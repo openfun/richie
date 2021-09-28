@@ -4,6 +4,7 @@ import random
 from http.cookies import SimpleCookie
 from unittest import mock
 
+from django.core.cache import caches
 from django.test import TestCase
 
 import arrow
@@ -11,16 +12,12 @@ import arrow
 from richie.apps.courses.factories import CategoryFactory, OrganizationFactory
 from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
 from richie.apps.search.elasticsearch import bulk_compat
-from richie.apps.search.filter_definitions import FILTERS, IndexableFilterDefinition
+from richie.apps.search.filter_definitions import FILTERS
 from richie.apps.search.indexers.courses import CoursesIndexer
+from richie.apps.search.indexers.organizations import OrganizationsIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 
 
-@mock.patch.object(  # Avoid having to build the categories and organizations indices
-    IndexableFilterDefinition,
-    "get_i18n_names",
-    side_effect=lambda o: {key: f"#{key:s}" for key in o},
-)
 @mock.patch.object(  # Avoid messing up the development Elasticsearch index
     CoursesIndexer,
     "index_name",
@@ -36,6 +33,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         """Reset indexable filters cache before each test so the context is as expected."""
         super().setUp()
         self.reset_filter_definitions_cache()
+        self.__filter_pages__ = None
 
     def tearDown(self):
         """Reset indexable filters cache after each test to avoid impacting subsequent tests."""
@@ -44,13 +42,13 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
 
     @staticmethod
     def reset_filter_definitions_cache():
-        """Reset indexable filters cache on the `base_page` field."""
+        """Reset indexable filters cache on the `base_page` and `aggs_include` fields."""
+        caches["search"].clear()
         for filter_name in ["levels", "subjects", "organizations"]:
             # pylint: disable=protected-access
             FILTERS[filter_name]._base_page = None
 
-    @staticmethod
-    def create_filter_pages():
+    def create_filter_pages(self):
         """
         Create pages for each filter based on an indexable. We must create them in the same order
         as they are instantiated in order to match the node paths we expect:
@@ -58,26 +56,59 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             - levels page path: 0002
             - organizations page path: 0003
         """
-        CategoryFactory(page_reverse_id="subjects", should_publish=True)
-        CategoryFactory(page_reverse_id="levels", should_publish=True)
-        OrganizationFactory(page_reverse_id="organizations", should_publish=True)
+        if not self.__filter_pages__:
+            self.__filter_pages__ = {
+                "levels": CategoryFactory(
+                    page_reverse_id="levels", page_title="Levels", should_publish=True
+                ),
+                "subjects": CategoryFactory(
+                    page_reverse_id="subjects",
+                    page_title="Subjects",
+                    should_publish=True,
+                ),
+                "organizations": OrganizationFactory(
+                    page_reverse_id="organizations",
+                    page_title="Organizations",
+                    should_publish=True,
+                ),
+            }
 
-    def prepare_index(self, courses):
+        return self.__filter_pages__
+
+    def prepare_index(self, courses, organizations=None):
         """
         Not a test.
         This method is doing the heavy lifting for the tests in this class:
-        - prepare the Elasticsearch index,
-        - execute the query.
+        preparing the Elasticsearch index so that individual tests just have to execute
+        the query.
         """
+        organizations = organizations or []
         self.create_filter_pages()
         # Delete any existing indices so we get a clean slate
         ES_INDICES_CLIENT.delete(index="_all")
+
+        # Create an index for our organizations
+        ES_INDICES_CLIENT.create(index="richie_organizations")
+        ES_INDICES_CLIENT.close(index="richie_organizations")
+        ES_INDICES_CLIENT.put_settings(
+            body=ANALYSIS_SETTINGS, index="richie_organizations"
+        )
+        ES_INDICES_CLIENT.open(index="richie_organizations")
+        # Use the default organizations mapping from the Indexer
+        ES_INDICES_CLIENT.put_mapping(
+            body=OrganizationsIndexer.mapping, index="richie_organizations"
+        )
+
+        # Set up empty indices for categories & persons. They need to exist to avoid errors
+        # but we do not use results from them in our tests.
+        ES_INDICES_CLIENT.create(index="richie_categories")
+        ES_INDICES_CLIENT.create(index="richie_persons")
+
         # Create an index we'll use to test the ES features
         ES_INDICES_CLIENT.create(index="test_courses")
         ES_INDICES_CLIENT.close(index="test_courses")
         ES_INDICES_CLIENT.put_settings(body=ANALYSIS_SETTINGS, index="test_courses")
         ES_INDICES_CLIENT.open(index="test_courses")
-
         # Use the default courses mapping from the Indexer
         ES_INDICES_CLIENT.put_mapping(body=CoursesIndexer.mapping, index="test_courses")
         # Add the sorting script
@@ -86,8 +117,11 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             id="state_field", body=CoursesIndexer.scripts["state_field"]
         )
 
-        # Actually insert our courses in the index
+        # Prepare actions to insert our courses and organizations in their indices
         actions = [
+            OrganizationsIndexer.get_es_document_for_organization(organization)
+            for organization in organizations
+        ] + [
             {
                 "_id": course["id"],
                 "_index": "test_courses",
@@ -96,6 +130,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             }
             for course in courses
         ]
+
         bulk_compat(actions=actions, chunk_size=500, client=ES_CLIENT)
         ES_INDICES_CLIENT.refresh()
 
@@ -127,11 +162,16 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         A facet that is selected in the querystring should always be included in the result's
         facet counts, even if it is not in the top 10.
         """
+        filter_pages = self.create_filter_pages()
+
         organizations = [
-            f"L-0003{o + 1:04d}" for o in range(10)
-        ] * 2  # 10 organizations with 2 occurences
-        organizations.append("L-00030011")  # 1 organization with only 1 occurence
-        # => organization with ID "L-00030011" is not in the top ten facets.
+            OrganizationFactory(
+                page_parent=filter_pages["organizations"].extended_object,
+                page_title=f"Organization #{index}",
+                should_publish=True,
+            )
+            for index in range(11)
+        ]
 
         self.prepare_index(
             [
@@ -148,14 +188,19 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "introduction": {"en": "introduction"},
                     "is_new": False,
                     "is_listed": True,
-                    "organizations": [id],
-                    "organizations_names": {"en": [f"Org #{id:s}"]},
+                    "organizations": [f"L-{organization.extended_object.node.path}"],
+                    "organizations_names": {
+                        "en": [organization.extended_object.get_title()]
+                    },
                     "title": {"en": "title"},
                 }
-                for index, id in enumerate(organizations)
-            ]
+                # 2 occurences for the first 10 organizations, only one for the 11th and last one
+                for index, organization in enumerate(
+                    organizations + organizations[0:10]
+                )
+            ],
+            organizations=organizations,
         )
-
         # If not filter is applied, the 10 top facets should be returned
         response = self.client.get("/api/v1.0/courses/")
         self.assertEqual(response.status_code, 200)
@@ -163,16 +208,16 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["organizations"]["values"],
             [
-                {"count": 2, "human_name": "#L-00030001", "key": "L-00030001"},
-                {"count": 2, "human_name": "#L-00030002", "key": "L-00030002"},
-                {"count": 2, "human_name": "#L-00030003", "key": "L-00030003"},
-                {"count": 2, "human_name": "#L-00030004", "key": "L-00030004"},
-                {"count": 2, "human_name": "#L-00030005", "key": "L-00030005"},
-                {"count": 2, "human_name": "#L-00030006", "key": "L-00030006"},
-                {"count": 2, "human_name": "#L-00030007", "key": "L-00030007"},
-                {"count": 2, "human_name": "#L-00030008", "key": "L-00030008"},
-                {"count": 2, "human_name": "#L-00030009", "key": "L-00030009"},
-                {"count": 2, "human_name": "#L-00030010", "key": "L-00030010"},
+                {"count": 2, "human_name": "Organization #0", "key": "L-00030001"},
+                {"count": 2, "human_name": "Organization #1", "key": "L-00030002"},
+                {"count": 2, "human_name": "Organization #2", "key": "L-00030003"},
+                {"count": 2, "human_name": "Organization #3", "key": "L-00030004"},
+                {"count": 2, "human_name": "Organization #4", "key": "L-00030005"},
+                {"count": 2, "human_name": "Organization #5", "key": "L-00030006"},
+                {"count": 2, "human_name": "Organization #6", "key": "L-00030007"},
+                {"count": 2, "human_name": "Organization #7", "key": "L-00030008"},
+                {"count": 2, "human_name": "Organization #8", "key": "L-00030009"},
+                {"count": 2, "human_name": "Organization #9", "key": "L-0003000A"},
             ],
         )
 
@@ -181,7 +226,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         # - at the end for the one that is not in the top 10 and should not be included
         #   if it wasn't forced...
         response = self.client.get(
-            "/api/v1.0/courses/?organizations=L-00030002&organizations=L-00030011"
+            "/api/v1.0/courses/?organizations=L-00030002&organizations=L-0003000B"
         )
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
@@ -189,31 +234,45 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["organizations"]["values"],
             [
-                {"count": 2, "human_name": "#L-00030001", "key": "L-00030001"},
-                {"count": 2, "human_name": "#L-00030002", "key": "L-00030002"},
-                {"count": 2, "human_name": "#L-00030003", "key": "L-00030003"},
-                {"count": 2, "human_name": "#L-00030004", "key": "L-00030004"},
-                {"count": 2, "human_name": "#L-00030005", "key": "L-00030005"},
-                {"count": 2, "human_name": "#L-00030006", "key": "L-00030006"},
-                {"count": 2, "human_name": "#L-00030007", "key": "L-00030007"},
-                {"count": 2, "human_name": "#L-00030008", "key": "L-00030008"},
-                {"count": 2, "human_name": "#L-00030009", "key": "L-00030009"},
-                {"count": 2, "human_name": "#L-00030010", "key": "L-00030010"},
-                {"count": 1, "human_name": "#L-00030011", "key": "L-00030011"},
+                {"count": 2, "human_name": "Organization #0", "key": "L-00030001"},
+                {"count": 2, "human_name": "Organization #1", "key": "L-00030002"},
+                {"count": 2, "human_name": "Organization #2", "key": "L-00030003"},
+                {"count": 2, "human_name": "Organization #3", "key": "L-00030004"},
+                {"count": 2, "human_name": "Organization #4", "key": "L-00030005"},
+                {"count": 2, "human_name": "Organization #5", "key": "L-00030006"},
+                {"count": 2, "human_name": "Organization #6", "key": "L-00030007"},
+                {"count": 2, "human_name": "Organization #7", "key": "L-00030008"},
+                {"count": 2, "human_name": "Organization #8", "key": "L-00030009"},
+                {"count": 2, "human_name": "Organization #9", "key": "L-0003000A"},
+                {"count": 1, "human_name": "Organization #10", "key": "L-0003000B"},
             ],
         )
 
     def test_query_courses_rare_facet_no_include_match(self, *_):
         """
         A facet that is selected in the querystring should not be included in the result's
-        facet counts if it does not match the include regex.
+        facet counts if it does not match the include parameter (include regex or filter page
+        children test).
         """
+        filter_pages = self.create_filter_pages()
+
+        # 10 organizations that are children of the Organizations filter page
         organizations = [
-            f"L-0003{o+1:04d}" for o in range(10)
-        ]  # 10 organizations matching the include regex
-        organizations.append(
-            "L-000300010001"
-        )  # 1 organization not matching the include regex
+            OrganizationFactory(
+                page_parent=filter_pages["organizations"].extended_object,
+                page_title=f"Organization #{index}",
+                should_publish=True,
+            )
+            for index in range(10)
+        ]
+        # 1 organization that is a child of another organization
+        organizations += [
+            OrganizationFactory(
+                page_parent=organizations[0].extended_object,
+                page_title="Organization #0 child",
+                should_publish=True,
+            )
+        ]
 
         self.prepare_index(
             [
@@ -230,23 +289,39 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "introduction": {"en": "introduction"},
                     "is_new": False,
                     "is_listed": True,
-                    "organizations": random.sample(
-                        organizations, random.randint(1, len(organizations))
-                    ),
-                    "organizations_names": {"en": [f"Org #{id:s}"]},
+                    "organizations": [
+                        f"{'P' if index == 0 else 'L'}-{organization.extended_object.node.path}"
+                    ],
+                    "organizations_names": {
+                        "en": [organization.extended_object.get_title()]
+                    },
                     "title": {"en": "title"},
                 }
-                for index, id in enumerate(organizations)
-            ]
+                for index, organization in enumerate(organizations)
+            ],
+            organizations=organizations,
         )
 
-        response = self.client.get("/api/v1.0/courses/?organizations=L-000300010001")
+        response = self.client.get(
+            f"/api/v1.0/courses/?organizations=L-{organizations[10].extended_object.node.path}"
+        )
         self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
 
+        reponse_organization_ids = [
+            o["key"] for o in response.json()["filters"]["organizations"]["values"]
+        ]
+        self.assertIn(
+            f"P-{organizations[0].extended_object.node.path}",
+            reponse_organization_ids,
+        )
+        for organization in organizations[1:10]:
+            self.assertIn(
+                f"L-{organization.extended_object.node.path}",
+                reponse_organization_ids,
+            )
         self.assertNotIn(
-            "L-000300010001",
-            [o["key"] for o in content["filters"]["organizations"]["values"]],
+            f"L-{organizations[10].extended_object.node.path}",
+            reponse_organization_ids,
         )
 
     def test_query_courses_is_listed(self, *_):

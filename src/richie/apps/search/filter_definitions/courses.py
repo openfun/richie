@@ -3,6 +3,8 @@ import re
 from operator import itemgetter
 
 from django import forms
+from django.core.cache import caches
+from django.core.cache.backends.base import InvalidCacheBackendError
 from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone, translation
 from django.utils.translation import gettext as _
@@ -122,6 +124,21 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             }
         }
 
+        def value_included(value, include):
+            """
+            Do not build aggregations for values from query string if they do not match
+            the current include filter.
+            Use a function to perform the check as the include filter can be either a regex
+            or a list.
+            """
+            try:
+                # The Elasticsearch include regex matches exact values so we must do the same
+                # by adding ^ (resp. $) at the beginning (resp. at the end) of the pattern.
+                return re.match(f"^{include:s}$", value)
+            # Trying to build the regex with a list will trigger a TypeError
+            except TypeError:
+                return value in include
+
         # Filters aggregation for values that were selected in the querystring (we must force
         # them because they may not be in the n top facet counts but we must make sure we keep
         # them so that they remain available as options that the user can see and unselect)
@@ -142,9 +159,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                     }
                 }
                 for value in data.get(self.name, [])
-                # The Elasticsearch include regex matches exact values so we must do the same
-                # by adding ^ (resp. $) at the beginning (resp. at the end) of the pattern.
-                if re.match(f"^{include:s}$", value)
+                if value_included(value, include)
             }
         )
 
@@ -344,7 +359,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         }
 
 
-class IndexableMPTTFilterDefinition(IndexableFilterDefinition):
+class IndexableHierarchicalFilterDefinition(IndexableFilterDefinition):
     """
     Some of our filters are a special case of terms-based filter as they use MPTT paths
     as IDs and enable limiting faceting by path.
@@ -368,8 +383,29 @@ class IndexableMPTTFilterDefinition(IndexableFilterDefinition):
         """
         if self.reverse_id:
             if self.base_page:
-                node = self.base_page.node
-                return f".*-{node.path:s}.{{{node.steplen:d}}}"
+                cache_key = f"filter_definition_{self.name}_aggs_include"
+                try:
+                    cache = caches["search"]
+                    aggs_include = cache.get(cache_key)
+                except InvalidCacheBackendError:
+                    cache = None
+                    aggs_include = None
+
+                if aggs_include is None:
+                    paths = self.base_page.node.get_children().values_list(
+                        "path", flat=True
+                    )
+                    # TO DO: replace this with proper IDs
+                    # In the meantime, this should add all necessary categories to aggregations
+                    # without making additional requests.
+                    aggs_include = [
+                        f"{prefix}-{path}" for path in paths for prefix in ["P", "L"]
+                    ]
+
+                if cache is not None:
+                    cache.set(cache_key, aggs_include)
+
+                return aggs_include
             return ""
 
         return super().aggs_include

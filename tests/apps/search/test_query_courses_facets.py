@@ -2,6 +2,7 @@
 import json
 from unittest import mock
 
+from django.core.cache import caches
 from django.test import TestCase
 
 import arrow
@@ -12,103 +13,22 @@ from richie.apps.search.elasticsearch import bulk_compat
 from richie.apps.search.filter_definitions import (
     FILTERS,
     FILTERS_CONFIGURATION,
-    IndexableFilterDefinition,
     NestingWrapper,
 )
 from richie.apps.search.filter_definitions.courses import (
     ALL_LANGUAGES_DICT,
-    IndexableMPTTFilterDefinition,
+    IndexableHierarchicalFilterDefinition,
 )
+from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
-
-SUBJECTS = [
-    {"id": "L-00010001", "title": {"en": "Science"}},
-    {"id": "L-00010002", "title": {"en": "Human and social sciences"}},
-    {"id": "L-00010003", "title": {"en": "Law"}},
-    {"id": "L-00010004", "title": {"en": "Economy and Finance"}},
-    {"id": "L-00010005", "title": {"en": "Education and Training"}},
-    {"id": "L-00010006", "title": {"en": "Management"}},
-    {"id": "L-00010007", "title": {"en": "Entrepreneurship"}},
-    {"id": "L-00010008", "title": {"en": "Computer science"}},
-    {"id": "L-00010009", "title": {"en": "Languages"}},
-    {"id": "L-00010010", "title": {"en": "Education and career guidance"}},
-    {"id": "L-00010011", "title": {"en": "Health"}},
-]
-INDEXABLE_SUBJECTS = {subject["id"]: subject["title"]["en"] for subject in SUBJECTS}
 
 NEW_LANGUAGES = list(ALL_LANGUAGES_DICT.items())[:11]
 NEW_LANGUAGES_DICT = dict(NEW_LANGUAGES)
 
-COURSES = [
-    {
-        "categories": [subject["id"] for subject in SUBJECTS],
-        "categories_names": {"en": [subject["title"]["en"] for subject in SUBJECTS]},
-        "course_runs": [{"languages": [language[0] for language in NEW_LANGUAGES]}],
-        "description": {"en": "Lorem ipsum dolor sit amet, consectetur adipiscim."},
-        "id": "101",
-        "is_new": True,
-        "is_listed": True,
-        "organizations": [],
-        "organizations_names": {"en": []},
-        "persons": [],
-        "persons_names": {"en": []},
-        "title": {"en": "Lorem ipsum dolor sit amet, consectetur adipiscim."},
-    },
-    {
-        "categories": [SUBJECTS[1]["id"], SUBJECTS[2]["id"]],
-        "categories_names": {
-            "en": [SUBJECTS[1]["title"]["en"], SUBJECTS[2]["title"]["en"]]
-        },
-        "course_runs": [{"languages": [NEW_LANGUAGES[1][0], NEW_LANGUAGES[2][0]]}],
-        "description": {"en": "Artisanally-sourced clicks neque. erat volutpat."},
-        "id": "102",
-        "is_new": True,
-        "is_listed": True,
-        "organizations": [],
-        "organizations_names": {"en": []},
-        "persons": [],
-        "persons_names": {},
-        "title": {"en": "Artisanally-sourced clicks neque. erat volutpat."},
-    },
-    {
-        "categories": [SUBJECTS[3]["id"], SUBJECTS[4]["id"]],
-        "categories_names": {
-            "en": [SUBJECTS[3]["title"]["en"], SUBJECTS[4]["title"]["en"]]
-        },
-        "course_runs": [{"languages": [NEW_LANGUAGES[3][0], NEW_LANGUAGES[4][0]]}],
-        "description": {"en": "Cursus honorum finite que non luctus ante."},
-        "id": "103",
-        "is_new": False,
-        "is_listed": True,
-        "organizations": [],
-        "organizations_names": {"en": []},
-        "persons": [],
-        "persons_names": {},
-        "title": {"en": "Cursus honorum finite que non luctus ante."},
-    },
-    {
-        "categories": [SUBJECTS[0]["id"]],
-        "categories_names": {"en": [SUBJECTS[0]["title"]["en"]]},
-        "course_runs": [{"languages": [NEW_LANGUAGES[0][0]]}],
-        "description": {"en": "Nullam ornare finibus sollicitudin."},
-        "id": "104",
-        "is_new": False,
-        "is_listed": True,
-        "organizations": [],
-        "organizations_names": {"en": []},
-        "persons": [],
-        "persons_names": {"en": []},
-        "title": {"en": "Nullam ornare finibus sollicitudin."},
-    },
-]
-
 
 # Reduce the number of languages down to the top 11 (for simplicity, like our 11 subjects)
 @mock.patch.dict(ALL_LANGUAGES_DICT, **NEW_LANGUAGES_DICT, clear=True)
-@mock.patch.object(  # Avoid having to build the categories and organizations indices
-    IndexableFilterDefinition, "get_i18n_names", return_value=INDEXABLE_SUBJECTS
-)
 @mock.patch.object(  # Avoid messing up the development Elasticsearch index
     CoursesIndexer,
     "index_name",
@@ -137,7 +57,8 @@ class FacetsCoursesQueryTestCase(TestCase):
 
     @staticmethod
     def reset_filter_definitions_cache():
-        """Reset indexable filters cache on the `base_page` field."""
+        """Reset indexable filters cache on the `base_page` and `aggs_include` fields."""
+        caches["search"].clear()
         for filter_name in ["levels", "subjects", "organizations"]:
             # pylint: disable=protected-access
             FILTERS[filter_name]._base_page = None
@@ -149,19 +70,29 @@ class FacetsCoursesQueryTestCase(TestCase):
         index with our courses so we can run our queries and check our facet counts.
         It also executes the query and returns the result from the API.
         """
-        # Create the subject category page. This is necessary to link the subjects we
-        # defined above with the "subjects" filter
-        # As it is the only page we create, we expect it to have the path "0001"
-        CategoryFactory(page_reverse_id="subjects", should_publish=True)
-
-        # Delete any existing indices so we get a clean slate
         ES_INDICES_CLIENT.delete(index="_all")
+
+        # Create an index for our categories
+        ES_INDICES_CLIENT.create(index="richie_categories")
+        ES_INDICES_CLIENT.close(index="richie_categories")
+        ES_INDICES_CLIENT.put_settings(
+            body=ANALYSIS_SETTINGS, index="richie_categories"
+        )
+        ES_INDICES_CLIENT.open(index="richie_categories")
+        ES_INDICES_CLIENT.put_mapping(
+            body=CategoriesIndexer.mapping, index="richie_categories"
+        )
+
+        # Set up empty indices for organizations & persons. They need to exist to avoid errors
+        # but we do not use results from them in our tests.
+        ES_INDICES_CLIENT.create(index="richie_organizations")
+        ES_INDICES_CLIENT.create(index="richie_persons")
+
         # Create an index we'll use to test the ES features
         ES_INDICES_CLIENT.create(index="test_courses")
         ES_INDICES_CLIENT.close(index="test_courses")
         ES_INDICES_CLIENT.put_settings(body=ANALYSIS_SETTINGS, index="test_courses")
         ES_INDICES_CLIENT.open(index="test_courses")
-
         # Use the default courses mapping from the Indexer
         ES_INDICES_CLIENT.put_mapping(body=CoursesIndexer.mapping, index="test_courses")
         # Add the sorting script
@@ -170,8 +101,127 @@ class FacetsCoursesQueryTestCase(TestCase):
             id="state_field", body=CoursesIndexer.scripts["state_field"]
         )
 
-        # Actually insert our courses in the index
+        # Create the subject category page. This is necessary to link the subjects
+        # with the "subjects" filter.
+        # As it is the first page we create, we expect it to have the path "0001".
+        subject_meta = CategoryFactory(
+            page_reverse_id="subjects", page_title="Subjects", should_publish=True
+        )
+        subjects = [
+            CategoryFactory(
+                page_parent=subject_meta.extended_object,
+                page_title=subject_name,
+                should_publish=True,
+            )
+            for subject_name in [
+                "Science",
+                "Human and social sciences",
+                "Law",
+                "Economy and Finance",
+                "Education and Training",
+                "Management",
+                "Entrepreneurship",
+                "Computer science",
+                "Languages",
+                "Education and career guidance",
+                "Health",
+            ]
+        ]
+
+        courses = [
+            {
+                "categories": [
+                    f"L-{subject.extended_object.node.path}" for subject in subjects
+                ],
+                "categories_names": {
+                    "en": [subject.extended_object.get_title() for subject in subjects]
+                },
+                "course_runs": [
+                    {"languages": [language[0] for language in NEW_LANGUAGES]}
+                ],
+                "description": {
+                    "en": "Lorem ipsum dolor sit amet, consectetur adipiscim."
+                },
+                "id": "101",
+                "is_new": True,
+                "is_listed": True,
+                "organizations": [],
+                "organizations_names": {"en": []},
+                "persons": [],
+                "persons_names": {"en": []},
+                "title": {"en": "Lorem ipsum dolor sit amet, consectetur adipiscim."},
+            },
+            {
+                "categories": [
+                    f"L-{subjects[1].extended_object.node.path}",
+                    f"L-{subjects[2].extended_object.node.path}",
+                ],
+                "categories_names": {
+                    "en": [
+                        subjects[1].extended_object.get_title(),
+                        subjects[2].extended_object.get_title(),
+                    ]
+                },
+                "course_runs": [
+                    {"languages": [NEW_LANGUAGES[1][0], NEW_LANGUAGES[2][0]]}
+                ],
+                "description": {
+                    "en": "Artisanally-sourced clicks neque. erat volutpat."
+                },
+                "id": "102",
+                "is_new": True,
+                "is_listed": True,
+                "organizations": [],
+                "organizations_names": {"en": []},
+                "persons": [],
+                "persons_names": {},
+                "title": {"en": "Artisanally-sourced clicks neque. erat volutpat."},
+            },
+            {
+                "categories": [
+                    f"L-{subjects[3].extended_object.node.path}",
+                    f"L-{subjects[4].extended_object.node.path}",
+                ],
+                "categories_names": {
+                    "en": [
+                        subjects[3].extended_object.get_title(),
+                        subjects[4].extended_object.get_title(),
+                    ]
+                },
+                "course_runs": [
+                    {"languages": [NEW_LANGUAGES[3][0], NEW_LANGUAGES[4][0]]}
+                ],
+                "description": {"en": "Cursus honorum finite que non luctus ante."},
+                "id": "103",
+                "is_new": False,
+                "is_listed": True,
+                "organizations": [],
+                "organizations_names": {"en": []},
+                "persons": [],
+                "persons_names": {},
+                "title": {"en": "Cursus honorum finite que non luctus ante."},
+            },
+            {
+                "categories": [f"L-{subjects[0].extended_object.node.path}"],
+                "categories_names": {"en": [subjects[0].extended_object.get_title()]},
+                "course_runs": [{"languages": [NEW_LANGUAGES[0][0]]}],
+                "description": {"en": "Nullam ornare finibus sollicitudin."},
+                "id": "104",
+                "is_new": False,
+                "is_listed": True,
+                "organizations": [],
+                "organizations_names": {"en": []},
+                "persons": [],
+                "persons_names": {"en": []},
+                "title": {"en": "Nullam ornare finibus sollicitudin."},
+            },
+        ]
+
+        # Prepare actions to insert categories and courses into their indices
         actions = [
+            CategoriesIndexer.get_es_document_for_category(subject)
+            for subject in subjects
+        ] + [
             {
                 "_id": course["id"],
                 "_index": "test_courses",
@@ -191,8 +241,9 @@ class FacetsCoursesQueryTestCase(TestCase):
                     for course_run in course["course_runs"]
                 ],
             }
-            for course in COURSES
+            for course in courses
         ]
+
         bulk_compat(actions=actions, chunk_size=500, client=ES_CLIENT)
         ES_INDICES_CLIENT.refresh()
 
@@ -314,7 +365,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {
                         "count": 1,
                         "human_name": "Education and career guidance",
-                        "key": "L-00010010",
+                        "key": "L-0001000A",
                     },
                     {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
                     {"count": 1, "human_name": "Languages", "key": "L-00010009"},
@@ -442,10 +493,10 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {
                         "count": 1,
                         "human_name": "Education and career guidance",
-                        "key": "L-00010010",
+                        "key": "L-0001000A",
                     },
                     {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
-                    {"count": 1, "human_name": "Health", "key": "L-00010011"},
+                    {"count": 1, "human_name": "Health", "key": "L-0001000B"},
                     {"count": 1, "human_name": "Languages", "key": "L-00010009"},
                     {"count": 1, "human_name": "Management", "key": "L-00010006"},
                 ],
@@ -491,7 +542,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         the applicable limit is not in our `subjects` filters.
         """
         content = self.execute_query(
-            querystring="scope=filters&subjects=L-00010001&subjects=L-00010011"
+            querystring="scope=filters&subjects=L-00010001&subjects=L-0001000B"
         )
         self.assertEqual(
             content["filters"]["subjects"],
@@ -524,7 +575,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {"count": 2, "human_name": "Science", "key": "L-00010001"},
                     {"count": 1, "human_name": "Computer science", "key": "L-00010008"},
                     {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
-                    {"count": 1, "human_name": "Health", "key": "L-00010011"},
+                    {"count": 1, "human_name": "Health", "key": "L-0001000B"},
                     {"count": 1, "human_name": "Languages", "key": "L-00010009"},
                     {"count": 1, "human_name": "Management", "key": "L-00010006"},
                 ],
@@ -581,7 +632,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         the applicable limit are in our `subjects`.
         """
         content = self.execute_query(
-            querystring="scope=filters&subjects=L-00010010&subjects=L-00010011"
+            querystring="scope=filters&subjects=L-0001000A&subjects=L-0001000B"
         )
         self.assertEqual(
             content["filters"]["subjects"],
@@ -616,10 +667,10 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {
                         "count": 1,
                         "human_name": "Education and career guidance",
-                        "key": "L-00010010",
+                        "key": "L-0001000A",
                     },
                     {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
-                    {"count": 1, "human_name": "Health", "key": "L-00010011"},
+                    {"count": 1, "human_name": "Health", "key": "L-0001000B"},
                     {"count": 1, "human_name": "Languages", "key": "L-00010009"},
                     {"count": 1, "human_name": "Management", "key": "L-00010006"},
                 ],
@@ -669,7 +720,7 @@ class FacetsCoursesQueryTestCase(TestCase):
     @mock.patch.dict(  # Increase min_doc_count for subjects to 2
         FILTERS,
         {
-            "subjects": IndexableMPTTFilterDefinition(
+            "subjects": IndexableHierarchicalFilterDefinition(
                 **{**FILTERS_CONFIGURATION[2][1], "min_doc_count": 2}
             )
         },
@@ -679,7 +730,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         Active values are returned for the subjects filter (based on ES terms) regardless
         of `min_doc_count`. Other values below the `min_doc_count` are not returned.
         """
-        content = self.execute_query(querystring="scope=filters&subjects=L-00010011")
+        content = self.execute_query(querystring="scope=filters&subjects=L-0001000B")
         self.assertEqual(
             content["filters"]["subjects"],
             {
@@ -709,7 +760,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                     },
                     {"count": 2, "human_name": "Law", "key": "L-00010003"},
                     {"count": 2, "human_name": "Science", "key": "L-00010001"},
-                    {"count": 1, "human_name": "Health", "key": "L-00010011"},
+                    {"count": 1, "human_name": "Health", "key": "L-0001000B"},
                 ],
             },
         )
@@ -717,7 +768,7 @@ class FacetsCoursesQueryTestCase(TestCase):
     @mock.patch.dict(  # Increase min_doc_count for subjects to 2
         FILTERS,
         {
-            "subjects": IndexableMPTTFilterDefinition(
+            "subjects": IndexableHierarchicalFilterDefinition(
                 **{**FILTERS_CONFIGURATION[2][1], "min_doc_count": 2}
             )
         },
