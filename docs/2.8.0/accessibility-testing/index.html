@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Automated accessibility checks · Richie</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Richie includes automated accessibility checks built through a `Cypress` end-to-end testing infrastructure."/><meta name="docsearch:version" content="2.8.0"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Automated accessibility checks · Richie"/><meta property="og:type" content="website"/><meta property="og:url" content="https://richie.education/"/><meta property="og:description" content="Richie includes automated accessibility checks built through a `Cypress` end-to-end testing infrastructure."/><meta property="og:image" content="https://richie.education/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://richie.education/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><h2 class="headerTitle">Richie</h2></a><a href="/versions"><h3>2.8.0</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/" target="_self">Home</a></li><li class=""><a href="https://github.com/openfun/richie" target="_self">GitHub</a></li><li class="siteNavGroupActive"><a href="/docs/2.8.0/quick-start" target="_self">Documentation</a></li><li class=""><a href="/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Contributing</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/2.8.0/quick-start">Quick start</a></li><li class="navListItem"><a class="navItem" href="/docs/2.8.0/docker-development">Docker development</a></li><li class="navListItem"><a class="navItem" href="/docs/2.8.0/native-installation">Native installation</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Recipes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/2.8.0/django-react-interop">Django &amp; React</a></li><li class="navListItem"><a class="navItem" href="/docs/2.8.0/building-the-frontend">Building the frontend</a></li><li class="navListItem"><a class="navItem" href="/docs/2.8.0/internationalization">I18n</a></li><li class="navListItem"><a class="navItem" href="/docs/2.8.0/frontend-overrides">Frontend overrides</a></li><li class="navListItem"><a class="navItem" href="/docs/2.8.0/lms-connection">LMS connection</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/2.8.0/contributing-guide">Contributing guide</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/2.8.0/accessibility-testing">Accessibility testing</a></li><li class="navListItem"><a class="navItem" href="/docs/2.8.0/css-guidelines">CSS Guidelines</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Automated accessibility checks</h1></header><article><div><span><p>Richie includes automated accessibility checks built through a <code>Cypress</code> end-to-end testing infrastructure.</p>
+<p>Automated accessibility checks can only surface around 30% of possible problems in any given page. This does not mean they are not useful, but they cannot replace human audits and developer proficiency.</p>
+<p>We use <code>axe</code> to run these checks. You can find more about axe on the <a href="https://github.com/dequelabs/axe-core"><code>axe-core</code> GitHub repository</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="testing-environment-setup"></a><a href="#testing-environment-setup" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Testing environment setup</h2>
+<p>Both <code>Cypress</code> and <code>axe</code> are used through their respective NPM packages. This means everything goes through <code>yarn</code> commands. You need to have <code>node</code> and <code>yarn</code> installed locally to run the tests.</p>
+<pre><code class="hljs css language-bash"><span class="hljs-built_in">cd</span> tests_e2e
+yarn install
+</code></pre>
+<p>This should install everything you need.</p>
+<h2><a class="anchor" aria-hidden="true" id="running-the-tests"></a><a href="#running-the-tests" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Running the tests</h2>
+<p>There are two way to use the <code>Cypress</code> tests: through a terminal-based runner and through the <code>Cypress</code> UI. Both are started through <code>yarn</code> but they have different use cases.</p>
+<pre><code class="hljs css language-bash">yarn cypress run
+</code></pre>
+<p>You can start by running the tests directly from the terminal. This is the quickest way to make sure all views pass checks (or find out which ones do not). This is also the starting point for work on running <code>Cypress</code> in the CI.</p>
+<pre><code class="hljs css language-bash">yarn cypress open
+</code></pre>
+<p>This command simply opens the <code>Cypress</code> UI. From there, you can run all or some of the test suites with live reloading. This is a great way to understand why some tests are failing, especially when it comes to a11y violations.</p>
+<p>When there are a11y violations, an assertion fails and prints out a list in the <code>Cypress</code> UI. You can then click on a violation to print more information in the browser console.</p>
+<h2><a class="anchor" aria-hidden="true" id="documentation-reference"></a><a href="#documentation-reference" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Documentation reference</h2>
+<ul>
+<li><a href="https://dequeuniversity.com/rules/axe/3.4">List of all possible violations covered by <code>axe</code></a></li>
+<li><a href="https://docs.cypress.io"><code>Cypress</code> documentation</a></li>
+<li><a href="https://github.com/avanslaars/cypress-axe"><code>axe</code> and <code>Cypress</code> integration</a></li>
+</ul>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 12/9/2019</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/2.8.0/contributing-guide"><span class="arrow-prev">← </span><span>Contributing guide</span></a><a class="docs-next button" href="/docs/2.8.0/css-guidelines"><span>CSS Guidelines</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#testing-environment-setup">Testing environment setup</a></li><li><a href="#running-the-tests">Running the tests</a></li><li><a href="#documentation-reference">Documentation reference</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Documentation</h5><a href="/docs/en/quick-start.html">Getting Started</a><a href="/versions">Versions</a><a href="/docs/en/contributing.html">Contributing</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://github.com/openfun/richie">GitHub</a></div></section><section class="copyright">Creative Commons 2021 — Richie contributors / Illustrations Katerina Limpitsouni</section></footer></div></body></html>
