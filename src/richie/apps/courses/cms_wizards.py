@@ -115,9 +115,9 @@ class BaseWizardForm(BaseFormMixin, forms.Form):
                     "slug": [
                         _(
                             "This slug is too long. The length of the path built by "
-                            f"prepending the slug of the parent page would be {length:d} "
+                            "prepending the slug of the parent page would be {:d} "
                             "characters long and it should be less than 255"
-                        )
+                        ).format(length)
                     ]
                 }
             )
@@ -147,8 +147,8 @@ class BaseWizardForm(BaseFormMixin, forms.Form):
                     "slug": [
                         _(
                             "You must first create a parent page and set its `reverse_id` to "
-                            f"`{reverse_id:s}`."
-                        )
+                            "`{:s}`."
+                        ).format(reverse_id)
                     ]
                 }
             ) from error
