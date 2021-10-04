@@ -487,6 +487,13 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
             )
         ).replace(tzinfo=pytz.utc)
 
+    @factory.lazy_attribute
+    def enrollment_count(self):
+        """
+        The number of enrollments of a course run is a random integer between 0 and 10,000.
+        """
+        return random.randint(0, 10000)  # nosec
+
 
 class CategoryFactory(BLDPageExtensionDjangoModelFactory):
     """

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add enrollment count to course run and to course page
+
 ### Fixed
 
 - Fix an issue related to css selector priority from r-scheme-colors mixins

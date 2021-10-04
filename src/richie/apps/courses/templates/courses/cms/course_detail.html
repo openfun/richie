@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags i18n extra_tags pagination_tags static thumbnail %}
+{% load cms_tags i18n extra_tags pagination_tags static thumbnail humanize %}
 
 {% block meta_index_rules %}
     {# Make sure course snapshot pages are not indexed by search engines #}
@@ -109,6 +109,20 @@
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
                             <div property="description">{% placeholder "course_introduction" or %}<p>{% trans 'Enter here a introduction of your course.' %}</p>{% endplaceholder %}</div>
                         {% endif %}
+                    </div>
+
+                    <div class="subheader__enrollment_count">
+                        {% block enrollment_count %}
+                            {% with enrollment_count=course.course_runs_enrollment_count %}
+                                {% if enrollment_count > 0 and RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT is None or enrollment_count > 0 and enrollment_count >= RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT %}
+                                    <div>
+                                        {% blocktrans with count=enrollment_count|intcomma %}
+                                            {{ count }} already enrolled!
+                                        {% endblocktrans %}
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endblock enrollment_count %}
                     </div>
 
                     <div class="subheader__teaser">

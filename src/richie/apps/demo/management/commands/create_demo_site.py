@@ -365,6 +365,8 @@ def create_demo_site():
         languages_subset = random.sample(
             ["de", "en", "es", "fr", "it", "nl"], random.randint(1, 4)  # nosec
         )
+        # only half the courses have an enrollment count defined
+        course_runs_with_enrollment_count = random.getrandbits(1)
         for i in range(nb_course_runs):
             course_run = factories.CourseRunFactory(
                 __sequence=i,
@@ -373,6 +375,11 @@ def create_demo_site():
                 ),
                 direct_course=course,
                 resource_link=f"{lms_endpoint}/courses/course-v1:edX+DemoX+Demo_Course/info",
+                enrollment_count=(
+                    random.randint(1, 10000)  # nosec
+                    if course_runs_with_enrollment_count
+                    else 0
+                ),
             )
             for language in course.extended_object.get_languages():
                 with translation.override(language):

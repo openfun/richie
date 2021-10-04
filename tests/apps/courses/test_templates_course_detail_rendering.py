@@ -62,6 +62,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             end=now + timedelta(hours=2),
             enrollment_end=now + timedelta(hours=1),
             languages=["en", "fr"],
+            enrollment_count=11000,
         )
 
         program_published, program_unpublished = ProgramFactory.create_batch(
@@ -194,6 +195,9 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         self.assertNotContains(
             response, program_unpublished.extended_object.get_title()
         )
+
+        # Check enrollment count
+        self.assertContains(response, "11,000 already enrolled")
 
     def test_templates_course_detail_cms_published_content_no_code(self):
         """
@@ -571,6 +575,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
 
+# pylint: disable=too-many-public-methods
 class RunsCourseCMSTestCase(CMSTestCase):
     """
     End-to-end test suite to validate the display of course runs on the course detail view.
@@ -642,7 +647,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             enrollment_end=self.now,
         )
 
-    def create_run_archived_open(self, course):
+    def create_run_archived_open(self, course, **kwargs):
         """
         Not a test. Create an archived open course run.
         """
@@ -652,9 +657,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
             start=self.now - timedelta(hours=1),
             end=self.now,
             enrollment_end=self.now + timedelta(hours=1),
+            **kwargs,
         )
 
-    def create_run_archived_closed(self, course):
+    def create_run_archived_closed(self, course, **kwargs):
         """
         Not a test. Create an archived closed course run.
         """
@@ -664,6 +670,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             start=self.now - timedelta(hours=1),
             end=self.now,
             enrollment_end=self.now - timedelta(hours=1),
+            **kwargs,
         )
 
     @override_settings(RICHIE_LMS_BACKENDS=[])
@@ -1045,3 +1052,65 @@ class RunsCourseCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
+
+    def test_templates_course_detail_runs_with_only_one_enrollment_count(self):
+        """
+        When a run has any enrollment count number, it should display the sum for all runs
+        """
+        course = CourseFactory()
+        course_run = self.create_run_ongoing_open(
+            course,
+            enrollment_count=3,
+        )
+        course_run = self.create_run_archived_open(
+            course,
+            enrollment_count=0,
+        )
+        self.assertTrue(course.extended_object.publish("en"))
+        course_run.refresh_from_db()
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertContains(response, r"3 already enrolled")
+
+    @override_settings(RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT=3)
+    def test_templates_course_detail_runs_with_multiple_enrollment_counts(self):
+        """
+        When a run has any enrollment count number, it should display the sum for all runs
+        """
+        course = CourseFactory()
+        course_run = self.create_run_ongoing_open(
+            course,
+            enrollment_count=3,
+        )
+        course_run = self.create_run_archived_open(
+            course,
+            enrollment_count=1,
+        )
+        course_run = self.create_run_archived_closed(
+            course,
+            enrollment_count=0,
+        )
+        self.assertTrue(course.extended_object.publish("en"))
+        course_run.refresh_from_db()
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertContains(response, r"4 already enrolled")
+
+    @override_settings(RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT=6)
+    def test_templates_course_detail_minimum_enrollment_count(self):
+        """
+        Show only the enrollment count when it is greather that the minimum setting value
+        """
+        course = CourseFactory()
+        course_run = self.create_run_ongoing_open(
+            course,
+            enrollment_count=5,
+        )
+        self.assertTrue(course.extended_object.publish("en"))
+        course_run.refresh_from_db()
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertNotContains(response, r"already enrolled")

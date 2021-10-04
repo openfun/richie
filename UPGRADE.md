@@ -16,6 +16,14 @@ $ make migrate
 
 ## Unreleased
 
+- Add `django.contrib.humanize` to your installed apps.
+  ```python
+  INSTALLED_APPS = (
+      # ...
+      'django.contrib.humanize',
+  )
+  ```
+
 ## 2.7.x to 2.8.x
 
 - `.no-scheme-fill` css class util has been removed.

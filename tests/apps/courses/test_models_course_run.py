@@ -596,33 +596,45 @@ class CourseRunModelsTestCase(TestCase):
 
     def test_models_course_run_mark_dirty_any_field(self):
         """
-        Updating the value of an editable field on the course run should mark the related
+        Updating the value of any editable field on the course run should mark the related
         course page dirty (waiting to be published).
         """
-        course_run = CourseRunFactory()
-        self.assertTrue(course_run.direct_course.extended_object.publish("en"))
-        title_obj = course_run.direct_course.extended_object.title_set.first()
 
-        field = random.choice(
-            [
-                f
-                for f in course_run._meta.fields
-                if f.editable and not f.auto_created and not f.name == "direct_course"
-            ]
-        ).name
+        fields = map(
+            lambda f: f.name,
+            filter(
+                lambda f: f.editable
+                and not f.auto_created
+                and not f.name == "direct_course",
+                CourseRun._meta.fields,
+            ),
+        )
 
-        stub = CourseRunFactory(
-            sync_mode="manual"
-        )  # New random values to update our course run
-        setattr(course_run, field, getattr(stub, field))
-        course_run.save()
+        for field in fields:
+            course_run = CourseRunFactory()
+            self.assertTrue(course_run.direct_course.extended_object.publish("en"))
+            title_obj = course_run.direct_course.extended_object.title_set.first()
 
-        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
+            stub = CourseRunFactory(
+                sync_mode="manual"
+            )  # New random values to update our course run
+            setattr(course_run, field, getattr(stub, field))
+            course_run.save()
 
-        course_run.mark_course_dirty()
-        title_obj.refresh_from_db()
+            self.assertEqual(
+                title_obj.publisher_state,
+                PUBLISHER_STATE_DEFAULT,
+                msg=f"Before refreshing from db {field:s}",
+            )
 
-        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DIRTY)
+            course_run.mark_course_dirty()
+            title_obj.refresh_from_db()
+
+            self.assertEqual(
+                title_obj.publisher_state,
+                PUBLISHER_STATE_DIRTY,
+                msg=f"After refreshing from db {field:s}",
+            )
 
     def test_models_course_run_mark_dirty_direct_course_field(self):
         """

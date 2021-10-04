@@ -53,6 +53,7 @@ class CourseRunAdminForm(TranslatableModelForm):
             "enrollment_start",
             "enrollment_end",
             "languages",
+            "enrollment_count",
         ]
 
     def __init__(self, *args, **kwargs):
@@ -138,6 +139,7 @@ class CourseRunAdmin(FrontendEditableAdminMixin, TranslatableAdmin):
         "enrollment_start",
         "enrollment_end",
         "languages",
+        "enrollment_count",
     )
     list_display = ["id"]
     form = CourseRunAdminForm

@@ -59,6 +59,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         self.assertContains(response, "id_enrollment_start_", count=3)
         self.assertContains(response, "id_enrollment_end_", count=3)
         self.assertContains(response, "id_languages")
+        self.assertContains(response, "id_enrollment_count")
 
     # List
 
@@ -211,6 +212,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         self.assertContains(response, "id_enrollment_start_", count=3)
         self.assertContains(response, "id_enrollment_end_", count=3)
         self.assertContains(response, "id_languages", count=2)
+        self.assertContains(response, "id_enrollment_count", count=2)
 
     def test_admin_course_run_change_view_get_superuser_public(self):
         """Public course runs should not render a change view."""
@@ -320,6 +322,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         self.assertContains(response, "id_enrollment_start_", count=3)
         self.assertContains(response, "id_enrollment_end_", count=3)
         self.assertContains(response, "id_languages", count=2)
+        self.assertContains(response, "id_enrollment_count", count=2)
 
     # Add
 
@@ -439,6 +442,7 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_start_1": "13:13:07",
             "enrollment_end_0": "2015-01-23",
             "enrollment_end_1": "09:07:11",
+            "enrollment_count": "5",
         }
         with timezone.override(pytz.utc):
             response = self.client.post(url, data, follow=True)
@@ -459,6 +463,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         check_method(
             course_run.enrollment_end, datetime(2015, 1, 23, 9, 7, 11, tzinfo=pytz.utc)
         )
+        check_method(course_run.enrollment_count, 5)
         return response
 
     def test_admin_course_run_change_view_post_anonymous(self):
