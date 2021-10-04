@@ -8,7 +8,7 @@ from datetime import MAXYEAR, datetime
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property, lazy
@@ -464,6 +464,24 @@ class Course(BasePageExtension):
             direct_course__extended_object__publisher_is_draft=is_draft,
         ).order_by("-start")
 
+    @cached_property
+    def course_runs_enrollment_count(self):
+        """
+        Returns a query that sum the enrollment count of each course run. They may be directly
+        related to the course or to a snapshot of the course.
+
+        The draft and the public page have their own course runs. The course runs on the draft
+        page are copied to the public page when the course is published (for any language).
+        """
+        is_draft = self.extended_object.publisher_is_draft
+        node = self.extended_object.node
+        current_and_descendant_nodes = node.__class__.get_tree(parent=node)
+
+        return CourseRun.objects.filter(
+            direct_course__extended_object__node__in=current_and_descendant_nodes,
+            direct_course__extended_object__publisher_is_draft=is_draft,
+        ).aggregate(sum=Sum("enrollment_count"))["sum"]
+
     @property
     def course_runs_dict(self):
         """Returns a dict of course runs grouped by their state."""
@@ -685,6 +703,12 @@ class CourseRun(TranslatableModel):
         # "override_settings" utility.
         choices=lazy(lambda: ALL_LANGUAGES, tuple)(),
         help_text=_("The list of languages in which the course content is available."),
+    )
+    enrollment_count = models.PositiveIntegerField(
+        _("enrollment count"),
+        default=0,
+        blank=True,
+        help_text=_("The number of enrolled students"),
     )
 
     class Meta:

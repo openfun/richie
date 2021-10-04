@@ -102,6 +102,11 @@ def site_metas(request: HttpRequest):
         ]
 
     context["FRONTEND_CONTEXT"] = json.dumps(context["FRONTEND_CONTEXT"])
+
+    if getattr(settings, "RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT", None):
+        context[
+            "RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT"
+        ] = settings.RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT
     return context
 
 

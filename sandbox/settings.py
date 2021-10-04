@@ -442,6 +442,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "django.contrib.sitemaps",
         "django.contrib.staticfiles",
         "django.contrib.messages",
+        "django.contrib.humanize",
     )
 
     # Languages
@@ -575,6 +576,13 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     )
     WEB_ANALYTICS_PROVIDER = values.Value(
         "google_analytics", environ_name="WEB_ANALYTICS_PROVIDER", environ_prefix=None
+    )
+
+    # Minimum enrollment count value that would be shown on course detail page
+    RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT = values.Value(
+        0,
+        environ_name="RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT",
+        environ_prefix=None,
     )
 
     # pylint: disable=invalid-name

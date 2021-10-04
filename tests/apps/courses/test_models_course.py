@@ -891,6 +891,27 @@ class CourseModelsTestCase(TestCase):
         )
         self.assertEqual(result, expected_public_course_runs)
 
+    def test_models_course_course_runs_enrollment_count(self):
+        """
+        The `course_runs_enrollment_count` property should be computed only once per request.
+        """
+        course = factories.CourseFactory()
+
+        # Create random course runs for this course
+        factories.CourseRunFactory(enrollment_count=3, direct_course=course)
+        factories.CourseRunFactory(enrollment_count=2, direct_course=course)
+        course.extended_object.publish("en")
+        course.refresh_from_db()
+
+        with self.assertNumQueries(4):
+            enrollment_count_sum = course.public_extension.course_runs_enrollment_count
+            self.assertEqual(enrollment_count_sum, 5)
+
+        # Check that getting the dict a second time gets it from the instance cache
+        with self.assertNumQueries(0):
+            enrollment_count_sum = course.public_extension.course_runs_enrollment_count
+            self.assertEqual(enrollment_count_sum, 5)
+
     def test_models_course_course_runs_dict(self):
         """The `course_runs_dict` property should be computed on once per request."""
         course = factories.CourseFactory()
