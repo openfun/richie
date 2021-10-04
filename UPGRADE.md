@@ -20,6 +20,17 @@ $ make migrate
 
 - A new scss variable has been added `$r-course-subheader-aside`. If you have overridden
   `_variables.scss` file, you have to define this variable.
+- Add a new entry to your `urls.py` declarations for the `robot.txt` file so
+  that the `sitemap.xml` file is found without the need to register it in each
+  crawler administration panel:
+  ```python
+    path(
+        "robots.txt",
+        TemplateView.as_view(
+            template_name="richie/robots.html", content_type="text/plain"
+        ),
+    )
+  ```
 
 ## 2.4.x to 2.5.x
 
