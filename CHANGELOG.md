@@ -17,6 +17,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix an issue related to css selector priority from r-scheme-colors mixins
 - Fix css classes related with course runs on the course detail page.
 
+## Changed
+
+- Update course search API to remove MPTT regexes as query params and replace
+  them with arrays or strings.
+
 ## [2.8.2] - 2021-10-05
 
 ### Fixed

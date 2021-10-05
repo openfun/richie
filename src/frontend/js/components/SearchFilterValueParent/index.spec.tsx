@@ -197,7 +197,7 @@ describe('<SearchFilterValueParent />', () => {
       offset: '0',
       scope: 'filters',
       subjects: ['L-000400050004'],
-      subjects_include: '.-00040005.{4,}',
+      subjects_children_aggs: 'P-00040005',
     });
 
     fireEvent.click(getByLabelText('Hide additional filters for Literature'));
@@ -220,7 +220,7 @@ describe('<SearchFilterValueParent />', () => {
       offset: '0',
       scope: 'filters',
       subjects: ['L-000400050004'],
-      subjects_include: '.-00040005.{4,}',
+      subjects_children_aggs: 'P-00040005',
     });
     expect(getByLabelText('Hide additional filters for Literature')).toHaveAttribute(
       'aria-pressed',
