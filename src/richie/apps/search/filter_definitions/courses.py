@@ -74,9 +74,40 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         Build the aggregations as a term query that counts all the different values assigned
         to the field.
         """
-        # Look for an aggregations parameter in the form data and default to the regex or list
-        # of values returned by the `aggs_include` property:
-        include = data[f"{self.name:s}_aggs"] or self.aggs_include
+        # Look the aggregations parameters in the form data (either [filter]_children_aggs or
+        # [filter]_aggs), and default to the filter definition's aggs_include.
+        if data[f"{self.name:s}_children_aggs"]:
+            # Cache the request for children of the relevant node
+            node_path = data[f"{self.name:s}_children_aggs"][2:]
+            cache_key = f"filter_definition_{self.name}_aggs_include_{node_path}"
+            try:
+                cache = caches["search"]
+                include = cache.get(cache_key)
+            except InvalidCacheBackendError:
+                cache = None
+                include = None
+
+            if include is None:
+                paths = (
+                    Page.objects.get(
+                        node__path=node_path,
+                        publisher_is_draft=False,
+                    )
+                    .node.get_children()
+                    .values_list("path", flat=True)
+                )
+                # TO DO: replace this with proper IDs
+                # In the meantime, this should add all necessary categories to aggregations
+                # without making additional requests.
+                include = [
+                    f"{prefix}-{path}" for path in paths for prefix in ["P", "L"]
+                ]
+
+                if cache is not None:
+                    cache.set(cache_key, include)
+
+        else:
+            include = data[f"{self.name:s}_aggs"] or self.aggs_include
 
         # Use all the query fragments from the queries *but* the one(s) that filter on the
         # current filter
@@ -169,7 +200,8 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         """
         Indexables are filtered via:
         - a list of their Elasticsearch ids i.e strings,
-        - a regex to eventually limit which terms are facetted.
+        - a list of ES IDs for which we want to get aggregations,
+        - one filter whose children we want to use for aggregations.
         """
         return {
             self.name: (
@@ -179,6 +211,10 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             f"{self.name}_aggs": (
                 ArrayField(required=False, base_type=forms.CharField(max_length=50)),
                 True,  # an ArrayField expects list values
+            ),
+            f"{self.name}_children_aggs": (
+                forms.CharField(required=False, max_length=50),
+                False,
             ),
         }
 
@@ -402,8 +438,8 @@ class IndexableHierarchicalFilterDefinition(IndexableFilterDefinition):
                         f"{prefix}-{path}" for path in paths for prefix in ["P", "L"]
                     ]
 
-                if cache is not None:
-                    cache.set(cache_key, aggs_include)
+                    if cache is not None:
+                        cache.set(cache_key, aggs_include)
 
                 return aggs_include
             return ""
