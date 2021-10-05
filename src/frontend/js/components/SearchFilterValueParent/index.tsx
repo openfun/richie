@@ -59,12 +59,12 @@ export const SearchFilterValueParent = ({ filter, value }: SearchFilterValuePare
       // Get only the filters & facet counts for the children of the current parent
       const childrenResponse = await fetchList('courses', {
         ...courseSearchParams,
-        [`${filter.name}_include`]: childrenPathMatch,
+        [`${filter.name}_children_aggs`]: value.key,
         scope: 'filters',
       });
 
       if (childrenResponse.status === RequestStatus.FAILURE) {
-        throw new Error(`Failed to get children filters for ${filter.name}/${childrenPathMatch}`);
+        throw new Error(`Failed to get children filters for ${filter.name}/${value.key}`);
       }
 
       setChildren(childrenResponse.content.filters[filter.name].values);
