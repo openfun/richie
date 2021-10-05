@@ -27,6 +27,10 @@ class ArrayField(forms.Field):
         was passed to us by the consumer
         """
         if value:
+            # Support comma-separated lists in addition to the traditional repeated-key format
+            # for query string parameters containing lists.
+            if isinstance(value, list) and len(value) == 1 and "," in value[0]:
+                value = value[0].split(",")
             # We have something to check: attempt to iterate over it
             try:
                 for base_type_value in value:

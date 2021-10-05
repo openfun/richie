@@ -33,6 +33,18 @@ class ArrayFieldsTestCase(TestCase):
         # The field is valid and returns cleaned data
         self.assertEqual(array_of_int.clean([1, 2, 3, 5, 7]), [1, 2, 3, 5, 7])
 
+    def test_field_array_comma_separated_values(self):
+        """
+        Happy path: the array field supports a string comprised of comma-separated values of
+        the base type.
+        """
+        # Create an ArrayField instance with some params
+        array_of_int = ArrayField(
+            required=False, base_type=forms.CharField(max_length=50)
+        )
+        # The field is valid and returns cleaned data
+        self.assertEqual(array_of_int.clean(["A21,C42,Y84"]), ["A21", "C42", "Y84"])
+
     def test_fields_array_invalid_string(self):
         """
         Invalid input: the value is an array but at least 1 item is invalid
