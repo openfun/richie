@@ -159,5 +159,10 @@ $r-footer-logo-width-lg: 11.875rem;
 // template
 $r-course-aside: 35%;
 
+// Subheader aside column width in course detail. Unlike, $r-course-aside this
+// variable cannot be null. Otherwise to homegenize layout, it should have the
+// same value than $r-course-aside.
+$r-course-subheader-aside: 35%;
+
 // Course search page shared variables
 $r-search-filters-gutter: 0.2rem !default;

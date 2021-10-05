@@ -16,6 +16,11 @@ $ make migrate
 
 ## Unreleased
 
+## 2.7.x to 2.8.x
+
+- A new scss variable has been added `$r-course-subheader-aside`. If you have overridden
+  `_variables.scss` file, you have to define this variable.
+
 ## 2.4.x to 2.5.x
 
 - Named capturing group regex are still considered experimental in Javascript and may cause trouble

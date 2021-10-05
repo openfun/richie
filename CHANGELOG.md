@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Use `$r-course-subheader-aside` to define subheader aside column width
+
 ## [2.8.1] - 2021-09-28
 
 ### Changed
