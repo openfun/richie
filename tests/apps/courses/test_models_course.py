@@ -1347,6 +1347,11 @@ class CourseModelsTestCase(TestCase):
         course = Course.objects.create(extended_object=PageFactory())
         self.assertIsNone(course.effort)
 
+    def test_models_course_field_pt_effort_null(self):
+        """The "pt_effort" property should return an empty string if effort is not set"""
+        course = factories.CourseFactory(effort=None)
+        self.assertEqual(course.pt_effort, "")
+
     def test_models_course_field_pt_effort_1_hour(self):
         """The "pt_effort" property should return what schema.org metadata expects"""
         course = factories.CourseFactory(effort=[1, "hour"])
