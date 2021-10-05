@@ -209,6 +209,9 @@ class Course(BasePageExtension):
     @property
     def pt_effort(self):
         """Return effort as a PT string for schema.org metadata."""
+        if not self.effort:
+            return ""
+
         (effort, effort_unit) = self.effort
         unit_letter = effort_unit[0].upper()
         return f"PT{effort:d}{unit_letter:s}"

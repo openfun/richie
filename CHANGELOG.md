@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix schema.org related "pt_effort" string computation when effort is not set
 - Use `$r-course-subheader-aside` to define subheader aside column width
 
 ## [2.8.1] - 2021-09-28
