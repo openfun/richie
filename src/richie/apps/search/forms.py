@@ -21,8 +21,12 @@ from .filter_definitions import FILTERS, AvailabilityFilterDefinition
 #             ArrayField(required=False, base_type=forms.CharField(max_length=50)),
 #             True,
 #         ),
-#         subjects_include: (
-#             CharField(required=False, max_length=20),
+#         subjects_aggs: (
+#             ArrayField(required=False, base_type=forms.CharField(max_length=50)),
+#             True,
+#         ),
+#         subjects_children_aggs: (
+#             forms.CharField(required=False, max_length=50),
 #             False,
 #         ),
 #         languages: (

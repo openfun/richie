@@ -74,9 +74,9 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         Build the aggregations as a term query that counts all the different values assigned
         to the field.
         """
-        # Look for an include parameter in the form data and default to the regex returned
-        # by the `aggs_include` property:
-        include = data[f"{self.name:s}_include"] or self.aggs_include
+        # Look for an aggregations parameter in the form data and default to the regex or list
+        # of values returned by the `aggs_include` property:
+        include = data[f"{self.name:s}_aggs"] or self.aggs_include
 
         # Use all the query fragments from the queries *but* the one(s) that filter on the
         # current filter
@@ -176,9 +176,9 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                 ArrayField(required=False, base_type=forms.CharField(max_length=50)),
                 True,  # an ArrayField expects list values
             ),
-            f"{self.name:s}_include": (
-                forms.CharField(max_length=500, required=False),
-                False,  # a CharField expects string values
+            f"{self.name}_aggs": (
+                ArrayField(required=False, base_type=forms.CharField(max_length=50)),
+                True,  # an ArrayField expects list values
             ),
         }
 

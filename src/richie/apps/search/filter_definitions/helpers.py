@@ -10,7 +10,7 @@ def applicable_facet_limit(data, filter_name):
     limit to `FACET_COUNTS_MAX_LIMIT` — which exists to provide a sensible upper boundary.
     """
     try:
-        has_self_include = data[f"{filter_name:s}_include"]
+        has_self_include = data[f"{filter_name:s}_aggs"]
         return (
             FACET_COUNTS_MAX_LIMIT if has_self_include else FACET_COUNTS_DEFAULT_LIMIT
         )
