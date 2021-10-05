@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-28 15:13+0200\n"
-"PO-Revision-Date: 2021-09-28 13:20\n"
+"POT-Creation-Date: 2021-10-05 09:54+0000\n"
+"PO-Revision-Date: 2021-10-05 10:01\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -534,13 +534,13 @@ msgid "blog posts"
 msgstr "entradas de blog"
 
 #: apps/courses/models/blog.py:91 apps/courses/models/category.py:165
-#: apps/courses/models/course.py:920 apps/courses/models/organization.py:209
+#: apps/courses/models/course.py:923 apps/courses/models/organization.py:209
 #: apps/courses/models/organization.py:243
 msgid "variant"
 msgstr "variante"
 
 #: apps/courses/models/blog.py:94 apps/courses/models/category.py:168
-#: apps/courses/models/course.py:923 apps/courses/models/organization.py:212
+#: apps/courses/models/course.py:926 apps/courses/models/organization.py:212
 #: apps/courses/models/organization.py:246
 msgid "Optional glimpse variant for a custom look."
 msgstr "Variante vista previa optional para un aspecto personalizado."
@@ -641,123 +641,123 @@ msgstr "curso"
 msgid "courses"
 msgstr "cursos"
 
-#: apps/courses/models/course.py:523
+#: apps/courses/models/course.py:526
 msgid "Self paced"
 msgstr "A ritmo propio"
 
-#: apps/courses/models/course.py:538 apps/courses/models/course.py:547
+#: apps/courses/models/course.py:541 apps/courses/models/course.py:550
 msgid "~{pace:d} {effort_unit!s}/{duration_unit!s}"
 msgstr "~{pace:d} {esfuerzo_unidad!s}/{duración_unidad!s}"
 
-#: apps/courses/models/course.py:554
+#: apps/courses/models/course.py:557
 msgid "~{pace_hours:d}h{pace_minutes:d}/{duration_unit!s}"
 msgstr "~{pace_hours:d}h{pace_minutes:d}/{duration_unit!s}"
 
-#: apps/courses/models/course.py:637
+#: apps/courses/models/course.py:640
 msgid "Manual"
 msgstr "Manual"
 
-#: apps/courses/models/course.py:638
+#: apps/courses/models/course.py:641
 msgid "Synchronization to draft page"
 msgstr "Sincronización a página de borrador"
 
-#: apps/courses/models/course.py:639
+#: apps/courses/models/course.py:642
 msgid "Synchronization to public page"
 msgstr "Sincronización a página pública"
 
-#: apps/courses/models/course.py:669
+#: apps/courses/models/course.py:672
 msgid "resource link"
 msgstr "enlace de recursos"
 
-#: apps/courses/models/course.py:671
+#: apps/courses/models/course.py:674
 msgid "course start"
 msgstr "inicio del curso"
 
-#: apps/courses/models/course.py:672
+#: apps/courses/models/course.py:675
 msgid "course end"
 msgstr "fin del curso"
 
-#: apps/courses/models/course.py:674
+#: apps/courses/models/course.py:677
 msgid "enrollment start"
 msgstr "inicio de inscripción"
 
-#: apps/courses/models/course.py:676
+#: apps/courses/models/course.py:679
 msgid "enrollment end"
 msgstr "fin de inscripción"
 
-#: apps/courses/models/course.py:684
+#: apps/courses/models/course.py:687
 msgid "The list of languages in which the course content is available."
 msgstr "Lista de idiomas en los que el contenido del curso está disponible."
 
-#: apps/courses/models/course.py:689
+#: apps/courses/models/course.py:692
 msgid "course run"
 msgstr "sesión de curso"
 
-#: apps/courses/models/course.py:690
+#: apps/courses/models/course.py:693
 msgid "course runs"
 msgstr "sesión de curso"
 
-#: apps/courses/models/course.py:860
+#: apps/courses/models/course.py:863
 msgid "title"
 msgstr "título"
 
-#: apps/courses/models/course.py:865
+#: apps/courses/models/course.py:868
 msgid "Course run translation"
 msgstr "Traducción de la sesión de curso"
 
-#: apps/courses/models/course.py:866
+#: apps/courses/models/course.py:869
 msgid "Course run translations"
 msgstr "Traducciones de la sesión de curso"
 
-#: apps/courses/models/course.py:930
+#: apps/courses/models/course.py:933
 msgid "course plugin"
 msgstr "plugin de curso"
 
-#: apps/courses/models/course.py:931
+#: apps/courses/models/course.py:934
 msgid "course plugins"
 msgstr "plugins de curso"
 
-#: apps/courses/models/course.py:948 plugins/large_banner/models.py:38
+#: apps/courses/models/course.py:951 plugins/large_banner/models.py:38
 msgid "logo"
 msgstr "logo"
 
-#: apps/courses/models/course.py:950
+#: apps/courses/models/course.py:953
 msgid "url"
 msgstr "url"
 
-#: apps/courses/models/course.py:953 apps/courses/models/course.py:977
+#: apps/courses/models/course.py:956 apps/courses/models/course.py:980
 msgid "name"
 msgstr "nombre"
 
-#: apps/courses/models/course.py:955 apps/courses/models/course.py:978
+#: apps/courses/models/course.py:958 apps/courses/models/course.py:981
 msgid "content"
 msgstr "contenido"
 
-#: apps/courses/models/course.py:960
+#: apps/courses/models/course.py:963
 msgid "licence"
 msgstr "licencia"
 
-#: apps/courses/models/course.py:961
+#: apps/courses/models/course.py:964
 msgid "licences"
 msgstr "licencias"
 
-#: apps/courses/models/course.py:983
+#: apps/courses/models/course.py:986
 msgid "Licence translation"
 msgstr "Traducción de la licencia"
 
-#: apps/courses/models/course.py:984
+#: apps/courses/models/course.py:987
 msgid "licence translations"
 msgstr "traducciones de licencias"
 
-#: apps/courses/models/course.py:998
+#: apps/courses/models/course.py:1001
 msgid "description"
 msgstr "descripción"
 
-#: apps/courses/models/course.py:1002
+#: apps/courses/models/course.py:1005
 msgid "licence plugin"
 msgstr "plugin de licencia"
 
-#: apps/courses/models/course.py:1003
+#: apps/courses/models/course.py:1006
 msgid "licence plugins"
 msgstr "plugins de licencia"
 
@@ -1510,19 +1510,19 @@ msgstr "Niveles"
 msgid "Persons"
 msgstr "Personas"
 
-#: apps/search/filter_definitions/courses.py:413
+#: apps/search/filter_definitions/courses.py:449
 msgid "Open for enrollment"
 msgstr "Inscripciones abiertas"
 
-#: apps/search/filter_definitions/courses.py:414
+#: apps/search/filter_definitions/courses.py:450
 msgid "Coming soon"
 msgstr "Próximamente"
 
-#: apps/search/filter_definitions/courses.py:415
+#: apps/search/filter_definitions/courses.py:451
 msgid "On-going"
 msgstr "En curso"
 
-#: apps/search/filter_definitions/courses.py:416
+#: apps/search/filter_definitions/courses.py:452
 msgid "Archived"
 msgstr "Archivado"
 
