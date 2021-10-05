@@ -63,7 +63,8 @@ class FacetsCoursesQueryTestCase(TestCase):
             # pylint: disable=protected-access
             FILTERS[filter_name]._base_page = None
 
-    def execute_query(self, querystring=""):
+    @staticmethod
+    def prepare_indices():
         """
         Not a test.
         This method is doing the heavy lifting for the tests in this class: create and fill the
@@ -247,10 +248,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         bulk_compat(actions=actions, chunk_size=500, client=ES_CLIENT)
         ES_INDICES_CLIENT.refresh()
 
-        response = self.client.get(f"/api/v1.0/courses/?{querystring:s}")
-        self.assertEqual(response.status_code, 200)
-
-        return json.loads(response.content)
+        return {"courses": courses, "subjects": subjects}
 
     @mock.patch(
         "richie.apps.search.filter_definitions.helpers.FACET_COUNTS_DEFAULT_LIMIT",
@@ -262,9 +260,11 @@ class FacetsCoursesQueryTestCase(TestCase):
         `FACET_COUNTS_DEFAULT_LIMIT` for any given filter, no matter the number of
         available facet values.
         """
-        content = self.execute_query(querystring="scope=filters")
+        self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?scope=filters")
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["subjects"],
+            response.json()["filters"]["subjects"],
             {
                 "base_path": "0001",
                 "has_more_values": True,
@@ -296,7 +296,7 @@ class FacetsCoursesQueryTestCase(TestCase):
             },
         )
         self.assertEqual(
-            content["filters"]["languages"],
+            response.json()["filters"]["languages"],
             {
                 "base_path": None,
                 "has_more_values": True,
@@ -323,17 +323,20 @@ class FacetsCoursesQueryTestCase(TestCase):
     @mock.patch(
         "richie.apps.search.filter_definitions.helpers.FACET_COUNTS_MAX_LIMIT", new=10
     )
-    def test_query_courses_returns_all_requested_facets_from_include(self, *_):
+    def test_query_courses_returns_all_requested_facets_from_aggs(self, *_):
         """
-        When the `foo_include` parameter is present in the query, more values are included
+        When the `foo_aggs` parameter is present in the query, more values are included
         in the facet counts for the `foo` filter, up to `FACET_COUNTS_MAX_LIMIT`.
         """
-        # NB: we put an ineffective `languages_include` param in the query string
-        content = self.execute_query(
-            querystring="scope=filters&languages_include=stub&subjects_include=.*-0001.{4}"
+        # NB: we put an ineffective `languages_aggs` param in the query string
+        objects = self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?scope=filters&languages_aggs=stub&subjects_aggs="
+            f"{'&subjects_aggs='.join([f'L-{subject.extended_object.node.path}' for subject in objects['subjects']])}"
         )
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["subjects"],
+            response.json()["filters"]["subjects"],
             {
                 "base_path": "0001",
                 "has_more_values": True,
@@ -373,10 +376,10 @@ class FacetsCoursesQueryTestCase(TestCase):
                 ],
             },
         )
-        # Languages response is still down to the top 5 facets because `languages_include` is not
+        # Languages response is still down to the top 5 facets because `languages_aggs` is not
         # supported in the form & query builder. It therefore does not change the response.
         self.assertEqual(
-            content["filters"]["languages"],
+            response.json()["filters"]["languages"],
             {
                 "base_path": None,
                 "has_more_values": True,
@@ -405,9 +408,11 @@ class FacetsCoursesQueryTestCase(TestCase):
         The applicable limit is set to 2. As we have 11 subjects/languages, it's straightforward
         to conclude that there are more values.
         """
-        content = self.execute_query(querystring="scope=filters")
+        self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?scope=filters")
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["subjects"],
+            response.json()["filters"]["subjects"],
             {
                 "base_path": "0001",
                 "has_more_values": True,
@@ -432,7 +437,7 @@ class FacetsCoursesQueryTestCase(TestCase):
             },
         )
         self.assertEqual(
-            content["filters"]["languages"],
+            response.json()["filters"]["languages"],
             {
                 "base_path": None,
                 "has_more_values": True,
@@ -459,9 +464,11 @@ class FacetsCoursesQueryTestCase(TestCase):
         we have 11 subjects/languages, it's straightforward to conclude that there are
         *no* more values.
         """
-        content = self.execute_query(querystring="scope=filters")
+        self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?scope=filters")
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["subjects"],
+            response.json()["filters"]["subjects"],
             {
                 "base_path": "0001",
                 "has_more_values": False,
@@ -503,7 +510,7 @@ class FacetsCoursesQueryTestCase(TestCase):
             },
         )
         self.assertEqual(
-            content["filters"]["languages"],
+            response.json()["filters"]["languages"],
             {
                 "base_path": None,
                 "has_more_values": False,
@@ -541,11 +548,13 @@ class FacetsCoursesQueryTestCase(TestCase):
         This is a case where there *are* more values because at least one of the values beyond
         the applicable limit is not in our `subjects` filters.
         """
-        content = self.execute_query(
-            querystring="scope=filters&subjects=L-00010001&subjects=L-0001000B"
+        self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?scope=filters&subjects=L-00010001&subjects=L-0001000B"
         )
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["subjects"],
+            response.json()["filters"]["subjects"],
             {
                 "base_path": "0001",
                 "has_more_values": True,
@@ -592,11 +601,13 @@ class FacetsCoursesQueryTestCase(TestCase):
         This is a case where there *are* more values because at least one of the values beyond
         the applicable limit is not in our `languages` filter.
         """
-        content = self.execute_query(
-            querystring="scope=filters&languages=az&languages=ca"
+        self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?scope=filters&languages=az&languages=ca"
         )
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["languages"],
+            response.json()["filters"]["languages"],
             {
                 "base_path": None,
                 "has_more_values": True,
@@ -631,11 +642,13 @@ class FacetsCoursesQueryTestCase(TestCase):
         This is a case where there are *no* more values because all of the values beyond
         the applicable limit are in our `subjects`.
         """
-        content = self.execute_query(
-            querystring="scope=filters&subjects=L-0001000A&subjects=L-0001000B"
+        self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?scope=filters&subjects=L-0001000A&subjects=L-0001000B"
         )
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["subjects"],
+            response.json()["filters"]["subjects"],
             {
                 "base_path": "0001",
                 "has_more_values": False,
@@ -687,11 +700,13 @@ class FacetsCoursesQueryTestCase(TestCase):
         This is a case where there are *no* more values because all of the values beyond
         the applicable limit are in our `languages` filter.
         """
-        content = self.execute_query(
-            querystring="scope=filters&languages=be&languages=ca"
+        self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?scope=filters&languages=be&languages=ca"
         )
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["languages"],
+            response.json()["filters"]["languages"],
             {
                 "base_path": None,
                 "has_more_values": False,
@@ -730,9 +745,13 @@ class FacetsCoursesQueryTestCase(TestCase):
         Active values are returned for the subjects filter (based on ES terms) regardless
         of `min_doc_count`. Other values below the `min_doc_count` are not returned.
         """
-        content = self.execute_query(querystring="scope=filters&subjects=L-0001000B")
+        self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?scope=filters&subjects=L-0001000B"
+        )
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["subjects"],
+            response.json()["filters"]["subjects"],
             {
                 "base_path": "0001",
                 "has_more_values": True,
@@ -784,9 +803,11 @@ class FacetsCoursesQueryTestCase(TestCase):
         *if* `min_doc_count` was 0 because we would get all 11 subjects.
         As `min_doc_count` is 2, we only get 5 subjects, and there are thus more values.
         """
-        content = self.execute_query(querystring="scope=filters")
+        self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?scope=filters")
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["subjects"],
+            response.json()["filters"]["subjects"],
             {
                 "base_path": "0001",
                 "has_more_values": True,
@@ -845,9 +866,11 @@ class FacetsCoursesQueryTestCase(TestCase):
         Active values are returned for the languages filter (based on manual aggregations)
         regardless of `min_doc_count`. Other values below the `min_doc_count` are not returned.
         """
-        content = self.execute_query(querystring="scope=filters&languages=ca")
+        self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?scope=filters&languages=ca")
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["languages"],
+            response.json()["filters"]["languages"],
             {
                 "base_path": None,
                 "has_more_values": True,
@@ -901,9 +924,11 @@ class FacetsCoursesQueryTestCase(TestCase):
         *if* `min_doc_count` was 0 because we would get all 11 languages.
         As `min_doc_count` is 2, we only get 5 languages, and there are thus more values.
         """
-        content = self.execute_query(querystring="scope=filters")
+        self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?scope=filters")
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            content["filters"]["languages"],
+            response.json()["filters"]["languages"],
             {
                 "base_path": None,
                 "has_more_values": True,

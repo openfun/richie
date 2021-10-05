@@ -1259,14 +1259,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             self.get_expected_courses(courses_definition, list(self.course_runs)),
         )
 
-    def test_query_courses_filter_organization_include(self, *_):
+    def test_query_courses_filter_organizations_aggs(self, *_):
         """
         It should be possible to limit faceting on an organization to specific values by
         passing a regex in the querystring.
         """
         self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?organizations_include=.*-00030001.{4}"
+            "/api/v1.0/courses/?organizations_aggs=L-000300010001&organizations_aggs=L-000300010002"
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -1317,14 +1317,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             self.get_expected_courses(courses_definition, list(self.course_runs)),
         )
 
-    def test_query_courses_filter_subject_include(self, *_):
+    def test_query_courses_filter_subjects_aggs(self, *_):
         """
-        It should be possible to limit faceting on a subject to specific values by
-        passing a regex in the querystring.
+        It should be possible to limit faceting on a subject to specific values by passing them
+        as a list in the querystring.
         """
         self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?subjects_include=.*-00010001.{4}"
+            "/api/v1.0/courses/?subjects_aggs=L-000100010001&subjects_aggs=L-000100010002"
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(

@@ -248,10 +248,10 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             ],
         )
 
-    def test_query_courses_rare_facet_no_include_match(self, *_):
+    def test_query_courses_rare_facet_no_aggs_match(self, *_):
         """
         A facet that is selected in the querystring should not be included in the result's
-        facet counts if it does not match the include parameter (include regex or filter page
+        facet counts if it does not match the aggs parameter (include regex or filter page
         children test).
         """
         filter_pages = self.create_filter_pages()
