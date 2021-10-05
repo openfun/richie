@@ -1266,7 +1266,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?organizations_aggs=L-000300010001&organizations_aggs=L-000300010002"
+            "/api/v1.0/courses/?organizations_aggs=L-000300010001"
+            "&organizations_aggs=L-000300010002"
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -1281,6 +1282,32 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     "count": 1,
                     "human_name": "Organization #0 Child #1",
                     "key": "L-000300010002",
+                },
+            ],
+        )
+
+    def test_query_courses_filter_organizations_children_aggs(self, *_):
+        """
+        It should be possible to limit faceting on organizations to specific values chosen as
+        the children of a given organization, passed in the query string.
+        """
+        self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?organizations_children_aggs=L-00030002"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["filters"]["organizations"]["values"],
+            [
+                {
+                    "count": 1,
+                    "human_name": "Organization #1 Child #0",
+                    "key": "L-000300020001",
+                },
+                {
+                    "count": 1,
+                    "human_name": "Organization #1 Child #1",
+                    "key": "L-000300020002",
                 },
             ],
         )
@@ -1339,6 +1366,32 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     "count": 1,
                     "human_name": "Subject #0 Child #1",
                     "key": "L-000100010002",
+                },
+            ],
+        )
+
+    def test_query_courses_filter_subjects_children_aggs(self, *_):
+        """
+        It should be possible to limit faceting on subjects to specific values chosen as
+        the children of a given subject, passed in the query string.
+        """
+        self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?subjects_children_aggs=L-00010002"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["filters"]["subjects"]["values"],
+            [
+                {
+                    "count": 1,
+                    "human_name": "Subject #1 Child #0",
+                    "key": "L-000100020001",
+                },
+                {
+                    "count": 1,
+                    "human_name": "Subject #1 Child #1",
+                    "key": "L-000100020002",
                 },
             ],
         )
@@ -1480,3 +1533,36 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             self.assertEqual(
                 list((int(c["id"]) for c in response.json()["objects"])), []
             )
+
+    def test_query_courses_children_aggs_over_aggs_list(self, *_):
+        """
+        When both [filter]_children_aggs and [filter]_aggs, two conflicting
+        aggregations-related parameters, are present in a query, [filter]_children_aggs should
+        take precedence.
+        """
+        self.prepare_indices()
+        response = self.client.get(
+            (
+                # Query string directly requests subject 0 children 0 and 1, and requests
+                # subject 1's children through the [filter]_children_aggs parameter.
+                "/api/v1.0/courses/?subjects_aggs=L-000100010001&subjects_aggs=L-000100010002"
+                "&subjects_children_aggs=L-00010002"
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        # Only subject 1's children are included, not the subjects requested directly.
+        self.assertEqual(
+            response.json()["filters"]["subjects"]["values"],
+            [
+                {
+                    "count": 1,
+                    "human_name": "Subject #1 Child #0",
+                    "key": "L-000100020001",
+                },
+                {
+                    "count": 1,
+                    "human_name": "Subject #1 Child #1",
+                    "key": "L-000100020002",
+                },
+            ],
+        )
