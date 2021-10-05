@@ -101,9 +101,7 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
 
     const facetResponse = await fetchList('courses', {
       ...courseSearchParams,
-      [`${filter.name}_include`]: `(${searchResponse.content.objects
-        .map((resource) => resource.id)
-        .join('|')})`,
+      [`${filter.name}_aggs`]: searchResponse.content.objects.map((resource) => resource.id),
       scope: 'filters',
     });
 

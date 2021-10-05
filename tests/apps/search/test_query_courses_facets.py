@@ -1,5 +1,4 @@
 """Tests for limits and related properties in facet counts in course searches."""
-import json
 from unittest import mock
 
 from django.core.cache import caches
@@ -328,11 +327,18 @@ class FacetsCoursesQueryTestCase(TestCase):
         When the `foo_aggs` parameter is present in the query, more values are included
         in the facet counts for the `foo` filter, up to `FACET_COUNTS_MAX_LIMIT`.
         """
-        # NB: we put an ineffective `languages_aggs` param in the query string
+        # `languages_aggs` is not supported in the form & query builder. It should not
+        # change the response.
+
         objects = self.prepare_indices()
         response = self.client.get(
             "/api/v1.0/courses/?scope=filters&languages_aggs=stub&subjects_aggs="
-            f"{'&subjects_aggs='.join([f'L-{subject.extended_object.node.path}' for subject in objects['subjects']])}"
+            + ",".join(
+                [
+                    f"L-{subject.extended_object.node.path}"
+                    for subject in objects["subjects"]
+                ]
+            )
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
