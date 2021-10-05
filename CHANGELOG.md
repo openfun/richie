@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.8.2] - 2021-10-05
+
 ### Fixed
 
 - Fix schema.org related "pt_effort" string computation when effort is not set
@@ -1385,7 +1387,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.8.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.8.2...master
+[2.8.2]: https://github.com/openfun/richie/compare/v2.8.1...v2.8.2
 [2.8.1]: https://github.com/openfun/richie/compare/v2.8.0...v2.8.1
 [2.8.0]: https://github.com/openfun/richie/compare/v2.7.1...v2.8.0
 [2.7.1]: https://github.com/openfun/richie/compare/v2.7.0...v2.7.1
