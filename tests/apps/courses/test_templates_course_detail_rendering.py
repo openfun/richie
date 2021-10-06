@@ -688,13 +688,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        self.assertNotContains(
-            response,
-            (
-                '<div class="course-detail__row course-detail__runs '
-                'course-detail__runs--inactive">'
-                '<h3 class="course-detail__title">'
-            ),
+        self.assertEqual(
+            re.findall('course-detail__runs--[^"]+', str(response.content)),
+            ["course-detail__runs--open"],
         )
 
     @override_settings(
@@ -762,13 +758,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        self.assertNotContains(
-            response,
-            (
-                '<div class="course-detail__row course-detail__runs '
-                'course-detail__runs--inactive">'
-                '<h3 class="course-detail__title">'
-            ),
+        self.assertEqual(
+            re.findall('course-detail__runs--[^"]+', str(response.content)),
+            ["course-detail__runs--open"],
         )
 
     @override_settings(
@@ -817,7 +809,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
     @timezone.override(pytz.utc)
     def test_templates_course_detail_runs_archived_open(self):
         """
-        Priority 2: an archived open course run should show in a separate section.
+        Priority 2: an archived open course run should show in the open section.
         """
         course = CourseFactory(page_title="my course")
         course_run = self.create_run_archived_open(course)
@@ -827,7 +819,6 @@ class RunsCourseCMSTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-        self.assertNotContains(response, "No open course runs")
         self.assertContains(
             response,
             (
@@ -836,13 +827,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        self.assertNotContains(
-            response,
-            (
-                '<div class="course-detail__row course-detail__runs '
-                'course-detail__runs--inactive">'
-                '<h3 class="course-detail__title">'
-            ),
+        self.assertEqual(
+            re.findall('course-detail__runs--[^"]+', str(response.content)),
+            ["course-detail__runs--open"],
         )
 
     @timezone.override(pytz.utc)
@@ -871,6 +858,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
             f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
         )
+        self.assertEqual(
+            re.findall('course-detail__runs--[^"]+', str(response.content)),
+            ["course-detail__runs--open", "course-detail__runs--upcoming"],
+        )
 
     @timezone.override(pytz.utc)
     def test_templates_course_detail_runs_future_closed(self):
@@ -897,6 +888,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
             '<ul class="course-detail__run-list"><li>'
             f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
+        )
+        self.assertEqual(
+            re.findall('course-detail__runs--[^"]+', str(response.content)),
+            ["course-detail__runs--open", "course-detail__runs--ongoing"],
         )
 
     @timezone.override(pytz.utc)
@@ -925,6 +920,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
             f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
         )
+        self.assertEqual(
+            re.findall('course-detail__runs--[^"]+', str(response.content)),
+            ["course-detail__runs--open", "course-detail__runs--ongoing"],
+        )
 
     @timezone.override(pytz.utc)
     def test_templates_course_detail_runs_archived_closed(self):
@@ -951,6 +950,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
             '<ul class="course-detail__run-list"><li>'
             f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
+        )
+        self.assertEqual(
+            re.findall('course-detail__runs--[^"]+', str(response.content)),
+            ["course-detail__runs--open", "course-detail__runs--archived"],
         )
 
     def test_templates_course_detail_runs_to_be_scheduled(self):
