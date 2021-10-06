@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix an issue related to css selector priority from r-scheme-colors mixins
+- Fix css classes related with course runs on the course detail page.
 
 ## [2.8.2] - 2021-10-05
 

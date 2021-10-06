@@ -309,7 +309,7 @@
 
                         {% block runs_to_be_scheduled %}
                         {% if runs_dict.7 and current_page.publisher_is_draft %}
-                            <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
+                            <div class="course-detail__row course-detail__runs course-detail__runs--to_be_scheduled">
                                 <h3 class="course-detail__title">
                                     {% trans "To be scheduled" context "Course runs to be scheduled (plural)" %}
                                 </h3>
@@ -320,7 +320,7 @@
 
                         {% block runs_upcoming %}
                         {% if runs_dict.3 %}
-                            <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
+                            <div class="course-detail__row course-detail__runs course-detail__runs--upcoming">
                                 <h3 class="course-detail__title">
                                     {% trans "Upcoming" context "Upcoming course runs (plural)" %}
                                 </h3>
@@ -331,7 +331,7 @@
 
                         {% block runs_ongoing %}
                         {% if runs_dict.4 or runs_dict.5 %}
-                            <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
+                            <div class="course-detail__row course-detail__runs course-detail__runs--ongoing">
                                 <h3 class="course-detail__title">
                                     {% trans "Ongoing" context "Ongoing course runs (plural)" %}
                                 </h3>
@@ -342,7 +342,7 @@
 
                         {% block runs_archived %}
                         {% if runs_dict.6 %}
-                            <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
+                            <div class="course-detail__row course-detail__runs course-detail__runs--archived">
                                 <h3 class="course-detail__title">
                                     {% trans "Archived" context "Archived course runs (plural)" %}
                                 </h3>
