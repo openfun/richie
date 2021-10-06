@@ -155,20 +155,22 @@ class LimitBrowserCacheTTLHeaders(MiddlewareMixin):
         Rewrite the "Cache-control" and "Expires headers" in the response
         if needed.
         """
-        try:
-            max_ttl = int(getattr(settings, "MAX_BROWSER_CACHE_TTL", None))
-            if max_ttl < 0:
-                raise ValueError("MAX_BROWSER_CACHE_TTL must be a positive integer")
-        except (ValueError, TypeError) as err:
-            logger.error(err)
-            return response
+        max_ttl = getattr(settings, "MAX_BROWSER_CACHE_TTL", None)
+        if max_ttl:
+            try:
+                max_ttl = int(max_ttl)
+                if max_ttl < 0:
+                    raise ValueError("MAX_BROWSER_CACHE_TTL must be a positive integer")
+            except (ValueError, TypeError) as err:
+                logger.error(err)
+                return response
 
-        max_age = get_max_age(response)
-        if max_age is not None and max_age > max_ttl:
-            if response.has_header("Expires"):
-                # Remove the Expires response Header because patch_response_headers()
-                # adds it only if it isn't already set
-                del response["Expires"]
-            patch_response_headers(response, cache_timeout=max_ttl)
+            max_age = get_max_age(response)
+            if max_age is not None and max_age > max_ttl:
+                if response.has_header("Expires"):
+                    # Remove the Expires response Header because patch_response_headers()
+                    # adds it only if it isn't already set
+                    del response["Expires"]
+                patch_response_headers(response, cache_timeout=max_ttl)
 
         return response
