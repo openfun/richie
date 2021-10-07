@@ -3,6 +3,7 @@ Section plugin forms
 """
 from django import forms
 
+from djangocms_attributes_field.widgets import AttributesWidget
 from djangocms_text_ckeditor.widgets import TextEditorWidget
 
 from .models import Section
@@ -21,8 +22,12 @@ class SectionForm(forms.ModelForm):
         """
 
         model = Section
-        widgets = {"title": TextEditorWidget(configuration=CKEDITOR_CONFIGURATION_NAME)}
+        widgets = {
+            "title": TextEditorWidget(configuration=CKEDITOR_CONFIGURATION_NAME),
+            "attributes": AttributesWidget(),
+        }
         fields = {
             "title",
             "template",
+            "attributes",
         }

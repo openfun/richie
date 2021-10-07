@@ -3,7 +3,7 @@
 <section class="section {{ variants }}">
     <div class="section__row">
         {% if instance.title %}
-            <h{{ header_level|default:2 }} class="section__title">
+            <h{{ header_level|default:2 }} class="section__title" {% if instance.attributes %} {{ instance.attributes_str }}{% endif %}>
                 {{ instance.title|safe }}
             </h{{ header_level|default:2 }}>
         {% endif %}
