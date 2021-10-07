@@ -18,6 +18,9 @@ $ make migrate
 
 ## 2.7.x to 2.8.x
 
+- `IndexableMPTTFilterDefinition` class was renamed to `IndexableHierarchicalFilterDefinition`.
+  If your project defines custom filter definitions in the `RICHIE_FILTERS_CONFIGURATION`
+  setting, you need to make sure you don't point to the old class name.
 - A new scss variable has been added `$r-course-subheader-aside`. If you have overridden
   `_variables.scss` file, you have to define this variable.
 - Add a new entry to your `urls.py` declarations for the `robot.txt` file so
