@@ -22,7 +22,7 @@ class SectionPlugin(CMSPluginBase):
     allow_children = True
     cache = True
     form = SectionForm
-    fieldsets = ((None, {"fields": ["title", "template"]}),)
+    fieldsets = ((None, {"fields": ["title", "template", "attributes"]}),)
     model = Section
     module = PLUGINS_GROUP
     name = _("Section")
