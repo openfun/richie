@@ -162,7 +162,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     line-height: 1.1rem;
     margin-bottom: 0;
 
-    svg {
+    .icon {
       @include sv-flex(1, 0, 1.4rem);
       width: 1.4rem;
       height: 0.9rem;
@@ -191,7 +191,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     font-size: 0.9rem;
     line-height: 1.1;
 
-    svg {
+    .icon {
       @include sv-flex(1, 0, 1.4rem);
       width: 1.4rem;
       height: 0.9rem;
@@ -261,11 +261,11 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     font-weight: $font-weight-bold;
     line-height: 1.1;
 
-    svg {
+    .icon {
       @include sv-flex(1, 0, 1.4rem);
-      width: 1.4rem;
       height: 1.3rem;
       margin-right: 0.5rem;
+      width: 1.4rem;
     }
   }
 }

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix an issue related to css selector priority from r-scheme-colors mixins
+
 ## [2.8.2] - 2021-10-05
 
 ### Fixed

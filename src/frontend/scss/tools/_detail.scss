@@ -23,20 +23,20 @@
 
   // Thin top divider line
   @if r-theme-val(block-schemes, divider) {
-    &#{$sel} + #{$sel}--divider {
+    & + #{$sel}--divider {
       border-top: $onepixel solid r-theme-val(block-schemes, divider);
     }
   }
 
   // Implement background variant modifiers
   @each $name, $scheme in r-theme-val(block-schemes, variants) {
-    &#{$sel}--#{$name} {
+    &--#{$name} {
       @include r-scheme-colors($scheme);
     }
   }
 
   // Some specific responsives adjustments for the 'waves' section
-  &#{$sel}--waves {
+  &--waves {
     padding-top: 3vw;
     @include media-breakpoint-up(lg) {
       padding-top: 3vw;
@@ -52,7 +52,7 @@
   }
 
   @if r-theme-val(block-schemes, alt-arc) {
-    &#{$sel}--arc {
+    &--arc {
       padding-bottom: 0 !important;
 
       &::after {
@@ -70,7 +70,7 @@
   }
 
   @if r-theme-val(block-schemes, alt-curve) {
-    &#{$sel}--curve {
+    &--curve {
       padding-top: 0 !important;
 
       &::before {

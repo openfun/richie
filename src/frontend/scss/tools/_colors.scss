@@ -83,7 +83,7 @@
 ///       color: #000000;
 ///       background: #ffffff;
 ///
-///       svg:not(.no-scheme-fill){
+///       svg {
 ///           fill: #000000;
 ///       }
 ///
@@ -146,9 +146,8 @@
     color: $font-color;
   }
 
-  // Fill svg color but not for elements with ".no-scheme-fill" class
   @if $apply-svg and $svg-color {
-    svg:not(.no-scheme-fill) {
+    svg {
       fill: $svg-color;
     }
   }
@@ -226,9 +225,9 @@
     color: $font-color;
   }
 
-  // Fill svg color but not for ".no-scheme-fill" class
   @if $svg-color {
-    svg:not(.no-scheme-fill) {
+    svg,
+    .icon {
       fill: $svg-color;
     }
   }

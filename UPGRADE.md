@@ -18,6 +18,7 @@ $ make migrate
 
 ## 2.7.x to 2.8.x
 
+- `.no-scheme-fill` css class util has been removed.
 - `IndexableMPTTFilterDefinition` class was renamed to `IndexableHierarchicalFilterDefinition`.
   If your project defines custom filter definitions in the `RICHIE_FILTERS_CONFIGURATION`
   setting, you need to make sure you don't point to the old class name.
