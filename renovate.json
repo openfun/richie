@@ -11,7 +11,8 @@
       ],
       "matchPackageNames": [
         "bootstrap",
-        "node-fetch"
+        "node-fetch",
+        "eslint",
       ]
     },
     {
