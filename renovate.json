@@ -12,7 +12,7 @@
       "matchPackageNames": [
         "bootstrap",
         "node-fetch",
-        "eslint",
+        "eslint"
       ]
     },
     {
