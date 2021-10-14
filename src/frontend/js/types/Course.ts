@@ -21,6 +21,11 @@ export interface Course extends Resource {
     title: string;
   }>;
   organization_highlighted: string;
+  organization_highlighted_cover_image: Nullable<{
+    sizes: string;
+    src: string;
+    srcset: string;
+  }>;
   organizations: string[];
   state: {
     call_to_action: Nullable<string>;

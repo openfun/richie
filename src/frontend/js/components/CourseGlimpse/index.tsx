@@ -20,6 +20,7 @@ const messages = defineMessages({
 const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataProps) => (
   <a className="course-glimpse course-glimpse--link" href={course.absolute_url}>
     <div className="course-glimpse__media">
+      {/* alt forced to empty string because it's a decorative image */}
       {course.cover_image ? (
         <img
           alt=""
@@ -39,11 +40,23 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
           <div className="course-glimpse__band" style={{ background: course.icon.color }}>
             {course.icon.title}
           </div>
+          {/* alt forced to empty string because it's a decorative image */}
           <img src={course.icon.src} srcSet={course.icon.srcset} sizes={course.icon.sizes} alt="" />
         </div>
       ) : null}
       <div className="course-glimpse__wrapper">
         <p className="course-glimpse__title">{course.title}</p>
+        {course.organization_highlighted_cover_image ? (
+          <div className="course-glimpse__organization-logo">
+            {/* alt forced to empty string because it's a decorative image */}
+            <img
+              alt=""
+              sizes={course.organization_highlighted_cover_image.sizes}
+              src={course.organization_highlighted_cover_image.src}
+              srcSet={course.organization_highlighted_cover_image.srcset}
+            />
+          </div>
+        ) : null}
         <div className="course-glimpse__organization">
           <svg aria-hidden={true} role="img" className="icon">
             <use xlinkHref="#icon-org" />

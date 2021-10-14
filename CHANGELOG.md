@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add enrollment count to course run and to course page
 - Add blocks on header and footer for branding overrides
+- Add organization logo to course glimpse
 
 ### Fixed
 

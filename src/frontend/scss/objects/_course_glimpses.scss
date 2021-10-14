@@ -201,6 +201,23 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     }
   }
 
+  &__organization-logo {
+    display: flex;
+    position: absolute;
+    right: 0;
+    top: -3.1rem;
+    width: 4.3rem;
+    height: 4.3rem;
+    padding: 0.15rem;
+    right: 0.15rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: $border-radius-sm;
+    overflow: hidden;
+    background-color: $white;
+    box-shadow: r-theme-val(course-glimpse, organization-shadow);
+  }
+
   &__media {
     border-top-left-radius: $border-radius-lg;
     border-top-right-radius: $border-radius-lg;

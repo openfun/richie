@@ -95,3 +95,6 @@ website/i18n/*
 # TLS Conf files
 docker/files/etc/nginx/ssl/*
 !docker/files/etc/nginx/ssl/ssl.conf.tpl
+
+# Meld git diff tool
+*.orig

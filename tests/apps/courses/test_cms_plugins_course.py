@@ -74,7 +74,12 @@ class CoursePluginTestCase(TestCase):
 
         # Create a course with a page in both english and french
         organization = OrganizationFactory(
-            page_title="public title", should_publish=True
+            page_title="public title",
+            should_publish=True,
+            fill_logo={
+                "original_filename": "org_logo.jpg",
+                "default_alt_text": "my logo",
+            },
         )
 
         course = CourseFactory(
@@ -187,6 +192,14 @@ class CoursePluginTestCase(TestCase):
         self.assertContains(
             response, organization.extended_object.get_title(), status_code=200
         )
+
+        # The course's main organization logo should be present
+        pattern = (
+            r'<div class="course-glimpse__organization-logo">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*org_logo\.jpg__200x113'
+            r'.*alt=""'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         # The course's cover should be present
         pattern = (

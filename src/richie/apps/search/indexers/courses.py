@@ -12,6 +12,7 @@ from django.utils import translation
 from cms.models import Title
 from djangocms_picture.models import Picture
 
+from richie.apps.search.indexers.organizations import OrganizationsIndexer
 from richie.plugins.plain_text.models import PlainText
 from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
@@ -202,6 +203,10 @@ class CoursesIndexer:
             "absolute_url": {"type": "object", "enabled": False},
             "cover_image": {"type": "object", "enabled": False},
             "icon": {"type": "object", "enabled": False},
+            "organization_highlighted_cover_image": {
+                "type": "object",
+                "enabled": False,
+            },
         },
     }
     display_fields = [
@@ -214,6 +219,7 @@ class CoursesIndexer:
         "icon",
         "introduction",
         "organization_highlighted",
+        "organization_highlighted_cover_image",
         "organizations",
         "title",
     ]
@@ -529,6 +535,11 @@ class CoursesIndexer:
         organization_highlighted = (
             organizations.get(id=organization_main.id) if organization_main else None
         )
+        organization_highlighted_cover_image = (
+            OrganizationsIndexer.get_logo_images(organization_main)
+            if organization_main
+            else {}
+        )
 
         # Prepare persons, making sure we get title information for persons
         # in the same query
@@ -613,6 +624,7 @@ class CoursesIndexer:
             }
             if organization_highlighted
             else None,
+            "organization_highlighted_cover_image": organization_highlighted_cover_image,
             "organizations": [
                 organization.get_es_id() for organization in organizations
             ],
@@ -703,6 +715,11 @@ class CoursesIndexer:
                 source["organization_highlighted"], language
             )
             if source.get("organization_highlighted", None)
+            else None,
+            "organization_highlighted_cover_image": get_best_field_language(
+                source["organization_highlighted_cover_image"], language
+            )
+            if source.get("organization_highlighted_cover_image", None)
             else None,
             "organizations": source["organizations"],
             "state": CourseState(**state),
