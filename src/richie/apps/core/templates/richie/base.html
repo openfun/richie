@@ -80,7 +80,9 @@
                             <button class="topbar__hamburger"
                                     data-target="main-menu" aria-label="menu" aria-expanded="false">&#8801;</button>
                             <a href="/" title="{% trans "Go to homepage" %}" rel="home" accesskey="h">
+                            {% block branding_topbar %}
                                 <img src="{% static "richie/images/logo.png" %}" class="topbar__logo" alt="{{ SITE.name }}">
+                            {% endblock branding_topbar %}
                             </a>
                         </div>
                         <div class="topbar__menu">
@@ -141,7 +143,9 @@
                         </div>
                         <div class="body-footer__brand">
                             <a href="/">
+                            {% block branding_footer %}
                                 <img src="{% static "richie/images/logo-alt.png" %}" alt="">
+                            {% endblock branding_footer %}
                             </a>
                         </div>
                         <div class="body-footer__insert">
