@@ -6,7 +6,7 @@ from collections.abc import Mapping
 from datetime import MAXYEAR, datetime
 
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.db.models import Q, Sum
 from django.urls import reverse
@@ -874,6 +874,16 @@ class CourseRun(TranslatableModel):
             # Get the course in the same version as the course run
             extended_object__publisher_is_draft=is_draft,
         ).distinct()[0]
+
+    @property
+    def safe_title(self):
+        """
+        Access the `title` translatable field from the `CourseRunTranslation` on a safe way.
+        """
+        try:
+            return self.title
+        except ObjectDoesNotExist:
+            return None
 
 
 class CourseRunTranslation(TranslatedFieldsModel):
