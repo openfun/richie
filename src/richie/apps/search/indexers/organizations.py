@@ -68,14 +68,7 @@ class OrganizationsIndexer:
         }
 
         # Prepare logo images
-        logo_images = {}
-        for logo in Picture.objects.filter(
-            cmsplugin_ptr__placeholder__page=organization.extended_object,
-            cmsplugin_ptr__placeholder__slot="logo",
-        ):
-            language = logo.cmsplugin_ptr.language
-            with translation.override(language):
-                logo_images[language] = get_picture_info(logo, "logo")
+        logo_images = cls.get_logo_images(organization)
 
         # Get description texts
         description = defaultdict(list)
@@ -104,6 +97,21 @@ class OrganizationsIndexer:
             "title": titles,
             "title_raw": titles,
         }
+
+    @classmethod
+    def get_logo_images(cls, organization):
+        """
+        Prepare logo images for an organization.
+        """
+        logo_images = {}
+        for logo in Picture.objects.filter(
+            cmsplugin_ptr__placeholder__page=organization.extended_object,
+            cmsplugin_ptr__placeholder__slot="logo",
+        ):
+            language = logo.cmsplugin_ptr.language
+            with translation.override(language):
+                logo_images[language] = get_picture_info(logo, "logo")
+        return logo_images
 
     @classmethod
     def get_es_documents(cls, index=None, action="index"):

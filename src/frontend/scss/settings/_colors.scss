@@ -385,6 +385,7 @@ $r-theme: (
     code-color: r-color('battleship-grey'),
     svg-icon-fill: r-color('white'),
     footer: $battleship-grey-scheme,
+    organization-shadow: 0 0 6px r-color('light-grey'),
   ),
   category-badges: (
     primary-item: $indianred3-scheme,

@@ -1,7 +1,7 @@
 {% load i18n cms_tags extra_tags static thumbnail %}{% spaceless %}
 {% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
 
-{% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title course_variant=course_variant|default:'glimpse' %}
+{% with course_page=course.extended_object course_state=course.state main_organization_title=course.get_main_organization.extended_object.get_title main_organization=course.get_main_organization course_variant=course_variant|default:'glimpse' %}
 <a class="course-{{ course_variant }}{% if course_page.publisher_is_draft is True %} course-{{ course_variant }}--draft{% endif %}" href="{{ course_page.get_absolute_url }}">
     <div class="course-{{ course_variant }}__media">
         {% get_page_plugins "course_cover" course_page as cover_plugins or %}
@@ -31,12 +31,32 @@
         {% endif %}
         <div class="course-{{ course_variant }}__wrapper">
             <p class="course-{{ course_variant }}__title">{{ course_page.get_title }}</p>
-            {% if main_org_title %}
+            {% if main_organization %}
+                {% with organization_page=main_organization.extended_object %}
+                    {% get_page_plugins "logo" organization_page as plugins or %}
+                    {% endget_page_plugins %}
+                    {% blockplugin plugins.0 %}
+                        <div class="course-glimpse__organization-logo">
+                            <img src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
+                                srcset="
+                                    {% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %} 200w
+                                    {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                                    {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                    {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
+                                "
+                                {# alt forced to empty string for a11y because the image does not carry more information than the course title #}
+                                alt=""
+                            />
+                        </div>
+                    {% endblockplugin %}
+                {% endwith %}
+            {% endif %} 
+            {% if main_organization_title %}
             <div class="course-{{ course_variant }}__organization">
                 <svg role="img" aria-hidden="true" class="icon">
                     <use href="#icon-org" />
                 </svg>
-                <span>{{ main_org_title }}</span>
+                <span>{{ main_organization_title }}</span>
             </div>
             {% endif %}
             <div class="course-{{ course_variant }}__code">

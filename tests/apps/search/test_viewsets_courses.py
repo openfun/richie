@@ -300,6 +300,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
                 "icon",
                 "introduction",
                 "organization_highlighted",
+                "organization_highlighted_cover_image",
                 "organizations",
                 "title",
             ],

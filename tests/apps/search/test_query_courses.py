@@ -256,6 +256,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "is_new": True,
                 "is_listed": True,
                 "organization_highlighted": {"en": "Org 33"},
+                "organization_highlighted_cover_image": {},
                 "organizations": [
                     org.get_es_id()
                     for org in [
@@ -582,6 +583,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "icon": "icon.jpg",
                         "introduction": "Polarized non-volatile structure",
                         "organization_highlighted": "Org 311",
+                        "organization_highlighted_cover_image": None,
                         "organizations": [
                             org.get_es_id()
                             for org in [
@@ -619,6 +621,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "icon": "icon.jpg",
                         "introduction": "Up-sized value-added project",
                         "organization_highlighted": "Org 321",
+                        "organization_highlighted_cover_image": None,
                         "organizations": [
                             org.get_es_id()
                             for org in [
@@ -656,6 +659,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "icon": "icon.jpg",
                         "introduction": "Innovative encompassing extranet",
                         "organization_highlighted": "Org 34",
+                        "organization_highlighted_cover_image": None,
                         "organizations": [
                             org.get_es_id()
                             for org in [
@@ -693,6 +697,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "icon": "icon.jpg",
                         "introduction": "De-engineered demand-driven success",
                         "organization_highlighted": "Org 33",
+                        "organization_highlighted_cover_image": None,
                         "organizations": [
                             org.get_es_id()
                             for org in [

@@ -21,6 +21,11 @@ describe('components/CourseGlimpse', () => {
     icon: null,
     id: '742',
     organization_highlighted: 'Some Organization',
+    organization_highlighted_cover_image: {
+      sizes: '330px',
+      src: '/thumbs/org_small.png',
+      srcset: 'some srcset',
+    },
     organizations: ['36', '63'],
     state: {
       call_to_action: 'Enroll now',
@@ -34,7 +39,7 @@ describe('components/CourseGlimpse', () => {
   const contextProps: CommonDataProps['context'] = ContextFactory().generate();
 
   it('renders a course glimpse with its data', () => {
-    render(
+    const { container } = render(
       <IntlProvider locale="en">
         <CourseGlimpse
           context={contextProps}
@@ -55,10 +60,24 @@ describe('components/CourseGlimpse', () => {
     screen.getByText('Some Organization');
     // Matches on 'Starts on Mar 14, 2019', date is wrapped with intl <span>
     screen.getByText('Starts on Mar 14, 2019');
+
+    // Check course logo
+    const courseGlipseMedia = container.getElementsByClassName('course-glimpse__media');
+    expect(courseGlipseMedia.length).toBe(1);
+    const img = courseGlipseMedia[0].firstChild;
+    expect(img).toBeInstanceOf(HTMLImageElement);
     // The logo is rendered along with alt text "" as it is decorative and included in a link block
-    const img = screen.getByRole('img');
     expect(img).toHaveAttribute('alt', '');
     expect(img).toHaveAttribute('src', '/thumbs/small.png');
+
+    // Check organization logo
+    const orgLogoElement = container.getElementsByClassName('course-glimpse__organization-logo');
+    expect(orgLogoElement.length).toBe(1);
+    const orgImg = orgLogoElement[0].firstChild;
+    expect(orgImg).toBeInstanceOf(HTMLImageElement);
+    // The logo is rendered along with alt text "" as it is decorative and included in a link block
+    expect(orgImg).toHaveAttribute('alt', '');
+    expect(orgImg).toHaveAttribute('src', '/thumbs/org_small.png');
   });
 
   it('works when there is no call to action or datetime on the state (eg. an archived course)', () => {
