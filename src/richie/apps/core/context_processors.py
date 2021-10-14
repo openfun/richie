@@ -185,7 +185,7 @@ class WebAnalyticsContextProcessor:
         dimensions["course_runs_titles"] = [
             course_run.title
             for course_run in course_runs
-            if course_run is not None and course_run.title is not None
+            if course_run is not None and course_run.safe_title is not None
         ]
 
         dimensions["course_runs_resource_links"] = map(

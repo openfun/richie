@@ -2,10 +2,12 @@
 Test suite for the Web Analytics
 """
 from django.conf import settings
+from django.core.cache import cache
 from django.test import RequestFactory
 from django.test.utils import override_settings
 
 from cms.test_utils.testcases import CMSTestCase
+from parler.models import TranslationDoesNotExist
 
 from richie.apps.core.context_processors import WebAnalyticsContextProcessor
 from richie.apps.courses.factories import (
@@ -13,6 +15,7 @@ from richie.apps.courses.factories import (
     CourseRunFactory,
     OrganizationFactory,
 )
+from richie.apps.courses.models.course import CourseRun, CourseRunTranslation
 
 
 class WebAnalyticsTestCase(CMSTestCase):
@@ -230,4 +233,53 @@ class WebAnalyticsTestCase(CMSTestCase):
             response,
             "YYY-ZZZ-WWW",
             msg_prefix="Page should include the Web Analytics id",
+        )
+
+    @override_settings(
+        WEB_ANALYTICS_ID="UA-XXXXXXXXX-X", WEB_ANALYTICS_PROVIDER="google_analytics"
+    )
+    def test_web_analytics_course_page_course_run_without_title(self):
+        """
+        Test Web Analytics with a course page that has a course run without a title translation
+        """
+        course = CourseFactory()
+
+        course_run = CourseRun(
+            direct_course=course,
+            languages=["fr"],
+            title=None,
+        )
+        course_run.save()
+
+        CourseRunTranslation.objects.all().delete()
+        course_run.refresh_from_db()
+
+        self.assertFalse(CourseRunTranslation.objects.exists())
+        self.assertEqual(course_run.title, None)
+
+        cache.clear()
+
+        # reread course run from database
+        course_run = CourseRun.objects.first()
+
+        self.assertIsNone(
+            course_run.safe_title,
+            msg="Course run without a title should return None on safe_title property",
+        )
+
+        with self.assertRaises(
+            TranslationDoesNotExist,
+            msg="Verify that the 'title' method unfortunately is raising an error",
+        ):
+            course_run.title  # pylint: disable=pointless-statement
+
+        page = course.extended_object
+        page.publish(settings.LANGUAGE_CODE)
+        url = page.get_absolute_url(language=settings.LANGUAGE_CODE)
+        response = self.client.get(url)
+
+        self.assertContains(
+            response,
+            "dimension3': ''",
+            msg_prefix="Should include an empty course run title on the 3rd custom dimension",
         )
