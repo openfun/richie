@@ -132,6 +132,35 @@ class OrganizationModelsTestCase(TestCase):
         with self.assertNumQueries(1):
             self.assertEqual(str(organization), "Organization: La Sorbonne (SOR)")
 
+    # get_es_id
+    def test_get_es_id_for_draft_organization_with_public_extension(self):
+        """
+        A draft organization with a public extension. Its ES ID is the ID of the page linked to the
+        public extension.
+        """
+        organization = OrganizationFactory(should_publish=True)
+        self.assertEqual(
+            organization.get_es_id(),
+            str(organization.public_extension.extended_object_id),
+        )
+
+    def test_get_es_id_for_published_organization(self):
+        """
+        A published organization. Its ES ID is the ID of the page linked to it.
+        """
+        organization = OrganizationFactory(should_publish=True)
+        self.assertEqual(
+            organization.public_extension.get_es_id(),
+            str(organization.public_extension.extended_object_id),
+        )
+
+    def test_get_es_id_for_draft_organization_with_no_public_extension(self):
+        """
+        A draft organization with no public extension. It has no ES ID.
+        """
+        organization = OrganizationFactory()
+        self.assertEqual(organization.get_es_id(), None)
+
     def test_models_organization_create_page_role(self, *_):
         """
         If the CMS_PERMISSIONS settings is True, a page role should be created when saving

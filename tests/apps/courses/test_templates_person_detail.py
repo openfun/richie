@@ -383,7 +383,7 @@ class PersonCMSTestCase(CMSTestCase):
         # There is a link to view more related courses directly in the Search view
         self.assertContains(
             response,
-            f'href="/the/courses/?persons={person.public_extension.extended_object_id}"',
+            f'href="/the/courses/?persons={person.get_es_id()}"',
         )
         self.assertContains(
             response,

@@ -27,7 +27,7 @@ from ...core.defaults import ALL_LANGUAGES
 from ...core.fields.duration import CompositeDurationField
 from ...core.fields.multiselect import MultiSelectField
 from ...core.helpers import get_permissions
-from ...core.models import BasePageExtension
+from ...core.models import BasePageExtension, EsIdMixin
 from .. import defaults, utils
 from .category import Category, CategoryPluginModel
 from .organization import Organization, OrganizationPluginModel
@@ -136,7 +136,7 @@ class CourseState(Mapping):
 
 
 # pylint: disable=too-many-public-methods
-class Course(BasePageExtension):
+class Course(EsIdMixin, BasePageExtension):
     """
     The course page extension represents and records a course in the catalog.
 

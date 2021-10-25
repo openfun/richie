@@ -30,6 +30,34 @@ class PersonModelsTestCase(TestCase):
         with self.assertNumQueries(2):
             self.assertEqual(str(person), "Person: Page of Lady Louise Dupont")
 
+    # get_es_id
+    def test_get_es_id_for_draft_person_with_public_extension(self):
+        """
+        A draft person with a public extension. Its ES ID is the ID of the page linked to the
+        public extension.
+        """
+        person = PersonFactory(should_publish=True)
+        self.assertEqual(
+            person.get_es_id(), str(person.public_extension.extended_object_id)
+        )
+
+    def test_get_es_id_for_published_person(self):
+        """
+        A published person. Its ES ID is the ID of the page linked to it.
+        """
+        person = PersonFactory(should_publish=True)
+        self.assertEqual(
+            person.public_extension.get_es_id(),
+            str(person.public_extension.extended_object_id),
+        )
+
+    def test_get_es_id_for_draft_person_with_no_public_extension(self):
+        """
+        A draft person with no public extension. It has no ES ID.
+        """
+        person = PersonFactory()
+        self.assertEqual(person.get_es_id(), None)
+
     # get_courses
 
     def test_models_person_get_courses(self):

@@ -8,11 +8,11 @@ from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 
-from ...core.models import BasePageExtension
+from ...core.models import BasePageExtension, EsIdMixin
 from ..defaults import PERSONS_PAGE
 
 
-class Person(BasePageExtension):
+class Person(EsIdMixin, BasePageExtension):
     """
     The person page extension represents and records people information.
     It could be a course or news article author.
