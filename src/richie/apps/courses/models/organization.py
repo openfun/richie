@@ -13,12 +13,12 @@ from cms.models import CMSPlugin
 from filer.models import FolderPermission
 
 from ...core.helpers import get_permissions
-from ...core.models import BasePageExtension
+from ...core.models import BasePageExtension, EsIdMixin
 from .. import defaults, utils
 from .role import PageRole
 
 
-class Organization(BasePageExtension):
+class Organization(EsIdMixin, BasePageExtension):
     """
     The organization page extension represents and records entities that manage courses.
     It could be a university or a training company for example.
@@ -47,17 +47,6 @@ class Organization(BasePageExtension):
         model = self._meta.verbose_name.title()
         name = self.extended_object.get_title()
         return f"{model:s}: {name:s} ({self.code:s})"
-
-    def get_es_id(self):
-        """
-        An ID built with the node path and the position of this organization in the taxonomy:
-            - P: parent, the organization has children
-            - L: leaf, the organization has no children
-
-        For example: a parent organization `P_00010002` and its child `L_000100020001`.
-        """
-        page = self.extended_object
-        return f"{'L' if page.node.is_leaf() else 'P':s}-{page.node.path:s}"
 
     def clean(self):
         """

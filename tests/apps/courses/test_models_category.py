@@ -116,6 +116,34 @@ class CategoryModelsTestCase(TestCase):
         )
         self.assertEqual(child_category.get_meta_category(), meta_category)
 
+    # get_es_id
+    def test_get_es_id_for_draft_category_with_public_extension(self):
+        """
+        A draft category with a public extension. Its ES ID is the ID of the page linked to the
+        public extension.
+        """
+        category = CategoryFactory(should_publish=True)
+        self.assertEqual(
+            category.get_es_id(), str(category.public_extension.extended_object_id)
+        )
+
+    def test_get_es_id_for_published_category(self):
+        """
+        A published category. Its ES ID is the ID of the page linked to it.
+        """
+        category = CategoryFactory(should_publish=True)
+        self.assertEqual(
+            category.public_extension.get_es_id(),
+            str(category.public_extension.extended_object_id),
+        )
+
+    def test_get_es_id_for_draft_category_with_no_public_extension(self):
+        """
+        A draft category with no public extension. It has no ES ID.
+        """
+        category = CategoryFactory()
+        self.assertEqual(category.get_es_id(), None)
+
     # get_courses
 
     def test_models_category_get_courses_queries(self):

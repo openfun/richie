@@ -568,7 +568,7 @@ class CoursesIndexer:
         ]
 
         return {
-            "_id": str(course.extended_object_id),
+            "_id": course.get_es_id(),
             "_index": index,
             "_op_type": action,
             "absolute_url": {
@@ -634,9 +634,7 @@ class CoursesIndexer:
                 ],
                 {},
             ),
-            "persons": [
-                str(person.public_extension.extended_object_id) for person in persons
-            ],
+            "persons": [person.get_es_id() for person in persons],
             "persons_names": reduce(
                 lambda acc, title: {
                     **acc,

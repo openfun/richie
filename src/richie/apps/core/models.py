@@ -291,3 +291,25 @@ class BasePageExtension(PageExtension):
             .distinct()
             .order_by("extended_object__node__path")
         )
+
+
+class EsIdMixin:
+    """
+    Add a common method to get the ES ID for an indexed object to all the models
+    that are indexed in ES.
+    """
+
+    def get_es_id(self):
+        """
+        Get the ElasticSearch ID for this object. It should be the same for both the published
+        and draft versions of the object.
+        """
+        try:
+            if self.public_extension:
+                return str(self.public_extension.extended_object_id)
+            if self.draft_extension:
+                return str(self.extended_object_id)
+        # pylint: disable=broad-except
+        except AttributeError:
+            pass
+        return None

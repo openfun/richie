@@ -9,11 +9,11 @@ from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 
-from ...core.models import BasePageExtension
+from ...core.models import BasePageExtension, EsIdMixin
 from ..defaults import CATEGORIES_PAGE, CATEGORY_GLIMPSE_VARIANT_CHOICES
 
 
-class Category(BasePageExtension):
+class Category(EsIdMixin, BasePageExtension):
     """
     The category page extension represents and records a thematic in the catalog.
 
@@ -42,17 +42,6 @@ class Category(BasePageExtension):
             ancestors_titles = f"{ancestors_titles:s} / "
         title = self.extended_object.get_title()
         return f"{ancestors_titles:s}{title:s}"
-
-    def get_es_id(self):
-        """
-        An ID built with the node path and the position of this category in the taxonomy:
-            - P: parent, the category has children
-            - L: leaf, the category has no children
-
-        For example: a parent category `P_00010002` and its child `L_000100020001`.
-        """
-        page = self.extended_object
-        return f"{'L' if page.node.is_leaf() else 'P':s}-{page.node.path:s}"
 
     def get_meta_category(self):
         """

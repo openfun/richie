@@ -106,6 +106,34 @@ class CourseModelsTestCase(TestCase):
         self.assertEqual(snapshot.code, "123")
         self.assertEqual(snapshot.public_extension.code, "123")
 
+    # get_es_id
+    def test_get_es_id_for_draft_course_with_public_extension(self):
+        """
+        A draft course with a public extension. Its ES ID is the ID of the page linked to the
+        public extension.
+        """
+        course = factories.CourseFactory(should_publish=True)
+        self.assertEqual(
+            course.get_es_id(), str(course.public_extension.extended_object_id)
+        )
+
+    def test_get_es_id_for_published_course(self):
+        """
+        A published course. Its ES ID is the ID of the page linked to it.
+        """
+        course = factories.CourseFactory(should_publish=True)
+        self.assertEqual(
+            course.public_extension.get_es_id(),
+            str(course.public_extension.extended_object_id),
+        )
+
+    def test_get_es_id_for_draft_course_with_no_public_extension(self):
+        """
+        A draft course with no public extension. It has no ES ID.
+        """
+        course = factories.CourseFactory()
+        self.assertEqual(course.get_es_id(), None)
+
     def test_models_course_create_page_role(self, *_):
         """
         If the CMS_PERMISSIONS settings is True, a page role should be created when calling
