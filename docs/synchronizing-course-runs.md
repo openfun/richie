@@ -53,6 +53,9 @@ We also share here our sample code to call this synchronization endpoint from Op
 should run on the `post_publish` signal emitted by the OpenEdX `cms` application each time a
 course run is modified and published.
 
+Or you can use the [Richie Open edX Synchronization](https://github.com/fccn/richie-openedx-sync)
+which is based on the following code sample and also includes the enrollment count.
+
 Given a `COURSE_HOOK` setting defined as follows in your OpenEdX instance:
 
 ```python
