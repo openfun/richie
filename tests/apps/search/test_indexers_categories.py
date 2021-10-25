@@ -44,7 +44,7 @@ class CategoriesIndexersTestCase(TestCase):
             fill_logo=True,
             should_publish=True,
         )
-        CategoryFactory(
+        category2 = CategoryFactory(
             page_parent=category1.extended_object,
             page_title={"en": "my second subject", "fr": "ma deuxième thématic"},
             should_publish=True,
@@ -69,7 +69,7 @@ class CategoriesIndexersTestCase(TestCase):
             ),
             [
                 {
-                    "_id": "L-0001000100010001",
+                    "_id": category2.get_es_id(),
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "absolute_url": {
@@ -94,7 +94,7 @@ class CategoriesIndexersTestCase(TestCase):
                     },
                 },
                 {
-                    "_id": "P-000100010001",
+                    "_id": category1.get_es_id(),
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "absolute_url": {
@@ -126,7 +126,7 @@ class CategoriesIndexersTestCase(TestCase):
                     },
                 },
                 {
-                    "_id": "P-00010001",
+                    "_id": meta.get_es_id(),
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "absolute_url": {
@@ -177,7 +177,7 @@ class CategoriesIndexersTestCase(TestCase):
             ),
             [
                 {
-                    "_id": "P-00010001",
+                    "_id": meta.get_es_id(),
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "absolute_url": {

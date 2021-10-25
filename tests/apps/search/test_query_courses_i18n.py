@@ -134,7 +134,7 @@ class CoursesI18nQueryTestCase(TestCase):
                     {
                         "count": 1,
                         "human_name": subject.extended_object.get_title(),
-                        "key": "L-00010001",
+                        "key": subject.get_es_id(),
                     }
                 ],
             },
@@ -154,7 +154,7 @@ class CoursesI18nQueryTestCase(TestCase):
                     {
                         "count": 1,
                         "human_name": level.extended_object.get_title(),
-                        "key": "L-00020001",
+                        "key": level.get_es_id(),
                     }
                 ],
             },
@@ -174,12 +174,12 @@ class CoursesI18nQueryTestCase(TestCase):
                     {
                         "count": 1,
                         "human_name": org_1.extended_object.get_title(),
-                        "key": "L-00030001",
+                        "key": org_1.get_es_id(),
                     },
                     {
                         "count": 1,
                         "human_name": org_2.extended_object.get_title(),
-                        "key": "L-00030002",
+                        "key": org_2.get_es_id(),
                     },
                 ],
             },

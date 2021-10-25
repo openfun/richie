@@ -171,9 +171,7 @@ class CoursesIndexersTestCase(TestCase):
             CoursesIndexer.get_es_documents(index="some_index", action="some_action")
         )
         self.assertEqual(len(indexed_courses), 1)
-        self.assertEqual(
-            indexed_courses[0]["_id"], str(course.public_extension.extended_object_id)
-        )
+        self.assertEqual(indexed_courses[0]["_id"], course.get_es_id())
 
     @mock.patch(
         "richie.apps.search.indexers.courses.get_picture_info",
@@ -185,33 +183,33 @@ class CoursesIndexersTestCase(TestCase):
         """
         # Create a course with a page in both english and french
         published_categories = [
-            CategoryFactory(  # L-0001
+            CategoryFactory(
                 fill_icon=True,
-                page_title={"en": "Title L-0001", "fr": "Titre L-0001"},
+                page_title={"en": "Title cat 1", "fr": "Titre cat 1"},
                 should_publish=True,
             ),
-            CategoryFactory(  # L-0002
+            CategoryFactory(
                 fill_icon=True,
-                page_title={"en": "Title L-0002", "fr": "Titre L-0002"},
+                page_title={"en": "Title cat 2", "fr": "Titre cat 2"},
                 should_publish=True,
             ),
         ]
-        draft_category = CategoryFactory(fill_icon=True)  # L-0003
+        draft_category = CategoryFactory(fill_icon=True)
 
-        main_organization = OrganizationFactory(  # L-0004
+        main_organization = OrganizationFactory(
             page_title={
                 "en": "english main organization title",
                 "fr": "titre organisation principale français",
             },
             should_publish=True,
         )
-        other_draft_organization = OrganizationFactory(  # L-0005
+        other_draft_organization = OrganizationFactory(
             page_title={
                 "en": "english other organization title",
                 "fr": "titre autre organisation français",
             }
         )
-        other_published_organization = OrganizationFactory(  # L-0006
+        other_published_organization = OrganizationFactory(
             page_title={
                 "en": "english other organization title",
                 "fr": "titre autre organisation français",
@@ -273,17 +271,20 @@ class CoursesIndexersTestCase(TestCase):
 
         # The results were properly formatted and passed to the consumer
         expected_course = {
-            "_id": str(course.public_extension.extended_object_id),
+            "_id": course.get_es_id(),
             "_index": "some_index",
             "_op_type": "some_action",
             "absolute_url": {
                 "en": "/en/an-english-course-title/",
                 "fr": "/fr/un-titre-cours-francais/",
             },
-            "categories": ["L-0001", "L-0002"],
+            "categories": [
+                published_categories[0].get_es_id(),
+                published_categories[1].get_es_id(),
+            ],
             "categories_names": {
-                "en": ["Title L-0001", "Title L-0002"],
-                "fr": ["Titre L-0001", "Titre L-0002"],
+                "en": ["Title cat 1", "Title cat 2"],
+                "fr": ["Titre cat 1", "Titre cat 2"],
             },
             "code": course.code,
             "complete": {
@@ -324,12 +325,12 @@ class CoursesIndexersTestCase(TestCase):
                 "en": {
                     "color": published_categories[0].color,
                     "info": "picture info",
-                    "title": "Title L-0001",
+                    "title": "Title cat 1",
                 },
                 "fr": {
                     "color": published_categories[0].color,
                     "info": "picture info",
-                    "title": "Titre L-0001",
+                    "title": "Titre cat 1",
                 },
             },
             "introduction": {
@@ -342,7 +343,10 @@ class CoursesIndexersTestCase(TestCase):
                 "en": "english main organization title",
                 "fr": "titre organisation principale français",
             },
-            "organizations": ["L-0004", "L-0006"],
+            "organizations": [
+                main_organization.get_es_id(),
+                other_published_organization.get_es_id(),
+            ],
             "organizations_names": {
                 "en": [
                     "english main organization title",
@@ -354,8 +358,8 @@ class CoursesIndexersTestCase(TestCase):
                 ],
             },
             "persons": [
-                str(person1.public_extension.extended_object_id),
-                str(person2.public_extension.extended_object_id),
+                person1.get_es_id(),
+                person2.get_es_id(),
             ],
             "persons_names": {
                 "en": ["Eugène Delacroix", "Comte de Saint-Germain"],

@@ -502,7 +502,6 @@ class CoursesIndexer:
         # in the same query
         category_pages = (
             course.get_root_to_leaf_public_category_pages()
-            .select_related("node")
             .prefetch_related(
                 Prefetch(
                     "title_set",
@@ -510,7 +509,6 @@ class CoursesIndexer:
                     queryset=Title.objects.filter(published=True),
                 )
             )
-            .only("node", "pk")
             .distinct()
         )
 
@@ -525,7 +523,6 @@ class CoursesIndexer:
                     queryset=Title.objects.filter(published=True),
                 )
             )
-            .only("extended_object__node")
             .distinct()
         )
         organization_main = course.get_main_organization()

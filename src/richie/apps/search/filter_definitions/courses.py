@@ -77,9 +77,9 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         # Look the aggregations parameters in the form data (either [filter]_children_aggs or
         # [filter]_aggs), and default to the filter definition's aggs_include.
         if data[f"{self.name:s}_children_aggs"]:
-            # Cache the request for children of the relevant node
-            node_path = data[f"{self.name:s}_children_aggs"][2:]
-            cache_key = f"filter_definition_{self.name}_aggs_include_{node_path}"
+            # Cache the request for children of the relevant parent
+            parent_id = data[f"{self.name:s}_children_aggs"]
+            cache_key = f"filter_definition_{self.name}_aggs_include_{parent_id}"
             try:
                 cache = caches["search"]
                 include = cache.get(cache_key)
@@ -88,21 +88,13 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                 include = None
 
             if include is None:
-                paths = (
-                    Page.objects.get(
-                        node__path=node_path,
-                        publisher_is_draft=False,
-                    )
-                    .node.get_children()
-                    .values_list("path", flat=True)
-                )
-                # TO DO: replace this with proper IDs
-                # In the meantime, this should add all necessary categories to aggregations
-                # without making additional requests.
+                # Add all child pages of the given parent to the included aggs
                 include = [
-                    f"{prefix}-{path}" for path in paths for prefix in ["P", "L"]
+                    str(page_id)
+                    for page_id in Page.objects.get(id=parent_id)
+                    .get_child_pages()
+                    .values_list("id", flat=True)
                 ]
-
                 if cache is not None:
                     cache.set(cache_key, include)
 
@@ -404,18 +396,15 @@ class IndexableHierarchicalFilterDefinition(IndexableFilterDefinition):
     @property
     def aggs_include(self):
         """
-        Return a regex that limits what facets are computed on the field.
+        Return a list that limits what facets are computed on the field.
 
         Returns:
         --------
-            string: a regex depending on filters configuration in settings and pages in the CMS:
-            - "": the empty string, if the `reverse_id` does not correspond to any published
+            list: a list depending on filters configuration in settings and pages in the CMS:
+            - an empty list, if the `reverse_id` does not correspond to any published
                 page which will not match any value and return an empty list of facets,
-            - ".*-0001.{4}": if the `reverse_id` points to a published page with path "0001"
-                this will match ids of the children of this page that will be of the form
-                P-00010001 if they have children or L-00010001 if they are leafs,
-            ' ".*": if no `reverse_id` is set (delegated to super) which will
-                match all values.
+            - a list of ids of all direct children of the base page,
+            - ".*": if no `reverse_id` is set (delegated to super) which will match all values.
         """
         if self.reverse_id:
             if self.base_page:
@@ -428,21 +417,18 @@ class IndexableHierarchicalFilterDefinition(IndexableFilterDefinition):
                     aggs_include = None
 
                 if aggs_include is None:
-                    paths = self.base_page.node.get_children().values_list(
-                        "path", flat=True
-                    )
-                    # TO DO: replace this with proper IDs
-                    # In the meantime, this should add all necessary categories to aggregations
-                    # without making additional requests.
+                    # Add all the direct children of the base page to the included aggregations
                     aggs_include = [
-                        f"{prefix}-{path}" for path in paths for prefix in ["P", "L"]
+                        str(page_id)
+                        for page_id in self.base_page.get_child_pages().values_list(
+                            "id", flat=True
+                        )
                     ]
-
                     if cache is not None:
                         cache.set(cache_key, aggs_include)
 
                 return aggs_include
-            return ""
+            return []
 
         return super().aggs_include
 

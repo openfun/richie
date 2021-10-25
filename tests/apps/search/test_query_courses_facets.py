@@ -1,4 +1,5 @@
 """Tests for limits and related properties in facet counts in course searches."""
+# pylint: disable=too-many-lines
 from unittest import mock
 
 from django.core.cache import caches
@@ -130,9 +131,7 @@ class FacetsCoursesQueryTestCase(TestCase):
 
         courses = [
             {
-                "categories": [
-                    f"L-{subject.extended_object.node.path}" for subject in subjects
-                ],
+                "categories": [subject.get_es_id() for subject in subjects],
                 "categories_names": {
                     "en": [subject.extended_object.get_title() for subject in subjects]
                 },
@@ -153,8 +152,8 @@ class FacetsCoursesQueryTestCase(TestCase):
             },
             {
                 "categories": [
-                    f"L-{subjects[1].extended_object.node.path}",
-                    f"L-{subjects[2].extended_object.node.path}",
+                    subjects[1].get_es_id(),
+                    subjects[2].get_es_id(),
                 ],
                 "categories_names": {
                     "en": [
@@ -179,8 +178,8 @@ class FacetsCoursesQueryTestCase(TestCase):
             },
             {
                 "categories": [
-                    f"L-{subjects[3].extended_object.node.path}",
-                    f"L-{subjects[4].extended_object.node.path}",
+                    subjects[3].get_es_id(),
+                    subjects[4].get_es_id(),
                 ],
                 "categories_names": {
                     "en": [
@@ -202,7 +201,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "title": {"en": "Cursus honorum finite que non luctus ante."},
             },
             {
-                "categories": [f"L-{subjects[0].extended_object.node.path}"],
+                "categories": [subjects[0].get_es_id()],
                 "categories_names": {"en": [subjects[0].extended_object.get_title()]},
                 "course_runs": [{"languages": [NEW_LANGUAGES[0][0]]}],
                 "description": {"en": "Nullam ornare finibus sollicitudin."},
@@ -219,7 +218,7 @@ class FacetsCoursesQueryTestCase(TestCase):
 
         # Prepare actions to insert categories and courses into their indices
         actions = [
-            CategoriesIndexer.get_es_document_for_category(subject)
+            CategoriesIndexer.get_es_document_for_category(subject.public_extension)
             for subject in subjects
         ] + [
             {
@@ -259,7 +258,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         `FACET_COUNTS_DEFAULT_LIMIT` for any given filter, no matter the number of
         available facet values.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?scope=filters")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -277,20 +276,28 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {
                         "count": 2,
                         "human_name": "Economy and Finance",
-                        "key": "L-00010004",
+                        "key": data["subjects"][3].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Education and Training",
-                        "key": "L-00010005",
+                        "key": data["subjects"][4].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Human and social sciences",
-                        "key": "L-00010002",
+                        "key": data["subjects"][1].get_es_id(),
                     },
-                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
-                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": data["subjects"][0].get_es_id(),
+                    },
                 ],
             },
         )
@@ -329,16 +336,10 @@ class FacetsCoursesQueryTestCase(TestCase):
         """
         # `languages_aggs` is not supported in the form & query builder. It should not
         # change the response.
-
-        objects = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
             "/api/v1.0/courses/?scope=filters&languages_aggs=stub&subjects_aggs="
-            + ",".join(
-                [
-                    f"L-{subject.extended_object.node.path}"
-                    for subject in objects["subjects"]
-                ]
-            )
+            + ",".join([subject.get_es_id() for subject in data["subjects"]])
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -356,29 +357,53 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {
                         "count": 2,
                         "human_name": "Economy and Finance",
-                        "key": "L-00010004",
+                        "key": data["subjects"][3].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Education and Training",
-                        "key": "L-00010005",
+                        "key": data["subjects"][4].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Human and social sciences",
-                        "key": "L-00010002",
+                        "key": data["subjects"][1].get_es_id(),
                     },
-                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
-                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
-                    {"count": 1, "human_name": "Computer science", "key": "L-00010008"},
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": data["subjects"][0].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Computer science",
+                        "key": data["subjects"][7].get_es_id(),
+                    },
                     {
                         "count": 1,
                         "human_name": "Education and career guidance",
-                        "key": "L-0001000A",
+                        "key": data["subjects"][9].get_es_id(),
                     },
-                    {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
-                    {"count": 1, "human_name": "Languages", "key": "L-00010009"},
-                    {"count": 1, "human_name": "Management", "key": "L-00010006"},
+                    {
+                        "count": 1,
+                        "human_name": "Entrepreneurship",
+                        "key": data["subjects"][6].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Languages",
+                        "key": data["subjects"][8].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Management",
+                        "key": data["subjects"][5].get_es_id(),
+                    },
                 ],
             },
         )
@@ -407,14 +432,14 @@ class FacetsCoursesQueryTestCase(TestCase):
 
     @mock.patch(
         "richie.apps.search.filter_definitions.helpers.FACET_COUNTS_DEFAULT_LIMIT",
-        new=2,
+        new=5,
     )
     def test_query_courses_just_has_more_values(self, *_):
         """
-        The applicable limit is set to 2. As we have 11 subjects/languages, it's straightforward
+        The applicable limit is set to 5. As we have 11 subjects/languages, it's straightforward
         to conclude that there are more values.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?scope=filters")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -431,13 +456,28 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "values": [
                     {
                         "count": 2,
+                        "human_name": "Economy and Finance",
+                        "key": data["subjects"][3].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": data["subjects"][4].get_es_id(),
+                    },
+                    {
+                        "count": 2,
                         "human_name": "Human and social sciences",
-                        "key": "L-00010002",
+                        "key": data["subjects"][1].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Science",
-                        "key": "L-00010001",
+                        "key": data["subjects"][0].get_es_id(),
                     },
                 ],
             },
@@ -454,7 +494,10 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "languages",
                 "position": 5,
                 "values": [
+                    {"count": 2, "human_name": "Afrikaans", "key": "af"},
+                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
                     {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Asturian", "key": "ast"},
                     {"count": 2, "human_name": "Azerbaijani", "key": "az"},
                 ],
             },
@@ -470,7 +513,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         we have 11 subjects/languages, it's straightforward to conclude that there are
         *no* more values.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?scope=filters")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -488,30 +531,58 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {
                         "count": 2,
                         "human_name": "Economy and Finance",
-                        "key": "L-00010004",
+                        "key": data["subjects"][3].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Education and Training",
-                        "key": "L-00010005",
+                        "key": data["subjects"][4].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Human and social sciences",
-                        "key": "L-00010002",
+                        "key": data["subjects"][1].get_es_id(),
                     },
-                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
-                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
-                    {"count": 1, "human_name": "Computer science", "key": "L-00010008"},
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": data["subjects"][0].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Computer science",
+                        "key": data["subjects"][7].get_es_id(),
+                    },
                     {
                         "count": 1,
                         "human_name": "Education and career guidance",
-                        "key": "L-0001000A",
+                        "key": data["subjects"][9].get_es_id(),
                     },
-                    {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
-                    {"count": 1, "human_name": "Health", "key": "L-0001000B"},
-                    {"count": 1, "human_name": "Languages", "key": "L-00010009"},
-                    {"count": 1, "human_name": "Management", "key": "L-00010006"},
+                    {
+                        "count": 1,
+                        "human_name": "Entrepreneurship",
+                        "key": data["subjects"][6].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Health",
+                        "key": data["subjects"][10].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Languages",
+                        "key": data["subjects"][8].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Management",
+                        "key": data["subjects"][5].get_es_id(),
+                    },
                 ],
             },
         )
@@ -554,9 +625,13 @@ class FacetsCoursesQueryTestCase(TestCase):
         This is a case where there *are* more values because at least one of the values beyond
         the applicable limit is not in our `subjects` filters.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?scope=filters&subjects=L-00010001&subjects=L-0001000B"
+            (
+                "/api/v1.0/courses/?scope=filters"
+                f"&subjects={data['subjects'][0].get_es_id()}"
+                f"&subjects={data['subjects'][10].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -574,25 +649,53 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {
                         "count": 2,
                         "human_name": "Economy and Finance",
-                        "key": "L-00010004",
+                        "key": data["subjects"][3].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Education and Training",
-                        "key": "L-00010005",
+                        "key": data["subjects"][4].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Human and social sciences",
-                        "key": "L-00010002",
+                        "key": data["subjects"][1].get_es_id(),
                     },
-                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
-                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
-                    {"count": 1, "human_name": "Computer science", "key": "L-00010008"},
-                    {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
-                    {"count": 1, "human_name": "Health", "key": "L-0001000B"},
-                    {"count": 1, "human_name": "Languages", "key": "L-00010009"},
-                    {"count": 1, "human_name": "Management", "key": "L-00010006"},
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": data["subjects"][0].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Computer science",
+                        "key": data["subjects"][7].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Entrepreneurship",
+                        "key": data["subjects"][6].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Health",
+                        "key": data["subjects"][10].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Languages",
+                        "key": data["subjects"][8].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Management",
+                        "key": data["subjects"][5].get_es_id(),
+                    },
                 ],
             },
         )
@@ -648,9 +751,13 @@ class FacetsCoursesQueryTestCase(TestCase):
         This is a case where there are *no* more values because all of the values beyond
         the applicable limit are in our `subjects`.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?scope=filters&subjects=L-0001000A&subjects=L-0001000B"
+            (
+                "/api/v1.0/courses/?scope=filters"
+                f"&subjects={data['subjects'][9].get_es_id()}"
+                f"&subjects={data['subjects'][10].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -668,30 +775,58 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {
                         "count": 2,
                         "human_name": "Economy and Finance",
-                        "key": "L-00010004",
+                        "key": data["subjects"][3].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Education and Training",
-                        "key": "L-00010005",
+                        "key": data["subjects"][4].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Human and social sciences",
-                        "key": "L-00010002",
+                        "key": data["subjects"][1].get_es_id(),
                     },
-                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
-                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
-                    {"count": 1, "human_name": "Computer science", "key": "L-00010008"},
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": data["subjects"][0].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Computer science",
+                        "key": data["subjects"][7].get_es_id(),
+                    },
                     {
                         "count": 1,
                         "human_name": "Education and career guidance",
-                        "key": "L-0001000A",
+                        "key": data["subjects"][9].get_es_id(),
                     },
-                    {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
-                    {"count": 1, "human_name": "Health", "key": "L-0001000B"},
-                    {"count": 1, "human_name": "Languages", "key": "L-00010009"},
-                    {"count": 1, "human_name": "Management", "key": "L-00010006"},
+                    {
+                        "count": 1,
+                        "human_name": "Entrepreneurship",
+                        "key": data["subjects"][6].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Health",
+                        "key": data["subjects"][10].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Languages",
+                        "key": data["subjects"][8].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Management",
+                        "key": data["subjects"][5].get_es_id(),
+                    },
                 ],
             },
         )
@@ -751,9 +886,12 @@ class FacetsCoursesQueryTestCase(TestCase):
         Active values are returned for the subjects filter (based on ES terms) regardless
         of `min_doc_count`. Other values below the `min_doc_count` are not returned.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?scope=filters&subjects=L-0001000B"
+            (
+                "/api/v1.0/courses/?scope=filters&subjects="
+                f"{data['subjects'][10].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -771,21 +909,33 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {
                         "count": 2,
                         "human_name": "Economy and Finance",
-                        "key": "L-00010004",
+                        "key": data["subjects"][3].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Education and Training",
-                        "key": "L-00010005",
+                        "key": data["subjects"][4].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Human and social sciences",
-                        "key": "L-00010002",
+                        "key": data["subjects"][1].get_es_id(),
                     },
-                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
-                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
-                    {"count": 1, "human_name": "Health", "key": "L-0001000B"},
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": data["subjects"][0].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Health",
+                        "key": data["subjects"][10].get_es_id(),
+                    },
                 ],
             },
         )
@@ -809,7 +959,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         *if* `min_doc_count` was 0 because we would get all 11 subjects.
         As `min_doc_count` is 2, we only get 5 subjects, and there are thus more values.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?scope=filters")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -827,20 +977,28 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {
                         "count": 2,
                         "human_name": "Economy and Finance",
-                        "key": "L-00010004",
+                        "key": data["subjects"][3].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Education and Training",
-                        "key": "L-00010005",
+                        "key": data["subjects"][4].get_es_id(),
                     },
                     {
                         "count": 2,
                         "human_name": "Human and social sciences",
-                        "key": "L-00010002",
+                        "key": data["subjects"][1].get_es_id(),
                     },
-                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
-                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": data["subjects"][0].get_es_id(),
+                    },
                 ],
             },
         )
