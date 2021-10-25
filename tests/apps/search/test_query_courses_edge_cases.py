@@ -49,13 +49,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             FILTERS[filter_name]._base_page = None
 
     def create_filter_pages(self):
-        """
-        Create pages for each filter based on an indexable. We must create them in the same order
-        as they are instantiated in order to match the node paths we expect:
-            - subjects page path: 0001
-            - levels page path: 0002
-            - organizations page path: 0003
-        """
+        """Create pages for each filter based on an indexable."""
         if not self.__filter_pages__:
             self.__filter_pages__ = {
                 "levels": CategoryFactory(
@@ -119,7 +113,9 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
 
         # Prepare actions to insert our courses and organizations in their indices
         actions = [
-            OrganizationsIndexer.get_es_document_for_organization(organization)
+            OrganizationsIndexer.get_es_document_for_organization(
+                organization.public_extension
+            )
             for organization in organizations
         ] + [
             {
@@ -188,7 +184,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "introduction": {"en": "introduction"},
                     "is_new": False,
                     "is_listed": True,
-                    "organizations": [f"L-{organization.extended_object.node.path}"],
+                    "organizations": [organization.get_es_id()],
                     "organizations_names": {
                         "en": [organization.extended_object.get_title()]
                     },
@@ -208,16 +204,56 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["organizations"]["values"],
             [
-                {"count": 2, "human_name": "Organization #0", "key": "L-00030001"},
-                {"count": 2, "human_name": "Organization #1", "key": "L-00030002"},
-                {"count": 2, "human_name": "Organization #2", "key": "L-00030003"},
-                {"count": 2, "human_name": "Organization #3", "key": "L-00030004"},
-                {"count": 2, "human_name": "Organization #4", "key": "L-00030005"},
-                {"count": 2, "human_name": "Organization #5", "key": "L-00030006"},
-                {"count": 2, "human_name": "Organization #6", "key": "L-00030007"},
-                {"count": 2, "human_name": "Organization #7", "key": "L-00030008"},
-                {"count": 2, "human_name": "Organization #8", "key": "L-00030009"},
-                {"count": 2, "human_name": "Organization #9", "key": "L-0003000A"},
+                {
+                    "count": 2,
+                    "human_name": "Organization #0",
+                    "key": organizations[0].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #1",
+                    "key": organizations[1].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #2",
+                    "key": organizations[2].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #3",
+                    "key": organizations[3].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #4",
+                    "key": organizations[4].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #5",
+                    "key": organizations[5].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #6",
+                    "key": organizations[6].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #7",
+                    "key": organizations[7].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #8",
+                    "key": organizations[8].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #9",
+                    "key": organizations[9].get_es_id(),
+                },
             ],
         )
 
@@ -226,7 +262,12 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         # - at the end for the one that is not in the top 10 and should not be included
         #   if it wasn't forced...
         response = self.client.get(
-            "/api/v1.0/courses/?organizations=L-00030002&organizations=L-0003000B"
+            (
+                "/api/v1.0/courses/?organizations="
+                f"{organizations[1].get_es_id()}"
+                "&organizations="
+                f"{organizations[10].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
@@ -234,17 +275,61 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["organizations"]["values"],
             [
-                {"count": 2, "human_name": "Organization #0", "key": "L-00030001"},
-                {"count": 2, "human_name": "Organization #1", "key": "L-00030002"},
-                {"count": 2, "human_name": "Organization #2", "key": "L-00030003"},
-                {"count": 2, "human_name": "Organization #3", "key": "L-00030004"},
-                {"count": 2, "human_name": "Organization #4", "key": "L-00030005"},
-                {"count": 2, "human_name": "Organization #5", "key": "L-00030006"},
-                {"count": 2, "human_name": "Organization #6", "key": "L-00030007"},
-                {"count": 2, "human_name": "Organization #7", "key": "L-00030008"},
-                {"count": 2, "human_name": "Organization #8", "key": "L-00030009"},
-                {"count": 2, "human_name": "Organization #9", "key": "L-0003000A"},
-                {"count": 1, "human_name": "Organization #10", "key": "L-0003000B"},
+                {
+                    "count": 2,
+                    "human_name": "Organization #0",
+                    "key": organizations[0].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #1",
+                    "key": organizations[1].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #2",
+                    "key": organizations[2].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #3",
+                    "key": organizations[3].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #4",
+                    "key": organizations[4].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #5",
+                    "key": organizations[5].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #6",
+                    "key": organizations[6].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #7",
+                    "key": organizations[7].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #8",
+                    "key": organizations[8].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #9",
+                    "key": organizations[9].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Organization #10",
+                    "key": organizations[10].get_es_id(),
+                },
             ],
         )
 
@@ -289,9 +374,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "introduction": {"en": "introduction"},
                     "is_new": False,
                     "is_listed": True,
-                    "organizations": [
-                        f"{'P' if index == 0 else 'L'}-{organization.extended_object.node.path}"
-                    ],
+                    "organizations": [organization.get_es_id()],
                     "organizations_names": {
                         "en": [organization.extended_object.get_title()]
                     },
@@ -303,7 +386,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         )
 
         response = self.client.get(
-            f"/api/v1.0/courses/?organizations=L-{organizations[10].extended_object.node.path}"
+            f"/api/v1.0/courses/?organizations={organizations[10].get_es_id()}"
         )
         self.assertEqual(response.status_code, 200)
 
@@ -311,16 +394,16 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             o["key"] for o in response.json()["filters"]["organizations"]["values"]
         ]
         self.assertIn(
-            f"P-{organizations[0].extended_object.node.path}",
+            organizations[0].get_es_id(),
             reponse_organization_ids,
         )
         for organization in organizations[1:10]:
             self.assertIn(
-                f"L-{organization.extended_object.node.path}",
+                organization.get_es_id(),
                 reponse_organization_ids,
             )
         self.assertNotIn(
-            f"L-{organizations[10].extended_object.node.path}",
+            organizations[10].get_es_id(),
             reponse_organization_ids,
         )
 

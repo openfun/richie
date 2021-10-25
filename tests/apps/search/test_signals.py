@@ -59,7 +59,7 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 1)
         action = mock_bulk.call_args[1]["actions"][0]
-        self.assertEqual(action["_id"], str(course.public_extension.extended_object_id))
+        self.assertEqual(action["_id"], course.get_es_id())
         self.assertEqual(action["_op_type"], "index")
         self.assertEqual(action["_index"], "test_courses")
 
@@ -84,7 +84,7 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 1)
         action = mock_bulk.call_args[1]["actions"][0]
-        self.assertEqual(action["_id"], str(course.public_extension.extended_object_id))
+        self.assertEqual(action["_id"], course.get_es_id())
         self.assertEqual(action["_op_type"], "index")
         self.assertEqual(action["_index"], "test_courses")
 
@@ -102,7 +102,7 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 1)
         action = mock_bulk.call_args[1]["actions"][0]
-        self.assertEqual(action["_id"], str(course.public_extension.extended_object_id))
+        self.assertEqual(action["_id"], course.get_es_id())
         self.assertEqual(action["_op_type"], "delete")
         self.assertEqual(action["_index"], "test_courses")
 
@@ -131,15 +131,13 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 3)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(actions[1]["_id"], "L-00010001")
+        self.assertEqual(actions[1]["_id"], organization.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "index")
         self.assertEqual(actions[1]["_index"], "richie_organizations")
-        self.assertEqual(actions[2]["_id"], "P-0001")
+        self.assertEqual(actions[2]["_id"], parent.get_es_id())
         self.assertEqual(actions[2]["_op_type"], "index")
         self.assertEqual(actions[2]["_index"], "richie_organizations")
 
@@ -167,12 +165,10 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(actions[1]["_id"], "L-0001")
+        self.assertEqual(actions[1]["_id"], organization.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "index")
         self.assertEqual(actions[1]["_index"], "richie_organizations")
 
@@ -205,12 +201,10 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(actions[1]["_id"], "L-0001")
+        self.assertEqual(actions[1]["_id"], organization.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "index")
         self.assertEqual(actions[1]["_index"], "richie_organizations")
 
@@ -227,12 +221,10 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(actions[1]["_id"], "L-0001")
+        self.assertEqual(actions[1]["_id"], organization.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "delete")
         self.assertEqual(actions[1]["_index"], "richie_organizations")
 
@@ -261,15 +253,13 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 3)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(actions[1]["_id"], "L-00010001")
+        self.assertEqual(actions[1]["_id"], category.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "index")
         self.assertEqual(actions[1]["_index"], "richie_categories")
-        self.assertEqual(actions[2]["_id"], "P-0001")
+        self.assertEqual(actions[2]["_id"], parent.get_es_id())
         self.assertEqual(actions[2]["_op_type"], "index")
         self.assertEqual(actions[2]["_index"], "richie_categories")
 
@@ -297,12 +287,10 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(actions[1]["_id"], "L-0001")
+        self.assertEqual(actions[1]["_id"], category.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "index")
         self.assertEqual(actions[1]["_index"], "richie_categories")
 
@@ -333,12 +321,10 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(actions[1]["_id"], "L-0001")
+        self.assertEqual(actions[1]["_id"], category.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "index")
         self.assertEqual(actions[1]["_index"], "richie_categories")
 
@@ -355,12 +341,10 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(actions[1]["_id"], "L-0001")
+        self.assertEqual(actions[1]["_id"], category.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "delete")
         self.assertEqual(actions[1]["_index"], "richie_categories")
 
@@ -388,14 +372,10 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(
-            actions[1]["_id"], str(person.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[1]["_id"], person.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "index")
         self.assertEqual(actions[1]["_index"], "richie_persons")
 
@@ -426,14 +406,10 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(
-            actions[1]["_id"], str(person.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[1]["_id"], person.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "index")
         self.assertEqual(actions[1]["_index"], "richie_persons")
 
@@ -450,13 +426,9 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(mock_bulk.call_count, 1)
         self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
         actions = list(mock_bulk.call_args[1]["actions"])
-        self.assertEqual(
-            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[0]["_id"], published_course.get_es_id())
         self.assertEqual(actions[0]["_op_type"], "index")
         self.assertEqual(actions[0]["_index"], "test_courses")
-        self.assertEqual(
-            actions[1]["_id"], str(person.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[1]["_id"], person.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "delete")
         self.assertEqual(actions[1]["_index"], "richie_persons")

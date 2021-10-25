@@ -22,6 +22,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Update course search API to remove MPTT regexes as query params and replace
   them with arrays or strings.
+- Use stable IDs for categories and organizations in ES indices and throughout
+  all search-related code.
 
 ## [2.8.2] - 2021-10-05
 

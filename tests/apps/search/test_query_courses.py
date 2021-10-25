@@ -43,11 +43,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
     works as expected.
     """
 
-    def __init__(self, *args, **kwargs):
-        self.persons = None
-        self.course_runs = None
-        super().__init__(*args, **kwargs)
-
     def setUp(self):
         """Reset indexable filters cache before each test so the context is as expected."""
         super().setUp()
@@ -68,13 +63,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
 
     @staticmethod
     def create_filter_pages():
-        """
-        Create pages for each filter based on an indexable. We must create them in the same order
-        as they are instantiated in order to match the node paths we expect:
-            - subjects page path: 0001
-            - levels page path: 0002
-            - organizations page path: 0003
-        """
+        """Create pages for each filter based on an indexable."""
         return {
             "subjects": CategoryFactory(
                 page_reverse_id="subjects", page_title="Subjects", should_publish=True
@@ -128,10 +117,10 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         - generate a set of courses randomly associated to our "interesting" course runs,
         - prepare the Elasticsearch index.
         """
+        # pylint: disable=too-many-locals
         filter_pages = self.create_filter_pages()
 
         top_subjects = [
-            # 00010001 through 00010004
             CategoryFactory(
                 page_parent=filter_pages["subjects"].extended_object,
                 page_title=f"Subject #{i}",
@@ -141,7 +130,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         ]
 
         subject_0_children = [
-            # 000100010001 and 000100010002
             CategoryFactory(
                 page_parent=top_subjects[0].extended_object,
                 page_title=f"Subject #0 Child #{i}",
@@ -151,7 +139,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         ]
 
         subject_1_children = [
-            # 000100020001 and 000100020002
             CategoryFactory(
                 page_parent=top_subjects[1].extended_object,
                 page_title=f"Subject #1 Child #{i}",
@@ -161,7 +148,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         ]
 
         levels = [
-            # 00020001 through 00020003
             CategoryFactory(
                 page_parent=filter_pages["levels"].extended_object,
                 page_title=f"Level #{i}",
@@ -171,7 +157,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         ]
 
         top_organizations = [
-            # 00030001 through 00030004
             OrganizationFactory(
                 page_parent=filter_pages["organizations"].extended_object,
                 page_title=f"Organization #{i}",
@@ -181,7 +166,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         ]
 
         organization_0_children = [
-            # 000300010001 and 000300010002
             OrganizationFactory(
                 page_parent=top_organizations[0].extended_object,
                 page_title=f"Organization #0 Child #{i}",
@@ -191,7 +175,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         ]
 
         organization_1_children = [
-            # 000300020001 and 000300020002
             OrganizationFactory(
                 page_parent=top_organizations[1].extended_object,
                 page_title=f"Organization #1 Child #{i}",
@@ -200,7 +183,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             for i in range(0, 2)
         ]
 
-        self.persons = [
+        persons = [
             PersonFactory(
                 page_title="Mikhaïl Boulgakov",
                 should_publish=True,
@@ -212,10 +195,13 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses = [
             {
                 "categories": [
-                    "P-00010001",
-                    "P-00010002",
-                    "L-000100010001",
-                    "L-00020001",
+                    cat.get_es_id()
+                    for cat in [
+                        top_subjects[0],
+                        top_subjects[1],
+                        subject_0_children[0],
+                        levels[0],
+                    ]
                 ],
                 "categories_names": {
                     "en": ["Artificial intelligence", "Autumn", "Wilderness"]
@@ -233,18 +219,28 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "is_new": True,
                 "is_listed": True,
                 "organization_highlighted": {"en": "Org 311"},
-                "organizations": ["P-00030001", "L-00030004", "L-000300010001"],
+                "organizations": [
+                    org.get_es_id()
+                    for org in [
+                        top_organizations[0],
+                        top_organizations[3],
+                        organization_0_children[0],
+                    ]
+                ],
                 "organizations_names": {"en": ["Org 31", "Org 34", "Org 311"]},
-                "persons": [self.persons[0].extended_object_id],
+                "persons": [persons[0].get_es_id()],
                 "persons_names": {"en": ["Mikhaïl Boulgakov"]},
                 "title": {"en": "Artificial intelligence for mushroom picking"},
             },
             {
                 "categories": [
-                    "P-00010001",
-                    "L-00010003",
-                    "L-000100010002",
-                    "L-00020003",
+                    cat.get_es_id()
+                    for cat in [
+                        top_subjects[0],
+                        top_subjects[2],
+                        subject_0_children[1],
+                        levels[2],
+                    ]
                 ],
                 "categories_names": {"en": ["Martial arts?", "Autumn"]},
                 "code": "002lmn",
@@ -260,7 +256,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "is_new": True,
                 "is_listed": True,
                 "organization_highlighted": {"en": "Org 33"},
-                "organizations": ["P-00030001", "L-00030003", "L-000300010002"],
+                "organizations": [
+                    org.get_es_id()
+                    for org in [
+                        top_organizations[0],
+                        top_organizations[2],
+                        organization_0_children[1],
+                    ]
+                ],
                 "organizations_names": {"en": ["Org 31", "Org 33", "Org 312"]},
                 "persons": [],
                 "persons_names": {},
@@ -268,10 +271,13 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             },
             {
                 "categories": [
-                    "P-00010002",
-                    "L-00010003",
-                    "L-000100020001",
-                    "L-00020001",
+                    cat.get_es_id()
+                    for cat in [
+                        top_subjects[1],
+                        top_subjects[2],
+                        subject_1_children[0],
+                        levels[0],
+                    ]
                 ],
                 "categories_names": {
                     "en": ["Artificial intelligence", "Water", "Wilderness"]
@@ -289,7 +295,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "is_new": False,
                 "is_listed": True,
                 "organization_highlighted": {"en": "Org 321"},
-                "organizations": ["P-00030002", "L-00030003", "L-000300020001"],
+                "organizations": [
+                    org.get_es_id()
+                    for org in [
+                        top_organizations[1],
+                        top_organizations[2],
+                        organization_1_children[0],
+                    ]
+                ],
                 "organizations_names": {"en": ["Org 32", "Org 33", "Org 321"]},
                 "persons": [],
                 "persons_names": {},
@@ -297,10 +310,13 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             },
             {
                 "categories": [
-                    "P-00010002",
-                    "L-00010004",
-                    "L-000100020002",
-                    "L-00020002",
+                    cat.get_es_id()
+                    for cat in [
+                        top_subjects[1],
+                        top_subjects[3],
+                        subject_1_children[1],
+                        levels[1],
+                    ]
                 ],
                 "categories_names": {"en": ["Martial arts?", "Water"]},
                 "code": "004xyz",
@@ -316,14 +332,21 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "is_new": False,
                 "is_listed": True,
                 "organization_highlighted": {"en": "Org 34"},
-                "organizations": ["P-00030002", "L-00030004", "L-000300020002"],
+                "organizations": [
+                    org.get_es_id()
+                    for org in [
+                        top_organizations[1],
+                        top_organizations[3],
+                        organization_1_children[1],
+                    ]
+                ],
                 "organizations_names": {"en": ["Org 32", "Org 34", "Org 322"]},
-                "persons": [self.persons[0].extended_object_id],
+                "persons": [persons[0].get_es_id()],
                 "persons_names": {"en": ["Mikhaïl Boulgakov"]},
                 "title": {"en": "Kung-fu moves for cloud infrastructure security"},
             },
         ]
-        self.course_runs = {
+        course_runs = {
             "A": {
                 # A) ongoing course, next open course to end enrollment
                 "start": arrow.utcnow().shift(days=-5).datetime,
@@ -401,7 +424,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         # Shuffle and group our course runs to assign them randomly to 4 courses
         # For example: [["I", "E", "C"], ["D", "G"], ["B", "A"], ["H", "F"]]
         if not suite:
-            shuffled_runs = random.sample(list(self.course_runs), len(self.course_runs))
+            shuffled_runs = random.sample(list(course_runs), len(course_runs))
             suite = [shuffled_runs[i::4] for i in range(4)]
 
         # Associate groups of course runs to each course
@@ -460,21 +483,25 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         now = arrow.utcnow()
         actions = (
             [
-                CategoriesIndexer.get_es_document_for_category(category)
+                CategoriesIndexer.get_es_document_for_category(
+                    category.public_extension
+                )
                 for category in top_subjects
                 + subject_0_children
                 + subject_1_children
                 + levels
             ]
             + [
-                OrganizationsIndexer.get_es_document_for_organization(organization)
+                OrganizationsIndexer.get_es_document_for_organization(
+                    organization.public_extension
+                )
                 for organization in top_organizations
                 + organization_0_children
                 + organization_1_children
             ]
             + [
-                PersonsIndexer.get_es_document_for_person(person)
-                for person in self.persons
+                PersonsIndexer.get_es_document_for_person(person.public_extension)
+                for person in persons
             ]
             + [
                 {
@@ -494,7 +521,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     "course_runs": sorted(
                         [
                             # Each course randomly gets course runs (thanks to above shuffle)
-                            self.course_runs[course_run_id]
+                            course_runs[course_run_id]
                             for course_run_id in course_run_ids
                         ],
                         key=lambda o: now - o["end"],
@@ -506,7 +533,18 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         bulk_compat(actions=actions, chunk_size=500, client=ES_CLIENT)
         ES_INDICES_CLIENT.refresh()
 
-        return courses_definition
+        return {
+            "course_runs": course_runs,
+            "courses_definition": courses_definition,
+            "top_subjects": top_subjects,
+            "subject_0_children": subject_0_children,
+            "subject_1_children": subject_1_children,
+            "levels": levels,
+            "top_organizations": top_organizations,
+            "organization_0_children": organization_0_children,
+            "organization_1_children": organization_1_children,
+            "persons": persons,
+        }
 
     def test_query_courses_match_all_general(self, *_):
         """
@@ -515,7 +553,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         the two course runs in german end-up on the same course (in this case the facet count
         should be 1. See next test).
         """
-        self.prepare_indices(suite=[["A", "E"], ["H", "G"], ["B", "I"], ["C", "F"]])
+        data = self.prepare_indices(
+            suite=[["A", "E"], ["H", "G"], ["B", "I"], ["C", "F"]]
+        )
         response = self.client.get("/api/v1.0/courses/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -527,10 +567,13 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "id": "0",
                         "absolute_url": "url",
                         "categories": [
-                            "P-00010001",
-                            "P-00010002",
-                            "L-000100010001",
-                            "L-00020001",
+                            cat.get_es_id()
+                            for cat in [
+                                data["top_subjects"][0],
+                                data["top_subjects"][1],
+                                data["subject_0_children"][0],
+                                data["levels"][0],
+                            ]
                         ],
                         "code": "001abc",
                         "cover_image": "cover_image.jpg",
@@ -539,11 +582,18 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "icon": "icon.jpg",
                         "introduction": "Polarized non-volatile structure",
                         "organization_highlighted": "Org 311",
-                        "organizations": ["P-00030001", "L-00030004", "L-000300010001"],
+                        "organizations": [
+                            org.get_es_id()
+                            for org in [
+                                data["top_organizations"][0],
+                                data["top_organizations"][3],
+                                data["organization_0_children"][0],
+                            ]
+                        ],
                         "state": {
                             "priority": 0,
                             "call_to_action": "enroll now",
-                            "datetime": self.course_runs["A"]["enrollment_end"]
+                            "datetime": data["course_runs"]["A"]["enrollment_end"]
                             .isoformat()
                             .replace("+00:00", "Z"),
                             "text": "closing on",
@@ -554,10 +604,13 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "id": "2",
                         "absolute_url": "url",
                         "categories": [
-                            "P-00010002",
-                            "L-00010003",
-                            "L-000100020001",
-                            "L-00020001",
+                            cat.get_es_id()
+                            for cat in [
+                                data["top_subjects"][1],
+                                data["top_subjects"][2],
+                                data["subject_1_children"][0],
+                                data["levels"][0],
+                            ]
                         ],
                         "code": "003rst",
                         "cover_image": "cover_image.jpg",
@@ -566,10 +619,17 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "icon": "icon.jpg",
                         "introduction": "Up-sized value-added project",
                         "organization_highlighted": "Org 321",
-                        "organizations": ["P-00030002", "L-00030003", "L-000300020001"],
+                        "organizations": [
+                            org.get_es_id()
+                            for org in [
+                                data["top_organizations"][1],
+                                data["top_organizations"][2],
+                                data["organization_1_children"][0],
+                            ]
+                        ],
                         "state": {
                             "priority": 0,
-                            "datetime": self.course_runs["B"]["enrollment_end"]
+                            "datetime": data["course_runs"]["B"]["enrollment_end"]
                             .isoformat()
                             .replace("+00:00", "Z"),
                             "call_to_action": "enroll now",
@@ -581,10 +641,13 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "id": "3",
                         "absolute_url": "url",
                         "categories": [
-                            "P-00010002",
-                            "L-00010004",
-                            "L-000100020002",
-                            "L-00020002",
+                            cat.get_es_id()
+                            for cat in [
+                                data["top_subjects"][1],
+                                data["top_subjects"][3],
+                                data["subject_1_children"][1],
+                                data["levels"][1],
+                            ]
                         ],
                         "code": "004xyz",
                         "cover_image": "cover_image.jpg",
@@ -593,10 +656,17 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "icon": "icon.jpg",
                         "introduction": "Innovative encompassing extranet",
                         "organization_highlighted": "Org 34",
-                        "organizations": ["P-00030002", "L-00030004", "L-000300020002"],
+                        "organizations": [
+                            org.get_es_id()
+                            for org in [
+                                data["top_organizations"][1],
+                                data["top_organizations"][3],
+                                data["organization_1_children"][1],
+                            ]
+                        ],
                         "state": {
                             "priority": 1,
-                            "datetime": self.course_runs["C"]["start"]
+                            "datetime": data["course_runs"]["C"]["start"]
                             .isoformat()
                             .replace("+00:00", "Z"),
                             "call_to_action": "enroll now",
@@ -608,10 +678,13 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "id": "1",
                         "absolute_url": "url",
                         "categories": [
-                            "P-00010001",
-                            "L-00010003",
-                            "L-000100010002",
-                            "L-00020003",
+                            cat.get_es_id()
+                            for cat in [
+                                data["top_subjects"][0],
+                                data["top_subjects"][2],
+                                data["subject_0_children"][1],
+                                data["levels"][2],
+                            ]
                         ],
                         "code": "002lmn",
                         "cover_image": "cover_image.jpg",
@@ -620,7 +693,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "icon": "icon.jpg",
                         "introduction": "De-engineered demand-driven success",
                         "organization_highlighted": "Org 33",
-                        "organizations": ["P-00030001", "L-00030003", "L-000300010002"],
+                        "organizations": [
+                            org.get_es_id()
+                            for org in [
+                                data["top_organizations"][0],
+                                data["top_organizations"][2],
+                                data["organization_0_children"][1],
+                            ]
+                        ],
                         "state": {
                             "priority": 5,
                             "datetime": None,
@@ -683,17 +763,17 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             {
                                 "count": 2,
                                 "human_name": "Level #0",
-                                "key": "L-00020001",
+                                "key": data["levels"][0].get_es_id(),
                             },
                             {
                                 "count": 1,
                                 "human_name": "Level #1",
-                                "key": "L-00020002",
+                                "key": data["levels"][1].get_es_id(),
                             },
                             {
                                 "count": 1,
                                 "human_name": "Level #2",
-                                "key": "L-00020003",
+                                "key": data["levels"][2].get_es_id(),
                             },
                         ],
                     },
@@ -723,22 +803,22 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             {
                                 "count": 2,
                                 "human_name": "Organization #0",
-                                "key": "P-00030001",
+                                "key": data["top_organizations"][0].get_es_id(),
                             },
                             {
                                 "count": 2,
                                 "human_name": "Organization #1",
-                                "key": "P-00030002",
+                                "key": data["top_organizations"][1].get_es_id(),
                             },
                             {
                                 "count": 2,
                                 "human_name": "Organization #2",
-                                "key": "L-00030003",
+                                "key": data["top_organizations"][2].get_es_id(),
                             },
                             {
                                 "count": 2,
                                 "human_name": "Organization #3",
-                                "key": "L-00030004",
+                                "key": data["top_organizations"][3].get_es_id(),
                             },
                         ],
                     },
@@ -755,7 +835,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             {
                                 "count": 2,
                                 "human_name": "Mikhaïl Boulgakov",
-                                "key": f"{self.persons[0].extended_object_id}",
+                                "key": data["persons"][0].get_es_id(),
                             }
                         ],
                     },
@@ -772,22 +852,22 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             {
                                 "count": 3,
                                 "human_name": "Subject #1",
-                                "key": "P-00010002",
+                                "key": data["top_subjects"][1].get_es_id(),
                             },
                             {
                                 "count": 2,
                                 "human_name": "Subject #0",
-                                "key": "P-00010001",
+                                "key": data["top_subjects"][0].get_es_id(),
                             },
                             {
                                 "count": 2,
                                 "human_name": "Subject #2",
-                                "key": "L-00010003",
+                                "key": data["top_subjects"][2].get_es_id(),
                             },
                             {
                                 "count": 1,
                                 "human_name": "Subject #3",
-                                "key": "L-00010004",
+                                "key": data["top_subjects"][3].get_es_id(),
                             },
                         ],
                     },
@@ -803,7 +883,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         - D/H course runs grouped under the same course:
           => 1 german course instead of 2
         """
-        self.prepare_indices(suite=[["A", "B"], ["H", "C"], ["E", "I"], ["G", "F"]])
+        data = self.prepare_indices(
+            suite=[["A", "B"], ["H", "C"], ["E", "I"], ["G", "F"]]
+        )
         response = self.client.get("/api/v1.0/courses/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -811,7 +893,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {
                     "call_to_action": "enroll now",
-                    "datetime": self.course_runs["A"]["enrollment_end"]
+                    "datetime": data["course_runs"]["A"]["enrollment_end"]
                     .isoformat()
                     .replace("+00:00", "Z"),
                     "priority": 0,
@@ -819,7 +901,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 },
                 {
                     "call_to_action": "enroll now",
-                    "datetime": self.course_runs["C"]["start"]
+                    "datetime": data["course_runs"]["C"]["start"]
                     .isoformat()
                     .replace("+00:00", "Z"),
                     "priority": 1,
@@ -827,7 +909,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 },
                 {
                     "call_to_action": None,
-                    "datetime": self.course_runs["E"]["start"]
+                    "datetime": data["course_runs"]["E"]["start"]
                     .isoformat()
                     .replace("+00:00", "Z"),
                     "priority": 3,
@@ -863,12 +945,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         Battle test filtering and sorting open courses.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?availability=open")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, ["A", "B", "C", "D"]),
+            self.get_expected_courses(data["courses_definition"], ["A", "B", "C", "D"]),
         )
 
     def test_query_courses_match_all_scope_objects(self, *_):
@@ -899,7 +981,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         runs with the same language (resp. availability) get grouped under the same
         course.
         """
-        self.prepare_indices(suite=[["A", "B"], ["H", "C"], ["E", "I"], ["G", "F"]])
+        data = self.prepare_indices(
+            suite=[["A", "B"], ["H", "C"], ["E", "I"], ["G", "F"]]
+        )
         response = self.client.get("/api/v1.0/courses/?availability=open")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -907,7 +991,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {
                     "call_to_action": "enroll now",
-                    "datetime": self.course_runs["A"]["enrollment_end"]
+                    "datetime": data["course_runs"]["A"]["enrollment_end"]
                     .isoformat()
                     .replace("+00:00", "Z"),
                     "priority": 0,
@@ -915,7 +999,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 },
                 {
                     "call_to_action": "enroll now",
-                    "datetime": self.course_runs["C"]["start"]
+                    "datetime": data["course_runs"]["C"]["start"]
                     .isoformat()
                     .replace("+00:00", "Z"),
                     "priority": 1,
@@ -942,27 +1026,71 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             response.json()["filters"]["subjects"]["values"],
             [
-                {"count": 2, "human_name": "Subject #0", "key": "P-00010001"},
-                {"count": 1, "human_name": "Subject #1", "key": "P-00010002"},
-                {"count": 1, "human_name": "Subject #2", "key": "L-00010003"},
-                {"count": 0, "human_name": "Subject #3", "key": "L-00010004"},
+                {
+                    "count": 2,
+                    "human_name": "Subject #0",
+                    "key": data["top_subjects"][0].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Subject #1",
+                    "key": data["top_subjects"][1].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Subject #2",
+                    "key": data["top_subjects"][2].get_es_id(),
+                },
+                {
+                    "count": 0,
+                    "human_name": "Subject #3",
+                    "key": data["top_subjects"][3].get_es_id(),
+                },
             ],
         )
         self.assertEqual(
             response.json()["filters"]["levels"]["values"],
             [
-                {"count": 1, "human_name": "Level #0", "key": "L-00020001"},
-                {"count": 1, "human_name": "Level #2", "key": "L-00020003"},
-                {"count": 0, "human_name": "Level #1", "key": "L-00020002"},
+                {
+                    "count": 1,
+                    "human_name": "Level #0",
+                    "key": data["levels"][0].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Level #2",
+                    "key": data["levels"][2].get_es_id(),
+                },
+                {
+                    "count": 0,
+                    "human_name": "Level #1",
+                    "key": data["levels"][1].get_es_id(),
+                },
             ],
         )
         self.assertEqual(
             response.json()["filters"]["organizations"]["values"],
             [
-                {"count": 2, "human_name": "Organization #0", "key": "P-00030001"},
-                {"count": 1, "human_name": "Organization #2", "key": "L-00030003"},
-                {"count": 1, "human_name": "Organization #3", "key": "L-00030004"},
-                {"count": 0, "human_name": "Organization #1", "key": "P-00030002"},
+                {
+                    "count": 2,
+                    "human_name": "Organization #0",
+                    "key": data["top_organizations"][0].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Organization #2",
+                    "key": data["top_organizations"][2].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Organization #3",
+                    "key": data["top_organizations"][3].get_es_id(),
+                },
+                {
+                    "count": 0,
+                    "human_name": "Organization #1",
+                    "key": data["top_organizations"][1].get_es_id(),
+                },
             ],
         )
 
@@ -970,48 +1098,48 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         Battle test filtering and sorting ongoing courses.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?availability=ongoing")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, ["A", "B", "F", "G"]),
+            self.get_expected_courses(data["courses_definition"], ["A", "B", "F", "G"]),
         )
 
     def test_query_courses_course_runs_filter_coming_soon_courses(self, *_):
         """
         Battle test filtering and sorting coming soon courses.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?availability=coming_soon")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, ["C", "E"]),
+            self.get_expected_courses(data["courses_definition"], ["C", "E"]),
         )
 
     def test_query_courses_course_runs_filter_archived_courses(self, *_):
         """
         Battle test filtering and sorting archived courses.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?availability=archived")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, ["D", "H", "I"]),
+            self.get_expected_courses(data["courses_definition"], ["D", "H", "I"]),
         )
 
     def test_query_courses_course_runs_filter_language(self, *_):
         """
         Battle test filtering and sorting courses in one language.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?languages=fr")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, ["A", "E", "G"]),
+            self.get_expected_courses(data["courses_definition"], ["A", "E", "G"]),
         )
 
     def test_query_courses_course_runs_filter_language_facets(self, *_):
@@ -1022,7 +1150,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         runs with the same language (resp. availability) get grouped under the same
         course.
         """
-        self.prepare_indices(suite=[["A", "B"], ["H", "D"], ["E", "I"], ["G", "F"]])
+        data = self.prepare_indices(
+            suite=[["A", "B"], ["H", "D"], ["E", "I"], ["G", "F"]]
+        )
         response = self.client.get("/api/v1.0/courses/?languages=fr")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -1030,7 +1160,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {
                     "call_to_action": "enroll now",
-                    "datetime": self.course_runs["A"]["enrollment_end"]
+                    "datetime": data["course_runs"]["A"]["enrollment_end"]
                     .isoformat()
                     .replace("+00:00", "Z"),
                     "priority": 0,
@@ -1038,7 +1168,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 },
                 {
                     "call_to_action": None,
-                    "datetime": self.course_runs["E"]["start"]
+                    "datetime": data["course_runs"]["E"]["start"]
                     .isoformat()
                     .replace("+00:00", "Z"),
                     "priority": 3,
@@ -1074,27 +1204,71 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             response.json()["filters"]["subjects"]["values"],
             [
-                {"count": 3, "human_name": "Subject #1", "key": "P-00010002"},
-                {"count": 1, "human_name": "Subject #0", "key": "P-00010001"},
-                {"count": 1, "human_name": "Subject #2", "key": "L-00010003"},
-                {"count": 1, "human_name": "Subject #3", "key": "L-00010004"},
+                {
+                    "count": 3,
+                    "human_name": "Subject #1",
+                    "key": data["top_subjects"][1].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Subject #0",
+                    "key": data["top_subjects"][0].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Subject #2",
+                    "key": data["top_subjects"][2].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Subject #3",
+                    "key": data["top_subjects"][3].get_es_id(),
+                },
             ],
         )
         self.assertEqual(
             response.json()["filters"]["levels"]["values"],
             [
-                {"count": 2, "human_name": "Level #0", "key": "L-00020001"},
-                {"count": 1, "human_name": "Level #1", "key": "L-00020002"},
-                {"count": 0, "human_name": "Level #2", "key": "L-00020003"},
+                {
+                    "count": 2,
+                    "human_name": "Level #0",
+                    "key": data["levels"][0].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Level #1",
+                    "key": data["levels"][1].get_es_id(),
+                },
+                {
+                    "count": 0,
+                    "human_name": "Level #2",
+                    "key": data["levels"][2].get_es_id(),
+                },
             ],
         )
         self.assertEqual(
             response.json()["filters"]["organizations"]["values"],
             [
-                {"count": 2, "human_name": "Organization #1", "key": "P-00030002"},
-                {"count": 2, "human_name": "Organization #3", "key": "L-00030004"},
-                {"count": 1, "human_name": "Organization #0", "key": "P-00030001"},
-                {"count": 1, "human_name": "Organization #2", "key": "L-00030003"},
+                {
+                    "count": 2,
+                    "human_name": "Organization #1",
+                    "key": data["top_organizations"][1].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #3",
+                    "key": data["top_organizations"][3].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Organization #0",
+                    "key": data["top_organizations"][0].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Organization #2",
+                    "key": data["top_organizations"][2].get_es_id(),
+                },
             ],
         )
 
@@ -1102,26 +1276,26 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         Battle test filtering and sorting courses in several languages.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?languages=fr&languages=de")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, ["A", "E", "G", "I"]),
+            self.get_expected_courses(data["courses_definition"], ["A", "E", "G", "I"]),
         )
 
     def test_query_courses_course_runs_filter_composed(self, *_):
         """
         Battle test filtering and sorting courses on an availability AND a language.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
             "/api/v1.0/courses/?availability=ongoing&languages=en"
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, ["B", "F"]),
+            self.get_expected_courses(data["courses_definition"], ["B", "F"]),
         )
 
     def test_query_courses_course_runs_filter_composed_facets(self, *_):
@@ -1132,7 +1306,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         runs with the same language (resp. availability) get grouped under the same
         course.
         """
-        self.prepare_indices(
+        data = self.prepare_indices(
             suite=[["A", "B"], ["H", "C"], ["E", "I"], ["G", "F"]],
         )
         response = self.client.get(
@@ -1144,7 +1318,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {
                     "call_to_action": "enroll now",
-                    "datetime": self.course_runs["B"]["enrollment_end"]
+                    "datetime": data["course_runs"]["B"]["enrollment_end"]
                     .isoformat()
                     .replace("+00:00", "Z"),
                     "priority": 0,
@@ -1179,27 +1353,71 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             response.json()["filters"]["subjects"]["values"],
             [
-                {"count": 2, "human_name": "Subject #1", "key": "P-00010002"},
-                {"count": 1, "human_name": "Subject #0", "key": "P-00010001"},
-                {"count": 1, "human_name": "Subject #3", "key": "L-00010004"},
-                {"count": 0, "human_name": "Subject #2", "key": "L-00010003"},
+                {
+                    "count": 2,
+                    "human_name": "Subject #1",
+                    "key": data["top_subjects"][1].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Subject #0",
+                    "key": data["top_subjects"][0].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Subject #3",
+                    "key": data["top_subjects"][3].get_es_id(),
+                },
+                {
+                    "count": 0,
+                    "human_name": "Subject #2",
+                    "key": data["top_subjects"][2].get_es_id(),
+                },
             ],
         )
         self.assertEqual(
             response.json()["filters"]["levels"]["values"],
             [
-                {"count": 1, "human_name": "Level #0", "key": "L-00020001"},
-                {"count": 1, "human_name": "Level #1", "key": "L-00020002"},
-                {"count": 0, "human_name": "Level #2", "key": "L-00020003"},
+                {
+                    "count": 1,
+                    "human_name": "Level #0",
+                    "key": data["levels"][0].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Level #1",
+                    "key": data["levels"][1].get_es_id(),
+                },
+                {
+                    "count": 0,
+                    "human_name": "Level #2",
+                    "key": data["levels"][2].get_es_id(),
+                },
             ],
         )
         self.assertEqual(
             response.json()["filters"]["organizations"]["values"],
             [
-                {"count": 2, "human_name": "Organization #3", "key": "L-00030004"},
-                {"count": 1, "human_name": "Organization #0", "key": "P-00030001"},
-                {"count": 1, "human_name": "Organization #1", "key": "P-00030002"},
-                {"count": 0, "human_name": "Organization #2", "key": "L-00030003"},
+                {
+                    "count": 2,
+                    "human_name": "Organization #3",
+                    "key": data["top_organizations"][3].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Organization #0",
+                    "key": data["top_organizations"][0].get_es_id(),
+                },
+                {
+                    "count": 1,
+                    "human_name": "Organization #1",
+                    "key": data["top_organizations"][1].get_es_id(),
+                },
+                {
+                    "count": 0,
+                    "human_name": "Organization #2",
+                    "key": data["top_organizations"][2].get_es_id(),
+                },
             ],
         )
 
@@ -1207,38 +1425,61 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         Battle test filtering new courses.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?new=new")
         self.assertEqual(response.status_code, 200)
         # Keep only the courses that are new:
-        courses_definition = filter(lambda c: c[0] in [0, 1], courses_definition)
-
+        courses_definition = filter(
+            lambda c: c[0] in [0, 1], data["courses_definition"]
+        )
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, list(self.course_runs)),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
         )
 
     def test_query_courses_filter_organization(self, *_):
         """
         Battle test filtering by an organization.
         """
-        courses_definition = self.prepare_indices()
-        response = self.client.get("/api/v1.0/courses/?organizations=P-00030002")
+        data = self.prepare_indices()
+        response = self.client.get(
+            (
+                "/api/v1.0/courses/?organizations="
+                f"{data['top_organizations'][1].get_es_id()}"
+            )
+        )
         self.assertEqual(response.status_code, 200)
-        # Keep only the courses that are linked to organization 00030002:
-        courses_definition = filter(lambda c: c[0] in [2, 3], courses_definition)
-
+        # Keep only the courses that are linked to this organization:
+        courses_definition = filter(
+            lambda c: c[0] in [2, 3], data["courses_definition"]
+        )
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, list(self.course_runs)),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
         )
         self.assertEqual(
             response.json()["filters"]["organizations"]["values"],
             [
-                {"count": 2, "human_name": "Organization #0", "key": "P-00030001"},
-                {"count": 2, "human_name": "Organization #1", "key": "P-00030002"},
-                {"count": 2, "human_name": "Organization #2", "key": "L-00030003"},
-                {"count": 2, "human_name": "Organization #3", "key": "L-00030004"},
+                {
+                    "count": 2,
+                    "human_name": "Organization #0",
+                    "key": data["top_organizations"][0].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #1",
+                    "key": data["top_organizations"][1].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #2",
+                    "key": data["top_organizations"][2].get_es_id(),
+                },
+                {
+                    "count": 2,
+                    "human_name": "Organization #3",
+                    "key": data["top_organizations"][3].get_es_id(),
+                },
             ],
         )
 
@@ -1246,17 +1487,23 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         Battle test filtering by multiple organizations.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?organizations=P-00030002&organizations=L-000300010001"
+            (
+                "/api/v1.0/courses/?organizations="
+                f"{data['top_organizations'][1].get_es_id()}"
+                "&organizations="
+                f"{data['organization_0_children'][0].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
-        # Keep only the courses that are linked to organizations 00030002 or 000300010001:
-        courses_definition = filter(lambda c: c[0] in [0, 2, 3], courses_definition)
-
+        # Keep only the courses that are linked to these organizations:
+        courses_definition = filter(
+            lambda c: c[0] in [0, 2, 3], data["courses_definition"]
+        )
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, list(self.course_runs)),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
         )
 
     def test_query_courses_filter_organizations_aggs(self, *_):
@@ -1264,10 +1511,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         It should be possible to limit faceting on an organization to specific values by
         passing a regex in the querystring.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?organizations_aggs=L-000300010001"
-            "&organizations_aggs=L-000300010002"
+            "/api/v1.0/courses/?organizations_aggs="
+            f"{data['organization_0_children'][0].get_es_id()}"
+            "&organizations_aggs="
+            f"{data['organization_0_children'][1].get_es_id()}"
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -1276,12 +1525,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {
                     "count": 1,
                     "human_name": "Organization #0 Child #0",
-                    "key": "L-000300010001",
+                    "key": data["organization_0_children"][0].get_es_id(),
                 },
                 {
                     "count": 1,
                     "human_name": "Organization #0 Child #1",
-                    "key": "L-000300010002",
+                    "key": data["organization_0_children"][1].get_es_id(),
                 },
             ],
         )
@@ -1291,9 +1540,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         It should be possible to limit faceting on organizations to specific values chosen as
         the children of a given organization, passed in the query string.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?organizations_children_aggs=L-00030002"
+            (
+                "/api/v1.0/courses/?organizations_children_aggs="
+                f"{data['top_organizations'][1].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -1302,12 +1554,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {
                     "count": 1,
                     "human_name": "Organization #1 Child #0",
-                    "key": "L-000300020001",
+                    "key": data["organization_1_children"][0].get_es_id(),
                 },
                 {
                     "count": 1,
                     "human_name": "Organization #1 Child #1",
-                    "key": "L-000300020002",
+                    "key": data["organization_1_children"][1].get_es_id(),
                 },
             ],
         )
@@ -1316,32 +1568,41 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         Battle test filtering by a subject.
         """
-        courses_definition = self.prepare_indices()
-        response = self.client.get("/api/v1.0/courses/?subjects=P-00010001")
+        data = self.prepare_indices()
+        response = self.client.get(
+            ("/api/v1.0/courses/?subjects=" f"{data['top_subjects'][0].get_es_id()}")
+        )
         self.assertEqual(response.status_code, 200)
         # Keep only the courses that are linked to subject 2:
-        courses_definition = filter(lambda c: c[0] in [0, 1], courses_definition)
-
+        courses_definition = filter(
+            lambda c: c[0] in [0, 1], data["courses_definition"]
+        )
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, list(self.course_runs)),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
         )
 
     def test_query_courses_filter_multiple_subjects(self, *_):
         """
         Battle test filtering by multiple subjects.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?subjects=P-00010001&subjects=L-00010004"
+            (
+                "/api/v1.0/courses/?subjects="
+                f"{data['top_subjects'][0].get_es_id()}"
+                "&subjects="
+                f"{data['top_subjects'][3].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
         # Keep only the courses that are linked to subjects 1 or 4:
-        courses_definition = filter(lambda c: c[0] in [0, 1, 3], courses_definition)
-
+        courses_definition = filter(
+            lambda c: c[0] in [0, 1, 3], data["courses_definition"]
+        )
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, list(self.course_runs)),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
         )
 
     def test_query_courses_filter_subjects_aggs(self, *_):
@@ -1349,9 +1610,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         It should be possible to limit faceting on a subject to specific values by passing them
         as a list in the querystring.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?subjects_aggs=L-000100010001&subjects_aggs=L-000100010002"
+            (
+                "/api/v1.0/courses/?subjects_aggs="
+                f"{data['subject_0_children'][0].get_es_id()}"
+                "&subjects_aggs="
+                f"{data['subject_0_children'][1].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -1360,12 +1626,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {
                     "count": 1,
                     "human_name": "Subject #0 Child #0",
-                    "key": "L-000100010001",
+                    "key": data["subject_0_children"][0].get_es_id(),
                 },
                 {
                     "count": 1,
                     "human_name": "Subject #0 Child #1",
-                    "key": "L-000100010002",
+                    "key": data["subject_0_children"][1].get_es_id(),
                 },
             ],
         )
@@ -1375,9 +1641,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         It should be possible to limit faceting on subjects to specific values chosen as
         the children of a given subject, passed in the query string.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?subjects_children_aggs=L-00010002"
+            (
+                "/api/v1.0/courses/?subjects_children_aggs="
+                f"{data['top_subjects'][1].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -1386,12 +1655,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {
                     "count": 1,
                     "human_name": "Subject #1 Child #0",
-                    "key": "L-000100020001",
+                    "key": data["subject_1_children"][0].get_es_id(),
                 },
                 {
                     "count": 1,
                     "human_name": "Subject #1 Child #1",
-                    "key": "L-000100020002",
+                    "key": data["subject_1_children"][1].get_es_id(),
                 },
             ],
         )
@@ -1400,32 +1669,41 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         Battle test filtering by a level.
         """
-        courses_definition = self.prepare_indices()
-        response = self.client.get("/api/v1.0/courses/?levels=L-00020001")
+        data = self.prepare_indices()
+        response = self.client.get(
+            f"/api/v1.0/courses/?levels={data['levels'][0].get_es_id()}"
+        )
         self.assertEqual(response.status_code, 200)
-        # Keep only the courses that are linked to level L-00020001:
-        courses_definition = filter(lambda c: c[0] in [0, 2], courses_definition)
-
+        # Keep only the courses that are linked to this level:
+        courses_definition = filter(
+            lambda c: c[0] in [0, 2], data["courses_definition"]
+        )
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, list(self.course_runs)),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
         )
 
     def test_query_courses_filter_multiple_levels(self, *_):
         """
         Battle test filtering by multiple levels.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?levels=L-00020001&levels=L-00020002"
+            (
+                "/api/v1.0/courses/?levels="
+                f"{data['levels'][0].get_es_id()}"
+                "&levels="
+                f"{data['levels'][1].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
-        # Keep only the courses that are linked to levels L-00020001 or L-00020002:
-        courses_definition = filter(lambda c: c[0] in [0, 2, 3], courses_definition)
-
+        # Keep only the courses that are linked to these levels:
+        courses_definition = filter(
+            lambda c: c[0] in [0, 2, 3], data["courses_definition"]
+        )
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, list(self.course_runs)),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
         )
 
     def test_query_courses_match_all_no_filter_pages(self, *_):
@@ -1449,14 +1727,16 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         Full-text search appropriately returns the list of courses that match a given
         related person name even through a text query.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?query=boulgakov")
         self.assertEqual(response.status_code, 200)
         # Keep only the courses that are linked to persons whose name contains "boulgakov"
-        courses_definition = filter(lambda c: c[0] in [0, 3], courses_definition)
+        courses_definition = filter(
+            lambda c: c[0] in [0, 3], data["courses_definition"]
+        )
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, list(self.course_runs)),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
         )
 
     def test_query_courses_text_language_analyzer_query(self, *_):
@@ -1479,17 +1759,19 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         Full-text search through the language analyzer combines with another filter.
         """
-        courses_definition = self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
-            "/api/v1.0/courses/?query=artificial&subjects=P-00010001"
+            (
+                "/api/v1.0/courses/?query=artificial&subjects="
+                f"{data['top_subjects'][0].get_es_id()}"
+            )
         )
         self.assertEqual(response.status_code, 200)
         # Keep only the courses that are linked to category one and contain the word "artificial"
-        courses_definition = filter(lambda c: c[0] in [0], courses_definition)
-
+        courses_definition = filter(lambda c: c[0] in [0], data["courses_definition"])
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
-            self.get_expected_courses(courses_definition, list(self.course_runs)),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
         )
 
     def test_query_courses_code_partial(self, *_):
@@ -1540,13 +1822,17 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         aggregations-related parameters, are present in a query, [filter]_children_aggs should
         take precedence.
         """
-        self.prepare_indices()
+        data = self.prepare_indices()
         response = self.client.get(
             (
                 # Query string directly requests subject 0 children 0 and 1, and requests
                 # subject 1's children through the [filter]_children_aggs parameter.
-                "/api/v1.0/courses/?subjects_aggs=L-000100010001&subjects_aggs=L-000100010002"
-                "&subjects_children_aggs=L-00010002"
+                "/api/v1.0/courses/?subjects_aggs="
+                f"{data['subject_0_children'][0].get_es_id()}"
+                "&subjects_aggs="
+                f"{data['subject_0_children'][1].get_es_id()}"
+                "&subjects_children_aggs="
+                f"{data['top_subjects'][1].get_es_id()}"
             )
         )
         self.assertEqual(response.status_code, 200)
@@ -1557,12 +1843,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {
                     "count": 1,
                     "human_name": "Subject #1 Child #0",
-                    "key": "L-000100020001",
+                    "key": data["subject_1_children"][0].get_es_id(),
                 },
                 {
                     "count": 1,
                     "human_name": "Subject #1 Child #1",
-                    "key": "L-000100020002",
+                    "key": data["subject_1_children"][1].get_es_id(),
                 },
             ],
         )
