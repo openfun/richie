@@ -1,4 +1,6 @@
 import { Maybe } from 'utils/types';
+import { base64Decode, base64Encode } from 'utils/base64Parser';
+import { handle } from './errors/handle';
 /**
  * useCache
  * Little utils to retrieve/store information in session storage.
@@ -20,19 +22,27 @@ interface CacheEntry {
 
 export const useCache = (key: string): CacheToolset => {
   const get = () => {
-    const payload = sessionStorage.getItem(key);
-    if (payload) {
-      const data: CacheEntry = JSON.parse(atob(payload));
+    try {
+      const payload = sessionStorage.getItem(key);
+      if (payload) {
+        const data: CacheEntry = JSON.parse(base64Decode(payload));
 
-      if (data.expiredAt > Date.now()) return data.value;
-      else clear();
+        if (data.expiredAt > Date.now()) return data.value;
+        else clear();
+      }
+      return undefined;
+    } catch (error) {
+      handle(error);
     }
-    return undefined;
   };
 
   const set = (value: any, lifetime: number = 5 * 60_000) => {
-    const payload = btoa(JSON.stringify({ value, expiredAt: Date.now() + lifetime }));
-    sessionStorage.setItem(key, payload);
+    try {
+      const payload = base64Encode(JSON.stringify({ value, expiredAt: Date.now() + lifetime }));
+      sessionStorage.setItem(key, payload);
+    } catch (error) {
+      handle(error);
+    }
   };
 
   const clear = () => sessionStorage.removeItem(key);
