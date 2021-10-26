@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix css classes related with course runs on the course detail page.
 - Fix error on course page when course run hasn't a title and the setting
 WEB_ANALYTICS_ID is enabled
+- Fix organization str when organization code is null
 
 ## Changed
 

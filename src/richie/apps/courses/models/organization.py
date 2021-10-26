@@ -46,7 +46,8 @@ class Organization(EsIdMixin, BasePageExtension):
         """Human representation of an organization"""
         model = self._meta.verbose_name.title()
         name = self.extended_object.get_title()
-        return f"{model:s}: {name:s} ({self.code:s})"
+        code = f" ({self.code:s})" if self.code else ""
+        return f"{model:s}: {name:s}{code:s}"
 
     def clean(self):
         """

@@ -132,6 +132,16 @@ class OrganizationModelsTestCase(TestCase):
         with self.assertNumQueries(1):
             self.assertEqual(str(organization), "Organization: La Sorbonne (SOR)")
 
+    def test_models_organization_str_code_none(self):
+        """
+        A organization with a nill code should not raise an error when printing the object.
+        """
+        page = PageFactory(title__title="An organization name")
+        organization = OrganizationFactory(
+            extended_object=page, should_publish=True, code=None
+        )
+        self.assertEqual("Organization: An organization name", str(organization))
+
     # get_es_id
     def test_get_es_id_for_draft_organization_with_public_extension(self):
         """
