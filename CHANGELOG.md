@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix `useCache` hook when it has to encode UTF-16 characters to base 64.
 - Fix an issue related to css selector priority from r-scheme-colors mixins
 - Fix css classes related with course runs on the course detail page.
 
