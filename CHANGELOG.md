@@ -8,27 +8,29 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.9.0] - 2021-10-27
+
 ### Added
 
 - Add enrollment count to course run and to course page
 - Add blocks on header and footer for branding overrides
 - Add organization logo to course glimpse
 
-### Fixed
-
-- Fix `useCache` hook when it has to encode UTF-16 characters to base 64.
-- Fix an issue related to css selector priority from r-scheme-colors mixins
-- Fix css classes related with course runs on the course detail page.
-- Fix error on course page when course run hasn't a title and the setting
-WEB_ANALYTICS_ID is enabled
-- Fix organization str when organization code is null
-
-## Changed
+### Changed
 
 - Update course search API to remove MPTT regexes as query params and replace
   them with arrays or strings.
 - Use stable IDs for categories and organizations in ES indices and throughout
   all search-related code.
+
+### Fixed
+
+- Fix `useCache` hook when it has to encode UTF-16 characters to base 64.
+- Fix an issue related to css selector priority from r-scheme-colors mixins
+- Fix css classes related with course runs on the course detail page.
+- Fix error on course page when course run doesn't have any title and the
+  setting WEB_ANALYTICS_ID is enabled
+- Fix organization str when organization code is null
 
 ## [2.8.2] - 2021-10-05
 
@@ -1412,7 +1414,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.8.2...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.9.0...master
+[2.9.0]: https://github.com/openfun/richie/compare/v2.8.2...v2.9.0
 [2.8.2]: https://github.com/openfun/richie/compare/v2.8.1...v2.8.2
 [2.8.1]: https://github.com/openfun/richie/compare/v2.8.0...v2.8.1
 [2.8.0]: https://github.com/openfun/richie/compare/v2.7.1...v2.8.0
