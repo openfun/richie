@@ -17,3 +17,8 @@
   margin: $margin;
   padding: $padding;
 }
+
+// Helper class to hide elements.
+.is-hidden {
+  display: none;
+}

@@ -10,6 +10,7 @@ from django.http.request import HttpRequest
 from django.middleware.csrf import get_token
 from django.utils.translation import get_language_from_request
 
+from richie.apps.courses.defaults import RICHIE_MAX_ARCHIVED_COURSE_RUNS
 from richie.apps.courses.models import Organization
 
 from . import defaults
@@ -107,6 +108,11 @@ def site_metas(request: HttpRequest):
         context[
             "RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT"
         ] = settings.RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT
+
+    context["RICHIE_MAX_ARCHIVED_COURSE_RUNS"] = getattr(
+        settings, "RICHIE_MAX_ARCHIVED_COURSE_RUNS", RICHIE_MAX_ARCHIVED_COURSE_RUNS
+    )
+
     return context
 
 

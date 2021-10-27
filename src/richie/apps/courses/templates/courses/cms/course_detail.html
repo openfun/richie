@@ -358,7 +358,7 @@
                                 <h3 class="course-detail__title">
                                     {% trans "Archived" context "Archived course runs (plural)" %}
                                 </h3>
-                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.6 %}
+                                {% include "courses/cms/fragment_course_runs_list.html" with max_course_runs=RICHIE_MAX_ARCHIVED_COURSE_RUNS course_runs=runs_dict.6%}
                             </div>
                         {% endif %}
                         {% endblock runs_archived %}

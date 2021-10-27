@@ -229,6 +229,12 @@
                 initializeAccordions();
                 initializeHamburgerMenu();
             });
+
+            function toggleClass(elements, clazz) {
+                for (let element of elements) {
+                    element.classList.toggle(clazz);
+                }
+            }
         </script>
         {% if request.toolbar and request.toolbar.edit_mode_active %}
         {# When edit mode is active, we have to refresh js scripts after saving modifications #}

@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add setting to limit the number of archived course runs displayed by
+  default on a course detail page.
 - Add timing function variables
 - Add a `outline` variant to button
 - Create a `shadowed-box` mixin
