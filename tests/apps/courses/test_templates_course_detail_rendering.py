@@ -1231,3 +1231,39 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         # Without course license participation
         self.assertNotContains(response, "License for the course content")
+
+    @override_settings(RICHIE_MAX_ARCHIVED_COURSE_RUNS=3)
+    def test_templates_course_detail_view_richie_max_archived_course_runs(self):
+        """
+        Only the number of archived course runs defined by `RICHIE_MAX_ARCHIVED_COURSE_RUNS`
+        setting should be displayed.
+        """
+        course = CourseFactory()
+        for _ in range(5):
+            self.create_run_archived_closed(course).refresh_from_db()
+        course.extended_object.publish("en")
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertContains(
+            response,
+            '<li class="is-hidden">',
+            count=2,
+        )
+        self.assertContains(response, "course-detail__view-more-runs")
+
+    @override_settings(RICHIE_MAX_ARCHIVED_COURSE_RUNS=None)
+    def test_templates_course_detail_view_no_richie_max_archived_course_runs(self):
+        """
+        All course runs should be displayed when `RICHIE_MAX_ARCHIVED_COURSE_RUNS` setting is None
+        """
+        course = CourseFactory()
+        for _ in range(5):
+            self.create_run_archived_closed(course).refresh_from_db()
+        course.extended_object.publish("en")
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertNotContains(
+            response,
+            '<li class="is-hidden">',
+        )
+        self.assertNotContains(response, "course-detail__view-more-runs")

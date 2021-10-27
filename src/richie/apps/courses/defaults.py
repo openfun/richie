@@ -343,3 +343,7 @@ EFFORT_UNITS = {
     MINUTE: TIME_UNITS[MINUTE],
     HOUR: TIME_UNITS[HOUR],
 }
+
+# Maximum number of archived course runs displayed by default on course detail page.
+# The additional runs can be viewed by clicking on `View more` link.
+RICHIE_MAX_ARCHIVED_COURSE_RUNS = 10
