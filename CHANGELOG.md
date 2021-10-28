@@ -22,6 +22,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix rendering difference between React and Django course glimpses
 - Fix an error when a user typed a short search query in the header or home
 - Fix an issue related to css selector priority from r-scheme-colors mixins
 - Fix css classes related with course runs on the course detail page.
