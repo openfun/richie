@@ -35,11 +35,22 @@ const messages = defineMessages({
     description: 'Accessibility text for the spinner while search results are being loaded',
     id: 'components.Search.spinnerText',
   },
+  textQueryLengthWarning: {
+    defaultMessage: `Text search requires at least 3 characters. { query } is not long enough to search.
+Search results will not be affected by this query.`,
+    description:
+      'Warning message in search results when the text query is not long enough to be used.',
+    id: 'components.Search.textQueryLengthWarning',
+  },
 });
 
 const Search = ({ context }: CommonDataProps) => {
   const { courseSearchParams, lastDispatchActions } = useCourseSearchParams();
-  const courseSearchResponse = useCourseSearch(courseSearchParams);
+  const { query, ...courseSearchParamsWithoutQuery } = courseSearchParams;
+
+  const courseSearchResponse = useCourseSearch(
+    query && query.length < 3 ? courseSearchParamsWithoutQuery : courseSearchParams,
+  );
 
   const alwaysShowFilters = useMatchMedia('(min-width: 992px)');
   const [showFilters, setShowFilters] = useState(false);
@@ -108,6 +119,16 @@ const Search = ({ context }: CommonDataProps) => {
       <div className="search__results">
         {courseSearchResponse && courseSearchResponse.status === RequestStatus.SUCCESS ? (
           <React.Fragment>
+            {query && query.length < 3 ? (
+              <div className="banner banner--rounded banner--warning">
+                <p className="banner__message">
+                  <FormattedMessage
+                    {...messages.textQueryLengthWarning}
+                    values={{ query: <b>&quot;{query}&quot;</b> }}
+                  />
+                </p>
+              </div>
+            ) : null}
             <CourseGlimpseList
               context={context}
               courses={courseSearchResponse.content.objects}

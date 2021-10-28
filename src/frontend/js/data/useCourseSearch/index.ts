@@ -1,3 +1,4 @@
+import { stringify } from 'query-string';
 import { useState } from 'react';
 
 import { APIListRequestParams } from 'types/api';
@@ -12,7 +13,7 @@ export const useCourseSearch = (searchParams: APIListRequestParams) => {
   useAsyncEffect(async () => {
     const response = await fetchList('courses', searchParams);
     setCourseSearchResponse(response);
-  }, [searchParams]);
+  }, [stringify(searchParams)]);
 
   return courseSearchResponse;
 };

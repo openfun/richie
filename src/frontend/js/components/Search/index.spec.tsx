@@ -68,6 +68,60 @@ describe('<Search />', () => {
     });
   });
 
+  it('shows the results and a warning message when there is a text query that is too short', async () => {
+    // Note: this can happen when loading <Search /> with a short text query already in the query string
+    fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
+      // NB: query is absent from API request query string
+      meta: {
+        total_count: 200,
+      },
+      objects: [
+        {
+          absolute_url: '/en/courses/vision-oriented-systemic-implementation/',
+          cover_image: {
+            sizes: '300px',
+            src: '/some/image.jpg',
+            srcset: '/some/image.jpg *',
+          },
+          duration: '2 days',
+          effort: '425 minutes',
+          icon: null,
+          introduction: 'Politics some never so various mean. American society long building.',
+          title: 'Vision-oriented systemic implementation',
+          id: '346',
+          categories: ['40', '46', '60', '104'],
+          code: '00027',
+          organization_highlighted: 'Object-based analyzing time-frame',
+          organizations: ['170', '186', '190'],
+          state: {
+            priority: 3,
+            datetime: '2022-04-30T18:45:31Z',
+            call_to_action: null,
+            text: 'starting on',
+          },
+        },
+      ],
+    });
+
+    render(
+      <IntlProvider locale="en">
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0', query: 'vi' })}>
+          <Search context={contextProps} />
+        </HistoryContext.Provider>
+      </IntlProvider>,
+    );
+
+    // Wait for search results to be loaded
+    await waitFor(() => {
+      expect(screen.queryByText('Loading search results...')).toBeNull();
+    });
+
+    screen.getByText('Vision-oriented systemic implementation');
+    screen.getByText((content) =>
+      content.startsWith('Text search requires at least 3 characters.'),
+    );
+  });
+
   it('shows an error message when it fails to get the results', async () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', 500);
 

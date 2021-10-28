@@ -16,7 +16,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add blocks on header and footer for branding overrides
 - Add organization logo to course glimpse
 
-### Changed
+### Fixed
+
+- Fix an error when a user typed a short search query in the header or home
+- Fix an issue related to css selector priority from r-scheme-colors mixins
+- Fix css classes related with course runs on the course detail page.
+
+## Changed
 
 - Update course search API to remove MPTT regexes as query params and replace
   them with arrays or strings.
