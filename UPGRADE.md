@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.8.x to 2.9.x
+
 - Add `django.contrib.humanize` to your installed apps.
   ```python
   INSTALLED_APPS = (
@@ -23,6 +25,10 @@ $ make migrate
       'django.contrib.humanize',
   )
   ```
+- If you want to activate the new feature showing the enrollment count on the course detail page,
+  set the `RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT` setting to a value greater than 0, to
+  specify the minimum number of enrollments for a course (accross all its sessions) starting from
+  which you want to show the enrollment count. It will display as: "1000 already enrolled!"
 
 ## 2.7.x to 2.8.x
 

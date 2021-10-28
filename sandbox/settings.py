@@ -580,7 +580,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
 
     # Minimum enrollment count value that would be shown on course detail page
     RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT = values.Value(
-        0,
+        5000,
         environ_name="RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT",
         environ_prefix=None,
     )

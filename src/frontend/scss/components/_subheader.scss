@@ -137,7 +137,7 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
     font-size: 1rem;
   }
 
-  &__enrollment_count {
+  &__enrollment-count {
     @include make-container();
     padding-left: 0;
     padding-right: 0;
