@@ -37,11 +37,17 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
     <div className="course-glimpse__content">
       {course.icon ? (
         <div className="course-glimpse__icon">
-          <div className="course-glimpse__band" style={{ background: course.icon.color }}>
-            {course.icon.title}
-          </div>
-          {/* alt forced to empty string because it's a decorative image */}
-          <img src={course.icon.src} srcSet={course.icon.srcset} sizes={course.icon.sizes} alt="" />
+          <span className="category-badge">
+            {/* alt forced to empty string because it's a decorative image */}
+            <img
+              alt=""
+              className="category-badge__icon"
+              sizes={course.icon.sizes}
+              src={course.icon.src}
+              srcSet={course.icon.srcset}
+            />
+            <span className="category-badge__title">{course.icon.title}</span>
+          </span>
         </div>
       ) : null}
       <div className="course-glimpse__wrapper">
