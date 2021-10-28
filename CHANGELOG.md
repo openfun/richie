@@ -29,6 +29,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Changed
 
+- Move organization logo behind category badge
 - Update course search API to remove MPTT regexes as query params and replace
   them with arrays or strings.
 - Use stable IDs for categories and organizations in ES indices and throughout
