@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Hide enrollment count by default until an explicit minimum is set
+
 ## [2.9.0] - 2021-10-27
 
 ### Added

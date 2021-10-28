@@ -111,19 +111,17 @@
                         {% endif %}
                     </div>
 
-                    <div class="subheader__enrollment_count">
-                        {% block enrollment_count %}
-                            {% with enrollment_count=course.course_runs_enrollment_count %}
-                                {% if enrollment_count > 0 and RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT is None or enrollment_count > 0 and enrollment_count >= RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT %}
-                                    <div>
-                                        {% blocktrans with count=enrollment_count|intcomma %}
-                                            {{ count }} already enrolled!
-                                        {% endblocktrans %}
-                                    </div>
-                                {% endif %}
-                            {% endwith %}
-                        {% endblock enrollment_count %}
-                    </div>
+                    {% block enrollment_count %}
+                        {% with enrollment_count=course.course_runs_enrollment_count %}
+                            {% if enrollment_count > 0 and RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT > 0 and enrollment_count >= RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT %}
+                                <div class="subheader__enrollment-count">
+                                    {% blocktrans with count=enrollment_count|intcomma %}
+                                        {{ count }} already enrolled!
+                                    {% endblocktrans %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                    {% endblock enrollment_count %}
 
                     <div class="subheader__teaser">
                         {% placeholder "course_teaser" or %}

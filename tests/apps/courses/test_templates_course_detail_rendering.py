@@ -196,8 +196,9 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             response, program_unpublished.extended_object.get_title()
         )
 
-        # Check enrollment count
-        self.assertContains(response, "11,000 already enrolled")
+        # Check that enrollment count is not present
+        self.assertContains(response, "enrollment-count")
+        self.assertContains(response, "11,000 already enrolled!")
 
     def test_templates_course_detail_cms_published_content_no_code(self):
         """
@@ -1053,6 +1054,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             html=True,
         )
 
+    @override_settings(RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT=3)
     def test_templates_course_detail_runs_with_only_one_enrollment_count(self):
         """
         When a run has any enrollment count number, it should display the sum for all runs
@@ -1114,3 +1116,39 @@ class RunsCourseCMSTestCase(CMSTestCase):
         response = self.client.get(course.extended_object.get_absolute_url())
 
         self.assertNotContains(response, r"already enrolled")
+
+    @override_settings(RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT=0)
+    def test_templates_course_detail_runs_count_minimum_0(self):
+        """
+        When the minimum number of enrollments is set to 0, the count should be hidden
+        """
+        course = CourseFactory()
+        course_run = self.create_run_ongoing_open(
+            course,
+            enrollment_count=3,
+        )
+        self.assertTrue(course.extended_object.publish("en"))
+        course_run.refresh_from_db()
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertNotContains(response, "enrollment-count")
+        self.assertNotContains(response, "already enrolled")
+
+    @override_settings(RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT=None)
+    def test_templates_course_detail_runs_count_minimum_none(self):
+        """
+        When the minimum number of enrollments is set to None, the count should be hidden
+        """
+        course = CourseFactory()
+        course_run = self.create_run_ongoing_open(
+            course,
+            enrollment_count=3,
+        )
+        self.assertTrue(course.extended_object.publish("en"))
+        course_run.refresh_from_db()
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertNotContains(response, "enrollment-count")
+        self.assertNotContains(response, "already enrolled")
