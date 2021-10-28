@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.8.x to 2.9.x
+
 - Add `django.contrib.humanize` to your installed apps.
   ```python
   INSTALLED_APPS = (
