@@ -117,9 +117,8 @@ jobs:
       - checkout
       # Generate a version.json file describing app release
       - <<: *generate-version-file
-      # Activate docker-in-docker (with layers caching enabled)
+      # Activate docker-in-docker
       - setup_remote_docker:
-          docker_layer_caching: true
           version: 19.03.13
 
       # Login to Docker Hub with encrypted credentials stored as secret
