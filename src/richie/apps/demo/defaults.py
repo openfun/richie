@@ -281,7 +281,7 @@ ICONS_INFO = {
             "fill_icon": pick_image("icons")("accessible.png"),
         },
         {
-            "page_title": {"en": "Closed caption", "fr": "Sous-titres malentendants"},
+            "page_title": {"en": "Closed caption", "fr": "Malentendants"},
             "color": "#a11000",
             "fill_icon": pick_image("icons")("cc.png"),
         },
