@@ -44,6 +44,7 @@
     "@formatjs/intl-relativetimeformat": "9.3.2",
     "@helpscout/helix": "0.2.0",
     "@sentry/browser": "6.13.3",
+    "@sentry/types": "6.13.3",
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "12.1.2",
     "@testing-library/react-hooks": "7.0.2",
