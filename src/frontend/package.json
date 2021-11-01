@@ -35,11 +35,11 @@
     "not dead"
   ],
   "dependencies": {
-    "@babel/core": "7.15.8",
+    "@babel/core": "7.16.0",
     "@babel/plugin-syntax-dynamic-import": "7.8.3",
-    "@babel/plugin-transform-modules-commonjs": "7.15.4",
-    "@babel/preset-env": "7.15.8",
-    "@babel/preset-typescript": "7.15.0",
+    "@babel/plugin-transform-modules-commonjs": "7.16.0",
+    "@babel/preset-env": "7.16.0",
+    "@babel/preset-typescript": "7.16.0",
     "@formatjs/cli": "4.4.0",
     "@formatjs/intl-relativetimeformat": "9.3.2",
     "@helpscout/helix": "0.2.0",
@@ -55,12 +55,12 @@
     "@types/js-cookie": "3.0.0",
     "@types/lodash-es": "4.17.5",
     "@types/query-string": "6.3.0",
-    "@types/react": "17.0.32",
+    "@types/react": "17.0.33",
     "@types/react-autosuggest": "10.1.5",
     "@types/react-dom": "17.0.10",
     "@types/react-modal": "3.13.1",
-    "@typescript-eslint/eslint-plugin": "5.1.0",
-    "@typescript-eslint/parser": "5.1.0",
+    "@typescript-eslint/eslint-plugin": "5.2.0",
+    "@typescript-eslint/parser": "5.2.0",
     "babel-jest": "27.3.1",
     "babel-loader": "8.2.3",
     "babel-plugin-react-intl": "8.2.25",
@@ -98,16 +98,16 @@
     "react-dom": "17.0.2",
     "react-intl": "5.21.0",
     "react-modal": "3.14.3",
-    "sass": "1.43.3",
+    "sass": "1.43.4",
     "source-map-loader": "3.0.0",
     "typescript": "4.4.4",
-    "webpack": "5.59.1",
+    "webpack": "5.61.0",
     "webpack-cli": "4.9.1",
     "whatwg-fetch": "3.6.2",
     "xhr-mock": "2.5.1",
     "yargs": "17.2.1"
   },
   "resolutions": {
-    "@types/react": "17.0.32"
+    "@types/react": "17.0.33"
   }
 }
