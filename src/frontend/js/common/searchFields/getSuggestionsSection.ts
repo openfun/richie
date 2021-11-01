@@ -28,7 +28,8 @@ export const getSuggestionsSection = async (kind: string, title: string, query: 
   // Fetch treats remote errors (400, 404, 503...) as successes
   // The ok flag is the way to discriminate
   if (!response.ok) {
-    return handle(new Error(`Failed to get list from ${kind} autocomplete : ${response.status}`));
+    const error = new Error(`Failed to get list from ${kind} autocomplete : ${response.status}`);
+    return response.status === 400 ? handle(error, await response.json()) : handle(error);
   }
 
   let responseData: Suggestion<string>[];
