@@ -41,6 +41,24 @@ class AutocompleteMixin:
         # the relevant indexer
         indexer = self._meta.indexer
 
+        # Some malformed requests have been generating 500 errors in autocomplete calls. Make sure
+        # we return the proper error code instead so the frontend can be debugged as well if
+        # necessary.
+        try:
+            query = request.query_params["query"]
+        except KeyError:
+            return Response(
+                status=400,
+                data={
+                    "errors": [
+                        (
+                            'Missing autocomplete "query" for request '
+                            f"to {self._meta.indexer.index_name}."
+                        )
+                    ]
+                },
+            )
+
         # Query our specific ES completion field
         language = get_language_from_request(request)
         autocomplete_query_response = ES_CLIENT.search(
@@ -48,7 +66,7 @@ class AutocompleteMixin:
             body={
                 "suggest": {
                     "objects": {
-                        "prefix": request.query_params["query"],
+                        "prefix": query,
                         "completion": {"field": f"complete.{language:s}"},
                     }
                 }

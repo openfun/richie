@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Hide enrollment count by default until an explicit minimum is set
+- Improve handling for autocompletion missing query errors
 
 ## [2.9.0] - 2021-10-27
 

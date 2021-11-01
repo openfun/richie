@@ -130,6 +130,17 @@ class AutocompleteCoursesTestCase(TestCase):
 
         return json.loads(results.content)
 
+    def test_autocomplete_missing_query(self, *_):
+        """
+        When the query is missing, the API returns a 400 error with an appropriate error.
+        """
+        response = self.client.get("/api/v1.0/courses/autocomplete/?")
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json(),
+            {"errors": ['Missing autocomplete "query" for request to test_courses.']},
+        )
+
     def test_autocomplete_text(self, *_):
         """
         Make sure autocomplete is operational and returns the expected courses.
