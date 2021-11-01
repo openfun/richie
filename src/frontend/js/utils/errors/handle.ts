@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/browser';
+import { CaptureContext } from '@sentry/types';
 
 const context = window.__richie_frontend_context__?.context;
 if (context?.sentry_dsn) {
@@ -14,9 +15,9 @@ if (context?.sentry_dsn) {
  * Generic error handler to be called whenever we need to do error reporting throughout the app.
  * Passes errors to Sentry if available, logs the error to the console otherwise.
  */
-export const handle = (error: unknown) => {
+export const handle = (error: unknown, errorContext?: CaptureContext) => {
   if (context?.sentry_dsn) {
-    Sentry.captureException(error);
+    Sentry.captureException(error, errorContext);
   } else {
     // eslint-disable-next-line no-console
     console.error(error);
