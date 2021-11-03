@@ -103,6 +103,10 @@
     "description": "Accessibility text for the spinner while search results are being loaded",
     "message": "A carregar os resultados da pesquisa..."
   },
+  "components.Search.textQueryLengthWarning": {
+    "description": "Warning message in search results when the text query is not long enough to be used.",
+    "message": "A pesquisa de texto requer pelo menos 3 caracteres. { query } não é longo o suficiente para pesquisar. Os resultados da pesquisa não serão alterados por esta consulta."
+  },
   "components.SearchFilterGroupModal.closeModal": {
     "description": "Text for the button to close the search filters modal",
     "message": "Fechar"
