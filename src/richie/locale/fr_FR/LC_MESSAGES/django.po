@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-27 09:43+0000\n"
-"PO-Revision-Date: 2021-10-27 14:38\n"
+"POT-Creation-Date: 2021-10-29 09:39+0000\n"
+"PO-Revision-Date: 2021-11-03 09:40\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -108,7 +108,7 @@ msgid "Go to homepage"
 msgstr "Retour à la page d'accueil"
 
 #: apps/core/templates/richie/base.html:107
-#: apps/courses/templates/courses/cms/course_detail.html:168
+#: apps/courses/templates/courses/cms/course_detail.html:166
 msgid "Contact us"
 msgstr "Nous contacter"
 
@@ -999,13 +999,13 @@ msgid "Complementary information"
 msgstr "Informations complémentaires"
 
 #: apps/courses/settings/__init__.py:173
-#: apps/courses/templates/courses/cms/course_detail.html:458
+#: apps/courses/templates/courses/cms/course_detail.html:456
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:47
 msgid "License for the course content"
 msgstr "Licence pour le contenu du cours"
 
 #: apps/courses/settings/__init__.py:178
-#: apps/courses/templates/courses/cms/course_detail.html:467
+#: apps/courses/templates/courses/cms/course_detail.html:465
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:56
 msgid "License for the content created by course participants"
 msgstr "Licence pour le contenu créé par les participants du cours"
@@ -1195,25 +1195,25 @@ msgstr "Rythme:"
 msgid "Enter here a introduction of your course."
 msgstr "Saisissez ici une courte description du cours."
 
-#: apps/courses/templates/courses/cms/course_detail.html:119
+#: apps/courses/templates/courses/cms/course_detail.html:118
 #, python-format
 msgid "\n"
-"                                            %(count)s already enrolled!\n"
-"                                        "
+"                                        %(count)s already enrolled!\n"
+"                                    "
 msgstr "\n"
-"                                            %(count)s déjà inscrits !\n"
-"                                        "
+"                                        %(count)s déjà inscrits !\n"
+"                                    "
 
-#: apps/courses/templates/courses/cms/course_detail.html:132
+#: apps/courses/templates/courses/cms/course_detail.html:130
 msgid "Add a teaser video or add a cover image below and it will be used as teaser image as well."
 msgstr "Ajouter une vidéo de teasing ou une image de couverture ci-dessous, celle-ci sera également utilisée comme image de teasing."
 
-#: apps/courses/templates/courses/cms/course_detail.html:144
-#: apps/courses/templates/courses/cms/course_detail.html:222
+#: apps/courses/templates/courses/cms/course_detail.html:142
+#: apps/courses/templates/courses/cms/course_detail.html:220
 msgid "course cover image"
 msgstr "image de couverture du cours"
 
-#: apps/courses/templates/courses/cms/course_detail.html:194
+#: apps/courses/templates/courses/cms/course_detail.html:192
 #, python-format
 msgid "\n"
 "                        Archived on %(creation_date)s\n"
@@ -1222,98 +1222,98 @@ msgstr "\n"
 "              Archivé le %(creation_date)s\n"
 "                    "
 
-#: apps/courses/templates/courses/cms/course_detail.html:198
+#: apps/courses/templates/courses/cms/course_detail.html:196
 msgid "Go to current version"
 msgstr "Accédez à la version actuelle"
 
-#: apps/courses/templates/courses/cms/course_detail.html:209
+#: apps/courses/templates/courses/cms/course_detail.html:207
 msgid "Glimpse cover"
 msgstr "Image d'aperçu"
 
-#: apps/courses/templates/courses/cms/course_detail.html:211
+#: apps/courses/templates/courses/cms/course_detail.html:209
 msgid "Add an image for course cover on its glimpse."
 msgstr "Ajouter une image pour la couverture du cours sur son aperçu."
 
-#: apps/courses/templates/courses/cms/course_detail.html:235
+#: apps/courses/templates/courses/cms/course_detail.html:233
 msgctxt "course_detail__title"
 msgid "What you will learn"
 msgstr "Ce que vous allez apprendre"
 
-#: apps/courses/templates/courses/cms/course_detail.html:236
+#: apps/courses/templates/courses/cms/course_detail.html:234
 msgid "At the end of this course, you will be able to:"
 msgstr "À la fin de ce cours, vous serez capable de :"
 
-#: apps/courses/templates/courses/cms/course_detail.html:245
+#: apps/courses/templates/courses/cms/course_detail.html:243
 msgctxt "course_detail__title"
 msgid "Description"
 msgstr "Description"
 
-#: apps/courses/templates/courses/cms/course_detail.html:256
+#: apps/courses/templates/courses/cms/course_detail.html:254
 msgctxt "course_detail__title"
 msgid "Format"
 msgstr "Format"
 
-#: apps/courses/templates/courses/cms/course_detail.html:258
+#: apps/courses/templates/courses/cms/course_detail.html:256
 msgid "How is the course structured?"
 msgstr "Quelle est la structure du cours ?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:267
+#: apps/courses/templates/courses/cms/course_detail.html:265
 msgctxt "course_detail__title"
 msgid "Prerequisites"
 msgstr "Prérequis"
 
-#: apps/courses/templates/courses/cms/course_detail.html:270
+#: apps/courses/templates/courses/cms/course_detail.html:268
 msgid "What are the prerequisites to follow this course?"
 msgstr "Quels sont les prérequis pour suivre ce cours ?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:280
+#: apps/courses/templates/courses/cms/course_detail.html:278
 msgctxt "course_detail__title"
 msgid "Assessment and certification"
 msgstr "Evaluation et Certification"
 
-#: apps/courses/templates/courses/cms/course_detail.html:283
+#: apps/courses/templates/courses/cms/course_detail.html:281
 msgid "How is progress evaluated and/or certified?"
 msgstr "Comment les étudiants sont ils évalués et/ou certifiés ?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:295
+#: apps/courses/templates/courses/cms/course_detail.html:293
 msgctxt "course_detail__title"
 msgid "Course plan"
 msgstr "Plan de cours"
 
-#: apps/courses/templates/courses/cms/course_detail.html:298
+#: apps/courses/templates/courses/cms/course_detail.html:296
 msgid "Enter here the detailed course plan."
 msgstr "Détaillez ici le plan du cours."
 
-#: apps/courses/templates/courses/cms/course_detail.html:313
+#: apps/courses/templates/courses/cms/course_detail.html:311
 msgctxt "course_detail__title"
 msgid "Course runs"
 msgstr "Sessions de cours"
 
-#: apps/courses/templates/courses/cms/course_detail.html:319
+#: apps/courses/templates/courses/cms/course_detail.html:317
 msgid "No open course runs"
 msgstr "Aucune session ouverte"
 
-#: apps/courses/templates/courses/cms/course_detail.html:328
+#: apps/courses/templates/courses/cms/course_detail.html:326
 msgctxt "Course runs to be scheduled (plural)"
 msgid "To be scheduled"
 msgstr "A programmer"
 
-#: apps/courses/templates/courses/cms/course_detail.html:339
+#: apps/courses/templates/courses/cms/course_detail.html:337
 msgctxt "Upcoming course runs (plural)"
 msgid "Upcoming"
 msgstr "A venir"
 
-#: apps/courses/templates/courses/cms/course_detail.html:350
+#: apps/courses/templates/courses/cms/course_detail.html:348
 msgctxt "Ongoing course runs (plural)"
 msgid "Ongoing"
 msgstr "En cours"
 
-#: apps/courses/templates/courses/cms/course_detail.html:361
+#: apps/courses/templates/courses/cms/course_detail.html:359
 msgctxt "Archived course runs (plural)"
 msgid "Archived"
 msgstr "Archivées"
 
-#: apps/courses/templates/courses/cms/course_detail.html:385
+#: apps/courses/templates/courses/cms/course_detail.html:383
 msgid "\n"
 "                                        This course is part of a program\n"
 "                                    "
@@ -1327,37 +1327,37 @@ msgstr[1] "\n"
 "                                        Ce cours fait partie de parcours\n"
 "                                    "
 
-#: apps/courses/templates/courses/cms/course_detail.html:411
+#: apps/courses/templates/courses/cms/course_detail.html:409
 msgctxt "course_detail__title"
 msgid "Course team"
 msgstr "Équipe pédagogique"
 
-#: apps/courses/templates/courses/cms/course_detail.html:416
+#: apps/courses/templates/courses/cms/course_detail.html:414
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:13
 msgid "Who are the teachers in the course team?"
 msgstr "Qui sont les enseignants de l’équipe pédagogique ?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:430
+#: apps/courses/templates/courses/cms/course_detail.html:428
 msgctxt "course_detail__title"
 msgid "Organizations"
 msgstr "Établissements"
 
-#: apps/courses/templates/courses/cms/course_detail.html:435
+#: apps/courses/templates/courses/cms/course_detail.html:433
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:32
 msgid "What are the organizations publishing this course?"
 msgstr "Qui sont les établissements publiant ce cours ?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:455
+#: apps/courses/templates/courses/cms/course_detail.html:453
 msgctxt "course_detail__title"
 msgid "License"
 msgstr "Licence"
 
-#: apps/courses/templates/courses/cms/course_detail.html:461
+#: apps/courses/templates/courses/cms/course_detail.html:459
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:50
 msgid "What is the license for the course content?"
 msgstr "Quelle est la licence pour le contenu du cours ?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:470
+#: apps/courses/templates/courses/cms/course_detail.html:468
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:59
 msgid "What is the license for the content created by course participants?"
 msgstr "Quelle est la licence pour le contenu créé par les participants du cours ?"
@@ -1494,7 +1494,7 @@ msgstr "Aucun parcours associé"
 msgid "The course will start {delay:s}"
 msgstr "Le cours commencera {delay:s}"
 
-#: apps/demo/management/commands/create_demo_site.py:389
+#: apps/demo/management/commands/create_demo_site.py:384
 #, python-brace-format
 msgid "Run {i:d}"
 msgstr "Session {i:d}"

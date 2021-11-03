@@ -8,10 +8,16 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.9.1] - 2021-11-03
+
 ### Fixed
 
-- Hide enrollment count by default until an explicit minimum is set
 - Improve handling for autocompletion missing query errors
+- Stack organization logo to the right and behind category badget on
+  course glimpse
+- Fix rendering difference between React and Django course glimpses
+- Hide enrollment count by default until an explicit minimum is set
+- Fix an error when a user typed a short search query in the header or home
 
 ## [2.9.0] - 2021-10-27
 
@@ -23,14 +29,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- Fix rendering difference between React and Django course glimpses
-- Fix an error when a user typed a short search query in the header or home
 - Fix an issue related to css selector priority from r-scheme-colors mixins
 - Fix css classes related with course runs on the course detail page.
 
 ## Changed
 
-- Move organization logo behind category badge
 - Update course search API to remove MPTT regexes as query params and replace
   them with arrays or strings.
 - Use stable IDs for categories and organizations in ES indices and throughout
@@ -1427,7 +1430,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.9.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.9.1...master
+[2.9.1]: https://github.com/openfun/richie/compare/v2.9.0...v2.9.1
 [2.9.0]: https://github.com/openfun/richie/compare/v2.8.2...v2.9.0
 [2.8.2]: https://github.com/openfun/richie/compare/v2.8.1...v2.8.2
 [2.8.1]: https://github.com/openfun/richie/compare/v2.8.0...v2.8.1
