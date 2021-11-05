@@ -2,12 +2,16 @@
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
+from django.dispatch import receiver
 
+from cms import operations
 from cms.models import Title
+from cms.signals import post_obj_operation
 
 from richie.apps.courses.models import Category, Course, Organization, Person
 from richie.apps.search.index_manager import richie_bulk
 from richie.apps.search.indexers import ES_INDICES
+from richie.apps.search.indexers.categories import CategoriesIndexer
 
 
 def apply_es_action_to_course(instance, action, _language):
@@ -165,3 +169,19 @@ def on_page_unpublished(sender, instance, language, **kwargs):
         transaction.on_commit(
             lambda: apply_es_action_to_page(instance, action, language)
         )
+
+
+# pylint: disable=unused-argument
+@receiver(post_obj_operation)
+def on_page_moved(sender, **kwargs):
+    """
+    When a page is moved, we may need to re-index all pages linked to objects of
+    the same kind. This applies to all category pages as they have the
+    *path* of the page in the ES index.
+    """
+    if getattr(settings, "RICHIE_KEEP_SEARCH_UPDATED", True):
+        operation_type = kwargs["operation"]
+        if operation_type == operations.MOVE_PAGE:
+            page = kwargs["obj"]
+            if hasattr(page, "category"):
+                richie_bulk(CategoriesIndexer.get_es_documents())
