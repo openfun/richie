@@ -6,6 +6,7 @@ from unittest import mock
 from django.db import connection
 from django.test import TestCase
 
+from richie.apps.core.factories import UserFactory
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
@@ -347,6 +348,68 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(actions[1]["_id"], category.get_es_id())
         self.assertEqual(actions[1]["_op_type"], "delete")
         self.assertEqual(actions[1]["_index"], "richie_categories")
+
+    def test_signals_categories_move(self, mock_bulk, *_):
+        """
+        Make sure all categories are re-indexed when a category page is moved
+        in the CMS page tree.
+        """
+        user = UserFactory(is_staff=True, is_superuser=True)
+        # Create a hierarchy of courses, with 2 parents to move the child between them
+        grandparent = CategoryFactory(page_reverse_id="subjects", should_publish=True)
+        parent_1 = CategoryFactory(
+            page_parent=grandparent.extended_object, should_publish=True
+        )
+        parent_2 = CategoryFactory(
+            page_parent=grandparent.extended_object, should_publish=True
+        )
+        child = CategoryFactory(
+            page_parent=parent_1.extended_object, should_publish=True
+        )
+        # Create a course so we can verify it's not re-indexed when the linked category is moved
+        CourseFactory(fill_categories=[child])
+        self.assertEqual(
+            child.extended_object.parent_page.id, parent_1.extended_object.id
+        )
+
+        self.client.force_login(user)
+        self.client.post(
+            f"/en/admin/cms/page/{child.extended_object.id}/move-page/",
+            {
+                "position": "0",
+                "id": str(child.extended_object.id),
+                "target": str(parent_2.extended_object.id),
+                "site": "1",
+            },
+        )
+
+        child.refresh_from_db()
+        self.assertEqual(
+            child.extended_object.parent_page.id, parent_2.extended_object.id
+        )
+        self.assertEqual(mock_bulk.call_count, 1)
+        actions = [*mock_bulk.call_args[1]["actions"]]
+        self.assertEqual(len(actions), 4)
+        self.assertEqual(
+            actions[0]["_id"], str(child.public_extension.extended_object_id)
+        )
+        self.assertEqual(actions[0]["_index"], "richie_categories")
+        self.assertEqual(actions[0]["_op_type"], "index")
+        self.assertEqual(
+            actions[1]["_id"], str(parent_2.public_extension.extended_object_id)
+        )
+        self.assertEqual(actions[1]["_index"], "richie_categories")
+        self.assertEqual(actions[1]["_op_type"], "index")
+        self.assertEqual(
+            actions[2]["_id"], str(parent_1.public_extension.extended_object_id)
+        )
+        self.assertEqual(actions[2]["_index"], "richie_categories")
+        self.assertEqual(actions[2]["_op_type"], "index")
+        self.assertEqual(
+            actions[3]["_id"], str(grandparent.public_extension.extended_object_id)
+        )
+        self.assertEqual(actions[3]["_index"], "richie_categories")
+        self.assertEqual(actions[3]["_op_type"], "index")
 
     def test_signals_persons_publish(self, mock_bulk, *_):
         """
