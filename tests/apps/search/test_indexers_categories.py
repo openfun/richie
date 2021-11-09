@@ -272,6 +272,7 @@ class CategoriesIndexersTestCase(TestCase):
             "_source": {
                 "is_meta": True,
                 "logo": {"en": "/image_en.png", "fr": "/image_fr.png"},
+                "kind": "subjects",
                 "nb_children": 3,
                 "path": "00010001",
                 "title": {"en": "Computer science", "fr": "Informatique"},
@@ -279,5 +280,5 @@ class CategoriesIndexersTestCase(TestCase):
         }
         self.assertEqual(
             CategoriesIndexer.format_es_document_for_autocomplete(es_category, "en"),
-            {"id": 89, "kind": "categories", "title": "Computer science"},
+            {"id": 89, "kind": "subjects", "title": "Computer science"},
         )

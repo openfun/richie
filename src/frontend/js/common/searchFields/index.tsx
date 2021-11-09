@@ -77,17 +77,5 @@ export const getRelevantFilter = (
   suggestion: SearchSuggestion,
 ) => {
   // Use the `kind` field on the suggestion to pick the relevant filter to update.
-  let filter = Object.values(filters).find((fltr) => fltr.name === suggestion.kind)!;
-
-  // We need a special-case to handle categories until we refactor the API to separate endpoints between
-  // kinds of categories
-  if (!filter) {
-    // Pick the filter to update based on the payload's path: it contains the relevant filter's page path
-    // (for eg. a meta-category or the "organizations" root page)
-    filter = Object.values(filters).find(
-      (fltr) => !!fltr.base_path && String(suggestion.id).substr(2).startsWith(fltr.base_path),
-    )!;
-  }
-
-  return filter;
+  return Object.values(filters).find((fltr) => fltr.name === suggestion.kind)!;
 };

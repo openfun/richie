@@ -191,6 +191,6 @@ class CategoriesIndexer:
         """
         return {
             "id": es_document["_id"],
-            "kind": "categories",
+            "kind": es_document["_source"]["kind"],
             "title": get_best_field_language(es_document["_source"]["title"], language),
         }
