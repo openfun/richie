@@ -101,7 +101,7 @@ async function render() {
     // Render the tree inside a shared `IntlProvider` so all components are able to access translated strings.
     ReactDOM.render(
       <QueryClientProvider client={queryClient}>
-        <IntlProvider locale={locale} messages={translatedMessages}>
+        <IntlProvider locale={locale} messages={translatedMessages} defaultLocale="en-US">
           <Root richieReactSpots={richieReactSpots} />
         </IntlProvider>
       </QueryClientProvider>,
