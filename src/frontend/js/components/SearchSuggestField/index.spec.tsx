@@ -239,8 +239,8 @@ describe('components/SearchSuggestField', () => {
 
     fetchMock.get('/api/v1.0/organizations/autocomplete/?query=orga', [
       {
-        id: 'L-00020007',
-        kind: 'whatever',
+        id: '27',
+        kind: 'organizations',
         title: 'Organization #27',
       },
     ]);
@@ -311,13 +311,13 @@ describe('components/SearchSuggestField', () => {
           params: {
             limit: '13',
             offset: '0',
-            organizations: ['L-00020007'],
+            organizations: ['27'],
             query: undefined,
           },
         },
       },
       '',
-      '/search?limit=13&offset=0&organizations=L-00020007',
+      '/search?limit=13&offset=0&organizations=27',
     );
   });
 
@@ -599,8 +599,8 @@ describe('components/SearchSuggestField', () => {
 
     fetchMock.get('/api/v1.0/organizations/autocomplete/?query=orga', [
       {
-        id: 'L-00020007',
-        kind: 'whatever',
+        id: '27',
+        kind: 'organizations',
         title: 'Organization #27',
       },
     ]);
@@ -663,13 +663,13 @@ describe('components/SearchSuggestField', () => {
           params: {
             limit: '13',
             offset: '0',
-            organizations: ['L-00020007'],
+            organizations: ['27'],
             query: undefined,
           },
         },
       },
       '',
-      '/search?limit=13&offset=0&organizations=L-00020007',
+      '/search?limit=13&offset=0&organizations=27',
     );
 
     // The user starts typing a full-text search, the organization remains selected
@@ -689,13 +689,13 @@ describe('components/SearchSuggestField', () => {
           params: {
             limit: '13',
             offset: '0',
-            organizations: ['L-00020007'],
+            organizations: ['27'],
             query: 'ric',
           },
         },
       },
       '',
-      '/search?limit=13&offset=0&organizations=L-00020007&query=ric',
+      '/search?limit=13&offset=0&organizations=27&query=ric',
     );
   });
 });

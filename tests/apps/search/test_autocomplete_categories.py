@@ -145,13 +145,31 @@ class AutocompleteCategoriesTestCase(TestCase):
         all_categories, response = self.execute_query(querystring="query=Electric")
         # Does not include the 4th, "not_subjects" element
         self.assertEqual(
-            [all_categories[0]["id"]], [category["id"] for category in response]
+            response,
+            [
+                {
+                    "id": all_categories[0]["id"],
+                    "kind": "subjects",
+                    "title": all_categories[0]["title"]["en"],
+                }
+            ],
         )
 
         all_categories, response = self.execute_query(querystring="query=bik")
         self.assertEqual(
-            [all_categories[i]["id"] for i in [2, 1]],
-            [category["id"] for category in response],
+            response,
+            [
+                {
+                    "id": all_categories[2]["id"],
+                    "kind": "subjects",
+                    "title": all_categories[2]["title"]["en"],
+                },
+                {
+                    "id": all_categories[1]["id"],
+                    "kind": "subjects",
+                    "title": all_categories[1]["title"]["en"],
+                },
+            ],
         )
 
     def test_autocomplete_diacritics_insensitive_query(self, *_):
