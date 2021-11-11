@@ -13,6 +13,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Create an context util
 - Add react-query to manage API requests and local data store
 - Move type utils into type directory
+- Make licenses on course page optional
 
 ### Fixed
 
