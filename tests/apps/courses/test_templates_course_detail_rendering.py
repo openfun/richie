@@ -10,14 +10,17 @@ from django.utils import dateformat, timezone
 
 import htmlmin
 import pytz
+from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import PageFactory, UserFactory
+from richie.apps.courses.cms_plugins import LicencePlugin
 from richie.apps.courses.factories import (
     VIDEO_SAMPLE_LINKS,
     CategoryFactory,
     CourseFactory,
     CourseRunFactory,
+    LicenceFactory,
     OrganizationFactory,
     ProgramFactory,
 )
@@ -413,11 +416,6 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         pattern = (
             r'<div class="course-detail__row course-detail__information">'
             r'<div class="cms-placeholder'
-        )
-        self.assertIsNotNone(re.search(pattern, str(response.content)))
-        pattern = (
-            r'<h3 class="course-detail__label">'
-            r'License for the course content</h3><div class="cms-placeholder'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -1152,3 +1150,84 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertNotContains(response, "enrollment-count")
         self.assertNotContains(response, "already enrolled")
+
+    def test_templates_course_detail_license_missing(self):
+        """
+        A course page without a license should not include license block on its published page.
+        """
+        course = CourseFactory()
+        self.assertTrue(course.extended_object.publish("en"))
+        response = self.client.get(course.extended_object.get_absolute_url())
+        self.assertNotContains(response, "license")
+
+    def test_templates_course_detail_license_missing_edit_mode(self):
+        """
+        A course page without a license should include the inputs of the license blocks on edit
+        mode.
+        """
+        # Login with an user with all permissions
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        # Get the edit mode of a course page
+        course = CourseFactory()
+        page_url = course.extended_object.get_absolute_url(language="en")
+        self.assertTrue(course.extended_object.publish("en"))
+        url = f"{page_url:s}?edit"
+        response = self.client.get(url)
+
+        self.assertContains(response, "What is the license for the course content?")
+        self.assertContains(
+            response,
+            "What is the license for the content created by course participants?",
+        )
+
+    def test_templates_course_detail_license_only_content(self):
+        """
+        A course with a license on course content and without on course partipants should only
+        show the 1st.
+        """
+        course = CourseFactory()
+
+        # Create random values for parameters with a factory
+        licence = LicenceFactory(name="Some license")
+
+        page = course.extended_object
+        placeholder = page.placeholders.get(slot="course_license_content")
+        add_plugin(placeholder, LicencePlugin, "en", licence=licence)
+
+        self.assertTrue(page.publish("en"))
+        response = self.client.get(page.get_absolute_url())
+
+        self.assertContains(response, "License for the course content")
+        self.assertContains(response, "Some license")
+
+        # Without course license participation
+        self.assertNotContains(
+            response, "License for the content created by course participants"
+        )
+
+    def test_templates_course_detail_license_only_participation(self):
+        """
+        A course with a license on course participation and without on course conent should only
+        show the 1st.
+        """
+        course = CourseFactory()
+
+        # Create random values for parameters with a factory
+        licence = LicenceFactory(name="Some license")
+
+        page = course.extended_object
+        placeholder = page.placeholders.get(slot="course_license_participation")
+        add_plugin(placeholder, LicencePlugin, "en", licence=licence)
+
+        self.assertTrue(course.extended_object.publish("en"))
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertContains(
+            response, "License for the content created by course participants"
+        )
+        self.assertContains(response, "Some license")
+
+        # Without course license participation
+        self.assertNotContains(response, "License for the course content")
