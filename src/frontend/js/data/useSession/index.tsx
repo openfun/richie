@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, PropsWithChildren } from 'react';
+import React, { createContext, useCallback, useContext, PropsWithChildren, useMemo } from 'react';
 import { handle } from 'utils/errors/handle';
 import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
@@ -79,7 +79,12 @@ export const SessionProvider = ({ children }: PropsWithChildren<any>) => {
     queryClient.setQueryData('user', null);
   }, [queryClient]);
 
-  return <Session.Provider value={{ user, destroy, login, register }}>{children}</Session.Provider>;
+  const value = useMemo<SessionContext>(
+    () => ({ user, destroy, login, register }),
+    [user, destroy, login, register],
+  );
+
+  return <Session.Provider value={value}>{children}</Session.Provider>;
 };
 
 export const useSession = () => useContext(Session);

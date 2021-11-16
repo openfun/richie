@@ -92,7 +92,7 @@ module.exports = (env) => {
         },
         {
           exclude: /node_modules(?!\/richie-education)/,
-          test: new RegExp(`\.(tsx?|jsx?)$`),
+          test: /\.(tsx?|jsx?)$/,
           use: [
             {
               loader: 'babel-loader',
