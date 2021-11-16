@@ -51,6 +51,7 @@
     "no-nested-ternary": "warn",
     "no-param-reassign": "off",
     "no-plusplus": "off",
+    "no-promise-executor-return": "off",
     "no-prototype-builtins": "off",
     "no-return-assign": "off",
     "no-return-await": "off",
@@ -60,6 +61,10 @@
     "prefer-template": "off",
     "react/button-has-type": "off",
     "react/destructuring-assignment": "off",
+    "react/function-component-definition": [
+      "error",
+      { "namedComponents": "arrow-function", "unnamedComponents": "arrow-function" }
+    ],
     "react/jsx-boolean-value": "off",
     "react/jsx-fragments": "off",
     "react/jsx-props-no-spreading": "off",

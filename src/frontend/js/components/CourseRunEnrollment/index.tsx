@@ -212,10 +212,8 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
             <FormattedMessage {...messages.enroll} />
             {step === Step.ENROLLING ? (
               <span aria-hidden="true">
-                <Spinner>
-                  <React.Fragment />
-                  {/* No children with loading text as the spinner is aria-hidden (handled by aria-busy) */}
-                </Spinner>
+                {/* No children with loading text as the spinner is aria-hidden (handled by aria-busy) */}
+                <Spinner />
               </span>
             ) : null}
           </button>
@@ -227,32 +225,28 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
         </React.Fragment>
       );
     case step === Step.ENROLLED:
-      return (
-        <React.Fragment>
-          {courseRun.starts_in_message ? (
-            <div>
-              {courseRun.dashboard_link ? (
-                <a href={courseRun.dashboard_link} className="course-run-enrollment__cta">
-                  <FormattedMessage {...messages.enrolled} />
-                </a>
-              ) : (
-                <p className="course-run-enrollment__helptext">
-                  <FormattedMessage {...messages.enrolled} />
-                </p>
-              )}
-              <p className="course-run-enrollment__helptext">{courseRun.starts_in_message}</p>
-            </div>
+      return courseRun.starts_in_message ? (
+        <div>
+          {courseRun.dashboard_link ? (
+            <a href={courseRun.dashboard_link} className="course-run-enrollment__cta">
+              <FormattedMessage {...messages.enrolled} />
+            </a>
           ) : (
-            <div>
-              <a href={courseRun.resource_link} className="course-run-enrollment__cta">
-                <FormattedMessage {...messages.goToCourse} />
-              </a>
-              <div className="course-run-enrollment__helptext">
-                <FormattedMessage {...messages.enrolled} />
-              </div>
-            </div>
+            <p className="course-run-enrollment__helptext">
+              <FormattedMessage {...messages.enrolled} />
+            </p>
           )}
-        </React.Fragment>
+          <p className="course-run-enrollment__helptext">{courseRun.starts_in_message}</p>
+        </div>
+      ) : (
+        <div>
+          <a href={courseRun.resource_link} className="course-run-enrollment__cta">
+            <FormattedMessage {...messages.goToCourse} />
+          </a>
+          <div className="course-run-enrollment__helptext">
+            <FormattedMessage {...messages.enrolled} />
+          </div>
+        </div>
       );
   }
 
