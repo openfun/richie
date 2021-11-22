@@ -6,6 +6,7 @@ from collections import OrderedDict
 
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.files.storage import get_storage_class
 from django.http.request import HttpRequest
 from django.middleware.csrf import get_token
 from django.utils.translation import get_language_from_request
@@ -53,11 +54,12 @@ def site_metas(request: HttpRequest):
     if getattr(settings, "CDN_DOMAIN", None):
         context["CDN_DOMAIN"] = settings.CDN_DOMAIN
 
+    storage_url = get_storage_class()().url("any-page")
     # Add a MEDIA_URL_PREFIX to context to prefix the media url files to have an absolute URL
-    if settings.MEDIA_URL.startswith("//"):
+    if storage_url.startswith("//"):
         # Eg. //my-cdn-user.cdn-provider.com/media/
         context["MEDIA_URL_PREFIX"] = f"{request.scheme:s}:"
-    elif settings.MEDIA_URL.startswith("/"):
+    elif storage_url.startswith("/"):
         # Eg. /media/
         context["MEDIA_URL_PREFIX"] = f"{protocol:s}://{site_current.domain:s}"
     else:

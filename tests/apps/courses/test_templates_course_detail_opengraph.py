@@ -2,7 +2,9 @@
 Test suite for the Open Graph for course pages
 """
 import re
+from unittest import mock
 
+from django.core.files.storage import FileSystemStorage
 from django.test.utils import override_settings
 
 from cms.api import add_plugin
@@ -185,3 +187,82 @@ class TemplatesCourseDetailOpengraphCMSTestCase(CMSTestCase):
         response = self.client.get(url)
 
         self.assertNotContains(response, "og:description")
+
+    @mock.patch.object(
+        FileSystemStorage,
+        "url",
+        lambda storage_instance, name: f"https://test-bucket.s3.amazonaws.com/{name:s}",
+    )
+    def test_open_graph_course_meta_og_image_media_storage_url_full(self):
+        """
+        Test if the og:image of a course has the correct value when using a mocked django storage
+        where each file is served from a AWS S3 URL like S3Boto3Storage.
+        """
+        course = CourseFactory(
+            page_title="Introduction to Programming",
+            code="IntroProg",
+            page_languages=["en"],
+            fill_cover=True,
+        )
+        course_page = course.extended_object
+        course_page.publish("en")
+
+        url = course_page.get_absolute_url(language="en")
+        response = self.client.get(url)
+        response_content = response.content.decode("UTF-8")
+
+        match = re.search("<meta[^>]+og:image[^>]+>", response_content)
+        html_meta_og_image = match.group(0)
+        self.assertIn(
+            'content="https://test-bucket.s3.amazonaws.com/', html_meta_og_image
+        )
+
+    @mock.patch.object(
+        FileSystemStorage,
+        "url",
+        lambda storage_instance, name: f"//my-cdn-user.cdn-provider.com/media/{name:s}",
+    )
+    def test_open_graph_course_meta_og_image_media_storage_url_double_slash(self):
+        """
+        Test if the og:image of a course has the correct value when using a mocked django storage
+        where each file is served storage that generate URLs starting with a double slash.
+        """
+        course = CourseFactory(
+            fill_cover=True,
+        )
+        course_page = course.extended_object
+        course_page.publish("en")
+
+        url = course_page.get_absolute_url(language="en")
+        response = self.client.get(url)
+        response_content = response.content.decode("UTF-8")
+
+        match = re.search("<meta[^>]+og:image[^>]+>", response_content)
+        html_meta_og_image = match.group(0)
+        self.assertIn(
+            'content="http://my-cdn-user.cdn-provider.com/media/', html_meta_og_image
+        )
+
+    @mock.patch.object(
+        FileSystemStorage,
+        "url",
+        lambda storage_instance, name: f"/media/{name:s}",
+    )
+    def test_open_graph_course_meta_og_image_media_storage_url_relative(self):
+        """
+        Test if the og:image of a course has the correct value when using a mocked django storage
+        where each file is served from relative path.
+        """
+        course = CourseFactory(
+            fill_cover=True,
+        )
+        course_page = course.extended_object
+        course_page.publish("en")
+
+        url = course_page.get_absolute_url(language="en")
+        response = self.client.get(url)
+        response_content = response.content.decode("UTF-8")
+
+        match = re.search("<meta[^>]+og:image[^>]+>", response_content)
+        html_meta_og_image = match.group(0)
+        self.assertIn('content="http://example.com/media/', html_meta_og_image)

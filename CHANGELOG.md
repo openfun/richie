@@ -27,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Prevent logout action to be called twice
+- Fix og:image when using S3Boto3Storage
 - Remove error message related with cache when any test fails
 
 ## [2.9.1] - 2021-11-03
