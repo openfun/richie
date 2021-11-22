@@ -70,7 +70,7 @@
     "cljs-merge": "1.1.1",
     "core-js": "3.19.1",
     "downshift": "6.1.7",
-    "eslint": "<8",
+    "eslint": "8.3.0",
     "eslint-config-airbnb": "19.0.0",
     "eslint-config-airbnb-typescript": "16.0.0",
     "eslint-config-prettier": "8.3.0",
