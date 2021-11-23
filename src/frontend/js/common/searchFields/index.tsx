@@ -1,4 +1,3 @@
-import React from 'react';
 import debounce from 'lodash-es/debounce';
 
 import { StaticFilterDefinitions } from 'types/filters';

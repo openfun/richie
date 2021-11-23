@@ -1,5 +1,5 @@
 import { stringify } from 'query-string';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, useIntl } from 'react-intl';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CourseGlimpse } from 'components/CourseGlimpse';

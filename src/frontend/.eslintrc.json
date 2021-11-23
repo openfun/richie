@@ -68,8 +68,10 @@
     "react/jsx-boolean-value": "off",
     "react/jsx-fragments": "off",
     "react/jsx-props-no-spreading": "off",
+    "react/jsx-uses-react": "off",
     "react/no-array-index-key": "warn",
     "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
     "react/require-default-props": "off"
   },
   "settings": {

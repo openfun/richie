@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { renderHook } from '@testing-library/react-hooks';
 import faker from 'faker';
 import fetchMock from 'fetch-mock';
-import React from 'react';
+import { PropsWithChildren } from 'react';
 import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS } from 'settings';
@@ -33,7 +33,7 @@ jest.mock('utils/context', () => ({
 
 describe('useEnrollment', () => {
   const endpoint = 'https://endpoint.test';
-  const wrapper = ({ client, children }: React.PropsWithChildren<{ client: QueryClient }>) => (
+  const wrapper = ({ client, children }: PropsWithChildren<{ client: QueryClient }>) => (
     <QueryClientProvider client={client}>
       <SessionProvider>{children}</SessionProvider>
     </QueryClientProvider>

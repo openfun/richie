@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 
 import { useFilterValue } from 'data/useFilterValue';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
@@ -37,4 +37,4 @@ const areEqual: (
   newProps: Readonly<SearchFilterValueLeafProps>,
 ) => boolean = (prevProps, newProps) => prevProps.value.count === newProps.value.count;
 
-export const SearchFilterValueLeaf = React.memo(SearchFilterValueLeafBase, areEqual);
+export const SearchFilterValueLeaf = memo(SearchFilterValueLeafBase, areEqual);

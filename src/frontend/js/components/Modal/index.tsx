@@ -1,4 +1,4 @@
-import React from 'react';
+import { PropsWithChildren } from 'react';
 import ReactModal from 'react-modal';
 
 // The `setAppElement` needs to happen in proper code but breaks our testing environment.
@@ -15,7 +15,7 @@ export const Modal = ({
   overlayClassName,
   children,
   ...props
-}: React.PropsWithChildren<ReactModal.Props>) => {
+}: PropsWithChildren<ReactModal.Props>) => {
   // As ReactModal can accept a ReactModal.Classes object or a string for some
   // class properties, we have to impletemente a little util to merge this special
   // object with the default CSS class to applied.

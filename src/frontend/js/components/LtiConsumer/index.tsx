@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { iframeResizer } from 'iframe-resizer';
 import { LtiConsumerContext, LtiConsumerProps } from 'types/LtiConsumer';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
 import { handle } from 'utils/errors/handle';
 
 const LtiConsumer = ({ id }: LtiConsumerProps) => {
-  const formRef = React.useRef<HTMLFormElement>(null);
-  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const [context, setContext] = useState<LtiConsumerContext>();
 
   const checkResponseStatus = (response: Response) => {

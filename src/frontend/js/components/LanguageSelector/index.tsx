@@ -1,5 +1,5 @@
 import { useSelect } from 'downshift';
-import React from 'react';
+import { FC } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { location } from 'utils/indirection/window';
@@ -33,7 +33,7 @@ interface LanguageSelectorProps {
   languages: { [code: string]: { code: string; name: string; url: string } };
 }
 
-const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, languages }) => {
+const LanguageSelector: FC<LanguageSelectorProps> = ({ currentLanguage, languages }) => {
   const intl = useIntl();
   const languagesList = Object.values(languages);
 

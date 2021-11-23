@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useSelect } from 'downshift';
 import { location } from 'utils/indirection/window';
@@ -12,7 +12,7 @@ const messages = defineMessages({
   },
 });
 
-export const DesktopUserMenu: React.FC<UserMenuProps> = ({ user }) => {
+export const DesktopUserMenu: FC<UserMenuProps> = ({ user }) => {
   const labels = user.urls.map((label) => label);
   const {
     isOpen,

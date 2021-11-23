@@ -1,4 +1,4 @@
-import React from 'react';
+import { PropsWithChildren } from 'react';
 import { QueryClientProvider, QueryClient } from 'react-query';
 import faker from 'faker';
 import fetchMock from 'fetch-mock';
@@ -31,7 +31,7 @@ describe('useSession', () => {
     useSession,
   }: {
     useSession: () => SessionContext;
-    SessionProvider: ({ children }: React.PropsWithChildren<any>) => JSX.Element;
+    SessionProvider: ({ children }: PropsWithChildren<any>) => JSX.Element;
   } = require('.');
 
   const wrapper = ({

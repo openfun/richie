@@ -9,8 +9,6 @@
 // regardless of their use throughout the Richie codebase itself.
 import 'core-js/modules/es.array.iterator';
 import 'core-js/modules/es.promise';
-
-import React from 'react';
 import ReactDOM from 'react-dom';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from 'react-query';

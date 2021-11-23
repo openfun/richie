@@ -1,4 +1,3 @@
-import React from 'react';
 import faker from 'faker';
 import { QueryClientProvider } from 'react-query';
 import { render, screen } from '@testing-library/react';

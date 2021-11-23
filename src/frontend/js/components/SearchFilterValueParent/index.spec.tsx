@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { stringify } from 'query-string';
-import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from 'react-query';
 

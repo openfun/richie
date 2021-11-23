@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CommonDataProps } from 'types/commonDataProps';
@@ -87,4 +87,4 @@ const areEqual: (
 ) => boolean = (prevProps, newProps) =>
   prevProps.context === newProps.context && prevProps.course.id === newProps.course.id;
 
-export const CourseGlimpse = React.memo(CourseGlimpseBase, areEqual);
+export const CourseGlimpse = memo(CourseGlimpseBase, areEqual);

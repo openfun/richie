@@ -1,5 +1,5 @@
 import { stringify } from 'query-string';
-import React from 'react';
+import { PropsWithChildren } from 'react';
 
 import { CourseSearchParamsAction } from 'data/useCourseSearchParams';
 import { renderHook } from '@testing-library/react-hooks';
@@ -19,7 +19,7 @@ describe('data/useFilterValue', () => {
     historyPushState,
     historyReplaceState,
   ];
-  const wrapper = ({ history, children }: React.PropsWithChildren<{ history: History }>) => (
+  const wrapper = ({ history, children }: PropsWithChildren<{ history: History }>) => (
     <HistoryContext.Provider value={history}>{children}</HistoryContext.Provider>
   );
 

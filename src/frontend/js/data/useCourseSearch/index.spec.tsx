@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import React from 'react';
+import { PropsWithChildren } from 'react';
 import { QueryClientProvider } from 'react-query';
 import createQueryClient from 'utils/react-query/createQueryClient';
 
@@ -17,7 +17,7 @@ const mockFetchList = fetchList as jest.MockedFunction<typeof fetchList>;
 
 describe('data/useCourseSearch', () => {
   const queryClient = createQueryClient();
-  const wrapper = ({ children }: React.PropsWithChildren<any>) => (
+  const wrapper = ({ children }: PropsWithChildren<any>) => (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 

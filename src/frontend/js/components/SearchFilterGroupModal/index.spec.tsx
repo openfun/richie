@@ -1,7 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { stringify } from 'query-string';
-import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'data/useHistory';

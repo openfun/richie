@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import React from 'react';
+import { Fragment } from 'react';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
 import { Spinner } from 'components/Spinner';
@@ -80,7 +80,7 @@ const UserLogin = ({ profileUrls = {} }: UserLoginProps) => {
           <FormattedMessage {...messages.spinnerText} />
         </Spinner>
       ) : user === null ? (
-        <React.Fragment>
+        <Fragment>
           <button onClick={register} className="user-login__btn user-login__btn--sign-up">
             <FormattedMessage {...messages.signUp} />
           </button>
@@ -90,7 +90,7 @@ const UserLogin = ({ profileUrls = {} }: UserLoginProps) => {
             </svg>
             <FormattedMessage {...messages.logIn} />
           </button>
-        </React.Fragment>
+        </Fragment>
       ) : (
         <UserMenu
           // If user's fullname is empty, we use its username as a fallback

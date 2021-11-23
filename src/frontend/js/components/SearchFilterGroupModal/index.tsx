@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
 
@@ -109,7 +109,7 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
   }, [modalIsOpen, query]);
 
   return (
-    <React.Fragment>
+    <Fragment>
       <button className="search-filter-group-modal-button" onClick={() => setModalIsOpen(true)}>
         <FormattedMessage {...messages.moreOptionsButton} />
       </button>
@@ -167,6 +167,6 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
           <FormattedMessage {...messages.closeButton} />
         </button>
       </Modal>
-    </React.Fragment>
+    </Fragment>
   );
 };

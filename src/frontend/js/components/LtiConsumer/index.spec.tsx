@@ -1,5 +1,4 @@
 import { act, render } from '@testing-library/react';
-import React from 'react';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 
