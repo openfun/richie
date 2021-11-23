@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CourseGlimpseList } from 'components/CourseGlimpseList';
@@ -95,30 +95,30 @@ const Search = ({ context }: CommonDataProps) => {
             onClick={() => setShowFilters(!showFilters)}
           >
             {showFilters ? (
-              <React.Fragment>
+              <Fragment>
                 <svg aria-hidden={true} role="img" className="icon search__filters__toggle__icon">
                   <use xlinkHref="#icon-cross" />
                 </svg>{' '}
                 <span className="offscreen">
                   <FormattedMessage {...messages.hideFiltersPane} />
                 </span>
-              </React.Fragment>
+              </Fragment>
             ) : (
-              <React.Fragment>
+              <Fragment>
                 <svg aria-hidden={true} role="img" className="icon search__filters__toggle__icon">
                   <use xlinkHref="#icon-filter" />
                 </svg>
                 <span className="offscreen">
                   <FormattedMessage {...messages.showFiltersPane} />
                 </span>
-              </React.Fragment>
+              </Fragment>
             )}
           </button>
         )}
       </div>
       <div className="search__results">
         {courseSearchResponse && courseSearchResponse.status === RequestStatus.SUCCESS ? (
-          <React.Fragment>
+          <Fragment>
             {query && query.length < 3 ? (
               <div className="banner banner--rounded banner--warning">
                 <p className="banner__message">
@@ -137,7 +137,7 @@ const Search = ({ context }: CommonDataProps) => {
             <PaginateCourseSearch
               courseSearchTotalCount={courseSearchResponse.content.meta.total_count}
             />
-          </React.Fragment>
+          </Fragment>
         ) : courseSearchResponse && courseSearchResponse.status === RequestStatus.FAILURE ? (
           <div className="search__results__error">
             <svg aria-hidden={true} role="img">

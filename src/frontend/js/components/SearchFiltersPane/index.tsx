@@ -1,4 +1,4 @@
-import React from 'react';
+import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { SearchFilterGroup } from 'components/SearchFilterGroup';
@@ -28,8 +28,7 @@ const messages = defineMessages({
 export const SearchFiltersPane = ({
   filters,
   ...passThroughProps
-}: SearchFiltersPaneProps &
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
+}: SearchFiltersPaneProps & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
   const filterList = filters && Object.values(filters);
 
   const { courseSearchParams, dispatchCourseSearchParamsUpdate } = useCourseSearchParams();

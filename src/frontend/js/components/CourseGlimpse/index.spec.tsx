@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { CommonDataProps } from 'types/commonDataProps';
 import { ContextFactory } from 'utils/test/factories';

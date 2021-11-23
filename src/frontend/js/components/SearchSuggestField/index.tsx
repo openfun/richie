@@ -1,5 +1,5 @@
 import debounce from 'lodash-es/debounce';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, useIntl } from 'react-intl';
 

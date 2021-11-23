@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
@@ -96,7 +96,7 @@ export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseS
       <nav aria-labelledby={`pagination-label-${componentId}`}>
         <ul className="pagination__list">
           {pageList.map((page, index) => (
-            <React.Fragment key={page}>
+            <Fragment key={page}>
               {/* Prepend a cell with "..." when the page number we're rendering does not follow the previous one */}
               {page > (pageList[index - 1] || 0) + 1 && (
                 <li className="pagination__item pagination__item--placeholder">...</li>
@@ -162,7 +162,7 @@ export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseS
                   </button>
                 </li>
               )}
-            </React.Fragment>
+            </Fragment>
           ))}
         </ul>
       </nav>

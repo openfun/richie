@@ -1,6 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import React from 'react';
 import { QueryClientProvider } from 'react-query';
 import { IntlProvider } from 'react-intl';
 import faker from 'faker';

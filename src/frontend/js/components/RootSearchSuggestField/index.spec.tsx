@@ -1,6 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { location } from 'utils/indirection/window';

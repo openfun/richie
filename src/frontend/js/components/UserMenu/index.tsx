@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { User } from 'types/User';
 import useMatchMedia from 'utils/useMatchMedia';
 import { DesktopUserMenu } from './DesktopUserMenu';
@@ -14,7 +14,7 @@ export interface UserMenuProps {
   };
 }
 
-export const UserMenu: React.FC<UserMenuProps> = (props: UserMenuProps) => {
+export const UserMenu: FC<UserMenuProps> = (props: UserMenuProps) => {
   const showDesktop = useMatchMedia('(min-width: 992px)');
 
   return showDesktop ? <DesktopUserMenu {...props} /> : <MobileUserMenu {...props} />;

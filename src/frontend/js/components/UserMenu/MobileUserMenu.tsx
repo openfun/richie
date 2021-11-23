@@ -1,7 +1,7 @@
-import React from 'react';
+import { FC } from 'react';
 import { UserMenuProps } from '.';
 
-export const MobileUserMenu: React.FC<UserMenuProps> = ({ user }) => (
+export const MobileUserMenu: FC<UserMenuProps> = ({ user }) => (
   <div className="user-menu user-menu--mobile">
     <h6 className="user-menu__username">
       <svg aria-hidden={true} role="img" className="icon">

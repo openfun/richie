@@ -1,5 +1,5 @@
 import { parse } from 'query-string';
-import React, { createContext, PropsWithChildren, useEffect, useState, useContext } from 'react';
+import { createContext, PropsWithChildren, useEffect, useState, useContext } from 'react';
 
 import { history, location } from 'utils/indirection/window';
 import { Maybe, Nullable } from 'types/utils';

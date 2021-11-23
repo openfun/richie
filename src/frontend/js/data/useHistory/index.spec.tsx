@@ -1,6 +1,6 @@
 import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import React from 'react';
+import { PropsWithChildren } from 'react';
 
 import { history, location } from 'utils/indirection/window';
 import { HistoryProvider, useHistory } from '.';
@@ -17,7 +17,7 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('data/useHistory', () => {
-  const wrapper = ({ children }: React.PropsWithChildren<any>) => (
+  const wrapper = ({ children }: PropsWithChildren<any>) => (
     <HistoryProvider>{children}</HistoryProvider>
   );
 

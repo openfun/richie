@@ -1,4 +1,3 @@
-import React from 'react';
 import { QueryClientProvider } from 'react-query';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';

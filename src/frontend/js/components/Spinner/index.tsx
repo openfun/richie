@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 interface SpinnerProps {
   'aria-labelledby'?: string;
@@ -6,7 +6,7 @@ interface SpinnerProps {
 }
 
 /** Component. Displays a rotating CSS loader. */
-export const Spinner: React.FC<SpinnerProps> = (props) => {
+export const Spinner: FC<SpinnerProps> = (props) => {
   const { children, size } = props;
   const spinnerProps = props['aria-labelledby']
     ? { 'aria-labelledby': props['aria-labelledby'] }
