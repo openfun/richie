@@ -5,7 +5,6 @@ Test suite for the cache module in the `core` application
 import time
 from datetime import datetime
 
-from django.conf import settings
 from django.core.cache import cache, caches
 from django.http import HttpRequest, HttpResponse
 from django.test import TestCase
@@ -423,7 +422,7 @@ class TestLimitBrowserCacheTTLHeaders(TestCase):
     Test case for the LimitBrowserCacheTTLHeaders middleware.
     """
 
-    def test_middleware_with_no_cache_headers(self):
+    def test_middleware_limit_cache_with_no_cache_headers(self):
         """
         Ensure that the middleware does not rewrite the response if it does
         not contains Cache headers.
@@ -436,7 +435,7 @@ class TestLimitBrowserCacheTTLHeaders(TestCase):
             response_to_test = middleware(HttpRequest())
             self.assertEqual(expected_headers, response_to_test.serialize_headers())
 
-    def test_middleware_limit_reached(self):
+    def test_middleware_limit_cache_reached(self):
         """
         Ensure that the middleware rewrite the response if the cache headers
         timeout are greater than MAX_BROWSER_CACHE_TTL
@@ -453,7 +452,22 @@ class TestLimitBrowserCacheTTLHeaders(TestCase):
             self.assertEqual(expected_expires, response_to_test["Expires"])
             self.assertIn("max-age=5", response_to_test["Cache-Control"])
 
-    def test_middleware_limit_not_reached(self):
+    def test_middleware_limit_cache_not_set(self):
+        """
+        The MAX_BROWSER_CACHE_TTL setting should default to 600 if not set in the project
+        """
+        response = HttpResponse("OK")
+        patch_response_headers(response, cache_timeout=3600)
+
+        self.assertIn("max-age=3600", response["Cache-Control"])
+
+        middleware = LimitBrowserCacheTTLHeaders(lambda request: response)
+        response_to_test = middleware(HttpRequest())
+        expected_expires = http_date(time.time() + 600)
+        self.assertEqual(expected_expires, response_to_test["Expires"])
+        self.assertIn("max-age=600", response_to_test["Cache-Control"])
+
+    def test_middleware_limit_cache_not_reached(self):
         """
         Ensure that the middleware does not rewrite the response if the cache
         headers timeout are lower than MAX_BROWSER_CACHE_TTL
@@ -468,7 +482,7 @@ class TestLimitBrowserCacheTTLHeaders(TestCase):
             response_to_test = middleware(HttpRequest())
             self.assertEqual(expected_headers, response_to_test.serialize_headers())
 
-    def test_middleware_invalid_settings(self):
+    def test_middleware_limit_cache_invalid_settings(self):
         """
         Ensure that the middleware does not rewrite the response if
         MAX_BROWSER_CACHE_TTL is not a positive integer.
@@ -492,14 +506,6 @@ class TestLimitBrowserCacheTTLHeaders(TestCase):
             self.assertIn("max-age=3600", response["Cache-Control"])
 
         with self.settings(MAX_BROWSER_CACHE_TTL=None):
-            middleware = LimitBrowserCacheTTLHeaders(response_builder)
-            response = middleware(HttpRequest())
-            self.assertEqual(http_date(time.time() + 3600), response["Expires"])
-            self.assertIn("max-age=3600", response["Cache-Control"])
-
-        # Test the case where the MAX_BROWSER_CACHE_TTL setting is not set
-        with self.settings():
-            del settings.MAX_BROWSER_CACHE_TTL
             middleware = LimitBrowserCacheTTLHeaders(response_builder)
             response = middleware(HttpRequest())
             self.assertEqual(http_date(time.time() + 3600), response["Expires"])
