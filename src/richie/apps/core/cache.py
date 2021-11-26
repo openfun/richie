@@ -155,7 +155,7 @@ class LimitBrowserCacheTTLHeaders(MiddlewareMixin):
         Rewrite the "Cache-control" and "Expires headers" in the response
         if needed.
         """
-        max_ttl = getattr(settings, "MAX_BROWSER_CACHE_TTL", None)
+        max_ttl = getattr(settings, "MAX_BROWSER_CACHE_TTL", 600)
         if max_ttl:
             try:
                 max_ttl = int(max_ttl)
