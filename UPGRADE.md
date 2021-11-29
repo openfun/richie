@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+- Add to `spinner` scheme property `base-color-light`
+
 ## 2.8.x to 2.9.x
 
 - Add `django.contrib.humanize` to your installed apps.
