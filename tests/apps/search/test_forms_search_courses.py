@@ -30,6 +30,7 @@ class CourseSearchFormTestCase(TestCase):
             form.cleaned_data,
             {
                 "availability": [],
+                "facet_sorting": "",
                 "languages": [],
                 "levels": [],
                 "levels_aggs": [],
@@ -48,6 +49,19 @@ class CourseSearchFormTestCase(TestCase):
                 "subjects": [],
                 "subjects_aggs": [],
                 "subjects_children_aggs": "",
+            },
+        )
+
+    def test_forms_courses_facet_sorting_among_choices(self, *_):
+        """The `facet_sorting` param should be one of the available choices."""
+        form = CourseSearchForm(data=QueryDict(query_string="facet_sorting=none"))
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors,
+            {
+                "facet_sorting": [
+                    "Select a valid choice. none is not one of the available choices."
+                ]
             },
         )
 
@@ -117,6 +131,7 @@ class CourseSearchFormTestCase(TestCase):
             data=QueryDict(
                 query_string=(
                     "availability=coming_soon"
+                    "&facet_sorting=count"
                     "&languages=fr"
                     "&levels=1"
                     "&limit=9"
@@ -134,6 +149,7 @@ class CourseSearchFormTestCase(TestCase):
             form.cleaned_data,
             {
                 "availability": ["coming_soon"],
+                "facet_sorting": "count",
                 "languages": ["fr"],
                 "levels": ["1"],
                 "levels_aggs": [],
@@ -165,6 +181,7 @@ class CourseSearchFormTestCase(TestCase):
                 query_string=(
                     "availability=coming_soon"
                     "&availability=ongoing"
+                    "&facet_sorting=name"
                     "&languages=fr"
                     "&languages=en"
                     "&levels=1"
@@ -196,6 +213,7 @@ class CourseSearchFormTestCase(TestCase):
             form.cleaned_data,
             {
                 "availability": ["coming_soon", "ongoing"],
+                "facet_sorting": "name",
                 "languages": ["fr", "en"],
                 "levels": ["1", "2"],
                 "levels_aggs": ["33", "34"],

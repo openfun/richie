@@ -4,7 +4,7 @@ from django.utils.module_loading import import_string
 
 # pylint: disable=unused-import
 from ..defaults import FILTERS_CONFIGURATION
-from .base import NestingWrapper  # noqa
+from .base import BaseFilterDefinition, NestingWrapper  # noqa
 from .courses import (  # noqa
     AvailabilityFilterDefinition,
     IndexableFilterDefinition,

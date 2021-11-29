@@ -6,13 +6,18 @@ from functools import reduce
 from django import forms
 from django.conf import settings
 from django.utils.translation import get_language
+from django.utils.translation import gettext_lazy as _
 
 import arrow
 
 from richie.apps.courses.models import CourseState
 
 from .defaults import QUERY_ANALYZERS, RELATED_CONTENT_BOOST
-from .filter_definitions import FILTERS, AvailabilityFilterDefinition
+from .filter_definitions import (
+    FILTERS,
+    AvailabilityFilterDefinition,
+    BaseFilterDefinition,
+)
 
 # Instantiate filter fields for each filter defined in settings
 # It is of the form:
@@ -61,6 +66,15 @@ class CourseSearchForm(SearchForm):
     Validate the query string params in the course search request, connect them to filter
     definitions and generate Elasticsearch queries.
     """
+
+    facet_sorting = forms.ChoiceField(
+        required=False,
+        choices=[
+            (BaseFilterDefinition.SORTING_CONF, _("Sort by configuration")),
+            (BaseFilterDefinition.SORTING_COUNT, _("Sort by facet count")),
+            (BaseFilterDefinition.SORTING_NAME, _("Sort alphabetically")),
+        ],
+    )
 
     def __init__(self, *args, data=None, **kwargs):
         """

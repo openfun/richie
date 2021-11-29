@@ -248,6 +248,231 @@ class FacetsCoursesQueryTestCase(TestCase):
 
         return {"courses": courses, "subjects": subjects}
 
+    def test_query_courses_facets_sorting_alphabetical(self, *_):
+        """
+        The "facet_sorting" parameter is respected for alphabetical sorting, and is
+        prioritized over the default sorting as defined by the filter configutation.
+        """
+        data = self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?scope=filters&facet_sorting=name"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["filters"]["subjects"],
+            {
+                "base_path": "0001",
+                "has_more_values": True,
+                "human_name": "Subjects",
+                "is_autocompletable": True,
+                "is_drilldown": False,
+                "is_searchable": True,
+                "name": "subjects",
+                "position": 2,
+                "values": [
+                    {
+                        "count": 1,
+                        "human_name": "Computer science",
+                        "key": data["subjects"][7].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Economy and Finance",
+                        "key": data["subjects"][3].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": data["subjects"][4].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Education and career guidance",
+                        "key": data["subjects"][9].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Entrepreneurship",
+                        "key": data["subjects"][6].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Human and social sciences",
+                        "key": data["subjects"][1].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Languages",
+                        "key": data["subjects"][8].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Management",
+                        "key": data["subjects"][5].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": data["subjects"][0].get_es_id(),
+                    },
+                ],
+            },
+        )
+
+    def test_query_courses_facets_sorting_by_count(self, *_):
+        """
+        The "facet_sorting" parameter is respected for facet count sorting, and is
+        prioritized over the default sorting as defined by the filter configutation.
+        """
+        data = self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?scope=filters&facet_sorting=count"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["filters"]["subjects"],
+            {
+                "base_path": "0001",
+                "has_more_values": True,
+                "human_name": "Subjects",
+                "is_autocompletable": True,
+                "is_drilldown": False,
+                "is_searchable": True,
+                "name": "subjects",
+                "position": 2,
+                "values": [
+                    {
+                        "count": 2,
+                        "human_name": "Economy and Finance",
+                        "key": data["subjects"][3].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": data["subjects"][4].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Human and social sciences",
+                        "key": data["subjects"][1].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": data["subjects"][0].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Computer science",
+                        "key": data["subjects"][7].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Education and career guidance",
+                        "key": data["subjects"][9].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Entrepreneurship",
+                        "key": data["subjects"][6].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Languages",
+                        "key": data["subjects"][8].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Management",
+                        "key": data["subjects"][5].get_es_id(),
+                    },
+                ],
+            },
+        )
+
+    def test_query_courses_facets_sorting_default(self, *_):
+        """
+        When there is no "facet_sorting" param, the default sorting is used.
+        """
+        data = self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?scope=filters")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["filters"]["subjects"],
+            {
+                "base_path": "0001",
+                "has_more_values": True,
+                "human_name": "Subjects",
+                "is_autocompletable": True,
+                "is_drilldown": False,
+                "is_searchable": True,
+                "name": "subjects",
+                "position": 2,
+                "values": [
+                    {
+                        "count": 2,
+                        "human_name": "Economy and Finance",
+                        "key": data["subjects"][3].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": data["subjects"][4].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Human and social sciences",
+                        "key": data["subjects"][1].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Law",
+                        "key": data["subjects"][2].get_es_id(),
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": data["subjects"][0].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Computer science",
+                        "key": data["subjects"][7].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Education and career guidance",
+                        "key": data["subjects"][9].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Entrepreneurship",
+                        "key": data["subjects"][6].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Languages",
+                        "key": data["subjects"][8].get_es_id(),
+                    },
+                    {
+                        "count": 1,
+                        "human_name": "Management",
+                        "key": data["subjects"][5].get_es_id(),
+                    },
+                ],
+            },
+        )
+
     @mock.patch(
         "richie.apps.search.filter_definitions.helpers.FACET_COUNTS_DEFAULT_LIMIT",
         new=5,

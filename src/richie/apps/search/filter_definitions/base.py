@@ -288,18 +288,19 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
         ]
 
         # Sort facets as requested
-        if self.sorting == self.SORTING_NAME:
+        sorting = data["facet_sorting"] or self.sorting
+        if sorting == self.SORTING_NAME:
             # Alphabetical ascending sorting
             values = sorted(
                 values,
                 key=lambda value: (value["human_name"], value["count"] * -1),
             )
-        elif self.sorting == self.SORTING_CONF:
+        elif sorting == self.SORTING_CONF:
             # Respect the order set in filter definitions
             values = sorted(
                 values, key=lambda value: [*human_names].index(value["key"])
             )
-        elif self.sorting == self.SORTING_COUNT:
+        elif sorting == self.SORTING_COUNT:
             # Sorting by descending facet count
             values = sorted(
                 values,
@@ -307,7 +308,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
             )
         else:
             raise ImproperlyConfigured(
-                f'Facet sorting "{self.sorting}" is invalid for filter {self.name}.'
+                f'Facet sorting "{sorting}" is invalid for filter {self.name}.'
             )
 
         return {
