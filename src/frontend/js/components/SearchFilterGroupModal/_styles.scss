@@ -5,6 +5,12 @@
   justify-content: space-between;
   max-width: 30rem;
 
+  &__close {
+    position: absolute;
+    right: 0;
+    top: 0.25rem;
+  }
+
   &__form {
     display: flex;
     flex-direction: column;
@@ -14,7 +20,6 @@
       display: block;
       margin: 0;
       padding: 1rem;
-      text-align: center;
       font-size: 1.1rem;
       font-weight: $font-weight-boldest;
     }
@@ -50,7 +55,7 @@
     }
   }
 
-  &__close {
+  &__more-results {
     padding: 0.5rem 1rem;
     flex-shrink: 0;
     flex-grow: 0;
@@ -72,25 +77,6 @@
 
     &:hover {
       color: r-theme-val(search-filters-group-modal, button-color);
-    }
-  }
-}
-
-body.has-opened-modal {
-  /*
-   * Flex children in a fixed/absolute container breaks Safari.
-   * Use a specific, admittedly hacky media query to target it with a special layout
-   * that solves the issue on that browser.
-   */
-  @media not all and (min-resolution: 0.001dpcm) {
-    @media all {
-      .search-filter-group-modal {
-        overflow: hidden;
-      }
-
-      .search-filter-group-modal__form__values {
-        overflow: auto;
-      }
     }
   }
 }

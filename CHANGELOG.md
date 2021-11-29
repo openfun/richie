@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add infinite scrolling to the facet search modal in course search.
 - Add reusable form components
 - Fix blogpost header image aspect ratio and sizes.
 - Add theme property to `Spinner` component
