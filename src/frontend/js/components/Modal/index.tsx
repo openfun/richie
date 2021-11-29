@@ -1,13 +1,5 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useMemo } from 'react';
 import ReactModal from 'react-modal';
-
-// The `setAppElement` needs to happen in proper code but breaks our testing environment.
-// This workaround is not satisfactory but it allows us to both test <SearchFilterGroupModal />
-// and avoid compromising accessibility in real-world use.
-const isTestEnv = process.env.NODE_ENV === 'test';
-if (!isTestEnv) {
-  ReactModal.setAppElement('#modal-exclude');
-}
 
 export const Modal = ({
   className,
@@ -35,9 +27,17 @@ export const Modal = ({
     return base || classes || undefined;
   };
 
+  const modalExclude = useMemo(() => {
+    const exclude = document.getElementById('modal-exclude');
+    if (exclude) {
+      return exclude;
+    }
+    throw new Error('Failed to get #modal-exclude to enable an accessible <ReactModal />.');
+  }, []);
+
   return (
     <ReactModal
-      ariaHideApp={!isTestEnv}
+      appElement={modalExclude}
       className={mergeClasses({ base: 'modal', classes: className })}
       bodyOpenClassName={mergeClasses({ base: 'has-opened-modal', classes: bodyOpenClassName })}
       overlayClassName={mergeClasses({ base: 'modal__overlay', classes: overlayClassName })}

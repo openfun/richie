@@ -1,3 +1,8 @@
+// Make sure random elements with any z-index don't show on top of the modals
+.ReactModal__Overlay {
+  z-index: 1;
+}
+
 .modal {
   background-color: r-theme-val(modal, base-background);
   border-radius: $border-radius;
