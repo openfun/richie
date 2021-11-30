@@ -100,13 +100,22 @@
                                 {% endget_placeholder_plugins %}
                                 {% blockplugin plugins.0 %}
                                     <img
-                                        src="{% thumbnail instance.picture 845x500 subject_location=instance.picture.subject_location %}"
+                                        src="{% thumbnail instance.picture 776x3104 subject_location=instance.picture.subject_location %}"
                                         srcset="
-                                            {% thumbnail instance.picture 845x500 subject_location=instance.picture.subject_location %} 500w
-                                            {% if instance.picture.width >= 1000 %},{% thumbnail instance.picture 1000x1000 subject_location=instance.picture.subject_location %} 1000w{% endif %}
-                                            {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x2000 subject_location=instance.picture.subject_location %} 2000w{% endif %}
+                                            {% thumbnail instance.picture 540x2160 subject_location=instance.picture.subject_location %} 540w
+                                            ,{% thumbnail instance.picture 653x2612 subject_location=instance.picture.subject_location %} 652w
+                                            ,{% thumbnail instance.picture 720x2880 subject_location=instance.picture.subject_location %} 720w
+                                            ,{% thumbnail instance.picture 776x3104 subject_location=instance.picture.subject_location %} 775w
+                                            {% if instance.picture.width >= 1080 %},{% thumbnail instance.picture 1080x4320 subject_location=instance.picture.subject_location %} 1080w{% endif %} {% comment %} 2x540 {% endcomment %}
+                                            {% if instance.picture.width >= 1306 %},{% thumbnail instance.picture 1306x5224 subject_location=instance.picture.subject_location %} 1305w{% endif %} {% comment %} 2x653 {% endcomment %}
+                                            {% if instance.picture.width >= 1440 %},{% thumbnail instance.picture 1440x5760 subject_location=instance.picture.subject_location %} 1440w{% endif %} {% comment %} 2x720 {% endcomment %}
+                                            {% if instance.picture.width >= 1552 %},{% thumbnail instance.picture 1552x6208 subject_location=instance.picture.subject_location %} 1550w{% endif %} {% comment %} 2x776 {% endcomment %}
+                                            {% if instance.picture.width >= 1620 %},{% thumbnail instance.picture 1620x6480 subject_location=instance.picture.subject_location %} 1620w{% endif %} {% comment %} 3x540 {% endcomment %}
+                                            {% if instance.picture.width >= 1959 %},{% thumbnail instance.picture 1959x7836 subject_location=instance.picture.subject_location %} 1958w{% endif %} {% comment %} 3x653 {% endcomment %}
+                                            {% if instance.picture.width >= 2160 %},{% thumbnail instance.picture 2160x8640 subject_location=instance.picture.subject_location %} 2160w{% endif %} {% comment %} 3x720 {% endcomment %}
+                                            {% if instance.picture.width >= 2328 %},{% thumbnail instance.picture 2328x9312 subject_location=instance.picture.subject_location %} 2325w{% endif %} {% comment %} 3x776 {% endcomment %}
                                         "
-                                        sizes="500px"
+                                        sizes="(min-width: 1200px) 775px, (min-width: 992px) 652px, (min-width: 768px) 720px, (min-width: 576px) 540px, 100vw"
                                         alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'blog post cover image' %}{% endif %}"
                                     />
                                 {% endblockplugin %}
