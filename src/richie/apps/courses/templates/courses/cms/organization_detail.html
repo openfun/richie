@@ -6,7 +6,7 @@
 
     {% get_placeholder_plugins "logo" as og_image_plugins %}
     {% blockplugin og_image_plugins.0 %}
-        {% thumbnail instance.picture 200x113 upscale as thumb %}
+        {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />
         <meta property="og:image:height" content="{{ thumb.height }}" />
@@ -29,13 +29,13 @@
                     {% endget_placeholder_plugins %}
                     {% blockplugin plugins.0 %}
                         <img
-                            src="{% thumbnail instance.picture 320x100 upscale %}"
+                            src="{% thumbnail instance.picture 320x100 replace_alpha='#FFFFFF' upscale %}"
                             srcset="
-                                {% thumbnail instance.picture 640x200 upscale %} 640w,
-                                {% thumbnail instance.picture 1280x300 upscale %} 1280w,
-                                {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x351 upscale %} 1500w,{% endif %}
-                                {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x468 upscale %} 2000w,{% endif %}
-                                {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x585 upscale %} 2500w,{% endif %}
+                                {% thumbnail instance.picture 640x200 replace_alpha='#FFFFFF' upscale %} 640w,
+                                {% thumbnail instance.picture 1280x300 replace_alpha='#FFFFFF' upscale %} 1280w,
+                                {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x351 replace_alpha='#FFFFFF' upscale %} 1500w,{% endif %}
+                                {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x468 replace_alpha='#FFFFFF' upscale %} 2000w,{% endif %}
+                                {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x585 replace_alpha='#FFFFFF' upscale %} 2500w,{% endif %}
                             "
                             sizes="(min-width: 576px) 80vw, (min-width: 1200px) 1140px, 100vw"
                             alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization banner' %}{% endif %}"
@@ -51,12 +51,12 @@
                     {% endget_placeholder_plugins %}
                     {% blockplugin plugins.0 %}
                         <img
-                            src="{% thumbnail instance.picture 200x113 upscale %}"
+                            src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale %}"
                             srcset="
-                                {% thumbnail instance.picture 200x113 upscale %} 200w,
-                                {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 upscale %} 400w,{% endif %}
-                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale %} 600w,{% endif %}
-                                {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale %} 800w{% endif %}
+                                {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale %} 200w,
+                                {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 replace_alpha='#FFFFFF' upscale %} 400w,{% endif %}
+                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 replace_alpha='#FFFFFF' upscale %} 600w,{% endif %}
+                                {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 replace_alpha='#FFFFFF' upscale %} 800w{% endif %}
                             "
                             sizes="(min-width: 768px) 16rem, (min-width: 1200px) 20rem, 12rem"
                             alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization logo' %}{% endif %}"

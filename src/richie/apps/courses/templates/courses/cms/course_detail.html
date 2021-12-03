@@ -16,7 +16,7 @@
     {% endget_placeholder_plugins %}
     {% blockplugin plugins.0 %}
         <meta property="og:type" content="website" />
-        {% thumbnail instance.picture 1200x630 crop upscale subject_location=instance.picture.subject_location as thumb %}
+        {% thumbnail instance.picture 1200x630 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />
         <meta property="og:image:height" content="{{ thumb.height }}" />
@@ -132,11 +132,11 @@
                             {% endget_placeholder_plugins %}
                             {% blockplugin plugins.0 %}
                                 <img
-                                    src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
+                                    src="{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                                     srcset="
-                                    {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
-                                    {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                                    {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+                                    {% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
+                                    {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                    {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
                                     "
                                     sizes="300px"
                                     alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'course cover image' %}{% endif %}"
@@ -200,7 +200,7 @@
 
                 {% block cover %}
                     {% get_placeholder_plugins "course_cover" as cover_plugins %}
-                    <meta property="image" content="{% thumbnail cover_plugins.0.picture 300x170 crop upscale subject_location=cover_plugins.0.picture.subject_location %}" />
+                    <meta property="image" content="{% thumbnail cover_plugins.0.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=cover_plugins.0.picture.subject_location %}" />
                     {% if current_page.publisher_is_draft %}
                     <div class="course-detail__block course-detail__cover">
                         <div class="course-detail__row">
@@ -210,11 +210,11 @@
                             {% endif %}
                             {% blockplugin cover_plugins.0 %}
                             <img
-                                src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
+                                src="{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                                 srcset="
-                                {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
-                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                                {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+                                {% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
+                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
                                 "
                                 sizes="300px"
                                 alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'course cover image' %}{% endif %}"

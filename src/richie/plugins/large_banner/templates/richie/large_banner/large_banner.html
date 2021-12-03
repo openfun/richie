@@ -3,17 +3,17 @@
 <div class="large-banner">
     {% if instance.background_image.url %}
     <img class="large-banner__background"
-            src="{% thumbnail instance.background_image 1900x450 crop='smart' %}"
-            srcset="{% thumbnail instance.background_image 2495x550 crop=',0' %} 2495w,
-                    {% thumbnail instance.background_image 1900x450 crop=',0' %} 1900w,
-                    {% thumbnail instance.background_image 1280x400 crop=',0' %} 1280w,
-                    {% thumbnail instance.background_image 768x450 crop=',0' %} 768w"
+            src="{% thumbnail instance.background_image 1900x450 replace_alpha='#FFFFFF' crop='smart' %}"
+            srcset="{% thumbnail instance.background_image 2495x550 replace_alpha='#FFFFFF' crop=',0' %} 2495w,
+                    {% thumbnail instance.background_image 1900x450 replace_alpha='#FFFFFF' crop=',0' %} 1900w,
+                    {% thumbnail instance.background_image 1280x400 replace_alpha='#FFFFFF' crop=',0' %} 1280w,
+                    {% thumbnail instance.background_image 768x450 replace_alpha='#FFFFFF' crop=',0' %} 768w"
             alt="banner">
     {% endif %}
     <div class="large-banner__body">
         <h1 class="large-banner__title">{{ instance.title }}</h1>
         {% if instance.logo %}
-            <img src="{% thumbnail instance.logo 200x100 crop='smart' %}" class="large-banner__logo" alt="{{ instance.logo_alt_text }}">
+            <img src="{% thumbnail instance.logo 200x100 replace_alpha='#FFFFFF' crop='smart' %}" class="large-banner__logo" alt="{{ instance.logo_alt_text }}">
         {% endif %}
         {% if instance.content %}
             <div class="large-banner__content">{{ instance.content|safe }}</div>

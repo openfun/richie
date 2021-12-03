@@ -6,7 +6,7 @@
 
     {% get_placeholder_plugins "logo" as og_image_plugins %}
     {% blockplugin og_image_plugins.0 %}
-        {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location as thumb %}
+        {% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />
         <meta property="og:image:height" content="{{ thumb.height }}" />
@@ -27,11 +27,11 @@
                     {% endget_placeholder_plugins %}
                     {% blockplugin banner_plugins.0 %}
                         <img
-                            src="{% thumbnail instance.picture 1140x400 crop upscale subject_location=instance.picture.subject_location %}"
+                            src="{% thumbnail instance.picture 1140x400 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                             srcset="
-                                {% thumbnail instance.picture 1140x400 crop upscale subject_location=instance.picture.subject_location %} 1140w
-                                {% if instance.picture.width >= 2280 %},{% thumbnail instance.picture 2280x800 crop upscale subject_location=instance.picture.subject_location %} 2280w{% endif %}
-                                {% if instance.picture.width >= 3420 %},{% thumbnail instance.picture 3420x600 crop upscale subject_location=instance.picture.subject_location %} 3420w{% endif %}
+                                {% thumbnail instance.picture 1140x400 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 1140w
+                                {% if instance.picture.width >= 2280 %},{% thumbnail instance.picture 2280x800 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 2280w{% endif %}
+                                {% if instance.picture.width >= 3420 %},{% thumbnail instance.picture 3420x600 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 3420w{% endif %}
                             "
                             sizes="1140px"
                             alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'category banner' %}{% endif %}"
@@ -45,11 +45,11 @@
                     {% endget_placeholder_plugins %}
                     {% blockplugin logo_plugins.0 %}
                         <img
-                            src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
+                            src="{% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                             srcset="
-                                {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
-                                {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                {% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 200w
+                                {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
                             "
                             sizes="200px"
                             alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'category logo' %}{% endif %}"

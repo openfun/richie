@@ -10,10 +10,10 @@
 <div class="glimpse-{{ glimpse_variant }}__wrapper">
     {% if instance.image %}
     <div class="glimpse-{{ glimpse_variant }}__media">
-        <img src="{% thumbnail instance.image 200x200 crop upscale subject_location=instance.image.subject_location %}"
-            srcset="{% thumbnail instance.image 200x200 crop upscale subject_location=instance.image.subject_location %} 200w
-                {% if instance.image.width >= 400 %},{% thumbnail instance.image 400x400 crop upscale subject_location=instance.image.subject_location %} 400w{% endif %}
-                {% if instance.image.width >= 800 %},{% thumbnail instance.image 800x800 crop upscale subject_location=instance.image.subject_location %} 800w{% endif %}"
+        <img src="{% thumbnail instance.image 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.image.subject_location %}"
+            srcset="{% thumbnail instance.image 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.image.subject_location %} 200w
+                {% if instance.image.width >= 400 %},{% thumbnail instance.image 400x400 replace_alpha='#FFFFFF' crop upscale subject_location=instance.image.subject_location %} 400w{% endif %}
+                {% if instance.image.width >= 800 %},{% thumbnail instance.image 800x800 replace_alpha='#FFFFFF' crop upscale subject_location=instance.image.subject_location %} 800w{% endif %}"
             sizes="200px"
             alt="">
     </div>

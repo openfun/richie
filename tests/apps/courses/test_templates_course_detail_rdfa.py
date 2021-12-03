@@ -164,7 +164,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         (image_value,) = graph.objects(subject, URIRef("http://ogp.me/ns#image"))
         pattern = (
             r"/media/filer_public_thumbnails/filer_public/.*cover\.jpg__"
-            r"1200x630_q85_crop_subject_location"
+            r"1200x630_q85_crop_replace_alpha-%23FFFFFF_subject_location"
         )
         self.assertIsNotNone(re.search(pattern, str(image_value)))
 
@@ -306,7 +306,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         (image_value,) = graph.objects(subject, URIRef("https://schema.org/image"))
         pattern = (
             r"/media/filer_public_thumbnails/filer_public/.*cover\.jpg__"
-            r"300x170_q85_crop_subject_location"
+            r"300x170_q85_crop_replace_alpha-%23FFFFFF_subject_location"
         )
         self.assertIsNotNone(re.search(pattern, str(image_value)))
 
@@ -349,7 +349,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         )
         pattern = (
             r"/media/filer_public_thumbnails/filer_public/.*logo.jpg__"
-            r"200x113_q85_subject_location"
+            r"200x113_q85_replace_alpha-%23FFFFFF_subject_location"
         )
         self.assertIsNotNone(re.search(pattern, str(logo_value)))
 
@@ -414,7 +414,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
 
         pattern = (
             r"/media/filer_public_thumbnails/filer_public/.*logo.jpg__"
-            r"200x113_q85_subject_location"
+            r"200x113_q85_replace_alpha-%23FFFFFF_subject_location"
         )
         (logo_value,) = graph.objects(
             URIRef("/en/main-org/"), URIRef("https://schema.org/logo")
@@ -469,7 +469,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
 
         pattern = (
             r"/media/filer_public_thumbnails/filer_public/.*portrait.jpg__"
-            r"200x200_q85_crop_subject_location"
+            r"200x200_q85_crop_replace_alpha-%23FFFFFF_subject_location"
         )
         for author_subject in author_subjects:
             (portrait_value,) = graph.objects(
