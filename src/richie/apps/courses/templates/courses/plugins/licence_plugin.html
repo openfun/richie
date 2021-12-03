@@ -3,7 +3,7 @@
 {% spaceless %}
 <div class="licence-plugin">
     <p class="licence-plugin__logo">
-        <img src="{% thumbnail instance.licence.logo 100x50 crop='smart' %}" alt="">
+        <img src="{% thumbnail instance.licence.logo 100x50 replace_alpha='#FFFFFF' crop='smart' %}" alt="">
     </p>
     <div class="licence-plugin__wrapper">
         <h{{ header_level|default:2 }} class="licence-plugin__title">

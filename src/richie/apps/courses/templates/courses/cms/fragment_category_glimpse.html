@@ -36,11 +36,11 @@
                         <div class="category-glimpse__logo__empty">{% trans "Logo" %}</div>
                     {% endget_page_plugins %}
                     {% blockplugin plugins.0 %}
-                        <img src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
+                        <img src="{% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                             srcset="
-                                {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
-                                {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                {% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 200w
+                                {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
                             "
                             sizes="200px"
                             alt="{{ category_page.get_title }}">

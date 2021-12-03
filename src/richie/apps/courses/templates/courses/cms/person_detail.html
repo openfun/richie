@@ -6,7 +6,7 @@
 
     {% get_placeholder_plugins "portrait" as og_image_plugins %}
     {% blockplugin og_image_plugins.0 %}
-        {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location as thumb %}
+        {% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />
         <meta property="og:image:height" content="{{ thumb.height }}" />
@@ -62,11 +62,11 @@
                             {% blockplugin plugins.0 %}
                             <div class="subheader__media subheader__media--locket">
                                 <img
-                                    src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
+                                    src="{% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                                     srcset="
-                                        {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
-                                        {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-                                        {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                        {% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 200w
+                                        {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                                        {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
                                     "
                                     sizes="200px"
                                     alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% blocktrans with title=current_page.get_title %}{{ title }} avatar{% endblocktrans %}{% endif %}"

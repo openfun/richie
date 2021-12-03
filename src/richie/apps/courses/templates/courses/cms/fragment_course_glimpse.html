@@ -8,11 +8,11 @@
             <p class="course-{{ course_variant }}--empty">{% trans "Cover" %}</p>
         {% endget_page_plugins %}
         {% blockplugin cover_plugins.0 %}
-            <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
+            <img src="{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                 srcset="
-                    {% thumbnail instance.picture 800x457 crop upscale subject_location=instance.picture.subject_location %} 300w
-                    {% if instance.picture.width >= 1600 %},{% thumbnail instance.picture 1600x914 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                    {% if instance.picture.width >= 2400 %},{% thumbnail instance.picture 2400x1371 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+                    {% thumbnail instance.picture 800x457 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
+                    {% if instance.picture.width >= 1600 %},{% thumbnail instance.picture 1600x914 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                    {% if instance.picture.width >= 2400 %},{% thumbnail instance.picture 2400x1371 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
                 "
                 sizes="300px"
                 {# alt forced to empty string for a11y because the image does not carry more information than the course title #}
@@ -37,12 +37,12 @@
                     {% endget_page_plugins %}
                     {% blockplugin plugins.0 %}
                         <div class="course-glimpse__organization-logo">
-                            <img src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
+                            <img src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
                                 srcset="
-                                    {% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %} 200w
-                                    {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-                                    {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                                    {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
+                                    {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 200w
+                                    {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                                    {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                    {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
                                 "
                                 {# alt forced to empty string for a11y because the image does not carry more information than the course title #}
                                 alt=""

@@ -11,10 +11,10 @@
 
             {% blockplugin plugins.0 %}
             <img
-                src="{% thumbnail instance.picture 845x500 subject_location=instance.picture.subject_location %}"
-                srcset="{% thumbnail instance.picture 845x500 subject_location=instance.picture.subject_location %} 500w
-                    {% if instance.picture.width >= 1000 %},{% thumbnail instance.picture 1000x1000 subject_location=instance.picture.subject_location %} 1000w{% endif %}
-                    {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x2000 subject_location=instance.picture.subject_location %} 2000w{% endif %}"
+                src="{% thumbnail instance.picture 845x500 replace_alpha='#FFFFFF' subject_location=instance.picture.subject_location %}"
+                srcset="{% thumbnail instance.picture 845x500 replace_alpha='#FFFFFF' subject_location=instance.picture.subject_location %} 500w
+                    {% if instance.picture.width >= 1000 %},{% thumbnail instance.picture 1000x1000 replace_alpha='#FFFFFF' subject_location=instance.picture.subject_location %} 1000w{% endif %}
+                    {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x2000 replace_alpha='#FFFFFF' subject_location=instance.picture.subject_location %} 2000w{% endif %}"
                 sizes="500px"
                 alt="">
             {% endblockplugin %}
@@ -40,11 +40,11 @@
                 <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
             {% endget_page_plugins %}
             {% blockplugin plugins.0 %}
-                <img src="{% thumbnail instance.picture 150x85 crop upscale subject_location=instance.picture.subject_location %}"
+                <img src="{% thumbnail instance.picture 150x85 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                     srcset="
-                    {% thumbnail instance.picture 150x85 crop upscale subject_location=instance.picture.subject_location %} 150w
-                    {% if instance.picture.width >= 300 %},{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w{% endif %}
-                    {% if instance.picture.width >= 450 %},{% thumbnail instance.picture 450x255 crop upscale subject_location=instance.picture.subject_location %} 450w{% endif %}
+                    {% thumbnail instance.picture 150x85 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 150w
+                    {% if instance.picture.width >= 300 %},{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w{% endif %}
+                    {% if instance.picture.width >= 450 %},{% thumbnail instance.picture 450x255 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 450w{% endif %}
                     "
                     sizes="150px"
                     alt=""
@@ -76,10 +76,10 @@
             {% endget_page_plugins %}
 
             {% blockplugin plugins.0 %}
-            <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
-                srcset="{% thumbnail instance.picture 800x480 crop upscale subject_location=instance.picture.subject_location %} 300w
-                {% if instance.picture.width >= 1600 %},{% thumbnail instance.picture 1600x960 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                {% if instance.picture.width >= 2400 %},{% thumbnail instance.picture 2400x1440 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}"
+            <img src="{% thumbnail instance.picture 300x170 crop replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
+                srcset="{% thumbnail instance.picture 800x480 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
+                {% if instance.picture.width >= 1600 %},{% thumbnail instance.picture 1600x960 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                {% if instance.picture.width >= 2400 %},{% thumbnail instance.picture 2400x1440 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}"
                 sizes="300px"
                 alt="">
             {% endblockplugin %}
