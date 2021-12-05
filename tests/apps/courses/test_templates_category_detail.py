@@ -378,3 +378,102 @@ class CategoryCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
+
+    def test_template_category_detail_meta_description(self):
+        """
+        The category meta description should show meta_description placeholder if defined
+        """
+        category = CategoryFactory()
+        page = category.extended_object
+
+        title_obj = page.get_title_obj(language="en")
+        title_obj.meta_description = "A custom description of the category"
+        title_obj.save()
+
+        page.publish("en")
+
+        url = category.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta name="description" content="A custom description of the category" />',
+        )
+
+    def test_template_category_detail_meta_description_description(self):
+        """
+        The category meta description should show the description if no meta_description is
+        specified
+        """
+        category = CategoryFactory()
+        page = category.extended_object
+
+        # Add an description to the category
+        placeholder = category.extended_object.placeholders.get(slot="description")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body="A further <b>description</b> of the category",
+        )
+        page.publish("en")
+
+        url = category.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta name="description" content="A further description of the category" />',
+        )
+
+    def test_template_category_detail_meta_description_description_max_length(self):
+        """
+        The category meta description should be cut if it exceeds more than 160 caracters
+        """
+        category = CategoryFactory()
+        page = category.extended_object
+        placeholder_value = (
+            "Long description that describes the page with a summary. "
+            "Long description that describes the page with a summary. "
+            "Long description that describes the page with a summary. "
+        )
+
+        # Add an description to the category
+        placeholder = category.extended_object.placeholders.get(slot="description")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body=placeholder_value,
+        )
+        page.publish("en")
+
+        url = category.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        cut = placeholder_value[0:160]
+        self.assertContains(
+            response,
+            f'<meta name="description" content="{cut}" />',
+        )
+
+    def test_template_category_detail_meta_description_empty(self):
+        """
+        The category meta description should not be present if neither the meta_description field
+        on the page, nor the description placeholder are filled
+        """
+        category = CategoryFactory()
+        page = category.extended_object
+        page.publish("en")
+
+        url = category.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(
+            response,
+            '<meta name="description"',
+        )

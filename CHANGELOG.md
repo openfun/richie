@@ -17,6 +17,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add timing function variables
 - Add a `outline` variant to button
 - Create a `shadowed-box` mixin
+- Add a meta description default value from course introduction,
+  blog excerpt, category description, person bio, program excerpt
+  and organization description
 
 ### Changed
 

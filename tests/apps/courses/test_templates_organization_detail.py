@@ -377,3 +377,102 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<meta property="og:image:height" content="113" />'
         )
+
+    def test_templates_organization_detail_meta_description(self):
+        """
+        The organization meta description should show meta_description placeholder if defined
+        """
+        organization = OrganizationFactory()
+        page = organization.extended_object
+
+        title_obj = page.get_title_obj(language="en")
+        title_obj.meta_description = "A longer organization description"
+        title_obj.save()
+
+        page.publish("en")
+
+        url = organization.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta name="description" content="A longer organization description" />',
+        )
+
+    def test_templates_organization_detail_meta_description_description(self):
+        """
+        The organization meta description should show the description placeholder if no
+        meta_description placeholoder exists
+        """
+        organization = OrganizationFactory()
+        page = organization.extended_object
+
+        # Add an excerpt to the organization
+        placeholder = organization.extended_object.placeholders.get(slot="description")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body="A <b>longer</b> organization description",
+        )
+        page.publish("en")
+
+        url = organization.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta name="description" content="A longer organization description" />',
+        )
+
+    def test_templates_organization_detail_meta_description_excerpt_max_length(self):
+        """
+        The organization meta description should be cut if it exceeds more than 160 caracters
+        """
+        organization = OrganizationFactory()
+        page = organization.extended_object
+        placeholder_value = (
+            "Long description that describes the page with a summary. "
+            "Long description that describes the page with a summary. "
+            "Long description that describes the page with a summary. "
+        )
+
+        # Add an excerpt to the organization
+        placeholder = organization.extended_object.placeholders.get(slot="description")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body=placeholder_value,
+        )
+        page.publish("en")
+
+        url = organization.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        cut = placeholder_value[0:160]
+        self.assertContains(
+            response,
+            f'<meta name="description" content="{cut}" />',
+        )
+
+    def test_templates_organization_detail_meta_description_empty(self):
+        """
+        The organization meta description should not be present if neither the meta_description
+        field on the page, nor the excerpt placeholder are filled
+        """
+        organization = OrganizationFactory()
+        page = organization.extended_object
+        page.publish("en")
+
+        url = organization.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(
+            response,
+            '<meta name="description"',
+        )
