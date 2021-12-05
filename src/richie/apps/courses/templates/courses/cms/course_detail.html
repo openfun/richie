@@ -10,6 +10,12 @@
     {% endif %}
 {% endblock meta_index_rules %}
 
+{% block meta_html_default %}
+    {% if not current_page|is_empty_placeholder:"course_introduction" %}
+        <meta name="description" content="{% filter slice:":160" %}{% show_placeholder 'course_introduction' current_page %}{% endfilter %}" />
+    {% endif %}
+{% endblock meta_html_default %}
+
 {% block meta_rdfa_context %}
     {% get_placeholder_plugins "course_cover" as plugins or %}
         {{ block.super }}

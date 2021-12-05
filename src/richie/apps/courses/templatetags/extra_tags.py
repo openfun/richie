@@ -3,6 +3,7 @@ import json
 
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
+from django.template.defaultfilters import stringfilter
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.translation import get_language
@@ -273,3 +274,12 @@ def course_enrollment_widget_props(context):
             }
         }
     )
+
+
+@register.filter
+@stringfilter
+def trim(value):
+    """
+    Remove whitespaces before and after a string.
+    """
+    return value.strip()

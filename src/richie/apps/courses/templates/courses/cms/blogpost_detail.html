@@ -1,6 +1,12 @@
 {% extends "richie/fullwidth.html" %}
 {% load static category_tags cms_tags extra_tags i18n thumbnail %}
 
+{% block meta_html_default %}
+    {% if not current_page|is_empty_placeholder:"excerpt" %}
+        <meta name="description" content="{% filter slice:":160" %}{% show_placeholder 'excerpt' current_page %}{% endfilter %}" />
+    {% endif %}
+{% endblock meta_html_default %}
+
 {% block meta_rdfa_context %}
     <meta property="og:type" content="article" />
     <meta property="og:article:published_time" content="{{ current_page.publication_date|date:"c" }}">

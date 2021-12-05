@@ -1,6 +1,12 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags extra_tags i18n pagination_tags static thumbnail %}
 
+{% block meta_html_default %}
+    {% if not current_page|is_empty_placeholder:"bio" %}
+        <meta name="description" content="{% filter slice:":160" %}{% show_placeholder 'bio' current_page %}{% endfilter %}" />
+    {% endif %}
+{% endblock meta_html_default %}
+
 {% block meta_rdfa_context %}
     <meta property="og:type" content="profile" />
 

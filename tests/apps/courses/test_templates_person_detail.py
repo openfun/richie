@@ -472,3 +472,102 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<meta property="og:image:height" content="200" />'
         )
+
+    def test_templates_person_detail_meta_description(self):
+        """
+        The person meta description should show meta_description placeholder if defined
+        """
+        person = PersonFactory()
+        page = person.extended_object
+
+        title_obj = page.get_title_obj(language="en")
+        title_obj.meta_description = "A custom description of the person"
+        title_obj.save()
+
+        page.publish("en")
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta name="description" content="A custom description of the person" />',
+        )
+
+    def test_templates_person_detail_meta_description_bio(self):
+        """
+        The person meta description should show the bio if no meta_description is
+        specified
+        """
+        person = PersonFactory()
+        page = person.extended_object
+
+        # Add a bio to a person
+        placeholder = person.extended_object.placeholders.get(slot="bio")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body="A biographic description of the person",
+        )
+        page.publish("en")
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta name="description" content="A biographic description of the person" />',
+        )
+
+    def test_templates_person_detail_meta_description_bio_exceeds_max_length(self):
+        """
+        The person meta description should be cut if it exceeds more than 160 caracters
+        """
+        person = PersonFactory()
+        page = person.extended_object
+        placeholder_value = (
+            "Long description that describes the page with a summary. "
+            "Long description that describes the page with a summary. "
+            "Long description that describes the page with a summary. "
+        )
+
+        # Add a bio to a person
+        placeholder = person.extended_object.placeholders.get(slot="bio")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body=placeholder_value,
+        )
+        page.publish("en")
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        cut = placeholder_value[0:160]
+        self.assertContains(
+            response,
+            f'<meta name="description" content="{cut}" />',
+        )
+
+    def test_templates_person_detail_meta_description_empty(self):
+        """
+        The person meta description should not be present if neither the meta_description field
+        on the page, nor the `bio` placeholder are filled
+        """
+        person = PersonFactory()
+        page = person.extended_object
+        page.publish("en")
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(
+            response,
+            '<meta name="description"',
+        )
