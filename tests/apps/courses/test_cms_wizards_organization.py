@@ -240,6 +240,8 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         self.assertEqual(page.get_slug(), "my-title")
         # The code is left blank in this case
         self.assertIsNone(organization.code)
+        # The page should be in navigation to appear in the breadcrumb
+        self.assertTrue(page.in_navigation)
 
         # A page role should have been created
         self.assertEqual(page.roles.count(), 1)
