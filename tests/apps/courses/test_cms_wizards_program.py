@@ -184,6 +184,8 @@ class ProgramCMSWizardTestCase(CMSTestCase):
         self.assertEqual(program_page.get_title(), "My title")
         # The slug should have been automatically set
         self.assertEqual(program_page.get_slug(), "my-title")
+        # The page should be in navigation to appear in the breadcrumb
+        self.assertTrue(program_page.in_navigation)
 
     def test_cms_wizards_program_submit_form_max_lengths(self):
         """

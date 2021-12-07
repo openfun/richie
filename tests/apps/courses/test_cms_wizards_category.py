@@ -181,6 +181,8 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         self.assertEqual(page.get_title(), "My title")
         # The slug should have been automatically set
         self.assertEqual(page.get_slug(), "my-title")
+        # The page should be in navigation to appear in the breadcrumb
+        self.assertTrue(page.in_navigation)
 
     def test_cms_wizards_category_submit_form_from_category_page(self):
         """

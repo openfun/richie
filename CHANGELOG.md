@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Include new pages in navigation by default so they have a breadcrumb
 - Create a generic React Modal component
 - Create an context util
 - Add react-query to manage API requests and local data store

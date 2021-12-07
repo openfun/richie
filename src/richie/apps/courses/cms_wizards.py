@@ -163,6 +163,7 @@ class BaseWizardForm(BaseFormMixin, forms.Form):
             language=get_language(),
             parent=self.parent_page,
             template=self.model.PAGE["template"],
+            in_navigation=True,
             published=False,  # The creation wizard should not publish the page
         )
 

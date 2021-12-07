@@ -340,6 +340,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
         self.assertEqual(page.get_title(), "My title")
         # The slug should have been automatically set
         self.assertEqual(page.get_slug(), "my-title")
+        # The page should be in navigation to appear in the breadcrumb
+        self.assertTrue(page.in_navigation)
 
         # The course should have a plugin with the organization
         self.assertEqual(OrganizationPluginModel.objects.count(), 1)
