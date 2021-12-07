@@ -30,6 +30,81 @@ class PersonCMSTestCase(CMSTestCase):
     End-to-end test suite to validate the content and Ux of the person detail view
     """
 
+    def test_templates_person_detail_open_graph_description_bio(self):
+        """
+        An opengraph description meta should be present if the person bio placeholder is set.
+        """
+        person = PersonFactory()
+        page = person.extended_object
+
+        # Add a bio to a person
+        placeholder = person.extended_object.placeholders.get(slot="bio")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body="A biographic description of the person",
+        )
+        page.publish("en")
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta property="og:description" content="A biographic description of the person" />',
+        )
+
+    def test_templates_person_detail_open_graph_description_bio_exceeds_max_length(
+        self,
+    ):
+        """
+        The open graph description should be cut if it exceeds more than 200 caracters
+        """
+        person = PersonFactory()
+        page = person.extended_object
+        placeholder_value = (
+            "Long description that describes the page with a summary. " * 7
+        )
+
+        # Add a bio to a person
+        placeholder = person.extended_object.placeholders.get(slot="bio")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body=placeholder_value,
+        )
+        page.publish("en")
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        cut = placeholder_value[0:200]
+        self.assertContains(
+            response,
+            f'<meta property="og:description" content="{cut}" />',
+        )
+
+    def test_templates_person_detail_open_graph_description_empty(self):
+        """
+        The opengraph description meta should not be present if person bio placeholder is not set
+        """
+        person = PersonFactory()
+        page = person.extended_object
+        page.publish("en")
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(
+            response,
+            "og:description",
+        )
+
     def test_templates_person_detail_cms_published_content(self):
         """
         Validate that the important elements are displayed on a published person page

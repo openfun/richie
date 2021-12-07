@@ -26,6 +26,79 @@ class CategoryCMSTestCase(CMSTestCase):
     End-to-end test suite to validate the content and Ux of the category detail view
     """
 
+    def test_template_category_detail_open_graph_description(self):
+        """
+        An opengraph description meta should be present if the description placeholder is set.
+        """
+        category = CategoryFactory()
+        page = category.extended_object
+
+        # Add an description to the category
+        placeholder = category.extended_object.placeholders.get(slot="description")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body=" A further <b>description</b> of the category  ",
+        )
+        page.publish("en")
+
+        url = category.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta property="og:description" content="A further description of the category" />',
+        )
+
+    def test_template_category_detail_open_graph_description_max_length(self):
+        """
+        An opengraph description meta should be cut if it exceeds more than 200 caracters
+        """
+        category = CategoryFactory()
+        page = category.extended_object
+        placeholder_value = (
+            "Long description that describes the page with a summary. " * 5
+        )
+
+        # Add an description to the category
+        placeholder = category.extended_object.placeholders.get(slot="description")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body=placeholder_value,
+        )
+        page.publish("en")
+
+        url = category.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        cut = placeholder_value[0:200]
+        self.assertContains(
+            response,
+            f'<meta property="og:description" content="{cut}" />',
+        )
+
+    def test_template_category_detail_open_graph_description_empty(self):
+        """
+        The opengraph description meta should not be present if description placeholder is not set
+        """
+        category = CategoryFactory()
+        page = category.extended_object
+        page.publish("en")
+
+        url = category.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(
+            response,
+            "og:description",
+        )
+
     def _extension_cms_published_content(
         self, factory_model, placeholder_slot, control_string
     ):
@@ -415,7 +488,7 @@ class CategoryCMSTestCase(CMSTestCase):
             language="en",
             placeholder=placeholder,
             plugin_type="CKEditorPlugin",
-            body="A further <b>description</b> of the category",
+            body=" A further <b>description</b> of the category  ",
         )
         page.publish("en")
 
