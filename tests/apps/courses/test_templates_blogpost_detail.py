@@ -23,6 +23,79 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
     End-to-end test suite to validate the content and Ux of the blogpost detail view
     """
 
+    def test_templates_blogpost_detail_open_graph_description_excerpt(self):
+        """
+        An opengraph description meta should be present if the excerpt placeholder is set.
+        """
+        blogpost = BlogPostFactory()
+        page = blogpost.extended_object
+
+        # Add an excerpt to the blogpost
+        placeholder = blogpost.extended_object.placeholders.get(slot="excerpt")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body="A further sub title of the blog post",
+        )
+        page.publish("en")
+
+        url = blogpost.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta property="og:description" content="A further sub title of the blog post" />',
+        )
+
+    def test_templates_blogpost_detail_open_graph_description_excerpt_max_length(self):
+        """
+        An opengraph description should be cut if it exceeds more than 200 caracters
+        """
+        blogpost = BlogPostFactory()
+        page = blogpost.extended_object
+        placeholder_value = (
+            "Long description that describes the page with a summary. " * 5
+        )
+
+        # Add an excerpt to the blogpost
+        placeholder = blogpost.extended_object.placeholders.get(slot="excerpt")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body=placeholder_value,
+        )
+        page.publish("en")
+
+        url = blogpost.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        cut = placeholder_value[0:200]
+        self.assertContains(
+            response,
+            f'<meta property="og:description" content="{cut}" />',
+        )
+
+    def test_templates_blogpost_detail_open_graph_description_excerpt_empty(self):
+        """
+        The opengraph description meta should be missing if the excerpt placeholder is not set.
+        """
+        blogpost = BlogPostFactory()
+        page = blogpost.extended_object
+        page.publish("en")
+
+        url = blogpost.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(
+            response,
+            "og:description",
+        )
+
     def test_templates_blogpost_detail_cms_published_content(self):
         """
         Validate that the important elements are displayed on a published blogpost page

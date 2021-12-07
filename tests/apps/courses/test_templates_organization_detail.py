@@ -24,6 +24,84 @@ class OrganizationCMSTestCase(CMSTestCase):
     End-to-end test suite to validate the content and Ux of the organization detail view
     """
 
+    def test_templates_organization_detail_open_graph_description_placeholder_description(
+        self,
+    ):
+        """
+        An opengraph description meta should be present if the organization description
+        placeholder is set.
+        """
+        organization = OrganizationFactory()
+        page = organization.extended_object
+
+        # Add a description to an organization
+        placeholder = organization.extended_object.placeholders.get(slot="description")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body="A longe <b>description</b> of the organization  ",
+        )
+        page.publish("en")
+
+        url = organization.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta property="og:description" content="A longe description of the organization" />',
+        )
+
+    def test_templates_organization_detail_open_graph_description_excerpt_max_length(
+        self,
+    ):
+        """
+        The opengraph description meta should be cut if it exceeds more than 200 caracters
+        """
+        organization = OrganizationFactory()
+        page = organization.extended_object
+        placeholder_value = (
+            "Long description that describes the page with a summary. " * 5
+        )
+
+        # Add an excerpt to the organization
+        placeholder = organization.extended_object.placeholders.get(slot="description")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body=placeholder_value,
+        )
+        page.publish("en")
+
+        url = organization.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        cut = placeholder_value[0:200]
+        self.assertContains(
+            response,
+            f'<meta property="og:description" content="{cut}" />',
+        )
+
+    def test_templates_organization_detail_open_graph_description_empty(self):
+        """
+        The opengraph description should not be present if the excerpt placeholder isn't filled
+        """
+        organization = OrganizationFactory()
+        page = organization.extended_object
+        page.publish("en")
+
+        url = organization.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(
+            response,
+            "og:description",
+        )
+
     def test_templates_organization_detail_cms_published_content(self):
         """
         Validate that the important elements are displayed on a published organization page
@@ -414,7 +492,7 @@ class OrganizationCMSTestCase(CMSTestCase):
             language="en",
             placeholder=placeholder,
             plugin_type="CKEditorPlugin",
-            body="A <b>longer</b> organization description",
+            body=" A <b>longer</b> organization description  ",
         )
         page.publish("en")
 
@@ -444,7 +522,7 @@ class OrganizationCMSTestCase(CMSTestCase):
         add_plugin(
             language="en",
             placeholder=placeholder,
-            plugin_type="PlainTextPlugin",
+            plugin_type="CKEditorPlugin",
             body=placeholder_value,
         )
         page.publish("en")

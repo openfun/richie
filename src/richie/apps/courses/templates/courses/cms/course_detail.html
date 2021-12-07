@@ -28,7 +28,7 @@
         <meta property="og:image:height" content="{{ thumb.height }}" />
     {% endblockplugin %}
     {% if not current_page|is_empty_placeholder:"course_introduction" %}
-        <meta property="og:description" content="{% show_placeholder 'course_introduction' current_page %}">
+        <meta property="og:description" content="{% filter slice:":200" %}{% show_placeholder 'course_introduction' current_page %}{% endfilter %}" />
     {% endif %}
 {% endblock meta_rdfa_context %}
 

@@ -21,6 +21,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add a meta description default value from course introduction,
   blog excerpt, category description, person bio, program excerpt
   and organization description
+- Improve social sharing by specifying og:description meta
+  for blogpost, category, person, program and organization.
 
 ### Changed
 

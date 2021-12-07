@@ -17,6 +17,9 @@
         <meta property="og:image:width" content="{{ thumb.width }}" />
         <meta property="og:image:height" content="{{ thumb.height }}" />  
     {% endblockplugin %}
+    {% if not current_page|is_empty_placeholder:"program_excerpt" %}
+        <meta property="og:description" content="{% filter slice:":200" %}{% show_placeholder 'program_excerpt' current_page %}{% endfilter %}" />
+    {% endif %}
 {% endblock meta_rdfa_context %}
 
 {% block body_rdfa %} vocab="https://schema.org/" typeof="EducationalOccupationalProgram"{% endblock body_rdfa %}

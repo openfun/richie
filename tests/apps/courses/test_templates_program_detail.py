@@ -15,6 +15,82 @@ class ProgramCMSTestCase(CMSTestCase):
     End-to-end test suite to validate the content and Ux of the program detail view
     """
 
+    def test_templates_program_detail_open_graph_description_program_excerpt(self):
+        """
+        An opengraph description meta should be present if the program_excerpt placeholder is set.
+        """
+        program = ProgramFactory()
+        page = program.extended_object
+
+        # Add a excerpt to a program
+        placeholder = program.extended_object.placeholders.get(slot="program_excerpt")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body="A program excerpt description",
+        )
+        page.publish("en")
+
+        url = program.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta property="og:description" content="A program excerpt description" />',
+        )
+
+    def test_templates_program_detail_open_graph_description_program_excerpt_exceeds_max_length(
+        self,
+    ):
+        """
+        The open graph description should be cut if it exceeds more than 200 caracters
+        """
+        program = ProgramFactory()
+        page = program.extended_object
+        placeholder_value = (
+            "Long description that describes the page with a summary. " * 8
+        )
+
+        # Add a excerpt to a program
+        placeholder = program.extended_object.placeholders.get(slot="program_excerpt")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body=placeholder_value,
+        )
+        page.publish("en")
+
+        url = program.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        cut = placeholder_value[0:200]
+        self.assertContains(
+            response,
+            f'<meta property="og:description" content="{cut}" />',
+        )
+
+    def test_templates_program_detail_meta_description_empty_program_excerpt(self):
+        """
+        The opengraph description meta should be missing if the program_excerpt placeholder is not
+        set.
+        """
+        program = ProgramFactory()
+        page = program.extended_object
+        page.publish("en")
+
+        url = program.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(
+            response,
+            "og:description",
+        )
+
     def test_templates_program_detail_cms_published_content(self):
         """
         Validate that the important elements are displayed on a published program page

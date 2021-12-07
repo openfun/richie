@@ -174,7 +174,7 @@ class TemplatesCourseDetailOpengraphCMSTestCase(CMSTestCase):
 
         self.assertContains(
             response,
-            '<meta property="og:description" content="Introduction to interesting course">',
+            '<meta property="og:description" content="Introduction to interesting course" />',
         )
 
     def test_open_graph_course_description_no_introduction(self):
@@ -187,6 +187,38 @@ class TemplatesCourseDetailOpengraphCMSTestCase(CMSTestCase):
         response = self.client.get(url)
 
         self.assertNotContains(response, "og:description")
+
+    def test_open_graph_course_description_course_introduction_max_length(self):
+        """
+        The open graph description should be cut if it exceeds more than 200 caracters
+        """
+        course = CourseFactory()
+        page = course.extended_object
+        placeholder_value = (
+            "Long description that describes the page with a summary. " * 5
+        )
+
+        # Add an course_introduction to the course
+        placeholder = course.extended_object.placeholders.get(
+            slot="course_introduction"
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body=placeholder_value,
+        )
+        page.publish("en")
+
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        cut = placeholder_value[0:200]
+        self.assertContains(
+            response,
+            f'<meta property="og:description" content="{cut}" />',
+        )
 
     @mock.patch.object(
         FileSystemStorage,
