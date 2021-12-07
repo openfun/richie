@@ -1,8 +1,11 @@
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
 
-// Design color palette
-@import 'colors';
+// Design color stuff
+@import '../colors/palette';
+@import '../colors/gradients';
+@import '../colors/schemes';
+@import '../colors/theme';
 
 // One pixel shortcut
 $onepixel: 0.0625rem;
