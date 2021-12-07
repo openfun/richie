@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Refactor scss color variables to be more easily customizable.
+
 ## [2.10.0] - 2021-12-27
 
 ### Added

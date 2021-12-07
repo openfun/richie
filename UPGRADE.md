@@ -16,6 +16,12 @@ $ make migrate
 
 ## Unreleased
 
+- The file `_colors.scss` has been divided into `_palette.scss` for the palette, 
+  `_gradients.scss`, `_schemes.scss`  and `_theme.scss`. Those files are now located in a 
+  dedicated folder `colors`.
+
+## 2.9.x to 2.10.x
+
 - Define the `form` scheme within `settings/_colors.scss`
 - Add to `spinner` scheme property `base-color-light`
 
