@@ -660,6 +660,18 @@ class CourseRunSyncMode(models.TextChoices):
     SYNC_TO_PUBLIC = "sync_to_public", _("Synchronization to public page")
 
 
+class CourseRunCatalogVisibility(models.TextChoices):
+    """Course run catalog visibility choices."""
+
+    COURSE_AND_SEARCH = "course_and_search", _(
+        "course_and_search - show on the course page and include in search results"
+    )
+    COURSE_ONLY = "course_only", _(
+        "course_only - show on the course page and hide from search results"
+    )
+    HIDDEN = "hidden", _("hidden - hide on the course page and from search results")
+
+
 class CourseRun(TranslatableModel):
     """
     The course run represents and records the occurence of a course between a start
@@ -709,6 +721,13 @@ class CourseRun(TranslatableModel):
         default=0,
         blank=True,
         help_text=_("The number of enrolled students"),
+    )
+    catalog_visibility = models.CharField(
+        _("catalog visibility"),
+        choices=CourseRunCatalogVisibility.choices,
+        default=CourseRunCatalogVisibility.COURSE_AND_SEARCH,
+        blank=False,
+        max_length=20,
     )
 
     class Meta:
@@ -884,6 +903,11 @@ class CourseRun(TranslatableModel):
             return self.title
         except ObjectDoesNotExist:
             return None
+
+    @property
+    def is_visible_on_course_page(self):
+        """Return True if the course run is visible on the course page"""
+        return self.catalog_visibility != CourseRunCatalogVisibility.HIDDEN
 
 
 class CourseRunTranslation(TranslatedFieldsModel):

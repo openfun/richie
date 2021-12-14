@@ -33,6 +33,7 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_start_1": "13:13:07",
             "enrollment_end_0": "2015-01-23",
             "enrollment_end_1": "09:07:11",
+            "catalog_visibility": "course_and_search",
         }
         request = RequestFactory().get("/")
         request.user = user
@@ -110,6 +111,7 @@ class CourseRunAdminTestCase(CMSTestCase):
             {
                 "direct_course": ["This field is required."],
                 "languages": ["This field is required."],
+                "catalog_visibility": ["This field is required."],
             },
         )
 

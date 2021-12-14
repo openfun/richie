@@ -122,16 +122,16 @@ def course_runs_sync(request, version):
     target_course_runs = CourseRun.objects.filter(resource_link=resource_link)
     draft_course_runs = target_course_runs.filter(draft_course_run__isnull=True)
 
-    serializer = lms.get_course_run_serializer(
-        request.data, partial=bool(draft_course_runs)
-    )
+    # Remove protected fields before update and transform
+    data = lms.clean_course_run_data(request.data)
+
+    serializer = lms.get_course_run_serializer(data, partial=bool(draft_course_runs))
 
     if serializer.is_valid() is not True:
         return Response(serializer.errors, status=400)
+    validated_data = serializer.validated_data
 
     if draft_course_runs:
-        # Remove protected fields before update
-        cleaned_data = lms.clean_course_run_data(serializer.validated_data)
 
         for course_run in draft_course_runs.filter(
             sync_mode__in=[
@@ -145,7 +145,7 @@ def course_runs_sync(request, version):
                     draft_course_run__sync_mode=CourseRunSyncMode.SYNC_TO_PUBLIC,
                     draft_course_run=course_run,
                 )
-            ).update(**cleaned_data)
+            ).update(**validated_data)
 
             public_course = course_run.direct_course.public_extension
             if course_run.sync_mode == CourseRunSyncMode.SYNC_TO_PUBLIC:
@@ -185,7 +185,7 @@ def course_runs_sync(request, version):
 
     # Instantiate a new draft course run
     draft_course_run = CourseRun(
-        direct_course=course, sync_mode=sync_mode, **serializer.validated_data
+        direct_course=course, sync_mode=sync_mode, **validated_data
     )
 
     # Create the related public course run if necessary
@@ -198,7 +198,7 @@ def course_runs_sync(request, version):
                 direct_course=course.public_extension,
                 draft_course_run=draft_course_run,
                 sync_mode=sync_mode,
-                **serializer.validated_data,
+                **validated_data,
             )
             public_course_run.save()
 

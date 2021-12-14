@@ -76,11 +76,38 @@ class EdXLMSBackend(BaseLMSBackend):
 
     def clean_course_run_data(self, data):
         """Remove course run's protected fields to the data dictionnary."""
-        return {
-            key: value
-            for (key, value) in data.items()
-            if key not in self.configuration.get("COURSE_RUN_SYNC_NO_UPDATE_FIELDS", [])
-        }
+
+        def filter_no_update_fields(elem):
+            """
+            Remove course run's protected fields from the `COURSE_RUN_SYNC_NO_UPDATE_FIELDS`
+            setting
+            """
+            return elem[0] not in self.configuration.get(
+                "COURSE_RUN_SYNC_NO_UPDATE_FIELDS", []
+            )
+
+        def change_catalog_visibility_value(value):
+            """Adapt catalog visibility values from Open edX to Richie"""
+            if value == "both":
+                return "course_and_search"
+            if value == "about":
+                return "course_only"
+            if value == "none":
+                return "hidden"
+            return value
+
+        def adapt_fields(item):
+            """
+            Adapt a dict item (key/value). If it's the `catalog_visibility` then change
+            its value.
+            """
+            key = item[0]
+            value = item[1]
+            if key == "catalog_visibility":
+                return key, change_catalog_visibility_value(value)
+            return key, value
+
+        return dict(map(adapt_fields, filter(filter_no_update_fields, data.items())))
 
     @staticmethod
     def get_course_run_serializer(data, partial=False):
