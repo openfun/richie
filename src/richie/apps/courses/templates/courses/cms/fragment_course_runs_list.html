@@ -4,8 +4,9 @@
 {% if course_runs %}
     <ul class="course-detail__run-list">
         {% for run in course_runs %}
+            {% if run.is_visible_on_course_page or request.toolbar.edit_mode_active %}
             {% render_model_block run %}
-                <li{% if max_course_runs and max_course_runs < forloop.counter %} class="is-hidden"{% endif %}>
+                <li class="{% if max_course_runs and max_course_runs < forloop.counter %}is-hidden {% endif %}course-detail__run-list__{{ run.catalog_visibility }}">
                     {% if course != run.direct_course %}
                         <a href="{{ run.direct_course.extended_object.get_absolute_url }}">
                     {% endif %}
@@ -23,6 +24,7 @@
                     {% endif %}
                 </li>
             {% endrender_model_block %}
+            {% endif %}
         {% endfor %}
     </ul>
     {% if max_course_runs and course_runs|length > max_course_runs %}

@@ -131,6 +131,17 @@
         }
       }
     }
+
+    &__none {
+      font-style: italic;
+      h3 {
+        background-color: r-theme-val(course-detail, run-not-visible);
+        &::before,
+        &::after {
+          content: '*';
+        }
+      }
+    }
   }
 
   &__run-session-link {
@@ -149,6 +160,17 @@
 
       & + li {
         margin-top: 1rem;
+      }
+    }
+
+    &__none {
+      font-style: italic;
+      text-decoration: wavy;
+      background-color: r-theme-val(course-detail, run-not-visible);
+
+      &::before,
+      &::after {
+        content: '*';
       }
     }
   }

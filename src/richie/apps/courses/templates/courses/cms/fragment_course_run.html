@@ -1,5 +1,6 @@
 {% load cms_tags i18n extra_tags %}{% spaceless %}
-<div class="course-detail__run-descriptions" rel="hasCourseInstance" typeof="CourseInstance">
+{% if run.is_visible_on_course_page or request.toolbar.edit_mode_active %}
+<div class="course-detail__run-descriptions course-detail__run-descriptions__{{ run.catalog_visibility }}" rel="hasCourseInstance" typeof="CourseInstance">
     {% render_model_block run %}
         {% if run.title %}<h3>{{ run.title|capfirst }}</h3>{% endif %}
         <dl property="courseMode" content="online">
@@ -32,4 +33,5 @@
         </a>
     {% endif %}
 </div>
+{% endif %}
 {% endspaceless %}

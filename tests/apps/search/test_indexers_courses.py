@@ -20,12 +20,14 @@ from richie.apps.courses.factories import (
     PersonFactory,
 )
 from richie.apps.courses.models import CourseState
+from richie.apps.courses.models.course import CourseRunCatalogVisibility
 from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
 from richie.plugins.simple_picture.cms_plugins import SimplePicturePlugin
 
 # pylint: disable=too-many-public-methods
+# pylint: disable=too-many-lines
 
 
 class CoursesIndexersTestCase(TestCase):
@@ -983,3 +985,101 @@ class CoursesIndexersTestCase(TestCase):
                 "title": "Duis eu arcu erat",
             },
         )
+
+    def test_indexers_courses_get_es_documents_course_run_catalog_visibility_none(self):
+        """
+        A course run with `none` on catalog visibility should not be indexed.
+        """
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.NONE,
+        )
+        self.assertTrue(course.extended_object.publish("en"))
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(indexed_courses[0]["course_runs"], [])
+
+    def test_indexers_courses_get_es_documents_course_run_catalog_visibility_about(
+        self,
+    ):
+        """
+        A course run with `about` on catalog visibility should not be indexed.
+        """
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.ABOUT,
+        )
+        self.assertTrue(course.extended_object.publish("en"))
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(indexed_courses[0]["course_runs"], [])
+
+    def test_indexers_courses_get_es_documents_course_run_catalog_visibility_both(self):
+        """
+        A course run with `both` on catalog visibility should be indexed.
+        """
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.BOTH,
+        )
+        self.assertTrue(course.extended_object.publish("en"))
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(len(indexed_courses[0]["course_runs"]), 1)
+
+    def test_indexers_courses_get_es_documents_course_catalog_visibility_none_and_both(
+        self,
+    ):
+        """
+        A course with one run with `none` and another with `both` on catalog visibility should
+        only have a single run on the index.
+        """
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.NONE,
+        )
+        CourseRunFactory(
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.BOTH,
+        )
+        self.assertTrue(course.extended_object.publish("en"))
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(len(indexed_courses[0]["course_runs"]), 1)
+
+    def test_indexers_courses_get_es_documents_course_catalog_visibility_one_each(self):
+        """
+        A course with 3 runs. A run with `none`, another with `both` and a last one with `about`
+        on the catalog visibility should have a single run on the index.
+        """
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.NONE,
+        )
+        CourseRunFactory(
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.ABOUT,
+        )
+        CourseRunFactory(
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.BOTH,
+        )
+        self.assertTrue(course.extended_object.publish("en"))
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(len(indexed_courses[0]["course_runs"]), 1)

@@ -24,7 +24,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     ProgramFactory,
 )
-from richie.apps.courses.models import CourseRun
+from richie.apps.courses.models import CourseRun, CourseRunCatalogVisibility
 from richie.apps.demo.utils import pick_image
 
 # pylint: disable=too-many-lines
@@ -611,7 +611,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             **kwargs,
         )
 
-    def create_run_future_not_yet_open(self, course):
+    def create_run_future_not_yet_open(self, course, **kwargs):
         """
         Not a test. Create a course run in the future and not yet open for enrollment.
         """
@@ -620,9 +620,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
             title="my course run",
             start=self.now + timedelta(hours=2),
             enrollment_start=self.now + timedelta(hours=1),
+            **kwargs,
         )
 
-    def create_run_future_closed(self, course):
+    def create_run_future_closed(self, course, **kwargs):
         """
         Not a test. Create a course run in the future and already closed for enrollment.
         """
@@ -632,9 +633,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
             start=self.now + timedelta(hours=1),
             enrollment_start=self.now - timedelta(hours=2),
             enrollment_end=self.now - timedelta(hours=1),
+            **kwargs,
         )
 
-    def create_run_ongoing_closed(self, course):
+    def create_run_ongoing_closed(self, course, **kwargs):
         """
         Not a test. Create an on-going course run that is closed for enrollment.
         """
@@ -644,6 +646,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             start=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=1),
             enrollment_end=self.now,
+            **kwargs,
         )
 
     def create_run_archived_open(self, course, **kwargs):
@@ -860,7 +863,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         end_string = dateformat.format(course_run.end, "N j, Y")
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list"><li>'
+            '<ul class="course-detail__run-list"><li class="course-detail__run-list__both">'
             f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
         )
@@ -891,7 +894,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         end_string = dateformat.format(course_run.end, "N j, Y")
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list"><li>'
+            '<ul class="course-detail__run-list"><li class="course-detail__run-list__both">'
             f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
         )
@@ -922,7 +925,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         end_string = dateformat.format(course_run.end, "N j, Y")
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list"><li>'
+            '<ul class="course-detail__run-list"><li class="course-detail__run-list__both">'
             f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
         )
@@ -953,7 +956,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         end_string = dateformat.format(course_run.end, "N j, Y")
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list"><li>'
+            '<ul class="course-detail__run-list"><li class="course-detail__run-list__both">'
             f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
         )
@@ -990,7 +993,8 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list"><li>My course run, from ... to ...</li></ul>',
+            '<ul class="course-detail__run-list"><li class="course-detail__run-list__both">'
+            "My course run, from ... to ...</li></ul>",
             html=True,
         )
 
@@ -1015,7 +1019,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         # The description line should start with a capital letter
         self.assertContains(
-            response, "<li>From Dec. 12, 2020 to Dec. 15, 2020</li>", html=True
+            response,
+            '<li class="course-detail__run-list__both">From Dec. 12, 2020 to Dec. 15, 2020</li>',
+            html=True,
         )
 
     def test_template_course_detail_without_course(self):
@@ -1246,7 +1252,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(
             response,
-            '<li class="is-hidden">',
+            '<li class="is-hidden',
             count=2,
         )
         self.assertContains(response, "course-detail__view-more-runs")
@@ -1264,7 +1270,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertNotContains(
             response,
-            '<li class="is-hidden">',
+            '<li class="is-hidden',
         )
         self.assertNotContains(response, "course-detail__view-more-runs")
 
@@ -1372,3 +1378,58 @@ class RunsCourseCMSTestCase(CMSTestCase):
             response,
             '<meta name="description"',
         )
+
+    @timezone.override(pytz.utc)
+    def test_templates_course_detail_runs_catalog_visibility(self):
+        """
+        Check each course run catalog visibility.
+
+        View mode:
+        * `none`  => not visible
+        * `about` => visible
+        * `both`  => visible
+
+        Edit mode:
+        * `none`  => visible
+        * `about` => visible
+        * `both`  => visible
+        """
+        course = CourseFactory(page_title="my course")
+        page = course.extended_object
+        course_run_title_none = "A hidden course run"
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_none,
+            catalog_visibility=CourseRunCatalogVisibility.NONE,
+        )
+        course_run_title_about = "A visible course run only on course page"
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_about,
+            catalog_visibility=CourseRunCatalogVisibility.ABOUT,
+        )
+        course_run_title_both = "A visible course run"
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_both,
+            catalog_visibility=CourseRunCatalogVisibility.BOTH,
+        )
+        self.assertTrue(page.publish("en"))
+
+        # view mode
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, course_run_title_none)
+        self.assertContains(response, course_run_title_about)
+        self.assertContains(response, course_run_title_both)
+
+        # edit mode, create user, login with him and open course page on edit mode
+        staff = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=staff.username, password="password")
+        url = f"{url:s}?edit"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, course_run_title_about)
+        self.assertContains(response, course_run_title_both)
+        self.assertContains(response, course_run_title_none)

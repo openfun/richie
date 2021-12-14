@@ -660,6 +660,16 @@ class CourseRunSyncMode(models.TextChoices):
     SYNC_TO_PUBLIC = "sync_to_public", _("Synchronization to public page")
 
 
+class CourseRunCatalogVisibility(models.TextChoices):
+    """Course run catalog visibility choices."""
+
+    BOTH = "both", _("both - show in catalog and allow access to about page")
+    ABOUT = "about", _("about - only allow access to about page")
+    NONE = "none", _(
+        "none - do not show in catalog and do not allow access to an about page"
+    )
+
+
 class CourseRun(TranslatableModel):
     """
     The course run represents and records the occurence of a course between a start
@@ -709,6 +719,13 @@ class CourseRun(TranslatableModel):
         default=0,
         blank=True,
         help_text=_("The number of enrolled students"),
+    )
+    catalog_visibility = models.CharField(
+        _("catalog visibility"),
+        choices=CourseRunCatalogVisibility.choices,
+        default=CourseRunCatalogVisibility.BOTH,
+        blank=False,
+        max_length=5,
     )
 
     class Meta:
@@ -884,6 +901,16 @@ class CourseRun(TranslatableModel):
             return self.title
         except ObjectDoesNotExist:
             return None
+
+    @property
+    def is_searchable(self):
+        """Return True if the course run is searchable on elastic search"""
+        return self.catalog_visibility == CourseRunCatalogVisibility.BOTH
+
+    @property
+    def is_visible_on_course_page(self):
+        """Return True if the course run is visible on the course page"""
+        return self.catalog_visibility != CourseRunCatalogVisibility.NONE
 
 
 class CourseRunTranslation(TranslatedFieldsModel):

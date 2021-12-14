@@ -20,6 +20,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add a meta description default value from course introduction,
   blog excerpt, category description, person bio, program excerpt
   and organization description
+- Add catalog visibility field to course run so it's possible to hide a
+  course run on the catalog and/or hide it completely. Possible values
+  of `both`, `about` and `none`.
 
 ### Changed
 

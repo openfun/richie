@@ -1,6 +1,7 @@
 """
 Tests for CourseRun API endpoints in the courses app.
 """
+# pylint: disable=too-many-lines
 import json
 from unittest import mock
 
@@ -14,13 +15,17 @@ from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 from richie.apps.courses.lms.edx import SyncCourseRunSerializer
-from richie.apps.courses.models import Course, CourseRun
+from richie.apps.courses.models import Course, CourseRun, CourseRunCatalogVisibility
 
 
+# pylint: disable=too-many-public-methods
 @mock.patch.object(post_publish, "send", wraps=post_publish.send)
 @override_settings(RICHIE_COURSE_RUN_SYNC_SECRETS=["shared secret"])
 class SyncCourseRunApiTestCase(CMSTestCase):
     """Test calls to sync a course run via API endpoint."""
+
+    # To update the http authorizations add a print statement the next assert
+    # print (get_signature(self.client._encode_json(data, "application/json"), "shared secret"))
 
     def test_api_course_run_sync_missing_signature(self, mock_signal):
         """The course run synchronization API endpoint requires a signature."""
@@ -194,6 +199,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "enrollment_count": 46782,
+            "catalog_visibility": "both",
         }
         self.assertEqual(
             course.extended_object.title_set.first().publisher_state,
@@ -203,7 +209,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
 
         authorization = (
             "SIG-HMAC-SHA256 "
-            "cd552ec6f030fa02fbb4a0565a1101f60c4a3014df7282a261e75ae9dadaf5b7"
+            "39f8e1db1b48c923ef1cd6d1fd0863b5d294bf0d2a56935d9849913fc1d0430d"
         )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
@@ -247,6 +253,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "enrollment_count": 324,
+            "catalog_visibility": "both",
         }
         self.assertEqual(
             course.extended_object.title_set.first().publisher_state,
@@ -259,7 +266,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 44d539443a166a30ec4832feae6bbd5686a8e372941d053dcb76296011831a00"
+                "SIG-HMAC-SHA256 e6af1da582464007dbe6ee552bbfbe5d89f568f1ef0cb0605b343987867f6078"
             ),
         )
 
@@ -303,6 +310,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "enrollment_count": 47892,
+            "catalog_visibility": "both",
         }
         self.assertEqual(
             course.extended_object.title_set.first().publisher_state,
@@ -315,7 +323,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 57199a6d4ab5b93356a4691f0bd1a801b3c57b52bf07cf8f6109cce535c778be"
+                "SIG-HMAC-SHA256 f6adffb96b92c860b871b47ddc47ef2cddad3647412b82789cc164dc7f074203"
             ),
         )
 
@@ -384,6 +392,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "enrollment_count": 45,
+            "catalog_visibility": "both",
         }
 
         self.assertEqual(
@@ -397,7 +406,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 6a2c0416f3d8f8bdb8e087fccbdaeef3f074860994259cdc82f3be28e77dbc53"
+                "SIG-HMAC-SHA256 d79a905477ecb18f1b2800a86d17647d1effc39790280f09665d2e31d8aae800"
             ),
         )
 
@@ -556,6 +565,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "enrollment_count": 15682,
+            "catalog_visibility": "both",
         }
 
         response = self.client.post(
@@ -563,7 +573,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 63bdf35dadba67ae2e70049e27b4ab7522d1c2c9e97dd1e712cc1af25d6fa2b3"
+                "SIG-HMAC-SHA256 fe8a89d95ab99f8b817102116e829f29c42e47639bb85f871410814b82fa12be"
             ),
         )
 
@@ -617,6 +627,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "enrollment_count": 2042,
+            "catalog_visibility": "both",
         }
 
         response = self.client.post(
@@ -624,7 +635,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 a7766e9620fb3bbccbe5b5c6483e3340b269c46b1bbde81e50c2478979b3f9f9"
+                "SIG-HMAC-SHA256 0176a4a37d65f372cea36ee901653fdd46fd049d4829cde462b37a76ac577216"
             ),
         )
 
@@ -672,6 +683,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "enrollment_count": 103123,
+            "catalog_visibility": "both",
         }
 
         response = self.client.post(
@@ -679,7 +691,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 a621d3394a9710642398edbd5b5d8670474d31c8d66f8baca5387a57ea7a854c"
+                "SIG-HMAC-SHA256 c383caa486f33d4fce2c2dea737aa952e2cb2cb5696b69ceec99415e8ae59f55"
             ),
         )
 
@@ -735,6 +747,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "enrollment_count": 542,
+            "catalog_visibility": "both",
         }
 
         response = self.client.post(
@@ -742,7 +755,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 dc711496ac750a0f866ac9da6f6da48727607528aece1ff19e57ff4acb56168f"
+                "SIG-HMAC-SHA256 c3d5cf34ea0d32ea9017325c57cec3448f257812b74b6c544093b937822f417e"
             ),
         )
 
@@ -793,6 +806,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "enrollment_count": 986,
+            "catalog_visibility": "both",
         }
 
         response = self.client.post(
@@ -800,7 +814,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 4ef3b0e3e8b185b403d3d2fcea15d3267d64ef89a0aa8d60aaf3c1aa8dd1cd67"
+                "SIG-HMAC-SHA256 1f2b16971a3e64ff2f95f579a64f81d55bd823d6d40a2c3e6603b46776ed6e90"
             ),
         )
 
@@ -909,6 +923,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "enrollment_count": 12345,
+            "catalog_visibility": "both",
         }
 
         response = self.client.post(
@@ -916,7 +931,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 9ef5f30f16ec0abe3cf2bd37a56f38f707e6467d91485e9c13f21eca606236b1"
+                "SIG-HMAC-SHA256 1f91aa7a9f2dfb1a4d1b2544e1c01acfeda201ec37263a7c5407ea8a2d9fe103"
             ),
         )
         self.assertEqual(response.status_code, 200)
@@ -969,4 +984,33 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         self.assertEqual(json.loads(response.content), {"success": True})
         course_run.refresh_from_db()
         self.assertEqual(course_run.enrollment_count, 865)
+        self.assertFalse(mock_signal.called)
+
+    @override_settings(TIME_ZONE="utc")
+    def test_api_course_run_sync_catalog_visibility(self, mock_signal):
+        """
+        Verify that the catalog visibility is updated
+        """
+        link = "http://example.edx:8073/courses/course-v1:edX+DemoX+01/course/"
+        course = CourseFactory(code="DemoX")
+        course_run = CourseRunFactory(direct_course=course, resource_link=link)
+        mock_signal.reset_mock()
+
+        data = {
+            "resource_link": link,
+            "catalog_visibility": CourseRunCatalogVisibility.NONE,
+        }
+
+        response = self.client.post(
+            "/api/v1.0/course-runs-sync",
+            data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=(
+                "SIG-HMAC-SHA256 e9f23ed36de0865dbfd543ce1c83e0ec1700c8821cf6ff960ec549f2e6c4a6db"
+            ),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), {"success": True})
+        course_run.refresh_from_db()
+        self.assertEqual(course_run.catalog_visibility, CourseRunCatalogVisibility.NONE)
         self.assertFalse(mock_signal.called)

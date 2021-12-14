@@ -406,6 +406,7 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
     title = factory.Sequence(_("Run {:d}").format)
     resource_link = factory.Faker("uri")
     sync_mode = models.CourseRunSyncMode.SYNC_TO_PUBLIC
+    catalog_visibility = models.CourseRunCatalogVisibility.BOTH
 
     # pylint: disable=no-self-use
     @factory.lazy_attribute

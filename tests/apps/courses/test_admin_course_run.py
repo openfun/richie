@@ -342,6 +342,7 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_start_1": "13:13:07",
             "enrollment_end_0": "2015-01-23",
             "enrollment_end_1": "09:07:11",
+            "catalog_visibility": "both",
         }
         with timezone.override(pytz.utc):
             response = self.client.post(url, data, follow=True)
@@ -443,6 +444,7 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_end_0": "2015-01-23",
             "enrollment_end_1": "09:07:11",
             "enrollment_count": "5",
+            "catalog_visibility": "both",
         }
         with timezone.override(pytz.utc):
             response = self.client.post(url, data, follow=True)

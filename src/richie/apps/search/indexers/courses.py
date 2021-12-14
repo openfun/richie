@@ -17,7 +17,13 @@ from richie.plugins.plain_text.models import PlainText
 from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
-from ...courses.models import MAX_DATE, CategoryPluginModel, Course, CourseState
+from ...courses.models import (
+    MAX_DATE,
+    CategoryPluginModel,
+    Course,
+    CourseRunCatalogVisibility,
+    CourseState,
+)
 from ..defaults import ES_INDICES_PREFIX, ES_STATE_WEIGHTS
 from ..forms import CourseSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
@@ -569,7 +575,9 @@ class CoursesIndexer:
                 "languages": cr["languages"],
             }
             for cr in course.course_runs.filter(
-                start__isnull=False, enrollment_start__isnull=False
+                start__isnull=False,
+                enrollment_start__isnull=False,
+                catalog_visibility=CourseRunCatalogVisibility.BOTH,
             )
             .order_by("-end")
             .values("start", "end", "enrollment_start", "enrollment_end", "languages")
