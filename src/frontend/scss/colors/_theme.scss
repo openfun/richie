@@ -349,6 +349,10 @@ $r-theme: (
     license-label-color: r-color('denim'),
     checkmark-list-decoration: url('../../richie/images/components/checkmark.svg'),
     view-more-runs-color: r-color('firebrick6'),
+    run-catalog-visibility-hidden-logo: url('../../richie/images/catalog_visibility/hidden.svg'),
+    run-catalog-visibility-course-only-logo:
+      url('../../richie/images/catalog_visibility/course_only.svg'),
+    run-catalog-visibility-logo-color: r-color('indianred3'),
   ),
   organization-detail: (
     banner-empty-background: r-color('smoke'),

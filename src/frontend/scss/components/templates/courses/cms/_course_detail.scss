@@ -1,6 +1,15 @@
 // Course detail template stylesheet
 //
 
+@mixin course-detail-run-descriptions-catalog-visibility-mask($mask-logo) {
+  -webkit-mask: $mask-logo;
+  mask: $mask-logo;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
 .course-detail {
   $detail-selector: &;
   margin: 0 auto;
@@ -131,6 +140,36 @@
         }
       }
     }
+
+    // Add CSS style only to edit mode
+    &--hidden,
+    &--course_only {
+      h3.cms-render-model::before {
+        content: '';
+        background-size: 1rem 1rem;
+        display: inline-block;
+        width: 1.5rem;
+        height: 1rem;
+        margin-left: -1.5rem;
+        background-repeat: no-repeat;
+        background-color: r-theme-val(course-detail, run-catalog-visibility-logo-color);
+      }
+    }
+
+    &--hidden {
+      h3.cms-render-model::before {
+        @include course-detail-run-descriptions-catalog-visibility-mask(
+          r-theme-val(course-detail, run-catalog-visibility-hidden-logo)
+        );
+      }
+    }
+    &--course_only {
+      h3.cms-render-model::before {
+        @include course-detail-run-descriptions-catalog-visibility-mask(
+          r-theme-val(course-detail, run-catalog-visibility-course-only-logo)
+        );
+      }
+    }
   }
 
   &__run-session-link {
@@ -150,6 +189,29 @@
       & + li {
         margin-top: 1rem;
       }
+    }
+
+    // Add CSS style only to edit mode
+    &--course_only.cms-render-model::before,
+    &--hidden.cms-render-model::before {
+      content: '';
+      background-size: 1rem 1rem;
+      display: inline-block;
+      width: 1.2rem;
+      height: 1rem;
+      margin-left: -1.4rem;
+      background-repeat: no-repeat;
+      background-color: r-theme-val(course-detail, run-catalog-visibility-logo-color);
+    }
+    &--hidden.cms-render-model::before {
+      @include course-detail-run-descriptions-catalog-visibility-mask(
+        r-theme-val(course-detail, run-catalog-visibility-hidden-logo)
+      );
+    }
+    &--course_only.cms-render-model::before {
+      @include course-detail-run-descriptions-catalog-visibility-mask(
+        r-theme-val(course-detail, run-catalog-visibility-course-only-logo)
+      );
     }
   }
 
