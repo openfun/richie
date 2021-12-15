@@ -689,3 +689,43 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         content = json.loads(response.content)
         self.assertEqual(len(content["objects"]), 2)
         self.assertEqual(content["objects"][0]["id"], "002")
+
+    def test_query_courses_negative_score(self, *_):
+        """
+        Negative scores should not happen and cause a 500 error for courses far in the future.
+        """
+        self.prepare_index(
+            [
+                {
+                    "absolute_url": {"en": "url"},
+                    "categories": [],
+                    "code": "abc123",
+                    "course_runs": [
+                        {
+                            "start": arrow.get(9999, 1, 1).datetime,
+                            "end": arrow.get(9999, 5, 1).datetime,
+                            "enrollment_start": arrow.utcnow().shift(days=-5).datetime,
+                            "enrollment_end": arrow.utcnow().shift(days=+5).datetime,
+                            "languages": ["fr"],
+                        }
+                    ],
+                    "cover_image": {"en": "cover_image.jpg"},
+                    "duration": {"en": "N/A"},
+                    "effort": {"en": "N/A"},
+                    "icon": {"en": "icon.jpg"},
+                    "id": "001",
+                    "introduction": {"en": "introduction"},
+                    "is_new": False,
+                    "is_listed": True,
+                    "organizations": [],
+                    "organizations_names": {"en": []},
+                    "title": {"en": "title"},
+                }
+            ]
+        )
+
+        response = self.client.get("/api/v1.0/courses/?query=title")
+        self.assertEqual(response.status_code, 200)
+
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 1)

@@ -35,7 +35,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- remove transparency when not necessary so that images are converted to jpg
+- Fix negative scores causing a 500 error for courses far in the future.
+- Remove transparency when not necessary so that images are converted to jpg
 - Prevent logout action to be called twice
 - Fix og:image when using S3Boto3Storage
 - Remove error message related with cache when any test fails

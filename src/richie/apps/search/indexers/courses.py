@@ -294,9 +294,12 @@ class CoursesIndexer:
                     // Ordered by ascending end of enrollment datetime. The next course to
                     // end enrollment is displayed first.
                     return (_score + 1) * (
-                        {weight_0:d} * params.ms_since_epoch - ZonedDateTime.parse(
-                            params._source.course_runs[best_index]['enrollment_end'], formatter
-                        ).toInstant().toEpochMilli()
+                        {weight_0:d} * params.ms_since_epoch + Math.max(
+                            0,
+                            2 * params.ms_since_epoch - ZonedDateTime.parse(
+                                params._source.course_runs[best_index]['enrollment_end'], formatter
+                            ).toInstant().toEpochMilli()
+                        )
                     );
                 }}
                 else if (best_state == 1) {{
@@ -304,9 +307,12 @@ class CoursesIndexer:
                     // Ordered by starting datetime. The next course to start is displayed
                     // first.
                     return (_score + 1) * (
-                        {weight_1:d} * params.ms_since_epoch - ZonedDateTime.parse(
-                            params._source.course_runs[best_index]['start'], formatter
-                        ).toInstant().toEpochMilli()
+                        {weight_1:d} * params.ms_since_epoch + Math.max(
+                            0,
+                            2 * params.ms_since_epoch - ZonedDateTime.parse(
+                                params._source.course_runs[best_index]['start'], formatter
+                            ).toInstant().toEpochMilli()
+                        )
                     );
                 }}
                 else if (best_state == 2) {{
@@ -314,9 +320,12 @@ class CoursesIndexer:
                     // Ordered by ascending end of enrollment datetime. The next course to
                     // end enrollment is displayed first.
                     return (_score + 1) * (
-                        {weight_2:d} * params.ms_since_epoch - ZonedDateTime.parse(
-                            params._source.course_runs[best_index]['enrollment_end'], formatter
-                        ).toInstant().toEpochMilli()
+                        {weight_2:d} * params.ms_since_epoch + Math.max(
+                            0,
+                            2 * params.ms_since_epoch - ZonedDateTime.parse(
+                                params._source.course_runs[best_index]['enrollment_end'], formatter
+                            ).toInstant().toEpochMilli()
+                        )
                     );
                 }}
                 else if (best_state == 3) {{
@@ -324,27 +333,36 @@ class CoursesIndexer:
                     // Ordered by starting datetime. The next course to start is displayed
                     // first.
                     return (_score + 1) * (
-                        {weight_3:d} * params.ms_since_epoch - ZonedDateTime.parse(
-                            params._source.course_runs[best_index]['start'], formatter
-                        ).toInstant().toEpochMilli()
+                        {weight_3:d} * params.ms_since_epoch + Math.max(
+                            0,
+                            2 * params.ms_since_epoch - ZonedDateTime.parse(
+                                params._source.course_runs[best_index]['start'], formatter
+                            ).toInstant().toEpochMilli()
+                        )
                     );
                 }}
                 else if (best_state == 4) {{
                     // The course is future but already closed for enrollment
                     // Ordered by end datetime. The next course to end is displayed first
                     return (_score + 1) * (
-                        {weight_4:d} * params.ms_since_epoch - ZonedDateTime.parse(
-                            params._source.course_runs[best_index]['start'], formatter
-                        ).toInstant().toEpochMilli()
+                        {weight_4:d} * params.ms_since_epoch + Math.max(
+                            0,
+                            2 * params.ms_since_epoch - ZonedDateTime.parse(
+                                params._source.course_runs[best_index]['start'], formatter
+                            ).toInstant().toEpochMilli()
+                        )
                     );
                 }}
                 else if (best_state == 5) {{
                     // The course is on-going and closed for enrollment
                     // Ordered by end datetime. The next course to end is displayed first
                     return (_score + 1) * (
-                        {weight_5:d} * params.ms_since_epoch - ZonedDateTime.parse(
-                            params._source.course_runs[best_index]['end'], formatter
-                        ).toInstant().toEpochMilli()
+                        {weight_5:d} * params.ms_since_epoch + Math.max(
+                            0,
+                            2 * params.ms_since_epoch - ZonedDateTime.parse(
+                                params._source.course_runs[best_index]['end'], formatter
+                            ).toInstant().toEpochMilli()
+                        )
                     );
                 }}
                 else if (best_state == 6) {{
