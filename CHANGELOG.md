@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Create a React `Banner` component
 - Add catalog visibility field to course run so it's possible to hide a
   course run on the catalog and/or hide it completely. Possible values
   are `course_and_search`, `course_only` and `hidden`.
@@ -27,7 +28,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fixed a layout issue on course glimpse
   when organization title and course title are too long
 - Add missing language parameter in LTI requests issued by LTI consumer plugin
-
 
 ## [2.11.0] - 2022-01-04
 
