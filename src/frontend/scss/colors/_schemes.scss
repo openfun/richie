@@ -1,0 +1,128 @@
+//
+// Basic color schemes
+// ---------
+$purplish-grey-scheme: (
+        font-color: r-color('white'),
+        link-color: r-color('firebrick6'),
+        svg-color: r-color('white'),
+        background: r-color('purplish-grey'),
+        hover-font-color: r-color('white'),
+        hover-background: r-color('purplish-grey'),
+) !default;
+$battleship-grey-scheme: (
+        font-color: r-color('white'),
+        link-color: r-color('firebrick6'),
+        svg-color: r-color('white'),
+        background: r-color('battleship-grey'),
+        hover-font-color: r-color('white'),
+        hover-background: r-color('battleship-grey'),
+) !default;
+$indianred3-scheme: (
+        font-color: r-color('white'),
+        link-color: r-color('light-grey'),
+        svg-color: r-color('white'),
+        background: r-color('indianred3'),
+        hover-font-color: r-color('white'),
+        hover-background: r-color('firebrick6'),
+) !default;
+$firebrick6-scheme: (
+        font-color: r-color('white'),
+        link-color: r-color('light-grey'),
+        svg-color: r-color('white'),
+        background: r-color('firebrick6'),
+        hover-font-color: r-color('white'),
+        hover-background: r-color('indianred3'),
+) !default;
+$white-scheme: (
+        font-color: r-color('black'),
+        h1-color: r-color('black'),
+        h2-color: r-color('black'),
+        svg-color: r-color('black'),
+        background: r-color('white'),
+        hover-font-color: r-color('firebrick6'),
+        hover-background: darken(r-color('white'), 8%),
+) !default;
+$smoke-scheme: (
+        font-color: r-color('firebrick6'),
+        svg-color: r-color('firebrick6'),
+        background: r-color('smoke'),
+        hover-font-color: r-color('indianred3'),
+        hover-background: r-color('white'),
+) !default;
+$light-grey-scheme: (
+        font-color: r-color('black'),
+        h1-color: r-color('black'),
+        h2-color: r-color('black'),
+        svg-color: r-color('black'),
+        background: r-color('light-grey'),
+        hover-font-color: r-color('firebrick6'),
+        hover-background: r-color('battleship-grey'),
+) !default;
+$azure2: (
+        font-color: r-color('black'),
+        h1-color: r-color('black'),
+        h2-color: r-color('black'),
+        svg-color: r-color('black'),
+        background: r-color('azure2'),
+        hover-font-color: r-color('firebrick6'),
+        hover-background: r-color('battleship-grey'),
+) !default;
+$clouds-scheme: (
+        background: bottom left / 100% 70% no-repeat r-color('smoke')
+        url('../../richie/images/components/clouds.jpg'),
+) !default;
+$waves-scheme: (
+        background: top 1vw left 50% / 98% 7vw no-repeat r-color('white')
+        url('../../richie/images/components/waves.svg'),
+) !default;
+$transparent-dark-scheme: (
+        font-color: r-color('black'),
+        h1-color: r-color('black'),
+        h2-color: r-color('black'),
+        link-color: r-color('firebrick6'),
+        svg-color: r-color('black'),
+        background: transparent,
+        border-color: r-color('black'),
+        hover-font-color: r-color('firebrick6'),
+        hover-svg-color: r-color('firebrick6'),
+        hover-border-color: r-color('firebrick6'),
+) !default;
+$neutral-gradient-scheme: (
+        font-color: r-color('black'),
+        link-color: r-color('firebrick6'),
+        svg-color: r-color('black'),
+        background: $neutral-gradient,
+) !default;
+$middle-gradient-scheme: (
+        font-color: r-color('black'),
+        link-color: r-color('black'),
+        svg-color: r-color('black'),
+        background: $middle-gradient,
+        hover-font-color: r-color('black'),
+) !default;
+$dark-gradient-scheme: (
+        font-color: r-color('black'),
+        h1-color: r-color('white'),
+        h2-color: r-color('white'),
+        link-color: r-color('black'),
+        svg-color: r-color('black'),
+        background: $dark-gradient,
+        hover-font-color: r-color('black'),
+) !default;
+$dark-gradient-alt-scheme: map-merge(
+                $dark-gradient-scheme,
+                (
+                        font-color: r-color('white'),
+                        link-color: r-color('white'),
+                        svg-color: r-color('white'),
+                        hover-font-color: r-color('white'),
+                )
+) !default;
+$white-mask-gradient-scheme: (
+        font-color: r-color('black'),
+        h1-color: r-color('black'),
+        h2-color: r-color('black'),
+        svg-color: r-color('black'),
+        background: $white-mask-gradient,
+        hover-font-color: r-color('firebrick6'),
+) !default;
