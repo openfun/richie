@@ -17,7 +17,7 @@ from parler.utils.context import switch_language
 from richie.apps.core.defaults import ALL_LANGUAGES
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
-from richie.apps.courses.models import CourseRun, CourseRunTranslation
+from richie.apps.courses.models import CourseRun, CourseRunCatalogVisibility, CourseRunTranslation
 
 
 # pylint: disable=too-many-public-methods
@@ -609,15 +609,16 @@ class CourseRunModelsTestCase(TestCase):
                 CourseRun._meta.fields,
             ),
         )
+        stub = CourseRunFactory(
+            sync_mode="manual",
+            catalog_visibility=CourseRunCatalogVisibility.ABOUT
+        )  # New random values to update our course run
 
         for field in fields:
             course_run = CourseRunFactory()
             self.assertTrue(course_run.direct_course.extended_object.publish("en"))
             title_obj = course_run.direct_course.extended_object.title_set.first()
 
-            stub = CourseRunFactory(
-                sync_mode="manual"
-            )  # New random values to update our course run
             setattr(course_run, field, getattr(stub, field))
             course_run.save()
 
