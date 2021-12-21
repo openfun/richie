@@ -1,186 +1,186 @@
 {
   "components.CourseGlimpse.cover": {
     "description": "Placeholder text when the course we are glimpsing at is missing a cover image",
-    "message": "Portada"
+    "message": "Обложка"
   },
   "components.CourseGlimpseList.courseCount": {
     "description": "Result count & pagination information for course search. Appears right above search results",
-    "message": "Mostrando {start, number} a {end, number} de {courseCount, number} ¡ {courseCount, plural, one {curso} other {cursos}} que coinciden con su búsqueda"
+    "message": "Показано от {start, number} до {end, number} на {courseCount, number} {courseCount, plural, one {курсе} few {курсах} many {курсах} other {курсах}} в соответствии с вашим поиском"
   },
   "components.CourseRunEnrollment.enroll": {
     "description": "CTA for users who can enroll in the course run or could enroll if they logged in.",
-    "message": "Inscribirse ahora"
+    "message": "Записаться сейчас"
   },
   "components.CourseRunEnrollment.enrolled": {
     "description": "Help text for users who see the \"Go to course\" CTA on course run enrollment",
-    "message": "Se ha inscrito en este curso"
+    "message": "Вы зачислены на этот курс"
   },
   "components.CourseRunEnrollment.enrollmentClosed": {
     "description": "Help text replacing the CTA on a course run when enrollment is closed.",
-    "message": "La inscripción en este curso está cerrada por el momento"
+    "message": "Регистрация на курс в данный момент закрыта"
   },
   "components.CourseRunEnrollment.enrollmentFailed": {
     "description": "Help text below the \"Enroll now\" CTA when an enrollment attempt has already failed.",
-    "message": "Su solicitud de inscripción ha fallado."
+    "message": "Не удалось выполнить запрос на зачисление."
   },
   "components.CourseRunEnrollment.goToCourse": {
     "description": "CTA for users who are already enrolled in a course run.",
-    "message": "Ir al curso"
+    "message": "Перейти к курсу"
   },
   "components.CourseRunEnrollment.loadingInitial": {
     "description": "Accessible text for the initial loading spinner on the course run enrollment button.",
-    "message": "Cargando información de inscripción..."
+    "message": "Загрузка информации о зачислении..."
   },
   "components.CourseRunEnrollment.loginToEnroll": {
     "description": "Helper text in the enroll button for non logged in users",
-    "message": "Inicia sesión para inscribirse"
+    "message": "Войти для записи"
   },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
-    "message": "Acceso a la configuración de su perfil"
+    "message": "Доступ к настройкам вашего профиля"
   },
   "components.LanguageSelector.currentlySelected": {
     "description": "Accessible hint to mark the currently selected language in the language selector",
-    "message": "(actualmente seleccionado)"
+    "message": "(сейчас выбрано)"
   },
   "components.LanguageSelector.languages": {
     "description": "Default text for the language selector button when the current language cannot be identified",
-    "message": "Idiomas"
+    "message": "Языки"
   },
   "components.LanguageSelector.selectLanguage": {
     "description": "Accessible label for the language selector button",
-    "message": "Seleccione un idioma:"
+    "message": "Выберите язык:"
   },
   "components.LanguageSelector.switchToLanguage": {
     "description": "Accessible link title for the language switching links in language selector",
-    "message": "Cambiar a {language}"
+    "message": "Переключиться на {language}"
   },
   "components.PaginateCourseSearch.currentlyReadingLastPageN": {
     "description": "Accessibility helper in pagination, shown next to the current page number when it is the last page.",
-    "message": "Leyendo la última página {page}"
+    "message": "В настоящее время чтение последней страницы {page}"
   },
   "components.PaginateCourseSearch.currentlyReadingPageN": {
     "description": "Accessibility helper in pagination, shown next to the current page number when it is not the last page.",
-    "message": "Actualmente leyendo la página {page}"
+    "message": "Сейчас чтение страницы {page}"
   },
   "components.PaginateCourseSearch.lastPageN": {
     "description": "Accessibility helper for pagination, added on the last page link.",
-    "message": "Última página {page}"
+    "message": "Последняя страница {page}"
   },
   "components.PaginateCourseSearch.nextPageN": {
     "description": "Accessibility helper for pagination, added on the next page link.",
-    "message": "Página siguiente {page}"
+    "message": "Следующая страница {page}"
   },
   "components.PaginateCourseSearch.pageN": {
     "description": "Accessibility helper for pagination, added on all page links for screen readers,\n      only shown next to \"page 1\" visually.",
-    "message": "Página {page}"
+    "message": "Страница {page}"
   },
   "components.PaginateCourseSearch.pagination": {
     "description": "Label for the pagination navigation in course search results.",
-    "message": "Paginación"
+    "message": "Постраничная навигация"
   },
   "components.PaginateCourseSearch.previousPageN": {
     "description": "Accessibility helper for pagination, added on the previous page link.",
-    "message": "Página anterior {page}"
+    "message": "Предыдущая страница {page}"
   },
   "components.RootSearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
-    "message": "Buscar cursos"
+    "message": "Поиск курсов"
   },
   "components.Search.errorMessage": {
     "description": "Error message for Search view when the request to load courses fails",
-    "message": "¡Algo está mal! No se han podido cargar los cursos."
+    "message": "Что-то не так! Курсы не могут быть загружены."
   },
   "components.Search.hideFiltersPane": {
     "description": "Accessibility text for the button/icon that toggles *off* the filters pane on mobile",
-    "message": "Ocultar panel de filtros"
+    "message": "Скрыть панель фильтров"
   },
   "components.Search.showFiltersPane": {
     "description": "Accessibility text for the button/icon that toggles *on* the filters pane on mobile",
-    "message": "Mostrar panel de filtros"
+    "message": "Показать панель фильтров"
   },
   "components.Search.spinnerText": {
     "description": "Accessibility text for the spinner while search results are being loaded",
-    "message": "Cargando resultados de búsqueda..."
+    "message": "Загрузка результатов поиска..."
   },
   "components.Search.textQueryLengthWarning": {
     "description": "Warning message in search results when the text query is not long enough to be used.",
-    "message": "La búsqueda de texto requiere al menos 3 caracteres. { query } no es lo suficientemente larga para buscar. Los resultados de la búsqueda no se verán afectados por esta consulta."
+    "message": "Текстовый поиск требует не менее 3 символов. { query } не достаточно длинный, чтобы искать. Этот запрос не повлияет на результаты поиска."
   },
   "components.SearchFilterGroupModal.closeModal": {
     "description": "Text for the button to close the search filters modal",
-    "message": "Cerrar ventana modal"
+    "message": "Закрыть модальное окно"
   },
   "components.SearchFilterGroupModal.error": {
     "description": "Error message when the search for more filter value fails in the search filters modal.",
-    "message": "Se ha producido un error al buscar {filterName}."
+    "message": "Произошла ошибка при поиске {filterName}."
   },
   "components.SearchFilterGroupModal.inputLabel": {
     "description": "Accessible label for the search input in the search filter modal.",
-    "message": "Buscar filtros para añadir"
+    "message": "Поиск фильтров для добавления"
   },
   "components.SearchFilterGroupModal.inputPlaceholder": {
     "description": "Placeholder message for the search input in the search filter modal.",
-    "message": "Buscar en { filterName }"
+    "message": "Искать в { filterName }"
   },
   "components.SearchFilterGroupModal.loadMoreResults": {
     "description": "Button to manually load more results for the current active filter",
-    "message": "Cargar más resultados"
+    "message": "Загрузить больше результатов"
   },
   "components.SearchFilterGroupModal.loadingResults": {
     "description": "Loading message while loading more results in the search filter modal.",
-    "message": "Cargando resultados de búsqueda..."
+    "message": "Загрузка результатов поиска..."
   },
   "components.SearchFilterGroupModal.modalTitle": {
     "description": "Title for the modal to add more filter values in the search filters modal.",
-    "message": "Añadir filtros para {filterName}"
+    "message": "Добавить фильтры для {filterName}"
   },
   "components.SearchFilterGroupModal.moreOptionsButton": {
     "description": "Test for the button to see more filter values than the top N that appear by default.",
-    "message": "Más opciones"
+    "message": "Ещё опции"
   },
   "components.SearchFilterGroupModal.queryTooShort": {
     "description": "Users need to enter at least 3 characters to search for more filter values; this message informs them when they start typing.",
-    "message": "Escriba por lo menos 3 caracteres para iniciar la búsqueda."
+    "message": "Введите минимум 3 символа, чтобы начать поиск."
   },
   "components.SearchFilterValueParent.ariaHideChildren": {
     "description": "Accessibility message for the button to hide children of the current filter",
-    "message": "Ocultar filtros adicionales para {filterValueName}"
+    "message": "Скрыть дополнительные фильтры для {filterValueName}"
   },
   "components.SearchFilterValueParent.ariaShowChildren": {
     "description": "Accessibility message for the button to show children of the current filter",
-    "message": "Mostrar más filtros para {filterValueName}"
+    "message": "Показать больше фильтров для {filterValueName}"
   },
   "components.SearchFiltersPane.clearFilters": {
     "description": "Helper button in search filters pane in search page to remove all active filters",
-    "message": "Retirar {activeFilterCount, number} activo {activeFilterCount, plural, one {filtro} other {filtros}}"
+    "message": "Очистите {activeFilterCount, number} {activeFilterCount, plural, one {активный фильтр} few {активных фильтра} many {активных фильтров} other {активных фильтров}}"
   },
   "components.SearchFiltersPane.title": {
     "description": "Title for the search filters pane in course search.",
-    "message": "Filtrar cursos"
+    "message": "Фильтровать курсы"
   },
   "components.SearchInput.button": {
     "description": "Accessibility text for the search button inside the Search input.",
-    "message": "Buscar"
+    "message": "Поиск"
   },
   "components.SearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
-    "message": "Buscar cursos, organizaciones, categorías"
+    "message": "Поиск курсов, организаций, категорий"
   },
   "components.UserLogin.logIn": {
     "description": "Text for the login button.",
-    "message": "Iniciar sesión"
+    "message": "Вход"
   },
   "components.UserLogin.logOut": {
     "description": "Text for the logout button.",
-    "message": "Cerrar sesión"
+    "message": "Выход"
   },
   "components.UserLogin.signup": {
     "description": "Text for the signup button.",
-    "message": "Registrarse"
+    "message": "Зарегистрироваться"
   },
   "components.UserLogin.spinnerText": {
     "description": "Accessibility text for the spinner in the login area.",
-    "message": "Cargando estado de inicio de sesión..."
+    "message": "Загрузка статуса входа..."
   }
 }

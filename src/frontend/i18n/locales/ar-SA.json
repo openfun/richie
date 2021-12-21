@@ -109,7 +109,7 @@
   },
   "components.SearchFilterGroupModal.closeModal": {
     "description": "Text for the button to close the search filters modal",
-    "message": "Close"
+    "message": "Close modal"
   },
   "components.SearchFilterGroupModal.error": {
     "description": "Error message when the search for more filter value fails in the search filters modal.",
@@ -122,6 +122,14 @@
   "components.SearchFilterGroupModal.inputPlaceholder": {
     "description": "Placeholder message for the search input in the search filter modal.",
     "message": "Search in { filterName }"
+  },
+  "components.SearchFilterGroupModal.loadMoreResults": {
+    "description": "Button to manually load more results for the current active filter",
+    "message": "Load more results"
+  },
+  "components.SearchFilterGroupModal.loadingResults": {
+    "description": "Loading message while loading more results in the search filter modal.",
+    "message": "Loading search results..."
   },
   "components.SearchFilterGroupModal.modalTitle": {
     "description": "Title for the modal to add more filter values in the search filters modal.",

@@ -8,8 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.10.0] - 2021-12-27
+
 ### Added
 
+- Add Russian translations
 - Add infinite scrolling to the facet search modal in course search.
 - Add reusable form components
 - Fix blogpost header image aspect ratio and sizes.
@@ -1465,7 +1468,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.9.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.10.0...master
+[2.10.0]: https://github.com/openfun/richie/compare/v2.9.1...v2.10.0
 [2.9.1]: https://github.com/openfun/richie/compare/v2.9.0...v2.9.1
 [2.9.0]: https://github.com/openfun/richie/compare/v2.8.2...v2.9.0
 [2.8.2]: https://github.com/openfun/richie/compare/v2.8.1...v2.8.2
