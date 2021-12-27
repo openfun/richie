@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Overriding frontend components · Richie</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Once you are able to build the frontend in your project (see previous section), you can override some parts of the frontend with a drop-in replacement you built yourself."/><meta name="docsearch:version" content="2.9.1"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Overriding frontend components · Richie"/><meta property="og:type" content="website"/><meta property="og:url" content="https://richie.education/"/><meta property="og:description" content="Once you are able to build the frontend in your project (see previous section), you can override some parts of the frontend with a drop-in replacement you built yourself."/><meta property="og:image" content="https://richie.education/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://richie.education/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><h2 class="headerTitle">Richie</h2></a><a href="/versions"><h3>2.9.1</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/" target="_self">Home</a></li><li class=""><a href="https://github.com/openfun/richie" target="_self">GitHub</a></li><li class="siteNavGroupActive"><a href="/docs/2.9.1/quick-start" target="_self">Documentation</a></li><li class=""><a href="/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recipes</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/2.9.1/quick-start">Quick start</a></li><li class="navListItem"><a class="navItem" href="/docs/2.9.1/docker-development">Docker development</a></li><li class="navListItem"><a class="navItem" href="/docs/2.9.1/native-installation">Native installation</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Recipes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/2.9.1/django-react-interop">Django &amp; React</a></li><li class="navListItem"><a class="navItem" href="/docs/2.9.1/building-the-frontend">Building the frontend</a></li><li class="navListItem"><a class="navItem" href="/docs/2.9.1/internationalization">I18n</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/2.9.1/frontend-overrides">Frontend overrides</a></li><li class="navListItem"><a class="navItem" href="/docs/2.9.1/lms-connection">LMS connection</a></li><li class="navListItem"><a class="navItem" href="/docs/2.9.1/web-analytics">Web Analytics</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/2.9.1/contributing-guide">Contributing guide</a></li><li class="navListItem"><a class="navItem" href="/docs/2.9.1/accessibility-testing">Accessibility testing</a></li><li class="navListItem"><a class="navItem" href="/docs/2.9.1/css-guidelines">CSS Guidelines</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Overriding frontend components</h1></header><article><div><span><p>Once you are able to build the frontend in your project (see previous section), you can override some parts of the frontend with a drop-in replacement you built yourself.</p>
+<p>This enables you to customize Richie to your own needs in the same way you could do it with backend templates by overriding templates or blocks which do not suit your needs.</p>
+<h2><a class="anchor" aria-hidden="true" id="defining-your-overrides"></a><a href="#defining-your-overrides" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Defining your overrides</h2>
+<p>Create a <code>json</code> settings files somewhere in your project. You'll use it to declare the overrides for your custom Richie build.</p>
+<p>Currently, it is only possible to override components. Richie's build is only set up to handle them.</p>
+<p>Inside, create an object with only one key: <code>&quot;overrides&quot;</code>. This is an object, whose key-value pairs is the name of a component as a key and the path to the drop-in replacement as the value.</p>
+<pre><code class="hljs css language-json">{
+  <span class="hljs-attr">"overrides"</span>: {
+    <span class="hljs-attr">"CourseGlimpse"</span>: <span class="hljs-string">"src/richie/components/CustomCourseGlimpse.tsx"</span>
+  }
+}
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="building-a-component-override"></a><a href="#building-a-component-override" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Building a component override</h2>
+<p>As overrides are supposed to be drop-in replacements, directly processed by the bundler instead of the original file, they need to expose the same API.</p>
+<p>For example, if our component to override was the following:</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">export</span> interface CourseGlimpseProps {
+  <span class="hljs-attr">course</span>: Course;
+  context: { <span class="hljs-attr">someProp</span>: string };
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> CourseGlimpse: React.FC&lt;CourseGlimpseProps&gt; = <span class="hljs-function">(<span class="hljs-params">{ course, context }</span>) =&gt;</span> {
+  <span class="hljs-comment">// Whatever happens in this component</span>
+  <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>The glimpse<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>;
+};
+</code></pre>
+<p>Then, your override needs to provide the same exports, explicitly a named <code>CourseGlimpseProps</code> interface and a named <code>CourseGlimpse</code> component.</p>
+<p>You also need to respect the assumptions made by other components that use your overridden version, if you are not overriding a root component.</p>
+<p>For example returning <code>null</code> might break a layout if the original component never returned such a value, etc. You also need to make sure to avoid conflict with the parameters accepted by the original component.</p>
+<h2><a class="anchor" aria-hidden="true" id="override-translation"></a><a href="#override-translation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Override translation</h2>
+<p>When you create an application based on richie, you can encounter two cases about translations:</p>
+<ol>
+<li>You created or overrode a react component and created new translation keys</li>
+<li>You just want to override a translation in an existing richie component</li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="create-new-translation-keys"></a><a href="#create-new-translation-keys" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Create new translation keys</h3>
+<p>Once you created your new component with its translation keys, you have to extract them with the following command:</p>
+<pre><code class="hljs">  formatjs extract '<span class="hljs-string">./</span>**/*<span class="hljs-string">.ts</span>*' <span class="hljs-params">--ignore</span> <span class="hljs-string">./node_modules</span> <span class="hljs-params">--ignore</span> '<span class="hljs-string">./</span>**/*<span class="hljs-string">.d.ts</span>' <span class="hljs-params">--out-file</span> '<span class="hljs-string">./i18n/frontend.json</span> <span class="hljs-params">--id-interpolation-pattern</span> '[sha512<span class="hljs-function">:contenthash</span><span class="hljs-function">:base64</span><span class="hljs-function">:6</span>]' <span class="hljs-params">--format</span> crowdin
+</code></pre>
+<p>This command extracts all translations defined in your typescript files then generates a <code>frontend.json</code> file in <code>i18n/</code> directory. This file is like a pot file, this is the base to create your translations in any language you want.</p>
+<p>As <code>--format</code> option indicates, this command generates a file compatible with crowdin. If you want to customize this command to fit your needs, read the <a href="https://formatjs.io/docs/tooling/cli/">formatjs/cli documentation</a>.</p>
+<p>Once translations keys are extracted and your local translations are ready, you need to compile these translations. In fact, the compilation process first aggregates all translation files found from provided paths then merges them with richie translations according their filename and finally generates an output formatted for <code>react-intl</code>. Below, here is an example of a compilation command:</p>
+<pre><code class="hljs">  <span class="hljs-keyword">node</span><span class="hljs-title">-modules</span>/richie-education/i18n/compile-translations.js ./i18n/locales/*.json
+</code></pre>
+<p>This command looks for all translation files in <code>i18n/locales</code> directory then merges files found with richie translation files. You can pass several path patterns. You can also use an <code>--ignore</code> argument to ignore a particular path.</p>
+<h3><a class="anchor" aria-hidden="true" id="override-an-existing-translation-key"></a><a href="#override-an-existing-translation-key" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Override an existing translation key</h3>
+<p>As explain above, the compilation process aggregates translations files then <strong>merges them according their filename</strong>. That means if you want override for example the english translation, you just have to create a <code>en-US.json</code> file and redefine translation keys used by Richie.</p>
+<p>Richie uses one file per language. Currently 4 languages supported:</p>
+<ul>
+<li>English: filename is <code>en-US.json</code></li>
+<li>French: filename is <code>fr-FR.json</code></li>
+<li>Canadian french: filename is <code>fr-CA.json</code></li>
+<li>Spanish: filename is <code>es-ES.json</code></li>
+</ul>
+<p>For example, richie uses the translation key <code>components.UserLogin.logIn</code> for the Log in button. If you want to change this label for the english translation, you just have to create a translation file <code>en-US.json</code> which redefines this translation key:</p>
+<pre><code class="hljs css language-json">{
+  <span class="hljs-attr">"components.UserLogin.logIn"</span>: {
+    <span class="hljs-attr">"description"</span>: <span class="hljs-string">"Overriden text for the login button."</span>,
+    <span class="hljs-attr">"message"</span>: <span class="hljs-string">"Authentication"</span>
+  },
+}
+</code></pre>
+<p>Then, for example if you put your overridden translation in i18n/overrides directory, you have to launch the compilation command below:</p>
+<pre><code class="hljs">  <span class="hljs-keyword">node</span><span class="hljs-title">-modules</span>/richie-education/i18n/compile-translations.js ./i18n/overrides/*.json
+</code></pre>
+<p>In this way, &quot;<em>Authentication</em>&quot; will be displayed as label for login button instead of &quot;<em>Sign in</em>&quot;.</p>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 10/30/2020</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/2.9.1/internationalization"><span class="arrow-prev">← </span><span>I18n</span></a><a class="docs-next button" href="/docs/2.9.1/lms-connection"><span>LMS connection</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#defining-your-overrides">Defining your overrides</a></li><li><a href="#building-a-component-override">Building a component override</a></li><li><a href="#override-translation">Override translation</a><ul class="toc-headings"><li><a href="#create-new-translation-keys">Create new translation keys</a></li><li><a href="#override-an-existing-translation-key">Override an existing translation key</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Documentation</h5><a href="/docs/en/quick-start.html">Getting Started</a><a href="/versions">Versions</a><a href="/docs/en/contributing.html">Contributing</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://github.com/openfun/richie">GitHub</a></div></section><section class="copyright">Creative Commons 2021 — Richie contributors / Illustrations Katerina Limpitsouni</section></footer></div></body></html>
