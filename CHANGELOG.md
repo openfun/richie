@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Refactor scss color variables to be more easily customizable.
 
+### Fixed
+
+- Make LMS authentication optional.
+
 ## [2.10.0] - 2021-12-27
 
 ### Added
