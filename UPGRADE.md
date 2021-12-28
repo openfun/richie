@@ -16,14 +16,63 @@ $ make migrate
 
 ## Unreleased
 
+## 2.9.x to 2.10.x
+
 - The file `_colors.scss` has been divided into `_palette.scss` for the palette, 
   `_gradients.scss`, `_schemes.scss`  and `_theme.scss`. Those files are now located in a 
   dedicated folder `colors`.
-
-## 2.9.x to 2.10.x
-
-- Define the `form` scheme within `settings/_colors.scss`
+- Add easing timing function variables to `settings/_variables.scss`:
+  ```css
+  // Easings (Quart)
+  $r-ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+  $r-ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+  $r-ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  ```
+- Define the `form` scheme within `settings/_colors.scss` and import the new CSS file related to
+  forms in `_main.scss`:
+  ```css
+  @import 'richie-education/scss/objects/form';
+  ```
 - Add to `spinner` scheme property `base-color-light`
+- Import the new CSS file related to modal in `_main.scss`:
+  ```css
+  @import 'richie-education/js/components/Modal/styles';
+  ```
+  These new styles also require modifications to variables
+  in `settings/_colors.scss`. To keep the existing behaviors unchanged:
+    - create a new `modal` entry at the same level as
+    `search-filters-group-modal`;
+    - move `base-background`, `base-border`, `base-color` and
+    `overlay-background` from `search-filters-group-modal` to `modal`;
+    - copy `close-background`, `close-border` and `close-color` from
+    `search-filters-group-modal` to `modal`;
+    - delete `modal-overlay-background` from `search-filters-group`.
+
+  Here is a code example of valid values for these entries:
+  ```css
+  search-filters-group: (
+    title-color: r-color('battleship-grey'),
+  ),
+  modal: (
+    base-background: r-color('white'),
+    base-border: r-color('battleship-grey'),
+    base-color: r-color('battleship-grey'),
+    close-background: r-color('white'),
+    close-border: r-color('silver'),
+    close-color: r-color('black'),
+    overlay-background: r-color('white'),
+  ),
+  search-filters-group-modal: (
+    button-background: r-color('white'),
+    button-color: r-color('dark-aquamarine'),
+    close-background: r-color('white'),
+    close-border: r-color('silver'),
+    close-color: r-color('black'),
+    input-background: r-color('silver'),
+    input-color: r-color('black'),
+    item-border: r-color('silver'),
+  ),
+  ```
 
 ## 2.8.x to 2.9.x
 
