@@ -39,7 +39,26 @@ export const Session = createContext<SessionContext>({} as any);
  * @param user the current user state. Read below to see possible states
  * @param destroy set Session to undefined then make a request to logout user from OpenEdX
  */
-export const SessionProvider = ({ children }: PropsWithChildren<any>) => {
+export const SessionProvider = ({ children }: PropsWithChildren<{}>) => {
+  // Make sure there is an authentication backend before attempting to use it
+  // to provide a session.
+  if (AuthenticationApi) {
+    return <SessionProviderInner>{children}</SessionProviderInner>;
+  } else {
+    const value = useMemo(() => {
+      const destroy = () => {
+        throw new Error('No authentication backend provided.');
+      };
+      const login = destroy;
+      const register = destroy;
+      return { destroy, login, register, user: null };
+    }, []);
+
+    return <Session.Provider value={value}>{children}</Session.Provider>;
+  }
+};
+
+export const SessionProviderInner = ({ children }: PropsWithChildren<{}>) => {
   /**
    * `user` is:
    * - `undefined` when we have not made the `whoami` request yet;
