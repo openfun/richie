@@ -22,6 +22,7 @@
         "setup-cfg"
       ],
       "matchPackageNames": [
+        "astroid",
         "arrow",
         "dj-pagination",
         "django-cms",
