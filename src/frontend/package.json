@@ -41,7 +41,7 @@
     "@babel/preset-env": "7.16.7",
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
-    "@formatjs/cli": "4.6.0",
+    "@formatjs/cli": "4.5.0",
     "@formatjs/intl-relativetimeformat": "9.4.1",
     "@helpscout/helix": "0.2.0",
     "@sentry/browser": "6.16.1",
