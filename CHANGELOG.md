@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Rename `branding_footer` template block to `body_footer_brand` in
+  `richie/base.html`and include link it can be customized.
 - Refactor scss color variables to be more easily customizable.
 
 ### Fixed
