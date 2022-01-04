@@ -18,6 +18,8 @@ $ make migrate
 
 ## 2.9.x to 2.10.x
 
+- If you overrode `richie/base.html`, the `branding_footer` template block has been renamed to
+  `body_footer_brand` and the link was integrated in the block so it can be customized.
 - The file `_colors.scss` has been divided into `_palette.scss` for the palette, 
   `_gradients.scss`, `_schemes.scss`  and `_theme.scss`. Those files are now located in a 
   dedicated folder `colors`.

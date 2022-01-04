@@ -146,11 +146,11 @@
                             </div>
                         </div>
                         <div class="body-footer__brand">
-                            <a href="/">
-                            {% block branding_footer %}
-                                <img src="{% static "richie/images/logo-alt.png" %}" alt="">
-                            {% endblock branding_footer %}
-                            </a>
+                            {% block body_footer_brand %}
+                                <a href="/">
+                                    <img src="{% static "richie/images/logo-alt.png" %}" alt="">
+                                </a>
+                            {% endblock body_footer_brand %}
                         </div>
                         <div class="body-footer__insert">
                             {% block body_footer_title %}
