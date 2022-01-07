@@ -135,7 +135,9 @@ class ProgramCMSTestCase(CMSTestCase):
         for course in courses[:2]:
             self.assertContains(
                 response,
-                f'<p class="course-glimpse__title">{course.extended_object.get_title():s}</p>',
+                '<h3 class="course-glimpse__title" title="{0:s}">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+                    course.extended_object.get_title()
+                ),
                 html=True,
             )
         for course in courses[-2:]:
@@ -187,7 +189,9 @@ class ProgramCMSTestCase(CMSTestCase):
             )
             self.assertContains(
                 response,
-                f'<p class="course-glimpse__title">{course.extended_object.get_title():s}</p>',
+                '<h3 class="course-glimpse__title" title="{0:s}">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+                    course.extended_object.get_title()
+                ),
                 html=True,
             )
         self.assertContains(
@@ -195,9 +199,12 @@ class ProgramCMSTestCase(CMSTestCase):
             '<a class="course-glimpse course-glimpse--draft" '
             f'href="{courses[2].extended_object.get_absolute_url():s}"',
         )
+
         self.assertContains(
             response,
-            f'<p class="course-glimpse__title">{courses[2].extended_object.get_title():s}</p>',
+            '<h3 class="course-glimpse__title" title="{0:s}">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+                courses[2].extended_object.get_title()
+            ),
             html=True,
         )
         # The unpublished course should not be present on the page

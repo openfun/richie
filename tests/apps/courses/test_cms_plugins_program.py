@@ -100,11 +100,11 @@ class ProgramPluginTestCase(CMSTestCase):
             '<a href="/en/public-title/" class="program-glimpse program-glimpse--link',
             status_code=200,
         )
-        # The program's title should be wrapped in a p
+        # The program's title should be wrapped in a h2
         program_title = program.public_extension.extended_object.get_title()
         self.assertContains(
             response,
-            f'<p class="program-glimpse__title">{program_title:s}</p>',
+            f'<h2 class="program-glimpse__title">{program_title:s}</h2>',
             html=True,
         )
         self.assertNotContains(response, "draft title")
@@ -210,7 +210,7 @@ class ProgramPluginTestCase(CMSTestCase):
         # The program's full name should be wrapped in a h2
         self.assertContains(
             response,
-            '<p class="program-glimpse__title">programme publique</p>',
+            '<h2 class="program-glimpse__title">programme publique</h2>',
             html=True,
         )
         self.assertNotContains(response, "public program")

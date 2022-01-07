@@ -215,7 +215,7 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             # pylint: disable=consider-using-f-string
-            '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
+            '<h2 class="organization-glimpse__title" property="name">{:s}</h2>'.format(
                 published_organization.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -336,7 +336,7 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             # pylint: disable=consider-using-f-string
-            '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
+            '<h2 class="organization-glimpse__title" property="name">{:s}</h2>'.format(
                 published_organization.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -354,7 +354,7 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             # pylint: disable=consider-using-f-string
-            '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
+            '<h2 class="organization-glimpse__title" property="name">{:s}</h2>'.format(
                 not_published_organization.extended_object.get_title()
             ),
             html=True,
@@ -421,7 +421,9 @@ class PersonCMSTestCase(CMSTestCase):
         # The course should be present on the page
         self.assertContains(
             response,
-            f'<p class="course-glimpse__title">{course.extended_object.get_title():s}</p>',
+            '<h2 class="course-glimpse__title" title="{0:s}">{0:s}</h2>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+                course.extended_object.get_title()
+            ),
             html=True,
         )
 
@@ -481,7 +483,7 @@ class PersonCMSTestCase(CMSTestCase):
         # The blog post should be present on the page
         self.assertContains(
             response,
-            f'<p class="blogpost-glimpse__title">{blog_post.extended_object.get_title():s}</p>',
+            f'<h2 class="blogpost-glimpse__title">{blog_post.extended_object.get_title():s}</h2>',
             html=True,
         )
 

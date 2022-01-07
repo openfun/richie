@@ -173,7 +173,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 # pylint: disable=consider-using-f-string
-                '<div class="organization-glimpse__title" property="name">{title:s}</div>'.format(
+                '<h2 class="organization-glimpse__title" property="name">{title:s}</h2>'.format(
                     title=organization.extended_object.get_title()
                 ),
                 html=True,
@@ -291,7 +291,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 # pylint: disable=consider-using-f-string
-                '<div class="organization-glimpse__title" property="name">{title:s}</div>'.format(
+                '<h2 class="organization-glimpse__title" property="name">{title:s}</h2>'.format(
                     title=organization.extended_object.get_title()
                 ),
                 html=True,

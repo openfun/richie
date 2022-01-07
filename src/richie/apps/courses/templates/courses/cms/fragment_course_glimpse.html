@@ -30,7 +30,7 @@
         </div>
         {% endif %}
         <div class="course-{{ course_variant }}__wrapper">
-            <p class="course-{{ course_variant }}__title" title="{{ course_page.get_title }}">{{ course_page.get_title }}</p>
+            <h{{ header_level|default:3 }} class="course-{{ course_variant }}__title" title="{{ course_page.get_title }}">{{ course_page.get_title }}</h{{ header_level|default:3 }}>
             {% if main_organization %}
                 {% with organization_page=main_organization.extended_object %}
                     {% get_page_plugins "logo" organization_page as plugins or %}
