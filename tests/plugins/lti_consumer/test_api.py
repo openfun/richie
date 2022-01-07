@@ -9,6 +9,7 @@ from unittest import mock
 from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory
 from django.test.utils import override_settings
+from django.utils import translation
 
 from cms.api import add_plugin
 from cms.models import PagePermission, Placeholder
@@ -264,7 +265,7 @@ class LtiConsumerPluginApiTestCase(CMSTestCase):
     def test_lti_consumer_api_get_context_method_is_cached(self, mock_params):
         """
         If "memory_cache" is defined, get_context method is cached
-        for 5 minutes to optimize db accesses without return
+        for 5 minutes to optimize db accesses without returning
         stale oauth credentials.
         """
         placeholder = Placeholder.objects.create(slot="test")
@@ -294,3 +295,18 @@ class LtiConsumerPluginApiTestCase(CMSTestCase):
             view_set.get_context(request, "v1.0", model_instance.pk)
 
         mock_params.assert_not_called()
+
+        # Check that cache is set separately for each language
+        translation.activate("fr")
+        with self.assertNumQueries(1):
+            view_set.get_context(request, "v1.0", model_instance.pk)
+
+        mock_params.assert_called_once_with(edit=False)
+
+        mock_params.reset_mock()
+
+        with self.assertNumQueries(0):
+            view_set.get_context(request, "v1.0", model_instance.pk)
+
+        mock_params.assert_not_called()
+        translation.deactivate()

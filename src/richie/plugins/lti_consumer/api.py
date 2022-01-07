@@ -3,6 +3,7 @@ from django.core.cache import caches
 from django.core.cache.backends.base import InvalidCacheBackendError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.utils import translation
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -28,7 +29,8 @@ class LTIConsumerViewsSet(viewsets.GenericViewSet):
             - is_automatic_resizing: boolean to control automatic resizing
 
         """
-        cache_key = f"lti_consumer_plugin__pk_{pk}"
+        language = translation.get_language()
+        cache_key = f"lti_consumer_plugin__pk_{pk}_{language}"
         edit = request.toolbar and request.toolbar.edit_mode_active
 
         # Send response from cache only if edition is off

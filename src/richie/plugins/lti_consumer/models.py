@@ -6,6 +6,7 @@ from urllib.parse import unquote
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils import translation
 from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -98,13 +99,14 @@ class LTIConsumer(CMSPlugin):
         site = get_current_site()
 
         lti_parameters = {
+            "context_id": site.domain,
+            "launch_presentation_locale": translation.get_language(),
             "lti_message_type": "basic-lti-launch-request",
+            "lis_person_contact_email_primary": "",
             "lti_version": "LTI-1p0",
             "resource_link_id": self.get_resource_link_id(),
-            "context_id": site.domain,
-            "user_id": "richie",
-            "lis_person_contact_email_primary": "",
             "roles": role,
+            "user_id": "richie",
         }
 
         # Get credentials from the predefined LTI provider if any, or from the model otherwise
