@@ -167,22 +167,30 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
 
   &__title {
     @include font-size($h6-font-size);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    color: r-theme-val(course-glimpse, title-color);
+    display: block;
+    display: -webkit-box;
     font-family: $r-font-family-montserrat;
     font-weight: $font-weight-boldest;
-    color: r-theme-val(course-glimpse, title-color);
+    line-height: 1.3em;
+    margin-bottom: 1rem;
+    max-height: 1.3em * 3; // 3 lines;
+    overflow: hidden;
   }
 
   &__organization {
-    display: flex;
-    position: absolute;
-    bottom: 1.6rem;
-    left: 0;
-    right: 0;
-    padding: 0 0.6rem;
     align-items: center;
+    bottom: 1.6rem;
     color: r-theme-val(course-glimpse, organization-color);
-    font-size: 0.9rem;
-    line-height: 1.1;
+    display: flex;
+    font-size: 0.7rem;
+    left: 0;
+    line-height: 1.1em;
+    padding: 0 0.6rem;
+    position: absolute;
+    right: 0;
 
     .icon {
       @include sv-flex(1, 0, 1.4rem);
@@ -191,6 +199,15 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
       margin-bottom: 0.15rem;
       margin-right: 0.5rem;
       fill: r-theme-val(course-glimpse, organization-color);
+    }
+
+    .title {
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      display: block;
+      display: -webkit-box;
+      max-height: 2.2em; // 2 lines
+      overflow: hidden;
     }
   }
 

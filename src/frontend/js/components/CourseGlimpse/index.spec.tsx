@@ -54,7 +54,7 @@ describe('components/CourseGlimpse', () => {
     // The link that wraps the course glimpse should have no title as its content is explicit enough
     expect(screen.getByRole('link')).not.toHaveAttribute('title');
     // The course glimpse shows the relevant information
-    screen.getByText('Course 42');
+    screen.getByRole('heading', { name: 'Course 42', level: 3 });
     screen.getByText('123abc');
     screen.getByText('Some Organization');
     // Matches on 'Starts on Mar 14, 2019', date is wrapped with intl <span>
@@ -98,7 +98,7 @@ describe('components/CourseGlimpse', () => {
     );
 
     // Make sure the component renders and shows the state
-    screen.getByText('Course 42');
+    screen.getByRole('heading', { name: 'Course 42', level: 3 });
     screen.getByText('Archived');
   });
 
@@ -109,7 +109,7 @@ describe('components/CourseGlimpse', () => {
       </IntlProvider>,
     );
 
-    screen.getByText('Course 42');
+    screen.getByRole('heading', { name: 'Course 42', level: 3 });
     screen.getByText('Cover');
   });
 
