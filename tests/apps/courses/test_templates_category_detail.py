@@ -186,7 +186,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             OrganizationFactory,
             "categories",
-            '<div class="organization-glimpse__title" property="name">{:s}</div>',
+            '<h2 class="organization-glimpse__title" property="name">{:s}</h2>',
         )
 
     def test_templates_category_detail_cms_published_content_courses(self):
@@ -197,7 +197,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             CourseFactory,
             "course_categories",
-            '<p class="course-glimpse__title">{:s}</p>',
+            '<h2 class="course-glimpse__title" title="{0:s}">{0:s}</h2>',
         )
 
     @mock.patch(
@@ -310,7 +310,9 @@ class CategoryCMSTestCase(CMSTestCase):
         related blogposts in all publication states.
         """
         self._extension_cms_published_content(
-            BlogPostFactory, "categories", '<p class="blogpost-glimpse__title">{:s}</p>'
+            BlogPostFactory,
+            "categories",
+            '<h2 class="blogpost-glimpse__title">{:s}</h2>',
         )
 
     def test_templates_category_detail_cms_published_content_persons(self):
@@ -389,7 +391,9 @@ class CategoryCMSTestCase(CMSTestCase):
         # The not published page extension should be on the page, mark as draft
         self.assertContains(
             response,
-            control_string.format(not_published_extension.extended_object.get_title()),
+            control_string.format(
+                not_published_extension.extended_object.get_title(),
+            ),
             html=True,
         )
 
@@ -397,19 +401,19 @@ class CategoryCMSTestCase(CMSTestCase):
         """Validate how a draft category page is displayed with its related organizations."""
         self._extension_cms_draft_content(
             OrganizationFactory,
-            '<div class="organization-glimpse__title" property="name">{:s}</div>',
+            '<h2 class="organization-glimpse__title" property="name">{:s}</h2>',
         )
 
     def test_templates_category_detail_cms_draft_content_courses(self):
         """Validate how a draft category page is displayed with its related courses."""
         self._extension_cms_draft_content(
-            CourseFactory, '<p class="course-glimpse__title">{:s}</p>'
+            CourseFactory, '<h2 class="course-glimpse__title" title="{0:s}">{0:s}</h2>'
         )
 
     def test_templates_category_detail_cms_draft_content_blogposts(self):
         """Validate how a draft category page is displayed with its related blogposts."""
         self._extension_cms_draft_content(
-            BlogPostFactory, '<p class="blogpost-glimpse__title">{:s}</p>'
+            BlogPostFactory, '<h2 class="blogpost-glimpse__title">{:s}</h2>'
         )
 
     def test_templates_category_detail_cms_draft_content_persons(self):

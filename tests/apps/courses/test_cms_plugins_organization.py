@@ -109,11 +109,11 @@ class OrganizationPluginTestCase(CMSTestCase):
             ),
         )
 
-        # The organization's title should be wrapped in a div
+        # The organization's title should be wrapped in a h2
         org_title = organization.public_extension.extended_object.get_title()
         self.assertContains(
             response,
-            f'<div class="organization-glimpse__title" property="name">{org_title:s}</div>',
+            f'<h2 class="organization-glimpse__title" property="name">{org_title:s}</h2>',
             html=True,
         )
         self.assertNotContains(response, "draft title")
@@ -298,7 +298,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         # The organization's full name should be wrapped in a h2
         self.assertContains(
             response,
-            '<div class="organization-glimpse__title" property="name">organisation publique</div>',
+            '<h2 class="organization-glimpse__title" property="name">organisation publique</h2>',
             html=True,
         )
         self.assertNotContains(response, "public organization")

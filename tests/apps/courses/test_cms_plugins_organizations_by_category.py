@@ -109,13 +109,13 @@ class OrganizationsByCategoryPluginTestCase(CMSTestCase):
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
-        # The organization's title should be wrapped in a div
+        # The organization's title should be wrapped in a h2
         public_title = (
             published_organization.public_extension.extended_object.get_title()
         )
         self.assertContains(
             response,
-            f'<div class="organization-glimpse__title" property="name">{public_title:s}</div>',
+            f'<h2 class="organization-glimpse__title" property="name">{public_title:s}</h2>',
             html=True,
         )
         self.assertNotContains(response, "draft")

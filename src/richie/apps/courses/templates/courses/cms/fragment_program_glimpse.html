@@ -20,7 +20,7 @@
     </div>
     <div class="program-glimpse__content">
         <div class="program-glimpse__wrapper">
-            <p class="program-glimpse__title">{{ program_page.get_title }}</p>
+            <h{{ header_level|default:3 }} class="program-glimpse__title">{{ program_page.get_title }}</h{{ header_level|default:3 }}>
             <p>
                 {% show_placeholder "program_excerpt" program_page %}
             </p>

@@ -111,12 +111,12 @@ class BlogPostPluginTestCase(CMSTestCase):
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
-        # The blogpost's title should be wrapped in a p
+        # The blogpost's title should be wrapped in a h2
         blogpost.refresh_from_db()
         blogpost_title = blogpost.public_extension.extended_object.get_title()
         self.assertContains(
             response,
-            f'<p class="blogpost-glimpse__title">{blogpost_title:s}</p>',
+            f'<h2 class="blogpost-glimpse__title">{blogpost_title:s}</h2>',
             html=True,
         )
         self.assertNotContains(response, "draft title")
@@ -199,11 +199,11 @@ class BlogPostPluginTestCase(CMSTestCase):
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
-        # The blogpost's title should be wrapped in a p
+        # The blogpost's title should be wrapped in a h2
         blogpost.refresh_from_db()
         self.assertContains(
             response,
-            '<p class="blogpost-glimpse__title">titre public</p>',
+            '<h2 class="blogpost-glimpse__title">titre public</h2>',
             html=True,
         )
         self.assertNotContains(response, "public title")

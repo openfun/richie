@@ -217,8 +217,8 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             # pylint: disable=consider-using-f-string
-            '<p class="course-glimpse__title">{:s}</p>'.format(
-                published_course.public_extension.extended_object.get_title()
+            '<h2 class="course-glimpse__title" title="{0:s}">{0:s}</h2>'.format(
+                published_course.public_extension.extended_object.get_title(),
             ),
             html=True,
         )
@@ -360,7 +360,7 @@ class OrganizationCMSTestCase(CMSTestCase):
         # The published course should be on the page in its draft version
         self.assertContains(
             response,
-            '<p class="course-glimpse__title">modified course</p>',
+            '<h2 class="course-glimpse__title" title="modified course">modified course</h2>',
             html=True,
         )
 

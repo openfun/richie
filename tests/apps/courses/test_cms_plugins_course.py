@@ -116,9 +116,10 @@ class CoursePluginTestCase(TestCase):
         )
 
         # The course's name should be present
+        course_title = course_page.get_title()
         self.assertContains(
             response,
-            f'<p class="course-glimpse__title">{course_page.get_title():s}</p>',
+            f'<h2 class="course-glimpse__title" title="{course_title:s}">{course_title:s}</h2>',
             status_code=200,
         )
         # The course's main organization should be present
@@ -172,9 +173,10 @@ class CoursePluginTestCase(TestCase):
         )
 
         # The course's name should be present
+        course_title = course_page.get_title()
         self.assertContains(
             response,
-            f'<p class="course-glimpse__title">{course_page.get_title():s}</p>',
+            f'<h2 class="course-glimpse__title" title="{course_title:s}">{course_title:s}</h2>',
             status_code=200,
         )
 
@@ -334,7 +336,7 @@ class CoursePluginTestCase(TestCase):
 
         # The course's name should be present
         self.assertIn(
-            '<p class="course-glimpse__title">cours public</p>',
+            '<h2 class="course-glimpse__title" title="cours public">cours public</h2>',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
         self.assertNotContains(response, "public course")
