@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Add missing language parameter in LTI requests issued by LTI consumer plugin
+
 ## [2.11.0] - 2022-01-04
 
 ### Changed

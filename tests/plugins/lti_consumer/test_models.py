@@ -131,6 +131,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             shared_secret="IgnoredSharedSecret",
         )
         expected_content_parameters = {
+            "launch_presentation_locale": "en",
             "lti_message_type": "basic-lti-launch-request",
             "lti_version": "LTI-1p0",
             "resource_link_id": "1234",
@@ -140,7 +141,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             "roles": "student",
             "oauth_consumer_key": "TestOauthConsumerKey",
             "oauth_nonce": "59474787080480293391616018589",
-            "oauth_signature": "PkxLai53gItjVvgbccU7AW4HwuY=",
+            "oauth_signature": "r75pOLpVUzPjOgbenOxE0WNIUbc=",
             "oauth_signature_method": "HMAC-SHA1",
             "oauth_timestamp": "1616018589",
             "oauth_version": "1.0",
@@ -166,6 +167,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             shared_secret="ManualTestSharedSecret",
         )
         expected_content_parameters = {
+            "launch_presentation_locale": "en",
             "lti_message_type": "basic-lti-launch-request",
             "lti_version": "LTI-1p0",
             "resource_link_id": "1234",
@@ -175,7 +177,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             "roles": "student",
             "oauth_consumer_key": "ManualTestOauthConsumerKey",
             "oauth_nonce": "59474787080480293391616018589",
-            "oauth_signature": "nh2VyyxvKNTsEFIa68yFmWC+10w=",
+            "oauth_signature": "UU7/veFv5lwc7pOhtz0Y0sowywA=",
             "oauth_signature_method": "HMAC-SHA1",
             "oauth_timestamp": "1616018589",
             "oauth_version": "1.0",
@@ -198,6 +200,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             url="http://localhost:8060/lti/videos/3cd0bcc4-0",
         )
         expected_content_parameters = {
+            "launch_presentation_locale": "en",
             "lti_message_type": "basic-lti-launch-request",
             "lti_version": "LTI-1p0",
             "resource_link_id": "1234",
@@ -207,7 +210,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             "roles": "instructor",
             "oauth_consumer_key": "TestOauthConsumerKey",
             "oauth_nonce": "59474787080480293391616018589",
-            "oauth_signature": "Y3d9qVSe+W7kA5E9+7JB/NeF2OA=",
+            "oauth_signature": "XYV4THSMsy4roezJfVEwxhFDF4w=",
             "oauth_signature_method": "HMAC-SHA1",
             "oauth_timestamp": "1616018589",
             "oauth_version": "1.0",
@@ -233,6 +236,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             shared_secret="ManualTestSharedSecret",
         )
         expected_content_parameters = {
+            "launch_presentation_locale": "en",
             "lti_message_type": "basic-lti-launch-request",
             "lti_version": "LTI-1p0",
             "resource_link_id": "1234",
@@ -242,7 +246,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             "roles": "instructor",
             "oauth_consumer_key": "ManualTestOauthConsumerKey",
             "oauth_nonce": "59474787080480293391616018589",
-            "oauth_signature": "CCnCQtLjPlb+Yr2C0FjYmoVO6Gk=",
+            "oauth_signature": "22mJEak6wRKx1Egcw4921Vzniw0=",
             "oauth_signature_method": "HMAC-SHA1",
             "oauth_timestamp": "1616018589",
             "oauth_version": "1.0",
