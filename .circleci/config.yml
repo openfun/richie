@@ -23,8 +23,8 @@ aliases:
     restore_cache:
       name: Restore node_modules cache
       keys:
-        - v7-front-dependencies-{{ checksum "~/fun/src/frontend/yarn.lock" }}
-        - v7-front-dependencies-
+        - v8-front-dependencies-{{ checksum "~/fun/src/frontend/yarn.lock" }}
+        - v8-front-dependencies-
 
 jobs:
   # Git jobs
@@ -568,7 +568,7 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: v7-front-dependencies-{{ checksum "yarn.lock" }}
+          key: v8-front-dependencies-{{ checksum "yarn.lock" }}
 
   build-front-production:
     docker:
