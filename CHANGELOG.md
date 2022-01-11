@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Type @helpscout/helix package
 - Add catalog visibility field to course run so it's possible to hide a
   course run on the catalog and/or hide it completely. Possible values
   are `course_and_search`, `course_only` and `hidden`.

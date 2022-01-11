@@ -6,24 +6,27 @@ import { QueryState } from 'react-query/types/core/query';
 import { MutationState } from 'react-query/types/core/mutation';
 import { PersistedClient } from 'react-query/types/persistQueryClient-experimental';
 import { MutationKey, QueryKey } from 'react-query';
+import { CourseRun, CourseState } from 'types';
+import { User } from 'types/User';
 
-const CourseStateFactory = createSpec({
+const CourseStateFactory = createSpec<CourseState>({
   priority: derived(() => Math.floor(Math.random() * 7)),
   datetime: derived(() => faker.date.past()().toISOString()),
-  call_to_action: faker.random.words(1, 3),
-  text: faker.random.words(1, 3),
+  call_to_action: faker.random.words(3),
+  text: faker.random.words(3),
 });
 
-export const CourseRunFactory = createSpec({
+export const CourseRunFactory = createSpec<CourseRun>({
   id: faker.datatype.number(),
   resource_link: faker.internet.url(),
   start: derived(() => faker.date.past()().toISOString()),
   end: derived(() => faker.date.past()().toISOString()),
   enrollment_start: derived(() => faker.date.past()().toISOString()),
   enrollment_end: derived(() => faker.date.past()().toISOString()),
-  languages: faker.random.locale(),
+  languages: derived(() => [faker.random.locale()()]),
   state: CourseStateFactory,
   starts_in_message: null,
+  dashboard_link: null,
 });
 
 export const EnrollmentFactory = createSpec({
@@ -33,14 +36,13 @@ export const EnrollmentFactory = createSpec({
   course_run: faker.datatype.number(),
 });
 
-export const UserFactory = createSpec({
+export const UserFactory = createSpec<User>({
   full_name: faker.fake('{{name.firstName}} {{name.lastName}}'),
   username: faker.internet.userName(),
 });
 
 export const ContextFactory = (context: Partial<CommonDataProps['context']> = {}) =>
-  createSpec({
-    auth_endpoint: 'https://endpoint.test',
+  createSpec<CommonDataProps['context']>({
     csrftoken: faker.random.alphaNumeric(64),
     environment: 'test',
     authentication: {
