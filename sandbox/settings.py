@@ -585,11 +585,16 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         environ_prefix=None,
     )
 
+    @classmethod
+    def _get_environment(cls):
+        """Environment in which the application is launched."""
+        return cls.__name__.lower()
+
     # pylint: disable=invalid-name
     @property
     def ENVIRONMENT(self):
         """Environment in which the application is launched."""
-        return self.__class__.__name__.lower()
+        return self._get_environment()
 
     # pylint: disable=invalid-name
     @property
@@ -611,9 +616,9 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
 
         # The SENTRY_DSN setting should be available to activate sentry for an environment
         if cls.SENTRY_DSN is not None:
-            sentry_sdk.init(
+            sentry_sdk.init(  # pylint: disable=abstract-class-instantiated
                 dsn=cls.SENTRY_DSN,
-                environment=cls.__name__.lower(),
+                environment=cls._get_environment(),
                 release=get_release(),
                 integrations=[DjangoIntegration()],
             )

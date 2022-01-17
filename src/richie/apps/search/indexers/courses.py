@@ -1,6 +1,7 @@
 """
 ElasticSearch course document management utilities
 """
+
 from collections import defaultdict
 from datetime import datetime
 from functools import reduce
@@ -294,6 +295,7 @@ class CoursesIndexer:
             "script": {
                 "lang": "painless",
                 "source": BEST_STATE_SCRIPT
+                # pylint: disable-next=consider-using-f-string
                 + """
                 if (best_state == 0) {{
                     // The course is on-going and open
@@ -383,7 +385,7 @@ class CoursesIndexer:
                 }}
                 // The course has no course runs
                 return 0;
-                """.format(  # pylint: disable=consider-using-f-string
+                """.format(
                     **{
                         f"weight_{i:d}": weight
                         for i, weight in enumerate(ES_STATE_WEIGHTS)

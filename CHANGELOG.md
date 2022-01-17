@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Upgrade to Python 3.10,
 - Do not use absolute positioning to place course glimpse metadata
 - Improve semantic of glimpses
 

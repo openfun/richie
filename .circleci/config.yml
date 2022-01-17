@@ -31,7 +31,7 @@ jobs:
   # Check that the git history is clean and complies with our expectations
   lint-git:
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: cimg/python:3.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -52,7 +52,7 @@ jobs:
       - run:
           name: Install gitlint
           command: |
-            pip install --user gitlint
+            pip install --user requests gitlint
       - run:
           name: lint commit messages added to master
           command: |
@@ -144,7 +144,7 @@ jobs:
   # Build backend development environment
   build-back:
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: cimg/python:3.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -165,7 +165,7 @@ jobs:
   # Build backend translations
   build-back-i18n:
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: cimg/python:3.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -177,7 +177,9 @@ jobs:
             - v2-back-dependencies-{{ .Revision }}
       - run:
           name: Install gettext (required to make messages)
-          command: sudo apt-get install -y gettext
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y gettext
       # Generate and persist the translations base file
       - run:
           name: Generate a POT file from strings extracted from the project
@@ -189,7 +191,7 @@ jobs:
 
   lint-back:
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: cimg/python:3.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -234,7 +236,7 @@ jobs:
 
   test-back-mysql:
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: cimg/python:3.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -326,7 +328,7 @@ jobs:
 
   test-back-postgresql:
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: cimg/python:3.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -406,7 +408,7 @@ jobs:
 
   test-back-postgresql-es6:
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: cimg/python:3.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -487,7 +489,7 @@ jobs:
   # ---- Packaging jobs ----
   package-back:
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: cimg/python:3.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -516,7 +518,7 @@ jobs:
   #     environment variables in CircleCI UI (with your PyPI credentials)
   pypi:
     docker:
-      - image: circleci/python:3.7-stretch
+      - image: cimg/python:3.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
