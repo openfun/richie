@@ -126,7 +126,9 @@ class CoursePluginTestCase(TestCase):
         self.assertIsNotNone(
             re.search(
                 (
-                    r'<div class="course-glimpse__organization">'
+                    r'<div class="'
+                    r"course-glimpse__metadata course-glimpse__metadata--organization"
+                    r'">'
                     r'<svg role="img".*'
                     r'<use href="#icon-org" />'
                 ),
@@ -184,7 +186,9 @@ class CoursePluginTestCase(TestCase):
         self.assertIsNotNone(
             re.search(
                 (
-                    r'<div class="course-glimpse__organization">'
+                    r'<div class="'
+                    r"course-glimpse__metadata course-glimpse__metadata--organization"
+                    r'">'
                     r'<svg role="img".*'
                     r'<use href="#icon-org" />'
                 ),

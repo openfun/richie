@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Do not use absolute positioning to place course glimpse metadata
 - Improve semantic of glimpses
 
 ### Fixed

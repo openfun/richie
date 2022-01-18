@@ -52,14 +52,14 @@
                 {% endwith %}
             {% endif %} 
             {% if main_organization_title %}
-            <div class="course-{{ course_variant }}__organization">
+            <div class="course-{{ course_variant }}__metadata course-{{ course_variant }}__metadata--organization">
                 <svg role="img" aria-hidden="true" class="icon">
                     <use href="#icon-org" />
                 </svg>
                 <span class="title" title="{{ main_organization_title }}">{{ main_organization_title }}</span>
             </div>
             {% endif %}
-            <div class="course-{{ course_variant }}__code">
+            <div class="course-{{ course_variant }}__metadata course-{{ course_variant }}__metadata--code">
                 <svg role="img" aria-hidden="true" class="icon">
                     <use href="#icon-barcode" />
                 </svg>
