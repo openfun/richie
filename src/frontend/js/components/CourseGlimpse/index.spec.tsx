@@ -120,6 +120,9 @@ describe('components/CourseGlimpse', () => {
       </IntlProvider>,
     );
 
-    expect(screen.getByText('-').parentElement).toHaveClass('course-glimpse__code');
+    expect(screen.getByText('-').parentElement).toHaveClass(
+      'course-glimpse__metadata',
+      'course-glimpse__metadata--code',
+    );
   });
 });

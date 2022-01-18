@@ -65,7 +65,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
             />
           </div>
         ) : null}
-        <div className="course-glimpse__organization">
+        <div className="course-glimpse__metadata course-glimpse__metadata--organization">
           <svg aria-hidden={true} role="img" className="icon">
             <use xlinkHref="#icon-org" />
           </svg>
@@ -73,7 +73,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
             {course.organization_highlighted}
           </span>
         </div>
-        <div className="course-glimpse__code">
+        <div className="course-glimpse__metadata course-glimpse__metadata--code">
           <svg aria-hidden={true} role="img" className="icon">
             <use xlinkHref="#icon-barcode" />
           </svg>

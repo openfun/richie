@@ -47,7 +47,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     $border: 0,
     $background: r-theme-val(course-glimpse, card-background),
     $media-margin: 0,
-    $wrapper-padding: 1.7rem $course-glimpse-content-padding-sides 3rem,
+    $wrapper-padding: 1.7rem $course-glimpse-content-padding-sides 0.5rem,
     $foot-divider: null
   );
 
@@ -140,29 +140,9 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
 
   &__wrapper {
     @include sv-flex(1, 0, auto);
-    position: relative;
-  }
-
-  &__code {
     display: flex;
-    position: absolute;
-    bottom: 0.4rem;
-    left: 0;
-    right: 0;
-    padding: 0 0.6rem;
-    font-size: 0.7rem;
-    color: r-theme-val(course-glimpse, code-color);
-    line-height: 1.1rem;
-    margin-bottom: 0;
-
-    .icon {
-      @include sv-flex(1, 0, 1.4rem);
-      width: 1.4rem;
-      height: 0.9rem;
-      margin-bottom: 0.15rem;
-      margin-right: 0.5rem;
-      fill: r-theme-val(course-glimpse, code-color);
-    }
+    flex-direction: column;
+    position: relative;
   }
 
   &__title {
@@ -174,31 +154,34 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     display: -webkit-box;
     font-family: $r-font-family-montserrat;
     font-weight: $font-weight-boldest;
+    flex: 1 0 1.3em * 3; // 3 lines;
     line-height: 1.3em;
     margin-bottom: 1rem;
-    max-height: 1.3em * 3; // 3 lines;
     overflow: hidden;
   }
 
-  &__organization {
+  &__metadata {
     align-items: center;
-    bottom: 1.6rem;
     color: r-theme-val(course-glimpse, organization-color);
     display: flex;
     font-size: 0.7rem;
-    left: 0;
     line-height: 1.1em;
-    padding: 0 0.6rem;
-    position: absolute;
-    right: 0;
+
+    &--organization {
+      color: r-theme-val(course-glimpse, organization-color);
+    }
+
+    &--code {
+      color: r-theme-val(course-glimpse, code-color);
+    }
 
     .icon {
       @include sv-flex(1, 0, 1.4rem);
-      width: 1.4rem;
+      fill: currentColor;
       height: 0.9rem;
       margin-bottom: 0.15rem;
       margin-right: 0.5rem;
-      fill: r-theme-val(course-glimpse, organization-color);
+      width: 1.4rem;
     }
 
     .title {
@@ -222,7 +205,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     overflow: hidden;
     padding: 0.25rem;
     position: absolute;
-    right: 0rem;
+    right: 0;
     top: -3.53rem;
     width: 4.3rem;
     z-index: 0;
