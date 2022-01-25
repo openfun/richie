@@ -19,7 +19,7 @@ class HomeSplash extends React.Component {
 
     const ProjectTitle = () => (
       <h2 className="projectTitle">
-        Richie enables you to build rich education portals quickly and with less code.
+        Richie helps educators create rich online learning portals. 
       </h2>
     );
 
@@ -44,7 +44,7 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
-            <Button href="https://demo.richie.education">Check out the demo</Button>
+            <Button href="https://demo.richie.education">View demo</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -71,8 +71,8 @@ module.exports = class Index extends React.Component {
         {[
           {
             content:
-              '<p>Richie is a specialized Content Management System designed to make learning portals. It is full-featured and ready-to-go.</p>' +
-              '<p>It is a toolbox to easily create full fledged websites with a catalog of online courses in days, not months.</p>' +
+              "<p>Richie helps educators create online learning portals. </p>" +
+              "<p>Build websites and online course catalogs in days with Richie's content management system.</p>" +
               `<a class="button" href="${docUrl('quick-start.html')}">Get started</a>`,
             image: `${baseUrl}img/undraw_professor.svg`,
             imageAlign: 'left',
@@ -88,10 +88,10 @@ module.exports = class Index extends React.Component {
           {[
             {
               content:
-                'Richie is built from the ground up to be localized and handle multilingual content.',
+                'From the ground up, Richie is localized and handles multilingual content.',
               image: `${baseUrl}img/undraw_around_the_world.svg`,
               imageAlign: 'top',
-              title: 'Multilingual by design',
+              title: 'Multilingual by Design',
             },
             {
               content:
@@ -102,10 +102,10 @@ module.exports = class Index extends React.Component {
             },
             {
               content:
-                'Anything can be swapped or changed, from colors and styles to the inner workings of the search engine.',
+                'Personalize course catalogs by swapping colors and styles, or dive deep to customize the built-in search engine.',
               image: `${baseUrl}img/undraw_experience_design.svg`,
               imageAlign: 'top',
-              title: 'Fully customizable',
+              title: 'Fully Customizable',
             },
           ]}
         </Block>
@@ -117,9 +117,9 @@ module.exports = class Index extends React.Component {
         {[
           {
             content:
-              '<p>Richie is released under the MIT licence and all its documentation is copyleft. You can use and modify it as you please.</p>' +
-              '<p>It was built with open source tools such as Django CMS (& Django), and React. Everything is done in the open. Reach out and start contributing!</p>' +
-              `<a class="button" href="${siteConfig.repoUrl}">See the code</a>`,
+              '<p>Built with django CMS, Django, and React - everything is in the open. Richie is available under the MIT license.</p>' +
+              '<p>Users can modify and distribute documentation freely. Start contributing today.</p>' +
+              `<a class="button" href="${siteConfig.repoUrl}">View code</a>`,
             image: `${baseUrl}img/undraw_open_source.svg`,
             imageAlign: 'right',
             title: 'Fully Open Source',
@@ -135,23 +135,20 @@ module.exports = class Index extends React.Component {
             <h2 className="homepage__feature-list__title">What Richie brings you</h2>
             <div className="blockElement blockElement--left twoByGridBlock">
               <div className="blockContent">
-                <h3>An LMS-agnostic education portal</h3>
+                <h3>An LMS-agnostic Education Portal</h3>
                 <p>
-                  Your course catalog can be synchronized with one or more LMS instances running
-                  different kinds of software, such as Open edX or Moodle. Richie is built to
-                  aggregate it all for your users.
+                  Course catalogs can synchronize with one or more LMS instances running different software, 
+                  such as Open edX or Moodle. Richie aggregates it all for your users.
                 </p>
-                <h3>An editor back-office</h3>
+                <h3>Author-first</h3>
                 <p>
-                  All the content in Richie is meant to be created and updated by regular editors,
-                  not software engineers. As it is based on Django CMS, you get a rich editor
-                  interface along with Richie.
+                  Content authors do not have to rely on software engineers to create and update all materials in Richie. 
+                  Instead, authors use a rich editor interface to maintain content.
                 </p>
-                <h3>Advanced access rights and moderation</h3>
+                <h3>Advanced Access Rights and Moderation</h3>
                 <p>
-                  From CMS content structured objects like organizations, courses, and categories,
-                  everything is managed through comprehensive access rights. Those can be based on
-                  individual user or tied to organizations.
+                  Everything is managed through comprehensive access rights from CMS content structured objects like 
+                  organizations, courses, and categories. Rights scale from individual users to enterprise-wide. 
                 </p>
               </div>
             </div>
@@ -159,14 +156,11 @@ module.exports = class Index extends React.Component {
               <div className="blockContent">
                 <h3>A multilingual website</h3>
                 <p>
-                  Richie itself is already available in more than one language, and you can add
-                  yours by talking to us. All the content can be added and managed in as many
-                  languages as you need.
+                  Richie itself is already available in more than one language, and you can add yours by talking to us. All the content can be added and managed in as many languages as you need. Richie is available in English, French, and Spanish. Want to add yours? Reach out! Richie supports content creation and management in as many languages as you need. 
                 </p>
-                <h3>An extensible platform</h3>
+                <h3>An Extensible Platform</h3>
                 <p>
-                  Richie is offered as a Django application (and adjoining NPM packaged). You can
-                  install it as a third-party app to build your own learning platform with Django.
+                  Richie is a Django application with a NPM package. You can install it as a third-party app to build learning platforms. 
                 </p>
               </div>
             </div>
@@ -180,11 +174,11 @@ module.exports = class Index extends React.Component {
         {[
           {
             content:
-              '<p>Stakeholders of the project have a regular video-chat meetup, in English. It takes place on (some) Thursdays in the afternoon, UTC time.</p>' +
-              "<p>If you're considering using or contributing to Richie, come introduce yourself and get some help!</p>",
+              '<p>Project stakeholders regularly check in through virtual meetups in English. Meetings typically take place on Thursday afternoons, UTC.</p>' +
+              "<p>We encourage potential and new contributors to introduce themselves and get help.</p>",
             image: `${baseUrl}img/undraw_video_call.svg`,
             imageAlign: 'left',
-            title: 'Join the community',
+            title: 'Join the Community',
           },
         ]}
       </Block>
