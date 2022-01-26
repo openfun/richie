@@ -72,7 +72,7 @@ module.exports = class Index extends React.Component {
           {
             content:
               "<p>Richie helps educators create online learning portals. </p>" +
-              "<p>Build websites and online course catalogs in days with Richie's content management system.</p>" +
+              "<p>Build websites including online course catalogs in days with Richie's content management system.</p>" +
               `<a class="button" href="${docUrl('quick-start.html')}">Get started</a>`,
             image: `${baseUrl}img/undraw_professor.svg`,
             imageAlign: 'left',
@@ -156,7 +156,7 @@ module.exports = class Index extends React.Component {
               <div className="blockContent">
                 <h3>A multilingual website</h3>
                 <p>
-                  Richie itself is already available in more than one language, and you can add yours by talking to us. All the content can be added and managed in as many languages as you need. Richie is available in English, French, and Spanish. Want to add yours? Reach out! Richie supports content creation and management in as many languages as you need. 
+                  Richie itself is already available in more than one language, and you can add yours by talking to us. All the content can be added and managed in as many languages as you need. Richie is available in English, French, Spanish, <a href="https://crowdin.com/project/richie">and more</a>. Want to add yours? Reach out! Richie supports content creation and management in as many languages as you need. 
                 </p>
                 <h3>An Extensible Platform</h3>
                 <p>
@@ -174,7 +174,7 @@ module.exports = class Index extends React.Component {
         {[
           {
             content:
-              '<p>Project stakeholders regularly check in through virtual meetups in English. Meetings typically take place on Thursday afternoons, UTC.</p>' +
+              '<p>Project stakeholders regularly check in through virtual meetups in English. Meetings typically take place on Tuesday afternoons, UTC.</p>' +
               "<p>We encourage potential and new contributors to introduce themselves and get help.</p>",
             image: `${baseUrl}img/undraw_video_call.svg`,
             imageAlign: 'left',
