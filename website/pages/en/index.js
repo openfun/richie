@@ -18,9 +18,7 @@ class HomeSplash extends React.Component {
     );
 
     const ProjectTitle = () => (
-      <h2 className="projectTitle">
-        Richie helps educators create rich online learning portals. 
-      </h2>
+      <h2 className="projectTitle">Richie helps educators create rich online learning portals..</h2>
     );
 
     const PromoSection = (props) => (
@@ -71,7 +69,7 @@ module.exports = class Index extends React.Component {
         {[
           {
             content:
-              "<p>Richie helps educators create online learning portals. </p>" +
+              '<p>Richie helps educators create online learning portals.</p>' +
               "<p>Build websites including online course catalogs in days with Richie's content management system.</p>" +
               `<a class="button" href="${docUrl('quick-start.html')}">Get started</a>`,
             image: `${baseUrl}img/undraw_professor.svg`,
@@ -87,8 +85,7 @@ module.exports = class Index extends React.Component {
         <Block layout="twoColumn" textAlign="center">
           {[
             {
-              content:
-                'From the ground up, Richie is localized and handles multilingual content.',
+              content: 'From the ground up, Richie is localized and handles multilingual content.',
               image: `${baseUrl}img/undraw_around_the_world.svg`,
               imageAlign: 'top',
               title: 'Multilingual by Design',
@@ -117,7 +114,7 @@ module.exports = class Index extends React.Component {
         {[
           {
             content:
-              '<p>Built with django CMS, Django, and React - everything is in the open. Richie is available under the MIT license.</p>' +
+              '<p>Built with Django CMS, Django, and React - everything is in the open. Richie is available under the MIT license.</p>' +
               '<p>Users can modify and distribute documentation freely. Start contributing today.</p>' +
               `<a class="button" href="${siteConfig.repoUrl}">View code</a>`,
             image: `${baseUrl}img/undraw_open_source.svg`,
@@ -137,30 +134,38 @@ module.exports = class Index extends React.Component {
               <div className="blockContent">
                 <h3>An LMS-agnostic Education Portal</h3>
                 <p>
-                  Course catalogs can synchronize with one or more LMS instances running different software, 
-                  such as Open edX or Moodle. Richie aggregates it all for your users.
+                  Course catalogs can synchronize with one or more LMS instances running different
+                  software, such as Open edX or Moodle. Richie aggregates it all for your users.
                 </p>
                 <h3>Author-first</h3>
                 <p>
-                  Content authors do not have to rely on software engineers to create and update all materials in Richie. 
-                  Instead, authors use a rich editor interface to maintain content.
+                  Content authors do not have to rely on software engineers to create and update all
+                  materials in Richie. Instead, authors use a rich editor interface to maintain
+                  content.
                 </p>
                 <h3>Advanced Access Rights and Moderation</h3>
                 <p>
-                  Everything is managed through comprehensive access rights from CMS content structured objects like 
-                  organizations, courses, and categories. Rights scale from individual users to enterprise-wide. 
+                  Everything is managed through comprehensive access rights from CMS content
+                  structured objects like organizations, courses, and categories. Rights scale from
+                  individual users to enterprise-wide.
                 </p>
               </div>
             </div>
             <div className="blockElement twoByGridBlock">
               <div className="blockContent">
-                <h3>A multilingual website</h3>
+                <h3>A Multilingual Website</h3>
                 <p>
-                  Richie itself is already available in more than one language, and you can add yours by talking to us. All the content can be added and managed in as many languages as you need. Richie is available in English, French, Spanish, <a href="https://crowdin.com/project/richie">and more</a>. Want to add yours? Reach out! Richie supports content creation and management in as many languages as you need. 
+                  Richie is available in more than one language, and you can add yours by talking to
+                  us. All the content can be added and managed in as many languages as you need.
+                  Richie is available in English, French, Spanish,{' '}
+                  <a href="https://crowdin.com/project/richie">and more</a>. Want to add yours?
+                  Reach out! Richie supports content creation and management in as many languages as
+                  you need.
                 </p>
                 <h3>An Extensible Platform</h3>
                 <p>
-                  Richie is a Django application with a NPM package. You can install it as a third-party app to build learning platforms. 
+                  Richie is a Django application with a NPM package. You can install it as a
+                  third-party app to build learning platforms.
                 </p>
               </div>
             </div>
@@ -175,7 +180,7 @@ module.exports = class Index extends React.Component {
           {
             content:
               '<p>Project stakeholders regularly check in through virtual meetups in English. Meetings typically take place on Tuesday afternoons, UTC.</p>' +
-              "<p>We encourage potential and new contributors to introduce themselves and get help.</p>",
+              '<p>We encourage potential and new contributors to introduce themselves and get help.</p>',
             image: `${baseUrl}img/undraw_video_call.svg`,
             imageAlign: 'left',
             title: 'Join the Community',
@@ -202,7 +207,7 @@ module.exports = class Index extends React.Component {
           <h2>Who is Using Richie?</h2>
           <div className="logos">{showcase}</div>
           <a className="button" href="https://demo.richie.education">
-            Check out the demo
+            View demo
           </a>
         </div>
       );
