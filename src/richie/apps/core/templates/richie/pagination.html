@@ -2,9 +2,7 @@
 
 {% if is_paginated %}
 <div class="pagination">
-  <div id="pagination-label" class="offscreen">{% trans "Pagination" %}</div>
-
-  <nav aria-labelledby="pagination-label">
+  <nav aria-label="{% trans "Pagination" %}">
     <ul class="pagination__list">
     {% for page in pages %}
       {% if page %}
