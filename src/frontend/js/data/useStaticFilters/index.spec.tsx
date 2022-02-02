@@ -4,6 +4,8 @@ import fetchMock from 'fetch-mock';
 
 import { FilterDefinition } from 'types/filters';
 import { Deferred } from 'utils/test/deferred';
+import { IntlProvider } from 'react-intl';
+import { PropsWithChildren } from 'react';
 import { useStaticFilters } from '.';
 
 describe('data/useStaticFilters', () => {
@@ -51,12 +53,16 @@ describe('data/useStaticFilters', () => {
     subjects,
   };
 
+  const wrapper = ({ children }: PropsWithChildren<any>) => (
+    <IntlProvider locale="en">{children}</IntlProvider>
+  );
+
   afterEach(() => fetchMock.restore());
 
   it('gets and returns the static filter definitions', async () => {
     const deferred = new Deferred();
     fetchMock.get('/api/v1.0/filter-definitions/', deferred.promise);
-    const { result } = renderHook(useStaticFilters);
+    const { result } = renderHook(useStaticFilters, { wrapper });
 
     // No request is made until we actually use the hook's return value
     expect(fetchMock.called('/api/v1.0/filter-definitions/')).toEqual(false);
@@ -83,7 +89,7 @@ describe('data/useStaticFilters', () => {
 
   it('includes a course config when requested', async () => {
     fetchMock.get('/api/v1.0/filter-definitions/', staticFilterDefinitions);
-    const { result } = renderHook(() => useStaticFilters(true));
+    const { result } = renderHook(() => useStaticFilters(true), { wrapper });
 
     let filters;
     await act(async () => {
