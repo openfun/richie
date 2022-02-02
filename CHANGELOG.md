@@ -23,6 +23,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Hide unpublished objects from list views (category, person and program)
 - Add missing translation within search autocomplete menu
 - Fix a layout issue on autosuggest search menu
 - Fixed a layout issue on course glimpse
