@@ -22,6 +22,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Add missing translation within search autocomplete menu
+- Fix a layout issue on autosuggest search menu
 - Fixed a layout issue on course glimpse
   when organization title and course title are too long
 - Add missing language parameter in LTI requests issued by LTI consumer plugin

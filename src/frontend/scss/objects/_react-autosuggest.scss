@@ -17,7 +17,8 @@
 
   &__suggestions-container {
     @extend .dropdown-menu;
-    width: 100%;
+    max-width: 480px;
+    min-width: 100%;
 
     &--open {
       display: block; // Show/hide is managed by react-autosuggest with the --open state
@@ -30,6 +31,9 @@
 
   &__suggestion {
     @extend .dropdown-item;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 
     &:hover {
       cursor: pointer;
