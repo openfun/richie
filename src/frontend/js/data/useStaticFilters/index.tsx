@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import { FilterDefinition, StaticFilterDefinitions } from 'types/filters';
 import { Nullable } from 'types/utils';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
+import { defineMessages, useIntl } from 'react-intl';
 
 // Our search and autosuggestion pipeline operated based on filter definitions. Obviously, we can't filters
 // courses by courses, but we still need a filter-definition-like config to run courses autocompletion.
@@ -15,6 +16,14 @@ const coursesConfig: FilterDefinition = {
   position: 99,
 };
 
+const messages = defineMessages({
+  courses: {
+    defaultMessage: 'Courses',
+    description: 'localized human_name label for coursesConfig filter name',
+    id: 'components.useStaticFilters.courses',
+  },
+});
+
 /**
  * Hook to provide static filter definitions to components as a promise while abstracting away
  * data-fetching & caching logic.
@@ -23,6 +32,7 @@ const coursesConfig: FilterDefinition = {
  */
 export const useStaticFilters = (includeCoursesConfig = false) => {
   const [needsFilters, setNeedsFilters] = useState(false);
+  const intl = useIntl();
 
   const filtersResolver = useRef<Nullable<(filters: StaticFilterDefinitions) => void>>(null);
   const [filtersPromise] = useState<Promise<StaticFilterDefinitions>>(
@@ -40,7 +50,14 @@ export const useStaticFilters = (includeCoursesConfig = false) => {
 
       filtersResolver.current!({
         ...filters,
-        ...(includeCoursesConfig ? { courses: coursesConfig } : {}),
+        ...(includeCoursesConfig
+          ? {
+              courses: {
+                ...coursesConfig,
+                human_name: intl.formatMessage(messages.courses),
+              },
+            }
+          : {}),
       });
     }
   }, [needsFilters]);
