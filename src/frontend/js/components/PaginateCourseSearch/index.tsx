@@ -1,5 +1,5 @@
-import { Fragment, useState } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { Fragment } from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
 
@@ -49,11 +49,8 @@ interface PaginateCourseSearchProps {
 }
 
 export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseSearchProps) => {
-  // Generate a unique ID per instance to ensure our aria-labelledby do not break if there are two
-  // or more instances of <PaginateCourseSearch /> on the page
-  const [componentId] = useState(Math.random());
   const { courseSearchParams, dispatchCourseSearchParamsUpdate } = useCourseSearchParams();
-
+  const intl = useIntl();
   // Extract pagination information from params and search results meta
   const limit = Number(courseSearchParams.limit);
   const offset = Number(courseSearchParams.offset);
@@ -90,10 +87,7 @@ export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseS
 
   return (
     <div className="pagination">
-      <div id={`pagination-label-${componentId}`} className="offscreen">
-        <FormattedMessage {...messages.pagination} />
-      </div>
-      <nav aria-labelledby={`pagination-label-${componentId}`}>
+      <nav aria-label={intl.formatMessage(messages.pagination)}>
         <ul className="pagination__list">
           {pageList.map((page, index) => (
             <Fragment key={page}>
