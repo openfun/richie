@@ -3,6 +3,7 @@ import EnrollmentApiInterface from 'utils/api/enrollment';
 import { useSession } from 'data/SessionProvider';
 import { useSessionQuery } from 'utils/react-query/useSessionQuery';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
+import WebAnalyticsAPIHandler from 'utils/api/web-analytics';
 
 /**
  * Hook to manage an enrollment related to a `resource_link`. It provides interface to
@@ -37,6 +38,9 @@ const useCourseEnrollment = (resourceLink: string) => {
     mutationKey: queryKey,
     onSuccess: () => {
       queryClient.invalidateQueries(queryKey);
+
+      // After enrolls the user, then send enrolled event to the web analytics handler.
+      WebAnalyticsAPIHandler()?.sendEnrolledEvent(resourceLink);
     },
   });
 

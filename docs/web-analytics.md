@@ -4,12 +4,12 @@ title: Add web analytics to your site
 sidebar_label: Web Analytics
 ---
 
-The purpose of this file is to document how you can enable a Web Analytics solution. 
-Currently Richie only supports by default the Google Analytics using the Google Tag Manager Javascript.
-But it is possible with little cost to add support for other web analytics solutions.
+Richie has native support to [Google Analytics](#google-analytics) and [Google Tag Manager](#google-tag-manager) Web Analytics solutions.
+The purpose of this file is to explain how you can enable one of the supported Web Analytics providers
+and how you can extend Richie with an alternative solution.
 
 ## Google Analytics
-Next, it is decribed how you can configure the **Google Analytics** on your Richie site.
+Next, it is described how you can configure the **Google Analytics** on your Richie site.
 
 - Add the `WEB_ANALYTICS_ID` setting, with your Google Analytics tracking id code.
 
@@ -20,6 +20,14 @@ Custom dimensions with a value as example:
 * Course runs titles - `Summer edition | Winter edition`
 * Course runs resource links - `http://example.edx:8073/courses/course-v1:edX+DemoX+Demo_Course/info`
 * Page title - `Introduction to Programming`
+
+## Google Tag Manager
+Next, it is described how you can configure the **Google Tag Manager** on your Richie site.
+
+- Add the `WEB_ANALYTICS_ID` setting, with your Google Tag Manager tracking id code.
+- Add the `WEB_ANALYTICS_PROVIDER` setting with the `google_tag_manager` value.
+
+The current Google Tag Manager implementation also defines a custom dimensions like the [Google Analytics](#google-analytics).
 
 ## Location of the web analytics javascript
 Use the `WEB_ANALYTICS_LOCATION` settings to decide where do you want to put the Javascript code. Use `head` (**default** value), to put the Javascript on HTML header, or `footer`, to put the Javascript code to the bottom of the body.
@@ -80,3 +88,8 @@ Example, if you only need the organization codes on your custom `richie/web_anal
     console.log("organization codes: '{{ WEB_ANALYTICS.DIMENSIONS.organizations_codes |join:" | " }}");
 </script>
 ```
+
+The frontend code also sends **events** to the web analytics provider.
+Richie sends events when the user is enrolled on a course run.
+To support different providers, you need to create a similar file
+of `src/frontend/js/utils/api/web-analytics/google_analytics.ts` and change the `src/frontend/js/utils/api/web-analytics/index.ts` file to include that newer provider.

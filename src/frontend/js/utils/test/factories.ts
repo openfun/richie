@@ -65,6 +65,7 @@ export const ContextFactory = (context: Partial<CommonDataProps['context']> = {}
     ],
     release: faker.system.semver(),
     sentry_dsn: null,
+    web_analytics_provider: null,
     ...context,
   });
 

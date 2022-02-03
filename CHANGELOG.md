@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+- Differentiate between Google Analytics and Google Tag Manager js code as
+  different Web Analytics providers.
+- Send web analytics event when an user enrolls to a course using the
+  LMS enrollment api.
 - Show organization acronym by using the `menu_title` field (if set) on
   the organization page.
 - Improve pagination blocks labels for screen reader users when there are

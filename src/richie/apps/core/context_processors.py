@@ -47,6 +47,7 @@ def site_metas(request: HttpRequest):
                 "environment": getattr(settings, "ENVIRONMENT", ""),
                 "release": getattr(settings, "RELEASE", ""),
                 "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
+                **WebAnalyticsContextProcessor().frontend_context_processor(request),
             }
         },
         **WebAnalyticsContextProcessor().context_processor(request),
@@ -129,6 +130,18 @@ class WebAnalyticsContextProcessor:
     Context processor to add Web Analytics tracking information to Richie CMS templates and
     frontend.
     """
+
+    # pylint: disable=no-self-use
+    def frontend_context_processor(self, request: HttpRequest) -> dict:
+        """
+        Additional web analytics information for the frontend react
+        """
+        context = {}
+        if getattr(settings, "WEB_ANALYTICS_ID"):
+            context["web_analytics_provider"] = getattr(
+                settings, "WEB_ANALYTICS_PROVIDER", "google_analytics"
+            )
+        return context
 
     def context_processor(self, request: HttpRequest) -> dict:
         """
