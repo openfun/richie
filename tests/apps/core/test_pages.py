@@ -84,6 +84,7 @@ class PagesTests(CMSTestCase):
             }
         ]
     )
+    @override_settings(WEB_ANALYTICS_ID="TRACKING_ID")
     def test_page_includes_frontend_context(self):
         """
         Create a page and make sure it includes the frontend context as included
@@ -115,4 +116,8 @@ class PagesTests(CMSTestCase):
                 r"\u0022course_regexp\u0022: "
                 r"\u0022^https://lms\u005C\u005C.example\u005C\u005C.com/courses/(.*)/course/?$\u0022"  # noqa pylint: disable=line-too-long
             ),
+        )
+        self.assertContains(
+            response,
+            r"\u0022web_analytics_provider\u0022: \u0022google_analytics\u0022",
         )
