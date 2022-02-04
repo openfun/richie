@@ -28,10 +28,14 @@ describe('OpenEdX Hawthorn API', () => {
   const LMSConf = context.lms_backends![0];
   const HawthornApi = API(LMSConf);
 
-  describe('ApiOptions', () => {
-    it('if a route is overriden in ApiOptions, related request uses it', async () => {
+  describe('APIOptions', () => {
+    it('if a route is overriden through APIOptions, related request uses it', async () => {
       const CustomApi = API(LMSConf, {
-        routes: { user: { me: '/my-custom-api/user/v2.0/whoami' } },
+        routes: {
+          user: {
+            me: `${LMSConf.endpoint}/my-custom-api/user/v2.0/whoami`,
+          },
+        },
       });
 
       fetchMock.get(`${EDX_ENDPOINT}/my-custom-api/user/v2.0/whoami`, 401);

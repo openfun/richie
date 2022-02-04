@@ -1,12 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import CourseEnrollmentAPI from 'utils/api/courseEnrollment';
-import { useSession } from 'data/useSession';
+import EnrollmentApiInterface from 'utils/api/enrollment';
+import { useSession } from 'data/SessionProvider';
 
 const useEnrollment = (resourceLink: string) => {
   const { user } = useSession();
   const queryKey = ['enrollment', resourceLink];
   const queryClient = useQueryClient();
-  const EnrollmentAPI = CourseEnrollmentAPI(resourceLink);
+  const EnrollmentAPI = EnrollmentApiInterface(resourceLink);
 
   const { data: enrollment } = useQuery(queryKey, async () => EnrollmentAPI.get(user!), {
     enabled: !!user,

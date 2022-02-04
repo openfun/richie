@@ -5,6 +5,8 @@ export const API_LIST_DEFAULT_PARAMS = {
 
 export const EDX_CSRF_TOKEN_COOKIE_NAME = 'edx_csrf_token';
 
+export const RICHIE_USER_TOKEN = 'RICHIE_USER_TOKEN';
+
 export const REACT_QUERY_SETTINGS = {
   // Cache is garbage collected after this delay
   cacheTime: 24 * 60 * 60 * 1000, // 24h in ms
@@ -21,6 +23,6 @@ export const REACT_QUERY_SETTINGS = {
     // The key used to persist cache within cache storage
     key: 'RICHIE_PERSISTED_QUERIES',
     // Cache storage throttle time
-    throttleTime: 250,
+    throttleTime: 500,
   },
 };
