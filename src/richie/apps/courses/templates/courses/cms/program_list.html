@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags extra_tags i18n %}
+{% load cms_tags extra_tags i18n pagination_tags %}
 
 {% block subheader_content %}
 <div class="subheader__container">
@@ -19,7 +19,13 @@
 
         <div class="program-list__programs program-list__row">
             <div class="program-glimpse-list">
-                {% for page in current_page.get_child_pages %}
+                {% if current_page.publisher_is_draft %}
+                    {% autopaginate current_page.get_child_pages 100 as object_list %}
+                {% else %}
+                    {% autopaginate current_page.get_child_pages.published.distinct 100 as object_list %}
+                {% endif %}
+
+                {% for page in object_list %}
                     {% if page.program %}
                         {% include "courses/cms/fragment_program_glimpse.html" with program=page.program %}
                     {% endif %}
@@ -28,6 +34,10 @@
                         {% trans "No associated programs" %}
                     </p>
                 {% endfor %}
+
+                {% if object_list %}
+                    {% paginate using "richie/pagination.html" %}
+                {% endif %}
             </div>
         </div>
     </div>

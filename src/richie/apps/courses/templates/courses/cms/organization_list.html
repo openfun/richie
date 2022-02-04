@@ -23,6 +23,10 @@
         {% empty %}
             <p class="organization-list__empty">{% trans "No organization yet" %}</p>
         {% endfor %}
+
+        {% if object_list %}
+            {% paginate using "richie/pagination.html" %}
+        {% endif %}
     </div>
 </div>
 {% endblock content %}

@@ -11,7 +11,12 @@
 
 {% block content %}
 <div class="person-list">
-  {% autopaginate current_page.get_child_pages 24 as object_list %}
+  {% if current_page.publisher_is_draft %}
+    {% autopaginate current_page.get_child_pages 100 as object_list %}
+  {% else %}
+    {% autopaginate current_page.get_child_pages.published.distinct 100 as object_list %}
+  {% endif %}
+
   {% for page in object_list %}
     {% if page.person %}
       {% include "courses/cms/fragment_person_glimpse.html" with person=page.person %}
