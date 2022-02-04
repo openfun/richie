@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 're
 
 import { Spinner } from 'components/Spinner';
 import { UserMenu } from 'components/UserMenu';
-import { useSession } from 'data/useSession';
+import { useSession } from 'data/SessionProvider';
 import { CommonDataProps } from 'types/commonDataProps';
 
 const messages: { [key: string]: MessageDescriptor } = defineMessages({

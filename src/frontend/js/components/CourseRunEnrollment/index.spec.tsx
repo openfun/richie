@@ -11,7 +11,7 @@ import createQueryClient from 'utils/react-query/createQueryClient';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import { handle } from 'utils/errors/handle';
 import context from 'utils/context';
-import { SessionProvider } from 'data/useSession';
+import { SessionProvider } from 'data/SessionProvider';
 import CourseRunEnrollment from '.';
 
 jest.mock('utils/errors/handle');

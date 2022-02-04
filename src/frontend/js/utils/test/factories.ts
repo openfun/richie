@@ -1,6 +1,8 @@
-import { createSpec, derived, faker } from '@helpscout/helix';
+import { compose, createSpec, derived, faker, oneOf } from '@helpscout/helix';
 import { CommonDataProps } from 'types/commonDataProps';
 import { APIBackend } from 'types/api';
+import type * as Joanie from 'types/Joanie';
+import { EnrollmentState, OrderState, ProductType } from 'types/Joanie';
 import { DehydratedState } from 'react-query/types/hydration';
 import { QueryState } from 'react-query/types/core/query';
 import { MutationState } from 'react-query/types/core/mutation';
@@ -37,6 +39,13 @@ export const UserFactory = createSpec({
   full_name: faker.fake('{{name.firstName}} {{name.lastName}}'),
   username: faker.internet.userName(),
 });
+
+export const FonzieUserFactory = compose(
+  UserFactory,
+  createSpec({
+    access_token: btoa(faker.datatype.uuid()),
+  }),
+);
 
 export const ContextFactory = (context: Partial<CommonDataProps['context']> = {}) =>
   createSpec({
@@ -112,4 +121,132 @@ export const MutationStateFactory = (key: MutationKey, state: Partial<MutationSt
     variables: undefined,
     ...state,
   } as MutationState,
+});
+
+export const CurrencyFactory = createSpec({
+  code: faker.finance.currencyCode(),
+  symbol: faker.finance.currencySymbol(),
+});
+
+export const OrganizationFactory = createSpec({
+  code: faker.random.alphaNumeric(5),
+  title: faker.random.words(1),
+});
+
+export const JoanieCourseRunFactory = createSpec({
+  end: faker.date.future(0.75)().toISOString(),
+  enrollment_end: faker.date.future(0.5)().toISOString(),
+  enrollment_start: faker.date.past(0.25)().toISOString(),
+  id: faker.datatype.uuid(),
+  resource_link: faker.internet.url(),
+  start: faker.date.future(0.25)().toISOString(),
+  title: faker.random.words(Math.ceil(Math.random() * 3)),
+});
+
+export const JoanieEnrollmentFactory = compose(
+  JoanieCourseRunFactory,
+  createSpec({
+    is_active: true,
+    state: EnrollmentState.SET,
+  }),
+);
+
+export const TargetCourseFactory = createSpec({
+  code: faker.random.alphaNumeric(5),
+  organization: OrganizationFactory,
+  title: faker.random.words(1, 3),
+  course_runs: JoanieCourseRunFactory.generate(1, 3),
+});
+
+export const CertificateProductFactory = createSpec({
+  id: faker.datatype.uuid(),
+  title: faker.random.words(1, 3),
+  type: ProductType.CERTIFICATE,
+  price: faker.datatype.number(),
+  price_currency: faker.finance.currencyCode(),
+  call_to_action: faker.random.words(1, 3),
+  certificate: createSpec({
+    id: faker.datatype.uuid(),
+    title: faker.random.words(Math.ceil(Math.random() * 3)),
+    description: faker.lorem.sentences(2),
+  }),
+  order: null,
+  target_courses: TargetCourseFactory.generate(1, 5),
+});
+
+const OrderLiteFactory = createSpec({
+  created_on: faker.date.past()().toISOString(),
+  enrollments: [],
+  id: faker.datatype.uuid(),
+  total: faker.datatype.number(),
+  total_currency: faker.finance.currencyCode(),
+  product: faker.datatype.uuid(),
+  state: OrderState.VALIDATED,
+});
+
+// TODO Create CredentialProductFactory and EnrollmentProductFactory
+export const ProductFactory = oneOf([CertificateProductFactory]);
+// Create a product with an order.
+export const ProductOrderFactory = (
+  productSpec: typeof ProductFactory = CertificateProductFactory,
+) =>
+  compose(productSpec).afterGenerate((product: Joanie.CourseProduct) => {
+    const enrollments = product.target_courses.map((course) => {
+      const index = faker.datatype.number(0, course.course_runs.length - 1)();
+      const courseRun = course.course_runs[index];
+      return {
+        ...courseRun,
+        is_active: true,
+        state: EnrollmentState.SET,
+      };
+    });
+
+    const order = OrderLiteFactory.extend({
+      product: product.id,
+      enrollments,
+    });
+    return [product, order];
+  });
+
+export const CourseFactory = createSpec({
+  code: faker.random.alphaNumeric(5),
+  organization: OrganizationFactory,
+  title: faker.random.words(Math.ceil(Math.random() * 3)),
+  products: ProductFactory.generate(1, 3),
+  course_runs: [],
+  orders: null,
+});
+
+export const OrderFactory = createSpec({
+  id: faker.datatype.uuid(),
+  course: faker.random.alphaNumeric(5),
+  created_on: faker.date.past()().toISOString(),
+  owner: faker.internet.userName(),
+  total: faker.datatype.number(),
+  total_currency: faker.finance.currencyCode(),
+  state: OrderState.VALIDATED,
+  product: faker.datatype.uuid(),
+  target_courses: TargetCourseFactory.generate(1, 5),
+});
+
+export const AddressFactory = createSpec({
+  address: faker.address.streetAddress(),
+  city: faker.address.city(),
+  country: faker.address.countryCode(),
+  first_name: faker.name.firstName(),
+  last_name: faker.name.lastName(),
+  id: faker.datatype.uuid(),
+  is_main: false,
+  postcode: faker.address.zipCode(),
+  title: faker.random.word(),
+});
+
+export const CreditCardFactory = createSpec({
+  brand: 'Visa',
+  expiration_month: derived(() => faker.date.future()().getMonth()),
+  expiration_year: derived(() => faker.date.future()().getFullYear()),
+  id: faker.datatype.uuid(),
+  is_main: false,
+  last_numbers: derived(() => faker.finance.creditCardNumber('visa')().slice(-4)),
+  title: faker.random.word(),
 });

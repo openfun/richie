@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useReducer } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { Spinner } from 'components/Spinner';
-import { useSession } from 'data/useSession';
+import { useSession } from 'data/SessionProvider';
 import { Priority } from 'types';
 import { User } from 'types/User';
 import { Maybe, Nullable } from 'types/utils';
