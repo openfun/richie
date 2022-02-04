@@ -11,6 +11,7 @@ from django.http.request import HttpRequest
 from django.middleware.csrf import get_token
 from django.utils.translation import get_language_from_request
 
+from richie.apps.core.templatetags.joanie import is_joanie_enabled
 from richie.apps.courses.defaults import RICHIE_MAX_ARCHIVED_COURSE_RUNS
 from richie.apps.courses.models import Organization
 
@@ -92,6 +93,11 @@ def site_metas(request: HttpRequest):
         context["FRONTEND_CONTEXT"]["context"]["authentication"] = {
             "endpoint": authentication_delegation["BASE_URL"],
             "backend": authentication_delegation["BACKEND"],
+        }
+
+    if is_joanie_enabled():
+        context["FRONTEND_CONTEXT"]["context"]["joanie_backend"] = {
+            "endpoint": settings.JOANIE["BASE_URL"],
         }
 
     if getattr(settings, "RICHIE_LMS_BACKENDS", None):
