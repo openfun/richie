@@ -38,6 +38,7 @@ export interface APICourseSearchResponse {
 }
 
 export interface APIAuthentication {
+  accessToken?: () => Nullable<string>;
   login: () => void;
   logout: () => Promise<void>;
   me: () => Promise<Nullable<User>>;
@@ -55,17 +56,18 @@ export interface APILms {
   enrollment: APIEnrollment;
 }
 
-export interface ApiOptions {
-  routes: {
-    [key: string]: {
-      [key: string]: string;
-    };
-  };
+export interface APIRoute {
+  [key: string]: string | APIRoute;
+}
+
+export interface APIOptions {
+  routes: APIRoute;
 }
 
 export enum APIBackend {
   BASE = 'base',
   FONZIE = 'fonzie',
+  JOANIE = 'joanie',
   OPENEDX_DOGWOOD = 'openedx-dogwood',
   OPENEDX_HAWTHORN = 'openedx-hawthorn',
 }

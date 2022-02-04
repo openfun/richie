@@ -12,16 +12,16 @@ import OpenEdxHawthornApiInterface from './openedx-hawthorn';
  *
  */
 
-const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
-  const ApiOptions = {
+const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
+  const APIOptions = {
     routes: {
       user: {
-        me: '/api/mobile/v0.5/my_user_info',
+        me: `${APIConf.endpoint}/api/mobile/v0.5/my_user_info`,
       },
     },
   };
 
-  return OpenEdxHawthornApiInterface(APIConf, ApiOptions);
+  return OpenEdxHawthornApiInterface(APIConf, APIOptions);
 };
 
 export default API;

@@ -9,7 +9,7 @@ import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import * as mockFactories from 'utils/test/factories';
 import createQueryClient from 'utils/react-query/createQueryClient';
-import { SessionProvider } from 'data/useSession';
+import BaseSessionProvider from 'data/SessionProvider/BaseSessionProvider';
 import useEnrollment from '.';
 
 jest.mock('utils/context', () => ({
@@ -35,7 +35,7 @@ describe('useEnrollment', () => {
   const endpoint = 'https://endpoint.test';
   const wrapper = ({ client, children }: PropsWithChildren<{ client: QueryClient }>) => (
     <QueryClientProvider client={client}>
-      <SessionProvider>{children}</SessionProvider>
+      <BaseSessionProvider>{children}</BaseSessionProvider>
     </QueryClientProvider>
   );
 
