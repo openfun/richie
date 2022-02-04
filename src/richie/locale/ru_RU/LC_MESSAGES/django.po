@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-17 09:03+0000\n"
-"PO-Revision-Date: 2021-12-27 09:49\n"
+"POT-Creation-Date: 2022-02-04 09:50+0000\n"
+"PO-Revision-Date: 2022-02-04 13:18\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -258,15 +258,15 @@ msgstr "Неверный запрос сервера"
 msgid "Something went wrong. Please try again later."
 msgstr "Что-то пошло не так. Пожалуйста, попробуйте позже."
 
-#: apps/courses/admin.py:262
+#: apps/courses/admin.py:264
 msgid "Course could not be found."
 msgstr "Курс не может быть найден."
 
-#: apps/courses/admin.py:295
+#: apps/courses/admin.py:297
 msgid "See user group"
 msgstr "Посмотреть группу пользователей"
 
-#: apps/courses/admin.py:296
+#: apps/courses/admin.py:298
 msgid "See filer folder"
 msgstr "Смотреть папку filer"
 
@@ -283,7 +283,7 @@ msgid "Category"
 msgstr "Категория"
 
 #: apps/courses/cms_plugins.py:122
-#: apps/courses/templates/courses/cms/fragment_course_run.html:10
+#: apps/courses/templates/courses/cms/fragment_course_run.html:11
 msgid "Course"
 msgstr "Курс"
 
@@ -536,13 +536,13 @@ msgid "blog posts"
 msgstr "записи в блоге"
 
 #: apps/courses/models/blog.py:91 apps/courses/models/category.py:154
-#: apps/courses/models/course.py:957 apps/courses/models/organization.py:199
+#: apps/courses/models/course.py:981 apps/courses/models/organization.py:199
 #: apps/courses/models/organization.py:233
 msgid "variant"
 msgstr "вариант"
 
 #: apps/courses/models/blog.py:94 apps/courses/models/category.py:157
-#: apps/courses/models/course.py:960 apps/courses/models/organization.py:202
+#: apps/courses/models/course.py:984 apps/courses/models/organization.py:202
 #: apps/courses/models/organization.py:236
 msgid "Optional glimpse variant for a custom look."
 msgstr "Дополнительный вариант с проблеском для придания индивидуального вида."
@@ -667,107 +667,123 @@ msgstr "Синхронизация с черновиком страницы"
 msgid "Synchronization to public page"
 msgstr "Синхронизация с публичной страницей"
 
-#: apps/courses/models/course.py:690
+#: apps/courses/models/course.py:667
+msgid "course_and_search - show on the course page and include in search results"
+msgstr "course_and_search - показать на странице курса и включить в результаты поиска"
+
+#: apps/courses/models/course.py:670
+msgid "course_only - show on the course page and hide from search results"
+msgstr "course_only - показывать на странице курса и скрыть от результатов поиска"
+
+#: apps/courses/models/course.py:672
+msgid "hidden - hide on the course page and from search results"
+msgstr "hidden - скрыть на странице курса и из результатов поиска"
+
+#: apps/courses/models/course.py:702
 msgid "resource link"
 msgstr "ссылка на ресурс"
 
-#: apps/courses/models/course.py:692
+#: apps/courses/models/course.py:704
 msgid "course start"
 msgstr "начало курса"
 
-#: apps/courses/models/course.py:693
+#: apps/courses/models/course.py:705
 msgid "course end"
 msgstr "конец курса"
 
-#: apps/courses/models/course.py:695
+#: apps/courses/models/course.py:707
 msgid "enrollment start"
 msgstr "начало зачисления"
 
-#: apps/courses/models/course.py:697
+#: apps/courses/models/course.py:709
 msgid "enrollment end"
 msgstr "окончание зачисления"
 
-#: apps/courses/models/course.py:705
+#: apps/courses/models/course.py:717
 msgid "The list of languages in which the course content is available."
 msgstr "Список языков, на которых доступно содержимое курса."
 
-#: apps/courses/models/course.py:708
+#: apps/courses/models/course.py:720
 msgid "enrollment count"
 msgstr "количество зачислений"
 
-#: apps/courses/models/course.py:711
+#: apps/courses/models/course.py:723
 msgid "The number of enrolled students"
 msgstr "Количество зачисленных студентов"
 
-#: apps/courses/models/course.py:716
+#: apps/courses/models/course.py:726
+msgid "catalog visibility"
+msgstr "видимость каталога"
+
+#: apps/courses/models/course.py:735
 msgid "course run"
 msgstr "запуск курса"
 
-#: apps/courses/models/course.py:717
+#: apps/courses/models/course.py:736
 msgid "course runs"
 msgstr "запуски курса"
 
-#: apps/courses/models/course.py:897
+#: apps/courses/models/course.py:921
 msgid "title"
 msgstr "заголовок"
 
-#: apps/courses/models/course.py:902
+#: apps/courses/models/course.py:926
 msgid "Course run translation"
 msgstr "Перевод запуска курса"
 
-#: apps/courses/models/course.py:903
+#: apps/courses/models/course.py:927
 msgid "Course run translations"
 msgstr "Переводы запуска курса"
 
-#: apps/courses/models/course.py:967
+#: apps/courses/models/course.py:991
 msgid "course plugin"
 msgstr "плагин курса"
 
-#: apps/courses/models/course.py:968
+#: apps/courses/models/course.py:992
 msgid "course plugins"
 msgstr "плагины курса"
 
-#: apps/courses/models/course.py:985 plugins/large_banner/models.py:38
+#: apps/courses/models/course.py:1009 plugins/large_banner/models.py:38
 msgid "logo"
 msgstr "лого"
 
-#: apps/courses/models/course.py:987
+#: apps/courses/models/course.py:1011
 msgid "url"
 msgstr "url"
 
-#: apps/courses/models/course.py:990 apps/courses/models/course.py:1014
+#: apps/courses/models/course.py:1014 apps/courses/models/course.py:1038
 msgid "name"
 msgstr "имя"
 
-#: apps/courses/models/course.py:992 apps/courses/models/course.py:1015
+#: apps/courses/models/course.py:1016 apps/courses/models/course.py:1039
 msgid "content"
 msgstr "контент"
 
-#: apps/courses/models/course.py:997
+#: apps/courses/models/course.py:1021
 msgid "licence"
 msgstr "лицензия"
 
-#: apps/courses/models/course.py:998
+#: apps/courses/models/course.py:1022
 msgid "licences"
 msgstr "лицензии"
 
-#: apps/courses/models/course.py:1020
+#: apps/courses/models/course.py:1044
 msgid "Licence translation"
 msgstr "Перевод лицензии"
 
-#: apps/courses/models/course.py:1021
+#: apps/courses/models/course.py:1045
 msgid "licence translations"
 msgstr "переводы лицензий"
 
-#: apps/courses/models/course.py:1035
+#: apps/courses/models/course.py:1059
 msgid "description"
 msgstr "описание"
 
-#: apps/courses/models/course.py:1039
+#: apps/courses/models/course.py:1063
 msgid "licence plugin"
 msgstr "плагин лицензии"
 
-#: apps/courses/models/course.py:1040
+#: apps/courses/models/course.py:1064
 msgid "licence plugins"
 msgstr "плагины лицензии"
 
@@ -1167,7 +1183,7 @@ msgstr "Похожие блоги"
 msgid "Related persons"
 msgstr "Связанные люди"
 
-#: apps/courses/templates/courses/cms/category_list.html:20
+#: apps/courses/templates/courses/cms/category_list.html:26
 msgid "No categories"
 msgstr "Нет категорий"
 
@@ -1378,44 +1394,44 @@ msgstr "Команда курса"
 msgid "License"
 msgstr "Лицензия"
 
-#: apps/courses/templates/courses/cms/fragment_course_run.html:6
+#: apps/courses/templates/courses/cms/fragment_course_run.html:7
 msgid "Enrollment"
 msgstr "Зачисление"
 
-#: apps/courses/templates/courses/cms/fragment_course_run.html:8
+#: apps/courses/templates/courses/cms/fragment_course_run.html:9
 #, python-format
 msgid "From %(enrollment_start)s to %(enrollment_end)s"
 msgstr "С %(enrollment_start)s по %(enrollment_end)s"
 
-#: apps/courses/templates/courses/cms/fragment_course_run.html:18
+#: apps/courses/templates/courses/cms/fragment_course_run.html:19
 #, python-format
 msgid "From %(start)s to %(end)s"
 msgstr "С %(start)s по %(end)s"
 
-#: apps/courses/templates/courses/cms/fragment_course_run.html:20
+#: apps/courses/templates/courses/cms/fragment_course_run.html:21
 #: apps/search/defaults.py:75
 msgid "Languages"
 msgstr "Языки"
 
-#: apps/courses/templates/courses/cms/fragment_course_runs_list.html:13
+#: apps/courses/templates/courses/cms/fragment_course_runs_list.html:14
 #, python-format
 msgid "\n"
-"                            %(title)s, from %(start)s to %(end)s\n"
-"                        "
+"                                %(title)s, from %(start)s to %(end)s\n"
+"                            "
 msgstr "\n"
-"                            %(title)s, с %(start)s до %(end)s\n"
-"                        "
+"                                %(title)s, с %(start)s по %(end)s\n"
+"                            "
 
-#: apps/courses/templates/courses/cms/fragment_course_runs_list.html:17
+#: apps/courses/templates/courses/cms/fragment_course_runs_list.html:18
 #, python-format
 msgid "\n"
-"                            From %(start)s to %(end)s\n"
-"                        "
+"                                From %(start)s to %(end)s\n"
+"                            "
 msgstr "\n"
 "                            С %(start)s по %(end)s\n"
-"                        "
+"                            "
 
-#: apps/courses/templates/courses/cms/fragment_course_runs_list.html:30
+#: apps/courses/templates/courses/cms/fragment_course_runs_list.html:32
 msgid "View more"
 msgstr "Показать еще"
 
@@ -1488,7 +1504,7 @@ msgstr "\n"
 msgid "Blogposts"
 msgstr "Записи в блогах"
 
-#: apps/courses/templates/courses/cms/person_list.html:21
+#: apps/courses/templates/courses/cms/person_list.html:26
 msgid "No persons"
 msgstr "Нет людей"
 
@@ -1496,7 +1512,7 @@ msgstr "Нет людей"
 msgid "program cover image"
 msgstr "обложка программы"
 
-#: apps/courses/templates/courses/cms/program_list.html:28
+#: apps/courses/templates/courses/cms/program_list.html:34
 msgid "No associated programs"
 msgstr "Нет связанных программ"
 
@@ -1748,19 +1764,19 @@ msgstr "Пожалуйста, выберите выбранного провай
 msgid "Please fill this field"
 msgstr "Пожалуйста, заполните это поле"
 
-#: plugins/lti_consumer/models.py:28
+#: plugins/lti_consumer/models.py:29
 msgid "LTI url"
 msgstr "LTI url"
 
-#: plugins/lti_consumer/models.py:30
+#: plugins/lti_consumer/models.py:31
 msgid "For a predefined provider, leave this field empty for uploading new content."
 msgstr "Для предопределенного поставщика оставьте это поле пустым для загрузки нового содержимого."
 
-#: plugins/lti_consumer/models.py:36
+#: plugins/lti_consumer/models.py:37
 msgid "Predefined LTI provider"
 msgstr "Предопределенный провайдер LTI"
 
-#: plugins/lti_consumer/models.py:41
+#: plugins/lti_consumer/models.py:42
 msgid "Please choose a predefined provider or fill fields below."
 msgstr "Пожалуйста, выберите провайдера или заполните поля ниже."
 

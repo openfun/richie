@@ -182,5 +182,9 @@
   "components.UserLogin.spinnerText": {
     "description": "Accessibility text for the spinner in the login area.",
     "message": "Cargando estado de inicio de sesión..."
+  },
+  "components.useStaticFilters.courses": {
+    "description": "localized human_name label for coursesConfig filter name",
+    "message": "Cursos"
   }
 }
