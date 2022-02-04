@@ -15,7 +15,7 @@ jest.mock('components/RootSearchSuggestField', () => ({
     `root search suggest field component rendered with ${exampleProp}`,
 }));
 
-jest.mock('data/useSession', () => ({
+jest.mock('data/SessionProvider', () => ({
   __esModule: true,
   SessionProvider: (props: PropsWithChildren<any>) => props.children,
 }));

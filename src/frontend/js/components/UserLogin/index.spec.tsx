@@ -14,7 +14,7 @@ import { Deferred } from 'utils/test/deferred';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import context from 'utils/context';
 import { REACT_QUERY_SETTINGS } from 'settings';
-import { SessionProvider } from 'data/useSession';
+import { SessionProvider } from 'data/SessionProvider';
 import UserLogin from '.';
 
 jest.mock('utils/errors/handle', () => ({

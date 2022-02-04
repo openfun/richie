@@ -4,7 +4,7 @@ import startCase from 'lodash-es/startCase';
 import { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { HistoryProvider } from 'data/useHistory';
-import { SessionProvider } from 'data/useSession';
+import { SessionProvider } from 'data/SessionProvider';
 import { Spinner } from 'components/Spinner';
 
 const CourseRunEnrollment = lazy(() => import('components/CourseRunEnrollment'));
