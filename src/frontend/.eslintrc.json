@@ -72,7 +72,8 @@
     "react/no-array-index-key": "warn",
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "react/style-prop-object": ["error", { "allow": ["FormattedNumber"] }]
   },
   "settings": {
     "polyfills": ["fetch", "Promise"]
