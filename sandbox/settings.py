@@ -433,6 +433,9 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "treebeard",
         "filer",
         "easy_thumbnails",
+        # django-autocomplete-light
+        "dal",
+        "dal_select2",
         # Django
         "django.contrib.auth",
         "django.contrib.contenttypes",

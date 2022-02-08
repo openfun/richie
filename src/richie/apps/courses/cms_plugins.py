@@ -10,7 +10,7 @@ from cms.plugin_pool import plugin_pool
 from richie.apps.core.defaults import PLUGINS_GROUP
 from richie.apps.core.models import get_relevant_page_with_fallbacks
 
-from .forms import LicencePluginForm
+from .forms import LicencePluginForm, PersonPluginForm
 from .models import (
     BlogPostPluginModel,
     CategoryPluginModel,
@@ -143,6 +143,7 @@ class PersonPlugin(CMSPluginBase):
     """
 
     cache = True
+    form = PersonPluginForm
     model = PersonPluginModel
     module = PLUGINS_GROUP
     name = _("Person")
