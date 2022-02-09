@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add course runs to the course search API
+
 ## [2.12.0] - 2022-02-04
 
 ### Added

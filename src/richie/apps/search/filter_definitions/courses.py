@@ -6,9 +6,10 @@ from django import forms
 from django.core.cache import caches
 from django.core.cache.backends.base import InvalidCacheBackendError
 from django.core.exceptions import ImproperlyConfigured
-from django.utils import timezone, translation
+from django.utils import translation
 from django.utils.translation import gettext as _
 
+import arrow
 from cms.api import Page
 
 from richie.apps.core.defaults import ALL_LANGUAGES_DICT
@@ -477,19 +478,18 @@ class AvailabilityFilterDefinition(
 
     def get_fragment_map(self):
         """Return the hardcoded query fragments updated to the current datetime."""
+        now = arrow.utcnow().datetime
         return {
             self.OPEN: [
-                {"range": {"course_runs.enrollment_start": {"lte": timezone.now()}}},
-                {"range": {"course_runs.enrollment_end": {"gte": timezone.now()}}},
+                {"range": {"course_runs.enrollment_start": {"lte": now}}},
+                {"range": {"course_runs.enrollment_end": {"gte": now}}},
             ],
-            self.COMING_SOON: [
-                {"range": {"course_runs.start": {"gte": timezone.now()}}}
-            ],
+            self.COMING_SOON: [{"range": {"course_runs.start": {"gte": now}}}],
             self.ONGOING: [
-                {"range": {"course_runs.start": {"lte": timezone.now()}}},
-                {"range": {"course_runs.end": {"gte": timezone.now()}}},
+                {"range": {"course_runs.start": {"lte": now}}},
+                {"range": {"course_runs.end": {"gte": now}}},
             ],
-            self.ARCHIVED: [{"range": {"course_runs.end": {"lte": timezone.now()}}}],
+            self.ARCHIVED: [{"range": {"course_runs.end": {"lte": now}}}],
         }
 
 

@@ -118,6 +118,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         - prepare the Elasticsearch index.
         """
         # pylint: disable=too-many-locals
+        now = arrow.utcnow()
         filter_pages = self.create_filter_pages()
 
         top_subjects = [
@@ -350,74 +351,74 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         course_runs = {
             "A": {
                 # A) ongoing course, next open course to end enrollment
-                "start": arrow.utcnow().shift(days=-5).datetime,
-                "end": arrow.utcnow().shift(days=+120).datetime,
-                "enrollment_start": arrow.utcnow().shift(days=-15).datetime,
-                "enrollment_end": arrow.utcnow().shift(days=+5).datetime,
+                "start": now.shift(days=-5).datetime,
+                "end": now.shift(days=+120).datetime,
+                "enrollment_start": now.shift(days=-15).datetime,
+                "enrollment_end": now.shift(days=+5).datetime,
                 "languages": ["fr"],
             },
             "B": {
                 # B) ongoing course, can still be enrolled in for longer than A)
-                "start": arrow.utcnow().shift(days=-15).datetime,
-                "end": arrow.utcnow().shift(days=+105).datetime,
-                "enrollment_start": arrow.utcnow().shift(days=-30).datetime,
-                "enrollment_end": arrow.utcnow().shift(days=+15).datetime,
+                "start": now.shift(days=-15).datetime,
+                "end": now.shift(days=+105).datetime,
+                "enrollment_start": now.shift(days=-30).datetime,
+                "enrollment_end": now.shift(days=+15).datetime,
                 "languages": ["en"],
             },
             "C": {
                 # C) not started yet, first upcoming course to start
-                "start": arrow.utcnow().shift(days=+15).datetime,
-                "end": arrow.utcnow().shift(days=+150).datetime,
-                "enrollment_start": arrow.utcnow().shift(days=-30).datetime,
-                "enrollment_end": arrow.utcnow().shift(days=+30).datetime,
+                "start": now.shift(days=+15).datetime,
+                "end": now.shift(days=+150).datetime,
+                "enrollment_start": now.shift(days=-30).datetime,
+                "enrollment_end": now.shift(days=+30).datetime,
                 "languages": ["en"],
             },
             "D": {
                 # D) already finished course but enrollment still open
-                "start": arrow.utcnow().shift(days=-80).datetime,
-                "end": arrow.utcnow().shift(days=-15).datetime,
-                "enrollment_start": arrow.utcnow().shift(days=-100).datetime,
-                "enrollment_end": arrow.utcnow().shift(days=+15).datetime,
+                "start": now.shift(days=-80).datetime,
+                "end": now.shift(days=-15).datetime,
+                "enrollment_start": now.shift(days=-100).datetime,
+                "enrollment_end": now.shift(days=+15).datetime,
                 "languages": ["en"],
             },
             "E": {
                 # E) not started yet, will start after the other upcoming course
-                "start": arrow.utcnow().shift(days=+45).datetime,
-                "end": arrow.utcnow().shift(days=+120).datetime,
-                "enrollment_start": arrow.utcnow().shift(days=+30).datetime,
-                "enrollment_end": arrow.utcnow().shift(days=+60).datetime,
+                "start": now.shift(days=+45).datetime,
+                "end": now.shift(days=+120).datetime,
+                "enrollment_start": now.shift(days=+30).datetime,
+                "enrollment_end": now.shift(days=+60).datetime,
                 "languages": ["fr", "de"],
             },
             "F": {
                 # F) ongoing course, most recent to end enrollment
-                "start": arrow.utcnow().shift(days=-90).datetime,
-                "end": arrow.utcnow().shift(days=+15).datetime,
-                "enrollment_start": arrow.utcnow().shift(days=-120).datetime,
-                "enrollment_end": arrow.utcnow().shift(days=-30).datetime,
+                "start": now.shift(days=-90).datetime,
+                "end": now.shift(days=+15).datetime,
+                "enrollment_start": now.shift(days=-120).datetime,
+                "enrollment_end": now.shift(days=-30).datetime,
                 "languages": ["en"],
             },
             "G": {
                 # G) ongoing course, enrollment has been over for the longest
-                "start": arrow.utcnow().shift(days=-75).datetime,
-                "end": arrow.utcnow().shift(days=+30).datetime,
-                "enrollment_start": arrow.utcnow().shift(days=-100).datetime,
-                "enrollment_end": arrow.utcnow().shift(days=-45).datetime,
+                "start": now.shift(days=-75).datetime,
+                "end": now.shift(days=+30).datetime,
+                "enrollment_start": now.shift(days=-100).datetime,
+                "enrollment_end": now.shift(days=-45).datetime,
                 "languages": ["fr"],
             },
             "H": {
                 # H) already finished course; it finished more recently than I)
-                "start": arrow.utcnow().shift(days=-80).datetime,
-                "end": arrow.utcnow().shift(days=-15).datetime,
-                "enrollment_start": arrow.utcnow().shift(days=-100).datetime,
-                "enrollment_end": arrow.utcnow().shift(days=-60).datetime,
+                "start": now.shift(days=-80).datetime,
+                "end": now.shift(days=-15).datetime,
+                "enrollment_start": now.shift(days=-100).datetime,
+                "enrollment_end": now.shift(days=-60).datetime,
                 "languages": ["en"],
             },
             "I": {
                 # I) the course that has been over for the longest
-                "start": arrow.utcnow().shift(days=-120).datetime,
-                "end": arrow.utcnow().shift(days=-30).datetime,
-                "enrollment_start": arrow.utcnow().shift(days=-150).datetime,
-                "enrollment_end": arrow.utcnow().shift(days=-90).datetime,
+                "start": now.shift(days=-120).datetime,
+                "end": now.shift(days=-30).datetime,
+                "enrollment_start": now.shift(days=-150).datetime,
+                "enrollment_end": now.shift(days=-90).datetime,
                 "languages": ["en", "de"],
             },
         }
@@ -481,7 +482,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         )
 
         # Actually insert our courses in the index
-        now = arrow.utcnow()
         actions = (
             [
                 CategoriesIndexer.get_es_document_for_category(
@@ -547,6 +547,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             "persons": persons,
         }
 
+    @mock.patch.object(arrow, "utcnow", return_value=arrow.get(2020, 2, 9))
     def test_query_courses_match_all_general(self, *_):
         """
         Validate the detailed format of the response to a match all query.
@@ -555,7 +556,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         should be 1. See next test).
         """
         data = self.prepare_indices(
-            suite=[["A", "E"], ["H", "G"], ["B", "I"], ["C", "F"]]
+            suite=[["A", "E"], ["H", "G"], ["B", "I"], ["C", "F"]],
         )
         response = self.client.get("/api/v1.0/courses/")
         self.assertEqual(response.status_code, 200)
@@ -577,6 +578,22 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             ]
                         ],
                         "code": "001abc",
+                        "course_runs": [
+                            {
+                                "end": "2020-06-08T00:00:00+00:00",
+                                "enrollment_end": "2020-02-14T00:00:00+00:00",
+                                "enrollment_start": "2020-01-25T00:00:00+00:00",
+                                "languages": ["fr"],
+                                "start": "2020-02-04T00:00:00+00:00",
+                            },
+                            {
+                                "end": "2020-06-08T00:00:00+00:00",
+                                "enrollment_end": "2020-04-09T00:00:00+00:00",
+                                "enrollment_start": "2020-03-10T00:00:00+00:00",
+                                "languages": ["fr", "de"],
+                                "start": "2020-03-25T00:00:00+00:00",
+                            },
+                        ],
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
@@ -615,6 +632,22 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             ]
                         ],
                         "code": "003rst",
+                        "course_runs": [
+                            {
+                                "end": "2020-05-24T00:00:00+00:00",
+                                "enrollment_end": "2020-02-24T00:00:00+00:00",
+                                "enrollment_start": "2020-01-10T00:00:00+00:00",
+                                "languages": ["en"],
+                                "start": "2020-01-25T00:00:00+00:00",
+                            },
+                            {
+                                "end": "2020-01-10T00:00:00+00:00",
+                                "enrollment_end": "2019-11-11T00:00:00+00:00",
+                                "enrollment_start": "2019-09-12T00:00:00+00:00",
+                                "languages": ["en", "de"],
+                                "start": "2019-10-12T00:00:00+00:00",
+                            },
+                        ],
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
@@ -653,6 +686,22 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             ]
                         ],
                         "code": "004xyz",
+                        "course_runs": [
+                            {
+                                "end": "2020-07-08T00:00:00+00:00",
+                                "enrollment_end": "2020-03-10T00:00:00+00:00",
+                                "enrollment_start": "2020-01-10T00:00:00+00:00",
+                                "languages": ["en"],
+                                "start": "2020-02-24T00:00:00+00:00",
+                            },
+                            {
+                                "end": "2020-02-24T00:00:00+00:00",
+                                "enrollment_end": "2020-01-10T00:00:00+00:00",
+                                "enrollment_start": "2019-10-12T00:00:00+00:00",
+                                "languages": ["en"],
+                                "start": "2019-11-11T00:00:00+00:00",
+                            },
+                        ],
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
@@ -691,6 +740,22 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             ]
                         ],
                         "code": "002lmn",
+                        "course_runs": [
+                            {
+                                "end": "2020-03-10T00:00:00+00:00",
+                                "enrollment_end": "2019-12-26T00:00:00+00:00",
+                                "enrollment_start": "2019-11-01T00:00:00+00:00",
+                                "languages": ["fr"],
+                                "start": "2019-11-26T00:00:00+00:00",
+                            },
+                            {
+                                "end": "2020-01-25T00:00:00+00:00",
+                                "enrollment_end": "2019-12-11T00:00:00+00:00",
+                                "enrollment_start": "2019-11-01T00:00:00+00:00",
+                                "languages": ["en"],
+                                "start": "2019-11-21T00:00:00+00:00",
+                            },
+                        ],
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
