@@ -8,6 +8,7 @@ import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
 import { EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
 import { Enrollment, OpenEdXEnrollment } from 'types';
+import { HttpError } from 'utils/errors/HttpError';
 
 /**
  *
@@ -75,58 +76,54 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
 
         return fetch(`${ROUTES.enrollment.get}/${params}`, {
           credentials: 'include',
-        })
-          .then((response) => {
-            if (response.ok) {
-              return response.headers.get('Content-Type') === 'application/json'
-                ? response.json()
-                : null;
-            }
-            if (response.status === 401 || response.status === 403) return null;
-            throw new Error(`[GET - Enrollment] > ${response.status} - ${response.statusText}`);
-          })
-          .catch((error) => {
-            handle(error);
-            return null;
-          });
+        }).then((response) => {
+          if (response.ok) {
+            return response.headers.get('Content-Type') === 'application/json'
+              ? response.json()
+              : null;
+          }
+          if (response.status >= 500) {
+            handle(new Error(`[GET - Enrollment] > ${response.status} - ${response.statusText}`));
+          }
+          throw new HttpError(response.status, response.statusText);
+        });
       },
       isEnrolled: async (enrollment: Maybe<Nullable<Enrollment>>) => {
         return new Promise((resolve) => resolve(!!(enrollment as OpenEdXEnrollment)?.is_active));
       },
       set: async (url: string, user: User): Promise<boolean> => {
-        try {
-          const courseId = extractCourseIdFromUrl(url);
-          /*
+        const courseId = extractCourseIdFromUrl(url);
+        /*
             edx_csrf_token cookie is set through a SET_COOKIE header send from a previous request
             e.g: To be able to enroll user, you have to get the enrollment before
           */
-          const csrfToken = Cookies.get(EDX_CSRF_TOKEN_COOKIE_NAME) || '';
+        const csrfToken = Cookies.get(EDX_CSRF_TOKEN_COOKIE_NAME) || '';
 
-          const isEnrolled = await fetch(ROUTES.enrollment.set, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFTOKEN': csrfToken,
+        const isEnrolled = await fetch(ROUTES.enrollment.set, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFTOKEN': csrfToken,
+          },
+          body: JSON.stringify({
+            user: user.username,
+            course_details: {
+              course_id: courseId,
             },
-            body: JSON.stringify({
-              user: user.username,
-              course_details: {
-                course_id: courseId,
-              },
-            }),
+          }),
+        })
+          .then((response) => {
+            if (response.ok) return response.json();
+            if (response.status >= 500) {
+              // Send server errors to sentry
+              handle(new Error(`[SET - Enrollment] > ${response.status} - ${response.statusText}`));
+            }
+            throw new HttpError(response.status, response.statusText);
           })
-            .then((response) => {
-              if (response.ok) return response.json();
-              throw new Error(`[SET - Enrollment] > ${response.status} - ${response.statusText}`);
-            })
-            .then(({ is_active }) => is_active);
+          .then(({ is_active }) => is_active);
 
-          return isEnrolled;
-        } catch (error) {
-          handle(error);
-          return false;
-        }
+        return isEnrolled;
       },
     },
   };

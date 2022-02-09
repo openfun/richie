@@ -63,7 +63,7 @@ describe('OpenEdX Hawthorn API', () => {
       });
 
       it('returns null if the user is anonymous', async () => {
-        fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${courseId}`, 401);
+        fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${courseId}`, '');
         const response = await HawthornApi.enrollment.get(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           null,
@@ -71,14 +71,14 @@ describe('OpenEdX Hawthorn API', () => {
         expect(response).toBeNull();
       });
 
-      it('returns null if request failed', async () => {
+      it('throws HttpError if request fails', async () => {
         fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`, 500);
 
         await expect(
           HawthornApi.enrollment.get(`https://demo.endpoint/courses?course_id=${courseId}`, {
             username,
           }),
-        ).resolves.toBeNull();
+        ).rejects.toThrow('Internal Server Error');
 
         expect(mockHandle).toHaveBeenCalledWith(
           new Error('[GET - Enrollment] > 500 - Internal Server Error'),
@@ -143,15 +143,15 @@ describe('OpenEdX Hawthorn API', () => {
         expect(response).toBeTruthy();
       });
 
-      it('returns false if request failed', async () => {
+      it('throws HttpError if request fails', async () => {
         fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, 500);
 
-        const response = await HawthornApi.enrollment.set(
-          `https://demo.endpoint/courses?course_id=${courseId}`,
-          { username },
-        );
+        await expect(
+          HawthornApi.enrollment.set(`https://demo.endpoint/courses?course_id=${courseId}`, {
+            username,
+          }),
+        ).rejects.toThrow('Internal Server Error');
 
-        expect(response).toBeFalsy();
         expect(mockHandle).toHaveBeenCalledWith(
           new Error('[SET - Enrollment] > 500 - Internal Server Error'),
         );
