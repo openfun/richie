@@ -147,17 +147,19 @@ describe('<CourseRunEnrollment />', () => {
 
     const button = screen.getByRole('button', { name: 'Enroll now' });
 
-    const enrollmentAction = new Deferred();
-    fetchMock.post(`${endpoint}/api/enrollment/v1/enrollment`, enrollmentAction.promise);
-    fireEvent.click(button);
+    // const enrollmentAction = new Deferred();
+    fetchMock.post(`${endpoint}/api/enrollment/v1/enrollment`, 500);
 
     await act(async () => {
-      enrollmentAction.reject('500 - Internal Server Error');
+      expect(() => fireEvent.click(button)).not.toThrow();
+      // enrollmentAction.reject('500 - Internal Server Error');
     });
 
     screen.getByRole('button', { name: 'Enroll now' });
     screen.getByText('Your enrollment request failed.');
-    expect(mockHandle).toHaveBeenCalledWith('500 - Internal Server Error');
+    expect(mockHandle).toHaveBeenCalledWith(
+      new Error('[SET - Enrollment] > 500 - Internal Server Error'),
+    );
   });
 
   it('shows a link to the course if the user is already enrolled', async () => {

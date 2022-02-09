@@ -10,7 +10,7 @@ import { REACT_QUERY_SETTINGS } from 'settings';
 import * as mockFactories from 'utils/test/factories';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import BaseSessionProvider from 'data/SessionProvider/BaseSessionProvider';
-import useEnrollment from '.';
+import useCourseEnrollment from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -31,7 +31,7 @@ jest.mock('utils/context', () => ({
     .generate(),
 }));
 
-describe('useEnrollment', () => {
+describe('useCourseEnrollment', () => {
   const endpoint = 'https://endpoint.test';
   const wrapper = ({ client, children }: PropsWithChildren<{ client: QueryClient }>) => (
     <QueryClientProvider client={client}>
@@ -73,7 +73,7 @@ describe('useEnrollment', () => {
       client = createQueryClient({ persistor: true });
     });
 
-    const { result } = renderHook(() => useEnrollment(courseRun.resource_link), {
+    const { result } = renderHook(() => useCourseEnrollment(courseRun.resource_link), {
       wrapper,
       initialProps: { client: client! },
     });
@@ -98,7 +98,7 @@ describe('useEnrollment', () => {
       enrollementDefered.promise,
     );
 
-    const { result } = renderHook(() => useEnrollment(courseRun.resource_link), {
+    const { result } = renderHook(() => useCourseEnrollment(courseRun.resource_link), {
       wrapper,
       initialProps: { client: client! },
     });

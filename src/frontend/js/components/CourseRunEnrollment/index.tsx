@@ -8,7 +8,7 @@ import { User } from 'types/User';
 import { Maybe, Nullable } from 'types/utils';
 import { handle } from 'utils/errors/handle';
 import { CommonDataProps } from 'types/commonDataProps';
-import useEnrollment from 'data/useEnrollment';
+import useCourseEnrollment from 'data/useCourseEnrollment';
 
 const messages = defineMessages({
   enroll: {
@@ -143,7 +143,7 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
 
 const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = (props) => {
   const { user, login } = useSession();
-  const { enrollmentIsActive, setEnrollment } = useEnrollment(props.courseRun.resource_link);
+  const { enrollmentIsActive, setEnrollment } = useCourseEnrollment(props.courseRun.resource_link);
 
   const [
     {
@@ -161,10 +161,11 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
   const enroll = useCallback(async () => {
     dispatch({ type: ActionType.ENROLL });
     if (courseRun && currentUser) {
-      const response = await setEnrollment();
+      const isEnrolled = await setEnrollment().catch(() => undefined);
+
       dispatch({
         type: ActionType.UPDATE_CONTEXT,
-        payload: { isEnrolled: response },
+        payload: { isEnrolled },
       });
     }
   }, [courseRun, currentUser, dispatch]);
