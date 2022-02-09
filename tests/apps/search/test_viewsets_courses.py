@@ -294,6 +294,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
                 "absolute_url",
                 "categories",
                 "code",
+                "course_runs",
                 "cover_image",
                 "duration",
                 "effort",

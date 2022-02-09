@@ -1,7 +1,6 @@
 """
 ElasticSearch course document management utilities
 """
-
 from collections import defaultdict
 from datetime import datetime
 from functools import reduce
@@ -220,6 +219,7 @@ class CoursesIndexer:
         "absolute_url",
         "categories",
         "code",
+        "course_runs",
         "cover_image",
         "duration",
         "effort",
@@ -739,6 +739,7 @@ class CoursesIndexer:
             "id": es_course["_id"],
             "categories": source["categories"],
             "code": source["code"],
+            "course_runs": source["course_runs"],
             "organization_highlighted": get_best_field_language(
                 source["organization_highlighted"], language
             )
