@@ -7,10 +7,10 @@ services:
       - env.d/development/postgresql
 
   mysql:
-    image: mysql:5.6
+    image: mysql:8.0
     env_file:
       - env.d/development/mysql
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+    command: --default-authentication-plugin=mysql_native_password
 
   elasticsearch:
     image: "${ELASTICSEARCH_IMAGE:-docker.elastic.co/elasticsearch/elasticsearch:7.14.0}"
