@@ -15,6 +15,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add course runs to the course search API
 
+### Changed
+
+- Upgrade mysql to version 8
+
 ## [2.12.0] - 2022-02-04
 
 ### Added
