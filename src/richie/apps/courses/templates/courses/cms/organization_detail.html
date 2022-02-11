@@ -108,7 +108,7 @@
                             {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
                         {% endfor %}
                         {% if paginator.num_pages > 1 %}
-                            {% paginate using "richie/pagination.html" %}
+                            {% include "richie/pagination.html" with label=_("Related courses pagination") %}
                             <div class="button-caesura">
                                 <a href="{% page_url 'courses' %}?organizations={{ organization.get_es_id }}" class="organization-detail__see-more">
                                     {% blocktrans with organization_title=organization.extended_object.get_title %}
@@ -136,7 +136,7 @@
                             {% endwith %}
                         {% endfor %}
                         {% if paginator.num_pages > 1 %}
-                            {% paginate using "richie/pagination.html" %}
+                            {% include "richie/pagination.html" with label=_("Related persons pagination") %}
                         {% endif %}
                     </section>
                 </div>

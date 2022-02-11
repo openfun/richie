@@ -8,6 +8,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+- Improve pagination blocks labels for screen reader users when there are
+  multiple pagination components on one page
+
 ### Added
 
 - Add course runs to the course search API

@@ -398,7 +398,7 @@
                                     {% endfor %}
                                 </div>
                                 {% if paginator.num_pages > 1 %}
-                                    {% paginate using "richie/pagination.html" %}
+                                    {% include "richie/pagination.html" %}
                                 {% endif %}
                             </section>
                         </div>

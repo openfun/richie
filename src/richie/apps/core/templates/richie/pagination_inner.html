@@ -1,0 +1,54 @@
+{% comment %}
+this is not meant to be included as is in a template,
+because wrapper tags are missing. See richie/pagination.html
+{% endcomment %}
+{% load i18n %}{% spaceless %}
+
+<ul class="pagination__list">
+    {% for page in pages %}
+      {% if page %}
+        {% ifequal page page_obj.number %}
+          <li class="pagination__item pagination__item--current">
+            <span class="pagination__page-number">
+              <span class="offscreen">
+              {% if forloop.last %}
+                {% blocktrans %}Currently reading last page {{ page }}{% endblocktrans %}
+              {% else %}
+                {% blocktrans %}Currently reading page {{ page }}{% endblocktrans %}
+              {% endif %}
+              </span>
+              <span aria-hidden="true">{% if page == 1 %}Page {{ page }}{% else %}{{ page }}{% endif %}</span>
+            </span>
+          </li>
+        {% else %}
+          {% if page == 1 %}
+            <li class="pagination__item">
+              <a href="{{ request.path }}{% if getvars %}?{{ getvars|slice:"1:" }}{% endif %}#page{{ page_suffix }}" class="pagination__page-number">
+                {% blocktrans %}Page {{ page }}{% endblocktrans %}
+              </a>
+            </li>
+          {% else %}
+            <li class="pagination__item">
+              <a href="?page{{ page_suffix }}={{ page }}{{ getvars }}#page{{ page_suffix }}" class="pagination__page-number">
+                <span class="offscreen">
+                  {% if page == page_obj.previous_page_number %}
+                    {% blocktrans %}Previous page {{ page }}{% endblocktrans %}
+                  {% elif forloop.last %}
+                    {% blocktrans %}Last page {{ page }}{% endblocktrans %}
+                  {% elif page == page_obj.next_page_number %}
+                    {% blocktrans %}Next page {{ page }}{% endblocktrans %}
+                  {% else %}
+                    {% blocktrans %}Page {{ page }}{% endblocktrans %}
+                  {% endif %}
+                </span>
+                <span aria-hidden="true">{{ page }}</span>
+              </a>
+            </li>
+          {% endif %}
+        {% endifequal %}
+      {% else %}
+        <li class="pagination__item pagination__item--placeholder">...</li>
+      {% endif %}
+    {% endfor %}
+</ul>
+{% endspaceless %}
