@@ -2,13 +2,11 @@
 MYSQL_ROOT_PASSWORD=
 MYSQL_ALLOW_EMPTY_PASSWORD=yes
 MYSQL_DATABASE=richie
-MYSQL_USER=fun
-MYSQL_PASSWORD=pass
 
 # App database configuration
 DB_ENGINE=django.db.backends.mysql
 DB_HOST=mysql
 DB_NAME=richie
-DB_USER=fun
-DB_PASSWORD=pass
+DB_USER=root
+DB_PASSWORD=
 DB_PORT=3306
