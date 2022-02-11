@@ -389,9 +389,9 @@ class OrganizationCMSTestCase(CMSTestCase):
         person_url = person.extended_object.get_absolute_url()
         person_name = person.extended_object.get_title()
         pattern = (
-            fr'<a href="{person_url:s}">'
+            rf'<a href="{person_url:s}">'
             r'<h3 class="person-glimpse__title">'
-            fr".*{person_name:s}.*</h3></a>"
+            rf".*{person_name:s}.*</h3></a>"
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
