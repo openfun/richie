@@ -38,7 +38,7 @@
         {% endfor %}
 
         {% if object_list %}
-            {% paginate using "richie/pagination.html" %}
+            {% include "richie/pagination.html" %}
         {% endif %}
     {% endwith %}
 </div>

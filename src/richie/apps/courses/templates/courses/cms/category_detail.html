@@ -120,7 +120,7 @@
                                 {% include "courses/cms/fragment_course_glimpse.html" %}
                             {% endfor %}
                             {% if paginator.num_pages > 1 %}
-                                {% paginate using "richie/pagination.html" %}
+                                {% include "richie/pagination.html" with label=_("Courses pagination") %}
                                 <div class="button-caesura">
                                 {% if category.get_meta_category %}
                                     <a href="{% page_url 'courses' %}?{{ category.get_meta_category.extended_object.reverse_id }}={{ category.get_es_id }}" class="category-detail__see-more">
@@ -152,7 +152,7 @@
                                 {% include "courses/cms/fragment_organization_glimpse.html" %}
                             {% endfor %}
                             {% if paginator.num_pages > 1 %}
-                                {% paginate using "richie/pagination.html" %}
+                                {% include "richie/pagination.html" with label=_("Related organizations pagination") %}
                             {% endif %}
                         </section>
                     </div>
@@ -171,7 +171,7 @@
                                 {% include "courses/cms/fragment_blogpost_glimpse.html" %}
                             {% endfor %}
                             {% if paginator.num_pages > 1 %}
-                                {% paginate using "richie/pagination.html" %}
+                                {% include "richie/pagination.html" with label=_("Related blogposts pagination") %}
                             {% endif %}
                         </section>
                     </div>
@@ -190,7 +190,7 @@
                                 {% include "courses/cms/fragment_person_glimpse.html" %}
                             {% endfor %}
                             {% if paginator.num_pages > 1 %}
-                                {% paginate using "richie/pagination.html" %}
+                                {% include "richie/pagination.html" with label=_("Related persons pagination") %}
                             {% endif %}
                         </section>
                     </div>
