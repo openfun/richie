@@ -118,7 +118,7 @@ class PersonPluginTestCase(CMSTestCase):
         # Person's portrait should be present
         href = person_page.get_absolute_url()
         pattern = (
-            fr'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true" '
+            rf'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true" '
             r'property="url">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
             r'.*alt="" property="image"'
@@ -147,7 +147,7 @@ class PersonPluginTestCase(CMSTestCase):
 
         href = person_page.get_absolute_url()
         pattern = (
-            fr'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true" '
+            rf'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true" '
             r'property="url">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
             r'.*alt="" property="image"'

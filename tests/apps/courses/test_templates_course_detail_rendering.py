@@ -525,7 +525,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         pattern = (
             r'<div class="subheader__teaser">'
             r'<div class="aspect-ratio">'
-            fr'<iframe src="{video_sample.url:s}"  allowfullscreen></iframe>'
+            rf'<iframe src="{video_sample.url:s}"  allowfullscreen></iframe>'
             r"</div>"
             r"</div>"
         )
@@ -545,7 +545,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
 
         self.assertEqual(response.status_code, 200)
         pattern = (
-            fr'<div class="subheader__teaser"><img.*/{video_sample.image:s}.*/></div>'
+            rf'<div class="subheader__teaser"><img.*/{video_sample.image:s}.*/></div>'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -567,7 +567,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         pattern = (
             r'<div class="subheader__teaser">'
             r'<div class="aspect-ratio">'
-            fr'<iframe src="{video_sample.url:s}"  allowfullscreen></iframe>'
+            rf'<iframe src="{video_sample.url:s}"  allowfullscreen></iframe>'
             r"</div>"
             r"</div>"
         )

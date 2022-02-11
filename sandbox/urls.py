@@ -36,7 +36,7 @@ urlpatterns = [
     ),
     path(r"sitemap.xml", sitemap, {"sitemaps": {"cmspages": CMSSitemap}}),
     re_path(
-        fr"api/{API_PREFIX:s}/",
+        rf"api/{API_PREFIX:s}/",
         include([*courses_urlpatterns, *search_urlpatterns, *plugins_urlpatterns]),
     ),
     path(r"oauth/", include("social_django.urls", namespace="social")),
