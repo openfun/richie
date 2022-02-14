@@ -177,6 +177,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             "PORT": values.Value(5432, environ_name="DB_PORT", environ_prefix=None),
         }
     }
+    DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
     MIGRATION_MODULES = {}
 
     # Static files (CSS, JavaScript, Images)

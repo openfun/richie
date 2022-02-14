@@ -257,7 +257,7 @@ def create_demo_site():
             page_parent=pages_created["courses"],
             fill_licences=course_licences,
             fill_team=random.sample(
-                eligible_persons,
+                list(eligible_persons),
                 min(
                     random.randint(1, defaults.NB_OBJECTS["course_persons"]),  # nosec
                     len(eligible_persons),
