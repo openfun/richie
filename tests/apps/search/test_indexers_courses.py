@@ -7,7 +7,7 @@ from unittest import mock
 from django.test import TestCase
 
 import pytz
-from cms.api import add_plugin
+from cms.api import add_plugin, create_page
 
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import CategoryPlugin
@@ -1095,3 +1095,38 @@ class CoursesIndexersTestCase(TestCase):
         )
         self.assertEqual(len(indexed_courses), 1)
         self.assertEqual(len(indexed_courses[0]["course_runs"]), 1)
+
+    def test_indexers_courses_get_es_documents_course_glimpse_organization_menu_title(
+        self,
+    ):
+        """
+        Linked organizations should display the indexed acronym if the menu_title
+        is filled.
+        """
+        menu_title = "MTO"
+
+        organization_page = create_page(
+            "My Test Organization",
+            "richie/single_column.html",
+            "en",
+            menu_title=menu_title,
+        )
+        organization = OrganizationFactory(
+            extended_object=organization_page, should_publish=True
+        )
+
+        course = CourseFactory(
+            fill_organizations=[organization],
+            should_publish=True,
+        )
+
+        course_document = CoursesIndexer.get_es_document_for_course(course)
+
+        # The organization should display the menu title and not the title itself
+        self.assertEqual(
+            course_document["organization_highlighted"], {"en": menu_title}
+        )
+        self.assertNotEqual(
+            course_document["organization_highlighted"],
+            {"en": course.extended_object.get_title()},
+        )

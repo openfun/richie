@@ -647,7 +647,7 @@ class CoursesIndexer:
             # Pick the highlighted organization from the organizations QuerySet to benefit from
             # the prefetch of related title sets
             "organization_highlighted": {
-                title.language: title.title
+                title.language: title.menu_title if title.menu_title else title.title
                 for title in organization_highlighted.extended_object.published_titles
             }
             if organization_highlighted

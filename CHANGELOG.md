@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+- Show organization acronym by using the `menu_title` field (if set) on
+  the organization page.
 - Improve pagination blocks labels for screen reader users when there are
   multiple pagination components on one page
 
