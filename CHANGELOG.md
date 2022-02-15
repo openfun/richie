@@ -41,6 +41,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   multiple pagination components on one page
 - Use the new `createWebStoragePersistor` to persist React query state
 - Upgrade mysql to version 8
+- Fix usage of deprecated Sass division operator in favor of math.div
 
 ## [2.12.0] - 2022-02-04
 
