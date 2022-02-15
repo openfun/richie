@@ -1,7 +1,7 @@
 {% load i18n cms_tags extra_tags static thumbnail %}{% spaceless %}
 {% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
 
-{% with course_page=course.extended_object course_state=course.state main_organization_title=course.get_main_organization.extended_object.get_title main_organization=course.get_main_organization course_variant=course_variant|default:'glimpse' %}
+{% with course_page=course.extended_object course_state=course.state main_organization_title=course.get_main_organization.extended_object.get_menu_title main_organization=course.get_main_organization course_variant=course_variant|default:'glimpse' %}
 <a class="course-{{ course_variant }}{% if course_page.publisher_is_draft is True %} course-{{ course_variant }}--draft{% endif %}" href="{{ course_page.get_absolute_url }}">
     <div class="course-{{ course_variant }}__media">
         {% get_page_plugins "course_cover" course_page as cover_plugins or %}

@@ -387,3 +387,60 @@ class CoursePluginTestCase(TestCase):
         response = self.client.get(url)
 
         self.assertNotContains(response, "glimpse")
+
+    def test_cms_plugins_course_glimpse_organization_acronym(self):
+        """
+        The course glimpse should render the organization acronym
+        if it is set in the menu_title field
+        """
+
+        # Menu title keyword to search for
+        menu_title = "MTO"
+
+        # Create a page to define a Title and a Menu title
+        organization_page = create_page(
+            "My Test Organization",
+            "richie/single_column.html",
+            "en",
+            menu_title=menu_title,
+        )
+        organization = OrganizationFactory(
+            extended_object=organization_page, should_publish=True
+        )
+
+        # Define a test course
+        course = CourseFactory(fill_organizations=[organization], should_publish=True)
+
+        course_page = course.extended_object
+
+        # Define a page to display the Course Glimpse
+        page = create_i18n_page({"en": "A page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+
+        add_plugin(placeholder, CoursePlugin, "en", **{"page": course_page})
+
+        page.publish("en")
+
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # The value should be present in html of the course glimpse
+        self.assertContains(
+            response,
+            (
+                # pylint: disable=consider-using-f-string
+                '<div class="course-glimpse__metadata '
+                'course-glimpse__metadata--organization">'
+                '<svg role="img" aria-hidden="true" class="icon">'
+                '<use href="#icon-org"></use></svg>'
+                '<span class="title" title="{0:s}">{0:s}</span>'
+            ).format(menu_title),
+            html=True,
+        )
+
+        # The value should be different from the page title
+        self.assertEqual(organization.extended_object.get_menu_title(), menu_title)
+        self.assertNotEqual(
+            organization.extended_object.get_title(),
+            organization.extended_object.get_menu_title(),
+        )
