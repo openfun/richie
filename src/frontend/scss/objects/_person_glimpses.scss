@@ -1,3 +1,5 @@
+@use "sass:math";
+
 // Person glimpse
 //
 
@@ -31,7 +33,7 @@
     $content-flex-justify: flex-start,
     $wrapper-padding: 0 0 0 1rem
   );
-  margin: $glimpse-gutter / 2;
+  margin: math.div($glimpse-gutter, 2);
   border-radius: $border-radius-lg;
   box-shadow: r-theme-val(person-glimpse, base-shadow);
 
