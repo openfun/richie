@@ -1,4 +1,4 @@
-import { createSessionStoragePersistor } from 'utils/react-query/createSessionStoragePersistor';
+import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { QueryClient, setLogger } from 'react-query';
 import { handle } from 'utils/errors/handle';
@@ -37,9 +37,13 @@ const createQueryClient = (options?: QueryClientOptions) => {
 
   if (options?.persistor) {
     // Prepare react-query cache persistance
-    const localStoragePersistor = createSessionStoragePersistor();
+    const persistor = createWebStoragePersistor({
+      storage: sessionStorage,
+      key: REACT_QUERY_SETTINGS.cacheStorage.key,
+      throttleTime: REACT_QUERY_SETTINGS.cacheStorage.throttleTime,
+    });
     persistQueryClient({
-      persistor: localStoragePersistor,
+      persistor,
       queryClient,
     });
   }
