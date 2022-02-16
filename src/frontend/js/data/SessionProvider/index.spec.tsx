@@ -28,10 +28,8 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('SessionProvider', () => {
-  const queryClient = createQueryClient({ persistor: true });
-
   const wrapper = ({
-    client = queryClient,
+    client = createQueryClient({ persistor: true }),
     children,
   }: React.PropsWithChildren<{ client: QueryClient }>) => (
     <QueryClientProvider client={client}>
@@ -43,12 +41,12 @@ describe('SessionProvider', () => {
     jest.useFakeTimers('modern');
     jest.resetModules();
     fetchMock.restore();
-    queryClient.clear();
     sessionStorage.clear();
   });
 
   afterEach(() => {
-    jest.clearAllTimers();
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
   });
 
   it('uses BaseSessionProvider if joanie is disabled', async () => {
@@ -96,7 +94,6 @@ describe('SessionProvider', () => {
 
       const { result } = renderHook(() => useSession(), {
         wrapper,
-        initialProps: { client: queryClient },
       });
 
       await act(async () => userDeferred.resolve(401));
@@ -124,11 +121,15 @@ describe('SessionProvider', () => {
 
       await act(async () => {
         userDeferred.resolve({ username });
-        jest.runAllTimers();
+      });
+
+      await act(async () => {
+        jest.runOnlyPendingTimers();
       });
 
       expect(result.current.user).toStrictEqual({ username });
       expect(result.all).toHaveLength(2);
+
       const cacheString = sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key);
       expect(cacheString).not.toBeNull();
       expect(cacheString).toContain(username);
@@ -144,7 +145,10 @@ describe('SessionProvider', () => {
 
       await act(async () => {
         userDeferred.resolve({ username });
-        jest.runAllTimers();
+      });
+
+      await act(async () => {
+        jest.runOnlyPendingTimers();
       });
 
       const { user, destroy } = result.current;
@@ -153,7 +157,7 @@ describe('SessionProvider', () => {
 
       await act(async () => {
         await destroy();
-        jest.runAllTimers();
+        jest.runOnlyPendingTimers();
       });
 
       expect(result.current.user).toBeNull();

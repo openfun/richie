@@ -19,6 +19,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Use the new `createWebStoragePersistor` to persist React query state
 - Upgrade mysql to version 8
 
 ## [2.12.0] - 2022-02-04
