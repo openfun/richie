@@ -10,17 +10,7 @@ from cms.plugin_pool import plugin_pool
 from richie.apps.core.defaults import PLUGINS_GROUP
 from richie.apps.core.models import get_relevant_page_with_fallbacks
 
-from .forms import LicencePluginForm, PersonPluginForm
-from .models import (
-    BlogPostPluginModel,
-    CategoryPluginModel,
-    CoursePluginModel,
-    LicencePluginModel,
-    OrganizationPluginModel,
-    OrganizationsByCategoryPluginModel,
-    PersonPluginModel,
-    ProgramPluginModel,
-)
+from . import forms, models
 
 
 @plugin_pool.register_plugin
@@ -31,7 +21,8 @@ class OrganizationPlugin(CMSPluginBase):
 
     cache = True
     fieldsets = ((None, {"fields": ["page", "variant"]}),)
-    model = OrganizationPluginModel
+    form = forms.OrganizationPluginForm
+    model = models.OrganizationPluginModel
     module = PLUGINS_GROUP
     name = _("Organization")
     render_template = "courses/plugins/organization.html"
@@ -58,7 +49,8 @@ class OrganizationsByCategoryPlugin(CMSPluginBase):
     """
 
     cache = True
-    model = OrganizationsByCategoryPluginModel
+    form = forms.OrganizationsByCategoryPluginForm
+    model = models.OrganizationsByCategoryPluginModel
     module = PLUGINS_GROUP
     name = _("Organization by Category")
     render_template = "courses/plugins/organizations_by_category.html"
@@ -89,7 +81,8 @@ class CategoryPlugin(CMSPluginBase):
 
     cache = True
     fieldsets = ((None, {"fields": ["page", "variant"]}),)
-    model = CategoryPluginModel
+    form = forms.CategoryPluginForm
+    model = models.CategoryPluginModel
     module = PLUGINS_GROUP
     name = _("Category")
     render_template = "courses/plugins/category_plugin.html"
@@ -117,7 +110,8 @@ class CoursePlugin(CMSPluginBase):
 
     cache = True
     fieldsets = ((None, {"fields": ["page", "variant"]}),)
-    model = CoursePluginModel
+    form = forms.CoursePluginForm
+    model = models.CoursePluginModel
     module = PLUGINS_GROUP
     name = _("Course")
     render_template = "courses/plugins/course_plugin.html"
@@ -143,8 +137,8 @@ class PersonPlugin(CMSPluginBase):
     """
 
     cache = True
-    form = PersonPluginForm
-    model = PersonPluginModel
+    form = forms.PersonPluginForm
+    model = models.PersonPluginModel
     module = PLUGINS_GROUP
     name = _("Person")
     render_template = "courses/plugins/person.html"
@@ -172,8 +166,8 @@ class LicencePlugin(CMSPluginBase):
     allow_children = False
     cache = True
     fieldsets = ((None, {"fields": ["licence", "description"]}),)
-    form = LicencePluginForm
-    model = LicencePluginModel
+    form = forms.LicencePluginForm
+    model = models.LicencePluginModel
     module = PLUGINS_GROUP
     name = _("Licence")
     render_template = "courses/plugins/licence_plugin.html"
@@ -192,7 +186,8 @@ class BlogPostPlugin(CMSPluginBase):
 
     cache = True
     fieldsets = ((None, {"fields": ["page", "variant"]}),)
-    model = BlogPostPluginModel
+    form = forms.BlogPostPluginForm
+    model = models.BlogPostPluginModel
     module = PLUGINS_GROUP
     name = _("Post")
     render_template = "courses/plugins/blogpost.html"
@@ -218,7 +213,8 @@ class ProgramPlugin(CMSPluginBase):
     """
 
     cache = True
-    model = ProgramPluginModel
+    form = forms.ProgramPluginForm
+    model = models.ProgramPluginModel
     module = PLUGINS_GROUP
     name = _("Program")
     render_template = "courses/plugins/program.html"
