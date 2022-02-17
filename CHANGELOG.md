@@ -15,7 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add settings to setup Joanie
 - Add course runs to the course search API
-- Add autocomplete feature on Page select in Person plugin
+- Add autocomplete feature on Page select in page related plugins
 
 ### Changed
 

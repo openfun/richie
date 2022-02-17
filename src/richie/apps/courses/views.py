@@ -6,7 +6,7 @@ from cms.api import Page
 from dal import autocomplete
 
 
-class PersonPageAdminAutocomplete(autocomplete.Select2QuerySetView):
+class PageAdminAutocomplete(autocomplete.Select2QuerySetView):
     """
     Autocomplete view for Person search in admin
     """
@@ -20,16 +20,20 @@ class PersonPageAdminAutocomplete(autocomplete.Select2QuerySetView):
         Without any search keyword from ``self.q`` every results are returned, if
         keyword is given results are filtered on it with insensitive ``contains``.
         """
+        model_name = self.kwargs["model_name"]
+
         # Filter out results depending on the visitor
         if (
             not self.request.user.is_authenticated
             or not self.request.user.is_staff
-            or not self.request.user.has_perm("courses.view_person")
+            or not self.request.user.has_perm(f"courses.view_{model_name}")
         ):
             return Page.objects.none()
 
-        # Retrieve only draft Person pages
-        qs = Page.objects.filter(publisher_is_draft=True, person__isnull=False)
+        # Retrieve only draft pages
+        qs = Page.objects.filter(
+            publisher_is_draft=True, **{f"{model_name}__isnull": False}
+        )
 
         # Perform autocompletion search on Person page
         if self.q:
