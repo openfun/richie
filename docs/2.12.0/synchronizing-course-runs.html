@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Synchronizing course runs between Richie and OpenEdX · Richie</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="Richie can receive automatic course runs updates on a dedicated API endpoint."/><meta name="docsearch:version" content="2.12.0"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Synchronizing course runs between Richie and OpenEdX · Richie"/><meta property="og:type" content="website"/><meta property="og:url" content="https://richie.education/"/><meta property="og:description" content="Richie can receive automatic course runs updates on a dedicated API endpoint."/><meta property="og:image" content="https://richie.education/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://richie.education/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><h2 class="headerTitle">Richie</h2></a><a href="/versions"><h3>2.12.0</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/" target="_self">Home</a></li><li class=""><a href="https://github.com/openfun/richie" target="_self">GitHub</a></li><li class=""><a href="/docs/2.12.0/quick-start" target="_self">Documentation</a></li><li class=""><a href="/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Synchronizing course runs between Richie and OpenEdX</h1></header><article><div><span><p>Richie can receive automatic course runs updates on a dedicated API endpoint.</p>
+<h2><a class="anchor" aria-hidden="true" id="configure-a-shared-secret"></a><a href="#configure-a-shared-secret" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configure a shared secret</h2>
+<p>In order to activate the course run synchronization API endpoint, you first need to configure the
+<code>RICHIE_COURSE_RUN_SYNC_SECRETS</code> setting with one or more secrets:</p>
+<pre><code class="hljs css language-python">RICHIE_COURSE_RUN_SYNC_SECRETS = [<span class="hljs-string">"SharedSecret"</span>, <span class="hljs-string">"OtherSharedSecret"</span>]
+</code></pre>
+<p>This setting collects several secrets in order to allow rotating them without any downtime. Any
+of the secrets listed in this setting can be used to sign your queries.</p>
+<p>Your secret should be shared with the LMS or distant system that needs to synchronize its course
+runs with the Richie instance. Richie will try the declared secrets one by one until it finds
+one that matches the signature sent by the remote system.</p>
+<h2><a class="anchor" aria-hidden="true" id="configure-lms-backends"></a><a href="#configure-lms-backends" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configure LMS backends</h2>
+<p>You then need to configure the LMS handler via the <code>RICHIE_LMS_BACKENDS</code> setting as explained
+in our <a href="lms-backends#configuring-the-lms-handler">guide on configuring LMS backends</a>. This is
+required if you want Richie to create a new course run automatically and associate it with the
+right course when the resource link submitted to the course run synchronization API endpoint is
+unknown to Richie.</p>
+<p>Each course run can be set to react differently to a synchronization request, thanks to the
+<code>sync_mode</code> field. This field can be set to one of the following values:</p>
+<ul>
+<li><code>manual</code>: this course run is ignored by the course runs synchronization script. In this case,
+the course run can only be edited manually using the DjangoCMS frontend editing.</li>
+<li><code>sync_to_draft</code>: only the draft version of this course run is synchronized. A manual
+publication is necessary for the update to be visible on the public site.</li>
+<li><code>sync_to_public</code>: the public version of this course run is updated by the synchronization
+script. As a results, updates are directly visible on the public site without further
+publication by a staff user in Richie.</li>
+</ul>
+<p>A <a href="lms-backends#default_course_run_sync_mode">DEFAULT_COURSE_RUN_SYNC_MODE parameter</a> in the
+<code>RICHIE_LMS_BACKENDS</code> setting, defines what default value is used for new course runs.</p>
+<h2><a class="anchor" aria-hidden="true" id="make-a-synchronization-query"></a><a href="#make-a-synchronization-query" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Make a synchronization query</h2>
+<p>You can refer to the <a href="api/course-run-synchronization-api">documentation of the course run synchronization API</a> for details
+on the query expected by this endpoint.</p>
+<p>We also share here our sample code to call this synchronization endpoint from OpenEdX. This code
+should run on the <code>post_publish</code> signal emitted by the OpenEdX <code>cms</code> application each time a
+course run is modified and published.</p>
+<p>Or you can use the <a href="https://github.com/fccn/richie-openedx-sync">Richie Open edX Synchronization</a>
+which is based on the following code sample and also includes the enrollment count.</p>
+<p>Given a <code>COURSE_HOOK</code> setting defined as follows in your OpenEdX instance:</p>
+<pre><code class="hljs css language-python">COURSE_HOOK = {
+    <span class="hljs-string">"secret"</span>: <span class="hljs-string">"SharedSecret"</span>,
+    <span class="hljs-string">"url"</span>: <span class="hljs-string">"https://richie.example.com/api/v1.0/course-runs-sync/"</span>,
+}
+</code></pre>
+<p>The code for the synchronization function in OpenEdX could look like this:</p>
+<pre><code class="hljs css language-python"><span class="hljs-keyword">import</span> hashlib
+<span class="hljs-keyword">import</span> hmac
+<span class="hljs-keyword">import</span> json
+
+<span class="hljs-keyword">from</span> django.conf <span class="hljs-keyword">import</span> settings
+
+<span class="hljs-keyword">from</span> microsite_configuration <span class="hljs-keyword">import</span> microsite
+<span class="hljs-keyword">import</span> requests
+<span class="hljs-keyword">from</span> xmodule.modulestore.django <span class="hljs-keyword">import</span> modulestore
+
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_course</span><span class="hljs-params">(course_key, *args, **kwargs)</span>:</span>
+    <span class="hljs-string">"""Synchronize an OpenEdX course, identified by its course key, with a Richie instance."""</span>
+    course = modulestore().get_course(course_key)
+    edxapp_domain = microsite.get_value(<span class="hljs-string">"site_domain"</span>, settings.LMS_BASE)
+
+    data = {
+        <span class="hljs-string">"resource_link"</span>: <span class="hljs-string">"https://{:s}/courses/{!s}/info"</span>.format(
+            edxapp_domain, course_key
+        ),
+        <span class="hljs-string">"start"</span>: course.start <span class="hljs-keyword">and</span> course.start.isoformat(),
+        <span class="hljs-string">"end"</span>: course.end <span class="hljs-keyword">and</span> course.end.isoformat(),
+        <span class="hljs-string">"enrollment_start"</span>: course.enrollment_start <span class="hljs-keyword">and</span> course.enrollment_start.isoformat(),
+        <span class="hljs-string">"enrollment_end"</span>: course.enrollment_end <span class="hljs-keyword">and</span> course.enrollment_end.isoformat(),
+        <span class="hljs-string">"languages"</span>: [course.language <span class="hljs-keyword">or</span> settings.LANGUAGE_CODE],
+    }
+
+    signature = hmac.new(
+        setting.COURSE_HOOK[<span class="hljs-string">"secret"</span>].encode(<span class="hljs-string">"utf-8"</span>),
+        msg=json.dumps(data).encode(<span class="hljs-string">"utf-8"</span>),
+        digestmod=hashlib.sha256,
+    ).hexdigest()
+
+    response = requests.post(
+        setting.COURSE_HOOK[<span class="hljs-string">"url"</span>],
+        json=data,
+        headers={<span class="hljs-string">"Authorization"</span>: <span class="hljs-string">"SIG-HMAC-SHA256 {:s}"</span>.format(signature)},
+    )
+</code></pre>
+<p>Thanks to the signal emitted in OpenEdX, this function can then be triggered each time a course
+is modified and published:</p>
+<pre><code class="hljs css language-python"><span class="hljs-keyword">from</span> django.dispatch <span class="hljs-keyword">import</span> receiver
+<span class="hljs-keyword">from</span> xmodule.modulestore.django <span class="hljs-keyword">import</span> SignalHandler
+
+
+<span class="hljs-meta">@receiver(SignalHandler.course_published, dispatch_uid='update_course_on_publish')</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">update_course_on_publish</span><span class="hljs-params">(sender, course_key, **kwargs)</span>:</span>
+    update_course(course_key)
+</code></pre>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 10/26/2021</em></div><div class="docs-prevnext"></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#configure-a-shared-secret">Configure a shared secret</a></li><li><a href="#configure-lms-backends">Configure LMS backends</a></li><li><a href="#make-a-synchronization-query">Make a synchronization query</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Documentation</h5><a href="/docs/en/quick-start.html">Getting Started</a><a href="/versions">Versions</a><a href="/docs/en/contributing.html">Contributing</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://github.com/openfun/richie">GitHub</a></div></section><section class="copyright">Creative Commons 2022 — Richie contributors / Illustrations Katerina Limpitsouni</section></footer></div></body></html>
