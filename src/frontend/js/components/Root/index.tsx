@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import { HistoryProvider } from 'data/useHistory';
 import { SessionProvider } from 'data/SessionProvider';
 import { Spinner } from 'components/Spinner';
+import context from 'utils/context';
 
 const CourseRunEnrollment = lazy(() => import('components/CourseRunEnrollment'));
 const LanguageSelector = lazy(() => import('components/LanguageSelector'));
@@ -78,7 +79,7 @@ export const Root = ({ richieReactSpots }: RootProps) => {
 
       // Add context to props if they do not already include it
       if (!props.context) {
-        props.context = window.__richie_frontend_context__.context;
+        props.context = context;
       }
 
       return ReactDOM.createPortal(<Component {...props} />, element);
