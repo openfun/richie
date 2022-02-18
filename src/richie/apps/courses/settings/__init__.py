@@ -18,6 +18,48 @@ Otherwise, you can just use the usual Django pattern in your settings.py file:
 """
 from django.utils.translation import gettext_lazy as _
 
+
+def richie_placeholder_conf(name):
+    """
+    Returns a common CMS placeholder configuration that can be shared to placeholders.
+
+    Arguments:
+        name (string): Name of placeholder to display in page structure.
+
+    Returns:
+        dict: Placeholder configuration.
+    """
+    return {
+        "name": name,
+        "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
+        "parent_classes": {
+            "BlogPostPlugin": ["SectionPlugin"],
+            "CategoryPlugin": ["SectionPlugin"],
+            "CoursePlugin": ["SectionPlugin"],
+            "GlimpsePlugin": ["SectionPlugin"],
+            "OrganizationPlugin": ["SectionPlugin"],
+            "OrganizationsByCategoryPlugin": ["SectionPlugin"],
+            "PersonPlugin": ["SectionPlugin"],
+            "ProgramPlugin": ["SectionPlugin"],
+        },
+        "child_classes": {
+            "SectionPlugin": [
+                "BlogPostPlugin",
+                "CategoryPlugin",
+                "CoursePlugin",
+                "GlimpsePlugin",
+                "LinkPlugin",
+                "NestedItemPlugin",
+                "OrganizationsByCategoryPlugin",
+                "OrganizationPlugin",
+                "PersonPlugin",
+                "ProgramPlugin",
+            ],
+            "NestedItemPlugin": ["NestedItemPlugin", "LinkPlugin"],
+        },
+    }
+
+
 # Associated LMS backends
 RICHIE_LMS_BACKENDS = []
 
@@ -47,6 +89,10 @@ CMS_TEMPLATES = (
     ("richie/child_pages_list.html", _("List of child pages")),
     ("richie/homepage.html", _("Homepage")),
     ("richie/single_column.html", _("Single column")),
+    ("richie/three_columns_33.html", _("Three columns: (33% | 33% | 33%)")),
+    ("richie/two_columns_50.html", _("Two columns: (50% | 50%)")),
+    ("richie/two_columns_25_75.html", _("Two columns: (25% | 75%)")),
+    ("richie/two_columns_75_25.html", _("Two columns: (75% | 25%)")),
 )
 
 CMS_PLACEHOLDER_CONF = {
@@ -86,35 +132,38 @@ CMS_PLACEHOLDER_CONF = {
         },
     },
     # Single column page
-    "richie/single_column.html maincontent": {
-        "name": _("Main content"),
-        "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
-        "parent_classes": {
-            "BlogPostPlugin": ["SectionPlugin"],
-            "CategoryPlugin": ["SectionPlugin"],
-            "CoursePlugin": ["SectionPlugin"],
-            "GlimpsePlugin": ["SectionPlugin"],
-            "OrganizationPlugin": ["SectionPlugin"],
-            "OrganizationsByCategoryPlugin": ["SectionPlugin"],
-            "PersonPlugin": ["SectionPlugin"],
-            "ProgramPlugin": ["SectionPlugin"],
-        },
-        "child_classes": {
-            "SectionPlugin": [
-                "BlogPostPlugin",
-                "CategoryPlugin",
-                "CoursePlugin",
-                "GlimpsePlugin",
-                "LinkPlugin",
-                "NestedItemPlugin",
-                "OrganizationsByCategoryPlugin",
-                "OrganizationPlugin",
-                "PersonPlugin",
-                "ProgramPlugin",
-            ],
-            "NestedItemPlugin": ["NestedItemPlugin", "LinkPlugin"],
-        },
-    },
+    "richie/single_column.html maincontent": richie_placeholder_conf(_("Main content")),
+    # Three equal 33/33/33 page
+    "richie/three_columns_33.html maincontent": richie_placeholder_conf(
+        _("Main content")
+    ),
+    "richie/three_columns_33.html secondcontent": richie_placeholder_conf(
+        _("Secondary content")
+    ),
+    "richie/three_columns_33.html thirdcontent": richie_placeholder_conf(
+        _("Third content")
+    ),
+    # Two equal 50/50 page
+    "richie/two_columns_50.html maincontent": richie_placeholder_conf(
+        _("Main content")
+    ),
+    "richie/two_columns_50.html secondcontent": richie_placeholder_conf(
+        _("Secondary content")
+    ),
+    # Two columns 25/75 page
+    "richie/two_columns_25_75.html maincontent": richie_placeholder_conf(
+        _("Main content")
+    ),
+    "richie/two_columns_25_75.html secondcontent": richie_placeholder_conf(
+        _("Secondary content")
+    ),
+    # Two columns 75/25 page
+    "richie/two_columns_75_25.html maincontent": richie_placeholder_conf(
+        _("Main content")
+    ),
+    "richie/two_columns_75_25.html secondcontent": richie_placeholder_conf(
+        _("Secondary content")
+    ),
     # Course detail
     "courses/cms/course_detail.html course_cover": {
         "name": _("Cover"),

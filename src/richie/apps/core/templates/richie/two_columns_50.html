@@ -1,0 +1,21 @@
+{% extends "richie/multiple_columns.html" %}
+{% load cms_tags %}
+
+
+{% block content_columns %}
+    <div class="multiple-columns__w50 multiple-columns__short">
+    {% block column_first %}
+        {% with header_level=2 %}
+            {% placeholder "maincontent" %}
+        {% endwith %}
+    {% endblock column_first %}
+    </div>
+
+    <div class="multiple-columns__w50 multiple-columns__short">
+    {% block column_second %}
+        {% with header_level=3 %}
+            {% placeholder "secondcontent" %}
+        {% endwith %}
+    {% endblock column_second %}
+    </div>
+{% endblock content_columns %}

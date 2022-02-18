@@ -1,0 +1,399 @@
+// Multiple columns templates stylesheet
+//
+// This aims to only adjust every possible plugins so they correctly fit since they
+// were done for 100% size only. No colour, font or anything else should be changed
+// here.
+//
+
+.multiple-columns {
+  $cell-gutter: 0.5rem;
+
+  @include make-container();
+  @include make-container-max-widths();
+  display: flex;
+  padding: 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background: r-theme-val(body-content, base-background);
+
+  @if $body-padding-fix {
+    @include content-padding-fix;
+  }
+  @include media-breakpoint-up(lg) {
+    padding: 1rem;
+  }
+
+  // Impose tiny horizontal padding to every section row
+  .section__row {
+    padding: $cell-gutter;
+  }
+
+  // ----------
+  // Shared base adjustments for short columns (25+33+50)
+  // ----------
+  &__short {
+    // Every plugins start at 100% width
+    .blogpost-glimpse,
+    .blogpost-mini,
+    .blogpost-favorite,
+    .category-glimpse,
+    .course-glimpse,
+    .course-glimpse__large,
+    .glimpse-card_square,
+    .glimpse-badge,
+    .glimpse-quote,
+    .glimpse-row_half,
+    .glimpse-row_full,
+    .nested-item--list.nested-item--0,
+    .organization-glimpse,
+    .organization-card,
+    .organization-row,
+    .person-glimpse,
+    .program-glimpse {
+      @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+      min-width: auto;
+      margin: $cell-gutter;
+    }
+
+    .category-tag,
+    .category-badge {
+      margin-top: 0;
+      margin-bottom: $cell-gutter;
+    }
+
+    .blogpost-mini {
+      padding: $cell-gutter;
+
+      .category-tag {
+        margin-bottom: 0;
+      }
+    }
+
+    .blogpost-favorite {
+      padding-left: 0.6rem;
+      padding-right: 0.6rem;
+
+      &__media {
+        @include sv-flex(1, 0, 100%);
+        margin-top: 0;
+        margin-bottom: 1rem;
+        order: 1;
+      }
+
+      &__content {
+        @include sv-flex(1, 0, 100%);
+        padding-right: 0;
+        order: 2;
+      }
+    }
+
+    .glimpse-row_half,
+    .glimpse-row_full {
+      @include media-breakpoint-up(md) {
+        &__media {
+          @include sv-flex(1, 0, calc(15% - 0.25rem));
+          margin-right: 0.25rem;
+        }
+
+        &__wrapper {
+          @include sv-flex(1, 0, 85%);
+        }
+      }
+    }
+
+    .organization-row {
+      &__logo {
+        @include sv-flex(1, 0, 100%);
+      }
+
+      &__content {
+        @include sv-flex(1, 0, 100%);
+      }
+    }
+  }
+
+  // ----------
+  // Specific adjustments to 25% width
+  // ----------
+  &__w25 {
+    @include sv-flex(1, 0, 100%);
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, 25%);
+    }
+
+    .person-glimpse {
+      flex-wrap: wrap;
+      padding: $cell-gutter;
+
+      &__media,
+      &__content {
+        @include sv-flex(1, 0, 100%);
+      }
+    }
+
+    .glimpse-quote {
+      padding: $cell-gutter;
+
+      &__media {
+        @include sv-flex(1, 0, 100%);
+        max-height: none;
+        margin-bottom: $cell-gutter;
+
+        img {
+          max-width: 50%;
+        }
+      }
+
+      &__title {
+        @include sv-flex(1, 0, 100%);
+      }
+    }
+
+    .blogpost-mini {
+      flex-wrap: wrap;
+      padding: $cell-gutter;
+
+      &__media,
+      &__content {
+        @include sv-flex(1, 0, 100%);
+      }
+
+      .category-tag {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  // ----------
+  // Specific adjustments to 33% width
+  // ----------
+  &__w33 {
+    @include sv-flex(1, 0, 100%);
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, 33.3333%);
+    }
+
+    .organization-glimpse-list {
+      margin: 0;
+      padding: 0;
+
+      .organization-glimpse {
+        @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+        margin: $cell-gutter;
+
+        @include media-breakpoint-up(lg) {
+          @include sv-flex(1, 0, calc(50% - #{$cell-gutter * 2}));
+        }
+      }
+    }
+  }
+
+  // ----------
+  // Specific adjustments to 50% width
+  // ----------
+  &__w50 {
+    @include sv-flex(1, 0, 100%);
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, 50%);
+    }
+
+    .category-glimpse,
+    .course-glimpse,
+    .glimpse-card_square,
+    .glimpse-badge,
+    .program-glimpse {
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, calc(50% - #{$cell-gutter * 2}));
+      }
+    }
+
+    .glimpse-row_half {
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, calc(50% - #{$cell-gutter * 2}));
+      }
+    }
+
+    .organization-card {
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, calc(50% - #{$cell-gutter * 2}));
+      }
+    }
+
+    .organization-glimpse-list {
+      margin: 0;
+      padding: 0;
+
+      .organization-glimpse {
+        @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+        margin: $cell-gutter;
+
+        @include media-breakpoint-up(lg) {
+          @include sv-flex(1, 0, calc(50% - #{$cell-gutter * 2}));
+        }
+      }
+    }
+
+    .organization-row {
+      @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+      margin: $cell-gutter;
+      padding: $cell-gutter;
+      display: flex;
+      flex-wrap: wrap;
+
+      & > a {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      &__logo {
+        @include sv-flex(1, 0, 100%);
+
+        @include media-breakpoint-up(lg) {
+          @include sv-flex(1, 0, calc(15%));
+        }
+      }
+
+      &__content {
+        @include sv-flex(1, 0, 100%);
+
+        @include media-breakpoint-up(lg) {
+          @include sv-flex(1, 0, calc(85%));
+        }
+      }
+    }
+  }
+
+  // ----------
+  // Adjustments only related to 75% width
+  // ----------
+  &__w75 {
+    @include sv-flex(1, 0, 100%);
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, 75%);
+    }
+
+    .glimpse-card_square,
+    .glimpse-badge {
+      @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+      margin: $cell-gutter;
+
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, calc(25% - #{$cell-gutter * 2}));
+      }
+    }
+
+    .course-glimpse,
+    .program-glimpse {
+      @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+      margin: $cell-gutter;
+
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, calc(33.3333% - #{$cell-gutter * 2}));
+      }
+    }
+
+    .blogpost-glimpse,
+    .person-glimpse,
+    .glimpse-quote,
+    .glimpse-row_half {
+      @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+      margin: $cell-gutter;
+
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, calc(50% - #{$cell-gutter * 2}));
+      }
+    }
+
+    .blogpost-mini {
+      @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+      margin: $cell-gutter;
+      padding: $cell-gutter;
+
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, calc(50% - #{$cell-gutter * 2}));
+      }
+    }
+
+    .blogpost-favorite {
+      @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+      margin: $cell-gutter;
+      padding: $cell-gutter;
+    }
+
+    .course-glimpse__large {
+      @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+      margin: $cell-gutter;
+    }
+
+    .organization-glimpse,
+    .organization-card {
+      @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+      margin: $cell-gutter;
+
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, calc(25% - #{$cell-gutter * 2}));
+      }
+    }
+
+    .organization-row {
+      @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+      margin: $cell-gutter;
+      padding: $cell-gutter;
+      display: flex;
+      flex-wrap: wrap;
+
+      & > a {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      &__logo {
+        @include sv-flex(1, 0, 100%);
+
+        @include media-breakpoint-up(lg) {
+          @include sv-flex(1, 0, calc(25%));
+        }
+      }
+
+      &__content {
+        @include sv-flex(1, 0, 100%);
+
+        @include media-breakpoint-up(lg) {
+          @include sv-flex(1, 0, calc(75%));
+        }
+      }
+    }
+
+    .organization-glimpse-list {
+      margin: 0;
+      padding: 0;
+
+      .organization-glimpse {
+        @include sv-flex(1, 0, calc(100% - #{$cell-gutter * 2}));
+        margin: $cell-gutter;
+
+        @include media-breakpoint-up(lg) {
+          @include sv-flex(1, 0, calc(25% - #{$cell-gutter * 2}));
+        }
+      }
+    }
+  }
+
+  // Add shared margin for vertical divider between allowed plugins
+  .hero-intro,
+  .embed-responsive,
+  .section,
+  .licence-plugin,
+  .button-caesura,
+  .rich-text-container {
+    margin: 1rem 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

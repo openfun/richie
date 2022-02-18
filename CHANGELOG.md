@@ -14,11 +14,15 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   for screen reader users.
 - Add a heading for screen reader users on the search results page to have a
   more understandable navigation.
+- Add new page templates for various multiple columns and their own CSS to
+  adjust every possible plugins to fit correctly;
 
 ### Changed
 
 - Update frontend overriding system to allow to override any frontend module.
 - Improve React search suggestion field labels for screen readers.
+- Removed usage of deprecated Sass division '/' operator in favor of
+  'math.div'.
 
 ## [2.13.0] - 2022-02-18
 
@@ -41,7 +45,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   multiple pagination components on one page
 - Use the new `createWebStoragePersistor` to persist React query state
 - Upgrade mysql to version 8
-- Fix usage of deprecated Sass division operator in favor of math.div
 
 ## [2.12.0] - 2022-02-04
 
