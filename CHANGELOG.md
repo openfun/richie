@@ -8,17 +8,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
-- Differentiate between Google Analytics and Google Tag Manager js code as
-  different Web Analytics providers.
-- Send web analytics event when an user enrolls to a course using the
-  LMS enrollment api.
-- Show organization acronym by using the `menu_title` field (if set) on
-  the organization page.
-- Improve pagination blocks labels for screen reader users when there are
-  multiple pagination components on one page
+## [2.13.0] - 2022-02-18
 
 ### Added
 
+- Send web analytics event when a user enrolls to a course using the
+  LMS enrollment api.
 - Wrap React widgets in a `ErrorBoundary`
 - Add settings to setup Joanie
 - Add course runs to the course search API
@@ -26,6 +21,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Differentiate between Google Analytics and Google Tag Manager js code as
+  different Web Analytics providers.
+- Show organization acronym by using the `menu_title` field (if set) on
+  the organization page.
+- Improve pagination blocks labels for screen reader users when there are
+  multiple pagination components on one page
 - Use the new `createWebStoragePersistor` to persist React query state
 - Upgrade mysql to version 8
 
@@ -1525,7 +1526,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.12.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.13.0...master
+[2.13.0]: https://github.com/openfun/richie/compare/v2.12.0...v2.13.0
 [2.12.0]: https://github.com/openfun/richie/compare/v2.11.0...v2.12.0
 [2.11.0]: https://github.com/openfun/richie/compare/v2.10.0...v2.11.0
 [2.10.0]: https://github.com/openfun/richie/compare/v2.9.1...v2.10.0
