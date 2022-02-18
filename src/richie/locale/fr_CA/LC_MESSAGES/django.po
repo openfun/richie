@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-04 09:50+0000\n"
-"PO-Revision-Date: 2022-02-04 13:18\n"
+"POT-Creation-Date: 2022-02-17 18:04+0000\n"
+"PO-Revision-Date: 2022-02-18 09:49\n"
 "Last-Translator: \n"
 "Language-Team: French, Canada\n"
 "Language: fr_CA\n"
@@ -133,37 +133,37 @@ msgstr "Cette page n'a pas d'objets enfants"
 msgid "Back to home"
 msgstr "Retour à la page d'accueil"
 
-#: apps/core/templates/richie/pagination.html:5
+#: apps/core/templates/richie/pagination.html:8
 msgid "Pagination"
 msgstr "Pagination"
 
-#: apps/core/templates/richie/pagination.html:16
+#: apps/core/templates/richie/pagination_inner.html:15
 #, python-format
 msgid "Currently reading last page %(page)s"
 msgstr "Actuellement sur la dernière page %(page)s"
 
-#: apps/core/templates/richie/pagination.html:18
+#: apps/core/templates/richie/pagination_inner.html:17
 #, python-format
 msgid "Currently reading page %(page)s"
 msgstr "Actuellement sur la page %(page)s"
 
-#: apps/core/templates/richie/pagination.html:28
-#: apps/core/templates/richie/pagination.html:42
+#: apps/core/templates/richie/pagination_inner.html:27
+#: apps/core/templates/richie/pagination_inner.html:41
 #, python-format
 msgid "Page %(page)s"
 msgstr "Page %(page)s"
 
-#: apps/core/templates/richie/pagination.html:36
+#: apps/core/templates/richie/pagination_inner.html:35
 #, python-format
 msgid "Previous page %(page)s"
 msgstr "Page précédente %(page)s"
 
-#: apps/core/templates/richie/pagination.html:38
+#: apps/core/templates/richie/pagination_inner.html:37
 #, python-format
 msgid "Last page %(page)s"
 msgstr "Dernière page %(page)s"
 
-#: apps/core/templates/richie/pagination.html:40
+#: apps/core/templates/richie/pagination_inner.html:39
 #, python-format
 msgid "Next page %(page)s"
 msgstr "Page suivante %(page)s"
@@ -268,36 +268,36 @@ msgstr "Voir le groupe d'utilisateurs"
 msgid "See filer folder"
 msgstr "Voir le dossier du classeur"
 
-#: apps/courses/cms_plugins.py:36
+#: apps/courses/cms_plugins.py:27
 msgid "Organization"
 msgstr "Institution"
 
-#: apps/courses/cms_plugins.py:63
+#: apps/courses/cms_plugins.py:55
 msgid "Organization by Category"
 msgstr "Institution par catégorie"
 
-#: apps/courses/cms_plugins.py:94
+#: apps/courses/cms_plugins.py:87
 msgid "Category"
 msgstr "Catégorie"
 
-#: apps/courses/cms_plugins.py:122
+#: apps/courses/cms_plugins.py:116
 #: apps/courses/templates/courses/cms/fragment_course_run.html:11
 msgid "Course"
 msgstr "Cours"
 
-#: apps/courses/cms_plugins.py:148 plugins/glimpse/defaults.py:23
+#: apps/courses/cms_plugins.py:143 plugins/glimpse/defaults.py:23
 msgid "Person"
 msgstr "Person."
 
-#: apps/courses/cms_plugins.py:177
+#: apps/courses/cms_plugins.py:172
 msgid "Licence"
 msgstr "License"
 
-#: apps/courses/cms_plugins.py:196
+#: apps/courses/cms_plugins.py:192
 msgid "Post"
 msgstr "Art."
 
-#: apps/courses/cms_plugins.py:222
+#: apps/courses/cms_plugins.py:219
 msgid "Program"
 msgstr "Parcours"
 
@@ -1155,6 +1155,11 @@ msgstr "Sous-catégories"
 msgid "Related courses"
 msgstr "Cours offerts"
 
+#: apps/courses/templates/courses/cms/category_detail.html:123
+#: apps/courses/templates/courses/cms/person_detail.html:134
+msgid "Courses pagination"
+msgstr "Pagination des cours"
+
 #: apps/courses/templates/courses/cms/category_detail.html:127
 #, python-format
 msgid "\n"
@@ -1172,14 +1177,27 @@ msgstr "Voir tous les cours"
 msgid "Related organizations"
 msgstr "Institutions associées"
 
+#: apps/courses/templates/courses/cms/category_detail.html:155
+msgid "Related organizations pagination"
+msgstr "Pagination des institutions liées"
+
 #: apps/courses/templates/courses/cms/category_detail.html:169
 msgid "Related blogposts"
 msgstr "Billets de blog liés"
+
+#: apps/courses/templates/courses/cms/category_detail.html:174
+msgid "Related blogposts pagination"
+msgstr "Pagination des billets de blog liés"
 
 #: apps/courses/templates/courses/cms/category_detail.html:188
 #: apps/courses/templates/courses/cms/organization_detail.html:132
 msgid "Related persons"
 msgstr "Personnes liées"
+
+#: apps/courses/templates/courses/cms/category_detail.html:193
+#: apps/courses/templates/courses/cms/organization_detail.html:139
+msgid "Related persons pagination"
+msgstr "Pagination des personnes liées"
 
 #: apps/courses/templates/courses/cms/category_list.html:26
 msgid "No categories"
@@ -1457,6 +1475,10 @@ msgstr "bannière d'institution"
 msgid "organization logo"
 msgstr "logo de l'institution"
 
+#: apps/courses/templates/courses/cms/organization_detail.html:111
+msgid "Related courses pagination"
+msgstr "Pagination des cours liés"
+
 #: apps/courses/templates/courses/cms/organization_detail.html:114
 #, python-format
 msgid "\n"
@@ -1495,6 +1517,10 @@ msgstr "\n"
 #: apps/courses/templates/courses/cms/person_detail.html:155
 msgid "Blogposts"
 msgstr "Messages de blog"
+
+#: apps/courses/templates/courses/cms/person_detail.html:160
+msgid "Blogposts pagination"
+msgstr "Pagination des billets de blog"
 
 #: apps/courses/templates/courses/cms/person_list.html:26
 msgid "No persons"
@@ -1547,19 +1573,19 @@ msgstr "Niveaux"
 msgid "Persons"
 msgstr "Personnes"
 
-#: apps/search/filter_definitions/courses.py:472
+#: apps/search/filter_definitions/courses.py:473
 msgid "Open for enrollment"
 msgstr "Ouvert pour inscription"
 
-#: apps/search/filter_definitions/courses.py:473
+#: apps/search/filter_definitions/courses.py:474
 msgid "Coming soon"
 msgstr "À venir"
 
-#: apps/search/filter_definitions/courses.py:474
+#: apps/search/filter_definitions/courses.py:475
 msgid "On-going"
 msgstr "En cours"
 
-#: apps/search/filter_definitions/courses.py:475
+#: apps/search/filter_definitions/courses.py:476
 msgid "Archived"
 msgstr "Archivé"
 
