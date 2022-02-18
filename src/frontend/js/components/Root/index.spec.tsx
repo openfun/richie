@@ -1,9 +1,13 @@
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
-
 import { findByText, render } from '@testing-library/react';
-import { ContextFactory } from 'utils/test/factories';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { Root } from '.';
 
+jest.mock('utils/context', () => ({
+  __esModule: true,
+  default: mockContextFactory({ authentication: undefined }).generate(),
+}));
 jest.mock('components/UserLogin', () => ({
   __esModule: true,
   default: () => 'user login component rendered',
@@ -21,11 +25,6 @@ jest.mock('data/SessionProvider', () => ({
 }));
 
 describe('<Root />', () => {
-  window.__richie_frontend_context__ = {
-    context: ContextFactory({ authentication: undefined }).generate(),
-  };
-  const { Root } = require('.');
-
   beforeEach(() => {
     jest.spyOn(console, 'warn').mockImplementation(() => {});
   });
