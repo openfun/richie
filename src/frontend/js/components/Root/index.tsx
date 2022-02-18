@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 import { HistoryProvider } from 'data/useHistory';
 import { SessionProvider } from 'data/SessionProvider';
 import { Spinner } from 'components/Spinner';
+import ErrorBoundary from 'utils/errors/ErrorBoundary';
 import context from 'utils/context';
 
 const CourseRunEnrollment = lazy(() => import('components/CourseRunEnrollment'));
@@ -82,7 +83,12 @@ export const Root = ({ richieReactSpots }: RootProps) => {
         props.context = context;
       }
 
-      return ReactDOM.createPortal(<Component {...props} />, element);
+      return ReactDOM.createPortal(
+        <ErrorBoundary>
+          <Component {...props} />
+        </ErrorBoundary>,
+        element,
+      );
     } else {
       // Emit a warning at runtime when we fail to find a matching component for an element that required one
       console.warn('Failed to load React component: no such component in Library ' + componentName);
