@@ -2,12 +2,15 @@ import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { findByText, render } from '@testing-library/react';
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { handle as mockHandle } from 'utils/errors/handle';
+import { noop } from 'utils';
 import { Root } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockContextFactory({ authentication: undefined }).generate(),
 }));
+jest.mock('utils/errors/handle');
 jest.mock('components/UserLogin', () => ({
   __esModule: true,
   default: () => 'user login component rendered',
@@ -26,7 +29,8 @@ jest.mock('data/SessionProvider', () => ({
 
 describe('<Root />', () => {
   beforeEach(() => {
-    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(noop);
+    jest.spyOn(console, 'warn').mockImplementation(noop);
   });
 
   afterEach(() => {
@@ -86,5 +90,29 @@ describe('<Root />', () => {
     expect(console.warn).toHaveBeenCalledWith(
       'Failed to load React component: no such component in Library UserFeedback',
     );
+  });
+
+  it('renders properly components even if one of them raises an error', async () => {
+    // Create a <UserLogin /> component which renders properly
+    const userLoginContainer = document.createElement('div');
+    userLoginContainer.setAttribute('class', 'richie-react richie-react--user-login');
+    document.body.append(userLoginContainer);
+    // On the other hand, <Search /> component raises an error
+    jest.doMock('components/Search', () => {
+      throw Error('Failed to render Search component.');
+    });
+    const searchFailingComponent = document.createElement('div');
+    searchFailingComponent.setAttribute('class', 'richie-react richie-react--search');
+    document.body.append(searchFailingComponent);
+
+    // Render the root component, passing our real element and our bogus one
+    render(
+      <IntlProvider locale="en">
+        <Root richieReactSpots={[userLoginContainer, searchFailingComponent]} />
+      </IntlProvider>,
+    );
+
+    await findByText(userLoginContainer, 'user login component rendered');
+    expect(mockHandle).toHaveBeenCalledWith(new Error('Failed to render Search component.'));
   });
 });
