@@ -1,0 +1,28 @@
+{% extends "richie/base.html" %}
+{% load cms_tags %}
+
+{% block head_title %}
+    {% page_attribute "page_title" %}
+{% endblock head_title %}
+
+{% block meta_opengraph_contextuals %}
+    {% page_attribute "page_title" as page_title %}
+    <meta property="og:title" content="{{ page_title|truncatechars:65 }}">
+    <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
+{% endblock meta_opengraph_contextuals %}
+
+
+{% block subheader_content %}
+<div class="subheader__container">
+    <h1 class="subheader__title">
+        {% render_model request.current_page "title" %}
+    </h1>
+</div>
+{% endblock subheader_content %}
+
+
+{% block content %}
+<div class="multiple-columns">
+    {% block content_columns %}{% endblock content_columns %}
+</div>
+{% endblock content %}
