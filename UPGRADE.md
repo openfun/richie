@@ -16,6 +16,15 @@ $ make migrate
 
 ## Unreleased
 
+- Frontend override system has been updated to allow overriding of any frontend module.
+  Thus if you override some components, you have to update the module regexp by prefixing
+  with `components/`.
+
+  ```diff
+    - "CourseGlimpse/CourseGlimpseFooter.tsx": "../../../../../js/components/CourseGlimpse/CourseGlimpseFooter.tsx"
+    + "components/CourseGlimpse/CourseGlimpseFooter.tsx$": "../../../../../js/components/CourseGlimpse/CourseGlimpseFooter.tsx"
+  ```
+
 ## 2.12.x to 2.13.x
 
 - Add `dal` and `dal_select2` to your installed apps.

@@ -108,11 +108,7 @@ module.exports = (env) => {
     plugins: [
       // Use module replacement to override any number of Richie components as defined in the settings
       ...Object.entries(overrides).map(
-        (entry) =>
-          new webpack.NormalModuleReplacementPlugin(
-            new RegExp(`components\/${entry[0]}$`),
-            entry[1],
-          ),
+        (entry) => new webpack.NormalModuleReplacementPlugin(new RegExp(entry[0]), entry[1]),
       ),
       // Provide the current running version as a global to our bundle. This is useful for eg. reporting
       // errors when using different versions in the backend and frontend.

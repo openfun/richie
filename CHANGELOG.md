@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Update frontend overriding system to allow to override any frontend module.
+
 ## [2.13.0] - 2022-02-18
 
 ### Added
