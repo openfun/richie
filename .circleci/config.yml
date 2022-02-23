@@ -715,7 +715,7 @@ jobs:
           command: |
             mkdir -p js/components/Spinner
             cp -R ~/fun/src/frontend/js/components/Spinner/*.tsx js/components/Spinner
-            echo '{"overrides": {"Spinner/index.tsx": "../../../../../js/components/Spinner/index.tsx"}}' > overrides.json
+            echo '{"overrides": {"components/Spinner/index.tsx$": "../../../../../js/components/Spinner/index.tsx"}}' > overrides.json
       - run:
           name: Create scss/_main.scss file using richie-education styles & mixins
           command: |
