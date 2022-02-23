@@ -16,6 +16,17 @@ $ make migrate
 
 ## Unreleased
 
+## 2.12.x to 2.13.x
+
+- Add `dal` and `dal_select2` to your installed apps.
+  ```python
+  INSTALLED_APPS = (
+      # ...
+      'dal',
+      'dal_select2',
+  )
+  ```
+
 ## 2.10.x to 2.11.x
 
 - If you overrode `richie/base.html`, the `branding_footer` template block has been renamed to
