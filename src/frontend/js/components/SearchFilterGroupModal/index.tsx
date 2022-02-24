@@ -4,6 +4,7 @@ import { useInfiniteQuery } from 'react-query';
 
 import { Modal } from 'components/Modal';
 import { Spinner } from 'components/Spinner';
+import { Icon } from 'components/Icon';
 import { fetchList } from 'data/getResourceList';
 import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
@@ -157,13 +158,10 @@ const ModalContent = ({ filter, modalIsOpen, setModalIsOpen }: ModalContentProps
         <span className="offscreen">
           <FormattedMessage {...messages.closeButton} />
         </span>
-        <svg
-          aria-hidden={true}
-          role="img"
-          className="icon modal__closeButton__icon search-filter-group-modal__close__icon"
-        >
-          <use xlinkHref="#icon-cross" />
-        </svg>
+        <Icon
+          name="icon-cross"
+          className="modal__closeButton__icon search-filter-group-modal__close__icon"
+        />
       </button>
       <fieldset className="search-filter-group-modal__form">
         <legend className="search-filter-group-modal__form__title">

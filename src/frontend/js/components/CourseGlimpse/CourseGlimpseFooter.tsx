@@ -1,5 +1,6 @@
 import { useIntl } from 'react-intl';
 
+import { Icon } from 'components/Icon';
 import { CommonDataProps } from 'types/commonDataProps';
 import { Course } from 'types/Course';
 
@@ -12,9 +13,7 @@ export const CourseGlimpseFooter: React.FC<{ course: Course } & CommonDataProps>
   return (
     <div className="course-glimpse-footer">
       <div className="course-glimpse-footer__date">
-        <svg aria-hidden={true} role="img" className="icon">
-          <use xlinkHref="#icon-calendar" />
-        </svg>
+        <Icon name="icon-calendar" />
         {course.state.text.charAt(0).toUpperCase() +
           course.state.text.substr(1) +
           (course.state.datetime

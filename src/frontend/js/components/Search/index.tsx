@@ -5,6 +5,7 @@ import { CourseGlimpseList } from 'components/CourseGlimpseList';
 import { PaginateCourseSearch } from 'components/PaginateCourseSearch';
 import { SearchFiltersPane } from 'components/SearchFiltersPane';
 import { Spinner } from 'components/Spinner';
+import { Icon } from 'components/Icon';
 import { useCourseSearch } from 'data/useCourseSearch';
 import { useCourseSearchParams, CourseSearchParamsAction } from 'data/useCourseSearchParams';
 import useMatchMedia from 'utils/useMatchMedia';
@@ -96,18 +97,14 @@ const Search = ({ context }: CommonDataProps) => {
           >
             {showFilters ? (
               <Fragment>
-                <svg aria-hidden={true} role="img" className="icon search__filters__toggle__icon">
-                  <use xlinkHref="#icon-cross" />
-                </svg>{' '}
+                <Icon name="icon-cross" className="search__filters__toggle__icon" />{' '}
                 <span className="offscreen">
                   <FormattedMessage {...messages.hideFiltersPane} />
                 </span>
               </Fragment>
             ) : (
               <Fragment>
-                <svg aria-hidden={true} role="img" className="icon search__filters__toggle__icon">
-                  <use xlinkHref="#icon-filter" />
-                </svg>
+                <Icon name="icon-filter" className="search__filters__toggle__icon" />
                 <span className="offscreen">
                   <FormattedMessage {...messages.showFiltersPane} />
                 </span>

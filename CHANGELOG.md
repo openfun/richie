@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Create a React `Icon` component.
+
 ### Changed
 
 - Update frontend overriding system to allow to override any frontend module.

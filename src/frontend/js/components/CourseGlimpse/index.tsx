@@ -3,6 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CommonDataProps } from 'types/commonDataProps';
 import { Course } from 'types/Course';
+import { Icon } from 'components/Icon';
 import { CourseGlimpseFooter } from './CourseGlimpseFooter';
 
 export interface CourseGlimpseProps {
@@ -66,17 +67,13 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
           </div>
         ) : null}
         <div className="course-glimpse__metadata course-glimpse__metadata--organization">
-          <svg aria-hidden={true} role="img" className="icon">
-            <use xlinkHref="#icon-org" />
-          </svg>
+          <Icon name="icon-org" />
           <span className="title" title={course.organization_highlighted}>
             {course.organization_highlighted}
           </span>
         </div>
         <div className="course-glimpse__metadata course-glimpse__metadata--code">
-          <svg aria-hidden={true} role="img" className="icon">
-            <use xlinkHref="#icon-barcode" />
-          </svg>
+          <Icon name="icon-barcode" />
           <span>{course.code || '-'}</span>
         </div>
       </div>
