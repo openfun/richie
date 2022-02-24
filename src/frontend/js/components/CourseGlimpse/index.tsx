@@ -51,9 +51,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
         </div>
       ) : null}
       <div className="course-glimpse__wrapper">
-        <h3 className="course-glimpse__title" title={course.title}>
-          {course.title}
-        </h3>
+        <h3 className="course-glimpse__title">{course.title}</h3>
         {course.organization_highlighted_cover_image ? (
           <div className="course-glimpse__organization-logo">
             {/* alt forced to empty string because it's a decorative image */}
@@ -69,9 +67,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
           <svg aria-hidden={true} role="img" className="icon">
             <use xlinkHref="#icon-org" />
           </svg>
-          <span className="title" title={course.organization_highlighted}>
-            {course.organization_highlighted}
-          </span>
+          <span className="title">{course.organization_highlighted}</span>
         </div>
         <div className="course-glimpse__metadata course-glimpse__metadata--code">
           <svg aria-hidden={true} role="img" className="icon">

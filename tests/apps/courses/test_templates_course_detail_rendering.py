@@ -110,6 +110,12 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         )
 
         response = self.client.get(url)
+        content = htmlmin.minify(
+            response.content.decode("UTF-8"),
+            reduce_empty_attributes=False,
+            remove_optional_attribute_quotes=False,
+        )
+
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(
@@ -168,15 +174,16 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         for icon in icons[-2:]:
             self.assertNotContains(response, icon.extended_object.get_title())
 
-        # Public organizations should be in response content
+        # Public organizations should be in HTML content
         for organization in organizations[:2]:
-            self.assertContains(
-                response,
+            self.assertIn(
                 # pylint: disable=consider-using-f-string
-                '<h2 class="organization-glimpse__title" property="name">{title:s}</h2>'.format(
-                    title=organization.extended_object.get_title()
+                '<div class="organization-glimpse" property="contributor" '
+                'typeof="CollegeOrUniversity"><a href="{:s}" title="{:s}">'.format(
+                    organization.extended_object.get_absolute_url(),
+                    organization.extended_object.get_title(),
                 ),
-                html=True,
+                content,
             )
 
         # Draft organizations should not be in response content
@@ -266,6 +273,11 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
         response = self.client.get(url)
+        content = htmlmin.minify(
+            response.content.decode("UTF-8"),
+            reduce_empty_attributes=False,
+            remove_optional_attribute_quotes=False,
+        )
 
         self.assertEqual(response.status_code, 200)
 
@@ -288,13 +300,13 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
 
         # Draft and published organizations should be present on the page
         for organization in organizations[:3]:
-            self.assertContains(
-                response,
+            self.assertIn(
                 # pylint: disable=consider-using-f-string
-                '<h2 class="organization-glimpse__title" property="name">{title:s}</h2>'.format(
-                    title=organization.extended_object.get_title()
+                '<a href="{:s}" title="{:s}">'.format(
+                    organization.extended_object.get_absolute_url(),
+                    organization.extended_object.get_title(),
                 ),
-                html=True,
+                content,
             )
         # The unpublished organization should not be present on the page
         self.assertNotContains(
@@ -1051,7 +1063,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             response,
             (
                 '<div class="banner banner--error banner--rounded" role="alert">'
-                '<svg class="banner__icon"><use href="#icon-cross" /></svg>'
+                '<svg class="banner__icon" aria-hidden="true"><use href="#icon-cross" /></svg>'
                 '<p class="banner__message">'
                 "A course object is missing on this course page. "
                 "Please select another page template."

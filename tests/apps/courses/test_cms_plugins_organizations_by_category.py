@@ -102,6 +102,7 @@ class OrganizationsByCategoryPluginTestCase(CMSTestCase):
 
         # Check the page content in English
         response = self.client.get(url)
+
         # The organization's name should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
         self.assertIn(
@@ -109,15 +110,7 @@ class OrganizationsByCategoryPluginTestCase(CMSTestCase):
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
-        # The organization's title should be wrapped in a h2
-        public_title = (
-            published_organization.public_extension.extended_object.get_title()
-        )
-        self.assertContains(
-            response,
-            f'<h2 class="organization-glimpse__title" property="name">{public_title:s}</h2>',
-            html=True,
-        )
+
         self.assertNotContains(response, "draft")
         self.assertNotContains(response, "private")
 

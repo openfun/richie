@@ -176,6 +176,12 @@ class PersonCMSTestCase(CMSTestCase):
 
         # Ensure the published page content is correct
         response = self.client.get(url)
+        content = htmlmin.minify(
+            response.content.decode("UTF-8"),
+            reduce_empty_attributes=False,
+            remove_optional_attribute_quotes=False,
+        )
+
         self.assertContains(
             response, "<title>My page title</title>", html=True, status_code=200
         )
@@ -197,6 +203,15 @@ class PersonCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
+        self.assertIn(
+            # pylint: disable=consider-using-f-string
+            '<div class="organization-glimpse" property="contributor" '
+            'typeof="CollegeOrUniversity"><a href="{:s}" title="{:s}">'.format(
+                published_organization.public_extension.extended_object.get_absolute_url(),
+                published_organization.public_extension.extended_object.get_title(),
+            ),
+            content,
+        )
         # The other categories should not be leaked:
         # - new_category linked only on the draft person page
         self.assertNotContains(
@@ -211,18 +226,6 @@ class PersonCMSTestCase(CMSTestCase):
             response, unpublished_category.extended_object.get_title(), html=True
         )
 
-        # The published organization should be on the page in its published version
-        self.assertContains(
-            response,
-            # pylint: disable=consider-using-f-string
-            '<h2 class="organization-glimpse__title" property="name">{:s}</h2>'.format(
-                published_organization.public_extension.extended_object.get_title()
-            ),
-            html=True,
-        )
-
-        # The other organizations should not be leaked:
-        # - new organization linked only on the draft person page
         self.assertNotContains(
             response,
             extra_published_organization.extended_object.get_title(),
@@ -333,14 +336,6 @@ class PersonCMSTestCase(CMSTestCase):
             ),
             content,
         )
-        self.assertContains(
-            response,
-            # pylint: disable=consider-using-f-string
-            '<h2 class="organization-glimpse__title" property="name">{:s}</h2>'.format(
-                published_organization.public_extension.extended_object.get_title()
-            ),
-            html=True,
-        )
         # The not published organization should not be on the page
         self.assertIn(
             # pylint: disable=consider-using-f-string
@@ -349,15 +344,6 @@ class PersonCMSTestCase(CMSTestCase):
                 not_published_organization.extended_object.get_title(),
             ),
             content,
-        )
-
-        self.assertContains(
-            response,
-            # pylint: disable=consider-using-f-string
-            '<h2 class="organization-glimpse__title" property="name">{:s}</h2>'.format(
-                not_published_organization.extended_object.get_title()
-            ),
-            html=True,
         )
 
         self.assertNotContains(response, "modified")
@@ -421,7 +407,7 @@ class PersonCMSTestCase(CMSTestCase):
         # The course should be present on the page
         self.assertContains(
             response,
-            '<h2 class="course-glimpse__title" title="{0:s}">{0:s}</h2>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+            '<h2 class="course-glimpse__title">{0:s}</h2>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
                 course.extended_object.get_title()
             ),
             html=True,
@@ -508,7 +494,7 @@ class PersonCMSTestCase(CMSTestCase):
             response,
             (
                 '<div class="banner banner--error banner--rounded" role="alert">'
-                '<svg class="banner__icon"><use href="#icon-cross" /></svg>'
+                '<svg class="banner__icon" aria-hidden="true"><use href="#icon-cross" /></svg>'
                 '<p class="banner__message">'
                 "A person object is missing on this person page. "
                 "Please select another page template."

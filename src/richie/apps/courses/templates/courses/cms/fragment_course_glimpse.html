@@ -30,7 +30,7 @@
         </div>
         {% endif %}
         <div class="course-{{ course_variant }}__wrapper">
-            <h{{ header_level|default:3 }} class="course-{{ course_variant }}__title" title="{{ course_page.get_title }}">{{ course_page.get_title }}</h{{ header_level|default:3 }}>
+            <h{{ header_level|default:3 }} class="course-{{ course_variant }}__title">{{ course_page.get_title }}</h{{ header_level|default:3 }}>
             {% if main_organization %}
                 {% with organization_page=main_organization.extended_object %}
                     {% get_page_plugins "logo" organization_page as plugins or %}
@@ -56,7 +56,7 @@
                 <svg role="img" aria-hidden="true" class="icon">
                     <use href="#icon-org" />
                 </svg>
-                <span class="title" title="{{ main_organization_title }}">{{ main_organization_title }}</span>
+                <span class="title">{{ main_organization_title }}</span>
             </div>
             {% endif %}
             <div class="course-{{ course_variant }}__metadata course-{{ course_variant }}__metadata--code">

@@ -7,9 +7,9 @@
             href="https://www.facebook.com/share.php?u={{ full_page_url }}"
             class="social-network-badges__item"
             target="_blank" rel="noopener noreferrer"
-            title="{% trans "Share on Facebook" %}"
         >
-            <svg role="img">
+            <svg role="img" aria-label="{% trans "Share on Facebook" %}">
+                <title>{% trans "Share on Facebook" %}</title>
                 <use href="#icon-facebook" />
             </svg>
         </a>
@@ -17,9 +17,9 @@
             href="https://twitter.com/intent/tweet?text={{ shared_sentence|urlencode }}"
             class="social-network-badges__item"
             target="_blank" rel="noopener noreferrer"
-            title="{% trans "Share on Twitter" %}"
         >
-            <svg role="img">
+            <svg role="img" aria-label="{% trans "Share on Twitter" %}">
+                <title>{% trans "Share on Twitter" %}</title>
                 <use href="#icon-twitter" />
             </svg>
         </a>
@@ -27,9 +27,9 @@
             href="https://www.linkedin.com/sharing/share-offsite/?url={{ full_page_url }}"
             class="social-network-badges__item"
             target="_blank" rel="noopener noreferrer"
-            title="{% trans "Share on Linkedin" %}"
         >
-            <svg role="img">
+            <svg role="img" aria-label="{% trans "Share on Linkedin" %}">
+                <title>{% trans "Share on Linkedin" %}</title>
                 <use href="#icon-linkedin" />
             </svg>
         </a>
@@ -37,9 +37,9 @@
             href="mailto:?subject={{ mailto_subject|urlencode }}&amp;body={{ full_page_url|urlencode }}"
             class="social-network-badges__item"
             target="_blank" rel="noopener noreferrer"
-            title="{% trans "Share by Email" %}"
         >
-            <svg role="img">
+            <svg role="img" aria-label="{% trans "Share by Email" %}">
+                <title>{% trans "Share by Email" %}</title>
                 <use href="#icon-envelope" />
             </svg>
         </a>
