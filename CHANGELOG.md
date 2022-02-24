@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## Added
+
+- Add settings that permit to configure elastic search client with custom
+  configuration like custom timeouts.
+
 ##  [2.15.0] - 2022-06-22
 
 ### Added

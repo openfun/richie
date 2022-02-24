@@ -271,6 +271,10 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         default="richie", environ_name="RICHIE_ES_INDICES_PREFIX", environ_prefix=None
     )
     RICHIE_ES_STATE_WEIGHTS = values.ListValue(None)
+    # Example to change the timeout: RICHIE_ES_CLIENT_KWARGS={'timeout': 30}
+    RICHIE_ES_CLIENT_KWARGS = values.DictValue(
+        {}, environ_name="RICHIE_ES_CLIENT_KWARGS", environ_prefix=None
+    )
 
     # LTI Content
     RICHIE_LTI_PROVIDERS = {
