@@ -4,6 +4,7 @@ import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 're
 
 import { Spinner } from 'components/Spinner';
 import { UserMenu } from 'components/UserMenu';
+import { Icon } from 'components/Icon';
 import { useSession } from 'data/SessionProvider';
 import { CommonDataProps } from 'types/commonDataProps';
 
@@ -85,9 +86,7 @@ const UserLogin = ({ profileUrls = {} }: UserLoginProps) => {
             <FormattedMessage {...messages.signUp} />
           </button>
           <button onClick={login} className="user-login__btn user-login__btn--log-in">
-            <svg aria-hidden={true} role="img" className="icon">
-              <use xlinkHref="#icon-login" />
-            </svg>
+            <Icon name="icon-login" />
             <FormattedMessage {...messages.logIn} />
           </button>
         </Fragment>

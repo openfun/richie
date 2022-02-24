@@ -1,12 +1,11 @@
 import { FC } from 'react';
+import { Icon } from 'components/Icon';
 import { UserMenuProps } from '.';
 
 export const MobileUserMenu: FC<UserMenuProps> = ({ user }) => (
   <div className="user-menu user-menu--mobile">
     <h6 className="user-menu__username">
-      <svg aria-hidden={true} role="img" className="icon">
-        <use xlinkHref="#icon-login" />
-      </svg>
+      <Icon name="icon-login" />
       {user.username}
     </h6>
     <ul className="user-menu__list">

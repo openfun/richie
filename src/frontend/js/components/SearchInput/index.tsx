@@ -1,6 +1,7 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CommonDataProps } from 'types/commonDataProps';
+import { Icon } from 'components/Icon';
 
 const messages = defineMessages({
   button: {
@@ -24,9 +25,7 @@ export const SearchInput = ({
   <div className="search-input">
     <input {...inputProps} />
     <button className="search-input__btn" onClick={onClick}>
-      <svg aria-hidden={true} role="img" className="icon search-input__btn__icon">
-        <use xlinkHref="#icon-magnifying-glass" />
-      </svg>{' '}
+      <Icon name="icon-magnifying-glass" className="search-input__btn__icon" />{' '}
       <span className="offscreen">
         <FormattedMessage {...messages.button} />
       </span>
