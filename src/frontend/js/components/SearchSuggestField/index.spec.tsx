@@ -72,7 +72,7 @@ describe('components/SearchSuggestField', () => {
   beforeEach(() => (location.search = ''));
 
   it('renders', () => {
-    const { getByPlaceholderText } = render(
+    const { getByPlaceholderText, getByLabelText } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
           <SearchSuggestField context={context} />
@@ -82,6 +82,8 @@ describe('components/SearchSuggestField', () => {
 
     // The placeholder text is shown in the input
     getByPlaceholderText('Search for courses, organizations, categories');
+    // Same text should also be recognized as a true input label
+    getByLabelText('Search for courses, organizations, categories');
   });
 
   it('picks the query from the URL if there is one', () => {

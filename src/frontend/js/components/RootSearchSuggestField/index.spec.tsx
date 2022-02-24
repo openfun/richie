@@ -51,6 +51,8 @@ describe('<RootSearchSuggestField />', () => {
 
     // The placeholder text is shown in the input
     screen.getByPlaceholderText('Search for courses');
+    // Same text should also be recognized as a true input label
+    screen.getByLabelText('Search for courses');
     // The component should not issue any request "on load", before the user starts interacting
     expect(fetchMock.called()).toEqual(false);
   });

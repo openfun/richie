@@ -119,6 +119,7 @@ const SearchSuggestField = ({ context }: CommonDataProps) => {
       }
     },
     placeholder: intl.formatMessage(messages.searchFieldPlaceholder),
+    'aria-label': intl.formatMessage(messages.searchFieldPlaceholder),
     value,
   };
 
