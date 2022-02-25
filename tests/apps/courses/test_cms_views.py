@@ -26,6 +26,9 @@ from richie.apps.courses import factories
 class PluginAutocompleteTestCase(CMSTestCase):
     """
     Test that PersonPlugin autocomplete view correctly returns results as expected
+
+    NOTE: We use 'assertCountEqual' on list assertions since expected results are not
+    strongly ordered and sometimes this leaded to test failures with 'assertEqual'.
     """
 
     def _test_cms_views_autocomplete_permission(self, model_name, factory_class):
@@ -105,9 +108,6 @@ class PluginAutocompleteTestCase(CMSTestCase):
         """
         Autocomplete view should return list of all objects with the right title in the
         current language.
-
-        NOTE: We stand on a queryset arbitrary order, that should be the order of
-        created objects (through their id order).
         """
         url = reverse_lazy(
             "page-admin-autocomplete",
@@ -142,7 +142,7 @@ class PluginAutocompleteTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
         payload = response.json()
         titles = [item["text"] for item in payload["results"]]
-        self.assertEqual(
+        self.assertCountEqual(
             titles,
             [
                 "donald duck",
@@ -156,7 +156,7 @@ class PluginAutocompleteTestCase(CMSTestCase):
         self.client.cookies.load({settings.LANGUAGE_COOKIE_NAME: "fr"})
         payload = self.client.get(url, follow=True).json()
         titles = [item["text"] for item in payload["results"]]
-        self.assertEqual(
+        self.assertCountEqual(
             titles,
             [
                 "donald duck",
@@ -170,7 +170,7 @@ class PluginAutocompleteTestCase(CMSTestCase):
         self.client.cookies.load({settings.LANGUAGE_COOKIE_NAME: "de"})
         payload = self.client.get(url, follow=True).json()
         titles = [item["text"] for item in payload["results"]]
-        self.assertEqual(
+        self.assertCountEqual(
             titles,
             ["donald duck", "dagobert duck", "flintheart glomgold", "gustav gans"],
         )
@@ -209,7 +209,7 @@ class PluginAutocompleteTestCase(CMSTestCase):
         data = {"q": "Duck"}
         payload = self.client.get(url, follow=True, data=data).json()
         titles = [item["text"] for item in payload["results"]]
-        self.assertEqual(titles, ["donald duck", "scrooge mcduck"])
+        self.assertCountEqual(titles, ["donald duck", "scrooge mcduck"])
 
         # Set language to french and search for a keyword that should match for english
         # and french
@@ -217,7 +217,7 @@ class PluginAutocompleteTestCase(CMSTestCase):
         data = {"q": "Duck"}
         payload = self.client.get(url, follow=True, data=data).json()
         titles = [item["text"] for item in payload["results"]]
-        self.assertEqual(
+        self.assertCountEqual(
             titles,
             [
                 "donald duck",
@@ -231,7 +231,7 @@ class PluginAutocompleteTestCase(CMSTestCase):
         data = {"q": "picsou"}
         payload = self.client.get(url, follow=True, data=data).json()
         titles = [item["text"] for item in payload["results"]]
-        self.assertEqual(titles, ["balthazar picsou"])
+        self.assertCountEqual(titles, ["balthazar picsou"])
 
 
 # Programmatically create test methods from the `_test_*` methods above. One set of test

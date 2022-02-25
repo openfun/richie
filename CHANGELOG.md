@@ -24,6 +24,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Removed usage of deprecated Sass division '/' operator in favor of
   'math.div'.
 
+### Fixed
+
+- Fix autocomplete views tests that may failed because of result order.
+
 ## [2.13.0] - 2022-02-18
 
 ### Added
