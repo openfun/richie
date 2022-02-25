@@ -44,9 +44,9 @@ export const Icon = ({ name, title, className = '' }: IconProps) => {
       {...(title && {
         role: 'img',
         'aria-label': title,
-        title,
       })}
     >
+      {title && <title>{title}</title>}
       <use href={`#${name}`} />
     </svg>
   );

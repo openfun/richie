@@ -10,7 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Create a React `Icon` component.
+- Create a React `Icon` component that can optionally take alternative text
+  for screen reader users.
 
 ### Changed
 
