@@ -12,6 +12,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Create a React `Icon` component that can optionally take alternative text
   for screen reader users.
+- Add a heading for screen reader users on the search results page to have a
+  more understandable navigation.
 
 ### Changed
 

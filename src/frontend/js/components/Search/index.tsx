@@ -31,6 +31,12 @@ const messages = defineMessages({
       'Accessibility text for the button/icon that toggles *on* the filters pane on mobile',
     id: 'components.Search.showFiltersPane',
   },
+  resultsTitle: {
+    defaultMessage: 'Search results',
+    description:
+      'Title for the search results pane in course search (not shown, made for screen reader users).',
+    id: 'components.Search.resultsTitle',
+  },
   spinnerText: {
     defaultMessage: 'Loading search results...',
     description: 'Accessibility text for the spinner while search results are being loaded',
@@ -114,6 +120,9 @@ const Search = ({ context }: CommonDataProps) => {
         )}
       </div>
       <div className="search__results">
+        <h2 className="offscreen">
+          <FormattedMessage {...messages.resultsTitle} />
+        </h2>
         {courseSearchResponse && courseSearchResponse.status === RequestStatus.SUCCESS ? (
           <Fragment>
             {query && query.length < 3 ? (
