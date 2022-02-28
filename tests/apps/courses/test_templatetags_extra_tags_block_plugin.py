@@ -49,7 +49,8 @@ class BlockPluginTemplateTagsTestCase(CMSTestCase):
     @transaction.atomic
     def test_templatetags_blockplugin_edit(self):
         """
-        The "blockplugin" template tag should include edit markup when edit mode is on.
+        The "blockplugin" template tag should include edit markup when edit mode is on
+        but not if silent mode is enabled.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         page = create_page("Test", "richie/single_column.html", "en", published=True)
@@ -81,3 +82,17 @@ class BlockPluginTemplateTagsTestCase(CMSTestCase):
             ).format(pid=plugin.id),
             output,
         )
+
+        # When the silent keyword is set exactly to 'True' string, the tag won't inject
+        # markup related to plugin edition but still render plugin content
+        template = (
+            "{% load extra_tags %}{% blockplugin plugin silent=True %}"
+            "{{ instance.body|safe }}"
+            "{% endblockplugin %}"
+        )
+
+        output = self.render_template_obj(
+            template, {"plugin": plugin}, request
+        ).replace("\n", "")
+
+        self.assertEqual("<b>Test</b>", output)

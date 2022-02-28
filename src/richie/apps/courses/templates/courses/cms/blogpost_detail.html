@@ -12,8 +12,8 @@
     <meta property="og:article:published_time" content="{{ current_page.publication_date|date:"c" }}">
     <meta property="og:article:modified_time" content="{{ current_page.changed_date|date:"c" }}">
 
-    {% get_placeholder_plugins "cover" as plugins %}
-    {% blockplugin plugins.0 %}
+    {% get_placeholder_plugins "cover" silent=True as plugins %}
+    {% blockplugin plugins.0 silent=True %}
         {% thumbnail instance.picture 845x500 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />

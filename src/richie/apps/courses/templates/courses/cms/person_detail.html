@@ -10,8 +10,8 @@
 {% block meta_rdfa_context %}
     <meta property="og:type" content="profile" />
 
-    {% get_placeholder_plugins "portrait" as og_image_plugins %}
-    {% blockplugin og_image_plugins.0 %}
+    {% get_placeholder_plugins "portrait" silent=True as og_image_plugins %}
+    {% blockplugin og_image_plugins.0 silent=True %}
         {% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />

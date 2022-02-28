@@ -10,8 +10,8 @@
 {% block meta_rdfa_context %}
     <meta property="og:type" content="website" />
 
-    {% get_placeholder_plugins "logo" as og_image_plugins %}
-    {% blockplugin og_image_plugins.0 %}
+    {% get_placeholder_plugins "logo" silent=True as og_image_plugins %}
+    {% blockplugin og_image_plugins.0 silent=True %}
         {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />

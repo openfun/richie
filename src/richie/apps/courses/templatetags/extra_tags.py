@@ -11,7 +11,7 @@ from django.utils.translation import gettext as _
 from django.utils.translation import to_locale
 
 import arrow
-from classytags.arguments import Argument, MultiValueArgument
+from classytags.arguments import Argument, KeywordArgument, MultiValueArgument
 from classytags.core import Options, Tag
 from classytags.utils import flatten_context
 from cms.templatetags.cms_tags import (
@@ -29,7 +29,8 @@ from ..lms import LMSHandler
 register = template.Library()
 
 
-def get_plugins_render_tag(context, name, varname, nodelist, page_lookup=None):
+# pylint: disable=arguments-differ,too-many-arguments
+def get_plugins_render_tag(context, name, silent, varname, nodelist, page_lookup=None):
     """
     Retrieve the placeholder's plugins and set them as a variable in the template context.
     If the placeholder is empty, render the block as fallback content and return the
@@ -64,10 +65,15 @@ def get_plugins_render_tag(context, name, varname, nodelist, page_lookup=None):
         if not context[varname] and nodelist:
             content = nodelist.render(context)
 
-        # Add the edit script and markup to the content, only if the placeholder is editable
-        # and the visited page is the one on which the placeholder is declared.
+        # Add the edit script and markup to the content, only if the placeholder is
+        # editable, the visited page is the one on which the placeholder is declared and
+        # silent mode is not enabled
         toolbar = get_toolbar_from_request(request)
-        if placeholder.page == request.current_page and toolbar.edit_mode_active:
+        if (
+            placeholder.page == request.current_page
+            and toolbar.edit_mode_active
+            and silent.get("silent", None) != "True"
+        ):
             renderer = toolbar.get_content_renderer()
             data = renderer.get_editable_placeholder_context(placeholder, page=page)
             data["content"] = content
@@ -95,12 +101,16 @@ class GetPlaceholderPlugins(Placeholder):
             <img src="{% thumbnail instance.picture 300x150 %}"/>
         {% endblockplugin %}
 
-    Keyword arguments:
+    Arguments:
         name: the name of the placeholder
-        varname: context variable name. Output will be added to template context as this variable
-            instead of being returned.
+        silent: If set to 'True' string there won't be any HTML related to placeholder
+            edition, no matter we are in edit mode or not. Any other value that 'True'
+            string or if this argument is not given, will result to default behavior
+            which is to let HTML related to edition to be injected.
         or: optional argument which if given will make the template tag a block
             tag whose content is shown if the placeholder is empty
+        varname: context variable name. Output will be added to template context as this variable
+            instead of being returned.
 
     Note: We must derive from the Placeholder class so that the tag is recognized as a
           placeholder and shown in the structure toolbar.
@@ -109,6 +119,7 @@ class GetPlaceholderPlugins(Placeholder):
     name = "get_placeholder_plugins"
     options = PlaceholderOptions(
         Argument("name", resolve=False),
+        KeywordArgument("silent", required=False, resolve=False),
         "as",
         Argument("varname", resolve=False),
         MultiValueArgument("extra_bits", required=False, resolve=False),
@@ -116,8 +127,8 @@ class GetPlaceholderPlugins(Placeholder):
     )
 
     # pylint: disable=arguments-differ,too-many-arguments
-    def render_tag(self, context, name, varname, extra_bits, nodelist=None):
-        return get_plugins_render_tag(context, name, varname, nodelist)
+    def render_tag(self, context, name, silent, varname, extra_bits, nodelist=None):
+        return get_plugins_render_tag(context, name, silent, varname, nodelist)
 
 
 @register.tag("get_page_plugins")
@@ -163,7 +174,7 @@ class GetPagePlugins(Tag):
     def render_tag(
         self, context, name, page_lookup, varname, extra_bits, nodelist=None
     ):
-        return get_plugins_render_tag(context, name, varname, nodelist, page_lookup)
+        return get_plugins_render_tag(context, name, {}, varname, nodelist, page_lookup)
 
 
 @register.tag()
@@ -178,10 +189,14 @@ class BlockPlugin(Tag):
 
     name = "blockplugin"
     template = "cms/toolbar/plugin.html"
-    options = Options(Argument("plugin"), blocks=[("endblockplugin", "nodelist")])
+    options = Options(
+        Argument("plugin"),
+        KeywordArgument("silent", required=False, resolve=False),
+        blocks=[("endblockplugin", "nodelist")],
+    )
 
     # pylint: disable=arguments-differ
-    def render_tag(self, context, plugin, nodelist):
+    def render_tag(self, context, plugin, silent, nodelist):
         """
         Renders the block for the plugin and returns the resulting HTML leaving the temmpate
         context untouched.
@@ -196,10 +211,15 @@ class BlockPlugin(Tag):
         internal_context["instance"] = plugin
         internal_context["content"] = nodelist.render(context.new(internal_context))
 
-        # Add the edit script and markup to the content, only if the placeholder is editable
-        # and the visited page is the one on which the plugin's placeholder is declared.
+        # Add the edit script and markup to the content, only if the placeholder is
+        # editable, the visited page is the one on which the plugin's placeholder is
+        # declared and silent mode is not enabled
         toolbar = get_toolbar_from_request(request)
-        if plugin.placeholder.page == request.current_page and toolbar.edit_mode_active:
+        if (
+            plugin.placeholder.page == request.current_page
+            and toolbar.edit_mode_active
+            and silent.get("silent", None) != "True"
+        ):
             return render_to_string(self.template, internal_context)
 
         return internal_context["content"]

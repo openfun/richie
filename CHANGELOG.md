@@ -16,6 +16,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   more understandable navigation.
 - Add new page templates for various multiple columns and their own CSS to
   adjust every possible plugins to fit correctly;
+- Add new keyword argument `silent` to template tags `get_placeholder_plugins`
+  and `blockplugin`. It have to be set to `True` on these tags when they are
+  used from `<head>` so they never append any invalid markup related to
+  edition mode.
 
 ### Changed
 

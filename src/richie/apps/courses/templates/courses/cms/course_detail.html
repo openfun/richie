@@ -17,10 +17,10 @@
 {% endblock meta_html_default %}
 
 {% block meta_rdfa_context %}
-    {% get_placeholder_plugins "course_cover" as plugins or %}
+    {% get_placeholder_plugins "course_cover" silent=True as plugins or %}
         {{ block.super }}
     {% endget_placeholder_plugins %}
-    {% blockplugin plugins.0 %}
+    {% blockplugin plugins.0 silent=True %}
         <meta property="og:type" content="website" />
         {% thumbnail instance.picture 1200x630 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
