@@ -36,6 +36,17 @@ $ make migrate
   )
   ```
 
+## 2.11.x to 2.12.x
+
+- If you overrode `course-detail` theme within `theme.scss`, you have to add these four 
+  new properties
+  ```scss
+  view-more-runs-color: r-color('firebrick6'),
+  run-catalog-visibility-hidden-logo: url('../../richie/images/catalog_visibility/hidden.svg'),
+  run-catalog-visibility-course-only-logo: url('../../richie/images/catalog_visibility/course_only.svg'),
+  run-catalog-visibility-logo-color: r-color('indianred3'),
+  ```
+
 ## 2.10.x to 2.11.x
 
 - If you overrode `richie/base.html`, the `branding_footer` template block has been renamed to
