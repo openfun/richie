@@ -26,6 +26,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Prevent context processor error when WEB_ANALYTICS_ID setting is not defined.
 - Fix autocomplete views tests that may failed because of result order.
 
 ## [2.13.0] - 2022-02-18
