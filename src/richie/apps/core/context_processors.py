@@ -137,7 +137,7 @@ class WebAnalyticsContextProcessor:
         Additional web analytics information for the frontend react
         """
         context = {}
-        if getattr(settings, "WEB_ANALYTICS_ID"):
+        if getattr(settings, "WEB_ANALYTICS_ID", None):
             context["web_analytics_provider"] = getattr(
                 settings, "WEB_ANALYTICS_PROVIDER", "google_analytics"
             )
