@@ -3,7 +3,7 @@
 <div class="section-tiles">
     <div class="section-tiles__row">
         {% if instance.title %}
-            <h{{ header_level|default:2 }} class="section-tiles__title">{{ instance.title }}</h{{ header_level|default:2 }}>
+            <h{{ header_level|default:2 }} class="section-tiles__title">{{ instance.title|safe }}</h{{ header_level|default:2 }}>
         {% endif %}
         <div class="section-tiles__items">
         {% for plugin in instance.child_plugin_instances %}
