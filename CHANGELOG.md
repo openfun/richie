@@ -28,6 +28,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Prevent context processor error when WEB_ANALYTICS_ID setting is not defined.
 - Fix autocomplete views tests that may failed because of result order.
+- Fix section tile title with richtext and special character escaping.
 
 ## [2.13.0] - 2022-02-18
 

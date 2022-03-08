@@ -57,6 +57,73 @@ class DefaultTemplatesTestCase(CMSPluginTestCase):
             """,
         )
 
+    def test_templates_section_title_safe(self):
+        """
+        The section title should be safe to pass HTML in default template and all
+        variant inheriters (except the 'tile' one). This is required since title input
+        is a CKEditor which make some escaping on special characters turning them to
+        HTML entities like "&eacute;" where '&' (along '<', '>' and others) will be
+        escaped by Django template renderer.
+        """
+        context = self.get_practical_plugin_context()
+        placeholder = Placeholder.objects.create(slot="footer")
+
+        add_plugin(
+            placeholder,
+            SectionPlugin,
+            "en",
+            title="<b>Titre &eacute;l&eacute;ctrique</b>",
+            template="richie/section/section.html",
+        )
+
+        html = context["cms_content_renderer"].render_placeholder(
+            placeholder, context=context, language="en"
+        )
+
+        self.assertHTMLEqual(
+            html,
+            """
+            <section class="section ">
+            <div class="section__row">
+            <h2 class="section__title"><b>Titre &eacute;l&eacute;ctrique</b></h2>
+            <div class="section__items"></div>
+            </div>
+            </section>
+            """,
+        )
+
+    def test_templates_section_tile_title_safe(self):
+        """
+        The section title should be safe to pass HTML in tile variant template alike
+        default section template.
+        """
+        context = self.get_practical_plugin_context()
+        placeholder = Placeholder.objects.create(slot="footer")
+
+        add_plugin(
+            placeholder,
+            SectionPlugin,
+            "en",
+            title="<b>Titre &eacute;l&eacute;ctrique</b>",
+            template="richie/section/section_tiles.html",
+        )
+
+        html = context["cms_content_renderer"].render_placeholder(
+            placeholder, context=context, language="en"
+        )
+
+        self.assertHTMLEqual(
+            html,
+            """
+            <div class="section-tiles ">
+            <div class="section-tiles__row">
+            <h2 class="section-tiles__title"><b>Titre &eacute;l&eacute;ctrique</b></h2>
+            <div class="section-tiles__items"></div>
+            </div>
+            </div>
+            """,
+        )
+
     def test_templates_section_default_nested(self):
         """The Section plugin can be used to render nested sections."""
         context = self.get_practical_plugin_context()
