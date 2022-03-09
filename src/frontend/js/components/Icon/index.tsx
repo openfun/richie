@@ -12,7 +12,7 @@ interface IconProps {
 }
 
 // icons from src/richie/apps/core/templates/richie/icons.html
-type IconType =
+export type IconType =
   | 'icon-calendar'
   | 'icon-barcode'
   | 'icon-chevron-down'
