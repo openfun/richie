@@ -436,6 +436,30 @@ $r-theme: (
   spinner: (
     base-color: r-color('denim'),
     base-color-light: r-color('white'),
+  ),
+  steps-breadcrumb: (
+    icon-background-active: r-color(purplish-grey),
+    icon-background: transparent,
+    icon-border-active: transparent,
+    icon-border: r-color('light-grey'),
+    icon-fill-active: r-color('white'),
+    icon-fill: r-color('light-grey'),
+    icon-outline: rgba(r-color(purplish-grey), 0.25),
+    label-color-active: r-color('charcoal'),
+    label-color: r-color('light-grey'),
+    separator-background-active: rgba(r-color(purplish-grey), 0.6),
+    separator-background: rgba(r-color(purplish-grey), 0.25),
+  ),
+  steps-content: (
+    content-color: r-color(purplish-grey),
+    icon-background: r-color(indianred3),
+    icon-color: r-color('white'),
+    icon-big-background: transparent,
+    icon-big-color: r-color('charcoal'),
+    icon-success-background: r-color('mantis'),
+    icon-success-color: r-color('white'),
+    title-color: r-color('charcoal'),
+    subtitle-color: r-color(purplish-grey),
   )
 ) !default;
 

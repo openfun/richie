@@ -1,0 +1,96 @@
+.StepBreadcrumb {
+  $margin-y: 1.25rem;
+  $icon-size: 3.375rem;
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  margin: 0 19% 2.375rem 19%;
+  padding: 0;
+
+  &__step {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: $margin-y 1.5rem;
+    position: relative;
+    text-align: center;
+    z-index: 1;
+
+    &__icon {
+      align-items: center;
+      background: r-theme-val(steps-breadcrumb, icon-background);
+      border-radius: 50%;
+      border: 3px solid r-theme-val(steps-breadcrumb, icon-border);
+      box-sizing: border-box;
+      color: r-theme-val(steps-breadcrumb, icon-fill);
+      display: flex;
+      font-family: $r-font-family-montserrat;
+      font-size: 1.25rem;
+      height: $icon-size;
+      justify-content: center;
+      margin-bottom: 0.3125rem;
+      width: $icon-size;
+
+      svg {
+        fill: currentColor;
+        max-height: $icon-size;
+        width: 55%;
+      }
+    }
+
+    &__label {
+      -moz-box-orient: vertical;
+      -moz-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      bottom: 0;
+      color: r-theme-val(steps-breadcrumb, label-color);
+      display: -moz-box;
+      display: -webkit-box;
+      font-weight: 600;
+      letter-spacing: 1px;
+      overflow: hidden;
+      padding-top: 0.625rem;
+      position: absolute;
+      text-transform: uppercase;
+      transform: translateY(100%);
+    }
+
+    &--active {
+      .StepBreadcrumb__step__icon {
+        background-color: r-theme-val(steps-breadcrumb, icon-background-active);
+        border-color: r-theme-val(steps-breadcrumb, icon-border-active);
+        box-shadow: 0 0 0 3px r-theme-val(steps-breadcrumb, icon-outline);
+        color: r-theme-val(steps-breadcrumb, icon-fill-active);
+      }
+
+      .StepBreadcrumb__step__label {
+        color: r-theme-val(steps-breadcrumb, label-color-active);
+      }
+    }
+  }
+
+  &__separator {
+    $separator-height: 0.1875rem;
+    background-color: r-theme-val(steps-breadcrumb, separator-background);
+    border-radius: 100vw;
+    height: $separator-height;
+    position: relative;
+    transform: translateY($margin-y + ($icon-size - $separator-height) * 0.5);
+    width: 100%;
+
+    &--active {
+      background-color: r-theme-val(steps-breadcrumb, separator-background-active);
+    }
+  }
+
+  @include media-breakpoint-down(xs) {
+    .StepBreadcrumb__separator {
+      display: none;
+    }
+    & > .StepBreadcrumb__step:not(.StepBreadcrumb__step--current) {
+      display: none;
+    }
+  }
+}
