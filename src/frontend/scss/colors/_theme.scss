@@ -364,6 +364,15 @@ $r-theme: (
     categories: $firebrick6-scheme,
     description-color: r-color('slate-grey'),
   ),
+  product-item: (
+    base-background: r-color('white'),
+    base-border: r-color('purplish-grey'),
+    light-color: r-color('white'),
+    base-color: r-color('charcoal'),
+    lighter-color: r-color('battleship-grey'),
+    button-color: r-color('white'),
+    button-background: r-color('firebrick6'),
+  ),
   program-detail: (
     cover-empty-background: r-color('smoke'),
   ),

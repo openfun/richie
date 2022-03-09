@@ -1,5 +1,5 @@
-import { Priority, StateCTA, StateText } from 'types/index';
-import { Nullable } from 'types/utils';
+import type { Priority, StateCTA, StateText } from 'types';
+import type { Nullable } from 'types/utils';
 
 // - Generic
 export interface PaginatedResponse<T> {

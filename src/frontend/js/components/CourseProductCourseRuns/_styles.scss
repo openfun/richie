@@ -1,0 +1,113 @@
+.product-widget__item.course {
+  .course__course-runs-header {
+    color: r-theme-val(product-item, lighter-color);
+    display: flex;
+    font-size: 0.69rem;
+    font-weight: $font-weight-bold;
+    justify-content: space-between;
+    padding-left: 1.5rem;
+    text-transform: uppercase;
+  }
+
+  .course-runs-not-available {
+    margin-top: 0.5rem;
+    padding-left: 0.2rem;
+
+    .icon {
+      display: inline-block;
+      fill: currentColor;
+      height: 1rem;
+      margin-right: 0.5rem;
+      width: 1rem;
+    }
+  }
+
+  .course-runs-list {
+    @include m-o-list-group__container;
+    color: r-theme-val(product-item, lighter-color);
+    list-style: none;
+
+    .course-runs-item {
+      align-items: center;
+      color: r-theme-val(product-item, base-color);
+      display: flex;
+      padding-left: 1.5rem;
+      position: relative;
+
+      &.course-runs-item--inactive {
+        display: block;
+
+        .course-runs-item__course-dates::before {
+          background-color: r-theme-val(product-item, lighter-color);
+          border-radius: 100%;
+          content: '';
+          display: block;
+          height: 6px;
+          left: calc(-1.5rem + 6px);
+          position: absolute;
+          width: 6px;
+        }
+      }
+
+      &.form-field {
+        margin-bottom: 0.5rem;
+        padding-left: 1.5rem;
+
+        .form-field__radio-control {
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+
+        .form-field__label {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          flex: 1;
+        }
+      }
+
+      &__course-dates {
+        align-items: center;
+        display: flex;
+        flex: 1;
+        font-weight: normal;
+        justify-content: space-between;
+        position: relative;
+        width: 100%;
+      }
+
+      &__date {
+        font-style: inherit;
+        z-index: 1;
+
+        &--start {
+          padding-right: 0.3125rem;
+        }
+
+        &--end {
+          padding-left: 0.3125rem;
+          text-align: right;
+        }
+
+        &-separator {
+          background-color: r-theme-val(product-item, lighter-color);
+          flex: 1;
+          height: $onepixel;
+        }
+      }
+
+      &__enrollment-dates {
+        color: r-theme-val(product-item, lighter-color);
+        display: block;
+        font-size: 0.8125rem;
+        line-height: 1.4em;
+      }
+
+      .course-runs-item__cta {
+        padding: 0.5rem 1rem;
+        min-width: 100px;
+      }
+    }
+  }
+}

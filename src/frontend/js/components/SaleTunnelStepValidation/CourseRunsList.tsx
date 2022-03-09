@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import * as Joanie from 'types/Joanie';
+import useDateFormat from 'utils/useDateFormat';
 
 const messages = defineMessages({
   availableCourseRuns: {
@@ -32,13 +33,7 @@ other {# course runs}
 });
 
 const CourseRunsList = ({ courseRuns }: PropsWithChildren<{ courseRuns: Joanie.CourseRun[] }>) => {
-  const intl = useIntl();
-  const formatDate = (date: string) =>
-    intl.formatDate(date, {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    });
+  const formatDate = useDateFormat({ month: 'long' });
 
   if (courseRuns.length === 0) {
     return (

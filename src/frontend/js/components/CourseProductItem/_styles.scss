@@ -1,0 +1,106 @@
+/*
+  CourseProductList component styles
+*/
+.product-widget {
+  background-color: white;
+  border-radius: 6px;
+  border: 6px solid r-theme-val(product-item, base-border);
+  overflow: hidden;
+
+  &:not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
+
+  &__header {
+    align-items: center;
+    background-color: r-theme-val(product-item, base-border);
+    color: r-theme-val(product-item, light-color);
+    display: flex;
+    font-family: $r-font-family-montserrat;
+    font-weight: bold;
+    justify-content: space-between;
+    padding: 1rem 0.5rem;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+  }
+
+  &__price {
+    background-color: r-theme-val(product-item, light-color);
+    border-radius: 100vw;
+    color: r-theme-val(product-item, base-border);
+    font-size: 0.81rem;
+    margin-bottom: 0;
+    margin-left: 1.5rem;
+    padding: 0.375rem 0.81rem;
+  }
+
+  .selector {
+    font-family: $r-font-family-hind;
+    font-weight: 500;
+    z-index: 9999;
+
+    &__button {
+      padding: 0;
+    }
+
+    &__list {
+      left: inherit;
+      top: calc(100% + 1rem);
+      white-space: nowrap;
+
+      &:before,
+      &:after {
+        left: inherit;
+        right: 0;
+      }
+    }
+
+    &__list__link {
+      cursor: pointer;
+    }
+  }
+
+  &__content {
+    @include m-o-list-group__container;
+    color: r-theme-val(product-item, base-color);
+    list-style: none;
+    padding: 1.25rem 2rem;
+  }
+
+  &__item {
+    margin-bottom: 0;
+    width: 100%;
+
+    &:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+
+    &-title {
+      font-size: 1rem;
+      margin-bottom: 2px;
+    }
+
+    &-description {
+      color: r-theme-val(product-item, lighter-color);
+      font-size: 0.8125rem;
+      line-height: 1.4em;
+    }
+  }
+
+  &__footer {
+    padding: 0 0.875rem 1rem 0.875rem;
+
+    .product-item__cta {
+      @include button-base(
+        $font-color: r-theme-val(product-item, button-color),
+        $font-family: $r-font-family-montserrat,
+        $font-size: 1rem,
+        $font-weight: $font-weight-bold
+      );
+      background-color: r-theme-val(product-item, button-background);
+      width: 100%;
+    }
+  }
+}
