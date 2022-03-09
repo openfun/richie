@@ -164,6 +164,12 @@ export const TargetCourseFactory = createSpec({
   course_runs: derived(() => JoanieCourseRunFactory.generate(1, 3)),
 });
 
+export const CertificationDefinitionFactory = createSpec({
+  id: faker.datatype.uuid(),
+  title: faker.random.words(Math.ceil(Math.random() * 3)),
+  description: faker.lorem.sentences(2),
+});
+
 export const CertificateProductFactory = createSpec({
   id: faker.datatype.uuid(),
   title: faker.random.words(1, 3),
@@ -171,11 +177,7 @@ export const CertificateProductFactory = createSpec({
   price: faker.datatype.number(),
   price_currency: faker.finance.currencyCode(),
   call_to_action: faker.random.words(1, 3),
-  certificate: createSpec({
-    id: faker.datatype.uuid(),
-    title: faker.random.words(Math.ceil(Math.random() * 3)),
-    description: faker.lorem.sentences(2),
-  }),
+  certificate: derived(() => CertificationDefinitionFactory.generate()),
   order: null,
   target_courses: derived(() => TargetCourseFactory.generate(1, 5)),
 });
@@ -184,13 +186,13 @@ export const OrderLiteFactory = createSpec({
   created_on: faker.date.past()().toISOString(),
   enrollments: [],
   id: faker.datatype.uuid(),
+  main_invoice: faker.datatype.uuid(),
   total: faker.datatype.number(),
   total_currency: faker.finance.currencyCode(),
   product: faker.datatype.uuid(),
   state: OrderState.VALIDATED,
 });
 
-// TODO Create CredentialProductFactory and EnrollmentProductFactory
 export const ProductFactory = oneOf([CertificateProductFactory]);
 
 export const CourseFactory = createSpec({
@@ -209,6 +211,7 @@ export const OrderFactory = createSpec({
   owner: faker.internet.userName(),
   total: faker.datatype.number(),
   total_currency: faker.finance.currencyCode(),
+  main_invoice: faker.datatype.uuid(),
   state: OrderState.VALIDATED,
   product: faker.datatype.uuid(),
   target_courses: derived(() => TargetCourseFactory.generate(1, 5)),
