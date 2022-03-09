@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Create a `StepBreadcrumb` component to display progress within a step process
 - Create a `useStepManager` hook to manage step process
 - Create a React `Icon` component that can optionally take alternative text
   for screen reader users.
