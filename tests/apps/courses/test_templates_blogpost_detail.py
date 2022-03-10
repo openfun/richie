@@ -128,7 +128,7 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True
         )
-        self.assertNotContains(response, "Comte de Saint-Germain", html=True)
+        self.assertContains(response, "Comte de Saint-Germain", html=True)
 
         self.assertContains(
             response,
@@ -196,6 +196,38 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<p class="blogpost-detail__pubdate">Not published yet</p>',
+            html=True,
+        )
+
+    def test_templates_blogpost_detail_author_empty(self):
+        """
+        The empty message for blogpost author should be present in edition but not in
+        published mode if its placeholder is empty.
+        """
+        blogpost = BlogPostFactory()
+        page = blogpost.extended_object
+        page.publish("en")
+
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+
+        # Published view does not have empty author message
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(
+            response,
+            ('<span class="blogpost-detail__empty">No author yet</span>'),
+            html=True,
+        )
+
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+        response = self.client.get(url, {"edit": "true"})
+
+        # Edition view does have empty author message
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            ('<span class="blogpost-detail__empty">No author yet</span>'),
             html=True,
         )
 

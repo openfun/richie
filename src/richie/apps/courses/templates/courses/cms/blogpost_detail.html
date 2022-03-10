@@ -78,7 +78,7 @@
 
                     {% block authors %}
                         {% with person_variant="tag" %}
-                            {% if current_page.publisher_is_draft %}
+                            {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"author" %}
                             <div class="blogpost-detail__authors">
                                 {% placeholder "author" or %}
                                     <span class="blogpost-detail__empty">{% trans 'No author yet' %}</span>
