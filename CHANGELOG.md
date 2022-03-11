@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   more understandable navigation.
 - Add new page templates for various multiple columns and their own CSS to
   adjust every possible plugins to fit correctly;
+- Add theme variable to change checkmark color.
 
 ### Changed
 

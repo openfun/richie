@@ -273,10 +273,12 @@
             left: 0;
             width: 0.8rem;
             height: 0.8rem;
-            background-image: r-theme-val(course-detail, checkmark-list-decoration);
             background-repeat: no-repeat;
-            background-position: top left;
-            background-size: 100% 100%;
+            background-color: r-theme-val(course-detail, checkmark-list-decoration-color);
+            -webkit-mask: r-theme-val(course-detail, checkmark-list-decoration);
+            mask: r-theme-val(course-detail, checkmark-list-decoration);
+            -webkit-mask-size: cover;
+            mask-size: cover;
           }
         }
       }
