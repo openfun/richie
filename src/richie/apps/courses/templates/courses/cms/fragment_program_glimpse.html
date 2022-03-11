@@ -3,9 +3,9 @@
 {% with program_page=program.extended_object %}
 <a href="{{ program.extended_object.get_absolute_url }}" class="program-glimpse program-glimpse--link{% if program.extended_object.publisher_is_draft %} program-glimpse--draft{% endif %}" >
     <div class="program-glimpse__media">
-    {% get_page_plugins "program_cover" program_page as plugins or %}
+    {% get_placeholder_plugins "program_cover" program_page as plugins or %}
         <div class="program-glimpse__empty">{% trans 'Cover' %}</div>
-    {% endget_page_plugins %}
+    {% endget_placeholder_plugins %}
     {% blockplugin plugins.0 %}
     <img src="{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
         srcset="

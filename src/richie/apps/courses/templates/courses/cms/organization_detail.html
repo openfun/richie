@@ -11,12 +11,12 @@
     <meta property="og:type" content="website" />
 
     {% get_placeholder_plugins "logo" as og_image_plugins %}
-    {% blockplugin og_image_plugins.0 %}
-        {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale as thumb %}
+    {% if og_image_plugins.0 %}
+        {% thumbnail og_image_plugins.0.picture 200x113 replace_alpha='#FFFFFF' upscale as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />
         <meta property="og:image:height" content="{{ thumb.height }}" />
-    {% endblockplugin %}
+    {% endif %}
     {% if not current_page|is_empty_placeholder:"description" %}
         <meta property="og:description" content="{% filter striptags|trim|slice:":200" %}{% show_placeholder 'description' current_page %}{% endfilter %}" />
     {% endif %}
@@ -31,11 +31,11 @@
         <div class="organization-detail__block organization-detail__block--unpadded">
             <div class="organization-detail__row organization-detail__row--unpadded">
                 <div class="organization-detail__banner">
-                    {% get_placeholder_plugins "banner" as plugins or %}
+                    {% placeholder_as_plugins "banner" as plugins or %}
                         <img src="{% static "richie/images/empty/organization_banner.jpg" %}"
                             class="organization-detail__banner--empty"
                             alt="">
-                    {% endget_placeholder_plugins %}
+                    {% endplaceholder_as_plugins %}
                     {% blockplugin plugins.0 %}
                         <img
                             src="{% thumbnail instance.picture 320x100 replace_alpha='#FFFFFF' upscale %}"
@@ -53,11 +53,11 @@
                 </div>
 
                 <div class="organization-detail__logo">
-                    {% get_placeholder_plugins "logo" as plugins or %}
+                    {% placeholder_as_plugins "logo" as plugins or %}
                         <img src="{% static "richie/images/empty/organization_logo.png" %}"
                             class="organization-detail__logo--empty"
                             alt="">
-                    {% endget_placeholder_plugins %}
+                    {% endplaceholder_as_plugins %}
                     {% blockplugin plugins.0 %}
                         <img
                             src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale %}"

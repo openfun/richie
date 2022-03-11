@@ -26,6 +26,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Stop using {% blockplugin %} template tags in <header> and replace them by
+  simple {% if %} tags that do the same and don't inject frontend editing markup
+- Fix `get_placeholder_plugins` when placed in <header> by refactoring and
+  introducing new `placeholder_as_plugins` template tag
 - Prevent context processor error when WEB_ANALYTICS_ID setting is not defined.
 - Fix autocomplete views tests that may failed because of result order.
 - Fix section tile title with richtext and special character escaping.

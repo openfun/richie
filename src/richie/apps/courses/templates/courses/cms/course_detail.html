@@ -17,16 +17,17 @@
 {% endblock meta_html_default %}
 
 {% block meta_rdfa_context %}
+    <meta property="og:type" content="website" />
+
     {% get_placeholder_plugins "course_cover" as plugins or %}
         {{ block.super }}
     {% endget_placeholder_plugins %}
-    {% blockplugin plugins.0 %}
-        <meta property="og:type" content="website" />
-        {% thumbnail instance.picture 1200x630 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location as thumb %}
+    {% if plugins.0 %}
+        {% thumbnail plugins.0.picture 1200x630 replace_alpha='#FFFFFF' crop upscale subject_location=plugins.0.picture.subject_location as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />
         <meta property="og:image:height" content="{{ thumb.height }}" />
-    {% endblockplugin %}
+    {% endif %}
     {% if not current_page|is_empty_placeholder:"course_introduction" %}
         <meta property="og:description" content="{% filter slice:":200" %}{% show_placeholder 'course_introduction' current_page %}{% endfilter %}" />
     {% endif %}
@@ -205,7 +206,7 @@
                 {% endblock snapshot %}
 
                 {% block cover %}
-                    {% get_placeholder_plugins "course_cover" as cover_plugins %}
+                    {% placeholder_as_plugins "course_cover" as cover_plugins %}
                     <meta property="image" content="{% thumbnail cover_plugins.0.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=cover_plugins.0.picture.subject_location %}" />
                     {% if current_page.publisher_is_draft %}
                     <div class="course-detail__block course-detail__cover">

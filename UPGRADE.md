@@ -16,6 +16,14 @@ $ make migrate
 
 ## Unreleased
 
+- The `get_placeholder_plugins` and `get_page_plugins` template tags were merged in a single
+  placeholder `get_placeholder_plugins` by making the `page_lookup` parameter optional.
+  A new template tag `placeholder_as_plugins` was introduced and should be used in place of
+  the `get_placeholder_plugins` tag whereever you want a real placeholder (with markup for
+  frontend editing) and not just getting the related plugins.
+- Don't use the `blockplugin` template tag in the page <header>. They can be replaced by a
+  simple {% if %} tag since their only purpose is to inject markup for frontend editing (which
+  is not valid html in the page header).
 - Frontend override system has been updated to allow overriding of any frontend module.
   Thus if you override some components, you have to update the module regexp by prefixing
   with `components/`.

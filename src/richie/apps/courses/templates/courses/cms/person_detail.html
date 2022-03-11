@@ -11,12 +11,12 @@
     <meta property="og:type" content="profile" />
 
     {% get_placeholder_plugins "portrait" as og_image_plugins %}
-    {% blockplugin og_image_plugins.0 %}
-        {% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location as thumb %}
+    {% if og_image_plugins.0 %}
+        {% thumbnail og_image_plugins.0.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=og_image_plugins.0.picture.subject_location as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />
         <meta property="og:image:height" content="{{ thumb.height }}" />
-    {% endblockplugin %}
+    {% endif %}
     {% if not current_page|is_empty_placeholder:"bio" %}
         <meta property="og:description" content="{% filter slice:":200" %}{% show_placeholder 'bio' current_page %}{% endfilter %}" />
     {% endif %}
@@ -61,13 +61,13 @@
 
                     <div class="subheader__aside">
                         <div class="subheader__cartouche">
-                            {% get_placeholder_plugins "portrait" as plugins or %}
+                            {% placeholder_as_plugins "portrait" as plugins or %}
                             <div class="subheader__media subheader__media--locket subheader__empty">
                                 <img src="{% static "richie/images/empty/person_portrait.png" %}"
                                         class="subheader__empty--avatar"
                                         alt="">
                             </div>
-                            {% endget_placeholder_plugins %}
+                            {% endplaceholder_as_plugins %}
                             {% blockplugin plugins.0 %}
                             <div class="subheader__media subheader__media--locket">
                                 <img
