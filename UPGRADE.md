@@ -32,6 +32,7 @@ $ make migrate
     - "CourseGlimpse/CourseGlimpseFooter.tsx": "../../../../../js/components/CourseGlimpse/CourseGlimpseFooter.tsx"
     + "components/CourseGlimpse/CourseGlimpseFooter.tsx$": "../../../../../js/components/CourseGlimpse/CourseGlimpseFooter.tsx"
   ```
+- If you customize the `course-detail` block theme add the `checkmark-list-decoration-color` variable.
 
 ## 2.12.x to 2.13.x
 
