@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add new page templates for various multiple columns and their own CSS to
   adjust every possible plugins to fit correctly;
 - Add theme variable to change checkmark color.
+- Add new placeholder 'excerpt' to Organization detail template
 
 ### Changed
 
@@ -24,6 +25,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Improve React search suggestion field labels for screen readers.
 - Removed usage of deprecated Sass division '/' operator in favor of
   'math.div'.
+- Organization plugin variant 'row' now use excerpt if not empty else the
+  description with every markup removed
 
 ### Fixed
 
@@ -36,6 +39,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix section tile title with richtext and special character escaping.
 - Change blogpost detail template to display author even in published mode
   except if its placeholder is empty.
+- Fix missing styles for Organization plugin 'row' variant link wrapper
 
 ## [2.13.0] - 2022-02-18
 

@@ -30,8 +30,22 @@
             {% endblockplugin %}
         </div>
         <div class="organization-{{ organization_variant }}__content">
-            <h{{ header_level|default:3 }} class="organization-{{ organization_variant }}__title" property="name">{{ organization_page.get_title }}</<h{{ header_level|default:3 }}>
-            <div class="organization-{{ organization_variant }}__excerpt" property="description">{% get_placeholder_plugins "description" organization_page as plugins or %}{% trans "Description" %}{% endget_placeholder_plugins %}{% blockplugin plugins.0 %}{{ instance.body|truncatewords_html:40|safe }}{% endblockplugin %}</div>
+            <h{{ header_level|default:3 }} class="organization-{{ organization_variant }}__title" property="name">{{ organization_page.get_title }}</h{{ header_level|default:3 }}>
+            <div class="organization-{{ organization_variant }}__excerpt" property="description">
+                {% get_placeholder_plugins "excerpt" organization_page as plugins %}
+                {% blockplugin plugins.0 %}
+                    <p>{{ instance.body }}</p>
+                {% endblockplugin %}
+                {% if not plugins %}
+                    {% get_placeholder_plugins "description" organization_page as plugins %}
+                    {% blockplugin plugins.0 %}
+                        <p>{{ instance.body|truncatewords_html:40|striptags }}</p>
+                    {% endblockplugin %}
+                    {% if not plugins %}
+                        <p>{% trans "Excerpt" %}</p>
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
     </a>
 {% else %}

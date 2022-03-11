@@ -265,6 +265,11 @@ CMS_PLACEHOLDER_CONF = {
         "plugins": ["CKEditorPlugin"],
         "limits": {"CKEditorPlugin": 1},
     },
+    "courses/cms/organization_detail.html excerpt": {
+        "name": _("Excerpt"),
+        "plugins": ["PlainTextPlugin"],
+        "limits": {"PlainTextPlugin": 1},
+    },
     # Category detail
     "courses/cms/category_detail.html banner": {
         "name": _("Banner"),
