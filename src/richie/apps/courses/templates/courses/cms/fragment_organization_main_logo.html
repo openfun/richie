@@ -12,9 +12,9 @@
         >
             <meta property="name" content="{{ organization_page.get_title }}"/>
             <meta property="url" content="{{ SITE.web_url }}{{ organization_page.get_absolute_url }}"/>
-            {% get_page_plugins "logo" organization_page as plugins or %}
+            {% get_placeholder_plugins "logo" organization_page as plugins or %}
                 <div class="subheader__empty">{% trans "Main organization" %}</div>
-            {% endget_page_plugins %}
+            {% endget_placeholder_plugins %}
             {% blockplugin plugins.0 %}
                 <div class="subheader__media">
                     <img

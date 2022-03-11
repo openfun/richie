@@ -11,12 +11,12 @@
     <meta property="og:type" content="website" />
 
     {% get_placeholder_plugins "logo" as og_image_plugins %}
-    {% blockplugin og_image_plugins.0 %}
-        {% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location as thumb %}
+    {% if og_image_plugins.0 %}
+        {% thumbnail og_image_plugins.0.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=og_image_plugins.0.picture.subject_location as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />
         <meta property="og:image:height" content="{{ thumb.height }}" />
-    {% endblockplugin %}
+    {% endif %}
     {% if not current_page|is_empty_placeholder:"description" %}
         <meta property="og:description" content="{% filter striptags|trim|slice:":200" %}{% show_placeholder 'description' current_page %}{% endfilter %}" />
     {% endif %}
@@ -31,9 +31,9 @@
         <div class="category-detail__block category-detail__block--unpadded">
             <div class="category-detail__row category-detail__row--unpadded">
                 <div class="category-detail__banner">
-                    {% get_placeholder_plugins "banner" as banner_plugins or %}
+                    {% placeholder_as_plugins "banner" as banner_plugins or %}
                         <div class="category-detail__empty">{% trans "Banner" %}</div>
-                    {% endget_placeholder_plugins %}
+                    {% endplaceholder_as_plugins %}
                     {% blockplugin banner_plugins.0 %}
                         <img
                             src="{% thumbnail instance.picture 1140x400 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
@@ -49,9 +49,9 @@
                 </div>
 
                 <div class="category-detail__logo">
-                    {% get_placeholder_plugins "logo" as logo_plugins or %}
+                    {% placeholder_as_plugins "logo" as logo_plugins or %}
                         <div class="category-detail__empty">{% trans "Logo" %}</div>
-                    {% endget_placeholder_plugins %}
+                    {% endplaceholder_as_plugins %}
                     {% blockplugin logo_plugins.0 %}
                         <img
                             src="{% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
@@ -71,7 +71,7 @@
         <div class="category-detail__intro category-detail__block category-detail__block--unpadded">
             <div class="category-detail__row">
                 <h1 class="category-detail__title">
-                    {% get_placeholder_plugins "icon" as icon_plugins %}
+                    {% placeholder_as_plugins "icon" as icon_plugins %}
                     {% blockplugin icon_plugins.0 %}
                         <img
                             src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"

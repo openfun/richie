@@ -11,12 +11,12 @@
     <meta property="og:type" content="website" />
 
     {% get_placeholder_plugins "program_cover" as og_image_plugins %}
-    {% blockplugin og_image_plugins.0 %}
-        {% thumbnail instance.picture 1200x630 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location as thumb %}
+    {% if og_image_plugins.0 %}
+        {% thumbnail og_image_plugins.0.picture 1200x630 replace_alpha='#FFFFFF' crop upscale subject_location=og_image_plugins.0.picture.subject_location as thumb %}
         <meta property="og:image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
         <meta property="og:image:width" content="{{ thumb.width }}" />
         <meta property="og:image:height" content="{{ thumb.height }}" />  
-    {% endblockplugin %}
+    {% endif %}
     {% if not current_page|is_empty_placeholder:"program_excerpt" %}
         <meta property="og:description" content="{% filter slice:":200" %}{% show_placeholder 'program_excerpt' current_page %}{% endfilter %}" />
     {% endif %}
@@ -36,9 +36,9 @@
     <div class="program-detail__block">
     {% if current_page.publisher_is_draft %}
         <div class="program-detail__cover program-detail__row">
-            {% get_placeholder_plugins "program_cover" as plugins or %}
+            {% placeholder_as_plugins "program_cover" as plugins or %}
                 <p class="program-detail__empty">{% trans "Cover" %}</p>
-            {% endget_placeholder_plugins %}
+            {% endplaceholder_as_plugins %}
             {% blockplugin plugins.0 %}
                 <img
                     src="{% thumbnail instance.picture 500x500 replace_alpha='#FFFFFF' subject_location=instance.picture.subject_location %}"

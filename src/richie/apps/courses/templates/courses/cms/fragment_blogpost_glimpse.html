@@ -5,9 +5,9 @@
 {% if blogpost_variant == "favorite" %}
     <div class="blogpost-{{ blogpost_variant }}{% if blogpost_page.publisher_is_draft %} blogpost-{{ blogpost_variant }}--draft{% endif %}">
         <div class="blogpost-{{ blogpost_variant }}__media">
-            {% get_page_plugins "cover" blogpost_page as plugins or %}
+            {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
                 <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
-            {% endget_page_plugins %}
+            {% endget_placeholder_plugins %}
 
             {% blockplugin plugins.0 %}
             <img
@@ -36,9 +36,9 @@
 {% elif blogpost_variant == "mini" %}
     <a href="{{ blogpost_page.get_absolute_url }}" class="blogpost-{{ blogpost_variant }}{% if blogpost_page.publisher_is_draft %} blogpost-{{ blogpost_variant }}--draft{% endif %}">
         <div class="blogpost-{{ blogpost_variant }}__media">
-            {% get_page_plugins "cover" blogpost_page as plugins or %}
+            {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
                 <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
-            {% endget_page_plugins %}
+            {% endget_placeholder_plugins %}
             {% blockplugin plugins.0 %}
                 <img src="{% thumbnail instance.picture 150x85 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                     srcset="
@@ -71,9 +71,9 @@
         </p>
         {% endif %}
         <div class="blogpost-{{ blogpost_variant }}__media">
-            {% get_page_plugins "cover" blogpost_page as plugins or %}
+            {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
                 <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
-            {% endget_page_plugins %}
+            {% endget_placeholder_plugins %}
 
             {% blockplugin plugins.0 %}
             <img src="{% thumbnail instance.picture 300x170 crop replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"

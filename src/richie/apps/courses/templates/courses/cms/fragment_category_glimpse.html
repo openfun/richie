@@ -10,7 +10,7 @@
 
         {% if category_variant == "badge" %}
             {% comment %}Small CTA alike, icon + title, commonly horizontal{% endcomment %}
-            {% get_page_plugins "icon" category_page as icon_plugins %}
+            {% get_placeholder_plugins "icon" category_page as icon_plugins %}
             {% if icon_plugins %}
                 {% blockplugin icon_plugins.0 %}
                 <img src="{% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %}"
@@ -32,9 +32,9 @@
             {% comment %}Larger look, logo + title, commonly vertical cell near to a vertical card, title is in a hX element{% endcomment %}
             <div class="category-glimpse__body">
                 <div class="category-glimpse__logo">
-                    {% get_page_plugins "logo" category_page as plugins or %}
+                    {% get_placeholder_plugins "logo" category_page as plugins or %}
                         <div class="category-glimpse__logo__empty">{% trans "Logo" %}</div>
-                    {% endget_page_plugins %}
+                    {% endget_placeholder_plugins %}
                     {% blockplugin plugins.0 %}
                         <img src="{% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                             srcset="

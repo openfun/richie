@@ -12,11 +12,11 @@
       aria-hidden="true"
       property="url"
     >
-        {% get_page_plugins "portrait" person_page as plugins or %}
+        {% get_placeholder_plugins "portrait" person_page as plugins or %}
             <img src="{% static "richie/images/empty/person_portrait.png" %}"
                  class="person-glimpse__media__empty"
                  alt="">
-        {% endget_page_plugins %}
+        {% endget_placeholder_plugins %}
         {% blockplugin plugins.0 %}
             <img src="{% thumbnail instance.picture 200x200 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                 srcset="

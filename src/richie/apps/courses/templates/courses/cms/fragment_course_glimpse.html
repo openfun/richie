@@ -4,9 +4,9 @@
 {% with course_page=course.extended_object course_state=course.state main_organization_title=course.get_main_organization.extended_object.get_menu_title main_organization=course.get_main_organization course_variant=course_variant|default:'glimpse' %}
 <a class="course-{{ course_variant }}{% if course_page.publisher_is_draft is True %} course-{{ course_variant }}--draft{% endif %}" href="{{ course_page.get_absolute_url }}">
     <div class="course-{{ course_variant }}__media">
-        {% get_page_plugins "course_cover" course_page as cover_plugins or %}
+        {% get_placeholder_plugins "course_cover" course_page as cover_plugins or %}
             <p class="course-{{ course_variant }}--empty">{% trans "Cover" %}</p>
-        {% endget_page_plugins %}
+        {% endget_placeholder_plugins %}
         {% blockplugin cover_plugins.0 %}
             <img src="{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
                 srcset="
@@ -21,7 +21,7 @@
         {% endblockplugin %}
     </div>
     <div class="course-{{ course_variant }}__content">
-        {% get_page_plugins "course_icons" course_page as icon_plugins %}
+        {% get_placeholder_plugins "course_icons" course_page as icon_plugins %}
         {% if icon_plugins %}
         <div class="course-{{ course_variant }}__icon">
             {% with category_variant="badge" has_link=False %}
@@ -33,8 +33,8 @@
             <h{{ header_level|default:3 }} class="course-{{ course_variant }}__title" title="{{ course_page.get_title }}">{{ course_page.get_title }}</h{{ header_level|default:3 }}>
             {% if main_organization %}
                 {% with organization_page=main_organization.extended_object %}
-                    {% get_page_plugins "logo" organization_page as plugins or %}
-                    {% endget_page_plugins %}
+                    {% get_placeholder_plugins "logo" organization_page as plugins or %}
+                    {% endget_placeholder_plugins %}
                     {% blockplugin plugins.0 %}
                         <div class="course-glimpse__organization-logo">
                             <img src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"

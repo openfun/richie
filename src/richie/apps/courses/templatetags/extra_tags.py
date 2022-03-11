@@ -29,7 +29,10 @@ from ..lms import LMSHandler
 register = template.Library()
 
 
-def get_plugins_render_tag(context, name, varname, nodelist, page_lookup=None):
+# pylint: disable=too-many-arguments
+def get_plugins_render_tag(
+    context, name, varname, nodelist, page_lookup=None, edit=True
+):
     """
     Retrieve the placeholder's plugins and set them as a variable in the template context.
     If the placeholder is empty, render the block as fallback content and return the
@@ -65,54 +68,31 @@ def get_plugins_render_tag(context, name, varname, nodelist, page_lookup=None):
             content = nodelist.render(context)
 
         # Add the edit script and markup to the content, only if the placeholder is editable
-        # and the visited page is the one on which the placeholder is declared.
-        toolbar = get_toolbar_from_request(request)
-        if placeholder.page == request.current_page and toolbar.edit_mode_active:
-            renderer = toolbar.get_content_renderer()
-            data = renderer.get_editable_placeholder_context(placeholder, page=page)
-            data["content"] = content
-            content = renderer.placeholder_edit_template.format(**data)
+        if edit:
+            toolbar = get_toolbar_from_request(request)
+            if toolbar.edit_mode_active:
+                renderer = toolbar.get_content_renderer()
+                data = renderer.get_editable_placeholder_context(placeholder, page=page)
+                data["content"] = content
+                content = renderer.placeholder_edit_template.format(**data)
 
     return content
 
 
-@register.tag("get_placeholder_plugins")
-class GetPlaceholderPlugins(Placeholder):
+@register.tag("placeholder_as_plugins")
+class PlaceholderAsPlugins(Placeholder):
     """
-    A template tag that declares a placeholder and sets its plugins as a context variable
-    instead of rendering them eg:
-
-        {% get_placeholder_plugins "logo" as varname %}
-        {% get_placeholder_plugins "logo" as varname or %}
-            <div>No content</div>
-        {% endget_placeholder_plugins %}
-
-    This tag can typically be used in association with the block_plugin tag, to customize the
-    way it is rendered eg:
-
-        {% get_placeholder_plugins "logo" as plugins %}
-        {% blockplugin plugins.0 %}
-            <img src="{% thumbnail instance.picture 300x150 %}"/>
-        {% endblockplugin %}
-
-    Keyword arguments:
-        name: the name of the placeholder
-        varname: context variable name. Output will be added to template context as this variable
-            instead of being returned.
-        or: optional argument which if given will make the template tag a block
-            tag whose content is shown if the placeholder is empty
-
-    Note: We must derive from the Placeholder class so that the tag is recognized as a
-          placeholder and shown in the structure toolbar.
+    Like DjangoCMS 'placeholder' but sets the list of linked plugins to a variable name
+    instead of rendering the placeholder.
     """
 
-    name = "get_placeholder_plugins"
+    name = "placeholder_as_plugins"
     options = PlaceholderOptions(
         Argument("name", resolve=False),
         "as",
         Argument("varname", resolve=False),
         MultiValueArgument("extra_bits", required=False, resolve=False),
-        blocks=[("endget_placeholder_plugins", "nodelist")],
+        blocks=[("endplaceholder_as_plugins", "nodelist")],
     )
 
     # pylint: disable=arguments-differ,too-many-arguments
@@ -120,20 +100,27 @@ class GetPlaceholderPlugins(Placeholder):
         return get_plugins_render_tag(context, name, varname, nodelist)
 
 
-@register.tag("get_page_plugins")
-class GetPagePlugins(Tag):
+@register.tag("get_placeholder_plugins")
+class GetPlaceholderPlugins(Tag):
     """
-    A template tag that gets plugins from a page's placeholder returns them as a context variable:
+    A template tag that gets plugins from a page's placeholder and sets them as a context variable:
 
-        {% get_page_plugins "logo" page_lookup as varname %}
-        {% get_page_plugins "logo" page_lookup as varname or %}
+        {% get_placeholder_plugins "logo" page_lookup as varname %}
+        {% get_placeholder_plugins "logo" page_lookup as varname or %}
             <div>No content</div>
-        {% endget_page_plugins %}
+        {% endget_placeholder_plugins %}
+
+    The page_lookup parameter can be omitted and will default to the current page
+
+        {% get_placeholder_plugins "logo" as varname %}
+        {% get_placeholder_plugins "logo" as varname or %}
+            <div>No content</div>
+        {% endget_placeholder_plugins %}
 
     This tag can typically be used in association with the block_plugin tag,
     to render the retrieved plugins:
 
-        {% get_page_plugins "logo" page_lookup as plugins %}
+        {% get_placeholder_plugins "logo" page_lookup as plugins %}
         {% blockplugin plugins.0 %}
             <img src="{% thumbnail instance.picture 300x150 %}"/>
         {% endblockplugin %}
@@ -149,21 +136,23 @@ class GetPagePlugins(Tag):
             tag whose content is shown if the placeholder is empty
     """
 
-    name = "get_page_plugins"
+    name = "get_placeholder_plugins"
     options = PlaceholderOptions(
         Argument("name", resolve=False),
-        Argument("page_lookup"),
+        Argument("page_lookup", required=False, default=None),
         "as",
         Argument("varname", resolve=False),
         MultiValueArgument("extra_bits", required=False, resolve=False),
-        blocks=[("endget_page_plugins", "nodelist")],
+        blocks=[("endget_placeholder_plugins", "nodelist")],
     )
 
     # pylint: disable=arguments-differ,too-many-arguments, unused-argument
     def render_tag(
         self, context, name, page_lookup, varname, extra_bits, nodelist=None
     ):
-        return get_plugins_render_tag(context, name, varname, nodelist, page_lookup)
+        return get_plugins_render_tag(
+            context, name, varname, nodelist, page_lookup, edit=False
+        )
 
 
 @register.tag()
@@ -185,7 +174,7 @@ class BlockPlugin(Tag):
         """
         Renders the block for the plugin and returns the resulting HTML leaving the temmpate
         context untouched.
-        If the placholder is editable, the edit script and markup are added to the rendered HTML.
+        If the placeholder is editable, the edit script and markup are added to the rendered HTML.
         """
         request = context.get("request")
         if not plugin or not request:
