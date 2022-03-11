@@ -28,8 +28,8 @@ class OrganizationCMSTestCase(CMSTestCase):
         self,
     ):
         """
-        An opengraph description meta should be present if the organization description
-        placeholder is set.
+        An opengraph description meta should be present if the organization excerpt or
+        description placeholder is set.
         """
         organization = OrganizationFactory()
         page = organization.extended_object
@@ -40,7 +40,7 @@ class OrganizationCMSTestCase(CMSTestCase):
             language="en",
             placeholder=placeholder,
             plugin_type="CKEditorPlugin",
-            body="A longe <b>description</b> of the organization  ",
+            body="A long <b>description</b> of the organization  ",
         )
         page.publish("en")
 
@@ -50,28 +50,47 @@ class OrganizationCMSTestCase(CMSTestCase):
 
         self.assertContains(
             response,
-            '<meta property="og:description" content="A longe description of the organization" />',
+            '<meta property="og:description" content="A long description of the organization" />',
+        )
+
+        # Add an excerpt to an organization
+        placeholder = organization.extended_object.placeholders.get(slot="excerpt")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body="A long excerpt of the organization  ",
+        )
+        page.publish("en")
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta property="og:description" content="A long excerpt of the organization" />',
         )
 
     def test_templates_organization_detail_open_graph_description_excerpt_max_length(
         self,
     ):
         """
-        The opengraph description meta should be cut if it exceeds more than 200 caracters
+        The opengraph description meta should be cut if it exceeds more than 200
+        characters
         """
         organization = OrganizationFactory()
         page = organization.extended_object
-        placeholder_value = (
+
+        # Add a description to the organization
+        description_value = (
             "Long description that describes the page with a summary. " * 5
         )
-
-        # Add an excerpt to the organization
         placeholder = organization.extended_object.placeholders.get(slot="description")
         add_plugin(
             language="en",
             placeholder=placeholder,
             plugin_type="CKEditorPlugin",
-            body=placeholder_value,
+            body=description_value,
         )
         page.publish("en")
 
@@ -79,7 +98,27 @@ class OrganizationCMSTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-        cut = placeholder_value[0:200]
+        cut = description_value[0:200]
+        self.assertContains(
+            response,
+            f'<meta property="og:description" content="{cut}" />',
+        )
+
+        # Add an excerpt to the organization
+        excerpt_value = "Long excerpt that describes the page with a summary. " * 5
+        placeholder = organization.extended_object.placeholders.get(slot="excerpt")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body=excerpt_value,
+        )
+        page.publish("en")
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        cut = excerpt_value[0:200]
         self.assertContains(
             response,
             f'<meta property="og:description" content="{cut}" />',
@@ -87,7 +126,8 @@ class OrganizationCMSTestCase(CMSTestCase):
 
     def test_templates_organization_detail_open_graph_description_empty(self):
         """
-        The opengraph description should not be present if the excerpt placeholder isn't filled
+        The opengraph description should not be present if the excerpt and description
+        placeholders aren't filled
         """
         organization = OrganizationFactory()
         page = organization.extended_object
@@ -480,13 +520,14 @@ class OrganizationCMSTestCase(CMSTestCase):
 
     def test_templates_organization_detail_meta_description_description(self):
         """
-        The organization meta description should show the description placeholder if no
-        meta_description placeholoder exists
+        The organization meta description should be filled with excerpt placeholder
+        content if filled else use a stripped version of description placeholder
+        content.
         """
         organization = OrganizationFactory()
         page = organization.extended_object
 
-        # Add an excerpt to the organization
+        # Add a description to the organization
         placeholder = organization.extended_object.placeholders.get(slot="description")
         add_plugin(
             language="en",
@@ -503,6 +544,24 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<meta name="description" content="A longer organization description" />',
+        )
+
+        # Add an excerpt to the organization
+        placeholder = organization.extended_object.placeholders.get(slot="excerpt")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body=" A longer organization excerpt  ",
+        )
+        page.publish("en")
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<meta name="description" content="A longer organization excerpt" />',
         )
 
     def test_templates_organization_detail_meta_description_excerpt_max_length(self):
