@@ -929,7 +929,9 @@ class CourseRunTranslation(TranslatedFieldsModel):
     def __str__(self):
         """Human representation of a course run translation."""
         model = self._meta.verbose_name.title()
-        return f"{model:s}: {self.title:s}"
+        title = self.title or str(_("Empty title"))
+
+        return f"{model:s}: {title:s}"
 
     # pylint: disable=signature-differs
     def save(self, *args, **kwargs):
