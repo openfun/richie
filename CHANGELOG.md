@@ -47,6 +47,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Change blogpost detail template to display author even in published mode
   except if its placeholder is empty.
 - Fix missing styles for Organization plugin 'row' variant link wrapper
+- Fix course run deletion when translation title is empty
 
 ## [2.13.0] - 2022-02-18
 

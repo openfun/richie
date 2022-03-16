@@ -848,3 +848,20 @@ class CourseRunModelsTestCase(TestCase):
 
         self.assertFalse(CourseRun.objects.exists())
         self.assertFalse(CourseRunTranslation.objects.exists())
+
+    def test_models_course_run_empty_translation_title(self):
+        """
+        A CourseRun translation object with an empty title should not raise any error
+        when its '__str__' method is invoked.
+        """
+        course = CourseFactory(page_languages=["en", "fr"])
+        course_run = CourseRunFactory(direct_course=course)
+        french_run_translation = CourseRunTranslation.objects.create(
+            master=course_run, language_code="fr", title=None
+        )
+        self.assertTrue(course_run.direct_course.extended_object.publish("en"))
+        self.assertTrue(course_run.direct_course.extended_object.publish("fr"))
+
+        self.assertEqual(
+            str(french_run_translation), "Course Run Translation: Empty title"
+        )
