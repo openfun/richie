@@ -26,6 +26,11 @@ const messages = defineMessages({
     description: 'Course code logo alternative text for screen reader users',
     id: 'components.CourseGlimpse.codeIconAlt',
   },
+  categoryLabel: {
+    defaultMessage: 'Category',
+    description: 'Category label text for screen reader users',
+    id: 'components.CourseGlimpse.categoryLabel',
+  },
 });
 
 const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataProps) => {
@@ -81,6 +86,9 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
                 src={course.icon.src}
                 srcSet={course.icon.srcset}
               />
+              <span className="offscreen">
+                <FormattedMessage {...messages.categoryLabel} />
+              </span>
               <span className="category-badge__title">{course.icon.title}</span>
             </span>
           </div>

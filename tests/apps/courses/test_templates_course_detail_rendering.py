@@ -136,6 +136,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
                 (
                     # pylint: disable=consider-using-f-string
                     '<a class="category-badge" href="{:s}">'
+                    '<span class="offscreen">Category</span>'
                     '<span class="category-badge__title">{:s}</span></a>'
                 ).format(
                     category.extended_object.get_absolute_url(),
@@ -149,7 +150,8 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         # Only published icons should be present on the page
         pattern = (
             r'<a.*class="category-badge".*href="{link:s}".*>'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.*alt="{title:s}">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.*alt="">'
+            r'<span class="offscreen">Category</span>'
             r'<span class="category-badge__title">'
             r".*{title:s}.*</span>"
         )
@@ -308,6 +310,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
                 (
                     # pylint: disable=consider-using-f-string
                     '<a class="category-badge" href="{:s}">'
+                    '<span class="offscreen">Category</span>'
                     '<span class="category-badge__title">{:s}</span></a>'
                 ).format(
                     category.extended_object.get_absolute_url(),
@@ -320,6 +323,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             (
                 # pylint: disable=consider-using-f-string
                 '<a class="category-badge category-badge--draft" href="{:s}">'
+                '<span class="offscreen">Category</span>'
                 '<span class="category-badge__title">{:s}</span></a>'
             ).format(
                 categories[2].extended_object.get_absolute_url(),

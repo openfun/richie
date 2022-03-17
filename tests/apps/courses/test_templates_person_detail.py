@@ -193,6 +193,7 @@ class PersonCMSTestCase(CMSTestCase):
             (
                 # pylint: disable=consider-using-f-string
                 '<a class="category-badge" href="{:s}">'
+                '<span class="offscreen">Category</span>'
                 '<span class="category-badge__title">{:s}</span></a>'
             ).format(
                 published_category.public_extension.extended_object.get_absolute_url(),
@@ -308,6 +309,7 @@ class PersonCMSTestCase(CMSTestCase):
             (
                 # pylint: disable=consider-using-f-string
                 '<a class="category-badge" href="{:s}">'
+                '<span class="offscreen">Category</span>'
                 '<span class="category-badge__title">{:s}</span></a>'
             ).format(
                 published_category.public_extension.extended_object.get_absolute_url(),
@@ -321,6 +323,7 @@ class PersonCMSTestCase(CMSTestCase):
             (
                 # pylint: disable=consider-using-f-string
                 '<a class="category-badge category-badge--draft" href="{:s}">'
+                '<span class="offscreen">Category</span>'
                 '<span class="category-badge__title">{:s}</span></a>'
             ).format(
                 not_published_category.extended_object.get_absolute_url(),
