@@ -21,9 +21,10 @@
                     "
                     sizes="40px"
                     class="category-badge__icon"
-                    alt="{{ category_page.get_title }}">
+                    alt="">
                 {% endblockplugin %}
             {% endif %}
+            <span class="offscreen">{% trans "Category" %}</span>
             <span class="category-badge__title">{{ category_page.get_title }}</span>
         {% elif category_variant == "tag" %}
             {% comment %}Small CTA alike, only title and no image, commonly horizontal{% endcomment %}

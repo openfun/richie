@@ -68,6 +68,7 @@ describe('components/CourseGlimpse', () => {
     screen.getByText('123abc');
     screen.getByLabelText('Organization');
     screen.getByText('Some Organization');
+    screen.getByText('Category');
     // Matches on 'Starts on Mar 14, 2019', date is wrapped with intl <span>
     screen.getByLabelText('Course date');
     screen.getByText('Starts on Mar 14, 2019');

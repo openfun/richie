@@ -151,7 +151,7 @@ class CoursePluginTestCase(TestCase):
         pattern = (
             r'<div class="course-glimpse__icon">'
             r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__40x40'
-            r'.*alt="icon title"'
+            r'.*alt=""'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -219,7 +219,7 @@ class CoursePluginTestCase(TestCase):
         pattern = (
             r'<div class="course-glimpse__icon">'
             r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__40x40'
-            r'.*alt="titre icone"'
+            r'.*alt=""'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
