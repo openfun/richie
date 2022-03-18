@@ -1,0 +1,8 @@
+.payment-button {
+  text-align: center;
+
+  &__error {
+    color: r-color('firebrick6');
+    margin-top: 0.5rem;
+  }
+}

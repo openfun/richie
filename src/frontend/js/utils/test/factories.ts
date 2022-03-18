@@ -1,13 +1,12 @@
 import { compose, createSpec, derived, faker, oneOf } from '@helpscout/helix';
-import { CommonDataProps } from 'types/commonDataProps';
-import { APIBackend } from 'types/api';
-import type * as Joanie from 'types/Joanie';
-import { EnrollmentState, OrderState, ProductType } from 'types/Joanie';
-import { DehydratedState } from 'react-query/types/hydration';
-import { QueryState } from 'react-query/types/core/query';
-import { MutationState } from 'react-query/types/core/mutation';
-import { PersistedClient } from 'react-query/types/persistQueryClient-experimental';
 import { MutationKey, QueryKey } from 'react-query';
+import { MutationState } from 'react-query/types/core/mutation';
+import { QueryState } from 'react-query/types/core/query';
+import { DehydratedState } from 'react-query/types/hydration';
+import { PersistedClient } from 'react-query/types/persistQueryClient-experimental';
+import { APIBackend } from 'types/api';
+import { CommonDataProps } from 'types/commonDataProps';
+import { EnrollmentState, OrderState, PaymentProviders, ProductType } from 'types/Joanie';
 
 const CourseStateFactory = createSpec({
   priority: derived(() => Math.floor(Math.random() * 7)),
@@ -175,7 +174,7 @@ export const CertificateProductFactory = createSpec({
   target_courses: TargetCourseFactory.generate(1, 5),
 });
 
-const OrderLiteFactory = createSpec({
+export const OrderLiteFactory = createSpec({
   created_on: faker.date.past()().toISOString(),
   enrollments: [],
   id: faker.datatype.uuid(),
@@ -187,27 +186,6 @@ const OrderLiteFactory = createSpec({
 
 // TODO Create CredentialProductFactory and EnrollmentProductFactory
 export const ProductFactory = oneOf([CertificateProductFactory]);
-// Create a product with an order.
-export const ProductOrderFactory = (
-  productSpec: typeof ProductFactory = CertificateProductFactory,
-) =>
-  compose(productSpec).afterGenerate((product: Joanie.CourseProduct) => {
-    const enrollments = product.target_courses.map((course) => {
-      const index = faker.datatype.number(0, course.course_runs.length - 1)();
-      const courseRun = course.course_runs[index];
-      return {
-        ...courseRun,
-        is_active: true,
-        state: EnrollmentState.SET,
-      };
-    });
-
-    const order = OrderLiteFactory.extend({
-      product: product.id,
-      enrollments,
-    });
-    return [product, order];
-  });
 
 export const CourseFactory = createSpec({
   code: faker.random.alphaNumeric(5),
@@ -251,3 +229,26 @@ export const CreditCardFactory = createSpec({
   last_numbers: derived(() => faker.finance.creditCardNumber('visa')().slice(-4)),
   title: faker.random.word(),
 });
+
+export const PaymentFactory = createSpec({
+  payment_id: faker.finance.routingNumber(),
+  provider: PaymentProviders.DUMMY,
+  url: faker.internet.url(),
+});
+
+export const OrderWithPaymentFactory = compose(
+  OrderFactory,
+  createSpec({
+    payment_info: PaymentFactory,
+  }),
+);
+
+export const OrderWithOneClickPaymentFactory = compose(
+  OrderFactory,
+  createSpec({
+    payment_info: derived(() => ({
+      ...PaymentFactory.generate(),
+      is_paid: true,
+    })),
+  }),
+);

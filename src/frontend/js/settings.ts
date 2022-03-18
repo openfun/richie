@@ -8,6 +8,12 @@ export const EDX_CSRF_TOKEN_COOKIE_NAME = 'edx_csrf_token';
 export const RICHIE_USER_TOKEN = 'RICHIE_USER_TOKEN';
 
 export const REACT_QUERY_SETTINGS = {
+  cacheStorage: {
+    // The key used to persist cache within cache storage
+    key: 'RICHIE_PERSISTED_QUERIES',
+    // Cache storage throttle time
+    throttleTime: 500,
+  },
   // Cache is garbage collected after this delay
   cacheTime: 24 * 60 * 60 * 1000, // 24h in ms
   // Data are considered as stale after this delay
@@ -19,10 +25,11 @@ export const REACT_QUERY_SETTINGS = {
     session: 5 * 60 * 1000, // 5 minutes in ms
     sessionItems: 20 * 60 * 1000, // 20 minutes, items related to the session should not be refreshed as the frequency than session information.
   },
-  cacheStorage: {
-    // The key used to persist cache within cache storage
-    key: 'RICHIE_PERSISTED_QUERIES',
-    // Cache storage throttle time
-    throttleTime: 500,
-  },
+};
+
+export const PAYMENT_SETTINGS = {
+  // Interval in ms to poll the related order when a payment has succeeded.
+  pollInterval: 1000,
+  // Number of retries
+  pollLimit: 30,
 };
