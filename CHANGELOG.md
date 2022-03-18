@@ -29,6 +29,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   'math.div'.
 - Organization plugin variant 'row' now use excerpt if not empty else the
   description with every markup removed
+- Set font size to 1rem on some detail pages contents: Organization
+  excerpt, Program body and Person main content
 
 ### Fixed
 
