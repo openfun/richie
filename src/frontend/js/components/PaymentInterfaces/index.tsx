@@ -4,6 +4,7 @@ import * as Joanie from 'types/Joanie';
 import { handle } from 'utils/errors/handle';
 
 const LazyPayplugLightbox = lazy(() => import('./PayplugLightbox'));
+const LazyDummy = lazy(() => import('./Dummy'));
 
 export interface PaymentInterfaceProps extends Joanie.Payment {
   onSuccess: () => void;
@@ -32,6 +33,7 @@ const PaymentInterface = (props: PaymentInterfaceProps) => {
   return (
     <Suspense fallback={null}>
       {props.provider === Joanie.PaymentProviders.PAYPLUG && <LazyPayplugLightbox {...props} />}
+      {props.provider === Joanie.PaymentProviders.DUMMY && <LazyDummy {...props} />}
     </Suspense>
   );
 };

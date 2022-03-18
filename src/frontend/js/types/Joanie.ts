@@ -157,6 +157,7 @@ export interface Address {
 
 // Payment
 export enum PaymentProviders {
+  DUMMY = 'dummy',
   PAYPLUG = 'payplug',
 }
 
