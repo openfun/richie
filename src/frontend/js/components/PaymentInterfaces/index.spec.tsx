@@ -1,13 +1,17 @@
 import { render, screen } from '@testing-library/react';
-import { handle as mockHandle } from 'utils/errors/handle';
-import { ContextFactory as mockContextFactory, PaymentFactory } from 'utils/test/factories';
 import type * as Joanie from 'types/Joanie';
 import { PaymentProviders } from 'types/Joanie';
+import { handle as mockHandle } from 'utils/errors/handle';
+import { ContextFactory as mockContextFactory, PaymentFactory } from 'utils/test/factories';
 import PaymentInterface from '.';
 
 jest.mock('./PayplugLightbox', () => ({
   __esModule: true,
   default: () => 'Payplug lightbox',
+}));
+jest.mock('./Dummy', () => ({
+  __esModule: true,
+  default: () => 'Dummy payment component',
 }));
 
 jest.mock('utils/errors/handle', () => ({
@@ -52,6 +56,17 @@ describe('PaymentInterface', () => {
     render(<PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />);
 
     await screen.findByText('Payplug lightbox');
+    expect(onError).not.toHaveBeenCalled();
+  });
+
+  it('should render the dummy payment component when provider is Dummy', async () => {
+    const payment: Joanie.Payment = PaymentFactory.afterGenerate((p: Joanie.Payment) => ({
+      ...p,
+      provider: PaymentProviders.DUMMY,
+    })).generate();
+    render(<PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />);
+
+    await screen.findByText('Dummy payment component');
     expect(onError).not.toHaveBeenCalled();
   });
 });
