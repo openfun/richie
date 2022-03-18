@@ -162,7 +162,6 @@ export enum PaymentProviders {
 }
 
 export interface Payment {
-  order_id: string;
   payment_id: string;
   provider: string;
   url: string;
@@ -170,6 +169,10 @@ export interface Payment {
 
 export interface PaymentOneClick extends Payment {
   is_paid: boolean;
+}
+
+export interface OrderWithPaymentInfo extends Order {
+  payment_info: Payment | PaymentOneClick;
 }
 
 // - API
@@ -216,9 +219,7 @@ interface APIUser {
   };
   orders: {
     abort(payload: OrderAbortPayload): Promise<void>;
-    create(
-      payload: OrderCreationPayload,
-    ): Promise<Order & { payment_info?: Payment | PaymentOneClick }>;
+    create(payload: OrderCreationPayload): Promise<OrderWithPaymentInfo>;
     get(id: Order['id']): Promise<Nullable<Order>>;
     get(queryParameters?: QueryParameters): Promise<PaginatedResponse<Nullable<Order>>>;
     invoice: {

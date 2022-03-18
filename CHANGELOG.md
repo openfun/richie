@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a `PaymentButton` component 
 - Add a `PaymentInterface` component to lazy load the right payment component
   according to the provider used 
 - Create a `StepBreadcrumb` component to display progress within a step process
