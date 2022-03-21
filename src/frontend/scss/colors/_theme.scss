@@ -1,14 +1,13 @@
 // Theme schemes
 
+// Used from styleguide to build available scheme to demonstrate, used to create button variant
 $r-theme: (
-  // Used from styleguide to build available scheme to demonstrate, used to create button variant
-  banner:
-    (
-      error: $firebrick6-scheme,
-      warning: $indianred3-scheme,
-      success: $azure2,
-      info: $battleship-grey-scheme,
-    ),
+  banner: (
+    error: $firebrick6-scheme,
+    warning: $indianred3-scheme,
+    success: $azure2,
+    info: $battleship-grey-scheme,
+  ),
   base-schemes: (
     primary: $firebrick6-scheme,
     secondary: $indianred3-scheme,
@@ -460,7 +459,7 @@ $r-theme: (
     icon-success-color: r-color('white'),
     title-color: r-color('charcoal'),
     subtitle-color: r-color(purplish-grey),
-  )
+  ),
 ) !default;
 
 // On a Richie child project you can easily change a specific value using:
