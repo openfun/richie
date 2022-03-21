@@ -35,9 +35,9 @@
     "not dead"
   ],
   "dependencies": {
-    "@babel/core": "7.17.5",
+    "@babel/core": "7.17.8",
     "@babel/plugin-syntax-dynamic-import": "7.8.3",
-    "@babel/plugin-transform-modules-commonjs": "7.16.8",
+    "@babel/plugin-transform-modules-commonjs": "7.17.7",
     "@babel/preset-env": "7.16.11",
     "@babel/preset-react": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
@@ -57,12 +57,12 @@
     "@types/js-cookie": "3.0.1",
     "@types/lodash-es": "4.17.6",
     "@types/query-string": "6.3.0",
-    "@types/react": "17.0.40",
+    "@types/react": "17.0.41",
     "@types/react-autosuggest": "10.1.5",
-    "@types/react-dom": "17.0.13",
+    "@types/react-dom": "17.0.14",
     "@types/react-modal": "3.13.1",
-    "@typescript-eslint/eslint-plugin": "5.14.0",
-    "@typescript-eslint/parser": "5.14.0",
+    "@typescript-eslint/eslint-plugin": "5.15.0",
+    "@typescript-eslint/parser": "5.15.0",
     "babel-jest": "27.5.1",
     "babel-loader": "8.2.3",
     "babel-plugin-react-intl": "8.2.25",
@@ -72,7 +72,7 @@
     "downshift": "6.1.7",
     "eslint": "8.11.0",
     "eslint-config-airbnb": "19.0.4",
-    "eslint-config-airbnb-typescript": "16.1.2",
+    "eslint-config-airbnb-typescript": "16.1.4",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-compat": "4.0.2",
     "eslint-plugin-formatjs": "3.0.0",
@@ -92,7 +92,7 @@
     "mdn-polyfills": "5.20.0",
     "node-fetch": ">2.6.6 <3",
     "nodemon": "2.0.15",
-    "prettier": "2.5.1",
+    "prettier": "2.6.0",
     "query-string": "7.1.1",
     "react": "17.0.2",
     "react-autosuggest": "10.1.0",
@@ -107,9 +107,9 @@
     "webpack-cli": "4.9.2",
     "whatwg-fetch": "3.6.2",
     "xhr-mock": "2.5.1",
-    "yargs": "17.3.1"
+    "yargs": "17.4.0"
   },
   "resolutions": {
-    "@types/react": "17.0.40"
+    "@types/react": "17.0.41"
   }
 }

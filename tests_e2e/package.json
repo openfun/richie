@@ -7,7 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "axe-core": "4.4.1",
-    "cypress": "9.5.1",
+    "cypress": "9.5.2",
     "cypress-axe": "0.14.0"
   }
 }
