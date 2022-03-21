@@ -3,7 +3,7 @@
 //
 
 //
-// For accessiblity and user experience purposes, an input should be always
+// For accessibility and user experience purposes, an input should be always
 // associated to a label.
 //
 //
@@ -284,6 +284,7 @@
       .form-field__select-input {
         border: none;
         box-sizing: content-box;
+        min-height: inherit;
         padding: 0 1.5rem 0 0;
         text-overflow: ellipsis;
       }
