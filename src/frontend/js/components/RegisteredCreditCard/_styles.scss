@@ -1,0 +1,37 @@
+.registered-credit-card {
+  @include shadowed-box();
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+
+  &__infos {
+    color: r-theme-val(registered-credit-card, base-color);
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-bold;
+    text-align: right;
+    user-select: none;
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  &__name {
+    color: r-theme-val(registered-credit-card, title-color);
+    font-size: 0.9rem;
+  }
+
+  &__number {
+    line-height: 1.2em;
+    text-transform: uppercase;
+
+    &:before {
+      content: 'XXXX XXXX XXXX ';
+    }
+  }
+
+  &__validity {
+    line-height: 1.2em;
+  }
+}
