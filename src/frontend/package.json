@@ -44,6 +44,7 @@
     "@formatjs/cli": "4.8.2",
     "@formatjs/intl-relativetimeformat": "10.0.0",
     "@helpscout/helix": "0.2.0",
+    "@hookform/resolvers": "2.8.8",
     "@sentry/browser": "6.18.2",
     "@sentry/types": "6.18.2",
     "@testing-library/jest-dom": "5.16.2",
@@ -98,6 +99,7 @@
     "react": "17.0.2",
     "react-autosuggest": "10.1.0",
     "react-dom": "17.0.2",
+    "react-hook-form": "7.28.1",
     "react-intl": "5.24.7",
     "react-modal": "3.14.4",
     "react-query": "3.34.16",
@@ -108,7 +110,8 @@
     "webpack-cli": "4.9.2",
     "whatwg-fetch": "3.6.2",
     "xhr-mock": "2.5.1",
-    "yargs": "17.4.0"
+    "yargs": "17.4.0",
+    "yup": "0.32.11"
   },
   "resolutions": {
     "@types/react": "17.0.41"
