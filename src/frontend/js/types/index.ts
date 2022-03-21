@@ -1,5 +1,15 @@
 import { Nullable } from 'types/utils';
 
+export type StateText =
+  | 'closing on'
+  | 'starting on'
+  | 'enrollment closed'
+  | 'on-going'
+  | 'archived'
+  | 'to be scheduled';
+
+export type StateCTA = 'enroll now' | 'study now' | undefined;
+
 export interface CourseRun {
   id: number;
   resource_link: string;
@@ -27,8 +37,8 @@ export enum Priority {
 export interface CourseState {
   priority: Priority;
   datetime: string;
-  call_to_action: string;
-  text: string;
+  call_to_action: StateCTA;
+  text: StateText;
 }
 
 export interface OpenEdXEnrollment {

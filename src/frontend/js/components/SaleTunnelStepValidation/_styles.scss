@@ -1,0 +1,130 @@
+.SaleTunnelStepValidation {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    margin-bottom: 2.375rem;
+    text-align: center;
+  }
+
+  &__title {
+    color: r-theme-val(steps-content, title-color);
+    font-size: 1.7rem;
+    line-height: 1.2em;
+    margin-bottom: 0;
+  }
+
+  &__price {
+    color: r-theme-val(steps-content, subtitle-color);
+    font-family: $r-font-family-montserrat;
+    font-size: 1rem;
+    margin-bottom: 0;
+  }
+
+  &__product-detail-list {
+    align-self: center;
+    list-style: none;
+
+    @include media-breakpoint-up(md) {
+      max-width: 70%;
+    }
+  }
+
+  .product-detail-row {
+    padding-left: 12px;
+    position: relative;
+
+    &:not(:last-child) {
+      padding-bottom: 1.5rem;
+
+      &:before {
+        background-color: r-theme-val(steps-content, icon-background);
+        border-radius: 100vw;
+        bottom: 1px;
+        content: '';
+        display: block;
+        left: -12px;
+        position: absolute;
+        top: 0;
+        transform: translateX(-50%);
+        width: 4px;
+      }
+    }
+
+    &__icon {
+      align-items: center;
+      background: r-theme-val(steps-content, icon-background);
+      border-radius: 100vw;
+      color: r-theme-val(steps-content, icon-color);
+      display: flex;
+      height: 24px;
+      justify-content: center;
+      left: -12px;
+      position: absolute;
+      transform: translate(-50%, -4px);
+      width: 24px;
+
+      svg {
+        fill: currentColor;
+        width: 50%;
+      }
+
+      &--big {
+        background-color: r-theme-val(steps-content, icon-big-background);
+        color: r-theme-val(steps-content, icon-big-color);
+        transform: translate(-50%, 1px);
+
+        svg {
+          width: 100%;
+        }
+      }
+    }
+    &__title {
+      color: r-theme-val(steps-content, title-color);
+      margin-bottom: 0.5rem;
+    }
+
+    &__content {
+      color: r-theme-val(steps-content, title-color);
+      font-size: 0.875rem;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .product-detail-row__course-run {
+    &-dates {
+      &__count {
+        margin-bottom: 0;
+
+        svg {
+          fill: currentColor;
+          display: inline-block;
+          height: 0.8rem;
+          line-height: 1rem;
+          margin-right: 10px;
+          vertical-align: middle;
+          width: 0.8rem;
+        }
+      }
+
+      &__list {
+        list-style: disc;
+      }
+
+      &__item:not(:last-child) {
+        margin-bottom: 0.5rem;
+      }
+
+      &__item > .course-run__enrollment-dates {
+        color: r-theme-val(steps-content, content-color);
+        display: block;
+      }
+    }
+  }
+
+  &__footer {
+    margin-top: 2.5rem;
+  }
+}

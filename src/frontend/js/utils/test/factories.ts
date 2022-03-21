@@ -134,13 +134,19 @@ export const OrganizationFactory = createSpec({
 });
 
 export const JoanieCourseRunFactory = createSpec({
-  end: faker.date.future(0.75)().toISOString(),
-  enrollment_end: faker.date.future(0.5)().toISOString(),
-  enrollment_start: faker.date.past(0.25)().toISOString(),
+  end: derived(() => faker.date.future(0.75)().toISOString()),
+  enrollment_end: derived(() => faker.date.future(0.5)().toISOString()),
+  enrollment_start: derived(() => faker.date.past(0.5)().toISOString()),
   id: faker.datatype.uuid(),
   resource_link: faker.internet.url(),
-  start: faker.date.future(0.25)().toISOString(),
+  start: derived(() => faker.date.past(0.25)().toISOString()),
   title: faker.random.words(Math.ceil(Math.random() * 3)),
+  state: {
+    priority: 1,
+    datetime: derived(() => faker.date.past(0.25)().toISOString()),
+    call_to_action: 'enroll now',
+    text: 'closing on',
+  },
 });
 
 export const JoanieEnrollmentFactory = compose(
@@ -155,7 +161,7 @@ export const TargetCourseFactory = createSpec({
   code: faker.random.alphaNumeric(5),
   organization: OrganizationFactory,
   title: faker.random.words(1, 3),
-  course_runs: JoanieCourseRunFactory.generate(1, 3),
+  course_runs: derived(() => JoanieCourseRunFactory.generate(1, 3)),
 });
 
 export const CertificateProductFactory = createSpec({
@@ -171,7 +177,7 @@ export const CertificateProductFactory = createSpec({
     description: faker.lorem.sentences(2),
   }),
   order: null,
-  target_courses: TargetCourseFactory.generate(1, 5),
+  target_courses: derived(() => TargetCourseFactory.generate(1, 5)),
 });
 
 export const OrderLiteFactory = createSpec({
@@ -191,7 +197,7 @@ export const CourseFactory = createSpec({
   code: faker.random.alphaNumeric(5),
   organization: OrganizationFactory,
   title: faker.random.words(Math.ceil(Math.random() * 3)),
-  products: ProductFactory.generate(1, 3),
+  products: derived(() => ProductFactory.generate(1, 3)),
   course_runs: [],
   orders: null,
 });
@@ -205,7 +211,7 @@ export const OrderFactory = createSpec({
   total_currency: faker.finance.currencyCode(),
   state: OrderState.VALIDATED,
   product: faker.datatype.uuid(),
-  target_courses: TargetCourseFactory.generate(1, 5),
+  target_courses: derived(() => TargetCourseFactory.generate(1, 5)),
 });
 
 export const AddressFactory = createSpec({

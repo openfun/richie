@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a `SaleTunnel` component
 - Add an `AddressesManagement` component
 - Add a `PaymentButton` component 
 - Add a `PaymentInterface` component to lazy load the right payment component
