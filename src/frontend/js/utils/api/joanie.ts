@@ -66,24 +66,22 @@ function getDefaultHeaders(): Record<string, string> {
   the request through the `Authorization` header.
 */
 function fetchWithJWT(routes: RequestInfo, options: RequestInit = {}) {
+  const headers = (options.headers as Record<string, string>) || getDefaultHeaders();
   try {
     const accessToken = AuthenticationApi!.accessToken!();
-    const headers = (options.headers as Record<string, string>) || getDefaultHeaders();
-
     if (accessToken) {
       // eslint-disable-next-line @typescript-eslint/dot-notation
       headers['Authorization'] = `Bearer ${accessToken}`;
     }
-
-    options.headers = headers;
-
-    return fetch(routes, options);
   } catch (error) {
     throw new Error(
       `Joanie requires JWT Token to fetch data, but the configured authentication
       api does not contains a method \`accessToken\` to retrieve this information.`,
     );
   }
+
+  options.headers = headers;
+  return fetch(routes, options);
 }
 
 /**

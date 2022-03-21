@@ -1,0 +1,141 @@
+//
+// AddressManagement component styles
+//
+
+.AddressesManagement {
+  & > section {
+    margin-bottom: 2rem;
+  }
+
+  & > .button {
+    .button__icon {
+      display: inline-block;
+      fill: none;
+      height: 1.2em;
+      stroke: currentColor;
+      transform: rotateZ(90deg);
+      width: 1.2em;
+    }
+    margin-bottom: 0.5rem;
+    margin-left: -1.5rem;
+  }
+
+  .address-form {
+    & > .form {
+      display: flex;
+      flex-direction: column;
+      @include shadowed-box($padding: 1rem);
+    }
+
+    .form__footer {
+      align-self: flex-end;
+      display: inline-block;
+
+      & > *:not(:last-child) {
+        margin-right: 0.5rem;
+      }
+    }
+
+    &.address-form--highlighted .form {
+      animation: loadAddressForm 500ms backwards;
+
+      @keyframes loadAddressForm {
+        0% {
+          transform: scale(1);
+        }
+        33% {
+          transform: scale(0.97);
+        }
+        66% {
+          transform: scale(1.01);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    }
+  }
+
+  .registered-addresses-list {
+    list-style: none;
+    padding: 0;
+  }
+  .registered-addresses-item {
+    @include shadowed-box($padding: 1rem);
+    align-items: center;
+    display: flex;
+
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+
+    @include media-breakpoint-down(md) {
+      align-items: start;
+      flex-direction: column;
+
+      &__actions {
+        align-self: end;
+      }
+    }
+
+    & > * {
+      margin: 0;
+    }
+
+    .address-main-indicator {
+      $tick-size: 1.125rem;
+      background-color: r-theme-val(form, input-unchecked-background);
+      border-radius: 100vw;
+      border: 2px solid r-theme-val(form, input-unchecked-border);
+      box-sizing: border-box;
+      display: block;
+      height: $tick-size;
+      position: relative;
+      width: $tick-size;
+
+      &:before {
+        background: transparent;
+        border-radius: 100vw;
+        content: '';
+        display: block;
+        height: 60%;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform-origin: center center;
+        transform: translate(-50%, -50%) scale(calc(100 / 60));
+        transition: transform 400ms $r-ease-out;
+        width: 60%;
+      }
+
+      &--is-main {
+        background-color: r-theme-val(form, input-checked-background);
+        border-color: r-theme-val(form, input-checked-border);
+        color: r-theme-val(form, input-checked-color);
+
+        &:before {
+          background-color: r-theme-val(form, input-checked-color);
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+    }
+
+    &__title {
+      font-size: 0.8rem;
+      margin-right: 0.8rem;
+    }
+    &__address {
+      flex: 1;
+      line-height: 1em;
+    }
+    &__actions {
+      & > .button {
+        min-width: 100px;
+
+        &:disabled {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+}
