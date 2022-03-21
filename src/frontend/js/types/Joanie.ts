@@ -139,7 +139,7 @@ export interface CreditCard {
   id: string;
   is_main: boolean;
   last_numbers: string;
-  title: string;
+  title?: string;
 }
 
 // Address
