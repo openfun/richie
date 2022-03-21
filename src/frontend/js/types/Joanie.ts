@@ -1,3 +1,4 @@
+import { Priority, StateCTA, StateText } from 'types/index';
 import { Nullable } from 'types/utils';
 
 // - Generic
@@ -23,12 +24,13 @@ export interface CourseRun {
   id: string;
   resource_link: string;
   start: string;
+  state: {
+    priority: Priority;
+    datetime: Date;
+    call_to_action: StateCTA;
+    text: StateText;
+  };
   title: string;
-}
-
-export interface CourseRunEnrollment extends CourseRun {
-  is_active: boolean;
-  state: EnrollmentState;
 }
 
 // - Certificate
@@ -102,7 +104,7 @@ export enum EnrollmentState {
   SET = 'set',
 }
 
-export interface Enrollment extends CourseRun {
+export interface Enrollment extends Omit<CourseRun, 'state'> {
   id: string;
   is_active: boolean;
   state: EnrollmentState;
@@ -240,7 +242,7 @@ interface APIUser {
 export interface API {
   user: APIUser;
   courses: {
-    get(id: string): Promise<Course>;
+    get(id: string): Promise<Nullable<Course>>;
   };
 }
 

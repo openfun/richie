@@ -16,10 +16,43 @@ $ make migrate
 
 ## Unreleased
 
+- New frontend widgets has been added, you have to update stylesheets as follows:
+  - `_main.scss`
+  ```diff
+  +   @import '../js/components/AddressesManagement/styles';
+  +   @import '../js/components/PaymentButton/styles';
+  +   @import '../js/components/RegisteredCreditCard/styles';
+  +   @import '../js/components/SaleTunnel/styles';
+  +   @import '../js/components/SaleTunnelStepPayment/styles';
+  +   @import '../js/components/SaleTunnelStepResume/styles';
+  +   @import '../js/components/SaleTunnelStepValidation/styles';
+  ```
+  
+  - Only if you have overridden `_palette.scss`:
+  ```diff
+  $palette = {
+    ...
+  +   'mantis': #76ce68,
+  }
+  ```
+
+  - Only if you have overridden `_theme.scss`:
+  ```diff
+  base-schemes: (
+    ...
+  +  active: $active-scheme,
+  )
+  ...
+  +registered-credit-card: (
+  +  title-color: r-color('charcoal'),
+  +  base-color: r-color('purplish-grey'),
+  +),
+  ```
+
 - The `get_placeholder_plugins` and `get_page_plugins` template tags were merged in a single
   placeholder `get_placeholder_plugins` by making the `page_lookup` parameter optional.
   A new template tag `placeholder_as_plugins` was introduced and should be used in place of
-  the `get_placeholder_plugins` tag whereever you want a real placeholder (with markup for
+  the `get_placeholder_plugins` tag wherever you want a real placeholder (with markup for
   frontend editing) and not just getting the related plugins.
 - Don't use the `blockplugin` template tag in the page <header>. They can be replaced by a
   simple {% if %} tag since their only purpose is to inject markup for frontend editing (which
@@ -29,9 +62,9 @@ $ make migrate
   with `components/`.
 
   ```diff
-    - "CourseGlimpse/CourseGlimpseFooter.tsx": "../../../../../js/components/CourseGlimpse/CourseGlimpseFooter.tsx"
-    + "components/CourseGlimpse/CourseGlimpseFooter.tsx$": "../../../../../js/components/CourseGlimpse/CourseGlimpseFooter.tsx"
-  ```
+  - "CourseGlimpse/CourseGlimpseFooter.tsx": "../../../../../js/components/CourseGlimpse/CourseGlimpseFooter.tsx"
+  + "components/CourseGlimpse/CourseGlimpseFooter.tsx$": "../../../../../js/components/CourseGlimpse/CourseGlimpseFooter.tsx"
+    ```
 - If you customize the `course-detail` block theme add the `checkmark-list-decoration-color` variable.
 
 ## 2.12.x to 2.13.x

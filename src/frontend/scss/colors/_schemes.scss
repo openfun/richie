@@ -48,6 +48,12 @@ $smoke-scheme: (
   hover-font-color: r-color('indianred3'),
   hover-background: r-color('white'),
 ) !default;
+$active-scheme: (
+  background: transparent,
+  font-color: r-color('firebrick6'),
+  svg-color: r-color('firebrick6'),
+  hover-font-color: r-color('indianred3'),
+) !default;
 $light-grey-scheme: (
   font-color: r-color('black'),
   h1-color: r-color('black'),

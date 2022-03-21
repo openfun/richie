@@ -1,0 +1,11 @@
+.SaleTunnel__modal {
+  min-height: 500px;
+
+  &-body {
+    padding: 0 3rem 1.5rem 3rem;
+
+    @include media-breakpoint-down(sm) {
+      padding: 0 1rem 1.5rem 1rem;
+    }
+  }
+}
