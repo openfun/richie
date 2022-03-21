@@ -12,6 +12,7 @@ import 'core-js/modules/es.promise';
 import ReactDOM from 'react-dom';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from 'react-query';
+import countries from 'i18n-iso-countries';
 import createQueryClient from 'utils/react-query/createQueryClient';
 
 import { Root } from 'components/Root';
@@ -30,6 +31,8 @@ async function render() {
     if (!locale) {
       throw new Error('<html> lang attribute is required to be set with a BCP47/RFC5646 locale.');
     }
+
+    const [languageCode, countryCode] = locale.split('-');
 
     // Polyfill outdated browsers who do not have Node.prototype.append
     if (
@@ -57,7 +60,6 @@ async function render() {
         // When countryCode is identical to languageCode, intlrelativeformat uses
         // only languageCode as locale file name
         let localeFilename = locale;
-        const [languageCode, countryCode] = localeFilename.split('-');
         if (RegExp(languageCode, 'i').test(countryCode)) {
           localeFilename = languageCode;
         }
@@ -85,6 +87,12 @@ async function render() {
       } else {
         handle(e);
       }
+    }
+
+    try {
+      countries.registerLocale(require(`i18n-iso-countries/langs/${languageCode}.json`));
+    } catch (e) {
+      handle(e);
     }
 
     // Create a react root element we'll render into. Note that this is just used to anchor our React tree in an
