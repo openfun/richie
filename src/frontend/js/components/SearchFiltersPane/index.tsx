@@ -6,6 +6,7 @@ import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseS
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APICourseSearchResponse } from 'types/api';
 import { Nullable } from 'types/utils';
+import { FacetedFilterDefinition } from 'types/filters';
 
 interface SearchFiltersPaneProps {
   filters: Nullable<APICourseSearchResponse['filters']>;
@@ -33,18 +34,37 @@ export const SearchFiltersPane = ({
 
   const { courseSearchParams, dispatchCourseSearchParamsUpdate } = useCourseSearchParams();
 
-  // Get all the currently active filters to show a count
-  const activeFilters = Object.entries(courseSearchParams)
+  const relevantFilters = Object.entries(courseSearchParams)
     // Drop filters that are irrelevant to the "clear" button
-    .filter(([key]) => !Object.keys(API_LIST_DEFAULT_PARAMS).includes(key))
+    .filter(([key]) => !Object.keys(API_LIST_DEFAULT_PARAMS).includes(key));
+
+  // Get all the currently active filters to show a count
+  const activeFilters = relevantFilters
     // Only keep the values
     .map((entry) => entry[1])
     // Drop undefined & null values
     .filter((item) => !!item);
+
   // Flatten the list of active filters before counting
   // This allows us to eg. count 3 if there are 3 active organization filters
   const activeFilterCount = ([] as any[]) // Type safety does not matter as we're only counting
     .concat(...activeFilters).length;
+
+  // Get of list of active filters human names, in the order of the shown filter list
+  function getFilterNames(prev: string[], current: FacetedFilterDefinition) {
+    const filter = relevantFilters.find((entry) => entry[0] === current.name);
+    let names: string[] = [];
+
+    if (filter) {
+      const filterValues = Array.isArray(filter[1]) ? filter[1] : [filter[1]];
+      names = current.values
+        .filter((value) => filterValues.includes(value.key))
+        .map((value) => `"${value.human_name}"`);
+    }
+
+    return [...prev, ...names];
+  }
+  const activeFilterNames = (filterList || []).reduce(getFilterNames, []).join(', ');
 
   return (
     <div className="search-filters-pane" {...passThroughProps}>
@@ -63,6 +83,7 @@ export const SearchFiltersPane = ({
         }
       >
         <FormattedMessage {...messages.clearFilters} values={{ activeFilterCount }} />
+        <span className="offscreen">&nbsp;({activeFilterNames})</span>
       </button>
       {filterList &&
         filterList.map((filter) => <SearchFilterGroup filter={filter} key={filter.name} />)}

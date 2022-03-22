@@ -30,6 +30,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   blocks
 - Add alternative text on course glimpse icons for screen reader users
 - On search page, warn screen reader users when the search results change
+- On search page, the "clear filters" button now have details on current
+  filters for screen reader users
 
 ### Changed
 
