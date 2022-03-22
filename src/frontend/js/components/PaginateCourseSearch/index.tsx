@@ -1,5 +1,7 @@
 import { Fragment } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { parse, stringify } from 'query-string';
+import { location } from 'utils/indirection/window';
 
 import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
 
@@ -123,15 +125,22 @@ export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseS
                 </li>
               ) : (
                 <li className="pagination__item">
-                  <button
+                  <a
+                    href={`?${stringify({
+                      ...parse(location.search),
+                      offset: String((page - 1) * limit),
+                    })}`}
                     className="pagination__page-number"
-                    onClick={() =>
-                      dispatchCourseSearchParamsUpdate({
-                        // Pages are 1-indexed, we need to 0-index them to calculate the correct offset
-                        offset: String((page - 1) * limit),
-                        type: CourseSearchParamsAction.pageChange,
-                      })
-                    }
+                    onClick={(event) => {
+                      if (!event.metaKey && !event.ctrlKey && !event.shiftKey) {
+                        event.preventDefault();
+                        dispatchCourseSearchParamsUpdate({
+                          // Pages are 1-indexed, we need to 0-index them to calculate the correct offset
+                          offset: String((page - 1) * limit),
+                          type: CourseSearchParamsAction.pageChange,
+                        });
+                      }
+                    }}
                   >
                     {/*  Help assistive technology users with some context */}
                     <span className="offscreen">
@@ -153,7 +162,7 @@ export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseS
                         page
                       )}
                     </span>
-                  </button>
+                  </a>
                 </li>
               )}
             </Fragment>
