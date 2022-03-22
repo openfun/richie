@@ -34,6 +34,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   description with every markup removed
 - Set font size to 1rem on some detail pages contents: Organization
   excerpt, Program body and Person main content
+- Use anchors instead of buttons in search pagination to let users open pages
+  in new tabs if they want
 
 ### Fixed
 

@@ -64,6 +64,19 @@ describe('<PaginateCourseSearch />', () => {
     screen.getByText('11');
   });
 
+  it('uses anchors to allow opening pagination links in a new tab', () => {
+    render(
+      <IntlProvider locale="en">
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
+          <PaginateCourseSearch courseSearchTotalCount={40} />
+        </HistoryContext.Provider>
+      </IntlProvider>,
+    );
+    expect(screen.queryByRole('button')).toBeNull();
+    const nextPageAnchor = screen.getByRole('link');
+    expect(nextPageAnchor).toHaveAttribute('href', '?offset=20');
+  });
+
   it('shows a pagination for course search (when on an arbitrary page)', () => {
     render(
       <IntlProvider locale="en">
