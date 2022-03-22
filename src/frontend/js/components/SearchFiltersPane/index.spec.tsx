@@ -75,14 +75,14 @@ describe('components/SearchFiltersPane', () => {
   });
 
   it('shows a button to remove all active filters when there are active filters', () => {
-    const { getByText } = render(
+    const { getByText, getByRole } = render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({
             limit: '14',
             offset: '28',
             organizations: 'L-00010023',
-            query: 'some query',
+            categories: ['12'],
           })}
         >
           <SearchFiltersPane
@@ -95,7 +95,13 @@ describe('components/SearchFiltersPane', () => {
                 is_searchable: true,
                 name: 'categories',
                 position: 0,
-                values: [],
+                values: [
+                  {
+                    count: 3,
+                    human_name: 'Dummy category',
+                    key: '12',
+                  },
+                ],
               },
               organizations: {
                 base_path: '0002',
@@ -105,7 +111,13 @@ describe('components/SearchFiltersPane', () => {
                 is_searchable: true,
                 name: 'organizations',
                 position: 1,
-                values: [],
+                values: [
+                  {
+                    count: 2,
+                    human_name: 'Dummy organization',
+                    key: 'L-00010023',
+                  },
+                ],
               },
             }}
           />
@@ -117,6 +129,11 @@ describe('components/SearchFiltersPane', () => {
     expect(getByText('Clear 2 active filters').parentElement).not.toHaveClass(
       'search-filters-pane__clear--hidden',
     );
+
+    // we want additional hidden text for screen reader users
+    getByRole('button', {
+      name: 'Clear 2 active filters ("Dummy category", "Dummy organization")',
+    });
 
     fireEvent.click(clearButton);
     expect(historyPushState).toHaveBeenCalledWith(
