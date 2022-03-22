@@ -123,7 +123,7 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         response = self.client.get(url)
 
         self.assertContains(
-            response, "<title>Preums</title>", html=True, status_code=200
+            response, "<title>Preums - example.com</title>", html=True, status_code=200
         )
         self.assertContains(
             response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True
@@ -163,7 +163,7 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         response = self.client.get(url)
 
         self.assertContains(
-            response, "<title>Preums</title>", html=True, status_code=200
+            response, "<title>Preums - example.com</title>", html=True, status_code=200
         )
         self.assertContains(
             response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True

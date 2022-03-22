@@ -217,7 +217,10 @@ class OrganizationCMSTestCase(CMSTestCase):
         # Ensure the published page content is correct
         response = self.client.get(url)
         self.assertContains(
-            response, "<title>La Sorbonne</title>", html=True, status_code=200
+            response,
+            "<title>La Sorbonne - example.com</title>",
+            html=True,
+            status_code=200,
         )
         self.assertContains(
             response,
@@ -360,7 +363,10 @@ class OrganizationCMSTestCase(CMSTestCase):
         url = page.get_absolute_url()
         response = self.client.get(url)
         self.assertContains(
-            response, "<title>La Sorbonne</title>", html=True, status_code=200
+            response,
+            "<title>La Sorbonne - example.com</title>",
+            html=True,
+            status_code=200,
         )
         self.assertContains(
             response,
