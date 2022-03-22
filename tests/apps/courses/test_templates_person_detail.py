@@ -177,7 +177,10 @@ class PersonCMSTestCase(CMSTestCase):
         # Ensure the published page content is correct
         response = self.client.get(url)
         self.assertContains(
-            response, "<title>My page title</title>", html=True, status_code=200
+            response,
+            "<title>My page title - example.com</title>",
+            html=True,
+            status_code=200,
         )
         self.assertContains(
             response,
@@ -284,7 +287,10 @@ class PersonCMSTestCase(CMSTestCase):
         )
 
         self.assertContains(
-            response, "<title>My page title</title>", html=True, status_code=200
+            response,
+            "<title>My page title - example.com</title>",
+            html=True,
+            status_code=200,
         )
         title = person.extended_object.get_title()
         self.assertContains(

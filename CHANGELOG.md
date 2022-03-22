@@ -23,6 +23,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   adjust every possible plugins to fit correctly;
 - Add theme variable to change checkmark color.
 - Add new placeholder 'excerpt' to Organization detail template
+- Add the website's name by default in every page title, that can be changed
+  or disabled by overriding the new `site_title` and `site_title_separator`
+  blocks
 
 ### Changed
 
