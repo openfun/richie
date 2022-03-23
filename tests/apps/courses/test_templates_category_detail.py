@@ -197,7 +197,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             CourseFactory,
             "course_categories",
-            '<h2 class="course-glimpse__title" title="{0:s}">{0:s}</h2>',
+            '<h2 class="course-glimpse__title">{0:s}</h2>',
         )
 
     @mock.patch(
@@ -407,7 +407,7 @@ class CategoryCMSTestCase(CMSTestCase):
     def test_templates_category_detail_cms_draft_content_courses(self):
         """Validate how a draft category page is displayed with its related courses."""
         self._extension_cms_draft_content(
-            CourseFactory, '<h2 class="course-glimpse__title" title="{0:s}">{0:s}</h2>'
+            CourseFactory, '<h2 class="course-glimpse__title">{0:s}</h2>'
         )
 
     def test_templates_category_detail_cms_draft_content_blogposts(self):
@@ -443,7 +443,7 @@ class CategoryCMSTestCase(CMSTestCase):
             response,
             (
                 '<div class="banner banner--error banner--rounded" role="alert">'
-                '<svg class="banner__icon"><use href="#icon-cross" /></svg>'
+                '<svg class="banner__icon" aria-hidden="true"><use href="#icon-cross" /></svg>'
                 '<p class="banner__message">'
                 "A category object is missing on this category page. "
                 "Please select another page template."

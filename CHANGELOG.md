@@ -29,6 +29,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Improve overall accessibility in Richie templates
 - Update frontend overriding system to allow to override any frontend module.
 - Improve React search suggestion field labels for screen readers.
 - Removed usage of deprecated Sass division '/' operator in favor of
