@@ -26,6 +26,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add the website's name by default in every page title, that can be changed
   or disabled by overriding the new `site_title` and `site_title_separator`
   blocks
+- Add a `__stretched-link` element to the card css block to help make
+  screen reader-friendly card links
 
 ### Changed
 
