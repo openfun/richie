@@ -97,21 +97,18 @@ class ProgramPluginTestCase(CMSTestCase):
         # The program's name should be present as a link to the cms page
         self.assertContains(
             response,
-            '<a href="/en/public-title/" class="program-glimpse program-glimpse--link',
+            '<a href="/en/public-title/" class="program-glimpse__link',
             status_code=200,
         )
         # The program's title should be wrapped in a h2
-        program_title = program.public_extension.extended_object.get_title()
-        self.assertContains(
-            response,
-            f'<h2 class="program-glimpse__title">{program_title:s}</h2>',
-            html=True,
-        )
+        pattern = r'<h2 class="program-glimpse__title">.*public title.*</h2>'
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
         self.assertNotContains(response, "draft title")
 
         # Program's cover should be present
         pattern = (
-            r'<div class="program-glimpse__media">'
+            r'<div class="program-glimpse__media" aria-hidden="true">'
+            r'<a href="program-glimpse__stretched-link" tabindex="-1" href="/en/public-title/">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )
@@ -122,12 +119,15 @@ class ProgramPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            '<a href="/fr/titre-public/" class="program-glimpse program-glimpse--link',
+            '<a href="/fr/titre-public/" class="program-glimpse__link',
             status_code=200,
         )
+        pattern = r'<h2 class="program-glimpse__title">.*titre public.*</h2>'
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
         # pylint: disable=no-member
         pattern = (
-            r'<div class="program-glimpse__media">'
+            r'<div class="program-glimpse__media" aria-hidden="true">'
+            r'<a href="program-glimpse__stretched-link" tabindex="-1" href="/fr/titre-public/">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )
@@ -204,20 +204,18 @@ class ProgramPluginTestCase(CMSTestCase):
         # Program's name should be present as a link to the cms page
         self.assertContains(
             response,
-            '<a href="/en/programme-publique/" class="program-glimpse program-glimpse--link" >',
+            '<a href="/en/programme-publique/" class="program-glimpse__link"',
             status_code=200,
         )
         # The program's full name should be wrapped in a h2
-        self.assertContains(
-            response,
-            '<h2 class="program-glimpse__title">programme publique</h2>',
-            html=True,
-        )
+        pattern = r'<h2 class="program-glimpse__title">.*programme publique.*</h2>'
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
         self.assertNotContains(response, "public program")
 
         # Program's cover should be present
         pattern = (
-            r'<div class="program-glimpse__media">'
+            r'<div class="program-glimpse__media" aria-hidden="true">'
+            r'<a href="program-glimpse__stretched-link" tabindex="-1" href="/en/programme-publique/">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )
