@@ -1051,7 +1051,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             response,
             (
                 '<div class="banner banner--error banner--rounded" role="alert">'
-                '<svg class="banner__icon"><use href="#icon-cross" /></svg>'
+                '<svg class="banner__icon" aria-hidden="true"><use href="#icon-cross" /></svg>'
                 '<p class="banner__message">'
                 "A course object is missing on this course page. "
                 "Please select another page template."

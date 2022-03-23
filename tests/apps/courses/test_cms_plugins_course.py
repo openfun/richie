@@ -119,7 +119,7 @@ class CoursePluginTestCase(TestCase):
         course_title = course_page.get_title()
         self.assertContains(
             response,
-            f'<h2 class="course-glimpse__title" title="{course_title:s}">{course_title:s}</h2>',
+            f'<h2 class="course-glimpse__title">{course_title:s}</h2>',
             status_code=200,
         )
         # The course's main organization should be present
@@ -178,7 +178,7 @@ class CoursePluginTestCase(TestCase):
         course_title = course_page.get_title()
         self.assertContains(
             response,
-            f'<h2 class="course-glimpse__title" title="{course_title:s}">{course_title:s}</h2>',
+            f'<h2 class="course-glimpse__title">{course_title:s}</h2>',
             status_code=200,
         )
 
@@ -340,7 +340,7 @@ class CoursePluginTestCase(TestCase):
 
         # The course's name should be present
         self.assertIn(
-            '<h2 class="course-glimpse__title" title="cours public">cours public</h2>',
+            '<h2 class="course-glimpse__title">cours public</h2>',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
         self.assertNotContains(response, "public course")
@@ -433,7 +433,7 @@ class CoursePluginTestCase(TestCase):
                 'course-glimpse__metadata--organization">'
                 '<svg role="img" aria-hidden="true" class="icon">'
                 '<use href="#icon-org"></use></svg>'
-                '<span class="title" title="{0:s}">{0:s}</span>'
+                '<span class="title">{0:s}</span>'
             ).format(menu_title),
             html=True,
         )

@@ -135,7 +135,7 @@ class ProgramCMSTestCase(CMSTestCase):
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<h3 class="course-glimpse__title" title="{0:s}">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+                '<h3 class="course-glimpse__title">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -189,7 +189,7 @@ class ProgramCMSTestCase(CMSTestCase):
             )
             self.assertContains(
                 response,
-                '<h3 class="course-glimpse__title" title="{0:s}">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+                '<h3 class="course-glimpse__title">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -202,7 +202,7 @@ class ProgramCMSTestCase(CMSTestCase):
 
         self.assertContains(
             response,
-            '<h3 class="course-glimpse__title" title="{0:s}">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+            '<h3 class="course-glimpse__title">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
                 courses[2].extended_object.get_title()
             ),
             html=True,
