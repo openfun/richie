@@ -1,30 +1,36 @@
 {% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "program" is required and must be a Program page extension{% endcomment %}
 {% with program_page=program.extended_object %}
-<a href="{{ program.extended_object.get_absolute_url }}" class="program-glimpse program-glimpse--link{% if program.extended_object.publisher_is_draft %} program-glimpse--draft{% endif %}" >
-    <div class="program-glimpse__media">
-    {% get_placeholder_plugins "program_cover" program_page as plugins or %}
-        <div class="program-glimpse__empty">{% trans 'Cover' %}</div>
-    {% endget_placeholder_plugins %}
-    {% blockplugin plugins.0 %}
-    <img src="{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
-        srcset="
-        {% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
-        {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-        {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
-        "
-        sizes="300px"
-        alt=""
-    />
-    {% endblockplugin %}
+<div class="program-glimpse{% if program.extended_object.publisher_is_draft %} program-glimpse--draft{% endif %}" >
+    <div class="program-glimpse__media" aria-hidden="true">
+        <a class="program-glimpse__stretched-link" tabindex="-1" href="{{ program.extended_object.get_absolute_url }}">
+        {% get_placeholder_plugins "program_cover" program_page as plugins or %}
+            <div class="program-glimpse__empty">{% trans 'Cover' %}</div>
+        {% endget_placeholder_plugins %}
+        {% blockplugin plugins.0 %}
+        <img src="{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
+            srcset="
+            {% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
+            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+            {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+            "
+            sizes="300px"
+            alt=""
+        />
+        {% endblockplugin %}
+        </a>
     </div>
     <div class="program-glimpse__content">
         <div class="program-glimpse__wrapper">
-            <h{{ header_level|default:3 }} class="program-glimpse__title">{{ program_page.get_title }}</h{{ header_level|default:3 }}>
+            <h{{ header_level|default:3 }} class="program-glimpse__title">
+                <a href="{{ program.extended_object.get_absolute_url }}" class="program-glimpse__link program-glimpse__stretched-link">
+                    {{ program_page.get_title }}
+                </a>
+            </h{{ header_level|default:3 }}>
             <p>
                 {% show_placeholder "program_excerpt" program_page %}
             </p>
         </div>
     </div>
-</a>
+</div>
 {% endwith %}

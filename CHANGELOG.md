@@ -55,6 +55,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add context for screen reader users on search filters "more options" buttons
 - On course page, make the organization image link clearer for
   screen reader users with a better alternative text
+- Change how program glimpses HTML is structured to be clearer when using
+  a screen reader
 
 ### Fixed
 
