@@ -62,6 +62,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix course run deletion when translation title is empty
 - On course page, make the course title the first thing that is read to
   screen readers (instead of the badges)
+- Fix program glimpse heading level being too high on course detail page
 
 ## [2.13.0] - 2022-02-18
 
