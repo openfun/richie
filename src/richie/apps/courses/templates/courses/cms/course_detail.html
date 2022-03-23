@@ -395,7 +395,7 @@
                                 </h2>
                                 <div class="section__items section__items--programs">
                                     {% for program in page_obj.object_list %}
-                                        {% include "courses/cms/fragment_program_glimpse.html" with program=program %}
+                                        {% include "courses/cms/fragment_program_glimpse.html" with program=program header_level=3 %}
                                     {% endfor %}
                                 </div>
                                 {% if paginator.num_pages > 1 %}
