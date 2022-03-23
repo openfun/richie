@@ -40,6 +40,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   excerpt, Program body and Person main content
 - Use anchors instead of buttons in search pagination to let users open pages
   in new tabs if they want
+- On course page, make the organization image link clearer for
+  screen reader users with a better alternative text
 
 ### Fixed
 

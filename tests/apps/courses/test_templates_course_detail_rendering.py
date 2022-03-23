@@ -454,15 +454,17 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
 
         self.assertEqual(response.status_code, 200)
         pattern = (
-            r'<a href="{url:s}" title="{title:s}" class="subheader__cartouche" '
+            r'<a href="{url:s}" title="{title:s}" aria-label="{title:s}" class="subheader__cartouche" '
             r'property="provider" typeof="CollegeOrUniversity">'
             r'<meta property="name" content="{title:s}">'
             r'<meta property="url" content="http://example.com{url:s}">'
             r'<div class="subheader__media">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
+            r'<img alt="" src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
         ).format(  # pylint: disable=consider-using-f-string
             url=organizations[0].extended_object.get_absolute_url(),
-            title=organizations[0].extended_object.get_title(),
+            title="Main organization &#34;"
+            + organizations[0].extended_object.get_title()
+            + "&#34;",
         )
         self.assertIsNotNone(re.search(pattern, str(content)))
 
