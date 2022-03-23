@@ -48,21 +48,6 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
         )}
       </div>
       <div className="course-glimpse__content">
-        {course.icon ? (
-          <div className="course-glimpse__icon">
-            <span className="category-badge">
-              {/* alt forced to empty string because it's a decorative image */}
-              <img
-                alt=""
-                className="category-badge__icon"
-                sizes={course.icon.sizes}
-                src={course.icon.src}
-                srcSet={course.icon.srcset}
-              />
-              <span className="category-badge__title">{course.icon.title}</span>
-            </span>
-          </div>
-        ) : null}
         <div className="course-glimpse__wrapper">
           <h3 className="course-glimpse__title">{course.title}</h3>
           {course.organization_highlighted_cover_image ? (
@@ -85,6 +70,21 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
             <span>{course.code || '-'}</span>
           </div>
         </div>
+        {course.icon ? (
+          <div className="course-glimpse__icon">
+            <span className="category-badge">
+              {/* alt forced to empty string because it's a decorative image */}
+              <img
+                alt=""
+                className="category-badge__icon"
+                sizes={course.icon.sizes}
+                src={course.icon.src}
+                srcSet={course.icon.srcset}
+              />
+              <span className="category-badge__title">{course.icon.title}</span>
+            </span>
+          </div>
+        ) : null}
         <CourseGlimpseFooter context={context} course={course} />
       </div>
     </a>

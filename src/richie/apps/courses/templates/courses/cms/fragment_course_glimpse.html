@@ -21,14 +21,6 @@
         {% endblockplugin %}
     </div>
     <div class="course-{{ course_variant }}__content">
-        {% get_placeholder_plugins "course_icons" course_page as icon_plugins %}
-        {% if icon_plugins %}
-        <div class="course-{{ course_variant }}__icon">
-            {% with category_variant="badge" has_link=False %}
-                {% render_plugin icon_plugins.0 %}
-            {% endwith %}
-        </div>
-        {% endif %}
         <div class="course-{{ course_variant }}__wrapper">
             <h{{ header_level|default:3 }} class="course-{{ course_variant }}__title">{{ course_page.get_title }}</h{{ header_level|default:3 }}>
             {% if main_organization %}
@@ -68,6 +60,15 @@
                 <span>{% if course.code %}{{ course.code }}{% else %}-{% endif %}</span>
             </div>
         </div>
+
+        {% get_placeholder_plugins "course_icons" course_page as icon_plugins %}
+        {% if icon_plugins %}
+        <div class="course-{{ course_variant }}__icon">
+            {% with category_variant="badge" has_link=False %}
+                {% render_plugin icon_plugins.0 %}
+            {% endwith %}
+        </div>
+        {% endif %}
 
         {% block course_glimpse_footer %}
         <div class="course-{{ course_variant }}-footer">

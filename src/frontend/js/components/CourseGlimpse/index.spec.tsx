@@ -17,7 +17,13 @@ describe('components/CourseGlimpse', () => {
     },
     duration: '3 months',
     effort: '3 hours',
-    icon: null,
+    icon: {
+      sizes: '60px',
+      src: '/thumbs/icon_small.png',
+      srcset: 'some srcset',
+      title: 'Some icon',
+      color: 'red',
+    },
     id: '742',
     organization_highlighted: 'Some Organization',
     organization_highlighted_cover_image: {
@@ -50,6 +56,9 @@ describe('components/CourseGlimpse', () => {
         />
       </IntlProvider>,
     );
+
+    // first text we encounter should be the title, so that screen reader users get it first
+    expect(container.textContent?.indexOf('Course 42')).toBe(0);
 
     // The link that wraps the course glimpse should have no title as its content is explicit enough
     expect(screen.getByRole('link')).not.toHaveAttribute('title');
