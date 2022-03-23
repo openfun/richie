@@ -7,6 +7,7 @@ import re
 from django import forms
 from django.conf import settings
 
+import lxml.html
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
 
@@ -97,21 +98,18 @@ class ProgramPluginTestCase(CMSTestCase):
         # The program's name should be present as a link to the cms page
         self.assertContains(
             response,
-            '<a href="/en/public-title/" class="program-glimpse program-glimpse--link',
+            '<a href="/en/public-title/" class="program-glimpse__link',
             status_code=200,
         )
         # The program's title should be wrapped in a h2
-        program_title = program.public_extension.extended_object.get_title()
-        self.assertContains(
-            response,
-            f'<h2 class="program-glimpse__title">{program_title:s}</h2>',
-            html=True,
-        )
+        pattern = r'<h2 class="program-glimpse__title">.*public title.*</h2>'
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
         self.assertNotContains(response, "draft title")
 
         # Program's cover should be present
         pattern = (
-            r'<div class="program-glimpse__media">'
+            r'<div class="program-glimpse__media" aria-hidden="true">'
+            r'<a class="program-glimpse__stretched-link" tabindex="-1" href="/en/public-title/">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )
@@ -122,12 +120,15 @@ class ProgramPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            '<a href="/fr/titre-public/" class="program-glimpse program-glimpse--link',
+            '<a href="/fr/titre-public/" class="program-glimpse__link',
             status_code=200,
         )
+        pattern = r'<h2 class="program-glimpse__title">.*titre public.*</h2>'
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
         # pylint: disable=no-member
         pattern = (
-            r'<div class="program-glimpse__media">'
+            r'<div class="program-glimpse__media" aria-hidden="true">'
+            r'<a class="program-glimpse__stretched-link" tabindex="-1" href="/fr/titre-public/">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )
@@ -201,27 +202,24 @@ class ProgramPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="en")
         response = self.client.get(url)
 
-        # Program's name should be present as a link to the cms page
-        self.assertContains(
-            response,
-            '<a href="/en/programme-publique/" class="program-glimpse program-glimpse--link" >',
-            status_code=200,
-        )
-        # The program's full name should be wrapped in a h2
-        self.assertContains(
-            response,
-            '<h2 class="program-glimpse__title">programme publique</h2>',
-            html=True,
-        )
+        html = lxml.html.fromstring(response.content)
+
+        # The program's full name should be wrapped in a link within an h2
+        title = html.cssselect(".program-glimpse__title")[0]
+        link = title.cssselect(".program-glimpse__link")[0]
+        self.assertEqual(link.text_content().strip(), "programme publique")
         self.assertNotContains(response, "public program")
 
         # Program's cover should be present
-        pattern = (
-            r'<div class="program-glimpse__media">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
-            r'.*alt=""'
+        cover = html.cssselect(".program-glimpse__media")[0]
+        self.assertEqual(cover.get("aria-hidden"), "true")
+        img = cover.cssselect("img")[0]
+        self.assertIsNotNone(
+            re.search(
+                r"/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170",
+                img.get("src"),
+            )
         )
-        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
     def test_cms_plugins_program_fallback_when_published_unpublished(self):
         """
