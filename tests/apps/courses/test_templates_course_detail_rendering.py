@@ -9,9 +9,11 @@ from django.test.utils import override_settings
 from django.utils import dateformat, timezone
 
 import htmlmin
+import lxml.html
 import pytz
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
+from lxml import etree
 
 from richie.apps.core.factories import PageFactory, UserFactory
 from richie.apps.courses.cms_plugins import LicencePlugin
@@ -448,25 +450,29 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         course = CourseFactory(fill_organizations=organizations)
 
         response = self.client.get(course.extended_object.get_absolute_url())
-        content = htmlmin.minify(
-            response.content.decode("UTF-8"), remove_optional_attribute_quotes=False
+        self.assertEqual(response.status_code, 200)
+        html = lxml.html.fromstring(response.content)
+
+        # Check the main organization HTML fragment
+        fragment = str(etree.tostring(html.cssselect(".subheader__cartouche")[0]))
+        url=organizations[0].extended_object.get_absolute_url()
+        title=f"Main organization &quot;{organizations[0].extended_object.get_title()}&quot;"
+
+        self.assertIn(f'<meta property="name" content="{title:s}"/>', fragment)
+        self.assertIn(f'<meta property="url" content="http://example.com{url:s}"/>', fragment)
+        self.assertIn(
+            (
+                f'<a href="{url:s}" title="{title:s}" aria-label="{title:s}" '
+                f'class="subheader__cartouche" property="provider" typeof="CollegeOrUniversity">'
+            ),
+            fragment
         )
 
-        self.assertEqual(response.status_code, 200)
         pattern = (
-            r'<a href="{url:s}" title="{title:s}" aria-label="{title:s}" class="subheader__cartouche" '
-            r'property="provider" typeof="CollegeOrUniversity">'
-            r'<meta property="name" content="{title:s}">'
-            r'<meta property="url" content="http://example.com{url:s}">'
-            r'<div class="subheader__media">'
-            r'<img alt="" src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
-        ).format(  # pylint: disable=consider-using-f-string
-            url=organizations[0].extended_object.get_absolute_url(),
-            title="Main organization &#34;"
-            + organizations[0].extended_object.get_title()
-            + "&#34;",
+            r'<img src="/media/filer_public_thumbnails/filer_public/[^>]+logo\.jpg__200x113[^>]+'
+            r'alt="" sizes="30vw" property="logo"/>'
         )
-        self.assertIsNotNone(re.search(pattern, str(content)))
+        self.assertIsNotNone(re.search(pattern, fragment))
 
     def test_templates_course_detail_no_programs(self):
         """
