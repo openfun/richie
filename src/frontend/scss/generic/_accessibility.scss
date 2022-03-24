@@ -2,23 +2,20 @@
 // to users that need it.
 
 // Screen reader only content
-.offscreen {
+// code taken from orange's fork of bootstrap
+// https://github.com/Orange-OpenSource/Orange-Boosted-Bootstrap/blob/v5.1.3/scss/mixins/_visually-hidden.scss#L8
+.offscreen,
+.offscreen-focusable:not(:focus) {
   position: absolute;
-  left: -10000px;
-  top: auto;
   width: 1px;
   height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
-
-  // Screen reader toggleable function, including offscreen navigation
-  &:active,
-  &:focus {
-    left: 5px;
-    top: 5px;
-    width: auto;
-    height: auto;
-    overflow: auto;
-  }
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 // Skip to content button styles for it to be rendered on link focus
@@ -28,6 +25,9 @@
   background-color: r-color('midnightblue');
   padding: 1rem;
   z-index: 100000;
+  position: absolute;
+  left: 5px;
+  top: 5px;
 
   &:active,
   &:hover,
