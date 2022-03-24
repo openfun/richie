@@ -113,7 +113,9 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(
-            response, "<title>Very interesting course - example.com</title>", html=True
+            response,
+            "<title>Very interesting course - Course - example.com</title>",
+            html=True,
         )
         self.assertContains(
             response,
@@ -272,7 +274,9 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(
-            response, "<title>Very interesting course - example.com</title>", html=True
+            response,
+            "<title>Very interesting course - Course - example.com</title>",
+            html=True,
         )
         self.assertContains(
             response,

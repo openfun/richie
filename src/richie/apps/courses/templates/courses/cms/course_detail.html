@@ -1,6 +1,11 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n extra_tags pagination_tags static thumbnail humanize %}
 
+{% block head_title %}
+    {% page_attribute "page_title" as course_title %}
+    {% blocktrans with course_title=course_title %}{{ course_title }} - Course{% endblocktrans %}
+{% endblock head_title %}
+
 {% block meta_index_rules %}
     {# Make sure course snapshot pages are not indexed by search engines #}
     {% if current_page.parent_page.course %}
