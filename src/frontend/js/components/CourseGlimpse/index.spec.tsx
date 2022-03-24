@@ -55,9 +55,12 @@ describe('components/CourseGlimpse', () => {
     expect(screen.getByRole('link')).not.toHaveAttribute('title');
     // The course glimpse shows the relevant information
     screen.getByRole('heading', { name: 'Course 42', level: 3 });
+    screen.getByLabelText('Course code');
     screen.getByText('123abc');
+    screen.getByLabelText('Organization');
     screen.getByText('Some Organization');
     // Matches on 'Starts on Mar 14, 2019', date is wrapped with intl <span>
+    screen.getByLabelText('Course date');
     screen.getByText('Starts on Mar 14, 2019');
 
     // Check course logo
