@@ -197,7 +197,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             CourseFactory,
             "course_categories",
-            '<h2 class="course-glimpse__title">{0:s}</h2>',
+            '<span class="course-glimpse__title-text">{0:s}</span>',
         )
 
     @mock.patch(
@@ -407,7 +407,7 @@ class CategoryCMSTestCase(CMSTestCase):
     def test_templates_category_detail_cms_draft_content_courses(self):
         """Validate how a draft category page is displayed with its related courses."""
         self._extension_cms_draft_content(
-            CourseFactory, '<h2 class="course-glimpse__title">{0:s}</h2>'
+            CourseFactory, '<span class="course-glimpse__title-text">{0:s}</span>'
         )
 
     def test_templates_category_detail_cms_draft_content_blogposts(self):

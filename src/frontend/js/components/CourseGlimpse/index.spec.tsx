@@ -61,7 +61,8 @@ describe('components/CourseGlimpse', () => {
     expect(container.textContent?.indexOf('Course 42')).toBe(0);
 
     // The link that wraps the course glimpse should have no title as its content is explicit enough
-    expect(screen.getByRole('link')).not.toHaveAttribute('title');
+    const link = container.querySelector('.course-glimpse__link');
+    expect(link).not.toHaveAttribute('title');
     // The course glimpse shows the relevant information
     screen.getByRole('heading', { name: 'Course 42', level: 3 });
     screen.getByLabelText('Course code');
@@ -76,7 +77,10 @@ describe('components/CourseGlimpse', () => {
     // Check course logo
     const courseGlipseMedia = container.getElementsByClassName('course-glimpse__media');
     expect(courseGlipseMedia.length).toBe(1);
-    const img = courseGlipseMedia[0].firstChild;
+    expect(courseGlipseMedia[0]).toHaveAttribute('aria-hidden', 'true');
+    const mediaLink = courseGlipseMedia[0].firstChild;
+    expect(mediaLink).toHaveAttribute('tabindex', '-1');
+    const img = mediaLink?.firstChild;
     expect(img).toBeInstanceOf(HTMLImageElement);
     // The logo is rendered along with alt text "" as it is decorative and included in a link block
     expect(img).toHaveAttribute('alt', '');

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { CommonDataProps } from 'types/commonDataProps';
@@ -36,25 +36,33 @@ const messages = defineMessages({
 const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataProps) => {
   const intl = useIntl();
   return (
-    <a className="course-glimpse course-glimpse--link" href={course.absolute_url}>
-      <div className="course-glimpse__media">
-        {/* alt forced to empty string because it's a decorative image */}
-        {course.cover_image ? (
-          <img
-            alt=""
-            sizes={course.cover_image.sizes}
-            src={course.cover_image.src}
-            srcSet={course.cover_image.srcset}
-          />
-        ) : (
-          <div className="course-glimpse__media__empty">
-            <FormattedMessage {...messages.cover} />
-          </div>
-        )}
+    <div className="course-glimpse">
+      {/* the media link is only here for mouse users, so hide it for keyboard/screen reader users.
+      Keyboard/sr will focus the link on the title */}
+      <div aria-hidden="true" className="course-glimpse__media">
+        <a tabIndex={-1} href={course.absolute_url}>
+          {/* alt forced to empty string because it's a decorative image */}
+          {course.cover_image ? (
+            <img
+              alt=""
+              sizes={course.cover_image.sizes}
+              src={course.cover_image.src}
+              srcSet={course.cover_image.srcset}
+            />
+          ) : (
+            <div className="course-glimpse__media__empty">
+              <FormattedMessage {...messages.cover} />
+            </div>
+          )}
+        </a>
       </div>
       <div className="course-glimpse__content">
         <div className="course-glimpse__wrapper">
-          <h3 className="course-glimpse__title">{course.title}</h3>
+          <h3 className="course-glimpse__title">
+            <a className="course-glimpse__link" href={course.absolute_url}>
+              <span className="course-glimpse__title-text">{course.title}</span>
+            </a>
+          </h3>
           {course.organization_highlighted_cover_image ? (
             <div className="course-glimpse__organization-logo">
               {/* alt forced to empty string because the organization name is rendered after */}
@@ -95,7 +103,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
         ) : null}
         <CourseGlimpseFooter context={context} course={course} />
       </div>
-    </a>
+    </div>
   );
 };
 

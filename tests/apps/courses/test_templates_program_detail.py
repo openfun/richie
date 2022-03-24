@@ -135,7 +135,7 @@ class ProgramCMSTestCase(CMSTestCase):
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<h3 class="course-glimpse__title">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+                '<span class="course-glimpse__title-text">{0:s}</span>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -184,25 +184,26 @@ class ProgramCMSTestCase(CMSTestCase):
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<a class="course-glimpse" '
+                '<a class="course-glimpse__link" '
                 f'href="{course.extended_object.get_absolute_url():s}"',
             )
             self.assertContains(
                 response,
-                '<h3 class="course-glimpse__title">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+                '<span class="course-glimpse__title-text">{0:s}</span>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
                     course.extended_object.get_title()
                 ),
                 html=True,
             )
         self.assertContains(
             response,
-            '<a class="course-glimpse course-glimpse--draft" '
-            f'href="{courses[2].extended_object.get_absolute_url():s}"',
+            '<div class="course-glimpse course-glimpse--draft">'
+            '<div aria-hidden="true" class="course-glimpse__media">'
+            f'<a tabindex="-1" href="{courses[2].extended_object.get_absolute_url():s}"',
         )
 
         self.assertContains(
             response,
-            '<h3 class="course-glimpse__title">{0:s}</h3>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+            '<span class="course-glimpse__title-text">{0:s}</span>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
                 courses[2].extended_object.get_title()
             ),
             html=True,

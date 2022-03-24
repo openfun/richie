@@ -43,6 +43,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   in new tabs if they want
 - Improve the `offscreen` class implementation to prevent potential visual
   issues for sighted user keyboards
+- Change how course glimpse anchor is structured (allows text selection
+  in the course glimpse + better screen reader user experience)
 
 ### Fixed
 
