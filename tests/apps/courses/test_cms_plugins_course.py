@@ -74,7 +74,7 @@ class CoursePluginTestCase(TestCase):
 
         # Create a course with a page in both english and french
         organization = OrganizationFactory(
-            page_title="public title",
+            page_title="organization public title",
             should_publish=True,
             fill_logo={
                 "original_filename": "org_logo.jpg",
@@ -83,7 +83,7 @@ class CoursePluginTestCase(TestCase):
         )
 
         course = CourseFactory(
-            page_title={"en": "public title", "fr": "titre public"},
+            page_title={"en": "course public title", "fr": "titre public cours"},
             fill_organizations=[organization],
             fill_icons=[icon_category_main, icon_category_secondary],
             fill_cover={
@@ -111,7 +111,7 @@ class CoursePluginTestCase(TestCase):
 
         # The course's url should be present
         self.assertIn(
-            '<a class="course-glimpse" href="/en/public-title/"',
+            '<a class="course-glimpse__link" href="/en/course-public-title/"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -119,7 +119,7 @@ class CoursePluginTestCase(TestCase):
         course_title = course_page.get_title()
         self.assertContains(
             response,
-            f'<h2 class="course-glimpse__title">{course_title:s}</h2>',
+            f'<span class="course-glimpse__title-text">{course_title:s}</span>',
             status_code=200,
         )
         # The course's main organization should be present
@@ -141,7 +141,8 @@ class CoursePluginTestCase(TestCase):
 
         # The course's cover should be present
         pattern = (
-            r'<div class="course-glimpse__media">'
+            r'<div aria-hidden="true" class="course-glimpse__media">'
+            r'<a tabindex="-1" href="/en/course-public-title/">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )
@@ -170,7 +171,7 @@ class CoursePluginTestCase(TestCase):
 
         # The course's url should be present
         self.assertIn(
-            '<a class="course-glimpse" href="/fr/titre-public/"',
+            '<a class="course-glimpse__link" href="/fr/titre-public-cours/"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -178,7 +179,7 @@ class CoursePluginTestCase(TestCase):
         course_title = course_page.get_title()
         self.assertContains(
             response,
-            f'<h2 class="course-glimpse__title">{course_title:s}</h2>',
+            f'<span class="course-glimpse__title-text">{course_title:s}</span>',
             status_code=200,
         )
 
@@ -209,7 +210,8 @@ class CoursePluginTestCase(TestCase):
 
         # The course's cover should be present
         pattern = (
-            r'<div class="course-glimpse__media">'
+            r'<div aria-hidden="true" class="course-glimpse__media">'
+            r'<a tabindex="-1" href="/fr/titre-public-cours/">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )
@@ -334,20 +336,21 @@ class CoursePluginTestCase(TestCase):
         # The course path in french should be in the url but the locale in the
         # url should remain "en"
         self.assertIn(
-            '<a class="course-glimpse" href="/en/cours-public/"',
+            '<a class="course-glimpse__link" href="/en/cours-public/"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
         # The course's name should be present
         self.assertIn(
-            '<h2 class="course-glimpse__title">cours public</h2>',
+            '<span class="course-glimpse__title-text">cours public</span>',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
         self.assertNotContains(response, "public course")
 
         # The course's cover should be present
         pattern = (
-            r'<div class="course-glimpse__media">'
+            r'<div aria-hidden="true" class="course-glimpse__media">'
+            r'<a tabindex="-1" href="/en/cours-public/">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )

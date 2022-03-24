@@ -430,7 +430,7 @@ class PersonCMSTestCase(CMSTestCase):
         # The course should be present on the page
         self.assertContains(
             response,
-            '<h2 class="course-glimpse__title">{0:s}</h2>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
+            '<span class="course-glimpse__title-text">{0:s}</span>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
                 course.extended_object.get_title()
             ),
             html=True,
