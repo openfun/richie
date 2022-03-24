@@ -40,6 +40,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   excerpt, Program body and Person main content
 - Use anchors instead of buttons in search pagination to let users open pages
   in new tabs if they want
+- Improve the `offscreen` class implementation to prevent potential visual
+  issues for sighted user keyboards
 
 ### Fixed
 
