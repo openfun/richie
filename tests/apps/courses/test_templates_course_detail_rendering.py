@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from django.test.utils import override_settings
 from django.utils import dateformat, timezone
 
-import htmlmin
+import lxml.html
 import pytz
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
@@ -450,25 +450,37 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             2, fill_logo=True, should_publish=True
         )
         course = CourseFactory(fill_organizations=organizations)
+        url = organizations[0].extended_object.get_absolute_url()
+        title = organizations[0].extended_object.get_title()
+        label = f'Main organization "{title}"'
 
         response = self.client.get(course.extended_object.get_absolute_url())
-        content = htmlmin.minify(
-            response.content.decode("UTF-8"), remove_optional_attribute_quotes=False
-        )
-
         self.assertEqual(response.status_code, 200)
-        pattern = (
-            r'<a href="{url:s}" title="{title:s}" class="subheader__cartouche" '
-            r'property="provider" typeof="CollegeOrUniversity">'
-            r'<meta property="name" content="{title:s}">'
-            r'<meta property="url" content="http://example.com{url:s}">'
-            r'<div class="subheader__media">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
-        ).format(  # pylint: disable=consider-using-f-string
-            url=organizations[0].extended_object.get_absolute_url(),
-            title=organizations[0].extended_object.get_title(),
+
+        html = lxml.html.fromstring(response.content)
+
+        link = html.cssselect(".subheader__cartouche")[0]
+        self.assertEqual(link.get("title"), label)
+        self.assertEqual(link.get("aria-label"), label)
+        self.assertEqual(link.get("href"), url)
+        self.assertEqual(link.get("property"), "provider")
+        self.assertEqual(link.get("typeof"), "CollegeOrUniversity")
+
+        meta_name = link.cssselect('meta[property="name"]')[0]
+        self.assertEqual(meta_name.get("content"), title)
+        meta_url = link.cssselect('meta[property="url"]')[0]
+        self.assertEqual(meta_url.get("content"), f"http://example.com{url:s}")
+
+        img = link.cssselect("img")[0]
+        self.assertEqual(img.get("alt"), "")
+        self.assertEqual(img.get("property"), "logo")
+        self.assertEqual(img.get("sizes"), "30vw")
+        self.assertIsNotNone(
+            re.search(
+                r"/media/filer_public_thumbnails/filer_public/[^>]+logo\.jpg__200x113[^>]+",
+                img.get("src"),
+            )
         )
-        self.assertIsNotNone(re.search(pattern, str(content)))
 
     def test_templates_course_detail_no_programs(self):
         """
