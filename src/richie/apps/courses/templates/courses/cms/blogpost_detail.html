@@ -125,7 +125,8 @@
                                             {% if instance.picture.width >= 2328 %},{% thumbnail instance.picture 2328x9312 replace_alpha='#FFFFFF' subject_location=instance.picture.subject_location %} 2325w{% endif %} {# 3x776 #}
                                         "
                                         sizes="(min-width: 1200px) 775px, (min-width: 992px) 652px, (min-width: 768px) 720px, (min-width: 576px) 540px, 100vw"
-                                        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'blog post cover image' %}{% endif %}"
+                                        {% comment %} the cover image is decorative {% endcomment %}
+                                        alt=""
                                     />
                                 {% endblockplugin %}
                             </div>

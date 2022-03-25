@@ -43,7 +43,8 @@
                                 {% if instance.picture.width >= 3420 %},{% thumbnail instance.picture 3420x600 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 3420w{% endif %}
                             "
                             sizes="1140px"
-                            alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'category banner' %}{% endif %}"
+                            {% comment %} this is purely a decorative image, don't set any alternative text {% endcomment %}
+                            alt=""
                         />
                     {% endblockplugin %}
                 </div>
@@ -61,7 +62,8 @@
                                 {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
                             "
                             sizes="200px"
-                            alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'category logo' %}{% endif %}"
+                            {% comment %} this is purely a decorative image, don't set any alternative text {% endcomment %}
+                            alt=""
                         />
                     {% endblockplugin %}
                 </div>
