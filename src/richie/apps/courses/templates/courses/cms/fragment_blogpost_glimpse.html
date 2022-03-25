@@ -36,20 +36,20 @@
 {% elif blogpost_variant == "mini" %}
     <a href="{{ blogpost_page.get_absolute_url }}" class="blogpost-{{ blogpost_variant }}{% if blogpost_page.publisher_is_draft %} blogpost-{{ blogpost_variant }}--draft{% endif %}">
         <div class="blogpost-{{ blogpost_variant }}__media">
-            {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
-                <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
-            {% endget_placeholder_plugins %}
-            {% blockplugin plugins.0 %}
-                <img src="{% thumbnail instance.picture 150x85 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
-                    srcset="
-                    {% thumbnail instance.picture 150x85 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 150w
-                    {% if instance.picture.width >= 300 %},{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w{% endif %}
-                    {% if instance.picture.width >= 450 %},{% thumbnail instance.picture 450x255 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 450w{% endif %}
-                    "
-                    sizes="150px"
-                    alt=""
-                />
-            {% endblockplugin %}
+                {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
+                    <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
+                {% endget_placeholder_plugins %}
+                {% blockplugin plugins.0 %}
+                    <img src="{% thumbnail instance.picture 150x85 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
+                        srcset="
+                        {% thumbnail instance.picture 150x85 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 150w
+                        {% if instance.picture.width >= 300 %},{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w{% endif %}
+                        {% if instance.picture.width >= 450 %},{% thumbnail instance.picture 450x255 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 450w{% endif %}
+                        "
+                        sizes="150px"
+                        alt=""
+                    />
+                {% endblockplugin %}
         </div>
         <div class="blogpost-{{ blogpost_variant }}__content">
             <div class="blogpost-{{ blogpost_variant }}__wrapper">
@@ -61,28 +61,29 @@
                 <h{{ header_level|default:3 }} class="blogpost-{{ blogpost_variant }}__title">{{ blogpost_page.get_title }}</h{{ header_level|default:3 }}>
             </div>
         </div>
-    </a>
+                    </a>
 {% else %}
-    <a href="{{ blogpost.extended_object.get_absolute_url }}"
-        class="blogpost-{{ blogpost_variant }}{% if blogpost_page.publisher_is_draft %} blogpost-{{ blogpost_variant }}--draft{% endif %}">
+    <div class="blogpost-{{ blogpost_variant }}{% if blogpost_page.publisher_is_draft %} blogpost-{{ blogpost_variant }}--draft{% endif %}">
         {% if blogpost_page.publication_date %}
         <p class="blogpost-{{ blogpost_variant }}__date">
             {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
         </p>
         {% endif %}
-        <div class="blogpost-{{ blogpost_variant }}__media">
-            {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
-                <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
-            {% endget_placeholder_plugins %}
+        <div class="blogpost-{{ blogpost_variant }}__media" aria-hidden="true">
+            <a href="{{ blogpost_page.get_absolute_url }}" tabindex="-1">
+                {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
+                    <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
+                {% endget_placeholder_plugins %}
 
-            {% blockplugin plugins.0 %}
-            <img src="{% thumbnail instance.picture 300x170 crop replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
-                srcset="{% thumbnail instance.picture 800x480 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
-                {% if instance.picture.width >= 1600 %},{% thumbnail instance.picture 1600x960 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                {% if instance.picture.width >= 2400 %},{% thumbnail instance.picture 2400x1440 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}"
-                sizes="300px"
-                alt="">
-            {% endblockplugin %}
+                {% blockplugin plugins.0 %}
+                <img src="{% thumbnail instance.picture 300x170 crop replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
+                    srcset="{% thumbnail instance.picture 800x480 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
+                    {% if instance.picture.width >= 1600 %},{% thumbnail instance.picture 1600x960 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                    {% if instance.picture.width >= 2400 %},{% thumbnail instance.picture 2400x1440 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}"
+                    sizes="300px"
+                    alt="">
+                {% endblockplugin %}
+            </a>
         </div>
         <div class="blogpost-{{ blogpost_variant }}__content">
             <div class="blogpost-{{ blogpost_variant }}__wrapper">
@@ -92,14 +93,18 @@
                     {% endwith %}
                 </div>
 
-                <h{{ header_level|default:3 }} class="blogpost-{{ blogpost_variant }}__title">{{ blogpost_page.get_title }}</h{{ header_level|default:3 }}>
+                <h{{ header_level|default:3 }} class="blogpost-{{ blogpost_variant }}__title">
+                    <a href="{{ blogpost.extended_object.get_absolute_url }}" class="blogpost-{{ blogpost_variant }}__link">
+                        {{ blogpost_page.get_title }}
+                    </a>
+                </h{{ header_level|default:3 }}>
 
                 <p class="blogpost-{{ blogpost_variant }}__excerpt">
                     {% show_placeholder "excerpt" blogpost_page %}
                 </p>
             </div>
         </div>
-    </a>
+    </div>
 {% endif %}
 
 {% endwith %}
