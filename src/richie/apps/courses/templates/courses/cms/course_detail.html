@@ -47,9 +47,18 @@
         <div class="subheader__container">
             <div class="subheader__intro">
                 <div class="subheader__main">
+                    {% block title %}
+                    <h1 class="subheader__title" property="name">{% render_model current_page "title" %}</h1>
+                    {% if course.code or current_page.publisher_is_draft %}
+                        <div class="subheader__code" property="courseCode" content="{{ course.code|default:'' }}">
+                            {% trans "Ref. " %}{% render_model course "code" "code,is_listed" "" "default:'...'" %}
+                        </div>
+                    {% endif %}
+                    {% endblock title %}
+
                     {% block categories %}
                     {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_icons" or not current_page|is_empty_placeholder:"course_categories" %}
-                    <div class="category-badge-list">
+                    <div class="category-badge-list subheader__badges">
                         <div class="category-badge-list__container">
                         {% with category_variant="badge" %}
                             {% placeholder "course_icons" %}
@@ -65,15 +74,6 @@
                     </div>
                     {% endif %}
                     {% endblock categories %}
-
-                    {% block title %}
-                    <h1 class="subheader__title" property="name">{% render_model current_page "title" %}</h1>
-                    {% if course.code or current_page.publisher_is_draft %}
-                        <div class="subheader__code" property="courseCode" content="{{ course.code|default:'' }}">
-                            {% trans "Ref. " %}{% render_model course "code" "code,is_listed" "" "default:'...'" %}
-                        </div>
-                    {% endif %}
-                    {% endblock title %}
 
                     <div class="subheader__content">
                         {% block synopsis %}

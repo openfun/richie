@@ -67,6 +67,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix course run deletion when translation title is empty
 - Reordered course glimpse text order in the DOM for better screen reader
   support.
+- On course page, make the course title the first thing that is read to
+  screen readers (instead of the badges)
 
 ## [2.13.0] - 2022-02-18
 

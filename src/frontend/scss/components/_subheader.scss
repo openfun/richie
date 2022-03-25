@@ -35,6 +35,12 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
     }
   }
 
+  // we show the badges above the title, but they are after the title in the DOM
+  // for better screen reader support
+  &__badges {
+    order: -1;
+  }
+
   // Main document title
   &__code {
     @include make-container();
