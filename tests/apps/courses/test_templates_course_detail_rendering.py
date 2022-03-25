@@ -1627,3 +1627,197 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, course_run_title_archived_hidden)
         self.assertContains(response, "Archived")
+
+    @timezone.override(pytz.utc)
+    def test_templates_course_detail_open_runs_presentation_ordering(
+        self,
+    ):
+        """
+        Verify the order of 4 open for enrollment course runs.
+        Firstly runs that contains the language of the current user and only after the runs that
+        don't match the current user authenticated language. On both groups, they should be sorted
+        by course start date.
+        """
+        course = CourseFactory(page_title="my course")
+        page = course.extended_object
+        course_run_title_fr_minus_2h = "French course run that have started -2h"
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_fr_minus_2h,
+            languages=["fr"],
+            start=self.now - timedelta(hours=2),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now - timedelta(hours=2),
+            enrollment_end=self.now + timedelta(hours=1),
+        )
+        course_run_title_fr_en_plus_1h = (
+            "Course run in both English and French that starts +1h"
+        )
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_fr_en_plus_1h,
+            languages=["en", "fr"],
+            start=self.now + timedelta(hours=1),
+            end=self.now + timedelta(hours=3),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=2),
+        )
+        course_run_title_en_minus_1h = "A course run in English that started -1h"
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_en_minus_1h,
+            languages=["en"],
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=1),
+        )
+        course_run_title_fr_plus_2h = (
+            "French course run that have will start on the next 2h"
+        )
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_fr_plus_2h,
+            languages=["fr"],
+            start=self.now + timedelta(hours=2),
+            end=self.now + timedelta(hours=3),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=1),
+        )
+        # viewing the page as en language
+        self.assertTrue(page.publish("en"))
+
+        # view mode
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        response_content = response.content.decode("UTF-8")
+
+        # get each course title index position
+        fr_minus_2h = response_content.index(course_run_title_fr_minus_2h)
+        fr_en_plus_1h_pos = response_content.index(course_run_title_fr_en_plus_1h)
+        en_minus_1h_pos = response_content.index(course_run_title_en_minus_1h)
+        fr_plus_2h = response_content.index(course_run_title_fr_plus_2h)
+
+        # Check the order of the open runs (language; start run):
+        # 1. en    -1h
+        # 2. fr,en +1h
+        # 3. fr    -2h
+        # 4. fr    +2h
+        self.assertLess(en_minus_1h_pos, fr_en_plus_1h_pos)
+        self.assertLess(fr_en_plus_1h_pos, fr_minus_2h)
+        self.assertLess(fr_minus_2h, fr_plus_2h)
+
+    @timezone.override(pytz.utc)
+    def test_templates_course_detail_scroll_to_open_course_runs_multiple_runs(
+        self,
+    ):
+        """
+        Test if it is shown an anchor that scrolls to the multiple open course runs
+        """
+        course = CourseFactory(page_title="my course")
+        page = course.extended_object
+        for i in range(2):  # pylint: disable=unused-variable
+            CourseRunFactory(
+                direct_course=course,
+                start=self.now - timedelta(hours=1),
+                end=self.now + timedelta(hours=2),
+                enrollment_start=self.now - timedelta(hours=1),
+                enrollment_end=self.now + timedelta(hours=2),
+            )
+
+        self.assertTrue(page.publish("en"))
+
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response, "2 course runs are currently open for this course"
+        )
+
+    @timezone.override(pytz.utc)
+    def test_templates_course_detail_scroll_to_open_course_runs_single_run(
+        self,
+    ):
+        """
+        Test if the anchor that scrolls the viewport to the open course runs is missing
+        when there is a single open course run.
+        """
+        course = CourseFactory(page_title="my course")
+        page = course.extended_object
+
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=2),
+        )
+
+        self.assertTrue(page.publish("en"))
+
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(
+            response, "course runs are currently open for this course"
+        )
+
+    @timezone.override(pytz.utc)
+    def test_templates_course_detail_scroll_to_open_course_runs_no_open_runs(
+        self,
+    ):
+        """
+        Test if the anchor that scrolls the viewport to the open course runs is missing
+        when there is a single open course run.
+        """
+        course = CourseFactory(page_title="my course")
+        page = course.extended_object
+
+        self.assertTrue(page.publish("en"))
+
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(
+            response, "course runs are currently open for this course"
+        )
+
+    def test_templates_course_detail_no_runs_msg(self):
+        """
+        Test if the `No course runs` message is displayed when the course doesn't have any run.
+        """
+        course = CourseFactory()
+        page = course.extended_object
+
+        self.assertTrue(page.publish("en"))
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, "No course runs")
+
+    def test_templates_course_detail_no_other_runs_msg(self):
+        """
+        Test if the `No other course runs` message is displayed when there is a single open
+        course run.
+        """
+        course = CourseFactory()
+        page = course.extended_object
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=2),
+        )
+
+        self.assertTrue(page.publish("en"))
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, "No other course runs")

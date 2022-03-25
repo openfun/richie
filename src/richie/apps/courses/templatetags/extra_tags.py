@@ -5,7 +5,7 @@ from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.defaultfilters import stringfilter
 from django.template.loader import render_to_string
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.utils.translation import get_language
 from django.utils.translation import gettext as _
 from django.utils.translation import to_locale
@@ -236,6 +236,22 @@ def visible_on_course_page(course_runs, edit_mode_active=None):
     if edit_mode_active:
         return course_runs
     return list(filter(lambda run: run.is_visible_on_course_page, course_runs))
+
+
+@register.filter()
+def sort_runs_by_language_and_start_date(course_runs):
+    """
+    Order course runs by: firstly runs that contains the language of the current user and only
+    after the runs that don't match the current user authenticated language. On both groups, they
+    should be sorted by course start date.
+    """
+    current_language = translation.get_language()
+    return list(
+        sorted(
+            course_runs,
+            key=lambda run: (current_language not in run.languages, run.start),
+        )
+    )
 
 
 @register.simple_tag(takes_context=True)
