@@ -71,7 +71,7 @@ describe('components/SearchFilterGroup', () => {
     screen.getByRole('group', { name: 'Organizations' });
     screen.getByText('Received parent: filter - Value One');
     screen.getByText('Received leaf: filter - Value Two');
-    screen.getByRole('button', { name: 'More options' });
+    screen.getByRole('button', { name: 'More options (Organizations)' });
   });
 
   it('does not render the "More options" button & modal if the filter is not searchable', () => {
