@@ -1,11 +1,4 @@
-import {
-  act,
-  getAllByRole,
-  queryAllByRole,
-  queryAllByTestId,
-  queryByRole,
-  render,
-} from '@testing-library/react';
+import { act, getAllByRole, getByText, queryAllByTestId, render } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { type Manifest, useStepManager } from 'hooks/useStepManager';
 import { StepBreadcrumb } from '.';
@@ -35,7 +28,7 @@ describe('StepBreadcrumb', () => {
 
     expect(getAllByRole(container, 'listitem')).toHaveLength(2);
 
-    const labels = queryAllByRole(container, 'heading', { level: 6 });
+    const labels = queryAllByTestId(container, 'StepBreadcrumb__step__label');
     const stepsIcons = queryAllByTestId(container, 'StepBreadcrumb__step__icon');
     let activeSteps = container.querySelectorAll(
       'li.StepBreadcrumb__step.StepBreadcrumb__step--active',
@@ -91,7 +84,6 @@ describe('StepBreadcrumb', () => {
 
     expect(getAllByRole(container, 'listitem')).toHaveLength(2);
 
-    const labels = queryAllByRole(container, 'heading', { level: 6 });
     const stepsIcons = queryAllByTestId(container, 'StepBreadcrumb__step__icon');
     let activeSteps = container.querySelectorAll(
       'li.StepBreadcrumb__step.StepBreadcrumb__step--active',
@@ -100,9 +92,8 @@ describe('StepBreadcrumb', () => {
       'li.StepBreadcrumb__step.StepBreadcrumb__step--current',
     );
 
-    expect(labels).toHaveLength(2);
-    queryByRole(container, 'heading', { level: 6, name: '0. Step' });
-    queryByRole(container, 'heading', { level: 6, name: '1. Step' });
+    getByText(container, '0. Step', { exact: true });
+    getByText(container, '1. Step', { exact: true });
 
     expect(stepsIcons).toHaveLength(2);
     stepsIcons.forEach((icon) => {
