@@ -264,6 +264,13 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     top: -3.53rem;
     width: 4.3rem;
     z-index: 0;
+
+    img {
+      object-fit: contain;
+      object-position: center;
+      height: 100%;
+      width: 100%;
+    }
   }
 
   &__media {
