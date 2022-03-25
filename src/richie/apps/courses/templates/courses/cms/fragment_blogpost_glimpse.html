@@ -71,8 +71,9 @@
     </div>
 {% else %}
     <div class="blogpost-{{ blogpost_variant }}{% if blogpost_page.publisher_is_draft %} blogpost-{{ blogpost_variant }}--draft{% endif %}">
+        {% comment %} sighted users see the date above the cover image, not announced to screen readers{% endcomment %}
         {% if blogpost_page.publication_date %}
-        <p class="blogpost-{{ blogpost_variant }}__date">
+        <p class="blogpost-{{ blogpost_variant }}__date" aria-hidden="true">
             {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
         </p>
         {% endif %}
@@ -106,6 +107,12 @@
                     </a>
                 </h{{ header_level|default:3 }}>
 
+                {% comment %}screen reader users get the date here, right after the title{% endcomment %}
+                {% if blogpost_page.publication_date %}
+                <p class="offscreen">
+                    {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
+                </p>
+                {% endif %}
                 <p class="blogpost-{{ blogpost_variant }}__excerpt">
                     {% show_placeholder "excerpt" blogpost_page %}
                 </p>
