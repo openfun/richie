@@ -48,6 +48,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   issues for sighted user keyboards
 - Change how course glimpse anchor is structured (allows text selection
   in the course glimpse + better screen reader user experience)
+- Add context for screen reader users on search filters "more options" buttons
 
 ### Fixed
 

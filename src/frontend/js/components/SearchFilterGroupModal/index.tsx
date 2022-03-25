@@ -252,6 +252,7 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
     <Fragment>
       <button className="search-filter-group-modal-button" onClick={() => setModalIsOpen(true)}>
         <FormattedMessage {...messages.moreOptionsButton} />
+        <span className="offscreen">({filter.human_name})</span>
       </button>
       <Modal
         appElement={modalExclude}

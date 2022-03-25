@@ -96,6 +96,8 @@ describe('<SearchFilterGroupModal />', () => {
 
       // The modal is rendered
       const openButton = screen.getByText('More options');
+      // Make sure there is a more explicit text for screen readers
+      screen.getByRole('button', { name: 'More options (Universities)' });
       fireEvent.click(openButton);
       screen.getByText('Loading search results...');
 
