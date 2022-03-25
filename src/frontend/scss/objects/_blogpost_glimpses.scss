@@ -117,7 +117,7 @@ $glimpse-gutter: 0.6rem;
         left: -0.6rem;
       }
 
-      &:first-child {
+      &:first-of-type {
         margin-left: 0;
 
         &::before {
@@ -384,7 +384,7 @@ $glimpse-gutter: 0.6rem;
         left: -0.6rem;
       }
 
-      &:first-child {
+      &:first-of-type {
         margin-left: 0;
 
         &::before {

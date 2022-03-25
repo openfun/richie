@@ -40,6 +40,7 @@
         {% if categories %}
         <div class="category-tag-list category-tag-list--primary">
             <div class="category-tag-list__container">
+                <p class="offscreen">{% trans "Categories" %}</p>
                 {% for category in categories %}
                     {% include "courses/cms/fragment_category_glimpse.html" with category_variant="tag" %}
                 {% endfor %}
@@ -61,6 +62,7 @@
                         {% with category_variant="tag" %}
                             {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
                             <div class="blogpost-detail__theme">
+                                <p class="offscreen">{% trans "Categories" %}</p>
                                 {% placeholder "categories" current_page or %}
                                     <span class="blogpost-detail__empty">{% trans 'No categories yet.' %}</span>
                                 {% endplaceholder %}
