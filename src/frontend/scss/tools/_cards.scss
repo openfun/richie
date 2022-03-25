@@ -93,13 +93,30 @@
   }
 
   // Link modifier disable default common link element behaviors
-  &--link {
+  &--link,
+  &__stretched-link {
     color: inherit;
 
     &:hover {
       color: inherit;
       text-decoration: none;
     }
+  }
+
+  // Taken the "stretched link" component from bootstrap.
+  // A stretched link makes the link clickable in the whole zone
+  // matching the nearest position: relative parent.
+  // So, the whole media or whole content depending on the link location.
+  // Make sure to use this only when the link is the only
+  // interactive element in its container.
+  &__stretched-link::after {
+    bottom: 0;
+    content: '';
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
   }
 
   // Media element
