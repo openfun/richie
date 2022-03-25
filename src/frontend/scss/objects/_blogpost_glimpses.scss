@@ -83,7 +83,13 @@ $glimpse-gutter: 0.6rem;
     color: r-theme-val(blogpost-glimpse, content-color);
   }
 
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
   &__categories {
+    order: -1;
     position: relative;
     margin: 0 0 0.1rem;
     padding-left: calc(10% + 0.2rem);
