@@ -102,6 +102,7 @@
                 {% endif %}
 
                 <div class="blogpost-{{ blogpost_variant }}__categories">
+                    <p class="offscreen">{% trans "Categories" %}</p>
                     {% with category_variant="tag" has_link=False %}
                         {% show_placeholder "categories" blogpost_page %}
                     {% endwith %}
