@@ -29,6 +29,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   or disabled by overriding the new `site_title` and `site_title_separator`
   blocks
 - Add alternative text on course glimpse icons for screen reader users
+- On search page, warn screen reader users when the search results change
 
 ### Changed
 

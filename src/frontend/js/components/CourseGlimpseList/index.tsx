@@ -13,6 +13,12 @@ const messages = defineMessages({
       'Result count & pagination information for course search. Appears right above search results',
     id: 'components.CourseGlimpseList.courseCount',
   },
+  offscreenCourseCount: {
+    defaultMessage:
+      '{courseCount, number} {courseCount, plural, one {course} other {courses}} matching your search',
+    description: 'Short result count information for course search. Only for screen readers',
+    id: 'components.CourseGlimpseList.offscreenCourseCount',
+  },
 });
 
 interface CourseGlimpseListProps {
@@ -27,7 +33,20 @@ export const CourseGlimpseList = ({
 }: CourseGlimpseListProps & CommonDataProps) => {
   return (
     <div className="course-glimpse-list">
-      <div className="course-glimpse-list__count">
+      <div
+        className="offscreen"
+        data-testid="course-glimpse-sr-count"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <FormattedMessage
+          {...messages.offscreenCourseCount}
+          values={{
+            courseCount: meta.total_count,
+          }}
+        />
+      </div>
+      <div className="course-glimpse-list__count" aria-hidden="true">
         <FormattedMessage
           {...messages.courseCount}
           values={{
