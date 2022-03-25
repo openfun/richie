@@ -32,6 +32,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - On search page, warn screen reader users when the search results change
 - On search page, the "clear filters" button now have details on current
   filters for screen reader users
+- Add a `__stretched-link` element to the card css block to help make
+  screen reader-friendly card links
 
 ### Changed
 
