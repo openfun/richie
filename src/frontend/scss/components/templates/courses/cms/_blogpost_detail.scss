@@ -17,6 +17,9 @@
 
   &__row {
     @include detail-row;
+
+    display: flex;
+    flex-direction: column;
   }
 
   &__title {
@@ -80,6 +83,7 @@
 
   &__subhead {
     padding: 0.5rem 0;
+    order: -1;
 
     @include media-breakpoint-up(lg) {
       display: flex;

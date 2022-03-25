@@ -51,6 +51,9 @@
     <div class="blogpost-detail">
 
         <div class="blogpost-detail__row">
+            {% block title %}
+                <h1 class="blogpost-detail__title">{% render_model current_page "title" %}</h1>
+            {% endblock title %}
 
             {% block subhead %}
                 <div class="blogpost-detail__subhead">
@@ -89,10 +92,6 @@
                     {% endblock authors %}
                 </div>
             {% endblock subhead %}
-
-            {% block title %}
-                <h1 class="blogpost-detail__title">{% render_model current_page "title" %}</h1>
-            {% endblock title %}
 
             {% block social_networks %}
                 {% include "social-networks/blogpost-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
