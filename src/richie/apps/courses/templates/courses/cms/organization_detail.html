@@ -51,7 +51,7 @@
                                 {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x585 replace_alpha='#FFFFFF' upscale %} 2500w,{% endif %}
                             "
                             sizes="(min-width: 576px) 80vw, (min-width: 1200px) 1140px, 100vw"
-                            alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization banner' %}{% endif %}"
+                            alt=""
                         />
                     {% endblockplugin %}
                 </div>
@@ -72,7 +72,7 @@
                                 {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 replace_alpha='#FFFFFF' upscale %} 800w{% endif %}
                             "
                             sizes="(min-width: 768px) 16rem, (min-width: 1200px) 20rem, 12rem"
-                            alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization logo' %}{% endif %}"
+                            alt=""
                         />
                     {% endblockplugin %}
                 </div>
