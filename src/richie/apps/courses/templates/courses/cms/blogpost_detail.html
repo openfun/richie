@@ -165,7 +165,7 @@
 
                         {% block related_blogposts %}
                             <div class="blogpost-glimpse-list">
-                                <p class="blogpost-glimpse-list__title"><span>{% trans 'Related posts' %}</span></p>
+                                <h2 class="blogpost-glimpse-list__title"><span>{% trans 'Related posts' %}</span></h2>
                                 {% for related_blogpost in current_page.blogpost.get_related_blogposts|slice:":3" %}
                                     {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=related_blogpost blogpost_variant="mini" %}
                                 {% endfor %}

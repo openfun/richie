@@ -103,7 +103,7 @@
                         <section class="category-glimpse-list">
                             <h2 class="category-detail__title">{% trans "Sub categories" %}</h2>
                             {% for child_category in children_categories %}
-                                {% include "courses/cms/fragment_category_glimpse.html" with category=child_category category_variant="glimpse" %}
+                                {% include "courses/cms/fragment_category_glimpse.html" with category=child_category category_variant="glimpse" header_level=3 %}
                             {% endfor %}
                         </section>
                     </div>
@@ -119,7 +119,7 @@
                         <section class="course-glimpse-list">
                             <h2 class="category-detail__title">{% trans "Related courses" %}</h2>
                             {% for course in page_obj.object_list %}
-                                {% include "courses/cms/fragment_course_glimpse.html" %}
+                                {% include "courses/cms/fragment_course_glimpse.html" with header_level=3 %}
                             {% endfor %}
                             {% if paginator.num_pages > 1 %}
                                 {% include "richie/pagination.html" with label=_("Courses pagination") %}
@@ -151,7 +151,7 @@
                         <section class="organization-glimpse-list">
                             <h2 class="category-detail__title">{% trans "Related organizations" %}</h2>
                             {% for organization in page_obj.object_list %}
-                                {% include "courses/cms/fragment_organization_glimpse.html" %}
+                                {% include "courses/cms/fragment_organization_glimpse.html" with header_level=3 %}
                             {% endfor %}
                             {% if paginator.num_pages > 1 %}
                                 {% include "richie/pagination.html" with label=_("Related organizations pagination") %}
@@ -170,7 +170,7 @@
                         <section class="blogpost-glimpse-list">
                             <h2 class="category-detail__title">{% trans "Related blogposts" %}</h2>
                             {% for blogpost in page_obj.object_list %}
-                                {% include "courses/cms/fragment_blogpost_glimpse.html" %}
+                                {% include "courses/cms/fragment_blogpost_glimpse.html" with header_level=3 %}
                             {% endfor %}
                             {% if paginator.num_pages > 1 %}
                                 {% include "richie/pagination.html" with label=_("Related blogposts pagination") %}
@@ -189,7 +189,7 @@
                         <section class="person-glimpse-list">
                             <h2 class="category-detail__title">{% trans "Related persons" %}</h2>
                             {% for person in page_obj.object_list %}
-                                {% include "courses/cms/fragment_person_glimpse.html" %}
+                                {% include "courses/cms/fragment_person_glimpse.html" with header_level=3 %}
                             {% endfor %}
                             {% if paginator.num_pages > 1 %}
                                 {% include "richie/pagination.html" with label=_("Related persons pagination") %}

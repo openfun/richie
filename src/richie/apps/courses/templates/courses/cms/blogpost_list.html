@@ -29,7 +29,7 @@
         {% endif %}
         {% for page in object_list %}
             {% if page.blogpost %}
-                {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=page.blogpost %}
+                {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=page.blogpost header_level=2 %}
             {% endif %}
         {% empty %}
             <p class="blogpost-glimpse blogpost-glimpse--empty">

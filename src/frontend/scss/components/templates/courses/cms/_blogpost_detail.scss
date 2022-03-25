@@ -47,6 +47,7 @@
 
     .blogpost-glimpse-list__title {
       @include font-size($h5-font-size);
+      font-family: inherit;
       position: relative;
       margin: 0;
       padding: 0;
