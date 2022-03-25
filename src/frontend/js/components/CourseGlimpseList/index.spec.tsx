@@ -22,7 +22,7 @@ describe('components/CourseGlimpseList', () => {
         title: 'Course 45',
       },
     ] as Course[];
-    render(
+    const { container } = render(
       <IntlProvider locale="en">
         <CourseGlimpseList
           context={contextProps}
@@ -38,5 +38,16 @@ describe('components/CourseGlimpseList', () => {
     // Both courses' titles are shown
     screen.getByText('Course 44');
     screen.getByText('Course 45');
+
+    // a (shorter) message warns screen reader users about new results
+    screen.getByText('45 courses matching your search');
+    const srOnlyCount = screen.queryByTestId('course-glimpse-sr-count');
+    expect(srOnlyCount).toHaveAttribute('aria-live', 'polite');
+    expect(srOnlyCount).toHaveAttribute('aria-atomic', 'true');
+    // the message shown in the UI
+    expect(container.querySelector('.course-glimpse-list__count')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
   });
 });
