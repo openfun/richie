@@ -88,7 +88,14 @@ export const StepBreadcrumb = <Keys extends PropertyKey, LastKey extends Keys>({
               <div className="StepBreadcrumb__step__icon" data-testid="StepBreadcrumb__step__icon">
                 {entry.icon ? <Icon name={entry.icon} /> : <span>{index + 1}</span>}
               </div>
-              {entry.label ? <h6 className="StepBreadcrumb__step__label">{entry.label}</h6> : null}
+              {entry.label ? (
+                <strong
+                  className="h6 StepBreadcrumb__step__label"
+                  data-testid="StepBreadcrumb__step__label"
+                >
+                  {entry.label}
+                </strong>
+              ) : null}
             </li>
             {entry.next !== null ? (
               <li aria-hidden={true} className={getSeparatorClassName(index)} />
