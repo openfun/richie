@@ -63,6 +63,7 @@
 
                 <div class="blogpost-{{ blogpost_variant }}__categories">
                     {% with category_variant="tag" has_link=False %}
+                        <p class="offscreen">{% trans "Categories" %}</p>
                         {% show_placeholder "categories" blogpost_page %}
                     {% endwith %}
                 </div>
@@ -109,6 +110,7 @@
                 {% endif %}
 
                 <div class="blogpost-{{ blogpost_variant }}__categories">
+                    <p class="offscreen">{% trans "Categories" %}</p>
                     {% with category_variant="tag" has_link=False %}
                         {% show_placeholder "categories" blogpost_page %}
                     {% endwith %}

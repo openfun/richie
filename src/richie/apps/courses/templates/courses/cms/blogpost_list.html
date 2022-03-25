@@ -13,6 +13,7 @@
 {% if categories %}
     <div class="category-tag-list category-tag-list--primary">
         <div class="category-tag-list__container">
+            <p class="offscreen">{% trans "Categories" %}</p>
             {% for category in categories %}
                 {% include "courses/cms/fragment_category_glimpse.html" with category_variant="tag" %}
             {% endfor %}
