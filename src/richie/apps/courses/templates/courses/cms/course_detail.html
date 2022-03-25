@@ -177,6 +177,33 @@
                     {% block contact %}
                         <a href="#" class="subheader__cta">{% trans "Contact us" %}</a>
                     {% endblock contact %}
+
+                    {% block run_open_single %}
+                        {% with runs_dict=course.course_runs_dict %}
+                            {% with open_visible_runs=runs_dict.0|add:runs_dict.1|add:runs_dict.2|visible_on_course_page:request.toolbar.edit_mode_active %}
+                                {% if open_visible_runs|length == 0 %}
+                                    <div class="course-detail__row course-detail__runs course-detail__runs--open">
+                                        <div class="course-detail__empty">{% trans "No open course runs" %}</div>
+                                    </div>
+                                {% elif open_visible_runs|length == 1 %}
+                                    <div class="course-detail__row course-detail__runs course-detail__runs--open">
+                                        {% for run in open_visible_runs|slice:":1" %}
+                                            {% include "courses/cms/fragment_course_run.html" %}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="course-detail__row course-detail__runs course-detail__go-to-open-runs">
+                                        <p>{{ open_visible_runs|length }} {% trans "course runs are currently open for this course" %}</p>
+                                        <a class="button button--primary"
+                                            href="#courseDetailsRunsOpen"
+                                            onclick="document.getElementById(this.getAttribute('href').substring(1)).scrollIntoView({behavior: 'smooth', block: 'start'}); return false;">
+                                            {% trans "Choose now" %}
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
+                        {% endwith %}
+                    {% endblock run_open_single %}
                 </div>
             </div>
         </div>
@@ -317,21 +344,40 @@
             {% block runs %}
                 <div class="course-detail__aside" property="isAccessibleForFree" content="true">
                     {% with runs_dict=course.course_runs_dict %}
-                        {% block runs_open %}
-                        {% with open_runs=runs_dict.0|add:runs_dict.1|add:runs_dict.2|dictsort:"start"|visible_on_course_page:request.toolbar.edit_mode_active %}
-                            <div class="course-detail__row course-detail__runs course-detail__runs--open">
-                                <h2 class="course-detail__title">
-                                    {% blocktrans context "course_detail__title" %}Course runs{% endblocktrans %}
-                                    {% render_model_add course "" "" "get_admin_url_to_add_run" %}
-                                </h2>
-                                {% for run in open_runs %}
-                                    {% include "courses/cms/fragment_course_run.html" %}
-                                {% empty %}
-                                    <div class="course-detail__empty">{% trans "No open course runs" %}</div>
-                                {% endfor %}
-                            </div>
+                        <h2 class="course-detail__title">
+                            {% if runs_dict.0|add:runs_dict.1|add:runs_dict.2|visible_on_course_page:request.toolbar.edit_mode_active|length == 1 %}
+                                {% blocktrans context "course_detail__title" %}Other course runs{% endblocktrans %}
+                            {% else %}
+                                {% blocktrans context "course_detail__title" %}Course runs{% endblocktrans %}
+                            {% endif %}
+                            {% render_model_add course "" "" "get_admin_url_to_add_run" %}
+                        </h2>
+
+                        {% with open_runs=runs_dict.0|add:runs_dict.1|add:runs_dict.2|visible_on_course_page:request.toolbar.edit_mode_active %}
+                            {% with other_runs=runs_dict.7|add:runs_dict.3|add:runs_dict.4|add:runs_dict.6|visible_on_course_page:request.toolbar.edit_mode_active %}
+                                {% if open_runs|length <= 1 and other_runs|length == 0 %}
+                                    <div class="course-detail__row course-detail__no-runs">
+                                        {% if open_runs|length == 0 %}
+                                            <p>{% trans "No course runs" %}</p>
+                                        {% else %}
+                                            <p>{% trans "No other course runs" %}</p>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endwith %}
                         {% endwith %}
-                        {% endblock runs_open %}
+
+                        {% block runs_open_multiple %}
+                        {% with open_runs=runs_dict.0|add:runs_dict.1|add:runs_dict.2|dictsort:"start" %}
+                            {% if open_runs|visible_on_course_page:request.toolbar.edit_mode_active|length > 1 %}
+                                <div id="courseDetailsRunsOpen" class="course-detail__row course-detail__runs course-detail__runs--open">
+                                    {% for run in open_runs|sort_runs_by_language_and_start_date %}
+                                        {% include "courses/cms/fragment_course_run.html" %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                        {% endblock runs_open_multiple %}
 
                         {% block runs_to_be_scheduled %}
                         {% with to_be_scheduled_runs=runs_dict.7|dictsort:"start"|visible_on_course_page:request.toolbar.edit_mode_active %}

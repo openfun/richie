@@ -39,6 +39,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Remove the use of Google Fonts
 - Improve overall accessibility in Richie templates
+- Move enroll button for the first open course run below the contact block.
+  If there are more than one open run, they're all still shown on course
+  detail aside block.
 - Update frontend overriding system to allow to override any frontend module.
 - Improve React search suggestion field labels for screen readers.
 - Removed usage of deprecated Sass division '/' operator in favor of
