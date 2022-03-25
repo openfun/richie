@@ -27,7 +27,7 @@
 
                 {% for page in object_list %}
                     {% if page.program %}
-                        {% include "courses/cms/fragment_program_glimpse.html" with program=page.program %}
+                        {% include "courses/cms/fragment_program_glimpse.html" with program=page.program header_level=2 %}
                     {% endif %}
                 {% empty %}
                     <p class="program-glimpse program-glimpse--empty">
