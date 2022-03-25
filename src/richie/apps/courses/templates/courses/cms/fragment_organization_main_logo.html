@@ -5,7 +5,8 @@
     {% with organization_page=organization.extended_object %}
         <a
           href="{{ organization_page.get_absolute_url }}"
-          title="{{ organization_page.get_title }}"
+          title="{% trans "Main organization" %} &quot;{{ organization_page.get_title }}&quot;"
+          aria-label="{% trans "Main organization" %} &quot;{{ organization_page.get_title }}&quot;"
           class="subheader__cartouche"
           property="{{ organization_property|default:'provider' }}"
           typeof="CollegeOrUniversity"
@@ -13,11 +14,12 @@
             <meta property="name" content="{{ organization_page.get_title }}"/>
             <meta property="url" content="{{ SITE.web_url }}{{ organization_page.get_absolute_url }}"/>
             {% get_placeholder_plugins "logo" organization_page as plugins or %}
-                <div class="subheader__empty">{% trans "Main organization" %}</div>
+                <div class="subheader__empty" aria-hidden="true">{% trans "Main organization" %}</div>
             {% endget_placeholder_plugins %}
             {% blockplugin plugins.0 %}
                 <div class="subheader__media">
                     <img
+                      alt=""
                       src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
                       srcset="
                         {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 200w
@@ -26,7 +28,6 @@
                         {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
                       "
                       sizes="30vw"
-                      alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'main organization logo' %}{% endif %}"
                       property="logo"
                     />
                 </div>
