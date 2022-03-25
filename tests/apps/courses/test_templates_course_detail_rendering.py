@@ -1422,23 +1422,35 @@ class RunsCourseCMSTestCase(CMSTestCase):
         """
         course = CourseFactory(page_title="my course")
         page = course.extended_object
-        course_run_title_hidden = "A hidden course run"
+        course_run_title_upcoming_hidden = "A hidden course run"
         CourseRunFactory(
             direct_course=course,
-            title=course_run_title_hidden,
+            title=course_run_title_upcoming_hidden,
             catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
+            start=self.now + timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now + timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=2),
         )
-        course_run_title_about = "A visible course run only on course page"
+        course_run_title_open_about = "A visible course run only on course page"
         CourseRunFactory(
             direct_course=course,
-            title=course_run_title_about,
+            title=course_run_title_open_about,
             catalog_visibility=CourseRunCatalogVisibility.COURSE_ONLY,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=1),
         )
-        course_run_title_both = "A visible course run"
+        course_run_title_open_both = "A visible course run"
         CourseRunFactory(
             direct_course=course,
-            title=course_run_title_both,
+            title=course_run_title_open_both,
             catalog_visibility=CourseRunCatalogVisibility.COURSE_AND_SEARCH,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=1),
         )
         self.assertTrue(page.publish("en"))
 
@@ -1446,9 +1458,34 @@ class RunsCourseCMSTestCase(CMSTestCase):
         url = page.get_absolute_url()
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, course_run_title_hidden)
-        self.assertContains(response, course_run_title_about)
-        self.assertContains(response, course_run_title_both)
+        self.assertNotContains(
+            response,
+            course_run_title_upcoming_hidden,
+            msg_prefix=("A hidden upcoming run should not be visible on view mode"),
+        )
+        self.assertNotContains(
+            response,
+            "Upcoming",
+            msg_prefix=(
+                "The hidden upcoming run should not be visible so the upcoming title should not be"
+                "visible"
+            ),
+        )
+        self.assertContains(
+            response,
+            course_run_title_open_about,
+            msg_prefix=(
+                "An open run with `about` on catalog visibility should be visible on view mode"
+            ),
+        )
+        self.assertContains(
+            response,
+            course_run_title_open_both,
+            msg_prefix=(
+                "An open run with `both` on catalog visibility should be visible "
+                "on view mode of the course page"
+            ),
+        )
 
         # edit mode, create user, login with him and open course page on edit mode
         staff = UserFactory(is_staff=True, is_superuser=True)
@@ -1456,6 +1493,137 @@ class RunsCourseCMSTestCase(CMSTestCase):
         url = f"{url:s}?edit"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, course_run_title_about)
-        self.assertContains(response, course_run_title_both)
-        self.assertContains(response, course_run_title_hidden)
+        self.assertContains(
+            response,
+            course_run_title_open_about,
+            msg_prefix=(
+                "An open run with `about`on the catalog visibility should be visible "
+                "on edit mode of the course page"
+            ),
+        )
+        self.assertContains(
+            response,
+            course_run_title_open_both,
+            msg_prefix=(
+                "An open run with `both`on the catalog visibility should be visible "
+                "on edit mode of the course page"
+            ),
+        )
+        self.assertContains(
+            response,
+            course_run_title_upcoming_hidden,
+            msg_prefix=(
+                "A hidden upcoming run should be visible "
+                "on edit mode of the course page"
+            ),
+        )
+        self.assertContains(
+            response,
+            "Upcoming",
+            msg_prefix=(
+                "The hidden upcoming run is visible on edit mode "
+                "so the Upcoming title should be visible"
+            ),
+        )
+
+    @timezone.override(pytz.utc)
+    def test_templates_course_detail_hidden_courses(self):
+        """
+        Check that each run on different state (Open, to be scheduled, hidden, ongoing, archived)
+        is not visible on view mode, also check that each title group is not visible.
+        On edit mode they should all be visible.
+        """
+        course = CourseFactory(page_title="my course")
+        page = course.extended_object
+        course_run_title_open_hidden = "An open hidden course run"
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_open_hidden,
+            catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=2),
+        )
+        course_run_title_to_be_scheduled_hidden = "A to be scheduled hidden course run"
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_to_be_scheduled_hidden,
+            catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
+            start=None,
+            end=None,
+        )
+        course_run_title_upcoming_hidden = "A hidden upcoming course run"
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_upcoming_hidden,
+            catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
+            start=self.now + timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now + timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=2),
+        )
+        course_run_title_ongoing_hidden = "An ongoing hidden course run"
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_ongoing_hidden,
+            catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=1),
+            enrollment_start=self.now - timedelta(hours=2),
+            enrollment_end=self.now - timedelta(hours=1),
+        )
+        course_run_title_archived_hidden = "An archived hidden course run"
+        CourseRunFactory(
+            direct_course=course,
+            title=course_run_title_archived_hidden,
+            catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
+            start=self.now - timedelta(hours=2),
+            end=self.now - timedelta(hours=1),
+            enrollment_start=self.now - timedelta(hours=3),
+            enrollment_end=self.now - timedelta(hours=2),
+        )
+        self.assertTrue(page.publish("en"))
+
+        # View mode
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(response, course_run_title_open_hidden)
+        self.assertNotContains(response, "Enroll now")
+        self.assertContains(response, "No open course runs")
+
+        self.assertNotContains(response, course_run_title_to_be_scheduled_hidden)
+        self.assertNotContains(response, "To be scheduled")
+
+        self.assertNotContains(response, course_run_title_upcoming_hidden)
+        self.assertNotContains(response, "Upcoming")
+
+        self.assertNotContains(response, course_run_title_ongoing_hidden)
+        self.assertNotContains(response, "Ongoing")
+
+        self.assertNotContains(response, course_run_title_archived_hidden)
+        self.assertNotContains(response, "Archived")
+
+        # edit mode, create user, login with him and open course page on edit mode
+        staff = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=staff.username, password="password")
+        url = f"{url:s}?edit"
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, course_run_title_open_hidden)
+        self.assertContains(response, "Enroll now")
+
+        self.assertContains(response, course_run_title_to_be_scheduled_hidden)
+        self.assertContains(response, "To be scheduled")
+
+        self.assertContains(response, course_run_title_upcoming_hidden)
+        self.assertContains(response, "Upcoming")
+
+        self.assertContains(response, course_run_title_ongoing_hidden)
+        self.assertContains(response, "Ongoing")
+
+        self.assertContains(response, course_run_title_archived_hidden)
+        self.assertContains(response, "Archived")

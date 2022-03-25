@@ -80,6 +80,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - On course page, make the course title the first thing that is read to
   screen readers (instead of the badges)
 - Fix program glimpse heading level being too high on course detail page
+- Hide title _To be scheduled_, _Upcoming_, _Ongoing_ and _Archived_ when all
+  course runs have catalog visibility `hidden`.
 
 ## [2.13.0] - 2022-02-18
 

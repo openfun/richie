@@ -227,6 +227,17 @@ def has_connected_lms(course_run):
     return LMSHandler.select_lms(course_run.resource_link) is not None
 
 
+@register.filter()
+def visible_on_course_page(course_runs, edit_mode_active=None):
+    """
+    Determine if the passed course run should be visible on the course page, if on edit mode
+    show all the course runs.
+    """
+    if edit_mode_active:
+        return course_runs
+    return list(filter(lambda run: run.is_visible_on_course_page, course_runs))
+
+
 @register.simple_tag(takes_context=True)
 def course_enrollment_widget_props(context):
     """

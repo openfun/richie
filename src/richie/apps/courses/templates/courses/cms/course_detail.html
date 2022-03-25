@@ -318,61 +318,71 @@
                 <div class="course-detail__aside" property="isAccessibleForFree" content="true">
                     {% with runs_dict=course.course_runs_dict %}
                         {% block runs_open %}
+                        {% with open_runs=runs_dict.0|add:runs_dict.1|add:runs_dict.2|dictsort:"start"|visible_on_course_page:request.toolbar.edit_mode_active %}
                             <div class="course-detail__row course-detail__runs course-detail__runs--open">
                                 <h2 class="course-detail__title">
                                     {% blocktrans context "course_detail__title" %}Course runs{% endblocktrans %}
                                     {% render_model_add course "" "" "get_admin_url_to_add_run" %}
                                 </h2>
-                                {% for run in runs_dict.0|add:runs_dict.1|add:runs_dict.2 %}
+                                {% for run in open_runs %}
                                     {% include "courses/cms/fragment_course_run.html" %}
                                 {% empty %}
                                     <div class="course-detail__empty">{% trans "No open course runs" %}</div>
                                 {% endfor %}
                             </div>
+                        {% endwith %}
                         {% endblock runs_open %}
 
                         {% block runs_to_be_scheduled %}
-                        {% if runs_dict.7 and current_page.publisher_is_draft %}
-                            <div class="course-detail__row course-detail__runs course-detail__runs--to_be_scheduled">
-                                <h3 class="course-detail__title">
-                                    {% trans "To be scheduled" context "Course runs to be scheduled (plural)" %}
-                                </h3>
-                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.7 %}
-                            </div>
-                        {% endif %}
+                        {% with to_be_scheduled_runs=runs_dict.7|dictsort:"start"|visible_on_course_page:request.toolbar.edit_mode_active %}
+                            {% if to_be_scheduled_runs|visible_on_course_page:request.toolbar.edit_mode_active and current_page.publisher_is_draft %}
+                                <div class="course-detail__row course-detail__runs course-detail__runs--to_be_scheduled">
+                                    <h3 class="course-detail__title">
+                                        {% trans "To be scheduled" context "Course runs to be scheduled (plural)" %}
+                                    </h3>
+                                    {% include "courses/cms/fragment_course_runs_list.html" with course_runs=to_be_scheduled_runs %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
                         {% endblock runs_to_be_scheduled %}
 
                         {% block runs_upcoming %}
-                        {% if runs_dict.3 %}
-                            <div class="course-detail__row course-detail__runs course-detail__runs--upcoming">
-                                <h3 class="course-detail__title">
-                                    {% trans "Upcoming" context "Upcoming course runs (plural)" %}
-                                </h3>
-                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.3 %}
-                            </div>
-                        {% endif %}
+                        {% with upcoming_runs=runs_dict.3|dictsort:"start"|visible_on_course_page:request.toolbar.edit_mode_active %}
+                            {% if upcoming_runs|visible_on_course_page:request.toolbar.edit_mode_active %}
+                                <div class="course-detail__row course-detail__runs course-detail__runs--upcoming">
+                                    <h3 class="course-detail__title">
+                                        {% trans "Upcoming" context "Upcoming course runs (plural)" %}
+                                    </h3>
+                                    {% include "courses/cms/fragment_course_runs_list.html" with course_runs=upcoming_runs %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
                         {% endblock runs_upcoming %}
 
                         {% block runs_ongoing %}
-                        {% if runs_dict.4 or runs_dict.5 %}
-                            <div class="course-detail__row course-detail__runs course-detail__runs--ongoing">
-                                <h3 class="course-detail__title">
-                                    {% trans "Ongoing" context "Ongoing course runs (plural)" %}
-                                </h3>
-                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.4|add:runs_dict.5 %}
-                            </div>
-                        {% endif %}
+                        {% with ongoing_runs=runs_dict.4|add:runs_dict.5|dictsort:"start"|visible_on_course_page:request.toolbar.edit_mode_active %}
+                            {% if ongoing_runs|length > 0 %}
+                                <div class="course-detail__row course-detail__runs course-detail__runs--ongoing">
+                                    <h3 class="course-detail__title">
+                                        {% trans "Ongoing" context "Ongoing course runs (plural)" %}
+                                    </h3>
+                                    {% include "courses/cms/fragment_course_runs_list.html" with course_runs=ongoing_runs %}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
                         {% endblock runs_ongoing %}
 
                         {% block runs_archived %}
-                        {% if runs_dict.6 %}
-                            <div class="course-detail__row course-detail__runs course-detail__runs--archived">
-                                <h3 class="course-detail__title">
-                                    {% trans "Archived" context "Archived course runs (plural)" %}
-                                </h3>
-                                {% include "courses/cms/fragment_course_runs_list.html" with max_course_runs=RICHIE_MAX_ARCHIVED_COURSE_RUNS course_runs=runs_dict.6%}
-                            </div>
-                        {% endif %}
+                        {% with archived_runs=runs_dict.6|dictsort:"start"|visible_on_course_page:request.toolbar.edit_mode_active %}
+                            {% if archived_runs|length > 0 %}
+                                <div class="course-detail__row course-detail__runs course-detail__runs--archived">
+                                    <h3 class="course-detail__title">
+                                        {% trans "Archived" context "Archived course runs (plural)" %}
+                                    </h3>
+                                    {% include "courses/cms/fragment_course_runs_list.html" with max_course_runs=RICHIE_MAX_ARCHIVED_COURSE_RUNS course_runs=archived_runs%}
+                                </div>
+                            {% endif %}
+                        {% endwith %}
                         {% endblock runs_archived %}
 
                     {% endwith %}
