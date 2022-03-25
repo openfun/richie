@@ -55,17 +55,17 @@
         </div>
         <div class="blogpost-{{ blogpost_variant }}__content">
             <div class="blogpost-{{ blogpost_variant }}__wrapper">
-                <div class="blogpost-{{ blogpost_variant }}__categories">
-                    {% with category_variant="tag" has_link=False %}
-                        {% show_placeholder "categories" blogpost_page %}
-                    {% endwith %}
-                </div>
-
                 <h{{ header_level|default:3 }} class="blogpost-{{ blogpost_variant }}__title">
                     <a href="{{ blogpost.extended_object.get_absolute_url }}" class="blogpost-{{ blogpost_variant }}__link">
                         {{ blogpost_page.get_title }}
                     </a>
                 </h{{ header_level|default:3 }}>
+
+                <div class="blogpost-{{ blogpost_variant }}__categories">
+                    {% with category_variant="tag" has_link=False %}
+                        {% show_placeholder "categories" blogpost_page %}
+                    {% endwith %}
+                </div>
             </div>
         </div>
     </div>
@@ -95,12 +95,6 @@
         </div>
         <div class="blogpost-{{ blogpost_variant }}__content">
             <div class="blogpost-{{ blogpost_variant }}__wrapper">
-                <div class="blogpost-{{ blogpost_variant }}__categories">
-                    {% with category_variant="tag" has_link=False %}
-                        {% show_placeholder "categories" blogpost_page %}
-                    {% endwith %}
-                </div>
-
                 <h{{ header_level|default:3 }} class="blogpost-{{ blogpost_variant }}__title">
                     <a href="{{ blogpost.extended_object.get_absolute_url }}" class="blogpost-{{ blogpost_variant }}__link">
                         {{ blogpost_page.get_title }}
@@ -113,6 +107,13 @@
                     {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
                 </p>
                 {% endif %}
+
+                <div class="blogpost-{{ blogpost_variant }}__categories">
+                    {% with category_variant="tag" has_link=False %}
+                        {% show_placeholder "categories" blogpost_page %}
+                    {% endwith %}
+                </div>
+
                 <p class="blogpost-{{ blogpost_variant }}__excerpt">
                     {% show_placeholder "excerpt" blogpost_page %}
                 </p>
