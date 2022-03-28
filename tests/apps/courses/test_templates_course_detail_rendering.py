@@ -27,7 +27,7 @@ from richie.apps.courses.factories import (
 from richie.apps.courses.models import CourseRun, CourseRunCatalogVisibility
 from richie.apps.demo.utils import pick_image
 
-# pylint: disable=too-many-lines
+# pylint: disable=too-many-lines, too-many-public-methods
 
 
 class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
@@ -1821,3 +1821,27 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(response, "No other course runs")
+
+    @override_settings(JOANIE={"ENABLED": True, "BASE_URL": "https://joanie.test"})
+    def test_template_course_detail_with_joanie_enabled(self):
+        """
+        When Joanie is enabled, course detail template should use
+        fragment_course_products template to display the React widget in charge
+        of retrieve and display products related to the course
+        """
+        course = CourseFactory(code="01337", should_publish=True)
+        page = course.extended_object
+
+        with self.assertTemplateUsed(
+            "courses/cms/fragment_course_products.html",
+        ):
+            response = self.client.get(page.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response, r'class="richie-react richie-react--course-products-list"'
+        )
+
+        pattern = r".*data-props=.*code.*01337.*"
+
+        self.assertIsNotNone(re.search(pattern, str(response.content)))

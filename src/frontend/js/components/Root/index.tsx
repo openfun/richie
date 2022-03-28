@@ -9,6 +9,7 @@ import { Spinner } from 'components/Spinner';
 import ErrorBoundary from 'utils/errors/ErrorBoundary';
 import context from 'utils/context';
 
+const CourseProductsList = lazy(() => import('components/CourseProductsList'));
 const CourseRunEnrollment = lazy(() => import('components/CourseRunEnrollment'));
 const LanguageSelector = lazy(() => import('components/LanguageSelector'));
 const LtiConsumer = lazy(() => import('components/LtiConsumer'));
@@ -21,6 +22,7 @@ const UserLogin = lazy(() => import('../UserLogin'));
 // for type-safety when we call them. This will let us use the props for any top-level component in a
 // way TypeScript understand and accepts
 interface ComponentLibrary {
+  CourseProductsList: typeof CourseProductsList;
   CourseRunEnrollment: typeof CourseRunEnrollment;
   LanguageSelector: typeof LanguageSelector;
   LtiConsumer: typeof LtiConsumer;
@@ -31,6 +33,7 @@ interface ComponentLibrary {
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
+  CourseProductsList,
   CourseRunEnrollment,
   LanguageSelector,
   LtiConsumer,
