@@ -1,0 +1,9 @@
+{% load cms_tags i18n extra_tags %}{% spaceless %}
+ <div class="course-detail__row course-detail__products">
+  <div class="course-detail__run-descriptions">
+      <div
+        class="richie-react richie-react--course-products-list"
+        data-props='{"code":"{{ course.code }}"}'></div>
+  </div>
+</div>
+{% endspaceless %}
