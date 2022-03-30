@@ -13,7 +13,9 @@
         "@types/faker",
         "bootstrap",
         "faker",
-        "node-fetch"
+        "node-fetch",
+        "react",
+        "react-dom"
       ]
     },
     {
