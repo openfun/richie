@@ -7,6 +7,7 @@ import createQueryClient from 'utils/react-query/createQueryClient';
 import { fetchList } from 'data/getResourceList';
 import { APIListRequestParams } from 'types/api';
 import { Deferred } from 'utils/test/deferred';
+import { IntlProvider } from 'react-intl';
 import { useCourseSearch } from '.';
 
 jest.mock('utils/context', () => jest.fn());
@@ -17,8 +18,10 @@ const mockFetchList = fetchList as jest.MockedFunction<typeof fetchList>;
 
 describe('data/useCourseSearch', () => {
   const queryClient = createQueryClient();
-  const wrapper = ({ children }: PropsWithChildren<any>) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  const wrapper = ({ children, locale }: PropsWithChildren<any>) => (
+    <IntlProvider locale={locale || 'en'}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </IntlProvider>
   );
 
   afterEach(() => {
@@ -91,5 +94,30 @@ describe('data/useCourseSearch', () => {
     rerender();
     // Now new request happens as the params are weakly identical
     expect(mockFetchList).not.toHaveBeenCalled();
+  });
+
+  it('triggers a new request if the language has changed', async () => {
+    const deferred = new Deferred<any>();
+    mockFetchList.mockReturnValue(deferred.promise);
+    const params = { limit: '999', offset: '0' };
+    const { result, rerender } = renderHook(() => useCourseSearch(params), { wrapper });
+
+    // Initial pass gets us a undefined value but issues the call
+    expect(result.current.data).toEqual(undefined);
+    expect(mockFetchList).toHaveBeenCalledTimes(1);
+    expect(mockFetchList).toHaveBeenCalledWith('courses', {
+      limit: '999',
+      offset: '0',
+    });
+
+    await act(async () => deferred.resolve('the response'));
+    expect(result.current.data).toEqual('the response');
+
+    // We reset our fetchList mock but keep the same params
+    mockFetchList.mockReset();
+    // Rerender component with a new language
+    rerender({ locale: 'fr' });
+    // As language has changed, search results should have been refetched
+    expect(mockFetchList).toHaveBeenCalledTimes(1);
   });
 });
