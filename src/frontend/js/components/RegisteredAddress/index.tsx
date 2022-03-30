@@ -56,7 +56,7 @@ const RegisteredAddress = ({ promote, select, edit, remove, address }: Props) =>
   const intl = useIntl();
 
   return (
-    <li className="registered-addresses-item" key={`addresses-list-${address.id}`}>
+    <li className="registered-addresses-item">
       <button
         aria-describedby={`address-${address.id}-infos`}
         aria-label={intl.formatMessage(messages.promoteButtonLabel, { title: address.title })}
@@ -70,7 +70,12 @@ const RegisteredAddress = ({ promote, select, edit, remove, address }: Props) =>
           }`}
         />
       </button>
-      <strong className="h6 registered-addresses-item__title">{address.title}</strong>
+      <strong
+        data-testid={`address-${address.id}-title`}
+        className="h6 registered-addresses-item__title"
+      >
+        {address.title}
+      </strong>
       <address
         className="registered-addresses-item__address"
         data-testid={`address-${address.id}-details`}

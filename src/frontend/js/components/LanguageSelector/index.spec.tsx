@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 import LanguageSelector from '.';
 
 describe('<LanguageSelector />', () => {
-  it('shows a dropdown menu that allows the user to change languages', () => {
+  it('shows a dropdown menu that allows the user to change languages', async () => {
     const languages = {
       en: {
         code: 'en',
@@ -28,7 +28,8 @@ describe('<LanguageSelector />', () => {
     const button = screen.getByLabelText('Select a language: Français', {
       selector: 'button',
     });
-    userEvent.click(button);
+
+    await userEvent.click(button);
 
     screen.getByRole('listbox', { name: 'Select a language:' });
     screen.getByRole('option', { name: 'Switch to Anglais' });
