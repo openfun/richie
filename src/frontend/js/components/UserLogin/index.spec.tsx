@@ -72,7 +72,7 @@ describe('<UserLogin />', () => {
       selector: 'button',
     });
 
-    userEvent.click(button);
+    await userEvent.click(button);
 
     screen.getByText(username);
     screen.getByText('Log out');
@@ -125,7 +125,7 @@ describe('<UserLogin />', () => {
       selector: 'button',
     });
 
-    userEvent.click(button);
+    await userEvent.click(button);
 
     screen.getByText(username);
     const settingsLink = screen.getByRole('link', { name: 'Settings' });

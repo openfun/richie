@@ -194,7 +194,7 @@ describe('<SearchFilterGroupModal />', () => {
         coursesDeferred.promise,
       );
 
-      userEvent.click(screen.getByText('Load more results'));
+      await userEvent.click(screen.getByText('Load more results'));
       await act(async () =>
         universitiesDeferred.resolve({
           meta: {

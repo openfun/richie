@@ -53,13 +53,13 @@ describe('<UserMenu />', () => {
       selector: 'button',
     });
 
-    userEvent.click(button);
+    await userEvent.click(button);
 
     screen.getByRole('link', { name: 'Profile' });
     screen.getByRole('link', { name: 'My Dashboard' });
     const logoutButton = screen.getByRole('button', { name: 'Log out' });
 
-    userEvent.click(logoutButton);
+    await userEvent.click(logoutButton);
 
     expect(logout).toHaveBeenCalledTimes(1);
   });
@@ -79,7 +79,7 @@ describe('<UserMenu />', () => {
     screen.getByRole('link', { name: 'My Dashboard' });
     const logoutButton = screen.getByRole('button', { name: 'Log out' });
 
-    userEvent.click(logoutButton);
+    await userEvent.click(logoutButton);
 
     expect(logout).toHaveBeenCalledTimes(1);
   });

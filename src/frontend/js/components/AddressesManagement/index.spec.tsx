@@ -331,7 +331,8 @@ describe('AddressesManagement', () => {
     expect($addresses).toHaveLength(addresses.length);
 
     addresses.forEach((address: Joanie.Address) => {
-      screen.getByText(address.title, { exact: true });
+      const $address = screen.getByTestId(`address-${address.id}-title`);
+      expect($address.textContent).toEqual(address.title);
     });
 
     // - User selects one of its existing address
@@ -472,7 +473,7 @@ describe('AddressesManagement', () => {
     expect($saveField).toBeNull();
 
     // - But finally user cancels his action
-    const $cancelButton = screen.getByRole('button', { name: 'Cancel edition', exact: true });
+    const $cancelButton = screen.getByRole('button', { name: 'Cancel', exact: true });
     await act(async () => {
       fireEvent.click($cancelButton);
     });
