@@ -37,6 +37,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Upgrade black lint version
 - Improve overall accessibility in Richie templates
 - Update frontend overriding system to allow to override any frontend module.
 - Improve React search suggestion field labels for screen readers.
