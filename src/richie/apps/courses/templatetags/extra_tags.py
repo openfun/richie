@@ -95,7 +95,7 @@ class PlaceholderAsPlugins(Placeholder):
         blocks=[("endplaceholder_as_plugins", "nodelist")],
     )
 
-    # pylint: disable=arguments-differ,too-many-arguments
+    # pylint: disable=arguments-renamed,too-many-arguments
     def render_tag(self, context, name, varname, extra_bits, nodelist=None):
         return get_plugins_render_tag(context, name, varname, nodelist)
 
