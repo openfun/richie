@@ -1,8 +1,48 @@
-//
-// https://fonts.google.com/?query=Montserrat&selection.family=Hind:wght@400;600|Montserrat:wght@300;700;800&sidebar.open
-//
+// Montserrat
+@font-face {
+  font-family: 'Montserrat';
+  font-display: swap;
+  font-weight: 300;
+  src: url('/static/richie/fonts/montserrat/montserrat-light.woff') format('woff'),
+    url('/static/richie/fonts/montserrat/montserrat-light.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-display: swap;
+  font-weight: 500;
+  src: url('/static/richie/fonts/montserrat/montserrat-medium.woff') format('woff'),
+    url('/static/richie/fonts/montserrat/montserrat-medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-display: swap;
+  font-weight: 700;
+  src: url('/static/richie/fonts/montserrat/montserrat-bold.woff') format('woff'),
+    url('/static/richie/fonts/montserrat/montserrat-bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-display: swap;
+  font-weight: 800;
+  src: url('/static/richie/fonts/montserrat/montserrat-extrabold.woff') format('woff'),
+    url('/static/richie/fonts/montserrat/montserrat-extrabold.woff2') format('woff2');
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Hind:wght@400;600&family=Montserrat:wght@300;500;700;800&display=swap');
+// Hind
+@font-face {
+  font-family: 'Hind';
+  font-display: swap;
+  font-weight: 400;
+  src: url('/static/richie/fonts/hind/hind-regular.woff') format('woff'),
+    url('/static/richie/fonts/hind/hind-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Hind';
+  font-display: swap;
+  font-weight: 600;
+  src: url('/static/richie/fonts/hind/hind-semibold.woff') format('woff'),
+    url('/static/richie/fonts/hind/hind-semibold.woff2') format('woff2');
+}
 
 // Font family class helpers by name
 $r-font-family-hind: 'Hind', sans-serif;
