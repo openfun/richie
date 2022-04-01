@@ -59,6 +59,8 @@ $ make migrate
   is not valid html in the page header).
 - The `runs_open` django template block have been replaced by `run_open_single` and
   `runs_open_multiple` blocks on the `course_detail.html` template.
+- The `contact` block has been removed from the `course_detail.html` template, if you overwrite it
+  please consider the new `run_open_single` block as alternative.
 - Frontend override system has been updated to allow overriding of any frontend module.
   Thus if you override some components, you have to update the module regexp by prefixing
   with `components/`.

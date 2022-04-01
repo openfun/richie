@@ -62,6 +62,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Change how program glimpses HTML is structured to be clearer when using
   a screen reader
 - Specify that we are on a course page in the course detail page title
+- Remove contact block on course detail page
 
 ### Fixed
 

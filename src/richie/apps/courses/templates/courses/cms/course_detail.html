@@ -174,10 +174,6 @@
                         {% include "social-networks/course-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
                     {% endblock social_networks %}
 
-                    {% block contact %}
-                        <a href="#" class="subheader__cta">{% trans "Contact us" %}</a>
-                    {% endblock contact %}
-
                     {% block run_open_single %}
                         {% with runs_dict=course.course_runs_dict %}
                             {% with open_visible_runs=runs_dict.0|add:runs_dict.1|add:runs_dict.2|visible_on_course_page:request.toolbar.edit_mode_active %}
