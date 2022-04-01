@@ -1,11 +1,183 @@
 {
+  "components.AddressesManagement.actionCreation": {
+    "description": "Action name for address creation.",
+    "message": "création"
+  },
+  "components.AddressesManagement.actionDeletion": {
+    "description": "Action name for address deletion.",
+    "message": "suppression"
+  },
+  "components.AddressesManagement.actionPromotion": {
+    "description": "Action name for address promotion.",
+    "message": "promotion"
+  },
+  "components.AddressesManagement.actionUpdate": {
+    "description": "Action name for address update.",
+    "message": "mise à jour"
+  },
+  "components.AddressesManagement.addAddress": {
+    "description": "Title of the address creation form",
+    "message": "Ajouter une nouvelle adresse"
+  },
+  "components.AddressesManagement.addressInput": {
+    "description": "Label of the \"address\" input",
+    "message": "Adresse"
+  },
+  "components.AddressesManagement.cancelButton": {
+    "description": "Label of the cancel button",
+    "message": "Annuler"
+  },
+  "components.AddressesManagement.cancelTitleButton": {
+    "description": "Title of the cancel button",
+    "message": "Annuler la modification"
+  },
+  "components.AddressesManagement.cityInput": {
+    "description": "Label of the \"city\" input",
+    "message": "Ville"
+  },
+  "components.AddressesManagement.closeButton": {
+    "description": "Label of the close button",
+    "message": "Retour"
+  },
+  "components.AddressesManagement.countryInput": {
+    "description": "Label of the \"country\" input",
+    "message": "Pays"
+  },
+  "components.AddressesManagement.deleteButton": {
+    "description": "Label of the delete button",
+    "message": "Supprimer"
+  },
+  "components.AddressesManagement.deleteButtonLabel": {
+    "description": "Title of the delete button",
+    "message": "Supprimer l'adresse \"{title}\""
+  },
+  "components.AddressesManagement.deletionConfirmation": {
+    "description": "Confirmation message shown to the user when he wants to delete an address",
+    "message": "Êtes-vous sûr de vouloir supprimer l'adresse \"{title}\" ? ⚠️ Vous ne pourrez pas annuler ce changement après."
+  },
+  "components.AddressesManagement.editAddress": {
+    "description": "Title of the address edit form",
+    "message": "Mettre à jour l'adresse {title}"
+  },
+  "components.AddressesManagement.editButton": {
+    "description": "Label of the edit button",
+    "message": "Modifier"
+  },
+  "components.AddressesManagement.editButtonLabel": {
+    "description": "Title of the edit button",
+    "message": "Modifier l'adresse \"{title}\""
+  },
+  "components.AddressesManagement.error": {
+    "description": "Error message shown to the user when address creation/update/deletion request fails.",
+    "message": "Une erreur s'est produire lors de la {action} de l'adresse. Veuillez réessayer plus tard."
+  },
+  "components.AddressesManagement.first_nameInput": {
+    "description": "Label of the \"first_name\" input",
+    "message": "Prénom du destinataire"
+  },
+  "components.AddressesManagement.last_nameInput": {
+    "description": "Label of the \"last_name\" input",
+    "message": "Nom du destinataire"
+  },
+  "components.AddressesManagement.postcodeInput": {
+    "description": "Label of the \"postcode\" input",
+    "message": "Code postal"
+  },
+  "components.AddressesManagement.promoteButtonLabel": {
+    "description": "Title of the button to set the address as the main one",
+    "message": "Utiliser l'adresse \"{title}\" comme adresse principale"
+  },
+  "components.AddressesManagement.registeredAddresses": {
+    "description": "Title of the registered addresses block",
+    "message": "Vos adresses"
+  },
+  "components.AddressesManagement.saveInput": {
+    "description": "Label of the \"save\" input",
+    "message": "Sauvegarder cette adresse"
+  },
+  "components.AddressesManagement.selectButton": {
+    "description": "Label of the select button",
+    "message": "Utiliser cette adresse"
+  },
+  "components.AddressesManagement.selectButtonLabel": {
+    "description": "Title of the select button",
+    "message": "Sélectionner l'adresse \"{title}\""
+  },
+  "components.AddressesManagement.titleInput": {
+    "description": "Label of the \"title\" input",
+    "message": "Titre de l'adresse"
+  },
+  "components.AddressesManagement.updateButton": {
+    "description": "Label of the update button",
+    "message": "Mettre à jour cette adresse"
+  },
+  "components.CourseGlimpse.categoryLabel": {
+    "description": "Category label text for screen reader users",
+    "message": "Catégorie"
+  },
+  "components.CourseGlimpse.codeIconAlt": {
+    "description": "Course code logo alternative text for screen reader users",
+    "message": "Code du cours"
+  },
   "components.CourseGlimpse.cover": {
     "description": "Placeholder text when the course we are glimpsing at is missing a cover image",
     "message": "Couverture"
   },
+  "components.CourseGlimpse.organizationIconAlt": {
+    "description": "Organization logo alternative text for screen reader users",
+    "message": "Établissement"
+  },
+  "components.CourseGlimpseFooter.dateIconAlt": {
+    "description": "Course date logo alternative text for screen reader users",
+    "message": "Date du cours"
+  },
   "components.CourseGlimpseList.courseCount": {
     "description": "Result count & pagination information for course search. Appears right above search results",
     "message": "Résultats {start, number} à {end, number} sur {courseCount, number} {courseCount, plural, one {cours} other {cours}} correspondant à votre recherche"
+  },
+  "components.CourseGlimpseList.offscreenCourseCount": {
+    "description": "Short result count information for course search. Only for screen readers",
+    "message": "{courseCount, number} {courseCount, plural, one {cours correspond} other {cours correspondent}} à votre recherche"
+  },
+  "components.CourseProductCertificateItem.certificateExplanation": {
+    "description": "Text displayed when the product certificate has no description",
+    "message": "Vous pourrez télécharger votre certificat une fois que vous aurez réussi toutes les sessions."
+  },
+  "components.CourseProductCertificateItem.congratulations": {
+    "description": "Congratulation message when user has passed the course.",
+    "message": "Félicitations, vous avez terminé ce cours !"
+  },
+  "components.CourseProductCertificateItem.download": {
+    "description": "Button label to download the certificate",
+    "message": "Télécharger"
+  },
+  "components.CourseProductCertificateItem.generatingCertificate": {
+    "description": "Accessible label displayed while certificate is being generated.",
+    "message": "Certificat en cours de génération..."
+  },
+  "components.CourseProductItem.enrolled": {
+    "description": "Message displayed when authenticated user owned the product",
+    "message": "Inscrit"
+  },
+  "components.CourseProductsList.end": {
+    "description": "End label displayed in the header of course run dates section",
+    "message": "Fin"
+  },
+  "components.CourseProductsList.loadingInitial": {
+    "description": "Accessible text for the initial loading spinner displayed when course is fetching",
+    "message": "Chargement des informations du cours..."
+  },
+  "components.CourseProductsList.start": {
+    "description": "Start label displayed in the header of course run dates section",
+    "message": "Début"
+  },
+  "components.CourseProductsLists.enrollOn": {
+    "description": "Text label for the enrollment dates",
+    "message": "Inscription du {start} au {end}"
+  },
+  "components.CourseProductsLists.noCourseRunAvailable": {
+    "description": "Text displayed when no course run are opened for the course",
+    "message": "Aucune session disponible pour ce cours."
   },
   "components.CourseRunEnrollment.enroll": {
     "description": "CTA for users who can enroll in the course run or could enroll if they logged in.",
@@ -35,9 +207,57 @@
     "description": "Helper text in the enroll button for non logged in users",
     "message": "Connectez-vous pour vous inscrire"
   },
+  "components.CourseRunList.enrollFromTo": {
+    "description": "Text label for the enrollment dates",
+    "message": "Inscription du {start} au {end}"
+  },
+  "components.CourseRunList.noCourseRunAvailable": {
+    "description": "Text displayed when no course run are opened for the course",
+    "message": "Aucune session disponible pour ce cours."
+  },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
     "message": "Accéder aux préférences de votre profil"
+  },
+  "components.EnrollableCourseRunList.ariaSelectCourseRun": {
+    "description": "Accessible label used by screen reader when user checked a course run radio input.",
+    "message": "Sélectionnez le cours se déroulant du {start} au {end}."
+  },
+  "components.EnrollableCourseRunList.enroll": {
+    "description": "Text label for the enroll button",
+    "message": "S'inscrire"
+  },
+  "components.EnrollableCourseRunList.enrollOn": {
+    "description": "Text label for the enrollment dates",
+    "message": "Inscription du {enrollment_start} au {enrollment_end}"
+  },
+  "components.EnrollableCourseRunList.enrolling": {
+    "description": "Label displayed when a request to enroll to a course run is loading",
+    "message": "Inscription en cours..."
+  },
+  "components.EnrollableCourseRunList.enrollmentNotYetOpened": {
+    "description": "Text label for the enroll cta when enrollment is not yet opened",
+    "message": "Les inscriptions ouvriront le {enrollment_start}"
+  },
+  "components.EnrollableCourseRunList.noCourseRunAvailable": {
+    "description": "Text displayed when no course run are opened for the course",
+    "message": "Aucune session disponible pour ce cours."
+  },
+  "components.EnrollableCourseRunList.selectCourseRun": {
+    "description": "Label displayed when user do not have select a course run.",
+    "message": "Sélectionnez une session"
+  },
+  "components.EnrolledCourseRun.goToCourse": {
+    "description": "CTA displayed when user is enrolled to the course run.",
+    "message": "Accéder au cours"
+  },
+  "components.EnrolledCourseRun.unroll": {
+    "description": "Button label to unroll.",
+    "message": "Se désinscrire"
+  },
+  "components.EnrolledCourseRun.unrolling": {
+    "description": "Accessible label displayed when user is being unrolled.",
+    "message": "Unrolling..."
   },
   "components.LanguageSelector.currentlySelected": {
     "description": "Accessible hint to mark the currently selected language in the language selector",
@@ -83,9 +303,137 @@
     "description": "Accessibility helper for pagination, added on the previous page link.",
     "message": "Page précédente: {page}"
   },
+  "components.PaymentButton.errorAbort": {
+    "description": "Error message shown when user aborts the payment.",
+    "message": "Vous avez annulé le paiement."
+  },
+  "components.PaymentButton.errorAborting": {
+    "description": "Error message shown when user asks to abort the payment.",
+    "message": "Paiement en cours d'annulation..."
+  },
+  "components.PaymentButton.errorDefault": {
+    "description": "Error message shown when payment creation request failed.",
+    "message": "Une erreur s'est produite lors du paiement. Veuillez réessayer plus tard."
+  },
+  "components.PaymentButton.pay": {
+    "description": "CTA label to proceed to the payment of the product",
+    "message": "Payer {price}"
+  },
+  "components.PaymentButton.payInOneClick": {
+    "description": "CTA label to proceed to the one click payment of the product",
+    "message": "Payer en un clic {price}"
+  },
+  "components.PaymentButton.paymentInProgress": {
+    "description": "Label for screen reader when a payment is in progress.",
+    "message": "Paiement en cours"
+  },
+  "components.PurchasedProductMenu.actionsRelated": {
+    "description": "Accessible label for the purchased product menu",
+    "message": "Autres actions liées à ce produit"
+  },
+  "components.PurchasedProductMenu.downloadInvoice": {
+    "description": "Label for selector item to download invoice",
+    "message": "Télécharger la facture"
+  },
+  "components.PurchasedProductMenu.generatingInvoice": {
+    "description": "Accessible label when invoice is being generated",
+    "message": "La facture est en cours de génération..."
+  },
+  "components.RegisteredCreditCard.expirationDate": {
+    "description": "Credit card expiration date label",
+    "message": "Date d'expiration : {expirationDate}"
+  },
+  "components.RegisteredCreditCard.inputAriaLabel": {
+    "description": "ARIA Label read by screen reader to inform which card is focused",
+    "message": "{selected, select, true {Déselectionner} other {Sélectionner}} la carte {title}"
+  },
   "components.RootSearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
     "message": "Recherche de cours"
+  },
+  "components.SaleTunnel.closeDialog": {
+    "description": "ARIA label used by screenreader to inform that the close dialog button is selected",
+    "message": "Fermer la fenêtre de dialogue"
+  },
+  "components.SaleTunnel.loginToPurchase": {
+    "description": "Label displayed inside the product's CTA when user is not logged in",
+    "message": "Connectez-vous pour acheter"
+  },
+  "components.SaleTunnel.stepPayment": {
+    "description": "Label of the Payment step",
+    "message": "Paiement"
+  },
+  "components.SaleTunnel.stepResume": {
+    "description": "Label of the Resume step",
+    "message": "Continuer"
+  },
+  "components.SaleTunnel.stepValidation": {
+    "description": "Label of the Validation step",
+    "message": "Validation"
+  },
+  "components.SaleTunnelStepPayment.registeredCardSectionTitle": {
+    "description": "Label for the registered credit cards section",
+    "message": "Vos cartes enregistrées"
+  },
+  "components.SaleTunnelStepPayment.resumeTile": {
+    "description": "Label for the resume tile",
+    "message": "Vous êtes sur le point d'acheter"
+  },
+  "components.SaleTunnelStepPayment.userBillingAddressAddLabel": {
+    "description": "Label for the billing address add button",
+    "message": "Ajouter une adresse"
+  },
+  "components.SaleTunnelStepPayment.userBillingAddressCreateLabel": {
+    "description": "Label for the billing address create button",
+    "message": "Créer une adresse"
+  },
+  "components.SaleTunnelStepPayment.userBillingAddressFieldset": {
+    "description": "Label for the billing address fieldset",
+    "message": "Adresse de facturation"
+  },
+  "components.SaleTunnelStepPayment.userBillingAddressNoEntry": {
+    "description": "Message displayed when the user has no address.",
+    "message": "You have not yet a billing address."
+  },
+  "components.SaleTunnelStepPayment.userBillingAddressSelectLabel": {
+    "description": "Label for the billing address select",
+    "message": "Sélectionner une adresse de facturation"
+  },
+  "components.SaleTunnelStepPayment.userTile": {
+    "description": "Label for the user information tile",
+    "message": "Vos informations personnelles"
+  },
+  "components.SaleTunnelStepResume.congratulations": {
+    "description": "Text displayed to thank user for his order",
+    "message": "Félicitations !"
+  },
+  "components.SaleTunnelStepResume.cta": {
+    "description": "Label to the call to action to close sale tunnel",
+    "message": "Commencer ce cours dès maintenant !"
+  },
+  "components.SaleTunnelStepResume.successDetailMessage": {
+    "description": "Text to remind that order's invoice will be send by email soon",
+    "message": "Vous allez recevoir votre facture par mail dans quelques instants."
+  },
+  "components.SaleTunnelStepResume.successMessage": {
+    "description": "Message to confirm that order has been created",
+    "message": "Votre commande a été créée avec succès."
+  },
+  "components.SaleTunnelStepValidation.availableCourseRuns": {
+    "description": "Course runs available text",
+    "message": "{ count, plural, =0 {Aucune session disponible} one {Une session disponible} other {# sessions disponibles}}"
+  },
+  "components.SaleTunnelStepValidation.courseRunDates": {
+    "description": "Course run date text",
+    "message": "Du {start} au {end}"
+  },
+  "components.SaleTunnelStepValidation.includingVAT": {
+    "description": "Text displayed next to the price to mention this is the price including VAT.",
+    "message": "TTC"
+  },
+  "components.SaleTunnelStepValidation.proceedToPayment": {
+    "description": "CTA to go to payment step",
+    "message": "Procéder au paiement"
   },
   "components.Search.errorMessage": {
     "description": "Error message for Search view when the request to load courses fails",
@@ -94,6 +442,10 @@
   "components.Search.hideFiltersPane": {
     "description": "Accessibility text for the button/icon that toggles *off* the filters pane on mobile",
     "message": "Cacher le menu des filtres"
+  },
+  "components.Search.resultsTitle": {
+    "description": "Title for the search results pane in course search (not shown, made for screen reader users).",
+    "message": "Résultats de recherche"
   },
   "components.Search.showFiltersPane": {
     "description": "Accessibility text for the button/icon that toggles *on* the filters pane on mobile",
