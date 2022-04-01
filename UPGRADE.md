@@ -16,16 +16,26 @@ $ make migrate
 
 ## Unreleased
 
+## 2.13.x to 2.14.x
+
 - New frontend widgets has been added, you have to update stylesheets as follows:
   - `_main.scss`
   ```diff
+  +   @import 'richie-education/scss/tools/utils';
+  
   +   @import '../js/components/AddressesManagement/styles';
+  +   @import '../js/components/CourseProductCertificateItem/styles';
+  +   @import '../js/components/CourseProductCourseRuns/styles';
+  +   @import '../js/components/CourseProductItem/styles';
   +   @import '../js/components/PaymentButton/styles';
   +   @import '../js/components/RegisteredCreditCard/styles';
   +   @import '../js/components/SaleTunnel/styles';
   +   @import '../js/components/SaleTunnelStepPayment/styles';
   +   @import '../js/components/SaleTunnelStepResume/styles';
   +   @import '../js/components/SaleTunnelStepValidation/styles';
+  +   @import '../js/components/StepBreadcrumb/styles';
+  ...
+  +   @import './components/templates/richie/multiple-columns';
   ```
   
   - Only if you have overridden `_palette.scss`:
@@ -43,10 +53,49 @@ $ make migrate
   +  active: $active-scheme,
   )
   ...
+  +product-item: (
+  +  base-background: r-color('white'),
+  +  base-border: r-color('purplish-grey'),
+  +  light-color: r-color('white'),
+  +  base-color: r-color('charcoal'),
+  +  lighter-color: r-color('battleship-grey'),
+  +  button-color: r-color('white'),
+  +  button-background: r-color('firebrick6'),
+  +),
   +registered-credit-card: (
   +  title-color: r-color('charcoal'),
   +  base-color: r-color('purplish-grey'),
   +),
+  ...
+  +shadowed-box: (
+  +  base-background: r-color('white'),
+  +  base-shadow: 0 2px 4px rgba(5, 18, 42, 0.19),
+  +),
+  ...
+  +steps-breadcrumb: (
+  +  icon-background-active: r-color(purplish-grey),
+  +  icon-background: transparent,
+  +  icon-border-active: transparent,
+  +  icon-border: r-color('light-grey'),
+  +  icon-fill-active: r-color('white'),
+  +  icon-fill: r-color('light-grey'),
+  +  icon-outline: rgba(r-color(purplish-grey), 0.25),
+  +  label-color-active: r-color('charcoal'),
+  +  label-color: r-color('light-grey'),
+  +  separator-background-active: rgba(r-color(purplish-grey), 0.6),
+  +  separator-background: rgba(r-color(purplish-grey), 0.25),
+  +),
+  +steps-content: (
+  +  content-color: r-color(purplish-grey),
+  +  icon-background: r-color(indianred3),
+  +  icon-color: r-color('white'),
+  +  icon-big-background: transparent,
+  +  icon-big-color: r-color('charcoal'),
+  +  icon-success-background: r-color('mantis'),
+  +  icon-success-color: r-color('white'),
+  +  title-color: r-color('charcoal'),
+  +  subtitle-color: r-color(purplish-grey),
+  +)
   ```
 
 - The `get_placeholder_plugins` and `get_page_plugins` template tags were merged in a single
