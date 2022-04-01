@@ -388,6 +388,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
 
     MIDDLEWARE = (
         "richie.apps.core.cache.LimitBrowserCacheTTLHeaders",
+        "richie.apps.core.cache.LimitCacheByCourseDates",
         "cms.middleware.utils.ApphookReloadMiddleware",
         "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",

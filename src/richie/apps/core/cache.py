@@ -6,10 +6,13 @@ Credits :
 """
 
 import logging
+import math
 import random
+from datetime import timedelta
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.utils import timezone
 from django.utils.cache import get_max_age, patch_response_headers
 from django.utils.deprecation import MiddlewareMixin
 
@@ -172,5 +175,50 @@ class LimitBrowserCacheTTLHeaders(MiddlewareMixin):
                     # adds it only if it isn't already set
                     del response["Expires"]
                 patch_response_headers(response, cache_timeout=max_ttl)
+
+        return response
+
+
+class LimitCacheByCourseDates(MiddlewareMixin):
+    """
+    This middleware allows to limit the maximum cache value for the course page
+    from the course run dates. To prevent race conditions where it is shown a
+    course page to the user that is no longer with correct presentation format.
+
+    It updates the cache response headers (Cache-control: max-age and Expires).
+
+    LimitCacheByCourseDates should be placed after the LimitBrowserCacheTTLHeaders of the
+    MIDDLEWARE list, so that it'll get called penultimate during the response phase.
+    """
+
+    # pylint: disable=no-self-use
+    def process_response(self, request, response):
+        """
+        Rewrite the "Cache-control" and "Expires headers" in the response
+        if needed.
+        """
+        expire_ts = None
+
+        if hasattr(request, "current_page"):
+            page = request.current_page
+            if hasattr(page, "course"):
+                course = page.course
+                expire_ts = course.next_course_run_date()
+
+        if expire_ts:
+            max_age = get_max_age(response)
+            max_age_ts = timezone.now() + timedelta(seconds=max_age)
+            if max_age is not None and expire_ts < max_age_ts:
+                # minus 1 second to prevent cases where the page is cached
+                cache_timeout_seconds = (
+                    math.trunc((expire_ts - timezone.now()).total_seconds()) - 1
+                )
+
+                if response.has_header("Expires"):
+                    # Remove the Expires response Header because patch_response_headers()
+                    # adds it only if it isn't already set
+                    del response["Expires"]
+
+                patch_response_headers(response, cache_timeout=cache_timeout_seconds)
 
         return response

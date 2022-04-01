@@ -62,6 +62,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Added a middleware `LimitCacheByCourseDates` to prevent cache of old
+  information on course pages.
 - Make useCourseSearch hook locale sensitive
 - Stop using {% blockplugin %} template tags in <header> and replace them by
   simple {% if %} tags that do the same and don't inject frontend editing markup
