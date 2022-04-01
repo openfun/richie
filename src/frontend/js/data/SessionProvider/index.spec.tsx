@@ -7,6 +7,7 @@ import {
   ContextFactory as mockContextFactory,
   PersistedClientFactory,
   QueryStateFactory,
+  UserFactory,
 } from 'utils/test/factories';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import { Deferred } from 'utils/test/deferred';
@@ -25,6 +26,12 @@ jest.mock('utils/context', () => ({
       endpoint: 'https://joanie.test',
     },
   }).generate(),
+}));
+
+jest.mock('utils/indirection/window', () => ({
+  location: {
+    assign: jest.fn(),
+  },
 }));
 
 describe('SessionProvider', () => {
@@ -67,6 +74,7 @@ describe('SessionProvider', () => {
 
     await screen.findByText('BaseSessionProvider');
   });
+
   it('uses JoanieSessionProvider if joanie is enabled', async () => {
     jest.doMock('../../utils/api/joanie.ts', () => ({
       isJoanieEnabled: true,
@@ -190,6 +198,68 @@ describe('SessionProvider', () => {
 
       expect(result.current.user).toStrictEqual({ username });
       expect(fetchMock.called()).toBeFalsy();
+    });
+
+    it('clears session storage on login', async () => {
+      const user = UserFactory.generate();
+      const userDeferred = new Deferred();
+
+      fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
+      const { result, rerender } = renderHook(useSession, { wrapper });
+
+      await act(async () => {
+        userDeferred.resolve(user);
+      });
+
+      await act(async () => {
+        jest.runOnlyPendingTimers();
+      });
+
+      expect(result.current.user).toStrictEqual(user);
+      expect(sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key)).toContain(
+        user.username,
+      );
+
+      await act(async () => {
+        result.current.login();
+      });
+
+      expect(sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key)).toBeNull();
+
+      rerender();
+      expect(result.current.user).toBeUndefined();
+    });
+
+    it('clears session storage on register', async () => {
+      const user = UserFactory.generate();
+      const userDeferred = new Deferred();
+
+      fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
+      const { result, rerender } = renderHook(useSession, {
+        wrapper,
+      });
+
+      await act(async () => {
+        userDeferred.resolve(user);
+      });
+
+      await act(async () => {
+        jest.runOnlyPendingTimers();
+      });
+
+      expect(result.current.user).toStrictEqual(user);
+      expect(sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key)).toContain(
+        user.username,
+      );
+
+      await act(async () => {
+        result.current.register();
+      });
+
+      expect(sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key)).toBeNull();
+
+      rerender();
+      expect(result.current.user).toBeUndefined();
     });
   });
 });

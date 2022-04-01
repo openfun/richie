@@ -56,12 +56,14 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
   const orders = useOrders();
 
   const login = useCallback(() => {
+    queryClient.clear();
     sessionStorage.removeItem(REACT_QUERY_SETTINGS.cacheStorage.key);
     sessionStorage.removeItem(RICHIE_USER_TOKEN);
     AuthenticationApi!.login();
   }, [queryClient]);
 
   const register = useCallback(() => {
+    queryClient.clear();
     sessionStorage.removeItem(REACT_QUERY_SETTINGS.cacheStorage.key);
     sessionStorage.removeItem(RICHIE_USER_TOKEN);
     AuthenticationApi!.register();

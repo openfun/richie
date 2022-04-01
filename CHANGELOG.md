@@ -67,6 +67,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Clear session cache on login and register
 - Make useCourseSearch hook locale sensitive
 - Stop using {% blockplugin %} template tags in <header> and replace them by
   simple {% if %} tags that do the same and don't inject frontend editing markup
