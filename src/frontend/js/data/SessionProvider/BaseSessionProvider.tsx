@@ -35,11 +35,13 @@ const BaseSessionProvider = ({ children }: PropsWithChildren<any>) => {
 
   const login = useCallback(() => {
     queryClient.clear();
+    sessionStorage.removeItem(REACT_QUERY_SETTINGS.cacheStorage.key);
     AuthenticationApi!.login();
   }, [queryClient]);
 
   const register = useCallback(() => {
     queryClient.clear();
+    sessionStorage.removeItem(REACT_QUERY_SETTINGS.cacheStorage.key);
     AuthenticationApi!.register();
   }, [queryClient]);
 
