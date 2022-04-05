@@ -157,7 +157,8 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     position: relative;
   }
 
-  &__title {
+  &__title,
+  &__title-text {
     @include font-size($h6-font-size);
     color: r-theme-val(course-glimpse, title-color);
     font-family: $r-font-family-montserrat;
