@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix search query string formatting
 - Fix a course glimpse title color issue when used within a section with variant
 
 ##  [2.14.0] - 2022-04-01
