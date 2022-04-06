@@ -17,14 +17,11 @@ export async function fetchList(
   params: APIListRequestParams = API_LIST_DEFAULT_PARAMS,
 ): Promise<FetchListResponse> {
   try {
-    const response = await fetch(
-      `/api/v1.0/${kind}/?${stringify(params, { arrayFormat: 'comma' })}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const response = await fetch(`/api/v1.0/${kind}/?${stringify(params)}`, {
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+    });
 
     if (!response.ok) {
       // Push remote errors to the error channel for consistency

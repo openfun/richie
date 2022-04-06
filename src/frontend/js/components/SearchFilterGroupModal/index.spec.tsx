@@ -75,7 +75,7 @@ describe('<SearchFilterGroupModal />', () => {
       const coursesDeferred = new Deferred();
       fetchMock.get(
         '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=' +
-          range(0, 21).join(','),
+          range(0, 21).join('&universities_aggs='),
         coursesDeferred.promise,
       );
 
@@ -145,7 +145,7 @@ describe('<SearchFilterGroupModal />', () => {
       const coursesDeferred = new Deferred();
       fetchMock.get(
         '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=' +
-          range(21, 42).join(','),
+          range(21, 42).join('&universities_aggs='),
         coursesDeferred.promise,
       );
 
@@ -190,7 +190,7 @@ describe('<SearchFilterGroupModal />', () => {
       const coursesDeferred = new Deferred();
       fetchMock.get(
         '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=' +
-          range(42, 46).join(','),
+          range(42, 46).join('&universities_aggs='),
         coursesDeferred.promise,
       );
 
@@ -235,7 +235,7 @@ describe('<SearchFilterGroupModal />', () => {
       fetchMock.get('/api/v1.0/universities/?limit=21&offset=0', universitiesDeferred.promise);
       const coursesDeferred = new Deferred();
       fetchMock.get(
-        '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-42,L-84,L-99',
+        '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-42&universities_aggs=L-84&universities_aggs=L-99',
         coursesDeferred.promise,
       );
 
@@ -312,7 +312,7 @@ describe('<SearchFilterGroupModal />', () => {
       );
       const coursesDeferred = new Deferred();
       fetchMock.get(
-        '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-12,L-17',
+        '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-12&universities_aggs=L-17',
         coursesDeferred.promise,
       );
       fireEvent.change(field, { target: { value: 'user' } });
@@ -361,7 +361,7 @@ describe('<SearchFilterGroupModal />', () => {
       );
       const coursesDeferred = new Deferred();
       fetchMock.get(
-        '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-03,L-66',
+        '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-03&universities_aggs=L-66',
         coursesDeferred.promise,
       );
       fireEvent.change(field, { target: { value: 'user input' } });
@@ -409,7 +409,7 @@ describe('<SearchFilterGroupModal />', () => {
     fetchMock.get('/api/v1.0/universities/?limit=21&offset=0', universitiesDeferred.promise);
     const coursesDeferred = new Deferred();
     fetchMock.get(
-      '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-42,L-84,L-99',
+      '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-42&universities_aggs=L-84&universities_aggs=L-99',
       coursesDeferred.promise,
     );
 
@@ -468,7 +468,7 @@ describe('<SearchFilterGroupModal />', () => {
     fetchMock.get('/api/v1.0/universities/?limit=21&offset=0', universitiesDeferred.promise);
     const coursesDeferred = new Deferred();
     fetchMock.get(
-      '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-42,L-84,L-99',
+      '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-42&universities_aggs=L-84&universities_aggs=L-99',
       coursesDeferred.promise,
     );
 
@@ -583,7 +583,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-42' }, { id: 'L-84' }, { id: 'L-99' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-42,L-84,L-99',
+      '/api/v1.0/courses/?facet_sorting=name&limit=21&offset=0&scope=filters&universities_aggs=L-42&universities_aggs=L-84&universities_aggs=L-99',
       { throws: new Error('Failed to search for universities') },
     );
 
