@@ -1,6 +1,6 @@
 import { useSelect } from 'downshift';
 import { FC } from 'react';
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { location } from 'utils/indirection/window';
 
@@ -51,7 +51,8 @@ const LanguageSelector: FC<LanguageSelectorProps> = ({ currentLanguage, language
     onSelectedItemChange: ({ selectedItem: newSelectedItem }) => {
       // Manually handle location changes in case the user interacted with a keyboard, and therefore with a
       // list item, and not by clicking on the actual links.
-      location.replace(newSelectedItem!.url);
+
+      location.replace(`${newSelectedItem!.url}${location.search}`);
     },
   });
 
@@ -77,7 +78,7 @@ const LanguageSelector: FC<LanguageSelectorProps> = ({ currentLanguage, language
                 className={`selector__list__link ${
                   highlightedIndex === index ? 'selector__list__link--highlighted' : ''
                 }`}
-                href={language.url}
+                href={`${language!.url}${location.search}`}
                 title={`${intl.formatMessage(messages.switchToLanguage, {
                   language: language.name,
                 })}${
@@ -87,7 +88,6 @@ const LanguageSelector: FC<LanguageSelectorProps> = ({ currentLanguage, language
                 }`}
               >
                 {language.name}
-                {}
               </a>
             </li>
           ))}
