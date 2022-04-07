@@ -24,6 +24,6 @@
   "devDependencies": {},
   "dependencies": {
     "docusaurus": "1.14.7",
-    "prettier": "2.6.1"
+    "prettier": "2.6.2"
   }
 }
