@@ -207,7 +207,11 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
                 defaultValue={selectedAddress!.id || ''}
               >
                 {addressesItems.map(({ id, title }) => (
-                  <option key={`address-${id}`} value={id}>
+                  <option
+                    data-testid={`address-${id}-option`}
+                    key={`address-${id}-option`}
+                    value={id}
+                  >
                     {title}
                   </option>
                 ))}
