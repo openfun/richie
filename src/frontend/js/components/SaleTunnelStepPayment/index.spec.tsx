@@ -162,7 +162,7 @@ describe('SaleTunnelStepPayment', () => {
     // - A select field containing all addresses should be displayed
     const dropdown = screen.getByRole('combobox', { name: 'Select a billing address' });
     addresses.forEach((address) => {
-      const $option = screen.getByRole('option', { name: address.title }) as HTMLOptionElement;
+      const $option = screen.getByTestId(`address-${address.id}-option`) as HTMLOptionElement;
       // - By default, the main address should be selected
       expect($option.selected).toBe(address.is_main);
     });

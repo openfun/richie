@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix erratic frontend test failure
+
+
 ##  [2.14.1] - 2022-04-07
 
 ### Fixed
