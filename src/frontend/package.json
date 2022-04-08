@@ -48,7 +48,7 @@
     "@sentry/browser": "6.19.6",
     "@sentry/types": "6.19.6",
     "@testing-library/jest-dom": "5.16.4",
-    "@testing-library/react": "13.0.0",
+    "@testing-library/react": "12.1.4",
     "@testing-library/react-hooks": "7.0.2",
     "@testing-library/user-event": "14.0.4",
     "@types/faker": "5.5.9",
@@ -58,9 +58,9 @@
     "@types/js-cookie": "3.0.1",
     "@types/lodash-es": "4.17.6",
     "@types/query-string": "6.3.0",
-    "@types/react": "18.0.0",
+    "@types/react": "17.0.44",
     "@types/react-autosuggest": "10.1.5",
-    "@types/react-dom": "18.0.0",
+    "@types/react-dom": "17.0.15",
     "@types/react-modal": "3.13.1",
     "@typescript-eslint/eslint-plugin": "5.18.0",
     "@typescript-eslint/parser": "5.18.0",
@@ -114,6 +114,6 @@
     "yup": "0.32.11"
   },
   "resolutions": {
-    "@types/react": "18.0.0"
+    "@types/react": "17.0.44"
   }
 }
