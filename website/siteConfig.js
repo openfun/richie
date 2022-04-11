@@ -7,6 +7,12 @@ const users = [
     pinned: true,
   },
   {
+    caption: 'NAU',
+    image: '/img/users/nau.svg',
+    infoLink: 'https://www.nau.edu.pt',
+    pinned: true,
+  },
+  {
     caption: 'EDUlib',
     image: '/img/users/edulib.png',
     infoLink: 'https://catalogue.edulib.org/',
