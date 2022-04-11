@@ -2,7 +2,7 @@
 const users = [
   {
     caption: 'France Université Numérique',
-    image: '/img/users/funmooc.png',
+    image: '/img/users/fun.svg',
     infoLink: 'https://www.fun-mooc.fr',
     pinned: true,
   },
