@@ -49,8 +49,8 @@
     "@sentry/types": "6.19.6",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.4",
-    "@testing-library/react-hooks": "7.0.2",
-    "@testing-library/user-event": "14.0.4",
+    "@testing-library/react-hooks": "8.0.0",
+    "@testing-library/user-event": "14.1.0",
     "@types/faker": "5.5.9",
     "@types/fetch-mock": "7.3.5",
     "@types/iframe-resizer": "3.5.9",
@@ -71,7 +71,7 @@
     "cljs-merge": "1.1.1",
     "core-js": "3.21.1",
     "downshift": "6.1.7",
-    "eslint": "8.12.0",
+    "eslint": "8.13.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "17.0.0",
     "eslint-config-prettier": "8.5.0",
@@ -110,7 +110,7 @@
     "webpack-cli": "4.9.2",
     "whatwg-fetch": "3.6.2",
     "xhr-mock": "2.5.1",
-    "yargs": "17.4.0",
+    "yargs": "17.4.1",
     "yup": "0.32.11"
   },
   "resolutions": {
