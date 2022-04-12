@@ -1,0 +1,143 @@
+version: "3.5"
+
+services:
+  db:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_DB=richie_${RICHIE_SITE:-funmooc}
+    env_file:
+      - "env.d/development"
+    ports:
+      - "5440:5432"
+    volumes:
+      - ./data/db/${RICHIE_SITE:-funmooc}:/var/lib/postgresql/data
+
+  elasticsearch:
+    image: fundocker/openshift-elasticsearch:6.6.2
+    env_file:
+      - "env.d/development"
+    ports:
+      - "9220:9200"
+
+  app-dev:
+    build:
+      context: .
+      target: development
+      args:
+        DOCKER_USER: ${DOCKER_USER:-1000}
+        SITE: ${RICHIE_SITE:-funmooc}
+    image: "${RICHIE_SITE:-funmooc}:development"
+    environment:
+      - DB_NAME=richie_${RICHIE_SITE:-funmooc}
+      - DJANGO_SETTINGS_MODULE=${RICHIE_SITE:-funmooc}.settings
+      - DJANGO_CONFIGURATION=Development
+      - RICHIE_ES_INDICES_PREFIX=richie_${RICHIE_SITE:-funmooc}
+    env_file: env.d/development
+    networks:
+      - default
+      - lms_outside
+    ports:
+      - "8070:8000"
+    volumes:
+      - "./sites/${RICHIE_SITE:-funmooc}/src/backend:/app"
+      - "./data/media/${RICHIE_SITE:-funmooc}:/data/media"
+    depends_on:
+      - "db"
+      - "elasticsearch"
+      - "redis-sentinel"
+    user: ${DOCKER_USER:-1000}
+
+  app:
+    build:
+      context: .
+      target: production
+      args:
+        DOCKER_USER: ${DOCKER_USER:-1000}
+        SITE: ${RICHIE_SITE:-funmooc}
+    # We tag our images with the current commit sha1 in the CI to make them
+    # unique and avoid collisions in parallel builds.
+    image: "${RICHIE_SITE:-funmooc}:production"
+    environment:
+      - DB_NAME=richie_${RICHIE_SITE:-funmooc}
+      - DJANGO_SETTINGS_MODULE=${RICHIE_SITE:-funmooc}.settings
+      - DJANGO_CONFIGURATION=ContinuousIntegration
+      - RICHIE_ES_INDICES_PREFIX=richie_${RICHIE_SITE:-funmooc}
+    env_file: env.d/development
+    networks:
+      - default
+      - lms_outside
+    volumes:
+      - ./data/media/${RICHIE_SITE:-funmooc}:/data/media
+    depends_on:
+      - "db"
+      - "elasticsearch"
+      - "redis-sentinel"
+    user: ${DOCKER_USER:-1000}
+
+  nginx:
+    build:
+      context: .
+      target: nginx
+      args:
+        DOCKER_USER: ${DOCKER_USER:-1000}
+        NGINX_IMAGE_NAME: ${NGINX_IMAGE_NAME:-fundocker/openshift-nginx}
+        NGINX_IMAGE_TAG: ${NGINX_IMAGE_TAG:-1.13}
+        SITE: ${RICHIE_SITE:-funmooc}
+    image: "${RICHIE_SITE:-funmooc}-nginx:production"
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./docker/files/etc/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./data/media/${RICHIE_SITE:-funmooc}:/data/media:ro
+    depends_on:
+      - app
+
+  dockerize:
+    image: jwilder/dockerize
+
+  node:
+    image: circleci/node:14
+    working_dir: /app/src/frontend
+    user: "${DOCKER_USER:-1000}"
+    volumes:
+      - ./sites/${RICHIE_SITE:-funmooc}:/app
+
+  terraform-state:
+    image: hashicorp/terraform:latest
+    env_file: env.d/aws
+    user: "${DOCKER_USER:-1000}"
+    working_dir: /app
+    volumes:
+      - ./aws/create_state_bucket:/app
+    user: ${DOCKER_USER:-1000}
+
+  terraform:
+    image: hashicorp/terraform:0.12.31
+    environment:
+      - TF_VAR_SITE=${RICHIE_SITE:-funmooc}
+      - TF_DATA_DIR=/config
+    env_file: env.d/aws
+    user: "${DOCKER_USER:-1000}"
+    working_dir: /app
+    volumes:
+      - ./aws:/app
+      - ./sites/${RICHIE_SITE:-funmooc}/aws:/config
+    user: ${DOCKER_USER:-1000}
+
+  redis-sentinel:
+    image: docker.io/bitnami/redis-sentinel:6.0-debian-10
+    environment:
+      - REDIS_MASTER_HOST=redis-primary
+    depends_on:
+      - redis-primary
+
+  redis-primary:
+    image: docker.io/bitnami/redis:6.0-debian-10
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=master
+
+networks:
+  lms_outside:
+    driver: bridge
+    name: "${RICHIE_LMS_NETWORK:-edx_outside}"

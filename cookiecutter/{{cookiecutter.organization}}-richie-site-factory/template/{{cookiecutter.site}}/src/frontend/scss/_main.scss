@@ -1,0 +1,115 @@
+// Basic functions must be loaded before settings to be able to use them from
+// settings and objects
+@import 'richie-education/scss/tools/rem';
+@import 'richie-education/scss/tools/colors';
+
+// Our variables must be imported before Bootstrap code so they can override it
+@import 'richie-education/scss/settings/fonts';
+@import 'richie-education/scss/settings/variables';
+
+// TWITTER BOOTSTRAP V4
+// Required
+@import 'bootstrap/scss/bootstrap-reboot.scss';
+
+// Only what we use
+@import 'bootstrap/scss/badge';
+@import 'bootstrap/scss/card';
+@import 'bootstrap/scss/dropdown';
+@import 'bootstrap/scss/forms';
+@import 'bootstrap/scss/list-group';
+@import 'bootstrap/scss/nav';
+@import 'bootstrap/scss/navbar';
+@import 'bootstrap/scss/type';
+@import 'bootstrap/scss/utilities/display';
+@import 'bootstrap/scss/utilities/flex';
+@import 'bootstrap/scss/utilities/text';
+@import 'bootstrap/scss/utilities/embed';
+
+// Used for prototyping
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/utilities/spacing';
+@import 'bootstrap/scss/utilities/background';
+
+// Internal addons (import order does matter due to some mixin usage from
+// deeper mixins)
+@import 'richie-education/scss/tools/shapes';
+@import 'richie-education/scss/tools/flexbox';
+@import 'richie-education/scss/tools/empty';
+@import 'richie-education/scss/tools/cards';
+@import 'richie-education/scss/tools/hero';
+@import 'richie-education/scss/tools/list-group';
+@import 'richie-education/scss/tools/buttons';
+@import 'richie-education/scss/tools/background';
+@import 'richie-education/scss/tools/spacing';
+@import 'richie-education/scss/tools/content';
+@import 'richie-education/scss/tools/accordion';
+@import 'richie-education/scss/tools/features';
+@import 'richie-education/scss/tools/detail';
+
+// Generic stuff
+@import 'richie-education/scss/generic/background';
+@import 'richie-education/scss/generic/type';
+@import 'richie-education/scss/generic/images';
+@import 'richie-education/scss/generic/accessibility';
+@import 'richie-education/scss/generic/icons';
+
+// Shared object styles
+@import 'richie-education/scss/objects/banner.scss';
+@import 'richie-education/scss/objects/breadcrumbs';
+@import 'richie-education/scss/objects/course_glimpses';
+@import 'richie-education/scss/objects/blogpost_glimpses';
+@import 'richie-education/scss/objects/organization_glimpses';
+@import 'richie-education/scss/objects/person_glimpses';
+@import 'richie-education/scss/objects/category_glimpses';
+@import 'richie-education/scss/objects/program_glimpses';
+@import 'richie-education/scss/objects/pagination';
+@import 'richie-education/scss/objects/social-networks';
+@import 'richie-education/scss/objects/buttons';
+@import 'richie-education/scss/objects/characteristics';
+@import 'richie-education/scss/objects/react-autosuggest';
+@import 'richie-education/scss/objects/search-filter-value';
+@import 'richie-education/scss/objects/selector';
+@import 'richie-education/scss/objects/form';
+@import 'richie-education/js/components/CourseRunEnrollment/styles';
+@import 'richie-education/js/components/LtiConsumer/styles';
+@import 'richie-education/js/components/Modal/styles';
+@import 'richie-education/js/components/SearchFilterGroup/styles';
+@import 'richie-education/js/components/SearchFilterGroupModal/styles';
+@import 'richie-education/js/components/SearchFiltersPane/styles';
+@import 'richie-education/js/components/SearchInput/styles';
+@import 'richie-education/js/components/Spinner/styles';
+@import 'richie-education/js/components/UserLogin/styles';
+@import 'richie-education/js/components/UserMenu/styles';
+@import 'richie-education/scss/components/templates/courses/plugins/category_plugin';
+@import 'richie-education/scss/components/templates/courses/plugins/licence_plugin';
+@import 'richie-education/scss/components/templates/richie/section/section';
+@import 'richie-education/scss/components/templates/richie/large_banner/large_banner';
+@import 'richie-education/scss/components/templates/richie/nesteditem/nesteditem';
+@import 'richie-education/scss/components/templates/richie/glimpse/glimpse';
+
+// Page component styles
+@import 'richie-education/scss/components/header';
+@import 'richie-education/scss/components/subheader';
+@import 'richie-education/scss/components/footer';
+@import 'richie-education/scss/components/styleguide';
+@import 'richie-education/scss/components/content';
+@import 'richie-education/scss/components/error';
+@import 'richie-education/scss/components/templates/search/search';
+@import 'richie-education/scss/components/templates/richie/single-column';
+@import 'richie-education/scss/components/templates/courses/cms/homepage';
+@import 'richie-education/scss/components/templates/courses/cms/organization_list';
+@import 'richie-education/scss/components/templates/courses/cms/organization_detail';
+@import 'richie-education/scss/components/templates/courses/cms/category_list';
+@import 'richie-education/scss/components/templates/courses/cms/category_detail';
+@import 'richie-education/scss/components/templates/courses/cms/course_detail';
+@import 'richie-education/scss/components/templates/courses/cms/person_list';
+@import 'richie-education/scss/components/templates/courses/cms/person_detail';
+@import 'richie-education/scss/components/templates/courses/cms/blogpost_list';
+@import 'richie-education/scss/components/templates/courses/cms/blogpost_detail';
+@import 'richie-education/scss/components/templates/courses/cms/program_list';
+@import 'richie-education/scss/components/templates/courses/cms/program_detail';
+
+// CMS patchs
+@import 'richie-education/scss/trumps/cms';
+// IE11 patchs
+@import 'richie-education/scss/trumps/ie11-fixes';

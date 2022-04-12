@@ -1,0 +1,11 @@
+{
+    "organization": null,
+    "_copy_without_render": [
+        ".circleci",
+        "bin/activate",
+        "bin/release",
+        "bin/upgrade",
+        "cookiecutter",
+        "template"
+    ]
+}

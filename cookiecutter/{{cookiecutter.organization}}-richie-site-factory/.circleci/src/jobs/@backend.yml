@@ -1,0 +1,118 @@
+# Backend jobs
+# Build, lint and test backend development environment for a site
+build-back:
+  parameters:
+    site:
+      type: string
+  docker:
+    - image: cimg/python:3.10
+  working_directory: ~/fun/sites/<< parameters.site >>
+  steps:
+    - checkout:
+        path: ~/fun
+    - restore_cache:
+        keys:
+          - v1-back-dependencies-<< parameters.site >>-{{ .Revision }}
+    - run:
+        name: Install development dependencies
+        command: >
+          pip install \
+            --user \
+            -r requirements/base.txt \
+            -r requirements/dev.txt
+    - save_cache:
+        paths:
+          - ~/.local
+        key: v1-back-dependencies-<< parameters.site >>-{{ .Revision }}
+
+lint-back:
+  parameters:
+    site:
+      type: string
+  docker:
+    - image: cimg/python:3.10
+  working_directory: ~/fun/sites/<< parameters.site >>/src/backend/
+  steps:
+    - checkout:
+        path: ~/fun
+    - restore_cache:
+        keys:
+          - v1-back-dependencies-<< parameters.site >>-{{ .Revision }}
+    - run:
+        name: Lint code with flake8
+        command: ~/.local/bin/flake8
+    - run:
+        name: Lint code with isort
+        command: ~/.local/bin/isort --check-only .
+    - run:
+        name: Lint code with black
+        command: ~/.local/bin/black .
+    - run:
+        name: Lint code with pylint
+        command: ~/.local/bin/pylint .
+    - run:
+        name: Lint code with bandit
+        command: ~/.local/bin/bandit -qr .
+    - run:
+        name: Lint code with raincoat
+        command: ~/.local/bin/raincoat
+
+test-back:
+  parameters:
+    site:
+      type: string
+  docker:
+    - image: cimg/python:3.10
+      environment:
+        DJANGO_SETTINGS_MODULE: << parameters.site >>.settings
+        PYTHONPATH: /home/circleci/fun/src/backend
+        DJANGO_CONFIGURATION: Test
+        DJANGO_SECRET_KEY: ThisIsAnExampleKeyForTestPurposeOnly
+        DB_HOST: localhost
+        DB_NAME: richie
+        DB_USER: richie_user
+        DB_PASSWORD: pass
+        DB_PORT: 5432
+    - image: circleci/postgres:9.6-alpine-ram
+      environment:
+        POSTGRES_DB: richie
+        POSTGRES_USER: richie_user
+        POSTGRES_PASSWORD: pass
+    - image: docker.io/bitnami/redis:6.0-debian-10
+      name: redis-primary
+      environment:
+        ALLOW_EMPTY_PASSWORD: yes
+        REDIS_REPLICATION_MODE: master
+    - image: docker.io/bitnami/redis-sentinel:6.0-debian-10
+      name: redis-sentinel
+      environment:
+        REDIS_MASTER_HOST: redis-primary
+  working_directory: ~/fun/sites/<< parameters.site >>/src/backend
+  steps:
+    - checkout:
+        path: ~/fun
+    - restore_cache:
+        keys:
+          - v1-back-dependencies-<< parameters.site >>-{{ .Revision }}
+    - run:
+        name: Install gettext (required to compile messages)
+        command: |
+          sudo apt-get update
+          sudo apt-get install -y gettext
+    - run:
+        name: Compile translations
+        command: python manage.py compilemessages || true
+    # Run back-end (Django) test suite
+    #
+    # Nota bene: to run the django test suite, we need to ensure that the
+    # PostgreSQL service is up and ready. To achieve this,
+    # we wrap the command execution with dockerize, a tiny tool
+    # installed in the development image. In our case, dockerize will wait
+    # up to one minute until the database container is answering on port 5432.
+    - run:
+        name: Run tests
+        command: |
+              dockerize \
+                -wait tcp://localhost:5432 \
+                -timeout 60s \
+                  ~/.local/bin/pytest

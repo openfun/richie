@@ -1,0 +1,16 @@
+bandit==1.7.2
+black==22.3.0
+Faker==13.2.0
+factory-boy==3.2.1
+flake8==4.0.1
+isort==5.10.1
+pylint==2.12.2
+pylint-django==2.5.2
+pytest==7.0.1
+pytest-cov==3.0.0
+pytest-django==4.5.2
+raincoat==1.0.1
+
+# Testing html
+lxml==4.8.0
+cssselect==1.1.0

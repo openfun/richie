@@ -44,7 +44,7 @@ jobs:
       - run:
           name: enforce absence of print statements in code
           command: |
-            ! git diff origin/master..HEAD -- . ':(exclude).circleci' | grep "print("
+            ! git diff origin/master..HEAD -- ":(exclude)*.circleci/*" | grep "print("
       - run:
           name: Check absence of fixup commits
           command: |
@@ -203,13 +203,13 @@ jobs:
             - v2-back-dependencies-{{ .Revision }}
       - run:
           name: Lint code with flake8
-          command: ~/.local/bin/flake8
+          command: ~/.local/bin/flake8 src/richie/apps src/richie/plugins sandbox tests
       - run:
           name: Lint code with isort
-          command: ~/.local/bin/isort --check-only .
+          command: ~/.local/bin/isort --check-only src/richie/apps src/richie/plugins sandbox tests
       - run:
           name: Lint code with black
-          command: ~/.local/bin/black src/richie/apps src/richie/plugins sandbox tests --check
+          command: ~/.local/bin/black . --check
       - run:
           name: Lint code with pylint
           command: ~/.local/bin/pylint src/richie/apps src/richie/plugins sandbox tests

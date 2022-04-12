@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# shellcheck source=bin/_config.sh
+source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+function usage(){
+    echo -e "Usage: ${0} [OPTIONS]
+
+Tag all untagged release commits (starting with the 🔖 gitmoji) and
+push the tags to github so the image is built and pushed to DockerHub.
+
+OPTIONS:
+  -h, --help       print this message
+  -c, --commit     dry run if this option is not set
+"
+}
+
+declare -i should_commit=0
+declare regex="🔖\(.*\).*version [0-9\.]*"
+
+# Parse options
+for i in "$@"
+do
+    case $i in
+        -h|--help|help)
+            usage "${0}"
+            exit 0
+            ;;
+        -c|--commit)
+            should_commit=1
+            shift
+            ;;
+        *)
+            shift
+            ;;
+    esac
+done
+
+git fetch origin
+
+# Loop over new release commits that were not tagged yet
+for commit_hash in $(git log --grep="${regex}" --since=2020-10-07 --pretty=format:"%h %d" | grep -v "tag:" | awk '{print $1}')
+do
+    version=$(git show --format="%s" -s "${commit_hash}" | sed -E "s/.*version ([0-9\.]*).*/\1/")
+    site=$(git show --format="%s" -s "${commit_hash}" | sed -E "s/🔖\((.*)\).*/\1/")
+    action=$([[ "${should_commit}" == 1 ]] && echo "Tagging" || echo "Would tag")
+
+    echo -e "${COLOR_INFO}${action} ${commit_hash} with ${site}-${version}${COLOR_RESET}"
+    if [[ "${should_commit}" == 1 ]]; then
+        git tag "${site}-${version}" "${commit_hash}"
+        git push origin --tags
+    fi
+done
