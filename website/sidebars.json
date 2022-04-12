@@ -1,6 +1,6 @@
 {
   "docs": {
-    "Getting started": ["quick-start", "docker-development", "native-installation"],
+    "Getting started": ["discover", "cookiecutter"],
     "Recipes": [
       "django-react-interop",
       "building-the-frontend",
@@ -9,6 +9,13 @@
       "lms-connection",
       "web-analytics"
     ],
-    "Contributing": ["contributing-guide", "accessibility-testing", "css-guidelines"]
+    "Contributing": [
+      "installation",
+      "docker-development",
+      "native-installation",
+      "contributing-guide",
+      "accessibility-testing",
+      "css-guidelines"
+    ]
   }
 }

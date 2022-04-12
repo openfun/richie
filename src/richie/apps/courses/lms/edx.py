@@ -31,7 +31,7 @@ class EdXTokenAuth(AuthBase):
     """Attach HTTP token authentication to the given Request object."""
 
     def __init__(self, token):
-        """Set-up token value in the instance."""
+        """Set up token value in the instance."""
         self.token = token
 
     def __call__(self, request):
