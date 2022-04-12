@@ -10,7 +10,9 @@ ES_CHUNK_SIZE = 500
 ES_PAGE_SIZE = 10
 
 # Use a lazy to enable easier testing by not defining the value at bootstrap time
-ES_INDICES_PREFIX = lazy(lambda: settings.RICHIE_ES_INDICES_PREFIX)()
+ES_INDICES_PREFIX = lazy(
+    lambda: getattr(settings, "RICHIE_ES_INDICES_PREFIX", "richie")
+)()
 
 # Define which analyzer should be used for each language
 QUERY_ANALYZERS = getattr(
