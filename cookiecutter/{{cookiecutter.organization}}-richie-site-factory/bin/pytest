@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+# Recreate the redis sentinel service to avoid inconsistent state
+docker-compose up -d -V redis-sentinel
+
+docker-compose run --rm dockerize -wait tcp://db:5432 -timeout 60s
+docker-compose run --rm dockerize -wait tcp://elasticsearch:9200 -timeout 60s
+docker-compose run --rm \
+    -e DJANGO_CONFIGURATION=Test \
+    -e PYTHONPATH=/app \
+    app-dev pytest "$@"

@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# shellcheck source=bin/_config.sh
+source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+function usage(){
+    echo -e "Usage: ${0} [SITE1] [SITE2] [OPTIONS]
+
+Each site must be the name of a folder in the \"sites\" directory
+holding a richie based site with customizations. If no sites are
+specified, the script will loop over all sites to make releases.
+
+OPTIONS:
+  -h, --help       print this message
+  -m, --major      force a major release (breaking change)
+  -c, --commit     commit the release to git log
+"
+}
+
+# Bump a site's release according to its changelog.
+#
+# Usage: release SITE IS_MAJOR SHOULD_COMMIT
+#
+#  SITE           string  name of a folder in the "sites" directory
+#  IS_MAJOR       0|1     whether we should force a major release (breaking change)
+#  SHOULD_COMMIT  0|1     whether we should commit the release to the git log
+function release() {
+    site=$1
+    is_major=$2
+    should_commit=$3
+
+    # Select the Unreleased section of the changelog (between [Unreleased] and the last release).
+    #
+    # According to the sed documentation :
+    # - An exclamation mark '!' after a regex ('/RE/!') will select all lines that do NOT match that regex
+    # - The `d` instruction will delete the selected lines.
+    changelog=$(sed "/## \[Unreleased/,/## \[/!d" "${SITES_DIRECTORY}/${site}/CHANGELOG.md" | tail -n +2)
+
+    # Extract the last version released from changelog
+    current_version=$(echo "${changelog}" | grep "## \[" | sed -E "s/.*\[(.*)\].*/\1/")
+
+    # Split current version to array with major/minor/revision release numbers
+    IFS=\. read -r -a current_version_array <<<"${current_version}"
+
+    # Bump version to above major, minor or revision number depending on changelog content
+    if [[ "${is_major}" == 1  ]]; then
+        # Major release
+        major_release=$((current_version_array[0] + 1))
+        new_version="${major_release}.0.0"
+    else
+        if ! echo "${changelog}" | grep "###" &> /dev/null; then
+            # No changes since the last release, do nothing
+            echo -e "${COLOR_INFO}Nothing to release on ${site}${COLOR_RESET}"
+            return 0
+        fi
+        if echo "${changelog}" | grep "###" | grep -v "Fixed" &> /dev/null; then
+            # Minor release
+            minor_release=$((current_version_array[1] + 1))
+            new_version="${current_version_array[0]}.${minor_release}.0"
+        else
+            # Revision release (fix)
+            revision_release=$((current_version_array[2] + 1))
+            new_version="${current_version_array[0]}.${current_version_array[1]}.${revision_release}"
+        fi
+    fi
+
+    echo -e "${COLOR_INFO}Creating release v${new_version} for ${site}${COLOR_RESET}"
+
+    # Update CHANGELOG.md
+    # - Add tag and date for the new releave in the form: ## [2.10.2]  2020-10-07
+    sed -i -E "/Unreleased/a \\\n## [${new_version}] - $(date +'%Y-%m-%d')" "${SITES_DIRECTORY}/${site}/CHANGELOG.md"
+    # - Add release link in footer
+    sed -i "s/^\[unreleased\].*$/[unreleased]: https:\/\/github.com\/openfun\/richie-site-factory\/compare\/${site}-${new_version}...HEAD/gi" "${SITES_DIRECTORY}/${site}/CHANGELOG.md"
+    sed -i -E "/^\[${current_version}\]/i [${new_version}]: https://github.com/openfun/richie-site-factory/compare/${site}-${current_version}...${site}-${new_version}" "${SITES_DIRECTORY}/${site}/CHANGELOG.md"
+
+    # Update richie backend and frontend versions
+    sed -i -E "s/(__version__ = \")(.*)\"/\1${new_version}\"/" "${SITES_DIRECTORY}/${site}/src/backend/${site}/__init__.py"
+    sed -i -E "s/(\"version\": \")(.*)\"/\1${new_version}\"/" "${SITES_DIRECTORY}/${site}/src/frontend/package.json"
+
+    if [[ "${should_commit}" == 1 ]]; then
+        # Commit changes to git log
+        # - Add only the modified files
+        git add "${SITES_DIRECTORY}/${site}/CHANGELOG.md"
+        git add "${SITES_DIRECTORY}/${site}/src/backend/${site}/__init__.py"
+        git add "${SITES_DIRECTORY}/${site}/src/frontend/package.json"
+
+        # - Reuse release description from CHANGELOG.md
+        changelog=$(echo "${changelog}" | sed "\$d;s/### //g")
+
+        # - Create commit respecting gitmoji/gitlint format
+        git commit -m "🔖(${site}) bump to version ${new_version}" -m "${changelog}"
+    fi
+}
+
+
+declare -a sites
+declare -i n_sites
+declare -i is_major=0
+declare -i should_commit=0
+
+# Parse options
+for i in "$@"
+do
+    case $i in
+        -h|--help|help)
+            usage "${0}"
+            exit 0
+            ;;
+        -m|--major)
+            is_major=1
+            shift
+            ;;
+        -c|--commit)
+            should_commit=1
+            shift
+            ;;
+        *)
+            sites+=("${1}")
+            shift
+            ;;
+    esac
+done
+
+# If no sites were specified, loop over all sites
+n_sites=${#sites[@]}
+if [[ ${n_sites} -eq 0 ]] ; then
+    # List all sites by browsing the "sites" directory
+    # and store them in the existing "sites" array
+    read -r -a sites <<< "$(
+        find "${SITES_DIRECTORY}" -maxdepth 1 -mindepth 1  -type d |
+        sed 's|'"${SITES_DIRECTORY}\/"'||' |
+        xargs
+    )"
+    n_sites=${#sites[@]}
+fi
+
+for (( i=0; i<n_sites; i++ )); do
+    release "${sites[$i]}" ${is_major} ${should_commit}
+done

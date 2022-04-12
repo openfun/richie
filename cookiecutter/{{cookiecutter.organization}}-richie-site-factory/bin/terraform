@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# shellcheck source=bin/_config.sh
+source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+args=( "$@" )
+
+case "$1" in
+    apply|destroy|import|plan)
+        args[0]="${args[0]} -var-file=/config/config.tfvars"
+        ;;
+    init)
+        args[0]="${args[0]} -backend-config=key=${RICHIE_SITE}.tfstate"
+        ;;
+esac
+
+docker-compose pull terraform
+
+# Run Terraform commands in the Hashicorp docker container via docker compose
+# shellcheck disable=SC2068
+DOCKER_USER="$(id -u):$(id -g)" \
+    docker-compose run --rm terraform ${args[@]}

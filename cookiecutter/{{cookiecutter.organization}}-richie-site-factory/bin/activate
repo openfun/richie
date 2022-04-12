@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# shellcheck source=bin/_config.sh
+source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+declare prompt
+declare -a sites
+declare -i default=1
+declare -i choice
+declare -i n_sites
+
+# List sites by looking in the "sites" directory
+# and store them in an array
+read -r -a sites <<< "$(
+    find "${SITES_DIRECTORY}" -maxdepth 1 -mindepth 1  -type d |
+    sed 's|'"${SITES_DIRECTORY}\/"'||' |
+    xargs
+)"
+n_sites=${#sites[@]}
+
+prompt="Select an available site to activate:\\n"
+for (( i=0; i<n_sites; i++ )); do
+    prompt+="[$((i+1))] ${sites[$i]}"
+    if [[ $((i+1)) -eq ${default} ]]; then
+        prompt+=" (default)"
+    fi
+    prompt+="\\n"
+done
+prompt+="Your choice: "
+read -r -p "$(echo -e "${prompt}")" choice
+
+if [[ ${choice} -gt n_sites ]]; then
+    (>&2 echo "Invalid choice ${choice} (should be <= ${n_sites})")
+    exit 10
+fi
+
+if [[ ${choice} -le 0 ]]; then
+    choice=${default}
+fi
+
+RICHIE_SITE="${sites[$((choice-1))]}"
+
+if [[ "${BASH_SOURCE[0]}" != "${0}" ]] ; then
+    export RICHIE_SITE
+else
+    echo -e "\\n# Copy/paste ${RICHIE_SITE} activation command:"
+    echo "export RICHIE_SITE=${RICHIE_SITE}"
+fi

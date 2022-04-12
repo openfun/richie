@@ -1,0 +1,47 @@
+# Front-end jobs
+# Build, lint and test frontend development environment for a site
+build-front-production:
+  parameters:
+    site:
+      type: string
+  docker:
+    - image: circleci/node:14
+  working_directory: ~/fun/sites/<< parameters.site >>/src/frontend/
+  steps:
+    - checkout:
+        path: ~/fun
+    - restore_cache:
+        keys:
+          - v1-front-dependencies-<< parameters.site >>-{{ checksum "yarn.lock" }}
+          - v1-front-dependencies-<< parameters.site >>-
+    - run:
+        name: Install frontend dependencies (with locked dependencies)
+        command: yarn install --frozen-lockfile
+    - run:
+        name: Build application styles (production mode)
+        command: yarn build-sass-production
+    - run:
+        command: yarn build-ts-production
+        name: Build application js (production mode)
+    - save_cache:
+        paths:
+          - ./node_modules
+        key: v1-front-dependencies-<< parameters.site >>-{{ checksum "yarn.lock" }}
+
+lint-front:
+  parameters:
+    site:
+      type: string
+  docker:
+    - image: circleci/node:14
+  working_directory: ~/fun/sites/<< parameters.site >>/src/frontend/
+  steps:
+    - checkout:
+        path: ~/fun
+    - restore_cache:
+        keys:
+          - v1-front-dependencies-<< parameters.site >>-{{ checksum "yarn.lock" }}
+          - v1-front-dependencies-<< parameters.site >>-
+    - run:
+        name: Lint frontend code with prettier & eslint
+        command: yarn lint

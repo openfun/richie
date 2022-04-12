@@ -55,6 +55,8 @@ COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin crowdin
 COMPOSE_TEST_RUN     = $(COMPOSE) run --rm -e DJANGO_CONFIGURATION=Test
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
+PYTHON_FILES         = src/richie/apps src/richie/plugins sandbox
+
 # -- Node
 # We must run node with a /home because yarn tries to write to ~/.yarnrc. If the
 # ID of our host user (with which we run the container) does not exist in the
@@ -207,27 +209,27 @@ lint-back-diff: ## lint back-end python sources, but only what has changed since
 
 lint-back-black: ## lint back-end python sources with black
 	@echo 'lint:black started…'
-	@$(COMPOSE_TEST_RUN_APP) black src/richie/apps src/richie/plugins sandbox tests
+	@$(COMPOSE_TEST_RUN_APP) black . 
 .PHONY: lint-back-black
 
 lint-back-flake8: ## lint back-end python sources with flake8
 	@echo 'lint:flake8 started…'
-	@$(COMPOSE_TEST_RUN_APP) flake8 src/richie/apps src/richie/plugins sandbox tests
+	@$(COMPOSE_TEST_RUN_APP) flake8 ${PYTHON_FILES} tests
 .PHONY: lint-back-flake8
 
 lint-back-isort: ## automatically re-arrange python imports in back-end code base
 	@echo 'lint:isort started…'
-	@$(COMPOSE_TEST_RUN_APP) isort --atomic src/richie/apps src/richie/plugins sandbox tests
+	@$(COMPOSE_TEST_RUN_APP) isort --atomic ${PYTHON_FILES} tests
 .PHONY: lint-back-isort
 
 lint-back-pylint: ## lint back-end python sources with pylint
 	@echo 'lint:pylint started…'
-	@$(COMPOSE_TEST_RUN_APP) pylint src/richie/apps src/richie/plugins sandbox tests
+	@$(COMPOSE_TEST_RUN_APP) pylint ${PYTHON_FILES} tests
 .PHONY: lint-back-pylint
 
 lint-back-bandit: ## lint back-end python sources with bandit
 	@echo 'lint:bandit started…'
-	@$(COMPOSE_TEST_RUN_APP) bandit -qr src/richie/apps src/richie/plugins sandbox
+	@$(COMPOSE_TEST_RUN_APP) bandit -qr ${PYTHON_FILES}
 .PHONY: lint-back-bandit
 
 messages: ## create the .po files used for i18n

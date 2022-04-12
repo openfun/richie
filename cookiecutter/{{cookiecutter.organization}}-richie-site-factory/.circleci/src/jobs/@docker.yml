@@ -1,0 +1,113 @@
+# Backend jobs
+# Build, test and publish Docker images for a site
+hub:
+  parameters:
+    site:
+      type: string
+    image_name:
+      type: string
+  docker:
+    - image: circleci/buildpack-deps:stretch
+      environment:
+        RICHIE_SITE: << parameters.site >>
+  working_directory: ~/fun
+  steps:
+    - checkout
+    # Generate a version.json file describing app release
+    - generate-version-file:
+        site: << parameters.site >>
+    # Activate docker-in-docker (with layers caching enabled)
+    - setup_remote_docker:
+        version: 19.03.13
+    - run:
+        name: Build docker images
+        command: make env.d/aws && make build
+    - run:
+        name: Check built image availability
+        command: |
+          docker images "<< parameters.image_name >>:development"
+          docker images "<< parameters.image_name >>:production"
+          docker images "<< parameters.image_name >>-nginx:production"
+    - run:
+        name: Check version.json file
+        command: make ci-version
+    - run:
+        name: Run Django migrations
+        command: make ci-migrate
+    - run:
+        name: Run Django checks with production image
+        command: make ci-check
+    - run:
+        name: Check that the changelog, versions and tag are always in sync
+        command: bin/ci check_tag << parameters.site >> "$CIRCLE_TAG"
+    # Publish images to DockerHub only for tags and the main branch:
+    #   - for a v1.0.1 tag, publish Docker tags "1.0.1"  and "latest"
+    #   - for the main branch, publish a "main" tag
+    #
+    # Nota bene: logged user (see "Login to DockerHub" step) must have write
+    # permission for the project's repository; this also implies that the
+    # DockerHub repository already exists.
+    - when:
+        condition:
+          or:
+            - << pipeline.git.tag >>
+            - equal:
+                - << pipeline.git.branch >>
+                - main
+        steps:
+          # Login to DockerHub to Publish new images
+          #
+          # Nota bene: you'll need to define the following secrets environment vars
+          # in CircleCI interface:
+          #
+          #   - DOCKER_USER
+          #   - DOCKER_PASS
+          - run:
+              name: Login to DockerHub
+              command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+          # Set environment variables that will be used in next steps
+          - run:
+              name: Compute Docker tag
+              command: |
+                DOCKER_TAG=$([[ -z "$CIRCLE_TAG" ]] && echo $CIRCLE_BRANCH || echo ${CIRCLE_TAG} | sed 's/^<< parameters.site >>-//')
+                echo "export DOCKER_TAG=${DOCKER_TAG}" >> $BASH_ENV
+          # Tag images
+          - run:
+              name: Tag app image
+              command: |
+                docker images fundocker/<< parameters.image_name >>
+                # Display either:
+                # - DOCKER_TAG: main (Git branch)
+                # or
+                # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
+                echo "DOCKER_TAG: ${DOCKER_TAG}"
+                docker tag << parameters.site >>:production fundocker/<< parameters.image_name >>:${DOCKER_TAG}
+                if [[ -n "$CIRCLE_TAG" ]]; then
+                    docker tag << parameters.site >>:production fundocker/<< parameters.image_name >>:latest
+                fi
+                docker images | grep -E "^fundocker/<< parameters.image_name >>\s*(${DOCKER_TAG}.*|latest|main)"
+          - run:
+              name: Tag nginx image
+              command: |
+                docker images fundocker/<< parameters.image_name >>-nginx
+                echo "DOCKER_TAG: ${DOCKER_TAG}"
+                docker tag << parameters.site >>-nginx:production fundocker/<< parameters.image_name >>-nginx:${DOCKER_TAG}
+                if [[ -n "$CIRCLE_TAG" ]]; then
+                    docker tag << parameters.site >>-nginx:production fundocker/<< parameters.image_name >>-nginx:latest
+                fi
+                docker images | grep -E "^fundocker/<< parameters.image_name >>-nginx\s*(${DOCKER_TAG}.*|latest|main)"
+          # Publish images
+          - run:
+              name: Publish app image
+              command: |
+                docker push fundocker/<< parameters.image_name >>:${DOCKER_TAG}
+                if [[ -n "$CIRCLE_TAG" ]]; then
+                  docker push fundocker/<< parameters.image_name >>:latest
+                fi
+          - run:
+              name: Publish nginx image
+              command: |
+                docker push fundocker/<< parameters.image_name >>-nginx:${DOCKER_TAG}
+                if [[ -n "$CIRCLE_TAG" ]]; then
+                  docker push fundocker/<< parameters.image_name >>-nginx:latest
+                fi

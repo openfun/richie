@@ -1,0 +1,62 @@
+# cookiecutter
+.cookiecutter_replay
+
+# env
+.env
+env.d/aws
+
+# virtualenv
+.venv
+venv
+
+# Packaging
+build
+dist
+*.egg-info
+
+# sqlite DB
+db.sqlite3
+*.db
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+.cache
+.pytest_cache
+nosetests.xml
+coverage.xml
+
+# i18n
+*.pot
+*.mo
+frontend.json
+
+# Built statics
+**/src/backend/base/static/richie/css/main.css*
+**/src/backend/base/static/richie/js
+
+# Site media
+data/
+
+# JS dependencies
+node_modules
+
+# SASS
+.sass-cache
+
+# logs
+yarn-error.log
+
+# Terraform
+.terraform
+*.tfstate
+*.tfstate.backup
+**/aws/environment
+**/aws/plugins
+
+# CircleCI
+.circleci/src/workflows/@*.yml

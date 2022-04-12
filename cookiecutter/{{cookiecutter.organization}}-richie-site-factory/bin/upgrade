@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# shellcheck source=bin/_config.sh
+source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+function usage(){
+    echo -e "Usage: ${0} VERSION [SITE1] [SITE2] [OPTIONS]
+
+Each site must be the name of a folder in the \"sites\" directory
+holding a richie based site with customizations. If no sites are
+specified, the script will loop over all sites to make releases.
+
+OPTIONS:
+  -h, --help       print this message
+  -b, --build      test building the site image after upgrading
+  -c, --commit     commit the upgrade to git log
+"
+}
+
+# Bump the version of richie on a site
+#
+# Usage: upgrade VERSION SITE SHOULD_COMMIT
+#
+#  VERSION        string  version of richie to which we want to upgrade
+#  SITE           string  name of a folder in the "sites" directory
+#  SHOULD_BUILD   0|1     whether we should test the build after upgrading
+#  SHOULD_COMMIT  0|1     whether we should commit the release to the git log
+function upgrade() {
+    version=$1
+    site=$2
+    should_build=$3
+    should_commit=$4
+
+    echo -e "${COLOR_INFO}Upgrading ${site} to ${version}...${COLOR_RESET}"
+
+    # Update richie backend and frontend dependencies
+    sed -i -E "s/(richie==)(.*)/\1${version}/" "${SITES_DIRECTORY}/${site}/requirements/base.txt"
+    sed -i -E "s/(\"richie-education\": \")(.*)\"/\1${version}\"/" "${SITES_DIRECTORY}/${site}/src/frontend/package.json"
+    (cd "${SITES_DIRECTORY}/${site}/src/frontend" && yarn)
+
+    if [[ "${should_build}" == 1 ]]; then
+        # Test build if requested
+        RICHIE_SITE=${site} make build
+    fi
+
+    if [[ "${should_commit}" == 1 ]]; then
+        # Commit changes to git log
+        # - Add only the modified files
+        git add "${SITES_DIRECTORY}/${site}/CHANGELOG.md"
+        git add "${SITES_DIRECTORY}/${site}/requirements/base.txt"
+        git add "${SITES_DIRECTORY}/${site}/src/frontend/package.json"
+        git add "${SITES_DIRECTORY}/${site}/src/frontend/yarn.lock"
+
+        # - Point to richie release in description
+        changelog="Changelog available at:
+https://github.com/openfun/richie/releases/tag/v${version}"
+
+        # - Create commit respecting gitmoji/gitlint format
+        git commit -m "⬆️(${site}) upgrade richie to v${version}" -m "${changelog}"
+    fi
+}
+
+
+declare -a args
+declare -i should_build=0
+declare -i should_commit=0
+
+# Parse options
+for i in "$@"
+do
+    case $i in
+        -h|--help|help)
+            usage "${0}"
+            exit 0
+            ;;
+        -b|--build)
+            should_build=1
+            shift
+            ;;
+        -c|--commit)
+            should_commit=1
+            shift
+            ;;
+        *)
+            args+=("${1}")
+            shift
+            ;;
+    esac
+done
+
+# Release version is required as first argument
+declare version="${args[0]}"
+declare -a sites=("${args[@]:1}")
+declare -i n_sites=${#sites[@]}
+
+if [[ -z "${version}" ]]; then
+    usage "${0}"
+    exit 1
+fi
+
+# If no sites were specified, loop over all sites
+if [[ ${n_sites} -eq 0 ]] ; then
+    # List all sites by browsing the "sites" directory
+    # and store them in the existing "sites" array
+    read -r -a sites <<< "$(
+        find "${SITES_DIRECTORY}" -maxdepth 1 -mindepth 1  -type d |
+        sed 's|'"${SITES_DIRECTORY}\/"'||' |
+        xargs
+    )"
+    n_sites=${#sites[@]}
+fi
+
+for (( i=0; i<n_sites; i++ )); do
+    upgrade "${version}" "${sites[$i]}" ${should_build} ${should_commit}
+done
