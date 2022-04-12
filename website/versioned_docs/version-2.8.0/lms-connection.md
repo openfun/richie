@@ -84,7 +84,7 @@ apps should be able to communicate with each other via the network bridge define
 docker-compose.
 
 If you want to activate [seamless enrollment](#2-seamless-enrollment) locally for development,
-you will need to set-up TLS domains for both Richie and OpenEdX. To do this, head over to our
+you will need to set up TLS domains for both Richie and OpenEdX. To do this, head over to our
 guide on [setting-up TLS connections for Richie and OpenEdX](tls-connection).
 
 
