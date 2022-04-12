@@ -40,8 +40,6 @@
         "djangocms-video",
         "djangorestframework",
         "elasticsearch",
-        "social-auth-app-django",
-        "social-auth-core[openidconnect]"
       ]
     }
   ]
