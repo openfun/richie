@@ -139,14 +139,14 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
         {address ? (
           <Fragment>
             <button
-              className="button button--active"
+              className="button button-sale--tertiary"
               onClick={handleCancel}
               title={intl.formatMessage(messages.cancelTitleButton)}
             >
               <FormattedMessage {...messages.cancelButton} />
             </button>
             <button
-              className="button button--primary"
+              className="button button-sale--primary"
               disabled={!formState.isValid || addresses.states.updating}
               type="submit"
             >
@@ -155,7 +155,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
           </Fragment>
         ) : (
           <button
-            className="button button--primary"
+            className="button button-sale--primary"
             disabled={!formState.isValid || addresses.states.creating || addresses.states.updating}
             type="submit"
           >

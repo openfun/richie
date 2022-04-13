@@ -88,14 +88,14 @@ const RegisteredAddress = ({ promote, select, edit, remove, address }: Props) =>
       <p className="registered-addresses-item__actions">
         <button
           aria-label={intl.formatMessage(messages.selectButtonLabel, { title: address.title })}
-          className="button button--tiny button--pill button--primary"
+          className="button button--tiny button--pill button-sale--primary"
           onClick={() => select(address)}
         >
           <FormattedMessage {...messages.selectButton} />
         </button>
         <button
           aria-label={intl.formatMessage(messages.editButtonLabel, { title: address.title })}
-          className="button button--tiny button--tertiary"
+          className="button button--tiny button--pill  button-sale--secondary"
           onClick={() => edit(address)}
         >
           <FormattedMessage {...messages.editButton} />
@@ -104,7 +104,7 @@ const RegisteredAddress = ({ promote, select, edit, remove, address }: Props) =>
           aria-label={intl.formatMessage(messages.deleteButtonLabel, {
             title: address.title,
           })}
-          className="button button--tiny button--tertiary"
+          className="button button--tiny button--pill  button-sale--secondary"
           disabled={address.is_main}
           onClick={() => remove(address)}
         >

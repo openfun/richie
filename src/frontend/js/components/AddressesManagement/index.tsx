@@ -7,6 +7,7 @@ import { Maybe } from 'types/utils';
 import { confirm } from 'utils/indirection/window';
 import RegisteredAddress from 'components/RegisteredAddress';
 import AddressForm, { type AddressFormValues } from 'components/AddressesManagement/AddressForm';
+import { Icon } from 'components/Icon';
 
 // constant used as `address.id` for local address
 export const LOCAL_BILLING_ADDRESS_ID = 'local-billing-address';
@@ -249,10 +250,8 @@ const AddressesManagement = ({ handleClose, selectAddress }: AddressesManagement
 
   return (
     <div className="AddressesManagement">
-      <button className="button button--tertiary" onClick={handleClose}>
-        <svg className="button__icon" aria-hidden="true">
-          <use href="#icon-chevron-down" />
-        </svg>
+      <button className="button button-sale--tertiary" onClick={handleClose}>
+        <Icon name="icon-chevron-down" className="button__icon" />
         <FormattedMessage {...messages.closeButton} />
       </button>
       {error && (

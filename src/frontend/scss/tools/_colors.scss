@@ -306,6 +306,23 @@
 }
 
 ///
+/// A util to apply a scheme to a button
+///
+@mixin r-button-apply-scheme(
+  $scheme,
+  $apply-border: true,
+  $prefix: null,
+  $include-hover: false,
+  $outline: false
+) {
+  @if $outline {
+    @include r-button-outline-colors($scheme, $apply-border, $prefix, $include-hover);
+  } @else {
+    @include r-button-colors($scheme, $apply-border, $prefix, $include-hover);
+  }
+}
+
+///
 /// A shortand to quickly get a color value in palette setting from given
 /// name. You should quote name to enforce it as a string, single word can be
 /// recognize as CSS keyword and would result as a null value.

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Improve sale tunnel theme overriding
+
 ### Fixed
 
 - Fix erratic frontend test failure

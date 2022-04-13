@@ -1,0 +1,83 @@
+.registered-addresses-item {
+  @include shadowed-box($padding: 1rem);
+  align-items: center;
+  display: flex;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  @include media-breakpoint-down(md) {
+    align-items: start;
+    flex-direction: column;
+
+    &__actions {
+      align-self: end;
+    }
+  }
+
+  & > * {
+    margin: 0;
+  }
+
+  .address-main-indicator {
+    $tick-size: 1.125rem;
+    background-color: r-theme-val(form, input-unchecked-background);
+    border-radius: 100vw;
+    border: 2px solid r-theme-val(form, input-unchecked-border);
+    box-sizing: border-box;
+    display: block;
+    height: $tick-size;
+    position: relative;
+    width: $tick-size;
+
+    &:before {
+      background: transparent;
+      border-radius: 100vw;
+      content: '';
+      display: block;
+      height: 60%;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform-origin: center center;
+      transform: translate(-50%, -50%) scale(calc(100 / 60));
+      transition: transform 400ms $r-ease-out;
+      width: 60%;
+    }
+
+    &--is-main {
+      background-color: r-theme-val(form, input-checked-background);
+      border-color: r-theme-val(form, input-checked-border);
+      color: r-theme-val(form, input-checked-color);
+
+      &:before {
+        background-color: r-theme-val(form, input-checked-color);
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+  }
+
+  &__title {
+    font-size: 0.8rem;
+    margin-right: 0.8rem;
+  }
+
+  &__address {
+    flex: 1;
+    line-height: 1em;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+
+    & > .button {
+      min-width: 100px;
+
+      &:disabled {
+        visibility: hidden;
+      }
+    }
+  }
+}

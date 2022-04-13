@@ -190,7 +190,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   return (
     <div className="payment-button">
       <button
-        className="button button--primary"
+        className="button button-sale--primary"
         disabled={!isReadyToPay || state === ComponentStates.LOADING}
         onClick={createPayment}
       >

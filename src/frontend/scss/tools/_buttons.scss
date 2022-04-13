@@ -75,6 +75,7 @@
   &:disabled {
     opacity: $disabled-opacity;
     @include box-shadow(none);
+    pointer-events: none;
   }
 
   &:not(:disabled):not(.disabled):active,
