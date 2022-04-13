@@ -69,7 +69,7 @@ export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValida
         ) : null}
       </ol>
       <footer className="SaleTunnelStepValidation__footer">
-        <button className="button button--primary" onClick={next}>
+        <button className="button button-sale--primary" onClick={next}>
           <FormattedMessage {...messages.proceedToPayment} />
         </button>
       </footer>

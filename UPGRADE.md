@@ -16,6 +16,25 @@ $ make migrate
 
 ## Unreleased
 
+## 2.14.x to 2.15.x
+- RegisteredAddress now has a related stylesheet, you have to update the main stylesheet as follows:
+  - `_main.scss`
+  ```diff
+  +   @import 'richie-education/js/components/RegisteredAddress/styles';
+  ```
+  - Only if you have overridden `_theme.scss`:
+  ```diff
+  ...
+  +sale-tunnel: (
+  +  primary-button-scheme: $firebrick6-scheme,
+  +  primary-button-is-outlined: false,
+  +  secondary-button-scheme: $purplish-grey-scheme,
+  +  secondary-button-is-outlined: true,
+  +  tertiary-button-scheme: $smoke-scheme,
+  +  tertiary-button-is-outlined: false,
+  +),
+  ...
+  ```
 ## 2.13.x to 2.14.x
 
 - New frontend widgets has been added, you have to update stylesheets as follows:
@@ -23,19 +42,19 @@ $ make migrate
   ```diff
   +   @import 'richie-education/scss/tools/utils';
   
-  +   @import '../js/components/AddressesManagement/styles';
-  +   @import '../js/components/CourseProductCertificateItem/styles';
-  +   @import '../js/components/CourseProductCourseRuns/styles';
-  +   @import '../js/components/CourseProductItem/styles';
-  +   @import '../js/components/PaymentButton/styles';
-  +   @import '../js/components/RegisteredCreditCard/styles';
-  +   @import '../js/components/SaleTunnel/styles';
-  +   @import '../js/components/SaleTunnelStepPayment/styles';
-  +   @import '../js/components/SaleTunnelStepResume/styles';
-  +   @import '../js/components/SaleTunnelStepValidation/styles';
-  +   @import '../js/components/StepBreadcrumb/styles';
+  +   @import 'richie-education/js/components/AddressesManagement/styles';
+  +   @import 'richie-education/js/components/CourseProductCertificateItem/styles';
+  +   @import 'richie-education/js/components/CourseProductCourseRuns/styles';
+  +   @import 'richie-education/js/components/CourseProductItem/styles';
+  +   @import 'richie-education/js/components/PaymentButton/styles';
+  +   @import 'richie-education/js/components/RegisteredCreditCard/styles';
+  +   @import 'richie-education/js/components/SaleTunnel/styles';
+  +   @import 'richie-education/js/components/SaleTunnelStepPayment/styles';
+  +   @import 'richie-education/js/components/SaleTunnelStepResume/styles';
+  +   @import 'richie-education/js/components/SaleTunnelStepValidation/styles';
+  +   @import 'richie-education/js/components/StepBreadcrumb/styles';
   ...
-  +   @import './components/templates/richie/multiple-columns';
+  +   @import 'richie-education/scss/components/templates/richie/multiple-columns';
   ```
   
   - Only if you have overridden `_palette.scss`:

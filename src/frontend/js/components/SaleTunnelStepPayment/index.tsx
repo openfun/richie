@@ -186,7 +186,7 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
             </h6>
             {addressesItems.length > 0 && (
               <button
-                className="button button--tiny button--pill button--outline-purplish-grey"
+                className="button button--tiny button--pill button-sale--secondary"
                 onClick={() => setShowAddressCreationForm(true)}
               >
                 <svg className="button__icon" aria-hidden="true">
@@ -233,7 +233,7 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
               </p>
               <button
                 aria-hidden="true"
-                className="button button--tiny button--pill button--primary"
+                className="button button--tiny button--pill button-sale--primary"
                 onClick={() => setShowAddressCreationForm(true)}
               >
                 <svg className="button__icon" role="img">

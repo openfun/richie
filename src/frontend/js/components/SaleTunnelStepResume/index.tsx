@@ -51,7 +51,7 @@ export const SaleTunnelStepResume = ({ next }: SaleTunnelStepResumeProps) => (
       <FormattedMessage {...messages.successDetailMessage} />
     </p>
     <footer className="SaleTunnelStepResume__footer">
-      <button className="button button--primary" onClick={next}>
+      <button className="button button-sale--primary" onClick={next}>
         <FormattedMessage {...messages.cta} />
       </button>
     </footer>
