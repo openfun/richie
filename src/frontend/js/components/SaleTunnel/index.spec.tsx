@@ -198,6 +198,14 @@ describe('SaleTunnel', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     screen.getByRole('heading', { level: 1, name: 'SaleTunnelStepPayment Component' });
 
+    // - Press the escape key should not close the dialog
+    fireEvent.keyDown(screen.getByTestId('SaleTunnel__modal'), { keyCode: 27 });
+    screen.getByTestId('SaleTunnel__modal');
+
+    // - Click on the overlay area should not close the dialog
+    fireEvent.click(document.querySelector('.modal__overlay')!);
+    screen.getByTestId('SaleTunnel__modal');
+
     // - Click on the close button should close the dialog
     fireEvent.click($closeButton);
     expect(screen.queryByTestId('SaleTunnel__modal')).toBeNull();
