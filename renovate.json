@@ -39,7 +39,7 @@
         "djangocms-text-ckeditor",
         "djangocms-video",
         "djangorestframework",
-        "elasticsearch",
+        "elasticsearch"
       ]
     }
   ]
