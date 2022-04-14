@@ -5,7 +5,22 @@
 
 // Our variables must be imported before Bootstrap code so they can override it
 @import 'richie-education/scss/settings/fonts';
+
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+
+// Override default Richie settings variables
+@import 'richie-education/scss/colors/palette';
+@import './extras/colors/palette';
+
+@import 'richie-education/scss/colors/gradients';
+@import 'richie-education/scss/colors/schemes';
+
+@import 'richie-education/scss/colors/theme';
+@import './extras/colors/theme';
+
 @import 'richie-education/scss/settings/variables';
+@import './extras/settings/variables';
 
 // TWITTER BOOTSTRAP V4
 // Required

@@ -1,12 +1,3 @@
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-
-// Design color stuff
-@import '../colors/palette';
-@import '../colors/gradients';
-@import '../colors/schemes';
-@import '../colors/theme';
-
 // One pixel shortcut
 $onepixel: 0.0625rem;
 // Debug line to possibly calibrate it again when base size has been changed

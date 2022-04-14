@@ -1,0 +1,18 @@
+// {{cookiecutter.site}} theme overwrites
+
+// This file is to override the default Richie theme scheme.
+// Default Richie file: https://github.com/openfun/richie/blob/master/src/frontend/scss/colors/_theme.scss
+// Instead of override the `r-theme` variable you can merge the default values with your own
+// custom code.
+
+// The example below only changes the `topbar` `item-hover-color` value
+// from `indianred3` to `firebrick6`.
+
+// $r-theme: recursive-map-merge(
+//   $r-theme,
+//   (
+//     topbar: (
+//       item-hover-color: r-color('firebrick6'),
+//     ),
+//   )
+// );
