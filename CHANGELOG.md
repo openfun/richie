@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Improve Sale Tunnel UX
 - Improve sale tunnel theme overriding
 
 ### Fixed

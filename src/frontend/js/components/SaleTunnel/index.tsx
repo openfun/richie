@@ -100,10 +100,12 @@ const SaleTunnel = ({ product }: SaleTunnelProps) => {
         {product.call_to_action}
       </button>
       <Modal
-        testId="SaleTunnel__modal"
         className="SaleTunnel__modal"
-        onRequestClose={handleModalClose}
         isOpen={isOpen}
+        onRequestClose={handleModalClose}
+        shouldCloseOnOverlayClick={false}
+        shouldCloseOnEsc={false}
+        testId="SaleTunnel__modal"
       >
         <button
           className="modal__closeButton"
