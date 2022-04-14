@@ -88,6 +88,14 @@ information about how to configure and run a site.
 Once you're happy with your site, don't forget to backup your work e.g. by
 committing it and pushing it to a new git repository.
 
+## Theming
+
+Probably you want to change the default theme. The cookiecutter adds an extra scss frontend folder with a couple of templates where you can use to change the default styling of the site.
+* `sites/<site>/src/frontend/scss/extras/colors/_palette.scss`
+* `sites/<site>/src/frontend/scss/extras/colors/_theme.scss`
+
+To change the default logo of the site, you need to create the folder `sites/<site>/src/backend/base/static/richie/images` and then override the new `logo.png` picture.
+
 ## Update your Richie site factory
 
 If we later improve our scripts, you will be able to update your own site

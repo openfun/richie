@@ -5,6 +5,14 @@
 
 // Our variables must be imported before Bootstrap code so they can override it
 @import './settings/fonts';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+
+// Design color stuff
+@import './colors/palette';
+@import './colors/gradients';
+@import './colors/schemes';
+@import './colors/theme';
 @import './settings/variables';
 
 // TWITTER BOOTSTRAP V4
