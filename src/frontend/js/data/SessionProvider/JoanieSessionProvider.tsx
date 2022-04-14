@@ -83,7 +83,7 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
   }, [queryClient]);
 
   const destroy = useCallback(async () => {
-    await AuthenticationApi!.logout();
+    AuthenticationApi!.logout();
     invalidate();
   }, [invalidate]);
 
