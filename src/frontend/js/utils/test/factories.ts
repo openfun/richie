@@ -17,7 +17,7 @@ const CourseStateFactory = createSpec({
 
 export const CourseRunFactory = createSpec({
   id: faker.datatype.number(),
-  resource_link: faker.internet.url(),
+  resource_link: faker.unique(faker.internet.url()),
   start: derived(() => faker.date.past()().toISOString()),
   end: derived(() => faker.date.past()().toISOString()),
   enrollment_start: derived(() => faker.date.past()().toISOString()),
@@ -138,7 +138,7 @@ export const JoanieCourseRunFactory = createSpec({
   enrollment_end: derived(() => faker.date.future(0.5)().toISOString()),
   enrollment_start: derived(() => faker.date.past(0.5)().toISOString()),
   id: faker.datatype.uuid(),
-  resource_link: faker.internet.url(),
+  resource_link: faker.unique(faker.internet.url()),
   start: derived(() => faker.date.past(0.25)().toISOString()),
   title: faker.random.words(Math.ceil(Math.random() * 3)),
   state: {
@@ -158,7 +158,7 @@ export const JoanieEnrollmentFactory = compose(
 );
 
 export const TargetCourseFactory = createSpec({
-  code: faker.random.alphaNumeric(5),
+  code: faker.unique(faker.random.alphaNumeric(5)),
   organization: OrganizationFactory,
   title: faker.random.words(1, 3),
   course_runs: derived(() => JoanieCourseRunFactory.generate(1, 3)),
@@ -172,7 +172,7 @@ export const CertificationDefinitionFactory = createSpec({
 
 export const CertificateProductFactory = createSpec({
   id: faker.datatype.uuid(),
-  title: faker.random.words(1, 3),
+  title: faker.unique(faker.random.words(1, 3)),
   type: ProductType.CERTIFICATE,
   price: faker.datatype.number(),
   price_currency: faker.finance.currencyCode(),
@@ -198,7 +198,7 @@ export const ProductFactory = oneOf([CertificateProductFactory]);
 export const CourseFactory = createSpec({
   code: faker.random.alphaNumeric(5),
   organization: OrganizationFactory,
-  title: faker.random.words(Math.ceil(Math.random() * 3)),
+  title: faker.unique(faker.random.words(Math.ceil(Math.random() * 3))),
   products: derived(() => ProductFactory.generate(1, 3)),
   course_runs: [],
   orders: null,
@@ -226,7 +226,7 @@ export const AddressFactory = createSpec({
   id: faker.datatype.uuid(),
   is_main: false,
   postcode: faker.address.zipCode(),
-  title: faker.random.word(),
+  title: faker.unique(faker.random.word()),
 });
 
 export const CreditCardFactory = createSpec({
@@ -236,7 +236,7 @@ export const CreditCardFactory = createSpec({
   id: faker.datatype.uuid(),
   is_main: false,
   last_numbers: derived(() => faker.finance.creditCardNumber('visa')().slice(-4)),
-  title: faker.random.word(),
+  title: faker.unique(faker.random.word()),
 });
 
 export const PaymentFactory = createSpec({

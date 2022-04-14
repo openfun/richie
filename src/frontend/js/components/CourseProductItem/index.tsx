@@ -68,7 +68,10 @@ const CourseProductItem = ({ product, order }: Props) => {
       <ol className="product-widget__content">
         {Children.toArray(
           product.target_courses.map((target_course) => (
-            <li className="product-widget__item course">
+            <li
+              data-testid={`course-item-${target_course.code}`}
+              className="product-widget__item course"
+            >
               <h5 className="product-widget__item-title">{target_course.title}</h5>
               {!isOwned && (
                 <CourseRunList courseRuns={target_course.course_runs.filter(isOpenedCourseRun)} />

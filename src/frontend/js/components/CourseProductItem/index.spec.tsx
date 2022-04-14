@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, getByRole, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
@@ -97,7 +97,8 @@ describe('CourseProductItem', () => {
 
     // - Render all target courses information
     product.target_courses.forEach((course) => {
-      screen.getByRole('heading', { level: 5, name: course.title });
+      const $item = screen.getByTestId(`course-item-${course.code}`);
+      getByRole($item, 'heading', { level: 5, name: course.title });
       screen.getByTestId(`CourseRunList-${course.course_runs.map(({ id }) => id).join('-')}`);
     });
 
@@ -139,7 +140,8 @@ describe('CourseProductItem', () => {
 
     // - Render all target courses information with EnrollableCourseRunList component
     product.target_courses.forEach((course) => {
-      screen.getByRole('heading', { level: 5, name: course.title });
+      const $item = screen.getByTestId(`course-item-${course.code}`);
+      getByRole($item, 'heading', { level: 5, name: course.title });
       screen.getByTestId(
         `EnrollableCourseRunList-${course.course_runs.map(({ id }) => id).join('-')}-${order.id}`,
       );
@@ -188,7 +190,8 @@ describe('CourseProductItem', () => {
 
     // - Other target courses should display EnrollableCourseRunList component
     targetCourses.forEach((course) => {
-      screen.getByRole('heading', { level: 5, name: course.title });
+      const $item = screen.getByTestId(`course-item-${course.code}`);
+      getByRole($item, 'heading', { level: 5, name: course.title });
       screen.getByTestId(
         `EnrollableCourseRunList-${course.course_runs.map(({ id }) => id).join('-')}-${order.id}`,
       );
