@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Avoid lag experienced by user on logout by not waiting for the logout request
+  to succeed
 - Improve Sale Tunnel UX
 - Improve sale tunnel theme overriding
 

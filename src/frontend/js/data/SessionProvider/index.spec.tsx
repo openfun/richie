@@ -164,7 +164,7 @@ describe('SessionProvider', () => {
       expect(sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key)).toContain(username);
 
       await act(async () => {
-        await destroy();
+        destroy();
         jest.runOnlyPendingTimers();
       });
 
