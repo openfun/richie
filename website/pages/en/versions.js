@@ -36,7 +36,7 @@ module.exports = function Versions(props) {
                   <a
                     href={`${siteConfig.baseUrl}${siteConfig.docsUrl}/${
                       props.language ? props.language + '/' : ''
-                    }quick-start`}
+                    }discover`}
                   >
                     Documentation
                   </a>
@@ -60,7 +60,7 @@ module.exports = function Versions(props) {
                   <a
                     href={`${siteConfig.baseUrl}${siteConfig.docsUrl}/${
                       props.language ? props.language + '/' : ''
-                    }next/quick-start`}
+                    }next/discover`}
                   >
                     Documentation
                   </a>
@@ -85,7 +85,7 @@ module.exports = function Versions(props) {
                         <a
                           href={`${siteConfig.baseUrl}${siteConfig.docsUrl}/${
                             props.language ? props.language + '/' : ''
-                          }${version}/quick-start`}
+                          }${version}/discover`}
                         >
                           Documentation
                         </a>

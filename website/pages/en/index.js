@@ -18,7 +18,9 @@ class HomeSplash extends React.Component {
     );
 
     const ProjectTitle = () => (
-      <h2 className="projectTitle">Richie helps educators create rich online learning portals..</h2>
+      <h2 className="projectTitle">
+        Richie helps educators create rich online learning portals...
+      </h2>
     );
 
     const PromoSection = (props) => (
@@ -71,7 +73,7 @@ module.exports = class Index extends React.Component {
             content:
               '<p>Richie helps educators create online learning portals.</p>' +
               "<p>Build websites including online course catalogs in days with Richie's content management system.</p>" +
-              `<a class="button" href="${docUrl('quick-start.html')}">Get started</a>`,
+              `<a class="button" href="${docUrl('discover.html')}">Get started</a>`,
             image: `${baseUrl}img/undraw_professor.svg`,
             imageAlign: 'left',
             title: siteConfig.tagline,

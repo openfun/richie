@@ -26,7 +26,7 @@ Among the features that `Richie` offers out of the box:
   programs (and their inter-relations),
 - Extensible with any third-party `DjangoCMS` plugin or any third-party `Django` application.
 
-## Quick preview
+## Discover Richie
 
 If you're looking for a quick preview of `Richie`, you can take a look and have a tour of
 `Richie` on our dedicated [demo site](https://demo.richie.education).
@@ -43,7 +43,7 @@ The database is regularly flushed.
 
 ## Getting started
 
-Take a look at our [Quick start guide](https://richie.education/docs/quick-start) to get started with Richie.
+Take a look at our [documentation](https://richie.education/docs/discover) to get started with Richie.
 
 ## Contributing
 

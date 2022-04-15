@@ -1,7 +1,7 @@
 {
   "version-1.16-docs": {
     "Getting started": [
-      "version-1.16-quick-start",
+      "version-1.16-discover",
       "version-1.16-docker-development",
       "version-1.16-native-installation"
     ],
