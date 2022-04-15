@@ -8,7 +8,7 @@ This document aims to list all needed steps to have a working `Richie`
 installation on your laptop.
 
 A better approach is to use [`Docker`](https://docs.docker.com) as explained in
-our guide for [container-native](quick-start.md) instructions.
+our guide for [container-native installation](installation.md) instructions.
 
 ## Installing a fresh server
 

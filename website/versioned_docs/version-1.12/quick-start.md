@@ -1,8 +1,8 @@
 ---
-id: version-1.12-quick-start
+id: version-1.12-discover
 title: Getting started with Richie
 sidebar_label: Quick start
-original_id: quick-start
+original_id: discover
 ---
 
 If you're just looking for a quick preview of `Richie`, you can take a look and have a tour of `Richie` on our dedicated [demo site](https://demo.richie.education).

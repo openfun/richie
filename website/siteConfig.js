@@ -31,7 +31,7 @@ module.exports = {
   headerLinks: [
     { href: '/', label: 'Home' },
     { href: repoUrl, label: 'GitHub' },
-    { doc: 'quick-start', label: 'Documentation' },
+    { doc: 'discover', label: 'Documentation' },
     { page: 'help', label: 'Help' },
   ],
 

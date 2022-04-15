@@ -28,7 +28,7 @@ module.exports = function Help(props) {
   const supportLinks = [
     {
       content: `Learn more in the [documentation](${docUrl(
-        'quick-start.html',
+        'discover.html',
       )}). Please tell us if anything is missing or out-of-date.`,
       title: 'Browse Docs',
     },
