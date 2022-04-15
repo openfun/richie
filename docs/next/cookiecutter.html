@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Start your own site · Richie</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="We use [Cookiecutter](https://github.com/audreyr/cookiecutter) to help you"/><meta name="docsearch:version" content="next"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Start your own site · Richie"/><meta property="og:type" content="website"/><meta property="og:url" content="https://richie.education/"/><meta property="og:description" content="We use [Cookiecutter](https://github.com/audreyr/cookiecutter) to help you"/><meta property="og:image" content="https://richie.education/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://richie.education/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><h2 class="headerTitle">Richie</h2></a><a href="/versions"><h3>next</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/" target="_self">Home</a></li><li class=""><a href="https://github.com/openfun/richie" target="_self">GitHub</a></li><li class="siteNavGroupActive"><a href="/docs/next/discover" target="_self">Documentation</a></li><li class=""><a href="/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Getting started</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/next/discover">Discover Richie</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/next/cookiecutter">Start your own site</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Recipes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/next/django-react-interop">Django &amp; React</a></li><li class="navListItem"><a class="navItem" href="/docs/next/building-the-frontend">Building the frontend</a></li><li class="navListItem"><a class="navItem" href="/docs/next/internationalization">I18n</a></li><li class="navListItem"><a class="navItem" href="/docs/next/frontend-overrides">Frontend overrides</a></li><li class="navListItem"><a class="navItem" href="/docs/next/lms-connection">LMS connection</a></li><li class="navListItem"><a class="navItem" href="/docs/next/web-analytics">Web Analytics</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/next/installation">Installation</a></li><li class="navListItem"><a class="navItem" href="/docs/next/docker-development">Docker development</a></li><li class="navListItem"><a class="navItem" href="/docs/next/native-installation">Native installation</a></li><li class="navListItem"><a class="navItem" href="/docs/next/contributing-guide">Contributing guide</a></li><li class="navListItem"><a class="navItem" href="/docs/next/accessibility-testing">Accessibility testing</a></li><li class="navListItem"><a class="navItem" href="/docs/next/css-guidelines">CSS Guidelines</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Start your own site</h1></header><article><div><span><p>We use <a href="https://github.com/audreyr/cookiecutter">Cookiecutter</a> to help you
+set up a production-ready learning portal website based on
+<a href="https://github.com/openfun/richie">Richie</a> in seconds.</p>
+<h2><a class="anchor" aria-hidden="true" id="install-cookiecutter"></a><a href="#install-cookiecutter" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install Cookiecutter</h2>
+<p>First, you need to <a href="https://cookiecutter.readthedocs.io/en/latest/installation.html">install cookiecutter on your machine</a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="run-cookiecutter"></a><a href="#run-cookiecutter" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run Cookiecutter</h2>
+<p>Navigate to the directory in which you want to create your site factory:</p>
+<pre><code class="hljs css language-bash">$ <span class="hljs-built_in">cd</span> /path/to/your/code/directory
+</code></pre>
+<p>Run Cookiecutter against our <a href="https://github.com/openfun/richie/tree/master/cookiecutter">Cookiecutter template</a>:</p>
+<pre><code class="hljs css language-bash">$ cookiecutter gh:openfun/richie --directory cookiecutter
+  &gt; organization: foo
+</code></pre>
+<p>The <code>--directory</code> option is to indicate that our Cookiecutter template is in
+a <code>cookiecutter</code> directory inside our git repository and not at the root.</p>
+<p>You will be prompted to enter an organization name, which will determine the
+name of your repository. For example, if you choose &quot;foo&quot; as organization
+name, your repository will be named <code>foo-richie-site-factory</code>. It's
+nice if you keep it that way so all richie site factories follow this
+convention.</p>
+<p>When you confirm the organization name, Cookiecutter will generate your
+project from the Cookiecutter template and place it at the level where you
+currently are.</p>
+<h3><a class="anchor" aria-hidden="true" id="bootstrap-your-project"></a><a href="#bootstrap-your-project" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Bootstrap your project</h3>
+<p>Enter the newly created project and add a new site to your site factory:</p>
+<pre><code class="hljs css language-bash">$ <span class="hljs-built_in">cd</span> foo-richie-site-factory
+$ make add-site
+  &gt; site: bar
+</code></pre>
+<p>This script also uses Cookiecutter against our <a href="https://github.com/openfun/richie/tree/master/cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template">site template</a>.</p>
+<p>Once your new site is created, activate it:</p>
+<pre><code class="hljs css language-bash">$ bin/activate
+</code></pre>
+<p>Now bootstrap the site to build its docker image, create its media folder,
+database, etc.:</p>
+<pre><code class="hljs css language-bash">$ make bootstrap
+</code></pre>
+<p>Once the bootstrap phase is finished, you should be able to view the site at
+<a href="http://localhost:8070">localhost:8070</a>.</p>
+<p>You can create a full fledge demo to test your site by running:</p>
+<pre><code class="hljs css language-bash">$ make demo-site
+</code></pre>
+<p>Note that the README of your newly created site factory contains detailed
+information about how to configure and run a site.</p>
+<p>Once you're happy with your site, don't forget to backup your work e.g. by
+committing it and pushing it to a new git repository.</p>
+<h2><a class="anchor" aria-hidden="true" id="update-your-richie-site-factory"></a><a href="#update-your-richie-site-factory" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Update your Richie site factory</h2>
+<p>If we later improve our scripts, you will be able to update your own site
+factory by replaying Cookiecutter. This will override your files in the
+project's scaffolding but, don't worry, it will respect all the sites you
+will have created in the <code>sites</code> directory:</p>
+<pre><code class="hljs"><span class="hljs-comment">$</span> <span class="hljs-comment">cookiecutter</span> --<span class="hljs-comment">overwrite</span><span class="hljs-literal">-</span><span class="hljs-comment">if</span><span class="hljs-literal">-</span><span class="hljs-comment">exists</span> <span class="hljs-comment">gh:openfun/richie</span> --<span class="hljs-comment">directory=cookiecutter</span>
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="help-us-improve-this-project"></a><a href="#help-us-improve-this-project" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Help us improve this project</h2>
+<p>After starting your project, please submit an issue let us know how it went and
+what other features we should add to make it better.</p>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 4/15/2022</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/next/discover"><span class="arrow-prev">← </span><span>Discover Richie</span></a><a class="docs-next button" href="/docs/next/django-react-interop"><span>Django &amp; React</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#install-cookiecutter">Install Cookiecutter</a></li><li><a href="#run-cookiecutter">Run Cookiecutter</a><ul class="toc-headings"><li><a href="#bootstrap-your-project">Bootstrap your project</a></li></ul></li><li><a href="#update-your-richie-site-factory">Update your Richie site factory</a></li><li><a href="#help-us-improve-this-project">Help us improve this project</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Documentation</h5><a href="/docs/en/discover.html">Getting Started</a><a href="/versions">Versions</a><a href="/docs/en/contributing.html">Contributing</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://github.com/openfun/richie">GitHub</a></div></section><section class="copyright">Creative Commons 2022 — Richie contributors / Illustrations Katerina Limpitsouni</section></footer></div></body></html>

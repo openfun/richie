@@ -1,0 +1,107 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Getting started with Richie · Richie</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="If you&#x27;re just looking for a quick preview of `Richie`, you can take a look and have a tour of `Richie` on our dedicated [demo site](https://demo.richie.education)."/><meta name="docsearch:version" content="1.12"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Getting started with Richie · Richie"/><meta property="og:type" content="website"/><meta property="og:url" content="https://richie.education/"/><meta property="og:description" content="If you&#x27;re just looking for a quick preview of `Richie`, you can take a look and have a tour of `Richie` on our dedicated [demo site](https://demo.richie.education)."/><meta property="og:image" content="https://richie.education/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://richie.education/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><h2 class="headerTitle">Richie</h2></a><a href="/versions"><h3>1.12</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/" target="_self">Home</a></li><li class=""><a href="https://github.com/openfun/richie" target="_self">GitHub</a></li><li class="siteNavGroupActive siteNavItemActive"><a href="/docs/1.12/discover" target="_self">Documentation</a></li><li class=""><a href="/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Getting started</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting started</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/docs/1.12/discover">Quick start</a></li><li class="navListItem"><a class="navItem" href="/docs/1.12/docker-development">Docker development</a></li><li class="navListItem"><a class="navItem" href="/docs/1.12/native-installation">Native installation</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Recipes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/1.12/django-react-interop">Django &amp; React</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/1.12/contributing-guide">Contributing guide</a></li><li class="navListItem"><a class="navItem" href="/docs/1.12/css-guidelines">CSS Guidelines</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Getting started with Richie</h1></header><article><div><span><p>If you're just looking for a quick preview of <code>Richie</code>, you can take a look and have a tour of <code>Richie</code> on our dedicated <a href="https://demo.richie.education">demo site</a>.</p>
+<p>Login/password are <code>admin</code>/<code>admin</code>. The database is regularly flushed.</p>
+<h2><a class="anchor" aria-hidden="true" id="architecture"></a><a href="#architecture" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Architecture</h2>
+<p><code>Richie</code> is a <strong>container-native application</strong> but can also be installed
+<a href="/docs/1.12/native-installation">on your machine</a>.</p>
+<p>For development, the project is defined using a <a href="../docker-compose.yml">docker-compose file</a> and
+consists of 4 services:</p>
+<ul>
+<li><strong>db</strong>: the <code>Postgresql</code> database,</li>
+<li><strong>elasticsearch</strong>: the search engine,</li>
+<li><strong>app</strong>: the actual <code>DjangoCMS</code> project with all our application code,</li>
+<li><strong>node</strong>: used for front-end related tasks, <em>i.e.</em> transpiling <code>TypeScript</code> sources, bundling
+them into a JS package, and building the CSS files from Sass sources.</li>
+</ul>
+<p>At &quot;France Université Numérique&quot;, we deploy our applications on <code>OpenShift</code>/<code>Kubernetes</code> using
+<a href="https://github.com/openfun/arnold"><code>Arnold</code></a>.</p>
+<h2><a class="anchor" aria-hidden="true" id="getting-started"></a><a href="#getting-started" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Getting started</h2>
+<h3><a class="anchor" aria-hidden="true" id="docker"></a><a href="#docker" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Docker</h3>
+<p>First, make sure you have a recent version of Docker and
+<a href="https://docs.docker.com/compose/install">Docker Compose</a> installed on your laptop:</p>
+<pre><code class="hljs css language-bash">$ docker -v
+  Docker version 1.13.1, build 092cba3
+
+$ docker-compose --version
+  docker-compose version 1.17.1, build 6d101fb
+</code></pre>
+<p>⚠️ You may need to run the following commands with <code>sudo</code> but this can be avoided by assigning your
+user to the <code>docker</code> group.</p>
+<h3><a class="anchor" aria-hidden="true" id="project-bootstrap"></a><a href="#project-bootstrap" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Project bootstrap</h3>
+<p>The easiest way to start working on the project is to use our <code>Makefile</code>:</p>
+<pre><code class="hljs">$ make bootstrap
+</code></pre>
+<p>This command builds the <code>app</code> container, installs front-end and back-end dependencies, builds the
+front-end application and styles, and performs database migrations. It's a good idea to use this
+command each time you are pulling code from the project repository to avoid dependency-related or
+migration-related issues.</p>
+<p>Now that your <code>Docker</code> services are ready to be used, start the full CMS by running:</p>
+<pre><code class="hljs">$ make run
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="adding-content"></a><a href="#adding-content" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding content</h3>
+<p>Once the CMS is up and running, you can create a superuser account:</p>
+<pre><code class="hljs">$ make superuser
+</code></pre>
+<p>You can create a basic demo site by running:</p>
+<pre><code class="hljs">$ make demo-site
+</code></pre>
+<p>Note that if you don't create the demo site and start from a blank CMS, you will get some errors
+requesting you to create some required root pages. So it is easier as a first approach to test the
+CMS with the demo site.</p>
+<p>You should be able to view the site at <a href="http://localhost:8070">localhost:8070</a></p>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 4/15/2022</em></div><div class="docs-prevnext"><a class="docs-next button" href="/docs/1.12/docker-development"><span>Docker development</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#architecture">Architecture</a></li><li><a href="#getting-started">Getting started</a><ul class="toc-headings"><li><a href="#docker">Docker</a></li><li><a href="#project-bootstrap">Project bootstrap</a></li><li><a href="#adding-content">Adding content</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Documentation</h5><a href="/docs/en/discover.html">Getting Started</a><a href="/versions">Versions</a><a href="/docs/en/contributing.html">Contributing</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://github.com/openfun/richie">GitHub</a></div></section><section class="copyright">Creative Commons 2022 — Richie contributors / Illustrations Katerina Limpitsouni</section></footer></div></body></html>
