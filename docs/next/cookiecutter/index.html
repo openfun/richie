@@ -57,15 +57,24 @@
         </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Start your own site</h1></header><article><div><span><p>We use <a href="https://github.com/audreyr/cookiecutter">Cookiecutter</a> to help you
 set up a production-ready learning portal website based on
 <a href="https://github.com/openfun/richie">Richie</a> in seconds.</p>
-<h2><a class="anchor" aria-hidden="true" id="install-cookiecutter"></a><a href="#install-cookiecutter" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install Cookiecutter</h2>
-<p>First, you need to <a href="https://cookiecutter.readthedocs.io/en/latest/installation.html">install cookiecutter on your machine</a>.</p>
 <h2><a class="anchor" aria-hidden="true" id="run-cookiecutter"></a><a href="#run-cookiecutter" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run Cookiecutter</h2>
-<p>Navigate to the directory in which you want to create your site factory:</p>
-<pre><code class="hljs css language-bash">$ <span class="hljs-built_in">cd</span> /path/to/your/code/directory
+<p>There are 2 options to run Cookiecutter:</p>
+<ul>
+<li><a href="https://cookiecutter.readthedocs.io/en/latest/installation.html">install it on your machine</a></li>
+<li>run it with Docker</li>
+</ul>
+<p>While you think of it, navigate to the directory in which you want to create
+your site factory:</p>
+<pre><code class="hljs"><span class="hljs-built_in">cd</span> /<span class="hljs-built_in">path</span>/to/your/code/directory
 </code></pre>
-<p>Run Cookiecutter against our <a href="https://github.com/openfun/richie/tree/master/cookiecutter">Cookiecutter template</a>:</p>
-<pre><code class="hljs css language-bash">$ cookiecutter gh:openfun/richie --directory cookiecutter
-  &gt; organization: foo
+<p>If you chose to install Cookiecutter, you can now run it against our
+<a href="https://github.com/openfun/richie/tree/master/cookiecutter">template</a> as follows:</p>
+<pre><code class="hljs css language-bash">cookiecutter gh:openfun/richie --directory cookiecutter
+</code></pre>
+<p>If you didn't want to install it on your machine, we provide a Docker image
+built with our <a href="https://github.com/openfun/dockerfiles">own repository</a> that you can use as follows:</p>
+<pre><code class="hljs css language-bash">docker run --rm -it -u $(id -u):$(id -g) -v <span class="hljs-variable">$PWD</span>:/app \
+fundocker/cookiecutter gh:openfun/richie --directory cookiecutter
 </code></pre>
 <p>The <code>--directory</code> option is to indicate that our Cookiecutter template is in
 a <code>cookiecutter</code> directory inside our git repository and not at the root.</p>
@@ -79,22 +88,21 @@ project from the Cookiecutter template and place it at the level where you
 currently are.</p>
 <h3><a class="anchor" aria-hidden="true" id="bootstrap-your-project"></a><a href="#bootstrap-your-project" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Bootstrap your project</h3>
 <p>Enter the newly created project and add a new site to your site factory:</p>
-<pre><code class="hljs css language-bash">$ <span class="hljs-built_in">cd</span> foo-richie-site-factory
-$ make add-site
-  &gt; site: bar
+<pre><code class="hljs css language-bash"><span class="hljs-built_in">cd</span> foo-richie-site-factory
+make add-site
 </code></pre>
 <p>This script also uses Cookiecutter against our <a href="https://github.com/openfun/richie/tree/master/cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template">site template</a>.</p>
 <p>Once your new site is created, activate it:</p>
-<pre><code class="hljs css language-bash">$ bin/activate
+<pre><code class="hljs css language-bash">bin/activate
 </code></pre>
 <p>Now bootstrap the site to build its docker image, create its media folder,
 database, etc.:</p>
-<pre><code class="hljs css language-bash">$ make bootstrap
+<pre><code class="hljs css language-bash">make bootstrap
 </code></pre>
 <p>Once the bootstrap phase is finished, you should be able to view the site at
 <a href="http://localhost:8070">localhost:8070</a>.</p>
 <p>You can create a full fledge demo to test your site by running:</p>
-<pre><code class="hljs css language-bash">$ make demo-site
+<pre><code class="hljs css language-bash">make demo-site
 </code></pre>
 <p>Note that the README of your newly created site factory contains detailed
 information about how to configure and run a site.</p>
@@ -105,9 +113,9 @@ committing it and pushing it to a new git repository.</p>
 factory by replaying Cookiecutter. This will override your files in the
 project's scaffolding but, don't worry, it will respect all the sites you
 will have created in the <code>sites</code> directory:</p>
-<pre><code class="hljs"><span class="hljs-comment">$</span> <span class="hljs-comment">cookiecutter</span> --<span class="hljs-comment">overwrite</span><span class="hljs-literal">-</span><span class="hljs-comment">if</span><span class="hljs-literal">-</span><span class="hljs-comment">exists</span> <span class="hljs-comment">gh:openfun/richie</span> --<span class="hljs-comment">directory=cookiecutter</span>
+<pre><code class="hljs"><span class="hljs-comment">cookiecutter</span> --<span class="hljs-comment">overwrite</span><span class="hljs-literal">-</span><span class="hljs-comment">if</span><span class="hljs-literal">-</span><span class="hljs-comment">exists</span> <span class="hljs-comment">gh:openfun/richie</span> --<span class="hljs-comment">directory=cookiecutter</span>
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="help-us-improve-this-project"></a><a href="#help-us-improve-this-project" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Help us improve this project</h2>
 <p>After starting your project, please submit an issue let us know how it went and
 what other features we should add to make it better.</p>
-</span></div></article></div><div class="docLastUpdate"><em>Last updated on 4/15/2022</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/next/discover"><span class="arrow-prev">← </span><span>Discover Richie</span></a><a class="docs-next button" href="/docs/next/django-react-interop"><span>Django &amp; React</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#install-cookiecutter">Install Cookiecutter</a></li><li><a href="#run-cookiecutter">Run Cookiecutter</a><ul class="toc-headings"><li><a href="#bootstrap-your-project">Bootstrap your project</a></li></ul></li><li><a href="#update-your-richie-site-factory">Update your Richie site factory</a></li><li><a href="#help-us-improve-this-project">Help us improve this project</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Documentation</h5><a href="/docs/en/discover.html">Getting Started</a><a href="/versions">Versions</a><a href="/docs/en/contributing.html">Contributing</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://github.com/openfun/richie">GitHub</a></div></section><section class="copyright">Creative Commons 2022 — Richie contributors / Illustrations Katerina Limpitsouni</section></footer></div></body></html>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 4/16/2022</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/next/discover"><span class="arrow-prev">← </span><span>Discover Richie</span></a><a class="docs-next button" href="/docs/next/django-react-interop"><span>Django &amp; React</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#run-cookiecutter">Run Cookiecutter</a><ul class="toc-headings"><li><a href="#bootstrap-your-project">Bootstrap your project</a></li></ul></li><li><a href="#update-your-richie-site-factory">Update your Richie site factory</a></li><li><a href="#help-us-improve-this-project">Help us improve this project</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Documentation</h5><a href="/docs/en/discover.html">Getting Started</a><a href="/versions">Versions</a><a href="/docs/en/contributing.html">Contributing</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://github.com/openfun/richie">GitHub</a></div></section><section class="copyright">Creative Commons 2022 — Richie contributors / Illustrations Katerina Limpitsouni</section></footer></div></body></html>
