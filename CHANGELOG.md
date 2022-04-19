@@ -33,6 +33,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Use `em` based media queries instead of `px` based media queries to fix all
   UI bugs when using the website with a huge text-only zoom
 - Upgrade documentation to use Docusaurus version 2
+- Refactor frontend scss code. Add `_index.scss` on each folder so the
+  `_main.scss` could be more compact. Add `!default` to homegrown Richie
+  shared scss settings/variables.
 
 ### Fixed
 

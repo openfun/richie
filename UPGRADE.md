@@ -20,6 +20,9 @@ $ make migrate
 - `<header>`, `<nav>` and `<footer>` DOM structure was updated for better accessibility. Make
   sure to check that everything still renders correctly if you override header or footer blocks
   in your templates.
+- The `_main.scss` file has been refactored, to made future upgrades more easy. The file
+  `_main.scss` can be more compact with lower probability of changes on future upgrades.
+  Use the [cookiecutter](cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template/{{cookiecutter.site}}/src/frontend/scss/_main.scss) `_main.scss` file as example.
 
 ## 2.14.x to 2.15.x
 - RegisteredAddress now has a related stylesheet, you have to update the main stylesheet as follows:
