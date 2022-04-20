@@ -103,6 +103,31 @@ jobs:
           name: Run renovate-config-validator command
           command: renovate-config-validator
 
+  # Check that all versions (backend, frontend, website and cookiecutter) are up-to-date
+  check-versions:
+    docker:
+      - image: cimg/base:2022.04
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Check that all versions are the same
+          command: |
+            BACKEND_VERSION=$(cat setup.cfg | grep "version" | cut -d" " -f3)
+            echo "richie version: ${BACKEND_VERSION}"
+            # In the frontend
+            cat src/frontend/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
+            # In the cookiecutter site template backend
+            cat cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template/{{cookiecutter.site}}/requirements/base.txt | grep "richie==${BACKEND_VERSION}$"
+            # In the cookiecutter site template frontend
+            cat cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template/{{cookiecutter.site}}/src/frontend/package.json | grep "\"richie-education\": \"${BACKEND_VERSION}\"$"
+            # In the e2e tests
+            cat tests_e2e/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
+            # In the website
+            cat website/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$" || cat setup.cfg | grep "beta"
+            # In the website versions
+            cat website/versions.json | grep "\"${BACKEND_VERSION}\",$" || cat setup.cfg | grep "beta"
+
   # ---- Docker jobs ----
   # Build the Docker image ready for production
   build-docker:
@@ -809,23 +834,6 @@ jobs:
 
   # ---- Documentation website jobs ----
 
-  # check if documentation version is missing
-  check-documentation-version:
-    docker:
-      - image: busybox:1.31.0
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - run:
-          name: Check if the documentation version exists for the current richie version
-          command: |
-            BACKEND_VERSION=$(cat setup.cfg | grep "version" | cut -d" " -f3 | cut -d"." -f1,2)
-            echo "richie version: ${BACKEND_VERSION}"
-            cat website/versions.json | grep "${BACKEND_VERSION}" || cat setup.cfg | grep "beta"
-
   # Run relevant linters (eg. prettier for now) on the documentation website
   lint-website:
     docker:
@@ -931,6 +939,12 @@ workflows:
           filters:
             tags:
               only: /.*/
+      # Check on each PR if the last richie version is present everywhere it should be.
+      # If not the build will fail before publishing a new release.
+      - check-versions:
+          filters:
+            tags:
+              only: /.*/
 
       # Docker jobs
       #
@@ -1021,6 +1035,7 @@ workflows:
       # succeed and it has been tagged with a tag starting with the letter v
       - pypi:
           requires:
+            - check-versions
             - package-back
           filters:
             branches:
@@ -1034,6 +1049,7 @@ workflows:
       # succeed and it has been tagged with a tag starting with the letter v
       - npm:
           requires:
+            - check-versions
             - lint-front
             - test-front
             - test-front-package
@@ -1045,12 +1061,6 @@ workflows:
 
       # Documentation website jobs.
       #
-      # Check on each PR if the documentation corresponding richie version
-      # is present. If not the build will fail before publishing a new release.
-      - check-documentation-version:
-          filters:
-            tags:
-              only: /.*/
       # Run relevant linters on the docs website
       - lint-website:
           filters:
@@ -1061,7 +1071,7 @@ workflows:
       # documentation in the release commit on master before they go out.
       - deploy-website:
           requires:
-            - check-documentation-version
+            - check-versions
             - lint-website
           filters:
             branches:
