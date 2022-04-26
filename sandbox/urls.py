@@ -12,6 +12,7 @@ from django.views.static import serve
 
 from cms.sitemaps import CMSSitemap
 
+from richie.apps.core.templatetags.joanie import is_joanie_enabled
 from richie.apps.courses.urls import urlpatterns as courses_urlpatterns
 from richie.apps.search.urls import urlpatterns as search_urlpatterns
 from richie.plugins.urls import urlpatterns as plugins_urlpatterns
@@ -42,6 +43,17 @@ urlpatterns = [
     path(r"", include("filer.server.urls")),
 ]
 
+if is_joanie_enabled():
+    urlpatterns += i18n_patterns(
+        path(
+            r"dashboard/",
+            TemplateView.as_view(
+                template_name="richie/dashboard.html",
+            ),
+            name="dashboard",
+        )
+    )
+
 urlpatterns += i18n_patterns(
     path(r"admin/", admin.site.urls),
     path(r"accounts/", include("django.contrib.auth.urls")),
@@ -55,7 +67,6 @@ urlpatterns += i18n_patterns(
     ),
     path(r"", include("cms.urls")),  # NOQA
 )
-
 
 # This is only needed when using runserver.
 if settings.DEBUG:

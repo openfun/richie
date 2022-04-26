@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add a `DashBoard` React based view
+
 ### Changed
 
 - Avoid lag experienced by user on logout by not waiting for the logout request
