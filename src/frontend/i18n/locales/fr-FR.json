@@ -538,5 +538,21 @@
   "components.useStaticFilters.courses": {
     "description": "localized human_name label for coursesConfig filter name",
     "message": "Cours"
+  },
+  "components.Dashboard.registeredCardSectionTitle": {
+    "description": "Label for the registered credit cards section",
+    "message": "Vos cartes enregistrées"
+  },
+  "components.Dashboard.userBillingAddressNoEntry": {
+    "description": "Message displayed when the user has no address.",
+    "message": "You have not yet a billing address."
+  },
+  "components.Dashboard.userBillingAddressSelectLabel": {
+    "description": "Label for the billing address select",
+    "message": "Sélectionner une adresse de facturation"
+  },
+  "components.Dashboard.userTile": {
+    "description": "Label for the user information tile",
+    "message": "Vos informations personnelles"
   }
 }
