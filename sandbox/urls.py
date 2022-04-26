@@ -56,6 +56,19 @@ urlpatterns += i18n_patterns(
     path(r"", include("cms.urls")),  # NOQA
 )
 
+if (
+    getattr(settings, "JOANIE", None) is not None
+    and settings.JOANIE.get("BASE_URL") is not None
+):
+    urlpatterns += i18n_patterns(
+        path(
+            r"dashboard",
+            TemplateView.as_view(
+                template_name="richie/dashboard.html",
+            ),
+            name="dashboard",
+        )
+    )
 
 # This is only needed when using runserver.
 if settings.DEBUG:

@@ -17,6 +17,7 @@ const RootSearchSuggestField = lazy(() => import('components/RootSearchSuggestFi
 const Search = lazy(() => import('components/Search'));
 const SearchSuggestField = lazy(() => import('components/SearchSuggestField'));
 const UserLogin = lazy(() => import('../UserLogin'));
+const Dashboard = lazy(() => import('components/DashBoard'));
 
 // List the top-level components that can be directly called from the Django templates in an interface
 // for type-safety when we call them. This will let us use the props for any top-level component in a
@@ -24,6 +25,7 @@ const UserLogin = lazy(() => import('../UserLogin'));
 interface ComponentLibrary {
   CourseProductsList: typeof CourseProductsList;
   CourseRunEnrollment: typeof CourseRunEnrollment;
+  Dashboard: typeof Dashboard;
   LanguageSelector: typeof LanguageSelector;
   LtiConsumer: typeof LtiConsumer;
   RootSearchSuggestField: typeof RootSearchSuggestField;
@@ -35,6 +37,7 @@ interface ComponentLibrary {
 const componentLibrary: ComponentLibrary = {
   CourseProductsList,
   CourseRunEnrollment,
+  Dashboard,
   LanguageSelector,
   LtiConsumer,
   RootSearchSuggestField,
