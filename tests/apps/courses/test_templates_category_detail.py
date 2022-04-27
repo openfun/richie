@@ -147,7 +147,10 @@ class CategoryCMSTestCase(CMSTestCase):
         # Ensure the published page content is correct
         response = self.client.get(url)
         self.assertContains(
-            response, "<title>Maths - example.com</title>", html=True, status_code=200
+            response,
+            "<title>Maths - Category - example.com</title>",
+            html=True,
+            status_code=200,
         )
         self.assertContains(
             response, '<h1 class="category-detail__title">Maths</h1>', html=True
@@ -376,7 +379,10 @@ class CategoryCMSTestCase(CMSTestCase):
         url = page.get_absolute_url()
         response = self.client.get(url)
         self.assertContains(
-            response, "<title>Maths - example.com</title>", html=True, status_code=200
+            response,
+            "<title>Maths - Category - example.com</title>",
+            html=True,
+            status_code=200,
         )
         self.assertContains(
             response, '<h1 class="category-detail__title">Maths</h1>', html=True

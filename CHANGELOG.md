@@ -14,6 +14,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   to succeed
 - Improve Sale Tunnel UX
 - Improve sale tunnel theme overriding
+- Improve overall accessibility on category page, especially for screen reader
+  users
 
 ### Fixed
 
