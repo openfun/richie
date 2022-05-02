@@ -8,10 +8,12 @@ module.exports = {
   },
   setupFilesAfterEnv: ['./js/testSetup.ts'],
   testMatch: [`${__dirname}/js/**/*.spec.+(ts|tsx|js)`],
-  testURL: 'https://localhost',
   coverageDirectory: '.coverage',
   testEnvironment: 'jsdom',
-  transformIgnorePatterns: ['node_modules/(?!(lodash-es)/)'],
+  testEnvironmentOptions: {
+    url: 'https://localhost',
+  },
+  transformIgnorePatterns: ['node_modules/(?!(lodash-es|@hookform/resolvers)/)'],
   globals: {
     RICHIE_VERSION: 'test',
   },
