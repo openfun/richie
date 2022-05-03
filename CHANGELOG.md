@@ -1,3 +1,4 @@
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -24,7 +25,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix erratic frontend test failure
 
-## [2.14.1] - 2022-04-07
+
+##  [2.14.1] - 2022-04-07
 
 ### Fixed
 
@@ -32,14 +34,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix search query string formatting
 - Fix a course glimpse title color issue when used within a section with variant
 
-## [2.14.0] - 2022-04-01
+##  [2.14.0] - 2022-04-01
 
 ### Added
 
 - Add a `CourseProductList` Component
 - Add a `SaleTunnel` component
 - Add an `AddressesManagement` component
-- Add a `PaymentButton` component
+- Add a `PaymentButton` component 
 - Add a `PaymentInterface` component to lazy load the right payment component
   according to the provider used
 - Create a `StepBreadcrumb` component to display progress within a step process
@@ -257,7 +259,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix schema.org related "pt_effort" string computation when effort is not set
 - Use `$r-course-subheader-aside` to define subheader aside column width
-
 ### Changed
 
 - Add attributes to the Section plugin
@@ -367,7 +368,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Avoid KeyError when an object is indexed with no titles
 - Add missing rel noopener noreferer on target blank links
 - Order blogposts by descending publication date within
-  (person|category)\_detail template
+  (person|category)_detail template
 - Fix filter pane quality issues on handheld devices
 - Fix small quality issues on the course search filters modal
 - Fix initializeAccordions compatibility issue
@@ -617,8 +618,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Hide unpublished pages from public version of organizations list page
 - Improve sanitizing of input text on CKEditor plugin
-- Replace course-detail**run-cta in fragment_course_run template by
-  course-run-enrollment**cta
+- Replace course-detail__run-cta in fragment_course_run template by
+  course-run-enrollment__cta
 
 ### Changed
 
@@ -742,7 +743,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Lowered down global 'h1' and 'h2' font size and added new
   'extra-font-size' variable with previous h1 value.
 - Adjust title size 'large_banner' variants.
-- Fix accordion button 'nested-item\_\_title' alignment to the left.
+- Fix accordion button 'nested-item__title' alignment to the left.
 - Another attempt to definitively fix the glitch with wave decoration
   and Chrome zoom/unzoom.
 - Add a little bit of space between banner and title on organization
