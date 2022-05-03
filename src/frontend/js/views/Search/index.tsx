@@ -1,17 +1,17 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { CourseGlimpseList } from 'components/CourseGlimpseList';
-import { PaginateCourseSearch } from 'components/PaginateCourseSearch';
-import { SearchFiltersPane } from 'components/SearchFiltersPane';
 import { Spinner } from 'components/Spinner';
 import { Icon } from 'components/Icon';
-import { useCourseSearch } from 'data/useCourseSearch';
-import { useCourseSearchParams, CourseSearchParamsAction } from 'data/useCourseSearchParams';
-import useMatchMedia from 'utils/useMatchMedia';
+import { useCourseSearch } from 'hooks/useCourseSearch';
+import { CourseSearchParamsAction, useCourseSearchParams } from 'hooks/useCourseSearchParams';
+import useMatchMedia from 'hooks/useMatchMedia';
 import { RequestStatus } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
 import { scroll } from 'utils/indirection/window';
+import { SearchFiltersPane } from './components/SearchFiltersPane';
+import { PaginateCourseSearch } from './components/PaginateCourseSearch';
+import { CourseGlimpseList } from './components/CourseGlimpseList';
 
 const messages = defineMessages({
   errorMessage: {

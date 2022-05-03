@@ -92,4 +92,4 @@ Example, if you only need the organization codes on your custom `richie/web_anal
 The frontend code also sends **events** to the web analytics provider.
 Richie sends events when the user is enrolled on a course run.
 To support different providers, you need to create a similar file
-of `src/frontend/js/utils/api/web-analytics/google_analytics.ts` and change the `src/frontend/js/utils/api/web-analytics/index.ts` file to include that newer provider.
+of `src/frontend/js/utils/api/web-analytics/google_analytics.ts` and change the `src/frontend/js/utils/api/web-analytics/mptt.ts` file to include that newer provider.

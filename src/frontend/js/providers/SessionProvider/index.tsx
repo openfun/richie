@@ -1,6 +1,6 @@
 import { lazy, PropsWithChildren, Suspense, useContext } from 'react';
-import { isJoanieEnabled } from 'utils/api/joanie';
-import { AuthenticationApi } from 'utils/api/authentication';
+import { isJoanieEnabled } from 'api/joanie';
+import { AuthenticationApi } from 'api/authentication';
 import { handle } from 'utils/errors/handle';
 import { Session } from './SessionContext';
 

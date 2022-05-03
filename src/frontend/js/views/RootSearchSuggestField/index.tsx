@@ -10,7 +10,7 @@ import {
   renderSuggestion,
 } from 'common/searchFields';
 import { SearchInput } from 'components/SearchInput';
-import { useStaticFilters } from 'data/useStaticFilters';
+import { useStaticFilters } from 'hooks/useStaticFilters';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { CommonDataProps } from 'types/commonDataProps';
 import {

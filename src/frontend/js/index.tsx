@@ -15,7 +15,7 @@ import { QueryClientProvider } from 'react-query';
 import countries from 'i18n-iso-countries';
 import createQueryClient from 'utils/react-query/createQueryClient';
 
-import { Root } from 'components/Root';
+import { Root } from 'views';
 import { handle } from 'utils/errors/handle';
 
 // Wait for the DOM to load before we scour it for an element that requires React to be rendered
@@ -53,8 +53,7 @@ async function render() {
       if (!Intl.PluralRules) {
         await import('intl-pluralrules');
       }
-      // TODO: remove type assertion when typescript libs include RelativeTimeFormat
-      if (!(Intl as any).RelativeTimeFormat) {
+      if (!Intl.RelativeTimeFormat) {
         await import('@formatjs/intl-relativetimeformat');
 
         // When countryCode is identical to languageCode, intlrelativeformat uses

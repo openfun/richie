@@ -3,20 +3,20 @@ import includes from 'lodash-es/includes';
 import startCase from 'lodash-es/startCase';
 import { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import { HistoryProvider } from 'data/useHistory';
-import { SessionProvider } from 'data/SessionProvider';
+import { HistoryProvider } from 'hooks/useHistory';
+import { SessionProvider } from 'providers/SessionProvider';
 import { Spinner } from 'components/Spinner';
 import ErrorBoundary from 'utils/errors/ErrorBoundary';
 import context from 'utils/context';
 
-const CourseProductsList = lazy(() => import('components/CourseProductsList'));
-const CourseRunEnrollment = lazy(() => import('components/CourseRunEnrollment'));
-const LanguageSelector = lazy(() => import('components/LanguageSelector'));
-const LtiConsumer = lazy(() => import('components/LtiConsumer'));
-const RootSearchSuggestField = lazy(() => import('components/RootSearchSuggestField'));
-const Search = lazy(() => import('components/Search'));
-const SearchSuggestField = lazy(() => import('components/SearchSuggestField'));
-const UserLogin = lazy(() => import('../UserLogin'));
+const CourseProductsList = lazy(() => import('views/CourseProductsList'));
+const CourseRunEnrollment = lazy(() => import('views/CourseRunEnrollment'));
+const LanguageSelector = lazy(() => import('views/LanguageSelector'));
+const LtiConsumer = lazy(() => import('views/LtiConsumer'));
+const RootSearchSuggestField = lazy(() => import('views/RootSearchSuggestField'));
+const Search = lazy(() => import('views/Search'));
+const SearchSuggestField = lazy(() => import('views/SearchSuggestField'));
+const UserLogin = lazy(() => import('views/UserLogin'));
 
 // List the top-level components that can be directly called from the Django templates in an interface
 // for type-safety when we call them. This will let us use the props for any top-level component in a

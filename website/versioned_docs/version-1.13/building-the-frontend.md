@@ -43,13 +43,13 @@ In your `package.json` file, you should see it in the list of dependencies. Also
 You are now ready to run your own frontend build. We'll just be using webpack directly.
 
 ```bash
-yarn webpack --config node_modules/richie-education/webpack.config.js --output-path ./build --richie-dependent-build
+yarn webpack --config node_modules/richie-education/webpack.jest.config.js --output-path ./build --richie-dependent-build
 ```
 
 Here is everything that is happening:
 
 - `yarn webpack` — run the webpack CLI;
-- `--config node_modules/richie-education/webpack.config.js` — point webpack to `richie-education`'s webpack config file;
+- `--config node_modules/richie-education/webpack.jest.config.js` — point webpack to `richie-education`'s webpack config file;
 - `--output-path ./build` — make sure we get our output where we need it to be;
 - `--richie-dependent-build` — enable some affordances with import paths. We pre-configured Richie's webpack to be able to run it from a dependent project.
 

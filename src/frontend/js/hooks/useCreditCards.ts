@@ -1,6 +1,6 @@
 import { useQueryClient } from 'react-query';
 import { REACT_QUERY_SETTINGS } from 'settings';
-import { useJoanieApi } from 'data/JoanieApiProvider';
+import { useJoanieApi } from 'providers/JoanieApiProvider';
 import { useSessionQuery } from 'utils/react-query/useSessionQuery';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 

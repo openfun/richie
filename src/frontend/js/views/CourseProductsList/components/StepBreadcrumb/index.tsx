@@ -1,7 +1,7 @@
 // StepBreadcrumb has been created to work in pair with useStepManager hook.
 // Within a step process, it aims to guide the user to know where he/she is in
 // the current process by translating visually the steps manifest.
-import { Children, Fragment, useCallback } from 'react';
+import { Children, FC, Fragment, useMemo } from 'react';
 import { Nullable } from 'types/utils';
 import { Manifest, Step, useStepManager } from 'hooks/useStepManager';
 import { Icon } from 'components/Icon';
@@ -55,54 +55,59 @@ export const StepBreadcrumb = <Keys extends PropertyKey, LastKey extends Keys>({
   const orderedSteps = sortSteps(firstStep, manifest);
   const activeIndex = getActiveStepIndex(orderedSteps, step);
 
-  const getStepClassName = useCallback(
-    (index) => {
-      const className = ['StepBreadcrumb__step'];
-      if (index <= activeIndex) className.push('StepBreadcrumb__step--active');
-      if (index === activeIndex) className.push('StepBreadcrumb__step--current');
-
-      return className.join(' ');
-    },
-    [activeIndex],
-  );
-
-  const getSeparatorClassName = useCallback(
-    (index) => {
-      const className = ['StepBreadcrumb__separator'];
-      if (index < activeIndex) className.push('StepBreadcrumb__separator--active');
-
-      return className.join(' ');
-    },
-    [activeIndex],
-  );
-
   return (
     <ol className="StepBreadcrumb">
       {Children.toArray(
         orderedSteps.map(([, entry], index) => (
           <Fragment>
-            <li
-              aria-current={index === activeIndex ? 'step' : 'false'}
-              className={getStepClassName(index)}
-            >
-              <div className="StepBreadcrumb__step__icon" data-testid="StepBreadcrumb__step__icon">
-                {entry.icon ? <Icon name={entry.icon} /> : <span>{index + 1}</span>}
-              </div>
-              {entry.label ? (
-                <strong
-                  className="h6 StepBreadcrumb__step__label"
-                  data-testid="StepBreadcrumb__step__label"
-                >
-                  {entry.label}
-                </strong>
-              ) : null}
-            </li>
-            {entry.next !== null ? (
-              <li aria-hidden={true} className={getSeparatorClassName(index)} />
-            ) : null}
+            <Step
+              {...entry}
+              isActive={index <= activeIndex}
+              isCurrent={index === activeIndex}
+              position={index + 1}
+            />
+            {entry.next !== null && <Separator isActive={index < activeIndex} />}
           </Fragment>
         )),
       )}
     </ol>
+  );
+};
+
+type SeparatorProps = { isActive: boolean };
+const Separator: FC<SeparatorProps> = ({ isActive }) => {
+  const classNames = useMemo(() => {
+    const className = ['StepBreadcrumb__separator'];
+    if (isActive) className.push('StepBreadcrumb__separator--active');
+
+    return className.join(' ');
+  }, [isActive]);
+  return <li aria-hidden={true} className={classNames} />;
+};
+
+type StepProps = { isActive: boolean; isCurrent: boolean; position: number } & Step;
+const Step: FC<StepProps> = ({ isActive, isCurrent, position, icon, label, next }) => {
+  const classNames = useMemo(() => {
+    const className = ['StepBreadcrumb__step'];
+    if (isActive) className.push('StepBreadcrumb__step--active');
+    if (isCurrent) className.push('StepBreadcrumb__step--current');
+
+    return className.join(' ');
+  }, [isActive, isCurrent]);
+
+  return (
+    <li aria-current={isCurrent ? 'step' : 'false'} className={classNames}>
+      <div className="StepBreadcrumb__step__icon" data-testid="StepBreadcrumb__step__icon">
+        {icon ? <Icon name={icon} /> : <span>{position}</span>}
+      </div>
+      {label && (
+        <strong
+          className="h6 StepBreadcrumb__step__label"
+          data-testid="StepBreadcrumb__step__label"
+        >
+          {label}
+        </strong>
+      )}
+    </li>
   );
 };

@@ -9,8 +9,8 @@ import {
   OrderLiteFactory,
 } from 'utils/test/factories';
 import { Deferred } from 'utils/test/deferred';
-import type { Props as CourseProductItemProps } from 'components/CourseProductItem';
-import JoanieApiProvider from 'data/JoanieApiProvider';
+import type { Props as CourseProductItemProps } from 'views/CourseProductsList/components/CourseProductItem';
+import JoanieApiProvider from 'providers/JoanieApiProvider';
 import type { Course, CourseProduct, OrderLite } from 'types/Joanie';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import CourseProductsList from '.';

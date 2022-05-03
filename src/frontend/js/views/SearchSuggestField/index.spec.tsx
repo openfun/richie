@@ -1,8 +1,8 @@
 import { act, fireEvent, render, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
-import { useCourseSearchParams, CourseSearchParamsAction } from 'data/useCourseSearchParams';
-import { HistoryProvider } from 'data/useHistory';
+import { CourseSearchParamsAction, useCourseSearchParams } from 'hooks/useCourseSearchParams';
+import { HistoryProvider } from 'hooks/useHistory';
 import { history, location } from 'utils/indirection/window';
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import { FilterDefinition } from 'types/filters';
