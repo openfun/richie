@@ -12,6 +12,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.test.client import RequestFactory
 from django.utils import timezone
 
+import lxml.html
 from cms.api import add_plugin, create_page
 from cms.plugin_rendering import ContentRenderer
 from cms.test_utils.testcases import CMSTestCase
@@ -52,6 +53,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         self.assertEqual(rendered_form.count(blogpost.extended_object.get_title()), 1)
         self.assertNotIn(other_page_title, plugin_form.as_table())
 
+    # pylint: disable=too-many-statements
     def test_cms_plugins_blogpost_render_on_public_page(self):
         """
         The blogpost plugin should render as expected on a public page.
@@ -104,60 +106,65 @@ class BlogPostPluginTestCase(CMSTestCase):
 
         # Check the page content in English
         response = self.client.get(url)
-        # The blogpost's name should be present as a link to the cms page
-        # And CMS page title should be in title attribute of the link
-        self.assertIn(
-            ('<a href="/en/public-title/" ' 'class="blogpost-glimpse"'),
-            re.sub(" +", " ", str(response.content).replace("\\n", "")),
-        )
+        html = lxml.html.fromstring(response.content)
 
-        # The blogpost's title should be wrapped in a h2
+        # The blogpost's name should be present as a link to the cms page, wrapped in a h2
+        title = html.cssselect("h2.blogpost-glimpse__title")[0]
+        link = title.cssselect(".blogpost-glimpse__link")[0]
+        self.assertEqual(link.get("href"), "/en/public-title/")
         blogpost.refresh_from_db()
         blogpost_title = blogpost.public_extension.extended_object.get_title()
-        self.assertContains(
-            response,
-            f'<h2 class="blogpost-glimpse__title">{blogpost_title:s}</h2>',
-            html=True,
-        )
+        self.assertEqual(link.text_content().strip(), blogpost_title)
         self.assertNotContains(response, "draft title")
 
         # Blogpost's cover should be present
         pattern = (
-            r'<div class="blogpost-glimpse__media">'
+            r'<div class="blogpost-glimpse__media" aria-hidden="true">'
+            r'<a href="/en/public-title/" tabindex="-1">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         # Publication date should be set by first publication
-        self.assertContains(
-            response,
-            '<p class="blogpost-glimpse__date">Nov. 30, 2019</p>',
-            html=True,
-        )
+        date = html.cssselect(".blogpost-glimpse__date")[0]
+        # the visible date is actually only here for sighted users, make sure it is
+        # hidden from screen readers
+        self.assertEqual(date.text_content().strip(), "Nov. 30, 2019")
+        self.assertEqual(date.get("aria-hidden"), "true")
+        # and make sure there is a screen reader-only date
+        screen_reader_date = html.cssselect('[data-testid="offscreen-date"]')[0]
+        self.assertEqual(screen_reader_date.text_content().strip(), "Nov. 30, 2019")
+        self.assertEqual(screen_reader_date.get("class"), "offscreen")
 
         # Same checks in French
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
-        self.assertIn(
-            ('<a href="/fr/titre-public/" ' 'class="blogpost-glimpse"'),
-            re.sub(" +", " ", str(response.content).replace("\\n", "")),
-        )
+        html = lxml.html.fromstring(response.content)
+
+        title = html.cssselect("h2.blogpost-glimpse__title")[0]
+        link = title.cssselect(".blogpost-glimpse__link")[0]
+        self.assertEqual(link.get("href"), "/fr/titre-public/")
 
         # pylint: disable=no-member
         pattern = (
-            r'<div class="blogpost-glimpse__media">'
+            r'<div class="blogpost-glimpse__media" aria-hidden="true">'
+            r'<a href="/fr/titre-public/" tabindex="-1">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         # Publication date should be set by first publication
-        self.assertContains(
-            response,
-            '<p class="blogpost-glimpse__date">30 novembre 2019</p>',
-            html=True,
-        )
+        date = html.cssselect(".blogpost-glimpse__date")[0]
+        # the visible date is actually only here for sighted users, make sure it is
+        # hidden from screen readers
+        self.assertEqual(date.text_content().strip(), "30 novembre 2019")
+        self.assertEqual(date.get("aria-hidden"), "true")
+        # and make sure there is a screen reader-only date
+        screen_reader_date = html.cssselect('[data-testid="offscreen-date"]')[0]
+        self.assertEqual(screen_reader_date.text_content().strip(), "30 novembre 2019")
+        self.assertEqual(screen_reader_date.get("class"), "offscreen")
 
     def test_cms_plugins_blogpost_fallback_when_never_published(self):
         """
@@ -192,34 +199,36 @@ class BlogPostPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="en")
         response = self.client.get(url)
 
-        # The english blogpost's name should be present as a link to the cms page
-        # But the locale in the url should remain "en"
-        self.assertIn(
-            ('<a href="/en/titre-public/" class="blogpost-glimpse"'),
-            re.sub(" +", " ", str(response.content).replace("\\n", "")),
-        )
+        html = lxml.html.fromstring(response.content)
 
-        # The blogpost's title should be wrapped in a h2
-        blogpost.refresh_from_db()
-        self.assertContains(
-            response,
-            '<h2 class="blogpost-glimpse__title">titre public</h2>',
-            html=True,
-        )
+        # The english blogpost's name should be present as a link wrapped
+        # in a h2 to the cms page, but the locale in the url should remain "en"
+        title = html.cssselect("h2.blogpost-glimpse__title")[0]
+        link = title.cssselect(".blogpost-glimpse__link")[0]
+        self.assertEqual(link.text_content().strip(), "titre public")
+        self.assertEqual(link.get("href"), "/en/titre-public/")
+
         self.assertNotContains(response, "public title")
 
         # Blogpost's cover should be present
         pattern = (
-            r'<div class="blogpost-glimpse__media">'
+            r'<div class="blogpost-glimpse__media" aria-hidden="true">'
+            r'<a href="/en/titre-public/" tabindex="-1">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt=""'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         # Publication date should be set by first publication
-        self.assertContains(
-            response, '<p class="blogpost-glimpse__date">Nov. 30, 2019</p>', html=True
-        )
+        date = html.cssselect(".blogpost-glimpse__date")[0]
+        # the visible date is actually only here for sighted users, make sure it is
+        # hidden from screen readers
+        self.assertEqual(date.text_content().strip(), "Nov. 30, 2019")
+        self.assertEqual(date.get("aria-hidden"), "true")
+        # and make sure there is a screen reader-only date
+        screen_reader_date = html.cssselect('[data-testid="offscreen-date"]')[0]
+        self.assertEqual(screen_reader_date.text_content().strip(), "Nov. 30, 2019")
+        self.assertEqual(screen_reader_date.get("class"), "offscreen")
 
     def test_cms_plugins_blogpost_fallback_when_published_unpublished(self):
         """
