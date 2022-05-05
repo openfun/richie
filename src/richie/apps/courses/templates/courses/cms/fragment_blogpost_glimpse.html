@@ -104,7 +104,7 @@
 
                 {% comment %}screen reader users get the date here, right after the title{% endcomment %}
                 {% if blogpost_page.publication_date %}
-                <p class="offscreen">
+                <p class="offscreen" data-testid="offscreen-date">
                     {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
                 </p>
                 {% endif %}

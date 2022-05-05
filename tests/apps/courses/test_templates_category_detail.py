@@ -6,6 +6,7 @@ from unittest import mock
 
 from django.test.utils import override_settings
 
+import lxml.html
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
@@ -100,7 +101,7 @@ class CategoryCMSTestCase(CMSTestCase):
         )
 
     def _extension_cms_published_content(
-        self, factory_model, placeholder_slot, control_string
+        self, factory_model, placeholder_slot, selector
     ):
         """
         Not a test. Sharing code for related page extension tests.
@@ -146,6 +147,8 @@ class CategoryCMSTestCase(CMSTestCase):
 
         # Ensure the published page content is correct
         response = self.client.get(url)
+        html = lxml.html.fromstring(response.content)
+
         self.assertContains(
             response,
             "<title>Maths - Category - example.com</title>",
@@ -157,13 +160,12 @@ class CategoryCMSTestCase(CMSTestCase):
         )
 
         # The published extension should be on the page in its published version
-        self.assertContains(
-            response,
-            control_string.format(
-                published_extension.public_extension.extended_object.get_title()
-            ),
-            html=True,
+        element = html.cssselect(selector)[0]
+        self.assertEqual(
+            element.text_content().strip(),
+            published_extension.public_extension.extended_object.get_title(),
         )
+
         # The other extensions should not be leaked:
         # - extra extension linked only on the draft category page
         self.assertNotContains(
@@ -189,7 +191,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             OrganizationFactory,
             "categories",
-            '<h2 class="organization-glimpse__title" property="name">{:s}</h2>',
+            'h3.organization-glimpse__title[property="name"]',
         )
 
     def test_templates_category_detail_cms_published_content_courses(self):
@@ -200,7 +202,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             CourseFactory,
             "course_categories",
-            '<span class="course-glimpse__title-text">{0:s}</span>',
+            "h3.course-glimpse__title",
         )
 
     @mock.patch(
@@ -315,7 +317,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             BlogPostFactory,
             "categories",
-            '<h2 class="blogpost-glimpse__title">{:s}</h2>',
+            "h3.blogpost-glimpse__title",
         )
 
     def test_templates_category_detail_cms_published_content_persons(self):
@@ -324,7 +326,7 @@ class CategoryCMSTestCase(CMSTestCase):
         related persons in all publication states.
         """
         self._extension_cms_published_content(
-            PersonFactory, "categories", '<h2 class="person-glimpse__title">{:s}</h2>'
+            PersonFactory, "categories", "h3.person-glimpse__title"
         )
 
     def test_templates_category_detail_cms_published_content_opengraph(self):
@@ -353,7 +355,7 @@ class CategoryCMSTestCase(CMSTestCase):
             response, '<meta property="og:image:height" content="200" />'
         )
 
-    def _extension_cms_draft_content(self, factory_model, control_string):
+    def _extension_cms_draft_content(self, factory_model, selector):
         """
         Not a test. Sharing code for related page extension tests.
         Validate how a draft category is displayed with its related page extensions.
@@ -378,6 +380,8 @@ class CategoryCMSTestCase(CMSTestCase):
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
         response = self.client.get(url)
+        html = lxml.html.fromstring(response.content)
+
         self.assertContains(
             response,
             "<title>Maths - Category - example.com</title>",
@@ -388,45 +392,33 @@ class CategoryCMSTestCase(CMSTestCase):
             response, '<h1 class="category-detail__title">Maths</h1>', html=True
         )
 
+        titles = [
+            published_extension.extended_object.get_title(),
+            not_published_extension.extended_object.get_title(),
+        ]
         # The published page extension should be on the page in its published version
-        self.assertContains(
-            response,
-            control_string.format(published_extension.extended_object.get_title()),
-            html=True,
-        )
         # The not published page extension should be on the page, mark as draft
-        self.assertContains(
-            response,
-            control_string.format(
-                not_published_extension.extended_object.get_title(),
-            ),
-            html=True,
-        )
+        for element in html.cssselect(selector):
+            self.assertIn(element.text_content().strip(), titles)
 
     def test_templates_category_detail_cms_draft_content_organizations(self):
         """Validate how a draft category page is displayed with its related organizations."""
         self._extension_cms_draft_content(
             OrganizationFactory,
-            '<h2 class="organization-glimpse__title" property="name">{:s}</h2>',
+            "h3.organization-glimpse__title",
         )
 
     def test_templates_category_detail_cms_draft_content_courses(self):
         """Validate how a draft category page is displayed with its related courses."""
-        self._extension_cms_draft_content(
-            CourseFactory, '<span class="course-glimpse__title-text">{0:s}</span>'
-        )
+        self._extension_cms_draft_content(CourseFactory, "h3.course-glimpse__title")
 
     def test_templates_category_detail_cms_draft_content_blogposts(self):
         """Validate how a draft category page is displayed with its related blogposts."""
-        self._extension_cms_draft_content(
-            BlogPostFactory, '<h2 class="blogpost-glimpse__title">{:s}</h2>'
-        )
+        self._extension_cms_draft_content(BlogPostFactory, "h3.blogpost-glimpse__title")
 
     def test_templates_category_detail_cms_draft_content_persons(self):
         """Validate how a draft category page is displayed with its related persons."""
-        self._extension_cms_draft_content(
-            PersonFactory, '<h2 class="person-glimpse__title">{:s}</h2>'
-        )
+        self._extension_cms_draft_content(PersonFactory, "h3.person-glimpse__title")
 
     def test_template_category_detail_without_category(self):
         """

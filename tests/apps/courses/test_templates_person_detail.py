@@ -7,6 +7,7 @@ from unittest import mock
 from django.test.utils import override_settings
 
 import htmlmin
+import lxml.html
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
@@ -488,12 +489,12 @@ class PersonCMSTestCase(CMSTestCase):
 
         url = person.extended_object.get_absolute_url()
         response = self.client.get(url)
+        html = lxml.html.fromstring(response.content)
 
         # The blog post should be present on the page
-        self.assertContains(
-            response,
-            f'<h2 class="blogpost-glimpse__title">{blog_post.extended_object.get_title():s}</h2>',
-            html=True,
+        title = html.cssselect("h3.blogpost-glimpse__title")[0]
+        self.assertEqual(
+            title.text_content().strip(), blog_post.extended_object.get_title()
         )
 
     def test_template_person_detail_without_person(self):
