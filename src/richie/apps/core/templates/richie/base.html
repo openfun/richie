@@ -204,6 +204,7 @@
                             const target = document.getElementById(el.dataset.target);
                             // Toggle the "is-active" class on both the burger and container
                             el.classList.toggle("is-active");
+                            el.setAttribute("aria-expanded", el.classList.contains("is-active"));
                             target.classList.toggle("is-open");
                         });
                     });
