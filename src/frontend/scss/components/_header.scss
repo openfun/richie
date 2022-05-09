@@ -35,6 +35,12 @@
     }
   }
 
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
   // Will show only on mobile breakpoints
   &__hamburger {
     @include sv-flex(0, 0, auto);

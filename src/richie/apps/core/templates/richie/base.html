@@ -81,47 +81,54 @@
 
             {# Wrap header content in a header tag to improve landmarks around the site #}
 
-            <header id="site-header">
-                <nav class="topbar {% block topbar_classes %}{% endblock topbar_classes %}" id="main-menu">
+            <div id="site-header">
+                <div class="topbar {% block topbar_classes %}{% endblock topbar_classes %}" id="main-menu">
                     <div class="topbar__container">
-                        <div class="topbar__brand">
-                            <button class="topbar__hamburger"
-                                    data-target="main-menu" aria-label="menu" aria-expanded="false">&#8801;</button>
-                            <a href="/" title="{% trans "Go to homepage" %}" rel="home" accesskey="h">
-                            {% block branding_topbar %}
-                                <img src="{% static "richie/images/logo.png" %}" class="topbar__logo" alt="{{ SITE.name }}">
-                            {% endblock branding_topbar %}
-                            </a>
-                        </div>
-                        <div class="topbar__menu">
-                            <ul class="topbar__list"> 
+                        <header class="topbar__header">
+                            <div class="topbar__brand">
+                                <a href="/" title="{% trans "Go to homepage" %}" rel="home" accesskey="h">
+                                {% block branding_topbar %}
+                                    <img src="{% static "richie/images/logo.png" %}" class="topbar__logo" alt="{{ SITE.name }}">
+                                {% endblock branding_topbar %}
+                                </a>
+
+                                <button
+                                    class="topbar__hamburger"
+                                    data-target="main-menu"
+                                    aria-label="{% trans "Menu" %}"
+                                    aria-expanded="false"
+                                >&#8801;</button>
+                            </div>
+                            <div class="topbar__menu topbar__menu--aside">
+                                {% block topbar_searchbar %}
+                                <div class="topbar__search richie-react richie-react--root-search-suggest-field"
+                                    data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}"}'></div>
+                                {% endblock topbar_searchbar %}
+                                <ul class="topbar__list topbar__list--controls">
+                                    {% block userlogin %}
+                                        {% if AUTHENTICATION %}
+                                            <li class="topbar__item topbar__item--login richie-react richie-react--user-login" data-props='{"profileUrls": {{ AUTHENTICATION.profile_urls }}}'></li>
+                                        {% endif %}
+                                    {% endblock userlogin %}
+                                    {% block topbar_contact %}
+                                    <li class="topbar__item topbar__item--cta">
+                                        <a href="#">{% trans "Contact us" %}</a>
+                                    </li>
+                                    {% endblock topbar_contact %}
+                                </ul>
+
+                                {% language_chooser "menu/language_menu.html" %}
+                            </div>
+                        </header>
+
+                        <nav class="topbar__menu">
+                            <ul class="topbar__list">
                                 {% show_menu 0 100 0 0 "menu/header_menu.html" %}
                             </ul>
-                        </div>
-                        <div class="topbar__menu topbar__menu--aside">
-                            {% block topbar_searchbar %}
-                            <div class="topbar__search richie-react richie-react--root-search-suggest-field"
-                                data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}"}'></div>
-                            {% endblock topbar_searchbar %}
-
-                            <ul class="topbar__list topbar__list--controls">
-                                {% block userlogin %}
-                                    {% if AUTHENTICATION %}
-                                        <li class="topbar__item topbar__item--login richie-react richie-react--user-login" data-props='{"profileUrls": {{ AUTHENTICATION.profile_urls }}}'></li>
-                                    {% endif %}
-                                {% endblock userlogin %}
-                                {% block topbar_contact %}
-                                <li class="topbar__item topbar__item--cta">
-                                    <a href="#">{% trans "Contact us" %}</a>
-                                </li>
-                                {% endblock topbar_contact %}
-                            </ul>
-
-                            {% language_chooser "menu/language_menu.html" %}
-                        </div>
+                        </nav>
                     </div>
-                </nav>
-            </header>
+                </div>
+            </div>
             {% endblock body_header %}
             
             {# Main landmark helps redirect users with disabilities directly to the content #}
