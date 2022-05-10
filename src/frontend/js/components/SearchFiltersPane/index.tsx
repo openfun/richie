@@ -68,7 +68,10 @@ export const SearchFiltersPane = ({
 
   return (
     <div className="search-filters-pane" {...passThroughProps}>
-      <h2 className="search-filters-pane__title">
+      <h2
+        id={`${passThroughProps.id || 'search-filters-pane'}__title`}
+        className="search-filters-pane__title"
+      >
         <FormattedMessage {...messages.filter} />
       </h2>
       <button

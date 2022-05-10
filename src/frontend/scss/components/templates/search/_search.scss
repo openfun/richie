@@ -65,6 +65,18 @@ $r-search-filters-width: 15rem !default;
       transform: translateX(0);
     }
 
+    &__pane-container:not(.is-closing) {
+      display: none;
+
+      @include media-breakpoint-up(lg) {
+        display: block;
+      }
+    }
+
+    &--active &__pane-container {
+      display: block;
+    }
+
     &__toggle {
       position: absolute;
       top: 1.25rem;
@@ -81,6 +93,11 @@ $r-search-filters-width: 15rem !default;
         width: 100%;
         height: 100%;
         fill: r-theme-val(search-filters, toggler-fill);
+      }
+
+      &--bottom {
+        top: auto;
+        bottom: 1.25rem;
       }
     }
   }

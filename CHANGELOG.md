@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- On the search page, improve accessibility of the filters pane when using a
+  small screen
+
 ##  [2.15.1] - 2022-08-10
 
 ### Changed

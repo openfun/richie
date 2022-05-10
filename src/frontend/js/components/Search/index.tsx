@@ -1,35 +1,23 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useRef } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CourseGlimpseList } from 'components/CourseGlimpseList';
 import { PaginateCourseSearch } from 'components/PaginateCourseSearch';
 import { SearchFiltersPane } from 'components/SearchFiltersPane';
 import { Spinner } from 'components/Spinner';
-import { Icon } from 'components/Icon';
 import { useCourseSearch } from 'data/useCourseSearch';
 import { useCourseSearchParams, CourseSearchParamsAction } from 'data/useCourseSearchParams';
 import useMatchMedia from 'utils/useMatchMedia';
 import { RequestStatus } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
 import { scroll } from 'utils/indirection/window';
+import FiltersPaneCloseButton from './FiltersPaneCloseButton';
 
 const messages = defineMessages({
   errorMessage: {
     defaultMessage: `Something's wrong! Courses could not be loaded.`,
     description: 'Error message for Search view when the request to load courses fails',
     id: 'components.Search.errorMessage',
-  },
-  hideFiltersPane: {
-    defaultMessage: 'Hide filters pane',
-    description:
-      'Accessibility text for the button/icon that toggles *off* the filters pane on mobile',
-    id: 'components.Search.hideFiltersPane',
-  },
-  showFiltersPane: {
-    defaultMessage: 'Show filters pane',
-    description:
-      'Accessibility text for the button/icon that toggles *on* the filters pane on mobile',
-    id: 'components.Search.showFiltersPane',
   },
   resultsTitle: {
     defaultMessage: 'Search results',
@@ -61,8 +49,16 @@ const Search = ({ context }: CommonDataProps) => {
 
   const alwaysShowFilters = useMatchMedia('(min-width: 992px)');
   const [showFilters, setShowFilters] = useState(false);
-
+  const filtersPaneRef = useRef<HTMLDivElement>(null);
   const [referenceId] = useState(`control-${Math.random()}`);
+  // this helps generating a class after the .search__filters css transition ended
+  const [filtersPaneClosing, setFiltersPaneClosing] = useState(false);
+  const onFiltersPaneCloseButtonClick = () => {
+    if (showFilters) {
+      setFiltersPaneClosing(showFilters);
+    }
+    setShowFilters(!showFilters);
+  };
 
   useEffect(() => {
     // We want to scroll back to the top when courses have changed, unless the last action resulted
@@ -78,49 +74,64 @@ const Search = ({ context }: CommonDataProps) => {
     }
   }, [courseSearchResponse]);
 
+  useEffect(() => {
+    if (filtersPaneClosing) {
+      filtersPaneRef.current?.addEventListener(
+        'transitionend',
+        () => setFiltersPaneClosing(false),
+        { once: true },
+      );
+    }
+  }, [filtersPaneClosing]);
+
   return (
     <div className="search">
       <div
+        role="region"
+        aria-labelledby={`${referenceId}-filters__title`}
+        ref={filtersPaneRef}
         className={`search__filters ${
           !alwaysShowFilters && showFilters ? 'search__filters--active' : ''
         }`}
       >
-        <SearchFiltersPane
-          aria-hidden={alwaysShowFilters ? false : !showFilters}
-          filters={
-            courseSearchResponse?.status === RequestStatus.SUCCESS
-              ? courseSearchResponse.content.filters
-              : null
-          }
-          id={referenceId}
-        />
         {!alwaysShowFilters && (
-          <button
-            aria-expanded={showFilters}
-            aria-controls={referenceId}
-            className="search__filters__toggle"
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            {showFilters ? (
-              <Fragment>
-                <Icon name="icon-cross" className="search__filters__toggle__icon" />{' '}
-                <span className="offscreen">
-                  <FormattedMessage {...messages.hideFiltersPane} />
-                </span>
-              </Fragment>
-            ) : (
-              <Fragment>
-                <Icon name="icon-filter" className="search__filters__toggle__icon" />
-                <span className="offscreen">
-                  <FormattedMessage {...messages.showFiltersPane} />
-                </span>
-              </Fragment>
-            )}
-          </button>
+          <FiltersPaneCloseButton
+            expanded={showFilters}
+            controls={`${referenceId}-filters`}
+            onClick={onFiltersPaneCloseButtonClick}
+          />
+        )}
+        <div
+          className={`search__filters__pane-container ${filtersPaneClosing ? 'is-closing' : ''} ${
+            !alwaysShowFilters && !showFilters && !filtersPaneClosing ? 'is-closed' : ''
+          }`}
+        >
+          <SearchFiltersPane
+            filters={
+              courseSearchResponse?.status === RequestStatus.SUCCESS
+                ? courseSearchResponse.content.filters
+                : null
+            }
+            id={`${referenceId}-filters`}
+          />
+        </div>
+        {/* we repeat the close button at the end because there can be quite a lot of filters,
+        and going back to the close button at the top is cumbersome, especially for screen reader users */}
+        {!alwaysShowFilters && showFilters && (
+          <FiltersPaneCloseButton
+            expanded={showFilters}
+            controls={`${referenceId}-filters`}
+            onClick={onFiltersPaneCloseButtonClick}
+            type="bottom"
+          />
         )}
       </div>
-      <div className="search__results">
-        <h2 className="offscreen">
+      <div
+        className="search__results"
+        role="region"
+        aria-labelledby={`${referenceId}-results__title`}
+      >
+        <h2 className="offscreen" id={`${referenceId}-results__title`}>
           <FormattedMessage {...messages.resultsTitle} />
         </h2>
         {courseSearchResponse && courseSearchResponse.status === RequestStatus.SUCCESS ? (
@@ -164,7 +175,7 @@ const Search = ({ context }: CommonDataProps) => {
             className={`search__results__overlay ${
               showFilters ? 'search__results__overlay--visible' : ''
             }`}
-            onClick={() => setShowFilters(false)}
+            onClick={onFiltersPaneCloseButtonClick}
           />
         )}
       </div>
