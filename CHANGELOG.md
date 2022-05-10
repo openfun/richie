@@ -18,8 +18,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   to succeed
 - Improve Sale Tunnel UX
 - Improve sale tunnel theme overriding
-- Improve html header and menu structure for better keyboard and screen reader
-  UX
+- Improve html header, menu and footer structure for better keyboard and
+  screen reader UX
 
 ### Fixed
 

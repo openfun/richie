@@ -150,12 +150,6 @@
             <footer id="site-footer">
                 <div class="body-footer">
                     <div class="body-footer__container">
-                        <div class="body-footer__menu">
-                            <p class="body-footer__subtitle">{% trans "Learn more" %}</p>
-                            <div class="body-footer__items">
-                                {% static_placeholder "footer" %}
-                            </div>
-                        </div>
                         <div class="body-footer__brand">
                             {% block body_footer_brand %}
                                 <a href="/">
@@ -170,6 +164,12 @@
                             {% language_chooser "menu/language_menu.html" %}
                             <div class="body-footer__badges">
                                 {% include "social-networks/footer-badges.html" %}
+                            </div>
+                        </div>
+                        <div class="body-footer__menu">
+                            <p class="body-footer__subtitle">{% trans "Learn more" %}</p>
+                            <div class="body-footer__items">
+                                {% static_placeholder "footer" %}
                             </div>
                         </div>
                     </div>
