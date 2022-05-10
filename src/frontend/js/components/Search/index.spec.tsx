@@ -177,10 +177,7 @@ describe('<Search />', () => {
 
     await waitFor(() => {
       // The search filters pane is not hidden, there is no button to show/hide it
-      expect(container.querySelector('.search-filters-pane')).toHaveAttribute(
-        'aria-hidden',
-        'false',
-      );
+      expect(container.querySelector('.search__filters__pane-container')).toBeVisible();
     });
     expect(container.querySelector('.search__filters__toggle')).toEqual(null);
   });
@@ -204,14 +201,15 @@ describe('<Search />', () => {
       </QueryClientProvider>,
     );
 
+    // there is a button to toggle the filters pane, placed right before the filters pane in the DOM
+    const topFiltersToggle = container.querySelector('.search__filters__toggle--top');
+    expect(topFiltersToggle).toBeInstanceOf(HTMLButtonElement);
+    const filtersContainer = topFiltersToggle?.nextElementSibling;
+    expect(filtersContainer?.classList.contains('search__filters__pane-container')).toBe(true);
+    // the filters pane is closed at first
     await waitFor(() => {
-      // The search filters pane is hidden, there is a button to show/hide it
-      expect(container.querySelector('.search-filters-pane')).toHaveAttribute(
-        'aria-hidden',
-        'true',
-      );
+      expect(filtersContainer?.classList.contains('is-closed')).toBe(true);
     });
-    expect(container.querySelector('.search__filters__toggle')).toBeInstanceOf(HTMLButtonElement);
 
     {
       // We have a "Show" button with the appropriate aria helper
@@ -224,27 +222,61 @@ describe('<Search />', () => {
 
       // After a click the filters pane is now shown
       fireEvent.click(button);
-      expect(container.querySelector('.search-filters-pane')).toHaveAttribute(
-        'aria-hidden',
-        'false',
-      );
+      await waitFor(() => {
+        expect(filtersContainer?.classList.contains('is-closed')).toBe(false);
+      });
     }
     {
-      // We now have a "Hide" button with the appropriate aria helper
+      // We now have two "Hide" button with the appropriate aria helper
       expect(screen.queryByText('Show filters pane')).toEqual(null);
-      const button = screen.getByText('Hide filters pane');
-      expect(container.querySelector('.search__filters__toggle')).toHaveAttribute(
-        'aria-expanded',
-        'true',
-      );
+      const buttons = screen.getAllByText('Hide filters pane');
+      expect(buttons.length).toBe(2);
+      buttons.forEach((button) => {
+        expect(button.closest('button')).toHaveAttribute('aria-expanded', 'true');
+      });
+      // we make sure the second button is placed right after the filters zone
+      const bottomFiltersToggle = container.querySelector('.search__filters__toggle--bottom');
+      expect(bottomFiltersToggle).toBeInstanceOf(HTMLButtonElement);
+      expect(bottomFiltersToggle?.previousElementSibling).toBe(filtersContainer);
 
       // After another click the filters pane is hidden again
-      fireEvent.click(button);
-      expect(container.querySelector('.search-filters-pane')).toHaveAttribute(
-        'aria-hidden',
-        'true',
-      );
+      fireEvent.click(buttons[0]);
+      await waitFor(() => {
+        // the code listens for a css transition to end before closing the pane.
+        // mock the transitionend event, as we do not support css in our tests
+        fireEvent.transitionEnd(filtersContainer!);
+        expect(filtersContainer?.classList.contains('is-closed')).toBe(true);
+      });
     }
+  });
+
+  it('has labelled regions for screen reader users', async () => {
+    fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
+      meta: {
+        total_count: 200,
+      },
+      objects: [],
+    });
+
+    const { container } = render(
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
+            <Search context={context} />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
+    );
+
+    // both filters and results zones are regions that are correctly labelled
+    const searchFilters = container.querySelector('.search__filters');
+    const searchResults = container.querySelector('.search__results');
+    [searchFilters, searchResults].forEach((region) => {
+      expect(region).toHaveAttribute('role', 'region');
+      const label = container.querySelector(`[id="${region?.getAttribute('aria-labelledby')}"]`);
+      expect(label).not.toBeNull();
+      expect(label?.tagName.toLowerCase()).toBe('h2');
+    });
   });
 
   it('should scroll up when filters have changed and courses are retrieved', async () => {
