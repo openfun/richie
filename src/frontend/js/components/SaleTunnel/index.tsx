@@ -29,9 +29,15 @@ const messages = defineMessages({
     id: 'components.SaleTunnel.stepResume',
   },
   loginToPurchase: {
-    defaultMessage: 'Login to purchase',
+    defaultMessage: 'Login to purchase {product}',
     description: "Label displayed inside the product's CTA when user is not logged in",
     id: 'components.SaleTunnel.loginToPurchase',
+  },
+  callToActionDescription: {
+    defaultMessage: 'Purchase {product}',
+    description:
+      'Additional description announced by screen readers when focusing the call to action buying button',
+    id: 'components.SaleTunnel.callToActionDescription',
   },
 });
 
@@ -83,14 +89,26 @@ const SaleTunnel = ({ product }: SaleTunnelProps) => {
   if (!user) {
     return (
       <button className="product-item__cta" onClick={login}>
-        <FormattedMessage {...messages.loginToPurchase} />
+        <FormattedMessage
+          {...messages.loginToPurchase}
+          values={{ product: <span className="offscreen">&quot;{product.title}&quot;</span> }}
+        />
       </button>
     );
   }
 
   return (
     <Fragment>
-      <button className="product-item__cta" onClick={() => setIsOpen(true)}>
+      <button
+        className="product-item__cta"
+        onClick={() => setIsOpen(true)}
+        // so that the button is explicit on its own, we add a description that doesn't
+        // rely on the text coming from the CMS
+        // eslint-disable-next-line jsx-a11y/aria-props
+        aria-description={intl.formatMessage(messages.callToActionDescription, {
+          product: product.title,
+        })}
+      >
         {product.call_to_action}
       </button>
       <Modal
