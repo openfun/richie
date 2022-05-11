@@ -21,7 +21,7 @@ const StepComponent =
   ({ next }: { next: () => void }) =>
     (
       <Fragment>
-        <h1>{title}</h1>
+        <h2>{title}</h2>
         <button onClick={next}>Next</button>
       </Fragment>
     );
@@ -104,7 +104,7 @@ describe('SaleTunnel', () => {
       );
     });
 
-    screen.getByRole('button', { name: 'Login to purchase' });
+    screen.getByRole('button', { name: `Login to purchase "${product.title}"` });
   });
 
   it('shows cta to open sale tunnel when user is authenticated', async () => {
