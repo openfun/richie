@@ -94,6 +94,7 @@ export const StepBreadcrumb = <Keys extends PropertyKey, LastKey extends Keys>({
             <li
               aria-current={index === activeIndex ? 'step' : 'false'}
               className={getStepClassName(index)}
+              tabIndex={index === activeIndex ? -1 : undefined}
             >
               <div className="StepBreadcrumb__step__icon" data-testid="StepBreadcrumb__step__icon">
                 {entry.icon ? <Icon name={entry.icon} /> : <span>{index + 1}</span>}

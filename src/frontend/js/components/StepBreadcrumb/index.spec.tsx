@@ -1,11 +1,4 @@
-import {
-  act,
-  getAllByRole,
-  getByText,
-  queryAllByTestId,
-  render,
-  screen,
-} from '@testing-library/react';
+import { act, getAllByRole, getByText, queryAllByTestId, render } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { IntlProvider } from 'react-intl';
 import { type Manifest, useStepManager } from 'hooks/useStepManager';
@@ -58,6 +51,7 @@ describe('StepBreadcrumb', () => {
     });
     expect(activeSteps).toHaveLength(1);
     expect(currentStep).toHaveTextContent('1');
+    expect(currentStep).toHaveAttribute('tabindex', '-1');
 
     act(() => result.current.next());
     rerender(
@@ -124,6 +118,8 @@ describe('StepBreadcrumb', () => {
     // there should be hidden text that make things more explicit for screen reader users
     expect(currentStepLabel?.querySelector('.offscreen')).toHaveTextContent('Step 1 of 2 (active)');
     expect(nextStepLabel?.querySelector('.offscreen')).toHaveTextContent('Step 2 of 2');
+    // the current step should be programmatically focusable
+    expect(currentStep).toHaveAttribute('tabindex', '-1');
     const separator = container.querySelectorAll('li.StepBreadcrumb__separator');
     let activeSeparator = container.querySelector(
       'li.StepBreadcrumb__separator.StepBreadcrumb__separator--active',
