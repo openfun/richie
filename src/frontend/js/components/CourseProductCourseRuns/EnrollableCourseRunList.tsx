@@ -9,7 +9,7 @@ import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
 import type { Maybe } from 'types/utils';
 import useDateFormat from 'utils/useDateFormat';
-import CourseRunSection from './CourseRunSection';
+import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
 
 const messages = defineMessages({
   ariaSelectCourseRun: {
@@ -147,6 +147,9 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
                       data-testid={`course-run-${courseRun.id}-start-date`}
                       className="course-runs-item__date course-runs-item__date--start"
                     >
+                      <span className="offscreen">
+                        <FormattedMessage {...sectionMessages.start} />
+                      </span>
                       {formatDate(courseRun.start)}
                     </em>
                     <span className="course-runs-item__date-separator" />
@@ -154,6 +157,9 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
                       data-testid={`course-run-${courseRun.id}-end-date`}
                       className="course-runs-item__date course-runs-item__date--end"
                     >
+                      <span className="offscreen">
+                        <FormattedMessage {...sectionMessages.end} />
+                      </span>
                       {formatDate(courseRun.end)}
                     </em>
                   </strong>

@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Icon } from 'components/Icon';
 import type * as Joanie from 'types/Joanie';
 import useDateFormat from 'utils/useDateFormat';
-import CourseRunSection from './CourseRunSection';
+import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
 
 const messages = defineMessages({
   enrollFromTo: {
@@ -45,6 +45,9 @@ const CourseRunList = ({ courseRuns }: Props) => {
                   data-testid={`course-run-${courseRun.id}-start-date`}
                   className="course-runs-item__date course-runs-item__date--start"
                 >
+                  <span className="offscreen">
+                    <FormattedMessage {...sectionMessages.start} />
+                  </span>
                   {formatDate(courseRun.start)}
                 </em>
                 <span className="course-runs-item__date-separator" />
@@ -52,6 +55,9 @@ const CourseRunList = ({ courseRuns }: Props) => {
                   data-testid={`course-run-${courseRun.id}-end-date`}
                   className="course-runs-item__date course-runs-item__date--end"
                 >
+                  <span className="offscreen">
+                    <FormattedMessage {...sectionMessages.end} />
+                  </span>
                   {formatDate(courseRun.end)}
                 </em>
               </strong>
