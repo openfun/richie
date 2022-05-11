@@ -28,6 +28,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix `components.SaleTunnelStepPayment.userBillingAddressNoEntry` misspell
 - Remove z-index of course glimpse icon to fix an overlay issue
 - Fix erratic frontend test failure
 

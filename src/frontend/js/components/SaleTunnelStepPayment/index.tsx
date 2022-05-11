@@ -32,7 +32,7 @@ const messages = defineMessages({
     id: 'components.SaleTunnelStepPayment.userBillingAddressSelectLabel',
   },
   userBillingAddressNoEntry: {
-    defaultMessage: 'You have not yet a billing address.',
+    defaultMessage: "You don't have any billing addresses yet.",
     description: 'Message displayed when the user has no address.',
     id: 'components.SaleTunnelStepPayment.userBillingAddressNoEntry',
   },
