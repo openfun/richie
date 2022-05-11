@@ -131,24 +131,38 @@ describe('SaleTunnel', () => {
     // Only CTA is displayed
     const button = screen.getByRole('button', { name: product.call_to_action });
 
+    // we need to fake requestAnimationFrame to test the full behavior of react modal that relies on it for its onAfterOpen callback
+    const rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+      cb(Math.random());
+      return Math.random();
+    });
+
     // Then user can enter into the sale tunnel and follow its 3 steps
-    fireEvent.click(button);
+    await act(async () => {
+      fireEvent.click(button);
+    });
 
     // - Dialog should have been displayed
     screen.getByTestId('SaleTunnel__modal');
 
     // - Step 1 : Validation
-    screen.getByRole('heading', { level: 1, name: 'SaleTunnelStepValidation Component' });
+    screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepValidation Component' });
+    // focus should be set to the current step
+    expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     expect(fetchMock.calls()).toHaveLength(0);
 
     // - Step 2 : Payment
-    screen.getByRole('heading', { level: 1, name: 'SaleTunnelStepPayment Component' });
+    screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepPayment Component' });
+    // focus should be set to the current step
+    expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     expect(fetchMock.calls()).toHaveLength(0);
 
     // - Step 3 : Resume
-    screen.getByRole('heading', { level: 1, name: 'SaleTunnelStepResume Component' });
+    screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepResume Component' });
+    // focus should be set to the current step
+    expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
 
     // - Terminated, resume.onExit callback is triggered to refresh course and orders and dialog has been closed
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
@@ -158,6 +172,7 @@ describe('SaleTunnel', () => {
     expect(calls[1][0]).toEqual('https://joanie.test/api/orders/');
 
     expect(screen.queryByTestId('SaleTunnel__modal')).toBeNull();
+    rafSpy.mockRestore();
   });
 
   it('renders a sale tunnel with a close button', async () => {
@@ -194,9 +209,9 @@ describe('SaleTunnel', () => {
     const $closeButton = screen.getByRole('button', { name: 'Close dialog' });
 
     // - Go to step 2
-    screen.getByRole('heading', { level: 1, name: 'SaleTunnelStepValidation Component' });
+    screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepValidation Component' });
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    screen.getByRole('heading', { level: 1, name: 'SaleTunnelStepPayment Component' });
+    screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepPayment Component' });
 
     // - Press the escape key should not close the dialog
     fireEvent.keyDown(screen.getByTestId('SaleTunnel__modal'), { keyCode: 27 });
@@ -212,6 +227,6 @@ describe('SaleTunnel', () => {
 
     // - If user reopens the dialog, the step manager should have been reset so step 1 should be displayed
     fireEvent.click($button);
-    screen.getByRole('heading', { level: 1, name: 'SaleTunnelStepValidation Component' });
+    screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepValidation Component' });
   });
 });

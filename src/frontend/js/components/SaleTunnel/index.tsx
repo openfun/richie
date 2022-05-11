@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
 import { SaleTunnelStepPayment } from 'components/SaleTunnelStepPayment';
@@ -47,6 +47,13 @@ interface SaleTunnelProps {
 
 type TunnelSteps = 'validation' | 'payment' | 'resume';
 
+const focusCurrentStep = (container: HTMLElement) => {
+  const currentStep = container.querySelector<HTMLElement>('.StepBreadcrumb [aria-current="step"]');
+  if (currentStep) {
+    currentStep.focus();
+  }
+};
+
 const SaleTunnel = ({ product }: SaleTunnelProps) => {
   const intl = useIntl();
   const manifest: Manifest<TunnelSteps, 'resume'> = {
@@ -80,11 +87,25 @@ const SaleTunnel = ({ product }: SaleTunnelProps) => {
   const course = useCourse(courseCode);
   const orders = useOrders();
   const [isOpen, setIsOpen] = useState(false);
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   const handleModalClose = () => {
     reset();
     setIsOpen(false);
   };
+
+  /**
+   * correctly handle keyboard/screen reader users navigation on step change.
+   * Without this, since elements are removed from the DOM from step to step,
+   * focus is set back to the <body> tag by the browser. We also do this
+   * in the `onAfterOpen` modal prop to correctly focus the first step
+   */
+  useEffect(() => {
+    if (!modalRef.current) {
+      return;
+    }
+    focusCurrentStep(modalRef.current);
+  }, [step]);
 
   if (!user) {
     return (
@@ -114,6 +135,13 @@ const SaleTunnel = ({ product }: SaleTunnelProps) => {
       <Modal
         className="SaleTunnel__modal"
         isOpen={isOpen}
+        onAfterOpen={(options) => {
+          if (!options) {
+            return;
+          }
+          focusCurrentStep(options.contentEl);
+        }}
+        contentRef={(ref) => (modalRef.current = ref)}
         onRequestClose={handleModalClose}
         shouldCloseOnOverlayClick={false}
         shouldCloseOnEsc={false}
