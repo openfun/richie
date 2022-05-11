@@ -69,7 +69,7 @@ const CertificateItem = ({ certificate, order }: Props) => {
         <use href="#icon-certificate" />
       </svg>
       <div>
-        <h5 className="product-widget__item-title">{certificate.title}</h5>
+        <strong className="product-widget__item-title h5">{certificate.title}</strong>
         <p className="product-widget__item-description">
           {order?.certificate ? (
             <>

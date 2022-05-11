@@ -83,6 +83,7 @@
     &__title {
       color: r-theme-val(steps-content, title-color);
       margin-bottom: 0.5rem;
+      font-size: $h4-font-size;
     }
 
     &__content {

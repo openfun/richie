@@ -152,9 +152,9 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
     <section className="SaleTunnelStepPayment">
       <section className="SaleTunnelStepPayment__block">
         <header className="SaleTunnelStepPayment__block__header">
-          <h5 className="SaleTunnelStepPayment__block__title">
+          <h2 className="SaleTunnelStepPayment__block__title">
             <FormattedMessage {...messages.resumeTile} />
-          </h5>
+          </h2>
         </header>
         <div className="SaleTunnelStepPayment__block--product">
           <strong className="SaleTunnelStepPayment__block--product__title">{product.title}</strong>
@@ -169,9 +169,9 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
       </section>
       <section className="SaleTunnelStepPayment__block">
         <header className="SaleTunnelStepPayment__block__header">
-          <h5 className="SaleTunnelStepPayment__block__title">
+          <h2 className="SaleTunnelStepPayment__block__title">
             <FormattedMessage {...messages.userTile} />
-          </h5>
+          </h2>
         </header>
         <div className="SaleTunnelStepPayment__block--buyer">
           <strong className="h6 SaleTunnelStepPayment__block--buyer__name">
@@ -181,9 +181,9 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
             <p className="SaleTunnelStepPayment__block--buyer__email">{user.email}</p>
           ) : null}
           <header className="SaleTunnelStepPayment__block--buyer__address-header">
-            <h6>
+            <h3 className="SaleTunnelStepPayment__block--buyer__address-title">
               <FormattedMessage {...messages.userBillingAddressFieldset} />
-            </h6>
+            </h3>
             {addressesItems.length > 0 && (
               <button
                 className="button button--tiny button--pill button-sale--secondary"

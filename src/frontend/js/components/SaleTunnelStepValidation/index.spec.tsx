@@ -26,7 +26,7 @@ describe('SaleTunnelStepValidation', () => {
       style: 'currency',
     });
 
-    screen.getByRole('heading', { level: 3, name: product.title });
+    screen.getByRole('heading', { level: 2, name: product.title });
     screen.getByText(`${formatter.format(product.price).replaceAll(' ', ' ')} including VAT`);
 
     const courses = container.querySelectorAll('.product-detail-row--course');
@@ -35,7 +35,7 @@ describe('SaleTunnelStepValidation', () => {
       const courseItem = product.target_courses[index];
       expect(
         getByRole(course as HTMLElement, 'heading', {
-          level: 4,
+          level: 3,
           name: courseItem.title,
         }),
       );
@@ -50,7 +50,7 @@ describe('SaleTunnelStepValidation', () => {
 
     const certificate = container.querySelector('.product-detail-row--certificate');
     expect(certificate).not.toBeNull();
-    expect(getByRole(container, 'heading', { level: 4, name: product.certificate.title }));
+    expect(getByRole(container, 'heading', { level: 3, name: product.certificate.title }));
 
     // Click on the button trigger the next function
     const button = screen.getByRole('button', { name: 'Proceed to payment' });

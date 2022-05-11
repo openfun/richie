@@ -28,7 +28,7 @@ export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValida
   return (
     <section className="SaleTunnelStepValidation">
       <header className="SaleTunnelStepValidation__header">
-        <h3 className="SaleTunnelStepValidation__title">{product.title}</h3>
+        <h2 className="SaleTunnelStepValidation__title">{product.title}</h2>
         <strong className="h4 SaleTunnelStepValidation__price">
           <FormattedNumber
             value={product.price}
@@ -50,7 +50,7 @@ export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValida
                 <use href="#icon-check" />
               </svg>
             </span>
-            <h4 className="product-detail-row__title">{course.title}</h4>
+            <h3 className="product-detail-row__title">{course.title}</h3>
             <CourseRunsList courseRuns={course.course_runs.filter(isOpenedCourseRun)} />
           </li>
         ))}
@@ -61,7 +61,7 @@ export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValida
                 <use href="#icon-certificate" />
               </svg>
             </span>
-            <h4 className="product-detail-row__title">{product.certificate.title}</h4>
+            <h3 className="product-detail-row__title">{product.certificate.title}</h3>
             {product.certificate.description ? (
               <p className="product-detail-row__content">{product.certificate.description}</p>
             ) : null}

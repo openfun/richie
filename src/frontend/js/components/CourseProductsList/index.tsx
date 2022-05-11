@@ -13,6 +13,11 @@ export const messages = defineMessages({
       'Accessible text for the initial loading spinner displayed when course is fetching',
     id: 'components.CourseProductsList.loadingInitial',
   },
+  title: {
+    defaultMessage: 'Products',
+    description: 'Course products list title (screen readers only)',
+    id: 'components.CourseProductsList.title',
+  },
 });
 
 interface Props {
@@ -29,11 +34,14 @@ const CourseProductsList = ({ code }: Props) => {
   // - useCourse hook is fetching data
   if (course.states.fetching) {
     return (
-      <Spinner aria-labelledby="loading-course">
-        <span id="loading-course">
-          <FormattedMessage {...messages.loading} />
-        </span>
-      </Spinner>
+      <div>
+        <OffscreenTitle />
+        <Spinner aria-labelledby="loading-course">
+          <span id="loading-course">
+            <FormattedMessage {...messages.loading} />
+          </span>
+        </Spinner>
+      </div>
     );
   }
 
@@ -42,6 +50,7 @@ const CourseProductsList = ({ code }: Props) => {
 
   return (
     <CourseCodeProvider code={code}>
+      <OffscreenTitle />
       {Children.toArray(
         course.item!.products.map((product) => (
           <CourseProductItem product={product} order={getProductOrder(product.id)} />
@@ -50,5 +59,11 @@ const CourseProductsList = ({ code }: Props) => {
     </CourseCodeProvider>
   );
 };
+
+const OffscreenTitle = () => (
+  <h2 className="offscreen">
+    <FormattedMessage {...messages.title} />
+  </h2>
+);
 
 export default CourseProductsList;
