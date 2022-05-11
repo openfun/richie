@@ -26,10 +26,10 @@ jest.mock('utils/context', () => ({
 jest.mock('components/CourseProductItem', () => ({
   __esModule: true,
   default: ({ product, order }: CourseProductItemProps) => (
-    <>
-      <h2>{product.title}</h2>
-      {order && <h3>{order.id}</h3>}
-    </>
+    <section data-testid="product-widget">
+      <h3>{product.title}</h3>
+      {order && <strong data-testid="product-widget__price">Enrolled</strong>}
+    </section>
   ),
 }));
 
@@ -111,6 +111,10 @@ describe('CourseProductsList', () => {
       </Wrapper>,
     );
 
+    // it should render a visually hidden heading for screen reader users
+    const $offscreenTitle = screen.getByRole('heading', { name: 'Products' });
+    expect($offscreenTitle.classList.contains('offscreen')).toBe(true);
+
     // - A loader should be displayed while couse information are fetching
     screen.getByRole('status', { name: 'Loading course information...' });
 
@@ -119,11 +123,8 @@ describe('CourseProductsList', () => {
     });
 
     // - It should render one <CourseProductItem /> per product
-    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(course.products.length);
-
+    expect(screen.queryAllByTestId('product-widget')).toHaveLength(course.products.length);
     // - It should also pass order information if user owns a product
-    const $orders = screen.getAllByRole('heading', { level: 3 });
-    expect($orders).toHaveLength(1);
-    screen.getByRole('heading', { level: 3, name: course.orders![0].id });
+    expect(screen.queryAllByTestId('product-widget__price')).toHaveLength(1);
   });
 });

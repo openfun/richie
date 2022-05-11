@@ -1,4 +1,4 @@
-import { getByRole, render, screen } from '@testing-library/react';
+import { getByText, getByRole, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
@@ -90,15 +90,23 @@ describe('CourseProductItem', () => {
     );
 
     screen.getByRole('heading', { level: 3, name: product.title });
-    screen.getByRole('heading', {
-      level: 6,
-      name: priceFormatter(product.price_currency, product.price),
-    });
+    // the price shouldn't be a heading to prevent misdirection for screen reader users
+    // but we want to it to visually look like a h6
+    const $price = screen.getByText(
+      // the price formatter generates non-breaking spaces and getByText doesn't seem to handle that well, replace it
+      priceFormatter(product.price_currency, product.price).replace(/\u00a0/g, ' '),
+    );
+    expect($price.tagName).toBe('STRONG');
+    expect($price.classList.contains('h6')).toBe(true);
 
     // - Render all target courses information
     product.target_courses.forEach((course) => {
       const $item = screen.getByTestId(`course-item-${course.code}`);
-      getByRole($item, 'heading', { level: 5, name: course.title });
+      // the course title shouldn't be a heading to prevent misdirection for screen reader users
+      // but we want to it to visually look like a h5
+      const $courseTitle = getByText($item, course.title);
+      expect($courseTitle.tagName).toBe('STRONG');
+      expect($courseTitle.classList.contains('h5')).toBe(true);
       screen.getByTestId(`CourseRunList-${course.course_runs.map(({ id }) => id).join('-')}`);
     });
 
@@ -136,12 +144,18 @@ describe('CourseProductItem', () => {
 
     screen.getByRole('heading', { level: 3, name: product.title });
     // - In place of product price, a label should be displayed
-    screen.getByRole('heading', { level: 6, name: 'Enrolled' });
+    const $enrolledInfo = screen.getByText('Enrolled');
+    expect($enrolledInfo.tagName).toBe('STRONG');
+    expect($enrolledInfo.classList.contains('h6')).toBe(true);
 
     // - Render all target courses information with EnrollableCourseRunList component
     product.target_courses.forEach((course) => {
       const $item = screen.getByTestId(`course-item-${course.code}`);
-      getByRole($item, 'heading', { level: 5, name: course.title });
+      // the course title shouldn't be a heading to prevent misdirection for screen reader users
+      // but we want to it to visually look like a h5
+      const $courseTitle = getByText($item, course.title);
+      expect($courseTitle.tagName).toBe('STRONG');
+      expect($courseTitle.classList.contains('h5')).toBe(true);
       screen.getByTestId(
         `EnrollableCourseRunList-${course.course_runs.map(({ id }) => id).join('-')}-${order.id}`,
       );
@@ -178,17 +192,24 @@ describe('CourseProductItem', () => {
 
     screen.getByRole('heading', { level: 3, name: product.title });
     // - In place of product price, a label should be displayed
-    screen.getByRole('heading', { level: 6, name: 'Enrolled' });
+    const $enrolledInfo = screen.getByText('Enrolled');
+    expect($enrolledInfo.tagName).toBe('STRONG');
+    expect($enrolledInfo.classList.contains('h6')).toBe(true);
 
     const [targetCourse, ...targetCourses] = product.target_courses;
     // - The first target course should display the EnrolledCourseRun component
-    screen.getByRole('heading', { level: 5, name: targetCourse.title });
+    const $courseTitle = screen.getByText(targetCourse.title);
+    expect($courseTitle.tagName).toBe('STRONG');
+    expect($courseTitle.classList.contains('h5')).toBe(true);
     screen.getByTestId(`EnrolledCourseRun-${enrollment.id}`);
 
     // - Other target courses should display EnrollableCourseRunList component
     targetCourses.forEach((course) => {
       const $item = screen.getByTestId(`course-item-${course.code}`);
-      getByRole($item, 'heading', { level: 5, name: course.title });
+      const $itemTitle = getByText($item, course.title);
+      expect($itemTitle.tagName).toBe('STRONG');
+      expect($itemTitle.classList.contains('h5')).toBe(true);
+
       screen.getByTestId(
         `EnrollableCourseRunList-${course.course_runs.map(({ id }) => id).join('-')}-${order.id}`,
       );

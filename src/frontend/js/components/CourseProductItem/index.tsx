@@ -51,7 +51,7 @@ const CourseProductItem = ({ product, order }: Props) => {
     <section className="product-widget">
       <header className="product-widget__header">
         <h3 className="product-widget__title">{product.title}</h3>
-        <h6 className="product-widget__price">
+        <strong className="product-widget__price h6">
           {isOwned ? (
             <FormattedMessage {...messages.enrolled} />
           ) : (
@@ -61,7 +61,7 @@ const CourseProductItem = ({ product, order }: Props) => {
               style="currency"
             />
           )}
-        </h6>
+        </strong>
       </header>
       <ol className="product-widget__content">
         {Children.toArray(
@@ -70,7 +70,7 @@ const CourseProductItem = ({ product, order }: Props) => {
               data-testid={`course-item-${target_course.code}`}
               className="product-widget__item course"
             >
-              <h5 className="product-widget__item-title">{target_course.title}</h5>
+              <strong className="product-widget__item-title">{target_course.title}</strong>
               {!isOwned && (
                 <CourseRunList courseRuns={target_course.course_runs.filter(isOpenedCourseRun)} />
               )}

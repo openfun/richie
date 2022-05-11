@@ -82,7 +82,7 @@ describe('SaleTunnelStepPayment', () => {
     });
 
     // - It should display product information (title & price)
-    screen.getByRole('heading', { level: 5, name: 'You are about to purchase' });
+    screen.getByRole('heading', { level: 2, name: 'You are about to purchase' });
     screen.getByText(product.title, { exact: true });
     screen.getByText(formatter.format(product.price).replaceAll(' ', ' '));
   });
@@ -104,7 +104,7 @@ describe('SaleTunnelStepPayment', () => {
     });
 
     // - It should display user information
-    screen.getByRole('heading', { level: 5, name: 'Your personal information' });
+    screen.getByRole('heading', { level: 2, name: 'Your personal information' });
     screen.getByText(user.username, { exact: true });
   });
 
@@ -154,7 +154,7 @@ describe('SaleTunnelStepPayment', () => {
       );
     });
 
-    screen.getByRole('heading', { level: 6, name: 'Billing address' });
+    screen.getByRole('heading', { level: 3, name: 'Billing address' });
 
     // - A button to add an address should be displayed
     screen.getByText('Add an address', { selector: 'button' });

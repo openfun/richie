@@ -54,7 +54,10 @@ describe('CoursePorductCertificateItem', () => {
       </Wrapper>,
     );
 
-    screen.getByRole('heading', { level: 5, name: certificateDefinition.title });
+    // the title is not a heading to prevent screen reader users "heading spam",
+    // but we want it to visually look like a heading for sighted users
+    expect(screen.queryByRole('heading', { name: certificateDefinition.title })).toBeNull();
+    expect(screen.getByText(certificateDefinition.title).classList.contains('h5')).toBe(true);
     screen.getByText(certificateDefinition.description);
   });
 
@@ -71,7 +74,6 @@ describe('CoursePorductCertificateItem', () => {
       </Wrapper>,
     );
 
-    screen.getByRole('heading', { level: 5, name: certificateDefinition.title });
     screen.getByText(
       'You will be able to download your certificate once you will pass all course runs.',
     );
@@ -88,8 +90,6 @@ describe('CoursePorductCertificateItem', () => {
         <CertificateItem certificate={certificateDefinition} order={order} />
       </Wrapper>,
     );
-
-    screen.getByRole('heading', { level: 5, name: certificateDefinition.title });
 
     // - The certificate description should not be displayed ...
     expect(screen.queryByText(certificateDefinition.description)).toBeNull();
