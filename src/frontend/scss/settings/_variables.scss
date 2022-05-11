@@ -10,24 +10,24 @@ $onepixel: 0.0625rem;
 // Add a new breakpoint "xxl" for more granular downgrading
 $grid-breakpoints: (
   xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px,
-  xxl: 1900px,
+  sm: em-calc(576px),
+  md: em-calc(768px),
+  lg: em-calc(992px),
+  xl: em-calc(1200px),
+  xxl: em-calc(1900px),
 );
 
 // Add max width for "xxl" breakpoint
 $container-max-widths: (
-  sm: 540px,
-  md: 720px,
-  lg: 960px,
-  xl: 1140px,
-  xxl: 1240px,
+  sm: rem-calc(540px),
+  md: rem-calc(720px),
+  lg: rem-calc(960px),
+  xl: rem-calc(1140px),
+  xxl: rem-calc(1240px),
 );
 
 // More space between columns
-$grid-gutter-width: 20px;
+$grid-gutter-width: rem-calc(20px);
 
 // Base body
 $body-color: r-theme-val(body-content, base-color);
