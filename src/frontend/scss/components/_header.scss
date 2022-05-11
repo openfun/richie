@@ -7,7 +7,11 @@
   background: r-theme-val(topbar, base-background);
 
   @include media-breakpoint-up($r-topbar-breakpoint) {
-    height: $r-topbar-height;
+    padding-bottom: 0;
+
+    &__header {
+      max-height: $r-topbar-height;
+    }
 
     &--over {
       position: absolute;
@@ -37,8 +41,13 @@
 
   &__header {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     width: 100%;
+
+    @include media-breakpoint-up($r-topbar-breakpoint) {
+      flex-direction: row;
+    }
   }
 
   // Will show only on mobile breakpoints
@@ -61,9 +70,9 @@
   // Brand part with hamburger and clickable logo
   &__brand {
     @include sv-flex(1, 0, auto);
+    align-items: stretch;
     display: flex;
     flex-direction: row;
-    align-items: stretch;
     order: 1;
 
     @include media-breakpoint-up($r-topbar-breakpoint) {
@@ -95,6 +104,9 @@
 
   &__logo {
     display: block;
+    max-height: $r-topbar-height;
+    object-fit: contain;
+    object-position: left center;
     width: $r-topbar-logo-width-sm;
 
     @include media-breakpoint-up($r-topbar-breakpoint) {
