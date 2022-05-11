@@ -1,9 +1,21 @@
-import { act, getAllByRole, getByText, queryAllByTestId, render } from '@testing-library/react';
+import {
+  act,
+  getAllByRole,
+  getByText,
+  queryAllByTestId,
+  render,
+  screen,
+} from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
+import { IntlProvider } from 'react-intl';
 import { type Manifest, useStepManager } from 'hooks/useStepManager';
 import { StepBreadcrumb } from '.';
 
 describe('StepBreadcrumb', () => {
+  const Wrapper = ({ children }: React.PropsWithChildren<{}>) => (
+    <IntlProvider locale="en">{children}</IntlProvider>
+  );
+
   it('renders visually a minimal manifest', () => {
     // If manifest's steps does not have `label` and `icon` property,
     // only a breadcrumb with the step index is displayed.
@@ -23,7 +35,9 @@ describe('StepBreadcrumb', () => {
 
     const { result } = renderHook(() => useStepManager(manifest));
     const { container, rerender } = render(
-      <StepBreadcrumb manifest={manifest} step={result.current.step} />,
+      <Wrapper>
+        <StepBreadcrumb manifest={manifest} step={result.current.step} />
+      </Wrapper>,
     );
 
     expect(getAllByRole(container, 'listitem')).toHaveLength(2);
@@ -46,7 +60,11 @@ describe('StepBreadcrumb', () => {
     expect(currentStep).toHaveTextContent('1');
 
     act(() => result.current.next());
-    rerender(<StepBreadcrumb manifest={manifest} step={result.current.step} />);
+    rerender(
+      <Wrapper>
+        <StepBreadcrumb manifest={manifest} step={result.current.step} />
+      </Wrapper>,
+    );
 
     activeSteps = container.querySelectorAll(
       'li.StepBreadcrumb__step.StepBreadcrumb__step--active',
@@ -79,7 +97,9 @@ describe('StepBreadcrumb', () => {
 
     const { result } = renderHook(() => useStepManager(manifest));
     const { container, rerender } = render(
-      <StepBreadcrumb manifest={manifest} step={result.current.step} />,
+      <Wrapper>
+        <StepBreadcrumb manifest={manifest} step={result.current.step} />
+      </Wrapper>,
     );
 
     expect(getAllByRole(container, 'listitem')).toHaveLength(2);
@@ -92,8 +112,8 @@ describe('StepBreadcrumb', () => {
       'li.StepBreadcrumb__step.StepBreadcrumb__step--current',
     );
 
-    getByText(container, '0. Step', { exact: true });
-    getByText(container, '1. Step', { exact: true });
+    const currentStepLabel = getByText(container, '0. Step', { exact: true });
+    const nextStepLabel = getByText(container, '1. Step', { exact: true });
 
     expect(stepsIcons).toHaveLength(2);
     stepsIcons.forEach((icon) => {
@@ -101,7 +121,9 @@ describe('StepBreadcrumb', () => {
     });
     expect(activeSteps).toHaveLength(1);
     expect(currentStep).toHaveTextContent('0. Step');
-
+    // there should be hidden text that make things more explicit for screen reader users
+    expect(currentStepLabel?.querySelector('.offscreen')).toHaveTextContent('Step 1 of 2 (active)');
+    expect(nextStepLabel?.querySelector('.offscreen')).toHaveTextContent('Step 2 of 2');
     const separator = container.querySelectorAll('li.StepBreadcrumb__separator');
     let activeSeparator = container.querySelector(
       'li.StepBreadcrumb__separator.StepBreadcrumb__separator--active',
@@ -110,7 +132,11 @@ describe('StepBreadcrumb', () => {
     expect(activeSeparator).toBeNull();
 
     act(() => result.current.next());
-    rerender(<StepBreadcrumb manifest={manifest} step={result.current.step} />);
+    rerender(
+      <Wrapper>
+        <StepBreadcrumb manifest={manifest} step={result.current.step} />
+      </Wrapper>,
+    );
 
     activeSteps = container.querySelectorAll(
       'li.StepBreadcrumb__step.StepBreadcrumb__step--active',
@@ -141,7 +167,11 @@ describe('StepBreadcrumb', () => {
     };
 
     const { result } = renderHook(() => useStepManager(manifest));
-    const { container } = render(<StepBreadcrumb manifest={manifest} step={result.current.step} />);
+    const { container } = render(
+      <Wrapper>
+        <StepBreadcrumb manifest={manifest} step={result.current.step} />
+      </Wrapper>,
+    );
 
     expect(getAllByRole(container, 'listitem')).toHaveLength(2);
 
@@ -171,7 +201,11 @@ describe('StepBreadcrumb', () => {
     };
 
     const { result } = renderHook(() => useStepManager(manifest));
-    const { container } = render(<StepBreadcrumb manifest={manifest} step={result.current.step} />);
+    const { container } = render(
+      <Wrapper>
+        <StepBreadcrumb manifest={manifest} step={result.current.step} />
+      </Wrapper>,
+    );
 
     expect(getAllByRole(container, 'listitem')).toHaveLength(2);
 
