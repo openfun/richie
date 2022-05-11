@@ -20,6 +20,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Improve sale tunnel theme overriding
 - Improve html header, menu and footer structure for better keyboard and
   screen reader UX
+- Improve overall accessibility, especially for screen reader users,
+  on all content pages: category list, category details, blogpost list,
+  blogpost details, program list, program details, organization detail.
 
 ### Fixed
 

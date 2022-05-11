@@ -1,6 +1,11 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags extra_tags i18n pagination_tags thumbnail %}
 
+{% block head_title %}
+    {% page_attribute "page_title" as category_title %}
+    {% blocktrans with category_title=category_title %}{{ category_title }} - Category{% endblocktrans %}
+{% endblock head_title %}
+
 {% block meta_html_default %}
     {% if not current_page|is_empty_placeholder:"description" %}
         <meta name="description" content="{% filter striptags|trim|slice:":160" %}{% show_placeholder 'description' current_page %}{% endfilter %}" />
