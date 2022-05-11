@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-const messages = defineMessages({
+export const messages = defineMessages({
   end: {
     defaultMessage: 'End',
     description: 'End label displayed in the header of course run dates section',
@@ -16,7 +16,9 @@ const messages = defineMessages({
 
 const CourseRunSection = ({ children }: PropsWithChildren<{}>) => (
   <section className="course__course-runs">
-    <header className="course__course-runs-header">
+    {/* the "start" and "end" texts will be repeated on each run offscreen
+    so that screen reader users understand correcty, so hide it from them here */}
+    <header className="course__course-runs-header" aria-hidden="true">
       <strong>
         <FormattedMessage {...messages.start} />
       </strong>

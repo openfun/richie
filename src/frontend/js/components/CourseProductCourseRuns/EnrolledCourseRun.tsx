@@ -5,7 +5,7 @@ import { useCourse } from 'hooks/useCourse';
 import { useEnrollment } from 'hooks/useEnrollment';
 import type * as Joanie from 'types/Joanie';
 import useDateFormat from 'utils/useDateFormat';
-import CourseRunSection from './CourseRunSection';
+import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
 
 const messages = defineMessages({
   goToCourse: {
@@ -52,6 +52,9 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
             data-testid={`enrollment-${enrollment.id}-start-date`}
             className="course-runs-item__date course-runs-item__date--start"
           >
+            <span className="offscreen">
+              <FormattedMessage {...sectionMessages.start} />
+            </span>
             {formatDate(enrollment.start)}
           </em>
           <span className="course-runs-item__date-separator" />
@@ -59,6 +62,9 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
             data-testid={`enrollment-${enrollment.id}-end-date`}
             className="course-runs-item__date course-runs-item__date--end"
           >
+            <span className="offscreen">
+              <FormattedMessage {...sectionMessages.end} />
+            </span>
             {formatDate(enrollment.end)}
           </em>
         </li>
