@@ -16,4 +16,8 @@ $rem-calc-base-font-size: 16px !default;
   $remSize: math.div($size, $rem-calc-base-font-size);
   @return $remSize * 1rem;
 }
+
+@function em-calc($size) {
+  $emSize: math.div($size, $rem-calc-base-font-size);
+  @return $emSize * 1em;
 }
