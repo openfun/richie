@@ -125,7 +125,7 @@ class ProgramCMSTestCase(CMSTestCase):
         page.publish("en")
         response = self.client.get(url)
         self.assertContains(
-            response, "<title>Preums - example.com</title>", html=True, status_code=200
+            response, "<title>Preums - Program - example.com</title>", html=True, status_code=200
         )
         self.assertContains(
             response, '<h1 class="subheader__title">Preums</h1>', html=True
@@ -174,7 +174,7 @@ class ProgramCMSTestCase(CMSTestCase):
         url = page.get_absolute_url()
         response = self.client.get(url)
         self.assertContains(
-            response, "<title>Preums - example.com</title>", html=True, status_code=200
+            response, "<title>Preums - Program - example.com</title>", html=True, status_code=200
         )
         self.assertContains(
             response, '<h1 class="subheader__title">Preums</h1>', html=True

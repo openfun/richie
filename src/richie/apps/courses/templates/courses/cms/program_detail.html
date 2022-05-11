@@ -1,6 +1,11 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags extra_tags i18n thumbnail %}
 
+{% block head_title %}
+    {% page_attribute "page_title" as program_title %}
+    {% blocktrans with program_title=program_title %}{{ program_title }} - Program{% endblocktrans %}
+{% endblock head_title %}
+
 {% block meta_html_default %}
     {% if not current_page|is_empty_placeholder:"program_excerpt" %}
         <meta name="description" content="{% filter slice:":160" %}{% show_placeholder 'program_excerpt' current_page %}{% endfilter %}" />
