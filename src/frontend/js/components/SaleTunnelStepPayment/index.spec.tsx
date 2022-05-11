@@ -123,7 +123,7 @@ describe('SaleTunnelStepPayment', () => {
       );
     });
 
-    screen.getByText('You have not yet a billing address.');
+    screen.getByText("You don't have any billing addresses yet.");
     const $button = screen.getByText('Create an address', { selector: 'button' });
 
     await act(async () => {
