@@ -28,6 +28,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Remove z-index of course glimpse icon to fix an overlay issue
 - Fix erratic frontend test failure
 
 
