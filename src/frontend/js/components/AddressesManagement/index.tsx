@@ -268,9 +268,9 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
         {addresses.items.length > 0 ? (
           <section className="address-registered">
             <header>
-              <h5>
+              <h2 className="h5">
                 <FormattedMessage {...messages.registeredAddresses} />
-              </h5>
+              </h2>
             </header>
             <ul className="registered-addresses-list">
               {Children.toArray(
@@ -291,7 +291,7 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
         ) : null}
         <section className={`address-form ${editedAddress ? 'address-form--highlighted' : ''}`}>
           <header>
-            <h5>
+            <h2 className="h5">
               {editedAddress ? (
                 <FormattedMessage
                   {...messages.editAddress}
@@ -300,7 +300,7 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
               ) : (
                 <FormattedMessage {...messages.addAddress} />
               )}
-            </h5>
+            </h2>
           </header>
           <AddressForm
             address={editedAddress}
