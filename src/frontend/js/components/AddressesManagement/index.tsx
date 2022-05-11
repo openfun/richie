@@ -1,4 +1,4 @@
-import { Children, useEffect, useState } from 'react';
+import { Children, forwardRef, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import Banner, { BannerType } from 'components/Banner';
 import { useAddresses } from 'hooks/useAddresses';
@@ -132,7 +132,7 @@ interface AddressesManagementProps {
   selectAddress: (address: Joanie.Address) => void;
 }
 
-const AddressesManagement = ({ handleClose, selectAddress }: AddressesManagementProps) => {
+const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>(({ handleClose, selectAddress }, ref) => {
   const intl = useIntl();
   const addresses = useAddresses();
   const [editedAddress, setEditedAddress] = useState<Maybe<Joanie.Address>>();
@@ -249,8 +249,8 @@ const AddressesManagement = ({ handleClose, selectAddress }: AddressesManagement
   }, [editedAddress]);
 
   return (
-    <div className="AddressesManagement">
-      <button className="button button-sale--tertiary" onClick={handleClose}>
+    <div className="AddressesManagement" ref={ref}>
+      <button className="AddressesManagement__closeButton button button-sale--tertiary" onClick={handleClose}>
         <Icon name="icon-chevron-down" className="button__icon" />
         <FormattedMessage {...messages.closeButton} />
       </button>
@@ -303,6 +303,6 @@ const AddressesManagement = ({ handleClose, selectAddress }: AddressesManagement
       </section>
     </div>
   );
-};
+});
 
 export default AddressesManagement;

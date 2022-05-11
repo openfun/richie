@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import AddressesManagement, { LOCAL_BILLING_ADDRESS_ID } from 'components/AddressesManagement';
 import { SelectField } from 'components/Form';
@@ -137,10 +137,23 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
     }
   };
 
+  const addressToggleRef = useRef<HTMLButtonElement>(null);
+  const addressRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (showAddressCreationForm) {
+      addressRef.current?.querySelector<HTMLElement>('.AddressesManagement__closeButton')?.focus();
+    } else {
+      addressToggleRef.current?.focus();
+    }
+  }, [showAddressCreationForm]);
+
   if (showAddressCreationForm) {
     return (
       <AddressesManagement
-        handleClose={() => setShowAddressCreationForm(false)}
+        ref={addressRef}
+        handleClose={() => {
+          setShowAddressCreationForm(false);
+        }}
         selectAddress={setAddress}
       />
     );
@@ -232,7 +245,7 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
                 </em>
               </p>
               <button
-                aria-hidden="true"
+                ref={addressToggleRef}
                 className="button button--tiny button--pill button-sale--primary"
                 onClick={() => setShowAddressCreationForm(true)}
               >
