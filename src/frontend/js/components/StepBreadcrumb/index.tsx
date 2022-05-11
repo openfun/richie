@@ -2,6 +2,7 @@
 // Within a step process, it aims to guide the user to know where he/she is in
 // the current process by translating visually the steps manifest.
 import { Children, Fragment, useCallback } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Nullable } from 'types/utils';
 import { Manifest, Step, useStepManager } from 'hooks/useStepManager';
 import { Icon } from 'components/Icon';
@@ -46,6 +47,15 @@ function sortSteps<Keys extends PropertyKey, LastKey extends Keys>(
 
   return steps;
 }
+
+const messages = defineMessages({
+  stepCount: {
+    defaultMessage:
+      'Step {current, number} of {total, number} {active, select, true {(active)} other {}}',
+    description: 'Info about current step, not visible, only announced by screen readers',
+    id: 'components.StepBreadcrumb.stepCount',
+  },
+});
 
 export const StepBreadcrumb = <Keys extends PropertyKey, LastKey extends Keys>({
   step,
@@ -94,6 +104,18 @@ export const StepBreadcrumb = <Keys extends PropertyKey, LastKey extends Keys>({
                   data-testid="StepBreadcrumb__step__label"
                 >
                   {entry.label}
+                  <span className="offscreen">
+                    {/* we repeat the "active" info in the hidden SR message because not all screen
+                    readers support the aria-current="step" attribute */}
+                    <FormattedMessage
+                      {...messages.stepCount}
+                      values={{
+                        current: index + 1,
+                        total: orderedSteps.length,
+                        active: index === activeIndex,
+                      }}
+                    />
+                  </span>
                 </strong>
               ) : null}
             </li>
