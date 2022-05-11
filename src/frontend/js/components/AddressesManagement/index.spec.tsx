@@ -137,7 +137,7 @@ describe('AddressesManagement', () => {
       );
     });
 
-    screen.getByRole('heading', { level: 5, name: 'Add a new address' });
+    screen.getByRole('heading', { level: 2, name: 'Add a new address' });
     screen.getByRole('form');
     const $titleField = screen.getByRole('textbox', { name: 'Address title' });
     const $firstnameField = screen.getByRole('textbox', { name: "Recipient's first name" });
@@ -225,7 +225,7 @@ describe('AddressesManagement', () => {
     });
 
     // - First the creation form should be displayed
-    screen.getByRole('heading', { level: 5, name: 'Add a new address' });
+    screen.getByRole('heading', { level: 2, name: 'Add a new address' });
     screen.getByRole('form');
     screen.getByRole('checkbox', { name: 'Save this address' });
     screen.getByRole('button', { name: 'Use this address' });
@@ -240,7 +240,7 @@ describe('AddressesManagement', () => {
     });
 
     // - Form should be updated
-    screen.getByRole('heading', { level: 5, name: `Update address ${address.title}` });
+    screen.getByRole('heading', { level: 2, name: `Update address ${address.title}` });
 
     let $titleField = screen.getByRole('textbox', { name: 'Address title' }) as HTMLInputElement;
     let $firstnameField = screen.getByRole('textbox', {
@@ -294,7 +294,7 @@ describe('AddressesManagement', () => {
     });
 
     // - Form should be restored and addresses should be updated
-    screen.getByRole('heading', { level: 5, name: 'Add a new address' });
+    screen.getByRole('heading', { level: 2, name: 'Add a new address' });
     screen.getByRole('form');
     screen.getByRole('checkbox', { name: 'Save this address' });
     screen.getByRole('button', { name: 'Use this address' });
@@ -307,7 +307,7 @@ describe('AddressesManagement', () => {
     });
 
     // - Form should be updated
-    screen.getByRole('heading', { level: 5, name: `Update address Home` });
+    screen.getByRole('heading', { level: 2, name: `Update address Home` });
 
     $titleField = screen.getByRole('textbox', { name: 'Address title' }) as HTMLInputElement;
     $firstnameField = screen.getByRole('textbox', {
@@ -339,7 +339,7 @@ describe('AddressesManagement', () => {
     });
 
     // - Form should be restored and addresses should be updated
-    screen.getByRole('heading', { level: 5, name: 'Add a new address' });
+    screen.getByRole('heading', { level: 2, name: 'Add a new address' });
     screen.getByRole('form');
     screen.getByRole('checkbox', { name: 'Save this address' });
     screen.getByRole('button', { name: 'Use this address' });
@@ -380,7 +380,7 @@ describe('AddressesManagement', () => {
     // - As this was the only existing address,
     //   registered addresses section should be hidden
 
-    expect(screen.queryByRole('heading', { level: 5, name: 'Your addresses' })).toBeNull();
+    expect(screen.queryByRole('heading', { level: 2, name: 'Your addresses' })).toBeNull();
     const $addresses = container!.querySelectorAll('.registered-addresses-item');
     expect($addresses).toHaveLength(0);
   });
