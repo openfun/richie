@@ -1,9 +1,10 @@
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
-import { Nullable, Maybe } from 'types/utils';
+import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { APILms } from 'types/api';
 import { Enrollment, OpenEdXEnrollment } from 'types';
-import OpenEdxHawthornApiInterface from './openedx-hawthorn';
+import { location } from 'utils/indirection/window';
+import { RICHIE_USER_TOKEN } from 'settings';
 
 const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
   const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> => {
@@ -12,7 +13,18 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
   };
 
   return {
-    user: OpenEdxHawthornApiInterface(APIConf).user,
+    user: {
+      me: async () => ({
+        // Simulate user is authenticated as `admin` with a valid access_token to request Joanie API.
+        username: 'admin',
+        access_token:
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJhZG1pbiIsImp0aSI6IjIxZGM5ZmI5MTZjYzRmNjViNTQ3OThmNjJmZWM0NTU0IiwiZnVsbF9uYW1lIjoiSm9obiBEb2UiLCJleHAiOjEwNjUyMjU2ODA4LCJpYXQiOjE2NTIyNTY4MDgsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20ifQ.jx7dfy12ckgJ3fFYSXxlfS1J7-g8pbSEVVYZGt9oIGQ',
+      }),
+      login: () => location.reload(),
+      register: () => location.reload(),
+      logout: async () => undefined,
+      accessToken: () => sessionStorage.getItem(RICHIE_USER_TOKEN),
+    },
     enrollment: {
       get: async (url: string, user: Nullable<User>) =>
         new Promise((resolve) => {
