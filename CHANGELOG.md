@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Fake authentication interface when using the `base` api interface
 - Avoid lag experienced by user on logout by not waiting for the logout request
   to succeed
 - Improve Sale Tunnel UX
