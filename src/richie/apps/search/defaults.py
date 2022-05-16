@@ -118,6 +118,8 @@ FILTERS_CONFIGURATION = [
             "is_autocompletable": True,
             "is_searchable": True,
             "min_doc_count": 0,
+            # Note: this is a special name that connects the filter to Organization objects
+            # in Richie as well was the corresponding indexer and API endpoint.
             "name": "organizations",
             "position": 4,
             "reverse_id": "organizations",
@@ -130,6 +132,8 @@ FILTERS_CONFIGURATION = [
             "is_autocompletable": True,
             "is_searchable": True,
             "min_doc_count": 0,
+            # Note: this is a special name that connects the filter to Person objects
+            # in Richie as well was the corresponding indexer and API endpoint.
             "name": "persons",
             "position": 5,
             "reverse_id": "persons",
