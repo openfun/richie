@@ -2,6 +2,7 @@
   "extends": [
     "github>openfun/renovate-configuration"
   ],
+  "ignorePaths": ["cookiecutter/**"],
   "packageRules": [
     {
       "enabled": false,
