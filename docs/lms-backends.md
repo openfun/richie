@@ -107,7 +107,7 @@ The name of the ReactJS backend to use for the targeted LMS.
     + `openedx-hawthorn`: backend for OpenEdX versions equal to `hawthorn` or higher
     + `openedx-fonzie`: backend for OpenEdX via [Fonzie](https://github.com/openfun/fonzie)
         (extra user info and JWT tokens)
-    + `base`: fake backend for development purposes
+    + `dummy`: fake backend for development purposes
 
 ### JS_COURSE_REGEX
 

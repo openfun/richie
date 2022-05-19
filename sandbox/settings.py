@@ -203,7 +203,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             "", environ_name="AUTHENTICATION_BASE_URL", environ_prefix=None
         ),
         "BACKEND": values.Value(
-            "base", environ_name="AUTHENTICATION_BACKEND", environ_prefix=None
+            "dummy", environ_name="AUTHENTICATION_BACKEND", environ_prefix=None
         ),
         # PROFILE_URLS are custom links to access to Auth profile views
         # from Richie. Link order will reflect the order of display in frontend.
@@ -249,7 +249,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             ),
             # React frontend
             "JS_BACKEND": values.Value(
-                "base", environ_name="EDX_JS_BACKEND", environ_prefix=None
+                "openedx-hawthorn", environ_name="EDX_JS_BACKEND", environ_prefix=None
             ),
             "JS_COURSE_REGEX": values.Value(
                 r"^.*/courses/(.*)/course/?$",
@@ -626,7 +626,7 @@ class Test(Base):
             "BASE_URL": "http://localhost:8073",
             "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
             "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
-            "JS_BACKEND": "base",
+            "JS_BACKEND": "dummy",
             "JS_COURSE_REGEX": r"^.*/courses/(.*)/course/?$",
         }
     ]

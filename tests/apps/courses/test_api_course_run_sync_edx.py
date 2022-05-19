@@ -893,7 +893,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
                 "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": ["languages", "start"],
                 "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
-                "JS_BACKEND": "base",
+                "JS_BACKEND": "dummy",
                 "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
             }
         ],

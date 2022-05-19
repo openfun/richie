@@ -1,7 +1,7 @@
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import context from 'utils/context';
 import { location } from 'utils/indirection/window';
-import API from './base';
+import API from './dummy';
 
 jest.mock('utils/indirection/window', () => ({
   location: {
@@ -13,12 +13,12 @@ jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockContextFactory({
     authentication: {
-      backend: 'base',
+      backend: 'dummy',
       endpoint: 'https://demo.endpoint/api',
     },
     lms_backends: [
       {
-        backend: 'base',
+        backend: 'dummy',
         course_regexp: '(?<course_id>.*)',
         endpoint: 'https://demo.endpoint/api',
       },
@@ -26,7 +26,7 @@ jest.mock('utils/context', () => ({
   }).generate(),
 }));
 
-describe('Base API', () => {
+describe('Dummy API', () => {
   const LMSConf = context.lms_backends![0];
   const BaseAPI = API(LMSConf);
 

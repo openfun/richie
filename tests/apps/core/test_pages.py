@@ -79,7 +79,7 @@ class PagesTests(CMSTestCase):
                 "BASE_URL": "https://lms.example.com",
                 "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
                 "COURSE_REGEX": r"^https://lms\.example\.com/courses/(?P<course_id>.*)/course/?$",
-                "JS_BACKEND": "base",
+                "JS_BACKEND": "dummy",
                 "JS_COURSE_REGEX": r"^https://lms\.example\.com/courses/(.*)/course/?$",
             }
         ]
@@ -109,7 +109,7 @@ class PagesTests(CMSTestCase):
         self.assertContains(
             response, r"\u0022endpoint\u0022: \u0022https://lms.example.com\u0022"
         )
-        self.assertContains(response, r"\u0022backend\u0022: \u0022base\u0022")
+        self.assertContains(response, r"\u0022backend\u0022: \u0022dummy\u0022")
         self.assertContains(
             response,
             (
