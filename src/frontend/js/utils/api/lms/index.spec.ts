@@ -7,7 +7,7 @@ jest.mock('utils/context', () => ({
   default: mockContextFactory({
     lms_backends: [
       {
-        backend: 'base',
+        backend: 'dummy',
         endpoint: 'https://demo.endpoint/api',
         course_regexp: '.*base.org/.*',
       },

@@ -16,6 +16,7 @@ $ make migrate
 
 ## Unreleased
 
+- On frontend, the API interface `base` has been renamed into `dummy`.
 - `<header>`, `<nav>` and `<footer>` DOM structure was updated for better accessibility. Make
   sure to check that everything still renders correctly if you override header or footer blocks
   in your templates.

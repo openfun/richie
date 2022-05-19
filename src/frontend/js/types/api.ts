@@ -65,7 +65,7 @@ export interface APIOptions {
 }
 
 export enum APIBackend {
-  BASE = 'base',
+  DUMMY = 'dummy',
   FONZIE = 'fonzie',
   JOANIE = 'joanie',
   OPENEDX_DOGWOOD = 'openedx-dogwood',

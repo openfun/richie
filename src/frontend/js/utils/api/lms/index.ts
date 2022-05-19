@@ -1,7 +1,7 @@
 import { handle } from 'utils/errors/handle';
 import context from 'utils/context';
-import { APILms, APIBackend } from 'types/api';
-import BaseApiInterface from './base';
+import { APIBackend, APILms } from 'types/api';
+import DummyApiInterface from './dummy';
 import OpenEdxDogwoodApiInterface from './openedx-dogwood';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
@@ -16,8 +16,8 @@ const LmsAPIHandler = (url: string): APILms => {
   const api = selectAPIWithUrl(url);
 
   switch (api?.backend) {
-    case APIBackend.BASE:
-      return BaseApiInterface(api);
+    case APIBackend.DUMMY:
+      return DummyApiInterface(api);
     case APIBackend.OPENEDX_DOGWOOD:
       return OpenEdxDogwoodApiInterface(api);
     case APIBackend.OPENEDX_HAWTHORN:

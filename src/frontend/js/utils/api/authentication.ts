@@ -10,7 +10,7 @@ import { AuthenticationBackend } from 'types/commonDataProps';
 import { Nullable } from 'types/utils';
 import context from 'utils/context';
 import { APIAuthentication, APIBackend } from 'types/api';
-import BaseApiInterface from './lms/base';
+import DummyApiInterface from './lms/dummy';
 import OpenEdxDogwoodApiInterface from './lms/openedx-dogwood';
 import OpenEdxHawthornApiInterface from './lms/openedx-hawthorn';
 import OpenEdxFonzieApiInterface from './lms/openedx-fonzie';
@@ -20,8 +20,8 @@ const AuthenticationAPIHandler = (): Nullable<APIAuthentication> => {
   if (!AUTHENTICATION) return null;
 
   switch (AUTHENTICATION.backend) {
-    case APIBackend.BASE:
-      return BaseApiInterface(AUTHENTICATION).user;
+    case APIBackend.DUMMY:
+      return DummyApiInterface(AUTHENTICATION).user;
     case APIBackend.OPENEDX_DOGWOOD:
       return OpenEdxDogwoodApiInterface(AUTHENTICATION).user;
     case APIBackend.OPENEDX_HAWTHORN:
