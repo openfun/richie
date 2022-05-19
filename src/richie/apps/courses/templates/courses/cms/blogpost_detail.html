@@ -34,21 +34,7 @@
 
 {% block content %}
     {% spaceless %}
-
-    {% block related_categories %}
-        {% get_related_category_pages request.current_page.parent_page.get_child_pages as categories %}
-        {% if categories %}
-        <div class="category-tag-list category-tag-list--primary">
-            <div class="category-tag-list__container">
-                <p class="offscreen">{% trans "Categories" %}</p>
-                {% for category in categories %}
-                    {% include "courses/cms/fragment_category_glimpse.html" with category_variant="tag" %}
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-    {% endblock related_categories %}
-
+    {% block content_header %}{%  endblock %}
     <div class="blogpost-detail">
 
         <div class="blogpost-detail__row">
@@ -172,6 +158,22 @@
                                 {% endfor %}
                             </div>
                         {% endblock related_blogposts %}
+
+                        {% block related_categories %}
+                          <div class="blogpost-glimpse-list">
+                            <h2 class="blogpost-glimpse-list__title"><span>{% trans 'Other categories of articles' %}</span></h2>
+                            {% get_related_category_pages request.current_page.parent_page.get_child_pages as categories %}
+                            {% if categories %}
+                              <div class="p-0 category-tag-list category-tag-list--primary">
+                                <div class="category-tag-list__container">
+                                  {% for category in categories %}
+                                    {% include "courses/cms/fragment_category_glimpse.html" with category_variant="tag" %}
+                                  {% endfor %}
+                                </div>
+                              </div>
+                            {% endif %}
+                          </div>
+                        {% endblock related_categories %}
                     </div>
                 {% endblock grid_aside %}
             </div>
