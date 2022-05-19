@@ -4,6 +4,13 @@
 .blogpost-detail {
   margin: 0 auto;
   padding: 0 0.5rem;
+
+  // If blogpost-detail is directly preceded by .subheader,
+  // increase padding between these two elements
+  .subheader + & {
+    padding-top: 0.5rem;
+  }
+
   @if r-theme-val(blogpost-detail, top-border) {
     border-top: 1px solid r-theme-val(blogpost-detail, top-border);
   }
@@ -78,6 +85,11 @@
           z-index: 3;
         }
       }
+    }
+
+    .category-tag-list__container {
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 
