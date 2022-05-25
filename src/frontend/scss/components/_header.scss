@@ -1,4 +1,11 @@
 // Main body header
+#site-header {
+  height: 96px;
+  @include media-breakpoint-up($r-topbar-breakpoint) {
+    height: 132px;
+  }
+}
+
 .topbar {
   $topbar-selector: &;
   padding: 1rem 0;
@@ -277,11 +284,11 @@
 
       a {
         @include button-size(
-          $btn-padding-y,
-          $btn-padding-x,
-          $btn-font-size,
-          $btn-line-height,
-          2rem
+                        $btn-padding-y,
+                        $btn-padding-x,
+                        $btn-font-size,
+                        $btn-line-height,
+                        2rem
         );
         @include font-size($font-size-base);
         justify-content: center;
