@@ -57,7 +57,7 @@ describe('CourseProductCourseRuns', () => {
     it('renders a list of course runs', () => {
       const courseRuns: CourseRun[] = JoanieCourseRunFactory.generate(2);
 
-      render(
+      const { container } = render(
         <Wrapper>
           <CourseRunList courseRuns={courseRuns} />
         </Wrapper>,
@@ -65,6 +65,12 @@ describe('CourseProductCourseRuns', () => {
 
       // It should render all course runs provided
       expect(screen.getAllByRole('listitem')).toHaveLength(2);
+
+      // there should be "Start" and "End" labels, hidden from screen readers
+      // (they are repeated for SR users on each course run line, see below)
+      const $section = container.querySelector('.course__course-runs-header');
+      expect($section?.getAttribute('aria-hidden')).toBe('true');
+      expect($section?.textContent).toBe('StartEnd');
 
       // For each course run, it should render course and enrollment dates
       courseRuns.forEach((courseRun: CourseRun) => {
@@ -75,6 +81,18 @@ describe('CourseProductCourseRuns', () => {
         // - Course run end date should be displayed
         const $endDate = screen.getByTestId(`course-run-${courseRun.id}-end-date`);
         expect($endDate.textContent).toEqual(dateFormatter.format(new Date(courseRun.end)));
+
+        // "start" and "end" labels should be here, but visually hidden, only for screen reader users
+        const $offscreenStartDate = screen.getByTestId(
+          `course-run-${courseRun.id}-offscreen-start-date`,
+        );
+        const $offscreenEndDate = screen.getByTestId(
+          `course-run-${courseRun.id}-offscreen-end-date`,
+        );
+        expect($offscreenStartDate.textContent).toEqual('Start');
+        expect($offscreenStartDate.classList.contains('offscreen')).toBe(true);
+        expect($offscreenEndDate.textContent).toEqual('End');
+        expect($offscreenEndDate.classList.contains('offscreen')).toBe(true);
 
         // - Course run enrollment dates should be displayed
         const $enrollmentDates = screen.getByTestId(`course-run-${courseRun.id}-enrollment-dates`);
@@ -123,9 +141,8 @@ describe('CourseProductCourseRuns', () => {
         </Wrapper>,
       );
 
-      // It should render all course runs provided and an additional listitem which contains
-      // a call to action to enroll.
-      expect(screen.getAllByRole('listitem')).toHaveLength(3);
+      // the list should contain only the course run items, without the call to action button
+      expect(screen.getAllByRole('listitem')).toHaveLength(2);
 
       // For each course run, it should render course, enrollment dates and a checkbox input
       // to select the course run
@@ -154,11 +171,21 @@ describe('CourseProductCourseRuns', () => {
         });
       });
 
-      // A call to action should be displayed when no course run is selected, it should be disabled
+      // A call to action should be displayed
       let $button: HTMLButtonElement = screen.getByRole('button', {
-        name: 'Select a course run',
+        name: 'Enroll',
       });
-      expect($button.disabled).toBe(true);
+      // the button should be enabled to provide feedback to user on what to do if he clicks it early
+      expect($button.disabled).toBe(false);
+
+      // when we click the button without selecting anything, an error should be displayed
+      await act(async () => {
+        fireEvent.click($button);
+      });
+      const error = screen.getByText('Select a course run');
+      // the error should be focused so that screen reader users understand better
+      expect(document.activeElement).toEqual(error);
+      expect($button.disabled).toBe(false);
 
       // Once a course run is selected, it should be enabled and allows user to enroll
       await act(async () => {
@@ -235,9 +262,8 @@ describe('CourseProductCourseRuns', () => {
         </Wrapper>,
       );
 
-      // It should render all course runs provided and an additional listitem which contains
-      // a call to action to enroll.
-      expect(screen.getAllByRole('listitem')).toHaveLength(2);
+      // the list should contain only the course run items, without the call to action button
+      expect(screen.getAllByRole('listitem')).toHaveLength(1);
 
       // For each course run, it should render course, enrollment dates and a checkbox input
       // to select the course run
@@ -264,11 +290,12 @@ describe('CourseProductCourseRuns', () => {
         )} to ${dateFormatter.format(new Date(courseRun.end))}.`,
       });
 
-      // A call to action should be displayed when no course run is selected, it should be disabled
-      let $button: HTMLButtonElement = screen.getByRole('button', {
-        name: 'Select a course run',
+      // A call to action should be displayed when no course run is selected
+      const $button: HTMLButtonElement = screen.getByRole('button', {
+        name: 'Enroll',
       });
-      expect($button.disabled).toBe(true);
+      // it should be enabled already to allow early user feedback
+      expect($button.disabled).toBe(false);
 
       await act(async () => {
         // - Select the first course run
@@ -278,16 +305,18 @@ describe('CourseProductCourseRuns', () => {
           )} to ${dateFormatter.format(new Date(courseRun.end))}.`,
         });
         fireEvent.click($radio);
+        fireEvent.click($button);
       });
 
-      // - As the selected course run is not yet opened for enrollment, the call to action should
-      // still be disabled and a message should inform user that he/she cannot enroll now.
-      $button = screen.getByRole('button', {
-        name: `Enrollment will open on ${dateFormatter.format(
-          new Date(courseRun.enrollment_start),
-        )}`,
-      });
-      expect($button.disabled).toBe(true);
+      // - As the selected course run is not yet opened for enrollment,
+      // a message should inform user that he/she cannot enroll now.
+      // it should be focused so that screen reader users understand better
+      // the submit button should stay enabled to always allow user feedback on its actions
+      const error = screen.getByText(
+        `Enrollment will open on ${dateFormatter.format(new Date(courseRun.enrollment_start))}`,
+      );
+      expect(document.activeElement).toEqual(error);
+      expect($button.disabled).toBe(false);
     });
   });
 
@@ -316,6 +345,18 @@ describe('CourseProductCourseRuns', () => {
       expect($startDate.textContent).toEqual(dateFormatter.format(new Date(enrollment.start)));
       const $endDate = screen.getByTestId(`enrollment-${enrollment.id}-start-date`);
       expect($endDate.textContent).toEqual(dateFormatter.format(new Date(enrollment.start)));
+
+      // "start" and "end" labels should be here but visually hidden for screen reader users
+      const $offscreenStartDate = screen.getByTestId(
+        `enrollment-${enrollment.id}-offscreen-start-date`,
+      );
+      const $offscreenEndDate = screen.getByTestId(
+        `enrollment-${enrollment.id}-offscreen-end-date`,
+      );
+      expect($offscreenStartDate.textContent).toEqual('Start');
+      expect($offscreenStartDate.classList.contains('offscreen')).toBe(true);
+      expect($offscreenEndDate.textContent).toEqual('End');
+      expect($offscreenEndDate.classList.contains('offscreen')).toBe(true);
 
       // - a link to access to the course,
       const $link: HTMLLinkElement = screen.getByRole('link', { name: 'Go to course' });

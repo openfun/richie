@@ -1,4 +1,4 @@
-import { Children, type ReactEventHandler, useMemo, useRef, useState } from 'react';
+import { Children, type FormEventHandler, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Icon } from 'components/Icon';
 import { Spinner } from 'components/Spinner';
@@ -61,6 +61,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
   const formRef = useRef<HTMLFormElement>(null);
 
   const [selectedCourseRun, setSelectedCourseRun] = useState<Maybe<Joanie.CourseRun>>();
+  const [submitted, setSubmitted] = useState(false);
   const selectedCourseRunIsNotOpened = useMemo(
     () =>
       selectedCourseRun === undefined ||
@@ -69,6 +70,9 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
   );
 
   const enrollment = useEnrollment();
+  const loading = enrollment.states.creating || enrollment.states.updating;
+  const canSubmit = selectedCourseRun && !selectedCourseRunIsNotOpened;
+  const showFeedback = !loading && submitted && !canSubmit;
   const courseCode = useCourseCode();
   const course = useCourse(courseCode);
 
@@ -88,8 +92,17 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
     setSelectedCourseRun(courseRun);
   };
 
-  const handleEnroll: ReactEventHandler<HTMLButtonElement> = async (event) => {
+  const handleEnroll: FormEventHandler<HTMLFormElement> = async (event) => {
+    setSubmitted(true);
     event.preventDefault();
+
+    // focus the feedback element if there are errors
+    if (!canSubmit) {
+      // we use an attribute selector and not an id selector because the CSS engine
+      // doesn't understand id selectors beginning with digits
+      formRef.current?.querySelector<HTMLElement>(`[id="${order.id}-feedback"]`)?.focus();
+    }
+
     if (selectedCourseRun) {
       const relatedEnrollment = order.enrollments.find(({ resource_link }) => {
         return resource_link === selectedCourseRun.resource_link;
@@ -122,7 +135,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
 
   return (
     <CourseRunSection>
-      <form ref={formRef} onChange={handleChange}>
+      <form ref={formRef} onChange={handleChange} onSubmit={handleEnroll}>
         <ol className="course-runs-list">
           {Children.toArray(
             courseRuns.map((courseRun) => (
@@ -143,23 +156,29 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
                 >
                   <span className="form-field__radio-control" />
                   <strong className="course-runs-item__course-dates">
+                    <span
+                      className="offscreen"
+                      data-testid={`course-run-${courseRun.id}-offscreen-start-date`}
+                    >
+                      <FormattedMessage {...sectionMessages.start} />
+                    </span>
                     <em
                       data-testid={`course-run-${courseRun.id}-start-date`}
                       className="course-runs-item__date course-runs-item__date--start"
                     >
-                      <span className="offscreen">
-                        <FormattedMessage {...sectionMessages.start} />
-                      </span>
                       {formatDate(courseRun.start)}
                     </em>
                     <span className="course-runs-item__date-separator" />
+                    <span
+                      className="offscreen"
+                      data-testid={`course-run-${courseRun.id}-offscreen-end-date`}
+                    >
+                      <FormattedMessage {...sectionMessages.end} />
+                    </span>
                     <em
                       data-testid={`course-run-${courseRun.id}-end-date`}
                       className="course-runs-item__date course-runs-item__date--end"
                     >
-                      <span className="offscreen">
-                        <FormattedMessage {...sectionMessages.end} />
-                      </span>
                       {formatDate(courseRun.end)}
                     </em>
                   </strong>
@@ -179,31 +198,31 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
               </li>
             )),
           )}
-          <li className="course-runs-item">
-            <button
-              className="course-runs-item__cta button--primary button--pill button--tiny"
-              onClick={handleEnroll}
-              disabled={selectedCourseRunIsNotOpened}
-            >
-              {enrollment.states.creating || enrollment.states.updating ? (
-                <Spinner theme="light" aria-labelledby="enrolling">
-                  <span id="enrolling">
-                    <FormattedMessage {...messages.enrolling} />
-                  </span>
-                </Spinner>
-              ) : !selectedCourseRun ? (
-                <FormattedMessage {...messages.selectCourseRun} />
-              ) : selectedCourseRun.state.priority >= Priority.FUTURE_NOT_YET_OPEN ? (
-                <FormattedMessage
-                  {...messages.enrollmentNotYetOpened}
-                  values={{ enrollment_start: formatDate(selectedCourseRun.enrollment_start) }}
-                />
-              ) : (
-                <FormattedMessage {...messages.enroll} />
-              )}
-            </button>
-          </li>
         </ol>
+        <div className="course-runs-item course-runs-item--submit">
+          <span id={`${order.id}-feedback`} className="course-runs-item__feedback" tabIndex={-1}>
+            {showFeedback && !selectedCourseRun && (
+              <FormattedMessage {...messages.selectCourseRun} />
+            )}
+            {showFeedback && selectedCourseRun && selectedCourseRunIsNotOpened && (
+              <FormattedMessage
+                {...messages.enrollmentNotYetOpened}
+                values={{ enrollment_start: formatDate(selectedCourseRun.enrollment_start) }}
+              />
+            )}
+          </span>
+          <button className="course-runs-item__cta button--primary button--pill button--tiny">
+            {loading ? (
+              <Spinner theme="light" aria-labelledby="enrolling">
+                <span id="enrolling">
+                  <FormattedMessage {...messages.enrolling} />
+                </span>
+              </Spinner>
+            ) : (
+              <FormattedMessage {...messages.enroll} />
+            )}
+          </button>
+        </div>
       </form>
     </CourseRunSection>
   );
