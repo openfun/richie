@@ -26,6 +26,7 @@
     @include m-o-list-group__container;
     color: r-theme-val(product-item, lighter-color);
     list-style: none;
+  }
 
     .course-runs-item {
       align-items: center;
@@ -49,8 +50,13 @@
         }
       }
 
-      &.form-field {
+    &.course-runs-item--enrolled,
+    &.form-field,
+    &__feedback:not(:empty) {
         margin-bottom: 0.5rem;
+    }
+
+    &.form-field {
         padding-left: 1.5rem;
 
         .form-field__radio-control {
@@ -97,6 +103,7 @@
         }
       }
 
+    &__feedback,
       &__enrollment-dates {
         color: r-theme-val(product-item, lighter-color);
         display: block;
@@ -104,10 +111,18 @@
         line-height: 1.4em;
       }
 
+    &__feedback {
+      color: r-theme-val(product-item, feedback-color);
+    }
+
       .course-runs-item__cta {
         padding: 0.5rem 1rem;
         min-width: 100px;
       }
     }
+
+  .course-runs-item--submit {
+    flex-direction: column;
+    align-items: baseline;
   }
 }

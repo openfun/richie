@@ -46,29 +46,35 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
 
   return (
     <CourseRunSection>
-      <ol className="course-runs-list">
-        <li className="course-runs-item course-runs-item--enrolled">
+      <div className="course-runs-list">
+        <div className="course-runs-item course-runs-item--enrolled">
+          <span
+            className="offscreen"
+            data-testid={`enrollment-${enrollment.id}-offscreen-start-date`}
+          >
+            <FormattedMessage {...sectionMessages.start} />
+          </span>
           <em
             data-testid={`enrollment-${enrollment.id}-start-date`}
             className="course-runs-item__date course-runs-item__date--start"
           >
-            <span className="offscreen">
-              <FormattedMessage {...sectionMessages.start} />
-            </span>
             {formatDate(enrollment.start)}
           </em>
           <span className="course-runs-item__date-separator" />
+          <span
+            className="offscreen"
+            data-testid={`enrollment-${enrollment.id}-offscreen-end-date`}
+          >
+            <FormattedMessage {...sectionMessages.end} />
+          </span>
           <em
             data-testid={`enrollment-${enrollment.id}-end-date`}
             className="course-runs-item__date course-runs-item__date--end"
           >
-            <span className="offscreen">
-              <FormattedMessage {...sectionMessages.end} />
-            </span>
             {formatDate(enrollment.end)}
           </em>
-        </li>
-        <li className="course-runs-item">
+        </div>
+        <div className="course-runs-item">
           <a
             href={enrollment.resource_link}
             className="course-runs-item__cta button--primary button--pill button--tiny"
@@ -86,8 +92,8 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
               <FormattedMessage {...messages.unroll} />
             )}
           </button>
-        </li>
-      </ol>
+        </div>
+      </div>
     </CourseRunSection>
   );
 };

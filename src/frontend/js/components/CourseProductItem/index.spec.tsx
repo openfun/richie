@@ -1,4 +1,4 @@
-import { getByText, getByRole, render, screen } from '@testing-library/react';
+import { getByText, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
