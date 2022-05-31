@@ -66,7 +66,7 @@ describe('PaymentButton', () => {
     jest.resetAllMocks();
   });
 
-  it('should render a payment button', () => {
+  it('should render a payment button', async () => {
     const product: Joanie.Product = ProductFactory.generate();
 
     render(
@@ -79,8 +79,16 @@ describe('PaymentButton', () => {
       name: `Pay ${formatPrice(product.price, product.price_currency)}`,
     }) as HTMLButtonElement;
 
-    // As a billing address is missing, button should be disabled
-    expect($button.disabled).toBe(true);
+    // a billing address is missing, but the button stays enabled
+    // this allows the user to get feedback on what's missing to make the payment by clicking on the button
+    expect($button.disabled).toBe(false);
+
+    // clicking the button should show an error and focus it so that screen reader users know what's happening
+    await act(async () => {
+      fireEvent.click($button);
+    });
+    const $error = screen.getByText('You must have a billing address.');
+    expect(document.activeElement).toBe($error);
   });
 
   it('should render a payment button with a specific label when a credit card is provided', () => {
@@ -101,8 +109,9 @@ describe('PaymentButton', () => {
       name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
     }) as HTMLButtonElement;
 
-    // As a billing address is missing, button should be disabled
-    expect($button.disabled).toBe(true);
+    // a billing address is missing, but the button stays enabled
+    // this allows the user to get feedback on what's missing to make the payment by clicking on the button
+    expect($button.disabled).toBe(false);
 
     const billingAddress: Joanie.Address = AddressFactory.generate();
 
@@ -117,7 +126,7 @@ describe('PaymentButton', () => {
       </Wrapper>,
     );
 
-    // As a billing address is given, the button should be active
+    // the button should be active
     expect($button.disabled).toBe(false);
   });
 
@@ -135,7 +144,7 @@ describe('PaymentButton', () => {
       name: `Pay ${formatPrice(product.price, product.price_currency)}`,
     }) as HTMLButtonElement;
 
-    // As a billing address is given, the button should be active
+    // the button should be active
     expect($button.disabled).toBe(false);
   });
 
@@ -172,7 +181,7 @@ describe('PaymentButton', () => {
       name: `Pay ${formatPrice(product.price, product.price_currency)}`,
     }) as HTMLButtonElement;
 
-    // - As all information are provided, payment button should not be disabled.
+    // - Payment button should not be disabled.
     expect($button.disabled).toBe(false);
 
     // - User clicks on pay button
@@ -265,7 +274,7 @@ describe('PaymentButton', () => {
       name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
     }) as HTMLButtonElement;
 
-    // - As all information are provided, payment button should not be disabled.
+    // - Payment button should not be disabled.
     expect($button.disabled).toBe(false);
 
     // - User clicks on pay button
@@ -358,7 +367,7 @@ describe('PaymentButton', () => {
       name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
     }) as HTMLButtonElement;
 
-    // - As all information are provided, payment button should not be disabled.
+    // - Payment button should not be disabled.
     expect($button.disabled).toBe(false);
 
     // - User clicks on pay button
@@ -406,8 +415,9 @@ describe('PaymentButton', () => {
       payment_id: order.payment_info.payment_id,
     });
 
-    // - An error message should be displayed
-    screen.getByText('An error occurred during payment. Please retry later.');
+    // - An error message should be displayed and focused (for screen reader users)
+    const $error = screen.getByText('An error occurred during payment. Please retry later.');
+    expect(document.activeElement).toBe($error);
   });
 
   it('should render an error message when payment failed', async () => {
@@ -473,7 +483,8 @@ describe('PaymentButton', () => {
     });
 
     // - An error message should be displayed
-    screen.getByText('An error occurred during payment. Please retry later.');
+    const $error = screen.getByText('An error occurred during payment. Please retry later.');
+    expect(document.activeElement).toBe($error);
     // - Payment interface should have been closed
     expect(screen.queryByText('Payment interface component')).toBeNull();
     // - Payment button should have been restore to its idle state
