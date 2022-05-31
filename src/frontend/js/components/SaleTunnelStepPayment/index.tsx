@@ -137,13 +137,12 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
     }
   };
 
-  const addressToggleRef = useRef<HTMLButtonElement>(null);
   const addressRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (showAddressCreationForm) {
       addressRef.current?.querySelector<HTMLElement>('.AddressesManagement__closeButton')?.focus();
     } else {
-      addressToggleRef.current?.focus();
+      document.querySelector<HTMLElement>('#sale-tunnel-address-header')?.focus();
     }
   }, [showAddressCreationForm]);
 
@@ -193,8 +192,12 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
           {user.email ? (
             <p className="SaleTunnelStepPayment__block--buyer__email">{user.email}</p>
           ) : null}
-          <header className="SaleTunnelStepPayment__block--buyer__address-header">
-            <h3 className="SaleTunnelStepPayment__block--buyer__address-title">
+          <header
+            tabIndex={-1}
+            id="sale-tunnel-address-header"
+            className="SaleTunnelStepPayment__block--buyer__address-header"
+          >
+            <h3 className="h6">
               <FormattedMessage {...messages.userBillingAddressFieldset} />
             </h3>
             {addressesItems.length > 0 && (
@@ -245,7 +248,6 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
                 </em>
               </p>
               <button
-                ref={addressToggleRef}
                 className="button button--tiny button--pill button-sale--primary"
                 onClick={() => setShowAddressCreationForm(true)}
               >

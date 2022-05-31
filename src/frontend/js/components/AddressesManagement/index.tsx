@@ -252,6 +252,10 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
 
     useEffect(() => {
       setError(undefined);
+
+      if (editedAddress) {
+        document.querySelector<HTMLElement>('[name="address-form"] input')?.focus();
+      }
     }, [editedAddress]);
 
     return (

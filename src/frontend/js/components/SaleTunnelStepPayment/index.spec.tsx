@@ -9,12 +9,6 @@ import { Address, CreditCard } from 'types/Joanie';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import { SaleTunnelStepPayment } from '.';
 
-jest.mock('components/AddressesManagement', () => ({
-  __esModule: true,
-  LOCAL_BILLING_ADDRESS_ID: 'local-billing-address',
-  default: () => <h1>Addresses Management</h1>,
-}));
-
 jest.mock('components/PaymentButton', () => ({
   __esModule: true,
   default: () => <h1>Payment Button</h1>,
@@ -130,8 +124,14 @@ describe('SaleTunnelStepPayment', () => {
       fireEvent.click($button);
     });
 
-    // - Click on the "create an address" button should mount the AddressesManagement component
-    screen.getByRole('heading', { level: 1, name: 'Addresses Management' });
+    // - Click on the "create an address" button should mount the AddressesManagement component and focus the back button
+    expect(screen.getByRole('button', { name: 'Go back' })).toEqual(document.activeElement);
+
+    // clicking the addresses back button should focus the address info zone
+    await act(async () => {
+      fireEvent.click(document.activeElement!);
+    });
+    expect(document.activeElement?.id).toBe('sale-tunnel-address-header');
   });
 
   it('should display registered addresses', async () => {
@@ -199,7 +199,7 @@ describe('SaleTunnelStepPayment', () => {
     });
 
     // - Click on the "create an address" button should mount the AddressesManagement component
-    screen.getByRole('heading', { level: 1, name: 'Addresses Management' });
+    expect(screen.getByRole('button', { name: 'Go back' })).toEqual(document.activeElement);
   });
 
   it('should not display registered credit cards section if user has no credit cards', async () => {
