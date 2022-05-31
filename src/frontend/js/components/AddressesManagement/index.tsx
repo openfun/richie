@@ -23,6 +23,11 @@ export const messages = defineMessages({
     description: 'Title of the address creation form',
     defaultMessage: 'Add a new address',
   },
+  requiredFields: {
+    id: 'components.AddressesManagement.requiredFields',
+    description: 'Text at the top of address creation form indicating what are required fields',
+    defaultMessage: 'Fields marked with {symbol} are required',
+  },
   editAddress: {
     id: 'components.AddressesManagement.editAddress',
     description: 'Title of the address edit form',

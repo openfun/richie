@@ -360,4 +360,11 @@
       }
     }
   }
+
+  &__required-fields-note {
+    font-style: italic;
+    span {
+      color: r-theme-val(form, required-note-color);
+    }
+  }
 }

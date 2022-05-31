@@ -76,6 +76,9 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
 
   return (
     <form className="form" name="address-form" onSubmit={handleSubmit(onSubmit)}>
+      <p className="form__required-fields-note">
+        <FormattedMessage {...messages.requiredFields} values={{ symbol: <span>*</span> }} />
+      </p>
       <TextField
         aria-invalid={!!formState.errors.title}
         aria-required={true}

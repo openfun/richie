@@ -26,6 +26,26 @@ describe('AddressForm', () => {
     jest.resetModules();
   });
 
+  it('shows a note about required fields', () => {
+    const { container } = render(
+      <IntlProvider locale="en">
+        <AddressForm handleReset={handleReset} onSubmit={onSubmit} />
+      </IntlProvider>,
+    );
+
+    // we use this form of testing because screen.getByText doesn't seem
+    // to handle text broken into multiple DOM elements correctly
+    expect(container).toHaveTextContent('Fields marked with * are required');
+
+    // the note should be rendered before any inputs
+    // we assume that it's the case if it's the first child of the form
+    expect(
+      container.querySelector(
+        'form[name="address-form"] > .form__required-fields-note:first-child',
+      ),
+    ).not.toBeNull();
+  });
+
   it('renders a button with label "Use this address" when no address is provided', () => {
     render(
       <IntlProvider locale="en">
