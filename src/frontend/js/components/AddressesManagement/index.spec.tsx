@@ -265,6 +265,9 @@ describe('AddressesManagement', () => {
     expect($countryField.value).toEqual(address.country);
     expect($saveField).toBeNull();
 
+    // focus should be set to the first input as a way to notify screen reader users
+    expect(document.activeElement).toEqual($titleField);
+
     // - User edits some values then submits its changes
     fetchMock
       .put(`https://joanie.endpoint/api/addresses/${address.id}/`, {
