@@ -28,98 +28,98 @@
     list-style: none;
   }
 
-    .course-runs-item {
-      align-items: center;
-      color: r-theme-val(product-item, base-color);
-      display: flex;
-      padding-left: 1.5rem;
-      position: relative;
+  .course-runs-item {
+    align-items: center;
+    color: r-theme-val(product-item, base-color);
+    display: flex;
+    padding-left: 1.5rem;
+    position: relative;
 
-      &.course-runs-item--inactive {
+    &.course-runs-item--inactive {
+      display: block;
+
+      .course-runs-item__course-dates::before {
+        background-color: r-theme-val(product-item, lighter-color);
+        border-radius: 100%;
+        content: '';
         display: block;
-
-        .course-runs-item__course-dates::before {
-          background-color: r-theme-val(product-item, lighter-color);
-          border-radius: 100%;
-          content: '';
-          display: block;
-          height: 6px;
-          left: calc(-1.5rem + 6px);
-          position: absolute;
-          width: 6px;
-        }
+        height: 6px;
+        left: calc(-1.5rem + 6px);
+        position: absolute;
+        width: 6px;
       }
+    }
 
     &.course-runs-item--enrolled,
     &.form-field,
     &__feedback:not(:empty) {
-        margin-bottom: 0.5rem;
+      margin-bottom: 0.5rem;
     }
 
     &.form-field {
-        padding-left: 1.5rem;
+      padding-left: 1.5rem;
 
-        .form-field__radio-control {
-          position: absolute;
-          left: 0;
-          top: 0;
-        }
-
-        .form-field__label {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          flex: 1;
-        }
+      .form-field__radio-control {
+        position: absolute;
+        left: 0;
+        top: 0;
       }
 
-      &__course-dates {
-        align-items: center;
+      .form-field__label {
         display: flex;
-        flex: 1;
-        font-weight: normal;
+        flex-direction: column;
         justify-content: space-between;
-        position: relative;
-        width: 100%;
+        flex: 1;
+      }
+    }
+
+    &__course-dates {
+      align-items: center;
+      display: flex;
+      flex: 1;
+      font-weight: normal;
+      justify-content: space-between;
+      position: relative;
+      width: 100%;
+    }
+
+    &__date {
+      font-style: inherit;
+      z-index: 1;
+
+      &--start {
+        padding-right: 0.3125rem;
       }
 
-      &__date {
-        font-style: inherit;
-        z-index: 1;
-
-        &--start {
-          padding-right: 0.3125rem;
-        }
-
-        &--end {
-          padding-left: 0.3125rem;
-          text-align: right;
-        }
-
-        &-separator {
-          background-color: r-theme-val(product-item, lighter-color);
-          flex: 1;
-          height: $onepixel;
-        }
+      &--end {
+        padding-left: 0.3125rem;
+        text-align: right;
       }
+
+      &-separator {
+        background-color: r-theme-val(product-item, lighter-color);
+        flex: 1;
+        height: $onepixel;
+      }
+    }
 
     &__feedback,
-      &__enrollment-dates {
-        color: r-theme-val(product-item, lighter-color);
-        display: block;
-        font-size: 0.8125rem;
-        line-height: 1.4em;
-      }
+    &__enrollment-dates {
+      color: r-theme-val(product-item, lighter-color);
+      display: block;
+      font-size: 0.8125rem;
+      line-height: 1.4em;
+    }
 
     &__feedback {
       color: r-theme-val(product-item, feedback-color);
     }
 
-      .course-runs-item__cta {
-        padding: 0.5rem 1rem;
-        min-width: 100px;
-      }
+    .course-runs-item__cta {
+      padding: 0.5rem 1rem;
+      min-width: 100px;
     }
+  }
 
   .course-runs-item--submit {
     flex-direction: column;
