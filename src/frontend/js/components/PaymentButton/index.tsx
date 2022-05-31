@@ -26,6 +26,11 @@ const messages = defineMessages({
     description: 'Error message shown when payment creation request failed.',
     id: 'components.PaymentButton.errorDefault',
   },
+  errorAddress: {
+    defaultMessage: 'You must have a billing address.',
+    description: "Error message shown when the user didn't select a billing address.",
+    id: 'components.PaymentButton.errorAddress',
+  },
   pay: {
     defaultMessage: 'Pay {price}',
     description: 'CTA label to proceed to the payment of the product',
@@ -46,6 +51,7 @@ const messages = defineMessages({
 export enum PaymentErrorMessageId {
   ERROR_ABORT = 'errorAbort',
   ERROR_ABORTING = 'errorAborting',
+  ERROR_ADDRESS = 'errorAddress',
   ERROR_DEFAULT = 'errorDefault',
 }
 
@@ -101,6 +107,11 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
     (p as OneClickPaymentInfo)?.is_paid === true;
 
   const createPayment = async () => {
+    if (!billingAddress) {
+      setError(PaymentErrorMessageId.ERROR_ADDRESS);
+      setState(ComponentStates.ERROR);
+    }
+
     if (isReadyToPay) {
       setState(ComponentStates.LOADING);
       let paymentInfos = payment;
@@ -187,12 +198,21 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
     }
   }, [error]);
 
+  useEffect(() => {
+    if (state === ComponentStates.ERROR) {
+      document.querySelector<HTMLElement>('#sale-tunnel-payment-error')?.focus();
+    }
+  }, [state]);
+
   return (
     <div className="payment-button">
       <button
         className="button button-sale--primary"
-        disabled={!isReadyToPay || state === ComponentStates.LOADING}
+        disabled={state === ComponentStates.LOADING}
         onClick={createPayment}
+        {...(state === ComponentStates.ERROR && {
+          'aria-describedby': 'sale-tunnel-payment-error',
+        })}
       >
         {state === ComponentStates.LOADING ? (
           <Spinner theme="light" aria-labelledby="payment-in-progress">
@@ -215,11 +235,9 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
       {state === ComponentStates.LOADING && payment && !isOneClickPayment(payment) && (
         <PaymentInterface {...payment} onError={handleError} onSuccess={handleSuccess} />
       )}
-      {state === ComponentStates.ERROR && (
-        <p className="payment-button__error">
-          <FormattedMessage {...messages[error]} />
-        </p>
-      )}
+      <p className="payment-button__error" id="sale-tunnel-payment-error" tabIndex={-1}>
+        {state === ComponentStates.ERROR && <FormattedMessage {...messages[error]} />}
+      </p>
     </div>
   );
 };

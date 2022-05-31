@@ -15,6 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add disabled style for inputs
 - Add a visually hidden title on video player iframes, meant to be announced
   to screen reader users
+- Improve sale tunnel accessibility, especially when using a keyboard
+  or screen reader
 
 ### Fixed
 
