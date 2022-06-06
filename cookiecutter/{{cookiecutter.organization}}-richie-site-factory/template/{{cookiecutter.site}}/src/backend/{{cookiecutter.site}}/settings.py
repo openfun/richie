@@ -501,8 +501,8 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     RICHIE_DEMO_FIXTURES_DIR = os.path.join(BASE_DIR, "base", "fixtures")
 
     # Elasticsearch
-    RICHIE_ES_HOST = values.Value(
-        "elasticsearch", environ_name="RICHIE_ES_HOST", environ_prefix=None
+    RICHIE_ES_HOST = values.ListValue(
+        ["elasticsearch"], environ_name="RICHIE_ES_HOST", environ_prefix=None
     )
     RICHIE_ES_INDICES_PREFIX = values.Value(
         default="richie", environ_name="RICHIE_ES_INDICES_PREFIX", environ_prefix=None

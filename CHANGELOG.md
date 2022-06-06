@@ -34,6 +34,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix `components.SaleTunnelStepPayment.userBillingAddressNoEntry` misspell
 - Remove z-index of course glimpse icon to fix an overlay issue
 - Fix erratic frontend test failure
+- Allow to configure multiple elasticsearch hosts
 
 
 ##  [2.14.1] - 2022-04-07

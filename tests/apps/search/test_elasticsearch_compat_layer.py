@@ -62,7 +62,7 @@ class ElasticSearchCompatLayerTestCase(TestCase):
         # - Use a fresh ES client instance to be sure that __es_version__ has
         #   not been called yet
         es_client = ElasticsearchClientCompat7to6(
-            [getattr(settings, "RICHIE_ES_HOST", "elasticsearch")]
+            getattr(settings, "RICHIE_ES_HOST", ["elasticsearch"])
         )
         es_indices_client = ElasticsearchIndicesClientCompat7to6(es_client)
 
