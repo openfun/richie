@@ -658,7 +658,7 @@ jobs:
   # ---- Front-end jobs ----
   build-front:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -691,7 +691,7 @@ jobs:
 
   build-front-production:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -720,7 +720,7 @@ jobs:
 
   build-dependent-front:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -762,7 +762,7 @@ jobs:
 
   lint-front:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -779,7 +779,7 @@ jobs:
 
   test-front:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -795,7 +795,7 @@ jobs:
 
   test-front-package:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -818,7 +818,7 @@ jobs:
   # environment variables in CircleCI UI (with your PyPI credentials)
   npm:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -837,7 +837,7 @@ jobs:
   # Run relevant linters (eg. prettier for now) on the documentation website
   lint-website:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -854,7 +854,7 @@ jobs:
   # Deploy the docs website to GitHub pages.
   deploy-website:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:16.15
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
