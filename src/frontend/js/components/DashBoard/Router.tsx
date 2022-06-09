@@ -1,5 +1,4 @@
-import { NavLink, useRoutes } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { useRoutes } from 'react-router-dom';
 import { DashBoardRoute } from './routes';
 
 interface DashBoardRouterProps {
@@ -13,25 +12,7 @@ const DashBoardRouter = ({ routes }: DashBoardRouterProps) => {
     throw new Error('dashboardRoutes has not been found !');
   }
 
-  return (
-    <>
-      <nav className="dashboard_nav inline-block">
-        {routes.reduce((links, route) => {
-          if (
-            route.path && route.title && typeof route.show === 'function' ? route.show?.() : true
-          ) {
-            links.push(
-              <NavLink to={route.path} key={`nav_${route.path}`}>
-                {route.title}
-              </NavLink>,
-            );
-          }
-          return links;
-        }, [] as ReactNode[])}
-      </nav>
-      <div className="dashboard_main inline-block">{routesNode}</div>
-    </>
-  );
+  return <div>{routesNode}</div>;
 };
 
 export default DashBoardRouter;

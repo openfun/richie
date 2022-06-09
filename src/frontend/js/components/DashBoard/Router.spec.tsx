@@ -1,6 +1,6 @@
 import { queryAllByRole, render, screen } from '@testing-library/react';
 import * as mockFactories from 'utils/test/factories';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Outlet } from 'react-router-dom';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from 'react-query';
 import { FonzieUserFactory, PersistedClientFactory, QueryStateFactory } from 'utils/test/factories';
@@ -98,7 +98,7 @@ describe('<DashBoardRouter />', () => {
     });
     DEFAULT_ROUTES.forEach(({ path, title }) => {
       if (title) {
-        const $link = screen.getAllByRole('link', { name: title })[0];
+        const $link = screen.getByRole('link', { name: title });
         expect($link.getAttribute('href')).toBe(path);
       }
     });
@@ -126,7 +126,7 @@ describe('<DashBoardRouter />', () => {
         />,
       );
     });
-    expect(screen.queryAllByRole('link', { name: 'preferences' })).toHaveLength(0);
+    expect(screen.queryByRole('link', { name: 'preferences' })).toBeNull();
     screen.getByRole('link', { name: 'title' });
   });
 
@@ -137,10 +137,34 @@ describe('<DashBoardRouter />', () => {
     expect(location.assign).toHaveBeenNthCalledWith(1, '/');
   });
 
-  it('does redirect to the 404 page if the path does not exist', async () => {
+  it('does show the children component if the path of the children is called', async () => {
     await act(async () => {
-      render(<Wrapper initial_entries={['/a_path_that_does_not_exist']} />);
+      render(
+        <Wrapper
+          initial_entries={['/parent/child']}
+          routes={[
+            {
+              path: '/parent',
+              title: 'parent',
+              element: (
+                <>
+                  <h2>Parent</h2>
+                  <Outlet />
+                </>
+              ),
+              children: [
+                {
+                  path: '/parent/child',
+                  title: 'child',
+                  element: <h3>Child</h3>,
+                },
+              ],
+            },
+          ]}
+        />,
+      );
     });
-    screen.getByRole('heading', { level: 2, name: '404 Not Found' });
+    screen.getByRole('heading', { level: 2, name: 'Parent' });
+    screen.getByRole('heading', { level: 3, name: 'Child' });
   });
 });

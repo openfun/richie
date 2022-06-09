@@ -56,16 +56,16 @@ describe('useDashBoardRoutes', () => {
   });
 
   it('adds a 404 page', async () => {
-    const x = renderHook(() => useDashboardRoutes(), { wrapper });
-    const element = x.result.current.routes[2].element as ReactElement;
+    const { result } = renderHook(() => useDashboardRoutes(), { wrapper });
+    const element = result.current.routes[2].element as ReactElement;
     expect(element.type).toEqual('h2');
     expect(element.props.children).toStrictEqual('404 Not Found');
-    expect(x.result.current.routes[2].path).toStrictEqual('*');
+    expect(result.current.routes[2].path).toStrictEqual('*');
   });
 
   it('returns a ProtectedRoute if the route is protected', async () => {
-    const x = renderHook(() => useDashboardRoutes(), { wrapper });
-    const element = x.result.current.routes[1].element as ReactElement;
+    const { result } = renderHook(() => useDashboardRoutes(), { wrapper });
+    const element = result.current.routes[1].element as ReactElement;
     const type = element.type as JSXElementConstructor<any>;
     expect(type.name).toStrictEqual('ProtectedRoute');
   });
