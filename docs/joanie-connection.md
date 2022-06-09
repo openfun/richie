@@ -1,3 +1,8 @@
+---
+id: joanie-connection
+title: Joanie Connection
+sidebar_label: Joanie Connection
+---
 # Joanie Connection
 
 ## Settings

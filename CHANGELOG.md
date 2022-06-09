@@ -27,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   blogpost details, program list, program details, organization detail.
 - Use `em` based media queries instead of `px` based media queries to fix all
   UI bugs when using the website with a huge text-only zoom
+- Upgrade documentation to use Docusaurus version 2
 
 ### Fixed
 

@@ -1,0 +1,15 @@
+{
+  "version-1.17/docs": {
+    "Getting started": [
+      "version-1.17/discover",
+      "version-1.17/docker-development",
+      "version-1.17/native-installation"
+    ],
+    "Recipes": ["version-1.17/django-react-interop", "version-1.17/building-the-frontend"],
+    "Contributing": [
+      "version-1.17/contributing-guide",
+      "version-1.17/accessibility-testing",
+      "version-1.17/css-guidelines"
+    ]
+  }
+}
