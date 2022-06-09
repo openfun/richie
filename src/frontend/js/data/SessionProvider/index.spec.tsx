@@ -45,7 +45,7 @@ describe('SessionProvider', () => {
   );
 
   beforeEach(() => {
-    jest.useFakeTimers('modern');
+    jest.useFakeTimers();
     jest.resetModules();
     fetchMock.restore();
     sessionStorage.clear();
