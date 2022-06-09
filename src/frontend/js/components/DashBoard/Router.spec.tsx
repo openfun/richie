@@ -50,10 +50,6 @@ describe('<DashBoardRouter />', () => {
         </ProtectedRoute>
       ),
     },
-    {
-      element: <h2>404 Not Found</h2>,
-      path: '*',
-    },
   ];
   const Wrapper = ({
     initial_entries,
@@ -97,7 +93,6 @@ describe('<DashBoardRouter />', () => {
   });
 
   it('shows a navigation displaying all provided paths', async () => {
-    // initializeUser(true);
     await act(async () => {
       render(<Wrapper initial_entries={['/']} />);
     });
@@ -112,7 +107,7 @@ describe('<DashBoardRouter />', () => {
   it('does not show a link if the method "show" of the route return false', async () => {
     initializeUser(true);
     await act(async () => {
-      const { container } = render(
+      render(
         <Wrapper
           initial_entries={['/title']}
           routes={[
@@ -130,8 +125,8 @@ describe('<DashBoardRouter />', () => {
           ]}
         />,
       );
-      expect(queryAllByRole(container, 'link', { name: 'preferences' })).toHaveLength(0);
     });
+    expect(screen.queryAllByRole('link', { name: 'preferences' })).toHaveLength(0);
     screen.getByRole('link', { name: 'title' });
   });
 

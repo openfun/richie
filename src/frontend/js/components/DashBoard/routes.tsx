@@ -7,14 +7,19 @@ export interface DashBoardRouteDefinition {
   intlTitle: MessageDescriptor;
   protected?: boolean;
   show?: () => boolean;
-  title?: string;
+  children?: Array<DashBoardRouteDefinition>;
 }
 
-export interface DashBoardRoute extends RouteObject {
-  path: string;
-  show?: () => boolean;
-  title?: string;
-}
+export type DashBoardRoute = RouteObject & { path: string } & (
+    | {
+        show?: () => boolean;
+        title: string;
+      }
+    | {
+        show: () => false;
+        title?: string;
+      }
+  );
 
 export const messages = defineMessages({
   homeDashBoardRouteTitle: {
@@ -31,6 +36,11 @@ export const messages = defineMessages({
     id: 'components.Dashboard.routes.courses.title',
     defaultMessage: 'Courses',
     description: "title of the dashboard's courses view",
+  },
+  courseDashBoardRouteTitle: {
+    id: 'components.Dashboard.routes.course.title',
+    defaultMessage: 'Course',
+    description: "title of the dashboard's course view",
   },
   preferencesDashBoardRouteTitle: {
     id: 'components.Dashboard.routes.preferences.title',
@@ -53,6 +63,12 @@ const dashboardRoutesDefinition: Array<DashBoardRouteDefinition> = [
   {
     element: <h2>Courses List</h2>,
     intlTitle: messages.coursesDashBoardRouteTitle,
+    children: [
+      {
+        element: <h2>Individual Course</h2>,
+        intlTitle: messages.courseDashBoardRouteTitle,
+      },
+    ],
   },
   {
     element: <h2>My preferences</h2>,
