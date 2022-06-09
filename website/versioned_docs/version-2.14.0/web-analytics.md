@@ -1,8 +1,7 @@
 ---
-id: version-2.14.0-web-analytics
+id: web-analytics
 title: Add web analytics to your site
 sidebar_label: Web Analytics
-original_id: web-analytics
 ---
 
 Richie has native support to [Google Analytics](#google-analytics) and [Google Tag Manager](#google-tag-manager) Web Analytics solutions.
@@ -14,7 +13,7 @@ Next, it is described how you can configure the **Google Analytics** on your Ric
 
 - Add the `WEB_ANALYTICS_ID` setting, with your Google Analytics tracking id code.
 
-The current Google Analytics implementation also includes custom dimensions. Those dimensions permit you to create further analyses on Google Analytics or even use them to create custom reports. 
+The current Google Analytics implementation also includes custom dimensions. Those dimensions permit you to create further analyses on Google Analytics or even use them to create custom reports.
 Custom dimensions with a value as example:
 * Organizations codes - `UNIV_LISBON | UNIV_PORTO`
 * Course code - `COURSE_XPTO`
@@ -65,7 +64,7 @@ But you can also contribute to Richie by creating a pull request to add support 
 Example of an override of the `richie/web_analytics.html` file:
 ```html
 {% block web_analytics %}
-    {% if WEB_ANALYTICS_ID %} 
+    {% if WEB_ANALYTICS_ID %}
         {% if WEB_ANALYTICS_PROVIDER == "my_custom_web_analytics_software" %}
             <script type="text/javascript" src="{% static 'myapp/js/custom_web_analytics_software.js' %}">
             <script type="text/javascript">

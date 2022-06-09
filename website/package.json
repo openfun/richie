@@ -3,14 +3,12 @@
   "version": "2.14.1",
   "description": "Documentation website for the Richie project",
   "scripts": {
-    "build": "docusaurus-build",
-    "examples": "docusaurus-examples",
+    "build": "docusaurus build",
     "prettier-write": "prettier --write '**/*.+(ts|tsx|json|js|jsx)'",
-    "publish-gh-pages": "docusaurus-publish",
-    "rename-version": "docusaurus-rename-version",
-    "start": "docusaurus-start",
-    "release": "docusaurus-version",
-    "write-translations": "docusaurus-write-translations"
+    "start": "docusaurus start",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "docusaurus": "docusaurus"
   },
   "repository": {
     "type": "git",
@@ -23,7 +21,13 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
-    "docusaurus": "1.14.7",
-    "prettier": "2.6.2"
+    "@docusaurus/core": "2.0.0-beta.20",
+    "@docusaurus/plugin-content-pages": "2.0.0-beta.20",
+    "@docusaurus/preset-classic": "2.0.0-beta.20",
+    "clsx": "1.1.1",
+    "prettier": "2.6.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-markdown": "8.0.3"
   }
 }

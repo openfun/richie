@@ -1,8 +1,7 @@
 ---
-id: version-2.0.0-lms-connection
+id: lms-connection
 title: Connecting Richie with an LMS
 sidebar_label: LMS connection
-original_id: lms-connection
 ---
 
 `richie` can be connected to one or more Learning Management Systems (LMS) like OpenEdx, Moodle
@@ -53,13 +52,13 @@ OpenEdx requires the use of a CORS CSRF Cookie. This cookie is flagged as secure
 not able to use it without a SSL connection.
 
 So if you need to use the OpenEdx API to Create, Update or Delete data from Richie, you have to
-enable SSL on Richie and OpenEdx on your development environment. So we need a little bit more 
+enable SSL on Richie and OpenEdx on your development environment. So we need a little bit more
 configuration. Below, we explain how to serve OpenEdx and Richie over SSL.
 
 #### Run OpenEdx and Richie on the same domain
 
 Richie and OpenEdx must be on the same domain to work properly (Cookie security policy blocks
-secure cookie sharing on localhost) To do that you have to edit your hosts file 
+secure cookie sharing on localhost) To do that you have to edit your hosts file
 (_.e.g_ `/etc/hosts` on a \*NIX system) to alias a domain `local.dev` with
 two subdomains `richie` and `edx` to localhost:
 
