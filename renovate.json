@@ -19,7 +19,8 @@
         "faker",
         "node-fetch",
         "react",
-        "react-dom"
+        "react-dom",
+        "typescript"
       ]
     },
     {
