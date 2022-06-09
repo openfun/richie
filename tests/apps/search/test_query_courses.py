@@ -101,7 +101,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         sorted_courses = sorted(
             filtered_courses,
             key=lambda o: min(
-                [course_run_ids.index(id) for id in o[1] if id in course_run_ids]
+                course_run_ids.index(id) for id in o[1] if id in course_run_ids
             ),
         )
 

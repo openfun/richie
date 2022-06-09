@@ -17,6 +17,6 @@ class FullStaticTagsTemplateTagsTestCase(TestCase):
         """
         request = RequestFactory().get("/")
         out = Template(
-            "{% load full_static_tags %}" "{% static_absolute 'image.png' %}"
+            "{% load full_static_tags %}" + "{% static_absolute 'image.png' %}"
         ).render(Context({"request": request}))
         self.assertEqual(out, "http://testserver/static/image.png")
