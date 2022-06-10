@@ -6,13 +6,14 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css)$': '<rootDir>/front/__mocks__/styleMock.js',
   },
-  setupFilesAfterEnv: ['./js/testSetup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest/setup.ts'],
   testMatch: [`${__dirname}/js/**/*.spec.+(ts|tsx|js)`],
   coverageDirectory: '.coverage',
   testEnvironment: 'jsdom',
   testEnvironmentOptions: {
     url: 'https://localhost',
   },
+  resolver: '<rootDir>/jest/resolver.js',
   transformIgnorePatterns: ['node_modules/(?!(lodash-es|@hookform/resolvers)/)'],
   globals: {
     RICHIE_VERSION: 'test',
