@@ -137,18 +137,24 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             "resource_link_id": "1234",
             "context_id": "example.com",
             "user_id": "richie",
-            "lis_person_contact_email_primary": "",
+            "lis_person_contact_email_primary": "richie@example.com",
             "roles": "student",
             "oauth_consumer_key": "TestOauthConsumerKey",
             "oauth_nonce": "59474787080480293391616018589",
-            "oauth_signature": "r75pOLpVUzPjOgbenOxE0WNIUbc=",
+            "oauth_signature": "jGM5+Ikpa/FheK2eU8x3iYwdXbc=",
             "oauth_signature_method": "HMAC-SHA1",
             "oauth_timestamp": "1616018589",
             "oauth_version": "1.0",
         }
 
         self.assertDictEqual(
-            expected_content_parameters, instance.get_content_parameters()
+            expected_content_parameters,
+            instance.get_content_parameters(
+                user_infos={
+                    "user_id": "richie",
+                    "lis_person_contact_email_primary": "richie@example.com",
+                }
+            ),
         )
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
@@ -173,18 +179,24 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             "resource_link_id": "1234",
             "context_id": "example.com",
             "user_id": "richie",
-            "lis_person_contact_email_primary": "",
+            "lis_person_contact_email_primary": "richie@example.com",
             "roles": "student",
             "oauth_consumer_key": "ManualTestOauthConsumerKey",
             "oauth_nonce": "59474787080480293391616018589",
-            "oauth_signature": "UU7/veFv5lwc7pOhtz0Y0sowywA=",
+            "oauth_signature": "YaMv9A7l183tRRzZ5vfZVeUAaQE=",
             "oauth_signature_method": "HMAC-SHA1",
             "oauth_timestamp": "1616018589",
             "oauth_version": "1.0",
         }
 
         self.assertDictEqual(
-            expected_content_parameters, instance.get_content_parameters()
+            expected_content_parameters,
+            instance.get_content_parameters(
+                user_infos={
+                    "user_id": "richie",
+                    "lis_person_contact_email_primary": "richie@example.com",
+                }
+            ),
         )
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
@@ -206,18 +218,25 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             "resource_link_id": "1234",
             "context_id": "example.com",
             "user_id": "richie",
-            "lis_person_contact_email_primary": "",
+            "lis_person_contact_email_primary": "richie@example.com",
             "roles": "instructor",
             "oauth_consumer_key": "TestOauthConsumerKey",
             "oauth_nonce": "59474787080480293391616018589",
-            "oauth_signature": "XYV4THSMsy4roezJfVEwxhFDF4w=",
+            "oauth_signature": "kvuf6xxUKaAA+v4msqDNeRxvgDA=",
             "oauth_signature_method": "HMAC-SHA1",
             "oauth_timestamp": "1616018589",
             "oauth_version": "1.0",
         }
 
         self.assertDictEqual(
-            expected_content_parameters, instance.get_content_parameters(edit=True)
+            expected_content_parameters,
+            instance.get_content_parameters(
+                user_infos={
+                    "user_id": "richie",
+                    "lis_person_contact_email_primary": "richie@example.com",
+                },
+                edit=True,
+            ),
         )
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
@@ -242,16 +261,23 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
             "resource_link_id": "1234",
             "context_id": "example.com",
             "user_id": "richie",
-            "lis_person_contact_email_primary": "",
+            "lis_person_contact_email_primary": "richie@example.com",
             "roles": "instructor",
             "oauth_consumer_key": "ManualTestOauthConsumerKey",
             "oauth_nonce": "59474787080480293391616018589",
-            "oauth_signature": "22mJEak6wRKx1Egcw4921Vzniw0=",
+            "oauth_signature": "r4uIBnKjfWaJGQrCRl1AqJLDWpM=",
             "oauth_signature_method": "HMAC-SHA1",
             "oauth_timestamp": "1616018589",
             "oauth_version": "1.0",
         }
 
         self.assertDictEqual(
-            expected_content_parameters, instance.get_content_parameters(edit=True)
+            expected_content_parameters,
+            instance.get_content_parameters(
+                user_infos={
+                    "user_id": "richie",
+                    "lis_person_contact_email_primary": "richie@example.com",
+                },
+                edit=True,
+            ),
         )

@@ -2,11 +2,12 @@
 from django.core.cache import caches
 from django.core.cache.backends.base import InvalidCacheBackendError
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 from django.utils import translation
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
 
 from . import models
 
@@ -25,13 +26,20 @@ class LTIConsumerViewsSet(viewsets.GenericViewSet):
         Returns:
         - response (JSON Object):
             - url: the LTI resource url
-            - content_paramters: all generated parameters related to the lti provider
+            - content_parameters: all generated parameters related to the lti provider
             - is_automatic_resizing: boolean to control automatic resizing
 
         """
         language = translation.get_language()
-        cache_key = f"lti_consumer_plugin__pk_{pk}_{language}"
         edit = request.toolbar and request.toolbar.edit_mode_active
+        user_infos = request.GET.dict()
+
+        if user_infos.get("user_id") is None:
+            return Response({"user_id": ["This parameter is required."]}, status=400)
+
+        cache_key = (
+            f"lti_consumer_plugin__pk_{pk}_{user_infos.get('user_id')}_{language}"
+        )
 
         # Send response from cache only if edition is off
         if edit:
@@ -60,7 +68,9 @@ class LTIConsumerViewsSet(viewsets.GenericViewSet):
             )
             if plugin.lti_provider_id
             else plugin.is_automatic_resizing,
-            "content_parameters": plugin.get_content_parameters(edit=edit),
+            "content_parameters": plugin.get_content_parameters(
+                user_infos=user_infos, edit=edit
+            ),
             "url": plugin.url,
         }
 

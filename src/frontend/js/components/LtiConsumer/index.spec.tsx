@@ -1,24 +1,41 @@
+import { type PropsWithChildren } from 'react';
 import { act, render } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
-
+import { hydrate, QueryClient, QueryClientProvider, QueryObserverOptions } from 'react-query';
+import {
+  ContextFactory as mockContextFactory,
+  PersistedClientFactory,
+  QueryStateFactory,
+} from 'utils/test/factories';
 import { Deferred } from 'utils/test/deferred';
 import {
   LtiConsumerContentParameters,
   LtiConsumerContext,
   LtiConsumerProps,
 } from 'types/LtiConsumer';
+import BaseSessionProvider from 'data/SessionProvider/BaseSessionProvider';
+import { RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY } from 'settings';
 import { handle } from 'utils/errors/handle';
+import createQueryClient from 'utils/react-query/createQueryClient';
 import LtiConsumer from '.';
 
 const mockHandle: jest.Mock<typeof handle> = handle as any;
 jest.mock('utils/errors/handle');
-jest.mock('utils/context', () => jest.fn());
+jest.mock('utils/context', () => ({
+  __esModule: true,
+  default: mockContextFactory().generate(),
+}));
+jest.mock('uuid', () => ({
+  v4: () => 'a-random-uuid',
+}));
 
 describe('components/LtiConsumer', () => {
   afterEach(() => {
     fetchMock.restore();
     jest.resetAllMocks();
+    sessionStorage.clear();
+    delete window.CMS;
   });
 
   // As HTMLFormElement doesn't implement submit (see https://github.com/jsdom/jsdom/issues/1937),
@@ -34,6 +51,14 @@ describe('components/LtiConsumer', () => {
     iframeDocument.close();
   });
   HTMLFormElement.prototype.submit = mockSubmit;
+
+  const Wrapper = ({ client, children }: PropsWithChildren<{ client: QueryClient }>) => (
+    <IntlProvider locale="en">
+      <QueryClientProvider client={client}>
+        <BaseSessionProvider>{children}</BaseSessionProvider>
+      </QueryClientProvider>
+    </IntlProvider>
+  );
 
   it('renders an auto-resized iframe with a LTI content', async () => {
     const contentParameters = {
@@ -63,12 +88,21 @@ describe('components/LtiConsumer', () => {
     } as LtiConsumerProps;
 
     const ltiContextDeferred = new Deferred();
-    fetchMock.get('/api/v1.0/plugins/lti-consumer/1337/context/', ltiContextDeferred.promise);
+    fetchMock.get(
+      '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
+      ltiContextDeferred.promise,
+    );
+
+    const { clientState } = PersistedClientFactory({
+      queries: [QueryStateFactory('user', { data: null })],
+    });
+    const client = createQueryClient();
+    hydrate(client, clientState);
 
     const { container } = render(
-      <IntlProvider locale="en">
+      <Wrapper client={client}>
         <LtiConsumer {...ltiConsumerProps} />
-      </IntlProvider>,
+      </Wrapper>,
     );
 
     await act(async () => ltiContextDeferred.resolve(ltiContextResponse));
@@ -122,12 +156,21 @@ describe('components/LtiConsumer', () => {
     } as LtiConsumerProps;
 
     const ltiContextDeferred = new Deferred();
-    fetchMock.get('/api/v1.0/plugins/lti-consumer/1337/context/', ltiContextDeferred.promise);
+    fetchMock.get(
+      '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
+      ltiContextDeferred.promise,
+    );
+
+    const { clientState } = PersistedClientFactory({
+      queries: [QueryStateFactory('user', { data: null })],
+    });
+    const client = createQueryClient();
+    hydrate(client, clientState);
 
     const { container } = render(
-      <IntlProvider locale="en">
+      <Wrapper client={client}>
         <LtiConsumer {...ltiConsumerProps} />
-      </IntlProvider>,
+      </Wrapper>,
     );
 
     await act(async () => ltiContextDeferred.resolve(ltiContextResponse));
@@ -157,12 +200,21 @@ describe('components/LtiConsumer', () => {
     } as LtiConsumerProps;
 
     const ltiContextDeferred = new Deferred();
-    fetchMock.get('/api/v1.0/plugins/lti-consumer/1337/context/', ltiContextDeferred.promise);
+    fetchMock.get(
+      '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
+      ltiContextDeferred.promise,
+    );
+
+    const { clientState } = PersistedClientFactory({
+      queries: [QueryStateFactory('user', { data: null })],
+    });
+    const client = createQueryClient();
+    hydrate(client, clientState);
 
     const { container } = render(
-      <IntlProvider locale="en">
+      <Wrapper client={client}>
         <LtiConsumer {...ltiConsumerProps} />
-      </IntlProvider>,
+      </Wrapper>,
     );
 
     await act(async () => ltiContextDeferred.resolve(500));
@@ -176,5 +228,186 @@ describe('components/LtiConsumer', () => {
     const form: HTMLFormElement = container.getElementsByTagName('form')[0];
     expect(iframe).toBeUndefined();
     expect(form).toBeUndefined();
+  });
+
+  it('uses user information when user is authenticated', () => {
+    const { clientState } = PersistedClientFactory({
+      queries: [
+        QueryStateFactory('user', { data: { username: 'johndoe', email: 'johndoe@example.com' } }),
+      ],
+    });
+    const client = createQueryClient();
+    hydrate(client, clientState);
+
+    const ltiContextDeferred = new Deferred();
+    fetchMock.get('/api/v1.0/plugins/lti-consumer/1337/context/', ltiContextDeferred.promise, {
+      query: {
+        lis_person_contact_email_primary: 'johndoe@example.com',
+        lis_person_name_given: 'johndoe',
+        lis_person_sourcedid: 'johndoe',
+        user_id: 'johndoe',
+      },
+    });
+
+    render(
+      <Wrapper client={client}>
+        <LtiConsumer id={1337} />
+      </Wrapper>,
+    );
+
+    expect(fetchMock.calls()).toHaveLength(1);
+    expect(
+      fetchMock.lastCall(/api\/v1.0\/plugins\/lti-consumer\/1337\/context\//, {
+        method: 'GET',
+        query: {
+          lis_person_contact_email_primary: 'johndoe@example.com',
+          lis_person_name_given: 'johndoe',
+          lis_person_sourcedid: 'johndoe',
+          user_id: 'johndoe',
+        },
+      }),
+    ).toBeDefined();
+    expect(sessionStorage.getItem(RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY)).toBeNull();
+  });
+
+  it('uses a random uuid as user_id when user is not authenticated', () => {
+    const { clientState } = PersistedClientFactory({
+      queries: [QueryStateFactory('user', { data: null })],
+    });
+    const client = createQueryClient();
+    hydrate(client, clientState);
+
+    const ltiContextDeferred = new Deferred();
+    fetchMock.get(
+      '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
+      ltiContextDeferred.promise,
+    );
+
+    render(
+      <Wrapper client={client}>
+        <LtiConsumer id={1337} />
+      </Wrapper>,
+    );
+
+    expect(fetchMock.calls()).toHaveLength(1);
+    expect(
+      fetchMock.lastCall(/api\/v1.0\/plugins\/lti-consumer\/1337\/context\//, {
+        method: 'GET',
+        query: {
+          user_id: 'a-random-uuid',
+        },
+      }),
+    ).toBeDefined();
+    expect(sessionStorage.getItem(RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY)).toBe('a-random-uuid');
+  });
+
+  it('sets stale time to 0 in editor mode', async () => {
+    window.CMS = {
+      config: {
+        auth: true,
+      },
+    };
+
+    const { clientState } = PersistedClientFactory({
+      queries: [QueryStateFactory('user', { data: null })],
+    });
+    const client = createQueryClient();
+    hydrate(client, clientState);
+
+    const ltiContextDeferred = new Deferred();
+    fetchMock.get(
+      '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
+      ltiContextDeferred.promise,
+    );
+
+    render(
+      <Wrapper client={client}>
+        <LtiConsumer id={1337} />
+      </Wrapper>,
+    );
+
+    await act(async () =>
+      ltiContextDeferred.resolve({
+        url: 'http://localhost:8060/lti/videos/c761d6e9-5371-4650-b27a-fa4c8865fd34',
+        content_parameters: {
+          lti_message_type: 'Marsha Video',
+          lti_version: 'LTI-1p0',
+          resource_link_id: '1',
+          context_id: 'coursecode1',
+          user_id: 'richie',
+          lis_person_contact_email_primary: '',
+          roles: 'instructor',
+          oauth_consumer_key: 'InsecureOauthConsumerKey',
+          oauth_signature_method: 'HMAC-SHA1',
+          oauth_timestamp: '1378916897',
+          oauth_nonce: '80966668944732164491378916897',
+          oauth_version: '1.0',
+          oauth_signature: 'frVp4JuvT1mVXlxktiAUjQ7/1cw=',
+        },
+        is_automatic_resizing: true,
+      }),
+    );
+
+    const cacheQueries = client.getQueryCache().getAll();
+
+    expect(
+      cacheQueries.find(
+        (query) =>
+          query.queryKey.includes('lti-consumer-plugin-1337') &&
+          (query.options as QueryObserverOptions).staleTime === 0,
+      ),
+    ).toBeDefined();
+  });
+
+  it('sets stale time to 5 minutes', async () => {
+    const { clientState } = PersistedClientFactory({
+      queries: [QueryStateFactory('user', { data: null })],
+    });
+    const client = createQueryClient();
+    hydrate(client, clientState);
+
+    const ltiContextDeferred = new Deferred();
+    fetchMock.get(
+      '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
+      ltiContextDeferred.promise,
+    );
+
+    render(
+      <Wrapper client={client}>
+        <LtiConsumer id={1337} />
+      </Wrapper>,
+    );
+
+    await act(async () =>
+      ltiContextDeferred.resolve({
+        url: 'http://localhost:8060/lti/videos/c761d6e9-5371-4650-b27a-fa4c8865fd34',
+        content_parameters: {
+          lti_message_type: 'Marsha Video',
+          lti_version: 'LTI-1p0',
+          resource_link_id: '1',
+          context_id: 'coursecode1',
+          user_id: 'richie',
+          lis_person_contact_email_primary: '',
+          roles: 'instructor',
+          oauth_consumer_key: 'InsecureOauthConsumerKey',
+          oauth_signature_method: 'HMAC-SHA1',
+          oauth_timestamp: '1378916897',
+          oauth_nonce: '80966668944732164491378916897',
+          oauth_version: '1.0',
+          oauth_signature: 'frVp4JuvT1mVXlxktiAUjQ7/1cw=',
+        },
+        is_automatic_resizing: true,
+      }),
+    );
+
+    const cacheQueries = client.getQueryCache().getAll();
+
+    expect(
+      cacheQueries.find(
+        (query) =>
+          query.queryKey.includes('lti-consumer-plugin-1337') &&
+          (query.options as QueryObserverOptions).staleTime === 300_000,
+      ),
+    ).toBeDefined();
   });
 });

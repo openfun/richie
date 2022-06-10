@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Get a unique LTI Context per user
 - Add a `DashBoard` React based view
 - Add API endpoint to search & autocomplete licences
 - Add licences-based filters on course search

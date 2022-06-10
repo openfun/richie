@@ -90,7 +90,7 @@ class LTIConsumer(CMSPlugin):
         """Use the plugin id as resource_link_id field."""
         return str(self.id)
 
-    def get_content_parameters(self, edit=False):
+    def get_content_parameters(self, user_infos, edit=False):
         """
         Convenient wrapper to authorize and return required parameters
         for LTI content consumption
@@ -99,14 +99,13 @@ class LTIConsumer(CMSPlugin):
         site = get_current_site()
 
         lti_parameters = {
+            **user_infos,
             "context_id": site.domain,
             "launch_presentation_locale": translation.get_language(),
             "lti_message_type": "basic-lti-launch-request",
-            "lis_person_contact_email_primary": "",
             "lti_version": "LTI-1p0",
             "resource_link_id": self.get_resource_link_id(),
             "roles": role,
-            "user_id": "richie",
         }
 
         # Get credentials from the predefined LTI provider if any, or from the model otherwise
