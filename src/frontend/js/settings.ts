@@ -6,6 +6,7 @@ export const API_LIST_DEFAULT_PARAMS = {
 export const EDX_CSRF_TOKEN_COOKIE_NAME = 'edx_csrf_token';
 
 export const RICHIE_USER_TOKEN = 'RICHIE_USER_TOKEN';
+export const RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY = 'RICHIE_LTI_ANONYMOUS_USER_ID';
 
 export const REACT_QUERY_SETTINGS = {
   cacheStorage: {
