@@ -1,0 +1,123 @@
+/**
+ *
+ * GENERAL STYLES
+ *
+ */
+
+button,
+a.button {
+  cursor: pointer;
+  background: white;
+  color: $primaryColor;
+}
+
+/**
+ *
+ * GENERAL STYLES
+ *
+ */
+
+.homepage .homeContainer .homeWrapper {
+  padding: 6rem 0;
+}
+
+.homepage .homeContainer .projectTitle {
+  max-width: 80vw;
+  font-weight: 400;
+  font-size: 200%;
+  margin: 0 auto 2rem;
+}
+
+@media only screen and (min-width: 480px) {
+  .homepage .homeContainer .projectTitle {
+    max-width: 40rem;
+  }
+}
+
+.homepage .homeContainer .promoSection .button {
+  background: $primaryColor;
+  color: white;
+}
+
+.homepage .homeContainer .promoSection .button:hover {
+  background: white;
+  color: $primaryColor;
+}
+
+.homepage .mainContainer {
+  padding: 0;
+}
+
+.homepage #homepage__jumbo {
+  padding: 5rem 0;
+}
+
+.homepage .homepage__features {
+  padding: 3rem 0;
+}
+
+.homepage .homepage__features .container {
+  padding: 0;
+}
+
+.homepage .homepage__features .gridBlock {
+  justify-content: center;
+}
+
+.homepage .homepage__features .blockElement {
+  max-width: 30rem;
+  padding: 2rem 0;
+}
+
+.homepage .homepage__features .imageAlignTop .blockImage {
+  max-width: 30%;
+}
+
+.homepage .homepage__feature-list {
+  padding: 5rem 0;
+}
+
+.homepage .homepage__feature-list .homepage__feature-list__title {
+  flex-basis: 100%;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: $primaryColor;
+}
+
+.homepage .homepage__feature-list .blockElement--left {
+  margin: 0 0.75rem 0 0;
+}
+
+.homepage .productShowcaseSection h2 {
+  font-size: 1.5rem;
+}
+
+/**
+ *
+ * FOOTER STYLES
+ *
+ */
+
+.nav-footer .sitemap {
+  justify-content: space-evenly;
+}
+
+.nav-footer .sitemap div {
+  flex-grow: 0;
+}
+
+/**
+ *
+ * HEADER STYLES
+ *
+ */
+
+.navigationSlider .slidingNav ul {
+  margin-top: 49px; /* Fix a small visual glitch on mobile */
+}
+
+@media only screen and (min-width: 1024px) {
+  .navigationSlider .slidingNav ul {
+    margin-top: 0; /* Fix a small visual glitch on mobile */
+  }
+}
