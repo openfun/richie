@@ -312,6 +312,8 @@ class CourseSearchForm(SearchForm):
 class ItemSearchForm(SearchForm):
     """Generate Elasticsearch queries for the category/organization indices."""
 
+    full_text_search_fields = ["title.*"]
+
     def __init__(self, *args, data=None, **kwargs):
         """Fix the QueryDict value getter to properly handle multi-value parameters."""
         # QueryDict/MultiValueDict breaks lists: we need to fix it
@@ -345,7 +347,7 @@ class ItemSearchForm(SearchForm):
                 {
                     "multi_match": {
                         "analyzer": QUERY_ANALYZERS[get_language()],
-                        "fields": ["title.*"],
+                        "fields": self.full_text_search_fields,
                         "query": full_text,
                     }
                 }
@@ -363,3 +365,9 @@ class ItemSearchForm(SearchForm):
             self.cleaned_data.get("offset") or 0,
             query,
         )
+
+
+class LicenceSearchForm(ItemSearchForm):
+    """Generate Elasticsearch queries for the licence index."""
+
+    full_text_search_fields = ["content.*", "title.*"]

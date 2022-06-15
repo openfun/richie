@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add a `DashBoard` React based view
+- Add API endpoint to search & autocomplete licences
 
 ### Changed
 
