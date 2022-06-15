@@ -23,6 +23,7 @@ from ...courses.models import (
     Course,
     CourseRunCatalogVisibility,
     CourseState,
+    Licence,
 )
 from ..defaults import ES_INDICES_PREFIX, ES_STATE_WEIGHTS
 from ..forms import CourseSearchForm
@@ -184,6 +185,7 @@ class CoursesIndexer:
             },
             # Keywords
             "categories": {"type": "keyword"},
+            "licences": {"type": "keyword"},
             "organizations": {"type": "keyword"},
             "persons": {"type": "keyword"},
             # Searchable
@@ -603,6 +605,16 @@ class CoursesIndexer:
             .values("start", "end", "enrollment_start", "enrollment_end", "languages")
         ]
 
+        licences = (
+            Licence.objects.filter(
+                licencepluginmodel__cmsplugin_ptr__placeholder__page__course=course,
+                licencepluginmodel__cmsplugin_ptr__placeholder__slot="course_license_content",
+            )
+            .distinct()
+            .order_by("id")
+            .values_list("id", flat=True)
+        )
+
         return {
             "_id": course.get_es_id(),
             "_index": index,
@@ -644,6 +656,7 @@ class CoursesIndexer:
             "is_new": len(course_runs) == 1,
             # If titles is an empty dict, it means the course is not published in any language:
             "is_listed": bool(course.is_listed and titles),
+            "licences": list(licences),
             # Pick the highlighted organization from the organizations QuerySet to benefit from
             # the prefetch of related title sets
             "organization_highlighted": {

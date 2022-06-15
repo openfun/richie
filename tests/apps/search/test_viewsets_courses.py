@@ -98,6 +98,14 @@ class CoursesViewsetsTestCase(CMSTestCase):
                                     ]
                                 }
                             },
+                            "licences": {
+                                "licences": {
+                                    "buckets": [
+                                        {"key": "41", "doc_count": 13},
+                                        {"key": "42", "doc_count": 66},
+                                    ]
+                                }
+                            },
                             "organizations": {
                                 "organizations": {
                                     "buckets": [
@@ -134,6 +142,15 @@ class CoursesViewsetsTestCase(CMSTestCase):
                             {"_id": "2", "_source": {"title": {"en": "Level 2"}}},
                             {"_id": "21", "_source": {"title": {"en": "Subject 1"}}},
                             {"_id": "22", "_source": {"title": {"en": "Subject 2"}}},
+                        ]
+                    }
+                }
+            if index == "richie_licences":
+                return {
+                    "hits": {
+                        "hits": [
+                            {"_id": "41", "_source": {"title": {"en": "Licence 41"}}},
+                            {"_id": "42", "_source": {"title": {"en": "Licence 42"}}},
                         ]
                     }
                 }
@@ -227,6 +244,20 @@ class CoursesViewsetsTestCase(CMSTestCase):
                         "values": [
                             {"count": 15, "human_name": "Level 2", "key": "2"},
                             {"count": 13, "human_name": "Level 1", "key": "1"},
+                        ],
+                    },
+                    "licences": {
+                        "base_path": None,
+                        "has_more_values": False,
+                        "human_name": "Licences",
+                        "is_autocompletable": True,
+                        "is_drilldown": False,
+                        "is_searchable": True,
+                        "name": "licences",
+                        "position": 6,
+                        "values": [
+                            {"count": 66, "human_name": "Licence 42", "key": "42"},
+                            {"count": 13, "human_name": "Licence 41", "key": "41"},
                         ],
                     },
                     "new": {
