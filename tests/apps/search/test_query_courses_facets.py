@@ -84,8 +84,9 @@ class FacetsCoursesQueryTestCase(TestCase):
             body=CategoriesIndexer.mapping, index="richie_categories"
         )
 
-        # Set up empty indices for organizations & persons. They need to exist to avoid errors
+        # Set up empty indices for other objects. They need to exist to avoid errors
         # but we do not use results from them in our tests.
+        ES_INDICES_CLIENT.create(index="richie_licences")
         ES_INDICES_CLIENT.create(index="richie_organizations")
         ES_INDICES_CLIENT.create(index="richie_persons")
 

@@ -139,4 +139,15 @@ FILTERS_CONFIGURATION = [
             "reverse_id": "persons",
         },
     ),
+    (
+        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+        {
+            "human_name": _("Licences"),
+            "is_autocompletable": True,
+            "is_searchable": True,
+            "min_doc_count": 0,
+            "name": "licences",
+            "position": 6,
+        },
+    ),
 ]

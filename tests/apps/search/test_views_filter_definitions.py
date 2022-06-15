@@ -96,6 +96,15 @@ class FilterDefinitionsViewTestCase(CMSTestCase):
                     "name": "levels",
                     "position": 3,
                 },
+                "licences": {
+                    "base_path": None,
+                    "human_name": "Licences",
+                    "is_autocompletable": True,
+                    "is_drilldown": False,
+                    "is_searchable": True,
+                    "name": "licences",
+                    "position": 6,
+                },
                 "organizations": {
                     "base_path": "0001",
                     "human_name": "Organizations",

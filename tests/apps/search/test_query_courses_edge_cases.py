@@ -93,8 +93,9 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             body=OrganizationsIndexer.mapping, index="richie_organizations"
         )
 
-        # Set up empty indices for categories & persons. They need to exist to avoid errors
+        # Set up empty indices for other objects. They need to exist to avoid errors
         # but we do not use results from them in our tests.
+        ES_INDICES_CLIENT.create(index="richie_licences")
         ES_INDICES_CLIENT.create(index="richie_categories")
         ES_INDICES_CLIENT.create(index="richie_persons")
 
@@ -150,6 +151,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 "Établissements",
                 "Langues",
                 "Personnes",
+                "Licences",
             ],
         )
 

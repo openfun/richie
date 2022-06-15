@@ -52,6 +52,7 @@ class CoursesI18nQueryTestCase(TestCase):
         for index in [
             "richie_categories",
             "richie_courses",
+            "richie_licences",
             "richie_persons",
             "richie_organizations",
         ]:

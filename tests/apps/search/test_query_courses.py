@@ -11,6 +11,7 @@ from cms.models import Page
 
 from richie.apps.courses.factories import (
     CategoryFactory,
+    LicenceFactory,
     OrganizationFactory,
     PersonFactory,
 )
@@ -20,6 +21,7 @@ from richie.apps.search.filter_definitions import FILTERS
 from richie.apps.search.filter_definitions.courses import ALL_LANGUAGES_DICT
 from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.indexers.courses import CoursesIndexer
+from richie.apps.search.indexers.licences import LicencesIndexer
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
 from richie.apps.search.indexers.persons import PersonsIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
@@ -157,6 +159,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             for i in range(0, 3)
         ]
 
+        licences = [
+            LicenceFactory(),
+            LicenceFactory(name="CC-BY-NC"),
+            LicenceFactory(name="CC-BY-SA"),
+        ]
+
         top_organizations = [
             OrganizationFactory(
                 page_parent=filter_pages["organizations"].extended_object,
@@ -219,6 +227,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "introduction": {"en": "Polarized non-volatile structure"},
                 "is_new": True,
                 "is_listed": True,
+                "licences": [licences[0].id],
                 "organization_highlighted": {"en": "Org 311"},
                 "organizations": [
                     org.get_es_id()
@@ -256,6 +265,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "introduction": {"en": "De-engineered demand-driven success"},
                 "is_new": True,
                 "is_listed": True,
+                "licences": [licences[0].id],
                 "organization_highlighted": {"en": "Org 33"},
                 "organization_highlighted_cover_image": {},
                 "organizations": [
@@ -296,6 +306,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "introduction": {"en": "Up-sized value-added project"},
                 "is_new": False,
                 "is_listed": True,
+                "licences": [licences[1].id],
                 "organization_highlighted": {"en": "Org 321"},
                 "organizations": [
                     org.get_es_id()
@@ -333,6 +344,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "introduction": {"en": "Innovative encompassing extranet"},
                 "is_new": False,
                 "is_listed": True,
+                "licences": [licences[2].id],
                 "organization_highlighted": {"en": "Org 34"},
                 "organizations": [
                     org.get_es_id()
@@ -505,6 +517,10 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 for person in persons
             ]
             + [
+                LicencesIndexer.get_es_document_for_licence(licence)
+                for licence in licences
+            ]
+            + [
                 {
                     "_id": course_id,
                     "_index": "test_courses",
@@ -541,6 +557,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             "subject_0_children": subject_0_children,
             "subject_1_children": subject_1_children,
             "levels": levels,
+            "licences": licences,
             "top_organizations": top_organizations,
             "organization_0_children": organization_0_children,
             "organization_1_children": organization_1_children,
@@ -847,6 +864,33 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             },
                         ],
                     },
+                    "licences": {
+                        "base_path": None,
+                        "has_more_values": False,
+                        "human_name": "Licences",
+                        "is_autocompletable": True,
+                        "is_drilldown": False,
+                        "is_searchable": True,
+                        "name": "licences",
+                        "position": 6,
+                        "values": [
+                            {
+                                "count": 2,
+                                "human_name": data["licences"][0].name,
+                                "key": str(data["licences"][0].id),
+                            },
+                            {
+                                "count": 1,
+                                "human_name": data["licences"][1].name,
+                                "key": str(data["licences"][1].id),
+                            },
+                            {
+                                "count": 1,
+                                "human_name": data["licences"][2].name,
+                                "key": str(data["licences"][2].id),
+                            },
+                        ],
+                    },
                     "new": {
                         "base_path": None,
                         "has_more_values": False,
@@ -1040,7 +1084,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?scope=filters")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()["filters"]), 7)
+        self.assertEqual(len(response.json()["filters"]), 8)
         self.assertFalse("objects" in response.json())
 
     def test_query_courses_course_runs_filter_availability_facets(self, *_):
@@ -1505,6 +1549,92 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
             self.get_expected_courses(courses_definition, list(data["course_runs"])),
+        )
+
+    def test_query_courses_filter_licence(self, *_):
+        """
+        Battle test filtering by a licence.
+        """
+        data = self.prepare_indices()
+        response = self.client.get(
+            (f"/api/v1.0/courses/?licences={data['licences'][0].id}")
+        )
+        self.assertEqual(response.status_code, 200)
+        # Keep only the courses that are linked to this licence:
+        courses_definition = filter(
+            lambda c: c[0] in [0, 1], data["courses_definition"]
+        )
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
+        )
+        self.assertEqual(
+            response.json()["filters"]["licences"]["values"],
+            [
+                {
+                    "count": 2,
+                    "human_name": data["licences"][0].name,
+                    "key": str(data["licences"][0].id),
+                },
+                {
+                    "count": 1,
+                    "human_name": data["licences"][1].name,
+                    "key": str(data["licences"][1].id),
+                },
+                {
+                    "count": 1,
+                    "human_name": data["licences"][2].name,
+                    "key": str(data["licences"][2].id),
+                },
+            ],
+        )
+
+    def test_query_courses_filter_multiple_licences(self, *_):
+        """
+        Battle test filtering by multiple licences.
+        """
+        data = self.prepare_indices()
+        response = self.client.get(
+            (
+                f"/api/v1.0/courses/?licences={data['licences'][0].id}"
+                f"&licences={data['licences'][2].id}"
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        # Keep only the courses that are linked to these licences:
+        courses_definition = filter(
+            lambda c: c[0] in [0, 1, 3], data["courses_definition"]
+        )
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
+        )
+
+    def test_query_courses_filter_licences_aggs(self, *_):
+        """
+        It should be possible to limit faceting on licences to specific values by
+        passing a regex in the querystring.
+        """
+        data = self.prepare_indices()
+        response = self.client.get(
+            f"/api/v1.0/courses/?licences_aggs={data['licences'][1].id}"
+            f"&licences_aggs={data['licences'][2].id}"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json()["filters"]["licences"]["values"],
+            [
+                {
+                    "count": 1,
+                    "human_name": data["licences"][1].name,
+                    "key": str(data["licences"][1].id),
+                },
+                {
+                    "count": 1,
+                    "human_name": data["licences"][2].name,
+                    "key": str(data["licences"][2].id),
+                },
+            ],
         )
 
     def test_query_courses_filter_organization(self, *_):

@@ -419,6 +419,7 @@ class CoursesIndexersTestCase(TestCase):
                     "introduction": {},
                     "is_new": False,
                     "is_listed": True,
+                    "licences": [],
                     "organization_highlighted": None,
                     "organization_highlighted_cover_image": {},
                     "organizations": [],

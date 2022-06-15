@@ -10,6 +10,7 @@ ES_INDICES = IndicesList(
         {
             "categories": "richie.apps.search.indexers.categories.CategoriesIndexer",
             "courses": "richie.apps.search.indexers.courses.CoursesIndexer",
+            "licences": "richie.apps.search.indexers.licences.LicencesIndexer",
             "organizations": "richie.apps.search.indexers.organizations.OrganizationsIndexer",
             "persons": "richie.apps.search.indexers.persons.PersonsIndexer",
         },
