@@ -16,6 +16,7 @@ from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
     CourseRunFactory,
+    LicenceFactory,
     OrganizationFactory,
     PersonFactory,
 )
@@ -74,6 +75,8 @@ class CoursesIndexersTestCase(TestCase):
                 )["_id"]
             ],
         )
+
+    # get_es_document_for_course
 
     def test_indexers_courses_get_es_documents_no_course_run(self):
         """
@@ -179,6 +182,7 @@ class CoursesIndexersTestCase(TestCase):
         "richie.apps.search.indexers.courses.get_picture_info",
         return_value={"info": "picture info"},
     )
+    # pylint: disable=too-many-locals
     def test_indexers_courses_get_es_documents_from_models(self, _mock_picture):
         """
         Happy path: the data is retrieved from the models properly formatted
@@ -231,12 +235,23 @@ class CoursesIndexersTestCase(TestCase):
             page_title={"en": "Jules de Polignac", "fr": "Jules de Polignac"}
         )
 
+        licence1, licence2, licence3, _licence4 = LicenceFactory.create_batch(4)
+        # Keep a licence unused to check that it is not returned. Link also licences to the
+        # "student content licence" placeholder to check they are ignored
+        licences_by_placeholders = [
+            ("course_license_content", licence1),
+            ("course_license_content", licence2),
+            ("course_license_participation", licence2),
+            ("course_license_participation", licence3),
+        ]
+
         course = CourseFactory(
             duration=[3, WEEK],
             effort=[2, HOUR],
             fill_categories=published_categories + [draft_category],
             fill_cover=True,
             fill_icons=published_categories + [draft_category],
+            fill_licences=licences_by_placeholders,
             fill_organizations=[
                 main_organization,
                 other_draft_organization,
@@ -341,6 +356,7 @@ class CoursesIndexersTestCase(TestCase):
             },
             "is_new": False,
             "is_listed": True,
+            "licences": [licence1.id, licence2.id],
             "organization_highlighted": {
                 "en": "english main organization title",
                 "fr": "titre organisation principale français",
@@ -607,8 +623,6 @@ class CoursesIndexersTestCase(TestCase):
                 "fr": "/fr/un-titre-court-francais/",
             },
         )
-
-    # get_es_document_for_course
 
     def test_indexers_courses_get_es_document_for_course_related_names_related_unpublished(
         self,
