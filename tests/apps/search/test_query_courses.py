@@ -240,6 +240,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "organizations_names": {"en": ["Org 31", "Org 34", "Org 311"]},
                 "persons": [persons[0].get_es_id()],
                 "persons_names": {"en": ["Mikhaïl Boulgakov"]},
+                "pace": 15,
                 "title": {"en": "Artificial intelligence for mushroom picking"},
             },
             {
@@ -279,6 +280,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "organizations_names": {"en": ["Org 31", "Org 33", "Org 312"]},
                 "persons": [],
                 "persons_names": {},
+                "pace": 90,
                 "title": {"en": "Click-farms: managing the autumn harvest"},
             },
             {
@@ -319,6 +321,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "organizations_names": {"en": ["Org 32", "Org 33", "Org 321"]},
                 "persons": [],
                 "persons_names": {},
+                "pace": 180,
                 "title": {"en": "Building a data lake out of mountain springs"},
             },
             {
@@ -357,6 +360,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "organizations_names": {"en": ["Org 32", "Org 34", "Org 322"]},
                 "persons": [persons[0].get_es_id()],
                 "persons_names": {"en": ["Mikhaïl Boulgakov"]},
+                "pace": None,
                 "title": {"en": "Kung-fu moves for cloud infrastructure security"},
             },
         ]
@@ -953,6 +957,38 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             }
                         ],
                     },
+                    "pace": {
+                        "base_path": None,
+                        "has_more_values": False,
+                        "human_name": "Weekly pace",
+                        "is_autocompletable": False,
+                        "is_drilldown": False,
+                        "is_searchable": False,
+                        "name": "pace",
+                        "position": 7,
+                        "values": [
+                            {
+                                "count": 1,
+                                "human_name": "Self-paced",
+                                "key": "self-paced",
+                            },
+                            {
+                                "count": 1,
+                                "human_name": "Less than one hour",
+                                "key": "lt-1h",
+                            },
+                            {
+                                "count": 1,
+                                "human_name": "One to two hours",
+                                "key": "1h-2h",
+                            },
+                            {
+                                "count": 1,
+                                "human_name": "More than two hours",
+                                "key": "gt-2h",
+                            },
+                        ],
+                    },
                     "subjects": {
                         "base_path": "0001",
                         "has_more_values": False,
@@ -1084,7 +1120,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?scope=filters")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()["filters"]), 8)
+        self.assertEqual(len(response.json()["filters"]), 9)
         self.assertFalse("objects" in response.json())
 
     def test_query_courses_course_runs_filter_availability_facets(self, *_):
@@ -1546,6 +1582,32 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition = filter(
             lambda c: c[0] in [0, 1], data["courses_definition"]
         )
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
+        )
+
+    def test_query_courses_filter_pace(self, *_):
+        """
+        Make sure courses can be filtered by pace.
+        """
+        data = self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?pace=1h-2h")
+        self.assertEqual(response.status_code, 200)
+        courses_definition = filter(lambda c: c[0] == 1, data["courses_definition"])
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
+        )
+
+    def test_query_courses_filter_pace_self_paced(self, *_):
+        """
+        Make sure courses can be filtered to only self-paced.
+        """
+        data = self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?pace=self-paced")
+        self.assertEqual(response.status_code, 200)
+        courses_definition = filter(lambda c: c[0] == 3, data["courses_definition"])
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
             self.get_expected_courses(courses_definition, list(data["course_runs"])),

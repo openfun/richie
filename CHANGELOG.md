@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add a `DashBoard` React based view
 - Add API endpoint to search & autocomplete licences
 - Add licences-based filters on course search
+- Add a pace filter on course search
 
 ### Changed
 

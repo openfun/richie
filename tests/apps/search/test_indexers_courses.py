@@ -384,6 +384,7 @@ class CoursesIndexersTestCase(TestCase):
                 "en": ["Eugène Delacroix", "Comte de Saint-Germain"],
                 "fr": ["Eugène Delacroix", "Earl of Saint-Germain"],
             },
+            "pace": 40,
             "title": {"fr": "un titre cours français", "en": "an english course title"},
         }
         indexed_courses = list(
@@ -398,7 +399,7 @@ class CoursesIndexersTestCase(TestCase):
         """
         course = CourseFactory(
             duration=[12, WEEK],
-            effort=[5, MINUTE],
+            effort=[36, MINUTE],
             page_title="Enhanced incremental circuit",
             should_publish=True,
         )
@@ -430,7 +431,7 @@ class CoursesIndexersTestCase(TestCase):
                     "cover_image": {},
                     "description": {},
                     "duration": {"en": "12 weeks", "fr": "12 semaines"},
-                    "effort": {"en": "5 minutes", "fr": "5 minutes"},
+                    "effort": {"en": "36 minutes", "fr": "36 minutes"},
                     "icon": {},
                     "introduction": {},
                     "is_new": False,
@@ -442,6 +443,7 @@ class CoursesIndexersTestCase(TestCase):
                     "organizations_names": {},
                     "persons": [],
                     "persons_names": {},
+                    "pace": 3,
                     "title": {"en": "Enhanced incremental circuit"},
                 }
             ],

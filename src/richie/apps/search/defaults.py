@@ -150,4 +150,26 @@ FILTERS_CONFIGURATION = [
             "position": 6,
         },
     ),
+    (
+        "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
+        {
+            "fragment_map": {
+                "self-paced": [{"bool": {"must_not": {"exists": {"field": "pace"}}}}],
+                "lt-1h": [{"range": {"pace": {"lt": 60}}}],
+                "1h-2h": [{"range": {"pace": {"gte": 60, "lte": 120}}}],
+                "gt-2h": [{"range": {"pace": {"gt": 120}}}],
+            },
+            "human_name": _("Weekly pace"),
+            "min_doc_count": 0,
+            "name": "pace",
+            "position": 7,
+            "sorting": "conf",
+            "values": {
+                "self-paced": _("Self-paced"),
+                "lt-1h": _("Less than one hour"),
+                "1h-2h": _("One to two hours"),
+                "gt-2h": _("More than two hours"),
+            },
+        },
+    ),
 ]

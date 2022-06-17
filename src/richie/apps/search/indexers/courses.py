@@ -29,7 +29,7 @@ from ..defaults import ES_INDICES_PREFIX, ES_STATE_WEIGHTS
 from ..forms import CourseSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
-from ..utils.indexers import slice_string_for_completion
+from ..utils.indexers import get_course_pace, slice_string_for_completion
 
 BEST_STATE_SCRIPT = """
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
@@ -215,6 +215,7 @@ class CoursesIndexer:
                 "type": "object",
                 "enabled": False,
             },
+            "pace": {"type": "integer"},  # Expresses minutes per week
         },
     }
     display_fields = [
@@ -699,6 +700,9 @@ class CoursesIndexer:
                 ],
                 {},
             ),
+            "pace": None
+            if course.is_self_paced
+            else get_course_pace(course.effort, course.duration),
             "title": titles,
         }
 
