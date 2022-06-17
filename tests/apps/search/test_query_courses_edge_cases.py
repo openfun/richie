@@ -152,6 +152,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 "Langues",
                 "Personnes",
                 "Licences",
+                "Weekly pace",
             ],
         )
 

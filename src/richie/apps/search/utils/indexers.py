@@ -4,6 +4,8 @@ or as helpers for users of the project.
 """
 from django.utils.module_loading import import_string
 
+from ...courses.defaults import DAY, HOUR, MINUTE, MONTH, WEEK
+
 
 class IndicesList:
     """
@@ -45,3 +47,35 @@ def slice_string_for_completion(string):
     """
     parts = [part for part in string.split(" ") if part != ""]
     return [" ".join(parts[index:]) for index, _ in enumerate(parts)]
+
+
+def get_course_pace(effort=None, duration=None):
+    """
+    Generate a single number for course pace, based on the effort and duration of the course.
+    Standardize on minutes/week:
+    - per week is the reference unit that makes the most sense for a course;
+    - minutes let us make the pace field an integer field, easy to convert to hours for
+      user facing strings.
+    """
+    # Courses without a duration are self-paced and do not have a pace
+    if not effort or not duration:
+        return None
+
+    # Normalize all efforts to minutes
+    if effort[1] == MINUTE:
+        effort_in_minutes = effort[0]
+    elif effort[1] == HOUR:
+        effort_in_minutes = effort[0] * 60
+    else:
+        return None
+
+    # Normalize all paces to minutes per week
+    if duration[1] == DAY:
+        return round(effort_in_minutes / duration[0] * 7)
+    if duration[1] == WEEK:
+        return round(effort_in_minutes / duration[0])
+    if duration[1] == MONTH:
+        return round(effort_in_minutes / duration[0] / 4.345)
+    # Drop courses with reference units in minutes and hours at they make no sense
+    # to express a course pace
+    return None

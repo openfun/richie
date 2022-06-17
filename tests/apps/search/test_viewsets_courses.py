@@ -302,6 +302,17 @@ class CoursesViewsetsTestCase(CMSTestCase):
                             {"count": 3, "human_name": "Person 33", "key": "33"},
                         ],
                     },
+                    "pace": {
+                        "base_path": None,
+                        "has_more_values": False,
+                        "human_name": "Weekly pace",
+                        "is_autocompletable": False,
+                        "is_drilldown": False,
+                        "is_searchable": False,
+                        "name": "pace",
+                        "position": 7,
+                        "values": [],
+                    },
                     "subjects": {
                         "base_path": None,
                         "has_more_values": False,

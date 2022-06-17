@@ -132,6 +132,15 @@ class FilterDefinitionsViewTestCase(CMSTestCase):
                     "name": "persons",
                     "position": 5,
                 },
+                "pace": {
+                    "base_path": None,
+                    "human_name": "Weekly pace",
+                    "is_autocompletable": False,
+                    "is_drilldown": False,
+                    "is_searchable": False,
+                    "name": "pace",
+                    "position": 7,
+                },
             },
         )
 
