@@ -21,11 +21,11 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
-    "@docusaurus/core": "2.0.0-beta.20",
-    "@docusaurus/plugin-content-pages": "2.0.0-beta.20",
-    "@docusaurus/preset-classic": "2.0.0-beta.20",
+    "@docusaurus/core": "2.0.0-beta.21",
+    "@docusaurus/plugin-content-pages": "2.0.0-beta.21",
+    "@docusaurus/preset-classic": "2.0.0-beta.21",
     "clsx": "1.1.1",
-    "prettier": "2.6.2",
+    "prettier": "2.7.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-markdown": "8.0.3"
