@@ -2,8 +2,13 @@ import type { CourseCodeProviderProps } from 'data/CourseCodeProvider/index';
 import { CourseCodeProvider, useCourseCode } from 'data/CourseCodeProvider/index';
 import type { PropsWithChildren } from 'react';
 import { renderHook } from '@testing-library/react-hooks';
+import { noop } from 'utils';
 
 describe('useCourseCode', () => {
+  beforeAll(() => {
+    jest.spyOn(console, 'error').mockImplementation(noop);
+  });
+
   it('returns the course code stored within CourseCodeProvider', () => {
     const { result } = renderHook(useCourseCode, {
       wrapper: ({ code, children }: PropsWithChildren<CourseCodeProviderProps>) => (
