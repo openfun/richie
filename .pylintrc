@@ -17,8 +17,9 @@ ignore-patterns=
 # pygtk.require().
 #init-hook=
 
-# Use multiple processes to speed up Pylint.
-jobs=1
+# Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
+# number of processors available to use.
+jobs=0
 
 # List of plugins (as comma separated values of python modules names) to load,
 # usually to register additional checkers.
