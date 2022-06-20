@@ -2,6 +2,7 @@ import type { PropsWithChildren } from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import JoanieApiProvider, { useJoanieApi } from 'data/JoanieApiProvider/index';
+import { noop } from 'utils';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -13,6 +14,10 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('useJoanieApi', () => {
+  beforeAll(() => {
+    jest.spyOn(console, 'error').mockImplementation(noop);
+  });
+
   it('returns the joanie api interface', () => {
     const { result } = renderHook(useJoanieApi, {
       wrapper: ({ children }: PropsWithChildren<{}>) => (
