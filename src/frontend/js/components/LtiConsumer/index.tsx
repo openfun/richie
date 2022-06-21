@@ -90,7 +90,7 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
         name={`lti_iframe_${id}`}
         title={context.url}
         src={context.url}
-        allow="microphone *; camera *; midi *; geolocation *; encrypted-media *; fullscreen *"
+        allow="microphone *; camera *; midi *; geolocation *; encrypted-media *; fullscreen *; display-capture *; autoplay *"
         allowFullScreen
       />
     </div>
