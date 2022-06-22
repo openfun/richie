@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Migrate code and type to comply with the new Joanie API
 - On blogpost detail view, move categories list on the right side 
 - Fake authentication interface when using the `base` api interface
 - Avoid lag experienced by user on logout by not waiting for the logout request

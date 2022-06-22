@@ -80,7 +80,7 @@ export type OrderLite = Pick<
   | 'total'
   | 'enrollments'
   | 'product'
-  | 'main_invoice'
+  | 'main_proforma_invoice'
   | 'certificate'
 >;
 
@@ -123,7 +123,7 @@ export interface Order {
   course: string;
   created_on: string;
   enrollments: Enrollment[];
-  main_invoice: string;
+  main_proforma_invoice: string;
   certificate: string;
   owner: string;
   total: number;
