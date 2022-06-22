@@ -41,6 +41,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix erratic frontend test failure
 - Allow to configure multiple elasticsearch hosts
 
+### Removed
+
+- PurchasedProductMenu frontend component
 
 ##  [2.14.1] - 2022-04-07
 

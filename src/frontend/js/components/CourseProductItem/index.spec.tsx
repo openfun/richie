@@ -1,4 +1,4 @@
-import { fireEvent, getByRole, render, screen, waitFor } from '@testing-library/react';
+import { getByRole, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
@@ -152,9 +152,6 @@ describe('CourseProductItem', () => {
 
     // - Does not Render <SaleTunnel />
     expect(screen.queryByTestId('SaleTunnel')).toBeNull();
-
-    // - Render <PurchasedProductMenu />
-    screen.getByLabelText('Other actions related to this product', { selector: 'button' });
   });
 
   it('renders enrollment information when user is enrolled to a course run', () => {
@@ -195,64 +192,6 @@ describe('CourseProductItem', () => {
       screen.getByTestId(
         `EnrollableCourseRunList-${course.course_runs.map(({ id }) => id).join('-')}-${order.id}`,
       );
-    });
-  });
-
-  describe('PurchasedProductMenu', () => {
-    beforeAll(() => {
-      // eslint-disable-next-line compat/compat
-      URL.createObjectURL = jest.fn();
-      // eslint-disable-next-line compat/compat
-      URL.revokeObjectURL = jest.fn();
-      HTMLAnchorElement.prototype.click = jest.fn();
-    });
-
-    it('allows to download invoice', async () => {
-      const product: Product = ProductFactory.generate();
-      const order: OrderLite = OrderLiteFactory.generate();
-
-      render(
-        <Wrapper code="00000">
-          <CourseProductItem product={product} order={order} />
-        </Wrapper>,
-      );
-
-      // - Render <PurchasedProductMenu />
-      const $button: HTMLButtonElement = screen.getByLabelText(
-        'Other actions related to this product',
-        {
-          selector: 'button',
-        },
-      );
-      expect($button.disabled).toBe(false);
-
-      fireEvent.click($button);
-
-      const $action = screen.getByRole('button', { name: 'Download invoice' });
-
-      fetchMock.get(
-        `https://joanie.test/api/orders/${order.id}/invoice/?reference=${order.main_invoice}`,
-        200,
-      );
-
-      fireEvent.click($action);
-
-      expect($button.disabled).toBe(true);
-      screen.getByRole('status', { name: 'Invoice is being generated...' });
-
-      await waitFor(() => {
-        expect($button.disabled).toBe(false);
-      });
-      // eslint-disable-next-line compat/compat
-      expect(URL.createObjectURL).toHaveBeenCalledTimes(1);
-      // eslint-disable-next-line compat/compat
-      expect(URL.revokeObjectURL).toHaveBeenCalledTimes(0);
-
-      // - A event listener should have attached to window to know when window is blurred.
-      // This event is triggered in browser when the download pop up is displayed.
-      fireEvent.blur(window);
-      // eslint-disable-next-line compat/compat
-      expect(URL.revokeObjectURL).toHaveBeenCalledTimes(1);
     });
   });
 });

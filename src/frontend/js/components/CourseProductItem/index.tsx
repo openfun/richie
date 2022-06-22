@@ -9,7 +9,6 @@ import {
 import SaleTunnel from 'components/SaleTunnel';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
-import PurchasedProductMenu from './PurchasedProductMenu';
 
 const messages = defineMessages({
   enrolled: {
@@ -63,7 +62,6 @@ const CourseProductItem = ({ product, order }: Props) => {
             />
           )}
         </h6>
-        {isOwned && <PurchasedProductMenu order={order} />}
       </header>
       <ol className="product-widget__content">
         {Children.toArray(
