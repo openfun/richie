@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-01 15:01+0000\n"
-"PO-Revision-Date: 2022-04-04 07:53\n"
+"POT-Creation-Date: 2022-06-22 13:21+0000\n"
+"PO-Revision-Date: 2022-06-22 16:25\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -105,30 +105,39 @@ msgstr "Вы находитесь здесь:"
 msgid "Skip to main content"
 msgstr "Перейти к основному содержимому"
 
-#: apps/core/templates/richie/base.html:90
+#: apps/core/templates/richie/base.html:89
 msgid "Go to homepage"
 msgstr "Вернуться на главную страницу"
+
+#: apps/core/templates/richie/base.html:98
+msgid "Menu"
+msgstr "Меню"
 
 #: apps/core/templates/richie/base.html:115
 msgid "Contact us"
 msgstr "Свяжитесь с нами"
 
-#: apps/core/templates/richie/base.html:147
+#: apps/core/templates/richie/base.html:162
+msgid "Life-changing learning!"
+msgstr "Обучение, меняющее жизнь!"
+
+#: apps/core/templates/richie/base.html:170
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr "Узнать больше"
 
-#: apps/core/templates/richie/base.html:161
-msgid "Life-changing learning!"
-msgstr "Обучение, меняющее жизнь!"
-
-#: apps/core/templates/richie/base.html:175
+#: apps/core/templates/richie/base.html:182
 msgid "Powered by"
 msgstr "Работает на"
 
 #: apps/core/templates/richie/child_pages_list.html:21
 msgid "This page has no child objects"
 msgstr "У этой страницы нет дочерних объектов"
+
+#: apps/core/templates/richie/dashboard.html:5
+#: apps/core/templates/richie/dashboard.html:9
+msgid "dashboard"
+msgstr "панель управления"
 
 #: apps/core/templates/richie/error.html:17
 msgid "Back to home"
@@ -229,7 +238,7 @@ msgstr "Страничка Twitter"
 #: apps/core/templates/social-networks/footer-badges.html:27
 #: apps/core/templates/social-networks/footer-badges.html:28
 msgid "Linkedin page"
-msgstr ""
+msgstr "Linkedin"
 
 #: apps/core/views/error.py:7
 msgid "Bad request"
@@ -321,7 +330,7 @@ msgstr "Снимок этой страницы..."
 
 #: apps/courses/cms_toolbars.py:109
 msgid "This will place a copy of this page as its child and move all its courseruns as children of its new copy."
-msgstr "Это поместит копию этой страницы в качестве ее дочерней и переместит все ее courseruns в качестве дочерних для ее новой копии."
+msgstr "Это поместит копию этой страницы в качестве ее дочерней и переместит все её этапы курса в качестве дочерних для ее новой копии."
 
 #: apps/courses/cms_wizards.py:56
 msgid "New page"
@@ -729,7 +738,7 @@ msgstr "запуск курса"
 
 #: apps/courses/models/course.py:736
 msgid "course runs"
-msgstr "запуски курса"
+msgstr "этапы курса"
 
 #: apps/courses/models/course.py:921
 msgid "title"
@@ -1009,13 +1018,13 @@ msgstr "Третье содержимое"
 
 #: apps/courses/settings/__init__.py:169 apps/courses/settings/__init__.py:332
 #: apps/courses/settings/__init__.py:352
-#: apps/courses/templates/courses/cms/blogpost_detail.html:108
+#: apps/courses/templates/courses/cms/blogpost_detail.html:95
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:10
-#: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:41
-#: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:76
+#: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:42
+#: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:86
 #: apps/courses/templates/courses/cms/fragment_course_glimpse.html:10
 #: apps/courses/templates/courses/cms/fragment_program_glimpse.html:9
-#: apps/courses/templates/courses/cms/program_detail.html:40
+#: apps/courses/templates/courses/cms/program_detail.html:45
 msgid "Cover"
 msgstr "Обложка"
 
@@ -1069,6 +1078,11 @@ msgstr "Лицензия на контент, созданный участни�
 
 #: apps/courses/settings/__init__.py:232 apps/courses/settings/__init__.py:260
 #: apps/courses/settings/__init__.py:296 apps/courses/settings/__init__.py:328
+#: apps/courses/templates/courses/cms/blogpost_detail.html:51
+#: apps/courses/templates/courses/cms/blogpost_list.html:16
+#: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:67
+#: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:116
+#: apps/courses/templates/courses/cms/fragment_person_glimpse.html:43
 msgid "Categories"
 msgstr "Категории"
 
@@ -1079,7 +1093,7 @@ msgstr "Иконка"
 #: apps/courses/settings/__init__.py:241 apps/courses/settings/__init__.py:318
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:27
 #: apps/courses/templates/courses/cms/person_detail.html:112
-#: apps/search/defaults.py:115
+#: apps/search/defaults.py:117
 msgid "Organizations"
 msgstr "Организации"
 
@@ -1088,12 +1102,12 @@ msgid "Assessment and Certification"
 msgstr "Оценка и сертификация"
 
 #: apps/courses/settings/__init__.py:250 apps/courses/settings/__init__.py:275
-#: apps/courses/templates/courses/cms/category_detail.html:35
+#: apps/courses/templates/courses/cms/category_detail.html:40
 msgid "Banner"
 msgstr "Баннер"
 
 #: apps/courses/settings/__init__.py:255 apps/courses/settings/__init__.py:280
-#: apps/courses/templates/courses/cms/category_detail.html:53
+#: apps/courses/templates/courses/cms/category_detail.html:60
 #: apps/courses/templates/courses/cms/fragment_category_glimpse.html:41
 msgid "Logo"
 msgstr "Лого"
@@ -1145,65 +1159,62 @@ msgstr "Кнопка цезура"
 msgid "Full width"
 msgstr "Во всю ширину"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:62
+#: apps/courses/templates/courses/cms/blogpost_detail.html:53
 msgid "No categories yet."
 msgstr "Еще нет категорий."
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:74
+#: apps/courses/templates/courses/cms/blogpost_detail.html:65
 msgid "Not published yet"
 msgstr "Ещё не опубликовано"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:84
+#: apps/courses/templates/courses/cms/blogpost_detail.html:75
 msgid "No author yet"
 msgstr "Пока нет автора"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:128
-msgid "blog post cover image"
-msgstr "обложка записи в блоге"
-
-#: apps/courses/templates/courses/cms/blogpost_detail.html:138
+#: apps/courses/templates/courses/cms/blogpost_detail.html:127
 #: apps/courses/templates/courses/cms/organization_detail.html:102
-#: apps/courses/templates/courses/cms/program_detail.html:60
+#: apps/courses/templates/courses/cms/program_detail.html:65
 msgid "No excerpt content"
 msgstr "Контент без выдержки"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:148
-#: apps/courses/templates/courses/cms/program_detail.html:68
+#: apps/courses/templates/courses/cms/blogpost_detail.html:137
+#: apps/courses/templates/courses/cms/program_detail.html:73
 msgid "No body content"
 msgstr "Контент без тела"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:167
+#: apps/courses/templates/courses/cms/blogpost_detail.html:156
 msgid "Related posts"
 msgstr "Похожие записи"
 
-#: apps/courses/templates/courses/cms/blogpost_list.html:36
+#: apps/courses/templates/courses/cms/blogpost_detail.html:165
+msgid "Other categories of articles"
+msgstr "Другие категории статей"
+
+#: apps/courses/templates/courses/cms/blogpost_list.html:37
 msgid "No associated blogposts"
 msgstr "Нет связанных блогов"
 
-#: apps/courses/templates/courses/cms/category_detail.html:46
-msgid "category banner"
-msgstr "баннер категории"
+#: apps/courses/templates/courses/cms/category_detail.html:6
+#, python-format
+msgid "%(category_title)s - Category"
+msgstr "%(category_title)s - Категория"
 
-#: apps/courses/templates/courses/cms/category_detail.html:64
-msgid "category logo"
-msgstr "лого категории"
-
-#: apps/courses/templates/courses/cms/category_detail.html:102
+#: apps/courses/templates/courses/cms/category_detail.html:111
 msgid "Sub categories"
 msgstr "Подкатегории"
 
-#: apps/courses/templates/courses/cms/category_detail.html:118
+#: apps/courses/templates/courses/cms/category_detail.html:127
 #: apps/courses/templates/courses/cms/organization_detail.html:120
-#: apps/courses/templates/courses/cms/program_detail.html:78
+#: apps/courses/templates/courses/cms/program_detail.html:83
 msgid "Related courses"
 msgstr "Связанные курсы"
 
-#: apps/courses/templates/courses/cms/category_detail.html:123
+#: apps/courses/templates/courses/cms/category_detail.html:132
 #: apps/courses/templates/courses/cms/person_detail.html:134
 msgid "Courses pagination"
 msgstr "Пагинация курсов"
 
-#: apps/courses/templates/courses/cms/category_detail.html:127
+#: apps/courses/templates/courses/cms/category_detail.html:136
 #, python-format
 msgid "\n"
 "                                        See all courses related to %(category_title)s\n"
@@ -1212,32 +1223,32 @@ msgstr "\n"
 "                                        Смотрите все курсы, относящиеся к %(category_title)s\n"
 "                                    "
 
-#: apps/courses/templates/courses/cms/category_detail.html:133
+#: apps/courses/templates/courses/cms/category_detail.html:142
 msgid "See all courses"
 msgstr "Посмотреть все курсы"
 
-#: apps/courses/templates/courses/cms/category_detail.html:150
+#: apps/courses/templates/courses/cms/category_detail.html:159
 msgid "Related organizations"
 msgstr "Связанные организации"
 
-#: apps/courses/templates/courses/cms/category_detail.html:155
+#: apps/courses/templates/courses/cms/category_detail.html:164
 msgid "Related organizations pagination"
 msgstr "Пагинация связанных курсов"
 
-#: apps/courses/templates/courses/cms/category_detail.html:169
+#: apps/courses/templates/courses/cms/category_detail.html:178
 msgid "Related blogposts"
 msgstr "Похожие блоги"
 
-#: apps/courses/templates/courses/cms/category_detail.html:174
+#: apps/courses/templates/courses/cms/category_detail.html:183
 msgid "Related blogposts pagination"
 msgstr "Пагинация связанных блогов"
 
-#: apps/courses/templates/courses/cms/category_detail.html:188
+#: apps/courses/templates/courses/cms/category_detail.html:197
 #: apps/courses/templates/courses/cms/organization_detail.html:146
 msgid "Related persons"
 msgstr "Связанные люди"
 
-#: apps/courses/templates/courses/cms/category_detail.html:193
+#: apps/courses/templates/courses/cms/category_detail.html:202
 #: apps/courses/templates/courses/cms/organization_detail.html:153
 msgid "Related persons pagination"
 msgstr "Пагинация связанных персон"
@@ -1249,7 +1260,7 @@ msgstr "Нет категорий"
 #: apps/courses/templates/courses/cms/course_detail.html:6
 #, python-format
 msgid "%(course_title)s - Course"
-msgstr ""
+msgstr "%(course_title)s - Курс"
 
 #: apps/courses/templates/courses/cms/course_detail.html:59
 msgid "Ref. "
@@ -1297,15 +1308,15 @@ msgstr "обложка курса"
 
 #: apps/courses/templates/courses/cms/course_detail.html:182
 msgid "No open course runs"
-msgstr "Нет запущенных курсов"
+msgstr "Нет запущенных этапов курса"
 
 #: apps/courses/templates/courses/cms/course_detail.html:192
 msgid "course runs are currently open for this course"
-msgstr ""
+msgstr "этапы курса открытые в настоящее время для этого курса"
 
 #: apps/courses/templates/courses/cms/course_detail.html:196
 msgid "Choose now"
-msgstr ""
+msgstr "Выберите сейчас"
 
 #: apps/courses/templates/courses/cms/course_detail.html:227
 #, python-format
@@ -1381,20 +1392,20 @@ msgstr "Введите подробный план курса."
 #: apps/courses/templates/courses/cms/course_detail.html:349
 msgctxt "course_detail__title"
 msgid "Other course runs"
-msgstr ""
+msgstr "Другие этапы курса"
 
 #: apps/courses/templates/courses/cms/course_detail.html:351
 msgctxt "course_detail__title"
 msgid "Course runs"
-msgstr "Запуски курса"
+msgstr "Этапы курса"
 
 #: apps/courses/templates/courses/cms/course_detail.html:361
 msgid "No course runs"
-msgstr ""
+msgstr "Нет этапов курса"
 
 #: apps/courses/templates/courses/cms/course_detail.html:363
 msgid "No other course runs"
-msgstr ""
+msgstr "Нет других этапов курса"
 
 #: apps/courses/templates/courses/cms/course_detail.html:387
 msgctxt "Course runs to be scheduled (plural)"
@@ -1414,7 +1425,7 @@ msgstr "Текущий"
 #: apps/courses/templates/courses/cms/course_detail.html:426
 msgctxt "Archived course runs (plural)"
 msgid "Archived"
-msgstr "В архиве"
+msgstr "Архивировано"
 
 #: apps/courses/templates/courses/cms/course_detail.html:451
 msgid "\n"
@@ -1474,12 +1485,12 @@ msgstr "Какова лицензия на контент, созданный у
 #: apps/courses/templates/courses/cms/fragment_course_glimpse.html:63
 #: apps/courses/templates/courses/cms/fragment_course_glimpse.html:64
 msgid "Course code"
-msgstr ""
+msgstr "Код курса"
 
 #: apps/courses/templates/courses/cms/fragment_course_glimpse.html:83
 #: apps/courses/templates/courses/cms/fragment_course_glimpse.html:84
 msgid "Course date"
-msgstr ""
+msgstr "Дата курса"
 
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:8
 msgid "Course team"
@@ -1504,7 +1515,7 @@ msgid "From %(start)s to %(end)s"
 msgstr "С %(start)s по %(end)s"
 
 #: apps/courses/templates/courses/cms/fragment_course_run.html:21
-#: apps/search/defaults.py:75
+#: apps/search/defaults.py:77
 msgid "Languages"
 msgstr "Языки"
 
@@ -1549,14 +1560,6 @@ msgstr "\n"
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:40
 msgid "Main organization"
 msgstr "Основная организация"
-
-#: apps/courses/templates/courses/cms/organization_detail.html:54
-msgid "organization banner"
-msgstr "баннер организации"
-
-#: apps/courses/templates/courses/cms/organization_detail.html:75
-msgid "organization logo"
-msgstr "лого организации"
 
 #: apps/courses/templates/courses/cms/organization_detail.html:125
 msgid "Related courses pagination"
@@ -1609,7 +1612,12 @@ msgstr "Пагинация блогов"
 msgid "No persons"
 msgstr "Нет людей"
 
-#: apps/courses/templates/courses/cms/program_detail.html:51
+#: apps/courses/templates/courses/cms/program_detail.html:6
+#, python-format
+msgid "%(program_title)s - Program"
+msgstr "%(program_title)s - Программа"
+
+#: apps/courses/templates/courses/cms/program_detail.html:56
 msgid "program cover image"
 msgstr "обложка программы"
 
@@ -1632,29 +1640,53 @@ msgstr "Запустить {i:d}"
 msgid "Regenerate search index..."
 msgstr "Пересоздать индекс поиска..."
 
-#: apps/search/defaults.py:48
+#: apps/search/defaults.py:50
 msgid "New courses"
 msgstr "Новые курсы"
 
-#: apps/search/defaults.py:53
+#: apps/search/defaults.py:55
 msgid "First session"
 msgstr "Первая сессия"
 
-#: apps/search/defaults.py:64
+#: apps/search/defaults.py:66
 msgid "Availability"
 msgstr "Доступность"
 
-#: apps/search/defaults.py:89
+#: apps/search/defaults.py:91
 msgid "Subjects"
 msgstr "Темы"
 
-#: apps/search/defaults.py:102
+#: apps/search/defaults.py:104
 msgid "Levels"
 msgstr "Уровни"
 
-#: apps/search/defaults.py:127
+#: apps/search/defaults.py:131
 msgid "Persons"
 msgstr "Люди"
+
+#: apps/search/defaults.py:145
+msgid "Licences"
+msgstr ""
+
+#: apps/search/defaults.py:162
+msgid "Weekly pace"
+msgstr ""
+
+#: apps/search/defaults.py:168
+msgid "Self-paced"
+msgstr ""
+
+#: apps/search/defaults.py:169
+msgid "Less than one hour"
+msgstr ""
+
+#: apps/search/defaults.py:170
+msgid "One to two hours"
+msgstr ""
+
+#: apps/search/defaults.py:171
+msgid "More than two hours"
+msgstr ""
 
 #: apps/search/filter_definitions/courses.py:473
 msgid "Open for enrollment"

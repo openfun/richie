@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+##  [2.15.0] - 2022-06-22
+
 ### Added
 
 - Get a unique LTI Context per user
@@ -1658,7 +1660,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.14.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.15.0...master
+[2.15.0]: https://github.com/openfun/richie/compare/v2.14.1...v2.15.0
 [2.14.1]: https://github.com/openfun/richie/compare/v2.14.0...v2.14.1
 [2.14.0]: https://github.com/openfun/richie/compare/v2.13.0...v2.14.0
 [2.13.0]: https://github.com/openfun/richie/compare/v2.12.0...v2.13.0
