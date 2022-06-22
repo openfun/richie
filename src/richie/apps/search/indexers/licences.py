@@ -49,7 +49,7 @@ class LicencesIndexer:
         translations = licence.translations.all()
 
         titles = {
-            translation.language_code: translation.name for translation in translations
+            translation.language_code: translation.short_name for translation in translations
         }
 
         return {
@@ -60,8 +60,9 @@ class LicencesIndexer:
                 language_code: slice_string_for_completion(name)
                 for language_code, name in titles.items()
             },
+            # Allow searching in the long name and in the content
             "content": {
-                translation.language_code: translation.content
+                translation.language_code: f"{translation.name:s}\n{translation.content:s}"
                 for translation in translations
             },
             "title": titles,

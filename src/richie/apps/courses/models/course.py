@@ -1006,6 +1006,7 @@ class Licence(TranslatableModel):
     """
 
     name = TranslatedField()
+    short_name = TranslatedField()
     content = TranslatedField()
     logo = FilerImageField(
         verbose_name=_("logo"), on_delete=models.PROTECT, related_name="licence"
@@ -1026,7 +1027,8 @@ class Licence(TranslatableModel):
     def __str__(self):
         """Human representation of a licence."""
         model = self._meta.verbose_name.title()
-        return f"{model:s}: {self.name:s}"
+        name = self.short_name or self.name
+        return f"{model:s}: {name:s}"
 
 
 class LicenceTranslation(TranslatedFieldsModel):
@@ -1038,6 +1040,7 @@ class LicenceTranslation(TranslatedFieldsModel):
 
     master = models.ForeignKey(Licence, models.CASCADE, related_name="translations")
     name = models.CharField(_("name"), max_length=200)
+    short_name = models.CharField(_("short name"), max_length=100, null=True, blank=True)
     content = models.TextField(_("content"), blank=False, default="")
 
     class Meta:
@@ -1049,7 +1052,8 @@ class LicenceTranslation(TranslatedFieldsModel):
     def __str__(self):
         """Human representation of a licence translation."""
         model = self._meta.verbose_name.title()
-        return f"{model:s}: {self.name:s}"
+        name = self.short_name or self.name
+        return f"{model:s}: {name:s}"
 
 
 class LicencePluginModel(CMSPlugin):
