@@ -73,7 +73,7 @@ test-back:
         DB_USER: richie_user
         DB_PASSWORD: pass
         DB_PORT: 5432
-    - image: circleci/postgres:9.6-alpine-ram
+    - image: cimg/postgres:9.6
       environment:
         POSTGRES_DB: richie
         POSTGRES_USER: richie_user
