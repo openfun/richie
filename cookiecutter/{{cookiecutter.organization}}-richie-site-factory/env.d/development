@@ -7,7 +7,6 @@ DJANGO_ALLOWED_HOSTS=*
 
 # Elastic search
 RICHIE_ES_HOST=elasticsearch
-discovery.type=single-node
 
 # PostgreSQL db container configuration
 POSTGRES_DB=richie
