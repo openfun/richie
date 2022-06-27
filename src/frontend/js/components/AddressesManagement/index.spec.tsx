@@ -104,20 +104,20 @@ describe('validationSchema', () => {
     });
 
     let { formState } = result.current;
-    expect(formState.errors.address.type).toEqual('required');
-    expect(formState.errors.address.message).toEqual('address is a required field');
-    expect(formState.errors.city.type).toEqual('required');
-    expect(formState.errors.city.message).toEqual('city is a required field');
-    expect(formState.errors.country.type).toEqual('required');
-    expect(formState.errors.country.message).toEqual('country is a required field');
-    expect(formState.errors.first_name.type).toEqual('required');
-    expect(formState.errors.first_name.message).toEqual('first_name is a required field');
-    expect(formState.errors.last_name.type).toEqual('required');
-    expect(formState.errors.last_name.message).toEqual('last_name is a required field');
-    expect(formState.errors.postcode.type).toEqual('required');
-    expect(formState.errors.postcode.message).toEqual('postcode is a required field');
-    expect(formState.errors.title.type).toEqual('required');
-    expect(formState.errors.title.message).toEqual('title is a required field');
+    expect(formState.errors.address?.type).toEqual('required');
+    expect(formState.errors.address?.message).toEqual('address is a required field');
+    expect(formState.errors.city?.type).toEqual('required');
+    expect(formState.errors.city?.message).toEqual('city is a required field');
+    expect(formState.errors.country?.type).toEqual('required');
+    expect(formState.errors.country?.message).toEqual('country is a required field');
+    expect(formState.errors.first_name?.type).toEqual('required');
+    expect(formState.errors.first_name?.message).toEqual('first_name is a required field');
+    expect(formState.errors.last_name?.type).toEqual('required');
+    expect(formState.errors.last_name?.message).toEqual('last_name is a required field');
+    expect(formState.errors.postcode?.type).toEqual('required');
+    expect(formState.errors.postcode?.message).toEqual('postcode is a required field');
+    expect(formState.errors.title?.type).toEqual('required');
+    expect(formState.errors.title?.message).toEqual('title is a required field');
     expect(formState.errors.save).not.toBeDefined();
     expect(formState.isValid).toBe(false);
 
@@ -137,8 +137,8 @@ describe('validationSchema', () => {
     formState = result.current.formState;
     expect(formState.errors.address).not.toBeDefined();
     expect(formState.errors.city).not.toBeDefined();
-    expect(formState.errors.country.type).toEqual('oneOf');
-    expect(formState.errors.country.message).toContain(
+    expect(formState.errors.country?.type).toEqual('oneOf');
+    expect(formState.errors.country?.message).toContain(
       'country must be one of the following values:',
     );
     expect(formState.errors.first_name).not.toBeDefined();
