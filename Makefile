@@ -81,6 +81,9 @@ default: help
 # -- Project
 bootstrap: ## install development dependencies
 bootstrap: \
+  env.d/development/common \
+  env.d/development/dev \
+  env.d/development/dev-ssl \
   env.d/development/crowdin \
   data/media/.keep \
   data/smedia/.keep \
@@ -314,6 +317,15 @@ i18n-generate-front: build-ts
 clean: ## restore repository state as it was freshly cloned
 	git clean -idx
 .PHONY: clean
+
+env.d/development/common:
+	cp env.d/development/common.dist env.d/development/common
+
+env.d/development/dev:
+	cp env.d/development/dev.dist env.d/development/dev
+
+env.d/development/dev-ssl:
+	cp env.d/development/dev-ssl.dist env.d/development/dev-ssl
 
 env.d/development/crowdin:
 	cp env.d/development/crowdin.dist env.d/development/crowdin
