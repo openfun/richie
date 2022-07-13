@@ -1,6 +1,6 @@
 # env
 .env
-env.d/development/crowdin
+env.d/development/
 
 # virtualenv
 .venv
