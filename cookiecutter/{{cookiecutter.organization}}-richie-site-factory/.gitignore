@@ -4,6 +4,7 @@
 # env
 .env
 env.d/aws
+env.d/development
 
 # virtualenv
 .venv
