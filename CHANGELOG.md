@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Import the missing stylesheet of AddressesManagement component
+
 ##  [2.15.0] - 2022-06-22
 
 ### Added
