@@ -542,6 +542,11 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "google_analytics", environ_name="WEB_ANALYTICS_PROVIDER", environ_prefix=None
     )
 
+    # Performance configuration, preconnect to the media CDN
+    MEDIA_HOSTNAME_PRECONNECT = values.BooleanValue(
+        False, environ_name="MEDIA_HOSTNAME_PRECONNECT", environ_prefix=None
+    )
+
     # Minimum enrollment count value that would be shown on course detail page
     RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT = values.Value(
         5000,

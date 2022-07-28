@@ -3,6 +3,7 @@ Template context processors
 """
 import json
 from collections import OrderedDict
+from urllib.parse import urlparse
 
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -67,6 +68,15 @@ def site_metas(request: HttpRequest):
     else:
         # Eg. https://my-cdn-user.cdn-provider.com/media/
         context["MEDIA_URL_PREFIX"] = ""
+
+    # Performance configurations
+    if urlparse(storage_url).hostname:
+        # Use dns-prefetch when using external media host, like a CDN.
+        context["MEDIA_URL_IS_EXTERNAL"] = True
+        # Optionally preconnect to the CDN
+        context["MEDIA_HOSTNAME_PRECONNECT"] = getattr(
+            settings, "MEDIA_HOSTNAME_PRECONNECT", False
+        )
 
     authentication_delegation = getattr(
         settings, "RICHIE_AUTHENTICATION_DELEGATION", None
