@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Display error messages in `AddressForm`
+- Add dns prefetch and optionally preconnect to media cdn
 
 ### Changed
 

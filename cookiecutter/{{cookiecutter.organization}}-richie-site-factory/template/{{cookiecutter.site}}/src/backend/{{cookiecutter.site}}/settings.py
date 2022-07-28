@@ -718,6 +718,11 @@ class Production(Base):
     # CDN domain for static/media urls. It is passed to the frontend to load built chunks
     CDN_DOMAIN = values.Value()
 
+    # Performance configuration, preconnect to the media CDN
+    MEDIA_HOSTNAME_PRECONNECT = values.BooleanValue(
+        False, environ_name="MEDIA_HOSTNAME_PRECONNECT", environ_prefix=None
+    )
+
     @property
     def TEXT_CKEDITOR_BASE_PATH(self):
         """Configure CKEditor with an absolute url as base path to point to CloudFront."""

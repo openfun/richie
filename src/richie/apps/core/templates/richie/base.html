@@ -52,6 +52,12 @@
             {% endblock meta_rdfa %}
 
         {% endblock meta %}
+        {% if MEDIA_URL_IS_EXTERNAL %}
+            {% if MEDIA_HOSTNAME_PRECONNECT %}
+                <link rel="preconnect" href="{{ MEDIA_URL }}" crossorigin>
+            {% endif %}
+            <link rel="dns-prefetch" href="{{ MEDIA_URL }}">
+        {% endif %}
         {% endspaceless %}
 
         {% if not WEB_ANALYTICS_LOCATION or WEB_ANALYTICS_LOCATION == "head" %}
