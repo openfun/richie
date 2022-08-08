@@ -15,10 +15,22 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
   return {
     user: {
       me: async () => ({
-        // Simulate user is authenticated as `admin` with a valid access_token to request Joanie API.
+        /* Simulate user is authenticated as `admin` with a valid access_token to request Joanie API.
+           JWT Token claim is:
+            {
+              "email": "admin@example.com",
+              "exp": 10652256808,
+              "full_name": "John Doe",
+              "iat": 1652256808,
+              "jti": "21dc9fb916cc4f65b54798f62fec4554",
+              "language": "en"
+              "token_type": "access",
+              "username": "admin",
+            }
+        */
         username: 'admin',
         access_token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJhZG1pbiIsImp0aSI6IjIxZGM5ZmI5MTZjYzRmNjViNTQ3OThmNjJmZWM0NTU0IiwiZnVsbF9uYW1lIjoiSm9obiBEb2UiLCJleHAiOjEwNjUyMjU2ODA4LCJpYXQiOjE2NTIyNTY4MDgsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20ifQ.jx7dfy12ckgJ3fFYSXxlfS1J7-g8pbSEVVYZGt9oIGQ',
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJhZG1pbiIsImp0aSI6IjIxZGM5ZmI5MTZjYzRmNjViNTQ3OThmNjJmZWM0NTU0IiwiZnVsbF9uYW1lIjoiSm9obiBEb2UiLCJleHAiOjEwNjUyMjU2ODA4LCJpYXQiOjE2NTIyNTY4MDgsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJsYW5ndWFnZSI6ImVuIn0.2bjiuPOdU3X2RkKIJ7_a9S8UnVoSfZrSlktsp7jXFzY',
       }),
       login: () => location.reload(),
       register: () => location.reload(),
