@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Upgrade to Django CMS 3.11
+
 ### Fixed
 
 - Import the missing stylesheet of AddressesManagement component
