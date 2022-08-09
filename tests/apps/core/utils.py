@@ -2,6 +2,7 @@
 import random
 from functools import reduce
 
+from django.http import HttpResponse
 from django.test.client import RequestFactory
 
 from cms.middleware.toolbar import ToolbarMiddleware
@@ -77,8 +78,8 @@ class CheckToolbarMixin:
         request.current_page = page
         request.session = {}
 
-        middleware = ToolbarMiddleware()
-        middleware.process_request(request)
+        middleware = ToolbarMiddleware(get_response=lambda req: HttpResponse())
+        middleware(request)
 
         # pylint: disable=no-member
         request.toolbar.get_left_items()
