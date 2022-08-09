@@ -317,17 +317,23 @@
             <form class="mb-5">
                 <div class="form-group">
                     <p class="form-field">
-                        <input class="form-field__input" id="field_1" placeholder="field_1" type="text" required="" />
-                        <label class="form-field__label" for="field_1">Field 1</label>
+                        <span class="form-field__box">
+                          <input class="form-field__input" id="field_1" placeholder="field_1" type="text" required="" />
+                          <label class="form-field__label" for="field_1">Field 1</label>
+                        </span>
                     </p>
                     <p class="form-field">
-                        <input class="form-field__input" id="field_2" placeholder="field_2" type="text" />
-                        <label class="form-field__label" for="field_2">Field 2</label>
+                        <span class="form-field__box">
+                          <input class="form-field__input" id="field_2" placeholder="field_2" type="text" />
+                          <label class="form-field__label" for="field_2">Field 2</label>
+                        </span>
                     </p>
                 </div>
                 <p class="form-field">
-                    <input class="form-field__input" id="field_3" placeholder="field_3" type="date" required />
-                    <label class="form-field__label" for="field_3">Field 3</label>
+                    <span class="form-field__box">
+                      <input class="form-field__input" id="field_3" placeholder="field_3" type="date" required />
+                      <label class="form-field__label" for="field_3">Field 3</label>
+                    </span>
                     <span class="form-field__message">
                         <svg class="form-field__message__icon">
                             <use href="#icon-info-rounded" />
@@ -336,45 +342,55 @@
                     </span>
                 </p>
                 <p class="form-field">
-                    <input class="form-field__radio-input" id="field_4-1" type="radio" name="field_4" />
-                    <label class="form-field__label" for="field_4-1">
-                        <span class="form-field__radio-control"></span>
-                        Field 4 - Option 1
-                    </label>
-                </p>
-                <p class="form-field">
-                    <input class="form-field__radio-input" id="field_4-2" type="radio" name="field_4" />
-                    <label class="form-field__label" for="field_4-2">
-                        <span class="form-field__radio-control" ></span>
-                        Field 4 - Option 2
-                    </label>
-                </p>
-                <p class="form-field">
-                    <textarea class="form-field__textarea" id="field_5" placeholder="Field 5" rows="10"></textarea>
-                    <label class="form-field__label" for="field_5">Field 5</label>
-                </p>
-                <p class="form-field">
-                    <label class="form-field__label" for="field_6">Field 6</label>
-                    <span class="form-field__select-container">
-                        <select class="form-field__select-input" id="field_6">
-                            <option disabled value="-">-</option>
-                            <option value="">Option 1</option>
-                            <option value="">Option 2</option>
-                            <option value="">Option 3</option>
-                        </select>
-                        <span class="form-field__select-arrow"></span>
+                    <span class="form-field__box">
+                      <input class="form-field__radio-input" id="field_4-1" type="radio" name="field_4" />
+                      <label class="form-field__label" for="field_4-1">
+                          <span class="form-field__radio-control"></span>
+                          Field 4 - Option 1
+                      </label>
                     </span>
                 </p>
                 <p class="form-field">
-                    <input class="form-field__checkbox-input" id="field_7" type="checkbox" />
-                    <label class="form-field__label" for="field_7">
-                        <span class="form-field__checkbox-control">
-                            <svg role="img">
-                                <use href="#icon-check"></use>
-                            </svg>
-                        </span>
-                        Field 7 (Checkbox)
-                    </label>
+                    <span class="form-field__box">
+                      <input class="form-field__radio-input" id="field_4-2" type="radio" name="field_4" />
+                      <label class="form-field__label" for="field_4-2">
+                          <span class="form-field__radio-control" ></span>
+                          Field 4 - Option 2
+                      </label>
+                    </span>
+                </p>
+                <p class="form-field">
+                    <span class="form-field__box">
+                      <textarea class="form-field__textarea" id="field_5" placeholder="Field 5" rows="10"></textarea>
+                      <label class="form-field__label" for="field_5">Field 5</label>
+                    </span>
+                </p>
+                <p class="form-field">
+                    <span class="form-field__box">
+                      <label class="form-field__label" for="field_6">Field 6</label>
+                      <span class="form-field__select-container">
+                          <select class="form-field__select-input" id="field_6">
+                              <option disabled value="-">-</option>
+                              <option value="">Option 1</option>
+                              <option value="">Option 2</option>
+                              <option value="">Option 3</option>
+                          </select>
+                          <span class="form-field__select-arrow"></span>
+                      </span>
+                    </span>
+                </p>
+                <p class="form-field">
+                    <span class="form-field__box">
+                      <input class="form-field__checkbox-input" id="field_7" type="checkbox" />
+                      <label class="form-field__label" for="field_7">
+                          <span class="form-field__checkbox-control">
+                              <svg role="img">
+                                  <use href="#icon-check"></use>
+                              </svg>
+                          </span>
+                          Field 7 (Checkbox)
+                      </label>
+                    </span>
                 </p>
             </form>
             <hr />
@@ -382,8 +398,10 @@
             <form>
                 <div class="form-group">
                     <p class="form-field form-field--error">
-                        <input class="form-field__input" id="error_field_1" placeholder="error_field_1" type="text" required="" />
-                        <label class="form-field__label" for="error_field_1">Field 1</label>
+                        <span class="form-field__box">
+                          <input class="form-field__input" id="error_field_1" placeholder="error_field_1" type="text" required="" />
+                          <label class="form-field__label" for="error_field_1">Field 1</label>
+                        </span>
                         <span class="form-field__message">
                             <svg class="form-field__message__icon">
                             <use href="#icon-warning" /></svg>
@@ -391,13 +409,17 @@
                         </span>
                     </p>
                     <p class="form-field form-field--error">
-                        <input class="form-field__input" id="error_field_2" placeholder="error_field_2" type="text" />
-                        <label class="form-field__label" for="error_field_2">Field 2</label>
+                        <span class="form-field__box">
+                          <input class="form-field__input" id="error_field_2" placeholder="error_field_2" type="text" />
+                          <label class="form-field__label" for="error_field_2">Field 2</label>
+                        </span>
                     </p>
                 </div>
                 <p class="form-field form-field--error">
-                    <input class="form-field__input" id="error_field_3" placeholder="error_field_3" type="date" />
-                    <label class="form-field__label" for="error_field_3">Field 3</label>
+                    <span class="form-field__box">
+                      <input class="form-field__input" id="error_field_3" placeholder="error_field_3" type="date" />
+                      <label class="form-field__label" for="error_field_3">Field 3</label>
+                    </span>
                     <span class="form-field__message">
                         <svg class="form-field__message__icon">
                             <use href="#icon-warning" />
@@ -406,51 +428,27 @@
                     </span>
                 </p>
                 <p class="form-field form-field--error">
-                    <input class="form-field__radio-input" id="error_field_4-1" type="radio" name="error_field_4" />
-                    <label class="form-field__label" for="error_field_4-1">
-                        <span class="form-field__radio-control"></span>
-                        Field 4 - Option 1
+                    <span class="form-field__box">
+                      <input class="form-field__radio-input" id="error_field_4-1" type="radio" name="error_field_4" />
+                      <label class="form-field__label" for="error_field_4-1">
+                          <span class="form-field__radio-control"></span>
+                          Field 4 - Option 1
+                      </label>
+                    </span>
+                    <span class="form-field__message">
+                        <svg class="form-field__message__icon">
+                            <use href="#icon-warning" />
+                        </svg>
+                        There is an error.
+                    </span>
+                </p>
+                <p class="form-field form-field--error">
+                    <span class="form-field__box">
+                      <input class="form-field__radio-input" id="error_field_4-2" type="radio" name="error_field_4" />
+                      <label class="form-field__label" for="error_field_4-2">
+                          <span class="form-field__radio-control" ></span>
+                          Field 4 - Option 2
                     </label>
-                    <span class="form-field__message">
-                        <svg class="form-field__message__icon">
-                            <use href="#icon-warning" />
-                        </svg>
-                        There is an error.
-                    </span>
-                </p>
-                <p class="form-field form-field--error">
-                    <input class="form-field__radio-input" id="error_field_4-2" type="radio" name="error_field_4" />
-                    <label class="form-field__label" for="error_field_4-2">
-                        <span class="form-field__radio-control" ></span>
-                        Field 4 - Option 2
-                    </label>
-                    <span class="form-field__message">
-                        <svg class="form-field__message__icon">
-                            <use href="#icon-warning" />
-                        </svg>
-                        There is an error.
-                    </span>
-                </p>
-                <p class="form-field form-field--error">
-                    <textarea class="form-field__textarea" id="error_field_5" placeholder="Field 5" rows="10"></textarea>
-                    <label class="form-field__label" for="error_field_5">Field 5</label>
-                    <span class="form-field__message">
-                        <svg class="form-field__message__icon">
-                            <use href="#icon-warning" />
-                        </svg>
-                        There is an error.
-                    </span>
-                </p>
-                <p class="form-field form-field--error">
-                    <label class="form-field__label" for="error_field_6">Field 6</label>
-                    <span class="form-field__select-container">
-                        <select class="form-field__select-input" id="error_field_6">
-                            <option disabled value="-">-</option>
-                            <option value="">Option 1</option>
-                            <option value="">Option 2</option>
-                            <option value="">Option 3</option>
-                        </select>
-                        <span class="form-field__select-arrow"></span>
                     </span>
                     <span class="form-field__message">
                         <svg class="form-field__message__icon">
@@ -460,15 +458,49 @@
                     </span>
                 </p>
                 <p class="form-field form-field--error">
-                    <input class="form-field__checkbox-input" id="error_field_7" type="checkbox" />
-                    <label class="form-field__label" for="error_field_7">
-                        <span class="form-field__checkbox-control">
-                            <svg role="img">
-                                <use href="#icon-check"></use>
-                            </svg>
-                        </span>
-                        Field 7 (Checkbox)
-                    </label>
+                    <span class="form-field__box">
+                      <textarea class="form-field__textarea" id="error_field_5" placeholder="Field 5" rows="10"></textarea>
+                      <label class="form-field__label" for="error_field_5">Field 5</label>
+                    </span>
+                    <span class="form-field__message">
+                        <svg class="form-field__message__icon">
+                            <use href="#icon-warning" />
+                        </svg>
+                        There is an error.
+                    </span>
+                </p>
+                <p class="form-field form-field--error">
+                    <span class="form-field__box">
+                      <label class="form-field__label" for="error_field_6">Field 6</label>
+                      <span class="form-field__select-container">
+                          <select class="form-field__select-input" id="error_field_6">
+                              <option disabled value="-">-</option>
+                              <option value="">Option 1</option>
+                              <option value="">Option 2</option>
+                              <option value="">Option 3</option>
+                          </select>
+                          <span class="form-field__select-arrow"></span>
+                      </span>
+                    </span>
+                    <span class="form-field__message">
+                        <svg class="form-field__message__icon">
+                            <use href="#icon-warning" />
+                        </svg>
+                        There is an error.
+                    </span>
+                </p>
+                <p class="form-field form-field--error">
+                    <span class="form-field__box">
+                      <input class="form-field__checkbox-input" id="error_field_7" type="checkbox" />
+                      <label class="form-field__label" for="error_field_7">
+                          <span class="form-field__checkbox-control">
+                              <svg role="img">
+                                  <use href="#icon-check"></use>
+                              </svg>
+                          </span>
+                          Field 7 (Checkbox)
+                      </label>
+                    </span>
                     <span class="form-field__message">
                         <svg class="form-field__message__icon">
                             <use href="#icon-warning" />

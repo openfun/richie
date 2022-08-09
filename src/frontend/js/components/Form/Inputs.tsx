@@ -34,7 +34,7 @@ const Field = ({
 
   return (
     <p className={classList}>
-      {children}
+      <span className="form-field__box">{children}</span>
       {message && (
         <span className="form-field__message">
           <svg className="form-field__message__icon">
