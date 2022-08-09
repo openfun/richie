@@ -11,21 +11,25 @@
 // .form
 //  .form-group
 //    .form-field
-//      .form-field__input
-//      .form-field__label
+//      .form-field__box
+//        .form-field__input
+//        .form-field__label
 //      .form-field__message--error
 //    .form-field
-//      .form-field__input
+//      .form-field__box
+//        .form-field__input
+//        .form-field__label
+//    .form-field
+//      .form-field__box
+//        .form-field__checkbox-input
+//        .form-field__checkbox-control
+//        .form-field__label
+//  .form-field
+//    .form-field__box
 //      .form-field__label
-//  .form-field
-//    .form-field__checkbox-input
-//    .form-field__checkbox-control
-//    .form-field__label
-//  .form-field
-//    .form-field__label
-//    .form-field__select-container
-//      .form-field__select-input
-//      .form-field__select-arrow
+//      .form-field__select-container
+//        .form-field__select-input
+//        .form-field__select-arrow
 
 @mixin input-base-style() {
   -webkit-appearance: none;
@@ -37,7 +41,6 @@
   color: r-theme-val(form, input-color);
   min-height: 3rem;
   display: block;
-  height: 100%;
   padding: 1rem 1rem 0 1rem;
   width: 100%;
 
@@ -79,6 +82,11 @@
     }
 
     // Common elements
+    &__box {
+      display: block;
+      position: relative;
+    }
+
     &__label {
       color: r-theme-val(form, input-placeholder);
       cursor: pointer;
@@ -117,7 +125,7 @@
     }
 
     &__textarea + &__label {
-      top: 0.33rem;
+      top: 0.5rem;
       z-index: 1;
     }
 
@@ -128,7 +136,7 @@
 
     &__textarea:focus + &__label,
     &__textarea:not(:placeholder-shown) + &__label {
-      transform: scale(0.66);
+      transform: scale(0.66) translateY(-0.25rem);
     }
 
     &__input[aria-required='true'] + &__label:after,
@@ -247,15 +255,12 @@
 
     // Message
     &__message {
-      bottom: 0;
       color: r-theme-val(form, message-color);
+      display: inline-block;
       font-size: 0.875rem;
-      left: 2px;
       line-height: 1.75em;
-      position: absolute;
-      transform: translateY(100%);
-      user-select: none;
-      vertical-align: middle;
+      padding: 0 2px;
+      text-align: justify;
 
       &__icon {
         fill: currentColor;
