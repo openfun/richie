@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-22 13:21+0000\n"
-"PO-Revision-Date: 2022-06-22 16:25\n"
+"PO-Revision-Date: 2022-08-10 13:56\n"
 "Last-Translator: \n"
 "Language-Team: French, Canada\n"
 "Language: fr_CA\n"
@@ -1662,23 +1662,23 @@ msgstr "Licences"
 
 #: apps/search/defaults.py:162
 msgid "Weekly pace"
-msgstr ""
+msgstr "Rythme hebdomadaire"
 
 #: apps/search/defaults.py:168
 msgid "Self-paced"
-msgstr ""
+msgstr "À votre rythme"
 
 #: apps/search/defaults.py:169
 msgid "Less than one hour"
-msgstr ""
+msgstr "Moins d'une heure"
 
 #: apps/search/defaults.py:170
 msgid "One to two hours"
-msgstr ""
+msgstr "Entre une et deux heures"
 
 #: apps/search/defaults.py:171
 msgid "More than two hours"
-msgstr ""
+msgstr "Plus de deux heures"
 
 #: apps/search/filter_definitions/courses.py:473
 msgid "Open for enrollment"
