@@ -10,7 +10,7 @@ import { forwardRef, type ReactNode, useMemo } from 'react';
  */
 
 interface FieldProps {
-  id?: string;
+  inputId?: string;
   error?: Boolean;
   message?: ReactNode | string;
   fieldClasses?: string[];
@@ -19,7 +19,7 @@ interface FieldProps {
 // - Field
 const Field = ({
   fieldClasses = [],
-  id,
+  inputId,
   error,
   message,
   children,
@@ -38,7 +38,7 @@ const Field = ({
     <p className={classList}>
       <span className="form-field__box">{children}</span>
       {message && (
-        <span className="form-field__message" {...(!!id && { id: `${id}-message` })}>
+        <span className="form-field__message" {...(!!inputId && { id: `${inputId}-message` })}>
           <svg aria-hidden={true} className="form-field__message__icon">
             <use href={iconHref} />
           </svg>
@@ -79,7 +79,7 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement>, Fi
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   ({ fieldClasses = [], label, id, type = 'text', error, message, ...props }, ref) => (
-    <Field id={id} error={error} message={message} fieldClasses={fieldClasses}>
+    <Field inputId={id} error={error} message={message} fieldClasses={fieldClasses}>
       <input
         className="form-field__input"
         id={id}
@@ -117,7 +117,7 @@ interface TextareaFieldProps extends React.TextareaHTMLAttributes<HTMLTextAreaEl
  */
 export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
   ({ fieldClasses = [], error, message, label, id, ...props }, ref) => (
-    <Field id={id} error={error} message={message} fieldClasses={fieldClasses}>
+    <Field inputId={id} error={error} message={message} fieldClasses={fieldClasses}>
       <textarea
         className="form-field__textarea"
         id={id}
@@ -155,7 +155,7 @@ interface SelectFieldProps extends React.SelectHTMLAttributes<HTMLSelectElement>
  */
 export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
   ({ fieldClasses = [], error, message, label, id, children, ...props }, ref) => (
-    <Field id={id} error={error} message={message} fieldClasses={fieldClasses}>
+    <Field inputId={id} error={error} message={message} fieldClasses={fieldClasses}>
       {label && (
         <label className="form-field__label" htmlFor={id}>
           {label}
@@ -196,7 +196,7 @@ interface CheckboxFieldProps extends Omit<TextFieldProps, 'type'> {
  */
 export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
   ({ fieldClasses = [], error, message, label, id, ...props }, ref) => (
-    <Field id={id} error={error} message={message} fieldClasses={fieldClasses}>
+    <Field inputId={id} error={error} message={message} fieldClasses={fieldClasses}>
       <input
         className="form-field__checkbox-input"
         id={id}
@@ -233,7 +233,7 @@ interface RadioFieldProps extends CheckboxFieldProps {}
  */
 export const RadioField = forwardRef<HTMLInputElement, RadioFieldProps>(
   ({ fieldClasses = [], error, label, message, id, onClick, ...props }, ref) => (
-    <Field id={id} error={error} message={message} fieldClasses={fieldClasses}>
+    <Field inputId={id} error={error} message={message} fieldClasses={fieldClasses}>
       <input
         className="form-field__radio-input"
         id={id}

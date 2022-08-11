@@ -20,6 +20,12 @@ describe('Field', () => {
 
     const $fieldMessageIcon = $fieldMessage!.querySelector('svg use');
     expect($fieldMessageIcon?.getAttribute('href')).toEqual('#icon-info-rounded');
+
+    // the message should be tied to the input (for screen reader users)
+    expect($fieldMessage!.id).not.toBe('');
+    expect(container.querySelector('.form-field__input')?.getAttribute('aria-describedby')).toEqual(
+      $fieldMessage!.id,
+    );
   });
 
   it('applies error class modifier when error is true', () => {
