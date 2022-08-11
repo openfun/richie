@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, type ReactNode, useMemo } from 'react';
 
 /**
  * A collection of form input elements
@@ -11,7 +11,7 @@ import { forwardRef, useMemo } from 'react';
 
 interface FieldProps {
   error?: Boolean;
-  message?: string;
+  message?: ReactNode | string;
   fieldClasses?: string[];
 }
 
