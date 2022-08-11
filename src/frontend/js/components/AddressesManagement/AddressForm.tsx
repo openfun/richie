@@ -7,7 +7,8 @@ import { messages } from 'components/AddressesManagement/index';
 import { CheckboxField, SelectField, TextField } from 'components/Form';
 import { useAddresses } from 'hooks/useAddresses';
 import type { Address } from 'types/Joanie';
-import validationSchema from './validationSchema';
+import { Maybe } from 'types/utils';
+import validationSchema, { ErrorKeys, errorMessages } from './validationSchema';
 
 export type AddressFormValues = Omit<Address, 'id' | 'is_main'> & { save: boolean };
 
@@ -41,6 +42,25 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
   const [languageCode] = intl.locale.split('-');
   const countryList = countries.getNames(languageCode);
 
+  const getLocalizedErrorMessage = (
+    error: Maybe<
+      | string
+      | {
+          key: ErrorKeys;
+          values: Record<PropertyKey, string | number | Array<string | number>>;
+        }
+    >,
+  ) => {
+    if (!error) return undefined;
+
+    if (typeof error === 'string' || errorMessages[error.key] === undefined) {
+      // If the error has not been translated we return a default error message.
+      return intl.formatMessage(errorMessages[ErrorKeys.MIXED_INVALID]);
+    }
+
+    return intl.formatMessage(errorMessages[error.key], error.values);
+  };
+
   /**
    * Prevent form to be submitted and clear `editedAddress` state.
    */
@@ -62,6 +82,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
         id="title"
         label={intl.formatMessage(messages.titleInputLabel)}
         error={!!formState.errors.title}
+        message={getLocalizedErrorMessage(formState.errors.title?.message)}
         {...register('title')}
       />
       <div className="form-group">
@@ -71,6 +92,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
           id="first_name"
           label={intl.formatMessage(messages.first_nameInputLabel)}
           error={!!formState.errors.first_name}
+          message={getLocalizedErrorMessage(formState.errors.first_name?.message)}
           {...register('first_name')}
         />
         <TextField
@@ -79,6 +101,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
           id="last_name"
           label={intl.formatMessage(messages.last_nameInputLabel)}
           error={!!formState.errors.last_name}
+          message={getLocalizedErrorMessage(formState.errors.last_name?.message)}
           {...register('last_name')}
         />
       </div>
@@ -88,6 +111,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
         id="address"
         label={intl.formatMessage(messages.addressInputLabel)}
         error={!!formState.errors.address}
+        message={getLocalizedErrorMessage(formState.errors.address?.message)}
         {...register('address')}
       />
       <div className="form-group">
@@ -97,6 +121,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
           id="postcode"
           label={intl.formatMessage(messages.postcodeInputLabel)}
           error={!!formState.errors.postcode}
+          message={getLocalizedErrorMessage(formState.errors.postcode?.message)}
           {...register('postcode')}
         />
         <TextField
@@ -105,6 +130,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
           id="city"
           label={intl.formatMessage(messages.cityInputLabel)}
           error={!!formState.errors.city}
+          message={getLocalizedErrorMessage(formState.errors.city?.message)}
           {...register('city')}
         />
       </div>
@@ -114,6 +140,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
         id="country"
         label={intl.formatMessage(messages.countryInputLabel)}
         error={!!formState.errors.country}
+        message={getLocalizedErrorMessage(formState.errors.country?.message)}
         {...register('country', { value: address?.country, required: true })}
       >
         <option disabled value="-">
@@ -132,6 +159,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
           id="save"
           label={intl.formatMessage(messages.saveInputLabel)}
           error={!!formState.errors?.save}
+          message={getLocalizedErrorMessage(formState.errors.save?.message)}
           {...register('save')}
         />
       ) : null}

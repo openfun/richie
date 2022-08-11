@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Display error messages in `AddressForm`
+
 ### Changed
 
 - Allow form messages to go on multiple lines
