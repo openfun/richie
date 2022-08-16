@@ -151,8 +151,8 @@ describe('AddressesManagement', () => {
       name: 'Use this address',
     }) as HTMLButtonElement;
 
-    // - Until form is not fulfill, submit button should be disabled
-    expect($submitButton.disabled).toBe(true);
+    // - submit button should always be enabled to allow early user feedback
+    expect($submitButton.disabled).toBe(false);
 
     // - User fulfills address fields
     let address = mockFactories.AddressFactory.generate();
@@ -170,7 +170,7 @@ describe('AddressesManagement', () => {
       fireEvent.blur($countryField);
     });
 
-    // Once the form has been fulfilled properly, submit button should be enabled.
+    // Once the form has been fulfilled properly, submit button should still be enabled.
     expect($submitButton.disabled).toBe(false);
 
     await act(async () => {

@@ -178,7 +178,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
             </button>
             <button
               className="button button-sale--primary"
-              disabled={!formState.isValid || addresses.states.updating}
+              disabled={addresses.states.updating}
               type="submit"
             >
               <FormattedMessage {...messages.updateButton} />
@@ -187,7 +187,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
         ) : (
           <button
             className="button button-sale--primary"
-            disabled={!formState.isValid || addresses.states.creating || addresses.states.updating}
+            disabled={addresses.states.creating || addresses.states.updating}
             type="submit"
           >
             <FormattedMessage {...messages.selectButton} />
