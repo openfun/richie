@@ -93,8 +93,9 @@ describe('AddressForm', () => {
       name: 'Use this address',
     }) as HTMLButtonElement;
 
-    // - Until form is not fulfill, submit button should be disabled
-    expect($submitButton.disabled).toBe(true);
+    // - submit button should be enabled even when the form is not valid,
+    //   so that every user can get feedback easily (especially screen reader users)
+    expect($submitButton.disabled).toBe(false);
 
     // - User fulfills address fields
     const address = mockFactories.AddressFactory.generate();
@@ -112,7 +113,7 @@ describe('AddressForm', () => {
       fireEvent.blur($countryInput);
     });
 
-    // Once the form has been fulfilled properly, submit button should be enabled.
+    // Once the form has been fulfilled properly, submit button should still be enabled.
     expect($submitButton.disabled).toBe(false);
 
     // Before submitting, we change field values to corrupt the form data
@@ -171,8 +172,8 @@ describe('AddressForm', () => {
       name: 'Use this address',
     }) as HTMLButtonElement;
 
-    // - Until form is not fulfill, submit button should be disabled
-    expect($submitButton.disabled).toBe(true);
+    // - button should never be disabled to allow user feedback at any time
+    expect($submitButton.disabled).toBe(false);
 
     // - User fulfills address fields
     const address = mockFactories.AddressFactory.generate();
@@ -190,7 +191,7 @@ describe('AddressForm', () => {
       fireEvent.blur($countryInput);
     });
 
-    // Once the form has been fulfilled properly, submit button should be enabled.
+    // button should still be enabled especially now that there is no error
     expect($submitButton.disabled).toBe(false);
 
     // Before submitting, we change field values to corrupt the form data
