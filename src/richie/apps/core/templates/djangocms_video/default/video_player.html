@@ -7,7 +7,12 @@ obsolete attribute "frameborder" and invalid "allowfullscreen" attribute value.
 {% if instance.embed_link %}
     {# show iframe if embed_link is provided #}
     <div class="aspect-ratio">
-        <iframe src="{{ instance.embed_link_with_parameters }}" {{ instance.attributes_str }} allowfullscreen></iframe>
+        <iframe
+            title="{% if instance.label %}{{ instance.label }}{% else %}{% trans "Video" %}{% endif %}"
+            src="{{ instance.embed_link_with_parameters }}"
+            {{ instance.attributes_str }}
+            allowfullscreen
+        ></iframe>
     </div>
     {% with disabled=instance.embed_link %}
         {% for plugin in instance.child_plugin_instances %}

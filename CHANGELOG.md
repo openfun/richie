@@ -13,6 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Modal component refactor for homogeneous use
 - New global scroll behavior for Modal
 - Add disabled style for inputs
+- Add a visually hidden title on video player iframes, meant to be announced
+  to screen reader users
 
 ### Fixed
 

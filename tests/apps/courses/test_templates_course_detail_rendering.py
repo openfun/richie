@@ -540,16 +540,12 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         course = CourseFactory(fill_teaser=video_sample, should_publish=True)
 
         response = self.client.get(course.extended_object.get_absolute_url())
-
         self.assertEqual(response.status_code, 200)
-        pattern = (
-            r'<div class="subheader__teaser">'
-            r'<div class="aspect-ratio">'
-            rf'<iframe src="{video_sample.url:s}"  allowfullscreen></iframe>'
-            r"</div>"
-            r"</div>"
-        )
-        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        html = lxml.html.fromstring(response.content)
+        iframe = html.cssselect(".subheader__teaser .aspect-ratio iframe")[0]
+        self.assertIn("allowfullscreen", iframe.keys())
+        self.assertEqual(iframe.get("title"), video_sample.label)
+        self.assertEqual(iframe.get("src"), video_sample.url)
 
     def test_templates_course_detail_teaser_empty_cover_image(self):
         """
@@ -584,14 +580,11 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         response = self.client.get(course.extended_object.get_absolute_url())
 
         self.assertEqual(response.status_code, 200)
-        pattern = (
-            r'<div class="subheader__teaser">'
-            r'<div class="aspect-ratio">'
-            rf'<iframe src="{video_sample.url:s}"  allowfullscreen></iframe>'
-            r"</div>"
-            r"</div>"
-        )
-        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        html = lxml.html.fromstring(response.content)
+        iframe = html.cssselect(".subheader__teaser .aspect-ratio iframe")[0]
+        self.assertIn("allowfullscreen", iframe.keys())
+        self.assertEqual(iframe.get("title"), video_sample.label)
+        self.assertEqual(iframe.get("src"), video_sample.url)
 
 
 # pylint: disable=too-many-public-methods
