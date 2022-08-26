@@ -42,24 +42,35 @@ ES_STATE_WEIGHTS = getattr(settings, "RICHIE_ES_STATE_WEIGHTS", None) or [
     1,  # ARCHIVED_CLOSED
 ]
 
-FILTERS_CONFIGURATION = [
-    (
-        "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
-        {
-            "fragment_map": {"new": [{"term": {"is_new": True}}]},
-            "human_name": _("New courses"),
-            "min_doc_count": 0,
-            "name": "new",
-            "position": 0,
-            "sorting": "conf",
-            "values": {"new": _("First session")},
-        },
-    ),
-    (
-        "richie.apps.search.filter_definitions.NestingWrapper",
-        {
-            "name": "course_runs",
-            "filters": [
+
+def build_filters_configuration() -> list:
+    """Build the default richie filters configuration"""
+    filters_configuration = []
+    if getattr(settings, "RICHIE_FILTERS_CONFIGURATION_NEW_ENABLED", True):
+        filters_configuration.append(
+            (
+                "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
+                {
+                    "fragment_map": {"new": [{"term": {"is_new": True}}]},
+                    "human_name": _("New courses"),
+                    "min_doc_count": 0,
+                    "name": "new",
+                    "position": getattr(
+                        settings, "RICHIE_FILTERS_CONFIGURATION_NEW_POSITION", 0
+                    ),
+                    "sorting": "conf",
+                    "values": {"new": _("First session")},
+                },
+            ),
+        )
+
+    if getattr(
+        settings, "RICHIE_FILTERS_CONFIGURATION_AVAILABILITY_ENABLED", True
+    ) or getattr(settings, "RICHIE_FILTERS_CONFIGURATION_LANGUAGES_ENABLED", True):
+        filters_wrapper = []
+
+        if getattr(settings, "RICHIE_FILTERS_CONFIGURATION_AVAILABILITY_ENABLED", True):
+            filters_wrapper.append(
                 (
                     "richie.apps.search.filter_definitions.AvailabilityFilterDefinition",
                     {
@@ -67,10 +78,17 @@ FILTERS_CONFIGURATION = [
                         "is_drilldown": True,
                         "min_doc_count": 0,
                         "name": "availability",
-                        "position": 1,
+                        "position": getattr(
+                            settings,
+                            "RICHIE_FILTERS_CONFIGURATION_AVAILABILITY_POSITION",
+                            1,
+                        ),
                         "sorting": "conf",
                     },
-                ),
+                )
+            )
+        if getattr(settings, "RICHIE_FILTERS_CONFIGURATION_LANGUAGES_ENABLED", True):
+            filters_wrapper.append(
                 (
                     "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
                     {
@@ -79,97 +97,153 @@ FILTERS_CONFIGURATION = [
                         # Eg. 200 languages, 190+ of which will have 0 matching courses.
                         "min_doc_count": 1,
                         "name": "languages",
-                        "position": 5,
+                        "position": getattr(
+                            settings,
+                            "RICHIE_FILTERS_CONFIGURATION_LANGUAGES_POSITION",
+                            5,
+                        ),
                     },
-                ),
-            ],
-        },
-    ),
-    (
-        "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
-        {
-            "human_name": _("Subjects"),
-            "is_autocompletable": True,
-            "is_searchable": True,
-            "min_doc_count": 0,
-            "name": "subjects",
-            "position": 2,
-            "reverse_id": "subjects",
-            "term": "categories",
-        },
-    ),
-    (
-        "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
-        {
-            "human_name": _("Levels"),
-            "is_autocompletable": True,
-            "is_searchable": True,
-            "min_doc_count": 0,
-            "name": "levels",
-            "position": 3,
-            "reverse_id": "levels",
-            "term": "categories",
-        },
-    ),
-    (
-        "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
-        {
-            "human_name": _("Organizations"),
-            "is_autocompletable": True,
-            "is_searchable": True,
-            "min_doc_count": 0,
-            # Note: this is a special name that connects the filter to Organization objects
-            # in Richie as well was the corresponding indexer and API endpoint.
-            "name": "organizations",
-            "position": 4,
-            "reverse_id": "organizations",
-        },
-    ),
-    (
-        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
-        {
-            "human_name": _("Persons"),
-            "is_autocompletable": True,
-            "is_searchable": True,
-            "min_doc_count": 0,
-            # Note: this is a special name that connects the filter to Person objects
-            # in Richie as well was the corresponding indexer and API endpoint.
-            "name": "persons",
-            "position": 5,
-            "reverse_id": "persons",
-        },
-    ),
-    (
-        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
-        {
-            "human_name": _("Licences"),
-            "is_autocompletable": True,
-            "is_searchable": True,
-            "min_doc_count": 0,
-            "name": "licences",
-            "position": 6,
-        },
-    ),
-    (
-        "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
-        {
-            "fragment_map": {
-                "self-paced": [{"bool": {"must_not": {"exists": {"field": "pace"}}}}],
-                "lt-1h": [{"range": {"pace": {"lt": 60}}}],
-                "1h-2h": [{"range": {"pace": {"gte": 60, "lte": 120}}}],
-                "gt-2h": [{"range": {"pace": {"gt": 120}}}],
-            },
-            "human_name": _("Weekly pace"),
-            "min_doc_count": 0,
-            "name": "pace",
-            "position": 7,
-            "sorting": "conf",
-            "values": {
-                "self-paced": _("Self-paced"),
-                "lt-1h": _("Less than one hour"),
-                "1h-2h": _("One to two hours"),
-                "gt-2h": _("More than two hours"),
-            },
-        },
-    ),
-]
+                )
+            )
+        filters_configuration.append(
+            (
+                "richie.apps.search.filter_definitions.NestingWrapper",
+                {"name": "course_runs", "filters": filters_wrapper},
+            ),
+        )
+
+    if getattr(settings, "RICHIE_FILTERS_CONFIGURATION_SUBJECTS_ENABLED", True):
+        filters_configuration.append(
+            (
+                "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
+                {
+                    "human_name": _("Subjects"),
+                    "is_autocompletable": True,
+                    "is_searchable": True,
+                    "min_doc_count": 0,
+                    "name": "subjects",
+                    "position": getattr(
+                        settings, "RICHIE_FILTERS_CONFIGURATION_SUBJECTS_POSITION", 2
+                    ),
+                    "reverse_id": "subjects",
+                    "term": "categories",
+                },
+            ),
+        )
+
+    if getattr(settings, "RICHIE_FILTERS_CONFIGURATION_LEVELS_ENABLED", True):
+        filters_configuration.append(
+            (
+                "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
+                {
+                    "human_name": _("Levels"),
+                    "is_autocompletable": True,
+                    "is_searchable": True,
+                    "min_doc_count": 0,
+                    "name": "levels",
+                    "position": getattr(
+                        settings, "RICHIE_FILTERS_CONFIGURATION_LEVELS_POSITION", 3
+                    ),
+                    "reverse_id": "levels",
+                    "term": "categories",
+                },
+            ),
+        )
+
+    if getattr(settings, "RICHIE_FILTERS_CONFIGURATION_ORGANIZATIONS_ENABLED", True):
+        filters_configuration.append(
+            (
+                "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
+                {
+                    "human_name": _("Organizations"),
+                    "is_autocompletable": True,
+                    "is_searchable": True,
+                    "min_doc_count": 0,
+                    # Note: this is a special name that connects the filter to Organization objects
+                    # in Richie as well was the corresponding indexer and API endpoint.
+                    "name": "organizations",
+                    "position": getattr(
+                        settings,
+                        "RICHIE_FILTERS_CONFIGURATION_ORGANIZATIONS_POSITION",
+                        4,
+                    ),
+                    "reverse_id": "organizations",
+                },
+            ),
+        )
+
+    if getattr(settings, "RICHIE_FILTERS_CONFIGURATION_PERSONS_ENABLED", True):
+        filters_configuration.append(
+            (
+                "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+                {
+                    "human_name": _("Persons"),
+                    "is_autocompletable": True,
+                    "is_searchable": True,
+                    "min_doc_count": 0,
+                    # Note: this is a special name that connects the filter to Person objects
+                    # in Richie as well was the corresponding indexer and API endpoint.
+                    "name": "persons",
+                    "position": getattr(
+                        settings, "RICHIE_FILTERS_CONFIGURATION_PERSONS_POSITION", 5
+                    ),
+                    "reverse_id": "persons",
+                },
+            ),
+        )
+
+    if getattr(settings, "RICHIE_FILTERS_CONFIGURATION_LICENCES_ENABLED", True):
+        filters_configuration.append(
+            (
+                "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+                {
+                    "human_name": _("Licences"),
+                    "is_autocompletable": True,
+                    "is_searchable": True,
+                    "min_doc_count": 0,
+                    "name": "licences",
+                    "position": getattr(
+                        settings, "RICHIE_FILTERS_CONFIGURATION_LICENCES_POSITION", 6
+                    ),
+                },
+            ),
+        )
+
+    if getattr(settings, "RICHIE_FILTERS_CONFIGURATION_PACE_ENABLED", True):
+        filters_configuration.append(
+            (
+                "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
+                {
+                    "fragment_map": {
+                        "self-paced": [
+                            {"bool": {"must_not": {"exists": {"field": "pace"}}}}
+                        ],
+                        "lt-1h": [{"range": {"pace": {"lt": 60}}}],
+                        "1h-2h": [{"range": {"pace": {"gte": 60, "lte": 120}}}],
+                        "gt-2h": [{"range": {"pace": {"gt": 120}}}],
+                    },
+                    "human_name": _("Weekly pace"),
+                    "min_doc_count": 0,
+                    "name": "pace",
+                    "position": getattr(
+                        settings, "RICHIE_FILTERS_CONFIGURATION_PACE_POSITION", 7
+                    ),
+                    "sorting": "conf",
+                    "values": {
+                        "self-paced": _("Self-paced"),
+                        "lt-1h": _("Less than one hour"),
+                        "1h-2h": _("One to two hours"),
+                        "gt-2h": _("More than two hours"),
+                    },
+                },
+            ),
+        )
+    return filters_configuration
+
+
+# Default filters configuration.
+# If you want to hide a specific filter just disable it using the
+# `RICHIE_FILTERS_CONFIGURATION_<name>_ENABLED` setting.
+# If you want to change the order of the filter use the
+# `RICHIE_FILTERS_CONFIGURATION_<name>_POSITION` setting.
+FILTERS_CONFIGURATION = build_filters_configuration()

@@ -2,11 +2,16 @@
 import json
 from unittest import mock
 
+from django.test import override_settings
+
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CategoryFactory
+from richie.apps.search.defaults import build_filters_configuration
 from richie.apps.search.filter_definitions import FILTERS
+
+# pylint: disable=too-many-public-methods
 
 
 class FilterDefinitionsViewTestCase(CMSTestCase):
@@ -166,3 +171,287 @@ class FilterDefinitionsViewTestCase(CMSTestCase):
         self.client.get("/api/v1.0/filter-definitions/")
         self.client.get("/api/v1.0/filter-definitions/")
         self.assertEqual(mock_get_static_definitions.call_count, 1)
+
+    @staticmethod
+    def filter_configuration_for_enabled_tests() -> list:
+        """A simpler filter configuration with only the filter names"""
+        filter_config = []
+        # pylint: disable=unused-variable
+        for path, params in build_filters_configuration():
+            filter_config.append(params.get("name"))
+            for filter_wrapper in params.get("filters", []):
+                filter_config.append(filter_wrapper[1].get("name"))
+        filter_config.sort()
+        return filter_config
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_NEW_ENABLED=False)
+    def test_filter_setting_disable_new(self):
+        """
+        Test if it's possible to hide the `new` filter.
+        """
+        self.assertListEqual(
+            self.filter_configuration_for_enabled_tests(),
+            [
+                "availability",
+                "course_runs",
+                "languages",
+                "levels",
+                "licences",
+                "organizations",
+                "pace",
+                "persons",
+                "subjects",
+            ],
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_AVAILABILITY_ENABLED=False)
+    def test_filter_setting_disable_availability(self):
+        """
+        Test if it's possible to hide the `availability` filter.
+        """
+        self.assertListEqual(
+            self.filter_configuration_for_enabled_tests(),
+            [
+                "course_runs",
+                "languages",
+                "levels",
+                "licences",
+                "new",
+                "organizations",
+                "pace",
+                "persons",
+                "subjects",
+            ],
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_LANGUAGES_ENABLED=False)
+    def test_filter_setting_disable_languages(self):
+        """
+        Test if it's possible to hide the `languages` filter.
+        """
+        self.assertListEqual(
+            self.filter_configuration_for_enabled_tests(),
+            [
+                "availability",
+                "course_runs",
+                "levels",
+                "licences",
+                "new",
+                "organizations",
+                "pace",
+                "persons",
+                "subjects",
+            ],
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_SUBJECTS_ENABLED=False)
+    def test_filter_setting_disable_subjects(self):
+        """
+        Test if it's possible to hide the `subjects` filter.
+        """
+        self.assertListEqual(
+            self.filter_configuration_for_enabled_tests(),
+            [
+                "availability",
+                "course_runs",
+                "languages",
+                "levels",
+                "licences",
+                "new",
+                "organizations",
+                "pace",
+                "persons",
+            ],
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_LEVELS_ENABLED=False)
+    def test_filter_setting_disable_levels(self):
+        """
+        Test if it's possible to hide the `levels` filter.
+        """
+        self.assertListEqual(
+            self.filter_configuration_for_enabled_tests(),
+            [
+                "availability",
+                "course_runs",
+                "languages",
+                "licences",
+                "new",
+                "organizations",
+                "pace",
+                "persons",
+                "subjects",
+            ],
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_ORGANIZATIONS_ENABLED=False)
+    def test_filter_setting_disable_organizations(self):
+        """
+        Test if it's possible to hide the `organizations` filter.
+        """
+        self.assertListEqual(
+            self.filter_configuration_for_enabled_tests(),
+            [
+                "availability",
+                "course_runs",
+                "languages",
+                "levels",
+                "licences",
+                "new",
+                "pace",
+                "persons",
+                "subjects",
+            ],
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_PERSONS_ENABLED=False)
+    def test_filter_setting_disable_persons(self):
+        """
+        Test if it's possible to hide the `persons` filter.
+        """
+        self.assertListEqual(
+            self.filter_configuration_for_enabled_tests(),
+            [
+                "availability",
+                "course_runs",
+                "languages",
+                "levels",
+                "licences",
+                "new",
+                "organizations",
+                "pace",
+                "subjects",
+            ],
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_LICENCES_ENABLED=False)
+    def test_filter_setting_disable_licences(self):
+        """
+        Test if it's possible to hide the `licences` filter.
+        """
+        self.assertListEqual(
+            self.filter_configuration_for_enabled_tests(),
+            [
+                "availability",
+                "course_runs",
+                "languages",
+                "levels",
+                "new",
+                "organizations",
+                "pace",
+                "persons",
+                "subjects",
+            ],
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_PACE_ENABLED=False)
+    def test_filter_setting_disable_pace(self):
+        """
+        Test if it's possible to hide the `pace` filter.
+        """
+        self.assertListEqual(
+            self.filter_configuration_for_enabled_tests(),
+            [
+                "availability",
+                "course_runs",
+                "languages",
+                "levels",
+                "licences",
+                "new",
+                "organizations",
+                "persons",
+                "subjects",
+            ],
+        )
+
+    @staticmethod
+    def filter_configuration_for_position_tests() -> dict:
+        """
+        A simpler filter configuration with a dict with filter name has key and position has value
+        """
+        filter_config = {}
+        # pylint: disable=unused-variable
+        for path, params in build_filters_configuration():
+            filter_config[params.get("name")] = params.get("position")
+            for filter_wrapper in params.get("filters", []):
+                filter_config[filter_wrapper[1].get("name")] = filter_wrapper[1].get(
+                    "position"
+                )
+        return filter_config
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_NEW_POSITION=99)
+    def test_filter_setting_position_new(self):
+        """
+        Test if it's possible to change the position of the `new` filter.
+        """
+        self.assertEqual(99, self.filter_configuration_for_position_tests().get("new"))
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_AVAILABILITY_POSITION=99)
+    def test_filter_setting_position_availability(self):
+        """
+        Test if it's possible to change the position of the `availability` filter.
+        """
+        self.assertEqual(
+            99, self.filter_configuration_for_position_tests().get("availability")
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_LANGUAGES_POSITION=99)
+    def test_filter_setting_position_language(self):
+        """
+        Test if it's possible to change the position of the `languages` filter.
+        """
+        self.assertEqual(
+            99, self.filter_configuration_for_position_tests().get("languages")
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_SUBJECTS_POSITION=99)
+    def test_filter_setting_position_subjects(self):
+        """
+        Test if it's possible to change the position of the `subjects` filter.
+        """
+        self.assertEqual(
+            99, self.filter_configuration_for_position_tests().get("subjects")
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_LEVELS_POSITION=99)
+    def test_filter_setting_position_levels(self):
+        """
+        Test if it's possible to change the position of the `levels` filter.
+        """
+        self.assertEqual(
+            99, self.filter_configuration_for_position_tests().get("levels")
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_ORGANIZATIONS_POSITION=99)
+    def test_filter_setting_position_organizations(self):
+        """
+        Test if it's possible to change the position of the `organizations` filter.
+        """
+        self.assertEqual(
+            99, self.filter_configuration_for_position_tests().get("organizations")
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_PERSONS_POSITION=99)
+    def test_filter_setting_position_persons(self):
+        """
+        Test if it's possible to change the position of the `persons` filter.
+        """
+        self.assertEqual(
+            99, self.filter_configuration_for_position_tests().get("persons")
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_LICENCES_POSITION=99)
+    def test_filter_setting_position_licences(self):
+        """
+        Test if it's possible to change the position of the `licences` filter.
+        """
+        self.assertEqual(
+            99, self.filter_configuration_for_position_tests().get("licences")
+        )
+
+    @override_settings(RICHIE_FILTERS_CONFIGURATION_PACE_POSITION=99)
+    def test_filter_setting_position_pace(self):
+        """
+        Test if it's possible to change the position of the `pace` filter.
+        """
+        self.assertEqual(99, self.filter_configuration_for_position_tests().get("pace"))

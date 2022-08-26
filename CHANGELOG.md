@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add settings that allow to remove or change the order/position of each
+  default search filter.
 - Display error messages in `AddressForm`
 
 ### Changed

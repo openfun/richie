@@ -549,6 +549,100 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         environ_prefix=None,
     )
 
+    # Settings that allow to remove each default search filter
+    RICHIE_FILTERS_CONFIGURATION_NEW_ENABLED = values.BooleanValue(
+        True,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_NEW_ENABLED",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_AVAILABILITY_ENABLED = values.BooleanValue(
+        True,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_AVAILABILITY_ENABLED",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_LANGUAGES_ENABLED = values.BooleanValue(
+        True,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_LANGUAGES_ENABLED",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_SUBJECTS_ENABLED = values.BooleanValue(
+        True,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_SUBJECTS_ENABLED",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_LEVELS_ENABLED = values.BooleanValue(
+        True,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_LEVELS_ENABLED",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_ORGANIZATIONS_ENABLED = values.BooleanValue(
+        True,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_ORGANIZATIONS_ENABLED",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_PERSONS_ENABLED = values.BooleanValue(
+        True,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_PERSONS_ENABLED",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_LICENCES_ENABLED = values.BooleanValue(
+        True,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_LICENCES_ENABLED",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_PACE_ENABLED = values.BooleanValue(
+        True,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_PACE_ENABLED",
+        environ_prefix=None,
+    )
+
+    # Settings that change the order/position of each default search filter
+    RICHIE_FILTERS_CONFIGURATION_NEW_POSITION = values.IntegerValue(
+        0,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_NEW_POSITION",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_AVAILABILITY_POSITION = values.IntegerValue(
+        1,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_AVAILABILITY_POSITION",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_LANGUAGES_POSITION = values.IntegerValue(
+        5,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_LANGUAGES_POSITION",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_SUBJECTS_POSITION = values.IntegerValue(
+        2,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_SUBJECTS_POSITION",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_LEVELS_POSITION = values.IntegerValue(
+        3,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_LEVELS_POSITION",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_ORGANIZATIONS_POSITION = values.IntegerValue(
+        4,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_ORGANIZATIONS_POSITION",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_PERSONS_POSITION = values.IntegerValue(
+        5,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_PERSONS_POSITION",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_LICENCES_POSITION = values.IntegerValue(
+        6,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_LICENCES_POSITION",
+        environ_prefix=None,
+    )
+    RICHIE_FILTERS_CONFIGURATION_PACE_POSITION = values.IntegerValue(
+        7,
+        environ_name="RICHIE_FILTERS_CONFIGURATION_PACE_POSITION",
+        environ_prefix=None,
+    )
+
     @classmethod
     def _get_environment(cls):
         """Environment in which the application is launched."""
