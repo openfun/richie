@@ -558,3 +558,7 @@ RICHIE_SIMPLEPICTURE_PRESETS = {
         "sizes": "60px",
     },
 }
+
+
+# Configure Django CMS Cache
+CMS_LIMIT_TTL_CACHE_FUNCTION = "richie.apps.courses.cache.limit_course_page_cache_ttl"

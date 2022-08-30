@@ -26,6 +26,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Language choices should be ordered alphabetically in course run admin form
+- Limit the cache ttl for course pages based on course run dates
 
 ## [2.16.0]
 
