@@ -4,6 +4,7 @@ Declare and configure the models for the courses application
 # pylint: disable=too-many-lines
 from collections.abc import Mapping
 from datetime import MAXYEAR, datetime
+from typing import List, Optional
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -584,6 +585,29 @@ class Course(EsIdMixin, BasePageExtension):
         this course is linked to the program page via any placeholder.
         """
         return self.get_reverse_related_page_extensions("program", language=language)
+
+    def next_course_run_date(self) -> Optional[datetime]:
+        """
+        Returns the next first future date of all the course runs, or if it doesn't exist return
+        `None`. Used to force the django page cache to be updated.
+        """
+
+        def get_course_run_dates(run: CourseRun) -> List[datetime]:
+            return (
+                run.start,
+                run.end,
+                run.enrollment_start,
+                run.enrollment_end,
+            )
+
+        nestedlist = [get_course_run_dates(r) for r in self.course_runs]
+        datesflatlist = [element for sublist in nestedlist for element in sublist]
+
+        # filter `None` and include only future dates, then sort all the dates
+        dates_sorted = sorted(
+            list(filter(lambda d: d and (timezone.now() < d), datesflatlist))
+        )
+        return dates_sorted[0] if len(dates_sorted) > 0 else None
 
     @property
     def state(self):

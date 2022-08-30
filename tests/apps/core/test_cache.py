@@ -2,12 +2,15 @@
 Test suite for the cache module in the `core` application
 """
 
+import math
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.core.cache import cache, caches
 from django.http import HttpRequest, HttpResponse
 from django.test import TestCase
+from django.test.utils import override_settings
+from django.utils import timezone
 from django.utils.cache import patch_response_headers
 from django.utils.http import http_date
 
@@ -15,6 +18,7 @@ from django_redis.serializers import json as json_serializer
 from django_redis.serializers import msgpack as msgpack_serializer
 
 from richie.apps.core.cache import LimitBrowserCacheTTLHeaders
+from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 
 # pylint: disable=too-many-public-methods
 
@@ -510,3 +514,178 @@ class TestLimitBrowserCacheTTLHeaders(TestCase):
             response = middleware(HttpRequest())
             self.assertEqual(http_date(time.time() + 3600), response["Expires"])
             self.assertIn("max-age=3600", response["Cache-Control"])
+
+    def _verify_cache_headers(
+        self, response, date_time_to_check: datetime, now: datetime
+    ):
+        """
+        Utility that check the `Expires` and the `Cache-Control` HTTP headers.
+        Is near the `date_time_to_check`.
+        It is not possible to assert at the second, because we can't know how much time it
+        will take to run the tests.
+        """
+        self.assertIn(
+            response["Expires"],
+            (
+                http_date((date_time_to_check - timedelta(seconds=2)).timestamp()),
+                http_date((date_time_to_check - timedelta(seconds=1)).timestamp()),
+                http_date((date_time_to_check).timestamp()),
+                http_date((date_time_to_check + timedelta(seconds=1)).timestamp()),
+                http_date((date_time_to_check + timedelta(seconds=2)).timestamp()),
+                http_date((date_time_to_check + timedelta(seconds=3)).timestamp()),
+                http_date((date_time_to_check + timedelta(seconds=4)).timestamp()),
+                http_date((date_time_to_check + timedelta(seconds=5)).timestamp()),
+            ),
+        )
+
+        def func(header_date_time: datetime):
+            return "max-age=" + str(math.trunc(header_date_time.total_seconds()))
+
+        self.assertIn(
+            response["Cache-Control"],
+            (
+                func(date_time_to_check - now - timedelta(seconds=5)),
+                func(date_time_to_check - now - timedelta(seconds=4)),
+                func(date_time_to_check - now - timedelta(seconds=3)),
+                func(date_time_to_check - now - timedelta(seconds=2)),
+                func(date_time_to_check - now - timedelta(seconds=1)),
+                func(date_time_to_check - now),
+                func(date_time_to_check - now + timedelta(seconds=1)),
+            ),
+        )
+
+    @override_settings(
+        MAX_BROWSER_CACHE_TTL=8600,
+        CMS_CACHE_DURATIONS={"menus": 3600, "content": 3600, "permissions": 3600},
+    )
+    def test_middleware_limit_cache_for_course_page_run_open(self):
+        """
+        Ensure that the middleware does not return a greater cache time for the course page
+        than the time that make it too older or inconsistent.
+        """
+        now = timezone.now()
+
+        course = CourseFactory()
+        next_minute = now + timedelta(minutes=1)
+        CourseRunFactory(
+            direct_course=course,
+            enrollment_start=now - timedelta(hours=3),
+            start=now - timedelta(hours=2),
+            enrollment_end=next_minute,
+            end=now + timedelta(hours=2),
+        )
+
+        course_page = course.extended_object
+        course_page.publish("en")
+
+        url = course_page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self._verify_cache_headers(response, next_minute, now)
+
+    @override_settings(
+        MAX_BROWSER_CACHE_TTL=8600,
+        CMS_CACHE_DURATIONS={"menus": 3600, "content": 3600, "permissions": 3600},
+    )
+    def test_middleware_limit_cache_for_course_page_run_multiple(self):
+        """
+        Ensure that the middleware does not return a greater cache time for the course page
+        than the time that make it too older or inconsistent, test using 2 different runs.
+        One of the course runs without end.
+        """
+        now = timezone.now()
+
+        course = CourseFactory()
+        next_date = now + timedelta(minutes=1)
+        CourseRunFactory(
+            direct_course=course,
+            enrollment_start=now - timedelta(hours=3),
+            start=now - timedelta(hours=2),
+            enrollment_end=now - timedelta(hours=1),
+            end=now + timedelta(hours=2),
+        )
+        CourseRunFactory(
+            direct_course=course,
+            enrollment_start=now - timedelta(hours=3),
+            start=now - timedelta(hours=2),
+            enrollment_end=next_date,
+            end=None,
+        )
+
+        course_page = course.extended_object
+        course_page.publish("en")
+
+        url = course_page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self._verify_cache_headers(response, next_date, now)
+
+    @override_settings(
+        MAX_BROWSER_CACHE_TTL=8600,
+        CMS_CACHE_DURATIONS={"menus": 3600, "content": 3600, "permissions": 3600},
+    )
+    def test_middleware_limit_cache_for_course_page_run(self):
+        """
+        Ensure that the middleware does not return a greater cache time for the course page
+        than the time that make it too older or inconsistent.
+        """
+        course = CourseFactory()
+
+        course_page = course.extended_object
+        course_page.publish("en")
+
+        url = course_page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertEqual(http_date(time.time() + 3600), response["Expires"])
+        self.assertIn("max-age=3600", response["Cache-Control"])
+
+    @override_settings(
+        MAX_BROWSER_CACHE_TTL=8600,
+        CMS_CACHE_DURATIONS={"menus": 3600, "content": 3600, "permissions": 3600},
+    )
+    def test_middleware_limit_cache_for_course_page_run_without_dates(self):
+        """
+        Ensure that the middleware returns the default cache headers for course with an archived
+        course run.
+        """
+        course = CourseFactory()
+        CourseRunFactory()
+
+        course_page = course.extended_object
+        course_page.publish("en")
+
+        url = course_page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertEqual(http_date(time.time() + 3600), response["Expires"])
+        self.assertIn("max-age=3600", response["Cache-Control"])
+
+    @override_settings(
+        MAX_BROWSER_CACHE_TTL=8600,
+        CMS_CACHE_DURATIONS={"menus": 3600, "content": 3600, "permissions": 3600},
+    )
+    def test_middleware_limit_cache_for_course_page_run_archived(self):
+        """
+        Ensure that the middleware returns the default cache headers for course with an archived
+        course run.
+        """
+        now = timezone.now()
+
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            enrollment_start=now - timedelta(hours=5),
+            start=now - timedelta(hours=4),
+            enrollment_end=now - timedelta(hours=3),
+            end=now - timedelta(hours=2),
+        )
+
+        course_page = course.extended_object
+        course_page.publish("en")
+
+        url = course_page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertEqual(http_date(time.time() + 3600), response["Expires"])
+        self.assertIn("max-age=3600", response["Cache-Control"])

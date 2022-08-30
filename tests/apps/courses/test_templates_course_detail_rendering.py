@@ -1133,7 +1133,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
     @override_settings(RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT=6)
     def test_templates_course_detail_minimum_enrollment_count(self):
         """
-        Show only the enrollment count when it is greather that the minimum setting value
+        Show only the enrollment count when it is greater that the minimum setting value
         """
         course = CourseFactory()
         course_run = self.create_run_ongoing_open(

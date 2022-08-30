@@ -18,6 +18,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - On the search page, improve accessibility of the filters pane when using a
   small screen
 
+### Fixed
+
+- Limit the cache ttl for courses based on course run dates
+
 ##  [2.15.1] - 2022-08-10
 
 ### Changed

@@ -4,13 +4,14 @@ Unit tests for the Course model
 # pylint: disable=too-many-lines
 import functools
 import random
+from datetime import timedelta
 from unittest import mock
 
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
-from django.utils import translation
+from django.utils import timezone, translation
 
 from cms.api import add_plugin, create_page
 from cms.models import PagePermission, Title
@@ -1697,3 +1698,63 @@ class CourseModelsTestCase(TestCase):
         """
         course = factories.CourseFactory(duration=[7, "hour"], effort=[7, "hour"])
         self.assertIsNone(course.get_pace_display())
+
+    def test_models_course_next_course_run_date_start(self):
+        """
+        Test get next future course run date when the next is the `start`.
+        """
+        now = timezone.now()
+        course = factories.CourseFactory()
+        factories.CourseRunFactory(
+            direct_course=course,
+            start=now + timedelta(hours=1),
+            end=now + timedelta(hours=5),
+            enrollment_start=now - timedelta(hours=1),
+            enrollment_end=now + timedelta(hours=2),
+        )
+        self.assertEqual(course.next_course_run_date(), now + timedelta(hours=1))
+
+    def test_models_course_next_course_run_date_end(self):
+        """
+        Test get next future course run date when the next is the `end`.
+        """
+        now = timezone.now()
+        course = factories.CourseFactory()
+        factories.CourseRunFactory(
+            direct_course=course,
+            start=now - timedelta(hours=1),
+            end=now + timedelta(hours=1),
+            enrollment_start=now - timedelta(hours=2),
+            enrollment_end=now + timedelta(hours=2),
+        )
+        self.assertEqual(course.next_course_run_date(), now + timedelta(hours=1))
+
+    def test_models_course_next_course_run_date_enrollment_start(self):
+        """
+        Test get next future course run date when the next is the `enrollment_start`.
+        """
+        now = timezone.now()
+        course = factories.CourseFactory()
+        factories.CourseRunFactory(
+            direct_course=course,
+            start=now + timedelta(hours=3),
+            end=now + timedelta(hours=5),
+            enrollment_start=now + timedelta(hours=1),
+            enrollment_end=now + timedelta(hours=2),
+        )
+        self.assertEqual(course.next_course_run_date(), now + timedelta(hours=1))
+
+    def test_models_course_next_course_run_date_enrollment_end(self):
+        """
+        Test get next future course run date when the next is the `enrollment_end`.
+        """
+        now = timezone.now()
+        course = factories.CourseFactory()
+        factories.CourseRunFactory(
+            direct_course=course,
+            start=now + timedelta(hours=3),
+            end=now + timedelta(hours=5),
+            enrollment_start=now - timedelta(hours=1),
+            enrollment_end=now + timedelta(hours=2),
+        )
+        self.assertEqual(course.next_course_run_date(), now + timedelta(hours=2))
