@@ -1,5 +1,4 @@
 """Make all filter definitions available from richie.apps.search.filter_definitions."""
-from django.conf import settings
 from django.utils.module_loading import import_string
 
 # pylint: disable=unused-import
@@ -14,8 +13,6 @@ from .courses import (  # noqa
 )
 
 FILTERS = {
-    params["name"]: import_string(path)(**params)
-    for path, params in getattr(
-        settings, "RICHIE_FILTERS_CONFIGURATION", FILTERS_CONFIGURATION
-    )
+    name: import_string(values["class"])(name, **values["params"])
+    for name, values in FILTERS_CONFIGURATION.items()
 }

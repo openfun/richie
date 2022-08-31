@@ -103,7 +103,7 @@ class FilterDefinitionsViewTestCase(CMSTestCase):
                     "is_drilldown": False,
                     "is_searchable": True,
                     "name": "licences",
-                    "position": 6,
+                    "position": 7,
                 },
                 "organizations": {
                     "base_path": "0001",
@@ -130,7 +130,7 @@ class FilterDefinitionsViewTestCase(CMSTestCase):
                     "is_drilldown": False,
                     "is_searchable": True,
                     "name": "persons",
-                    "position": 5,
+                    "position": 6,
                 },
                 "pace": {
                     "base_path": None,
@@ -139,7 +139,7 @@ class FilterDefinitionsViewTestCase(CMSTestCase):
                     "is_drilldown": False,
                     "is_searchable": False,
                     "name": "pace",
-                    "position": 7,
+                    "position": 8,
                 },
             },
         )

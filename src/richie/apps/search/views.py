@@ -9,6 +9,7 @@ from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from .defaults import FILTERS_PRESENTATION
 from .filter_definitions import FILTERS
 
 
@@ -37,10 +38,13 @@ def filter_definitions(request, version):
     Make available on an API route the static parts of filter definitions.
     This is useful to some frontend components that need them to configure themselves.
     """
-    return Response(
-        {
-            name: faceted_definition
-            for filter in FILTERS.values()
-            for name, faceted_definition in filter.get_static_definitions().items()
-        }
-    )
+    filters = {
+        name: faceted_definition
+        for filter in FILTERS.values()
+        for name, faceted_definition in filter.get_definition().items()
+        if name in FILTERS_PRESENTATION
+    }
+    for name in filters:
+        filters[name]["position"] = FILTERS_PRESENTATION.index(name)
+
+    return Response(filters)
