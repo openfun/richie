@@ -876,7 +876,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "is_drilldown": False,
                         "is_searchable": True,
                         "name": "licences",
-                        "position": 6,
+                        "position": 7,
                         "values": [
                             {
                                 "count": 2,
@@ -948,7 +948,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "is_drilldown": False,
                         "is_searchable": True,
                         "name": "persons",
-                        "position": 5,
+                        "position": 6,
                         "values": [
                             {
                                 "count": 2,
@@ -965,7 +965,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "is_drilldown": False,
                         "is_searchable": False,
                         "name": "pace",
-                        "position": 7,
+                        "position": 8,
                         "values": [
                             {
                                 "count": 1,

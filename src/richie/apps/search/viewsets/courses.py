@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from .. import ES_CLIENT
-from ..defaults import ES_PAGE_SIZE
+from ..defaults import ES_PAGE_SIZE, FILTERS_PRESENTATION
 from ..filter_definitions import FILTERS
 from ..indexers import ES_INDICES
 from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
@@ -38,9 +38,7 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
 
         limit, offset, query, aggs = params_form.build_es_query()
 
-        body = {
-            "script_fields": params_form.get_script_fields(),
-        }
+        body = {"script_fields": params_form.get_script_fields()}
 
         # The querystring may request only the query or only the aggregations
         scope = params_form.cleaned_data["scope"]
@@ -81,7 +79,11 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
                     course_query_response["aggregations"]["all_courses"],
                     data=params_form.cleaned_data,
                 ).items()
+                if name in FILTERS_PRESENTATION
             }
+            for name in filters:
+                filters[name]["position"] = FILTERS_PRESENTATION.index(name)
+
             response_object["filters"] = dict(
                 sorted(filters.items(), key=lambda f: f[1]["position"])
             )
@@ -97,10 +99,7 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
         # Wrap the ES get in a try/catch to we control the exception we emit — it would
         # raise and end up in a 500 error otherwise
         try:
-            query_response = ES_CLIENT.get(
-                index=self._meta.indexer.index_name,
-                id=pk,
-            )
+            query_response = ES_CLIENT.get(index=self._meta.indexer.index_name, id=pk)
         except NotFoundError:
             return Response(status=404)
 

@@ -42,117 +42,98 @@ ES_STATE_WEIGHTS = getattr(settings, "RICHIE_ES_STATE_WEIGHTS", None) or [
     1,  # ARCHIVED_CLOSED
 ]
 
-FILTERS_CONFIGURATION = [
-    (
-        "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
-        {
+DEFAULT_FILTERS_CONFIGURATION = {
+    # Note: the key is a special name that connects the filter to page objects
+    # in Richie as well as the corresponding indexer and API endpoint.
+    "new": {
+        "class": "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
+        "params": {
             "fragment_map": {"new": [{"term": {"is_new": True}}]},
             "human_name": _("New courses"),
             "min_doc_count": 0,
-            "name": "new",
-            "position": 0,
             "sorting": "conf",
             "values": {"new": _("First session")},
         },
-    ),
-    (
-        "richie.apps.search.filter_definitions.NestingWrapper",
-        {
-            "name": "course_runs",
-            "filters": [
-                (
-                    "richie.apps.search.filter_definitions.AvailabilityFilterDefinition",
-                    {
+    },
+    "course_runs": {
+        "class": "richie.apps.search.filter_definitions.NestingWrapper",
+        "params": {
+            "filters": {
+                "availability": {
+                    "class": "richie.apps.search.filter_definitions.AvailabilityFilterDefinition",
+                    "params": {
                         "human_name": _("Availability"),
                         "is_drilldown": True,
                         "min_doc_count": 0,
-                        "name": "availability",
-                        "position": 1,
                         "sorting": "conf",
                     },
-                ),
-                (
-                    "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
-                    {
+                },
+                "languages": {
+                    "class": "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
+                    "params": {
                         "human_name": _("Languages"),
                         # There are too many available languages to show them all, all the time.
                         # Eg. 200 languages, 190+ of which will have 0 matching courses.
                         "min_doc_count": 1,
-                        "name": "languages",
-                        "position": 5,
                     },
-                ),
-            ],
+                },
+            }
         },
-    ),
-    (
-        "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
-        {
+    },
+    "subjects": {
+        "class": "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
+        "params": {
             "human_name": _("Subjects"),
             "is_autocompletable": True,
             "is_searchable": True,
             "min_doc_count": 0,
-            "name": "subjects",
-            "position": 2,
             "reverse_id": "subjects",
             "term": "categories",
         },
-    ),
-    (
-        "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
-        {
+    },
+    "levels": {
+        "class": "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
+        "params": {
             "human_name": _("Levels"),
             "is_autocompletable": True,
             "is_searchable": True,
             "min_doc_count": 0,
-            "name": "levels",
-            "position": 3,
             "reverse_id": "levels",
             "term": "categories",
         },
-    ),
-    (
-        "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
-        {
+    },
+    "organizations": {
+        "class": "richie.apps.search.filter_definitions.IndexableHierarchicalFilterDefinition",
+        "params": {
             "human_name": _("Organizations"),
             "is_autocompletable": True,
             "is_searchable": True,
             "min_doc_count": 0,
-            # Note: this is a special name that connects the filter to Organization objects
-            # in Richie as well was the corresponding indexer and API endpoint.
-            "name": "organizations",
-            "position": 4,
             "reverse_id": "organizations",
         },
-    ),
-    (
-        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
-        {
+    },
+    "persons": {
+        "class": "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+        "params": {
             "human_name": _("Persons"),
             "is_autocompletable": True,
             "is_searchable": True,
             "min_doc_count": 0,
-            # Note: this is a special name that connects the filter to Person objects
-            # in Richie as well was the corresponding indexer and API endpoint.
-            "name": "persons",
-            "position": 5,
             "reverse_id": "persons",
         },
-    ),
-    (
-        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
-        {
+    },
+    "licences": {
+        "class": "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+        "params": {
             "human_name": _("Licences"),
             "is_autocompletable": True,
             "is_searchable": True,
             "min_doc_count": 0,
-            "name": "licences",
-            "position": 6,
         },
-    ),
-    (
-        "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
-        {
+    },
+    "pace": {
+        "class": "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
+        "params": {
             "fragment_map": {
                 "self-paced": [{"bool": {"must_not": {"exists": {"field": "pace"}}}}],
                 "lt-1h": [{"range": {"pace": {"lt": 60}}}],
@@ -161,8 +142,6 @@ FILTERS_CONFIGURATION = [
             },
             "human_name": _("Weekly pace"),
             "min_doc_count": 0,
-            "name": "pace",
-            "position": 7,
             "sorting": "conf",
             "values": {
                 "self-paced": _("Self-paced"),
@@ -171,5 +150,26 @@ FILTERS_CONFIGURATION = [
                 "gt-2h": _("More than two hours"),
             },
         },
-    ),
-]
+    },
+}
+
+FILTERS_CONFIGURATION = getattr(
+    settings, "RICHIE_FILTERS_CONFIGURATION", DEFAULT_FILTERS_CONFIGURATION
+)
+
+
+FILTERS_PRESENTATION = getattr(
+    settings,
+    "RICHIE_FILTERS_PRESENTATION",
+    [
+        "new",
+        "availability",
+        "subjects",
+        "levels",
+        "organizations",
+        "languages",
+        "persons",
+        "licences",
+        "pace",
+    ],
+)

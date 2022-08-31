@@ -254,7 +254,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
                         "is_drilldown": False,
                         "is_searchable": True,
                         "name": "licences",
-                        "position": 6,
+                        "position": 7,
                         "values": [
                             {"count": 66, "human_name": "Licence 42", "key": "42"},
                             {"count": 13, "human_name": "Licence 41", "key": "41"},
@@ -295,7 +295,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
                         "is_drilldown": False,
                         "is_searchable": True,
                         "name": "persons",
-                        "position": 5,
+                        "position": 6,
                         "values": [
                             {"count": 11, "human_name": "Person 31", "key": "31"},
                             {"count": 7, "human_name": "Person 32", "key": "32"},
@@ -310,7 +310,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
                         "is_drilldown": False,
                         "is_searchable": False,
                         "name": "pace",
-                        "position": 7,
+                        "position": 8,
                         "values": [],
                     },
                     "subjects": {

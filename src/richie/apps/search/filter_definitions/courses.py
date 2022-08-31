@@ -250,7 +250,6 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                 "is_drilldown": self.is_drilldown,
                 "is_searchable": self.is_searchable,
                 "name": self.name,
-                "position": self.position,
             }
         }
 
@@ -442,9 +441,9 @@ class StaticChoicesFilterDefinition(
     A filter definition for static choices ie that can be defined from the project settings.
     """
 
-    def __init__(self, values, fragment_map, *args, **kwargs):
+    def __init__(self, name, values, fragment_map, *args, **kwargs):
         """Record values and fragment map as attributes."""
-        super().__init__(*args, **kwargs)
+        super().__init__(name, *args, **kwargs)
         self.values = values
         self.fragment_map = fragment_map
 

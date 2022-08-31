@@ -16,6 +16,13 @@ $ make migrate
 
 ## Unreleased
 
+## 2.15.x to 2.16.x
+
+- The way filters are configured has changed. There is now a separate setting
+  `RICHIE_FILTERS_PRESENTATION` to easily define which filters are displayed and in which order.
+  If you need to customize more than the list and order of the search filters, the
+  `RICHIE_FILTERS_CONFIGURATION` still exists and has a new simplified format.
+
 ## 2.14.x to 2.15.x
 
 - On frontend, the API interface `base` has been renamed into `dummy`.

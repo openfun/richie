@@ -1103,7 +1103,8 @@ class FacetsCoursesQueryTestCase(TestCase):
         FILTERS,
         {
             "subjects": IndexableHierarchicalFilterDefinition(
-                **{**FILTERS_CONFIGURATION[2][1], "min_doc_count": 2}
+                "subjects",
+                **{**FILTERS_CONFIGURATION["subjects"]["params"], "min_doc_count": 2},
             )
         },
     )
@@ -1170,7 +1171,8 @@ class FacetsCoursesQueryTestCase(TestCase):
         FILTERS,
         {
             "subjects": IndexableHierarchicalFilterDefinition(
-                **{**FILTERS_CONFIGURATION[2][1], "min_doc_count": 2}
+                "subjects",
+                **{**FILTERS_CONFIGURATION["subjects"]["params"], "min_doc_count": 2},
             )
         },
     )
@@ -1233,21 +1235,17 @@ class FacetsCoursesQueryTestCase(TestCase):
         FILTERS,
         {
             "course_runs": NestingWrapper(
-                **{
-                    "name": "course_runs",
-                    "filters": [
-                        (
-                            "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
-                            {
-                                "human_name": "Languages",
-                                "min_doc_count": 2,
-                                "name": "languages",
-                                "position": 5,
-                                "sorting": "count",
-                            },
-                        )
-                    ],
-                }
+                "course_runs",
+                filters={
+                    "languages": {
+                        "class": "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
+                        "params": {
+                            "human_name": "Languages",
+                            "min_doc_count": 2,
+                            "sorting": "count",
+                        },
+                    }
+                },
             )
         },
     )
@@ -1285,21 +1283,17 @@ class FacetsCoursesQueryTestCase(TestCase):
         FILTERS,
         {
             "course_runs": NestingWrapper(
-                **{
-                    "name": "course_runs",
-                    "filters": [
-                        (
-                            "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
-                            {
-                                "human_name": "Languages",
-                                "min_doc_count": 2,
-                                "name": "languages",
-                                "position": 5,
-                                "sorting": "count",
-                            },
-                        )
-                    ],
-                }
+                "course_runs",
+                filters={
+                    "languages": {
+                        "class": "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
+                        "params": {
+                            "human_name": "Languages",
+                            "min_doc_count": 2,
+                            "sorting": "count",
+                        },
+                    },
+                },
             )
         },
     )

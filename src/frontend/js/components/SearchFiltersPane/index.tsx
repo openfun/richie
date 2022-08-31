@@ -30,7 +30,7 @@ export const SearchFiltersPane = ({
   filters,
   ...passThroughProps
 }: SearchFiltersPaneProps & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
-  const filterList = filters && Object.values(filters);
+  const filterList = filters && Object.values(filters).sort((f1, f2) => f1.position - f2.position);
 
   const { courseSearchParams, dispatchCourseSearchParamsUpdate } = useCourseSearchParams();
 

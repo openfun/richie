@@ -7,7 +7,7 @@ import { SearchFiltersPane } from '.';
 
 jest.mock('components/SearchFilterGroup', () => ({
   SearchFilterGroup: ({ filter }: any) => (
-    <span>{`Received filter title: ${filter.human_name}`}</span>
+    <span data-testid="filter">{`Received filter title: ${filter.human_name}`}</span>
   ),
 }));
 
@@ -25,7 +25,11 @@ describe('components/SearchFiltersPane', () => {
   ];
 
   it('renders all our search filter groups', () => {
-    const { getByText } = render(
+    const shuffledNames = ['Categories', 'Organizations', 'Persons'].sort(
+      () => Math.random() - 0.5,
+    );
+
+    const { getByText, getAllByTestId } = render(
       <IntlProvider locale="en">
         <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
           <SearchFiltersPane
@@ -37,7 +41,7 @@ describe('components/SearchFiltersPane', () => {
                 is_autocompletable: true,
                 is_searchable: true,
                 name: 'categories',
-                position: 0,
+                position: shuffledNames.indexOf('Categories'),
                 values: [],
               },
               organizations: {
@@ -47,7 +51,17 @@ describe('components/SearchFiltersPane', () => {
                 is_autocompletable: true,
                 is_searchable: true,
                 name: 'organizations',
-                position: 1,
+                position: shuffledNames.indexOf('Organizations'),
+                values: [],
+              },
+              persons: {
+                base_path: '0003',
+                has_more_values: false,
+                human_name: 'Persons',
+                is_autocompletable: true,
+                is_searchable: true,
+                name: 'persons',
+                position: shuffledNames.indexOf('Persons'),
                 values: [],
               },
             }}
@@ -56,10 +70,13 @@ describe('components/SearchFiltersPane', () => {
       </IntlProvider>,
     );
 
-    // The pane's title is shown along with the filter groups
-    getByText('Filter courses');
-    getByText('Received filter title: Categories');
-    getByText('Received filter title: Organizations');
+    // The pane's title is shown along with filter groups in the order defined by their position
+    const items = getAllByTestId('filter');
+    expect(items.length).toEqual(3);
+    items.forEach((element, index) => {
+      expect(element.textContent).toContain(shuffledNames[index]);
+    });
+
     expect(getByText('Clear 0 active filters')).toHaveClass('search-filters-pane__clear--hidden');
   });
 

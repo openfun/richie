@@ -32,7 +32,6 @@ class BaseFilterDefinition:
         is_drilldown=False,
         is_searchable=False,
         min_doc_count=0,
-        position=0,
         sorting=FACET_SORTING_DEFAULT,
     ):
         """Set common attributes with sensible defaults (only name is required)."""
@@ -43,7 +42,6 @@ class BaseFilterDefinition:
         self.is_drilldown = is_drilldown
         self.is_searchable = is_searchable
         self.min_doc_count = min_doc_count
-        self.position = position
         self.sorting = sorting
 
     def get_form_fields(self):
@@ -139,7 +137,6 @@ class BaseFilterDefinition:
                         "is_searchable": False,
                         "is_drilldown": False,
                         "name": "languages",
-                        "position": 5,
                     }
                 }
 
@@ -174,7 +171,6 @@ class BaseFilterDefinition:
                         "is_searchable": False,
                         "is_drilldown": False,
                         "name": "languages",
-                        "position": 5,
                         "values": [
                             {"key": "en", "human_name": "English", "count": 3},
                             {"key": "fr", "human_name": "French", "count": 2},
@@ -243,7 +239,6 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
                 "is_drilldown": self.is_drilldown,
                 "is_searchable": self.is_searchable,
                 "name": self.name,
-                "position": self.position,
             }
         }
 
@@ -292,8 +287,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
         if sorting == self.SORTING_NAME:
             # Alphabetical ascending sorting
             values = sorted(
-                values,
-                key=lambda value: (value["human_name"], value["count"] * -1),
+                values, key=lambda value: (value["human_name"], value["count"] * -1)
             )
         elif sorting == self.SORTING_CONF:
             # Respect the order set in filter definitions
@@ -303,8 +297,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
         elif sorting == self.SORTING_COUNT:
             # Sorting by descending facet count
             values = sorted(
-                values,
-                key=lambda value: (value["count"] * -1, value["human_name"]),
+                values, key=lambda value: (value["count"] * -1, value["human_name"])
             )
         else:
             raise ImproperlyConfigured(
@@ -366,10 +359,10 @@ class NestingWrapper(BaseFilterDefinition):
         super().__init__(name)
         self.path = path or name
         self.filter_definitions = {
-            params["name"]: import_string(dotted_path)(
-                term=f"{self.path:s}.{params['name']:s}", **params
+            name: import_string(values["class"])(
+                name, term=f"{self.path:s}.{name:s}", **values["params"]
             )
-            for dotted_path, params in filters
+            for name, values in filters.items()
         }
 
     def get_form_fields(self):
