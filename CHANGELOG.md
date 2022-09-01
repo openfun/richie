@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Add pip requests package for open edx lms backend.
+
 ### Added
 
 - Display error messages in `AddressForm`
