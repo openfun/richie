@@ -434,7 +434,7 @@ CKEDITOR_BASIC_CONFIGURATION = {
     "toolbarCanCollapse": False,
     "contentsCss": "/static/css/ckeditor.css",
     # Only enable following tag definitions
-    "allowedContent": ["p", "b", "i", "a[href]"],
+    "allowedContent": ["p", "b", "i", "a[href,target]"],
     # Enabled showblocks as default behavior
     "startupOutlineBlocks": True,
     # Default toolbar configurations for djangocms_text_ckeditor

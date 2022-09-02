@@ -18,6 +18,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- CKEditor basic configuration should allow to include target on anchors
+  for course fields: assessment, format and prerequisites.
 - Allow form messages to go on multiple lines
 - On the search page, improve accessibility of the filters pane when using a
   small screen
