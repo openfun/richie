@@ -90,11 +90,16 @@ committing it and pushing it to a new git repository.
 
 ## Theming
 
-Probably you want to change the default theme. The cookiecutter adds an extra scss frontend folder with a couple of templates where you can use to change the default styling of the site.
+You probably want to change the default theme. The cookiecutter adds an extra scss frontend folder with a couple of templates that you can use to change the default styling of the site.
 * `sites/<site>/src/frontend/scss/extras/colors/_palette.scss`
 * `sites/<site>/src/frontend/scss/extras/colors/_theme.scss`
 
 To change the default logo of the site, you need to create the folder `sites/<site>/src/backend/base/static/richie/images` and then override the new `logo.png` picture.
+
+For more advanced customization, refer to our recipes:
+
+* [How to customize search filters](filters-customization.md)
+* [How to override frontend components in Richie](frontend-overrides.md)
 
 ## Update your Richie site factory
 
