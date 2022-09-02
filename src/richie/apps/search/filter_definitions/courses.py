@@ -115,13 +115,13 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         base_facet_limit = applicable_facet_limit(data, self.name)
 
         # Add a control length to let us know if there are more items than what what we're
-        # returning. This is achieved by counting the results in `get_faceted_definitions`.
+        # returning. This is achieved by counting the results in `get_facet_info``.
         # Example:
         #   - applicable limit is 10;
         #   - 2 active filters;
         #   - query the top 13 (10 + 2 + 1) facets;
         #   => we'll be able to determine if there are more items depending on what is returned
-        #      and how they are ordered. (see in `get_faceted_definitions`).
+        #      and how they are ordered. (see in `get_facet_info`).
         control_length = len(data[self.name]) + 1
 
         # Terms aggregation will return the n top facet counts among all the values taken
@@ -135,7 +135,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                             "field": self.term,
                             "include": include,
                             # Always force `min_doc_count` at 0: we filter the results in
-                            # `get_faceted_definitions` so we can have more information on the
+                            # `get_facet_info` so we can have more information on the
                             # availability of more values below the filter's `min_doc_count`.
                             "min_doc_count": 0,
                             "size": base_facet_limit + control_length,
@@ -238,25 +238,9 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             for doc in search_query_response["hits"]["hits"]
         }
 
-    def get_static_definitions(self):
+    def get_facet_info(self, facets, data, *args, **kwargs):
         """
-        Build the static definition from the filter's base properties.
-        """
-        return {
-            self.name: {
-                "base_path": self.base_page.node.path if self.base_page else None,
-                "human_name": self.human_name,
-                "is_autocompletable": self.is_autocompletable,
-                "is_drilldown": self.is_drilldown,
-                "is_searchable": self.is_searchable,
-                "name": self.name,
-            }
-        }
-
-    def get_faceted_definitions(self, facets, data, *args, **kwargs):
-        """
-        Build the filter definition's values from base definition and the faceted keys in the
-        current language.
+        Build the facet information from keys in the current language.
         Those provide us with the keys and counts that we just have to consume. They come from:
         - a bucket with the top facets in decreasing order of counts,
         - specific facets for values that were select in the querystring (we must force them
@@ -368,8 +352,6 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
 
         return {
             self.name: {
-                # We always need to pass the base definition to the frontend
-                **self.get_static_definitions()[self.name],
                 # If values are removed due to `min_doc_count`, we are not returning them, and
                 # therefore by definition our filter `has_more_values`.
                 "has_more_values": has_more_values

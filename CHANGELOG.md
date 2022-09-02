@@ -29,6 +29,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Refactor filter definition methods to simplify writing custom filters
 - Improve filters configuration to allow easier customization
 - CKEditor basic configuration should allow to include target on anchors
   for course fields: assessment, format and prerequisites.

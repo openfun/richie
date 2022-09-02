@@ -119,7 +119,7 @@ class BaseFilterDefinition:
         """
         raise NotImplementedError()
 
-    def get_static_definitions(self):
+    def get_definition(self):
         """
         Build a static filter definition that only uses a filter's intrinsic attributes and
         holds no contextual information related to a search. This is useful to eg. configure
@@ -128,49 +128,46 @@ class BaseFilterDefinition:
         Returns:
         --------
             Dict: a dictionary mapping the name of a filter with a dictionary of all the
-                information necessary to display make use of the filtre through search.
-                {
-                    languages: {
-                        "base_path": None,
-                        "human_name": "Languages",
-                        "is_autocompletable": False,
-                        "is_searchable": False,
-                        "is_drilldown": False,
-                        "name": "languages",
-                    }
-                }
-
-        To be implemented in each actual FilterDefintion class.
+                information necessary to display and make use of the filter through search.
         """
-        raise NotImplementedError()
+        return {
+            self.name: {
+                "base_path": self.base_page.node.path
+                if getattr(self, "base_page", None)
+                else None,
+                "human_name": self.human_name,
+                "is_autocompletable": self.is_autocompletable,
+                "is_drilldown": self.is_drilldown,
+                "is_searchable": self.is_searchable,
+                "name": self.name,
+            }
+        }
 
-    def get_faceted_definitions(self, facets, data, *args, **kwargs):
+    def get_facet_info(self, facets, data, *args, **kwargs):
         """
-        Build the filter definition from a filter's common attributes and its Elasticsearch
-        facet results. The frontend uses these definitions to display the filters on the
+        Build the facet information from a filter's Elasticsearch facet results.
+        The frontend uses this information to display the filters on the
         user interface (see search page left side bar).
 
         Arguments:
         ----------
-            Dict: a dictionary mapping each aggregation name (one for each aggregation bucket
-                defined by the `get_aggs_fragment` method) with its documents counts as returned
-                by Elasticsearch in the "aggregations" part of the response.
+            facets (Dict): a dictionary mapping each aggregation name (one for each aggregation
+                bucket defined by the `get_aggs_fragment` method) with its documents counts as
+                returned by Elasticsearch in the "aggregations" part of the response.
+            data (Dict): a dictionary mapping the name of filters with the list of
+                values selected for each filter. Typically the `cleaned_data` output of
+                a valid filter form:
+                e.g. {"availability": ["open"], "languages": ["en", "fr"]}
 
         Returns:
         --------
-            Dict: a dictionary mapping the name of a filter with a dictionary of all the
-                information necessary to display the filter on the search page with its
-                facet counts. For example:
+            Dict: a dictionary mapping the name of a filter with a dictionary of facet information
+                necessary to display the filter on the search page with its facet counts.
+                For example:
 
                 {
                     languages: {
-                        "base_path": None,
                         "has_more_values": False,
-                        "human_name": "Languages",
-                        "is_autocompletable": False,
-                        "is_searchable": False,
-                        "is_drilldown": False,
-                        "name": "languages",
                         "values": [
                             {"key": "en", "human_name": "English", "count": 3},
                             {"key": "fr", "human_name": "French", "count": 2},
@@ -227,26 +224,8 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
             )
         }
 
-    def get_static_definitions(self):
-        """
-        Build the static definition from the filter's base properties.
-        """
-        return {
-            self.name: {
-                "base_path": None,
-                "human_name": self.human_name,
-                "is_autocompletable": self.is_autocompletable,
-                "is_drilldown": self.is_drilldown,
-                "is_searchable": self.is_searchable,
-                "name": self.name,
-            }
-        }
-
-    def get_faceted_definitions(self, facets, data, *args, **kwargs):
-        """
-        Add the counts to the values from the initial definition to make them complete
-        and sorted as the frontend expects them.
-        """
+    def get_facet_info(self, facets, data, *args, **kwargs):
+        """Add facet counts to the values and sort as the frontend expects them."""
         human_names = self.get_values()
 
         # for each facet, we derive the value and the count:
@@ -306,8 +285,6 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
 
         return {
             self.name: {
-                # We always need to pass the base definition to the frontend
-                **self.get_static_definitions()[self.name],
                 # If values are removed due to `min_doc_count`, we are not returning them, and
                 # therefore by definition our filter `has_more_values`.
                 "has_more_values": has_more_values
@@ -342,7 +319,7 @@ class NestingWrapper(BaseFilterDefinition):
             - get_form_fields,
             - get_query_fragment,
             - get_aggs_fragment,
-            - get_faceted_definitions.
+            - get_facet_info.
 
         Arguments:
         ----------
@@ -578,24 +555,24 @@ class NestingWrapper(BaseFilterDefinition):
             )
         return aggs
 
-    def get_static_definitions(self):
+    def get_definition(self):
         """
         Collect static definitions from the children filter definitions in a dictionary.
         """
         return {
             name: facet_definition
             for fd in self.filter_definitions.values()
-            for name, facet_definition in fd.get_static_definitions().items()
+            for name, facet_definition in fd.get_definition().items()
         }
 
-    def get_faceted_definitions(self, facets, data, *args, **kwargs):
+    def get_facet_info(self, facets, data, *args, **kwargs):
         """
-        Collect facet definitions from the children filter definitions in a dictionary.
+        Collect facet information from the children filter definitions in a dictionary.
         """
         return {
             name: facet_definition
             for fd in self.filter_definitions.values()
-            for name, facet_definition in fd.get_faceted_definitions(
+            for name, facet_definition in fd.get_facet_info(
                 facets, data=data, *args, **kwargs
             ).items()
         }
