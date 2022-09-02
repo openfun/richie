@@ -57,7 +57,7 @@ class BaseFilterDefinition:
 
     def get_query_fragment(self, data):
         """
-        Build the query fragment to use in the ElasticSearch filter & aggregations.
+        Build the query fragment to use in the ElasticSearch query.
 
         Arguments:
         ----------
@@ -84,7 +84,7 @@ class BaseFilterDefinition:
 
     def get_aggs_fragment(self, queries, *args, **kwargs):
         """
-        Build the aggregations fragment to use to extract facets from ElasticSearch.
+        Build the aggregations fragment to use to extract facets from ElasticSearch aggregations.
 
         Arguments:
         ----------

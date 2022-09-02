@@ -2,10 +2,11 @@
   "docs": {
     "Getting started": ["discover", "cookiecutter"],
     "Recipes": [
+      "filters-customization",
       "django-react-interop",
       "building-the-frontend",
-      "internationalization",
       "frontend-overrides",
+      "internationalization",
       "lms-connection",
       "web-analytics"
     ],
