@@ -146,7 +146,7 @@ class FilterDefinitionsViewTestCase(CMSTestCase):
 
     @mock.patch.object(
         FILTERS["new"],
-        "get_static_definitions",
+        "get_definition",
         return_value={
             "new": {
                 "base_path": None,
@@ -159,10 +159,10 @@ class FilterDefinitionsViewTestCase(CMSTestCase):
             }
         },
     )
-    def test_views_filter_definitions_is_cached(self, mock_get_static_definitions):
+    def test_views_filter_definitions_is_cached(self, mock_get_definition):
         """
         Make sure we don't re-build the static filter definitions with each call.
         """
         self.client.get("/api/v1.0/filter-definitions/")
         self.client.get("/api/v1.0/filter-definitions/")
-        self.assertEqual(mock_get_static_definitions.call_count, 1)
+        self.assertEqual(mock_get_definition.call_count, 1)

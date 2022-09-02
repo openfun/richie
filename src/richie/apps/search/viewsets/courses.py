@@ -72,10 +72,16 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
             ]
 
         if form_class.FILTERS in scope or not scope:
-            filters = {
-                name: faceted_definition
+            filters_definition = {
+                name: definition
                 for filter in FILTERS.values()
-                for name, faceted_definition in filter.get_faceted_definitions(
+                for name, definition in filter.get_definition().items()
+                if name in FILTERS_PRESENTATION
+            }
+            filters = {
+                name: {**filters_definition[name], **faceted_definition}
+                for filter in FILTERS.values()
+                for name, faceted_definition in filter.get_facet_info(
                     course_query_response["aggregations"]["all_courses"],
                     data=params_form.cleaned_data,
                 ).items()
