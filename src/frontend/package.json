@@ -14,7 +14,9 @@
     "build-sass-production": "sass scss/_main.scss ../richie/static/richie/css/main.css --style=compressed --load-path=node_modules",
     "test": "jest",
     "watch-sass": "nodemon -e scss -x 'yarn build-sass'",
-    "watch-ts": "yarn build-ts --watch"
+    "watch-ts": "yarn build-ts --watch",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -47,6 +49,14 @@
     "@hookform/resolvers": "2.9.7",
     "@sentry/browser": "7.9.0",
     "@sentry/types": "7.9.0",
+    "@storybook/addon-actions": "6.5.10",
+    "@storybook/addon-essentials": "6.5.10",
+    "@storybook/addon-interactions": "6.5.10",
+    "@storybook/addon-links": "6.5.10",
+    "@storybook/builder-webpack5": "6.5.10",
+    "@storybook/manager-webpack5": "6.5.10",
+    "@storybook/react": "6.5.10",
+    "@storybook/testing-library": "0.0.13",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "12.1.4",
     "@testing-library/react-hooks": "8.0.1",

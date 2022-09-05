@@ -167,6 +167,14 @@ lint-front-eslint: ## lint TypeScript sources
 	@$(YARN) lint
 .PHONY: lint-front-eslint
 
+run-storybook: ## Run front-end's storybook
+	@$(COMPOSE) up -d storybook
+.PHONY: run-storybook
+
+stop-storybook: ## Stop front-end's storybook
+	@$(COMPOSE) stop storybook
+.PHONY: stop-storybook
+
 test-front: ## run front-end tests
 	@$(YARN) test --runInBand
 .PHONY: test-front
@@ -212,7 +220,7 @@ lint-back-diff: ## lint back-end python sources, but only what has changed since
 
 lint-back-black: ## lint back-end python sources with black
 	@echo 'lint:black started…'
-	@$(COMPOSE_TEST_RUN_APP) black . 
+	@$(COMPOSE_TEST_RUN_APP) black .
 .PHONY: lint-back-black
 
 lint-back-flake8: ## lint back-end python sources with flake8
