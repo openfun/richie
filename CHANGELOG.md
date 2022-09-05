@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Display error messages in `AddressForm`
 - Add dns prefetch and optionally preconnect to media cdn
+- Add StorybookJS to frontend
 
 ### Changed
 
