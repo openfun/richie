@@ -84,7 +84,7 @@ describe('SaleTunnelStepPayment', () => {
     // - It should display product information (title & price)
     screen.getByRole('heading', { level: 5, name: 'You are about to purchase' });
     screen.getByText(product.title, { exact: true });
-    screen.getByText(formatter.format(product.price).replace(' ', ' '));
+    screen.getByText(formatter.format(product.price).replaceAll(' ', ' '));
   });
 
   it('should display authenticated user information', async () => {

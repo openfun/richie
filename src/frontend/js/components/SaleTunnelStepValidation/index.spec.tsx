@@ -27,7 +27,7 @@ describe('SaleTunnelStepValidation', () => {
     });
 
     screen.getByRole('heading', { level: 3, name: product.title });
-    screen.getByText(`${formatter.format(product.price).replace(' ', ' ')} including VAT`);
+    screen.getByText(`${formatter.format(product.price).replaceAll(' ', ' ')} including VAT`);
 
     const courses = container.querySelectorAll('.product-detail-row--course');
     expect(courses).toHaveLength(product.target_courses.length);
