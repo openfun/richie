@@ -1699,7 +1699,7 @@ class CourseModelsTestCase(TestCase):
         course = factories.CourseFactory(duration=[7, "hour"], effort=[7, "hour"])
         self.assertIsNone(course.get_pace_display())
 
-    def test_models_course_next_course_run_date_start(self):
+    def test_models_course_compute_max_cache_ttl_start(self):
         """
         Test get next future course run date when the next is the `start`.
         """
@@ -1712,9 +1712,10 @@ class CourseModelsTestCase(TestCase):
             enrollment_start=now - timedelta(hours=1),
             enrollment_end=now + timedelta(hours=2),
         )
-        self.assertEqual(course.next_course_run_date(), now + timedelta(hours=1))
+        print(course.compute_max_cache_ttl())
+        self.assertEqual(course.compute_max_cache_ttl(), now + timedelta(hours=1))
 
-    def test_models_course_next_course_run_date_end(self):
+    def test_models_course_compute_max_cache_ttl_end(self):
         """
         Test get next future course run date when the next is the `end`.
         """
@@ -1727,9 +1728,9 @@ class CourseModelsTestCase(TestCase):
             enrollment_start=now - timedelta(hours=2),
             enrollment_end=now + timedelta(hours=2),
         )
-        self.assertEqual(course.next_course_run_date(), now + timedelta(hours=1))
+        self.assertEqual(course.compute_max_cache_ttl(), now + timedelta(hours=1))
 
-    def test_models_course_next_course_run_date_enrollment_start(self):
+    def test_models_course_compute_max_cache_ttl_enrollment_start(self):
         """
         Test get next future course run date when the next is the `enrollment_start`.
         """
@@ -1742,9 +1743,9 @@ class CourseModelsTestCase(TestCase):
             enrollment_start=now + timedelta(hours=1),
             enrollment_end=now + timedelta(hours=2),
         )
-        self.assertEqual(course.next_course_run_date(), now + timedelta(hours=1))
+        self.assertEqual(course.compute_max_cache_ttl(), now + timedelta(hours=1))
 
-    def test_models_course_next_course_run_date_enrollment_end(self):
+    def test_models_course_compute_max_cache_ttl_enrollment_end(self):
         """
         Test get next future course run date when the next is the `enrollment_end`.
         """
@@ -1757,4 +1758,4 @@ class CourseModelsTestCase(TestCase):
             enrollment_start=now - timedelta(hours=1),
             enrollment_end=now + timedelta(hours=2),
         )
-        self.assertEqual(course.next_course_run_date(), now + timedelta(hours=2))
+        self.assertEqual(course.compute_max_cache_ttl(), now + timedelta(hours=2))

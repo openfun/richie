@@ -3,7 +3,7 @@ Declare and configure the models for the courses application
 """
 # pylint: disable=too-many-lines
 from collections.abc import Mapping
-from datetime import MAXYEAR, datetime
+from datetime import MAXYEAR, datetime, timedelta
 from typing import List, Optional
 
 from django.conf import settings
@@ -35,6 +35,7 @@ from .organization import Organization, OrganizationPluginModel
 from .person import Person, PersonPluginModel
 from .role import PageRole
 
+CACHE_MARGIN = timedelta(seconds=30)
 MAX_DATE = datetime(MAXYEAR, 12, 31, tzinfo=pytz.utc)
 
 
@@ -586,28 +587,31 @@ class Course(EsIdMixin, BasePageExtension):
         """
         return self.get_reverse_related_page_extensions("program", language=language)
 
-    def next_course_run_date(self) -> Optional[datetime]:
+    def compute_max_cache_ttl(self) -> Optional[datetime]:
         """
         Returns the next first future date of all the course runs, or if it doesn't exist return
         `None`. Used to force the django page cache to be updated.
         """
+        now = timezone.now()
+        cache_durations = []
 
-        def get_course_run_dates(run: CourseRun) -> List[datetime]:
-            return (
-                run.start,
-                run.end,
-                run.enrollment_start,
-                run.enrollment_end,
-            )
+        for dates in self.course_runs.values(
+            "start", "end", "enrollment_start", "enrollment_end"
+        ):
+            if (start := (dates.get("start", datetime.min) + 2 * CACHE_MARGIN)) > now:
+                cache_durations.append((start - now).total_seconds())
+            if (
+                (enrollment_start := dates.get("enrollment_start", datetime.min)
+                + 2 * CACHE_MARGIN)
+                > now
+            ):
+                cache_durations.append((enrollment_start - now).total_seconds())
+            if (end := dates.get("end", datetime.max)) > now:
+                cache_durations.append((end - now).total_seconds())
+            if (enrollment_end := dates.get("enrollment_end", datetime.max)) > now:
+                cache_durations.append((enrollment_end - now).total_seconds())
 
-        nestedlist = [get_course_run_dates(r) for r in self.course_runs]
-        datesflatlist = [element for sublist in nestedlist for element in sublist]
-
-        # filter `None` and include only future dates, then sort all the dates
-        dates_sorted = sorted(
-            list(filter(lambda d: d and (timezone.now() < d), datesflatlist))
-        )
-        return dates_sorted[0] if len(dates_sorted) > 0 else None
+        return sorted(cache_durations)[0] if cache_durations else None
 
     @property
     def state(self):
@@ -687,11 +691,13 @@ class CourseRunSyncMode(models.TextChoices):
 class CourseRunCatalogVisibility(models.TextChoices):
     """Course run catalog visibility choices."""
 
-    COURSE_AND_SEARCH = "course_and_search", _(
-        "course_and_search - show on the course page and include in search results"
+    COURSE_AND_SEARCH = (
+        "course_and_search",
+        _("course_and_search - show on the course page and include in search results"),
     )
-    COURSE_ONLY = "course_only", _(
-        "course_only - show on the course page and hide from search results"
+    COURSE_ONLY = (
+        "course_only",
+        _("course_only - show on the course page and hide from search results"),
     )
     HIDDEN = "hidden", _("hidden - hide on the course page and from search results")
 
@@ -870,22 +876,25 @@ class CourseRun(TranslatableModel):
         enrollment_end = enrollment_end or MAX_DATE
 
         now = timezone.now()
-        if start < now:
-            if end > now:
-                if enrollment_end > now:
+        if now - start > CACHE_MARGIN:
+            if end - now > CACHE_MARGIN:
+                if enrollment_end - now > CACHE_MARGIN:
                     # ongoing open
                     return CourseState(CourseState.ONGOING_OPEN, enrollment_end)
                 # ongoing closed
                 return CourseState(CourseState.ONGOING_CLOSED)
-            if enrollment_start < now < enrollment_end:
+            if (
+                now - enrollment_start > CACHE_MARGIN
+                and enrollment_end - now > CACHE_MARGIN
+            ):
                 # archived open
                 return CourseState(CourseState.ARCHIVED_OPEN, enrollment_end)
             # archived closed
             return CourseState(CourseState.ARCHIVED_CLOSED)
-        if enrollment_start > now:
+        if now - enrollment_start < CACHE_MARGIN:
             # future not yet open
             return CourseState(CourseState.FUTURE_NOT_YET_OPEN, start)
-        if enrollment_end > now:
+        if enrollment_end - now > CACHE_MARGIN:
             # future open
             return CourseState(CourseState.FUTURE_OPEN, start)
         # future already closed
