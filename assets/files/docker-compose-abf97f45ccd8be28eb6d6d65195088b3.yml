@@ -62,7 +62,19 @@ services:
     depends_on:
       - app
 
-  node:
+  storybook:
+    image: node:16.15
+    ports:
+      - "8076:6006"
+    working_dir: /app/src/frontend
+    command: npm run storybook
+    environment:
+      - HOME=/tmp
+    user: "${DOCKER_USER:-1000}"
+    volumes:
+      - .:/app
+
+  frontend:
     image: node:16.15
     working_dir: /app/src/frontend
     user: "${DOCKER_USER:-1000}"
