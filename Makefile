@@ -48,7 +48,7 @@ COMPOSE_RUN          = $(COMPOSE) run --rm
 COMPOSE_RUN_SSL      = $(COMPOSE_SSL) run --rm
 COMPOSE_EXEC         = $(COMPOSE) exec
 COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
-COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) node
+COMPOSE_EXEC_FRONTEND= $(COMPOSE_EXEC) frontend
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
 COMPOSE_RUN_SSL_APP  = $(COMPOSE_RUN_SSL) app
 COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin crowdin
@@ -57,14 +57,14 @@ COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
 PYTHON_FILES         = src/richie/apps src/richie/plugins sandbox
 
-# -- Node
-# We must run node with a /home because yarn tries to write to ~/.yarnrc. If the
+# -- Frontend
+# We must run frontend with a /home because yarn tries to write to ~/.yarnrc. If the
 # ID of our host user (with which we run the container) does not exist in the
 # container (e.g. 1000 exists but 1009 does not exist by default), then yarn
 # will try to write to "/.yarnrc" at the root of the system and will fail with a
 # permission error.
-COMPOSE_RUN_NODE     = $(COMPOSE_RUN) -e HOME="/tmp" node
-YARN                 = $(COMPOSE_RUN_NODE) yarn
+COMPOSE_RUN_FRONTEND = $(COMPOSE_RUN) -e HOME="/tmp" frontend
+YARN                 = $(COMPOSE_RUN_FRONTEND) yarn
 
 # -- Django
 MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
