@@ -760,6 +760,59 @@ jobs:
             echo "== Javascript =="
             ls ./build/js/*.js
 
+  cookiecutter-bootstrap:
+    docker:
+      - image: cimg/python:3.10-node
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+        environment:
+          RICHIE_SITE: ci
+    working_directory: ~/fun
+    steps:
+      # Activate docker-in-docker
+      - setup_remote_docker:
+          version: 19.03.13
+      - run:
+          name: Install cookiecutter
+          command: pip install cookiecutter
+      - run:
+          name: Create a project from richie cookiecutter template
+          command: cookiecutter gh:openfun/richie --checkout $CIRCLE_BRANCH --directory cookiecutter --no-input organization=fun
+      - run:
+          name: Enter the newly created project and add a new site "ci"
+          command: |
+            cd fun-richie-site-factory
+            cookiecutter template -o sites/ --no-input site=${RICHIE_SITE} domain=${RICHIE_SITE}.test
+      - run:
+          name: Create env files
+          command: |
+            cp fun-richie-site-factory/env.d/aws.dist fun-richie-site-factory/env.d/aws
+            cp fun-richie-site-factory/env.d/development.dist fun-richie-site-factory/env.d/development
+      - run:
+          name: Create media and db volumes for "ci" site
+          command: |
+            mkdir -p fun-richie-site-factory/data/media/${RICHIE_SITE}
+            mkdir -p fun-richie-site-factory/data/db/${RICHIE_SITE}
+      - run:
+          name: Tweak requirement files to install the branch richie version instead of the released one
+          command: |
+            sed -i 's@"richie-education":.*@"richie-education": "https://gitpkg.now.sh/openfun/richie/src/frontend?'"${CIRCLE_BRANCH}"'"@' fun-richie-site-factory/sites/${RICHIE_SITE}/src/frontend/package.json
+            sed -i 's@richie==.*@git+https://github.com/openfun/richie.git\@'"${CIRCLE_BRANCH}"'#egg=richie@' fun-richie-site-factory/sites/${RICHIE_SITE}/requirements/base.txt
+      - run:
+          name: Build front
+          command: |
+            cd fun-richie-site-factory/sites/${RICHIE_SITE}/src/frontend
+            yarn install
+            yarn build-sass-production
+            yarn build-ts-production
+      - run:
+          name: Build app container
+          command: |
+            cd fun-richie-site-factory
+            docker-compose build app
+
+
   lint-front:
     docker:
       - image: cimg/node:16.15
@@ -1076,3 +1129,14 @@ workflows:
           filters:
             branches:
               only: master
+
+      # Cookiecutter template jobs
+      #
+      # Try to bootstrap a new richie site factory through cookiecutter template
+      - cookiecutter-bootstrap:
+          requires:
+            - build-front
+            - build-back
+          filters:
+            tags:
+              only: /.*/
