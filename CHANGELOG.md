@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Add pip requests package for open edx lms backend.
+- Fix several issues about cookiecutter template
 
 ### Added
 
