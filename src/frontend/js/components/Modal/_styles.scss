@@ -5,18 +5,14 @@
   color: r-theme-val(modal, base-color);
   left: 0;
   margin: 3rem auto;
-  max-height: calc(100% - 6rem);
   max-width: 1024px;
   outline: none;
-  overflow: auto;
-  position: absolute;
   right: 0;
   top: 0;
   width: 75vw;
 
   @include media-breakpoint-down(sm) {
     margin: 1rem auto;
-    max-height: calc(100% - 2rem);
     width: calc(100% - 2rem);
   }
 
@@ -66,9 +62,22 @@
     right: 0;
     top: 0;
     z-index: 300;
+    overflow: auto;
 
     &--transparent {
       background-color: transparent;
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+
+    &.filled {
+      background-color: r-theme-val(modal, base-background);
     }
   }
 }

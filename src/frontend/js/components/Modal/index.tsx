@@ -1,13 +1,31 @@
-import { PropsWithChildren, useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 import ReactModal from 'react-modal';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+
+const messages = defineMessages({
+  closeDialog: {
+    defaultMessage: 'Close modal',
+    description: 'Text for the button to close the modal',
+    id: 'components.Modal.closeDialog',
+  },
+});
+
+interface ModalProps extends ReactModal.Props {
+  closeButton?: boolean;
+  title?: string | ReactNode;
+}
 
 export const Modal = ({
   className,
   bodyOpenClassName,
   overlayClassName,
   children,
+  closeButton = true,
+  title,
   ...props
-}: PropsWithChildren<ReactModal.Props>) => {
+}: ModalProps) => {
+  const intl = useIntl();
+
   // As ReactModal can accept a ReactModal.Classes object or a string for some
   // class properties, we have to impletemente a little util to merge this special
   // object with the default CSS class to applied.
@@ -35,6 +53,11 @@ export const Modal = ({
     throw new Error('Failed to get #modal-exclude to enable an accessible <ReactModal />.');
   }, []);
 
+  const headerClasses = ['modal__header'];
+  if (title) {
+    headerClasses.push('filled');
+  }
+
   return (
     <ReactModal
       appElement={modalExclude}
@@ -43,6 +66,23 @@ export const Modal = ({
       overlayClassName={mergeClasses({ base: 'modal__overlay', classes: overlayClassName })}
       {...props}
     >
+      <div className={headerClasses.join(' ')}>
+        <div>{title}</div>
+        {closeButton && (
+          <button
+            className="modal__closeButton"
+            onClick={(e) => props.onRequestClose?.(e)}
+            title={intl.formatMessage(messages.closeDialog)}
+          >
+            <svg className="modal__closeButton__icon" aria-hidden="true">
+              <use href="#icon-round-close" />
+            </svg>
+            <span className="offscreen">
+              <FormattedMessage {...messages.closeDialog} />
+            </span>
+          </button>
+        )}
+      </div>
       {children}
     </ReactModal>
   );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAsyncEffect } from "../js/utils/useAsyncEffect";
+import { IntlProvider } from 'react-intl';
 
 export const parameters = {
   actions: {argTypesRegex: "^on[A-Z].*"},
@@ -31,8 +32,10 @@ const IconsWrapper = props => {
 
 export const decorators = [
   (Story) => (
-    <IconsWrapper>
-      <Story/>
-    </IconsWrapper>
+    <IntlProvider locale="en">
+      <IconsWrapper>
+        <Story/>
+      </IconsWrapper>
+    </IntlProvider>
   ),
 ];
