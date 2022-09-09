@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { IntlProvider } from 'react-intl';
 import { Modal } from '.';
 
 describe('<Modal />', () => {
@@ -10,12 +11,14 @@ describe('<Modal />', () => {
 
   it('merges custom classNames of type string with the default classes', () => {
     render(
-      <Modal
-        isOpen={true}
-        className="custom-class"
-        bodyOpenClassName="custom-body-open-class"
-        overlayClassName="custom-overlay-class"
-      />,
+      <IntlProvider locale="en">
+        <Modal
+          isOpen={true}
+          className="custom-class"
+          bodyOpenClassName="custom-body-open-class"
+          overlayClassName="custom-overlay-class"
+        />
+      </IntlProvider>,
     );
 
     const $body = document.querySelector('body.has-opened-modal.custom-body-open-class');
@@ -29,19 +32,21 @@ describe('<Modal />', () => {
 
   it('merges custom classNames of type ReactModal.Classes with the default classes', () => {
     render(
-      <Modal
-        isOpen={true}
-        className={{
-          base: 'custom-class-base',
-          afterOpen: 'custom-class-afterOpen',
-          beforeClose: 'custom-class-beforeClose',
-        }}
-        overlayClassName={{
-          base: 'custom-overlay-class-base',
-          afterOpen: 'custom-overlay-class-afterOpen',
-          beforeClose: 'custom-overlay-class-beforeClose',
-        }}
-      />,
+      <IntlProvider locale="en">
+        <Modal
+          isOpen={true}
+          className={{
+            base: 'custom-class-base',
+            afterOpen: 'custom-class-afterOpen',
+            beforeClose: 'custom-class-beforeClose',
+          }}
+          overlayClassName={{
+            base: 'custom-overlay-class-base',
+            afterOpen: 'custom-overlay-class-afterOpen',
+            beforeClose: 'custom-overlay-class-beforeClose',
+          }}
+        />
+      </IntlProvider>,
     );
 
     const $modal = document.querySelector('.modal.custom-class-base');

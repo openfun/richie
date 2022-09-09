@@ -4,7 +4,6 @@ import { useInfiniteQuery } from 'react-query';
 
 import { Modal } from 'components/Modal';
 import { Spinner } from 'components/Spinner';
-import { Icon } from 'components/Icon';
 import { fetchList } from 'data/getResourceList';
 import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
@@ -151,22 +150,7 @@ const ModalContent = ({ filter, modalIsOpen, setModalIsOpen }: ModalContentProps
 
   return (
     <Fragment>
-      <button
-        className="modal__closeButton search-filter-group-modal__close"
-        onClick={() => setModalIsOpen(false)}
-      >
-        <span className="offscreen">
-          <FormattedMessage {...messages.closeButton} />
-        </span>
-        <Icon
-          name="icon-cross"
-          className="modal__closeButton__icon search-filter-group-modal__close__icon"
-        />
-      </button>
       <fieldset className="search-filter-group-modal__form">
-        <legend className="search-filter-group-modal__form__title">
-          <FormattedMessage {...messages.modalTitle} values={{ filterName: filter.human_name }} />
-        </legend>
         <input
           aria-label={intl.formatMessage(messages.inputLabel)}
           className="search-filter-group-modal__form__input"
@@ -257,8 +241,13 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
       <Modal
         appElement={modalExclude}
         bodyOpenClassName="has-search-filter-group-modal"
-        className="search-filter-group-modal modal--stretched"
+        className="search-filter-group-modal"
         isOpen={modalIsOpen}
+        title={
+          <legend className="search-filter-group-modal__form__title">
+            <FormattedMessage {...messages.modalTitle} values={{ filterName: filter.human_name }} />
+          </legend>
+        }
         onRequestClose={() => setModalIsOpen(false)}
       >
         <ModalContent {...{ filter, modalIsOpen, setModalIsOpen }} />

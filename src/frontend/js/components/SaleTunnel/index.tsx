@@ -33,12 +33,6 @@ const messages = defineMessages({
     description: "Label displayed inside the product's CTA when user is not logged in",
     id: 'components.SaleTunnel.loginToPurchase',
   },
-  closeDialog: {
-    defaultMessage: 'Close the dialog',
-    description:
-      'ARIA label used by screenreader to inform that the close dialog button is selected',
-    id: 'components.SaleTunnel.closeDialog',
-  },
 });
 
 interface SaleTunnelProps {
@@ -107,18 +101,6 @@ const SaleTunnel = ({ product }: SaleTunnelProps) => {
         shouldCloseOnEsc={false}
         testId="SaleTunnel__modal"
       >
-        <button
-          className="modal__closeButton"
-          onClick={handleModalClose}
-          title={intl.formatMessage(messages.closeDialog)}
-        >
-          <svg className="modal__closeButton__icon" aria-hidden="true">
-            <use href="#icon-round-close" />
-          </svg>
-          <span className="offscreen">
-            <FormattedMessage {...messages.closeDialog} />
-          </span>
-        </button>
         <div className="SaleTunnel__modal-body">
           <StepBreadcrumb manifest={manifest} step={step} />
           {step === 'validation' && <SaleTunnelStepValidation product={product} next={next} />}

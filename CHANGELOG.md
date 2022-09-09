@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Modal component refactor for homogeneous use
+- New global scroll behavior for Modal
+
 ## [2.16.0]
 
 ### Fixed
