@@ -76,7 +76,16 @@
     position: sticky;
     top: 0;
 
-    &.filled {
+    h2 {
+      font-family: $r-font-family-hind;
+      display: block;
+      margin: 0;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: $font-weight-boldest;
+    }
+
+    &--filled {
       background-color: r-theme-val(modal, base-background);
     }
   }

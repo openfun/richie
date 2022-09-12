@@ -1,17 +1,18 @@
 import { ReactNode, useMemo } from 'react';
 import ReactModal from 'react-modal';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { StringHelper } from '../../utils/StringHelper';
 
 const messages = defineMessages({
   closeDialog: {
-    defaultMessage: 'Close modal',
+    defaultMessage: 'Close dialog',
     description: 'Text for the button to close the modal',
     id: 'components.Modal.closeDialog',
   },
 });
 
 interface ModalProps extends ReactModal.Props {
-  closeButton?: boolean;
+  hasCloseButton?: boolean;
   title?: string | ReactNode;
 }
 
@@ -20,14 +21,14 @@ export const Modal = ({
   bodyOpenClassName,
   overlayClassName,
   children,
-  closeButton = true,
+  hasCloseButton = true,
   title,
   ...props
 }: ModalProps) => {
   const intl = useIntl();
 
   // As ReactModal can accept a ReactModal.Classes object or a string for some
-  // class properties, we have to impletemente a little util to merge this special
+  // class properties, we have to implement a little util to merge this special
   // object with the default CSS class to applied.
   const mergeClasses = ({ base, classes }: { base?: string; classes?: any }) => {
     if (base && classes) {
@@ -55,7 +56,7 @@ export const Modal = ({
 
   const headerClasses = ['modal__header'];
   if (title) {
-    headerClasses.push('filled');
+    headerClasses.push('modal__header--filled');
   }
 
   return (
@@ -66,9 +67,10 @@ export const Modal = ({
       overlayClassName={mergeClasses({ base: 'modal__overlay', classes: overlayClassName })}
       {...props}
     >
-      <div className={headerClasses.join(' ')}>
-        <div>{title}</div>
-        {closeButton && (
+      <header className={headerClasses.join(' ')}>
+        {StringHelper.isString(title) && <h2>{title}</h2>}
+        {!StringHelper.isString(title) && title}
+        {hasCloseButton && (
           <button
             className="modal__closeButton"
             onClick={(e) => props.onRequestClose?.(e)}
@@ -82,7 +84,7 @@ export const Modal = ({
             </span>
           </button>
         )}
-      </div>
+      </header>
       {children}
     </ReactModal>
   );

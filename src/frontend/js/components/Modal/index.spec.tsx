@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { Modal } from '.';
 
@@ -54,5 +54,44 @@ describe('<Modal />', () => {
 
     expect($modal).toBeInstanceOf(HTMLDivElement);
     expect($overlay).toBeInstanceOf(HTMLDivElement);
+  });
+
+  it('displays close button', () => {
+    render(
+      <IntlProvider locale="en">
+        <Modal isOpen={true} />
+      </IntlProvider>,
+    );
+
+    screen.getByRole('button', { name: 'Close dialog' });
+  });
+
+  it('has no close button', () => {
+    render(
+      <IntlProvider locale="en">
+        <Modal isOpen={true} hasCloseButton={false} />
+      </IntlProvider>,
+    );
+
+    expect(screen.queryByRole('button', { name: 'Close dialog' })).toBeNull();
+  });
+
+  it('displays title', () => {
+    render(
+      <IntlProvider locale="en">
+        <Modal isOpen={true} title={<div data-testid="custom__header">Hi there</div>} />
+      </IntlProvider>,
+    );
+
+    screen.getByTestId('custom__header');
+  });
+
+  it('displays title in h2 if it is a string', () => {
+    render(
+      <IntlProvider locale="en">
+        <Modal isOpen={true} title="Hello world" />
+      </IntlProvider>,
+    );
+    screen.getByRole('heading', { level: 2, name: 'Hello world' });
   });
 });

@@ -427,7 +427,7 @@ describe('<SearchFilterGroupModal />', () => {
     // The modal is not rendered
     expect(screen.queryByText('Add filters for Universities')).toEqual(null);
     expect(screen.queryByPlaceholderText('Search in Universities')).toEqual(null);
-    expect(screen.queryByText('Close modal')).toEqual(null);
+    expect(screen.queryByText('Close dialog')).toEqual(null);
 
     // The modal is rendered
     const openButton = screen.getByText('More options');
@@ -452,7 +452,7 @@ describe('<SearchFilterGroupModal />', () => {
     screen.getByPlaceholderText('Search in Universities');
 
     // User clicks on the close button
-    const closeButton = screen.getByText('Close modal');
+    const closeButton = screen.getByText('Close dialog');
     fireEvent.click(closeButton);
 
     // The modal is not rendered any more
@@ -460,7 +460,7 @@ describe('<SearchFilterGroupModal />', () => {
       expect(screen.queryByText('Add filters for Universities')).toEqual(null);
     });
     expect(screen.queryByPlaceholderText('Search in Universities')).toEqual(null);
-    expect(screen.queryByText('Close modal')).toEqual(null);
+    expect(screen.queryByText('Close dialog')).toEqual(null);
   });
 
   it('adds the value and closes when the user clicks a filter value', async () => {

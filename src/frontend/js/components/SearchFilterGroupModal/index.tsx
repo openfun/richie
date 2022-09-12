@@ -223,6 +223,7 @@ interface SearchFilterGroupModalProps {
 
 export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const intl = useIntl();
 
   const modalExclude = useMemo(() => {
     const exclude = document.getElementById('modal-exclude');
@@ -243,11 +244,7 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
         bodyOpenClassName="has-search-filter-group-modal"
         className="search-filter-group-modal"
         isOpen={modalIsOpen}
-        title={
-          <legend className="search-filter-group-modal__form__title">
-            <FormattedMessage {...messages.modalTitle} values={{ filterName: filter.human_name }} />
-          </legend>
-        }
+        title={intl.formatMessage(messages.modalTitle, { filterName: filter.human_name })}
         onRequestClose={() => setModalIsOpen(false)}
       >
         <ModalContent {...{ filter, modalIsOpen, setModalIsOpen }} />

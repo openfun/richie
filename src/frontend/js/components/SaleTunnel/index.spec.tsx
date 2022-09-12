@@ -191,7 +191,7 @@ describe('SaleTunnel', () => {
     screen.getByTestId('SaleTunnel__modal');
 
     // - A close button should be displayed
-    const $closeButton = screen.getByRole('button', { name: 'Close modal' });
+    const $closeButton = screen.getByRole('button', { name: 'Close dialog' });
 
     // - Go to step 2
     screen.getByRole('heading', { level: 1, name: 'SaleTunnelStepValidation Component' });
