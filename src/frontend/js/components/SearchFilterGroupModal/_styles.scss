@@ -16,14 +16,6 @@
     flex-direction: column;
     flex-grow: 1;
 
-    &__title {
-      display: block;
-      margin: 0;
-      padding: 1rem;
-      font-size: 1.1rem;
-      font-weight: $font-weight-boldest;
-    }
-
     &__input {
       width: 100%;
       padding: 0.5rem 1rem;
