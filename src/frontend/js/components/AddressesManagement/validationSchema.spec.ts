@@ -2,6 +2,7 @@ import faker from 'faker';
 import { act, renderHook } from '@testing-library/react-hooks';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Maybe } from 'types/utils';
 import validationSchema from './validationSchema';
 
 describe('validationSchema', () => {
@@ -77,27 +78,46 @@ describe('validationSchema', () => {
     });
 
     let { formState } = result.current;
+
+    type ErrorMessageObject = Maybe<{ key: string; values: Record<any, any> }>;
+
     expect(formState.errors.address?.type).toEqual('required');
-    expect(formState.errors.address?.message?.key).toEqual('mixedRequired');
-    expect(formState.errors.address?.message?.values?.path).toEqual('address');
+    expect((formState.errors.address?.message as ErrorMessageObject)?.key).toEqual('mixedRequired');
+    expect((formState.errors.address?.message as ErrorMessageObject)?.values?.path).toEqual(
+      'address',
+    );
     expect(formState.errors.city?.type).toEqual('required');
-    expect(formState.errors.city?.message?.key).toEqual('mixedRequired');
-    expect(formState.errors.city?.message?.values?.path).toEqual('city');
+    expect((formState.errors.city?.message as ErrorMessageObject)?.key).toEqual('mixedRequired');
+    expect((formState.errors.city?.message as ErrorMessageObject)?.values?.path).toEqual('city');
     expect(formState.errors.country?.type).toEqual('required');
-    expect(formState.errors.country?.message?.key).toEqual('mixedRequired');
-    expect(formState.errors.country?.message?.values?.path).toEqual('country');
+    expect((formState.errors.country?.message as ErrorMessageObject)?.key).toEqual('mixedRequired');
+    expect((formState.errors.country?.message as ErrorMessageObject)?.values?.path).toEqual(
+      'country',
+    );
     expect(formState.errors.first_name?.type).toEqual('required');
-    expect(formState.errors.first_name?.message?.key).toEqual('mixedRequired');
-    expect(formState.errors.first_name?.message?.values?.path).toEqual('first_name');
+    expect((formState.errors.first_name?.message as ErrorMessageObject)?.key).toEqual(
+      'mixedRequired',
+    );
+    expect((formState.errors.first_name?.message as ErrorMessageObject)?.values?.path).toEqual(
+      'first_name',
+    );
     expect(formState.errors.last_name?.type).toEqual('required');
-    expect(formState.errors.last_name?.message?.key).toEqual('mixedRequired');
-    expect(formState.errors.last_name?.message?.values?.path).toEqual('last_name');
+    expect((formState.errors.last_name?.message as ErrorMessageObject)?.key).toEqual(
+      'mixedRequired',
+    );
+    expect((formState.errors.last_name?.message as ErrorMessageObject)?.values?.path).toEqual(
+      'last_name',
+    );
     expect(formState.errors.postcode?.type).toEqual('required');
-    expect(formState.errors.postcode?.message?.key).toEqual('mixedRequired');
-    expect(formState.errors.postcode?.message?.values?.path).toEqual('postcode');
+    expect((formState.errors.postcode?.message as ErrorMessageObject)?.key).toEqual(
+      'mixedRequired',
+    );
+    expect((formState.errors.postcode?.message as ErrorMessageObject)?.values?.path).toEqual(
+      'postcode',
+    );
     expect(formState.errors.title?.type).toEqual('required');
-    expect(formState.errors.title?.message?.key).toEqual('mixedRequired');
-    expect(formState.errors.title?.message?.values?.path).toEqual('title');
+    expect((formState.errors.title?.message as ErrorMessageObject)?.key).toEqual('mixedRequired');
+    expect((formState.errors.title?.message as ErrorMessageObject)?.values?.path).toEqual('title');
     expect(formState.errors.save).not.toBeDefined();
     expect(formState.isValid).toBe(false);
 
@@ -118,8 +138,10 @@ describe('validationSchema', () => {
     expect(formState.errors.address).not.toBeDefined();
     expect(formState.errors.city).not.toBeDefined();
     expect(formState.errors.country?.type).toEqual('oneOf');
-    expect(formState.errors.country?.message?.key).toEqual('mixedOneOf');
-    expect(formState.errors.country?.message?.values?.path).toEqual('country');
+    expect((formState.errors.country?.message as ErrorMessageObject)?.key).toEqual('mixedOneOf');
+    expect((formState.errors.country?.message as ErrorMessageObject)?.values?.path).toEqual(
+      'country',
+    );
     expect(formState.errors.first_name).not.toBeDefined();
     expect(formState.errors.last_name).not.toBeDefined();
     expect(formState.errors.postcode).not.toBeDefined();
