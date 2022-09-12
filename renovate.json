@@ -22,6 +22,17 @@
         "react-dom",
         "typescript"
       ]
+    },
+    {
+      "enabled": false,
+      "groupName": "ignored python dependencies",
+      "matchManagers": [
+        "setup-cfg"
+      ],
+      "matchPackageNames": [
+        "django",
+        "elasticsearch"
+      ]
     }
   ]
 }
