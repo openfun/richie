@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - New global scroll behavior for Modal
 - Add disabled style for inputs
 
+### Fixed
+
+- Language choices should be ordered alphabetically in course run admin form
+
 ## [2.16.0]
 
 ### Fixed
