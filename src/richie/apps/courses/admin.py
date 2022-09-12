@@ -2,6 +2,7 @@
 Courses application admin
 """
 from itertools import chain
+from operator import itemgetter
 
 from django import forms
 from django.conf import settings
@@ -108,6 +109,10 @@ class CourseRunAdminForm(TranslatableModelForm):
 
         if len(course_query) < 2:
             self.fields["direct_course"].widget = forms.HiddenInput()
+
+        self.fields["languages"].choices = sorted(
+            self.fields["languages"].choices, key=itemgetter(1)
+        )
 
     def clean_direct_course(self):
         """Ensure that the user has the required permissions to change the related course page."""

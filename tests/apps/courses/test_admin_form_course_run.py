@@ -3,6 +3,7 @@ Test suite covering the admin form for the CourseRun model
 """
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
+from django.utils import translation
 
 from cms.models import PagePermission
 from cms.test_utils.testcases import CMSTestCase
@@ -239,3 +240,18 @@ class CourseRunAdminTestCase(CMSTestCase):
         self.assertIn(
             f'<option value="{snapshot.id:d}">Title 1 Snapshot</option>', html
         )
+
+    def test_admin_form_course_run_choices_languages(self):
+        """The languages field choices should be sorted alphabetically by localized values."""
+        user = UserFactory(is_staff=True, is_superuser=True)
+
+        request = RequestFactory().get("/")
+        request.user = user
+        CourseRunAdminForm.request = request
+
+        form = CourseRunAdminForm()
+        self.assertEqual(form.fields["languages"].choices[32][1], "German")
+
+        with translation.override("fr"):
+            form = CourseRunAdminForm()
+            self.assertEqual(form.fields["languages"].choices[2][1], "Allemand")
