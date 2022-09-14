@@ -83,22 +83,18 @@
     position: relative;
 
     &:hover {
-
-      // Wanted to use &__label syntax but it compiles as .form-field:hover__label :(
-      .form-field__label, .form-field__message {
-        color: r-theme-val(form, input-hover);
-      }
-
+      // Wanted to use &__input syntax but it compiles as .form-field:hover__input :(
       .form-field__input,
       .form-field__textarea,
       .form-field__select-input,
       .form-field__radio-control,
       .form-field__checkbox-control {
-        border-color: r-theme-val(form, input-hover);
+        border-color: r-theme-val(form, input-hover-color);
       }
 
-      .form-field__select-input {
-        color: r-theme-val(form, input-hover);
+      .form-field__checkbox-input + .form-field__label,
+      .form-field__radio-input + .form-field__label {
+        color: r-theme-val(form, input-hover-color);
       }
     }
 
@@ -180,9 +176,12 @@
       position: absolute;
       z-index: -1;
 
-      &[disabled] ~ label span {
-        background-color: r-theme-val(form, input-disabled-background);
+      &[disabled] ~ label {
         cursor: not-allowed;
+
+        span {
+          background-color: r-theme-val(form, input-disabled-background);
+        }
       }
     }
 
