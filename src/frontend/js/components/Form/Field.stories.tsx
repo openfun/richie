@@ -12,5 +12,8 @@ export const defaultConfig = {
     message: {
       control: 'text',
     },
+    disabled: {
+      control: 'boolean',
+    },
   },
 };

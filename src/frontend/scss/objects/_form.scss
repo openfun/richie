@@ -53,6 +53,11 @@
     box-shadow: 0 0 0 2px r-theme-val(form, input-outline);
     outline: none;
   }
+
+  &[disabled] {
+    background-color: r-theme-val(form, input-disabled-background);
+    cursor: not-allowed;
+  }
 }
 
 .form {
@@ -76,6 +81,26 @@
     line-height: 1rem;
     margin: 0;
     position: relative;
+
+    &:hover {
+
+      // Wanted to use &__label syntax but it compiles as .form-field:hover__label :(
+      .form-field__label, .form-field__message {
+        color: r-theme-val(form, input-hover);
+      }
+
+      .form-field__input,
+      .form-field__textarea,
+      .form-field__select-input,
+      .form-field__radio-control,
+      .form-field__checkbox-control {
+        border-color: r-theme-val(form, input-hover);
+      }
+
+      .form-field__select-input {
+        color: r-theme-val(form, input-hover);
+      }
+    }
 
     &:not(:last-child) {
       margin-bottom: 2rem;
@@ -154,11 +179,16 @@
       opacity: 0;
       position: absolute;
       z-index: -1;
+
+      &[disabled] ~ label span {
+        background-color: r-theme-val(form, input-disabled-background);
+        cursor: not-allowed;
+      }
     }
 
     &__checkbox-input + &__label,
     &__radio-input + &__label {
-      color: r-theme-val(form, input-color) !important;
+      color: r-theme-val(form, input-color);
     }
 
     &__checkbox-input:focus + &__label > &__checkbox-control,

@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Modal component refactor for homogeneous use
 - New global scroll behavior for Modal
+- Add disabled style for inputs
 
 ## [2.16.0]
 
