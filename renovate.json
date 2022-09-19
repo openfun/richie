@@ -29,7 +29,7 @@
         "setup-cfg"
       ],
       "matchPackageNames": [
-        "django",
+        "Django",
         "elasticsearch"
       ]
     }
