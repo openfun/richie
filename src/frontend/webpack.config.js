@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = (env) => {
   const richieSettings = env ? env['richie-settings'] : undefined;
@@ -63,12 +64,8 @@ module.exports = (env) => {
     resolve: {
       // Add '.ts' and '.tsx' as resolvable extensions.
       extensions: ['.ts', '.tsx', '.js', '.json'],
-      modules: [
-        path.resolve(__dirname, 'js'),
-        __dirname,
-        'node_modules',
-        ...richieDependentModuleResolutions,
-      ],
+      plugins: [new TsconfigPathsPlugin({})],
+      modules: ['node_modules', ...richieDependentModuleResolutions],
     },
 
     module: {
