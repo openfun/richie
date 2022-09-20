@@ -486,6 +486,11 @@ $r-theme: (
     title-color: r-color('charcoal'),
     subtitle-color: r-color(purplish-grey),
   ),
+  dashboard-item: (
+    base-color: r-color(charcoal),
+    base-shadow: 0 0 6px r-color('light-grey'),
+    base-border: r-color('light-grey'),
+  ),
 ) !default;
 
 // On a Richie child project you can easily change a specific value using:
