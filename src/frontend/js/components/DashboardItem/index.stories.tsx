@@ -5,7 +5,7 @@ export default {
   title: 'Components/Dashboard/Item',
   component: DashboardItem,
   args: {
-    headRef: 'Ref. 30194',
+    code: 'Ref. 30194',
     title: 'Machine learning in Python with sckit-learn',
     imageUrl: DEMO_IMAGE_URL,
     footer: (

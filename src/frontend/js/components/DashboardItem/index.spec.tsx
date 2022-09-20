@@ -5,19 +5,18 @@ import { DashboardSubItem } from 'components/DashboardItem/DashboardSubItem';
 
 describe('<DashboardItem />', () => {
   it('renders a basic DashboardItem', () => {
-    render(
-      <DashboardItem title="Become a React pro" headRef="Ref. 123" imageUrl={DEMO_IMAGE_URL} />,
-    );
+    render(<DashboardItem title="Become a React pro" code="Ref. 123" imageUrl={DEMO_IMAGE_URL} />);
 
     screen.getByText('Become a React pro');
     screen.getByText('Ref. 123');
-    expect(screen.getByTestId('dashboard-item__block__head__thumbnail')).toHaveStyle(
-      'background-image: url(' + DEMO_IMAGE_URL + ')',
+    expect(screen.getByTestId('dashboard-item__block__head__thumbnail')).toHaveAttribute(
+      'src',
+      DEMO_IMAGE_URL,
     );
   });
   it('renders a DashboardItem with children', () => {
     render(
-      <DashboardItem title="Become a React pro" headRef="Ref. 123" imageUrl={DEMO_IMAGE_URL}>
+      <DashboardItem title="Become a React pro" code="Ref. 123" imageUrl={DEMO_IMAGE_URL}>
         <DashboardSubItemsList
           subItems={[
             <DashboardSubItem title="Sub 1" />,

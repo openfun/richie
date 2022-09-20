@@ -1,5 +1,11 @@
 import { type FormatDateOptions, useIntl } from 'react-intl';
 
+export const DEFAULT_DATE_FORMAT: FormatDateOptions = {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+};
+
 /**
  * This hook must be used within <IntlProvider />.
  * It returns a method to format dates.
@@ -20,9 +26,7 @@ const useDateFormat = (formatOptions: FormatDateOptions = {}) => {
 
   function formatDate(date: string, options: FormatDateOptions = {}) {
     return intl.formatDate(date, {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
+      ...DEFAULT_DATE_FORMAT,
       ...formatOptions,
       ...options,
     });

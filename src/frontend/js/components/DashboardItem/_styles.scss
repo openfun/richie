@@ -23,9 +23,7 @@
       &__thumbnail {
         height: 70px;
         width: 70px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
+        object-fit: contain;
         box-shadow: r-theme-val(dashboard-item, base-shadow);
         border-radius: $border-radius;
         flex-shrink: 0;
@@ -56,6 +54,10 @@
         .button {
           width: 100%;
         }
+      }
+
+      .button {
+        flex-shrink: 0;
       }
     }
 
@@ -146,6 +148,10 @@
       .button {
         width: 100%;
       }
+    }
+
+    .button {
+      flex-shrink: 0;
     }
 
     p {
