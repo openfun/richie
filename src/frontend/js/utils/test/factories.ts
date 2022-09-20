@@ -8,7 +8,7 @@ import { APIBackend } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
 import { EnrollmentState, OrderState, PaymentProviders, ProductType } from 'types/Joanie';
 
-const CourseStateFactory = createSpec({
+export const CourseStateFactory = createSpec({
   priority: derived(() => Math.floor(Math.random() * 7)),
   datetime: derived(() => faker.date.past()().toISOString()),
   call_to_action: faker.random.words(1, 3),
@@ -73,6 +73,7 @@ interface PersistedClientFactoryOptions {
   queries?: DehydratedState['queries'];
   timestamp?: number;
 }
+
 export const PersistedClientFactory = ({
   buster,
   mutations,
@@ -132,21 +133,39 @@ export const OrganizationFactory = createSpec({
   title: faker.random.words(1),
 });
 
-export const JoanieCourseRunFactory = createSpec({
-  end: derived(() => faker.date.future(0.75)().toISOString()),
-  enrollment_end: derived(() => faker.date.future(0.5)().toISOString()),
-  enrollment_start: derived(() => faker.date.past(0.5)().toISOString()),
-  id: faker.datatype.uuid(),
-  resource_link: faker.unique(faker.internet.url()),
-  start: derived(() => faker.date.past(0.25)().toISOString()),
-  title: faker.random.words(Math.ceil(Math.random() * 3)),
-  state: {
-    priority: 1,
-    datetime: derived(() => faker.date.past(0.25)().toISOString()),
-    call_to_action: 'enroll now',
-    text: 'closing on',
-  },
+export const CourseFactory = createSpec({
+  code: faker.random.alphaNumeric(5),
+  organization: OrganizationFactory,
+  title: faker.unique(faker.random.words(Math.ceil(Math.random() * 3))),
+  products: derived(() => ProductFactory.generate(1, 3)),
+  course_runs: [],
+  orders: null,
 });
+
+/**
+ * `scopes` allows to conditionally include properties.
+ * This is required to avoid circular dependencies when generating mocks.
+ */
+export const JoanieCourseRunFactory = (scopes?: { course: Boolean }) => {
+  return createSpec({
+    end: derived(() => faker.date.future(0.75)().toISOString()),
+    enrollment_end: derived(() => faker.date.future(0.5)().toISOString()),
+    enrollment_start: derived(() => faker.date.past(0.5)().toISOString()),
+    id: faker.datatype.uuid(),
+    resource_link: faker.unique(faker.internet.url()),
+    start: derived(() => faker.date.past(0.25)().toISOString()),
+    title: faker.random.words(Math.ceil(Math.random() * 3)),
+    state: {
+      priority: 1,
+      datetime: derived(() => faker.date.past(0.25)().toISOString()),
+      call_to_action: 'enroll now',
+      text: 'closing on',
+    },
+    ...(scopes?.course && {
+      course: CourseFactory.generate(),
+    }),
+  });
+};
 
 export const JoanieEnrollmentFactory = createSpec({
   id: faker.datatype.uuid(),
@@ -159,7 +178,7 @@ export const TargetCourseFactory = createSpec({
   code: faker.unique(faker.random.alphaNumeric(5)),
   organization: OrganizationFactory,
   title: faker.random.words(1, 3),
-  course_runs: derived(() => JoanieCourseRunFactory.generate(1, 3)),
+  course_runs: derived(() => JoanieCourseRunFactory().generate(1, 3)),
 });
 
 export const CertificationDefinitionFactory = createSpec({
@@ -193,18 +212,8 @@ export const OrderLiteFactory = createSpec({
 
 export const ProductFactory = oneOf([CertificateProductFactory]);
 
-export const CourseFactory = createSpec({
-  code: faker.random.alphaNumeric(5),
-  organization: OrganizationFactory,
-  title: faker.unique(faker.random.words(Math.ceil(Math.random() * 3))),
-  products: derived(() => ProductFactory.generate(1, 3)),
-  course_runs: [],
-  orders: null,
-});
-
 export const OrderFactory = createSpec({
   id: faker.datatype.uuid(),
-  course: faker.random.alphaNumeric(5),
   created_on: faker.date.past()().toISOString(),
   owner: faker.internet.userName(),
   total: faker.datatype.number(),
@@ -213,6 +222,8 @@ export const OrderFactory = createSpec({
   state: OrderState.VALIDATED,
   product: faker.datatype.uuid(),
   target_courses: derived(() => TargetCourseFactory.generate(1, 5)),
+  course: CourseFactory,
+  enrollments: [],
 });
 
 export const AddressFactory = createSpec({

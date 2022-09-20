@@ -31,6 +31,7 @@ export interface CourseRun {
     text: StateText;
   };
   title: string;
+  course?: Course;
 }
 
 // - Certificate
@@ -121,11 +122,11 @@ export enum OrderState {
 
 export interface Order {
   id: string;
-  course: string;
+  course?: Course;
   created_on: string;
   enrollments: Enrollment[];
   main_proforma_invoice: string;
-  certificate: string;
+  certificate?: string;
   owner: string;
   total: number;
   total_currency: string;

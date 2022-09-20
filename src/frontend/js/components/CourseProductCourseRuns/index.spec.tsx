@@ -36,7 +36,7 @@ describe('CourseProductCourseRuns', () => {
 
   afterEach(() => {
     fetchMock.restore();
-    JoanieCourseRunFactory.afterGenerate((cr: CourseRun) => cr);
+    JoanieCourseRunFactory().afterGenerate((cr: CourseRun) => cr);
   });
 
   describe('CourseRunList', () => {
@@ -55,7 +55,7 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('renders a list of course runs', () => {
-      const courseRuns: CourseRun[] = JoanieCourseRunFactory.generate(2);
+      const courseRuns: CourseRun[] = JoanieCourseRunFactory().generate(2);
 
       const { container } = render(
         <Wrapper>
@@ -131,7 +131,7 @@ describe('CourseProductCourseRuns', () => {
 
     it('renders a list of course runs with a call to action to enroll', async () => {
       const course: Course = CourseFactory.generate();
-      const courseRuns: CourseRun[] = JoanieCourseRunFactory.generate(2);
+      const courseRuns: CourseRun[] = JoanieCourseRunFactory().generate(2);
       const order: OrderLite = OrderLiteFactory.generate();
       fetchMock.get(`https://joanie.test/api/courses/${course.code}/`, 200);
 
@@ -233,26 +233,28 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('does not allow to enroll if course run is not opened for enrollment', async () => {
-      const courseRun: CourseRun = JoanieCourseRunFactory.afterGenerate((cr: CourseRun) => ({
-        // - Course Run not yet opened for enrollment
-        ...cr,
-        enrollment_start: faker.date.future(0.25)().toISOString(),
-        enrollment_end: faker.date.future(0.5)().toISOString(),
-        start: faker.date.future(0.75)().toISOString(),
-        end: faker.date.future(1.0)().toISOString(),
-        state: {
-          priority: faker.random.arrayElement([
-            Priority.FUTURE_NOT_YET_OPEN,
-            Priority.FUTURE_CLOSED,
-            Priority.ONGOING_CLOSED,
-            Priority.ARCHIVED_CLOSED,
-            Priority.TO_BE_SCHEDULED,
-          ])(),
-          datetime: faker.date.future(0.25)().toISOString(),
-          call_to_action: undefined,
-          text: 'starting on',
-        },
-      })).generate();
+      const courseRun: CourseRun = JoanieCourseRunFactory()
+        .afterGenerate((cr: CourseRun) => ({
+          // - Course Run not yet opened for enrollment
+          ...cr,
+          enrollment_start: faker.date.future(0.25)().toISOString(),
+          enrollment_end: faker.date.future(0.5)().toISOString(),
+          start: faker.date.future(0.75)().toISOString(),
+          end: faker.date.future(1.0)().toISOString(),
+          state: {
+            priority: faker.random.arrayElement([
+              Priority.FUTURE_NOT_YET_OPEN,
+              Priority.FUTURE_CLOSED,
+              Priority.ONGOING_CLOSED,
+              Priority.ARCHIVED_CLOSED,
+              Priority.TO_BE_SCHEDULED,
+            ])(),
+            datetime: faker.date.future(0.25)().toISOString(),
+            call_to_action: undefined,
+            text: 'starting on',
+          },
+        }))
+        .generate();
       const order = OrderLiteFactory.generate();
       fetchMock.get('https://joanie.test/api/courses/00000/', 200);
 

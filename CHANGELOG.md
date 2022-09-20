@@ -11,6 +11,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add Dashboard router
+- Add generic dashboard component
+- Add dashboard components for Order, Enrollment
 
 ### Changed
 
