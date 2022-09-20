@@ -36,6 +36,7 @@ export type IconType =
   | 'icon-plus'
   | 'icon-quote'
   | 'icon-round-close'
+  | 'icon-school'
   | 'icon-search-fail'
   | 'icon-stopwatch'
   | 'icon-three-vertical-dots'
