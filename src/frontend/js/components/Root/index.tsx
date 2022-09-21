@@ -17,7 +17,7 @@ const RootSearchSuggestField = lazy(() => import('components/RootSearchSuggestFi
 const Search = lazy(() => import('components/Search'));
 const SearchSuggestField = lazy(() => import('components/SearchSuggestField'));
 const UserLogin = lazy(() => import('../UserLogin'));
-const Dashboard = lazy(() => import('components/DashBoard'));
+const Dashboard = lazy(() => import('components/Dashboard'));
 
 // List the top-level components that can be directly called from the Django templates in an interface
 // for type-safety when we call them. This will let us use the props for any top-level component in a
