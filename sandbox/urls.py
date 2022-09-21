@@ -45,8 +45,8 @@ urlpatterns = [
 
 if is_joanie_enabled():
     urlpatterns += i18n_patterns(
-        path(
-            r"dashboard/",
+        re_path(
+            r"^dashboard/.*",
             TemplateView.as_view(
                 template_name="richie/dashboard.html",
             ),
