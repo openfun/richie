@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add Dashboard router
+
 ### Changed
 
 - Use new Joanie Enrollment resource type

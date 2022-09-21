@@ -1,0 +1,112 @@
+import { defineMessages, IntlShape } from 'react-intl';
+import type {
+  PrimitiveType,
+  FormatXMLElementFn,
+  Options as IntlMessageFormatOptions,
+} from 'intl-messageformat';
+
+/**
+ * All existing dashboard paths.
+ */
+export enum DashboardPaths {
+  COURSES = '/courses',
+  COURSE = '/courses/:code',
+  PREFERENCES = '/preferences',
+  PREFERENCES_ADDRESS_EDITION = '/preferences/addresses/:addressId',
+  PREFERENCES_CREDIT_CARD_EDITION = '/preferences/credit-cards/:creditCard',
+}
+
+// Translations of dashboard route paths
+const dashboardRoutePaths = defineMessages<DashboardPaths>({
+  [DashboardPaths.COURSES]: {
+    id: 'components.Dashboard.DashboardRoutes.courses.path',
+    description: 'The path to display the courses view.',
+    defaultMessage: '/courses',
+  },
+  [DashboardPaths.COURSE]: {
+    id: 'components.Dashboard.DashboardRoutes.course.path',
+    description: 'The path to display a course detail view.',
+    defaultMessage: '/courses/{code}',
+  },
+  [DashboardPaths.PREFERENCES]: {
+    id: 'components.Dashboard.DashboardRoutes.preferences.path',
+    description: 'The path to display the preferences view.',
+    defaultMessage: '/preferences',
+  },
+  [DashboardPaths.PREFERENCES_ADDRESS_EDITION]: {
+    id: 'components.Dashboard.DashboardRoutes.preferences.addresses.edition.path',
+    description: 'The path to display the addresses edition view.',
+    defaultMessage: '/preferences/addresses/{addressId}',
+  },
+  [DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION]: {
+    id: 'components.Dashboard.DashboardRoutes.preferences.creditCards.edition.path',
+    description: 'The path to display the credit cards edition view.',
+    defaultMessage: '/preferences/credit-cards/{creditCardId}',
+  },
+});
+
+// Translations of dashboard route labels
+const dashboardRouteLabels = defineMessages<DashboardPaths>({
+  [DashboardPaths.COURSES]: {
+    id: 'components.Dashboard.DashboardRoutes.courses.label',
+    description: 'Label of the courses view used in navigation components.',
+    defaultMessage: 'My Courses',
+  },
+  [DashboardPaths.COURSE]: {
+    id: 'components.Dashboard.DashboardRoutes.course.session.label',
+    description: 'Label of the course session view used in navigation components.',
+    defaultMessage: 'Course',
+  },
+  [DashboardPaths.PREFERENCES]: {
+    id: 'components.Dashboard.DashboardRoutes.preferences.label',
+    description: 'Label of the preferences view used in navigation components.',
+    defaultMessage: 'My preferences',
+  },
+  [DashboardPaths.PREFERENCES_ADDRESS_EDITION]: {
+    id: 'components.Dashboard.DashboardRoutes.preferences.addresses.edition.label',
+    description: 'Label of the addresses edition view.',
+    defaultMessage: 'Billing addresses',
+  },
+  [DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION]: {
+    id: 'components.Dashboard.DashboardRoutes.preferences.creditCards.label',
+    description: 'Label of the credit cards edition view.',
+    defaultMessage: 'Credit cards',
+  },
+});
+
+/**
+ * Use `intl.formatMessage` to retrieve a path or label of a given route for the active locale.
+ *
+ * Currying function which takes first the type of attribute to translate (path or label)
+ * then takes the intl object retrieved from the IntlProvider.
+ * Finally, it takes a path and options to pass to `intl.formatMessage` method
+ */
+
+enum RouteAttributes {
+  PATH = 'path',
+  LABEL = 'label',
+}
+
+const getDashboardRouteAttribute =
+  (attribute: RouteAttributes) =>
+  (intl: IntlShape) =>
+  (
+    path: DashboardPaths,
+    ...options: [
+      values?: Record<string, PrimitiveType | FormatXMLElementFn<string, string>>,
+      opts?: IntlMessageFormatOptions,
+    ]
+  ) => {
+    const messages =
+      attribute === RouteAttributes.LABEL ? dashboardRoutePaths : dashboardRouteLabels;
+    return intl.formatMessage(messages[path], ...options);
+  };
+
+/** Get the provided dashboard route label in the active locale */
+export const getDashboardRouteLabel = getDashboardRouteAttribute(RouteAttributes.LABEL);
+
+/** Get the provided dashboard route path in the active locale */
+export const getDashboardRoutePath = getDashboardRouteAttribute(RouteAttributes.PATH);
+
+/** Type guard to detect if a path is a dashboard path */
+export const isIntlPath = (path: string): path is DashboardPaths => path in dashboardRoutePaths;
