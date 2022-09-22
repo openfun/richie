@@ -1,8 +1,13 @@
 // Extend jest matchers with jest-dom's
 import '@testing-library/jest-dom/extend-expect';
+import { Request, Response } from 'node-fetch';
 
 import { setLogger } from 'react-query';
 import { noop } from 'utils';
+
+// Mock Request & Reponse objects
+global.Request = Request as any;
+global.Response = Response as any;
 
 /*
  * A little trick to prevent so package to be reset when using `jest.resetModules()`.
