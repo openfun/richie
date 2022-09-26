@@ -37,7 +37,7 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
 
   const unroll = async () => {
     await methods.update({
-      course_run: enrollment.resource_link,
+      course_run: enrollment.course_run.resource_link,
       is_active: false,
       id: enrollment!.id,
     });
@@ -58,7 +58,7 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
             data-testid={`enrollment-${enrollment.id}-start-date`}
             className="course-runs-item__date course-runs-item__date--start"
           >
-            {formatDate(enrollment.start)}
+            {formatDate(enrollment.course_run.start)}
           </em>
           <span className="course-runs-item__date-separator" />
           <span
@@ -71,12 +71,12 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
             data-testid={`enrollment-${enrollment.id}-end-date`}
             className="course-runs-item__date course-runs-item__date--end"
           >
-            {formatDate(enrollment.end)}
+            {formatDate(enrollment.course_run.end)}
           </em>
         </div>
         <div className="course-runs-item">
           <a
-            href={enrollment.resource_link}
+            href={enrollment.course_run.resource_link}
             className="course-runs-item__cta button--primary button--pill button--tiny"
           >
             <FormattedMessage {...messages.goToCourse} />
