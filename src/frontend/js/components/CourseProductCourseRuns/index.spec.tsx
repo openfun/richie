@@ -342,9 +342,13 @@ describe('CourseProductCourseRuns', () => {
 
       // - It should render course dates,
       const $startDate = screen.getByTestId(`enrollment-${enrollment.id}-start-date`);
-      expect($startDate.textContent).toEqual(dateFormatter.format(new Date(enrollment.start)));
+      expect($startDate.textContent).toEqual(
+        dateFormatter.format(new Date(enrollment.course_run.start)),
+      );
       const $endDate = screen.getByTestId(`enrollment-${enrollment.id}-start-date`);
-      expect($endDate.textContent).toEqual(dateFormatter.format(new Date(enrollment.start)));
+      expect($endDate.textContent).toEqual(
+        dateFormatter.format(new Date(enrollment.course_run.start)),
+      );
 
       // "start" and "end" labels should be here but visually hidden for screen reader users
       const $offscreenStartDate = screen.getByTestId(
@@ -360,7 +364,7 @@ describe('CourseProductCourseRuns', () => {
 
       // - a link to access to the course,
       const $link: HTMLLinkElement = screen.getByRole('link', { name: 'Go to course' });
-      expect($link).toHaveAttribute('href', enrollment.resource_link);
+      expect($link).toHaveAttribute('href', enrollment.course_run.resource_link);
 
       // - a call to action to unroll to the course.
       screen.getByRole('button', { name: 'Unroll' });
@@ -403,7 +407,7 @@ describe('CourseProductCourseRuns', () => {
       expect(calls[0][0]).toBe(`https://joanie.test/api/enrollments/${enrollment.id}/`);
       expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
         is_active: false,
-        course_run: enrollment.resource_link,
+        course_run: enrollment.course_run.resource_link,
       });
       // Afterward a request to refresh the course should have been executed
       expect(calls[1][0]).toBe(`https://joanie.test/api/courses/${course.code}/`);

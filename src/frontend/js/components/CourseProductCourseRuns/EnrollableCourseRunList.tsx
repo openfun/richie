@@ -104,8 +104,8 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
     }
 
     if (selectedCourseRun) {
-      const relatedEnrollment = order.enrollments.find(({ resource_link }) => {
-        return resource_link === selectedCourseRun.resource_link;
+      const relatedEnrollment = order.enrollments.find(({ course_run }) => {
+        return course_run.resource_link === selectedCourseRun.resource_link;
       });
       if (relatedEnrollment) {
         await enrollment.methods.update({

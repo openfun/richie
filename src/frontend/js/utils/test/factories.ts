@@ -148,13 +148,12 @@ export const JoanieCourseRunFactory = createSpec({
   },
 });
 
-export const JoanieEnrollmentFactory = compose(
-  JoanieCourseRunFactory,
-  createSpec({
-    is_active: true,
-    state: EnrollmentState.SET,
-  }),
-);
+export const JoanieEnrollmentFactory = createSpec({
+  id: faker.datatype.uuid(),
+  course_run: CourseRunFactory,
+  is_active: true,
+  state: EnrollmentState.SET,
+});
 
 export const TargetCourseFactory = createSpec({
   code: faker.unique(faker.random.alphaNumeric(5)),

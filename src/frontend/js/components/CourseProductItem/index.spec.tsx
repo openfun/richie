@@ -174,7 +174,7 @@ describe('CourseProductItem', () => {
     const enrollment: Enrollment = JoanieEnrollmentFactory.afterGenerate(
       ({ state, ...e }: Enrollment): Enrollment => ({
         ...e,
-        ...(product.target_courses[0]!.course_runs[0]! as CourseRun),
+        course_run: product.target_courses[0]!.course_runs[0]! as CourseRun,
         state,
       }),
     ).generate();

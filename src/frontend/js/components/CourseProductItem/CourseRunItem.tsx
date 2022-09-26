@@ -12,8 +12,8 @@ const findEnrollment = (
   order: Joanie.OrderLite,
 ) => {
   const resourceLinks = targetCourse.course_runs.map(({ resource_link }) => resource_link);
-  return order.enrollments.find(({ is_active, resource_link }) => {
-    return is_active && resourceLinks.includes(resource_link);
+  return order.enrollments.find(({ is_active, course_run }) => {
+    return is_active && resourceLinks.includes(course_run.resource_link);
   });
 };
 
