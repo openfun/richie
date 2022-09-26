@@ -104,10 +104,11 @@ export enum EnrollmentState {
   SET = 'set',
 }
 
-export interface Enrollment extends Omit<CourseRun, 'state'> {
+export interface Enrollment {
   id: string;
   is_active: boolean;
   state: EnrollmentState;
+  course_run: CourseRun;
 }
 
 // Order
@@ -195,7 +196,7 @@ interface OrderAbortPayload {
 }
 
 interface EnrollmentCreationPayload {
-  course_run: Enrollment['resource_link'];
+  course_run: CourseRun['resource_link'];
   is_active: boolean;
   order?: Order['id'];
 }

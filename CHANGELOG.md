@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Use new Joanie Enrollment resource type
 - Modal component refactor for homogeneous use
 - New global scroll behavior for Modal
 - Add disabled style for inputs
