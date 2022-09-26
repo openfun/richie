@@ -773,6 +773,17 @@ jobs:
       # Activate docker-in-docker
       - setup_remote_docker:
           version: 19.03.13
+      - checkout
+      - run:
+         name: Is a release branch
+         command: |
+           # We want to run this job only on release branch, to guess that
+           # we check if a new release entry has been added into the CHANGELOG
+           # If there is no new release entry, git diff returns a 0 exit code
+           if git diff --quiet -G"^## \[[0-9.]*\]$" origin/master..HEAD CHANGELOG.md; then
+             # So we can gracefully exit the job
+             circleci-agent step halt
+           fi
       - run:
           name: Install cookiecutter
           command: pip install cookiecutter
