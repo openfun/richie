@@ -29,7 +29,7 @@
 
     .form__footer {
       align-self: flex-end;
-      display: inline-block;
+      display: flex;
 
       & > *:not(:last-child) {
         margin-right: 0.5rem;

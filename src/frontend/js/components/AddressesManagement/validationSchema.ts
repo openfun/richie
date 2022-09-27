@@ -1,42 +1,8 @@
 import countries from 'i18n-iso-countries';
-import { defineMessages } from 'react-intl';
+import { IntlShape } from 'react-intl';
 import * as Yup from 'yup';
-
-export enum ErrorKeys {
-  MIXED_INVALID = 'mixedInvalid',
-  MIXED_REQUIRED = 'mixedRequired',
-  MIXED_ONEOF = 'mixedOneOf',
-  STRING_MAX = 'stringMax',
-  STRING_MIN = 'stringMin',
-}
-
-export const errorMessages = defineMessages<ErrorKeys>({
-  [ErrorKeys.MIXED_INVALID]: {
-    id: 'components.AddressesManagement.validationSchema.mixedInvalid',
-    defaultMessage: 'This field is invalid.',
-    description: 'Error message displayed when a field value is invalid.',
-  },
-  [ErrorKeys.MIXED_REQUIRED]: {
-    id: 'components.AddressesManagement.validationSchema.mixedRequired',
-    defaultMessage: 'This field is required.',
-    description: 'Error message displayed when a field is required.',
-  },
-  [ErrorKeys.MIXED_ONEOF]: {
-    id: 'components.AddressesManagement.validationSchema.mixedOneOf',
-    defaultMessage: 'You must select a value within: {values}.',
-    description: 'Error message displayed when a field value must be one of a list.',
-  },
-  [ErrorKeys.STRING_MAX]: {
-    id: 'components.AddressesManagement.validationSchema.stringMax',
-    defaultMessage: 'The maximum length is {max} {max, plural, one {char} other {chars}}.',
-    description: 'Error message displayed when a field value is too long.',
-  },
-  [ErrorKeys.STRING_MIN]: {
-    id: 'components.AddressesManagement.validationSchema.stringMin',
-    defaultMessage: 'The minimum length is {min} {min, plural, one {char} other {chars}}.',
-    description: 'Error message displayed when a field value is too short.',
-  },
-});
+import { ErrorKeys, errorMessages } from 'components/AddressesManagement/ValidationErrors';
+import { Maybe } from 'types/utils';
 
 Yup.setLocale({
   mixed: {
@@ -49,6 +15,26 @@ Yup.setLocale({
     min: (values) => ({ key: ErrorKeys.STRING_MIN, values }),
   },
 });
+
+export const getLocalizedErrorMessage = (
+  intl: IntlShape,
+  error: Maybe<
+    | string
+    | {
+        key: ErrorKeys;
+        values: Record<PropertyKey, string | number | Array<string | number>>;
+      }
+  >,
+) => {
+  if (!error) return undefined;
+
+  if (typeof error === 'string' || errorMessages[error.key] === undefined) {
+    // If the error has not been translated we return a default error message.
+    return intl.formatMessage(errorMessages[ErrorKeys.MIXED_INVALID]);
+  }
+
+  return intl.formatMessage(errorMessages[error.key], error.values);
+};
 
 // / ! \ If you need to edit the validation schema,
 // you should also add/edit error messages above.

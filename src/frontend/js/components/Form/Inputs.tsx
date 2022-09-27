@@ -138,7 +138,9 @@ export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>
 );
 
 // - SelectField
-interface SelectFieldProps extends React.SelectHTMLAttributes<HTMLSelectElement>, FieldProps {
+export interface SelectFieldProps
+  extends React.SelectHTMLAttributes<HTMLSelectElement>,
+    FieldProps {
   defaultValue?: string;
   id: string;
   label?: string;

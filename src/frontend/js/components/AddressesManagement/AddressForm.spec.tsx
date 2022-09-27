@@ -1,12 +1,11 @@
-import { act } from '@testing-library/react-hooks';
 import { fireEvent, getByText, render, screen } from '@testing-library/react';
-import countries from 'i18n-iso-countries';
+import { act } from '@testing-library/react-hooks';
 import { IntlProvider } from 'react-intl';
+import { Address } from 'types/Joanie';
 import * as mockFactories from 'utils/test/factories';
 import { AddressFactory } from 'utils/test/factories';
-import { Address } from 'types/Joanie';
-import { ErrorKeys } from './validationSchema';
 import AddressForm from './AddressForm';
+import { ErrorKeys } from './ValidationErrors';
 
 jest.mock('hooks/useAddresses', () => ({
   useAddresses: () => ({
@@ -132,16 +131,13 @@ describe('AddressForm', () => {
     // Firstname field should have a message saying that the value is required.
     getByText($firstnameInput.closest('.form-field')!, 'This field is required.');
     // Country field should have a message saying that the value is not valid.
-    getByText(
-      $countryInput.closest('.form-field')!,
-      `You must select a value within: ${Object.keys(countries.getAlpha2Codes()).join(', ')}.`,
-    );
+    getByText($countryInput.closest('.form-field')!, `You must select a value.`);
   });
 
   it('renders default error message when error message does not exist', async () => {
-    jest.doMock('./validationSchema', () => ({
+    jest.doMock('./ValidationErrors', () => ({
       __esModule: true,
-      ...jest.requireActual('./validationSchema'),
+      ...jest.requireActual('./ValidationErrors'),
       errorMessages: {
         [ErrorKeys.MIXED_INVALID]: {
           id: 'components.AddressesManagement.validationSchema.mixedInvalid',
