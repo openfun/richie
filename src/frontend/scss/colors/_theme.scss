@@ -220,6 +220,12 @@ $r-theme: (
     secondary-item: $indianred3-scheme,
     tertiary-item: $smoke-scheme,
   ),
+  dashboard-card: (
+    base-color: r-color(charcoal),
+    base-shadow: 0 0 6px r-color('light-grey'),
+    text-hover-color: r-color('grey59'),
+    base-border: r-color('azure2'),
+  ),
   form: (
     input-placeholder: r-color('grey32'),
     input-color: r-color('charcoal'),
