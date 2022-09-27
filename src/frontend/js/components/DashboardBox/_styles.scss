@@ -1,0 +1,33 @@
+.dashboard-box {
+  border-radius: $border-radius-lg;
+  border: 1px solid r-theme-val(dashboard-box, base-border);
+  background: r-theme-val(dashboard-box, background);
+  color: r-theme-val(dashboard-box, base-color);
+
+  &__header {
+    padding: 0.5rem;
+    border-bottom: 1px solid r-theme-val(dashboard-box, base-border);
+    display: flex;
+    flex-direction: row-reverse;
+    text-transform: uppercase;
+    font-weight: 300;
+    color: r-theme-val(dashboard-box, header-color);
+  }
+
+  &__content {
+    padding: 1rem 1.5rem 3rem 1.9rem;
+  }
+
+  &__footer {
+    padding: 0.5rem;
+    border-top: 1px solid r-theme-val(dashboard-box, base-border);
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+
+    @include media-breakpoint-down(sm) {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}
