@@ -1,4 +1,6 @@
-interface IconProps {
+import { PropsWithTestId } from 'types/utils';
+
+type Props = PropsWithTestId<{
   name: IconType;
   /**
    * Optional title, will be announced by screen readers
@@ -9,7 +11,7 @@ interface IconProps {
    */
   title?: string;
   className?: string;
-}
+}>;
 
 // icons from src/richie/apps/core/templates/richie/icons.html
 export type IconType =
@@ -20,6 +22,7 @@ export type IconType =
   | 'icon-check'
   | 'icon-checklist'
   | 'icon-chevron-down'
+  | 'icon-chevron-down-outline'
   | 'icon-clock'
   | 'icon-creditCard'
   | 'icon-cross'
@@ -43,7 +46,7 @@ export type IconType =
   | 'icon-twitter'
   | 'icon-warning';
 
-export const Icon = ({ name, title, className = '' }: IconProps) => {
+export const Icon = ({ name, title, className = '', ...props }: Props) => {
   return (
     <svg
       className={`icon ${className}`}
@@ -52,6 +55,7 @@ export const Icon = ({ name, title, className = '' }: IconProps) => {
         role: 'img',
         'aria-label': title,
       })}
+      {...props}
     >
       {title && <title>{title}</title>}
       <use href={`#${name}`} />

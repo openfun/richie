@@ -22,11 +22,17 @@
   &--square {
     @include button-base($form-factor: 'square');
   }
+
   &--pill {
     @include button-base($form-factor: 'pill');
   }
+
   &--round {
     @include button-base($form-factor: 'round');
+  }
+
+  &--nano {
+    @include button-tiny($padding-x: 0, $padding-y: 0);
   }
 
   // Size modifiers and their specific form factors
@@ -36,9 +42,11 @@
     &.button--square {
       @include button-tiny($form-factor: 'square');
     }
+
     &.button--pill {
       @include button-tiny($form-factor: 'pill');
     }
+
     &.button--round {
       @include button-tiny($form-factor: 'round');
     }
@@ -50,9 +58,11 @@
     &.button--square {
       @include button-small($form-factor: 'square');
     }
+
     &.button--pill {
       @include button-small($form-factor: 'pill');
     }
+
     &.button--round {
       @include button-small($form-factor: 'round');
     }
@@ -64,9 +74,11 @@
     &.button--square {
       @include button-large($form-factor: 'square');
     }
+
     &.button--pill {
       @include button-large($form-factor: 'pill');
     }
+
     &.button--round {
       @include button-large($form-factor: 'round');
     }
@@ -82,6 +94,7 @@
           @include r-button-colors($scheme, $apply-border: true, $prefix: 'hover');
         }
       }
+
       // Enforce colors opposed to avoid framework 'disabled'
       // selector to win priority
       &.disabled {
@@ -97,6 +110,7 @@
           @include r-button-colors($scheme, $apply-border: true, $prefix: hover);
         }
       }
+
       // Enforce colors opposed to avoid framework 'disabled'
       // selector to win priority
       &.disabled {
