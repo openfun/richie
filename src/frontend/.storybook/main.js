@@ -14,7 +14,11 @@ module.exports = {
   core: {
     builder: '@storybook/builder-webpack5',
   },
-  staticDirs: ['../../richie/static', '../../richie/apps/core/templates/richie'],
+  staticDirs: [
+    { from: '../../richie/static', to: '/static' },
+    { from: '../../richie/apps/core/static', to: '/static' },
+    '../../richie/apps/core/templates/richie',
+  ],
   webpackFinal: async (config, { configType }) => {
     config.resolve.plugins = [new TsconfigPathsPlugin()];
     return config;
