@@ -226,6 +226,14 @@ $r-theme: (
     text-hover-color: r-color('grey59'),
     base-border: r-color('azure2'),
   ),
+  dashboard-box: (
+    background: r-color(smoke),
+    base-color: r-color(charcoal),
+    header-color: r-color(slate-grey),
+    base-shadow: 0 0 6px r-color('light-grey'),
+    text-hover-color: r-color('grey59'),
+    base-border: r-color('light-grey'),
+  ),
   form: (
     input-placeholder: r-color('grey32'),
     input-color: r-color('charcoal'),
