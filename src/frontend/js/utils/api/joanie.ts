@@ -10,8 +10,8 @@
  */
 import { stringify } from 'query-string';
 import type * as Joanie from 'types/Joanie';
-import context from 'utils/context';
 import { AuthenticationApi } from 'utils/api/authentication';
+import context from 'utils/context';
 import { HttpError } from 'utils/errors/HttpError';
 
 interface CheckStatusOptions {

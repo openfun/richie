@@ -1,19 +1,19 @@
-import { useState } from "react";
-import { useAsyncEffect } from "../js/utils/useAsyncEffect";
+import { useState } from 'react';
 import { IntlProvider } from 'react-intl';
+import { useAsyncEffect } from '../js/utils/useAsyncEffect';
+import './__mocks__/utils/context';
 
 export const parameters = {
-  actions: {argTypesRegex: "^on[A-Z].*"},
+  actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
       color: /(background|color)$/i,
       date: /Date$/,
     },
   },
-}
+};
 
-
-const IconsWrapper = props => {
+const IconsWrapper = (props) => {
   const [symbols, setSymbols] = useState('');
 
   useAsyncEffect(async () => {
@@ -24,7 +24,7 @@ const IconsWrapper = props => {
 
   return (
     <div>
-      <div dangerouslySetInnerHTML={{__html: symbols}}/>
+      <div dangerouslySetInnerHTML={{ __html: symbols }} />
       {props.children}
     </div>
   );
@@ -34,7 +34,7 @@ export const decorators = [
   (Story) => (
     <IntlProvider locale="en">
       <IconsWrapper>
-        <Story/>
+        <Story />
       </IconsWrapper>
     </IntlProvider>
   ),

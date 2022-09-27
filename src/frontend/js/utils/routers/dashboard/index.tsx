@@ -1,9 +1,9 @@
-import { defineMessages, IntlShape } from 'react-intl';
 import type {
-  PrimitiveType,
   FormatXMLElementFn,
   Options as IntlMessageFormatOptions,
+  PrimitiveType,
 } from 'intl-messageformat';
+import { defineMessages, IntlShape } from 'react-intl';
 
 /**
  * All existing dashboard paths.
@@ -13,6 +13,7 @@ export enum DashboardPaths {
   COURSE = '/courses/:code',
   PREFERENCES = '/preferences',
   PREFERENCES_ADDRESS_EDITION = '/preferences/addresses/:addressId',
+  PREFERENCES_ADDRESS_CREATION = '/preferences/addresses/create',
   PREFERENCES_CREDIT_CARD_EDITION = '/preferences/credit-cards/:creditCard',
 }
 
@@ -37,6 +38,11 @@ const dashboardRoutePaths = defineMessages<DashboardPaths>({
     id: 'components.Dashboard.DashboardRoutes.preferences.addresses.edition.path',
     description: 'The path to display the addresses edition view.',
     defaultMessage: '/preferences/addresses/{addressId}',
+  },
+  [DashboardPaths.PREFERENCES_ADDRESS_CREATION]: {
+    id: 'components.Dashboard.DashboardRoutes.preferences.addresses.creation.path',
+    description: 'The path to display the addresses creation view.',
+    defaultMessage: '/preferences/addresses/create',
   },
   [DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION]: {
     id: 'components.Dashboard.DashboardRoutes.preferences.creditCards.edition.path',
@@ -65,6 +71,11 @@ const dashboardRouteLabels = defineMessages<DashboardPaths>({
   [DashboardPaths.PREFERENCES_ADDRESS_EDITION]: {
     id: 'components.Dashboard.DashboardRoutes.preferences.addresses.edition.label',
     description: 'Label of the addresses edition view.',
+    defaultMessage: 'Billing addresses',
+  },
+  [DashboardPaths.PREFERENCES_ADDRESS_CREATION]: {
+    id: 'components.Dashboard.DashboardRoutes.preferences.addresses.creation.label',
+    description: 'Label of the addresses creation view.',
     defaultMessage: 'Billing addresses',
   },
   [DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION]: {
@@ -98,7 +109,7 @@ const getDashboardRouteAttribute =
     ]
   ) => {
     const messages =
-      attribute === RouteAttributes.LABEL ? dashboardRoutePaths : dashboardRouteLabels;
+      attribute === RouteAttributes.LABEL ? dashboardRouteLabels : dashboardRoutePaths;
     return intl.formatMessage(messages[path], ...options);
   };
 

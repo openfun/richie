@@ -1,6 +1,6 @@
+import { FC, ReactNode, useMemo, useRef, useState } from 'react';
 import { Button } from 'components/Button';
 import { Icon } from 'components/Icon';
-import { FC, ReactNode, useMemo, useRef, useState } from 'react';
 
 interface DashboardCardProps {
   header: ReactNode | string;

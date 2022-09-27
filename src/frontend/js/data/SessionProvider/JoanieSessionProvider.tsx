@@ -1,15 +1,15 @@
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
-import { AuthenticationApi } from 'utils/api/authentication';
-import isTestEnv from 'utils/test/isTestEnv';
-import type { User } from 'types/User';
-import type { Nullable } from 'types/utils';
-import { useCreditCards } from 'hooks/useCreditCards';
+import JoanieApiProvider from 'data/JoanieApiProvider';
 import { useAddresses } from 'hooks/useAddresses';
+import { useCreditCards } from 'hooks/useCreditCards';
 import { useOrders } from 'hooks/useOrders';
 import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
-import JoanieApiProvider from 'data/JoanieApiProvider';
+import type { User } from 'types/User';
+import type { Nullable } from 'types/utils';
+import { AuthenticationApi } from 'utils/api/authentication';
+import isTestEnv from 'utils/test/isTestEnv';
 import usePrevious from 'utils/usePrevious';
 import { Session } from './SessionContext';
 

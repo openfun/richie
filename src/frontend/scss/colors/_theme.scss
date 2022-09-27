@@ -220,6 +220,13 @@ $r-theme: (
     secondary-item: $indianred3-scheme,
     tertiary-item: $smoke-scheme,
   ),
+  dashboard-addresses: (
+    empty-color: r-color(slate-grey),
+  ),
+  dashboard-address-box: (
+    base-color: r-color(charcoal),
+    title-color: r-color(slate-grey),
+  ),
   dashboard-card: (
     base-color: r-color(charcoal),
     base-shadow: 0 0 6px r-color('light-grey'),

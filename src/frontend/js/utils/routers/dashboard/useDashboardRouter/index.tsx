@@ -1,12 +1,27 @@
+import type {
+  FormatXMLElementFn,
+  Options as IntlMessageFormatOptions,
+  PrimitiveType,
+} from 'intl-messageformat';
 import { useMemo } from 'react';
-import { createBrowserRouter, Navigate, Outlet, RouteObject } from 'react-router-dom';
 import { useIntl } from 'react-intl';
+import {
+  createBrowserRouter,
+  Navigate,
+  NavigateOptions,
+  Outlet,
+  RouteObject,
+  useNavigate,
+} from 'react-router-dom';
+import { DashboardCreateAddressLoader } from 'components/DashboardAddressesManagement/DashboardCreateAddressLoader';
+import { DashboardEditAddressLoader } from 'components/DashboardAddressesManagement/DashboardEditAddressLoader';
+import { DashboardPreferences } from 'components/DashboardPreferences';
+import useRouteInfo from 'hooks/useRouteInfo';
 import {
   DashboardPaths,
   getDashboardRouteLabel,
   getDashboardRoutePath,
 } from 'utils/routers/dashboard';
-import useRouteInfo from 'hooks/useRouteInfo';
 import { getDashboardBasename } from './getDashboardBasename';
 
 /**
@@ -31,16 +46,10 @@ const RouteInfo = ({ title }: { title: string }) => {
   );
 };
 
-/**
- * Returns the Dashboard router.
- * As dashboard is only accessible to authenticated user, this hook
- * is also in charge to redirect user to the root of the site if user
- * is anonymous.
- */
-const useDashboardRouter = () => {
+export function getDashboardRoutes() {
   const intl = useIntl();
-  const getRoutePath = getDashboardRouteLabel(intl);
-  const getRouteLabel = getDashboardRoutePath(intl);
+  const getRoutePath = getDashboardRoutePath(intl);
+  const getRouteLabel = getDashboardRouteLabel(intl);
 
   const routes: RouteObject[] = [
     {
@@ -68,17 +77,20 @@ const useDashboardRouter = () => {
           children: [
             {
               index: true,
-              element: <RouteInfo title={getRouteLabel(DashboardPaths.PREFERENCES)} />,
+              element: <DashboardPreferences />,
               handle: { crumbLabel: getRouteLabel(DashboardPaths.PREFERENCES) },
             },
             {
               path: getRoutePath(DashboardPaths.PREFERENCES_ADDRESS_EDITION, {
                 addressId: ':addressId',
               }),
-              element: (
-                <RouteInfo title={getRouteLabel(DashboardPaths.PREFERENCES_ADDRESS_EDITION)} />
-              ),
+              element: <DashboardEditAddressLoader />,
               handle: { crumbLabel: getRouteLabel(DashboardPaths.PREFERENCES_ADDRESS_EDITION) },
+            },
+            {
+              path: getRoutePath(DashboardPaths.PREFERENCES_ADDRESS_CREATION),
+              element: <DashboardCreateAddressLoader />,
+              handle: { crumbLabel: getRouteLabel(DashboardPaths.PREFERENCES_ADDRESS_CREATION) },
             },
             {
               path: getRoutePath(DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
@@ -94,13 +106,41 @@ const useDashboardRouter = () => {
       ],
     },
   ];
+  return routes;
+}
 
-  const router = useMemo(
-    () => createBrowserRouter(routes, { basename: getDashboardBasename(intl.locale) }),
+/**
+ * Returns the Dashboard router.
+ * As dashboard is only accessible to authenticated user, this hook
+ * is also in charge to redirect user to the root of the site if user
+ * is anonymous.
+ */
+const useDashboardRouter = () => {
+  const intl = useIntl();
+  return createBrowserRouter(getDashboardRoutes(), { basename: getDashboardBasename(intl.locale) });
+};
+
+/**
+ * Wrapper for `useNavigate` to avoid repetitive hooks calls.
+ */
+export const useDashboardNavigate = () => {
+  const getRoutePath = getDashboardRoutePath(useIntl());
+  const navigate = useNavigate();
+  return useMemo(
+    () =>
+      (
+        to: number | DashboardPaths,
+        values?: Record<string, PrimitiveType | FormatXMLElementFn<string, string>>,
+        options?: IntlMessageFormatOptions,
+        routerOptions?: NavigateOptions,
+      ) => {
+        if (typeof to === 'number') {
+          return navigate(to);
+        }
+        return navigate(getRoutePath(to, values, options), routerOptions);
+      },
     [],
   );
-
-  return router;
 };
 
 export default useDashboardRouter;

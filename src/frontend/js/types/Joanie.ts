@@ -180,7 +180,7 @@ export interface OrderWithPaymentInfo extends Order {
 }
 
 // - API
-interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> {
+export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> {
   is_main?: boolean;
 }
 

@@ -1,0 +1,52 @@
+.dashboard-addresses {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  &__empty {
+    text-align: center;
+    color: r-theme-val(dashboard-addresses, empty-color);
+    margin: 0;
+  }
+}
+
+.dashboard-address-box {
+  &__title,
+  &__identity,
+  &__address {
+    font-size: 18px;
+  }
+
+  &__title {
+    color: r-theme-val(dashboard-address-box, title-color);
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  &__identity {
+    color: r-theme-val(dashboard-address-box, base-color);
+    font-weight: bold;
+    margin: 0;
+  }
+
+  &__address {
+    margin: 0;
+  }
+
+  &__buttons {
+    display: flex;
+
+    button:nth-child(2) {
+      margin-left: 0.5rem;
+    }
+
+    @include media-breakpoint-down(sm) {
+      flex-direction: column;
+
+      button:nth-child(2) {
+        margin-left: 0;
+        margin-top: 0.5rem;
+      }
+    }
+  }
+}

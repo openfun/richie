@@ -1,5 +1,5 @@
-import { DashboardCard } from 'components/DashboardCard/index';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { DashboardCard } from 'components/DashboardCard/index';
 import { Button } from 'components/Button';
 
 describe('<DashboardCard/>', () => {

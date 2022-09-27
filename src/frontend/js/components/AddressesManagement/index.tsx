@@ -1,13 +1,13 @@
 import { Children, forwardRef, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import Banner, { BannerType } from 'components/Banner';
-import { useAddresses } from 'hooks/useAddresses';
-import type * as Joanie from 'types/Joanie';
-import { Maybe } from 'types/utils';
-import { confirm } from 'utils/indirection/window';
-import RegisteredAddress from 'components/RegisteredAddress';
 import AddressForm, { type AddressFormValues } from 'components/AddressesManagement/AddressForm';
+import Banner, { BannerType } from 'components/Banner';
 import { Icon } from 'components/Icon';
+import RegisteredAddress from 'components/RegisteredAddress';
+import { useAddressesManagement } from 'hooks/useAddressesManagement';
+import type * as Joanie from 'types/Joanie';
+import { Address } from 'types/Joanie';
+import { Maybe } from 'types/utils';
 
 // constant used as `address.id` for local address
 export const LOCAL_BILLING_ADDRESS_ID = 'local-billing-address';
@@ -93,38 +93,6 @@ export const messages = defineMessages({
     description: 'Label of the update button',
     defaultMessage: 'Update this address',
   },
-  deletionConfirmation: {
-    id: 'components.AddressesManagement.deletionConfirmation',
-    description: 'Confirmation message shown to the user when he wants to delete an address',
-    defaultMessage:
-      'Are you sure you want to delete the "{title}" address ?\n⚠️ You cannot undo this change after.',
-  },
-  error: {
-    id: 'components.AddressesManagement.error',
-    description:
-      'Error message shown to the user when address creation/update/deletion request fails.',
-    defaultMessage: 'An error occurred while address {action}. Please retry later.',
-  },
-  actionCreation: {
-    id: 'components.AddressesManagement.actionCreation',
-    description: 'Action name for address creation.',
-    defaultMessage: 'creation',
-  },
-  actionUpdate: {
-    id: 'components.AddressesManagement.actionUpdate',
-    description: 'Action name for address update.',
-    defaultMessage: 'update',
-  },
-  actionDeletion: {
-    id: 'components.AddressesManagement.actionDeletion',
-    description: 'Action name for address deletion.',
-    defaultMessage: 'deletion',
-  },
-  actionPromotion: {
-    id: 'components.AddressesManagement.actionPromotion',
-    description: 'Action name for address promotion.',
-    defaultMessage: 'promotion',
-  },
   selectButton: {
     id: 'components.AddressesManagement.selectButton',
     description: 'Label of the select button',
@@ -140,9 +108,12 @@ interface AddressesManagementProps {
 const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>(
   ({ handleClose, selectAddress }, ref) => {
     const intl = useIntl();
-    const addresses = useAddresses();
     const [editedAddress, setEditedAddress] = useState<Maybe<Joanie.Address>>();
-    const [error, setError] = useState<Maybe<string>>();
+    const {
+      methods: { setError, create, update, remove, promote },
+      states: { error },
+      ...addresses
+    } = useAddressesManagement();
 
     /**
      * Sort addresses ascending by title according to the locale
@@ -168,25 +139,6 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
     };
 
     /**
-     * Ask the user to confirm his intention
-     * then make the request to delete the provided address
-     *
-     * @param {Joanie.Address} address
-     */
-    const handleDelete = (address: Joanie.Address) => {
-      setError(undefined);
-      // eslint-disable-next-line no-alert, no-restricted-globals
-      const sure = confirm(
-        intl.formatMessage(messages.deletionConfirmation, { title: address.title }),
-      );
-      if (!address.is_main && sure) {
-        addresses.methods.delete(address.id, {
-          onError: () => setError(intl.formatMessage(messages.actionDeletion)),
-        });
-      }
-    };
-
-    /**
      * Create a new address according to form values
      * then update `selectedAddress` state with this new one.
      * If `save` checkbox input is checked, the address is persisted
@@ -195,12 +147,8 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
      * @param {AddressFormValues} formValues address fields to update
      */
     const handleCreate = async ({ save, ...address }: AddressFormValues) => {
-      setError(undefined);
       if (save) {
-        await addresses.methods.create(address, {
-          onSuccess: handleSelect,
-          onError: () => setError(intl.formatMessage(messages.actionCreation)),
-        });
+        await create(address, { onSuccess: handleSelect });
       } else {
         handleSelect({
           id: LOCAL_BILLING_ADDRESS_ID,
@@ -217,42 +165,19 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
      * @param {AddressFormValues} formValues address fields to update
      */
     const handleUpdate = async ({ save, ...newAddress }: AddressFormValues) => {
-      setError(undefined);
-      addresses.methods.update(
+      update(
         {
           ...editedAddress!,
           ...newAddress,
         },
         {
           onSuccess: () => setEditedAddress(undefined),
-          onError: () => setError(intl.formatMessage(messages.actionUpdate)),
         },
       );
     };
 
-    /**
-     * Update the provided address to promote it as main
-     *
-     * @param {Joanie.Address} address
-     */
-    const promoteAddress = (address: Joanie.Address) => {
-      if (!address.is_main) {
-        setError(undefined);
-        addresses.methods.update(
-          {
-            ...address,
-            is_main: true,
-          },
-          {
-            onError: () => setError(intl.formatMessage(messages.actionPromotion)),
-          },
-        );
-      }
-    };
-
     useEffect(() => {
       setError(undefined);
-
       if (editedAddress) {
         document.querySelector<HTMLElement>('[name="address-form"] input')?.focus();
       }
@@ -267,13 +192,7 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
           <Icon name="icon-chevron-down" className="button__icon" />
           <FormattedMessage {...messages.closeButton} />
         </button>
-        {error && (
-          <Banner
-            message={intl.formatMessage(messages.error, { action: error })}
-            type={BannerType.ERROR}
-            rounded
-          />
-        )}
+        {error && <Banner message={error} type={BannerType.ERROR} rounded />}
         {addresses.items.length > 0 ? (
           <section className="address-registered">
             <header>
@@ -289,8 +208,8 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
                     <RegisteredAddress
                       address={address}
                       edit={setEditedAddress}
-                      promote={promoteAddress}
-                      remove={handleDelete}
+                      promote={promote}
+                      remove={remove}
                       select={handleSelect}
                     />
                   )),
