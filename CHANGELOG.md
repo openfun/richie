@@ -25,6 +25,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Unlocalize aspect ratio floating value rendered in lti_consumer template
+  to always display value with a dot no matter active language
 - Language choices should be ordered alphabetically in course run admin form
 
 ## [2.16.0]

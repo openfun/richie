@@ -1,5 +1,6 @@
+{% load l10n %}
 <div
   class="richie-react richie-react--lti-consumer aspect-ratio"
-  style="padding-bottom: {{ instance.get_inline_ratio_percentage }}%"
+  style="padding-bottom: {{ instance.get_inline_ratio_percentage|unlocalize }}%"
   data-props='{"id":{{ instance.pk }}}'
 ></div>
