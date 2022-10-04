@@ -94,10 +94,10 @@ class LTIConsumerPluginTestCase(TestCase):
             "en",
             url=url,
             lti_provider_id="lti_provider_test",
-            inline_ratio=0.2217,
         )
 
         renderer = ContentRenderer(request=request)
+
         with override_settings(RICHIE_LTI_PROVIDERS=lti_providers):
             html = renderer.render_plugin(model_instance, global_context)
 
@@ -117,6 +117,7 @@ class LTIConsumerPluginTestCase(TestCase):
             "lti_provider_test": {
                 "oauth_consumer_key": "TestOauthConsumerKey",
                 "shared_secret": "TestSharedSecret",
+                "inline_ratio": 0.75,
             }
         }
 
@@ -138,6 +139,7 @@ class LTIConsumerPluginTestCase(TestCase):
         )
 
         renderer = ContentRenderer(request=request)
+
         with override_settings(RICHIE_LTI_PROVIDERS=lti_providers):
             html = renderer.render_plugin(model_instance, global_context)
 

@@ -14,6 +14,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Allow editor to enforce `inline_ratio` and `is_automatic_resizing` values for
+  a lti consumer plugin based on a lti provider
 - Use new Joanie Enrollment resource type
 - Modal component refactor for homogeneous use
 - New global scroll behavior for Modal

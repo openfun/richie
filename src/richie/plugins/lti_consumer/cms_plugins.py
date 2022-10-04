@@ -21,6 +21,26 @@ class LTIConsumerPlugin(CMSPluginBase):
     allow_children = False
     cache = True
     disable_child_plugins = True
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": [
+                    "lti_provider_id",
+                    "url",
+                    "oauth_consumer_key",
+                    "form_shared_secret",
+                ]
+            },
+        ),
+        (
+            _("Advanced settings"),
+            {
+                "classes": ("collapse",),
+                "fields": ["is_automatic_resizing", "inline_ratio"],
+            },
+        ),
+    )
     form = LTIConsumerForm
     model = LTIConsumer
     module = PLUGINS_GROUP

@@ -1,6 +1,7 @@
 """
 Model tests
 """
+import random
 from unittest import mock
 
 from django.core.exceptions import ValidationError
@@ -26,13 +27,7 @@ def get_lti_settings(is_regex=True):
 class LTIConsumerModelsTestCase(TestCase):
     """Model tests case"""
 
-    def test_lti_consumer_models_is_automatic_resizing_default(self):
-        """Check fields default values."""
-        instance = LTIConsumer.objects.create()
-        self.assertTrue(instance.is_automatic_resizing)
-        self.assertEqual(instance.inline_ratio, 0.5625)
-
-    def test_lti_consumer_models_inline_ratio_min(self):
+    def test_lti_consumer_modelsinline_ratio_min(self):
         """The "inline_ratio" field should not accept values smaller than 0.1"""
         instance = LTIConsumerFactory(inline_ratio=0.09)
 
@@ -44,7 +39,7 @@ class LTIConsumerModelsTestCase(TestCase):
             "{'inline_ratio': ['Ensure this value is greater than or equal to 0.1.']}",
         )
 
-    def test_lti_consumer_models_inline_ratio_max(self):
+    def test_lti_consumer_modelsinline_ratio_max(self):
         """The "inline_ratio" field should not accept values bigger than 10"""
         instance = LTIConsumerFactory(inline_ratio=10.01)
 
@@ -103,6 +98,68 @@ class LTIConsumerModelsTestCase(TestCase):
         instance.save()
         expected_url = "http://localhost:8060/lti/videos/"
         self.assertEqual(instance.url, expected_url)
+
+    def test_lti_consumer_models_get_inline_ratio(self):
+        """
+        The "get_inline_ratio" method should return the "inline_ratio" field value
+        or defaults to the lti provider values if there are otherwise returns 0.5625.
+        """
+
+        # Should return plugin.inline_ratio
+        instance = LTIConsumerFactory(inline_ratio=0.1337)
+        self.assertEqual(instance.get_inline_ratio(), 0.1337)
+
+        # Or defaults to lti_provider inline_ratio properties
+        with override_settings(
+            RICHIE_LTI_PROVIDERS={"lti_provider_test": {"inline_ratio": 0.75}}
+        ):
+            instance = LTIConsumerFactory(inline_ratio=None)
+            self.assertEqual(instance.get_inline_ratio(), 0.75)
+
+        # Otherwise returns 0.5625
+        with override_settings(
+            RICHIE_LTI_PROVIDERS={"lti_provider_test": {"inline_ratio": None}}
+        ):
+            instance = LTIConsumerFactory(inline_ratio=None)
+            self.assertEqual(instance.get_inline_ratio(), 0.5625)
+
+    def test_lti_consumer_models_get_is_automatic_resizing(self):
+        """
+        The "get_is_automatic_resizing" method should return the "is_automatic_resizing"
+        field value or defaults to the lti provider values if there are
+        otherwise returns True.
+        """
+
+        plugin_is_automatic_resizing = random.choice([True, False])
+        lti_provider_is_automatic_resizing = random.choice([True, False])
+
+        # Should return plugin.is_automatic_resizing
+        instance = LTIConsumerFactory(
+            is_automatic_resizing=plugin_is_automatic_resizing
+        )
+        self.assertEqual(
+            instance.get_is_automatic_resizing(), plugin_is_automatic_resizing
+        )
+
+        # Or defaults to lti_provider is_automatic_resizing properties
+        with override_settings(
+            RICHIE_LTI_PROVIDERS={
+                "lti_provider_test": {
+                    "is_automatic_resizing": lti_provider_is_automatic_resizing
+                }
+            }
+        ):
+            instance = LTIConsumerFactory(is_automatic_resizing=None)
+            self.assertEqual(
+                instance.get_is_automatic_resizing(), lti_provider_is_automatic_resizing
+            )
+
+        # Otherwise returns True
+        with override_settings(
+            RICHIE_LTI_PROVIDERS={"lti_provider_test": {"is_automatic_resizing": None}}
+        ):
+            instance = LTIConsumerFactory(is_automatic_resizing=None)
+            self.assertEqual(instance.get_is_automatic_resizing(), True)
 
 
 # Freeze time to make signatures predictable

@@ -33,8 +33,8 @@ class LTIConsumerForm(forms.ModelForm):
             "url",
             "oauth_consumer_key",
             "form_shared_secret",
-            "is_automatic_resizing",
             "inline_ratio",
+            "is_automatic_resizing",
         ]
 
     def __init__(self, *args, **kwargs):
