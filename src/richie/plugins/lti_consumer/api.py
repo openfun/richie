@@ -63,11 +63,7 @@ class LTIConsumerViewsSet(viewsets.GenericViewSet):
         )
 
         response = {
-            "is_automatic_resizing": plugin.lti_provider.get(
-                "is_automatic_resizing", True
-            )
-            if plugin.lti_provider_id
-            else plugin.is_automatic_resizing,
+            "is_automatic_resizing": plugin.get_is_automatic_resizing(),
             "content_parameters": plugin.get_content_parameters(
                 user_infos=user_infos, edit=edit
             ),

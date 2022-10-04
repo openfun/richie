@@ -1,6 +1,6 @@
 $(document).ready(() => {
   const $lti_provider_id = $("#id_lti_provider_id");
-  const $foldable_fields = $(".field-oauth_consumer_key, .field-form_shared_secret, .field-is_automatic_resizing, .field-inline_ratio");
+  const $foldable_fields = $(".field-oauth_consumer_key, .field-form_shared_secret");
 
   const set_foldable_fields_visibility = () => {
     if ($lti_provider_id.val()) {

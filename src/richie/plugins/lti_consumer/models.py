@@ -43,11 +43,28 @@ class LTIConsumer(CMSPlugin):
     )
     oauth_consumer_key = models.CharField(max_length=50, null=True, blank=True)
     shared_secret = models.CharField(max_length=50, null=True, blank=True)
-    is_automatic_resizing = models.BooleanField(default=True, blank=True)
+    is_automatic_resizing = models.BooleanField(
+        blank=True,
+        null=True,
+        choices=[(None, _("Inherit")), (True, _("Yes")), (False, _("No"))],
+        help_text=_(
+            (
+                "If active, the LTI viewport will automatically fit its content. Leave blank to"
+                " use the default value of the selected LTI provider if there is."
+            ),
+        ),
+    )
     inline_ratio = models.FloatField(
-        default=0.5625,  # default is 16/9
+        null=True,
         blank=True,
         validators=[MinValueValidator(0.1), MaxValueValidator(10)],
+        help_text=_(
+            (
+                "Enforce the aspect ratio of the LTI viewport. e.g: if you want to display a video"
+                " with 4:3 landscape format, the value will be 0.75 (3 / 4 = 0.75). Leave blank to"
+                " use the default value of the selected LTI provider if there is."
+            ),
+        ),
     )
 
     # pylint: disable=signature-differs
@@ -76,15 +93,36 @@ class LTIConsumer(CMSPlugin):
             self.lti_provider_id, {}
         )
 
+    def get_inline_ratio(self):
+        """
+        Returns plugin "inline_ratio" or defaults to the lti provider setting
+        otherwise returns 0.5625 (16:9 aspect ratio).
+        """
+
+        if (inline_ratio := self.inline_ratio) is None and self.lti_provider_id:
+            inline_ratio = self.lti_provider.get("inline_ratio")
+
+        return inline_ratio or 0.5625
+
+    def get_is_automatic_resizing(self):
+        """
+        Returns plugin "is_automatic_resizing" or defaults to the lti provider setting
+        otherwise returns True.
+        """
+
+        if (
+            is_automatic_resizing := self.is_automatic_resizing
+        ) is None and self.lti_provider_id:
+            is_automatic_resizing = self.lti_provider.get("is_automatic_resizing")
+
+        return is_automatic_resizing if is_automatic_resizing is not None else True
+
     def get_inline_ratio_percentage(self):
         """
         Returns actual value to use for `inline_ratio` setting as a percentage
         """
-        return 100 * (
-            self.lti_provider.get("inline_ratio", 0.5625)
-            if self.lti_provider_id
-            else self.inline_ratio
-        )
+
+        return 100 * float(self.get_inline_ratio())
 
     def get_resource_link_id(self):
         """Use the plugin id as resource_link_id field."""
