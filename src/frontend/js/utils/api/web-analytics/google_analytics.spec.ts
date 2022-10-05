@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
-import WebAnalyticsAPIHandler from '.';
 import GoogleAnalyticsApi from './google_analytics';
+import WebAnalyticsAPIHandler from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,

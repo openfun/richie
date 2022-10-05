@@ -9,12 +9,11 @@
 // regardless of their use throughout the Richie codebase itself.
 import 'core-js/modules/es.array.iterator';
 import 'core-js/modules/es.promise';
-import ReactDOM from 'react-dom';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from 'react-query';
 import countries from 'i18n-iso-countries';
+import ReactDOM from 'react-dom';
 import createQueryClient from 'utils/react-query/createQueryClient';
-
 import { Root } from 'components/Root';
 import { handle } from 'utils/errors/handle';
 

@@ -1,13 +1,13 @@
+import { getByRole, getByText, render, screen } from '@testing-library/react';
+import { IntlProvider } from 'react-intl';
+import faker from 'faker';
 import {
   JoanieCourseRunFactory,
   JoanieEnrollmentFactory,
   OrderFactory,
 } from 'utils/test/factories';
-import { getByRole, getByText, render, screen } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
 import { DashboardItemOrder } from 'components/DashboardItem/DashboardItemOrder';
 import { Order } from 'types/Joanie';
-import faker from 'faker';
 import { DEFAULT_DATE_FORMAT } from 'utils/useDateFormat';
 
 describe('<DashboardItemOrder/>', () => {

@@ -1,6 +1,6 @@
 import { PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
-import { AuthenticationApi } from 'utils/api/authentication';
 import { useQuery, useQueryClient } from 'react-query';
+import { AuthenticationApi } from 'utils/api/authentication';
 import { Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { REACT_QUERY_SETTINGS } from 'settings';

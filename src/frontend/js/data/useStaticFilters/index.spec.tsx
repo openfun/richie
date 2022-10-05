@@ -2,10 +2,10 @@ import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import fetchMock from 'fetch-mock';
 
-import { FilterDefinition } from 'types/filters';
-import { Deferred } from 'utils/test/deferred';
 import { IntlProvider } from 'react-intl';
 import { PropsWithChildren } from 'react';
+import { FilterDefinition } from 'types/filters';
+import { Deferred } from 'utils/test/deferred';
 import { useStaticFilters } from '.';
 
 describe('data/useStaticFilters', () => {

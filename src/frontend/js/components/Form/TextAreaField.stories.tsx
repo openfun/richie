@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { TextareaField as Base } from './index';
 import { defaultConfig } from './Field.stories';
+import { TextareaField as Base } from './index';
 
 export default {
   title: 'Components/Inputs',

@@ -42,6 +42,13 @@
     "import/extensions": "off",
     "import/no-cycle": ["off"],
     "import/no-dynamic-require": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "alphabetize": { "order": "ignore" }
+      }
+    ],
     "import/prefer-default-export": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/label-has-associated-control": "warn",
@@ -76,6 +83,7 @@
     "react/style-prop-object": ["error", { "allow": ["FormattedNumber"] }]
   },
   "settings": {
-    "polyfills": ["fetch", "Promise"]
+    "polyfills": ["fetch", "Promise"],
+    "import/resolver": "webpack"
   }
 }

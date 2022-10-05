@@ -1,9 +1,9 @@
 import { IntlProvider } from 'react-intl';
-import { DashboardItemEnrollment } from 'components/DashboardItem/DashboardItemEnrollment';
 import { render, screen } from '@testing-library/react';
+import * as faker from 'faker';
+import { DashboardItemEnrollment } from 'components/DashboardItem/DashboardItemEnrollment';
 import { Enrollment } from 'types/Joanie';
 import { JoanieCourseRunFactory, JoanieEnrollmentFactory } from 'utils/test/factories';
-import * as faker from 'faker';
 import { DEFAULT_DATE_FORMAT } from 'utils/useDateFormat';
 
 describe('<DashboardItemEnrollment/>', () => {

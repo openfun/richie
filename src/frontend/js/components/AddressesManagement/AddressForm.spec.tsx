@@ -1,9 +1,9 @@
 import { act } from '@testing-library/react-hooks';
 import { fireEvent, getByText, render, screen } from '@testing-library/react';
-import * as mockFactories from 'utils/test/factories';
-import { AddressFactory } from 'utils/test/factories';
 import countries from 'i18n-iso-countries';
 import { IntlProvider } from 'react-intl';
+import * as mockFactories from 'utils/test/factories';
+import { AddressFactory } from 'utils/test/factories';
 import { Address } from 'types/Joanie';
 import { ErrorKeys } from './validationSchema';
 import AddressForm from './AddressForm';

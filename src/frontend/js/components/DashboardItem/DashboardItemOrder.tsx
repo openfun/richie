@@ -1,8 +1,8 @@
+import { FormattedMessage, useIntl } from 'react-intl';
 import { Button } from 'components/Button';
 import { DashboardItemEnrollmentFooter } from 'components/DashboardItem/DashboardItemEnrollmentFooter';
 import { DashboardSubItem } from 'components/DashboardItem/DashboardSubItem';
 import { Icon } from 'components/Icon';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Enrollment, Order, OrderState } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { DashboardSubItemsList } from './DashboardSubItemsList';

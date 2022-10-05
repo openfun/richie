@@ -4,9 +4,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from '@testing-library/react-hooks';
 import fetchMock from 'fetch-mock';
-import * as mockFactories from 'utils/test/factories';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from 'react-query';
+import * as mockFactories from 'utils/test/factories';
 import { SessionProvider } from 'data/SessionProvider';
 import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
 import type * as Joanie from 'types/Joanie';

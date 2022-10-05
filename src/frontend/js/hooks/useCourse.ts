@@ -2,9 +2,9 @@
  * Joanie hook to retrieve information about a course
  *
  */
+import { useQuery, useQueryClient } from 'react-query';
 import { useJoanieApi } from 'data/JoanieApiProvider';
 import useLocalizedQueryKey from 'utils/react-query/useLocalizedQueryKey';
-import { useQuery, useQueryClient } from 'react-query';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import { useSession } from 'data/SessionProvider';
 
