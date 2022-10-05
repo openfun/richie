@@ -2,12 +2,12 @@ import { act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { PropsWithChildren } from 'react';
 import { QueryClientProvider } from 'react-query';
+import { IntlProvider } from 'react-intl';
 import createQueryClient from 'utils/react-query/createQueryClient';
 
 import { fetchList } from 'data/getResourceList';
 import { APIListRequestParams } from 'types/api';
 import { Deferred } from 'utils/test/deferred';
-import { IntlProvider } from 'react-intl';
 import { useCourseSearch } from '.';
 
 jest.mock('utils/context', () => jest.fn());

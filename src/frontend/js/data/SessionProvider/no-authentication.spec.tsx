@@ -1,8 +1,8 @@
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import { renderHook } from '@testing-library/react-hooks';
+import { render, screen } from '@testing-library/react';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import { handle as mockHandle } from 'utils/errors/handle';
 import { noop } from 'utils';
-import { render, screen } from '@testing-library/react';
 import { SessionProvider, useSession } from '.';
 
 jest.mock('utils/errors/handle');

@@ -1,8 +1,8 @@
 import { stringify } from 'query-string';
 import { PropsWithChildren } from 'react';
 
-import { CourseSearchParamsAction } from 'data/useCourseSearchParams';
 import { renderHook } from '@testing-library/react-hooks';
+import { CourseSearchParamsAction } from 'data/useCourseSearchParams';
 import { History, HistoryContext } from 'data/useHistory';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { useFilterValue } from '.';

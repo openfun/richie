@@ -1,6 +1,6 @@
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
-import WebAnalyticsAPIHandler from '.';
 import GoogleTagManagerApi from './google_tag_manager';
+import WebAnalyticsAPIHandler from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,

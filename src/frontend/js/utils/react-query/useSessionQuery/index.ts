@@ -1,12 +1,12 @@
 import type { QueryFunction, QueryKey } from 'react-query/types/core/types';
 import type { UseQueryOptions, UseQueryResult } from 'react-query/types/react/types';
+import { useQuery, useQueryClient } from 'react-query';
+import { useMemo } from 'react';
 import type { HttpError } from 'utils/errors/HttpError';
 import type { TSessionQueryKey } from 'utils/react-query/useSessionKey';
 import useSessionQueryKey from 'utils/react-query/useSessionKey';
-import { useQuery, useQueryClient } from 'react-query';
 import { useSession } from 'data/SessionProvider';
 import { REACT_QUERY_SETTINGS } from 'settings';
-import { useMemo } from 'react';
 
 /**
  * Hook to use when the query relies on the current session. In this way, the queryKey

@@ -1,6 +1,8 @@
 import { hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import fetchMock from 'fetch-mock';
 import { renderHook } from '@testing-library/react-hooks';
+import { PropsWithChildren } from 'react';
+import { waitFor } from '@testing-library/react';
 import {
   ContextFactory as mockContextFactory,
   PersistedClientFactory,
@@ -10,8 +12,6 @@ import BaseSessionProvider from 'data/SessionProvider/BaseSessionProvider';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import { useSession } from 'data/SessionProvider';
 import { checkStatus } from 'utils/api/joanie';
-import { PropsWithChildren } from 'react';
-import { waitFor } from '@testing-library/react';
 import { useSessionMutation } from '.';
 
 jest.mock('utils/context', () => ({

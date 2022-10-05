@@ -1,6 +1,6 @@
 import fetchMock from 'fetch-mock';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import faker from 'faker';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import { handle } from 'utils/errors/handle';
 import context from 'utils/context';
 import API from './openedx-hawthorn';

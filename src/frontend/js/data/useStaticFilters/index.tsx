@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 
+import { defineMessages, useIntl } from 'react-intl';
 import { FilterDefinition, StaticFilterDefinitions } from 'types/filters';
 import { Nullable } from 'types/utils';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
-import { defineMessages, useIntl } from 'react-intl';
 
 // Our search and autosuggestion pipeline operated based on filter definitions. Obviously, we can't filters
 // courses by courses, but we still need a filter-definition-like config to run courses autocompletion.

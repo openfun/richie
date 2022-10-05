@@ -1,5 +1,5 @@
-import { Enrollment } from 'types/Joanie';
 import { FormattedMessage } from 'react-intl';
+import { Enrollment } from 'types/Joanie';
 import { Icon } from 'components/Icon';
 import { Button } from 'components/Button';
 import useDateFormat from 'utils/useDateFormat';

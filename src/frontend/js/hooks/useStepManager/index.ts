@@ -1,5 +1,5 @@
-import { type IconType } from 'components/Icon';
 import { useEffect, useMemo, useState } from 'react';
+import { type IconType } from 'components/Icon';
 import { type Nullable } from 'types/utils';
 
 export interface Step<Keys extends PropertyKey = PropertyKey> {

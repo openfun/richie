@@ -1,7 +1,7 @@
-import type { CourseCodeProviderProps } from 'data/CourseCodeProvider/index';
-import { CourseCodeProvider, useCourseCode } from 'data/CourseCodeProvider/index';
 import type { PropsWithChildren } from 'react';
 import { renderHook } from '@testing-library/react-hooks';
+import type { CourseCodeProviderProps } from 'data/CourseCodeProvider/index';
+import { CourseCodeProvider, useCourseCode } from 'data/CourseCodeProvider/index';
 import { noop } from 'utils';
 
 describe('useCourseCode', () => {

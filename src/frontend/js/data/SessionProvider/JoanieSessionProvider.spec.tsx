@@ -2,13 +2,13 @@ import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { act, render, waitFor } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
+import { PropsWithChildren } from 'react';
 import { ContextFactory as mockContextFactory, FonzieUserFactory } from 'utils/test/factories';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
-import { renderHook } from '@testing-library/react-hooks';
 import { useSession } from 'data/SessionProvider/index';
-import { PropsWithChildren } from 'react';
 import JoanieSessionProvider from './JoanieSessionProvider';
 
 jest.mock('utils/errors/handle');
