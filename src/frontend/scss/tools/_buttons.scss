@@ -43,6 +43,11 @@
   border: $border-width solid transparent;
   color: $font-color;
   display: $display;
+  @if ($display == flex) {
+    align-items: center;
+    justify-content: center;
+  }
+
   font-family: $font-family;
   font-weight: $font-weight;
   text-align: $text-align;
