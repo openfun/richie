@@ -135,9 +135,16 @@ export interface Order {
   target_courses: string[];
 }
 
+export enum CreditCardBrand {
+  MASTERCARD = 'Mastercard',
+  MAESTRO = 'Maestro',
+  VISA = 'Visa',
+  CB = 'CB',
+}
+
 // Credit Card
 export interface CreditCard {
-  brand: string;
+  brand: CreditCardBrand;
   expiration_month: number;
   expiration_year: number;
   id: string;
