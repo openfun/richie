@@ -153,13 +153,14 @@ const API = (): Joanie.API => {
             method: 'POST',
             body: JSON.stringify(creditCard),
           }).then(checkStatus),
-        update: async ({ id, ...creditCard }) =>
-          fetchWithJWT(ROUTES.user.creditCards.create.replace(':id', id), {
+        update: async ({ id, ...creditCard }) => {
+          return fetchWithJWT(ROUTES.user.creditCards.update.replace(':id', id), {
             method: 'PUT',
             body: JSON.stringify(creditCard),
-          }).then(checkStatus),
+          }).then(checkStatus);
+        },
         delete: async (id) =>
-          fetchWithJWT(ROUTES.user.creditCards.create.replace(':id', id), {
+          fetchWithJWT(ROUTES.user.creditCards.delete.replace(':id', id), {
             method: 'DELETE',
           }).then(checkStatus),
       },
