@@ -22,6 +22,7 @@ import {
   getDashboardRouteLabel,
   getDashboardRoutePath,
 } from 'utils/routers/dashboard';
+import { DashboardEditCreditCardLoader } from 'components/DashboardCreditCardsManagement/DashboardEditCreditCardLoader';
 import { getDashboardBasename } from './getDashboardBasename';
 
 /**
@@ -96,9 +97,7 @@ export function getDashboardRoutes() {
               path: getRoutePath(DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
                 creditCardId: ':creditCardId',
               }),
-              element: (
-                <RouteInfo title={getRouteLabel(DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION)} />
-              ),
+              element: <DashboardEditCreditCardLoader />,
               handle: { crumbLabel: getRouteLabel(DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION) },
             },
           ],

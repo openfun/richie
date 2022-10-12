@@ -220,6 +220,9 @@ $r-theme: (
     secondary-item: $indianred3-scheme,
     tertiary-item: $smoke-scheme,
   ),
+  credit-card-brand-logo: (
+    background-color: r-color(denim),
+  ),
   dashboard-addresses: (
     empty-color: r-color(slate-grey),
   ),
@@ -232,6 +235,15 @@ $r-theme: (
     base-shadow: 0 0 6px r-color('light-grey'),
     text-hover-color: r-color('grey59'),
     base-border: r-color('azure2'),
+  ),
+  dashboard-credit-cards: (
+    empty-color: r-color(slate-grey),
+  ),
+  dashboard-credit-card-box: (
+    base-color: r-color(charcoal),
+    title-color: r-color(slate-grey),
+    expire-soon-color: r-color('indianred3'),
+    expired-color: r-color('firebrick6'),
   ),
   dashboard-box: (
     background: r-color(smoke),

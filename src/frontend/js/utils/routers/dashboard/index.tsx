@@ -14,7 +14,7 @@ export enum DashboardPaths {
   PREFERENCES = '/preferences',
   PREFERENCES_ADDRESS_EDITION = '/preferences/addresses/:addressId',
   PREFERENCES_ADDRESS_CREATION = '/preferences/addresses/create',
-  PREFERENCES_CREDIT_CARD_EDITION = '/preferences/credit-cards/:creditCard',
+  PREFERENCES_CREDIT_CARD_EDITION = '/preferences/credit-cards/:creditCardId',
 }
 
 // Translations of dashboard route paths
