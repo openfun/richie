@@ -220,6 +220,9 @@ $r-theme: (
     secondary-item: $indianred3-scheme,
     tertiary-item: $smoke-scheme,
   ),
+  dashboard: (
+    background-color: r-color('azure2'),
+  ),
   dashboard-addresses: (
     empty-color: r-color(slate-grey),
   ),
@@ -240,6 +243,10 @@ $r-theme: (
     base-shadow: 0 0 6px r-color('light-grey'),
     text-hover-color: r-color('grey59'),
     base-border: r-color('light-grey'),
+  ),
+  dashboard-sidebar: (
+    background-color: r-color('white'),
+    base-shadow: 0 -5px 6px r-color('light-grey'),
   ),
   form: (
     input-placeholder: r-color('grey32'),

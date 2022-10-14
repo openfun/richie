@@ -22,6 +22,7 @@ import {
   getDashboardRouteLabel,
   getDashboardRoutePath,
 } from 'utils/routers/dashboard';
+import { DashboardLayout } from 'components/Dashboard/DashboardLayout';
 import { getDashboardBasename } from './getDashboardBasename';
 
 /**
@@ -54,7 +55,7 @@ export function getDashboardRoutes() {
   const routes: RouteObject[] = [
     {
       path: '/',
-      element: <Outlet />,
+      element: <DashboardLayout />,
       children: [
         {
           index: true,

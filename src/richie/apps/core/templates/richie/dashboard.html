@@ -1,19 +1,13 @@
-{% extends "richie/single_column.html" %}
+{% extends "richie/base.html" %}
 {% load cms_tags i18n %}
 
 {% block head_title %}
     {% trans "dashboard" %}
 {% endblock head_title %}
 
-{% block meta_opengraph_contextuals %}
-    {% trans "dashboard" as page_title %}
-    <meta property="og:title" content="{{ page_title |truncatechars:65 }}">
-    <meta property="og:url" content="{{ SITE.web_url }}-{{ page_title }}">
-{% endblock meta_opengraph_contextuals %}
-
-
+{% block body_header %}{% endblock body_header %}
 {% block subheader %}{% endblock subheader %}
 
-{% block column %}
+{% block content %}
     <div class="richie-react richie-react--dashboard"></div>
-{% endblock column %}
+{% endblock content %}

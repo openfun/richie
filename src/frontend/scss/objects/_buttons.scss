@@ -30,6 +30,10 @@
   }
   &--nano {
     @include button-tiny($padding-x: 0, $padding-y: 0);
+
+    .button__icon {
+      margin-right: 0;
+    }
   }
 
   // Size modifiers and their specific form factors

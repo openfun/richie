@@ -34,6 +34,7 @@ export type IconType =
   | 'icon-linkedin'
   | 'icon-login'
   | 'icon-magnifying-glass'
+  | 'icon-menu'
   | 'icon-org'
   | 'icon-pace'
   | 'icon-plus'
