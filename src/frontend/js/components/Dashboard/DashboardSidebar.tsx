@@ -1,7 +1,22 @@
 import { useState } from 'react';
-import { useMediaQuery } from 'react-responsive';
+import { Link } from 'react-router-dom';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Button } from 'components/Button';
 import { Icon } from 'components/Icon';
+import {
+  DashboardPaths,
+  getDashboardRouteLabel,
+  getDashboardRoutePath,
+} from 'utils/routers/dashboard';
+import { useMediaQuerySM } from 'hooks/useMedia';
+
+const messages = defineMessages({
+  header: {
+    id: 'components.DashboardSidebar.header',
+    description: 'Title of the dashboard sidebar',
+    defaultMessage: 'Dashboard',
+  },
+});
 
 interface Props {
   opened: boolean;
@@ -10,7 +25,7 @@ interface Props {
   isMobile: boolean;
 }
 
-export const DashboardSidebar = ({ opened, open, close, isMobile }: Props) => {
+export const DashboardSidebar = ({ opened, close, isMobile }: Props) => {
   const classes = ['dashboard__sidebar'];
   if (isMobile) {
     classes.push('dashboard__sidebar--mobile');
@@ -19,16 +34,39 @@ export const DashboardSidebar = ({ opened, open, close, isMobile }: Props) => {
     classes.push('dashboard__sidebar--closed');
   }
 
+  const intl = useIntl();
+  const getRoutePath = getDashboardRoutePath(intl);
+  const getRouteLabel = getDashboardRouteLabel(intl);
+
   return (
     <aside className={classes.join(' ')}>
-      {isMobile && (
-        <div className="close">
-          <Button size="nano" onClick={() => close()}>
-            <Icon name="icon-round-close" className="button__icon" />
-          </Button>
+      <div className="dashboard__sidebar__container">
+        {isMobile && (
+          <div className="close">
+            <Button size="nano" onClick={() => close()}>
+              <Icon name="icon-round-close" className="button__icon" />
+            </Button>
+          </div>
+        )}
+        <div className="dashboard__sidebar__logo">
+          <img src="/static/richie/images/logo.png" alt="" />
         </div>
-      )}
-      <img src="/static/richie/images/logo.png" className="dashboard__sidebar__logo" />
+        <h3>
+          <FormattedMessage {...messages.header} />
+        </h3>
+        <ul>
+          <li>
+            <Link to={getRoutePath(DashboardPaths.COURSES)}>
+              {getRouteLabel(DashboardPaths.COURSES)}
+            </Link>
+          </li>
+          <li>
+            <Link to={getRoutePath(DashboardPaths.PREFERENCES)}>
+              {getRouteLabel(DashboardPaths.PREFERENCES)}
+            </Link>
+          </li>
+        </ul>
+      </div>
     </aside>
   );
 };
@@ -39,12 +77,8 @@ export const DashboardSidebar = ({ opened, open, close, isMobile }: Props) => {
  * opened on large screens.
  */
 export function useDashboardSidebar() {
-  const [opened, setOpened] = useState(true);
-
-  // TODO: Use constants.
-  const isMobile = useMediaQuery({ query: '(max-width: 768px)' });
-  console.log('isMobile', isMobile);
-
+  const [opened, setOpened] = useState(false);
+  const isMobile = useMediaQuerySM();
   return {
     opened,
     isMobile,

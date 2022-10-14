@@ -247,6 +247,8 @@ $r-theme: (
   dashboard-sidebar: (
     background-color: r-color('white'),
     base-shadow: 0 -5px 6px r-color('light-grey'),
+    base-color: r-color(denim),
+    close-color: r-color('slate-grey'),
   ),
   form: (
     input-placeholder: r-color('grey32'),

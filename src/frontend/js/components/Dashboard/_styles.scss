@@ -1,3 +1,5 @@
+$sidebarPadding: 2rem;
+
 .dashboard {
   background-color: r-theme-val(dashboard, background-color);
   display: flex;
@@ -15,6 +17,11 @@
       align-items: center;
       //border: 3px cornflowerblue solid;
     }
+
+    main {
+      // To give space to the sidebar to make its content visible.
+      min-height: 400px;
+    }
   }
 
   &__sidebar {
@@ -23,13 +30,56 @@
     width: 300px;
     transition: all 0.25s;
     box-shadow: r-theme-val(dashboard-sidebar, base-shadow);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
+    padding: $sidebarPadding;
 
     .close {
+      position: absolute;
+      right: -1rem;
+      top: -1rem;
       display: none;
+
+      button svg {
+        color: r-theme-val(dashboard-sidebar, close-color);
+      }
+    }
+
+    &__container {
+      position: sticky;
+      top: $sidebarPadding;
+      // This is used to prevent the sidebar container to be hidden beyond the waves at the bottom of the page when
+      // scrolling down.
+      padding-bottom: 5vw;
+    }
+
+    &__logo {
+      display: flex;
+      justify-content: center;
+
+      img {
+        margin: auto;
+      }
+    }
+
+    h3 {
+      font-size: 20px;
+      font-weight: 900;
+      margin: 3rem 0 1rem 0;
+      color: r-theme-val(dashboard-sidebar, base-color);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+
+      li {
+        a {
+          font-size: 15px;
+          font-weight: bold;
+          color: r-theme-val(dashboard-sidebar, base-color);
+        }
+      }
     }
 
     &--mobile {
