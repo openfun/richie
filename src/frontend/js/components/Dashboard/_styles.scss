@@ -1,0 +1,16 @@
+.dashboard {
+
+  &__avatar {
+    box-shadow: r-theme-val(dashboard-sidebar, base-shadow);
+    background-color: r-theme-val(dashboard-avatar, background-color);
+    border-radius: 100%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: r-theme-val(dashboard-avatar, base-color);
+    font-size: 3rem;
+    font-weight: bold;
+  }
+}
