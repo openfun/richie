@@ -60,32 +60,33 @@ export const DashboardAddressesManagement = ({
     });
   }, [addresses.items]);
 
-  if (isLoading) {
-    return <Spinner />;
-  }
-
   return (
     <DashboardCard header={<FormattedMessage {...messages.header} />}>
       <div className="dashboard-addresses">
-        {error && <Banner message={error} type={BannerType.ERROR} rounded />}
-        {!error && addressesList.length === 0 && (
-          <p className="dashboard-addresses__empty">
-            <FormattedMessage {...messages.emptyList} />
-          </p>
+        {isLoading && <Spinner />}
+        {!isLoading && (
+          <>
+            {error && <Banner message={error} type={BannerType.ERROR} rounded />}
+            {!error && addressesList.length === 0 && (
+              <p className="dashboard-addresses__empty">
+                <FormattedMessage {...messages.emptyList} />
+              </p>
+            )}
+            {addressesList.map((address) => (
+              <DashboardAddressBox
+                key={address.id}
+                address={address}
+                edit={(_address) => onClickEdit?.(_address)}
+                remove={remove}
+                promote={promote}
+              />
+            ))}
+            <Button color="outline-primary" onClick={() => onClickCreate?.()}>
+              <Icon name="icon-plus" className="button__icon" />
+              <FormattedMessage {...messages.add} />
+            </Button>
+          </>
         )}
-        {addressesList.map((address) => (
-          <DashboardAddressBox
-            key={address.id}
-            address={address}
-            edit={(_address) => onClickEdit?.(_address)}
-            remove={remove}
-            promote={promote}
-          />
-        ))}
-        <Button color="outline-primary" onClick={() => onClickCreate?.()}>
-          <Icon name="icon-plus" className="button__icon" />
-          <FormattedMessage {...messages.add} />
-        </Button>
       </div>
     </DashboardCard>
   );
