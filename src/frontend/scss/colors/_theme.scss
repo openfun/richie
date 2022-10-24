@@ -220,6 +220,10 @@ $r-theme: (
     secondary-item: $indianred3-scheme,
     tertiary-item: $smoke-scheme,
   ),
+  dashboard-avatar: (
+    background-color: r-color('firebrick6'),
+    base-color: r-color('white'),
+  ),
   credit-card-brand-logo: (
     background-color: r-color(denim),
   ),
