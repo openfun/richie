@@ -554,6 +554,13 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         environ_prefix=None,
     )
 
+    # Configure course search page reverse id
+    RICHIE_SEARCH_REVERSE_ID = values.Value(
+        "courses",
+        environ_name="RICHIE_SEARCH_REVERSE_ID",
+        environ_prefix=None,
+    )
+
     @classmethod
     def _get_environment(cls):
         """Environment in which the application is launched."""

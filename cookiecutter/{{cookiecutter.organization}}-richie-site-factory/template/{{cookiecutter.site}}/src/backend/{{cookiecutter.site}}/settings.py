@@ -270,6 +270,13 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         environ_prefix=None,
     )
 
+    # Configure course search page reverse id
+    RICHIE_SEARCH_REVERSE_ID = values.Value(
+        "courses",
+        environ_name="RICHIE_SEARCH_REVERSE_ID",
+        environ_prefix=None,
+    )
+
     # Internationalization
     TIME_ZONE = "Europe/Paris"
     USE_I18N = True

@@ -108,7 +108,7 @@
                             <div class="topbar__menu topbar__menu--aside">
                                 {% block topbar_searchbar %}
                                 <div class="topbar__search richie-react richie-react--root-search-suggest-field"
-                                    data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}"}'></div>
+                                    data-props='{"courseSearchPageUrl": "{% page_url RICHIE_SEARCH_REVERSE_ID %}"}'></div>
                                 {% endblock topbar_searchbar %}
                                 <ul class="topbar__list topbar__list--controls">
                                     {% block userlogin %}

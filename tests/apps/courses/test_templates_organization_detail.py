@@ -283,9 +283,12 @@ class OrganizationCMSTestCase(CMSTestCase):
     @mock.patch(
         "cms.templatetags.cms_tags.PageUrl.get_value", return_value="/the/courses/"
     )
-    @override_settings(RICHIE_GLIMPSE_PAGINATION={"courses": 2})
+    @override_settings(
+        RICHIE_GLIMPSE_PAGINATION={"courses": 2},
+        RICHIE_SEARCH_REVERSE_ID="overall-search",
+    )
     def test_templates_organization_detail_cms_published_content_max_courses(
-        self, _mock_page_url
+        self, mock_page_url
     ):
         """
         Make sure the organization detail page does not display too many courses, even when a large
@@ -313,6 +316,10 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertContains(response, courses[0].extended_object.get_title())
         self.assertContains(response, courses[1].extended_object.get_title())
         self.assertNotContains(response, courses[2].extended_object.get_title())
+
+        # Check if `RICHIE_SEARCH_REVERSE_ID` setting value is used has reverse id
+        # to find course page search
+        self.assertEqual("overall-search", mock_page_url.call_args[1]["page_lookup"])
 
         # There is a link to view more related courses directly in the Search view
         self.assertContains(

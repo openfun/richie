@@ -130,13 +130,13 @@
                                 {% include "richie/pagination.html" with label=_("Courses pagination") %}
                                 <div class="button-caesura">
                                 {% if category.get_meta_category %}
-                                    <a href="{% page_url 'courses' %}?{{ category.get_meta_category.extended_object.reverse_id }}={{ category.get_es_id }}" class="category-detail__see-more">
+                                    <a href="{% page_url RICHIE_SEARCH_REVERSE_ID %}?{{ category.get_meta_category.extended_object.reverse_id }}={{ category.get_es_id }}" class="category-detail__see-more">
                                     {% blocktrans with category_title=category.extended_object.get_title %}
                                         See all courses related to {{ category_title }}
                                     {% endblocktrans %}
                                     </a>
                                 {% else %}
-                                    <a href="{% page_url 'courses' %}" class="category-detail__see-more">
+                                    <a href="{% page_url RICHIE_SEARCH_REVERSE_ID %}" class="category-detail__see-more">
                                     {% trans "See all courses" %}
                                     </a>
                                 {% endif %}

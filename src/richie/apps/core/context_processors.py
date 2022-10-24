@@ -54,6 +54,11 @@ def site_metas(request: HttpRequest):
         **WebAnalyticsContextProcessor().context_processor(request),
     }
 
+    # Add a context variable with the reverse id of the search course page.
+    context["RICHIE_SEARCH_REVERSE_ID"] = getattr(
+        settings, "RICHIE_SEARCH_REVERSE_ID", "courses"
+    )
+
     if getattr(settings, "CDN_DOMAIN", None):
         context["CDN_DOMAIN"] = settings.CDN_DOMAIN
 

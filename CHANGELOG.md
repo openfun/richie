@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add `RICHIE_SEARCH_REVERSE_ID` setting that allows to have different search
+  page and courses parent page.
 - Add Dashboard router
 - Add generic dashboard component
 - Add dashboard components for Order, Enrollment

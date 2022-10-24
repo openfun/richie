@@ -124,7 +124,7 @@
                         {% if paginator.num_pages > 1 %}
                             {% include "richie/pagination.html" with label=_("Related courses pagination") %}
                             <div class="button-caesura">
-                                <a href="{% page_url 'courses' %}?organizations={{ organization.get_es_id }}" class="organization-detail__see-more">
+                                <a href="{% page_url RICHIE_SEARCH_REVERSE_ID %}?organizations={{ organization.get_es_id }}" class="organization-detail__see-more">
                                     {% blocktrans with organization_title=organization.extended_object.get_title %}
                                         See all courses related to {{ organization_title }}
                                     {% endblocktrans %}
