@@ -17,6 +17,7 @@ import createQueryClient from 'utils/react-query/createQueryClient';
 import { DashboardTest } from 'components/Dashboard/DashboardTest';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import * as Joanie from 'types/Joanie';
+import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -70,6 +71,7 @@ describe('<DashAddressesManagement/>', () => {
     });
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
+    expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
     // The empty placeholder is shown.
     screen.getByText("You haven't created any addresses yet.");
   });
@@ -324,7 +326,7 @@ describe('<DashAddressesManagement/>', () => {
     });
 
     // Make sure it redirected to the correct route.
-    await screen.findByText('Edit address "' + address.title + '"');
+    await screen.getAllByText('Edit address "' + address.title + '"');
   });
 
   it('shows an error banner in case of API error', async () => {

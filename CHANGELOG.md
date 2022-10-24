@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add dashboard components for Order, Enrollment
 - Add dashboard components for Credit Card management
 - Dashboard addresses management components
+- Add dashboard layout
 
 ### Changed
 

@@ -10,6 +10,7 @@ import { DashboardTest } from 'components/Dashboard/DashboardTest';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import { Address } from 'types/Joanie';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
+import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -86,10 +87,9 @@ describe('<DashboardCreateAddress/>', () => {
       );
     });
 
-    // We are on the expected route.
-    await screen.findByText('Create an address');
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
+    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Submit the empty form to trigger validation errors.
     const button = await screen.findByRole('button', { name: 'Create' });
@@ -137,8 +137,7 @@ describe('<DashboardCreateAddress/>', () => {
         </QueryClientProvider>,
       );
     });
-    // We are on the expected route.
-    await screen.findByText('Create an address');
+    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Fill the form with random data.
     const button = await screen.findByRole('button', { name: 'Create' });
@@ -194,8 +193,7 @@ describe('<DashboardCreateAddress/>', () => {
       ).container;
     });
 
-    // We are on the expected route.
-    await screen.findByText('Create an address');
+    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Fill the form with random data.
     const button = await screen.findByRole('button', { name: 'Create' });

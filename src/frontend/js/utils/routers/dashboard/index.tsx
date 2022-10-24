@@ -52,11 +52,11 @@ const dashboardRoutePaths = defineMessages<DashboardPaths>({
 });
 
 // Translations of dashboard route labels
-const dashboardRouteLabels = defineMessages<DashboardPaths>({
+export const dashboardRouteLabels = defineMessages<DashboardPaths>({
   [DashboardPaths.COURSES]: {
     id: 'components.Dashboard.DashboardRoutes.courses.label',
     description: 'Label of the courses view used in navigation components.',
-    defaultMessage: 'My Courses',
+    defaultMessage: 'My courses',
   },
   [DashboardPaths.COURSE]: {
     id: 'components.Dashboard.DashboardRoutes.course.session.label',
@@ -71,17 +71,17 @@ const dashboardRouteLabels = defineMessages<DashboardPaths>({
   [DashboardPaths.PREFERENCES_ADDRESS_EDITION]: {
     id: 'components.Dashboard.DashboardRoutes.preferences.addresses.edition.label',
     description: 'Label of the addresses edition view.',
-    defaultMessage: 'Billing addresses',
+    defaultMessage: 'Edit address "{addressTitle}"',
   },
   [DashboardPaths.PREFERENCES_ADDRESS_CREATION]: {
     id: 'components.Dashboard.DashboardRoutes.preferences.addresses.creation.label',
     description: 'Label of the addresses creation view.',
-    defaultMessage: 'Billing addresses',
+    defaultMessage: 'Create address',
   },
   [DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION]: {
     id: 'components.Dashboard.DashboardRoutes.preferences.creditCards.label',
     description: 'Label of the credit cards edition view.',
-    defaultMessage: 'Credit cards',
+    defaultMessage: 'Edit credit card "{creditCardTitle}"',
   },
 });
 

@@ -10,6 +10,7 @@ import { DashboardTest } from 'components/Dashboard/DashboardTest';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
+import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -78,6 +79,11 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
+    expectBreadcrumbsToEqualParts([
+      'Back',
+      'My preferences',
+      'Edit credit card "' + creditCard.title + '"',
+    ]);
     // We are on the expected route.
     screen.getByText('Edit credit card');
 
