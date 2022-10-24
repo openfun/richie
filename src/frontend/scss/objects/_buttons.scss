@@ -8,10 +8,11 @@
   @include button-base($display: flex);
 
   & > .button__icon {
-    height: 1em;
+    width: 18px;
     margin: 0 0.5rem 0 0;
     transform: translateY(-$onepixel);
-    width: 1em;
+    height: 18px;
+    fill: currentColor;
 
     &--right {
       margin: 0 0 0 0.5rem;
@@ -30,6 +31,10 @@
   }
   &--nano {
     @include button-tiny($padding-x: 0, $padding-y: 0);
+
+    .button__icon {
+      margin-right: 0;
+    }
   }
 
   // Size modifiers and their specific form factors
