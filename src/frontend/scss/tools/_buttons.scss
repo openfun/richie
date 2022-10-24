@@ -97,7 +97,7 @@
 // Tiny button base shortcut
 //
 @mixin button-tiny(
-  $display: inline-block,
+  $display: flex,
   $font-family: $btn-font-family,
   $font-size: $btn-font-size-tiny,
   $font-weight: $btn-font-weight,
@@ -138,7 +138,7 @@
 // Small button base shortcut
 //
 @mixin button-small(
-  $display: inline-block,
+  $display: flex,
   $font-family: $btn-font-family,
   $font-size: $btn-font-size-sm,
   $font-weight: $btn-font-weight,
@@ -179,7 +179,7 @@
 // Large button base shortcut
 //
 @mixin button-large(
-  $display: inline-block,
+  $display: flex,
   $font-family: $btn-font-family,
   $font-size: $btn-font-size-lg,
   $font-weight: $btn-font-weight,
