@@ -1,0 +1,43 @@
+import { MessageDescriptor, MessageFormatElement } from 'react-intl';
+import { Maybe } from 'types/utils';
+
+export class IntlHelper {
+  /**
+   * Tells if `values` contains all required values for `descriptor`.
+   *
+   * For example:
+   *
+   * #1
+   * values = {}
+   * descriptor represent "Hello {name}"
+   * Returns false.
+   *
+   * #1
+   * values = {name: "Bob"}
+   * descriptor represent "Hello {name}"
+   * Returns true.
+   *
+   * @param descriptor
+   * @param values
+   */
+  static doValuesExist(descriptor: MessageDescriptor, values: Record<string, string>): boolean {
+    const extractedValues = IntlHelper.extractValueNamesFromDescriptor(descriptor);
+    return extractedValues.reduce((previous, value) => {
+      return previous && !!values[value];
+    }, true);
+  }
+
+  static extractValueNamesFromDescriptor(descriptor: MessageDescriptor): string[] {
+    return (descriptor.defaultMessage as MessageFormatElement[])
+      .filter((part) => part.type === 1)
+      .map((part) => (part as any).value);
+  }
+
+  static extractValueNames(str: Maybe<string>): string[] {
+    if (!str) {
+      return [];
+    }
+    const matches = Array.from(str.matchAll(/{(\w+)}/g), (m) => m[1]);
+    return matches;
+  }
+}
