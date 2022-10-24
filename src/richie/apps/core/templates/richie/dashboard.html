@@ -1,4 +1,4 @@
-{% extends "richie/single_column.html" %}
+{% extends "richie/base.html" %}
 {% load cms_tags i18n %}
 
 {% block head_title %}
@@ -14,6 +14,6 @@
 
 {% block subheader %}{% endblock subheader %}
 
-{% block column %}
+{% block content %}
     <div class="richie-react richie-react--dashboard"></div>
-{% endblock column %}
+{% endblock content %}

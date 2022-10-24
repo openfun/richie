@@ -9,6 +9,7 @@ import { SessionProvider } from 'data/SessionProvider';
 import { DashboardTest } from 'components/Dashboard/DashboardTest';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
+import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -69,10 +70,13 @@ describe('<DashboardEditAddress/>', () => {
       );
     });
 
+    expectBreadcrumbsToEqualParts([
+      'Back',
+      'My preferences',
+      'Edit address "' + address.title + '"',
+    ]);
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-    // We are on the right route.
-    await screen.findByText('Edit address "' + address.title + '"');
 
     // The form fields are correctly set to the `address` ones.
     const button = await screen.findByRole('button', { name: 'Save updates' });
@@ -155,8 +159,11 @@ describe('<DashboardEditAddress/>', () => {
 
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-    // We are on the expected route.
-    await screen.findByText('Edit address "' + address.title + '"');
+    expectBreadcrumbsToEqualParts([
+      'Back',
+      'My preferences',
+      'Edit address "' + address.title + '"',
+    ]);
 
     // The edit route API is called when submitting.
     const button = await screen.findByRole('button', { name: 'Save updates' });

@@ -19,10 +19,12 @@ import { DashboardPreferences } from 'components/DashboardPreferences';
 import useRouteInfo from 'hooks/useRouteInfo';
 import {
   DashboardPaths,
+  dashboardRouteLabels,
   getDashboardRouteLabel,
   getDashboardRoutePath,
 } from 'utils/routers/dashboard';
 import { DashboardEditCreditCardLoader } from 'components/DashboardCreditCardsManagement/DashboardEditCreditCardLoader';
+import { DashboardLayout } from 'components/Dashboard/DashboardLayout';
 import { getDashboardBasename } from './getDashboardBasename';
 
 /**
@@ -55,7 +57,7 @@ export function getDashboardRoutes() {
   const routes: RouteObject[] = [
     {
       path: '/',
-      element: <Outlet />,
+      element: <DashboardLayout />,
       children: [
         {
           index: true,
@@ -64,41 +66,46 @@ export function getDashboardRoutes() {
         {
           path: getRoutePath(DashboardPaths.COURSES),
           element: <RouteInfo title={getRouteLabel(DashboardPaths.COURSES)} />,
-          handle: { crumbLabel: getRouteLabel(DashboardPaths.COURSES) },
+          handle: { crumbLabel: dashboardRouteLabels[DashboardPaths.COURSES] },
         },
         {
           path: getRoutePath(DashboardPaths.COURSE, { code: ':code' }),
           element: <RouteInfo title={getRouteLabel(DashboardPaths.COURSE)} />,
-          handle: { crumbLabel: getRouteLabel(DashboardPaths.COURSE) },
+          handle: { crumbLabel: dashboardRouteLabels[DashboardPaths.COURSE] },
         },
         {
           path: getRoutePath(DashboardPaths.PREFERENCES),
-          handle: { name: getRouteLabel(DashboardPaths.PREFERENCES) },
+          handle: { crumbLabel: dashboardRouteLabels[DashboardPaths.PREFERENCES] },
           element: <Outlet />,
           children: [
             {
               index: true,
               element: <DashboardPreferences />,
-              handle: { crumbLabel: getRouteLabel(DashboardPaths.PREFERENCES) },
             },
             {
               path: getRoutePath(DashboardPaths.PREFERENCES_ADDRESS_EDITION, {
                 addressId: ':addressId',
               }),
               element: <DashboardEditAddressLoader />,
-              handle: { crumbLabel: getRouteLabel(DashboardPaths.PREFERENCES_ADDRESS_EDITION) },
+              handle: {
+                crumbLabel: dashboardRouteLabels[DashboardPaths.PREFERENCES_ADDRESS_EDITION],
+              },
             },
             {
               path: getRoutePath(DashboardPaths.PREFERENCES_ADDRESS_CREATION),
               element: <DashboardCreateAddressLoader />,
-              handle: { crumbLabel: getRouteLabel(DashboardPaths.PREFERENCES_ADDRESS_CREATION) },
+              handle: {
+                crumbLabel: dashboardRouteLabels[DashboardPaths.PREFERENCES_ADDRESS_CREATION],
+              },
             },
             {
               path: getRoutePath(DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
                 creditCardId: ':creditCardId',
               }),
               element: <DashboardEditCreditCardLoader />,
-              handle: { crumbLabel: getRouteLabel(DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION) },
+              handle: {
+                crumbLabel: dashboardRouteLabels[DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION],
+              },
             },
           ],
         },

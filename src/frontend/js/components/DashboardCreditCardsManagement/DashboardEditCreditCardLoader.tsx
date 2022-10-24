@@ -5,6 +5,7 @@ import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { DashboardEditCreditCard } from 'components/DashboardCreditCardsManagement/DashboardEditCreditCard';
 import { DashboardPaths } from 'utils/routers/dashboard';
+import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 
 /**
  * This component relies on react-router.
@@ -16,6 +17,10 @@ export const DashboardEditCreditCardLoader = () => {
     states: { error, isLoading },
     ...creditCards
   } = useCreditCards(params.creditCardId);
+
+  useBreadcrumbsPlaceholders({
+    creditCardTitle: creditCards?.items[0]?.title ?? '',
+  });
 
   if (isLoading) {
     return <Spinner />;

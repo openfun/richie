@@ -220,6 +220,10 @@ $r-theme: (
     secondary-item: $indianred3-scheme,
     tertiary-item: $smoke-scheme,
   ),
+  dashboard: (
+    background-color: r-color('azure2'),
+    base-shadow: 0 0 6px r-color('light-grey'),
+  ),
   dashboard-avatar: (
     background-color: r-color('firebrick6'),
     base-color: r-color('white'),
@@ -233,6 +237,9 @@ $r-theme: (
   dashboard-address-box: (
     base-color: r-color(charcoal),
     title-color: r-color(slate-grey),
+  ),
+  dashboard-breadcrumbs: (
+    base-color: r-color(charcoal),
   ),
   dashboard-card: (
     base-color: r-color(charcoal),
@@ -255,6 +262,14 @@ $r-theme: (
     header-color: r-color(slate-grey),
     base-shadow: 0 0 6px r-color('light-grey'),
     text-hover-color: r-color('grey59'),
+    base-border: r-color('light-grey'),
+  ),
+  dashboard-sidebar: (
+    background-color: r-color('white'),
+    base-shadow: 0 0 6px r-color('light-grey'),
+    base-color: r-color(charcoal),
+    sub-title-color: r-color('slate-grey'),
+    active-color: r-color('indianred3'),
     base-border: r-color('light-grey'),
   ),
   form: (

@@ -1,35 +1,37 @@
-import { AnchorHTMLAttributes, ButtonHTMLAttributes, FC } from 'react';
+import { AnchorHTMLAttributes, ButtonHTMLAttributes, forwardRef } from 'react';
 
 type ButtonAnchorAttributes = ButtonHTMLAttributes<HTMLButtonElement> &
   AnchorHTMLAttributes<HTMLAnchorElement>;
 
-interface ButtonProps extends ButtonAnchorAttributes {
+export interface ButtonProps extends ButtonAnchorAttributes {
   color?: 'primary' | 'secondary' | 'outline-primary' | 'outline-secondary';
   size?: 'nano' | 'tiny' | 'small' | 'large';
 }
 
-export const Button: FC<ButtonProps> = ({ disabled = false, ...props }) => {
-  const classes = ['button'];
-  if (props.color) {
-    classes.push('button--' + props.color);
-  }
-  if (props.size) {
-    classes.push('button--' + props.size);
-  }
-  const elementProps = {
-    className: classes.join(' '),
-    disabled,
-  };
-  if (props.href && !disabled) {
+export const Button = forwardRef<HTMLButtonElement & HTMLAnchorElement, ButtonProps>(
+  ({ disabled = false, ...props }, ref) => {
+    const classes = ['button'];
+    if (props.color) {
+      classes.push('button--' + props.color);
+    }
+    if (props.size) {
+      classes.push('button--' + props.size);
+    }
+    const elementProps = {
+      className: classes.join(' '),
+      disabled,
+    };
+    if (props.href && !disabled) {
+      return (
+        <a {...elementProps} {...props} ref={ref}>
+          {props.children}
+        </a>
+      );
+    }
     return (
-      <a {...elementProps} {...props}>
+      <button {...elementProps} {...props} ref={ref}>
         {props.children}
-      </a>
+      </button>
     );
-  }
-  return (
-    <button {...elementProps} {...props}>
-      {props.children}
-    </button>
-  );
-};
+  },
+);

@@ -5,6 +5,7 @@ import { Spinner } from 'components/Spinner';
 import { useAddresses } from 'hooks/useAddresses';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import { useDashboardNavigate } from 'utils/routers/dashboard/useDashboardRouter';
+import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 
 /**
  * This component relies on react-router.
@@ -16,6 +17,11 @@ export const DashboardEditAddressLoader = () => {
     states: { error, isLoading },
     ...addresses
   } = useAddresses(params.addressId);
+
+  useBreadcrumbsPlaceholders({
+    addressTitle: addresses?.items[0]?.title,
+  });
+
   return (
     <>
       {isLoading && <Spinner />}
