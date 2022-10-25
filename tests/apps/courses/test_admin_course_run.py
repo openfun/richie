@@ -60,6 +60,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         self.assertContains(response, "id_enrollment_end_", count=3)
         self.assertContains(response, "id_languages")
         self.assertContains(response, "id_enrollment_count")
+        self.assertContains(response, "id_sync_mode")
 
     # List
 
@@ -213,6 +214,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         self.assertContains(response, "id_enrollment_end_", count=3)
         self.assertContains(response, "id_languages", count=2)
         self.assertContains(response, "id_enrollment_count", count=2)
+        self.assertContains(response, "id_sync_mode", count=2)
 
     def test_admin_course_run_change_view_get_superuser_public(self):
         """Public course runs should not render a change view."""
@@ -287,7 +289,7 @@ class CourseRunAdminTestCase(CMSTestCase):
 
     def test_admin_course_run_change_view_get_staff_all_permissions(self):
         """
-        Staff users with all permissions should allowed to view a course run's change view.
+        Staff users with all permissions should be allowed to view a course run's change view.
         """
         user = UserFactory(is_staff=True)
         self.client.login(username=user.username, password="password")
@@ -323,6 +325,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         self.assertContains(response, "id_enrollment_end_", count=3)
         self.assertContains(response, "id_languages", count=2)
         self.assertContains(response, "id_enrollment_count", count=2)
+        self.assertContains(response, "id_sync_mode", count=2)
 
     # Add
 
@@ -343,6 +346,7 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_end_0": "2015-01-23",
             "enrollment_end_1": "09:07:11",
             "catalog_visibility": "course_and_search",
+            "sync_mode": "manual",
         }
         with timezone.override(pytz.utc):
             response = self.client.post(url, data, follow=True)
@@ -445,6 +449,7 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_end_1": "09:07:11",
             "enrollment_count": "5",
             "catalog_visibility": "course_and_search",
+            "sync_mode": "manual",
         }
         with timezone.override(pytz.utc):
             response = self.client.post(url, data, follow=True)
@@ -466,6 +471,7 @@ class CourseRunAdminTestCase(CMSTestCase):
             course_run.enrollment_end, datetime(2015, 1, 23, 9, 7, 11, tzinfo=pytz.utc)
         )
         check_method(course_run.enrollment_count, 5)
+        check_method(course_run.sync_mode, "manual")
         return response
 
     def test_admin_course_run_change_view_post_anonymous(self):

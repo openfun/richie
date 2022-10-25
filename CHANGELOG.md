@@ -14,11 +14,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add generic dashboard component
 - Add dashboard components for Order, Enrollment
 - Add dashboard components for Credit Card management
+- Dashboard addresses management components
 
 ### Changed
 
-- Allow editor to enforce `inline_ratio` and `is_automatic_resizing` values for
-  a lti consumer plugin based on a lti provider
+- Allow editor to enforce `inline_ratio` and `is_automatic_resizing` values
+  for a lti consumer plugin based on a lti provider
 - Use new Joanie Enrollment resource type
 - Modal component refactor for homogeneous use
 - New global scroll behavior for Modal
@@ -30,13 +31,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix course run synchronization when no-update fields are declared (broken
+  since Richie version 2.15.0)
 - Unlocalize aspect ratio floating value rendered in lti_consumer template
   to always display value with a dot no matter active language
 - Language choices should be ordered alphabetically in course run admin form
-
-### Added
-
-- Dashboard addresses management components 
 
 ## [2.16.0]
 
