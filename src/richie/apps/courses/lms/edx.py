@@ -12,6 +12,12 @@ from .base import BaseLMSBackend
 
 logger = logging.getLogger(__name__)
 
+VISIBILITY_MAPPING = {
+    "both": "course_and_search",
+    "about": "course_only",
+    "none": "hidden",
+}
+
 
 def split_course_key(key):
     """Split an OpenEdX course key by organization, course and course run codes.
@@ -69,45 +75,18 @@ class EdXLMSBackend(BaseLMSBackend):
         """Extract the LMS course id from the course run url."""
         return re.match(self.configuration["COURSE_REGEX"], url).group("course_id")
 
-    def extract_course_number(self, data):
-        """Extract the LMS course number from data dictionary."""
+    def extract_course_code(self, data):
+        """Extract the LMS course code from data dictionary."""
         course_id = self.extract_course_id(data.get("resource_link"))
         return split_course_key(course_id)[1]
 
     def clean_course_run_data(self, data):
-        """Remove course run's protected fields to the data dictionnary."""
-
-        def filter_no_update_fields(elem):
-            """
-            Remove course run's protected fields from the `COURSE_RUN_SYNC_NO_UPDATE_FIELDS`
-            setting
-            """
-            return elem[0] not in self.configuration.get(
-                "COURSE_RUN_SYNC_NO_UPDATE_FIELDS", []
-            )
-
-        def change_catalog_visibility_value(value):
-            """Adapt catalog visibility values from Open edX to Richie"""
-            if value == "both":
-                return "course_and_search"
-            if value == "about":
-                return "course_only"
-            if value == "none":
-                return "hidden"
-            return value
-
-        def adapt_fields(item):
-            """
-            Adapt a dict item (key/value). If it's the `catalog_visibility` then change
-            its value.
-            """
-            key = item[0]
-            value = item[1]
-            if key == "catalog_visibility":
-                return key, change_catalog_visibility_value(value)
-            return key, value
-
-        return dict(map(adapt_fields, filter(filter_no_update_fields, data.items())))
+        """Try mapping OpenEdX visibility values to Richie's corresponding values."""
+        try:
+            data["catalog_visibility"] = VISIBILITY_MAPPING[data["catalog_visibility"]]
+        except KeyError:
+            pass
+        return data
 
     @staticmethod
     def get_course_run_serializer(data, partial=False):
