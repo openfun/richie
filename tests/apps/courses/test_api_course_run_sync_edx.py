@@ -898,7 +898,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             }
         ],
     )
-    def test_api_course_run_sync_with_no_update_fields(self, mock_signal):
+    def test_api_course_run_sync_update_with_no_update_fields(self, mock_signal):
         """
         If a course run exists and LMS Backend has course run protected fields,
         these fields should not be updated.
@@ -957,6 +957,61 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             course.extended_object.title_set.first().publisher_state,
             PUBLISHER_STATE_DIRTY,
         )
+        self.assertFalse(mock_signal.called)
+
+    @override_settings(
+        TIME_ZONE="utc",
+        RICHIE_LMS_BACKENDS=[
+            {
+                "BASE_URL": "http://localhost:8073",
+                "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
+                "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": ["languages", "start"],
+                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+                "JS_BACKEND": "dummy",
+                "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
+            }
+        ],
+    )
+    def test_api_course_run_sync_create_with_no_update_fields(self, mock_signal):
+        """
+        If a course run does not exist and LMS Backend has course run protected fields,
+        these fields should still be used to create the course run.
+        """
+        link = "http://example.edx:8073/courses/course-v1:edX+DemoX+01/course/"
+        course = CourseFactory(code="DemoX")
+        Title.objects.update(publisher_state=PUBLISHER_STATE_DEFAULT)
+        mock_signal.reset_mock()
+
+        data = {
+            "resource_link": link,
+            "start": "2020-12-09T09:31:59.417817Z",
+            "end": "2021-03-14T09:31:59.417895Z",
+            "enrollment_start": "2020-11-09T09:31:59.417936Z",
+            "enrollment_end": "2020-12-24T09:31:59.417972Z",
+            "languages": ["en", "fr"],
+            "enrollment_count": 12345,
+            "catalog_visibility": "course_and_search",
+        }
+
+        response = self.client.post(
+            "/api/v1.0/course-runs-sync",
+            data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=(
+                "SIG-HMAC-SHA256 13433eb9159326b7d0f38ea86ab1ef8510ac4bc643d997d2ad01e349bee15570"
+            ),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), {"success": True})
+        self.assertEqual(CourseRun.objects.count(), 1)
+
+        # Check that the draft course run was created
+        draft_course_run = CourseRun.objects.get(direct_course=course)
+        draft_serializer = SyncCourseRunSerializer(instance=draft_course_run)
+
+        for field, value in data.items():
+            self.assertEqual(draft_serializer.data[field], value)
+
         self.assertFalse(mock_signal.called)
 
     @override_settings(TIME_ZONE="utc")

@@ -122,16 +122,23 @@ def course_runs_sync(request, version):
     target_course_runs = CourseRun.objects.filter(resource_link=resource_link)
     draft_course_runs = target_course_runs.filter(draft_course_run__isnull=True)
 
-    # Remove protected fields before update and transform
-    data = lms.clean_course_run_data(request.data)
-
-    serializer = lms.get_course_run_serializer(data, partial=bool(draft_course_runs))
+    # Clean data before instiating a serializer with it
+    cleaned_data = lms.clean_course_run_data(request.data)
+    serializer = lms.get_course_run_serializer(
+        cleaned_data, partial=bool(draft_course_runs)
+    )
 
     if serializer.is_valid() is not True:
         return Response(serializer.errors, status=400)
     validated_data = serializer.validated_data
 
     if draft_course_runs:
+        # Remove fields that are protected for update
+        validated_data = {
+            key: value
+            for (key, value) in validated_data.items()
+            if key not in lms.configuration.get("COURSE_RUN_SYNC_NO_UPDATE_FIELDS", [])
+        }
 
         for course_run in draft_course_runs.filter(
             sync_mode__in=[
