@@ -695,6 +695,7 @@ class CourseRun(TranslatableModel):
         max_length=20,
         choices=CourseRunSyncMode.choices,
         default=CourseRunSyncMode.MANUAL,
+        verbose_name=_("Synchronization mode"),
     )
 
     title = TranslatedField()
