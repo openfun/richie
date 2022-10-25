@@ -180,14 +180,14 @@ def course_runs_sync(request, version):
         )
 
     # Look for the course targeted by the resource link
-    course_number = normalize_code(lms.extract_course_number(request.data))
+    course_code = normalize_code(lms.extract_course_code(request.data))
     try:
         course = Course.objects.get(
-            code=course_number, extended_object__publisher_is_draft=True
+            code=course_code, extended_object__publisher_is_draft=True
         )
     except Course.DoesNotExist:
         return Response(
-            {"resource_link": [f"Unknown course: {course_number:s}."]}, status=400
+            {"resource_link": [f"Unknown course: {course_code:s}."]}, status=400
         )
 
     # Instantiate a new draft course run
