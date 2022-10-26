@@ -11,7 +11,11 @@ jest.mock('utils/context', () => ({
     sentry_dsn: 'https://sentry.local.test',
   }).generate(),
 }));
-jest.mock('@sentry/browser');
+jest.mock('@sentry/browser', () => ({
+  init: jest.fn(),
+  configureScope: jest.fn(),
+  captureException: jest.fn(),
+}));
 
 describe('handle', () => {
   it('should initialize sentry', () => {
