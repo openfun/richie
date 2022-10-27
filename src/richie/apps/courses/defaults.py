@@ -347,3 +347,11 @@ EFFORT_UNITS = {
 # Maximum number of archived course runs displayed by default on course detail page.
 # The additional runs can be viewed by clicking on `View more` link.
 RICHIE_MAX_ARCHIVED_COURSE_RUNS = 10
+
+# Joanie resource types
+JOANIE_RESOURCE_TYPE_COURSE_RUNS = "course-runs"
+JOANIE_RESOURCE_TYPE_PRODUCTS = "products"
+JOANIE_RESOURCE_TYPES = [
+    JOANIE_RESOURCE_TYPE_COURSE_RUNS,
+    JOANIE_RESOURCE_TYPE_PRODUCTS,
+]
