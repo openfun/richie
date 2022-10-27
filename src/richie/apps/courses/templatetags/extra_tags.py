@@ -23,6 +23,7 @@ from cms.toolbar.utils import get_toolbar_from_request
 from cms.utils import get_site_id
 from cms.utils.plugins import get_plugins
 
+from .. import defaults
 from ..lms import LMSHandler
 
 # pylint: disable=invalid-name
@@ -225,6 +226,22 @@ def has_connected_lms(course_run):
     link to the course run.
     """
     return LMSHandler.select_lms(course_run.resource_link) is not None
+
+
+@register.filter()
+def is_joanie_product(course_run):
+    """
+    Check that the course run is managed by Joanie
+    then the resource type is equal to `products`.
+    """
+    handler = LMSHandler.select_lms(course_run.resource_link)
+
+    if not getattr(handler, "is_joanie", False):
+        return False
+
+    resource_type = handler.extract_resource_type(course_run.resource_link)
+
+    return resource_type == defaults.JOANIE_RESOURCE_TYPE_PRODUCTS
 
 
 @register.filter()
