@@ -15,7 +15,7 @@ const messages = defineMessages({
     id: 'hooks.useCreditCardsManagement.deletionConfirmation',
     description: 'Confirmation message shown to the user when he wants to delete a credit card',
     defaultMessage:
-      'Are you sure you want to delete the credit card ?\n⚠️ You cannot undo this change after.',
+      'Are you sure you want to delete the credit card?\n⚠️ You cannot undo this change after.',
   },
 });
 

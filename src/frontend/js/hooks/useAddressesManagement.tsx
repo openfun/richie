@@ -25,7 +25,7 @@ const messages = defineMessages({
     id: 'hooks.useAddressesManagement.deletionConfirmation',
     description: 'Confirmation message shown to the user when he wants to delete an address',
     defaultMessage:
-      'Are you sure you want to delete the "{title}" address ?\n⚠️ You cannot undo this change after.',
+      'Are you sure you want to delete the "{title}" address?\n⚠️ You cannot undo this change after.',
   },
   actionDeletion: {
     id: 'hooks.useAddressesManagement.actionDeletion',
