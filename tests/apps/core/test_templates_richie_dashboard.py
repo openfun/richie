@@ -9,7 +9,17 @@ from cms.test_utils.testcases import CMSTestCase
 class TemplatesRichieDashboardTestCase(CMSTestCase):
     """Testing the dashboard.html template"""
 
-    @override_settings(JOANIE={"BASE_URL": "https://joanie.test"})
+    @override_settings(
+        RICHIE_LMS_BACKENDS=[
+            {
+                "BASE_URL": "http://localhost:8071",
+                "BACKEND": "richie.apps.courses.lms.joanie.JoanieBackend",
+                "COURSE_REGEX": "^.*/api/(?P<resource_type>(course-runs|products))/(?P<resource_id>.*)/?$",  # noqa pylint: disable=line-too-long
+                "JS_BACKEND": "joanie",
+                "JS_COURSE_REGEX": r"^.*/api/(course-runs|products)/(.*)/?$",
+            }
+        ]
+    )
     def test_templates_richie_dashboard_joanie_enabled(self):
         """
         Dashboard view should be reachable if JOANIE is enabled
@@ -19,7 +29,7 @@ class TemplatesRichieDashboardTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, r'class="richie-react richie-react--dashboard"')
 
-    @override_settings(JOANIE={})
+    @override_settings(RICHIE_LMS_BACKENDS=[])
     def test_templates_richie_dashboard_joanie_is_not_enabled(self):
         """
         Dashboard view should not be reachable if JOANIE is disabled

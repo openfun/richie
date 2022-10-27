@@ -108,7 +108,7 @@ def site_metas(request: HttpRequest):
 
     if is_joanie_enabled():
         context["FRONTEND_CONTEXT"]["context"]["joanie_backend"] = {
-            "endpoint": settings.JOANIE["BASE_URL"],
+            "endpoint": settings.JOANIE_BACKEND["BASE_URL"],
         }
 
     if getattr(settings, "RICHIE_LMS_BACKENDS", None):
