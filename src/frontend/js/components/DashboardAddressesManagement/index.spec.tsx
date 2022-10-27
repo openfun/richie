@@ -351,6 +351,6 @@ describe('<DashAddressesManagement/>', () => {
     // It shows an error banner.
     const banner = container!.querySelector('.banner--error') as HTMLElement;
     expect(banner).not.toBeNull();
-    await findByText(banner!, 'An error occurred: Internal Server Error. Please retry later.');
+    await findByText(banner!, 'An error occurred while fetching addresses. Please retry later.');
   });
 });

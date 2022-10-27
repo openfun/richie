@@ -10,11 +10,25 @@ import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import { useSessionQuery } from 'utils/react-query/useSessionQuery';
 
 const messages = defineMessages({
-  error: {
-    id: 'hooks.useAddresses.error',
-    description:
-      'Error message shown to the user when address creation/update/deletion request fails.',
-    defaultMessage: 'An error occurred: {error}. Please retry later.',
+  errorUpdate: {
+    id: 'hooks.useAddresses.errorUpdate',
+    description: 'Error message shown to the user when address update request fails.',
+    defaultMessage: 'An error occurred while updating the address. Please retry later.',
+  },
+  errorDelete: {
+    id: 'hooks.useAddresses.errorDelete',
+    description: 'Error message shown to the user when address deletion request fails.',
+    defaultMessage: 'An error occurred while deleting the address. Please retry later.',
+  },
+  errorCreate: {
+    id: 'hooks.useAddresses.errorCreate',
+    description: 'Error message shown to the user when address creation request fails.',
+    defaultMessage: 'An error occurred while creating the address. Please retry later.',
+  },
+  errorSelect: {
+    id: 'hooks.useAddresses.errorSelect',
+    description: 'Error message shown to the user when addresses fetch request fails.',
+    defaultMessage: 'An error occurred while fetching addresses. Please retry later.',
   },
   errorNotFound: {
     id: 'hooks.useAddresses.errorNotFound',
@@ -36,12 +50,8 @@ export const useAddresses = (id?: string) => {
   const [data, setData] = useState<Address[]>([]);
   const intl = useIntl();
 
-  const onError = (e: Error) => {
-    setError(intl.formatMessage(messages.error, { error: e.message }));
-  };
-
   const [readHandler, queryKey] = useSessionQuery('addresses', () => API.user.addresses.get(), {
-    onError,
+    onError: () => setError(intl.formatMessage(messages.errorSelect)),
   });
 
   const prefetch = async () => {
@@ -84,15 +94,15 @@ export const useAddresses = (id?: string) => {
   const writeHandlers = {
     create: useSessionMutation(API.user.addresses.create, {
       onSuccess,
-      onError,
+      onError: () => setError(intl.formatMessage(messages.errorCreate)),
     }),
     update: useSessionMutation(API.user.addresses.update, {
       onSuccess,
-      onError,
+      onError: () => setError(intl.formatMessage(messages.errorUpdate)),
     }),
     delete: useSessionMutation(API.user.addresses.delete, {
       onSuccess,
-      onError,
+      onError: () => setError(intl.formatMessage(messages.errorDelete)),
     }),
   };
 
