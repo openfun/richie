@@ -16,37 +16,16 @@ const messages = defineMessages({
     description: 'Error shown if a user tries to promote a main address',
     defaultMessage: 'Cannot promote main address.',
   },
-  actionPromotion: {
-    id: 'hooks.useAddressesManagement.actionPromotion',
-    description: 'Action name for address promotion.',
-    defaultMessage: 'promotion',
-  },
   deletionConfirmation: {
     id: 'hooks.useAddressesManagement.deletionConfirmation',
     description: 'Confirmation message shown to the user when he wants to delete an address',
     defaultMessage:
       'Are you sure you want to delete the "{title}" address?\n⚠️ You cannot undo this change after.',
   },
-  actionDeletion: {
-    id: 'hooks.useAddressesManagement.actionDeletion',
-    description: 'Action name for address deletion.',
-    defaultMessage: 'deletion',
-  },
-  actionCreation: {
-    id: 'hooks.useAddressesManagement.actionCreation',
-    description: 'Action name for address creation.',
-    defaultMessage: 'creation',
-  },
   actionUpdate: {
     id: 'hooks.useAddressesManagement.actionUpdate',
     description: 'Action name for address update.',
     defaultMessage: 'update',
-  },
-  error: {
-    id: 'hooks.useAddressesManagement.error',
-    description:
-      'Error message shown to the user when address creation/update/deletion request fails.',
-    defaultMessage: 'An error occurred while address {action}. Please retry later.',
   },
 });
 

@@ -169,6 +169,6 @@ describe('<DashboardEditAddress/>', () => {
     // An error banner is shown.
     const banner = container!.querySelector('.banner--error') as HTMLElement;
     expect(banner).not.toBeNull();
-    await findByText(banner!, 'An error occurred: Internal Server Error. Please retry later.');
+    await findByText(banner!, 'An error occurred while updating the address. Please retry later.');
   });
 });
