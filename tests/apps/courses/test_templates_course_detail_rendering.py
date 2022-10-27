@@ -1815,7 +1815,17 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, "No other course runs")
 
-    @override_settings(JOANIE={"ENABLED": True, "BASE_URL": "https://joanie.test"})
+    @override_settings(
+        RICHIE_LMS_BACKENDS=[
+            {
+                "BASE_URL": "http://localhost:8071",
+                "BACKEND": "richie.apps.courses.lms.joanie.JoanieBackend",
+                "COURSE_REGEX": "^.*/api/(?P<resource_type>(course-runs|products))/(?P<resource_id>.*)/?$",  # noqa pylint: disable=line-too-long
+                "JS_BACKEND": "joanie",
+                "JS_COURSE_REGEX": r"^.*/api/(course-runs|products)/(.*)/?$",
+            }
+        ]
+    )
     def test_template_course_detail_with_joanie_enabled(self):
         """
         When Joanie is enabled, course detail template should use

@@ -7,18 +7,35 @@ sidebar_label: Joanie Connection
 
 ## Settings
 
-All settings related to Joanie have to be declared in the `JOANIE` dictionary
+All settings related to Joanie have to be declared in the `JOANIE_BACKEND` dictionary
 within `settings.py`.
-To enable Joanie, the minimal configuration requires one property:
+To enable Joanie, the minimal configuration requires following properties:
 
-- `BASE_URL` : the endpoint at which Joanie is accessible
+- `BASE_URL`
+- `BACKEND`
+- `COURSE_REGEX`
+- `JS_COURSE_REGEX`
+
+Take a look to [LMS Backend documentation](./lms-backends.md#configuring-the-lms-handler) to get details about those properties.
 
 Add to your `settings.py`:
 
 ```python
 ...
-JOANIE = {
-  "BASE_URL": values.Value(environ_name="JOANIE_BASE_URL", environ_prefix=None)
+JOANIE_BACKEND = {
+    "BASE_URL": values.Value(environ_name="JOANIE_BASE_URL", environ_prefix=None),
+    "BACKEND": values.Value("richie.apps.courses.lms.joanie.JoanieBackend", environ_name="JOANIE_BACKEND", environ_prefix=None),
+    "JS_BACKEND": values.Value("joanie", environ_name="JOANIE_JS_BACKEND", environ_prefix=None),
+    "COURSE_REGEX": values.Value(
+        r"^.*/api/(?P<resource_type>(course-runs|products))/(?P<resource_id>.*)/?$",
+        environ_name="JOANIE_COURSE_REGEX",
+        environ_prefix=None,
+    ),
+    "JS_COURSE_REGEX": values.Value(
+        r"^.*/api/(course-runs|products)/(.*)/?$",
+        environ_name="JOANIE_JS_COURSE_REGEX",
+        environ_prefix=None,
+    ),
 }
 ...
 ```

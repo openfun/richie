@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- JoanieBackend to identify course runs managed by Joanie
 - Add Dashboard router
 - Add generic dashboard component
 - Add dashboard components for Order, Enrollment
