@@ -1,19 +1,7 @@
 {
-  "components.AddressesManagement.actionCreation": {
-    "description": "Action name for address creation.",
-    "message": "creation"
-  },
-  "components.AddressesManagement.actionDeletion": {
-    "description": "Action name for address deletion.",
-    "message": "deletion"
-  },
   "components.AddressesManagement.actionPromotion": {
     "description": "Action name for address promotion.",
     "message": "promotion"
-  },
-  "components.AddressesManagement.actionUpdate": {
-    "description": "Action name for address update.",
-    "message": "update"
   },
   "components.AddressesManagement.addAddress": {
     "description": "Title of the address creation form",
@@ -51,10 +39,6 @@
     "description": "Title of the delete button",
     "message": "Delete \"{title}\" address"
   },
-  "components.AddressesManagement.deletionConfirmation": {
-    "description": "Confirmation message shown to the user when he wants to delete an address",
-    "message": "Are you sure you want to delete the \"{title}\" address ? ⚠️ You cannot undo this change after."
-  },
   "components.AddressesManagement.editAddress": {
     "description": "Title of the address edit form",
     "message": "Update address {title}"
@@ -66,10 +50,6 @@
   "components.AddressesManagement.editButtonLabel": {
     "description": "Title of the edit button",
     "message": "Edit \"{title}\" address"
-  },
-  "components.AddressesManagement.error": {
-    "description": "Error message shown to the user when address creation/update/deletion request fails.",
-    "message": "An error occurred while address {action}. Please retry later."
   },
   "components.AddressesManagement.first_nameInput": {
     "description": "Label of the \"first_name\" input",
@@ -91,6 +71,10 @@
     "description": "Title of the registered addresses block",
     "message": "Your addresses"
   },
+  "components.AddressesManagement.requiredFields": {
+    "description": "Text at the top of address creation form indicating what are required fields",
+    "message": "Fields marked with {symbol} are required"
+  },
   "components.AddressesManagement.saveInput": {
     "description": "Label of the \"save\" input",
     "message": "Save this address"
@@ -111,6 +95,26 @@
     "description": "Label of the update button",
     "message": "Update this address"
   },
+  "components.AddressesManagement.validationSchema.mixedInvalid": {
+    "description": "Error message displayed when a field value is invalid.",
+    "message": "This field is invalid."
+  },
+  "components.AddressesManagement.validationSchema.mixedOneOf": {
+    "description": "Error message displayed when a field value must be one of a list.",
+    "message": "You must select a value."
+  },
+  "components.AddressesManagement.validationSchema.mixedRequired": {
+    "description": "Error message displayed when a field is required.",
+    "message": "This field is required."
+  },
+  "components.AddressesManagement.validationSchema.stringMax": {
+    "description": "Error message displayed when a field value is too long.",
+    "message": "The maximum length is {max} {max, plural, one {char} other {chars}}."
+  },
+  "components.AddressesManagement.validationSchema.stringMin": {
+    "description": "Error message displayed when a field value is too short.",
+    "message": "The minimum length is {min} {min, plural, one {char} other {chars}}."
+  },
   "components.CourseGlimpse.categoryLabel": {
     "description": "Category label text for screen reader users",
     "message": "Category"
@@ -121,7 +125,7 @@
   },
   "components.CourseGlimpse.cover": {
     "description": "Placeholder text when the course we are glimpsing at is missing a cover image",
-    "message": "Cover"
+    "message": "غلاف"
   },
   "components.CourseGlimpse.organizationIconAlt": {
     "description": "Organization logo alternative text for screen reader users",
@@ -133,7 +137,7 @@
   },
   "components.CourseGlimpseList.courseCount": {
     "description": "Result count & pagination information for course search. Appears right above search results",
-    "message": "Showing {start, number} to {end, number} of {courseCount, number} {courseCount, plural, one {course} other {courses}} matching your search"
+    "message": "عرض {start, number} إلى {end, number} من {courseCount, number} {courseCount, plural, zero {} one {دورة} two {دورات} few {دورات} many {دورات} other {دورات}} مطابقة للبحث الخاص بك"
   },
   "components.CourseGlimpseList.offscreenCourseCount": {
     "description": "Short result count information for course search. Only for screen readers",
@@ -171,6 +175,10 @@
     "description": "Start label displayed in the header of course run dates section",
     "message": "Start"
   },
+  "components.CourseProductsList.title": {
+    "description": "Course products list title (screen readers only)",
+    "message": "Products"
+  },
   "components.CourseProductsLists.enrollOn": {
     "description": "Text label for the enrollment dates",
     "message": "Enrollment from {start} to {end}"
@@ -181,31 +189,31 @@
   },
   "components.CourseRunEnrollment.enroll": {
     "description": "CTA for users who can enroll in the course run or could enroll if they logged in.",
-    "message": "Enroll now"
+    "message": "التسجيل الآن"
   },
   "components.CourseRunEnrollment.enrolled": {
     "description": "Help text for users who see the \"Go to course\" CTA on course run enrollment",
-    "message": "You are enrolled in this course run"
+    "message": "أنت مسجل في هذه الدورة التدريبية"
   },
   "components.CourseRunEnrollment.enrollmentClosed": {
     "description": "Help text replacing the CTA on a course run when enrollment is closed.",
-    "message": "Enrollment in this course run is closed at the moment"
+    "message": "تم إغلاق التسجيل في هذه الدورة التدريبية في الوقت الحالي"
   },
   "components.CourseRunEnrollment.enrollmentFailed": {
     "description": "Help text below the \"Enroll now\" CTA when an enrollment attempt has already failed.",
-    "message": "Your enrollment request failed."
+    "message": "فشل طلب التسجيل الخاص بك."
   },
   "components.CourseRunEnrollment.goToCourse": {
     "description": "CTA for users who are already enrolled in a course run.",
-    "message": "Go to course"
+    "message": "الذهاب إلى الدورة"
   },
   "components.CourseRunEnrollment.loadingInitial": {
     "description": "Accessible text for the initial loading spinner on the course run enrollment button.",
-    "message": "Loading enrollment information..."
+    "message": "جاري تحميل معلومات التسجيل..."
   },
   "components.CourseRunEnrollment.loginToEnroll": {
     "description": "Helper text in the enroll button for non logged in users",
-    "message": "Log in to enroll"
+    "message": "تسجيل الدخول للتسجيل"
   },
   "components.CourseRunList.enrollFromTo": {
     "description": "Text label for the enrollment dates",
@@ -215,9 +223,177 @@
     "description": "Text displayed when no course run are opened for the course",
     "message": "No session available for this course."
   },
+  "components.Dashboard.DashboardRoutes.course.path": {
+    "description": "The path to display a course detail view.",
+    "message": "/courses/{code}"
+  },
+  "components.Dashboard.DashboardRoutes.course.session.label": {
+    "description": "Label of the course session view used in navigation components.",
+    "message": "Course"
+  },
+  "components.Dashboard.DashboardRoutes.courses.label": {
+    "description": "Label of the courses view used in navigation components.",
+    "message": "My Courses"
+  },
+  "components.Dashboard.DashboardRoutes.courses.path": {
+    "description": "The path to display the courses view.",
+    "message": "/courses"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.addresses.creation.label": {
+    "description": "Label of the addresses creation view.",
+    "message": "Billing addresses"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.addresses.creation.path": {
+    "description": "The path to display the addresses creation view.",
+    "message": "/preferences/addresses/create"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.addresses.edition.label": {
+    "description": "Label of the addresses edition view.",
+    "message": "Billing addresses"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.addresses.edition.path": {
+    "description": "The path to display the addresses edition view.",
+    "message": "/preferences/addresses/{addressId}"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.creditCards.edition.path": {
+    "description": "The path to display the credit cards edition view.",
+    "message": "/preferences/credit-cards/{creditCardId}"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.creditCards.label": {
+    "description": "Label of the credit cards edition view.",
+    "message": "Credit cards"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.label": {
+    "description": "Label of the preferences view used in navigation components.",
+    "message": "My preferences"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.path": {
+    "description": "The path to display the preferences view.",
+    "message": "/preferences"
+  },
+  "components.DashboardAddressBox.delete": {
+    "description": "Delete address button on the dashboard addresses list",
+    "message": "Delete"
+  },
+  "components.DashboardAddressBox.edit": {
+    "description": "Edit address button on the dashboard addresses list",
+    "message": "Edit"
+  },
+  "components.DashboardAddressBox.isMain": {
+    "description": "Text to inform that the address is the default one on the dashboard",
+    "message": "Default address"
+  },
+  "components.DashboardAddressBox.setMain": {
+    "description": "Set as default button text on the dashboard addresses list",
+    "message": "Use by default"
+  },
+  "components.DashboardAddressesManagement.add": {
+    "description": "Add button of the dashboard addresses management block",
+    "message": "Add a new address"
+  },
+  "components.DashboardAddressesManagement.emptyList": {
+    "description": "Empty placeholder of the dashboard addresses management block",
+    "message": "You haven't created any addresses yet."
+  },
+  "components.DashboardAddressesManagement.error": {
+    "description": "Error shown in the dashboard addresses management block",
+    "message": "An error occurred. Please retry later."
+  },
+  "components.DashboardAddressesManagement.header": {
+    "description": "Title of the dashboard addresses management block",
+    "message": "Billing addresses"
+  },
+  "components.DashboardCreateAddressForm.header": {
+    "description": "Title of the dashboard address creation form",
+    "message": "Create an address"
+  },
+  "components.DashboardCreateAddressForm.submit": {
+    "description": "Submit button of the dashboard address creation form",
+    "message": "Create"
+  },
+  "components.DashboardCreditCardBox.delete": {
+    "description": "Delete credit card button on the dashboard credit cards list",
+    "message": "Delete"
+  },
+  "components.DashboardCreditCardBox.edit": {
+    "description": "Edit credit card button on the dashboard credit cards list",
+    "message": "Edit"
+  },
+  "components.DashboardCreditCardBox.endsWith": {
+    "description": "Text to show the credit card code",
+    "message": "Ends with •••• {code}"
+  },
+  "components.DashboardCreditCardBox.expiration": {
+    "description": "Text to show the credit card expiration date",
+    "message": "Expires on {month}/{year}"
+  },
+  "components.DashboardCreditCardBox.expired": {
+    "description": "Text to show the credit card expired date",
+    "message": "Expired since {month}/{year}"
+  },
+  "components.DashboardCreditCardBox.isMain": {
+    "description": "Text to inform that the credit card is the default one on the dashboard",
+    "message": "Default credit card"
+  },
+  "components.DashboardCreditCardBox.setMain": {
+    "description": "Set as default button text on the dashboard credit cards list",
+    "message": "Use by default"
+  },
+  "components.DashboardCreditCardsManagement.emptyList": {
+    "description": "Empty placeholder of the dashboard credit cards management block",
+    "message": "You haven't created any credit cards yet."
+  },
+  "components.DashboardCreditCardsManagement.errorCannotPromoteMain": {
+    "description": "Error shown if a user tries to promote a main credit card",
+    "message": "Cannot promote main credit card."
+  },
+  "components.DashboardCreditCardsManagement.header": {
+    "description": "Title of the dashboard credit cards management block",
+    "message": "Credit cards"
+  },
+  "components.DashboardEditAddressForm.header": {
+    "description": "Title of the dashboard address edit form",
+    "message": "Edit address \"{title}\""
+  },
+  "components.DashboardEditAddressForm.remove": {
+    "description": "Remove button of the dashboard address edit form",
+    "message": "Remove"
+  },
+  "components.DashboardEditAddressForm.submit": {
+    "description": "Submit button of the dashboard address edit form",
+    "message": "Save updates"
+  },
+  "components.DashboardEditCreditCard.delete": {
+    "description": "Delete button of the dashboard credit card edit form",
+    "message": "Delete"
+  },
+  "components.DashboardEditCreditCard.expirationInputLabel": {
+    "description": "Label of the expiration input on the credit card edit page",
+    "message": "Expiration"
+  },
+  "components.DashboardEditCreditCard.header": {
+    "description": "Title of the dashboard credit card edit form",
+    "message": "Edit credit card"
+  },
+  "components.DashboardEditCreditCard.isMainInputLabel": {
+    "description": "Label of the \"is_main\" input on the credit card edit page",
+    "message": "Use this credit card as default"
+  },
+  "components.DashboardEditCreditCard.lastNumbersInputLabel": {
+    "description": "Label of the last numbers input on the credit card edit page",
+    "message": "Numbers"
+  },
+  "components.DashboardEditCreditCard.submit": {
+    "description": "Submit button of the dashboard credit card edit form",
+    "message": "Save updates"
+  },
+  "components.DashboardEditCreditCard.titleInputLabel": {
+    "description": "Label of the title input on the credit card edit page",
+    "message": "Name of the credit card"
+  },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
-    "message": "Access to your profile settings"
+    "message": "الوصول إلى إعدادات ملفك الشخصي"
   },
   "components.EnrollableCourseRunList.ariaSelectCourseRun": {
     "description": "Accessible label used by screen reader when user checked a course run radio input.",
@@ -249,7 +425,7 @@
   },
   "components.EnrolledCourseRun.goToCourse": {
     "description": "CTA displayed when user is enrolled to the course run.",
-    "message": "Go to course"
+    "message": "الذهاب إلى الدورة"
   },
   "components.EnrolledCourseRun.unroll": {
     "description": "Button label to unroll.",
@@ -261,47 +437,51 @@
   },
   "components.LanguageSelector.currentlySelected": {
     "description": "Accessible hint to mark the currently selected language in the language selector",
-    "message": "(currently selected)"
+    "message": "(المحدد حاليا)"
   },
   "components.LanguageSelector.languages": {
     "description": "Default text for the language selector button when the current language cannot be identified",
-    "message": "Languages"
+    "message": "اللغات"
   },
   "components.LanguageSelector.selectLanguage": {
     "description": "Accessible label for the language selector button",
-    "message": "Select a language:"
+    "message": "اختر لغة:"
   },
   "components.LanguageSelector.switchToLanguage": {
     "description": "Accessible link title for the language switching links in language selector",
-    "message": "Switch to {language}"
+    "message": "التبديل إلى {language}"
+  },
+  "components.Modal.closeDialog": {
+    "description": "Text for the button to close the modal",
+    "message": "Close dialog"
   },
   "components.PaginateCourseSearch.currentlyReadingLastPageN": {
     "description": "Accessibility helper in pagination, shown next to the current page number when it is the last page.",
-    "message": "Currently reading last page {page}"
+    "message": "حاليا قراءة الصفحة الأخيرة {page}"
   },
   "components.PaginateCourseSearch.currentlyReadingPageN": {
     "description": "Accessibility helper in pagination, shown next to the current page number when it is not the last page.",
-    "message": "Currently reading page {page}"
+    "message": "قراءة الصفحة {page} حاليا"
   },
   "components.PaginateCourseSearch.lastPageN": {
     "description": "Accessibility helper for pagination, added on the last page link.",
-    "message": "Last page {page}"
+    "message": "آخر صفحة {page}"
   },
   "components.PaginateCourseSearch.nextPageN": {
     "description": "Accessibility helper for pagination, added on the next page link.",
-    "message": "Next page {page}"
+    "message": "الصفحة التالية {page}"
   },
   "components.PaginateCourseSearch.pageN": {
     "description": "Accessibility helper for pagination, added on all page links for screen readers,\n      only shown next to \"page 1\" visually.",
-    "message": "Page {page}"
+    "message": "الصفحة {page}"
   },
   "components.PaginateCourseSearch.pagination": {
     "description": "Label for the pagination navigation in course search results.",
-    "message": "Pagination"
+    "message": "ترقيم الصفحات"
   },
   "components.PaginateCourseSearch.previousPageN": {
     "description": "Accessibility helper for pagination, added on the previous page link.",
-    "message": "Previous page {page}"
+    "message": "الصفحة السابقة {page}"
   },
   "components.PaymentButton.errorAbort": {
     "description": "Error message shown when user aborts the payment.",
@@ -310,6 +490,10 @@
   "components.PaymentButton.errorAborting": {
     "description": "Error message shown when user asks to abort the payment.",
     "message": "Aborting the payment..."
+  },
+  "components.PaymentButton.errorAddress": {
+    "description": "Error message shown when the user didn't select a billing address.",
+    "message": "You must have a billing address."
   },
   "components.PaymentButton.errorDefault": {
     "description": "Error message shown when payment creation request failed.",
@@ -327,18 +511,6 @@
     "description": "Label for screen reader when a payment is in progress.",
     "message": "Payment in progress"
   },
-  "components.PurchasedProductMenu.actionsRelated": {
-    "description": "Accessible label for the purchased product menu",
-    "message": "Other actions related to this product"
-  },
-  "components.PurchasedProductMenu.downloadInvoice": {
-    "description": "Label for selector item to download invoice",
-    "message": "Download invoice"
-  },
-  "components.PurchasedProductMenu.generatingInvoice": {
-    "description": "Accessible label when invoice is being generated",
-    "message": "Invoice is being generated..."
-  },
   "components.RegisteredCreditCard.expirationDate": {
     "description": "Credit card expiration date label",
     "message": "Expiration date: {expirationDate}"
@@ -349,15 +521,15 @@
   },
   "components.RootSearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
-    "message": "Search for courses"
+    "message": "البحث عن دورات"
   },
-  "components.SaleTunnel.closeDialog": {
-    "description": "ARIA label used by screenreader to inform that the close dialog button is selected",
-    "message": "Close the dialog"
+  "components.SaleTunnel.callToActionDescription": {
+    "description": "Additional description announced by screen readers when focusing the call to action buying button",
+    "message": "Purchase {product}"
   },
   "components.SaleTunnel.loginToPurchase": {
     "description": "Label displayed inside the product's CTA when user is not logged in",
-    "message": "Login to purchase"
+    "message": "Login to purchase {product}"
   },
   "components.SaleTunnel.stepPayment": {
     "description": "Label of the Payment step",
@@ -393,7 +565,7 @@
   },
   "components.SaleTunnelStepPayment.userBillingAddressNoEntry": {
     "description": "Message displayed when the user has no address.",
-    "message": "You have not yet a billing address."
+    "message": "You don't have any billing addresses yet."
   },
   "components.SaleTunnelStepPayment.userBillingAddressSelectLabel": {
     "description": "Label for the billing address select",
@@ -437,11 +609,11 @@
   },
   "components.Search.errorMessage": {
     "description": "Error message for Search view when the request to load courses fails",
-    "message": "Something's wrong! Courses could not be loaded."
+    "message": "شيء خاطئ! لا يمكن تحميل الدورات الدراسية."
   },
   "components.Search.hideFiltersPane": {
     "description": "Accessibility text for the button/icon that toggles *off* the filters pane on mobile",
-    "message": "Hide filters pane"
+    "message": "إخفاء لوحة الفلاتر"
   },
   "components.Search.resultsTitle": {
     "description": "Title for the search results pane in course search (not shown, made for screen reader users).",
@@ -449,11 +621,11 @@
   },
   "components.Search.showFiltersPane": {
     "description": "Accessibility text for the button/icon that toggles *on* the filters pane on mobile",
-    "message": "Show filters pane"
+    "message": "إظهار لوحة الفلاتر"
   },
   "components.Search.spinnerText": {
     "description": "Accessibility text for the spinner while search results are being loaded",
-    "message": "Loading search results..."
+    "message": "تحميل نتائج البحث..."
   },
   "components.Search.textQueryLengthWarning": {
     "description": "Warning message in search results when the text query is not long enough to be used.",
@@ -465,15 +637,15 @@
   },
   "components.SearchFilterGroupModal.error": {
     "description": "Error message when the search for more filter value fails in the search filters modal.",
-    "message": "There was an error while searching for {filterName}."
+    "message": "حدث خطأ أثناء البحث عن {filterName}."
   },
   "components.SearchFilterGroupModal.inputLabel": {
     "description": "Accessible label for the search input in the search filter modal.",
-    "message": "Search for filters to add"
+    "message": "البحث عن عوامل التصفية لإضافتها"
   },
   "components.SearchFilterGroupModal.inputPlaceholder": {
     "description": "Placeholder message for the search input in the search filter modal.",
-    "message": "Search in { filterName }"
+    "message": "البحث في { filterName }"
   },
   "components.SearchFilterGroupModal.loadMoreResults": {
     "description": "Button to manually load more results for the current active filter",
@@ -481,62 +653,122 @@
   },
   "components.SearchFilterGroupModal.loadingResults": {
     "description": "Loading message while loading more results in the search filter modal.",
-    "message": "Loading search results..."
+    "message": "تحميل نتائج البحث..."
   },
   "components.SearchFilterGroupModal.modalTitle": {
     "description": "Title for the modal to add more filter values in the search filters modal.",
-    "message": "Add filters for {filterName}"
+    "message": "إضافة فلاتر لـ {filterName}"
   },
   "components.SearchFilterGroupModal.moreOptionsButton": {
     "description": "Test for the button to see more filter values than the top N that appear by default.",
-    "message": "More options"
+    "message": "المزيد من الخيارات"
   },
   "components.SearchFilterGroupModal.queryTooShort": {
     "description": "Users need to enter at least 3 characters to search for more filter values; this message informs them when they start typing.",
-    "message": "Type at least 3 characters to start searching."
+    "message": "اكتب 3 أحرف على الأقل لبدء البحث."
   },
   "components.SearchFilterValueParent.ariaHideChildren": {
     "description": "Accessibility message for the button to hide children of the current filter",
-    "message": "Hide additional filters for {filterValueName}"
+    "message": "إخفاء عوامل التصفية الإضافية لـ {filterValueName}"
   },
   "components.SearchFilterValueParent.ariaShowChildren": {
     "description": "Accessibility message for the button to show children of the current filter",
-    "message": "Show more filters for {filterValueName}"
+    "message": "إظهار المزيد من الفلاتر لـ {filterValueName}"
   },
   "components.SearchFiltersPane.clearFilters": {
     "description": "Helper button in search filters pane in search page to remove all active filters",
-    "message": "Clear {activeFilterCount, number} active {activeFilterCount, plural, one {filter} other {filters}}"
+    "message": "مسح {activeFilterCount, number} نشط {activeFilterCount, plural, zero {} one {فلتر} two {فلاتر} few {فلاتر} many {فلاتر} other {فلاتر}}"
   },
   "components.SearchFiltersPane.title": {
     "description": "Title for the search filters pane in course search.",
-    "message": "Filter courses"
+    "message": "تصفية الدورات"
   },
   "components.SearchInput.button": {
     "description": "Accessibility text for the search button inside the Search input.",
-    "message": "Search"
+    "message": "البحث"
   },
   "components.SearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
-    "message": "Search for courses, organizations, categories"
+    "message": "البحث عن الدورات، المنظمات، الفئات"
+  },
+  "components.StepBreadcrumb.stepCount": {
+    "description": "Info about current step, not visible, only announced by screen readers",
+    "message": "Step {current, number} of {total, number} {active, select, true {(active)} other {}}"
   },
   "components.UserLogin.logIn": {
     "description": "Text for the login button.",
-    "message": "Log in"
+    "message": "تسجيل الدخول"
   },
   "components.UserLogin.logOut": {
     "description": "Text for the logout button.",
-    "message": "Log out"
+    "message": "تسجيل الخروج"
   },
   "components.UserLogin.signup": {
     "description": "Text for the signup button.",
-    "message": "Sign up"
+    "message": "التسجيل"
   },
   "components.UserLogin.spinnerText": {
     "description": "Accessibility text for the spinner in the login area.",
-    "message": "Loading login status..."
+    "message": "جاري  تسجيل الدخول..."
   },
   "components.useStaticFilters.courses": {
     "description": "localized human_name label for coursesConfig filter name",
-    "message": "Courses"
+    "message": "الدورات"
+  },
+  "hooks.useAddresses.errorCreate": {
+    "description": "Error message shown to the user when address creation request fails.",
+    "message": "An error occurred while creating the address. Please retry later."
+  },
+  "hooks.useAddresses.errorDelete": {
+    "description": "Error message shown to the user when address deletion request fails.",
+    "message": "An error occurred while deleting the address. Please retry later."
+  },
+  "hooks.useAddresses.errorNotFound": {
+    "description": "Error message shown to the user when not address matches.",
+    "message": "Cannot find the address"
+  },
+  "hooks.useAddresses.errorSelect": {
+    "description": "Error message shown to the user when addresses fetch request fails.",
+    "message": "An error occurred while fetching addresses. Please retry later."
+  },
+  "hooks.useAddresses.errorUpdate": {
+    "description": "Error message shown to the user when address update request fails.",
+    "message": "An error occurred while updating the address. Please retry later."
+  },
+  "hooks.useAddressesManagement.actionUpdate": {
+    "description": "Action name for address update.",
+    "message": "update"
+  },
+  "hooks.useAddressesManagement.deletionConfirmation": {
+    "description": "Confirmation message shown to the user when he wants to delete an address",
+    "message": "Are you sure you want to delete the \"{title}\" address? ⚠️ You cannot undo this change after."
+  },
+  "hooks.useAddressesManagement.errorCannotPromoteMain": {
+    "description": "Error shown if a user tries to promote a main address",
+    "message": "Cannot promote main address."
+  },
+  "hooks.useAddressesManagement.errorCannotRemoveMain": {
+    "description": "Error shown if a user tries to remove a main address",
+    "message": "Cannot remove main address."
+  },
+  "hooks.useCreditCards.error": {
+    "description": "Error message shown to the user when credit card creation/update/deletion request fails.",
+    "message": "An error occurred: {error}. Please retry later."
+  },
+  "hooks.useCreditCards.errorNotFound": {
+    "description": "Error message shown to the user when no credit cards matches.",
+    "message": "Cannot find the credit card"
+  },
+  "hooks.useCreditCardsManagement.deletionConfirmation": {
+    "description": "Confirmation message shown to the user when he wants to delete a credit card",
+    "message": "Are you sure you want to delete the credit card? ⚠️ You cannot undo this change after."
+  },
+  "hooks.useCreditCardsManagement.errorCannotRemoveMain": {
+    "description": "Error shown if a user tries to delete a main credit card",
+    "message": "Cannot remove main credit card."
+  },
+  "hooks.useDashboardAddressForm.isMainInputLabel": {
+    "description": "Label of the \"is_main\" input",
+    "message": "Use this address as default"
   }
 }

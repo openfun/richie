@@ -1,19 +1,7 @@
 {
-  "components.AddressesManagement.actionCreation": {
-    "description": "Action name for address creation.",
-    "message": "criação"
-  },
-  "components.AddressesManagement.actionDeletion": {
-    "description": "Action name for address deletion.",
-    "message": "exclusão"
-  },
   "components.AddressesManagement.actionPromotion": {
     "description": "Action name for address promotion.",
     "message": "promoção"
-  },
-  "components.AddressesManagement.actionUpdate": {
-    "description": "Action name for address update.",
-    "message": "atualização"
   },
   "components.AddressesManagement.addAddress": {
     "description": "Title of the address creation form",
@@ -51,10 +39,6 @@
     "description": "Title of the delete button",
     "message": "Eliminar endereço de \"{title}\""
   },
-  "components.AddressesManagement.deletionConfirmation": {
-    "description": "Confirmation message shown to the user when he wants to delete an address",
-    "message": "Tem certeza que deseja eliminar o endereço \"{title}? ⚠️ Não é possível desfazer essa alteração."
-  },
   "components.AddressesManagement.editAddress": {
     "description": "Title of the address edit form",
     "message": "Atualizar endereço {title}"
@@ -66,10 +50,6 @@
   "components.AddressesManagement.editButtonLabel": {
     "description": "Title of the edit button",
     "message": "Editar endereço de \"{title}\""
-  },
-  "components.AddressesManagement.error": {
-    "description": "Error message shown to the user when address creation/update/deletion request fails.",
-    "message": "Ocorreu um erro durante o processo de {action} de endereço. Por favor, tente novamente mais tarde."
   },
   "components.AddressesManagement.first_nameInput": {
     "description": "Label of the \"first_name\" input",
@@ -91,6 +71,10 @@
     "description": "Title of the registered addresses block",
     "message": "Os seus endereços"
   },
+  "components.AddressesManagement.requiredFields": {
+    "description": "Text at the top of address creation form indicating what are required fields",
+    "message": "Os campos marcados com {symbol} são obrigatórios"
+  },
   "components.AddressesManagement.saveInput": {
     "description": "Label of the \"save\" input",
     "message": "Guardar este endereço"
@@ -110,6 +94,26 @@
   "components.AddressesManagement.updateButton": {
     "description": "Label of the update button",
     "message": "Atualizar este endereço"
+  },
+  "components.AddressesManagement.validationSchema.mixedInvalid": {
+    "description": "Error message displayed when a field value is invalid.",
+    "message": "Este campo é inválido."
+  },
+  "components.AddressesManagement.validationSchema.mixedOneOf": {
+    "description": "Error message displayed when a field value must be one of a list.",
+    "message": "Tem de definir um valor."
+  },
+  "components.AddressesManagement.validationSchema.mixedRequired": {
+    "description": "Error message displayed when a field is required.",
+    "message": "Este campo é obrigatório."
+  },
+  "components.AddressesManagement.validationSchema.stringMax": {
+    "description": "Error message displayed when a field value is too long.",
+    "message": "O tamanho máximo é de {max} {max, plural, one {caractere} other {caracteres}}."
+  },
+  "components.AddressesManagement.validationSchema.stringMin": {
+    "description": "Error message displayed when a field value is too short.",
+    "message": "O tamanho mínimo é de {min} {min, plural, one {caractere} other {caracteres}}."
   },
   "components.CourseGlimpse.categoryLabel": {
     "description": "Category label text for screen reader users",
@@ -171,6 +175,10 @@
     "description": "Start label displayed in the header of course run dates section",
     "message": "Início"
   },
+  "components.CourseProductsList.title": {
+    "description": "Course products list title (screen readers only)",
+    "message": "Produtos"
+  },
   "components.CourseProductsLists.enrollOn": {
     "description": "Text label for the enrollment dates",
     "message": "Inscrições de {start} a {end}"
@@ -214,6 +222,174 @@
   "components.CourseRunList.noCourseRunAvailable": {
     "description": "Text displayed when no course run are opened for the course",
     "message": "Nenhuma sessão disponível para este curso."
+  },
+  "components.Dashboard.DashboardRoutes.course.path": {
+    "description": "The path to display a course detail view.",
+    "message": "/cursos/{code}"
+  },
+  "components.Dashboard.DashboardRoutes.course.session.label": {
+    "description": "Label of the course session view used in navigation components.",
+    "message": "Curso"
+  },
+  "components.Dashboard.DashboardRoutes.courses.label": {
+    "description": "Label of the courses view used in navigation components.",
+    "message": "Os Meus Cursos"
+  },
+  "components.Dashboard.DashboardRoutes.courses.path": {
+    "description": "The path to display the courses view.",
+    "message": "/cursos"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.addresses.creation.label": {
+    "description": "Label of the addresses creation view.",
+    "message": "Endereço de faturação"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.addresses.creation.path": {
+    "description": "The path to display the addresses creation view.",
+    "message": "/preferences/addresses/create"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.addresses.edition.label": {
+    "description": "Label of the addresses edition view.",
+    "message": "Endereço de faturação"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.addresses.edition.path": {
+    "description": "The path to display the addresses edition view.",
+    "message": "/preferências/endereços/{addressId}"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.creditCards.edition.path": {
+    "description": "The path to display the credit cards edition view.",
+    "message": "/preferências/cartões-de-crédito/{creditCardId}"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.creditCards.label": {
+    "description": "Label of the credit cards edition view.",
+    "message": "Cartões de crédito"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.label": {
+    "description": "Label of the preferences view used in navigation components.",
+    "message": "As minhas preferências"
+  },
+  "components.Dashboard.DashboardRoutes.preferences.path": {
+    "description": "The path to display the preferences view.",
+    "message": "/preferências"
+  },
+  "components.DashboardAddressBox.delete": {
+    "description": "Delete address button on the dashboard addresses list",
+    "message": "Eliminar"
+  },
+  "components.DashboardAddressBox.edit": {
+    "description": "Edit address button on the dashboard addresses list",
+    "message": "Editar"
+  },
+  "components.DashboardAddressBox.isMain": {
+    "description": "Text to inform that the address is the default one on the dashboard",
+    "message": "Endereço predefinido"
+  },
+  "components.DashboardAddressBox.setMain": {
+    "description": "Set as default button text on the dashboard addresses list",
+    "message": "Utilizar por predefinição"
+  },
+  "components.DashboardAddressesManagement.add": {
+    "description": "Add button of the dashboard addresses management block",
+    "message": "Adicionar um novo endereço"
+  },
+  "components.DashboardAddressesManagement.emptyList": {
+    "description": "Empty placeholder of the dashboard addresses management block",
+    "message": "Ainda não criou nenhum endereço."
+  },
+  "components.DashboardAddressesManagement.error": {
+    "description": "Error shown in the dashboard addresses management block",
+    "message": "Um erro ocorreu. Tente novamente mais tarde."
+  },
+  "components.DashboardAddressesManagement.header": {
+    "description": "Title of the dashboard addresses management block",
+    "message": "Endereço de faturação"
+  },
+  "components.DashboardCreateAddressForm.header": {
+    "description": "Title of the dashboard address creation form",
+    "message": "Criar novo endereço"
+  },
+  "components.DashboardCreateAddressForm.submit": {
+    "description": "Submit button of the dashboard address creation form",
+    "message": "Criar"
+  },
+  "components.DashboardCreditCardBox.delete": {
+    "description": "Delete credit card button on the dashboard credit cards list",
+    "message": "Eliminar"
+  },
+  "components.DashboardCreditCardBox.edit": {
+    "description": "Edit credit card button on the dashboard credit cards list",
+    "message": "Editar"
+  },
+  "components.DashboardCreditCardBox.endsWith": {
+    "description": "Text to show the credit card code",
+    "message": "Termina com ••• {code}"
+  },
+  "components.DashboardCreditCardBox.expiration": {
+    "description": "Text to show the credit card expiration date",
+    "message": "Expira em {month}/{year}"
+  },
+  "components.DashboardCreditCardBox.expired": {
+    "description": "Text to show the credit card expired date",
+    "message": "Expira em {month}/{year}"
+  },
+  "components.DashboardCreditCardBox.isMain": {
+    "description": "Text to inform that the credit card is the default one on the dashboard",
+    "message": "Cartão de crédito predefinido"
+  },
+  "components.DashboardCreditCardBox.setMain": {
+    "description": "Set as default button text on the dashboard credit cards list",
+    "message": "Utilizar por predefinição"
+  },
+  "components.DashboardCreditCardsManagement.emptyList": {
+    "description": "Empty placeholder of the dashboard credit cards management block",
+    "message": "Ainda não criou nenhum cartão de crédito."
+  },
+  "components.DashboardCreditCardsManagement.errorCannotPromoteMain": {
+    "description": "Error shown if a user tries to promote a main credit card",
+    "message": "Não é possível promover o cartão de crédito principal."
+  },
+  "components.DashboardCreditCardsManagement.header": {
+    "description": "Title of the dashboard credit cards management block",
+    "message": "Cartões de crédito"
+  },
+  "components.DashboardEditAddressForm.header": {
+    "description": "Title of the dashboard address edit form",
+    "message": "Atualizar endereço \"{title}\""
+  },
+  "components.DashboardEditAddressForm.remove": {
+    "description": "Remove button of the dashboard address edit form",
+    "message": "Remover"
+  },
+  "components.DashboardEditAddressForm.submit": {
+    "description": "Submit button of the dashboard address edit form",
+    "message": "Salvar atualizações"
+  },
+  "components.DashboardEditCreditCard.delete": {
+    "description": "Delete button of the dashboard credit card edit form",
+    "message": "Eliminar"
+  },
+  "components.DashboardEditCreditCard.expirationInputLabel": {
+    "description": "Label of the expiration input on the credit card edit page",
+    "message": "Expiração"
+  },
+  "components.DashboardEditCreditCard.header": {
+    "description": "Title of the dashboard credit card edit form",
+    "message": "Editar cartão de crédito"
+  },
+  "components.DashboardEditCreditCard.isMainInputLabel": {
+    "description": "Label of the \"is_main\" input on the credit card edit page",
+    "message": "Usar este cartão de crédito como padrão"
+  },
+  "components.DashboardEditCreditCard.lastNumbersInputLabel": {
+    "description": "Label of the last numbers input on the credit card edit page",
+    "message": "Números"
+  },
+  "components.DashboardEditCreditCard.submit": {
+    "description": "Submit button of the dashboard credit card edit form",
+    "message": "Salvar atualizações"
+  },
+  "components.DashboardEditCreditCard.titleInputLabel": {
+    "description": "Label of the title input on the credit card edit page",
+    "message": "Nome do cartão de crédito"
   },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
@@ -275,6 +451,10 @@
     "description": "Accessible link title for the language switching links in language selector",
     "message": "Mudar idioma para {language}"
   },
+  "components.Modal.closeDialog": {
+    "description": "Text for the button to close the modal",
+    "message": "Fechar janela de diálogo"
+  },
   "components.PaginateCourseSearch.currentlyReadingLastPageN": {
     "description": "Accessibility helper in pagination, shown next to the current page number when it is the last page.",
     "message": "A ler a última página {page}"
@@ -311,6 +491,10 @@
     "description": "Error message shown when user asks to abort the payment.",
     "message": "Cancelando o pagamento..."
   },
+  "components.PaymentButton.errorAddress": {
+    "description": "Error message shown when the user didn't select a billing address.",
+    "message": "Tem de introduzir um endereço de faturação."
+  },
   "components.PaymentButton.errorDefault": {
     "description": "Error message shown when payment creation request failed.",
     "message": "Ocorreu um erro durante o pagamento. Por favor, tente novamente mais tarde."
@@ -327,18 +511,6 @@
     "description": "Label for screen reader when a payment is in progress.",
     "message": "A processar pagamento"
   },
-  "components.PurchasedProductMenu.actionsRelated": {
-    "description": "Accessible label for the purchased product menu",
-    "message": "Outras ações relacionadas com este produto"
-  },
-  "components.PurchasedProductMenu.downloadInvoice": {
-    "description": "Label for selector item to download invoice",
-    "message": "Descarregar fatura"
-  },
-  "components.PurchasedProductMenu.generatingInvoice": {
-    "description": "Accessible label when invoice is being generated",
-    "message": "A fatura está a ser gerada..."
-  },
   "components.RegisteredCreditCard.expirationDate": {
     "description": "Credit card expiration date label",
     "message": "Expira a {expirationDate}"
@@ -351,13 +523,13 @@
     "description": "Placeholder text displayed in the search field when it is empty.",
     "message": "Pesquisar cursos"
   },
-  "components.SaleTunnel.closeDialog": {
-    "description": "ARIA label used by screenreader to inform that the close dialog button is selected",
-    "message": "Fechar esta caixa de diálogo"
+  "components.SaleTunnel.callToActionDescription": {
+    "description": "Additional description announced by screen readers when focusing the call to action buying button",
+    "message": "Comprar {product}"
   },
   "components.SaleTunnel.loginToPurchase": {
     "description": "Label displayed inside the product's CTA when user is not logged in",
-    "message": "Faça login para comprar"
+    "message": "Faça entrar para comprar {product}"
   },
   "components.SaleTunnel.stepPayment": {
     "description": "Label of the Payment step",
@@ -393,7 +565,7 @@
   },
   "components.SaleTunnelStepPayment.userBillingAddressNoEntry": {
     "description": "Message displayed when the user has no address.",
-    "message": "Você ainda não tem um endereço de faturação."
+    "message": "Ainda não tem endereços de faturação."
   },
   "components.SaleTunnelStepPayment.userBillingAddressSelectLabel": {
     "description": "Label for the billing address select",
@@ -519,6 +691,10 @@
     "description": "Placeholder text displayed in the search field when it is empty.",
     "message": "Pesquisar cursos, organizações, categorias"
   },
+  "components.StepBreadcrumb.stepCount": {
+    "description": "Info about current step, not visible, only announced by screen readers",
+    "message": "Passo {current, number} de {total, number} {active, select, true {(ativo)} other {}}"
+  },
   "components.UserLogin.logIn": {
     "description": "Text for the login button.",
     "message": "Entrar"
@@ -538,5 +714,61 @@
   "components.useStaticFilters.courses": {
     "description": "localized human_name label for coursesConfig filter name",
     "message": "Cursos"
+  },
+  "hooks.useAddresses.errorCreate": {
+    "description": "Error message shown to the user when address creation request fails.",
+    "message": "An error occurred while creating the address. Please retry later."
+  },
+  "hooks.useAddresses.errorDelete": {
+    "description": "Error message shown to the user when address deletion request fails.",
+    "message": "An error occurred while deleting the address. Please retry later."
+  },
+  "hooks.useAddresses.errorNotFound": {
+    "description": "Error message shown to the user when not address matches.",
+    "message": "Não foi possível encontrar o endereço"
+  },
+  "hooks.useAddresses.errorSelect": {
+    "description": "Error message shown to the user when addresses fetch request fails.",
+    "message": "An error occurred while fetching addresses. Please retry later."
+  },
+  "hooks.useAddresses.errorUpdate": {
+    "description": "Error message shown to the user when address update request fails.",
+    "message": "An error occurred while updating the address. Please retry later."
+  },
+  "hooks.useAddressesManagement.actionUpdate": {
+    "description": "Action name for address update.",
+    "message": "atualização"
+  },
+  "hooks.useAddressesManagement.deletionConfirmation": {
+    "description": "Confirmation message shown to the user when he wants to delete an address",
+    "message": "Are you sure you want to delete the \"{title}\" address? ⚠️ You cannot undo this change after."
+  },
+  "hooks.useAddressesManagement.errorCannotPromoteMain": {
+    "description": "Error shown if a user tries to promote a main address",
+    "message": "Impossível promover o endereço principal."
+  },
+  "hooks.useAddressesManagement.errorCannotRemoveMain": {
+    "description": "Error shown if a user tries to remove a main address",
+    "message": "Impossível remover o endereço principal."
+  },
+  "hooks.useCreditCards.error": {
+    "description": "Error message shown to the user when credit card creation/update/deletion request fails.",
+    "message": "Um erro ocorreu: {error}. Tente novamente mais tarde."
+  },
+  "hooks.useCreditCards.errorNotFound": {
+    "description": "Error message shown to the user when no credit cards matches.",
+    "message": "Não foi possível encontrar o cartão de crédito"
+  },
+  "hooks.useCreditCardsManagement.deletionConfirmation": {
+    "description": "Confirmation message shown to the user when he wants to delete a credit card",
+    "message": "Are you sure you want to delete the credit card? ⚠️ You cannot undo this change after."
+  },
+  "hooks.useCreditCardsManagement.errorCannotRemoveMain": {
+    "description": "Error shown if a user tries to delete a main credit card",
+    "message": "Não é possível remover o cartão de crédito principal."
+  },
+  "hooks.useDashboardAddressForm.isMainInputLabel": {
+    "description": "Label of the \"is_main\" input",
+    "message": "Usar este endereço como padrão"
   }
 }
