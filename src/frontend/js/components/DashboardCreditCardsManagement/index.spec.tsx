@@ -113,9 +113,10 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('renders the correct label for an expiration date that will soon expire', async () => {
-    const limit = new Date();
-    limit.setMonth(limit.getMonth() + 1);
-    const date = faker.date.future(0.2, limit);
+    const offset = new Date();
+    offset.setMonth(offset.getMonth() + 1);
+    offset.setDate(1);
+    const date = faker.date.future(2 / 12, offset);
     const creditCard: CreditCard = {
       ...mockFactories.CreditCardFactory.generate(),
       expiration_month: date.getMonth() + 1,
