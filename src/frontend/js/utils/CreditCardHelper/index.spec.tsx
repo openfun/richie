@@ -25,7 +25,10 @@ describe('CreditCardHelper', () => {
     ).toBe(CreditCardExpirationStatus.FINE);
   });
   it('is soon expired', () => {
-    const date = faker.date.future(0.2);
+    const offset = new Date();
+    offset.setMonth(offset.getMonth() + 1);
+    offset.setDate(1);
+    const date = faker.date.future(2 / 12, offset);
     expect(
       CreditCardHelper.getExpirationState({
         ...CreditCardFactory.generate(),
