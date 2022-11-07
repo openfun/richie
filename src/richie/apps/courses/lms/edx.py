@@ -7,7 +7,6 @@ import re
 import requests
 from requests.auth import AuthBase
 
-from ..serializers import SyncCourseRunSerializer
 from .base import BaseLMSBackend
 
 logger = logging.getLogger(__name__)
@@ -87,8 +86,3 @@ class EdXLMSBackend(BaseLMSBackend):
         except KeyError:
             pass
         return data
-
-    @staticmethod
-    def get_course_run_serializer(data, partial=False):
-        """Prepare data and return a bound serializer."""
-        return SyncCourseRunSerializer(data=data, partial=partial)
