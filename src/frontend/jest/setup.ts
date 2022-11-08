@@ -2,9 +2,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import { Request, Response } from 'node-fetch';
 
-import { setLogger } from 'react-query';
-import { noop } from 'utils';
-
 // Mock Request & Reponse objects
 global.Request = Request as any;
 global.Response = Response as any;
@@ -24,12 +21,4 @@ RESET_MODULE_EXCEPTIONS.forEach((moduleName) => {
     }
     return mockActualRegistry[moduleName];
   });
-});
-
-/* Prevent log error during tests */
-setLogger({
-  // eslint-disable-next-line no-console
-  log: console.log,
-  warn: console.warn,
-  error: noop,
 });

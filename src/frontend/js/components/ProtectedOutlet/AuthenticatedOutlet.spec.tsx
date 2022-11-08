@@ -1,15 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { hydrate, QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import {
-  ContextFactory as mockContextFactory,
-  PersistedClientFactory,
-  QueryStateFactory,
-  UserFactory,
-} from 'utils/test/factories';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import BaseSessionProvider from 'data/SessionProvider/BaseSessionProvider';
 import { location } from 'utils/indirection/window';
-import createQueryClient from 'utils/react-query/createQueryClient';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import AuthenticatedOutlet from './AuthenticatedOutlet';
 
 jest.mock('utils/context', () => ({
@@ -61,27 +56,14 @@ describe('<AuthenticatedOutlet />', () => {
     );
   };
 
-  const createQueryClientWithUser = (isAuthenticated: Boolean) => {
-    const user = isAuthenticated ? UserFactory.generate() : null;
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: user })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
-    return client;
-  };
-
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
   it('should display child route if user is authenticated', () => {
-    const client = createQueryClientWithUser(true);
-
     render(
       <AuthenticatedRouter
-        client={client}
+        client={createTestQueryClient({ user: true })}
         redirectTo="/forbidden"
         initialEntries={['/restricted']}
       />,
@@ -95,11 +77,9 @@ describe('<AuthenticatedOutlet />', () => {
   });
 
   it('should redirect to provided path if user is anonymous', () => {
-    const client = createQueryClientWithUser(false);
-
     render(
       <AuthenticatedRouter
-        client={client}
+        client={createTestQueryClient()}
         redirectTo="/forbidden"
         initialEntries={['/restricted']}
       />,
@@ -113,9 +93,9 @@ describe('<AuthenticatedOutlet />', () => {
   });
 
   it('should redirect to "/" if user is anonymous and no redirect path is provided', () => {
-    const client = createQueryClientWithUser(false);
-
-    render(<AuthenticatedRouter client={client} initialEntries={['/restricted']} />);
+    render(
+      <AuthenticatedRouter client={createTestQueryClient()} initialEntries={['/restricted']} />,
+    );
 
     // The restricted route should not be rendered
     expect(screen.queryByTestId('route-restricted')).toBeNull();

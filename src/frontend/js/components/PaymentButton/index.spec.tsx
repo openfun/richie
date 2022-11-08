@@ -2,23 +2,21 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
-import { hydrate, QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   AddressFactory,
   ContextFactory as mockContextFactory,
   CreditCardFactory,
   OrderWithOneClickPaymentFactory,
   OrderWithPaymentFactory,
-  PersistedClientFactory,
   ProductFactory,
-  QueryStateFactory,
 } from 'utils/test/factories';
 import JoanieApiProvider from 'data/JoanieApiProvider';
 import { CourseCodeProvider } from 'data/CourseCodeProvider';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
-import createQueryClient from 'utils/react-query/createQueryClient';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import PaymentButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -161,14 +159,8 @@ describe('PaymentButton', () => {
         state: OrderState.PENDING,
       });
 
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: { username: 'John Doe' } })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     render(
-      <Wrapper client={client}>
+      <Wrapper client={createTestQueryClient({ user: { username: 'John Doe' } })}>
         <PaymentButton
           billingAddress={billingAddress}
           product={product}
@@ -253,14 +245,8 @@ describe('PaymentButton', () => {
         state: OrderState.PENDING,
       });
 
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: { username: 'John Doe' } })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     render(
-      <Wrapper client={client}>
+      <Wrapper client={createTestQueryClient({ user: null })}>
         <PaymentButton
           billingAddress={billingAddress}
           creditCard={creditCard.id}
@@ -346,14 +332,8 @@ describe('PaymentButton', () => {
       })
       .post(`https://joanie.test/api/orders/${order.id}/abort/`, 200);
 
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: { username: 'John Doe' } })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     render(
-      <Wrapper client={client}>
+      <Wrapper client={createTestQueryClient({ user: { username: 'John Doe' } })}>
         <PaymentButton
           billingAddress={billingAddress}
           creditCard={creditCard.id}
@@ -409,8 +389,13 @@ describe('PaymentButton', () => {
     await act(async () => {
       jest.runOnlyPendingTimers();
     });
-    expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit);
-    expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/orders/${order.id}/abort/`);
+
+    await waitFor(async () => expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit), {
+      timeout: 2000,
+    });
+    await waitFor(() =>
+      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/orders/${order.id}/abort/`),
+    );
     expect(JSON.parse(fetchMock.lastOptions()!.body!.toString())).toEqual({
       payment_id: order.payment_info.payment_id,
     });
@@ -418,7 +403,7 @@ describe('PaymentButton', () => {
     // - An error message should be displayed and focused (for screen reader users)
     const $error = screen.getByText('An error occurred during payment. Please retry later.');
     expect(document.activeElement).toBe($error);
-  });
+  }, 10000);
 
   it('should render an error message when payment failed', async () => {
     const product: Joanie.Product = ProductFactory.generate();
@@ -433,14 +418,8 @@ describe('PaymentButton', () => {
         state: OrderState.PENDING,
       });
 
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: { username: 'John Doe' } })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     render(
-      <Wrapper client={client}>
+      <Wrapper client={createTestQueryClient({ user: { username: 'John Doe' } })}>
         <PaymentButton
           billingAddress={billingAddress}
           product={product}
@@ -475,7 +454,7 @@ describe('PaymentButton', () => {
     expect($button.disabled).toBe(true);
 
     // - Payment interface should be displayed
-    screen.getByText('Payment interface component');
+    await screen.findByText('Payment interface component');
 
     // - Simulate the payment has failed
     await act(async () => {

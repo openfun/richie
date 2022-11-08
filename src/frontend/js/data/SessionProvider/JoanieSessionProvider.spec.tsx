@@ -1,14 +1,13 @@
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { act, render, waitFor } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { act, render, renderHook, waitFor } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { ContextFactory as mockContextFactory, FonzieUserFactory } from 'utils/test/factories';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
 import { useSession } from 'data/SessionProvider/index';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from './JoanieSessionProvider';
 
 jest.mock('utils/errors/handle');
@@ -27,9 +26,9 @@ jest.mock('utils/indirection/window', () => ({
 
 // - Joanie Session Provider test suite
 describe('JoanieSessionProvider', () => {
-  const Wrapper = ({ client, children }: PropsWithChildren<{ client: QueryClient }>) => (
+  const Wrapper = ({ children }: PropsWithChildren) => (
     <IntlProvider locale="en">
-      <QueryClientProvider client={client}>
+      <QueryClientProvider client={createTestQueryClient({ persister: true })}>
         <JoanieSessionProvider>{children}</JoanieSessionProvider>
       </QueryClientProvider>
     </IntlProvider>
@@ -52,64 +51,69 @@ describe('JoanieSessionProvider', () => {
   });
 
   it('stores user access token within session storage', async () => {
-    const queryClient = createQueryClient();
     const user = FonzieUserFactory.generate();
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', user);
 
-    render(<Wrapper client={queryClient} />);
-
-    await waitFor(() => {
+    await act(async () => {
+      render(<Wrapper />);
+    });
+    await waitFor(async () => {
       expect(fetchMock.lastUrl()).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
     });
-
-    expect(sessionStorage.getItem(RICHIE_USER_TOKEN)).toEqual(user.access_token);
+    await waitFor(async () =>
+      expect(sessionStorage.getItem(RICHIE_USER_TOKEN)).toEqual(user.access_token),
+    );
   });
 
   it('prefetches addresses, credit-cards and order when user is authenticated', async () => {
-    const queryClient = createQueryClient();
     const user = FonzieUserFactory.generate();
     const deferredUser = new Deferred();
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', deferredUser.promise);
 
-    render(<Wrapper client={queryClient} />);
+    await act(async () => {
+      render(<Wrapper />);
+    });
 
     await act(async () => deferredUser.resolve(user));
 
-    const calls = fetchMock.calls();
-    expect(calls).toHaveLength(4);
-    expect(calls[0][0]).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
-    expect(calls[1][0]).toEqual('https://joanie.endpoint.test/api/addresses/');
-    expect(calls[2][0]).toEqual('https://joanie.endpoint.test/api/credit-cards/');
-    expect(calls[3][0]).toEqual('https://joanie.endpoint.test/api/orders/');
+    await waitFor(async () => {
+      const calls = fetchMock.calls();
+      expect(calls).toHaveLength(4);
+      expect(calls[0][0]).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
+      expect(calls[1][0]).toEqual('https://joanie.endpoint.test/api/addresses/');
+      expect(calls[2][0]).toEqual('https://joanie.endpoint.test/api/credit-cards/');
+      expect(calls[3][0]).toEqual('https://joanie.endpoint.test/api/orders/');
+    });
   });
 
   it('does not prefetch address, credit-cards, and order when user is anonymous', async () => {
-    const queryClient = createQueryClient();
     const deferredUser = new Deferred();
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', deferredUser.promise);
 
-    render(<Wrapper client={queryClient} />);
+    await act(async () => {
+      render(<Wrapper />);
+    });
 
     await act(async () => deferredUser.resolve(null));
 
-    expect(fetchMock.lastUrl()).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
+    await waitFor(async () =>
+      expect(fetchMock.lastUrl()).toEqual('https://auth.endpoint.test/api/v1.0/user/me'),
+    );
 
     expect(fetchMock.calls()).toHaveLength(1);
     expect(fetchMock.lastUrl()).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
   });
 
   it('clears session storage on login', async () => {
-    const queryClient = createQueryClient({ persistor: true });
     const user = FonzieUserFactory.generate();
     const userDeferred = new Deferred();
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', userDeferred.promise);
     const { result, rerender } = renderHook(useSession, {
       wrapper: Wrapper,
-      initialProps: { client: queryClient },
     });
 
     await act(async () => {
@@ -132,18 +136,16 @@ describe('JoanieSessionProvider', () => {
     expect(sessionStorage.getItem(RICHIE_USER_TOKEN)).toBeNull();
 
     rerender();
-    expect(result.current.user).toBeUndefined();
+    await waitFor(async () => expect(result.current.user).toBeUndefined());
   });
 
   it('clears session storage on register', async () => {
-    const queryClient = createQueryClient({ persistor: true });
     const user = FonzieUserFactory.generate();
     const userDeferred = new Deferred();
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', userDeferred.promise);
     const { result, rerender } = renderHook(useSession, {
       wrapper: Wrapper,
-      initialProps: { client: queryClient },
     });
 
     await act(async () => {
@@ -166,6 +168,6 @@ describe('JoanieSessionProvider', () => {
     expect(sessionStorage.getItem(RICHIE_USER_TOKEN)).toBeNull();
 
     rerender();
-    expect(result.current.user).toBeUndefined();
+    await waitFor(async () => expect(result.current.user).toBeUndefined());
   });
 });

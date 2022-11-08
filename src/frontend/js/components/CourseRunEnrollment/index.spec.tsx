@@ -1,17 +1,17 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
-import faker from 'faker';
 
 import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
 import * as mockFactories from 'utils/test/factories';
-import createQueryClient from 'utils/react-query/createQueryClient';
-import { REACT_QUERY_SETTINGS } from 'settings';
+import { UserFactory } from 'utils/test/factories';
 import { handle } from 'utils/errors/handle';
 import context from 'utils/context';
 import { SessionProvider } from 'data/SessionProvider';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { User } from 'types/User';
 import CourseRunEnrollment from '.';
 
 jest.mock('utils/errors/handle');
@@ -39,21 +39,6 @@ const mockHandle = handle as jest.MockedFunction<typeof handle>;
 describe('<CourseRunEnrollment />', () => {
   const endpoint = 'https://demo.endpoint';
 
-  const initializeUser = (loggedin = true) => {
-    const username = faker.internet.userName();
-    sessionStorage.setItem(
-      REACT_QUERY_SETTINGS.cacheStorage.key,
-      JSON.stringify(
-        mockFactories.PersistedClientFactory({
-          queries: [
-            mockFactories.QueryStateFactory('user', { data: loggedin ? { username } : null }),
-          ],
-        }),
-      ),
-    );
-    return loggedin ? username : null;
-  };
-
   const getCourseRunProp = (courseRun: CourseRun) => ({
     id: courseRun.id,
     resource_link: courseRun.resource_link,
@@ -62,30 +47,24 @@ describe('<CourseRunEnrollment />', () => {
     dashboard_link: courseRun.dashboard_link,
   });
 
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
-
   afterEach(() => {
-    jest.clearAllTimers();
-    sessionStorage.clear();
     fetchMock.restore();
   });
 
   it('shows an "Enroll" button and allows the user to enroll', async () => {
-    const username = initializeUser();
+    const user: User = UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
+      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
       enrollmentsDeferred.promise,
     );
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
@@ -100,7 +79,7 @@ describe('<CourseRunEnrollment />', () => {
       enrollmentsDeferred.resolve({});
     });
 
-    const button = screen.getByRole('button', { name: 'Enroll now' });
+    const button = await screen.findByRole('button', { name: 'Enroll now' });
 
     const enrollActionDeferred = new Deferred();
     fetchMock.post(`${endpoint}/api/enrollment/v1/enrollment`, enrollActionDeferred.promise);
@@ -117,19 +96,19 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('shows an error message and the enrollment button when the enrollment fails', async () => {
-    const username = initializeUser();
+    const user: User = UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
     const enrollmentDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
+      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
       enrollmentDeferred.promise,
     );
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
@@ -145,7 +124,7 @@ describe('<CourseRunEnrollment />', () => {
       enrollmentDeferred.resolve({});
     });
 
-    const button = screen.getByRole('button', { name: 'Enroll now' });
+    const button = await screen.findByRole('button', { name: 'Enroll now' });
 
     // const enrollmentAction = new Deferred();
     fetchMock.post(`${endpoint}/api/enrollment/v1/enrollment`, 500);
@@ -163,19 +142,19 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('shows a link to the course if the user is already enrolled', async () => {
-    const username = initializeUser();
+    const user: User = UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
+      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
       enrollmentsDeferred.promise,
     );
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
@@ -191,12 +170,12 @@ describe('<CourseRunEnrollment />', () => {
       enrollmentsDeferred.resolve({ is_active: true });
     });
 
-    screen.getByRole('link', { name: 'Go to course' });
+    await screen.findByRole('link', { name: 'Go to course' });
     screen.getByText('You are enrolled in this course run');
   });
 
   it("shows remaining course opening time and a link to the lms dashboard if the user is already enrolled and if the course hasn't started yet", async () => {
-    const username = initializeUser();
+    const user: User = UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
     courseRun.starts_in_message = 'The course will start in 3 days';
@@ -204,13 +183,13 @@ describe('<CourseRunEnrollment />', () => {
 
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
+      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
       enrollmentsDeferred.promise,
     );
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
@@ -227,21 +206,22 @@ describe('<CourseRunEnrollment />', () => {
     });
 
     expect(screen.queryByRole('link', { name: 'Go to course' })).toBeNull();
-    expect(screen.getByText('You are enrolled in this course run')).toHaveAttribute(
-      'href',
-      'https://edx.local.dev:8073/dashboard',
+    await waitFor(() =>
+      expect(screen.getByText('You are enrolled in this course run')).toHaveAttribute(
+        'href',
+        'https://edx.local.dev:8073/dashboard',
+      ),
     );
     screen.getByText('The course will start in 3 days');
   });
 
   it('shows a helpful message if the course run is closed', async () => {
-    initializeUser(false);
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 4;
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: null })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
@@ -256,13 +236,12 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('prompts anonymous users to log in', async () => {
-    initializeUser(false);
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: null })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />

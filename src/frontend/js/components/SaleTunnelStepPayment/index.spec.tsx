@@ -1,12 +1,13 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import * as mockFactories from 'utils/test/factories';
+import { UserFactory } from 'utils/test/factories';
 import { SessionProvider } from 'data/SessionProvider';
-import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
 import { Address, CreditCard } from 'types/Joanie';
-import createQueryClient from 'utils/react-query/createQueryClient';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { User } from 'types/User';
 import { SaleTunnelStepPayment } from '.';
 
 jest.mock('components/PaymentButton', () => ({
@@ -25,26 +26,9 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('SaleTunnelStepPayment', () => {
-  const initializeUser = () => {
-    const user = mockFactories.FonzieUserFactory.generate();
-
-    sessionStorage.setItem(
-      REACT_QUERY_SETTINGS.cacheStorage.key,
-      JSON.stringify(
-        mockFactories.PersistedClientFactory({
-          queries: [mockFactories.QueryStateFactory('user', { data: user })],
-        }),
-      ),
-    );
-    sessionStorage.setItem(RICHIE_USER_TOKEN, user.access_token);
-
-    return user;
-  };
-
   const mockNext = jest.fn();
 
   beforeEach(() => {
-    initializeUser();
     fetchMock.get('https://joanie.endpoint/api/addresses/', []);
     fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
     fetchMock.get('https://joanie.endpoint/api/orders/', []);
@@ -60,7 +44,7 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <SaleTunnelStepPayment product={product} next={mockNext} />
@@ -82,12 +66,12 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display authenticated user information', async () => {
-    const user = initializeUser();
+    const user: User = UserFactory.generate();
     const product = mockFactories.ProductFactory.generate();
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <SaleTunnelStepPayment product={product} next={mockNext} />
@@ -105,9 +89,9 @@ describe('SaleTunnelStepPayment', () => {
   it('should display a button to create an address if user has no address ', async () => {
     const product = mockFactories.ProductFactory.generate();
 
-    await act(async () => {
+    await act(() => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <SaleTunnelStepPayment product={product} next={mockNext} />
@@ -144,7 +128,7 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <SaleTunnelStepPayment product={product} next={mockNext} />
@@ -157,7 +141,7 @@ describe('SaleTunnelStepPayment', () => {
     screen.getByRole('heading', { level: 3, name: 'Billing address' });
 
     // - A button to add an address should be displayed
-    screen.getByText('Add an address', { selector: 'button' });
+    await screen.findByText('Add an address', { selector: 'button' });
 
     // - A select field containing all addresses should be displayed
     const dropdown = screen.getByRole('combobox', { name: 'Select a billing address' });
@@ -207,7 +191,7 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <SaleTunnelStepPayment product={product} next={mockNext} />
@@ -236,7 +220,7 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <SaleTunnelStepPayment product={product} next={mockNext} />
@@ -246,7 +230,7 @@ describe('SaleTunnelStepPayment', () => {
       );
     });
 
-    screen.getByRole('heading', { level: 5, name: 'Your registered credit card' });
+    await screen.findByRole('heading', { level: 5, name: 'Your registered credit card' });
 
     // - Registered card should be displayed
     const $creditCardList = document.querySelector(
@@ -291,18 +275,18 @@ describe('SaleTunnelStepPayment', () => {
   it('should render <PaymentButton />', async () => {
     const product = mockFactories.ProductFactory.generate();
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <SaleTunnelStepPayment product={product} next={mockNext} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(
+      <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <IntlProvider locale="en">
+          <SessionProvider>
+            <SaleTunnelStepPayment product={product} next={mockNext} />
+          </SessionProvider>
+        </IntlProvider>
+      </QueryClientProvider>,
+    );
 
-    screen.getByRole('heading', { level: 1, name: 'Payment Button' });
+    await waitFor(() => {
+      screen.getByRole('heading', { level: 1, name: 'Payment Button' });
+    });
   });
 });

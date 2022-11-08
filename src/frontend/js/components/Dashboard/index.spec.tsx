@@ -1,11 +1,10 @@
 import { fireEvent, getByText, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import { hydrate, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
-import { act } from '@testing-library/react-hooks';
+import { act } from 'react-dom/test-utils';
 import * as mockFactories from 'utils/test/factories';
-import { PersistedClientFactory, QueryStateFactory, UserFactory } from 'utils/test/factories';
-import createQueryClient from 'utils/react-query/createQueryClient';
+import { UserFactory } from 'utils/test/factories';
 import { location } from 'utils/indirection/window';
 import { User } from 'types/User';
 import { Nullable } from 'types/utils';
@@ -15,6 +14,7 @@ import JoanieSessionProvider from 'data/SessionProvider/JoanieSessionProvider';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import { expectUrlMatchLocationDisplayed } from 'utils/test/expectUrlMatchLocationDisplayed';
 import { DashboardTest } from 'components/Dashboard/DashboardTest';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -35,15 +35,9 @@ jest.mock('utils/indirection/window', () => ({
 
 describe('<Dashboard />', () => {
   const DashboardWithUser = ({ user }: { user: Nullable<User> }) => {
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: user })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     return (
       <IntlProvider locale="en">
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user })}>
           <JoanieSessionProvider>
             <DashboardTest initialRoute={DashboardPaths.COURSES} />
           </JoanieSessionProvider>
@@ -105,7 +99,7 @@ describe('<Dashboard />', () => {
     fetchMock.get('https://joanie.endpoint/api/addresses/', [address], { overwriteRoutes: true });
     render(<DashboardWithUser user={user} />);
     expectUrlMatchLocationDisplayed(DashboardPaths.COURSES);
-    expectBreadcrumbsToEqualParts(['Back', 'My courses']);
+    await expectBreadcrumbsToEqualParts(['Back', 'My courses']);
 
     // Go to "My Preferences" route.
     const link = screen.getByRole('link', { name: 'My preferences' });
@@ -113,7 +107,7 @@ describe('<Dashboard />', () => {
       fireEvent.click(link);
     });
     expectUrlMatchLocationDisplayed(DashboardPaths.PREFERENCES);
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
+    await expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
 
     // Go to the address edit route.
     const button = await screen.findByRole('button', { name: 'Edit' });
@@ -123,7 +117,7 @@ describe('<Dashboard />', () => {
     expectUrlMatchLocationDisplayed(
       DashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(':addressId', address.id),
     );
-    expectBreadcrumbsToEqualParts([
+    await expectBreadcrumbsToEqualParts([
       'Back',
       'My preferences',
       'Edit address "' + address.title + '"',
@@ -135,7 +129,7 @@ describe('<Dashboard />', () => {
       fireEvent.click(backButton);
     });
     expectUrlMatchLocationDisplayed(DashboardPaths.PREFERENCES);
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
+    await expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
 
     // Click again on back button to get redirect to website's root.
     expect(location.replace).not.toHaveBeenCalled();

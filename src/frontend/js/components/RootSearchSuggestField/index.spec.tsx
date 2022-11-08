@@ -127,7 +127,7 @@ describe('<RootSearchSuggestField />', () => {
     await waitFor(() => {
       expect(fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut')).toEqual(true);
     });
-    screen.getByText('Courses');
+    await screen.findByText('Courses');
     const course = screen.getByText('Course #42');
 
     expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut')).toEqual(true);
@@ -167,7 +167,7 @@ describe('<RootSearchSuggestField />', () => {
     await waitFor(() => {
       expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut')).toEqual(true);
     });
-    screen.getByText('Subjects');
+    await screen.findByText('Subjects');
     const subject = screen.getByText('Subject #311');
 
     expect(fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut')).toEqual(true);
@@ -240,7 +240,7 @@ describe('<RootSearchSuggestField />', () => {
     await waitFor(() => {
       expect(fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut')).toEqual(true);
     });
-    screen.getByText('Courses');
+    await screen.findByText('Courses');
     screen.getByText('Course #42');
 
     expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut')).toEqual(true);

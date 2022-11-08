@@ -1,20 +1,16 @@
-import faker from 'faker';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { act } from 'react-dom/test-utils';
-import {
-  ContextFactory as mockContextFactory,
-  PersistedClientFactory,
-  QueryStateFactory,
-} from 'utils/test/factories';
+import * as mockFactories from 'utils/test/factories';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import { Deferred } from 'utils/test/deferred';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import context from 'utils/context';
-import { REACT_QUERY_SETTINGS } from 'settings';
 import { SessionProvider } from 'data/SessionProvider';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { User } from 'types/User';
 import UserLogin from '.';
 
 jest.mock('utils/errors/handle', () => ({
@@ -35,30 +31,16 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('<UserLogin />', () => {
-  const initializeUser = () => {
-    const username = faker.internet.userName();
-    sessionStorage.setItem(
-      REACT_QUERY_SETTINGS.cacheStorage.key,
-      JSON.stringify(
-        PersistedClientFactory({
-          queries: [QueryStateFactory('user', { data: { username } })],
-        }),
-      ),
-    );
-    return username;
-  };
-
   afterEach(() => {
-    sessionStorage.clear();
     fetchMock.restore();
   });
 
   it('gets and renders the user name and a dropdown containing a logout link', async () => {
-    const username = initializeUser();
+    const user: User = mockFactories.UserFactory.generate();
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <UserLogin context={context} />
@@ -68,13 +50,13 @@ describe('<UserLogin />', () => {
       );
     });
 
-    const button = screen.getByLabelText(`Access to your profile settings ${username}`, {
+    const button = screen.getByLabelText(`Access to your profile settings ${user.username}`, {
       selector: 'button',
     });
 
     await userEvent.click(button);
 
-    screen.getByText(username);
+    screen.getByText(user.username);
     screen.getByText('Log out');
     expect(screen.queryByText('Loading login status...')).toBeNull();
   });
@@ -83,8 +65,8 @@ describe('<UserLogin />', () => {
     const loginDeferred = new Deferred();
     fetchMock.get('https://endpoint.test/api/user/v1/me', loginDeferred.promise);
 
-    const { getByText, queryByText } = render(
-      <QueryClientProvider client={createQueryClient({ persistor: true })}>
+    const { queryByText, findByText } = render(
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <SessionProvider>
             <UserLogin context={context} />
@@ -97,13 +79,13 @@ describe('<UserLogin />', () => {
       loginDeferred.resolve(401);
     });
 
-    getByText('Log in');
-    getByText('Sign up');
+    await findByText('Log in');
+    await findByText('Sign up');
     expect(queryByText('Loading login status...')).toBeNull();
   });
 
   it('should renders profile urls and bind user info if needed', async () => {
-    const username = initializeUser();
+    const user: User = mockFactories.UserFactory.generate();
     const profileUrls = {
       settings: { label: 'Settings', action: 'https://auth.local.test/settings' },
       account: { label: 'Account', action: 'https://auth.local.test/u/(username)' },
@@ -111,7 +93,7 @@ describe('<UserLogin />', () => {
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <UserLogin context={context} profileUrls={profileUrls} />
@@ -121,16 +103,16 @@ describe('<UserLogin />', () => {
       );
     });
 
-    const button = screen.getByLabelText(`Access to your profile settings ${username}`, {
+    const button = screen.getByLabelText(`Access to your profile settings ${user.username}`, {
       selector: 'button',
     });
 
     await userEvent.click(button);
 
-    screen.getByText(username);
+    screen.getByText(user.username);
     const settingsLink = screen.getByRole('link', { name: 'Settings' });
     const accountLink = screen.getByRole('link', { name: 'Account' });
     expect(settingsLink.getAttribute('href')).toEqual('https://auth.local.test/settings');
-    expect(accountLink.getAttribute('href')).toEqual(`https://auth.local.test/u/${username}`);
+    expect(accountLink.getAttribute('href')).toEqual(`https://auth.local.test/u/${user.username}`);
   });
 });

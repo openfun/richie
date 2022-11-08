@@ -4,10 +4,11 @@ import fetchMock from 'fetch-mock';
 import { range } from 'lodash-es';
 import { stringify } from 'query-string';
 import { IntlProvider } from 'react-intl';
-import { QueryClient, QueryClientProvider } from 'react-query';
-
+import { QueryClientProvider } from '@tanstack/react-query';
 import { History, HistoryContext } from 'data/useHistory';
 import { Deferred } from 'utils/test/deferred';
+import { resolveAll } from 'utils/resolveAll';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SearchFilterGroupModal } from '.';
 
 jest.mock('utils/errors/handle', () => ({ handle: jest.fn() }));
@@ -79,11 +80,10 @@ describe('<SearchFilterGroupModal />', () => {
         coursesDeferred.promise,
       );
 
-      const queryClient = new QueryClient();
       render(
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '21', offset: '0' })}>
-            <QueryClientProvider client={queryClient}>
+            <QueryClientProvider client={createTestQueryClient()}>
               <SearchFilterGroupModal filter={filter} />
             </QueryClientProvider>
           </HistoryContext.Provider>
@@ -130,9 +130,9 @@ describe('<SearchFilterGroupModal />', () => {
       screen.getByText('Add filters for Universities');
       screen.getByPlaceholderText('Search in Universities');
 
-      // Default search results are shown with their facet counts
-      range(0, 21).forEach((value) => {
-        screen.getByText(
+      // Default search results are shown with their facet counts;
+      await resolveAll(range(0, 21), async (value) => {
+        await screen.findByText(
           (content) =>
             content.startsWith(`Value #${value} `) && content.includes(String(value * 100)),
         );
@@ -176,8 +176,8 @@ describe('<SearchFilterGroupModal />', () => {
       );
 
       // Search results including top 21 and next 21 are shown with their facet counts
-      range(0, 42).forEach((value) => {
-        screen.getByText(
+      await resolveAll(range(0, 42), async (value) => {
+        await screen.findByText(
           (content) =>
             content.startsWith(`Value #${value} `) && content.includes(String(value * 100)),
         );
@@ -220,8 +220,8 @@ describe('<SearchFilterGroupModal />', () => {
       );
 
       // All three batches of search results are displayed along with facet counts
-      range(0, 46).forEach((value) => {
-        screen.getByText(
+      await resolveAll(range(0, 46), async (value) => {
+        await screen.findByText(
           (content) =>
             content.startsWith(`Value #${value} `) && content.includes(String(value * 100)),
         );
@@ -239,11 +239,10 @@ describe('<SearchFilterGroupModal />', () => {
         coursesDeferred.promise,
       );
 
-      const queryClient = new QueryClient();
       render(
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '21', offset: '0' })}>
-            <QueryClientProvider client={queryClient}>
+            <QueryClientProvider client={createTestQueryClient()}>
               <SearchFilterGroupModal filter={filter} />
             </QueryClientProvider>
           </HistoryContext.Provider>
@@ -294,7 +293,9 @@ describe('<SearchFilterGroupModal />', () => {
     fireEvent.focus(field);
 
     // Default search results are shown with their facet counts
-    screen.getByText((content) => content.startsWith('Value #42') && content.includes('(7)'));
+    await screen.findByText(
+      (content) => content.startsWith('Value #42') && content.includes('(7)'),
+    );
     screen.getByText((content) => content.startsWith('Value #84') && content.includes('(12)'));
 
     // User starts typing, less than 3 characters
@@ -349,7 +350,9 @@ describe('<SearchFilterGroupModal />', () => {
     }
 
     // New search results are shown with their facet counts
-    screen.getByText((content) => content.startsWith('Value #12') && content.includes('(7)'));
+    await screen.findByText(
+      (content) => content.startsWith('Value #12') && content.includes('(7)'),
+    );
     screen.getByText((content) => content.startsWith('Value #17') && content.includes('(12)'));
 
     {
@@ -413,11 +416,10 @@ describe('<SearchFilterGroupModal />', () => {
       coursesDeferred.promise,
     );
 
-    const queryClient = new QueryClient();
     render(
       <IntlProvider locale="en">
         <HistoryContext.Provider value={makeHistoryOf({ limit: '21', offset: '0' })}>
-          <QueryClientProvider client={queryClient}>
+          <QueryClientProvider client={createTestQueryClient()}>
             <SearchFilterGroupModal filter={filter} />
           </QueryClientProvider>
         </HistoryContext.Provider>
@@ -472,11 +474,10 @@ describe('<SearchFilterGroupModal />', () => {
       coursesDeferred.promise,
     );
 
-    const queryClient = new QueryClient();
     render(
       <IntlProvider locale="en">
         <HistoryContext.Provider value={makeHistoryOf({ limit: '21', offset: '0' })}>
-          <QueryClientProvider client={queryClient}>
+          <QueryClientProvider client={createTestQueryClient()}>
             <SearchFilterGroupModal filter={filter} />
           </QueryClientProvider>
         </HistoryContext.Provider>
@@ -520,7 +521,9 @@ describe('<SearchFilterGroupModal />', () => {
     screen.getByPlaceholderText('Search in Universities');
 
     // Default search results are shown with their facet counts
-    screen.getByText((content) => content.startsWith('Value #84') && content.includes('(12)'));
+    await screen.findByText(
+      (content) => content.startsWith('Value #84') && content.includes('(12)'),
+    );
     const value42 = screen.getByText(
       (content) => content.startsWith('Value #42') && content.includes('(7)'),
     );
@@ -553,11 +556,10 @@ describe('<SearchFilterGroupModal />', () => {
       throws: new Error('Failed to search for universities'),
     });
 
-    const queryClient = new QueryClient();
     render(
       <IntlProvider locale="en">
         <HistoryContext.Provider value={makeHistoryOf({ limit: '21', offset: '0' })}>
-          <QueryClientProvider client={queryClient}>
+          <QueryClientProvider client={createTestQueryClient()}>
             <SearchFilterGroupModal filter={filter} />
           </QueryClientProvider>
         </HistoryContext.Provider>
@@ -587,11 +589,10 @@ describe('<SearchFilterGroupModal />', () => {
       { throws: new Error('Failed to search for universities') },
     );
 
-    const queryClient = new QueryClient();
     render(
       <IntlProvider locale="en">
         <HistoryContext.Provider value={makeHistoryOf({ limit: '21', offset: '0' })}>
-          <QueryClientProvider client={queryClient}>
+          <QueryClientProvider client={createTestQueryClient()}>
             <SearchFilterGroupModal filter={filter} />
           </QueryClientProvider>
         </HistoryContext.Provider>

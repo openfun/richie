@@ -1,5 +1,4 @@
-import { act } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 
 import { IntlProvider } from 'react-intl';
@@ -68,22 +67,23 @@ describe('data/useStaticFilters', () => {
     expect(fetchMock.called('/api/v1.0/filter-definitions/')).toEqual(false);
 
     // useStaticFilters returns a promise for the static filter definitions
-    deferred.resolve(staticFilterDefinitions);
-    let filters;
     await act(async () => {
-      filters = await result.current();
+      deferred.resolve(staticFilterDefinitions);
     });
-    expect(filters).toEqual(staticFilterDefinitions);
+
+    await waitFor(async () => {
+      const filters = await result.current();
+      expect(filters).toEqual(staticFilterDefinitions);
+    });
+
     expect(fetchMock.calls('/api/v1.0/filter-definitions/').length).toEqual(1);
 
     fetchMock.restore();
     fetchMock.get('/api/v1.0/filter-definitions/', new Error('should not be called'));
-    // More calls return the filter but don't request on the API again
-    let filtersAgain;
-    await act(async () => {
-      filtersAgain = await result.current();
+    await waitFor(async () => {
+      const filtersAgain = await result.current();
+      expect(filtersAgain).toEqual(staticFilterDefinitions);
     });
-    expect(filtersAgain).toEqual(staticFilterDefinitions);
     expect(fetchMock.calls('/api/v1.0/filter-definitions/').length).toEqual(0);
   });
 
@@ -91,21 +91,19 @@ describe('data/useStaticFilters', () => {
     fetchMock.get('/api/v1.0/filter-definitions/', staticFilterDefinitions);
     const { result } = renderHook(() => useStaticFilters(true), { wrapper });
 
-    let filters;
-    await act(async () => {
-      filters = await result.current();
-    });
-
-    expect(filters).toEqual({
-      ...staticFilterDefinitions,
-      courses: {
-        base_path: null,
-        human_name: 'Courses',
-        is_autocompletable: true,
-        is_searchable: true,
-        name: 'courses',
-        position: 99,
-      },
+    await waitFor(async () => {
+      const filters = await result.current();
+      expect(filters).toEqual({
+        ...staticFilterDefinitions,
+        courses: {
+          base_path: null,
+          human_name: 'Courses',
+          is_autocompletable: true,
+          is_searchable: true,
+          name: 'courses',
+          position: 99,
+        },
+      });
     });
   });
 });

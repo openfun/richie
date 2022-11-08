@@ -2,18 +2,11 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { Fragment } from 'react';
 import { IntlProvider } from 'react-intl';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import {
-  ContextFactory as mockContextFactory,
-  FonzieUserFactory,
-  PersistedClientFactory,
-  ProductFactory,
-  QueryStateFactory,
-} from 'utils/test/factories';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ContextFactory as mockContextFactory, ProductFactory } from 'utils/test/factories';
 import { CourseCodeProvider } from 'data/CourseCodeProvider';
 import { SessionProvider } from 'data/SessionProvider';
-import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
-import createQueryClient from 'utils/react-query/createQueryClient';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import SaleTunnel from '.';
 
 const StepComponent =
@@ -51,33 +44,9 @@ describe('SaleTunnel', () => {
     document.body.appendChild(modalExclude);
   });
 
-  beforeEach(() => {
-    jest.useFakeTimers();
-  });
-
   afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
     fetchMock.restore();
-    sessionStorage.clear();
   });
-
-  const initializeUser = (loggedin = true) => {
-    const user = loggedin ? FonzieUserFactory.generate() : null;
-
-    sessionStorage.setItem(
-      REACT_QUERY_SETTINGS.cacheStorage.key,
-      JSON.stringify(
-        PersistedClientFactory({ queries: [QueryStateFactory('user', { data: user })] }),
-      ),
-    );
-
-    if (loggedin) {
-      sessionStorage.setItem(RICHIE_USER_TOKEN, user.access_token);
-    }
-
-    return user;
-  };
 
   const Wrapper = ({ client, children }: React.PropsWithChildren<{ client: QueryClient }>) => (
     <IntlProvider locale="en">
@@ -90,28 +59,23 @@ describe('SaleTunnel', () => {
   );
 
   it('shows a login button if user is not authenticated', async () => {
-    initializeUser(false);
     const product = ProductFactory.generate();
-    const queryClient = createQueryClient({ persistor: true });
 
     fetchMock.get('https://joanie.test/api/courses/00000/', []);
 
     await act(async () => {
       render(
-        <Wrapper client={queryClient}>
+        <Wrapper client={createTestQueryClient({ user: null })}>
           <SaleTunnel product={product} />
         </Wrapper>,
       );
     });
 
-    screen.getByRole('button', { name: `Login to purchase "${product.title}"` });
+    await screen.findByRole('button', { name: `Login to purchase "${product.title}"` });
   });
 
   it('shows cta to open sale tunnel when user is authenticated', async () => {
-    initializeUser();
     const product = ProductFactory.generate();
-    const queryClient = createQueryClient({ persistor: true });
-
     fetchMock
       .get('https://joanie.test/api/courses/00000/', [])
       .get('https://joanie.test/api/addresses/', [])
@@ -120,7 +84,7 @@ describe('SaleTunnel', () => {
 
     await act(async () => {
       render(
-        <Wrapper client={queryClient}>
+        <Wrapper client={createTestQueryClient({ user: true })}>
           <SaleTunnel product={product} />
         </Wrapper>,
       );
@@ -176,9 +140,7 @@ describe('SaleTunnel', () => {
   });
 
   it('renders a sale tunnel with a close button', async () => {
-    initializeUser();
     const product = ProductFactory.generate();
-    const queryClient = createQueryClient({ persistor: true });
 
     fetchMock
       .get('https://joanie.test/api/courses/00000/', [])
@@ -188,7 +150,7 @@ describe('SaleTunnel', () => {
 
     await act(async () => {
       render(
-        <Wrapper client={queryClient}>
+        <Wrapper client={createTestQueryClient({ user: true })}>
           <SaleTunnel product={product} />
         </Wrapper>,
       );

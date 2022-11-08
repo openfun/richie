@@ -1,6 +1,6 @@
-import { renderHook } from '@testing-library/react-hooks';
 import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
+import { renderHook } from '@testing-library/react';
 import useDashboardRoutes from '.';
 
 describe('useDashboardRouter', () => {

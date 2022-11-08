@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { Modal } from 'components/Modal';
 import { Spinner } from 'components/Spinner';

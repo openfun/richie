@@ -1,4 +1,5 @@
 import {
+  act,
   fireEvent,
   getByRole,
   queryByRole,
@@ -7,17 +8,18 @@ import {
   screen,
 } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import { hydrate, QueryClientProvider } from 'react-query';
-import { act } from '@testing-library/react-hooks';
+import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { findByText } from '@storybook/testing-library';
 import * as mockFactories from 'utils/test/factories';
 import { SessionProvider } from 'data/SessionProvider';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import { DashboardTest } from 'components/Dashboard/DashboardTest';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import * as Joanie from 'types/Joanie';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
+import { resolveAll } from 'utils/resolveAll';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { expectBannerError } from 'utils/test/expectBannerError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -34,17 +36,6 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('<DashAddressesManagement/>', () => {
-  const createQueryClientWithUser = (isAuthenticated: Boolean) => {
-    const user = isAuthenticated ? mockFactories.UserFactory.generate() : null;
-    const { clientState } = mockFactories.PersistedClientFactory({
-      queries: [mockFactories.QueryStateFactory('user', { data: user })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
-    return client;
-  };
-
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/orders/', []);
     fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
@@ -57,10 +48,9 @@ describe('<DashAddressesManagement/>', () => {
 
   it('renders an empty list with placeholder', async () => {
     fetchMock.get('https://joanie.endpoint/api/addresses/', []);
-    const client = createQueryClientWithUser(true);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
@@ -69,20 +59,20 @@ describe('<DashAddressesManagement/>', () => {
         </QueryClientProvider>,
       );
     });
+
+    await expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
+    // The empty placeholder is shown.
+    await screen.findByText("You haven't created any addresses yet.");
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
-    // The empty placeholder is shown.
-    screen.getByText("You haven't created any addresses yet.");
   });
 
   it('renders a list with addresses', async () => {
-    const client = createQueryClientWithUser(true);
     const addresses = mockFactories.AddressFactory.generate(5);
     fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
@@ -95,18 +85,17 @@ describe('<DashAddressesManagement/>', () => {
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
     // Each addresses is displayed.
-    addresses.forEach((address: Joanie.Address) => {
-      screen.getByText(address.title);
+    await resolveAll(addresses, async (address: Joanie.Address) => {
+      await screen.findByText(address.title);
     });
   });
 
   it('deletes an address', async () => {
-    const client = createQueryClientWithUser(true);
     const addresses = mockFactories.AddressFactory.generate(5);
     fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
@@ -120,7 +109,7 @@ describe('<DashAddressesManagement/>', () => {
 
     // Find the delete button of the first address.
     const address = addresses[0];
-    screen.getByText(address.title);
+    await screen.findByText(address.title);
     const addressBox = await screen.findByTestId('dashboard-address-box__' + address.id);
     const deleteButton = getByRole(addressBox, 'button', {
       name: 'Delete',
@@ -148,12 +137,11 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('promotes an address', async () => {
-    const client = createQueryClientWithUser(true);
     const addresses = mockFactories.AddressFactory.generate(5);
     fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
@@ -167,7 +155,7 @@ describe('<DashAddressesManagement/>', () => {
 
     // Find the promote button of the first address.
     const address = addresses[0];
-    screen.getByText(address.title);
+    await screen.findByText(address.title);
     let addressBox = screen.getByTestId('dashboard-address-box__' + address.id);
     const promoteButton = getByRole(addressBox, 'button', {
       name: 'Use by default',
@@ -200,13 +188,12 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('shows the main address above all others', async () => {
-    const client = createQueryClientWithUser(true);
     const addresses = mockFactories.AddressFactory.generate(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
@@ -216,7 +203,7 @@ describe('<DashAddressesManagement/>', () => {
       );
     });
 
-    const addressBoxes = screen.queryAllByTestId('dashboard-address-box__', { exact: false });
+    const addressBoxes = await screen.findAllByTestId('dashboard-address-box__', { exact: false });
     expect(addressBoxes.length).toEqual(5);
     await findByText(addressBoxes[0], 'Default address');
     addressBoxes
@@ -225,13 +212,12 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('cannot delete a main address', async () => {
-    const client = createQueryClientWithUser(true);
     const addresses = mockFactories.AddressFactory.generate(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
@@ -243,7 +229,7 @@ describe('<DashAddressesManagement/>', () => {
 
     // Assert that no delete button is shown on the main address.
     const address = addresses[0];
-    screen.getByText(address.title);
+    await screen.findByText(address.title);
     const addressBox = screen.getByTestId('dashboard-address-box__' + address.id);
     expect(
       queryByRole(addressBox, 'button', {
@@ -253,13 +239,12 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('cannot promote a main address', async () => {
-    const client = createQueryClientWithUser(true);
     const addresses = mockFactories.AddressFactory.generate(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
@@ -271,7 +256,7 @@ describe('<DashAddressesManagement/>', () => {
 
     // Assert that no promote button is shown on the main address.
     const address = addresses[0];
-    screen.getByText(address.title);
+    await screen.findByText(address.title);
     const addressBox = screen.getByTestId('dashboard-address-box__' + address.id);
     expect(
       queryByRole(addressBox, 'button', {
@@ -281,11 +266,10 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('redirects to the create address route', async () => {
-    const client = createQueryClientWithUser(true);
     fetchMock.get('https://joanie.endpoint/api/addresses/', []);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
@@ -304,12 +288,11 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('redirects to the edit address route', async () => {
-    const client = createQueryClientWithUser(true);
     const address = mockFactories.AddressFactory.generate();
     fetchMock.get('https://joanie.endpoint/api/addresses/', [address]);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
@@ -330,29 +313,25 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('shows an error banner in case of API error', async () => {
-    const client = createQueryClientWithUser(true);
     mockFactories.AddressFactory.generate();
     // Mock the API route to return a 500 error.
     fetchMock.get('https://joanie.endpoint/api/addresses/', {
       status: 500,
       body: 'Bad request',
     });
-    let container: HTMLElement | undefined;
+
     await act(async () => {
-      container = render(
-        <QueryClientProvider client={client}>
+      render(
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
-      ).container;
+      );
     });
 
-    // It shows an error banner.
-    const banner = container!.querySelector('.banner--error') as HTMLElement;
-    expect(banner).not.toBeNull();
-    await findByText(banner!, 'An error occurred while fetching addresses. Please retry later.');
+    await expectBannerError('An error occurred while fetching addresses. Please retry later.');
   });
 });

@@ -1,15 +1,15 @@
-import { hydrate, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
-import { act } from '@testing-library/react-hooks';
-import { findByText, fireEvent, render, screen } from '@testing-library/react';
+import { act, findByText, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import * as mockFactories from 'utils/test/factories';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import { SessionProvider } from 'data/SessionProvider';
 import { DashboardTest } from 'components/Dashboard/DashboardTest';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
+import JoanieSessionProvider from 'data/SessionProvider/JoanieSessionProvider';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -22,17 +22,6 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('<DashboardEditAddress/>', () => {
-  const createQueryClientWithUser = (isAuthenticated: Boolean) => {
-    const user = isAuthenticated ? mockFactories.UserFactory.generate() : null;
-    const { clientState } = mockFactories.PersistedClientFactory({
-      queries: [mockFactories.QueryStateFactory('user', { data: user })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
-    return client;
-  };
-
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/orders/', []);
     fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
@@ -52,10 +41,9 @@ describe('<DashboardEditAddress/>', () => {
     const updateUrl = 'https://joanie.endpoint/api/addresses/' + address.id + '/';
     fetchMock.put(updateUrl, 200);
 
-    const client = createQueryClientWithUser(true);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest
@@ -70,13 +58,13 @@ describe('<DashboardEditAddress/>', () => {
       );
     });
 
-    expectBreadcrumbsToEqualParts([
+    // It doesn't show any errors.
+    expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
+    await expectBreadcrumbsToEqualParts([
       'Back',
       'My preferences',
       'Edit address "' + address.title + '"',
     ]);
-    // It doesn't show any errors.
-    expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
 
     // The form fields are correctly set to the `address` ones.
     const button = await screen.findByRole('button', { name: 'Save updates' });
@@ -92,7 +80,7 @@ describe('<DashboardEditAddress/>', () => {
     const postcodeInput: HTMLInputElement = screen.getByRole('textbox', { name: 'Postcode' });
     const countryInput: HTMLSelectElement = screen.getByRole('combobox', { name: 'Country' });
 
-    expect(titleInput.value).toBe(address.title);
+    await waitFor(() => expect(titleInput.value).toBe(address.title));
     expect(firstnameInput.value).toBe(address.first_name);
     expect(lastnameInput.value).toBe(address.last_name);
     expect(addressInput.value).toBe(address.address);
@@ -138,40 +126,44 @@ describe('<DashboardEditAddress/>', () => {
     const updateUrl = 'https://joanie.endpoint/api/addresses/' + address.id + '/';
     fetchMock.put(updateUrl, { status: 500, body: 'Bad request' });
 
-    const client = createQueryClientWithUser(true);
     let container: HTMLElement | undefined;
     await act(async () => {
       container = render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
-            <SessionProvider>
+            <JoanieSessionProvider>
               <DashboardTest
                 initialRoute={DashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
                   ':addressId',
                   address.id,
                 )}
               />
-            </SessionProvider>
+            </JoanieSessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
       ).container;
     });
 
-    // It doesn't show any errors.
-    expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-    expectBreadcrumbsToEqualParts([
+    await expectBreadcrumbsToEqualParts([
       'Back',
       'My preferences',
       'Edit address "' + address.title + '"',
     ]);
+    // It doesn't show any errors.
+    expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
 
     // The edit route API is called when submitting.
     const button = await screen.findByRole('button', { name: 'Save updates' });
+
+    // Make sure the form is loaded.
+    const titleInput: HTMLInputElement = screen.getByRole('textbox', { name: 'Address title' });
+    await waitFor(() => expect(titleInput.value).toBe(address.title));
+
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(false);
     await act(async () => {
       fireEvent.click(button);
     });
-    expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
+    await waitFor(() => expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true));
 
     // An error banner is shown.
     const banner = container!.querySelector('.banner--error') as HTMLElement;

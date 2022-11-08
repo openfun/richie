@@ -1,7 +1,7 @@
 import faker from 'faker';
-import { act, renderHook } from '@testing-library/react-hooks';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { act, renderHook } from '@testing-library/react';
 import { Maybe } from 'types/utils';
 import validationSchema from './validationSchema';
 
