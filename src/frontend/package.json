@@ -57,9 +57,12 @@
     "@storybook/manager-webpack5": "6.5.13",
     "@storybook/react": "6.5.13",
     "@storybook/testing-library": "0.0.13",
+    "@tanstack/query-core": "4.3.4",
+    "@tanstack/query-sync-storage-persister": "4.3.4",
+    "@tanstack/react-query": "4.3.4",
+    "@tanstack/react-query-persist-client": "4.3.4",
     "@testing-library/jest-dom": "5.16.5",
-    "@testing-library/react": "12.1.4",
-    "@testing-library/react-hooks": "8.0.1",
+    "@testing-library/react": "13.4.0",
     "@testing-library/user-event": "14.4.3",
     "@types/faker": "5.5.9",
     "@types/fetch-mock": "7.3.5",
@@ -68,9 +71,9 @@
     "@types/js-cookie": "3.0.2",
     "@types/lodash-es": "4.17.6",
     "@types/query-string": "6.3.0",
-    "@types/react": "17.0.44",
+    "@types/react": "18.0.25",
     "@types/react-autosuggest": "10.1.5",
-    "@types/react-dom": "17.0.15",
+    "@types/react-dom": "18.0.7",
     "@types/react-modal": "3.13.1",
     "@types/uuid": "8.3.4",
     "@typescript-eslint/eslint-plugin": "5.42.0",
@@ -109,9 +112,9 @@
     "nodemon": "2.0.20",
     "prettier": "2.7.1",
     "query-string": "7.1.1",
-    "react": ">=17.0.2 <18",
+    "react": "18.2.0",
     "react-autosuggest": "10.1.0",
-    "react-dom": ">=17.0.2 <18",
+    "react-dom": "18.2.0",
     "react-hook-form": "7.39.1",
     "react-intl": "6.2.1",
     "react-modal": "3.16.1",
@@ -128,8 +131,5 @@
     "xhr-mock": "2.5.1",
     "yargs": "17.6.2",
     "yup": "0.32.11"
-  },
-  "resolutions": {
-    "@types/react": "17.0.44"
   }
 }

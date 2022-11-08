@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix courses badges css.
 
+### Changed
+
+- Migrate to React 18 and React-Query v4
+
 ## [2.17.0]
 
 ### Added
