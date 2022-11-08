@@ -1,7 +1,8 @@
+import * as React from 'react';
 import { ReactNode, useMemo } from 'react';
 import ReactModal from 'react-modal';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { StringHelper } from '../../utils/StringHelper';
+import { StringHelper } from 'utils/StringHelper';
 
 const messages = defineMessages({
   closeDialog: {

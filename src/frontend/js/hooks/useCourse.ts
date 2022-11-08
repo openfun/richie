@@ -2,7 +2,7 @@
  * Joanie hook to retrieve information about a course
  *
  */
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useJoanieApi } from 'data/JoanieApiProvider';
 import useLocalizedQueryKey from 'utils/react-query/useLocalizedQueryKey';
 import { REACT_QUERY_SETTINGS } from 'settings';
@@ -17,7 +17,7 @@ import { useSession } from 'data/SessionProvider';
  */
 export const useCourse = (code: string) => {
   const API = useJoanieApi();
-  const { user } = useSession();
+  const { user, isLoadingUser } = useSession();
   const QUERY_KEY = useLocalizedQueryKey(user ? ['user', 'course', code] : ['course', code]);
   const queryClient = useQueryClient();
 
@@ -26,6 +26,7 @@ export const useCourse = (code: string) => {
     refetch,
     isLoading,
   } = useQuery(QUERY_KEY, () => API.courses.get(code), {
+    enabled: !isLoadingUser,
     staleTime: user
       ? REACT_QUERY_SETTINGS.staleTimes.sessionItems
       : REACT_QUERY_SETTINGS.staleTimes.default,

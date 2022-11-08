@@ -1,5 +1,5 @@
 import { PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AuthenticationApi } from 'utils/api/authentication';
 import { Nullable } from 'types/utils';
 import { User } from 'types/User';
@@ -25,10 +25,14 @@ const BaseSessionProvider = ({ children }: PropsWithChildren<any>) => {
    * - `null` when the user is anonymous or the request failed;
    * - a user object when the user is logged in.
    */
-  const { data: user } = useQuery<Nullable<User>>('user', AuthenticationApi!.me, {
-    refetchOnWindowFocus: true,
-    staleTime: REACT_QUERY_SETTINGS.staleTimes.session,
-  });
+  const { data: user, isLoading: isLoadingUser } = useQuery<Nullable<User>>(
+    ['user'],
+    AuthenticationApi!.me,
+    {
+      refetchOnWindowFocus: true,
+      staleTime: REACT_QUERY_SETTINGS.staleTimes.session,
+    },
+  );
   const previousUserState = usePrevious(user);
 
   const queryClient = useQueryClient();
@@ -52,9 +56,9 @@ const BaseSessionProvider = ({ children }: PropsWithChildren<any>) => {
     */
     queryClient.removeQueries({
       predicate: (query: any) =>
-        query.options.queryKey.includes('user') && query.options.queryKey !== 'user',
+        query.options.queryKey.includes('user') && query.options.queryKey.length > 1,
     });
-    queryClient.setQueryData('user', null);
+    queryClient.setQueryData(['user'], null);
   }, [queryClient]);
 
   const destroy = useCallback(async () => {
@@ -65,12 +69,13 @@ const BaseSessionProvider = ({ children }: PropsWithChildren<any>) => {
   const context = useMemo(
     () => ({
       user,
+      isLoadingUser,
       destroy,
       invalidate,
       login,
       register,
     }),
-    [user, destroy, login, register],
+    [user, isLoadingUser, destroy, login, register],
   );
 
   useEffect(() => {
@@ -78,7 +83,7 @@ const BaseSessionProvider = ({ children }: PropsWithChildren<any>) => {
     if (previousUserState !== user) {
       queryClient.removeQueries({
         predicate: (query: any) =>
-          query.options.queryKey.includes('user') && query.options.queryKey !== 'user',
+          query.options.queryKey.includes('user') && query.options.queryKey.length > 1,
       });
     }
   }, [user]);

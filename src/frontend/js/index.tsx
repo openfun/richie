@@ -10,9 +10,9 @@
 import 'core-js/modules/es.array.iterator';
 import 'core-js/modules/es.promise';
 import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import countries from 'i18n-iso-countries';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import { Root } from 'components/Root';
 import { handle } from 'utils/errors/handle';
@@ -96,21 +96,21 @@ async function render() {
 
     // Create a react root element we'll render into. Note that this is just used to anchor our React tree in an
     // arbitraty place since all our actual UI components will be rendered into their own containers through portals.
-    const reactRoot = document.createElement('div');
-    reactRoot.setAttribute('class', 'richie-react richie-react--root');
-    document.body.append(reactRoot);
+    const rootContainer = document.createElement('div');
+    rootContainer.setAttribute('class', 'richie-react richie-react--root');
+    document.body.append(rootContainer);
 
     // React-query
-    const queryClient = createQueryClient({ logger: true, persistor: true });
+    const queryClient = createQueryClient({ logger: true, persister: true });
 
     // Render the tree inside a shared `IntlProvider` so all components are able to access translated strings.
-    ReactDOM.render(
+    const reactRoot = createRoot(rootContainer);
+    reactRoot.render(
       <QueryClientProvider client={queryClient}>
         <IntlProvider locale={locale} messages={translatedMessages} defaultLocale="en-US">
           <Root richieReactSpots={richieReactSpots} />
         </IntlProvider>
       </QueryClientProvider>,
-      reactRoot,
     );
   }
 }

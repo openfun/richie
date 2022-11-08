@@ -1,4 +1,4 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import EnrollmentApiInterface from 'utils/api/enrollment';
 import { useSession } from 'data/SessionProvider';
 import { useSessionQuery } from 'utils/react-query/useSessionQuery';

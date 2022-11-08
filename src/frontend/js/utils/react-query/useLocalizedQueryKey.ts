@@ -1,4 +1,4 @@
-import type { QueryKey } from 'react-query';
+import type { QueryKey } from '@tanstack/react-query';
 import { useIntl } from 'react-intl';
 
 /**

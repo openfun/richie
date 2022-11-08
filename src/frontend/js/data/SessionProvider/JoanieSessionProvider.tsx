@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import JoanieApiProvider from 'data/JoanieApiProvider';
 import { useAddresses } from 'hooks/useAddresses';
 import { useOrders } from 'hooks/useOrders';
@@ -34,7 +34,11 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
    * - a user object when the user is logged in.
    */
   const [refetchInterval, setRefetchInterval] = useState<false | number>(false);
-  const { data: user, isStale } = useQuery<Nullable<User>>('user', AuthenticationApi!.me, {
+  const {
+    data: user,
+    isStale,
+    isLoading: isLoadingUser,
+  } = useQuery<Nullable<User>>(['user'], AuthenticationApi!.me, {
     refetchOnWindowFocus: true,
     refetchInterval,
     staleTime: REACT_QUERY_SETTINGS.staleTimes.session,
@@ -77,9 +81,9 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
     sessionStorage.removeItem(RICHIE_USER_TOKEN);
     queryClient.removeQueries({
       predicate: (query: any) =>
-        query.options.queryKey.includes('user') && query.options.queryKey !== 'user',
+        query.options.queryKey.includes('user') && query.options.queryKey.length > 1,
     });
-    queryClient.setQueryData('user', null);
+    queryClient.setQueryData(['user'], null);
   }, [queryClient]);
 
   const destroy = useCallback(async () => {
@@ -108,11 +112,12 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
   const context = useMemo(
     () => ({
       user,
+      isLoadingUser,
       destroy,
       login,
       register,
     }),
-    [user, destroy, login, register],
+    [user, isLoadingUser, destroy, login, register],
   );
 
   useEffect(() => {
@@ -120,7 +125,7 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
     if (previousUserState !== user) {
       queryClient.removeQueries({
         predicate: (query: any) =>
-          query.options.queryKey.includes('user') && query.options.queryKey !== 'user',
+          query.options.queryKey.includes('user') && query.options.queryKey.length > 1,
       });
     }
   }, [user]);

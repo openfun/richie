@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { PropsWithTestId } from 'types/utils';
 
 type Props = PropsWithTestId<{
@@ -6,7 +6,7 @@ type Props = PropsWithTestId<{
   footer?: ReactNode;
 }>;
 
-export const DashboardBox: FC<Props> = ({ header, footer, ...props }) => {
+export const DashboardBox = ({ header, footer, ...props }: PropsWithChildren<Props>) => {
   return (
     <div className="dashboard-box" {...props}>
       {!!header && <header className="dashboard-box__header">{header}</header>}

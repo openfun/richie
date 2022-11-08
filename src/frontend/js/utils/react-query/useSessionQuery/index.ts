@@ -1,7 +1,11 @@
 import { useMemo } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
-import type { QueryFunction, QueryKey } from 'react-query/types/core/types';
-import type { UseQueryOptions, UseQueryResult } from 'react-query/types/react/types';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import type {
+  QueryFunction,
+  QueryKey,
+  UseQueryOptions,
+  UseQueryResult,
+} from '@tanstack/react-query';
 import { useSession } from 'data/SessionProvider';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import type { HttpError } from 'utils/errors/HttpError';
@@ -38,7 +42,7 @@ export function useSessionQuery<
 
   const handleError = async (error: HttpError) => {
     if (error.code === 401) {
-      queryClient.invalidateQueries('user', { exact: true });
+      queryClient.invalidateQueries(['user'], { exact: true });
     }
 
     if (options?.onError) {

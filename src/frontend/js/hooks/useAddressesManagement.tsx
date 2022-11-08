@@ -1,5 +1,5 @@
 import { defineMessages, useIntl } from 'react-intl';
-import { MutateOptions } from 'react-query';
+import { MutateOptions } from '@tanstack/react-query';
 import { useAddresses } from 'hooks/useAddresses';
 import * as Joanie from 'types/Joanie';
 import { HttpError } from 'utils/errors/HttpError';

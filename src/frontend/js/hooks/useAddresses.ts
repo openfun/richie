@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { MutateOptions, useQueryClient } from 'react-query';
+import { MutateOptions, useQueryClient } from '@tanstack/react-query';
 import { useJoanieApi } from 'data/JoanieApiProvider';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import { Address, AddressCreationPayload } from 'types/Joanie';
@@ -50,7 +50,7 @@ export const useAddresses = (id?: string) => {
   const [data, setData] = useState<Address[]>([]);
   const intl = useIntl();
 
-  const [readHandler, queryKey] = useSessionQuery('addresses', () => API.user.addresses.get(), {
+  const [readHandler, queryKey] = useSessionQuery(['addresses'], () => API.user.addresses.get(), {
     onError: () => setError(intl.formatMessage(messages.errorSelect)),
   });
 
