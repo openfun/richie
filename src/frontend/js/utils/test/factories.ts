@@ -1,9 +1,7 @@
 import { compose, createSpec, derived, faker, oneOf } from '@helpscout/helix';
-import { MutationKey, QueryKey } from 'react-query';
-import { MutationState } from 'react-query/types/core/mutation';
-import { QueryState } from 'react-query/types/core/query';
-import { DehydratedState } from 'react-query/types/hydration';
-import { PersistedClient } from 'react-query/types/persistQueryClient-experimental';
+import type { DehydratedState, MutationKey, QueryKey, QueryState } from '@tanstack/react-query';
+import type { MutationState } from '@tanstack/query-core/build/lib/mutation';
+import { PersistedClient } from '@tanstack/react-query-persist-client';
 import { APIBackend } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
 import { EnrollmentState, OrderState, PaymentProviders, ProductType } from 'types/Joanie';

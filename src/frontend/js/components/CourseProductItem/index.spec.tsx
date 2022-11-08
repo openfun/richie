@@ -2,7 +2,7 @@ import { getByText, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import {
   CertificateProductFactory,
   ContextFactory as mockContextFactory,
@@ -13,7 +13,7 @@ import {
 import { CourseCodeProvider } from 'data/CourseCodeProvider';
 import JoanieApiProvider from 'data/JoanieApiProvider';
 import { CourseRun, Enrollment, OrderLite, Product } from 'types/Joanie';
-import createQueryClient from 'utils/react-query/createQueryClient';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import CourseProductItem from '.';
 
 jest.mock('utils/context', () => ({
@@ -74,7 +74,7 @@ describe('CourseProductItem', () => {
     <IntlProvider locale="en">
       <CourseCodeProvider code={code}>
         <JoanieApiProvider>
-          <QueryClientProvider client={createQueryClient()}>{children}</QueryClientProvider>
+          <QueryClientProvider client={createTestQueryClient()}>{children}</QueryClientProvider>
         </JoanieApiProvider>
       </CourseCodeProvider>
     </IntlProvider>

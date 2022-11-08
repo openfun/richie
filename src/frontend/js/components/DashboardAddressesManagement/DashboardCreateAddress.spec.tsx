@@ -1,16 +1,16 @@
-import { hydrate, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
-import { act } from '@testing-library/react-hooks';
-import { findByText, fireEvent, render, screen } from '@testing-library/react';
+import { act, findByText, fireEvent, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import * as mockFactories from 'utils/test/factories';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import { SessionProvider } from 'data/SessionProvider';
 import { DashboardTest } from 'components/Dashboard/DashboardTest';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import { Address } from 'types/Joanie';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { expectBannerError } from 'utils/test/expectBannerError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -31,7 +31,7 @@ jest.mock('utils/indirection/window', () => ({
  * @param address
  */
 const fillForm = async (address: Address) => {
-  const titleInput = screen.getByRole('textbox', { name: 'Address title' });
+  const titleInput = await screen.findByRole('textbox', { name: 'Address title' });
   const firstnameInput = screen.getByRole('textbox', { name: "Recipient's first name" });
   const lastnameInput = screen.getByRole('textbox', { name: "Recipient's last name" });
   const addressInput = screen.getByRole('textbox', { name: 'Address' });
@@ -51,17 +51,6 @@ const fillForm = async (address: Address) => {
 };
 
 describe('<DashboardCreateAddress/>', () => {
-  const createQueryClientWithUser = (isAuthenticated: Boolean) => {
-    const user = isAuthenticated ? mockFactories.UserFactory.generate() : null;
-    const { clientState } = mockFactories.PersistedClientFactory({
-      queries: [mockFactories.QueryStateFactory('user', { data: user })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
-    return client;
-  };
-
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/orders/', []);
     fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
@@ -74,10 +63,9 @@ describe('<DashboardCreateAddress/>', () => {
 
   it('renders error for each field', async () => {
     fetchMock.get('https://joanie.endpoint/api/addresses/', []);
-    const client = createQueryClientWithUser(true);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES_ADDRESS_CREATION} />
@@ -89,7 +77,7 @@ describe('<DashboardCreateAddress/>', () => {
 
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
+    await expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Submit the empty form to trigger validation errors.
     const button = await screen.findByRole('button', { name: 'Create' });
@@ -125,10 +113,9 @@ describe('<DashboardCreateAddress/>', () => {
   it('creates an address and redirect to preferences', async () => {
     fetchMock.get('https://joanie.endpoint/api/addresses/', []);
     fetchMock.post('https://joanie.endpoint/api/addresses/', []);
-    const client = createQueryClientWithUser(true);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES_ADDRESS_CREATION} />
@@ -137,7 +124,7 @@ describe('<DashboardCreateAddress/>', () => {
         </QueryClientProvider>,
       );
     });
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
+    await expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Fill the form with random data.
     const button = await screen.findByRole('button', { name: 'Create' });
@@ -178,22 +165,20 @@ describe('<DashboardCreateAddress/>', () => {
       status: 500,
       body: 'Bad request',
     });
-    const client = createQueryClientWithUser(true);
 
-    let container: HTMLElement | undefined;
     await act(async () => {
-      container = render(
-        <QueryClientProvider client={client}>
+      render(
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.PREFERENCES_ADDRESS_CREATION} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
-      ).container;
+      );
     });
 
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
+    await expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Fill the form with random data.
     const button = await screen.findByRole('button', { name: 'Create' });
@@ -211,9 +196,6 @@ describe('<DashboardCreateAddress/>', () => {
       true,
     );
 
-    // It shows an error banner.
-    const banner = container!.querySelector('.banner--error') as HTMLElement;
-    expect(banner).not.toBeNull();
-    await findByText(banner!, 'An error occurred while creating the address. Please retry later.');
+    await expectBannerError('An error occurred while creating the address. Please retry later.');
   });
 });

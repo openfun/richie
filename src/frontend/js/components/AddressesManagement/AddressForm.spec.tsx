@@ -1,5 +1,4 @@
-import { fireEvent, getByText, render, screen } from '@testing-library/react';
-import { act } from '@testing-library/react-hooks';
+import { act, fireEvent, getByText, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { Address } from 'types/Joanie';
 import * as mockFactories from 'utils/test/factories';

@@ -1,15 +1,14 @@
-import { act, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { renderHook } from '@testing-library/react-hooks';
+import { act, renderHook, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import faker from 'faker';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
-import { REACT_QUERY_SETTINGS } from 'settings';
 import * as mockFactories from 'utils/test/factories';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import BaseSessionProvider from 'data/SessionProvider/BaseSessionProvider';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { User } from 'types/User';
 import useCourseEnrollment from '.';
 
 jest.mock('utils/context', () => ({
@@ -33,49 +32,30 @@ jest.mock('utils/context', () => ({
 
 describe('useCourseEnrollment', () => {
   const endpoint = 'https://endpoint.test';
-  const wrapper = ({ client, children }: PropsWithChildren<{ client: QueryClient }>) => (
-    <QueryClientProvider client={client}>
-      <BaseSessionProvider>{children}</BaseSessionProvider>
-    </QueryClientProvider>
-  );
-
-  const initializeUser = (loggedin = true) => {
-    const username = faker.internet.userName();
-    sessionStorage.setItem(
-      REACT_QUERY_SETTINGS.cacheStorage.key,
-      JSON.stringify(
-        mockFactories.PersistedClientFactory({
-          queries: [
-            mockFactories.QueryStateFactory('user', { data: loggedin ? { username } : null }),
-          ],
-        }),
-      ),
-    );
-    return loggedin ? username : null;
-  };
+  const wrapper =
+    (client: QueryClient) =>
+    ({ children }: PropsWithChildren) =>
+      (
+        <QueryClientProvider client={client}>
+          <BaseSessionProvider>{children}</BaseSessionProvider>
+        </QueryClientProvider>
+      );
 
   beforeEach(() => {
-    sessionStorage.clear();
     fetchMock.restore();
   });
 
   it('does not make request when user is not authenticated', async () => {
-    const username = initializeUser(false);
+    const user: User = mockFactories.UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
 
     fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
+      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
       401,
     );
 
-    let client: QueryClient;
-    await waitFor(() => {
-      client = createQueryClient({ persistor: true });
-    });
-
     const { result } = renderHook(() => useCourseEnrollment(courseRun.resource_link), {
-      wrapper,
-      initialProps: { client: client! },
+      wrapper: wrapper(createTestQueryClient({ user: null })),
     });
 
     expect(fetchMock.called()).toBeFalsy();
@@ -84,23 +64,18 @@ describe('useCourseEnrollment', () => {
   });
 
   it('retrieves enrollment when user is authenticated', async () => {
-    const username = initializeUser();
+    const user: User = mockFactories.UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
-    let client: QueryClient;
-    await waitFor(() => {
-      client = createQueryClient({ persistor: true });
-    });
 
     const enrollmentResponse = { title: courseRun.id, is_active: faker.datatype.boolean() };
     const enrollementDefered = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
+      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
       enrollementDefered.promise,
     );
 
     const { result } = renderHook(() => useCourseEnrollment(courseRun.resource_link), {
-      wrapper,
-      initialProps: { client: client! },
+      wrapper: wrapper(createTestQueryClient({ user })),
     });
 
     await act(async () => {
@@ -108,7 +83,7 @@ describe('useCourseEnrollment', () => {
     });
 
     expect(fetchMock.called()).toBeTruthy();
-    expect(result.current.enrollment).toStrictEqual(enrollmentResponse);
+    await waitFor(() => expect(result.current.enrollment).toStrictEqual(enrollmentResponse));
     expect(result.current.enrollmentIsActive).toStrictEqual(enrollmentResponse.is_active);
   });
 });

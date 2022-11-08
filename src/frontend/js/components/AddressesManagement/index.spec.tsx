@@ -1,16 +1,14 @@
 /**
  * Test suite for AddressesManagement component
  */
-import { fireEvent, render, screen } from '@testing-library/react';
-import { act } from '@testing-library/react-hooks';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import * as mockFactories from 'utils/test/factories';
 import { SessionProvider } from 'data/SessionProvider';
-import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
 import type * as Joanie from 'types/Joanie';
-import createQueryClient from 'utils/react-query/createQueryClient';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import AddressesManagement from '.';
 
 jest.mock('utils/context', () => ({
@@ -28,20 +26,6 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('AddressesManagement', () => {
-  const initializeUser = () => {
-    const user = mockFactories.FonzieUserFactory.generate();
-
-    sessionStorage.setItem(
-      REACT_QUERY_SETTINGS.cacheStorage.key,
-      JSON.stringify(
-        mockFactories.PersistedClientFactory({
-          queries: [mockFactories.QueryStateFactory('user', { data: user })],
-        }),
-      ),
-    );
-    sessionStorage.setItem(RICHIE_USER_TOKEN, user.access_token);
-  };
-
   const handleClose = jest.fn();
   const selectAddress = jest.fn();
 
@@ -53,16 +37,14 @@ describe('AddressesManagement', () => {
   afterEach(() => {
     jest.clearAllMocks();
     fetchMock.restore();
-    sessionStorage.clear();
   });
 
   it('renders a go back button', async () => {
-    initializeUser();
     fetchMock.get('https://joanie.endpoint/api/addresses/', []);
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
@@ -82,7 +64,6 @@ describe('AddressesManagement', () => {
   });
 
   it("renders the user's addresses", async () => {
-    initializeUser();
     const addresses = mockFactories.AddressFactory.generate(Math.ceil(Math.random() * 5));
     fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
 
@@ -90,7 +71,7 @@ describe('AddressesManagement', () => {
 
     await act(async () => {
       ({ container } = render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
@@ -100,9 +81,11 @@ describe('AddressesManagement', () => {
       ));
     });
 
-    // All user's addresses should be displayed
-    const $addresses = container!.querySelectorAll('.registered-addresses-item');
-    expect($addresses).toHaveLength(addresses.length);
+    await waitFor(() => {
+      // All user's addresses should be displayed
+      const $addresses = container!.querySelectorAll('.registered-addresses-item');
+      return expect($addresses).toHaveLength(addresses.length);
+    });
 
     addresses.forEach((address: Joanie.Address) => {
       const $address = screen.getByTestId(`address-${address.id}-title`);
@@ -122,12 +105,11 @@ describe('AddressesManagement', () => {
   });
 
   it('renders a form to create an address', async () => {
-    initializeUser();
     fetchMock.get('https://joanie.endpoint/api/addresses/', []);
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
@@ -208,13 +190,12 @@ describe('AddressesManagement', () => {
   });
 
   it('renders a form to edit an address when user selects an address to edit', async () => {
-    initializeUser();
     const address = mockFactories.AddressFactory.generate();
     fetchMock.get('https://joanie.endpoint/api/addresses/', [address]);
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
@@ -231,7 +212,7 @@ describe('AddressesManagement', () => {
     screen.getByRole('button', { name: 'Use this address' });
 
     // - Then user selects an address to edit
-    let $editButton = screen.getByRole('button', {
+    let $editButton = await screen.findByRole('button', {
       name: `Edit "${address.title}" address`,
       exact: true,
     });
@@ -349,14 +330,13 @@ describe('AddressesManagement', () => {
   });
 
   it('allows user to delete an existing address', async () => {
-    initializeUser();
     const address = mockFactories.AddressFactory.generate();
     fetchMock.get('https://joanie.endpoint/api/addresses/', [address]);
 
     let container: HTMLElement;
     await act(async () => {
       ({ container } = render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
@@ -371,7 +351,7 @@ describe('AddressesManagement', () => {
       .delete(`https://joanie.endpoint/api/addresses/${address.id}/`, {})
       .get('https://joanie.endpoint/api/addresses/', [], { overwriteRoutes: true });
 
-    const $deleteButton = screen.getByRole('button', {
+    const $deleteButton = await screen.findByRole('button', {
       name: `Delete "${address.title}" address`,
       exact: true,
     });
@@ -389,14 +369,13 @@ describe('AddressesManagement', () => {
   });
 
   it('allows user to promote an address as main', async () => {
-    initializeUser();
     const [address1, address2] = mockFactories.AddressFactory.generate(2);
     address1.is_main = true;
     fetchMock.get('https://joanie.endpoint/api/addresses/', [address1, address2]);
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
@@ -429,7 +408,7 @@ describe('AddressesManagement', () => {
         },
       );
 
-    const $promoteButton = screen.getByRole('button', {
+    const $promoteButton = await screen.findByRole('button', {
       name: `Define "${address2.title}" address as main`,
       exact: true,
     });

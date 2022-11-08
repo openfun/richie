@@ -2,7 +2,7 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import {
   ContextFactory as mockContextFactory,
   CourseFactory,
@@ -12,7 +12,7 @@ import { Deferred } from 'utils/test/deferred';
 import type { Props as CourseProductItemProps } from 'components/CourseProductItem';
 import JoanieApiProvider from 'data/JoanieApiProvider';
 import type { Course, CourseProduct, OrderLite } from 'types/Joanie';
-import createQueryClient from 'utils/react-query/createQueryClient';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import CourseProductsList from '.';
 
 jest.mock('utils/context', () => ({
@@ -36,7 +36,7 @@ jest.mock('components/CourseProductItem', () => ({
 describe('CourseProductsList', () => {
   const Wrapper = ({ children }: PropsWithChildren<{}>) => (
     <IntlProvider locale="en">
-      <QueryClientProvider client={createQueryClient()}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <JoanieApiProvider>{children}</JoanieApiProvider>
       </QueryClientProvider>
     </IntlProvider>
@@ -89,7 +89,7 @@ describe('CourseProductsList', () => {
     });
 
     // - As course does not have products, it should render nothing.
-    expect(container.children).toHaveLength(0);
+    await waitFor(() => expect(container.children).toHaveLength(0));
   });
 
   it('renders one <CourseProductItem /> per course product', async () => {
@@ -123,7 +123,9 @@ describe('CourseProductsList', () => {
     });
 
     // - It should render one <CourseProductItem /> per product
-    expect(screen.queryAllByTestId('product-widget')).toHaveLength(course.products.length);
+    await waitFor(() =>
+      expect(screen.queryAllByTestId('product-widget')).toHaveLength(course.products.length),
+    );
     // - It should also pass order information if user owns a product
     expect(screen.queryAllByTestId('product-widget__price')).toHaveLength(1);
   });

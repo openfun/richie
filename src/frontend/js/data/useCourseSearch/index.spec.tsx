@@ -1,13 +1,12 @@
-import { act } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
-import { QueryClientProvider } from 'react-query';
 import { IntlProvider } from 'react-intl';
-import createQueryClient from 'utils/react-query/createQueryClient';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 import { fetchList } from 'data/getResourceList';
 import { APIListRequestParams } from 'types/api';
 import { Deferred } from 'utils/test/deferred';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { useCourseSearch } from '.';
 
 jest.mock('utils/context', () => jest.fn());
@@ -17,15 +16,14 @@ jest.mock('data/getResourceList', () => ({
 const mockFetchList = fetchList as jest.MockedFunction<typeof fetchList>;
 
 describe('data/useCourseSearch', () => {
-  const queryClient = createQueryClient();
-  const wrapper = ({ children, locale }: PropsWithChildren<any>) => (
+  let locale: string;
+  const wrapper = ({ children }: PropsWithChildren<any>) => (
     <IntlProvider locale={locale || 'en'}>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={createTestQueryClient()}>{children}</QueryClientProvider>
     </IntlProvider>
   );
 
   afterEach(() => {
-    queryClient.clear();
     jest.resetAllMocks();
   });
 
@@ -47,7 +45,7 @@ describe('data/useCourseSearch', () => {
     await act(async () => {
       deferred.resolve('the response');
     });
-    expect(result.current.data).toEqual('the response');
+    await waitFor(() => expect(result.current.data).toEqual('the response'));
 
     // We then reset our fetchList mock and change the search params
     mockFetchList.mockReset();
@@ -69,7 +67,7 @@ describe('data/useCourseSearch', () => {
     await act(async () => {
       deferred.resolve('another response');
     });
-    expect(result.current.data).toEqual('another response');
+    await waitFor(() => expect(result.current.data).toEqual('another response'));
   });
 
   it('does not trigger a new request if the params are unchanged', async () => {
@@ -87,7 +85,7 @@ describe('data/useCourseSearch', () => {
     });
 
     await act(async () => deferred.resolve('the response'));
-    expect(result.current.data).toEqual('the response');
+    await waitFor(() => expect(result.current.data).toEqual('the response'));
 
     // We reset our fetchList mock but keep the same params
     mockFetchList.mockReset();
@@ -111,13 +109,20 @@ describe('data/useCourseSearch', () => {
     });
 
     await act(async () => deferred.resolve('the response'));
-    expect(result.current.data).toEqual('the response');
+    await waitFor(() => expect(result.current.data).toEqual('the response'));
 
     // We reset our fetchList mock but keep the same params
     mockFetchList.mockReset();
-    // Rerender component with a new language
-    rerender({ locale: 'fr' });
+
+    await act(async () => {
+      // Rerender component with a new language
+      // renderHook API has changed during its add into react-testing-library and forces us to do
+      // some nasty patterns: https://github.com/testing-library/react-testing-library/pull/991#issuecomment-1207138334
+      locale = 'fr';
+      rerender();
+    });
+
     // As language has changed, search results should have been refetched
-    expect(mockFetchList).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(mockFetchList).toHaveBeenCalledTimes(1));
   });
 });

@@ -1,5 +1,11 @@
-import { act, getAllByRole, getByText, queryAllByTestId, render } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import {
+  act,
+  getAllByRole,
+  getByText,
+  queryAllByTestId,
+  render,
+  renderHook,
+} from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { type Manifest, useStepManager } from 'hooks/useStepManager';
 import { StepBreadcrumb } from '.';

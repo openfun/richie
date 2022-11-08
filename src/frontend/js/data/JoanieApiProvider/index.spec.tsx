@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import JoanieApiProvider, { useJoanieApi } from 'data/JoanieApiProvider/index';
 import { noop } from 'utils';
@@ -31,9 +31,8 @@ describe('useJoanieApi', () => {
   });
 
   it('throws an error if it is not used within a JoanieApiProvider', () => {
-    const { result } = renderHook(useJoanieApi);
-    expect(result.error).toEqual(
-      new Error('useJoanieApi must be used within a JoanieApiProvider.'),
-    );
+    expect(() => {
+      renderHook(useJoanieApi);
+    }).toThrow('useJoanieApi must be used within a JoanieApiProvider.');
   });
 });

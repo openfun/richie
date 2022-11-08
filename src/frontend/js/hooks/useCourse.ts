@@ -17,7 +17,7 @@ import { useSession } from 'data/SessionProvider';
  */
 export const useCourse = (code: string) => {
   const API = useJoanieApi();
-  const { user, isLoadingUser } = useSession();
+  const { user } = useSession();
   const QUERY_KEY = useLocalizedQueryKey(user ? ['user', 'course', code] : ['course', code]);
   const queryClient = useQueryClient();
 
@@ -26,7 +26,7 @@ export const useCourse = (code: string) => {
     refetch,
     isLoading,
   } = useQuery(QUERY_KEY, () => API.courses.get(code), {
-    enabled: !isLoadingUser,
+    enabled: user !== undefined,
     staleTime: user
       ? REACT_QUERY_SETTINGS.staleTimes.sessionItems
       : REACT_QUERY_SETTINGS.staleTimes.default,

@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import {
   ContextFactory as mockContextFactory,
   CourseFactory,
@@ -14,9 +14,9 @@ import {
 import JoanieApiProvider from 'data/JoanieApiProvider';
 import { CourseCodeProvider } from 'data/CourseCodeProvider';
 import type { Course, CourseRun, Enrollment, OrderLite } from 'types/Joanie';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import { Deferred } from 'utils/test/deferred';
 import { Priority } from 'types';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseRunList, EnrollableCourseRunList, EnrolledCourseRun } from '.';
 
 jest.mock('utils/context', () => ({
@@ -109,7 +109,7 @@ describe('CourseProductCourseRuns', () => {
     const Wrapper = ({ code, children }: PropsWithChildren<{ code: string }>) => (
       <IntlProvider locale="en">
         <CourseCodeProvider code={code}>
-          <QueryClientProvider client={createQueryClient()}>
+          <QueryClientProvider client={createTestQueryClient()}>
             <JoanieApiProvider>{children}</JoanieApiProvider>
           </QueryClientProvider>
         </CourseCodeProvider>
@@ -299,6 +299,7 @@ describe('CourseProductCourseRuns', () => {
       // it should be enabled already to allow early user feedback
       expect($button.disabled).toBe(false);
 
+      fetchMock.post('https://joanie.test/api/enrollments/', []);
       await act(async () => {
         // - Select the first course run
         const $radio = screen.getByRole('radio', {
@@ -309,12 +310,11 @@ describe('CourseProductCourseRuns', () => {
         fireEvent.click($radio);
         fireEvent.click($button);
       });
-
       // - As the selected course run is not yet opened for enrollment,
       // a message should inform user that he/she cannot enroll now.
       // it should be focused so that screen reader users understand better
       // the submit button should stay enabled to always allow user feedback on its actions
-      const error = screen.getByText(
+      const error = await screen.findByText(
         `Enrollment will open on ${dateFormatter.format(new Date(courseRun.enrollment_start))}`,
       );
       expect(document.activeElement).toEqual(error);
@@ -326,7 +326,7 @@ describe('CourseProductCourseRuns', () => {
     const Wrapper = ({ code, children }: PropsWithChildren<{ code: string }>) => (
       <IntlProvider locale="en">
         <CourseCodeProvider code={code}>
-          <QueryClientProvider client={createQueryClient()}>
+          <QueryClientProvider client={createTestQueryClient()}>
             <JoanieApiProvider>{children}</JoanieApiProvider>
           </QueryClientProvider>
         </CourseCodeProvider>
@@ -397,7 +397,7 @@ describe('CourseProductCourseRuns', () => {
       });
 
       // - While request is pending, an accessible spinner should be displayed
-      screen.getByRole('status', { name: 'Unrolling...' });
+      await screen.findByRole('status', { name: 'Unrolling...' });
 
       await act(async () => {
         enrollmentDeferred.resolve(200);

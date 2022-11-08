@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { stringify } from 'query-string';
 import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 import { fetchList } from 'data/getResourceList';
 import { History, HistoryContext } from 'data/useHistory';
 import { APIListRequestParams, RequestStatus } from 'types/api';
-import createQueryClient from 'utils/react-query/createQueryClient';
 
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SearchFilterValueParent } from '.';
 
 jest.mock('utils/context', () => jest.fn());
@@ -29,16 +29,14 @@ describe('<SearchFilterValueParent />', () => {
     historyPushState,
     historyReplaceState,
   ];
-  const queryClient = createQueryClient();
 
   afterEach(() => {
-    queryClient.clear();
     jest.resetAllMocks();
   });
 
   it('renders the parent filter value and a button to show the children', () => {
     const { getByLabelText, queryByLabelText } = render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
             <SearchFilterValueParent
@@ -97,7 +95,7 @@ describe('<SearchFilterValueParent />', () => {
 
     // Helper to get the React element with the expected params
     const getElement = (params: APIListRequestParams) => (
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf(params)}>
             <SearchFilterValueParent
@@ -166,7 +164,7 @@ describe('<SearchFilterValueParent />', () => {
     } as any);
 
     const { getByLabelText, queryByLabelText } = render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider
             value={makeHistoryOf({
@@ -246,7 +244,7 @@ describe('<SearchFilterValueParent />', () => {
 
   it('shows the parent filter value itself as inactive when it is not in the search params', () => {
     const { getByLabelText } = render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
             <SearchFilterValueParent
@@ -281,7 +279,7 @@ describe('<SearchFilterValueParent />', () => {
 
   it('disables the parent value when its count is 0', () => {
     const { getByLabelText } = render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
             <SearchFilterValueParent
@@ -314,7 +312,7 @@ describe('<SearchFilterValueParent />', () => {
   });
   it('shows the parent filter value itself as active when it is in the search params', () => {
     const { getByLabelText } = render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider
             value={makeHistoryOf({
@@ -353,7 +351,7 @@ describe('<SearchFilterValueParent />', () => {
 
   it('dispatches a FILTER_ADD action on filter click if it was not active', () => {
     const { getByLabelText } = render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
             <SearchFilterValueParent
@@ -394,7 +392,7 @@ describe('<SearchFilterValueParent />', () => {
 
   it('dispatches a FILTER_REMOVE action on filter click if it was active', () => {
     const { getByLabelText } = render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider
             value={makeHistoryOf({

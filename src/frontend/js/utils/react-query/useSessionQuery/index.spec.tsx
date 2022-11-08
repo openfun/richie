@@ -1,17 +1,12 @@
-import { hydrate, QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
-import { renderHook } from '@testing-library/react-hooks';
 import { PropsWithChildren } from 'react';
-import { waitFor } from '@testing-library/react';
-import {
-  ContextFactory as mockContextFactory,
-  PersistedClientFactory,
-  QueryStateFactory,
-} from 'utils/test/factories';
+import { renderHook, waitFor } from '@testing-library/react';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import BaseSessionProvider from 'data/SessionProvider/BaseSessionProvider';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import { checkStatus } from 'utils/api/joanie';
 import { useSession } from 'data/SessionProvider';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { useSessionQuery } from '.';
 
 jest.mock('utils/context', () => ({
@@ -25,8 +20,8 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('useSessionQuery', () => {
-  const wrapper = ({ client, children }: PropsWithChildren<{ client: QueryClient }>) => (
-    <QueryClientProvider client={client}>
+  const wrapper = ({ children }: PropsWithChildren) => (
+    <QueryClientProvider client={createTestQueryClient({ user: { username: 'John Doe' } })}>
       <BaseSessionProvider>{children}</BaseSessionProvider>
     </QueryClientProvider>
   );
@@ -41,19 +36,9 @@ describe('useSessionQuery', () => {
     fetchMock.get('https://endpoint.test/api/user/v1/me', 401);
     const handleError = jest.fn();
 
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: { username: 'John Doe' } })],
-    });
-
-    let client: QueryClient;
-    await waitFor(() => {
-      client = createQueryClient();
-      hydrate(client, clientState);
-    });
-
     const useHooks = () => {
       const session = useSession();
-      useSessionQuery('orders', () => fetch('http://api.endpoint/orders/').then(checkStatus), {
+      useSessionQuery(['orders'], () => fetch('http://api.endpoint/orders/').then(checkStatus), {
         onError: handleError,
       });
 
@@ -62,9 +47,6 @@ describe('useSessionQuery', () => {
 
     const { result } = renderHook(() => useHooks(), {
       wrapper,
-      initialProps: {
-        client: client!,
-      },
     });
 
     // - At the first render, query state should be retrieved from the sessionStorage

@@ -1,16 +1,23 @@
-import { act } from '@testing-library/react-hooks';
-import { fireEvent, getByText, queryByText, render, screen } from '@testing-library/react';
-import { hydrate, QueryClientProvider } from 'react-query';
+import {
+  act,
+  fireEvent,
+  getByText,
+  queryByText,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
-import { findByText } from '@storybook/testing-library';
 import * as mockFactories from 'utils/test/factories';
 import { SessionProvider } from 'data/SessionProvider';
 import { DashboardTest } from 'components/Dashboard/DashboardTest';
 import { DashboardPaths } from 'utils/routers/dashboard';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { expectBannerError } from 'utils/test/expectBannerError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -27,17 +34,6 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('<DahsboardEditCreditCard/>', () => {
-  const createQueryClientWithUser = (isAuthenticated: Boolean) => {
-    const user = isAuthenticated ? mockFactories.UserFactory.generate() : null;
-    const { clientState } = mockFactories.PersistedClientFactory({
-      queries: [mockFactories.QueryStateFactory('user', { data: user })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
-    return client;
-  };
-
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/orders/', []);
     fetchMock.get('https://joanie.endpoint/api/addresses/', []);
@@ -59,10 +55,9 @@ describe('<DahsboardEditCreditCard/>', () => {
     const updateUrl = 'https://joanie.endpoint/api/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, 200);
 
-    const client = createQueryClientWithUser(true);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest
@@ -77,23 +72,21 @@ describe('<DahsboardEditCreditCard/>', () => {
       );
     });
 
-    // It doesn't show any errors.
-    expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-    expectBreadcrumbsToEqualParts([
+    await expectBreadcrumbsToEqualParts([
       'Back',
       'My preferences',
       'Edit credit card "' + creditCard.title + '"',
     ]);
-    // We are on the expected route.
-    screen.getByText('Edit credit card');
+    // It doesn't show any errors.
+    expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
 
     const button = screen.getByRole('button', { name: 'Save updates' });
 
     // The title input value is correct.
-    const titleInput: HTMLInputElement = screen.getByRole('textbox', {
+    const titleInput: HTMLInputElement = await screen.findByRole('textbox', {
       name: 'Name of the credit card',
     });
-    expect(titleInput.value).toBe(creditCard.title);
+    await waitFor(() => expect(titleInput.value).toBe(creditCard.title));
 
     // Mock refresh route.
     fetchMock.get(
@@ -158,10 +151,9 @@ describe('<DahsboardEditCreditCard/>', () => {
     const updateUrl = 'https://joanie.endpoint/api/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, 200);
 
-    const client = createQueryClientWithUser(true);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest
@@ -176,17 +168,17 @@ describe('<DahsboardEditCreditCard/>', () => {
       );
     });
 
+    // We are on the expected route.
+    await screen.findByText('Edit credit card');
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-    // We are on the expected route.
-    screen.getByText('Edit credit card');
 
     const button = screen.getByRole('button', { name: 'Save updates' });
     // The is_main input value is correct.
     const isMainInput: HTMLInputElement = screen.getByRole('checkbox', {
       name: 'Use this credit card as default',
     });
-    expect(isMainInput.checked).toBe(false);
+    await waitFor(() => expect(isMainInput.checked).toBe(false));
 
     // Mock refresh route.
     fetchMock.get(
@@ -251,10 +243,9 @@ describe('<DahsboardEditCreditCard/>', () => {
     const updateUrl = 'https://joanie.endpoint/api/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, 200);
 
-    const client = createQueryClientWithUser(true);
     await act(async () => {
       render(
-        <QueryClientProvider client={client}>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest
@@ -269,11 +260,10 @@ describe('<DahsboardEditCreditCard/>', () => {
       );
     });
 
+    // We are on the expected route.
+    await screen.findByText('Edit credit card');
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-
-    // We are on the expected route.
-    screen.getByText('Edit credit card');
 
     const deleteButton = screen.getByRole('button', { name: 'Delete' });
 
@@ -326,11 +316,9 @@ describe('<DahsboardEditCreditCard/>', () => {
       body: 'Internal error',
     });
 
-    const client = createQueryClientWithUser(true);
-    let container: HTMLElement | undefined;
     await act(async () => {
-      container = render(
-        <QueryClientProvider client={client}>
+      render(
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest
@@ -342,10 +330,10 @@ describe('<DahsboardEditCreditCard/>', () => {
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
-      ).container;
+      );
     });
 
-    const button = screen.getByRole('button', { name: 'Save updates' });
+    const button = await screen.findByRole('button', { name: 'Save updates' });
     // Submit of the form calls the API edit route.
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(false);
     await act(async () => {
@@ -353,9 +341,6 @@ describe('<DahsboardEditCreditCard/>', () => {
     });
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
-    // It shows an error banner.
-    const banner = container!.querySelector('.banner--error') as HTMLElement;
-    expect(banner).not.toBeNull();
-    await findByText(banner!, 'An error occurred: Internal Server Error. Please retry later.');
+    await expectBannerError('An error occurred: Internal Server Error. Please retry later.');
   });
 });

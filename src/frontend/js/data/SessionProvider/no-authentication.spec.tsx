@@ -1,5 +1,5 @@
-import { renderHook } from '@testing-library/react-hooks';
-import { render, screen } from '@testing-library/react';
+import { render, renderHook, screen } from '@testing-library/react';
+import { PropsWithChildren } from 'react';
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import { handle as mockHandle } from 'utils/errors/handle';
 import { noop } from 'utils';
@@ -21,7 +21,7 @@ describe('SessionProvider with no authentication', () => {
 
   it('provides default context value if there is no authentication backend', async () => {
     const { result } = renderHook(useSession, {
-      wrapper: ({ children }) => <SessionProvider>{children}</SessionProvider>,
+      wrapper: ({ children }: PropsWithChildren) => <SessionProvider>{children}</SessionProvider>,
     });
     expect(result.current.user).toBeNull();
     expect(result.current.destroy).toEqual(noop);

@@ -1,17 +1,12 @@
-import { hydrate, QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
-import { renderHook } from '@testing-library/react-hooks';
 import { PropsWithChildren } from 'react';
-import { waitFor } from '@testing-library/react';
-import {
-  ContextFactory as mockContextFactory,
-  PersistedClientFactory,
-  QueryStateFactory,
-} from 'utils/test/factories';
+import { renderHook, waitFor } from '@testing-library/react';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import BaseSessionProvider from 'data/SessionProvider/BaseSessionProvider';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import { useSession } from 'data/SessionProvider';
 import { checkStatus } from 'utils/api/joanie';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { useSessionMutation } from '.';
 
 jest.mock('utils/context', () => ({
@@ -25,8 +20,8 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('useSessionMutation', () => {
-  const wrapper = ({ client, children }: PropsWithChildren<{ client: QueryClient }>) => (
-    <QueryClientProvider client={client}>
+  const wrapper = ({ children }: PropsWithChildren) => (
+    <QueryClientProvider client={createTestQueryClient({ user: { username: 'John Doe' } })}>
       <BaseSessionProvider>{children}</BaseSessionProvider>
     </QueryClientProvider>
   );
@@ -53,19 +48,8 @@ describe('useSessionMutation', () => {
       return { session, mutation };
     };
 
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: { username: 'John Doe' } })],
-    });
-
-    let client: QueryClient;
-    await waitFor(() => {
-      client = createQueryClient();
-      hydrate(client, clientState);
-    });
-
     const { result } = renderHook(useHooks, {
       wrapper,
-      initialProps: { client: client! },
     });
 
     // - As client query has been hydrated with an existing user query,

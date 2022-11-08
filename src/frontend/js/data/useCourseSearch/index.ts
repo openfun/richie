@@ -1,5 +1,5 @@
 import { stringify } from 'query-string';
-import { useQuery, UseQueryOptions } from 'react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { APIListRequestParams } from 'types/api';
 import useLocalizedQueryKey from 'utils/react-query/useLocalizedQueryKey';

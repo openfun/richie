@@ -1,7 +1,6 @@
 import { stringify } from 'query-string';
 import { PropsWithChildren } from 'react';
-
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { CourseSearchParamsAction } from 'data/useCourseSearchParams';
 import { History, HistoryContext } from 'data/useHistory';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
@@ -19,9 +18,10 @@ describe('data/useFilterValue', () => {
     historyPushState,
     historyReplaceState,
   ];
-  const wrapper = ({ history, children }: PropsWithChildren<{ history: History }>) => (
-    <HistoryContext.Provider value={history}>{children}</HistoryContext.Provider>
-  );
+  const wrapper =
+    ({ history }: { history: History }) =>
+    ({ children }: PropsWithChildren) =>
+      <HistoryContext.Provider value={history}>{children}</HistoryContext.Provider>;
 
   beforeEach(jest.resetAllMocks);
 
@@ -46,8 +46,7 @@ describe('data/useFilterValue', () => {
       },
     ];
     const { result } = renderHook(() => useFilterValue(...props), {
-      wrapper,
-      initialProps: { history: makeHistoryOf({ limit: '999', offset: '0' }) },
+      wrapper: wrapper({ history: makeHistoryOf({ limit: '999', offset: '0' }) }),
     });
 
     const [isActive, toggle] = result.current;
@@ -102,10 +101,9 @@ describe('data/useFilterValue', () => {
       },
     ];
     const { result } = renderHook(() => useFilterValue(...props), {
-      wrapper,
-      initialProps: {
+      wrapper: wrapper({
         history: makeHistoryOf({ limit: '999', offset: '0', organizations: ['87'] }),
-      },
+      }),
     });
 
     const [isActive, toggle] = result.current;

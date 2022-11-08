@@ -1,4 +1,4 @@
-import { QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { stringify } from 'query-string';
@@ -7,8 +7,8 @@ import { IntlProvider } from 'react-intl';
 import { History, HistoryContext } from 'data/useHistory';
 import * as mockWindow from 'utils/indirection/window';
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
-import createQueryClient from 'utils/react-query/createQueryClient';
 import context from 'utils/context';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import Search from '.';
 
 let mockMatches = false;
@@ -40,10 +40,8 @@ describe('<Search />', () => {
     historyPushState,
     historyReplaceState,
   ];
-  const queryClient = createQueryClient();
 
   afterEach(() => {
-    queryClient.clear();
     fetchMock.restore();
     jest.resetAllMocks();
   });
@@ -57,7 +55,7 @@ describe('<Search />', () => {
     });
 
     render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
             <Search context={context} />
@@ -112,7 +110,7 @@ describe('<Search />', () => {
     });
 
     render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0', query: 'vi' })}>
             <Search context={context} />
@@ -136,7 +134,7 @@ describe('<Search />', () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', 500);
 
     render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
             <Search context={context} />
@@ -166,7 +164,7 @@ describe('<Search />', () => {
 
     mockMatches = true;
     const { container } = render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
             <Search context={context} />
@@ -192,7 +190,7 @@ describe('<Search />', () => {
 
     mockMatches = false;
     const { container } = render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
             <Search context={context} />
@@ -259,7 +257,7 @@ describe('<Search />', () => {
     });
 
     const { container } = render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createTestQueryClient()}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
             <Search context={context} />
@@ -289,7 +287,7 @@ describe('<Search />', () => {
       });
 
       render(
-        <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={createTestQueryClient()}>
           <IntlProvider locale="en">
             <HistoryContext.Provider
               value={makeHistoryOf({
@@ -321,7 +319,7 @@ describe('<Search />', () => {
       });
 
       render(
-        <QueryClientProvider client={queryClient}>
+        <QueryClientProvider client={createTestQueryClient()}>
           <IntlProvider locale="en">
             <HistoryContext.Provider
               value={makeHistoryOf({

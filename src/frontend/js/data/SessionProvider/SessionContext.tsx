@@ -8,7 +8,6 @@ export interface SessionContext {
   login: () => void;
   register: () => void;
   user: Maybe<Nullable<User>>;
-  isLoadingUser: boolean;
 }
 
 export const Session = createContext<SessionContext>({
@@ -16,5 +15,4 @@ export const Session = createContext<SessionContext>({
   login: noop,
   register: noop,
   user: null,
-  isLoadingUser: false,
 });

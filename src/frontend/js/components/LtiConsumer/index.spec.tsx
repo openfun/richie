@@ -1,13 +1,9 @@
 import { type PropsWithChildren } from 'react';
-import { act, render } from '@testing-library/react';
+import { act, render, waitFor } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
-import { hydrate, QueryClient, QueryClientProvider, QueryObserverOptions } from 'react-query';
-import {
-  ContextFactory as mockContextFactory,
-  PersistedClientFactory,
-  QueryStateFactory,
-} from 'utils/test/factories';
+import { QueryClient, QueryClientProvider, QueryObserverOptions } from '@tanstack/react-query';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import { Deferred } from 'utils/test/deferred';
 import {
   LtiConsumerContentParameters,
@@ -17,7 +13,8 @@ import {
 import BaseSessionProvider from 'data/SessionProvider/BaseSessionProvider';
 import { RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY } from 'settings';
 import { handle } from 'utils/errors/handle';
-import createQueryClient from 'utils/react-query/createQueryClient';
+import { resolveAll } from 'utils/resolveAll';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import LtiConsumer from '.';
 
 const mockHandle: jest.Mock<typeof handle> = handle as any;
@@ -93,14 +90,8 @@ describe('components/LtiConsumer', () => {
       ltiContextDeferred.promise,
     );
 
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: null })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     const { container } = render(
-      <Wrapper client={client}>
+      <Wrapper client={createTestQueryClient({ user: null })}>
         <LtiConsumer {...ltiConsumerProps} />
       </Wrapper>,
     );
@@ -108,13 +99,18 @@ describe('components/LtiConsumer', () => {
     await act(async () => ltiContextDeferred.resolve(ltiContextResponse));
 
     // check form inputs
-    Object.entries(ltiContextResponse.content_parameters).forEach(([name, value]) => {
-      const input = container.querySelector(`input[name=${name}]`);
-      expect(input).toBeInstanceOf(HTMLInputElement);
-      if (input) {
-        expect(input.getAttribute('value')).toEqual(value);
-      }
-    });
+    await resolveAll(
+      Object.entries(ltiContextResponse.content_parameters),
+      async ([name, value]) => {
+        await waitFor(() => {
+          const input = container.querySelector(`input[name=${name}]`);
+          expect(input).toBeInstanceOf(HTMLInputElement);
+          if (input) {
+            expect(input.getAttribute('value')).toEqual(value);
+          }
+        });
+      },
+    );
 
     // check if iframeresizer does its job
     const iframe: HTMLIFrameElement = container.getElementsByTagName('iframe')[0];
@@ -161,14 +157,8 @@ describe('components/LtiConsumer', () => {
       ltiContextDeferred.promise,
     );
 
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: null })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     const { container } = render(
-      <Wrapper client={client}>
+      <Wrapper client={createTestQueryClient({ user: null })}>
         <LtiConsumer {...ltiConsumerProps} />
       </Wrapper>,
     );
@@ -176,11 +166,16 @@ describe('components/LtiConsumer', () => {
     await act(async () => ltiContextDeferred.resolve(ltiContextResponse));
 
     // check form inputs
-    Object.entries(ltiContextResponse.content_parameters).forEach(([name, value]) => {
-      const input = container.querySelector(`input[name=${name}]`);
-      expect(input).toBeInstanceOf(HTMLInputElement);
-      expect(input!.getAttribute('value')).toEqual(value);
-    });
+    await resolveAll(
+      Object.entries(ltiContextResponse.content_parameters),
+      async ([name, value]) => {
+        await waitFor(() => {
+          const input = container.querySelector(`input[name=${name}]`);
+          expect(input).toBeInstanceOf(HTMLInputElement);
+          expect(input!.getAttribute('value')).toEqual(value);
+        });
+      },
+    );
 
     // check if iframeresizer does its job
     const iframe: HTMLIFrameElement = container.getElementsByTagName('iframe')[0];
@@ -205,22 +200,18 @@ describe('components/LtiConsumer', () => {
       ltiContextDeferred.promise,
     );
 
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: null })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     const { container } = render(
-      <Wrapper client={client}>
+      <Wrapper client={createTestQueryClient({ user: null })}>
         <LtiConsumer {...ltiConsumerProps} />
       </Wrapper>,
     );
 
     await act(async () => ltiContextDeferred.resolve(500));
 
-    expect(mockHandle).toHaveBeenCalledWith(
-      Error('Failed to retrieve LTI consumer context at placeholder 1337'),
+    await waitFor(() =>
+      expect(mockHandle).toHaveBeenCalledWith(
+        Error('Failed to retrieve LTI consumer context at placeholder 1337'),
+      ),
     );
 
     // Nothing has been rendered
@@ -231,14 +222,6 @@ describe('components/LtiConsumer', () => {
   });
 
   it('uses user information when user is authenticated', () => {
-    const { clientState } = PersistedClientFactory({
-      queries: [
-        QueryStateFactory('user', { data: { username: 'johndoe', email: 'johndoe@example.com' } }),
-      ],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     const ltiContextDeferred = new Deferred();
     fetchMock.get('/api/v1.0/plugins/lti-consumer/1337/context/', ltiContextDeferred.promise, {
       query: {
@@ -250,7 +233,11 @@ describe('components/LtiConsumer', () => {
     });
 
     render(
-      <Wrapper client={client}>
+      <Wrapper
+        client={createTestQueryClient({
+          user: { username: 'johndoe', email: 'johndoe@example.com' },
+        })}
+      >
         <LtiConsumer id={1337} />
       </Wrapper>,
     );
@@ -271,12 +258,6 @@ describe('components/LtiConsumer', () => {
   });
 
   it('uses a random uuid as user_id when user is not authenticated', () => {
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: null })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     const ltiContextDeferred = new Deferred();
     fetchMock.get(
       '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
@@ -284,7 +265,7 @@ describe('components/LtiConsumer', () => {
     );
 
     render(
-      <Wrapper client={client}>
+      <Wrapper client={createTestQueryClient({ user: null })}>
         <LtiConsumer id={1337} />
       </Wrapper>,
     );
@@ -308,17 +289,12 @@ describe('components/LtiConsumer', () => {
       },
     };
 
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: null })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
     const ltiContextDeferred = new Deferred();
     fetchMock.get(
       '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
       ltiContextDeferred.promise,
     );
+    const client = createTestQueryClient({ user: null });
 
     render(
       <Wrapper client={client}>
@@ -360,12 +336,7 @@ describe('components/LtiConsumer', () => {
   });
 
   it('sets stale time to 5 minutes', async () => {
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory('user', { data: null })],
-    });
-    const client = createQueryClient();
-    hydrate(client, clientState);
-
+    const client = createTestQueryClient({ user: null });
     const ltiContextDeferred = new Deferred();
     fetchMock.get(
       '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
