@@ -1,4 +1,4 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { REACT_QUERY_SETTINGS } from 'settings';
@@ -39,7 +39,7 @@ export const useCreditCards = (id?: string) => {
   };
 
   const [readHandler, queryKey] = useSessionQuery(
-    'credit-cards',
+    ['credit-cards'],
     () => API.user.creditCards.get(),
     {
       onError,

@@ -1,4 +1,4 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useJoanieApi } from 'data/JoanieApiProvider';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import useLocalizedQueryKey from 'utils/react-query/useLocalizedQueryKey';
@@ -10,7 +10,7 @@ import { useSessionQuery } from 'utils/react-query/useSessionQuery';
  */
 export const useOrders = () => {
   const API = useJoanieApi();
-  const baseQueryKey = useLocalizedQueryKey('orders');
+  const baseQueryKey = useLocalizedQueryKey(['orders']);
   const queryClient = useQueryClient();
 
   const [readHandler, queryKey] = useSessionQuery(baseQueryKey, () => API.user.orders.get());

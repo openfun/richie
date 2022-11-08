@@ -1,6 +1,9 @@
-import { MutationFunction } from 'react-query/types/core/types';
-import { UseMutationOptions, UseMutationResult } from 'react-query/types/react/types';
-import { useMutation, useQueryClient } from 'react-query';
+import type {
+  MutationFunction,
+  UseMutationOptions,
+  UseMutationResult,
+} from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { HttpError } from 'utils/errors/HttpError';
 
 /**
@@ -22,7 +25,7 @@ export function useSessionMutation<TData = unknown, TVariables = void, TContext 
     context: TContext | undefined,
   ) => {
     if (error.code === 401) {
-      await queryClient.invalidateQueries('user', { exact: true });
+      await queryClient.invalidateQueries(['user'], { exact: true });
     }
 
     if (options?.onError) {

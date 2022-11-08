@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { PropsWithChildren, useMemo } from 'react';
 
 interface SpinnerProps {
   'aria-labelledby'?: string;
@@ -7,7 +7,7 @@ interface SpinnerProps {
 }
 
 /** Component. Displays a rotating CSS loader. */
-export const Spinner: FC<SpinnerProps> = (props) => {
+export const Spinner = (props: PropsWithChildren<SpinnerProps>) => {
   const { children, size = 'small', theme } = props;
   const spinnerProps = props['aria-labelledby']
     ? { 'aria-labelledby': props['aria-labelledby'] }

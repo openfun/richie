@@ -9,11 +9,11 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ router }: DashboardProps) => {
-  const { user } = useSession();
+  const { user, isLoadingUser } = useSession();
   const routerToUse = router ?? useDashboardRouter();
 
   useEffect(() => {
-    if (!user) {
+    if (!isLoadingUser && !user) {
       location.replace('/');
     }
   }, [user]);

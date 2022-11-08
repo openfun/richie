@@ -1,4 +1,4 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useJoanieApi } from 'data/JoanieApiProvider';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 

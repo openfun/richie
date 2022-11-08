@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { matchMedia } from 'utils/indirection/window';
 
 /**
@@ -10,7 +10,10 @@ import { matchMedia } from 'utils/indirection/window';
 const useMatchMedia = (query: string): boolean => {
   const mediaQuery = useMemo(() => matchMedia(query), [query]);
   const [matches, setMatches] = useState(mediaQuery.matches);
-  const handleChange = useCallback((mQuery) => setMatches(mQuery.matches), [setMatches]);
+  const handleChange = useCallback(
+    (mQuery: MediaQueryListEvent) => setMatches(mQuery.matches),
+    [setMatches],
+  );
 
   useEffect(() => {
     mediaQuery.addListener(handleChange);

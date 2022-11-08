@@ -1,4 +1,4 @@
-import type { QueryKey } from 'react-query';
+import type { QueryKey } from '@tanstack/react-query';
 
 export type TSessionQueryKey = ['user', ...(readonly unknown[])];
 
@@ -8,13 +8,7 @@ export type TSessionQueryKey = ['user', ...(readonly unknown[])];
  * @param queryKey
  */
 const useSessionQueryKey = (queryKey: QueryKey): TSessionQueryKey => {
-  if (queryKey === 'user') {
-    return [queryKey];
-  } else if (Array.isArray(queryKey) && queryKey[0] === 'user') {
-    return queryKey as TSessionQueryKey;
-  }
-
-  return ['user', ...(typeof queryKey === 'string' ? ([queryKey] as const) : queryKey)];
+  return queryKey[0] === 'user' ? (queryKey as TSessionQueryKey) : ['user', ...queryKey];
 };
 
 export default useSessionQueryKey;

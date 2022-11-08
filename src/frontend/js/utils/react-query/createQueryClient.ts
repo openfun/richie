@@ -1,20 +1,20 @@
-import { createWebStoragePersistor } from 'react-query/createWebStoragePersistor-experimental';
-import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
-import { QueryClient, setLogger } from 'react-query';
+import { QueryClient, QueryClientConfig } from '@tanstack/react-query';
+import { persistQueryClient } from '@tanstack/react-query-persist-client';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 import { handle } from 'utils/errors/handle';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import { noop } from 'utils';
 import context from 'utils/context';
 
-interface QueryClientOptions {
+export interface QueryClientOptions {
   logger?: boolean;
-  persistor?: boolean;
+  persister?: boolean;
 }
 
 const createQueryClient = (options?: QueryClientOptions) => {
   const environment = context?.environment;
 
-  const queryClient = new QueryClient({
+  const configuration: QueryClientConfig = {
     defaultOptions: {
       queries: {
         cacheTime: REACT_QUERY_SETTINGS.cacheTime,
@@ -23,27 +23,34 @@ const createQueryClient = (options?: QueryClientOptions) => {
         staleTime: REACT_QUERY_SETTINGS.staleTimes.default,
       },
     },
-  });
+    logger: {
+      log: noop,
+      warn: noop,
+      error: noop,
+    },
+  };
 
   if (options?.logger) {
     // Link react-query logger to our error handler
-    setLogger({
+    configuration.logger = {
       // eslint-disable-next-line no-console
       log: environment === 'development' ? console.log : noop,
       warn: environment === 'development' ? console.warn : noop,
       error: handle,
-    });
+    };
   }
 
-  if (options?.persistor) {
+  const queryClient = new QueryClient(configuration);
+
+  if (options?.persister) {
     // Prepare react-query cache persistance
-    const persistor = createWebStoragePersistor({
+    const persister = createSyncStoragePersister({
       storage: sessionStorage,
       key: REACT_QUERY_SETTINGS.cacheStorage.key,
       throttleTime: REACT_QUERY_SETTINGS.cacheStorage.throttleTime,
     });
     persistQueryClient({
-      persistor,
+      persister,
       queryClient,
     });
   }

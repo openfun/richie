@@ -19,7 +19,7 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
   };
 
   const [{ data: context }] = useSessionQuery<LtiConsumerContext>(
-    `lti-consumer-plugin-${id}`,
+    [`lti-consumer-plugin-${id}`],
     () => {
       // We have to provide a unique user_id to generate the lti context. When user is authenticated, we use its
       // username as user_id. In the case the user is anonymous, we generate an uuid then store it into the session

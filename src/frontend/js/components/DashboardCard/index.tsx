@@ -1,13 +1,13 @@
-import { FC, ReactNode, useMemo, useRef, useState } from 'react';
+import { PropsWithChildren, ReactNode, useMemo, useRef, useState } from 'react';
 import { Button } from 'components/Button';
 import { Icon } from 'components/Icon';
 
-interface DashboardCardProps {
+interface Props {
   header: ReactNode | string;
   footer?: ReactNode;
 }
 
-export const DashboardCard: FC<DashboardCardProps> = (props) => {
+export const DashboardCard = (props: PropsWithChildren<Props>) => {
   const [opened, setOpened] = useState(true);
   const expandableRef = useRef<HTMLDivElement>(null);
   const [wrapperHeight, setWrapperHeight] = useState('auto');

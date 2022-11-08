@@ -66,7 +66,7 @@ export const StepBreadcrumb = <Keys extends PropertyKey, LastKey extends Keys>({
   const activeIndex = getActiveStepIndex(orderedSteps, step);
 
   const getStepClassName = useCallback(
-    (index) => {
+    (index: number) => {
       const className = ['StepBreadcrumb__step'];
       if (index <= activeIndex) className.push('StepBreadcrumb__step--active');
       if (index === activeIndex) className.push('StepBreadcrumb__step--current');
@@ -77,7 +77,7 @@ export const StepBreadcrumb = <Keys extends PropertyKey, LastKey extends Keys>({
   );
 
   const getSeparatorClassName = useCallback(
-    (index) => {
+    (index: number) => {
       const className = ['StepBreadcrumb__separator'];
       if (index < activeIndex) className.push('StepBreadcrumb__separator--active');
 
