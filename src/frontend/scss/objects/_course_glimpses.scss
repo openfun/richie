@@ -138,9 +138,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     }
 
     img {
-      @include sv-flex(0, 0, 1.6rem);
       margin: 0 0.5rem 0 0;
-      order: 1;
     }
   }
 

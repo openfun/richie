@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix courses badges css.
+
 ## [2.17.0]
 
 ### Added
