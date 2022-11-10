@@ -86,7 +86,7 @@ const UserLogin = ({ profileUrls = {} }: UserLoginProps) => {
             <FormattedMessage {...messages.signUp} />
           </button>
           <button onClick={login} className="user-login__btn user-login__btn--log-in">
-            <Icon name="icon-login" />
+            <Icon name="icon-login" size="small" />
             <FormattedMessage {...messages.logIn} />
           </button>
         </Fragment>

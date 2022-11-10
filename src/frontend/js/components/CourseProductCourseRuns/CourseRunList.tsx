@@ -28,7 +28,7 @@ const CourseRunList = ({ courseRuns }: Props) => {
   if (courseRuns.length === 0) {
     return (
       <p className="course-runs-not-available product-widget__item-description">
-        <Icon name="icon-warning" />
+        <Icon name="icon-warning" size="small" />
         <FormattedMessage {...messages.noCourseRunAvailable} />
       </p>
     );

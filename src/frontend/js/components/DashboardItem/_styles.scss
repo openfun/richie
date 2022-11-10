@@ -69,14 +69,6 @@
       @include media-breakpoint-down(sm) {
         margin-bottom: 0.5rem;
       }
-
-      .icon {
-        width: 1.4rem;
-        height: 1.4rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
     }
   }
 }

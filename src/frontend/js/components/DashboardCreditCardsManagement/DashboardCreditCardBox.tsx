@@ -105,7 +105,7 @@ export const DashboardCreditCardBox = ({ creditCard, promote, edit, remove }: Pr
                 }
               >
                 {expirationState === CreditCardExpirationStatus.EXPIRED && (
-                  <Icon name="icon-warning" />
+                  <Icon name="icon-warning" size="small" />
                 )}
                 <FormattedMessage
                   {...expirationMessage}

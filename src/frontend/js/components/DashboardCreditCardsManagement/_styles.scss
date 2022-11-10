@@ -88,11 +88,6 @@
     align-items: center;
     gap: 0.5rem;
 
-    .icon {
-      width: 1rem;
-      height: 1rem;
-    }
-
     &--soon {
       color: r-theme-val(dashboard-credit-card-box, expire-soon-color);
     }

@@ -31,12 +31,6 @@
       justify-content: center;
       margin-bottom: 0.3125rem;
       width: $icon-size;
-
-      svg {
-        fill: currentColor;
-        max-height: $icon-size;
-        width: 55%;
-      }
     }
 
     &__label {

@@ -1,5 +1,7 @@
 import { PropsWithTestId } from 'types/utils';
 
+export type IconSize = 'small' | 'medium' | 'large';
+
 type Props = PropsWithTestId<{
   name: IconType;
   /**
@@ -11,6 +13,7 @@ type Props = PropsWithTestId<{
    */
   title?: string;
   className?: string;
+  size?: IconSize;
 }>;
 
 // icons from src/richie/apps/core/templates/richie/icons.html
@@ -50,10 +53,10 @@ export type IconType =
   | 'icon-twitter'
   | 'icon-warning';
 
-export const Icon = ({ name, title, className = '', ...props }: Props) => {
+export const Icon = ({ name, title, className = '', size = 'medium', ...props }: Props) => {
   return (
     <svg
-      className={`icon ${className}`}
+      className={`icon icon--${size} ${className}`}
       aria-hidden={title ? undefined : true}
       {...(title && {
         role: 'img',

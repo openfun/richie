@@ -189,7 +189,7 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
           className="AddressesManagement__closeButton button button-sale--tertiary"
           onClick={handleClose}
         >
-          <Icon name="icon-chevron-down" className="button__icon" />
+          <Icon name="icon-chevron-left-outline" className="button__icon" />
           <FormattedMessage {...messages.closeButton} />
         </button>
         {error && <Banner message={error} type={BannerType.ERROR} rounded />}

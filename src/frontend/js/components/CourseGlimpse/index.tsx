@@ -75,11 +75,19 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
             </div>
           ) : null}
           <div className="course-glimpse__metadata course-glimpse__metadata--organization">
-            <Icon name="icon-org" title={intl.formatMessage(messages.organizationIconAlt)} />
+            <Icon
+              name="icon-org"
+              title={intl.formatMessage(messages.organizationIconAlt)}
+              size="small"
+            />
             <span className="title">{course.organization_highlighted}</span>
           </div>
           <div className="course-glimpse__metadata course-glimpse__metadata--code">
-            <Icon name="icon-barcode" title={intl.formatMessage(messages.codeIconAlt)} />
+            <Icon
+              name="icon-barcode"
+              title={intl.formatMessage(messages.codeIconAlt)}
+              size="small"
+            />
             <span>{course.code || '-'}</span>
           </div>
         </div>
