@@ -12,13 +12,10 @@
   .course-runs-not-available {
     margin-top: 0.5rem;
     padding-left: 0.2rem;
+    display: flex;
 
     .icon {
-      display: inline-block;
-      fill: currentColor;
-      height: 1rem;
       margin-right: 0.5rem;
-      width: 1rem;
     }
   }
 

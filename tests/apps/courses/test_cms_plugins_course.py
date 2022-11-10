@@ -434,7 +434,7 @@ class CoursePluginTestCase(TestCase):
                 # pylint: disable=consider-using-f-string
                 '<div class="course-glimpse__metadata '
                 'course-glimpse__metadata--organization">'
-                '<svg role="img" aria-label="Organization" class="icon">'
+                '<svg role="img" aria-label="Organization" class="icon icon--small">'
                 "<title>Organization</title>"
                 '<use href="#icon-org"></use></svg>'
                 '<span class="title">{0:s}</span>'

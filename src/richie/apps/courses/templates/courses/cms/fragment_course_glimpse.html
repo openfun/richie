@@ -51,7 +51,7 @@
             {% endif %} 
             {% if main_organization_title %}
             <div class="course-{{ course_variant }}__metadata course-{{ course_variant }}__metadata--organization">
-                <svg role="img" aria-label="{% trans "Organization" %}" class="icon">
+                <svg role="img" aria-label="{% trans "Organization" %}" class="icon icon--small">
                     <title>{% trans "Organization" %}</title>
                     <use href="#icon-org" />
                 </svg>
@@ -59,7 +59,7 @@
             </div>
             {% endif %}
             <div class="course-{{ course_variant }}__metadata course-{{ course_variant }}__metadata--code">
-                <svg role="img" aria-label="{% trans "Course code" %}" class="icon">
+                <svg role="img" aria-label="{% trans "Course code" %}" class="icon icon--small">
                     <title>{% trans "Course code" %}</title>
                     <use href="#icon-barcode" />
                 </svg>
@@ -79,7 +79,7 @@
         {% block course_glimpse_footer %}
         <div class="course-{{ course_variant }}-footer">
             <div class="course-{{ course_variant }}-footer__date">
-                <svg role="img" aria-label="{% trans "Course date" %}" class="icon">
+                <svg role="img" aria-label="{% trans "Course date" %}" class="icon icon--medium">
                     <title>{% trans "Course date" %}</title>
                     <use href="#icon-calendar" />
                 </svg>

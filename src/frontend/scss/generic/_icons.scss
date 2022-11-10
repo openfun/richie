@@ -1,4 +1,23 @@
 // Helper to force svg icons to be blocks by default for convenience at call sites
+$iconSmallSize: 1.25rem;
+$iconMediumSize: 1.5rem;
+$iconLargeSize: 2.1875rem;
 .icon {
   display: block;
+  fill: currentColor;
+
+  &--small {
+    width: $iconSmallSize;
+    height: $iconSmallSize;
+  }
+
+  &--medium {
+    width: $iconMediumSize;
+    height: $iconMediumSize;
+  }
+
+  &--large {
+    width: $iconLargeSize;
+    height: $iconLargeSize;
+  }
 }

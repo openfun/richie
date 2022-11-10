@@ -2,6 +2,7 @@ import { ReactNode, useMemo } from 'react';
 import ReactModal from 'react-modal';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { StringHelper } from 'utils/StringHelper';
+import { Icon } from 'components/Icon';
 
 const messages = defineMessages({
   closeDialog: {
@@ -76,9 +77,7 @@ export const Modal = ({
             onClick={(e) => props.onRequestClose?.(e)}
             title={intl.formatMessage(messages.closeDialog)}
           >
-            <svg className="modal__closeButton__icon" aria-hidden="true">
-              <use href="#icon-round-close" />
-            </svg>
+            <Icon name="icon-round-close" />
             <span className="offscreen">
               <FormattedMessage {...messages.closeDialog} />
             </span>

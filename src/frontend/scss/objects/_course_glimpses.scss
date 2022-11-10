@@ -228,12 +228,8 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     }
 
     .icon {
-      @include sv-flex(1, 0, 1.4rem);
-      fill: currentColor;
-      height: 0.9rem;
       margin-bottom: 0.15rem;
       margin-right: 0.5rem;
-      width: 1.4rem;
     }
 
     .title {
@@ -332,10 +328,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     line-height: 1.1;
 
     .icon {
-      @include sv-flex(1, 0, 1.4rem);
-      height: 1.3rem;
       margin-right: 0.5rem;
-      width: 1.4rem;
     }
   }
 }
