@@ -8,11 +8,8 @@
   @include button-base($display: flex);
 
   & > .button__icon {
-    width: 18px;
     margin: 0 0.5rem 0 0;
     transform: translateY(-$onepixel);
-    height: 18px;
-    fill: currentColor;
 
     &--right {
       margin: 0 0 0 0.5rem;
