@@ -123,7 +123,7 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
   useEffect(() => {
     // When user is updated, session queries should be invalidated.
     if (previousUserState !== user) {
-      queryClient.removeQueries({
+      queryClient.invalidateQueries({
         predicate: (query: any) =>
           query.options.queryKey.includes('user') && query.options.queryKey.length > 1,
       });
