@@ -6,8 +6,8 @@
   "author": "Open FUN (France Université Numérique)",
   "license": "MIT",
   "dependencies": {
-    "axe-core": "4.5.1",
-    "cypress": "10.11.0",
+    "axe-core": "4.5.2",
+    "cypress": "11.1.0",
     "cypress-axe": "1.0.0"
   }
 }
