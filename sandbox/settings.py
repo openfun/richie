@@ -618,6 +618,10 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             with sentry_sdk.configure_scope() as scope:
                 scope.set_extra("application", "backend")
 
+        # If a Joanie Backend has been configured, we add it into LMS_BACKENDS dict
+        if cls.JOANIE_BACKEND.get("BASE_URL") is not None:
+            cls.RICHIE_LMS_BACKENDS.append(cls.JOANIE_BACKEND)
+
 
 class Development(Base):
     """
@@ -663,7 +667,7 @@ class Test(Base):
 
 class ContinuousIntegration(Test):
     """
-    Continous Integration environment settings
+    Continuous Integration environment settings
 
     nota bene: it should inherit from the Test environment.
     """
