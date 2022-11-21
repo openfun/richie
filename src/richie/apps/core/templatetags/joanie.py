@@ -1,6 +1,7 @@
 """Custom template tags related to Joanie."""
 from django import template
-from django.conf import settings
+
+from richie.apps.courses.lms import LMSHandler
 
 register = template.Library()
 
@@ -8,12 +9,8 @@ register = template.Library()
 @register.simple_tag()
 def is_joanie_enabled():
     """
-    Determines if Joanie is enabled
-
-    Within settings, JOANIE can be enabled/disabled by setting the value of
-    `JOANIE.BASE_URL` with the url of joanie endpoint.
+    Determines if Joanie is enabled by checking if there is
+    an enabled lms backend with attribute `is_joanie` set to True.
     """
-    if getattr(settings, "JOANIE", None) is not None:
-        return settings.JOANIE.get("BASE_URL") is not None
 
-    return False
+    return any(getattr(lms, "is_joanie", False) for lms in LMSHandler.get_lms_classes())

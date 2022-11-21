@@ -13,6 +13,17 @@ class LMSHandler:
     """
 
     @staticmethod
+    def get_lms_classes():
+        """
+        Return all enabled LMS classes.
+        """
+
+        return {
+            import_string(lms_configuration["BACKEND"])
+            for lms_configuration in settings.RICHIE_LMS_BACKENDS
+        }
+
+    @staticmethod
     def select_lms(url):
         """
         Select and return the first LMS backend matching the url passed in argument.
