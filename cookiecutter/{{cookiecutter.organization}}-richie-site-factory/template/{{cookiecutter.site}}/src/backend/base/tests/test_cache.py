@@ -1,4 +1,4 @@
-"""Test funmooc cache plugin"""
+"""Test site cache plugin"""
 
 import datetime
 from unittest import mock

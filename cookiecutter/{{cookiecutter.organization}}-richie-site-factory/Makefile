@@ -1,5 +1,3 @@
-RICHIE_SITE ?= funmooc
-
 # -- Terminal colors
 COLOR_INFO    = \033[0;36m
 COLOR_RESET   = \033[0m
@@ -42,6 +40,7 @@ MANAGE = $(COMPOSE_RUN_APP) python manage.py
 default: help
 
 bootstrap: \
+  .env \
   env.d/aws \
   env.d/development \
   data/media/$(RICHIE_SITE)/.keep \
@@ -56,7 +55,7 @@ bootstrap: \
 bootstrap:  ## install development dependencies
 .PHONY: bootstrap
 
-add-site: ## add a new site to the site factory
+generate-site: ## generate a new site using cookiecutter
 	@docker run --rm -it -e LC_ALL=C.UTF-8 \
 		-u $(DOCKER_UID):$(DOCKER_GID) \
 		-v $(PWD):/app \
@@ -66,31 +65,37 @@ add-site: ## add a new site to the site factory
 			--output-dir /app/sites \
 			--config-file /app/.cookiecutter_default.yml \
 			/app/template
+.PHONY: generate-site
 
+add-site: generate-site ## add a new site to the site factory
+	@echo "RICHIE_SITE=$(shell ls -td sites/* | head -1 | cut -f2 -d'/')" > .env
 .PHONY: add-site
 
+.env: ## site should be activated
+	@bin/activate
+
 # == Docker
-build: ## build all containers
+build: .env ## build all containers
 	$(COMPOSE) build app
 	$(COMPOSE) build nginx
 	$(COMPOSE) build app-dev
 .PHONY: build
 
-reset:  ## Remove database and local files
+reset: .env ## Remove database and local files
 	$(COMPOSE) stop
 	rm -Ir data/* || exit 0
 	$(COMPOSE) rm db
 .PHONY: reset
 
-down: ## stop & remove containers
+down: .env ## stop & remove containers
 	@$(COMPOSE) down
 .PHONY: down
 
-logs: ## display app logs (follow mode)
+logs: .env ## display app logs (follow mode)
 	@$(COMPOSE) logs -f app-dev
 .PHONY: logs
 
-run: ## start the wsgi (production) or development server
+run: .env ## start the wsgi (production) or development server
 	@$(COMPOSE) up -V -d redis-sentinel
 	@$(WAIT_SENTINEL)
 	@$(COMPOSE) up -d nginx
@@ -98,51 +103,51 @@ run: ## start the wsgi (production) or development server
 	@$(WAIT_DB)
 .PHONY: run
 
-stop: ## stop the development server
+stop: .env ## stop the development server
 	@$(COMPOSE) stop
 .PHONY: stop
 
-info:  ## get activated site info
-	@echo "RICHIE_SITE: $(COLOR_INFO)$(RICHIE_SITE)$(COLOR_RESET)"
+info: .env ## get activated site info
+	@cat .env
 .PHONY: info
 
 # == Frontend
 build-front: install-front build-ts build-sass ## build front-end application
 .PHONY: build-front
 
-build-sass: ## build Sass files to css
+build-sass: .env ## build Sass files to css
 	@$(YARN) build-sass
 .PHONY: build-sass
 
-build-sass-production: ## build Sass files to css (production mode)
+build-sass-production: .env ## build Sass files to css (production mode)
 	@$(YARN) build-sass-production
 .PHONY: build-sass-production
 
-build-ts: ## build ts(x) files to js
+build-ts: .env ## build ts(x) files to js
 	@$(YARN) build-ts
 .PHONY: build-ts
 
-build-ts-production: ## build ts(x) files to js (production mode)
+build-ts-production: .env ## build ts(x) files to js (production mode)
 	@$(YARN) build-ts-production
 .PHONY: build-ts-production
 
-install-front: ## install front-end dependencies
+install-front: .env ## install front-end dependencies
 	@$(YARN) install
 .PHONY: install-front
 
-install-front-production: ## install front-end dependencies (production mode)
+install-front-production: .env ## install front-end dependencies (production mode)
 	@$(YARN) install --frozen-lockfile
 .PHONY: install-front-production
 
-lint-front-prettier: ## run prettier linter over ts(x) & scss files
+lint-front-prettier: .env ## run prettier linter over ts(x) & scss files
 	@$(YARN) prettier
 .PHONY: lint-front-prettier
 
-lint-front-prettier-write: ## run prettier over ts(x) & scss files -- beware! overwrites files
+lint-front-prettier-write: .env ## run prettier over ts(x) & scss files -- beware! overwrites files
 	@$(YARN) prettier-write
 .PHONY: lint-front-prettier-write
 
-lint-front-eslint: ## run eslint over ts files
+lint-front-eslint: .env ## run eslint over ts files
 	@$(YARN) lint
 .PHONY: lint-front-eslint
 
@@ -152,15 +157,15 @@ lint-front: \
 	lint-front-eslint
 .PHONY: lint-front
 
-test-back: ## run back-end tests
+test-back: .env ## run back-end tests
 	bin/pytest
 .PHONY: test-back
 
-watch-sass: ## watch changes in Sass files
+watch-sass: .env ## watch changes in Sass files
 	@$(YARN) watch-sass
 .PHONY: watch-sass
 
-watch-ts: ## watch changes in js files
+watch-ts: .env ## watch changes in js files
 	@$(YARN) watch-ts
 .PHONY: watch-ts
 
@@ -169,11 +174,11 @@ env.d/aws:
 	cp env.d/aws.dist env.d/aws
 
 # == Django
-check: ## perform django checks
+check: .env ## perform django checks
 	@$(MANAGE) check
 .PHONY: check
 
-demo-site: ## create a demo site
+demo-site: .env ## create a demo site
 	@$(COMPOSE) up -d db
 	@$(WAIT_DB)
 	@$(MANAGE) flush
@@ -181,7 +186,7 @@ demo-site: ## create a demo site
 	@${MAKE} search-index
 .PHONY: demo-site
 
-init: ## create base site structure
+init: .env ## create base site structure
 	@$(MANAGE) richie_init
 	@${MAKE} search-index
 .PHONY: init
@@ -197,37 +202,37 @@ lint-back: \
   lint-back-raincoat
 .PHONY: lint-back
 
-lint-back-black: ## lint back-end python sources with black
+lint-back-black: .env ## lint back-end python sources with black
 	@echo 'lint:black started…'
 	@$(COMPOSE_TEST_RUN_APP) black .
 .PHONY: lint-back-black
 
-lint-back-flake8: ## lint back-end python sources with flake8
+lint-back-flake8: .env ## lint back-end python sources with flake8
 	@echo 'lint:flake8 started…'
 	@$(COMPOSE_TEST_RUN_APP) flake8
 .PHONY: lint-back-flake8
 
-lint-back-isort: ## automatically re-arrange python imports in back-end code base
+lint-back-isort: .env ## automatically re-arrange python imports in back-end code base
 	@echo 'lint:isort started…'
 	@$(COMPOSE_TEST_RUN_APP) isort --atomic .
 .PHONY: lint-back-isort
 
-lint-back-pylint: ## lint back-end python sources with pylint
+lint-back-pylint: .env ## lint back-end python sources with pylint
 	@echo 'lint:pylint started…'
 	@$(COMPOSE_TEST_RUN_APP) pylint .
 .PHONY: lint-back-pylint
 
-lint-back-raincoat: ## lint back-end python sources with raincoat
+lint-back-raincoat: .env ## lint back-end python sources with raincoat
 	@echo 'lint:raincoat started…'
 	@$(COMPOSE_TEST_RUN_APP) raincoat
 .PHONY: lint-back-raincoat
 
-lint-back-bandit: ## lint back-end python sources with bandit
+lint-back-bandit: .env ## lint back-end python sources with bandit
 	@echo 'lint:bandit started…'
 	@$(COMPOSE_TEST_RUN_APP) bandit -qr .
 .PHONY: lint-back-bandit
 
-import-fixtures:  ## import fixtures
+import-fixtures: .env ## import fixtures
 	@$(MANAGE) import_fixtures -v3
 .PHONY: import-fixtures
 
@@ -237,48 +242,48 @@ i18n: \
 	i18n-front
 .PHONY: i18n
 
-i18n-back: ## create/update .po files and compile .mo files used for i18n
+i18n-back: .env ## create/update .po files and compile .mo files used for i18n
 	@$(MANAGE) makemessages --keep-pot --all
 	@echo 'Reactivating obsolete strings (allow overriding strings defined in dependencies)'
 	@$(COMPOSE_RUN_APP) find ./ -type f -name django.po -exec sed -i 's/#~ //g' {} \;
 	@$(MANAGE) compilemessages
 .PHONY: i18n-back
 
-i18n-front: ## Extract and compile translation files used for react-intl
+i18n-front: .env ## Extract and compile translation files used for react-intl
 	@$(YARN) extract-translations
 	@$(YARN) compile-translations
 .PHONY: i18n-front
 
-migrate: ## perform database migrations
+migrate: .env ## perform database migrations
 	@$(COMPOSE) up -d db
 	@$(WAIT_DB)
 	@$(MANAGE) migrate
 .PHONY: migrate
 
-search-index: ## (re)generate the Elasticsearch index
+search-index: .env ## (re)generate the Elasticsearch index
 	@$(COMPOSE) up -d elasticsearch
 	@$(WAIT_ES)
 	@$(MANAGE) bootstrap_elasticsearch
 .PHONY: search-index
 
-superuser: ## create a DjangoCMS superuser
+superuser: .env ## create a DjangoCMS superuser
 	@$(COMPOSE) up -d db
 	@$(WAIT_DB)
 	@$(MANAGE) createsuperuser
 .PHONY: superuser
 
 # == CI
-ci-check: ## run django check management command on productin image
+ci-check: .env ## run django check management command on productin image
 	$(COMPOSE_RUN) app python manage.py check
 .PHONY: ci-check
 
-ci-migrate: ## run django migrate command on production image
+ci-migrate: .env ## run django migrate command on production image
 	@$(COMPOSE) up -d db
 	@$(WAIT_DB)
 	$(COMPOSE_RUN) app python manage.py migrate
 .PHONY: ci-migrate
 
-ci-run: ## start the wsgi server (and linked services)
+ci-run: .env ## start the wsgi server (and linked services)
 	@$(COMPOSE) up -d app
 	# As we use a remote docker environment, we should explicitly use the same
 	# network to check containers status
@@ -287,7 +292,7 @@ ci-run: ## start the wsgi server (and linked services)
 	docker run --network container:fun_elasticsearch_1 --rm jwilder/dockerize -wait tcp://localhost:9200 -timeout 60s
 .PHONY: ci-run
 
-ci-version: ## check version file bundled in the docker image
+ci-version: .env ## check version file bundled in the docker image
 	$(COMPOSE_RUN) --no-deps app cat version.json
 .PHONY: ci-version
 
@@ -296,12 +301,12 @@ clean: ## restore repository state as it was freshly cloned
 	git clean -idx
 .PHONY: clean
 
-data/media/$(RICHIE_SITE)/.keep:
+data/media/$(RICHIE_SITE)/.keep: .env
 	@echo 'Preparing media volume...'
 	@mkdir -p data/media/$(RICHIE_SITE)
 	@touch data/media/$(RICHIE_SITE)/.keep
 
-data/db/$(RICHIE_SITE):
+data/db/$(RICHIE_SITE): .env
 	@echo 'Preparing db volume...'
 	@mkdir -p data/db/$(RICHIE_SITE)
 

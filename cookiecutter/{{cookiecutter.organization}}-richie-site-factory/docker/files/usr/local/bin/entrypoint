@@ -14,7 +14,7 @@
 # To pass environment variables, you can either use the -e option of the docker
 # run command:
 #
-#     docker run --rm -e USER_NAME=foo -e HOME='/home/foo' funmooc:latest python manage.py migrate
+#     docker run --rm -e USER_NAME=foo -e HOME='/home/foo' foo:latest python manage.py migrate
 #
 # or define new variables in an environment file to use with docker or
 # docker-compose:
@@ -23,7 +23,7 @@
 #     USER_NAME=foo
 #     HOME=/home/foo
 #
-#     docker run --rm --env-file env.d/development funmooc:latest python manage.py migrate
+#     docker run --rm --env-file env.d/development foo:latest python manage.py migrate
 #
 
 echo "🐳(entrypoint) creating user running in the container..."

@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-# source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
-
-docker run --rm -it -e LC_ALL=C.UTF-8 \
-    -v ${PWD}:/srv/app -w /srv/app \
-    cookiecutter/cookiecutter \
-    -o /srv/app/sites /srv/app/site_template

@@ -1,5 +1,5 @@
 """
-WSGI config for the funmooc project.
+WSGI config for the site project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

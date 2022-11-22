@@ -1,7 +1,6 @@
 parameters:
     site:
         type: string
-        default: funmooc
 steps:
     - run:
         name: Create a version.json

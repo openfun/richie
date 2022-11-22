@@ -83,9 +83,9 @@ $ bin/terraform init
 ```
 
 Now that your terraform project is initialized, you will be able to create S3
-buckets for static and media files in various environments (see the [project's
-settings](../src/backend/funmooc/settings.py)). To achieve this, we will use
-Terraform workspaces with the following paradigm:
+buckets for static and media files in various environments (see the project's
+settings). To achieve this, we will use Terraform workspaces with the
+following paradigm:
 
 _One workspace should be dedicated to one environment_.
 

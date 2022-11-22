@@ -1,7 +1,7 @@
 ARG NGINX_IMAGE_NAME=fundocker/openshift-nginx
 ARG NGINX_IMAGE_TAG=1.13
 ARG STATIC_ROOT=/data/static
-ARG SITE=funmooc
+ARG SITE
 
 # The ID of the user running in the container
 ARG DOCKER_USER=10000
