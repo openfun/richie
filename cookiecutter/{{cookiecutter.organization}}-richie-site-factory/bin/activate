@@ -18,6 +18,17 @@ read -r -a sites <<< "$(
 )"
 n_sites=${#sites[@]}
 
+if [[ n_sites -eq 0 ]]; then
+    (>&2 echo "You should first add a site to the project by running: make add-site")
+    exit 10
+fi
+
+if [[ n_sites -eq 1 ]]; then
+    # If there is only one site, just activate it
+    echo "RICHIE_SITE=${sites[0]}" > .env
+    exit 0
+fi
+
 prompt="Select an available site to activate:\\n"
 for (( i=0; i<n_sites; i++ )); do
     prompt+="[$((i+1))] ${sites[$i]}"
@@ -38,11 +49,5 @@ if [[ ${choice} -le 0 ]]; then
     choice=${default}
 fi
 
-RICHIE_SITE="${sites[$((choice-1))]}"
-
-if [[ "${BASH_SOURCE[0]}" != "${0}" ]] ; then
-    export RICHIE_SITE
-else
-    echo -e "\\n# Copy/paste ${RICHIE_SITE} activation command:"
-    echo "export RICHIE_SITE=${RICHIE_SITE}"
-fi
+# Activate the chosen site
+echo "RICHIE_SITE=${sites[$((choice-1))]}" > .env
