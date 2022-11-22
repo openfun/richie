@@ -20,6 +20,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix courses badges css.
+- Fix style in edit mode on courses with catalog visibility with
+  `course_only` or `course_and_search`.
 
 ## [2.17.0]
 

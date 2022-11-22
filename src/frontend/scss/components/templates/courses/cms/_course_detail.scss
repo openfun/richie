@@ -139,44 +139,46 @@
 
     & + #{$detail-selector}__run-descriptions {
       @if r-theme-val(course-detail, run-descriptions-divider) {
-        &::before {
+        margin-top: 4rem;
+
+        &::after {
           content: '';
           display: block;
           width: 60%;
-          margin: 2rem auto;
+          margin: 2rem 0;
+          top: -4rem;
+          left: 50%;
+          transform: translateX(-50%);
+          position: absolute;
           border-top: $onepixel solid r-theme-val(course-detail, run-descriptions-divider);
         }
       }
     }
 
     // Add CSS style only to edit mode
-    &--hidden,
-    &--course_only {
-      h3.cms-render-model::before {
-        content: '';
-        background-size: 1rem 1rem;
-        display: inline-block;
-        width: 1.5rem;
-        height: 1rem;
-        margin-left: -1.5rem;
-        background-repeat: no-repeat;
-        background-color: r-theme-val(course-detail, run-catalog-visibility-logo-color);
-      }
+    &--hidden::before,
+    &--course_only::before {
+      content: '';
+      background-size: 1rem 1rem;
+      display: inline-block;
+      width: 1.5rem;
+      height: 1rem;
+      position: absolute;
+      top: 0.25rem;
+      left: -1.5rem;
+      background-repeat: no-repeat;
+      background-color: r-theme-val(course-detail, run-catalog-visibility-logo-color);
     }
 
-    &--hidden {
-      h3.cms-render-model::before {
-        @include course-detail-run-descriptions-catalog-visibility-mask(
-          r-theme-val(course-detail, run-catalog-visibility-hidden-logo)
-        );
-      }
+    &--hidden::before {
+      @include course-detail-run-descriptions-catalog-visibility-mask(
+        r-theme-val(course-detail, run-catalog-visibility-hidden-logo)
+      );
     }
-    &--course_only {
-      h3.cms-render-model::before {
-        @include course-detail-run-descriptions-catalog-visibility-mask(
-          r-theme-val(course-detail, run-catalog-visibility-course-only-logo)
-        );
-      }
+    &--course_only::before {
+      @include course-detail-run-descriptions-catalog-visibility-mask(
+        r-theme-val(course-detail, run-catalog-visibility-course-only-logo)
+      );
     }
   }
 
