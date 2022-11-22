@@ -8,19 +8,23 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
-### Fixed
+### Added
 
-- Fix courses badges css.
+- Allow synchronizing course runs in bulk via the same API hook
+- JoanieBackend to identify course runs managed by Joanie
 
 ### Changed
 
 - Migrate to React 18 and React-Query v4
 
+### Fixed
+
+- Fix courses badges css.
+
 ## [2.17.0]
 
 ### Added
 
-- JoanieBackend to identify course runs managed by Joanie
 - Add Dashboard router
 - Add generic dashboard component
 - Add dashboard components for Order, Enrollment

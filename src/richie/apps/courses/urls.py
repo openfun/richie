@@ -5,7 +5,7 @@ from django.urls import path, re_path
 
 from rest_framework import routers
 
-from .api import CourseRunsViewSet, course_runs_sync
+from .api import CourseRunsViewSet, sync_course_runs_from_request
 from .views import PageAdminAutocomplete
 
 ROUTER = routers.SimpleRouter()
@@ -14,7 +14,9 @@ ROUTER = routers.SimpleRouter()
 ROUTER.register("course-runs", CourseRunsViewSet, "course_runs")
 
 urlpatterns = ROUTER.urls + [
-    re_path("course-runs-sync/?$", course_runs_sync, name="course_run_sync"),
+    re_path(
+        "course-runs-sync/?$", sync_course_runs_from_request, name="course_run_sync"
+    ),
     path(
         "page-admin-autocomplete/<slug:model_name>>/",
         PageAdminAutocomplete.as_view(),

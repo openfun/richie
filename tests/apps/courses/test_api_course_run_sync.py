@@ -1008,3 +1008,203 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             self.assertEqual(draft_serializer.data[field], value)
 
         self.assertFalse(mock_signal.called)
+
+    # Bulk
+
+    @override_settings(
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="utc"
+    )
+    def test_api_course_run_sync_create_bulk_success(self, mock_signal):
+        """
+        It should be possible to synchronize a list of course runs in bulk.
+        """
+        course = CourseFactory(code="DemoX", should_publish=True)
+        resource_link1 = (
+            "http://example.edx:8073/courses/course-v1:edX+DemoX+01/course/"
+        )
+        resource_link2 = (
+            "http://example.edx:8073/courses/course-v1:edX+DemoX+02/course/"
+        )
+        data = [
+            {
+                "resource_link": resource_link1,
+                "start": "2020-12-09T09:31:59.417817Z",
+                "end": "2021-03-14T09:31:59.417895Z",
+                "enrollment_start": "2020-11-09T09:31:59.417936Z",
+                "enrollment_end": "2020-12-24T09:31:59.417972Z",
+                "languages": ["en", "fr"],
+                "enrollment_count": 46782,
+                "catalog_visibility": "course_and_search",
+            },
+            {
+                "resource_link": resource_link2,
+                "start": "2021-12-09T09:31:59.417817Z",
+                "end": "2022-03-14T09:31:59.417895Z",
+                "enrollment_start": "2021-11-09T09:31:59.417936Z",
+                "enrollment_end": "2021-12-24T09:31:59.417972Z",
+                "languages": ["en"],
+                "enrollment_count": 210,
+                "catalog_visibility": "course_and_search",
+            },
+        ]
+
+        mock_signal.reset_mock()
+
+        authorization = (
+            "SIG-HMAC-SHA256 "
+            "3f23b25632caa04b5fb9ac8b21f5143779fb61b6fa9b0422fce0f6fdad0b3de3"
+        )
+        response = self.client.post(
+            "/api/v1.0/course-runs-sync",
+            data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=authorization,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.json(),
+            {resource_link1: {"success": True}, resource_link2: {"success": True}},
+        )
+        self.assertEqual(CourseRun.objects.count(), 4)
+
+        # Check that the draft course run was updated
+        draft_course_runs = CourseRun.objects.filter(direct_course=course).order_by(
+            "resource_link"
+        )
+        draft_serializer = SyncCourseRunSerializer(
+            instance=draft_course_runs, many=True
+        )
+        self.assertEqual(draft_serializer.data, data)
+
+        # Check that a new public course run was created
+        public_course_runs = CourseRun.objects.filter(
+            direct_course=course.public_extension
+        ).order_by("resource_link")
+        public_serializer = SyncCourseRunSerializer(
+            instance=public_course_runs, many=True
+        )
+        self.assertEqual(public_serializer.data, data)
+
+    @override_settings(
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="utc"
+    )
+    def test_api_course_run_sync_create_bulk_missing_resource_link(self, _mock_signal):
+        """
+        If one resource link is missing, the whole synchronization cal should fail.
+        """
+        CourseFactory(code="DemoX", should_publish=True)
+        resource_link = "http://example.edx:8073/courses/course-v1:edX+DemoX+01/course/"
+        data = [
+            {
+                "resource_link": resource_link,
+                "start": "2020-12-09T09:31:59.417817Z",
+                "end": "2021-03-14T09:31:59.417895Z",
+                "enrollment_start": "2020-11-09T09:31:59.417936Z",
+                "enrollment_end": "2020-12-24T09:31:59.417972Z",
+                "languages": ["en", "fr"],
+            },
+            {
+                # missing resource link
+                "start": "2021-12-09T09:31:59.417817Z",
+                "end": "2022-03-14T09:31:59.417895Z",
+                "enrollment_start": "2021-11-09T09:31:59.417936Z",
+                "enrollment_end": "2021-12-24T09:31:59.417972Z",
+                "languages": ["en"],
+            },
+        ]
+
+        authorization = (
+            "SIG-HMAC-SHA256 "
+            "f56ad4bbb70eae7aa8fc979b82e86d20b0aa2151fafc63f5246dbb6c44813da1"
+        )
+        response = self.client.post(
+            "/api/v1.0/course-runs-sync",
+            data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=authorization,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json(), {"resource_link": ["This field is required."]}
+        )
+        self.assertFalse(CourseRun.objects.exists())
+
+    @override_settings(
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="utc"
+    )
+    def test_api_course_run_sync_create_bulk_errors(self, mock_signal):
+        """
+        When errors occur on one of the course runs in bulk. The error is included
+        in the document returned.
+        """
+        course = CourseFactory(code="DemoX", should_publish=True)
+        resource_link1 = (
+            "http://example.edx:8073/courses/course-v1:edX+DemoX+01/course/"
+        )
+        resource_link2 = (
+            "http://example.edx:8073/courses/course-v1:edX+DemoX+02/course/"
+        )
+        data = [
+            {
+                "resource_link": resource_link1,
+                "start": 1,
+                "end": "2021-03-14T09:31:59.417895Z",
+                "enrollment_start": "2020-11-09T09:31:59.417936Z",
+                "enrollment_end": "2020-12-24T09:31:59.417972Z",
+                "languages": ["en", "fr"],
+                "enrollment_count": 46782,
+                "catalog_visibility": "course_and_search",
+            },
+            {
+                "resource_link": resource_link2,
+                "start": "2021-12-09T09:31:59.417817Z",
+                "end": "2022-03-14T09:31:59.417895Z",
+                "enrollment_start": "2021-11-09T09:31:59.417936Z",
+                "enrollment_end": "2021-12-24T09:31:59.417972Z",
+                "languages": ["en"],
+                "enrollment_count": 210,
+                "catalog_visibility": "course_and_search",
+            },
+        ]
+
+        mock_signal.reset_mock()
+
+        authorization = (
+            "SIG-HMAC-SHA256 "
+            "26339b1ef2d8203b097345e3176ebe857645768c1a65877805c4c30d70ae4495"
+        )
+        response = self.client.post(
+            "/api/v1.0/course-runs-sync",
+            data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=authorization,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            response.json(),
+            {
+                resource_link1: {
+                    "start": [
+                        (
+                            "Datetime has wrong format. Use one of these formats instead: "
+                            "YYYY-MM-DDThh:mm[:ss[.uuuuuu]][+HH:MM|-HH:MM|Z]."
+                        )
+                    ]
+                },
+                resource_link2: {"success": True},
+            },
+        )
+        self.assertEqual(CourseRun.objects.count(), 2)
+
+        # Check that the draft course run of the valid item was updated
+        draft_course_run = CourseRun.objects.get(direct_course=course)
+        draft_serializer = SyncCourseRunSerializer(instance=draft_course_run)
+        self.assertEqual(draft_serializer.data, data[1])
+
+        # Check that a new public course run of the valid item was created
+        public_course_run = CourseRun.objects.get(direct_course=course.public_extension)
+        public_serializer = SyncCourseRunSerializer(instance=public_course_run)
+        self.assertEqual(public_serializer.data, data[1])
