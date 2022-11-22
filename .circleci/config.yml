@@ -121,6 +121,9 @@ jobs:
             cat cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template/{{cookiecutter.site}}/requirements/base.txt | grep "richie==${BACKEND_VERSION}$"
             # In the cookiecutter site template frontend
             cat cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template/{{cookiecutter.site}}/src/frontend/package.json | grep "\"richie-education\": \"${BACKEND_VERSION}\"$"
+            # In the cookiecutter documentation
+            cat docs/cookiecutter.md | grep "cookiecutter gh:openfun/richie --directory cookiecutter  --checkout v${BACKEND_VERSION}"
+            cat docs/cookiecutter.md | grep "fundocker/cookiecutter gh:openfun/richie --directory cookiecutter --checkout v${BACKEND_VERSION}"
             # In the e2e tests
             cat tests_e2e/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
             # In the website
