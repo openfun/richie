@@ -11,15 +11,10 @@
         "npm"
       ],
       "matchPackageNames": [
-        "@testing-library/react",
         "@types/faker",
-        "@types/react",
-        "@types/react-dom",
         "bootstrap",
         "faker",
-        "node-fetch",
-        "react",
-        "react-dom"
+        "node-fetch"
       ]
     },
     {
