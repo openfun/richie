@@ -12,7 +12,11 @@ generate-version-file: &generate-version-file
         "$CIRCLE_PROJECT_REPONAME" \
         "$CIRCLE_BUILD_URL" > sandbox/version.json
 
-version: 2
+version: 2.1
+parameters:
+  nightly-round:
+    type: boolean
+    default: false
 
 aliases:
   - &checkout_fun
@@ -808,11 +812,15 @@ jobs:
           command: |
             mkdir -p fun-richie-site-factory/data/media/${RICHIE_SITE}
             mkdir -p fun-richie-site-factory/data/db/${RICHIE_SITE}
-      - run:
-          name: Tweak requirement files to install the branch richie version instead of the released one
-          command: |
-            sed -i 's@"richie-education":.*@"richie-education": "https://gitpkg.now.sh/openfun/richie/src/frontend?'"${CIRCLE_BRANCH}"'"@' fun-richie-site-factory/sites/${RICHIE_SITE}/src/frontend/package.json
-            sed -i 's@richie==.*@git+https://github.com/openfun/richie.git\@'"${CIRCLE_BRANCH}"'#egg=richie@' fun-richie-site-factory/sites/${RICHIE_SITE}/requirements/base.txt
+      - when:
+          condition:
+            not: << pipeline.parameters.nightly-round >>
+          steps:
+            - run:
+                name: Tweak requirement files to install the branch richie version instead of the released one
+                command: |
+                  sed -i 's@"richie-education":.*@"richie-education": "https://gitpkg.now.sh/openfun/richie/src/frontend?'"${CIRCLE_BRANCH}"'"@' fun-richie-site-factory/sites/${RICHIE_SITE}/src/frontend/package.json
+                  sed -i 's@richie==.*@git+https://github.com/openfun/richie.git\@'"${CIRCLE_BRANCH}"'#egg=richie@' fun-richie-site-factory/sites/${RICHIE_SITE}/requirements/base.txt
       - run:
           name: Build front
           command: |
@@ -939,9 +947,11 @@ jobs:
             cd ./website && yarn install && GIT_USER=funmoocbot CI_PULL_REQUEST="" CIRCLE_PULL_REQUEST="" yarn run deploy
 
 workflows:
-  version: 2
-
   richie:
+    # Do not trigger this workflow on schedule trigger
+    when:
+      not:
+        equal: [ scheduled_pipeline, << pipeline.trigger_source >> ]
     jobs:
       # Front-end jobs
       #
@@ -1154,3 +1164,10 @@ workflows:
           filters:
             tags:
               only: /.*/
+
+  nightly-round:
+    # This workflow is triggered each working days at 3:00am UTC.
+    when:
+      equal: [ "Nightly round", << pipeline.schedule.name >> ]
+    jobs:
+      - cookiecutter-bootstrap
