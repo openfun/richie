@@ -206,7 +206,7 @@ class BasePageExtension(PageExtension):
         )
 
         relevant_language = next(
-            filter(lambda l: l in existing_languages, languages), current_language
+            filter(lambda lang: lang in existing_languages, languages), current_language
         )
 
         related_name = plugin_model.page.field.related_query_name()
