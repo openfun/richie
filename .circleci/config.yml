@@ -787,7 +787,7 @@ jobs:
            # We want to run this job only on release or master branch, to guess that
            # we check if a new release entry has been added into the CHANGELOG
            # If there is no new release entry, git diff returns a 0 exit code
-           if [ "$CIRCLE_BRANCH" != "master" ] & git diff --quiet -G"^## \[[0-9.]*\]$" origin/master..HEAD CHANGELOG.md; then
+           if [ "$CIRCLE_BRANCH" != "master" ] && git diff --quiet -G"^## \[[0-9.]*\]$" origin/master..HEAD CHANGELOG.md; then
              # So we can gracefully exit the job
              circleci-agent step halt
            fi
