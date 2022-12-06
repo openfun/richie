@@ -35,8 +35,8 @@ jest.mock('utils/indirection/window', () => ({
 
 describe('<DahsboardEditCreditCard/>', () => {
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
   });
 
   afterEach(() => {
@@ -51,8 +51,8 @@ describe('<DahsboardEditCreditCard/>', () => {
     // It must keep the same id.
     creditCardUpdated.id = creditCard.id;
 
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards);
-    const updateUrl = 'https://joanie.endpoint/api/credit-cards/' + creditCard.id + '/';
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
+    const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, 200);
 
     await act(async () => {
@@ -90,7 +90,7 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     // Mock refresh route.
     fetchMock.get(
-      'https://joanie.endpoint/api/credit-cards/',
+      'https://joanie.endpoint/api/v1.0/credit-cards/',
       [
         ...creditCards.slice(0, 5),
         {
@@ -147,8 +147,8 @@ describe('<DahsboardEditCreditCard/>', () => {
     const creditCardUpdated = { ...creditCard };
     creditCardUpdated.is_main = true;
 
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards);
-    const updateUrl = 'https://joanie.endpoint/api/credit-cards/' + creditCard.id + '/';
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
+    const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, 200);
 
     await act(async () => {
@@ -182,7 +182,7 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     // Mock refresh route.
     fetchMock.get(
-      'https://joanie.endpoint/api/credit-cards/',
+      'https://joanie.endpoint/api/v1.0/credit-cards/',
       [
         ...creditCards.slice(0, 5),
         {
@@ -239,8 +239,8 @@ describe('<DahsboardEditCreditCard/>', () => {
     const creditCard = mockFactories.CreditCardFactory.generate();
     let creditCards = [...mockFactories.CreditCardFactory.generate(5), creditCard];
 
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards);
-    const updateUrl = 'https://joanie.endpoint/api/credit-cards/' + creditCard.id + '/';
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
+    const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, 200);
 
     await act(async () => {
@@ -268,10 +268,10 @@ describe('<DahsboardEditCreditCard/>', () => {
     const deleteButton = screen.getByRole('button', { name: 'Delete' });
 
     // Mock delete route and the refresh route to returns `creditCards` without the first one.
-    const deleteUrl = 'https://joanie.endpoint/api/credit-cards/' + creditCard.id + '/';
+    const deleteUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.delete(deleteUrl, []);
     creditCards = creditCards.slice(0, 5);
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards, {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards, {
       overwriteRoutes: true,
     });
 
@@ -309,8 +309,8 @@ describe('<DahsboardEditCreditCard/>', () => {
     const creditCard = mockFactories.CreditCardFactory.generate();
     const creditCards = [...mockFactories.CreditCardFactory.generate(5), creditCard];
 
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards);
-    const updateUrl = 'https://joanie.endpoint/api/credit-cards/' + creditCard.id + '/';
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
+    const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, {
       status: 500,
       body: 'Internal error',

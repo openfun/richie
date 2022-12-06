@@ -23,8 +23,8 @@ jest.mock('utils/context', () => ({
 
 describe('<DashboardEditAddress/>', () => {
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
   });
 
   afterEach(() => {
@@ -37,8 +37,8 @@ describe('<DashboardEditAddress/>', () => {
     const addressUpdated = mockFactories.AddressFactory.generate();
     // It must keep the same id.
     addressUpdated.id = address.id;
-    fetchMock.get('https://joanie.endpoint/api/addresses/', [address]);
-    const updateUrl = 'https://joanie.endpoint/api/addresses/' + address.id + '/';
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
+    const updateUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
     fetchMock.put(updateUrl, 200);
 
     await act(async () => {
@@ -89,7 +89,7 @@ describe('<DashboardEditAddress/>', () => {
     expect(countryInput.value).toBe(address.country);
 
     // Mock refresh route.
-    fetchMock.get('https://joanie.endpoint/api/addresses/', [addressUpdated], {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [addressUpdated], {
       overwriteRoutes: true,
     });
 
@@ -120,10 +120,10 @@ describe('<DashboardEditAddress/>', () => {
 
   it('shows an error in case of API error', async () => {
     const address = mockFactories.AddressFactory.generate();
-    fetchMock.get('https://joanie.endpoint/api/addresses/', [address]);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
     // Mock the edit API route to return a 500 status.
-    const updateUrl = 'https://joanie.endpoint/api/addresses/' + address.id + '/';
+    const updateUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
     fetchMock.put(updateUrl, { status: 500, body: 'Bad request' });
 
     let container: HTMLElement | undefined;

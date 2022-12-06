@@ -118,7 +118,7 @@ describe('CourseProductCourseRuns', () => {
 
     it('renders a warning message when no course runs are provided', () => {
       const order: OrderLite = OrderLiteFactory.generate();
-      fetchMock.get('https://joanie.test/api/courses/00000/', 200);
+      fetchMock.get('https://joanie.test/api/v1.0/courses/00000/', 200);
 
       render(
         <Wrapper code="00000">
@@ -133,7 +133,7 @@ describe('CourseProductCourseRuns', () => {
       const course: Course = CourseFactory.generate();
       const courseRuns: CourseRun[] = JoanieCourseRunFactory().generate(2);
       const order: OrderLite = OrderLiteFactory.generate();
-      fetchMock.get(`https://joanie.test/api/courses/${course.code}/`, 200);
+      fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
 
       render(
         <Wrapper code={course.code}>
@@ -206,7 +206,7 @@ describe('CourseProductCourseRuns', () => {
       // - User clicks to enroll
       fetchMock.resetHistory();
       const enrollmentDeferred = new Deferred();
-      fetchMock.post('https://joanie.test/api/enrollments/', enrollmentDeferred.promise);
+      fetchMock.post('https://joanie.test/api/v1.0/enrollments/', enrollmentDeferred.promise);
 
       await act(async () => {
         fireEvent.click($button);
@@ -222,14 +222,14 @@ describe('CourseProductCourseRuns', () => {
       const calls = fetchMock.calls();
       expect(calls).toHaveLength(2);
       // A request to create the enrollment should have been executed
-      expect(calls[0][0]).toBe('https://joanie.test/api/enrollments/');
+      expect(calls[0][0]).toBe('https://joanie.test/api/v1.0/enrollments/');
       expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
         is_active: true,
         order: order.id,
         course_run: courseRuns[0].resource_link,
       });
       // Afterward a request to refresh the course should have been executed
-      expect(calls[1][0]).toBe(`https://joanie.test/api/courses/${course.code}/`);
+      expect(calls[1][0]).toBe(`https://joanie.test/api/v1.0/courses/${course.code}/`);
     });
 
     it('does not allow to enroll if course run is not opened for enrollment', async () => {
@@ -256,7 +256,7 @@ describe('CourseProductCourseRuns', () => {
         }))
         .generate();
       const order = OrderLiteFactory.generate();
-      fetchMock.get('https://joanie.test/api/courses/00000/', 200);
+      fetchMock.get('https://joanie.test/api/v1.0/courses/00000/', 200);
 
       render(
         <Wrapper code="00000">
@@ -299,7 +299,7 @@ describe('CourseProductCourseRuns', () => {
       // it should be enabled already to allow early user feedback
       expect($button.disabled).toBe(false);
 
-      fetchMock.post('https://joanie.test/api/enrollments/', []);
+      fetchMock.post('https://joanie.test/api/v1.0/enrollments/', []);
       await act(async () => {
         // - Select the first course run
         const $radio = screen.getByRole('radio', {
@@ -335,7 +335,7 @@ describe('CourseProductCourseRuns', () => {
 
     it('renders enrollment information', () => {
       const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
-      fetchMock.get('https://joanie.test/api/courses/00000/', 200);
+      fetchMock.get('https://joanie.test/api/v1.0/courses/00000/', 200);
       render(
         <Wrapper code="00000">
           <EnrolledCourseRun enrollment={enrollment} />
@@ -375,7 +375,7 @@ describe('CourseProductCourseRuns', () => {
     it('allows to unroll', async () => {
       const course: Course = CourseFactory.generate();
       const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
-      fetchMock.get(`https://joanie.test/api/courses/${course.code}/`, 200);
+      fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
 
       render(
         <Wrapper code={course.code}>
@@ -388,7 +388,7 @@ describe('CourseProductCourseRuns', () => {
       fetchMock.resetHistory();
       const enrollmentDeferred = new Deferred();
       fetchMock.put(
-        `https://joanie.test/api/enrollments/${enrollment.id}/`,
+        `https://joanie.test/api/v1.0/enrollments/${enrollment.id}/`,
         enrollmentDeferred.promise,
       );
 
@@ -406,13 +406,13 @@ describe('CourseProductCourseRuns', () => {
       const calls = fetchMock.calls();
       expect(calls).toHaveLength(2);
       // A request to unroll user should have been executed
-      expect(calls[0][0]).toBe(`https://joanie.test/api/enrollments/${enrollment.id}/`);
+      expect(calls[0][0]).toBe(`https://joanie.test/api/v1.0/enrollments/${enrollment.id}/`);
       expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
         is_active: false,
         course_run: enrollment.course_run.resource_link,
       });
       // Afterward a request to refresh the course should have been executed
-      expect(calls[1][0]).toBe(`https://joanie.test/api/courses/${course.code}/`);
+      expect(calls[1][0]).toBe(`https://joanie.test/api/v1.0/courses/${course.code}/`);
     });
   });
 });

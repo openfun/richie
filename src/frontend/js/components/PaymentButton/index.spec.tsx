@@ -153,8 +153,8 @@ describe('PaymentButton', () => {
     const handleSuccess = jest.fn();
 
     fetchMock
-      .post('https://joanie.test/api/orders/', order)
-      .get(`https://joanie.test/api/orders/${order.id}/`, {
+      .post('https://joanie.test/api/v1.0/orders/', order)
+      .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, {
         ...order,
         state: OrderState.PENDING,
       });
@@ -183,7 +183,7 @@ describe('PaymentButton', () => {
 
     // - Route to create order should have been called
     expect(fetchMock.calls()).toHaveLength(1);
-    expect(fetchMock.lastUrl()).toBe('https://joanie.test/api/orders/');
+    expect(fetchMock.lastUrl()).toBe('https://joanie.test/api/v1.0/orders/');
 
     // - Spinner should be displayed
     screen.getByText('Payment in progress');
@@ -198,11 +198,11 @@ describe('PaymentButton', () => {
 
     // - Once payment succeeded, order should be refetch
     expect(fetchMock.calls()).toHaveLength(2);
-    expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/orders/${order.id}/`);
+    expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
     // - Order should be polled until its state is validated
     fetchMock.get(
-      `https://joanie.test/api/orders/${order.id}/`,
+      `https://joanie.test/api/v1.0/orders/${order.id}/`,
       {
         ...order,
         state: OrderState.VALIDATED,
@@ -219,7 +219,7 @@ describe('PaymentButton', () => {
 
     // - Order should have been refetched
     expect(fetchMock.calls()).toHaveLength(3);
-    expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/orders/${order.id}/`);
+    expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
     // - As order state is validated, the onSuccess callback should be triggered.
     expect(handleSuccess).toHaveBeenCalledTimes(1);
@@ -239,8 +239,8 @@ describe('PaymentButton', () => {
     const handleSuccess = jest.fn();
 
     fetchMock
-      .post('https://joanie.test/api/orders/', order)
-      .get(`https://joanie.test/api/orders/${order.id}/`, {
+      .post('https://joanie.test/api/v1.0/orders/', order)
+      .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, {
         ...order,
         state: OrderState.PENDING,
       });
@@ -271,14 +271,14 @@ describe('PaymentButton', () => {
     // - Route to create order should have been called
     // - Furthermore, as payment succeeded immediately, order should have been refetched
     expect(fetchMock.calls()).toHaveLength(2);
-    expect(fetchMock.calls()[0][0]).toBe('https://joanie.test/api/orders/');
+    expect(fetchMock.calls()[0][0]).toBe('https://joanie.test/api/v1.0/orders/');
     expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
       billing_address: billingAddress,
       credit_card_id: creditCard.id,
       course: '00000',
       product: product.id,
     });
-    expect(fetchMock.calls()[1][0]).toBe(`https://joanie.test/api/orders/${order.id}/`);
+    expect(fetchMock.calls()[1][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
     // - Spinner should be displayed
     screen.getByText('Payment in progress');
@@ -288,7 +288,7 @@ describe('PaymentButton', () => {
 
     // - Order should be polled until its state is validated
     fetchMock.get(
-      `https://joanie.test/api/orders/${order.id}/`,
+      `https://joanie.test/api/v1.0/orders/${order.id}/`,
       {
         ...order,
         state: OrderState.VALIDATED,
@@ -305,7 +305,7 @@ describe('PaymentButton', () => {
 
     // - Order should have been refetched
     expect(fetchMock.calls()).toHaveLength(3);
-    expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/orders/${order.id}/`);
+    expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
     // - As order state is validated, the onSuccess callback should be triggered.
     expect(handleSuccess).toHaveBeenCalledTimes(1);
@@ -325,12 +325,12 @@ describe('PaymentButton', () => {
     const handleSuccess = jest.fn();
 
     fetchMock
-      .post('https://joanie.test/api/orders/', order)
-      .get(`https://joanie.test/api/orders/${order.id}/`, {
+      .post('https://joanie.test/api/v1.0/orders/', order)
+      .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, {
         ...order,
         state: OrderState.PENDING,
       })
-      .post(`https://joanie.test/api/orders/${order.id}/abort/`, 200);
+      .post(`https://joanie.test/api/v1.0/orders/${order.id}/abort/`, 200);
 
     render(
       <Wrapper client={createTestQueryClient({ user: { username: 'John Doe' } })}>
@@ -358,14 +358,14 @@ describe('PaymentButton', () => {
     // - Route to create order should have been called
     // - Furthermore, as payment succeeded immediately, order should have been refetched
     expect(fetchMock.calls()).toHaveLength(2);
-    expect(fetchMock.calls()[0][0]).toBe('https://joanie.test/api/orders/');
+    expect(fetchMock.calls()[0][0]).toBe('https://joanie.test/api/v1.0/orders/');
     expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
       billing_address: billingAddress,
       credit_card_id: creditCard.id,
       course: '00000',
       product: product.id,
     });
-    expect(fetchMock.calls()[1][0]).toBe(`https://joanie.test/api/orders/${order.id}/`);
+    expect(fetchMock.calls()[1][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
     // - Spinner should be displayed
     screen.getByText('Payment in progress');
@@ -394,7 +394,7 @@ describe('PaymentButton', () => {
       timeout: 2000,
     });
     await waitFor(() =>
-      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/orders/${order.id}/abort/`),
+      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/abort/`),
     );
     expect(JSON.parse(fetchMock.lastOptions()!.body!.toString())).toEqual({
       payment_id: order.payment_info.payment_id,
@@ -412,8 +412,8 @@ describe('PaymentButton', () => {
     const handleSuccess = jest.fn();
 
     fetchMock
-      .post('https://joanie.test/api/orders/', order)
-      .get(`https://joanie.test/api/orders/${order.id}/`, {
+      .post('https://joanie.test/api/v1.0/orders/', order)
+      .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, {
         ...order,
         state: OrderState.PENDING,
       });
@@ -442,7 +442,7 @@ describe('PaymentButton', () => {
 
     // - Route to create order should have been called
     expect(fetchMock.calls()).toHaveLength(1);
-    expect(fetchMock.lastUrl()).toBe('https://joanie.test/api/orders/');
+    expect(fetchMock.lastUrl()).toBe('https://joanie.test/api/v1.0/orders/');
     expect(JSON.parse(fetchMock.lastOptions()!.body!.toString())).toEqual({
       billing_address: billingAddress,
       course: '00000',

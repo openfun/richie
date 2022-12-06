@@ -21,8 +21,8 @@ jest.mock('utils/context', () => ({
 
 describe('useCreditCards', () => {
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
   });
 
   afterEach(() => {
@@ -43,7 +43,7 @@ describe('useCreditCards', () => {
   it('retrieves all the credit cards', async () => {
     const creditCards = mockFactories.CreditCardFactory.generate(5);
     const responseDeferred = new Deferred();
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', responseDeferred.promise);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', responseDeferred.promise);
 
     const { result } = renderHook(() => useCreditCards(), {
       wrapper: Wrapper,
@@ -72,7 +72,7 @@ describe('useCreditCards', () => {
     const creditCards = mockFactories.CreditCardFactory.generate(5);
     const creditCard = creditCards[3];
     const responseDeferred = new Deferred();
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', responseDeferred.promise);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', responseDeferred.promise);
     const { result } = renderHook(() => useCreditCards(creditCard.id), {
       wrapper: Wrapper,
     });

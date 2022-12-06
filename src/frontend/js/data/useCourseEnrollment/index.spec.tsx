@@ -84,6 +84,8 @@ describe('useCourseEnrollment', () => {
 
     expect(fetchMock.called()).toBeTruthy();
     await waitFor(() => expect(result.current.enrollment).toStrictEqual(enrollmentResponse));
-    expect(result.current.enrollmentIsActive).toStrictEqual(enrollmentResponse.is_active);
+    await waitFor(() =>
+      expect(result.current.enrollmentIsActive).toStrictEqual(enrollmentResponse.is_active),
+    );
   });
 });

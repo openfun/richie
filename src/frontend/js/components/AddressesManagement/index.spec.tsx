@@ -30,8 +30,8 @@ describe('AddressesManagement', () => {
   const selectAddress = jest.fn();
 
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
   });
 
   afterEach(() => {
@@ -40,7 +40,7 @@ describe('AddressesManagement', () => {
   });
 
   it('renders a go back button', async () => {
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
 
     await act(async () => {
       render(
@@ -65,7 +65,7 @@ describe('AddressesManagement', () => {
 
   it("renders the user's addresses", async () => {
     const addresses = mockFactories.AddressFactory.generate(Math.ceil(Math.random() * 5));
-    fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
 
     let container: HTMLElement;
 
@@ -105,7 +105,7 @@ describe('AddressesManagement', () => {
   });
 
   it('renders a form to create an address', async () => {
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
 
     await act(async () => {
       render(
@@ -167,7 +167,7 @@ describe('AddressesManagement', () => {
 
     // - User fulfills the form again but wants to save the address this time
     address = mockFactories.AddressFactory.generate();
-    fetchMock.post('https://joanie.endpoint/api/addresses/', {
+    fetchMock.post('https://joanie.endpoint/api/v1.0/addresses/', {
       ...address,
       is_main: true,
     });
@@ -191,7 +191,7 @@ describe('AddressesManagement', () => {
 
   it('renders a form to edit an address when user selects an address to edit', async () => {
     const address = mockFactories.AddressFactory.generate();
-    fetchMock.get('https://joanie.endpoint/api/addresses/', [address]);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
     await act(async () => {
       render(
@@ -251,14 +251,14 @@ describe('AddressesManagement', () => {
 
     // - User edits some values then submits its changes
     fetchMock
-      .put(`https://joanie.endpoint/api/addresses/${address.id}/`, {
+      .put(`https://joanie.endpoint/api/v1.0/addresses/${address.id}/`, {
         ...address,
         title: 'Home',
         first_name: 'John',
         last_name: 'DOE',
       })
       .get(
-        'https://joanie.endpoint/api/addresses/',
+        'https://joanie.endpoint/api/v1.0/addresses/',
         [
           {
             ...address,
@@ -331,7 +331,7 @@ describe('AddressesManagement', () => {
 
   it('allows user to delete an existing address', async () => {
     const address = mockFactories.AddressFactory.generate();
-    fetchMock.get('https://joanie.endpoint/api/addresses/', [address]);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
     let container: HTMLElement;
     await act(async () => {
@@ -348,8 +348,8 @@ describe('AddressesManagement', () => {
 
     // - User deletes his only existing address
     fetchMock
-      .delete(`https://joanie.endpoint/api/addresses/${address.id}/`, {})
-      .get('https://joanie.endpoint/api/addresses/', [], { overwriteRoutes: true });
+      .delete(`https://joanie.endpoint/api/v1.0/addresses/${address.id}/`, {})
+      .get('https://joanie.endpoint/api/v1.0/addresses/', [], { overwriteRoutes: true });
 
     const $deleteButton = await screen.findByRole('button', {
       name: `Delete "${address.title}" address`,
@@ -371,7 +371,7 @@ describe('AddressesManagement', () => {
   it('allows user to promote an address as main', async () => {
     const [address1, address2] = mockFactories.AddressFactory.generate(2);
     address1.is_main = true;
-    fetchMock.get('https://joanie.endpoint/api/addresses/', [address1, address2]);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address1, address2]);
 
     await act(async () => {
       render(
@@ -387,12 +387,12 @@ describe('AddressesManagement', () => {
 
     // - User promotes address2 as main
     fetchMock
-      .put(`https://joanie.endpoint/api/addresses/${address2.id}/`, {
+      .put(`https://joanie.endpoint/api/v1.0/addresses/${address2.id}/`, {
         ...address2,
         is_main: true,
       })
       .get(
-        'https://joanie.endpoint/api/addresses/',
+        'https://joanie.endpoint/api/v1.0/addresses/',
         [
           {
             ...address1,

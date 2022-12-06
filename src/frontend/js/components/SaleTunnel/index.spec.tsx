@@ -61,7 +61,7 @@ describe('SaleTunnel', () => {
   it('shows a login button if user is not authenticated', async () => {
     const product = ProductFactory.generate();
 
-    fetchMock.get('https://joanie.test/api/courses/00000/', []);
+    fetchMock.get('https://joanie.test/api/v1.0/courses/00000/', []);
 
     await act(async () => {
       render(
@@ -77,10 +77,10 @@ describe('SaleTunnel', () => {
   it('shows cta to open sale tunnel when user is authenticated', async () => {
     const product = ProductFactory.generate();
     fetchMock
-      .get('https://joanie.test/api/courses/00000/', [])
-      .get('https://joanie.test/api/addresses/', [])
-      .get('https://joanie.test/api/credit-cards/', [])
-      .get('https://joanie.test/api/orders/', []);
+      .get('https://joanie.test/api/v1.0/courses/00000/', [])
+      .get('https://joanie.test/api/v1.0/addresses/', [])
+      .get('https://joanie.test/api/v1.0/credit-cards/', [])
+      .get('https://joanie.test/api/v1.0/orders/', []);
 
     await act(async () => {
       render(
@@ -132,8 +132,8 @@ describe('SaleTunnel', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     const calls = fetchMock.calls();
     expect(calls).toHaveLength(2);
-    expect(calls[0][0]).toEqual('https://joanie.test/api/courses/00000/');
-    expect(calls[1][0]).toEqual('https://joanie.test/api/orders/');
+    expect(calls[0][0]).toEqual('https://joanie.test/api/v1.0/courses/00000/');
+    expect(calls[1][0]).toEqual('https://joanie.test/api/v1.0/orders/');
 
     expect(screen.queryByTestId('SaleTunnel__modal')).toBeNull();
     rafSpy.mockRestore();
@@ -143,10 +143,10 @@ describe('SaleTunnel', () => {
     const product = ProductFactory.generate();
 
     fetchMock
-      .get('https://joanie.test/api/courses/00000/', [])
-      .get('https://joanie.test/api/addresses/', [])
-      .get('https://joanie.test/api/credit-cards/', [])
-      .get('https://joanie.test/api/orders/', []);
+      .get('https://joanie.test/api/v1.0/courses/00000/', [])
+      .get('https://joanie.test/api/v1.0/addresses/', [])
+      .get('https://joanie.test/api/v1.0/credit-cards/', [])
+      .get('https://joanie.test/api/v1.0/orders/', []);
 
     await act(async () => {
       render(

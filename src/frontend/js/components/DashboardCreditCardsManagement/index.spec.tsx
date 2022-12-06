@@ -38,8 +38,8 @@ jest.mock('utils/indirection/window', () => ({
 
 describe('<DashboardCreditCardsManagement/>', () => {
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
   });
 
   afterEach(() => {
@@ -48,7 +48,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('renders an empty list with placeholder', async () => {
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -74,7 +74,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
       expiration_month: date.getMonth() + 1,
       expiration_year: date.getFullYear(),
     };
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', [creditCard]);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -111,7 +111,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
       expiration_month: date.getMonth() + 1,
       expiration_year: date.getFullYear(),
     };
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', [creditCard]);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -147,7 +147,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
       expiration_month: date.getMonth() + 1,
       expiration_year: date.getFullYear(),
     };
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', [creditCard]);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -176,7 +176,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
 
   it('deletes a credit card', async () => {
     const creditCards = mockFactories.CreditCardFactory.generate(5);
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -200,9 +200,9 @@ describe('<DashboardCreditCardsManagement/>', () => {
     });
 
     // Mock delete route and the refresh route to returns `creditCards` without the first one.
-    const deleteUrl = 'https://joanie.endpoint/api/credit-cards/' + creditCard.id + '/';
+    const deleteUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.delete(deleteUrl, []);
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards.splice(1), {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards.splice(1), {
       overwriteRoutes: true,
     });
 
@@ -225,7 +225,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
 
   it('promotes a credit card', async () => {
     const creditCards = mockFactories.CreditCardFactory.generate(5);
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -251,10 +251,10 @@ describe('<DashboardCreditCardsManagement/>', () => {
     expect(queryByText(creditCardContainer, 'Default credit card')).toBeNull();
 
     // Mock the update url and the refresh URL to return the first credit card as main.
-    const updateUrl = 'https://joanie.endpoint/api/credit-cards/' + creditCard.id + '/';
+    const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, []);
     fetchMock.get(
-      'https://joanie.endpoint/api/credit-cards/',
+      'https://joanie.endpoint/api/v1.0/credit-cards/',
       [{ ...creditCard, is_main: true }, ...creditCards.splice(1)],
       { overwriteRoutes: true },
     );
@@ -278,7 +278,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     const creditCards = mockFactories.CreditCardFactory.generate(5);
     const mainCreditCard = creditCards[3];
     mainCreditCard.is_main = true;
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -310,7 +310,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     const creditCards = mockFactories.CreditCardFactory.generate(5);
     const mainCreditCard = creditCards[3];
     mainCreditCard.is_main = true;
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -338,7 +338,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     const creditCards = mockFactories.CreditCardFactory.generate(5);
     const mainCreditCard = creditCards[3];
     mainCreditCard.is_main = true;
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -365,7 +365,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   it('redirects to the edit credit card route', async () => {
     const creditCards = mockFactories.CreditCardFactory.generate(5);
     const creditCard = creditCards[2];
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -405,7 +405,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
 
   it('shows an error banner in case of API error', async () => {
     // Mock the API route to return a 500 error.
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', {
       status: 500,
       body: 'Bad request',
     });

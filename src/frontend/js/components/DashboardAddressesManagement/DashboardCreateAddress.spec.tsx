@@ -52,8 +52,8 @@ const fillForm = async (address: Address) => {
 
 describe('<DashboardCreateAddress/>', () => {
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
   });
 
   afterEach(() => {
@@ -62,7 +62,7 @@ describe('<DashboardCreateAddress/>', () => {
   });
 
   it('renders error for each field', async () => {
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -102,17 +102,17 @@ describe('<DashboardCreateAddress/>', () => {
     await findByText(countryInput.closest('.form-field')!, 'You must select a value.');
 
     // The create API route is not called.
-    expect(fetchMock.called('https://joanie.endpoint/api/addresses/', { method: 'post' })).toBe(
-      false,
-    );
+    expect(
+      fetchMock.called('https://joanie.endpoint/api/v1.0/addresses/', { method: 'post' }),
+    ).toBe(false);
 
     // Make sure it stays on the same route.
     await screen.findByText('Create an address');
   });
 
   it('creates an address and redirect to preferences', async () => {
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
-    fetchMock.post('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
+    fetchMock.post('https://joanie.endpoint/api/v1.0/addresses/', []);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -132,21 +132,21 @@ describe('<DashboardCreateAddress/>', () => {
     await fillForm(address);
 
     // Form submit calls the API create route.
-    expect(fetchMock.called('https://joanie.endpoint/api/addresses/', { method: 'post' })).toBe(
-      false,
-    );
+    expect(
+      fetchMock.called('https://joanie.endpoint/api/v1.0/addresses/', { method: 'post' }),
+    ).toBe(false);
     await act(async () => {
       fireEvent.click(button);
     });
-    expect(fetchMock.called('https://joanie.endpoint/api/addresses/', { method: 'post' })).toBe(
-      true,
-    );
+    expect(
+      fetchMock.called('https://joanie.endpoint/api/v1.0/addresses/', { method: 'post' }),
+    ).toBe(true);
 
     // The API is called with correct body.
     const expectedBody = { ...address, is_main: true };
     delete expectedBody.id;
     expectFetchCall(
-      'https://joanie.endpoint/api/addresses/',
+      'https://joanie.endpoint/api/v1.0/addresses/',
       { method: 'post' },
       {
         body: expectedBody,
@@ -158,10 +158,10 @@ describe('<DashboardCreateAddress/>', () => {
   });
 
   it('shows an error in case of API error', async () => {
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
 
     // Mock the create API route to return a 500 status.
-    fetchMock.post('https://joanie.endpoint/api/addresses/', {
+    fetchMock.post('https://joanie.endpoint/api/v1.0/addresses/', {
       status: 500,
       body: 'Bad request',
     });
@@ -186,15 +186,15 @@ describe('<DashboardCreateAddress/>', () => {
     await fillForm(address);
 
     // The create API route is called when submitting form.
-    expect(fetchMock.called('https://joanie.endpoint/api/addresses/', { method: 'post' })).toBe(
-      false,
-    );
+    expect(
+      fetchMock.called('https://joanie.endpoint/api/v1.0/addresses/', { method: 'post' }),
+    ).toBe(false);
     await act(async () => {
       fireEvent.click(button);
     });
-    expect(fetchMock.called('https://joanie.endpoint/api/addresses/', { method: 'post' })).toBe(
-      true,
-    );
+    expect(
+      fetchMock.called('https://joanie.endpoint/api/v1.0/addresses/', { method: 'post' }),
+    ).toBe(true);
 
     await expectBannerError('An error occurred while creating the address. Please retry later.');
   });

@@ -29,9 +29,9 @@ describe('SaleTunnelStepPayment', () => {
   const mockNext = jest.fn();
 
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
-    fetchMock.get('https://joanie.endpoint/api/orders/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
   });
 
   afterEach(() => {
@@ -124,7 +124,9 @@ describe('SaleTunnelStepPayment', () => {
     const randomIndex = Math.floor(Math.random() * addresses.length);
     addresses[randomIndex].is_main = true;
 
-    fetchMock.get('https://joanie.endpoint/api/addresses/', addresses, { overwriteRoutes: true });
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses, {
+      overwriteRoutes: true,
+    });
 
     await act(async () => {
       render(
@@ -214,7 +216,7 @@ describe('SaleTunnelStepPayment', () => {
     const randomIndex = Math.floor(Math.random() * creditCards.length);
     creditCards[randomIndex].is_main = true;
 
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', creditCards, {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards, {
       overwriteRoutes: true,
     });
 

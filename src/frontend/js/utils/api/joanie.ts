@@ -13,6 +13,7 @@ import type * as Joanie from 'types/Joanie';
 import { AuthenticationApi } from 'utils/api/authentication';
 import context from 'utils/context';
 import { HttpError } from 'utils/errors/HttpError';
+import { JOANIE_API_VERSION } from 'settings';
 
 interface CheckStatusOptions {
   fallbackValue: any;
@@ -87,41 +88,56 @@ function fetchWithJWT(routes: RequestInfo, options: RequestInit = {}) {
 /**
  * Build Joanie API Routes interface.
  */
-const getRoutes = (joanieEndpoint: string) => ({
-  user: {
-    creditCards: {
-      get: `${joanieEndpoint}/api/credit-cards/:id/`,
-      create: `${joanieEndpoint}/api/credit-cards/`,
-      update: `${joanieEndpoint}/api/credit-cards/:id/`,
-      delete: `${joanieEndpoint}/api/credit-cards/:id/`,
-    },
-    addresses: {
-      get: `${joanieEndpoint}/api/addresses/:id/`,
-      create: `${joanieEndpoint}/api/addresses/`,
-      update: `${joanieEndpoint}/api/addresses/:id/`,
-      delete: `${joanieEndpoint}/api/addresses/:id/`,
-    },
-    orders: {
-      abort: `${joanieEndpoint}/api/orders/:id/abort/`,
-      create: `${joanieEndpoint}/api/orders/`,
-      get: `${joanieEndpoint}/api/orders/:id/`,
-      invoice: {
-        download: `${joanieEndpoint}/api/orders/:id/invoice/`,
+const getAPIEndpoint = () => {
+  const endpoint = context?.joanie_backend?.endpoint;
+  const version = JOANIE_API_VERSION;
+
+  if (!endpoint) {
+    throw new Error('[JOANIE] - Joanie API endpoint is not defined.');
+  }
+
+  return `${endpoint}/api/${version}`;
+};
+
+const getRoutes = () => {
+  const baseUrl = getAPIEndpoint();
+
+  return {
+    user: {
+      creditCards: {
+        get: `${baseUrl}/credit-cards/:id/`,
+        create: `${baseUrl}/credit-cards/`,
+        update: `${baseUrl}/credit-cards/:id/`,
+        delete: `${baseUrl}/credit-cards/:id/`,
+      },
+      addresses: {
+        get: `${baseUrl}/addresses/:id/`,
+        create: `${baseUrl}/addresses/`,
+        update: `${baseUrl}/addresses/:id/`,
+        delete: `${baseUrl}/addresses/:id/`,
+      },
+      orders: {
+        abort: `${baseUrl}/orders/:id/abort/`,
+        create: `${baseUrl}/orders/`,
+        get: `${baseUrl}/orders/:id/`,
+        invoice: {
+          download: `${baseUrl}/orders/:id/invoice/`,
+        },
+      },
+      certificates: {
+        download: `${baseUrl}/certificates/:id/download/`,
+      },
+      enrollments: {
+        get: `${baseUrl}/enrollments/:id/`,
+        create: `${baseUrl}/enrollments/`,
+        update: `${baseUrl}/enrollments/:id/`,
       },
     },
-    certificates: {
-      download: `${joanieEndpoint}/api/certificates/:id/download/`,
+    courses: {
+      get: `${baseUrl}/courses/:id/`,
     },
-    enrollments: {
-      get: `${joanieEndpoint}/api/enrollments/:id/`,
-      create: `${joanieEndpoint}/api/enrollments/`,
-      update: `${joanieEndpoint}/api/enrollments/:id/`,
-    },
-  },
-  courses: {
-    get: `${joanieEndpoint}/api/courses/:id/`,
-  },
-});
+  };
+};
 
 /**
  * Flag which determines if joanie is enabled.
@@ -129,13 +145,7 @@ const getRoutes = (joanieEndpoint: string) => ({
 export const isJoanieEnabled = !!context.joanie_backend;
 
 const API = (): Joanie.API => {
-  const configuration = context.joanie_backend;
-
-  if (!configuration) {
-    throw new Error('[JOANIE] - Joanie is not configured.');
-  }
-
-  const ROUTES = getRoutes(configuration.endpoint);
+  const ROUTES = getRoutes();
 
   return {
     user: {

@@ -99,7 +99,7 @@ describe('CoursePorductCertificateItem', () => {
     expect($button.disabled).toBe(false);
 
     // When user clicks on "Download" button, the certificate should be downloaded
-    fetchMock.get(`https://joanie.test/api/certificates/${order.certificate}/download/`, 200);
+    fetchMock.get(`https://joanie.test/api/v1.0/certificates/${order.certificate}/download/`, 200);
 
     fireEvent.click($button);
 
@@ -137,7 +137,7 @@ describe('CoursePorductCertificateItem', () => {
     const $button: HTMLButtonElement = screen.getByRole('button', { name: 'Download' });
     expect($button.disabled).toBe(false);
 
-    fetchMock.get(`https://joanie.test/api/certificates/${order.certificate}/download/`, 401);
+    fetchMock.get(`https://joanie.test/api/v1.0/certificates/${order.certificate}/download/`, 401);
 
     await act(async () => {
       // - User ask to download certificate, but the request fails with a 401 response
