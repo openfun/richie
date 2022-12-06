@@ -50,7 +50,7 @@ describe('CourseProductsList', () => {
 
   it('returns null when course does not exist from Joanie', async () => {
     const courseCode = '00001';
-    fetchMock.get(`https://joanie.test/api/courses/${courseCode}/`, 404);
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/${courseCode}/`, 404);
 
     const { container } = render(
       <Wrapper>
@@ -73,7 +73,7 @@ describe('CourseProductsList', () => {
       products: [],
     })).generate();
     const courseDeferred = new Deferred();
-    fetchMock.get(`https://joanie.test/api/courses/${course.code}/`, courseDeferred.promise);
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, courseDeferred.promise);
 
     const { container } = render(
       <Wrapper>
@@ -103,7 +103,7 @@ describe('CourseProductsList', () => {
       return { ...c, orders: [order] };
     }).generate();
     const courseDeferred = new Deferred();
-    fetchMock.get(`https://joanie.test/api/courses/${course.code}/`, courseDeferred.promise);
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, courseDeferred.promise);
 
     render(
       <Wrapper>

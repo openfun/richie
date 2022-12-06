@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Use versionned Joanie api routes
 - Migrate to React 18 and React-Query v4
 
 ### Fixed

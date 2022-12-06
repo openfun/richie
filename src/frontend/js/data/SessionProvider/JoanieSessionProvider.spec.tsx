@@ -40,9 +40,9 @@ describe('JoanieSessionProvider', () => {
     sessionStorage.clear();
 
     fetchMock
-      .get('https://joanie.endpoint.test/api/addresses/', [])
-      .get('https://joanie.endpoint.test/api/credit-cards/', [])
-      .get('https://joanie.endpoint.test/api/orders/', []);
+      .get('https://joanie.endpoint.test/api/v1.0/addresses/', [])
+      .get('https://joanie.endpoint.test/api/v1.0/credit-cards/', [])
+      .get('https://joanie.endpoint.test/api/v1.0/orders/', []);
   });
 
   afterEach(() => {
@@ -82,9 +82,9 @@ describe('JoanieSessionProvider', () => {
       const calls = fetchMock.calls();
       expect(calls).toHaveLength(4);
       expect(calls[0][0]).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
-      expect(calls[1][0]).toEqual('https://joanie.endpoint.test/api/addresses/');
-      expect(calls[2][0]).toEqual('https://joanie.endpoint.test/api/credit-cards/');
-      expect(calls[3][0]).toEqual('https://joanie.endpoint.test/api/orders/');
+      expect(calls[1][0]).toEqual('https://joanie.endpoint.test/api/v1.0/addresses/');
+      expect(calls[2][0]).toEqual('https://joanie.endpoint.test/api/v1.0/credit-cards/');
+      expect(calls[3][0]).toEqual('https://joanie.endpoint.test/api/v1.0/orders/');
     });
   });
 

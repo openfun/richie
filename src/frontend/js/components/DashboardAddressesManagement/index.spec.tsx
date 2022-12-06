@@ -37,8 +37,8 @@ jest.mock('utils/indirection/window', () => ({
 
 describe('<DashAddressesManagement/>', () => {
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
   });
 
   afterEach(() => {
@@ -47,7 +47,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('renders an empty list with placeholder', async () => {
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -69,7 +69,7 @@ describe('<DashAddressesManagement/>', () => {
 
   it('renders a list with addresses', async () => {
     const addresses = mockFactories.AddressFactory.generate(5);
-    fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -92,7 +92,7 @@ describe('<DashAddressesManagement/>', () => {
 
   it('deletes an address', async () => {
     const addresses = mockFactories.AddressFactory.generate(5);
-    fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -116,9 +116,9 @@ describe('<DashAddressesManagement/>', () => {
     });
 
     // Mock the delete route and the refresh route to returns `addresses` without the first one.
-    const deleteUrl = 'https://joanie.endpoint/api/addresses/' + address.id + '/';
+    const deleteUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
     fetchMock.delete(deleteUrl, []);
-    fetchMock.get('https://joanie.endpoint/api/addresses/', addresses.splice(1), {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses.splice(1), {
       overwriteRoutes: true,
     });
 
@@ -138,7 +138,7 @@ describe('<DashAddressesManagement/>', () => {
 
   it('promotes an address', async () => {
     const addresses = mockFactories.AddressFactory.generate(5);
-    fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -164,10 +164,10 @@ describe('<DashAddressesManagement/>', () => {
     expect(queryByText(addressBox, 'Default address')).toBeNull();
 
     // Mock the update url and the refresh URL to return the first address as main.
-    const updateUrl = 'https://joanie.endpoint/api/addresses/' + address.id + '/';
+    const updateUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
     fetchMock.put(updateUrl, []);
     fetchMock.get(
-      'https://joanie.endpoint/api/addresses/',
+      'https://joanie.endpoint/api/v1.0/addresses/',
       [{ ...address, is_main: true }, ...addresses.splice(1)],
       { overwriteRoutes: true },
     );
@@ -190,7 +190,7 @@ describe('<DashAddressesManagement/>', () => {
   it('shows the main address above all others', async () => {
     const addresses = mockFactories.AddressFactory.generate(5);
     addresses[0].is_main = true;
-    fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -214,7 +214,7 @@ describe('<DashAddressesManagement/>', () => {
   it('cannot delete a main address', async () => {
     const addresses = mockFactories.AddressFactory.generate(5);
     addresses[0].is_main = true;
-    fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -241,7 +241,7 @@ describe('<DashAddressesManagement/>', () => {
   it('cannot promote a main address', async () => {
     const addresses = mockFactories.AddressFactory.generate(5);
     addresses[0].is_main = true;
-    fetchMock.get('https://joanie.endpoint/api/addresses/', addresses);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -266,7 +266,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('redirects to the create address route', async () => {
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -289,7 +289,7 @@ describe('<DashAddressesManagement/>', () => {
 
   it('redirects to the edit address route', async () => {
     const address = mockFactories.AddressFactory.generate();
-    fetchMock.get('https://joanie.endpoint/api/addresses/', [address]);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
     await act(async () => {
       render(
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -315,7 +315,7 @@ describe('<DashAddressesManagement/>', () => {
   it('shows an error banner in case of API error', async () => {
     mockFactories.AddressFactory.generate();
     // Mock the API route to return a 500 error.
-    fetchMock.get('https://joanie.endpoint/api/addresses/', {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', {
       status: 500,
       body: 'Bad request',
     });

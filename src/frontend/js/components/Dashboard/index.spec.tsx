@@ -48,9 +48,9 @@ describe('<Dashboard />', () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
-    fetchMock.get('https://joanie.endpoint/api/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/credit-cards/', []);
-    fetchMock.get('https://joanie.endpoint/api/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
   });
 
   afterEach(() => {
@@ -81,7 +81,7 @@ describe('<Dashboard />', () => {
 
   it('changes route when using the sidebar', async () => {
     const user = UserFactory.generate();
-    fetchMock.get('https://joanie.endpoint/api/addresses/', [], { overwriteRoutes: true });
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [], { overwriteRoutes: true });
     render(<DashboardWithUser user={user} />);
     expectUrlMatchLocationDisplayed(DashboardPaths.COURSES);
 
@@ -96,7 +96,9 @@ describe('<Dashboard />', () => {
   it('redirect when clicking on the breadcrumbs back button', async () => {
     const user = UserFactory.generate();
     const address: Address = mockFactories.AddressFactory.generate();
-    fetchMock.get('https://joanie.endpoint/api/addresses/', [address], { overwriteRoutes: true });
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address], {
+      overwriteRoutes: true,
+    });
     render(<DashboardWithUser user={user} />);
     expectUrlMatchLocationDisplayed(DashboardPaths.COURSES);
     await expectBreadcrumbsToEqualParts(['Back', 'My courses']);
