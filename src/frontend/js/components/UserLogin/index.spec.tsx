@@ -50,7 +50,7 @@ describe('<UserLogin />', () => {
       );
     });
 
-    const button = screen.getByLabelText(`Access to your profile settings ${user.username}`, {
+    const button = screen.getByLabelText(`Access to your profile settings`, {
       selector: 'button',
     });
 
@@ -103,7 +103,7 @@ describe('<UserLogin />', () => {
       );
     });
 
-    const button = screen.getByLabelText(`Access to your profile settings ${user.username}`, {
+    const button = screen.getByLabelText(`Access to your profile settings`, {
       selector: 'button',
     });
 

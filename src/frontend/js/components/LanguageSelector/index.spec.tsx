@@ -33,7 +33,7 @@ describe('<LanguageSelector />', () => {
       </IntlProvider>,
     );
 
-    const button = screen.getByLabelText('Select a language: Français', {
+    const button = screen.getByLabelText('Select a language:', {
       selector: 'button',
     });
 
@@ -72,7 +72,7 @@ describe('<LanguageSelector />', () => {
       </HistoryProvider>,
     );
 
-    const button = screen.getByLabelText('Select a language: Français', {
+    const button = screen.getByLabelText('Select a language:', {
       selector: 'button',
     });
 
