@@ -49,7 +49,7 @@ describe('<UserMenu />', () => {
       </IntlProvider>,
     );
 
-    const button = screen.getByLabelText('Access to your profile settings John Doe', {
+    const button = screen.getByLabelText('Access to your profile settings', {
       selector: 'button',
     });
 
