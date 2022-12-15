@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useDashboardNavigate } from 'utils/routers/dashboard/useDashboardRouter';
-import { useCreditCards } from 'hooks/useCreditCards';
+import { useCreditCard } from 'hooks/useCreditCards';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { DashboardEditCreditCard } from 'components/DashboardCreditCardsManagement/DashboardEditCreditCard';
@@ -15,11 +15,11 @@ export const DashboardEditCreditCardLoader = () => {
   const navigate = useDashboardNavigate();
   const {
     states: { error, isLoading },
-    ...creditCards
-  } = useCreditCards(params.creditCardId);
+    ...creditCard
+  } = useCreditCard(params.creditCardId);
 
   useBreadcrumbsPlaceholders({
-    creditCardTitle: creditCards?.items[0]?.title ?? '',
+    creditCardTitle: creditCard.item?.title ?? '',
   });
 
   if (isLoading) {
@@ -28,10 +28,10 @@ export const DashboardEditCreditCardLoader = () => {
   if (error) {
     return <Banner message={error} type={BannerType.ERROR} />;
   }
-  if (creditCards.items.length > 0) {
+  if (creditCard.item) {
     return (
       <DashboardEditCreditCard
-        creditCard={creditCards.items[0]}
+        creditCard={creditCard.item}
         onSettled={() => navigate(DashboardPaths.PREFERENCES)}
       />
     );

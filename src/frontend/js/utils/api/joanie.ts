@@ -14,6 +14,7 @@ import { AuthenticationApi } from 'utils/api/authentication';
 import context from 'utils/context';
 import { HttpError } from 'utils/errors/HttpError';
 import { JOANIE_API_VERSION } from 'settings';
+import { ResourcesQuery } from '../../hooks/useResources';
 
 interface CheckStatusOptions {
   fallbackValue: any;
@@ -150,10 +151,10 @@ const API = (): Joanie.API => {
   return {
     user: {
       creditCards: {
-        get: async (id?: string) => {
+        get: async (filters?: ResourcesQuery) => {
           let url;
 
-          if (id) url = ROUTES.user.creditCards.get.replace(':id', id);
+          if (filters?.id) url = ROUTES.user.creditCards.get.replace(':id', filters.id);
           else url = ROUTES.user.creditCards.get.replace(':id/', '');
 
           return fetchWithJWT(url).then(checkStatus);
