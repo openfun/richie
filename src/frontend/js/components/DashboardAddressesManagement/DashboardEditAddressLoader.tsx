@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import Banner, { BannerType } from 'components/Banner';
 import { DashboardEditAddress } from 'components/DashboardAddressesManagement/DashboardEditAddress';
 import { Spinner } from 'components/Spinner';
-import { useAddresses } from 'hooks/useAddresses';
+import { useAddress } from 'hooks/useAddresses';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import { useDashboardNavigate } from 'utils/routers/dashboard/useDashboardRouter';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
@@ -15,20 +15,19 @@ export const DashboardEditAddressLoader = () => {
   const navigate = useDashboardNavigate();
   const {
     states: { error, isLoading },
-    ...addresses
-  } = useAddresses(params.addressId);
-
+    ...address
+  } = useAddress(params.addressId);
   useBreadcrumbsPlaceholders({
-    addressTitle: addresses?.items[0]?.title,
+    addressTitle: address.item?.title,
   });
 
   return (
     <>
       {isLoading && <Spinner />}
       {error && <Banner message={error} type={BannerType.ERROR} />}
-      {addresses.items.length > 0 && (
+      {address.item && (
         <DashboardEditAddress
-          address={addresses.items[0]}
+          address={address.item}
           onSettled={() => {
             navigate(DashboardPaths.PREFERENCES);
           }}
