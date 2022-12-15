@@ -341,6 +341,8 @@ describe('<DahsboardEditCreditCard/>', () => {
     });
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
-    await expectBannerError('An error occurred: Internal Server Error. Please retry later.');
+    await expectBannerError(
+      'An error occurred while updating the credit card. Please retry later.',
+    );
   });
 });

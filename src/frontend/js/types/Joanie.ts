@@ -235,7 +235,7 @@ interface APIUser {
   creditCards: {
     create(payload: Omit<CreditCard, 'id'>): Promise<CreditCard>;
     delete(id: CreditCard['id']): Promise<void>;
-    get(id: CreditCard['id']): Promise<CreditCard>;
+    get(filters?: ResourcesQuery): Promise<CreditCard>;
     get(): Promise<CreditCard[]>;
     update(payload: CreditCard): Promise<CreditCard>;
   };

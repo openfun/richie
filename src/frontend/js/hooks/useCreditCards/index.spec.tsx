@@ -4,10 +4,11 @@ import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import * as mockFactories from 'utils/test/factories';
-import { useCreditCards } from 'hooks/useCreditCards/index';
+import { useCreditCard, useCreditCards } from 'hooks/useCreditCards/index';
 import { SessionProvider } from 'data/SessionProvider';
 import { Deferred } from 'utils/test/deferred';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { CreditCard } from '../../types/Joanie';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -70,10 +71,10 @@ describe('useCreditCards', () => {
 
   it('retrieves a specific credit card', async () => {
     const creditCards = mockFactories.CreditCardFactory.generate(5);
-    const creditCard = creditCards[3];
+    const creditCard: CreditCard = creditCards[3];
     const responseDeferred = new Deferred();
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', responseDeferred.promise);
-    const { result } = renderHook(() => useCreditCards(creditCard.id), {
+    const { result } = renderHook(() => useCreditCard(creditCard.id), {
       wrapper: Wrapper,
     });
 
@@ -83,7 +84,7 @@ describe('useCreditCards', () => {
     expect(result.current.states.updating).toBe(false);
     expect(result.current.states.isLoading).toBe(true);
     expect(result.current.states.error).toBe(undefined);
-    expect(result.current.items).toEqual([]);
+    expect(result.current.item).toEqual(undefined);
 
     responseDeferred.resolve(creditCards);
 
@@ -93,6 +94,6 @@ describe('useCreditCards', () => {
     expect(result.current.states.updating).toBe(false);
     expect(result.current.states.isLoading).toBe(false);
     expect(result.current.states.error).toBe(undefined);
-    expect(JSON.stringify(result.current.items)).toBe(JSON.stringify([creditCard]));
+    expect(JSON.stringify(result.current.item)).toBe(JSON.stringify(creditCard));
   });
 });

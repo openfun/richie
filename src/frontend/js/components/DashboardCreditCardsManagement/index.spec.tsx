@@ -422,6 +422,6 @@ describe('<DashboardCreditCardsManagement/>', () => {
       );
     });
 
-    await expectBannerError('An error occurred: Internal Server Error. Please retry later.');
+    await expectBannerError('An error occurred while fetching credit cards. Please retry later.');
   });
 });

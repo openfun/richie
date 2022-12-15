@@ -3,7 +3,6 @@ import { MutateOptions } from '@tanstack/react-query';
 import { useCreditCards } from 'hooks/useCreditCards';
 import { CreditCard } from 'types/Joanie';
 import { confirm } from 'utils/indirection/window';
-import { HttpError } from 'utils/errors/HttpError';
 
 const messages = defineMessages({
   errorCannotRemoveMain: {
@@ -23,7 +22,7 @@ export const useCreditCardsManagement = () => {
   const intl = useIntl();
   const creditCards = useCreditCards();
 
-  const safeDelete = (creditCard: CreditCard, options?: MutateOptions<void, HttpError, string>) => {
+  const safeDelete = (creditCard: CreditCard, options?: MutateOptions) => {
     if (creditCard.is_main) {
       creditCards.methods.setError(intl.formatMessage(messages.errorCannotRemoveMain));
       return;
