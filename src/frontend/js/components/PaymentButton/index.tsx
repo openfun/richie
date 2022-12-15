@@ -117,23 +117,27 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
       let paymentInfos = payment;
 
       if (!paymentInfos) {
-        try {
-          const order = await orderManager.methods.create({
+        orderManager.methods.create(
+          {
             billing_address: billingAddress!,
             ...(creditCard && { credit_card_id: creditCard }),
             course: courseCode,
             product: product.id,
-          });
-          paymentInfos = {
-            ...order.payment_info!,
-            order_id: order.id,
-          };
-        } catch {
-          setState(ComponentStates.ERROR);
-        }
+          },
+          {
+            onSuccess: (order) => {
+              paymentInfos = {
+                ...order.payment_info,
+                order_id: order.id,
+              };
+              setPayment(paymentInfos);
+            },
+            onError: () => {
+              setState(ComponentStates.ERROR);
+            },
+          },
+        );
       }
-
-      setPayment(paymentInfos);
     }
   };
 

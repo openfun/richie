@@ -10,7 +10,7 @@ export interface PaginatedResponse<T> {
   results: Array<T>;
 }
 
-interface PaginatedParameters {
+export interface PaginatedParameters {
   page: number;
   offset: number;
 }
@@ -243,7 +243,7 @@ interface APIUser {
     abort(payload: OrderAbortPayload): Promise<void>;
     create(payload: OrderCreationPayload): Promise<OrderWithPaymentInfo>;
     get(id: Order['id']): Promise<Nullable<Order>>;
-    get(queryParameters?: QueryParameters): Promise<PaginatedResponse<Nullable<Order>>>;
+    get(filters?: ResourcesQuery): Promise<PaginatedResponse<Nullable<Order>>>;
     invoice: {
       download(payload: { order_id: Order['id']; invoice_reference: string }): Promise<File>;
     };
