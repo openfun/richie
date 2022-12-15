@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type {
   QueryFunction,
   QueryKey,
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'data/SessionProvider';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import type { HttpError } from 'utils/errors/HttpError';

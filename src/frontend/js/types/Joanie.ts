@@ -1,5 +1,6 @@
 import type { Priority, StateCTA, StateText } from 'types';
 import type { Nullable } from 'types/utils';
+import { Resource, ResourcesQuery } from '../hooks/useResources';
 
 // - Generic
 export interface PaginatedResponse<T> {
@@ -211,6 +212,16 @@ interface EnrollmentCreationPayload {
 
 interface EnrollmentUpdatePayload extends EnrollmentCreationPayload {
   id: Enrollment['id'];
+}
+
+export interface ApiResourceInterface<
+  TData extends Resource,
+  TResourceQuery extends ResourcesQuery = ResourcesQuery,
+> {
+  get: (filters?: TResourceQuery) => any;
+  create?: (payload: any) => Promise<TData>;
+  update?: (payload: TData) => Promise<TData>;
+  delete?: (id: TData['id']) => Promise<void>;
 }
 
 interface APIUser {
