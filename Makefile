@@ -175,8 +175,9 @@ stop-storybook: ## Stop front-end's storybook
 	@$(COMPOSE) stop storybook
 .PHONY: stop-storybook
 
-test-front: ## run front-end tests
-	@$(YARN) test --runInBand
+test-front: ## run front-end tests, or specific test like `make test-front js/components/CourseRunEnrollment`
+	@args="$(filter-out $@,$(MAKECMDGOALS))" && \
+	$(YARN) test $${args:-${1}}
 .PHONY: test-front
 
 watch-sass: ## watch changes in Sass files
@@ -268,8 +269,9 @@ superuser: ## Create an admin user with password "admin"
 	@$(MANAGE) shell -c "from django.contrib.auth.models import User; not User.objects.filter(username='admin').exists() and User.objects.create_superuser('admin', 'admin@example.com', 'admin')"
 .PHONY: superuser
 
-test-back: ## run back-end tests
-	@DB_PORT=$(DB_PORT) bin/pytest
+test-back: ## run back-end tests, or specific test like `make test-back tests/apps/core/test_web_analytics.py`
+	@args="$(filter-out $@,$(MAKECMDGOALS))" && \
+    DB_PORT=$(DB_PORT) bin/pytest $${args:-${1}}
 .PHONY: test-back
 
 # -- Internationalization
