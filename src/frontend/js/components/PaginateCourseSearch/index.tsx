@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { parse, stringify } from 'query-string';
+import queryString from 'query-string';
 import { location } from 'utils/indirection/window';
 
 import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
@@ -126,8 +126,8 @@ export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseS
               ) : (
                 <li className="pagination__item">
                   <a
-                    href={`?${stringify({
-                      ...parse(location.search),
+                    href={`?${queryString.stringify({
+                      ...queryString.parse(location.search),
                       offset: String((page - 1) * limit),
                     })}`}
                     className="pagination__page-number"

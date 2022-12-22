@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { iframeResizer } from 'iframe-resizer';
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { LtiConsumerContext, LtiConsumerProps } from 'types/LtiConsumer';
 import { useSession } from 'data/SessionProvider';
 import { REACT_QUERY_SETTINGS, RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY } from 'settings';
@@ -40,7 +40,9 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
       };
 
       return fetch(
-        `/api/v1.0/plugins/lti-consumer/${id}/context/?${stringify(userInfos, { skipNull: true })}`,
+        `/api/v1.0/plugins/lti-consumer/${id}/context/?${queryString.stringify(userInfos, {
+          skipNull: true,
+        })}`,
       ).then(checkResponseStatus);
     },
     {

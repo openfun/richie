@@ -1,4 +1,4 @@
-import { parse, stringify } from 'query-string';
+import queryString from 'query-string';
 import { useEffect } from 'react';
 
 import { useHistory } from 'data/useHistory';
@@ -112,14 +112,16 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
     // `stringify` would output for our courseSearchParams. This allows us to avoid doing a deep comparison on
     // `courseSearchParams` and the result of `parse(location.search)`.
     // It also neatly treats eg. `organizations: '43'` and `organizations: ['43']` as the same.
-    if (stringify(newParams) !== stringify(parse(location.search))) {
+    if (
+      queryString.stringify(newParams) !== queryString.stringify(queryString.parse(location.search))
+    ) {
       pushState(
         {
           name: 'courseSearch',
           data: { params: newParams, lastDispatchActions: actions },
         },
         '',
-        `${location.pathname}?${stringify(newParams)}`,
+        `${location.pathname}?${queryString.stringify(newParams)}`,
       );
     } else {
       // Just issue a replaceState call. This is useful as it means we'll push normalized params from
@@ -130,7 +132,7 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
           data: { params: newParams, lastDispatchActions: actions },
         },
         '',
-        `${location.pathname}?${stringify(newParams)}`,
+        `${location.pathname}?${queryString.stringify(newParams)}`,
       );
     }
   };
@@ -149,10 +151,10 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
           data: { params: newParams, lastDispatchActions: null },
         },
         '',
-        `${location.pathname}?${stringify(newParams)}`,
+        `${location.pathname}?${queryString.stringify(newParams)}`,
       );
     }
-  }, [stringify(courseSearchParams)]);
+  }, [queryString.stringify(courseSearchParams)]);
 
   return {
     courseSearchParams,

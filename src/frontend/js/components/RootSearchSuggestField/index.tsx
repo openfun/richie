@@ -1,4 +1,4 @@
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, useIntl } from 'react-intl';
@@ -61,7 +61,7 @@ const RootSearchSuggestField = ({
    */
   const moveToSearchViewWithQuery = () =>
     location.assign(
-      `${courseSearchPageUrl}?${stringify({
+      `${courseSearchPageUrl}?${queryString.stringify({
         ...API_LIST_DEFAULT_PARAMS,
         query: value,
       })}`,
@@ -114,7 +114,7 @@ const RootSearchSuggestField = ({
     // active filter value.
     const filter = getRelevantFilter(await getFilters(), suggestion);
     location.assign(
-      `${courseSearchPageUrl}?${stringify({
+      `${courseSearchPageUrl}?${queryString.stringify({
         ...API_LIST_DEFAULT_PARAMS,
         [filter.name]: suggestion.id,
       })}`,

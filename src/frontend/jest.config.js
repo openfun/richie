@@ -14,7 +14,9 @@ module.exports = {
     url: 'https://localhost',
   },
   resolver: '<rootDir>/jest/resolver.js',
-  transformIgnorePatterns: ['node_modules/(?!(lodash-es|@hookform/resolvers)/)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(lodash-es|@hookform/resolvers|query-string|decode-uri-component|split-on-first|filter-obj)/)',
+  ],
   globals: {
     RICHIE_VERSION: 'test',
   },
