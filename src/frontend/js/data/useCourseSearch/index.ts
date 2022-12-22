@@ -1,4 +1,4 @@
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
 import { APIListRequestParams } from 'types/api';
@@ -14,10 +14,10 @@ export const useCourseSearch = (
     readonly (string | APIListRequestParams)[]
   > = {},
 ) => {
-  const queryKey = useLocalizedQueryKey(['courses', stringify(searchParams)]) as readonly (
-    | string
-    | APIListRequestParams
-  )[];
+  const queryKey = useLocalizedQueryKey([
+    'courses',
+    queryString.stringify(searchParams),
+  ]) as readonly (string | APIListRequestParams)[];
   return useQuery<
     FetchListResponse,
     unknown,

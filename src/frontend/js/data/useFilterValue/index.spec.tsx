@@ -1,4 +1,4 @@
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { PropsWithChildren } from 'react';
 import { renderHook } from '@testing-library/react';
 import { CourseSearchParamsAction } from 'data/useCourseSearchParams';
@@ -13,7 +13,7 @@ describe('data/useFilterValue', () => {
     {
       state: { name: 'courseSearch', data: { params } },
       title: '',
-      url: `/search?${stringify(params)}`,
+      url: `/search?${queryString.stringify(params)}`,
     },
     historyPushState,
     historyReplaceState,

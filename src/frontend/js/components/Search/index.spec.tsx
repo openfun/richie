@@ -1,7 +1,7 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'data/useHistory';
@@ -35,7 +35,7 @@ describe('<Search />', () => {
     {
       state: { name: 'courseSearch', data: { params, lastDispatchActions } },
       title: '',
-      url: `/search?${stringify(params)}`,
+      url: `/search?${queryString.stringify(params)}`,
     },
     historyPushState,
     historyReplaceState,

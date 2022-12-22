@@ -1,4 +1,4 @@
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APICourseSearchResponse, APIListRequestParams, RequestStatus } from 'types/api';
@@ -17,7 +17,7 @@ export async function fetchList(
   params: APIListRequestParams = API_LIST_DEFAULT_PARAMS,
 ): Promise<FetchListResponse> {
   try {
-    const response = await fetch(`/api/v1.0/${kind}/?${stringify(params)}`, {
+    const response = await fetch(`/api/v1.0/${kind}/?${queryString.stringify(params)}`, {
       headers: {
         'Content-Type': 'application/json',
       },

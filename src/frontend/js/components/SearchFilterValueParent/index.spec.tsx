@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 
@@ -24,7 +24,7 @@ describe('<SearchFilterValueParent />', () => {
     {
       state: { name: 'courseSearch', data: { params } },
       title: '',
-      url: `/search?${stringify(params)}`,
+      url: `/search?${queryString.stringify(params)}`,
     },
     historyPushState,
     historyReplaceState,

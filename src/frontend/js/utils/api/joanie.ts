@@ -8,20 +8,20 @@
  *    instead you should use the `useJoanieApi` Hook.
  *
  */
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import type * as Joanie from 'types/Joanie';
 import { AuthenticationApi } from 'utils/api/authentication';
 import context from 'utils/context';
 import { HttpError } from 'utils/errors/HttpError';
 import { JOANIE_API_VERSION } from 'settings';
-import { ResourcesQuery } from '../../hooks/useResources';
+import { ResourcesQuery } from 'hooks/useResources';
 
 interface CheckStatusOptions {
   fallbackValue: any;
   ignoredErrorStatus: number[];
 }
 /*
-  An util to manage Joanie API responses.
+  A util to manage Joanie API responses.
   It parses properly the response according to its `Content-Type`
   otherwise it throws an `HttpError`.
 
@@ -219,7 +219,7 @@ const API = (): Joanie.API => {
             url = ROUTES.user.orders.get.replace(':id', arg1);
           } else {
             url = ROUTES.user.orders.get.replace(':id/', '');
-            queryParameters = stringify(arg1 || {});
+            queryParameters = queryString.stringify(arg1 || {});
           }
 
           if (queryParameters) {
@@ -231,7 +231,7 @@ const API = (): Joanie.API => {
         invoice: {
           download: async ({ order_id, invoice_reference }) => {
             let url = ROUTES.user.orders.invoice.download.replace(':id', order_id);
-            url += `?${stringify({ reference: invoice_reference })}`;
+            url += `?${queryString.stringify({ reference: invoice_reference })}`;
 
             return fetchWithJWT(url).then(checkStatus);
           },
@@ -251,7 +251,7 @@ const API = (): Joanie.API => {
             url = ROUTES.user.enrollments.get.replace(':id', arg1);
           } else {
             url = ROUTES.user.enrollments.get.replace(':id/', '');
-            queryParameters = stringify(arg1 || {});
+            queryParameters = queryString.stringify(arg1 || {});
           }
 
           if (queryParameters) {

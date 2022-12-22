@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import { range } from 'lodash-es';
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { History, HistoryContext } from 'data/useHistory';
@@ -55,7 +55,7 @@ describe('<SearchFilterGroupModal />', () => {
     {
       state: { name: 'courseSearch', data: { params } },
       title: '',
-      url: `/search?${stringify(params)}`,
+      url: `/search?${queryString.stringify(params)}`,
     },
     historyPushState,
     historyReplaceState,

@@ -21,13 +21,7 @@ module.exports = (env) => {
     ? require(path.join(process.cwd(), richieSettings)).overrides
     : {};
 
-  const babelCompileDeps = [
-    'query-string',
-    'react-intl',
-    'react-modal',
-    'split-on-first',
-    'strict-uri-encode',
-  ];
+  const babelCompileDeps = ['react-intl', 'react-modal', 'strict-uri-encode'];
 
   // Get the version from package.json to make it available in the bundle
   let version;
@@ -78,7 +72,7 @@ module.exports = (env) => {
               options: {
                 plugins: [
                   ...require('./babel.config').plugins,
-                  // Some modules (eg. query-string) are not pre-compiled but do not use import/export
+                  // Some modules (eg. react-modal) are not pre-compiled but do not use es modules.
                   // We need to give webpack
                   '@babel/plugin-transform-modules-commonjs',
                 ],

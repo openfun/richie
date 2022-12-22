@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import { act, fireEvent, renderHook, screen, waitFor } from '@testing-library/react';
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import * as mockFactories from 'utils/test/factories';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { Deferred } from 'utils/test/deferred';
@@ -40,7 +40,7 @@ const API = {
     get: async (filters?: TodoQuery): Promise<Todo[]> => {
       let url = 'https://example.com/api/todos';
       const { id, ...restFilters } = filters || {};
-      const queryParameters = stringify(restFilters);
+      const queryParameters = queryString.stringify(restFilters);
       if (id) {
         url = `${url}/${id}`;
       }

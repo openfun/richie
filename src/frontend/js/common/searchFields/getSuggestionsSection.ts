@@ -1,5 +1,5 @@
 import take from 'lodash-es/take';
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 
 import { Suggestion } from 'types/Suggestion';
 import { handle } from 'utils/errors/handle';
@@ -16,7 +16,7 @@ export const getSuggestionsSection = async (kind: string, title: string, query: 
   // Run the search for the section on the API
   let response: Response;
   try {
-    response = await fetch(`/api/v1.0/${kind}/autocomplete/?${stringify({ query })}`, {
+    response = await fetch(`/api/v1.0/${kind}/autocomplete/?${queryString.stringify({ query })}`, {
       headers: {
         'Content-Type': 'application/json',
       },
