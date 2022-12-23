@@ -316,12 +316,12 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             "joanie", environ_name="JOANIE_JS_BACKEND", environ_prefix=None
         ),
         "COURSE_REGEX": values.Value(
-            r"^.*/api/v1.0/(?P<resource_type>(course-runs|products))/(?P<resource_id>.*)/?$",
+            r"^.*/api/v1.0/(?P<resource_type>(course-runs|products))/(?P<resource_id>[^/]*)/?$",
             environ_name="JOANIE_COURSE_REGEX",
             environ_prefix=None,
         ),
         "JS_COURSE_REGEX": values.Value(
-            r"^.*/api/v1.0/(course-runs|products)/(.*)/?$",
+            r"^.*/api/v1.0/(course-runs|products)/([^/]*)/?$",
             environ_name="JOANIE_JS_COURSE_REGEX",
             environ_prefix=None,
         ),
