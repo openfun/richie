@@ -1820,31 +1820,47 @@ class RunsCourseCMSTestCase(CMSTestCase):
             {
                 "BASE_URL": "http://localhost:8071",
                 "BACKEND": "richie.apps.courses.lms.joanie.JoanieBackend",
-                "COURSE_REGEX": "^.*/api/(?P<resource_type>(course-runs|products))/(?P<resource_id>.*)/?$",  # noqa pylint: disable=line-too-long
+                "COURSE_REGEX": r"^.*/api/v1.0/(?P<resource_type>(course-runs|products))/(?P<resource_id>[^/]*)/?$",  # noqa pylint: disable=line-too-long
                 "JS_BACKEND": "joanie",
-                "JS_COURSE_REGEX": r"^.*/api/(course-runs|products)/(.*)/?$",
+                "JS_COURSE_REGEX": r"^.*/api/v1.0/(course-runs|products)/(.*)/?$",
             }
         ]
     )
-    def test_template_course_detail_with_joanie_enabled(self):
+    def test_template_course_detail_with_joanie_product(self):
         """
-        When Joanie is enabled, course detail template should use
-        fragment_course_products template to display the React widget in charge
-        of retrieve and display products related to the course
+        When a CourseRun is recognized as a Joanie product, a <div /> to render the
+        CourseProductItem React widget should be rendered instead of the usual
+        course run information.
         """
         course = CourseFactory(code="01337", should_publish=True)
         page = course.extended_object
 
-        with self.assertTemplateUsed(
-            "courses/cms/fragment_course_products.html",
-        ):
-            response = self.client.get(page.get_absolute_url())
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response, r'class="richie-react richie-react--course-products-list"'
+        CourseRunFactory(
+            title="A Joanie Product",
+            resource_link="http://localhost:8071/api/v1.0/products/product_00001/",
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=2),
         )
 
-        pattern = r".*data-props=.*code.*01337.*"
+        self.assertTrue(page.publish("en"))
 
-        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        response = self.client.get(page.get_absolute_url())
+        html = lxml.html.fromstring(response.content)
+
+        self.assertEqual(response.status_code, 200)
+
+        product_item_widget = html.cssselect(
+            ".richie-react.richie-react--course-product-item"
+        )[0]
+        self.assertIsNotNone(product_item_widget)
+
+        self.assertEqual(
+            product_item_widget.attrib["data-props"],
+            '{"productId": "product_00001", "courseCode": "01337"}',
+        )
+
+        # But usual course run information should not be displayed
+        self.assertIsNone(html.cssselect('dl[content="online"][property="courseMode"]'))

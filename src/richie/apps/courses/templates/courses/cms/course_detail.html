@@ -339,10 +339,6 @@
 
             {% block runs %}
                 <div class="course-detail__aside" property="isAccessibleForFree" content="true">
-                    {% is_joanie_enabled as joanie_is_active %}
-                    {% if joanie_is_active is True %}
-                        {% include "courses/cms/fragment_course_products.html" with course=course %}
-                    {% endif %}
                     {% with runs_dict=course.course_runs_dict %}
                         <h2 class="course-detail__title">
                             {% if runs_dict.0|add:runs_dict.1|add:runs_dict.2|visible_on_course_page:request.toolbar.edit_mode_active|length == 1 %}
