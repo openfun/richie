@@ -4,6 +4,7 @@ import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import {
   QueryOptions,
   ResourcesQuery,
+  useResource,
   useResourcesCustom,
   UseResourcesProps,
 } from './useResources';
@@ -31,3 +32,5 @@ export const useOrders = (filters?: OrderResourcesQuery, queryOptions?: QueryOpt
     },
   };
 };
+
+export const useOrder = useResource(props);

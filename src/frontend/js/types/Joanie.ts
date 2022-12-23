@@ -135,7 +135,7 @@ export interface Order {
   total_currency: string;
   state: OrderState;
   product: string;
-  target_courses: string[];
+  target_courses: Omit<Course, 'products'>[];
 }
 
 export enum CreditCardBrand {
@@ -270,9 +270,6 @@ interface APIUser {
 
 export interface API {
   user: APIUser;
-  courses: {
-    get(id: string): Promise<Nullable<Course>>;
-  };
   products: {
     get(filters?: ResourcesQuery): Promise<Nullable<Product>>;
   };

@@ -4,7 +4,6 @@ import { Fragment } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ContextFactory as mockContextFactory, ProductFactory } from 'utils/test/factories';
-import { CourseCodeProvider } from 'data/CourseCodeProvider';
 import { SessionProvider } from 'data/SessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import SaleTunnel from '.';
@@ -51,9 +50,7 @@ describe('SaleTunnel', () => {
   const Wrapper = ({ client, children }: React.PropsWithChildren<{ client: QueryClient }>) => (
     <IntlProvider locale="en">
       <QueryClientProvider client={client}>
-        <SessionProvider>
-          <CourseCodeProvider code="00000">{children}</CourseCodeProvider>
-        </SessionProvider>
+        <SessionProvider>{children}</SessionProvider>
       </QueryClientProvider>
     </IntlProvider>
   );
@@ -61,12 +58,12 @@ describe('SaleTunnel', () => {
   it('shows a login button if user is not authenticated', async () => {
     const product = ProductFactory.generate();
 
-    fetchMock.get('https://joanie.test/api/v1.0/courses/00000/', []);
+    fetchMock.get(`https://joanie.test/api/v1.0/@@products/${product.id}/`, product);
 
     await act(async () => {
       render(
         <Wrapper client={createTestQueryClient({ user: null })}>
-          <SaleTunnel product={product} />
+          <SaleTunnel courseCode="00000" product={product} />
         </Wrapper>,
       );
     });
@@ -77,7 +74,7 @@ describe('SaleTunnel', () => {
   it('shows cta to open sale tunnel when user is authenticated', async () => {
     const product = ProductFactory.generate();
     fetchMock
-      .get('https://joanie.test/api/v1.0/courses/00000/', [])
+      .get(`https://joanie.test/api/v1.0/products/${product.id}/`, product)
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
@@ -85,7 +82,7 @@ describe('SaleTunnel', () => {
     await act(async () => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <SaleTunnel product={product} />
+          <SaleTunnel courseCode="00000" product={product} />
         </Wrapper>,
       );
     });
@@ -132,7 +129,7 @@ describe('SaleTunnel', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     const calls = fetchMock.calls();
     expect(calls).toHaveLength(2);
-    expect(calls[0][0]).toEqual('https://joanie.test/api/v1.0/courses/00000/');
+    expect(calls[0][0]).toEqual(`https://joanie.test/api/v1.0/products/${product.id}/`);
     expect(calls[1][0]).toEqual('https://joanie.test/api/v1.0/orders/');
 
     expect(screen.queryByTestId('SaleTunnel__modal')).toBeNull();
@@ -143,7 +140,7 @@ describe('SaleTunnel', () => {
     const product = ProductFactory.generate();
 
     fetchMock
-      .get('https://joanie.test/api/v1.0/courses/00000/', [])
+      .get(`https://joanie.test/api/v1.0/@@products/${product.id}/`, product)
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
@@ -151,7 +148,7 @@ describe('SaleTunnel', () => {
     await act(async () => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <SaleTunnel product={product} />
+          <SaleTunnel courseCode="00000" product={product} />
         </Wrapper>,
       );
     });

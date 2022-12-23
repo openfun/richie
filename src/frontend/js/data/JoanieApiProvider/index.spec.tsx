@@ -27,7 +27,7 @@ describe('useJoanieApi', () => {
 
     expect(result.current).toBeInstanceOf(Object);
     expect(result.current.user).toBeInstanceOf(Object);
-    expect(result.current.courses).toBeInstanceOf(Object);
+    expect(result.current.products).toBeInstanceOf(Object);
   });
 
   it('throws an error if it is not used within a JoanieApiProvider', () => {

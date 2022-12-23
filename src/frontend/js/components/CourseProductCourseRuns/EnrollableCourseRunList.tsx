@@ -2,9 +2,7 @@ import { Children, type FormEventHandler, useMemo, useRef, useState } from 'reac
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Icon } from 'components/Icon';
 import { Spinner } from 'components/Spinner';
-import { useCourseCode } from 'data/CourseCodeProvider';
 import { useEnrollment } from 'hooks/useEnrollment';
-import { useCourse } from 'hooks/useCourse';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
 import type { Maybe } from 'types/utils';
@@ -73,8 +71,6 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
   const loading = enrollment.states.creating || enrollment.states.updating;
   const canSubmit = selectedCourseRun && !selectedCourseRunIsNotOpened;
   const showFeedback = !loading && submitted && !canSubmit;
-  const courseCode = useCourseCode();
-  const course = useCourse(courseCode);
 
   const handleChange = () => {
     const form = formRef.current;
@@ -112,17 +108,15 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
           is_active: true,
           course_run: selectedCourseRun.id,
           id: relatedEnrollment.id,
-          was_created_by_order: relatedEnrollment.was_created_by_order,
+          was_created_by_order: true,
         });
       } else {
         await enrollment.methods.create({
           is_active: true,
-          order: order.id,
           course_run: selectedCourseRun.id,
           was_created_by_order: true,
         });
       }
-      course.methods.invalidate();
     }
   };
 

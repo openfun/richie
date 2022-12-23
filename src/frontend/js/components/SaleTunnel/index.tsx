@@ -7,9 +7,8 @@ import { SaleTunnelStepValidation } from 'components/SaleTunnelStepValidation';
 import { StepBreadcrumb } from 'components/StepBreadcrumb';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
 import { useSession } from 'data/SessionProvider';
-import { useCourseCode } from 'data/CourseCodeProvider';
-import { useCourse } from 'hooks/useCourse';
 import { useOrders } from 'hooks/useOrders';
+import { useProduct } from 'hooks/useProduct';
 import type * as Joanie from 'types/Joanie';
 
 const messages = defineMessages({
@@ -41,10 +40,6 @@ const messages = defineMessages({
   },
 });
 
-interface SaleTunnelProps {
-  product: Joanie.Product;
-}
-
 type TunnelSteps = 'validation' | 'payment' | 'resume';
 
 const focusCurrentStep = (container: HTMLElement) => {
@@ -54,7 +49,12 @@ const focusCurrentStep = (container: HTMLElement) => {
   }
 };
 
-const SaleTunnel = ({ product }: SaleTunnelProps) => {
+type Props = {
+  product: Joanie.Product;
+  courseCode: Joanie.Course['code'];
+};
+
+const SaleTunnel = ({ product, courseCode }: Props) => {
   const intl = useIntl();
   const manifest: Manifest<TunnelSteps, 'resume'> = {
     start: 'validation',
@@ -74,8 +74,8 @@ const SaleTunnel = ({ product }: SaleTunnelProps) => {
         label: intl.formatMessage(messages.stepResume),
         next: null,
         onExit: () => {
-          course.methods.refetch();
-          orders.methods.refetch();
+          productQuery.methods.refetch();
+          ordersQuery.methods.refetch();
           handleModalClose();
         },
       },
@@ -83,9 +83,8 @@ const SaleTunnel = ({ product }: SaleTunnelProps) => {
   };
   const { step, next, reset } = useStepManager(manifest);
   const { user, login } = useSession();
-  const courseCode = useCourseCode();
-  const course = useCourse(courseCode);
-  const orders = useOrders();
+  const productQuery = useProduct(product.id);
+  const ordersQuery = useOrders({ product: product.id, course: courseCode });
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement | null>(null);
 
