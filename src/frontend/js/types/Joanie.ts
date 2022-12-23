@@ -64,6 +64,7 @@ export interface Product {
   call_to_action: string;
   certificate: CertificateDefinition;
   target_courses: Omit<Course, 'products'>[];
+  orders: Order['id'][];
 }
 
 // - Course
@@ -244,8 +245,11 @@ interface APIUser {
   orders: {
     abort(payload: OrderAbortPayload): Promise<void>;
     create(payload: OrderCreationPayload): Promise<OrderWithPaymentInfo>;
-    get(id: Order['id']): Promise<Nullable<Order>>;
-    get(filters?: ResourcesQuery): Promise<PaginatedResponse<Nullable<Order>>>;
+    get<Filters extends ResourcesQuery = ResourcesQuery>(
+      filters?: Filters,
+    ): Filters extends { id: string }
+      ? Promise<Nullable<Order>>
+      : Promise<PaginatedResponse<Nullable<Order>>>;
     invoice: {
       download(payload: { order_id: Order['id']; invoice_reference: string }): Promise<File>;
     };
@@ -268,6 +272,9 @@ export interface API {
   user: APIUser;
   courses: {
     get(id: string): Promise<Nullable<Course>>;
+  };
+  products: {
+    get(filters?: ResourcesQuery): Promise<Nullable<Product>>;
   };
 }
 
