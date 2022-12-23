@@ -170,6 +170,7 @@ export const JoanieEnrollmentFactory = createSpec({
   course_run: CourseRunFactory,
   is_active: true,
   state: EnrollmentState.SET,
+  was_created_by_order: false,
 });
 
 export const TargetCourseFactory = createSpec({

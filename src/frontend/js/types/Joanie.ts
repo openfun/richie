@@ -1,6 +1,6 @@
 import type { Priority, StateCTA, StateText } from 'types';
 import type { Nullable } from 'types/utils';
-import { Resource, ResourcesQuery } from '../hooks/useResources';
+import { Resource, ResourcesQuery } from 'hooks/useResources';
 
 // - Generic
 export interface PaginatedResponse<T> {
@@ -111,6 +111,7 @@ export interface Enrollment {
   is_active: boolean;
   state: EnrollmentState;
   course_run: CourseRun;
+  was_created_by_order: boolean;
 }
 
 // Order
@@ -205,9 +206,10 @@ interface OrderAbortPayload {
 }
 
 interface EnrollmentCreationPayload {
-  course_run: CourseRun['resource_link'];
+  course_run: CourseRun['id'];
   is_active: boolean;
   order?: Order['id'];
+  was_created_by_order: boolean;
 }
 
 interface EnrollmentUpdatePayload extends EnrollmentCreationPayload {
@@ -253,8 +255,11 @@ interface APIUser {
   };
   enrollments: {
     create(payload: EnrollmentCreationPayload): Promise<any>;
-    get(id: Enrollment['id']): Promise<Enrollment>;
-    get(queryParameters?: QueryParameters): Promise<PaginatedResponse<Enrollment>>;
+    get<Filters extends ResourcesQuery = ResourcesQuery>(
+      filters?: Filters,
+    ): Filters extends { id: string }
+      ? Promise<Enrollment>
+      : Promise<PaginatedResponse<Enrollment>>;
     update(payload: EnrollmentUpdatePayload): Promise<any>;
   };
 }

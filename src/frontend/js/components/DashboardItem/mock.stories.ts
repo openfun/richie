@@ -1,10 +1,11 @@
 import { CourseStateFactory } from 'utils/test/factories';
-import { Enrollment, EnrollmentState } from '../../types/Joanie';
+import { Enrollment, EnrollmentState } from 'types/Joanie';
 
 export const enrollment: Enrollment = {
   id: '1',
   state: EnrollmentState.SET,
   is_active: true,
+  was_created_by_order: true,
   course_run: {
     id: '1',
     title: '',

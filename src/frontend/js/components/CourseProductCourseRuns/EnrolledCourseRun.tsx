@@ -37,9 +37,10 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
 
   const unroll = async () => {
     await methods.update({
-      course_run: enrollment.course_run.resource_link,
+      course_run: enrollment.course_run.id,
       is_active: false,
       id: enrollment!.id,
+      was_created_by_order: enrollment.was_created_by_order,
     });
     course.methods.invalidate();
   };
