@@ -25,6 +25,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix style in edit mode on courses with catalog visibility with
   `course_only` or `course_and_search`.
 
+### Removed
+
+- Remove CourseProductsList React widget
+
 ## [2.17.0]
 
 ### Added
