@@ -1863,4 +1863,6 @@ class RunsCourseCMSTestCase(CMSTestCase):
         )
 
         # But usual course run information should not be displayed
-        self.assertIsNone(html.cssselect('dl[content="online"][property="courseMode"]'))
+        self.assertCountEqual(
+            html.cssselect('dl[content="online"][property="courseMode"]'), []
+        )
