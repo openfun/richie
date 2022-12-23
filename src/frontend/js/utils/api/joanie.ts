@@ -15,6 +15,7 @@ import context from 'utils/context';
 import { HttpError } from 'utils/errors/HttpError';
 import { JOANIE_API_VERSION } from 'settings';
 import { ResourcesQuery } from 'hooks/useResources';
+import { ObjectHelper } from 'utils/ObjectHelper';
 
 interface CheckStatusOptions {
   fallbackValue: any;
@@ -137,6 +138,12 @@ const getRoutes = () => {
     courses: {
       get: `${baseUrl}/courses/:id/`,
     },
+    products: {
+      get: `${baseUrl}/products/:id/`,
+    },
+    courseRuns: {
+      get: `${baseUrl}/course-runs/:id/`,
+    },
   };
 };
 
@@ -211,19 +218,15 @@ const API = (): Joanie.API => {
             method: 'POST',
             body: JSON.stringify(payload),
           }).then(checkStatus),
-        get: async (arg1) => {
+        get: async (filters) => {
           let url;
-          let queryParameters;
+          const { id = '', ...queryParameters } = filters || {};
 
-          if (typeof arg1 === 'string') {
-            url = ROUTES.user.orders.get.replace(':id', arg1);
-          } else {
-            url = ROUTES.user.orders.get.replace(':id/', '');
-            queryParameters = queryString.stringify(arg1 || {});
-          }
+          if (id) url = ROUTES.user.orders.get.replace(':id', id);
+          else url = ROUTES.user.orders.get.replace(':id/', '');
 
-          if (queryParameters) {
-            url += `?${queryParameters}`;
+          if (!ObjectHelper.isEmpty(queryParameters)) {
+            url += '?' + queryString.stringify(queryParameters);
           }
 
           return fetchWithJWT(url).then(checkStatus);
@@ -243,19 +246,15 @@ const API = (): Joanie.API => {
             method: 'POST',
             body: JSON.stringify(payload),
           }).then(checkStatus),
-        get: async (arg1) => {
+        get: async (filters) => {
           let url;
-          let queryParameters;
+          const { id = '', ...queryParameters } = filters || {};
 
-          if (typeof arg1 === 'string') {
-            url = ROUTES.user.enrollments.get.replace(':id', arg1);
-          } else {
-            url = ROUTES.user.enrollments.get.replace(':id/', '');
-            queryParameters = queryString.stringify(arg1 || {});
-          }
+          if (id) url = ROUTES.user.enrollments.get.replace(':id', id);
+          else url = ROUTES.user.enrollments.get.replace(':id/', '');
 
-          if (queryParameters) {
-            url += `?${queryParameters}`;
+          if (!ObjectHelper.isEmpty(queryParameters)) {
+            url += '?' + queryString.stringify(queryParameters);
           }
 
           return fetchWithJWT(url).then(checkStatus);
@@ -276,6 +275,23 @@ const API = (): Joanie.API => {
         fetchWithJWT(ROUTES.courses.get.replace(':id', id)).then((response) =>
           checkStatus(response, { fallbackValue: null, ignoredErrorStatus: [404] }),
         ),
+    },
+    products: {
+      get: async (filters = {}) => {
+        let url;
+        const { id = '', ...queryParameters } = filters;
+
+        if (id) url = ROUTES.products.get.replace(':id', id);
+        else url = ROUTES.products.get.replace(':id/', '');
+
+        if (!ObjectHelper.isEmpty(queryParameters)) {
+          url += '?' + queryString.stringify(queryParameters);
+        }
+
+        return fetchWithJWT(url).then((response) =>
+          checkStatus(response, { fallbackValue: null, ignoredErrorStatus: [404] }),
+        );
+      },
     },
   };
 };
