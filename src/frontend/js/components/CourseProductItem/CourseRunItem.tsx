@@ -19,7 +19,7 @@ const findEnrollment = (
 
 interface Props {
   targetCourse: Joanie.CourseProductTargetCourse;
-  order?: Joanie.OrderLite;
+  order?: Joanie.Order;
 }
 
 const CourseRunItem = ({ targetCourse, order }: Props) => {

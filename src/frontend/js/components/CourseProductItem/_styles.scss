@@ -3,15 +3,15 @@
 */
 .product-widget {
   background-color: white;
-  border-radius: 6px;
   border: 6px solid r-theme-val(product-item, base-border);
+  border-radius: 6px;
   overflow: hidden;
 
   &:not(:last-child) {
     margin-bottom: 1.5rem;
   }
 
-  &__header {
+  & &__header {
     align-items: center;
     background-color: r-theme-val(product-item, base-border);
     color: r-theme-val(product-item, light-color);
@@ -20,20 +20,21 @@
     font-weight: bold;
     justify-content: space-between;
     padding: 1rem 0.5rem;
-  }
 
-  &__title {
-    font-size: 1.5rem;
-  }
+    & .product-widget__title {
+      color: r-theme-val(product-item, light-color);
+      font-size: 1.5rem;
+    }
 
-  &__price {
-    background-color: r-theme-val(product-item, light-color);
-    border-radius: 100vw;
-    color: r-theme-val(product-item, base-border);
-    font-size: 0.81rem;
-    margin-bottom: 0;
-    margin-left: 1.5rem;
-    padding: 0.375rem 0.81rem;
+    & .product-widget__price {
+      background-color: r-theme-val(product-item, light-color);
+      border-radius: 100vw;
+      color: r-theme-val(product-item, base-border);
+      font-size: 0.81rem;
+      margin-bottom: 0;
+      margin-left: 1.5rem;
+      padding: 0.375rem 0.81rem;
+    }
   }
 
   .selector {
@@ -77,10 +78,11 @@
       margin-bottom: 2rem;
     }
 
-    &-title {
+    & .product-widget__item-title.h5 {
+      color: currentColor;
+      display: block;
       font-size: 1rem;
       margin-bottom: 2px;
-      display: block;
     }
 
     &-description {

@@ -9,10 +9,10 @@ import {
   CourseFactory,
   JoanieCourseRunFactory,
   JoanieEnrollmentFactory,
-  OrderLiteFactory,
+  OrderFactory,
 } from 'utils/test/factories';
 import JoanieApiProvider from 'data/JoanieApiProvider';
-import { CourseCodeProvider } from 'data/CourseCodeProvider';
+import { CourseProductProvider } from 'data/CourseProductProvider';
 import type { Course, CourseRun, Enrollment, OrderLite } from 'types/Joanie';
 import { Deferred } from 'utils/test/deferred';
 import { Priority } from 'types';
@@ -106,22 +106,25 @@ describe('CourseProductCourseRuns', () => {
   });
 
   describe('EnrollableCourseRunList', () => {
-    const Wrapper = ({ code, children }: PropsWithChildren<{ code: string }>) => (
+    const Wrapper = ({
+      productId,
+      code,
+      children,
+    }: PropsWithChildren<{ productId: string; code: string }>) => (
       <IntlProvider locale="en">
-        <CourseCodeProvider code={code}>
+        <CourseProductProvider productId={productId} courseCode={code}>
           <QueryClientProvider client={createTestQueryClient()}>
             <JoanieApiProvider>{children}</JoanieApiProvider>
           </QueryClientProvider>
-        </CourseCodeProvider>
+        </CourseProductProvider>
       </IntlProvider>
     );
 
     it('renders a warning message when no course runs are provided', () => {
-      const order: OrderLite = OrderLiteFactory.generate();
-      fetchMock.get('https://joanie.test/api/v1.0/courses/00000/', 200);
+      const order: OrderLite = OrderFactory.generate();
 
       render(
-        <Wrapper code="00000">
+        <Wrapper productId={order.product} code="00000">
           <EnrollableCourseRunList courseRuns={[]} order={order} />
         </Wrapper>,
       );
@@ -132,11 +135,10 @@ describe('CourseProductCourseRuns', () => {
     it('renders a list of course runs with a call to action to enroll', async () => {
       const course: Course = CourseFactory.generate();
       const courseRuns: CourseRun[] = JoanieCourseRunFactory().generate(2);
-      const order: OrderLite = OrderLiteFactory.generate();
-      fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
+      const order: OrderLite = OrderFactory.generate();
 
       render(
-        <Wrapper code={course.code}>
+        <Wrapper productId={order.product} code={course.code}>
           <EnrollableCourseRunList courseRuns={courseRuns} order={order} />
         </Wrapper>,
       );
@@ -220,16 +222,14 @@ describe('CourseProductCourseRuns', () => {
       });
 
       const calls = fetchMock.calls();
-      expect(calls).toHaveLength(2);
+      expect(calls).toHaveLength(1);
       // A request to create the enrollment should have been executed
       expect(calls[0][0]).toBe('https://joanie.test/api/v1.0/enrollments/');
       expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
         is_active: true,
-        order: order.id,
-        course_run: courseRuns[0].resource_link,
+        course_run: courseRuns[0].id,
+        was_created_by_order: true,
       });
-      // Afterward a request to refresh the course should have been executed
-      expect(calls[1][0]).toBe(`https://joanie.test/api/v1.0/courses/${course.code}/`);
     });
 
     it('does not allow to enroll if course run is not opened for enrollment', async () => {
@@ -255,11 +255,10 @@ describe('CourseProductCourseRuns', () => {
           },
         }))
         .generate();
-      const order = OrderLiteFactory.generate();
-      fetchMock.get('https://joanie.test/api/v1.0/courses/00000/', 200);
+      const order = OrderFactory.generate();
 
       render(
-        <Wrapper code="00000">
+        <Wrapper productId={order.product} code="00000">
           <EnrollableCourseRunList courseRuns={[courseRun]} order={order} />
         </Wrapper>,
       );
@@ -323,21 +322,21 @@ describe('CourseProductCourseRuns', () => {
   });
 
   describe('EnrolledCourseRun', () => {
-    const Wrapper = ({ code, children }: PropsWithChildren<{ code: string }>) => (
+    const Wrapper = ({ children }: PropsWithChildren<{}>) => (
       <IntlProvider locale="en">
-        <CourseCodeProvider code={code}>
+        <CourseProductProvider productId="abc" courseCode="00000">
           <QueryClientProvider client={createTestQueryClient()}>
             <JoanieApiProvider>{children}</JoanieApiProvider>
           </QueryClientProvider>
-        </CourseCodeProvider>
+        </CourseProductProvider>
       </IntlProvider>
     );
 
     it('renders enrollment information', () => {
       const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
-      fetchMock.get('https://joanie.test/api/v1.0/courses/00000/', 200);
+
       render(
-        <Wrapper code="00000">
+        <Wrapper>
           <EnrolledCourseRun enrollment={enrollment} />
         </Wrapper>,
       );
@@ -373,12 +372,10 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('allows to unroll', async () => {
-      const course: Course = CourseFactory.generate();
       const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
-      fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
 
       render(
-        <Wrapper code={course.code}>
+        <Wrapper>
           <EnrolledCourseRun enrollment={enrollment} />
         </Wrapper>,
       );
@@ -404,15 +401,14 @@ describe('CourseProductCourseRuns', () => {
       });
 
       const calls = fetchMock.calls();
-      expect(calls).toHaveLength(2);
+      expect(calls).toHaveLength(1);
       // A request to unroll user should have been executed
       expect(calls[0][0]).toBe(`https://joanie.test/api/v1.0/enrollments/${enrollment.id}/`);
       expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
         is_active: false,
-        course_run: enrollment.course_run.resource_link,
+        course_run: enrollment.course_run.id,
+        was_created_by_order: enrollment.was_created_by_order,
       });
-      // Afterward a request to refresh the course should have been executed
-      expect(calls[1][0]).toBe(`https://joanie.test/api/v1.0/courses/${course.code}/`);
     });
   });
 });

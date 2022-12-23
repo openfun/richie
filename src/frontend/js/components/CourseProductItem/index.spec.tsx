@@ -1,19 +1,20 @@
-import { getByText, render, screen } from '@testing-library/react';
+import { getByText, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
+import faker from 'faker';
 import {
   CertificateProductFactory,
   ContextFactory as mockContextFactory,
   JoanieEnrollmentFactory,
-  OrderLiteFactory,
+  OrderFactory,
   ProductFactory,
 } from 'utils/test/factories';
-import { CourseCodeProvider } from 'data/CourseCodeProvider';
 import JoanieApiProvider from 'data/JoanieApiProvider';
-import { CourseRun, Enrollment, OrderLite, Product } from 'types/Joanie';
+import { CourseRun, Enrollment, Order, Product } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { Deferred } from 'utils/test/deferred';
 import CourseProductItem from '.';
 
 jest.mock('utils/context', () => ({
@@ -38,13 +39,7 @@ jest.mock('components/CourseProductCourseRuns', () => ({
   CourseRunList: ({ courseRuns }: { courseRuns: CourseRun[] }) => (
     <div data-testid={`CourseRunList-${courseRuns.map(({ id }) => id).join('-')}`} />
   ),
-  EnrollableCourseRunList: ({
-    courseRuns,
-    order,
-  }: {
-    courseRuns: CourseRun[];
-    order: OrderLite;
-  }) => (
+  EnrollableCourseRunList: ({ courseRuns, order }: { courseRuns: CourseRun[]; order: Order }) => (
     <div
       data-testid={`EnrollableCourseRunList-${courseRuns.map(({ id }) => id).join('-')}-${
         order.id
@@ -67,30 +62,38 @@ describe('CourseProductItem', () => {
     fetchMock.restore();
     JoanieEnrollmentFactory.afterGenerate((e: Enrollment) => e);
     ProductFactory.afterGenerate((p: Product) => p);
-    OrderLiteFactory.afterGenerate((o: OrderLite) => o);
+    OrderFactory.afterGenerate((o: Order) => o);
   });
 
-  const Wrapper = ({ code, children }: PropsWithChildren<{ code: string }>) => (
+  const Wrapper = ({ children }: PropsWithChildren<{}>) => (
     <IntlProvider locale="en">
-      <CourseCodeProvider code={code}>
-        <JoanieApiProvider>
-          <QueryClientProvider client={createTestQueryClient()}>{children}</QueryClientProvider>
-        </JoanieApiProvider>
-      </CourseCodeProvider>
+      <JoanieApiProvider>
+        <QueryClientProvider client={createTestQueryClient()}>{children}</QueryClientProvider>
+      </JoanieApiProvider>
     </IntlProvider>
   );
 
-  it('renders product information', () => {
+  it('renders product information', async () => {
     const product: Product = ProductFactory.generate();
+    const productDeferred = new Deferred();
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/products/${product.id}/?course=00000`,
+      productDeferred.promise,
+    );
 
     render(
-      <Wrapper code="00000">
-        <CourseProductItem product={product} />
+      <Wrapper>
+        <CourseProductItem courseCode="00000" productId={product.id} />
       </Wrapper>,
     );
 
-    screen.getByRole('heading', { level: 3, name: product.title });
-    // the price shouldn't be a heading to prevent misdirection for screen reader users
+    // - A loader should be displayed while product information are fetching
+    screen.getByRole('status', { name: 'Loading product information...' });
+
+    productDeferred.resolve(product);
+
+    await screen.findByRole('heading', { level: 3, name: product.title });
+    // the price shouldn't be a heading to prevent misdirection for screen reader users,
     // but we want to it to visually look like a h6
     const $price = screen.getByText(
       // the price formatter generates non-breaking spaces and getByText doesn't seem to handle that well, replace it
@@ -102,7 +105,7 @@ describe('CourseProductItem', () => {
     // - Render all target courses information
     product.target_courses.forEach((course) => {
       const $item = screen.getByTestId(`course-item-${course.code}`);
-      // the course title shouldn't be a heading to prevent misdirection for screen reader users
+      // the course title shouldn't be a heading to prevent misdirection for screen reader users,
       // but we want to it to visually look like a h5
       const $courseTitle = getByText($item, course.title);
       expect($courseTitle.tagName).toBe('STRONG');
@@ -117,48 +120,68 @@ describe('CourseProductItem', () => {
     screen.getByTestId('SaleTunnel');
   });
 
-  it('does not render <CertificateItem /> if product do not have a certificate', () => {
+  it('does not render <CertificateItem /> if product do not have a certificate', async () => {
     const product: Product = ProductFactory.afterGenerate(
       ({ certificate, ...p }: Product) => p,
     ).generate();
 
+    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
+
     render(
-      <Wrapper code="00000">
-        <CourseProductItem product={product} />
+      <Wrapper>
+        <CourseProductItem productId={product.id} courseCode="00000" />
       </Wrapper>,
     );
+
+    // Wait for product information to be fetched
+    await screen.findByRole('heading', { level: 3, name: product.title });
 
     // - Does not render <CertificateItem />
     expect(screen.queryByTestId('CertificateItem')).toBeNull();
   });
 
-  it('adapts information when user purchased the product', () => {
-    const product: Product = ProductFactory.generate();
-    const order: OrderLite = OrderLiteFactory.generate();
+  it('adapts information when user purchased the product', async () => {
+    const orderId = faker.datatype.uuid();
+    const product: Product = ProductFactory.afterGenerate((p: Product) => ({
+      ...p,
+      orders: [orderId],
+    })).generate();
+    const order: Order = OrderFactory.afterGenerate((o: Order) => ({
+      ...o,
+      target_courses: product.target_courses,
+      id: orderId,
+    })).generate();
+
+    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
+    fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
 
     render(
-      <Wrapper code="00000">
-        <CourseProductItem product={product} order={order} />
+      <Wrapper>
+        <CourseProductItem productId={product.id} courseCode="00000" />
       </Wrapper>,
     );
 
-    screen.getByRole('heading', { level: 3, name: product.title });
+    // Wait for product information to be fetched
+    await screen.findByRole('heading', { level: 3, name: product.title });
+
     // - In place of product price, a label should be displayed
     const $enrolledInfo = screen.getByText('Enrolled');
     expect($enrolledInfo.tagName).toBe('STRONG');
     expect($enrolledInfo.classList.contains('h6')).toBe(true);
 
-    // - Render all target courses information with EnrollableCourseRunList component
-    product.target_courses.forEach((course) => {
-      const $item = screen.getByTestId(`course-item-${course.code}`);
-      // the course title shouldn't be a heading to prevent misdirection for screen reader users
-      // but we want to it to visually look like a h5
-      const $courseTitle = getByText($item, course.title);
-      expect($courseTitle.tagName).toBe('STRONG');
-      expect($courseTitle.classList.contains('h5')).toBe(true);
-      screen.getByTestId(
-        `EnrollableCourseRunList-${course.course_runs.map(({ id }) => id).join('-')}-${order.id}`,
-      );
+    // - Render all order's target courses information with EnrollableCourseRunList component
+    await waitFor(() => {
+      order.target_courses.forEach((course) => {
+        const $item = screen.getByTestId(`course-item-${course.code}`);
+        // the course title shouldn't be a heading to prevent misdirection for screen reader users,
+        // but we want to it to visually look like a h5
+        const $courseTitle = getByText($item, course.title);
+        expect($courseTitle.tagName).toBe('STRONG');
+        expect($courseTitle.classList.contains('h5')).toBe(true);
+        screen.getByTestId(
+          `EnrollableCourseRunList-${course.course_runs.map(({ id }) => id).join('-')}-${orderId}`,
+        );
+      });
     });
 
     // - Render <CertificateItem />
@@ -168,8 +191,12 @@ describe('CourseProductItem', () => {
     expect(screen.queryByTestId('SaleTunnel')).toBeNull();
   });
 
-  it('renders enrollment information when user is enrolled to a course run', () => {
-    const product: Product = CertificateProductFactory.generate();
+  it('renders enrollment information when user is enrolled to a course run', async () => {
+    const orderId = faker.datatype.uuid();
+    const product: Product = CertificateProductFactory.afterGenerate((p: Product) => ({
+      ...p,
+      orders: [orderId],
+    })).generate();
     // - Create an order with an active enrollment
     const enrollment: Enrollment = JoanieEnrollmentFactory.afterGenerate(
       ({ state, ...e }: Enrollment): Enrollment => ({
@@ -178,30 +205,39 @@ describe('CourseProductItem', () => {
         state,
       }),
     ).generate();
-    const order: OrderLite = OrderLiteFactory.afterGenerate((o: OrderLite) => ({
+    const order: Order = OrderFactory.afterGenerate((o: Order) => ({
       ...o,
+      id: orderId,
       product: product.id,
+      target_courses: product.target_courses,
       enrollments: [enrollment],
     })).generate();
 
+    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
+    fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
+
     render(
-      <Wrapper code="00000">
-        <CourseProductItem product={product} order={order} />
+      <Wrapper>
+        <CourseProductItem productId={product.id} courseCode="00000" />
       </Wrapper>,
     );
 
-    screen.getByRole('heading', { level: 3, name: product.title });
+    // Wait for product information to be fetched
+    await screen.findByRole('heading', { level: 3, name: product.title });
+
     // - In place of product price, a label should be displayed
-    const $enrolledInfo = screen.getByText('Enrolled');
-    expect($enrolledInfo.tagName).toBe('STRONG');
-    expect($enrolledInfo.classList.contains('h6')).toBe(true);
+    const $enrolledInfo: HTMLElement = await screen.findByText('Enrolled');
+    expect($enrolledInfo!.tagName).toBe('STRONG');
+    expect($enrolledInfo!.classList.contains('h6')).toBe(true);
 
     const [targetCourse, ...targetCourses] = product.target_courses;
     // - The first target course should display the EnrolledCourseRun component
     const $courseTitle = screen.getByText(targetCourse.title);
     expect($courseTitle.tagName).toBe('STRONG');
     expect($courseTitle.classList.contains('h5')).toBe(true);
-    screen.getByTestId(`EnrolledCourseRun-${enrollment.id}`);
+    await waitFor(() => {
+      screen.getByTestId(`EnrolledCourseRun-${enrollment.id}`);
+    });
 
     // - Other target courses should display EnrollableCourseRunList component
     targetCourses.forEach((course) => {

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import PaymentInterface from 'components/PaymentInterfaces';
 import { Spinner } from 'components/Spinner';
-import { useCourseCode } from 'data/CourseCodeProvider';
+import { useCourseProduct } from 'data/CourseProductProvider';
 import { useJoanieApi } from 'data/JoanieApiProvider';
 import { useOrders } from 'hooks/useOrders';
 import { PAYMENT_SETTINGS } from 'settings';
@@ -80,7 +80,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   const intl = useIntl();
   const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const courseCode = useCourseCode();
+  const { courseCode } = useCourseProduct();
   const orderManager = useOrders();
 
   const isReadyToPay = useMemo(() => {
@@ -98,7 +98,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
    * @returns {Promise<boolean>} - Promise resolving to true if order is validated
    */
   const isOrderValidated = async (id: string): Promise<Boolean> => {
-    const order = await API.user.orders.get(id);
+    const order = await API.user.orders.get({ id });
     return order?.state === OrderState.VALIDATED;
   };
 

@@ -1,7 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Spinner } from 'components/Spinner';
-import { useCourseCode } from 'data/CourseCodeProvider';
-import { useCourse } from 'hooks/useCourse';
 import { useEnrollment } from 'hooks/useEnrollment';
 import type * as Joanie from 'types/Joanie';
 import useDateFormat from 'utils/useDateFormat';
@@ -32,8 +30,6 @@ interface Props {
 const EnrolledCourseRun = ({ enrollment }: Props) => {
   const formatDate = useDateFormat();
   const { methods, states } = useEnrollment();
-  const courseCode = useCourseCode();
-  const course = useCourse(courseCode);
 
   const unroll = async () => {
     await methods.update({
@@ -42,7 +38,6 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
       id: enrollment!.id,
       was_created_by_order: enrollment.was_created_by_order,
     });
-    course.methods.invalidate();
   };
 
   return (

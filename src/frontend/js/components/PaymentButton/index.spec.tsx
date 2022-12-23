@@ -12,7 +12,7 @@ import {
   ProductFactory,
 } from 'utils/test/factories';
 import JoanieApiProvider from 'data/JoanieApiProvider';
-import { CourseCodeProvider } from 'data/CourseCodeProvider';
+import { CourseProductProvider } from 'data/CourseProductProvider';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
@@ -47,9 +47,9 @@ describe('PaymentButton', () => {
   }: PropsWithChildren<{ client?: QueryClient }>) => (
     <IntlProvider locale="en">
       <JoanieApiProvider>
-        <CourseCodeProvider code="00000">
+        <CourseProductProvider productId="" courseCode="00000">
           <QueryClientProvider client={client}>{children}</QueryClientProvider>
-        </CourseCodeProvider>
+        </CourseProductProvider>
       </JoanieApiProvider>
     </IntlProvider>
   );
