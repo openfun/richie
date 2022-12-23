@@ -309,6 +309,21 @@ def course_enrollment_widget_props(context):
     )
 
 
+@register.simple_tag(takes_context=True)
+def joanie_product_widget_props(context):
+    """
+    Return a json dumps which contains all properties required
+    by JoanieProduct React widget.
+    """
+    course_run = context["run"]
+    lms = LMSHandler.select_lms(course_run.resource_link)
+
+    product_id = lms.extract_resource_id(course_run.resource_link)
+    course_code = course_run.direct_course.code
+
+    return json.dumps({"productId": product_id, "courseCode": course_code})
+
+
 @register.filter
 @stringfilter
 def trim(value):
