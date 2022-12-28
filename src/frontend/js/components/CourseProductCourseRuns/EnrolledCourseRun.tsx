@@ -2,7 +2,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Spinner } from 'components/Spinner';
 import { useCourseCode } from 'data/CourseCodeProvider';
 import { useCourse } from 'hooks/useCourse';
-import { useEnrollment } from 'hooks/useEnrollment';
+import { useEnrollments } from 'hooks/useEnrollments';
 import type * as Joanie from 'types/Joanie';
 import useDateFormat from 'utils/useDateFormat';
 import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
@@ -31,17 +31,19 @@ interface Props {
 
 const EnrolledCourseRun = ({ enrollment }: Props) => {
   const formatDate = useDateFormat();
-  const { methods, states } = useEnrollment();
+  const { methods, states } = useEnrollments();
   const courseCode = useCourseCode();
   const course = useCourse(courseCode);
 
-  const unroll = async () => {
-    await methods.update({
-      course_run: enrollment.course_run.resource_link,
-      is_active: false,
-      id: enrollment!.id,
-    });
-    course.methods.invalidate();
+  const unroll = () => {
+    methods.update(
+      {
+        course_run: enrollment.course_run.resource_link,
+        is_active: false,
+        id: enrollment!.id,
+      },
+      { onSettled: () => course.methods.invalidate() },
+    );
   };
 
   return (

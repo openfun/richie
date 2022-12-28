@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Icon } from 'components/Icon';
 import { Spinner } from 'components/Spinner';
 import { useCourseCode } from 'data/CourseCodeProvider';
-import { useEnrollment } from 'hooks/useEnrollment';
+import { useEnrollments } from 'hooks/useEnrollments';
 import { useCourse } from 'hooks/useCourse';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
@@ -69,7 +69,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
     [selectedCourseRun],
   );
 
-  const enrollment = useEnrollment();
+  const enrollment = useEnrollments();
   const loading = enrollment.states.creating || enrollment.states.updating;
   const canSubmit = selectedCourseRun && !selectedCourseRunIsNotOpened;
   const showFeedback = !loading && submitted && !canSubmit;
@@ -104,23 +104,30 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
     }
 
     if (selectedCourseRun) {
+      const onSettled = () => course.methods.invalidate();
+
       const relatedEnrollment = order.enrollments.find(({ course_run }) => {
         return course_run.resource_link === selectedCourseRun.resource_link;
       });
       if (relatedEnrollment) {
-        await enrollment.methods.update({
-          is_active: true,
-          course_run: selectedCourseRun.resource_link,
-          id: relatedEnrollment.id,
-        });
+        await enrollment.methods.update(
+          {
+            is_active: true,
+            course_run: selectedCourseRun.resource_link,
+            id: relatedEnrollment.id,
+          },
+          { onSettled },
+        );
       } else {
-        await enrollment.methods.create({
-          is_active: true,
-          order: order.id,
-          course_run: selectedCourseRun.resource_link,
-        });
+        await enrollment.methods.create(
+          {
+            is_active: true,
+            order: order.id,
+            course_run: selectedCourseRun.resource_link,
+          },
+          { onSettled },
+        );
       }
-      course.methods.invalidate();
     }
   };
 
