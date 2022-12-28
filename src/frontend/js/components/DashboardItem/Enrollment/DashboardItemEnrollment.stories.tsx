@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { enrollment } from '../mock.stories';
 import { DashboardItemEnrollment } from './DashboardItemEnrollment';
-import { enrollment } from './mock.stories';
 
 export default {
   title: 'Components/Dashboard/Enrollment',
