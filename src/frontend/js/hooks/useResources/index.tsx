@@ -1,4 +1,5 @@
 import type { QueryKey, UseQueryOptions } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { MessageDescriptor } from 'react-intl';
 import { HttpError } from 'utils/errors/HttpError';
 import { ApiResourceInterface } from 'types/Joanie';
@@ -33,6 +34,7 @@ export interface UseResourcesProps<
   messages?: Record<string, MessageDescriptor>;
   queryOptions?: QueryOptions<TData>;
   frozenQueryKey?: boolean;
+  onMutationSuccess?: (queryClient: QueryClient) => void;
 }
 
 export const useResourcesCustom = <
