@@ -25,6 +25,8 @@ import {
 } from 'utils/routers/dashboard';
 import { DashboardEditCreditCardLoader } from 'components/DashboardCreditCardsManagement/DashboardEditCreditCardLoader';
 import { DashboardLayout } from 'components/Dashboard/DashboardLayout';
+import { DashboardCourses } from '../../../../components/DashboardCourses';
+import { DashboardOrderLoader } from '../../../../components/DashboardOrderLoader';
 import { getDashboardBasename } from './getDashboardBasename';
 
 /**
@@ -65,8 +67,21 @@ export function getDashboardRoutes() {
         },
         {
           path: getRoutePath(DashboardPaths.COURSES),
-          element: <RouteInfo title={getRouteLabel(DashboardPaths.COURSES)} />,
           handle: { crumbLabel: dashboardRouteLabels[DashboardPaths.COURSES] },
+          element: <Outlet />,
+          children: [
+            {
+              index: true,
+              element: <DashboardCourses />,
+            },
+            {
+              path: getRoutePath(DashboardPaths.ORDER, {
+                orderId: ':orderId',
+              }),
+              element: <DashboardOrderLoader />,
+              handle: { crumbLabel: dashboardRouteLabels[DashboardPaths.ORDER] },
+            },
+          ],
         },
         {
           path: getRoutePath(DashboardPaths.COURSE, { code: ':code' }),

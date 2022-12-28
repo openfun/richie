@@ -10,6 +10,7 @@ import { defineMessages, IntlShape } from 'react-intl';
  */
 export enum DashboardPaths {
   COURSES = '/courses',
+  ORDER = '/courses/orders/:code',
   COURSE = '/courses/:code',
   PREFERENCES = '/preferences',
   PREFERENCES_ADDRESS_EDITION = '/preferences/addresses/:addressId',
@@ -23,6 +24,11 @@ const dashboardRoutePaths = defineMessages<DashboardPaths>({
     id: 'components.Dashboard.DashboardRoutes.courses.path',
     description: 'The path to display the courses view.',
     defaultMessage: '/courses',
+  },
+  [DashboardPaths.ORDER]: {
+    id: 'components.Dashboard.DashboardRoutes.order.path',
+    description: 'The path to display an order detail view.',
+    defaultMessage: '/courses/orders/{orderId}',
   },
   [DashboardPaths.COURSE]: {
     id: 'components.Dashboard.DashboardRoutes.course.path',
@@ -57,6 +63,11 @@ export const dashboardRouteLabels = defineMessages<DashboardPaths>({
     id: 'components.Dashboard.DashboardRoutes.courses.label',
     description: 'Label of the courses view used in navigation components.',
     defaultMessage: 'My courses',
+  },
+  [DashboardPaths.ORDER]: {
+    id: 'components.Dashboard.DashboardRoutes.order.label',
+    description: 'Label of the order view used in navigation components.',
+    defaultMessage: 'Order details "{orderTitle}"',
   },
   [DashboardPaths.COURSE]: {
     id: 'components.Dashboard.DashboardRoutes.course.session.label',
