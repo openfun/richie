@@ -176,7 +176,7 @@ export const TargetCourseFactory = createSpec({
   code: faker.unique(faker.random.alphaNumeric(5)),
   organization: OrganizationFactory,
   title: faker.random.words(1, 3),
-  course_runs: derived(() => JoanieCourseRunFactory().generate(1, 3)),
+  course_runs: derived(() => JoanieCourseRunFactory().generate(3, 5)),
 });
 
 export const CertificationDefinitionFactory = createSpec({
@@ -220,7 +220,7 @@ export const OrderFactory = createSpec({
   state: OrderState.VALIDATED,
   product: faker.datatype.uuid(),
   target_courses: derived(() => TargetCourseFactory.generate(1, 5)),
-  course: CourseFactory,
+  course: faker.random.alphaNumeric(5),
   enrollments: [],
 });
 

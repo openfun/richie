@@ -123,7 +123,7 @@ export enum OrderState {
 
 export interface Order {
   id: string;
-  course?: Course;
+  course: string;
   created_on: string;
   enrollments: Enrollment[];
   main_proforma_invoice: string;
@@ -133,7 +133,7 @@ export interface Order {
   total_currency: string;
   state: OrderState;
   product: string;
-  target_courses: string[];
+  target_courses: Course[];
 }
 
 export enum CreditCardBrand {

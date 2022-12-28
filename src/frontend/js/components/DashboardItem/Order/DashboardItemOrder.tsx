@@ -1,18 +1,21 @@
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Button } from 'components/Button';
-import { DashboardItemEnrollmentFooter } from 'components/DashboardItem/DashboardItemEnrollmentFooter';
 import { DashboardSubItem } from 'components/DashboardItem/DashboardSubItem';
 import { Icon } from 'components/Icon';
-import { Enrollment, Order, OrderState } from 'types/Joanie';
+import { Order, OrderState } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
-import { DashboardSubItemsList } from './DashboardSubItemsList';
-import { DashboardItem, DEMO_IMAGE_URL } from './index';
+import { CoursesHelper } from 'utils/CoursesHelper';
+import { useProduct } from 'hooks/useProduct';
+import { DashboardPaths, getDashboardRoutePath } from 'utils/routers/dashboard';
+import { RouterButton } from '../../RouterButton';
+import { DashboardSubItemsList } from '../DashboardSubItemsList';
+import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
+import { DashboardItem, DEMO_IMAGE_URL } from '../index';
 
 const messages = {
   accessCourse: {
     id: 'components.DashboardItemOrder.gotoCourse',
-    description: '',
-    defaultMessage: 'ACCESS COURSE',
+    description: 'Button that redirects to the order details',
+    defaultMessage: 'View details',
   },
   statusOnGoing: {
     id: 'components.DashboardItemOrder.statusOnGoing',
@@ -35,22 +38,31 @@ const messages = {
 
 interface DashboardItemOrderProps {
   order: Order;
+  detailsButton?: boolean;
+  writable?: boolean;
 }
 
-export const DashboardItemOrder = ({ order }: DashboardItemOrderProps) => {
+export const DashboardItemOrder = ({
+  order,
+  detailsButton = true,
+  writable,
+}: DashboardItemOrderProps) => {
   const { course } = order;
   if (!course) {
     throw new Error('Order must provide course attribute');
   }
   const intl = useIntl();
+  const product = useProduct(order.product);
+  const getRoutePath = getDashboardRoutePath(useIntl());
 
   return (
     <DashboardItem
-      title={course.title}
-      code={'Ref. ' + course.code}
+      data-testid={`dashboard-item-order-${order.id}`}
+      title={product.item?.title ?? ''}
+      code={'Ref. ' + course}
       imageUrl={DEMO_IMAGE_URL}
       footer={
-        <>
+        <div className="dashboard-item-order__footer">
           <div className="dashboard-item__block__status">
             <Icon name="icon-school" />
             <div>
@@ -68,35 +80,38 @@ export const DashboardItemOrder = ({ order }: DashboardItemOrderProps) => {
               )}
             </div>
           </div>
-          <Button
-            color="outline-primary"
-            disabled={false}
-            href={'/dashboard/courses/' + course.code}
-            data-testid="dashboard-item-order__button"
-          >
-            {intl.formatMessage(messages.accessCourse)}
-          </Button>
-        </>
+          {detailsButton && (
+            <RouterButton
+              color="outline-primary"
+              disabled={false}
+              href={getRoutePath(DashboardPaths.ORDER, { orderId: order.id })}
+              data-testid="dashboard-item-order__button"
+            >
+              {intl.formatMessage(messages.accessCourse)}
+            </RouterButton>
+          )}
+        </div>
       }
     >
       <DashboardSubItemsList
-        subItems={order.enrollments?.map((enrollment) => (
-          <DashboardItemOrderEnrollment key={enrollment.id} enrollment={enrollment} />
+        subItems={order.target_courses?.map((targetCourse) => (
+          <DashboardSubItem
+            title={targetCourse.title}
+            footer={
+              <DashboardItemCourseEnrolling
+                writable={writable}
+                course={targetCourse}
+                order={order}
+                activeEnrollment={CoursesHelper.findActiveCourseEnrollmentInOrder(
+                  targetCourse,
+                  order,
+                )}
+                notEnrolledUrl={getRoutePath(DashboardPaths.ORDER, { orderId: order.id })}
+              />
+            }
+          />
         ))}
       />
     </DashboardItem>
-  );
-};
-
-const DashboardItemOrderEnrollment = ({ enrollment }: { enrollment: Enrollment }) => {
-  const { course } = enrollment.course_run;
-  if (!course) {
-    throw new Error('Enrollment must provide course attribute');
-  }
-  return (
-    <DashboardSubItem
-      title={course.title}
-      footer={<DashboardItemEnrollmentFooter enrollment={enrollment} />}
-    />
   );
 };

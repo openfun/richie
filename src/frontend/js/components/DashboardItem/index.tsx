@@ -1,11 +1,12 @@
 import { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithTestId } from '../../types/utils';
 
-interface Props {
+type Props = PropsWithTestId<{
   title: string;
   code: string;
   imageUrl: string;
   footer?: ReactNode;
-}
+}>;
 
 // This is temporary due to the fact that backend doesn't give this attribute yet.
 export const DEMO_IMAGE_URL =
@@ -13,7 +14,7 @@ export const DEMO_IMAGE_URL =
 
 export const DashboardItem = (props: PropsWithChildren<Props>) => {
   return (
-    <div className="dashboard-item">
+    <div className="dashboard-item" data-testid={props['data-testid']}>
       <div className="dashboard-item__block">
         <header className="dashboard-item__block__head">
           <img

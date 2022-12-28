@@ -1,6 +1,6 @@
-import { DashboardItemEnrollmentFooter } from 'components/DashboardItem/DashboardItemEnrollmentFooter';
 import { Enrollment } from 'types/Joanie';
-import { DashboardItem, DEMO_IMAGE_URL } from './index';
+import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
+import { DashboardItem, DEMO_IMAGE_URL } from '../index';
 
 interface DashboardItemCourseRunProps {
   enrollment: Enrollment;
@@ -17,7 +17,9 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
       title={course.title}
       code={'Ref. ' + course.code}
       imageUrl={DEMO_IMAGE_URL}
-      footer={<DashboardItemEnrollmentFooter enrollment={enrollment} />}
+      footer={
+        <DashboardItemCourseEnrolling course={course} activeEnrollment={enrollment} icon={true} />
+      }
     />
   );
 };
