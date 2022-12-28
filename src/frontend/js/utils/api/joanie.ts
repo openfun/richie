@@ -133,6 +133,9 @@ const getRoutes = () => {
         create: `${baseUrl}/enrollments/`,
         update: `${baseUrl}/enrollments/:id/`,
       },
+      products: {
+        get: `${baseUrl}/products/:id/`,
+      },
     },
     courses: {
       get: `${baseUrl}/courses/:id/`,
@@ -269,6 +272,32 @@ const API = (): Joanie.API => {
       certificates: {
         download: async (id: string): Promise<File> =>
           fetchWithJWT(ROUTES.user.certificates.download.replace(':id', id)).then(checkStatus),
+      },
+      products: {
+        get: async (arg1) => {
+          let url;
+          let queryParameters;
+
+          if (
+            !!arg1 &&
+            (typeof arg1 === 'string' ||
+              (Object.keys(arg1 as object).length === 1 && (arg1 as object).hasOwnProperty('id')))
+          ) {
+            url = ROUTES.user.products.get.replace(
+              ':id',
+              (arg1 as ResourcesQuery).id ?? (arg1 as string),
+            );
+          } else {
+            url = ROUTES.user.products.get.replace(':id/', '');
+            queryParameters = stringify((arg1 as ResourcesQuery) || {});
+          }
+
+          if (queryParameters) {
+            url += `?${queryParameters}`;
+          }
+
+          return fetchWithJWT(url).then(checkStatus);
+        },
       },
     },
     courses: {

@@ -257,6 +257,10 @@ interface APIUser {
     get(filters?: ResourcesQuery): Promise<PaginatedResponse<Enrollment>>;
     update(payload: EnrollmentUpdatePayload): Promise<any>;
   };
+  products: {
+    get(id: Product['id']): Promise<Product>;
+    get(filters?: ResourcesQuery): Promise<Product[]>;
+  };
 }
 
 export interface API {
