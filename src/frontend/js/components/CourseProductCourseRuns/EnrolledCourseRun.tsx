@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Spinner } from 'components/Spinner';
-import { useEnrollment } from 'hooks/useEnrollment';
+import { useEnrollments } from 'hooks/useEnrollments';
 import type * as Joanie from 'types/Joanie';
 import useDateFormat from 'utils/useDateFormat';
 import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
@@ -29,10 +29,10 @@ interface Props {
 
 const EnrolledCourseRun = ({ enrollment }: Props) => {
   const formatDate = useDateFormat();
-  const { methods, states } = useEnrollment();
+  const { methods, states } = useEnrollments();
 
-  const unroll = async () => {
-    await methods.update({
+  const unroll = () => {
+    methods.update({
       course_run: enrollment.course_run.id,
       is_active: false,
       id: enrollment!.id,

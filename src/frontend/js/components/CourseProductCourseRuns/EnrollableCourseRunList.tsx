@@ -2,7 +2,7 @@ import { Children, type FormEventHandler, useMemo, useRef, useState } from 'reac
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Icon } from 'components/Icon';
 import { Spinner } from 'components/Spinner';
-import { useEnrollment } from 'hooks/useEnrollment';
+import { useEnrollments } from 'hooks/useEnrollments';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
 import type { Maybe } from 'types/utils';
@@ -67,7 +67,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
     [selectedCourseRun],
   );
 
-  const enrollment = useEnrollment();
+  const enrollment = useEnrollments();
   const loading = enrollment.states.creating || enrollment.states.updating;
   const canSubmit = selectedCourseRun && !selectedCourseRunIsNotOpened;
   const showFeedback = !loading && submitted && !canSubmit;
@@ -84,7 +84,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
       });
 
     const courseRunId = selectedInput?.id.split('|')[1];
-    const courseRun = courseRuns.find(({ resource_link }) => resource_link === courseRunId);
+    const courseRun = courseRuns.find(({ id }) => id === courseRunId);
     setSelectedCourseRun(courseRun);
   };
 
@@ -101,7 +101,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
 
     if (selectedCourseRun) {
       const relatedEnrollment = order.enrollments.find(({ course_run }) => {
-        return course_run.resource_link === selectedCourseRun.resource_link;
+        return course_run.id === selectedCourseRun.id;
       });
       if (relatedEnrollment) {
         await enrollment.methods.update({
@@ -139,17 +139,14 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
                 <input
                   className="form-field__radio-input"
                   type="radio"
-                  id={`${order.id}|${courseRun.resource_link}`}
+                  id={`${order.id}|${courseRun.id}`}
                   name={order.id}
                   aria-label={intl.formatMessage(messages.ariaSelectCourseRun, {
                     start: formatDate(courseRun.start),
                     end: formatDate(courseRun.end),
                   })}
                 />
-                <label
-                  className="form-field__label"
-                  htmlFor={`${order.id}|${courseRun.resource_link}`}
-                >
+                <label className="form-field__label" htmlFor={`${order.id}|${courseRun.id}`}>
                   <span className="form-field__radio-control" />
                   <strong className="course-runs-item__course-dates">
                     <span
