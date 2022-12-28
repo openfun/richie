@@ -69,7 +69,7 @@ describe('<Dashboard />', () => {
     render(<DashboardWithUser user={user} />);
 
     expect(location.replace).not.toBeCalled();
-    screen.getByTestId('RouteInfo-/courses');
+    expectUrlMatchLocationDisplayed(DashboardPaths.COURSES);
   });
 
   it('should render breadcrumbs', () => {

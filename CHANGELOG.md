@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Added DashboardItemOrder that allows to select course runs
+
 ## [2.19.0]
 
 ### Added
