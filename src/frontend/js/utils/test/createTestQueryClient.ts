@@ -4,8 +4,9 @@ import createQueryClient, { QueryClientOptions } from 'utils/react-query/createQ
 import { User } from 'types/User';
 import { Maybe, Nullable } from 'types/utils';
 
-interface Params extends QueryClientOptions {
+export interface CreateTestQueryClientParams extends QueryClientOptions {
   user?: Maybe<Nullable<User | boolean>>;
+  queriesCallback?: (queries: DehydratedState['queries']) => void;
 }
 
 /**
@@ -16,7 +17,7 @@ interface Params extends QueryClientOptions {
  *
  * @param params
  */
-export const createTestQueryClient = (params?: Params) => {
+export const createTestQueryClient = (params?: CreateTestQueryClientParams) => {
   let userToUse: Maybe<Nullable<User>>;
   if (params?.user === true) {
     userToUse = mockFactories.UserFactory.generate();
@@ -30,6 +31,8 @@ export const createTestQueryClient = (params?: Params) => {
   if (userToUse || userToUse === null) {
     queries.push(mockFactories.QueryStateFactory(['user'], { data: userToUse }));
   }
+
+  params?.queriesCallback?.(queries);
 
   const { clientState } = mockFactories.PersistedClientFactory({
     queries,
