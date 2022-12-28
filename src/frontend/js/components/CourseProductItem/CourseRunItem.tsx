@@ -7,13 +7,7 @@ import {
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
-
-const findEnrollment = (targetCourse: Joanie.TargetCourse, order: Joanie.OrderLite) => {
-  const resourceLinks = targetCourse.course_runs.map(({ resource_link }) => resource_link);
-  return order.enrollments.find(({ is_active, course_run }) => {
-    return is_active && resourceLinks.includes(course_run.resource_link);
-  });
-};
+import { CoursesHelper } from 'utils/CoursesHelper';
 
 interface Props {
   targetCourse: Joanie.TargetCourse;
@@ -22,7 +16,9 @@ interface Props {
 
 const CourseRunItem = ({ targetCourse, order }: Props) => {
   const isEnrollable = order?.state === OrderState.VALIDATED;
-  const courseRunEnrollment = isEnrollable ? findEnrollment(targetCourse, order) : undefined;
+  const courseRunEnrollment = isEnrollable
+    ? CoursesHelper.findActiveCourseEnrollmentInOrder(targetCourse, order)
+    : undefined;
   const isEnrolled = !!courseRunEnrollment?.is_active;
   const isOpenedCourseRun = (courseRun: Joanie.CourseRun) =>
     courseRun.state.priority <= Priority.FUTURE_NOT_YET_OPEN;
