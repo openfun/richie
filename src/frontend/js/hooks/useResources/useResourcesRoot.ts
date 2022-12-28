@@ -73,6 +73,7 @@ export const useResourcesRoot = <
   queryOptions,
   localized,
   messages: resourceMessages,
+  onMutationSuccess,
 }: UseResourcesProps<TData, TResourceQuery, TApiResource>) => {
   const queryClient = useQueryClient();
   const [error, setError] = useState<Maybe<string>>();
@@ -128,6 +129,7 @@ export const useResourcesRoot = <
   const onSuccess = async () => {
     setError(undefined);
     await invalidate();
+    await onMutationSuccess?.(queryClient);
   };
 
   const mutation = (session ? useSessionMutation : useMutation) as typeof useMutation;
