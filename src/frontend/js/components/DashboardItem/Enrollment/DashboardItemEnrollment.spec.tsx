@@ -1,10 +1,10 @@
 import { IntlProvider } from 'react-intl';
 import { render, screen } from '@testing-library/react';
 import * as faker from 'faker';
-import { DashboardItemEnrollment } from 'components/DashboardItem/DashboardItemEnrollment';
+import { DashboardItemEnrollment } from 'components/DashboardItem/Enrollment/DashboardItemEnrollment';
 import { Enrollment } from 'types/Joanie';
 import { JoanieCourseRunFactory, JoanieEnrollmentFactory } from 'utils/test/factories';
-import { DEFAULT_DATE_FORMAT } from 'utils/useDateFormat';
+import { DATETIME_FORMAT } from 'utils/useDateFormat';
 
 describe('<DashboardItemEnrollment/>', () => {
   it('renders a opened enrollment', () => {
@@ -26,15 +26,17 @@ describe('<DashboardItemEnrollment/>', () => {
     );
     screen.getByText(enrollment.course_run.course!.title);
     screen.getByText('Ref. ' + enrollment.course_run.course!.code);
-    const link = screen.getByRole('link', { name: 'ACCESS COURSE' });
+    const link = screen.getByRole('link', { name: 'Access course' });
     expect(link).toBeEnabled();
     expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
 
     screen.getByText(
-      'COURSE OPEN • Started on ' +
-        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+      'OPEN • Happens on ' +
+        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
           new Date(enrollment.course_run.start),
-        ),
+        ) +
+        ' - ' +
+        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(enrollment.course_run.end)),
     );
   });
 
@@ -57,14 +59,16 @@ describe('<DashboardItemEnrollment/>', () => {
     );
     screen.getByText(enrollment.course_run.course!.title);
     screen.getByText('Ref. ' + enrollment.course_run.course!.code);
-    const link = screen.getByRole('link', { name: 'ACCESS COURSE' });
+    const link = screen.getByRole('link', { name: 'Access course' });
     expect(link).toBeEnabled();
     expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
     screen.getByText(
-      'CLOSED • Finished on ' +
-        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
-          new Date(enrollment.course_run.end),
-        ),
+      'CLOSED • Occurred on ' +
+        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
+          new Date(enrollment.course_run.start),
+        ) +
+        ' - ' +
+        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(enrollment.course_run.end)),
     );
   });
 
@@ -84,9 +88,9 @@ describe('<DashboardItemEnrollment/>', () => {
     );
     screen.getByText(enrollment.course_run.course!.title);
     screen.getByText('Ref. ' + enrollment.course_run.course!.code);
-    const link = screen.getByRole('link', { name: 'ACCESS COURSE' });
+    const link = screen.getByRole('link', { name: 'Access course' });
     expect(link).toBeEnabled();
     expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
-    screen.getByText('NOT ENROLLED');
+    screen.getByText('Not enrolled');
   });
 });

@@ -264,6 +264,9 @@ $r-theme: (
     text-hover-color: r-color('grey59'),
     base-border: r-color('light-grey'),
   ),
+  dashboard-item-course-enrolling-run: (
+    enrolled-color: r-color('mantis'),
+  ),
   dashboard-sidebar: (
     background-color: r-color('white'),
     base-shadow: 0 0 6px r-color('light-grey'),

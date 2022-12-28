@@ -5,6 +5,11 @@ export const DEFAULT_DATE_FORMAT: FormatDateOptions = {
   month: 'short',
   year: 'numeric',
 };
+export const DATETIME_FORMAT: FormatDateOptions = {
+  ...DEFAULT_DATE_FORMAT,
+  hour: '2-digit',
+  minute: '2-digit',
+};
 
 /**
  * This hook must be used within <IntlProvider />.
