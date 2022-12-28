@@ -1,10 +1,15 @@
 import { IntlProvider } from 'react-intl';
 import { render, screen } from '@testing-library/react';
 import * as faker from 'faker';
-import { DashboardItemEnrollment } from 'components/DashboardItem/DashboardItemEnrollment';
+import { DashboardItemEnrollment } from 'components/DashboardItem/Enrollment/DashboardItemEnrollment';
 import { Enrollment } from 'types/Joanie';
-import { JoanieCourseRunFactory, JoanieEnrollmentFactory } from 'utils/test/factories';
-import { DEFAULT_DATE_FORMAT } from 'utils/useDateFormat';
+import {
+  CourseStateFactory,
+  JoanieCourseRunFactory,
+  JoanieEnrollmentFactory,
+} from 'utils/test/factories';
+import { DATETIME_FORMAT } from 'utils/useDateFormat';
+import { Priority } from 'types';
 
 describe('<DashboardItemEnrollment/>', () => {
   it('renders a opened enrollment', () => {
@@ -18,6 +23,7 @@ describe('<DashboardItemEnrollment/>', () => {
         end: faker.date.future(1.0).toISOString(),
       },
     };
+    enrollment.course_run.state.priority = Priority.ONGOING_OPEN;
 
     render(
       <IntlProvider locale="en">
@@ -26,15 +32,17 @@ describe('<DashboardItemEnrollment/>', () => {
     );
     screen.getByText(enrollment.course_run.course!.title);
     screen.getByText('Ref. ' + enrollment.course_run.course!.code);
-    const link = screen.getByRole('link', { name: 'ACCESS COURSE' });
+    const link = screen.getByRole('link', { name: 'Access course' });
     expect(link).toBeEnabled();
     expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
 
     screen.getByText(
-      'COURSE OPEN • Started on ' +
-        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+      'You are enrolled for the session from ' +
+        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
           new Date(enrollment.course_run.start),
-        ),
+        ) +
+        ' to ' +
+        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(enrollment.course_run.end)),
     );
   });
 
@@ -47,6 +55,7 @@ describe('<DashboardItemEnrollment/>', () => {
         enrollment_end: faker.date.past(0.75).toISOString(),
         start: faker.date.past(0.25).toISOString(),
         end: faker.date.past(0.5).toISOString(),
+        state: { ...CourseStateFactory.generate(), priority: Priority.ARCHIVED_CLOSED },
       },
     };
 
@@ -57,14 +66,16 @@ describe('<DashboardItemEnrollment/>', () => {
     );
     screen.getByText(enrollment.course_run.course!.title);
     screen.getByText('Ref. ' + enrollment.course_run.course!.code);
-    const link = screen.getByRole('link', { name: 'ACCESS COURSE' });
+    const link = screen.getByRole('link', { name: 'Access course' });
     expect(link).toBeEnabled();
     expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
     screen.getByText(
-      'CLOSED • Finished on ' +
-        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
-          new Date(enrollment.course_run.end),
-        ),
+      'You are enrolled for the session from ' +
+        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
+          new Date(enrollment.course_run.start),
+        ) +
+        ' to ' +
+        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(enrollment.course_run.end)),
     );
   });
 
@@ -84,9 +95,6 @@ describe('<DashboardItemEnrollment/>', () => {
     );
     screen.getByText(enrollment.course_run.course!.title);
     screen.getByText('Ref. ' + enrollment.course_run.course!.code);
-    const link = screen.getByRole('link', { name: 'ACCESS COURSE' });
-    expect(link).toBeEnabled();
-    expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
-    screen.getByText('NOT ENROLLED');
+    screen.getByText('Not enrolled');
   });
 });

@@ -1,6 +1,6 @@
 .dashboard-item {
   &__block {
-    background: white;
+    background: r-theme-val(dashboard-item, background-color);
     border-radius: $border-radius;
     box-shadow: r-theme-val(dashboard-item, base-shadow);
     color: r-theme-val(dashboard-item, base-color);
@@ -42,25 +42,6 @@
       }
     }
 
-    &__footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5rem 1rem;
-
-      @include media-breakpoint-down(sm) {
-        flex-direction: column;
-
-        .button {
-          width: 100%;
-        }
-      }
-
-      .button {
-        flex-shrink: 0;
-      }
-    }
-
     &__status {
       display: flex;
       align-items: center;
@@ -75,6 +56,8 @@
 
 .dashboard-sub-item-list {
   padding-left: 30px;
+  position: relative;
+  overflow: hidden;
 
   &__item {
     position: relative;
@@ -90,19 +73,14 @@
       border-radius: 50%;
     }
 
-    &::after {
+    &:last-child::after {
       content: '';
       background: map-get(r-theme-val(base-schemes, secondary), background);
-      height: 150px;
+      height: 10000px;
       position: absolute;
       left: -16px;
-      top: -130px;
+      top: -9978px;
       width: 2px;
-
-      @include media-breakpoint-down(sm) {
-        height: 200px;
-        top: -170px;
-      }
     }
   }
 }
@@ -112,6 +90,7 @@
   box-shadow: r-theme-val(dashboard-item, base-shadow);
   color: r-theme-val(dashboard-item, base-color);
   margin-top: 10px;
+  background: r-theme-val(dashboard-item, background-color);
 
   &__header {
     align-items: center;
@@ -127,12 +106,15 @@
       overflow: hidden;
     }
   }
+}
 
-  &__footer {
+.dashboard-item__course-enrolling {
+  &__infos {
     align-items: center;
     display: flex;
     justify-content: space-between;
     padding: 0.5rem 1rem;
+    min-height: 3.75rem;
 
     @include media-breakpoint-down(sm) {
       flex-direction: column;
@@ -149,5 +131,70 @@
     p {
       margin: 0;
     }
+  }
+
+  &__runs {
+    position: relative;
+  }
+
+  &__loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(r-theme-val(dashboard-item, overlay-background-color), 0.8);
+  }
+
+  &__no-runs {
+    padding: 1.2rem 1rem;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__run {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+
+    &:not(:last-child) {
+      border-bottom: $onepixel solid r-theme-val(dashboard-item, base-border);
+    }
+
+    &__not-opened {
+      color: r-theme-val(product-item, feedback-color);
+    }
+
+    &__enrolled {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.7rem 1.3rem;
+      color: r-theme-val(dashboard-item-course-enrolling-run, enrolled-color);
+      font-family: $r-font-family-montserrat;
+    }
+  }
+}
+
+.dashboard-item-order__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  min-height: 3.75rem;
+
+  @include media-breakpoint-down(sm) {
+    flex-direction: column;
+
+    .button {
+      width: 100%;
+    }
+  }
+
+  .button {
+    flex-shrink: 0;
   }
 }
