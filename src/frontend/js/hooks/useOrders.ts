@@ -4,6 +4,7 @@ import { API, Order } from '../types/Joanie';
 import {
   QueryOptions,
   ResourcesQuery,
+  useResource,
   useResourcesCustom,
   UseResourcesProps,
 } from './useResources';
@@ -25,3 +26,4 @@ export const useOrders = (filters?: ResourcesQuery, queryOptions?: QueryOptions<
     },
   };
 };
+export const useOrder = useResource(props);
