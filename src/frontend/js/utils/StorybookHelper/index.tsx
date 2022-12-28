@@ -1,20 +1,15 @@
 import countries from 'i18n-iso-countries';
 import { lazy, ReactNode, Suspense } from 'react';
 import { IntlProvider } from 'react-intl';
-import { hydrate, QueryClientProvider } from '@tanstack/react-query';
-import createQueryClient from 'utils/react-query/createQueryClient';
-import { PersistedClientFactory, QueryStateFactory } from 'utils/test/factories';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { User } from 'types/User';
+import { createTestQueryClient, CreateTestQueryClientParams } from '../test/createTestQueryClient';
 
 const LazyJoanieSessionProvider = lazy(() => import('data/SessionProvider/JoanieSessionProvider'));
 
 export class StorybookHelper {
-  static wrapInApp(children: ReactNode, opts?: { user?: User }) {
-    const { clientState } = PersistedClientFactory({
-      queries: [QueryStateFactory(['user'], { data: opts?.user })],
-    });
-    const client = createQueryClient({ persister: true });
-    hydrate(client, clientState);
+  static wrapInApp(children: ReactNode, opts?: { user?: User } & CreateTestQueryClientParams) {
+    const client = createTestQueryClient({ persister: true, logger: true, ...opts });
 
     countries.registerLocale(require(`i18n-iso-countries/langs/en.json`));
     return (
