@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Allow synchronizing course runs in bulk via the same API hook
 - JoanieBackend to identify course runs managed by Joanie
+- Added DashboardItemOrder that allows to select course runs
 
 ### Changed
 
