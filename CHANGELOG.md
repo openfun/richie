@@ -15,10 +15,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Migrate to useResources hooks
 - Refactor CourseProductItem as Joanie products are Richie course runs
 - Use versionned Joanie api routes
 - Migrate to React 18 and React-Query v4
-- Migrate to useResources hooks
 
 ### Fixed
 
