@@ -28,7 +28,7 @@ class GitmojiTitle(LineRule):
         title contains one of them.
         """
         gitmojis = requests.get(
-            "https://raw.githubusercontent.com/carloscuesta/gitmoji/master/src/data/gitmojis.json"
+            "https://raw.githubusercontent.com/carloscuesta/gitmoji/master/packages/gitmojis/src/gitmojis.json"
         ).json()["gitmojis"]
         emojis = [item["emoji"] for item in gitmojis]
         pattern = r"^({:s})\(.*\)\s[a-z].*$".format("|".join(emojis))
