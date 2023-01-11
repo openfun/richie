@@ -7,22 +7,23 @@ import {
   OrderFactory,
 } from 'utils/test/factories';
 import { DashboardItemOrder } from 'components/DashboardItem/DashboardItemOrder';
-import { Order } from 'types/Joanie';
+import { Course, Order } from 'types/Joanie';
 import { DEFAULT_DATE_FORMAT } from 'utils/useDateFormat';
 
 describe('<DashboardItemOrder/>', () => {
   it('renders component without enrollments', () => {
     const order: Order = OrderFactory.generate();
+    const course = order.course as Course;
 
     render(
       <IntlProvider locale="en">
         <DashboardItemOrder order={order} />
       </IntlProvider>,
     );
-    screen.getByRole('heading', { level: 5, name: order.course!.title });
+    screen.getByRole('heading', { level: 5, name: course.title });
     const button = screen.getByRole('link', { name: 'ACCESS COURSE' });
     expect(button).toBeEnabled();
-    expect(button).toHaveAttribute('href', '/dashboard/courses/' + order.course!.code);
+    expect(button).toHaveAttribute('href', '/dashboard/courses/' + course.code);
   });
 
   it('renders component with enrollments', () => {
@@ -51,16 +52,17 @@ describe('<DashboardItemOrder/>', () => {
         },
       ],
     };
+    const course = order.course as Course;
 
     render(
       <IntlProvider locale="en">
         <DashboardItemOrder order={order} />
       </IntlProvider>,
     );
-    screen.getByRole('heading', { level: 5, name: order.course!.title });
+    screen.getByRole('heading', { level: 5, name: course.title });
     const button = screen.getAllByRole('link', { name: 'ACCESS COURSE' })[0];
     expect(button).toBeEnabled();
-    expect(button).toHaveAttribute('href', '/dashboard/courses/' + order.course!.code);
+    expect(button).toHaveAttribute('href', '/dashboard/courses/' + course.code);
 
     // First enrollment.
     {
