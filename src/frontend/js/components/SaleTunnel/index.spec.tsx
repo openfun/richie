@@ -58,12 +58,10 @@ describe('SaleTunnel', () => {
   it('shows a login button if user is not authenticated', async () => {
     const product = ProductFactory.generate();
 
-    fetchMock.get(`https://joanie.test/api/v1.0/@@products/${product.id}/`, product);
-
     await act(async () => {
       render(
         <Wrapper client={createTestQueryClient({ user: null })}>
-          <SaleTunnel courseCode="00000" product={product} />
+          <SaleTunnel product={product} />
         </Wrapper>,
       );
     });
@@ -74,15 +72,16 @@ describe('SaleTunnel', () => {
   it('shows cta to open sale tunnel when user is authenticated', async () => {
     const product = ProductFactory.generate();
     fetchMock
-      .get(`https://joanie.test/api/v1.0/products/${product.id}/`, product)
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
 
+    const onSuccess = jest.fn();
+
     await act(async () => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <SaleTunnel courseCode="00000" product={product} />
+          <SaleTunnel onSuccess={onSuccess} product={product} />
         </Wrapper>,
       );
     });
@@ -111,26 +110,24 @@ describe('SaleTunnel', () => {
     // focus should be set to the current step
     expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    expect(fetchMock.calls()).toHaveLength(0);
+    expect(onSuccess).not.toHaveBeenCalled();
 
     // - Step 2 : Payment
     screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepPayment Component' });
     // focus should be set to the current step
     expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    expect(fetchMock.calls()).toHaveLength(0);
+    expect(onSuccess).not.toHaveBeenCalled();
 
     // - Step 3 : Resume
     screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepResume Component' });
     // focus should be set to the current step
     expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
+    expect(onSuccess).not.toHaveBeenCalled();
 
-    // - Terminated, resume.onExit callback is triggered to refresh course and orders and dialog has been closed
+    // - Terminated, resume.onExit callback is triggered, onSuccess callback should have been executed.
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    const calls = fetchMock.calls();
-    expect(calls).toHaveLength(2);
-    expect(calls[0][0]).toEqual(`https://joanie.test/api/v1.0/products/${product.id}/`);
-    expect(calls[1][0]).toEqual('https://joanie.test/api/v1.0/orders/');
+    expect(onSuccess).toHaveBeenCalledTimes(1);
 
     expect(screen.queryByTestId('SaleTunnel__modal')).toBeNull();
     rafSpy.mockRestore();
@@ -148,7 +145,7 @@ describe('SaleTunnel', () => {
     await act(async () => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <SaleTunnel courseCode="00000" product={product} />
+          <SaleTunnel product={product} />
         </Wrapper>,
       );
     });
@@ -162,7 +159,6 @@ describe('SaleTunnel', () => {
     const product = ProductFactory.generate();
 
     fetchMock
-      .get(`https://joanie.test/api/v1.0/@@products/${product.id}/`, product)
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
@@ -170,7 +166,7 @@ describe('SaleTunnel', () => {
     await act(async () => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <SaleTunnel courseCode="00000" product={product} />
+          <SaleTunnel product={product} />
         </Wrapper>,
       );
     });

@@ -89,7 +89,13 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
         </ol>
         {!isOwned && (
           <footer className="product-widget__footer">
-            <SaleTunnel product={product} courseCode={courseCode} />
+            <SaleTunnel
+              product={product}
+              onSuccess={() => {
+                productQuery.methods.refetch();
+                orderQuery.methods.refetch();
+              }}
+            />
           </footer>
         )}
       </section>
