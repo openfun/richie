@@ -29,6 +29,17 @@ export const useResourcesOmniscient = <
     [messages, props.messages],
   );
   const filter = useCallback(() => {
+    // The following condition is important, let's illustrate it with the following situation:
+    // - enabled: false ( happens when waiting for filters values, like `id` for useResource )
+    // - react-query already has items in cache because they are already loaded from somewhere in the
+    //  app ( the QUERY_KEY stays the same with omniscient resources )
+    // => The current function ( useResourcesOmniscient ) would return all cached items without this
+    //  condition, where in reality we must return nothing because filters are not defined yet.
+    if (props.queryOptions?.enabled === false) {
+      setData([]);
+      return;
+    }
+
     if (!useResources.items) {
       setData([]);
       return;
