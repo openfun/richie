@@ -63,16 +63,18 @@ export interface Product {
   price_currency: string;
   call_to_action: string;
   certificate: CertificateDefinition;
-  target_courses: Omit<Course, 'products'>[];
+  target_courses: TargetCourse[];
   orders: Order['id'][];
 }
 
 // - Course
-export interface CourseProductTargetCourse {
+export interface TargetCourse {
   code: string;
-  organization: Organization;
+  organizations: Organization[];
   title: string;
-  course_runs: Array<CourseRun>;
+  course_runs: CourseRun[];
+  is_graded: boolean;
+  position: number;
 }
 
 export type OrderLite = Pick<
@@ -89,7 +91,7 @@ export type OrderLite = Pick<
 
 export interface CourseProduct extends Product {
   order: Nullable<OrderLite>;
-  target_courses: CourseProductTargetCourse[];
+  target_courses: TargetCourse[];
 }
 
 export interface Course {
@@ -134,8 +136,8 @@ export interface Order {
   total: number;
   total_currency: string;
   state: OrderState;
-  product: string;
-  target_courses: Omit<Course, 'products'>[];
+  product: Product['id'];
+  target_courses: TargetCourse[];
 }
 
 export enum CreditCardBrand {
