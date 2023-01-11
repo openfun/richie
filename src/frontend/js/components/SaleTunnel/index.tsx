@@ -7,9 +7,8 @@ import { SaleTunnelStepValidation } from 'components/SaleTunnelStepValidation';
 import { StepBreadcrumb } from 'components/StepBreadcrumb';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
 import { useSession } from 'data/SessionProvider';
-import { useOrders } from 'hooks/useOrders';
-import { useProduct } from 'hooks/useProduct';
 import type * as Joanie from 'types/Joanie';
+import { Priority } from 'types';
 
 const messages = defineMessages({
   stepValidation: {
@@ -57,10 +56,10 @@ const focusCurrentStep = (container: HTMLElement) => {
 
 type Props = {
   product: Joanie.Product;
-  courseCode: Joanie.Course['code'];
+  onSuccess?: () => void;
 };
 
-const SaleTunnel = ({ product, courseCode }: Props) => {
+const SaleTunnel = ({ product, onSuccess }: Props) => {
   const intl = useIntl();
 
   const manifest: Manifest<TunnelSteps, 'resume'> = {
@@ -81,8 +80,7 @@ const SaleTunnel = ({ product, courseCode }: Props) => {
         label: intl.formatMessage(messages.stepResume),
         next: null,
         onExit: () => {
-          productQuery.methods.refetch();
-          ordersQuery.methods.refetch();
+          onSuccess?.();
           handleModalClose();
         },
       },
@@ -90,12 +88,12 @@ const SaleTunnel = ({ product, courseCode }: Props) => {
   };
   const { step, next, reset } = useStepManager(manifest);
   const { user, login } = useSession();
-  const productQuery = useProduct(product.id);
-  const ordersQuery = useOrders({ product: product.id, course: courseCode });
   const [isOpen, setIsOpen] = useState(false);
+  const isOpenedCourseRun = (courseRun: Joanie.CourseRun) =>
+    courseRun.state.priority <= Priority.FUTURE_NOT_YET_OPEN;
 
   const oneCourseHasNoCourseRun = useMemo(() => {
-    return product.target_courses.some(({ course_runs }) => course_runs.length === 0);
+    return product.target_courses.some(({ course_runs }) => !course_runs.some(isOpenedCourseRun));
   }, [product]);
 
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -129,28 +127,26 @@ const SaleTunnel = ({ product, courseCode }: Props) => {
     );
   }
 
-  if (oneCourseHasNoCourseRun) {
-    return (
-      <p className="product-item__no-course-run">
-        <FormattedMessage {...messages.noCourseRunToPurchase} />
-      </p>
-    );
-  }
-
   return (
     <Fragment>
       <button
         className="product-item__cta"
-        onClick={() => setIsOpen(true)}
+        onClick={() => !oneCourseHasNoCourseRun && setIsOpen(true)}
         // so that the button is explicit on its own, we add a description that doesn't
         // rely on the text coming from the CMS
         // eslint-disable-next-line jsx-a11y/aria-props
         aria-description={intl.formatMessage(messages.callToActionDescription, {
           product: product.title,
         })}
+        disabled={oneCourseHasNoCourseRun}
       >
         {product.call_to_action}
       </button>
+      {oneCourseHasNoCourseRun && (
+        <p className="product-item__no-course-run">
+          <FormattedMessage {...messages.noCourseRunToPurchase} />
+        </p>
+      )}
       <Modal
         className="SaleTunnel__modal"
         isOpen={isOpen}

@@ -1,4 +1,4 @@
-import { API, Order, Product, Course } from 'types/Joanie';
+import { API, Order, Product, Course, OrderState } from 'types/Joanie';
 import { useJoanieApi } from 'data/JoanieApiProvider';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import {
@@ -12,12 +12,32 @@ import {
 type OrderResourcesQuery = ResourcesQuery & {
   course?: Course['code'];
   product?: Product['id'];
+  state?: OrderState[];
 };
+
+function omniscientFiltering(data: Order[], filter: OrderResourcesQuery): Order[] {
+  if (!filter) return data;
+
+  return data.filter(
+    (order) =>
+      // If filter.id is defined filter by order.id
+      (!filter.id || order.id === filter.id) &&
+      // If filter.course is defined filter by order.course
+      (!filter.course ||
+        (typeof order.course === 'string' && order.course === filter.course) ||
+        (typeof order.course === 'object' && order.course?.code === filter.course)) &&
+      // If filter.product is defined filter by order.product
+      (!filter.product || order.product === filter.product) &&
+      // If filter.state is defined filter by order.state
+      (!filter.state || filter.state.includes(order.state)),
+  );
+}
 
 const props: UseResourcesProps<Order, OrderResourcesQuery, API['user']['orders']> = {
   queryKey: ['orders'],
   apiInterface: () => useJoanieApi().user.orders,
   omniscient: true,
+  omniscientFiltering,
   session: true,
 };
 
