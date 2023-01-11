@@ -95,6 +95,10 @@
   &__footer {
     padding: 0 0.875rem 1rem 0.875rem;
 
+    .product-item__no-course-run {
+      text-align: center;
+      color: r-theme-val(product-item, button-background);
+    }
     .product-item__cta {
       @include button-base(
         $font-color: r-theme-val(product-item, button-color),
