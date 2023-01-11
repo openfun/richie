@@ -22,6 +22,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Prevent product course run enrollment when user owns the product
+  through an invalid order
 - Display a message in the sales tunnel when at least one course has no course
   runs, to say that this product is not currently available for sale. 
 - Show error message when user tries to enroll or unroll to a

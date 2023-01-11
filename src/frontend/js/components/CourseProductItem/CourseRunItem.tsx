@@ -6,6 +6,7 @@ import {
 } from 'components/CourseProductCourseRuns';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
+import { OrderState } from 'types/Joanie';
 
 const findEnrollment = (targetCourse: Joanie.TargetCourse, order: Joanie.OrderLite) => {
   const resourceLinks = targetCourse.course_runs.map(({ resource_link }) => resource_link);
@@ -20,8 +21,8 @@ interface Props {
 }
 
 const CourseRunItem = ({ targetCourse, order }: Props) => {
-  const isOwned = order !== undefined;
-  const courseRunEnrollment = isOwned ? findEnrollment(targetCourse, order) : undefined;
+  const isEnrollable = order?.state === OrderState.VALIDATED;
+  const courseRunEnrollment = isEnrollable ? findEnrollment(targetCourse, order) : undefined;
   const isEnrolled = !!courseRunEnrollment?.is_active;
   const isOpenedCourseRun = (courseRun: Joanie.CourseRun) =>
     courseRun.state.priority <= Priority.FUTURE_NOT_YET_OPEN;
@@ -73,16 +74,16 @@ const CourseRunItem = ({ targetCourse, order }: Props) => {
       className="product-widget__item course"
     >
       <strong className="product-widget__item-title h5">{targetCourse.title}</strong>
-      {!isOwned && (
+      {!isEnrollable && (
         <CourseRunList courseRuns={targetCourse.course_runs.filter(isOpenedCourseRun)} />
       )}
-      {isOwned && !isEnrolled && (
+      {isEnrollable && !isEnrolled && (
         <EnrollableCourseRunList
           courseRuns={targetCourse.course_runs.filter(isOpenedCourseRun)}
           order={order}
         />
       )}
-      {isOwned && isEnrolled && <EnrolledCourseRun enrollment={courseRunEnrollment} />}
+      {isEnrollable && isEnrolled && <EnrolledCourseRun enrollment={courseRunEnrollment} />}
     </li>
   );
 };

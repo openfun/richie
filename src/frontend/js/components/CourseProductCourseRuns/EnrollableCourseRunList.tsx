@@ -70,7 +70,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
   const enrollment = useEnrollments();
   const loading = enrollment.states.creating || enrollment.states.updating;
   const canSubmit = selectedCourseRun && !selectedCourseRunIsNotOpened;
-  const showFeedback = !loading && submitted && !canSubmit;
+  const showFeedback = (!loading && submitted && !canSubmit) || enrollment.states.error;
 
   const handleChange = () => {
     const form = formRef.current;
@@ -97,6 +97,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
       // we use an attribute selector and not an id selector because the CSS engine
       // doesn't understand id selectors beginning with digits
       formRef.current?.querySelector<HTMLElement>(`[id="${order.id}-feedback"]`)?.focus();
+      return;
     }
 
     if (selectedCourseRun) {
@@ -194,16 +195,19 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
         </ol>
         <div className="course-runs-item course-runs-item--submit">
           <span id={`${order.id}-feedback`} className="course-runs-item__feedback" tabIndex={-1}>
-            {showFeedback && !selectedCourseRun && (
-              <FormattedMessage {...messages.selectCourseRun} />
-            )}
-            {showFeedback && selectedCourseRun && selectedCourseRunIsNotOpened && (
-              <FormattedMessage
-                {...messages.enrollmentNotYetOpened}
-                values={{ enrollment_start: formatDate(selectedCourseRun.enrollment_start) }}
-              />
-            )}
-            {enrollment.states?.error}
+            {showFeedback &&
+              (selectedCourseRun ? (
+                selectedCourseRunIsNotOpened ? (
+                  <FormattedMessage
+                    {...messages.enrollmentNotYetOpened}
+                    values={{ enrollment_start: formatDate(selectedCourseRun.enrollment_start) }}
+                  />
+                ) : (
+                  enrollment.states?.error
+                )
+              ) : (
+                <FormattedMessage {...messages.selectCourseRun} />
+              ))}
           </span>
           <button className="course-runs-item__cta button--primary button--pill button--tiny">
             {loading ? (
