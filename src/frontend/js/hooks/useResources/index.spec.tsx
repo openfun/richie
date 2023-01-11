@@ -256,6 +256,33 @@ describe('useResources (omniscient)', () => {
     await waitFor(() => expect(result.current.states.error).toBe('Cannot find the resource.'));
     expect(result.current.item).toBe(undefined);
   });
+
+  it('waits for id to be defined before returning data even if the data is already in cache', async () => {
+    const todos: Todo[] = TodoFactory.generate(5);
+    fetchMock.get('https://example.com/api/todos', todos);
+
+    const expectedTodo = pickRandomlyFromArray(todos);
+    const { result, rerender } = renderHook(
+      (initialProps: Maybe<string>) => useTodo(initialProps),
+      {
+        wrapper: Wrapper,
+      },
+    );
+
+    await waitFor(() => expect(result.current.states.isLoading).toBe(true));
+    expect(result.current.item).toBe(undefined);
+    expect(fetchMock.called('https://example.com/api/todos')).toBe(false);
+
+    rerender(expectedTodo.id);
+
+    await waitFor(() => expect(result.current.item).toEqual(expectedTodo));
+    expect(fetchMock.lastUrl()).toBe('https://example.com/api/todos');
+    expect(result.current.states.isLoading).toBe(false);
+    expect(result.current.states.fetching).toBe(false);
+
+    rerender(undefined);
+    await waitFor(() => expect(result.current.item).toBe(undefined));
+  });
 });
 
 describe('useResource (omniscient) with session', () => {
