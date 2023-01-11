@@ -175,7 +175,7 @@ export const JoanieEnrollmentFactory = createSpec({
 
 export const TargetCourseFactory = createSpec({
   code: faker.unique(faker.random.alphaNumeric(5)),
-  organization: OrganizationFactory,
+  organizations: [],
   title: faker.random.words(1, 3),
   course_runs: derived(() => JoanieCourseRunFactory().generate(1, 3)),
 });
