@@ -7,6 +7,7 @@ import type * as Joanie from 'types/Joanie';
 import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
 import { useOrder } from 'hooks/useOrders';
+import { OrderState } from 'types/Joanie';
 import CourseRunItem from './CourseRunItem';
 
 const messages = defineMessages({
@@ -32,9 +33,15 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
   const productQuery = useProduct(productId, { course: courseCode });
   const product = productQuery.item;
   const isOwned = useMemo(() => product?.orders?.length > 0, [productQuery.item]);
-  const { item: order, ...orderQuery } = useOrder(product?.orders[0], {
-    enabled: product?.orders?.length > 0,
-  });
+  const { item: order, ...orderQuery } = useOrder(
+    product?.orders?.[0],
+    {
+      state: [OrderState.VALIDATED],
+    },
+    {
+      enabled: isOwned,
+    },
+  );
 
   const targetCourses = useMemo(() => {
     if (order) {
@@ -48,55 +55,56 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
     return [];
   }, [productQuery.item, order]);
 
-  if (productQuery.states.fetching || orderQuery.states.fetching) {
-    return (
-      <Spinner aria-labelledby="loading-course">
-        <span id="loading-course">
-          <FormattedMessage {...messages.loading} />
-        </span>
-      </Spinner>
-    );
-  }
-
-  if (!product) return null;
-
   return (
     <CourseProductProvider courseCode={courseCode} productId={productId}>
       <section className="product-widget">
-        <header className="product-widget__header">
-          <h3 className="product-widget__title">{product.title}</h3>
-          <strong className="product-widget__price h6">
-            {isOwned ? (
-              <FormattedMessage {...messages.enrolled} />
-            ) : (
-              <FormattedNumber
-                currency={product.price_currency}
-                value={product.price}
-                style="currency"
-              />
+        {(productQuery.states.fetching || orderQuery.states.fetching) && (
+          <section className="product-widget__overlay">
+            <Spinner aria-labelledby="loading-course" theme="light" size="large">
+              <span id="loading-course">
+                <FormattedMessage {...messages.loading} />
+              </span>
+            </Spinner>
+          </section>
+        )}
+        {product && (
+          <>
+            <header className="product-widget__header">
+              <h3 className="product-widget__title">{product.title}</h3>
+              <strong className="product-widget__price h6">
+                {isOwned ? (
+                  <FormattedMessage {...messages.enrolled} />
+                ) : (
+                  <FormattedNumber
+                    currency={product.price_currency}
+                    value={product.price}
+                    style="currency"
+                  />
+                )}
+              </strong>
+            </header>
+            <ol className="product-widget__content">
+              {Children.toArray(
+                targetCourses.map((target_course) => (
+                  <CourseRunItem targetCourse={target_course} order={order} />
+                )),
+              )}
+              {product.certificate && (
+                <CertificateItem certificate={product.certificate} order={order} />
+              )}
+            </ol>
+            {!isOwned && (
+              <footer className="product-widget__footer">
+                <SaleTunnel
+                  product={product}
+                  onSuccess={() => {
+                    productQuery.methods.refetch();
+                    orderQuery.methods.refetch();
+                  }}
+                />
+              </footer>
             )}
-          </strong>
-        </header>
-        <ol className="product-widget__content">
-          {Children.toArray(
-            targetCourses.map((target_course) => (
-              <CourseRunItem targetCourse={target_course} order={order} />
-            )),
-          )}
-          {product.certificate && (
-            <CertificateItem certificate={product.certificate} order={order} />
-          )}
-        </ol>
-        {!isOwned && (
-          <footer className="product-widget__footer">
-            <SaleTunnel
-              product={product}
-              onSuccess={() => {
-                productQuery.methods.refetch();
-                orderQuery.methods.refetch();
-              }}
-            />
-          </footer>
+          </>
         )}
       </section>
     </CourseProductProvider>

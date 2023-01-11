@@ -5,10 +5,24 @@
   background-color: white;
   border: 6px solid r-theme-val(product-item, base-border);
   border-radius: 6px;
+  min-height: 100px;
   overflow: hidden;
 
   &:not(:last-child) {
     margin-bottom: 1.5rem;
+  }
+
+  & &__overlay {
+    background-color: r-theme-val(modal, overlay-background);
+    border-radius: 6px;
+    display: grid;
+    height: 100%;
+    left: 0;
+    place-items: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 2;
   }
 
   & &__header {
