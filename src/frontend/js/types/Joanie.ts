@@ -127,7 +127,7 @@ export enum OrderState {
 
 export interface Order {
   id: string;
-  course?: Course;
+  course?: Course['code'] | Course;
   created_on: string;
   enrollments: Enrollment[];
   main_proforma_invoice: string;

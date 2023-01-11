@@ -39,8 +39,8 @@ interface DashboardItemOrderProps {
 
 export const DashboardItemOrder = ({ order }: DashboardItemOrderProps) => {
   const { course } = order;
-  if (!course) {
-    throw new Error('Order must provide course attribute');
+  if (!course || typeof course === 'string') {
+    throw new Error('Order must provide course object attribute.');
   }
   const intl = useIntl();
 
