@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.18.0]
+
 ### Added
 
 - Allow synchronizing course runs in bulk via the same API hook
@@ -1754,7 +1756,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.17.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.18.0...master
+[2.18.0]: https://github.com/openfun/richie/compare/v2.17.0...2.18.0
 [2.17.0]: https://github.com/openfun/richie/compare/v2.16.0...2.17.0
 [2.16.0]: https://github.com/openfun/richie/compare/v2.15.1...2.16.0
 [2.15.1]: https://github.com/openfun/richie/compare/v2.15.0...2.15.1

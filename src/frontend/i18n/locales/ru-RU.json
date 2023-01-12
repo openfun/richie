@@ -1,4 +1,12 @@
 {
+  "16uca+": {
+    "description": "",
+    "message": "Sub \"{value}\""
+  },
+  "9vqPaF": {
+    "description": "",
+    "message": "Root"
+  },
   "components.AddressesManagement.actionPromotion": {
     "description": "Action name for address promotion.",
     "message": "повышение"
@@ -163,21 +171,17 @@
     "description": "Message displayed when authenticated user owned the product",
     "message": "Зачислен"
   },
+  "components.CourseProductItem.loadingInitial": {
+    "description": "Accessible text for the initial loading spinner displayed when product is fetching",
+    "message": "Loading product information..."
+  },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
     "message": "Окончание"
   },
-  "components.CourseProductsList.loadingInitial": {
-    "description": "Accessible text for the initial loading spinner displayed when course is fetching",
-    "message": "Загрузка информации о курсе..."
-  },
   "components.CourseProductsList.start": {
     "description": "Start label displayed in the header of course run dates section",
     "message": "Начало"
-  },
-  "components.CourseProductsList.title": {
-    "description": "Course products list title (screen readers only)",
-    "message": "Products"
   },
   "components.CourseProductsLists.enrollOn": {
     "description": "Text label for the enrollment dates",
@@ -233,7 +237,7 @@
   },
   "components.Dashboard.DashboardRoutes.courses.label": {
     "description": "Label of the courses view used in navigation components.",
-    "message": "My Courses"
+    "message": "My courses"
   },
   "components.Dashboard.DashboardRoutes.courses.path": {
     "description": "The path to display the courses view.",
@@ -241,7 +245,7 @@
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.creation.label": {
     "description": "Label of the addresses creation view.",
-    "message": "Billing addresses"
+    "message": "Create address"
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.creation.path": {
     "description": "The path to display the addresses creation view.",
@@ -249,7 +253,7 @@
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.edition.label": {
     "description": "Label of the addresses edition view.",
-    "message": "Billing addresses"
+    "message": "Edit address \"{addressTitle}\""
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.edition.path": {
     "description": "The path to display the addresses edition view.",
@@ -261,7 +265,7 @@
   },
   "components.Dashboard.DashboardRoutes.preferences.creditCards.label": {
     "description": "Label of the credit cards edition view.",
-    "message": "Credit cards"
+    "message": "Edit credit card \"{creditCardTitle}\""
   },
   "components.Dashboard.DashboardRoutes.preferences.label": {
     "description": "Label of the preferences view used in navigation components.",
@@ -302,6 +306,10 @@
   "components.DashboardAddressesManagement.header": {
     "description": "Title of the dashboard addresses management block",
     "message": "Billing addresses"
+  },
+  "components.DashboardBreadcrumbs.back": {
+    "description": "The dashboard's breadcrumb back button's label",
+    "message": "Back"
   },
   "components.DashboardCreateAddressForm.header": {
     "description": "Title of the dashboard address creation form",
@@ -390,6 +398,18 @@
   "components.DashboardEditCreditCard.titleInputLabel": {
     "description": "Label of the title input on the credit card edit page",
     "message": "Name of the credit card"
+  },
+  "components.DashboardSidebar.header": {
+    "description": "Title of the dashboard sidebar",
+    "message": "Welcome {name}"
+  },
+  "components.DashboardSidebar.responsiveNavLabel": {
+    "description": "a11y related label for select input used to navigate on responsive",
+    "message": "Navigate to"
+  },
+  "components.DashboardSidebar.subHeader": {
+    "description": "Sub title of the dashboard sidebar",
+    "message": "You are on your dashboard"
   },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
@@ -530,6 +550,10 @@
   "components.SaleTunnel.loginToPurchase": {
     "description": "Label displayed inside the product's CTA when user is not logged in",
     "message": "Login to purchase {product}"
+  },
+  "components.SaleTunnel.noCourseRunToPurchase": {
+    "description": "Label displayed inside the product's when there is no courseRun",
+    "message": "At least one course has no course runs, this product is not currently available for sale"
   },
   "components.SaleTunnel.stepPayment": {
     "description": "Label of the Payment step",
@@ -751,13 +775,25 @@
     "description": "Error shown if a user tries to remove a main address",
     "message": "Cannot remove main address."
   },
-  "hooks.useCreditCards.error": {
-    "description": "Error message shown to the user when credit card creation/update/deletion request fails.",
-    "message": "An error occurred: {error}. Please retry later."
+  "hooks.useCreditCards.errorCreate": {
+    "description": "Error message shown to the user when credit card creation request fails.",
+    "message": "An error occurred while creating the credit card. Please retry later."
+  },
+  "hooks.useCreditCards.errorDelete": {
+    "description": "Error message shown to the user when credit card deletion request fails.",
+    "message": "An error occurred while deleting the credit card. Please retry later."
   },
   "hooks.useCreditCards.errorNotFound": {
     "description": "Error message shown to the user when no credit cards matches.",
     "message": "Cannot find the credit card"
+  },
+  "hooks.useCreditCards.errorSelect": {
+    "description": "Error message shown to the user when credit cards fetch request fails.",
+    "message": "An error occurred while fetching credit cards. Please retry later."
+  },
+  "hooks.useCreditCards.errorUpdate": {
+    "description": "Error message shown to the user when credit card update request fails.",
+    "message": "An error occurred while updating the credit card. Please retry later."
   },
   "hooks.useCreditCardsManagement.deletionConfirmation": {
     "description": "Confirmation message shown to the user when he wants to delete a credit card",
@@ -770,5 +806,53 @@
   "hooks.useDashboardAddressForm.isMainInputLabel": {
     "description": "Label of the \"is_main\" input",
     "message": "Use this address as default"
+  },
+  "hooks.useEnrollments.errorCreate": {
+    "description": "Error message shown to the user when enrollment creation request fails.",
+    "message": "An error occurred while creating the enrollment. Please retry later."
+  },
+  "hooks.useEnrollments.errorDelete": {
+    "description": "Error message shown to the user when enrollment deletion request fails.",
+    "message": "An error occurred while deleting the enrollment. Please retry later."
+  },
+  "hooks.useEnrollments.errorNotFound": {
+    "description": "Error message shown to the user when no enrollment matches.",
+    "message": "Cannot find the enrollment"
+  },
+  "hooks.useEnrollments.errorSelect": {
+    "description": "Error message shown to the user when enrollments fetch request fails.",
+    "message": "An error occurred while fetching enrollments. Please retry later."
+  },
+  "hooks.useEnrollments.errorUpdate": {
+    "description": "Error message shown to the user when enrollment update request fails.",
+    "message": "An error occurred while updating the enrollment. Please retry later."
+  },
+  "hooks.useProduct.errorNotFound": {
+    "description": "Error message shown to the user when no product matches.",
+    "message": "Cannot find the product"
+  },
+  "hooks.useProduct.errorSelect": {
+    "description": "Error message shown to the user when product fetch request fails.",
+    "message": "An error occurred while fetching product. Please retry later."
+  },
+  "hooks.useResources.errorCreate": {
+    "description": "Error message shown to the user when resource creation request fails.",
+    "message": "An error occurred while creating a resource. Please retry later."
+  },
+  "hooks.useResources.errorDelete": {
+    "description": "Error message shown to the user when resource deletion request fails.",
+    "message": "An error occurred while deleting a resource. Please retry later."
+  },
+  "hooks.useResources.errorGet": {
+    "description": "Error message shown to the user when resource fetch request fails.",
+    "message": "An error occurred while fetching resources. Please retry later."
+  },
+  "hooks.useResources.errorNotFound": {
+    "description": "Error message shown to the user when no resources matches.",
+    "message": "Cannot find the resource."
+  },
+  "hooks.useResources.errorUpdate": {
+    "description": "Error message shown to the user when resource update request fails.",
+    "message": "An error occurred while updating a resource. Please retry later."
   }
 }
