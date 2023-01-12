@@ -1,5 +1,9 @@
 .payment-button {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   &__error {
     color: r-color('firebrick6');
