@@ -70,6 +70,7 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
             {formatDate(enrollment.course_run.end)}
           </em>
         </div>
+        {states.error && <p className="course-runs-list__errors-feedback ">{states.error}</p>}
         <div className="course-runs-item">
           <a
             href={enrollment.course_run.resource_link}

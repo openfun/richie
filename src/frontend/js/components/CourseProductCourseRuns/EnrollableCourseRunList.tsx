@@ -203,6 +203,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
                 values={{ enrollment_start: formatDate(selectedCourseRun.enrollment_start) }}
               />
             )}
+            {enrollment.states?.error}
           </span>
           <button className="course-runs-item__cta button--primary button--pill button--tiny">
             {loading ? (
