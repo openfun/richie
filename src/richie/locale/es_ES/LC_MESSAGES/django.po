@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-26 15:43+0000\n"
-"PO-Revision-Date: 2022-10-26 18:49\n"
+"POT-Creation-Date: 2023-01-10 15:18+0000\n"
+"PO-Revision-Date: 2023-01-12 16:42\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -302,7 +302,7 @@ msgid "Category"
 msgstr "Categoría"
 
 #: apps/courses/cms_plugins.py:116
-#: apps/courses/templates/courses/cms/fragment_course_run.html:11
+#: apps/courses/templates/courses/cms/fragment_course_run.html:17
 msgid "Course"
 msgstr "Curso"
 
@@ -1071,13 +1071,13 @@ msgid "Complementary information"
 msgstr "Información complementaria"
 
 #: apps/courses/settings/__init__.py:222
-#: apps/courses/templates/courses/cms/course_detail.html:526
+#: apps/courses/templates/courses/cms/course_detail.html:522
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:47
 msgid "License for the course content"
 msgstr "Licencia para el contenido del curso"
 
 #: apps/courses/settings/__init__.py:227
-#: apps/courses/templates/courses/cms/course_detail.html:537
+#: apps/courses/templates/courses/cms/course_detail.html:533
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:56
 msgid "License for the content created by course participants"
 msgstr "Licencia para el contenido creado por los participantes del curso"
@@ -1395,45 +1395,45 @@ msgstr "Plan del curso"
 msgid "Enter here the detailed course plan."
 msgstr "Ingrese aquí el plan detallado del curso."
 
-#: apps/courses/templates/courses/cms/course_detail.html:349
+#: apps/courses/templates/courses/cms/course_detail.html:345
 msgctxt "course_detail__title"
 msgid "Other course runs"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:351
+#: apps/courses/templates/courses/cms/course_detail.html:347
 msgctxt "course_detail__title"
 msgid "Course runs"
 msgstr "Sesión de curso"
 
-#: apps/courses/templates/courses/cms/course_detail.html:361
+#: apps/courses/templates/courses/cms/course_detail.html:357
 msgid "No course runs"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:363
+#: apps/courses/templates/courses/cms/course_detail.html:359
 msgid "No other course runs"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:387
+#: apps/courses/templates/courses/cms/course_detail.html:383
 msgctxt "Course runs to be scheduled (plural)"
 msgid "To be scheduled"
 msgstr "Por ser programado"
 
-#: apps/courses/templates/courses/cms/course_detail.html:400
+#: apps/courses/templates/courses/cms/course_detail.html:396
 msgctxt "Upcoming course runs (plural)"
 msgid "Upcoming"
 msgstr "Próximo"
 
-#: apps/courses/templates/courses/cms/course_detail.html:413
+#: apps/courses/templates/courses/cms/course_detail.html:409
 msgctxt "Ongoing course runs (plural)"
 msgid "Ongoing"
 msgstr "En progreso"
 
-#: apps/courses/templates/courses/cms/course_detail.html:426
+#: apps/courses/templates/courses/cms/course_detail.html:422
 msgctxt "Archived course runs (plural)"
 msgid "Archived"
 msgstr "Archivado"
 
-#: apps/courses/templates/courses/cms/course_detail.html:451
+#: apps/courses/templates/courses/cms/course_detail.html:447
 msgid "\n"
 "                                        This course is part of a program\n"
 "                                    "
@@ -1447,37 +1447,37 @@ msgstr[1] "\n"
 "                                        Este curso es parte de los programas\n"
 "                                    "
 
-#: apps/courses/templates/courses/cms/course_detail.html:477
+#: apps/courses/templates/courses/cms/course_detail.html:473
 msgctxt "course_detail__title"
 msgid "Course team"
 msgstr "Equipo del curso"
 
-#: apps/courses/templates/courses/cms/course_detail.html:482
+#: apps/courses/templates/courses/cms/course_detail.html:478
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:13
 msgid "Who are the teachers in the course team?"
 msgstr "¿Quiénes son los profesores del equipo del curso?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:496
+#: apps/courses/templates/courses/cms/course_detail.html:492
 msgctxt "course_detail__title"
 msgid "Organizations"
 msgstr "Organizaciones"
 
-#: apps/courses/templates/courses/cms/course_detail.html:501
+#: apps/courses/templates/courses/cms/course_detail.html:497
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:32
 msgid "What are the organizations publishing this course?"
 msgstr "¿Cuáles son las organizaciones que publican este curso?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:522
+#: apps/courses/templates/courses/cms/course_detail.html:518
 msgctxt "course_detail__title"
 msgid "License"
 msgstr "Licencia"
 
-#: apps/courses/templates/courses/cms/course_detail.html:529
+#: apps/courses/templates/courses/cms/course_detail.html:525
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:50
 msgid "What is the license for the course content?"
 msgstr "¿Cuál es la licencia para el contenido del curso?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:540
+#: apps/courses/templates/courses/cms/course_detail.html:536
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:59
 msgid "What is the license for the content created by course participants?"
 msgstr "¿Cuál es la licencia para el contenido creado por los participantes del curso?"
@@ -1500,21 +1500,21 @@ msgstr "Equipo del curso"
 msgid "License"
 msgstr "Licencia"
 
-#: apps/courses/templates/courses/cms/fragment_course_run.html:7
+#: apps/courses/templates/courses/cms/fragment_course_run.html:13
 msgid "Enrollment"
 msgstr "Inscripción"
 
-#: apps/courses/templates/courses/cms/fragment_course_run.html:9
+#: apps/courses/templates/courses/cms/fragment_course_run.html:15
 #, python-format
 msgid "From %(enrollment_start)s to %(enrollment_end)s"
 msgstr "De %(enrollment_start)s a %(enrollment_end)s"
 
-#: apps/courses/templates/courses/cms/fragment_course_run.html:19
+#: apps/courses/templates/courses/cms/fragment_course_run.html:25
 #, python-format
 msgid "From %(start)s to %(end)s"
 msgstr "De %(start)s a %(end)s"
 
-#: apps/courses/templates/courses/cms/fragment_course_run.html:21
+#: apps/courses/templates/courses/cms/fragment_course_run.html:27
 #: apps/search/defaults.py:74
 msgid "Languages"
 msgstr "Idiomas"
@@ -1627,7 +1627,7 @@ msgstr "No hay programas asociados"
 
 #. Translators: delay indicates when the course will start as a duration.
 #. In english the string will be "The course will start in 3 days"
-#: apps/courses/templatetags/extra_tags.py:278
+#: apps/courses/templatetags/extra_tags.py:295
 msgid "The course will start {delay:s}"
 msgstr "El curso comenzará {delay:s}"
 

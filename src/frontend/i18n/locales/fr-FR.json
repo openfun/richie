@@ -1,4 +1,12 @@
 {
+  "16uca+": {
+    "description": "",
+    "message": "Sub \"{value}\""
+  },
+  "9vqPaF": {
+    "description": "",
+    "message": "Root"
+  },
   "components.AddressesManagement.actionPromotion": {
     "description": "Action name for address promotion.",
     "message": "promotion"
@@ -163,21 +171,17 @@
     "description": "Message displayed when authenticated user owned the product",
     "message": "Inscrit"
   },
+  "components.CourseProductItem.loadingInitial": {
+    "description": "Accessible text for the initial loading spinner displayed when product is fetching",
+    "message": "Chargement des informations produit..."
+  },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
     "message": "Fin"
   },
-  "components.CourseProductsList.loadingInitial": {
-    "description": "Accessible text for the initial loading spinner displayed when course is fetching",
-    "message": "Chargement des informations du cours..."
-  },
   "components.CourseProductsList.start": {
     "description": "Start label displayed in the header of course run dates section",
     "message": "Début"
-  },
-  "components.CourseProductsList.title": {
-    "description": "Course products list title (screen readers only)",
-    "message": "Produits"
   },
   "components.CourseProductsLists.enrollOn": {
     "description": "Text label for the enrollment dates",
@@ -233,7 +237,7 @@
   },
   "components.Dashboard.DashboardRoutes.courses.label": {
     "description": "Label of the courses view used in navigation components.",
-    "message": "Mes Cours"
+    "message": "Mes cours"
   },
   "components.Dashboard.DashboardRoutes.courses.path": {
     "description": "The path to display the courses view.",
@@ -241,7 +245,7 @@
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.creation.label": {
     "description": "Label of the addresses creation view.",
-    "message": "Adresses de facturation"
+    "message": "Créer une adresse"
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.creation.path": {
     "description": "The path to display the addresses creation view.",
@@ -249,7 +253,7 @@
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.edition.label": {
     "description": "Label of the addresses edition view.",
-    "message": "Adresses de facturation"
+    "message": "Éditer l'adresse \"{addressTitle}\""
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.edition.path": {
     "description": "The path to display the addresses edition view.",
@@ -261,7 +265,7 @@
   },
   "components.Dashboard.DashboardRoutes.preferences.creditCards.label": {
     "description": "Label of the credit cards edition view.",
-    "message": "Cartes de crédit"
+    "message": "Éditer la carte de crédit \"{creditCardTitle}\""
   },
   "components.Dashboard.DashboardRoutes.preferences.label": {
     "description": "Label of the preferences view used in navigation components.",
@@ -302,6 +306,10 @@
   "components.DashboardAddressesManagement.header": {
     "description": "Title of the dashboard addresses management block",
     "message": "Adresses de facturation"
+  },
+  "components.DashboardBreadcrumbs.back": {
+    "description": "The dashboard's breadcrumb back button's label",
+    "message": "Retour"
   },
   "components.DashboardCreateAddressForm.header": {
     "description": "Title of the dashboard address creation form",
@@ -390,6 +398,18 @@
   "components.DashboardEditCreditCard.titleInputLabel": {
     "description": "Label of the title input on the credit card edit page",
     "message": "Nom de la carte de crédit"
+  },
+  "components.DashboardSidebar.header": {
+    "description": "Title of the dashboard sidebar",
+    "message": "Bienvenue {name}"
+  },
+  "components.DashboardSidebar.responsiveNavLabel": {
+    "description": "a11y related label for select input used to navigate on responsive",
+    "message": "Naviguer vers"
+  },
+  "components.DashboardSidebar.subHeader": {
+    "description": "Sub title of the dashboard sidebar",
+    "message": "Vous êtes sur votre tableau de bord"
   },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
@@ -530,6 +550,10 @@
   "components.SaleTunnel.loginToPurchase": {
     "description": "Label displayed inside the product's CTA when user is not logged in",
     "message": "Connectez-vous pour acheter {product}"
+  },
+  "components.SaleTunnel.noCourseRunToPurchase": {
+    "description": "Label displayed inside the product's when there is no courseRun",
+    "message": "Au moins un cours n'a aucune session, ce produit n'est pas disponible à la vente actuellement"
   },
   "components.SaleTunnel.stepPayment": {
     "description": "Label of the Payment step",
@@ -751,13 +775,25 @@
     "description": "Error shown if a user tries to remove a main address",
     "message": "Vous ne pouvez pas supprimer l'adresse principale."
   },
-  "hooks.useCreditCards.error": {
-    "description": "Error message shown to the user when credit card creation/update/deletion request fails.",
-    "message": "Une erreur est survenue: {error}. Veuillez réessayer plus tard."
+  "hooks.useCreditCards.errorCreate": {
+    "description": "Error message shown to the user when credit card creation request fails.",
+    "message": "Une erreur s'est produite lors de la création de votre carte de crédit. Veuillez réessayer plus tard."
+  },
+  "hooks.useCreditCards.errorDelete": {
+    "description": "Error message shown to the user when credit card deletion request fails.",
+    "message": "Une erreur s'est produite lors de la suppression de votre carte de crédit. Veuillez réessayer plus tard."
   },
   "hooks.useCreditCards.errorNotFound": {
     "description": "Error message shown to the user when no credit cards matches.",
     "message": "Carte de crédit introuvable"
+  },
+  "hooks.useCreditCards.errorSelect": {
+    "description": "Error message shown to the user when credit cards fetch request fails.",
+    "message": "Une erreur s'est produite lors de la récupération des cartes de crédit. Veuillez réessayer plus tard."
+  },
+  "hooks.useCreditCards.errorUpdate": {
+    "description": "Error message shown to the user when credit card update request fails.",
+    "message": "Une erreur s'est produite lors de la modification de votre carte de crédit. Veuillez réessayer plus tard."
   },
   "hooks.useCreditCardsManagement.deletionConfirmation": {
     "description": "Confirmation message shown to the user when he wants to delete a credit card",
@@ -770,5 +806,53 @@
   "hooks.useDashboardAddressForm.isMainInputLabel": {
     "description": "Label of the \"is_main\" input",
     "message": "Utiliser cette adresse par défaut"
+  },
+  "hooks.useEnrollments.errorCreate": {
+    "description": "Error message shown to the user when enrollment creation request fails.",
+    "message": "Une erreur s'est produite lors de votre inscription. Veuillez réessayer plus tard."
+  },
+  "hooks.useEnrollments.errorDelete": {
+    "description": "Error message shown to the user when enrollment deletion request fails.",
+    "message": "Une erreur s'est produite lors de votre désinscription. Veuillez réessayer plus tard."
+  },
+  "hooks.useEnrollments.errorNotFound": {
+    "description": "Error message shown to the user when no enrollment matches.",
+    "message": "Impossible de trouver l'inscription"
+  },
+  "hooks.useEnrollments.errorSelect": {
+    "description": "Error message shown to the user when enrollments fetch request fails.",
+    "message": "Une erreur s'est produite lors de la récupération de vos inscriptions. Veuillez réessayer plus tard."
+  },
+  "hooks.useEnrollments.errorUpdate": {
+    "description": "Error message shown to the user when enrollment update request fails.",
+    "message": "Une erreur s'est produite lors de la modification de votre inscription. Veuillez réessayer plus tard."
+  },
+  "hooks.useProduct.errorNotFound": {
+    "description": "Error message shown to the user when no product matches.",
+    "message": "Produit introuvable"
+  },
+  "hooks.useProduct.errorSelect": {
+    "description": "Error message shown to the user when product fetch request fails.",
+    "message": "Une erreur s'est produite lors de la récupération du produit. Veuillez réessayer plus tard."
+  },
+  "hooks.useResources.errorCreate": {
+    "description": "Error message shown to the user when resource creation request fails.",
+    "message": "Une erreur s'est produite lors de la création de la ressource. Veuillez réessayer plus tard."
+  },
+  "hooks.useResources.errorDelete": {
+    "description": "Error message shown to the user when resource deletion request fails.",
+    "message": "Une erreur s'est produite lors de la suppression de la ressource. Veuillez réessayer plus tard."
+  },
+  "hooks.useResources.errorGet": {
+    "description": "Error message shown to the user when resource fetch request fails.",
+    "message": "Une erreur s'est produite lors de la récupération des ressources. Veuillez réessayer plus tard."
+  },
+  "hooks.useResources.errorNotFound": {
+    "description": "Error message shown to the user when no resources matches.",
+    "message": "Ressource introuvable."
+  },
+  "hooks.useResources.errorUpdate": {
+    "description": "Error message shown to the user when resource update request fails.",
+    "message": "Une erreur s'est produite lors de la modification de la ressource. Veuillez réessayer plus tard."
   }
 }
