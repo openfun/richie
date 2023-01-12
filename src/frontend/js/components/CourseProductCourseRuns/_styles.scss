@@ -23,6 +23,12 @@
     @include m-o-list-group__container;
     color: r-theme-val(product-item, lighter-color);
     list-style: none;
+
+    &__errors-feedback {
+      color: r-theme-val(product-item, feedback-color);
+      padding-left: 1.5rem;
+      font-size: 0.8125rem;
+    }
   }
 
   .course-runs-item {

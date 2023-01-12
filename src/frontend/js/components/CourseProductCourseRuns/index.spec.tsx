@@ -232,6 +232,101 @@ describe('CourseProductCourseRuns', () => {
       });
     });
 
+    it('enroll with errors', async () => {
+      const course: Course = CourseFactory.generate();
+      const courseRuns: CourseRun[] = JoanieCourseRunFactory().generate(2);
+      const order: OrderLite = OrderFactory.generate();
+      fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
+
+      render(
+        <Wrapper productId={order.product} code={course.code}>
+          <EnrollableCourseRunList courseRuns={courseRuns} order={order} />
+        </Wrapper>,
+      );
+
+      // the list should contain only the course run items, without the call to action button
+      expect(screen.getAllByRole('listitem')).toHaveLength(2);
+
+      // For each course run, it should render course, enrollment dates and a checkbox input
+      // to select the course run
+      courseRuns.forEach((courseRun: CourseRun) => {
+        // - Course run start date should be displayed
+        const $startDate = screen.getByTestId(`course-run-${courseRun.id}-start-date`);
+        expect($startDate.textContent).toEqual(dateFormatter.format(new Date(courseRun.start)));
+
+        // - Course run end date should be displayed
+        const $endDate = screen.getByTestId(`course-run-${courseRun.id}-end-date`);
+        expect($endDate.textContent).toEqual(dateFormatter.format(new Date(courseRun.end)));
+
+        // - Course run enrollment dates should be displayed
+        const $enrollmentDates = screen.getByTestId(`course-run-${courseRun.id}-enrollment-dates`);
+        expect($enrollmentDates.textContent).toEqual(
+          `Enrollment from ${dateFormatter.format(
+            new Date(courseRun.enrollment_start),
+          )} to ${dateFormatter.format(new Date(courseRun.enrollment_end))}`,
+        );
+
+        // - A radio input
+        screen.getByRole('radio', {
+          name: `Select course run from ${dateFormatter.format(
+            new Date(courseRun.start),
+          )} to ${dateFormatter.format(new Date(courseRun.end))}.`,
+        });
+      });
+
+      // A call to action should be displayed
+      let $button: HTMLButtonElement = screen.getByRole('button', {
+        name: 'Enroll',
+      });
+      // the button should be enabled to provide feedback to user on what to do if he clicks it early
+      expect($button.disabled).toBe(false);
+
+      // when we click the button without selecting anything, an error should be displayed
+      await act(async () => {
+        fireEvent.click($button);
+      });
+      const error = screen.getByText('Select a course run');
+      // the error should be focused so that screen reader users understand better
+      expect(document.activeElement).toEqual(error);
+      expect($button.disabled).toBe(false);
+
+      // Once a course run is selected, it should be enabled and allows user to enroll
+      await act(async () => {
+        // - Select the first course run
+        const $radio = screen.getByRole('radio', {
+          name: `Select course run from ${dateFormatter.format(
+            new Date(courseRuns[0].start),
+          )} to ${dateFormatter.format(new Date(courseRuns[0].end))}.`,
+        });
+        fireEvent.click($radio);
+      });
+
+      $button = screen.getByRole('button', {
+        name: 'Enroll',
+      });
+      expect($button.disabled).toBe(false);
+
+      // - User clicks to enroll
+      fetchMock.resetHistory();
+      const enrollmentDeferred = new Deferred();
+      fetchMock.post('https://joanie.test/api/v1.0/enrollments/', enrollmentDeferred.promise);
+
+      await act(async () => {
+        fireEvent.click($button);
+      });
+
+      // A spinner should be displayed
+      screen.getByRole('status', { name: 'Enrolling...' });
+
+      await act(async () => {
+        enrollmentDeferred.resolve(500);
+      });
+
+      await screen.findByText(
+        'An error occurred while creating the enrollment. Please retry later.',
+      );
+    });
+
     it('does not allow to enroll if course run is not opened for enrollment', async () => {
       const courseRun: CourseRun = JoanieCourseRunFactory()
         .afterGenerate((cr: CourseRun) => ({
@@ -409,6 +504,42 @@ describe('CourseProductCourseRuns', () => {
         course_run: enrollment.course_run.id,
         was_created_by_order: enrollment.was_created_by_order,
       });
+    });
+
+    it('unroll with error', async () => {
+      const course: Course = CourseFactory.generate();
+      const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
+      fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
+
+      render(
+        <Wrapper>
+          <EnrolledCourseRun enrollment={enrollment} />
+        </Wrapper>,
+      );
+
+      const $button: HTMLButtonElement = screen.getByRole('button', { name: 'Unroll' });
+
+      fetchMock.resetHistory();
+      const enrollmentDeferred = new Deferred();
+      fetchMock.put(
+        `https://joanie.test/api/v1.0/enrollments/${enrollment.id}/`,
+        enrollmentDeferred.promise,
+      );
+
+      await act(async () => {
+        fireEvent.click($button);
+      });
+
+      // - While request is pending, an accessible spinner should be displayed
+      await screen.findByRole('status', { name: 'Unrolling...' });
+
+      await act(async () => {
+        enrollmentDeferred.resolve(500);
+      });
+
+      await screen.findByText(
+        'An error occurred while updating the enrollment. Please retry later.',
+      );
     });
   });
 });

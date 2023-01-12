@@ -22,9 +22,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Show error message when user tries to enroll or unenroll to a
+  course run and the requests fails
 - Fix courses badges css.
 - Fix style in edit mode on courses with catalog visibility with
   `course_only` or `course_and_search`.
+
 
 ### Removed
 
