@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
 import { SaleTunnelStepPayment } from 'components/SaleTunnelStepPayment';
@@ -32,6 +32,12 @@ const messages = defineMessages({
     description: "Label displayed inside the product's CTA when user is not logged in",
     id: 'components.SaleTunnel.loginToPurchase',
   },
+  noCourseRunToPurchase: {
+    defaultMessage:
+      'At least one course has no course runs, this product is not currently available for sale',
+    description: "Label displayed inside the product's when there is no courseRun",
+    id: 'components.SaleTunnel.noCourseRunToPurchase',
+  },
   callToActionDescription: {
     defaultMessage: 'Purchase {product}',
     description:
@@ -56,6 +62,7 @@ type Props = {
 
 const SaleTunnel = ({ product, courseCode }: Props) => {
   const intl = useIntl();
+
   const manifest: Manifest<TunnelSteps, 'resume'> = {
     start: 'validation',
     steps: {
@@ -86,6 +93,11 @@ const SaleTunnel = ({ product, courseCode }: Props) => {
   const productQuery = useProduct(product.id);
   const ordersQuery = useOrders({ product: product.id, course: courseCode });
   const [isOpen, setIsOpen] = useState(false);
+
+  const oneCourseHasNoCourseRun = useMemo(() => {
+    return product.target_courses.some(({ course_runs }) => course_runs.length === 0);
+  }, [product]);
+
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   const handleModalClose = () => {
@@ -114,6 +126,14 @@ const SaleTunnel = ({ product, courseCode }: Props) => {
           values={{ product: <span className="offscreen">&quot;{product.title}&quot;</span> }}
         />
       </button>
+    );
+  }
+
+  if (oneCourseHasNoCourseRun) {
+    return (
+      <p className="product-item__no-course-run">
+        <FormattedMessage {...messages.noCourseRunToPurchase} />
+      </p>
     );
   }
 

@@ -22,7 +22,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- Show error message when user tries to enroll or unenroll to a
+- Display a message in the sales tunnel when at least one course has no course
+  runs, to say that this product is not currently available for sale. 
+- Show error message when user tries to enroll or unroll to a
   course run and the requests fails
 - Fix courses badges css.
 - Fix style in edit mode on courses with catalog visibility with
