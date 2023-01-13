@@ -1,29 +1,64 @@
-{% block web_analytics %}
-    {% if WEB_ANALYTICS_ID %} 
-        {% if WEB_ANALYTICS_PROVIDER == "google_tag_manager" %}
-            <script async src="https://www.googletagmanager.com/gtag/js?id={{ WEB_ANALYTICS_ID | safe }}"></script>
-            <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                {% for dimension_key, dimension_value_list in WEB_ANALYTICS_DIMENSIONS.items %}
-                    gtag('set', {'dimension{{forloop.counter}}': '{{ dimension_value_list|join:" | " }}'});
-                {% endfor %}
-                gtag('config', '{{ WEB_ANALYTICS_ID | safe }}');
-            </script>
-        {% endif %}
-        {% if WEB_ANALYTICS_PROVIDER == "google_analytics" %}
-            <script>
-                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-                ga('create', '{{ WEB_ANALYTICS_ID | safe }}', 'auto');
-                {% for dimension_key, dimension_value_list in WEB_ANALYTICS_DIMENSIONS.items %}
-                    ga('set', {'dimension{{forloop.counter}}': '{{ dimension_value_list|join:" | " }}'});
-                {% endfor %}
-                ga('send', 'pageview');
-            </script>
+
+{% comment %}
+Template parameter:
+ - `location`: where to put the web analytics content. Possible values `head` or `footer`.
+{% endcomment %}
+
+{% for provider, provider_configuration in WEB_ANALYTICS.items %}
+    {% if provider_configuration.tracking_id %}
+        {% if provider_configuration.location == location or location == 'footer' and provider_configuration.location is None %}
+            {% if provider == "google_universal_analytics" %}
+                {% block google_universal_analytics %}
+                <script>
+                    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+                    ga('create', '{{ provider_configuration.tracking_id | safe }}', 'auto');
+                    {% for dimension_key, dimension_value_list in WEB_ANALYTICS_DIMENSIONS.items %}
+                        ga('set', {'dimension{{forloop.counter}}': '{{ dimension_value_list|join:" | " }}'});
+                    {% endfor %}
+                    ga('send', 'pageview');
+                </script>
+                {% endblock google_universal_analytics %}
+            {% endif %}
+            {% if provider == "google_tag" %}
+                {% block google_tag %}
+                <!-- Google tag (gtag.js) -->
+                <script async src="https://www.googletagmanager.com/gtag/js?id={{ provider_configuration.tracking_id | safe }}"></script>
+                <script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    {% for dimension_key, dimension_value_list in WEB_ANALYTICS_DIMENSIONS.items %}
+                        gtag('set', {'dimension{{forloop.counter}}': '{{ dimension_value_list|join:" | " }}'});
+                    {% endfor %}
+                    gtag('config', '{{ provider_configuration.tracking_id | safe }}');
+                </script>
+                {% endblock google_tag %}
+            {% endif %}
+            {% if provider == "google_tag_manager" %}
+                {% block google_tag_manager %}
+                <!-- Google Tag Manager -->
+                <script>
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({
+                    'event' : 'pageview',
+                    {% for dimension_key, dimension_value_list in WEB_ANALYTICS_DIMENSIONS.items %}
+                    '{{ dimension_key }}': '{{ dimension_value_list|join:" | " }}',
+                    {% endfor %}
+                    });
+                </script>
+                <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl+'{{ provider_configuration.environment | default:'' | safe }}';f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','{{ provider_configuration.tracking_id | safe }}');</script>
+                <!-- End Google Tag Manager -->
+                {% endblock google_tag_manager %}
+            {% endif %}
+            {% block web_analytics_additional_providers %}
+            {% endblock web_analytics_additional_providers %}
         {% endif %}
     {% endif %}
-{% endblock web_analytics %}
+{% endfor %}

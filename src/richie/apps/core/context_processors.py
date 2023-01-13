@@ -146,9 +146,9 @@ class WebAnalyticsContextProcessor:
         Additional web analytics information for the frontend react
         """
         context = {}
-        if getattr(settings, "WEB_ANALYTICS_ID", None):
-            context["web_analytics_provider"] = getattr(
-                settings, "WEB_ANALYTICS_PROVIDER", "google_analytics"
+        if getattr(settings, "WEB_ANALYTICS", None):
+            context["web_analytics_providers"] = json.dumps(
+                list(getattr(settings, "WEB_ANALYTICS", {}).keys())
             )
         return context
 
@@ -159,17 +159,9 @@ class WebAnalyticsContextProcessor:
         context = {}
         if hasattr(request, "current_page"):
             # load web analytics settings to the context
-            if getattr(settings, "WEB_ANALYTICS_ID", None):
-                context["WEB_ANALYTICS_ID"] = settings.WEB_ANALYTICS_ID
+            if getattr(settings, "WEB_ANALYTICS", None):
+                context["WEB_ANALYTICS"] = settings.WEB_ANALYTICS
                 context["WEB_ANALYTICS_DIMENSIONS"] = self.get_dimensions(request)
-
-            context["WEB_ANALYTICS_LOCATION"] = getattr(
-                settings, "WEB_ANALYTICS_LOCATION", "head"
-            )
-
-            context["WEB_ANALYTICS_PROVIDER"] = getattr(
-                settings, "WEB_ANALYTICS_PROVIDER", "google_analytics"
-            )
         return context
 
     # pylint: disable=no-self-use

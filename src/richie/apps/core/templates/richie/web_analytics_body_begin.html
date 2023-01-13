@@ -1,0 +1,10 @@
+{% for provider, provider_configuration in WEB_ANALYTICS.items %}
+    {% if provider_configuration.tracking_id %}
+        {% if provider == "google_tag_manager" %}
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ provider_configuration.tracking_id | safe }}{{ provider_configuration.environment | default:'' | safe }}"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        {% endif %}
+    {% endif %}
+{% endfor %}
