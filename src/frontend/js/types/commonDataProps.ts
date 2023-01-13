@@ -25,6 +25,6 @@ export interface CommonDataProps {
     joanie_backend?: JoanieBackend;
     release: string;
     sentry_dsn: Nullable<string>;
-    web_analytics_provider?: Nullable<string>;
+    web_analytics_providers?: Nullable<string[]>;
   };
 }

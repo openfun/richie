@@ -11,13 +11,19 @@ export abstract class BaseWebAnalyticsApi implements WebAnalyticsAPI {
    * @param label additional info about specific elements to identify a product like the course run.
    * @param value
    */
-  abstract sendEvent(category: string, action: string, label: string, value?: number): void;
+  abstract sendEvent(
+    eventName: string,
+    category: string,
+    action: string,
+    label: string,
+    value?: number,
+  ): void;
 
   /**
    * Sends the enrolled user to a course event.
    * @param resourceLink the course link that the user have been enrolled
    */
   sendEnrolledEvent(resourceLink: string): void {
-    return this.sendEvent('courseEnroll', 'courseEnrollApi', resourceLink);
+    return this.sendEvent('courseEnroll', 'courseEnroll', 'courseEnrollApi', resourceLink);
   }
 }

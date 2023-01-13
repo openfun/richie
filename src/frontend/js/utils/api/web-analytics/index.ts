@@ -2,23 +2,42 @@ import { Maybe } from 'types/utils';
 import { WebAnalyticsAPI, WebAnalyticsAPIBackend } from 'types/WebAnalytics';
 import context from 'utils/context';
 import { handle } from 'utils/errors/handle';
-import GoogleAnalyticsApi from './google_analytics';
 import GoogleTagManagerApi from './google_tag_manager';
+import GoogleTagApi from './google_tag';
+import GoogleUniversalAnalyticsApi from './google_universal_analytics';
 
-const WEB_ANALYTICS_PROVIDER = context?.web_analytics_provider;
+const WEB_ANALYTICS_PROVIDERS = context?.web_analytics_providers;
 
-const WebAnalyticsAPIHandler = (): Maybe<WebAnalyticsAPI> => {
+/**
+ * Delegate event calls to all configured web analytics providers.
+ */
+class WebAnalyticsAPIDelegator2Providers implements WebAnalyticsAPI {
+  providers: WebAnalyticsAPI[];
+  constructor(providers: WebAnalyticsAPI[]) {
+    this.providers = providers;
+  }
+
+  sendEnrolledEvent(resourceLink: string): void {
+    this.providers.forEach((provider) => provider.sendEnrolledEvent(resourceLink));
+  }
+}
+
+const WebAnalyticsAPIHandler = (): Maybe<WebAnalyticsAPIDelegator2Providers> => {
+  const providers: WebAnalyticsAPI[] = [];
   try {
-    switch (WEB_ANALYTICS_PROVIDER) {
-      case WebAnalyticsAPIBackend.GOOGLE_ANALYTICS:
-        return new GoogleAnalyticsApi();
-      case WebAnalyticsAPIBackend.GOOGLE_TAG_MANAGER:
-        return new GoogleTagManagerApi();
+    if (WEB_ANALYTICS_PROVIDERS?.includes(WebAnalyticsAPIBackend.GOOGLE_UNIVERSAL_ANALYTICS)) {
+      providers.push(new GoogleUniversalAnalyticsApi());
+    }
+    if (WEB_ANALYTICS_PROVIDERS?.includes(WebAnalyticsAPIBackend.GOOGLE_TAG)) {
+      providers.push(new GoogleTagApi());
+    }
+    if (WEB_ANALYTICS_PROVIDERS?.includes(WebAnalyticsAPIBackend.GOOGLE_TAG_MANAGER)) {
+      providers.push(new GoogleTagManagerApi());
     }
   } catch (error) {
     handle(error);
   }
-  return undefined;
+  return providers.length === 0 ? undefined : new WebAnalyticsAPIDelegator2Providers(providers);
 };
 
 export default WebAnalyticsAPIHandler;

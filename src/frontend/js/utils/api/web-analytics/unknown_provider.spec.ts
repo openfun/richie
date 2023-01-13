@@ -4,7 +4,7 @@ import WebAnalyticsAPIHandler from '.';
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockContextFactory({
-    web_analytics_provider: 'unknown_provider',
+    web_analytics_providers: ['unknown_provider'],
   }).generate(),
 }));
 describe('Web Analytics', () => {

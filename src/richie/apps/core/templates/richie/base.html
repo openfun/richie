@@ -60,9 +60,7 @@
         {% endif %}
         {% endspaceless %}
 
-        {% if not WEB_ANALYTICS_LOCATION or WEB_ANALYTICS_LOCATION == "head" %}
-            {% include "richie/web_analytics.html" %}
-        {% endif %}
+        {% include "richie/web_analytics.html" with location='head' %}
 
         {% render_block "css" %}
 
@@ -71,6 +69,7 @@
         {% endblock css_links %}
     </head>
     <body{% block body_rdfa %}{% endblock body_rdfa %}>
+        {% include "richie/web_analytics_body_begin.html" %}
         {% include "richie/icons.html" %}
         {% cms_toolbar %}
 
@@ -269,9 +268,7 @@
             });
         </script>
         {% endif %}
-        {% if WEB_ANALYTICS_LOCATION == "footer" %}
-            {% include "richie/web_analytics.html" %}
-        {% endif %}
+        {% include "richie/web_analytics.html" with location='footer' %}
         {% block body_js %}{% endblock body_js %}
     </body>
 </html>

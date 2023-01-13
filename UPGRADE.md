@@ -16,6 +16,36 @@ $ make migrate
 
 ## Unreleased
 
+- The web analytics settings have been changed, from multiple settings to a single `WEB_ANALYTICS`
+  dict setting. The dict `key` is the web analytics identification string and the `value` is
+  a dict with specific configuration for each web analytics solution.
+  Nevertheless the shared `tracking_id` and `location` keys are shared between all web analytics
+  providers.
+  If you extends the web analytics js code with your own solution, you should be careful,
+  because the code has been changed to support multiple web analytics providers to be activated
+  at the same time.
+  For performance reasons the default location for the web analytics js code
+  have been changed from `head` to `footer`.
+  So you should change the `WEB_ANALYTICS` setting in your settings.py file:
+  ```python
+  WEB_ANALYTICS = values.DictValue(
+      None,
+      environ_name="WEB_ANALYTICS",
+      environ_prefix=None,
+  )
+  ```
+  The old behavior can still be enabled if you use the next value on the `WEB_ANALYTICS`
+  setting and replace the `UA-TRACKING_ID` value with your own value of the removed
+  `WEB_ANALYTICS_ID` setting.
+  ```
+  {
+      'google_universal_analytics': {
+          'tracking_id': 'UA-TRACKING_ID',
+          'location': 'head,
+      },
+  }
+  ```
+
 ## 2.19.x to 2.20.1
 
 - A new setting "FEATURES" has been added to enable some early features. If you want to test those

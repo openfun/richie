@@ -482,14 +482,10 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     }
 
     # Web Analytics
-    WEB_ANALYTICS_PROVIDER = values.Value(
-        None, environ_name="WEB_ANALYTICS_PROVIDER", environ_prefix=None
-    )
-    WEB_ANALYTICS_LOCATION = values.Value(
-        "head", environ_name="WEB_ANALYTICS_LOCATION", environ_prefix=None
-    )
-    WEB_ANALYTICS_ID = values.Value(
-        None, environ_name="WEB_ANALYTICS_ID", environ_prefix=None
+    WEB_ANALYTICS = values.DictValue(
+        None,
+        environ_name="WEB_ANALYTICS",
+        environ_prefix=None,
     )
 
     # Demo

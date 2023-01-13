@@ -12,6 +12,7 @@ export interface WebAnalyticsAPI {
 }
 
 export enum WebAnalyticsAPIBackend {
-  GOOGLE_ANALYTICS = 'google_analytics',
+  GOOGLE_UNIVERSAL_ANALYTICS = 'google_universal_analytics',
+  GOOGLE_TAG = 'google_tag',
   GOOGLE_TAG_MANAGER = 'google_tag_manager',
 }

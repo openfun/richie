@@ -20,7 +20,13 @@ export default class GoogleAnalyticsApi extends BaseWebAnalyticsApi {
     this.ga = ga;
   }
 
-  sendEvent(category: string, action: string, label: string, value?: number): void {
+  sendEvent(
+    eventName: string,
+    category: string,
+    action: string,
+    label: string,
+    value?: number,
+  ): void {
     this.ga('send', 'event', category, action, label, value);
   }
 }

@@ -12,12 +12,24 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add CourseAddToWishlist button to add/remove a course from users wishlist
 - Added Enrollment's pagination in the dashboard
+- Allow multiple web analytics providers at the same time.
 
 ### Fixed
 
 - Fix form styles to suffix input label with "*" when a select,
   radio or checkbox input is required
 - Button can be use with a className prop
+
+### Changed
+- Rename web analytics providers, from `google_analytics` to
+  `google_universal_analytics`. The `google_tag_manager`
+  now uses the correct `gtm.js` and the `google_tag` uses the `gtag.js`.
+  Replace the multiple web analytics settings with a single
+  `WEB_ANALYTICS` dict setting.
+  The location logic of web analytics js code has been moved to be
+  inside the `web_analytics.html` template.
+- For performance reasons the default location for the web analytics js code
+  have been changed from `head` to `footer`.
 
 ## [2.20.1] - 2023-02-22
 
