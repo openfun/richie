@@ -68,11 +68,14 @@ export interface Product {
 }
 
 // - Course
-export interface TargetCourse {
+export interface AbstractCourse {
   code: string;
   organizations: Organization[];
   title: string;
   course_runs: CourseRun[];
+}
+
+export interface TargetCourse extends AbstractCourse {
   is_graded: boolean;
   position: number;
 }
@@ -94,12 +97,8 @@ export interface CourseProduct extends Product {
   target_courses: TargetCourse[];
 }
 
-export interface Course {
-  code: string;
-  organization: Organization;
-  title: string;
+export interface Course extends AbstractCourse {
   products: CourseProduct[];
-  course_runs: CourseRun[];
   orders?: OrderLite[];
 }
 
