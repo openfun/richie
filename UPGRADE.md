@@ -16,6 +16,20 @@ $ make migrate
 
 ## Unreleased
 
+## 2.17.x to 2.18.x
+
+- To manage Joanie's products and course runs, the settings `JOANIE_BACKEND` has to be bound
+  into `RICHIE_LMS_BACKENDS`. To bind those settings add this code within `post_setup` method
+  of `Base` class configuration within `settings.py`.
+  ```python
+    @classmethod
+    def post_setup(cls):
+        ...
+        # If a Joanie Backend has been configured, we add it into LMS_BACKENDS dict
+        if cls.JOANIE_BACKEND.get("BASE_URL") is not None:
+            cls.RICHIE_LMS_BACKENDS.append(cls.JOANIE_BACKEND)
+  ```
+
 ## 2.16.x to 2.17.x
 
 - Richie is now able to delegate course enrollment to Joanie which will then synchronize its
@@ -27,9 +41,9 @@ $ make migrate
     "BACKEND": "richie.apps.courses.lms.joanie.JoanieBackend",
     "JS_BACKEND": "joanie",
     # The regex to match a resource that can be handle by the lms.joanie.JoanieBackend interface
-    "COURSE_REGEX": r"^.*/api/(?P<resource_type>(course-runs|products))/(?P<resource_id>.*)/?$",
+    "COURSE_REGEX": r"^.*/api/v1.0/(?P<resource_type>(course-runs|products))/(?P<resource_id>[^/]*)/?$",
     # The regex to match a resource that can be handle by the lms.joanie.JoanieBackend interface
-    "JS_COURSE_REGEX": r"^.*/api/(course-runs|products)/(.*)/?$",
+    "JS_COURSE_REGEX": r"^.*/api/v1.0/(course-runs|products)/([^/]*)/?$",
     # A list of course run properties to not update
     "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": [],
     # The synchronization mode ("manual", "sync_to_public" or "sync_to_draft") 

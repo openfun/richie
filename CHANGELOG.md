@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Update Joanie connection documentation
+
 ## [2.18.0]
 
 ### Added
