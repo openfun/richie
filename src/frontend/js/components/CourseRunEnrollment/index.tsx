@@ -75,6 +75,7 @@ enum Step {
 enum ActionType {
   UPDATE_CONTEXT = 'UPDATE_CONTEXT',
   ENROLL = 'ENROLL',
+  ENROLLMENT_FAILED = 'ENROLLMENT_FAILED',
   ERROR = 'ERROR',
 }
 interface ReducerState {
@@ -89,6 +90,7 @@ interface ReducerState {
 type ReducerAction =
   | { type: ActionType.UPDATE_CONTEXT; payload: Partial<ReducerState['context']> }
   | { type: ActionType.ENROLL }
+  | { type: ActionType.ENROLLMENT_FAILED; payload: { error: Error } }
   | { type: ActionType.ERROR; payload: { error: Error } };
 
 const getStepFromContext = (
@@ -134,6 +136,8 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
     }
     case ActionType.ENROLL:
       return { step: Step.ENROLLING, context };
+    case ActionType.ENROLLMENT_FAILED:
+      return { step: Step.ENROLLMENT_FAILED, { ...context, ...action.payload } };
     case ActionType.ERROR:
       return { step: Step.FAILED, context, ...action.payload };
     default:
@@ -161,7 +165,12 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
   const enroll = useCallback(async () => {
     dispatch({ type: ActionType.ENROLL });
     if (courseRun && currentUser) {
-      const isEnrolled = await setEnrollment().catch(() => undefined);
+      const isEnrolled = await setEnrollment().catch((error) => {
+        dispatch({
+          type: ActionType.ENROLLMENT_FAILED,
+          paylaod: { error }
+        })
+      });
 
       dispatch({
         type: ActionType.UPDATE_CONTEXT,
@@ -220,7 +229,7 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
           </button>
           {step === Step.ENROLLMENT_FAILED ? (
             <div className="course-run-enrollment__errortext">
-              <FormattedMessage {...messages.enrollmentFailed} />
+              {error || <FormattedMessage {...messages.enrollmentFailed} />}
             </div>
           ) : null}
         </React.Fragment>
