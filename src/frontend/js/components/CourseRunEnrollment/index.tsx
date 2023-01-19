@@ -9,6 +9,7 @@ import { Maybe, Nullable } from 'types/utils';
 import { handle } from 'utils/errors/handle';
 import { CommonDataProps } from 'types/commonDataProps';
 import useCourseEnrollment from 'data/useCourseEnrollment';
+import { HttpError } from 'utils/errors/HttpError';
 
 const messages = defineMessages({
   enroll: {
@@ -75,6 +76,7 @@ enum Step {
 enum ActionType {
   UPDATE_CONTEXT = 'UPDATE_CONTEXT',
   ENROLL = 'ENROLL',
+  ENROLLMENT_FAILED = 'ENROLLMENT_FAILED',
   ERROR = 'ERROR',
 }
 interface ReducerState {
@@ -84,12 +86,13 @@ interface ReducerState {
     courseRun: CourseRunEnrollmentProps['courseRun'];
     currentUser: Maybe<Nullable<User>>;
   };
-  error?: Error;
+  error?: HttpError;
 }
 type ReducerAction =
   | { type: ActionType.UPDATE_CONTEXT; payload: Partial<ReducerState['context']> }
   | { type: ActionType.ENROLL }
-  | { type: ActionType.ERROR; payload: { error: Error } };
+  | { type: ActionType.ENROLLMENT_FAILED; payload: { error: HttpError } }
+  | { type: ActionType.ERROR; payload: { error: HttpError } };
 
 const getStepFromContext = (
   { currentUser, courseRun, isEnrolled }: ReducerState['context'],
@@ -132,6 +135,8 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
       const nextContext = { ...context, ...action.payload };
       return { step: getStepFromContext(nextContext, step), context: nextContext };
     }
+    case ActionType.ENROLLMENT_FAILED:
+      return { step: Step.ENROLLMENT_FAILED, context, ...action.payload };
     case ActionType.ENROLL:
       return { step: Step.ENROLLING, context };
     case ActionType.ERROR:
@@ -148,8 +153,8 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
   const [
     {
       context: { currentUser, courseRun },
-      error,
       step,
+      error,
     },
     dispatch,
   ] = useReducer<React.Reducer<ReducerState, ReducerAction>, ReducerState>(
@@ -160,13 +165,22 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
 
   const enroll = useCallback(async () => {
     dispatch({ type: ActionType.ENROLL });
-    if (courseRun && currentUser) {
-      const isEnrolled = await setEnrollment().catch(() => undefined);
 
-      dispatch({
-        type: ActionType.UPDATE_CONTEXT,
-        payload: { isEnrolled },
-      });
+    if (courseRun && currentUser) {
+      try {
+        const isEnrolled = await setEnrollment();
+        dispatch({
+          type: ActionType.UPDATE_CONTEXT,
+          payload: { isEnrolled },
+        });
+      } catch (err) {
+        if (err instanceof HttpError) {
+          dispatch({
+            type: ActionType.ENROLLMENT_FAILED,
+            payload: { error: err },
+          });
+        }
+      }
     }
   }, [courseRun, currentUser, dispatch]);
 
@@ -220,7 +234,11 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
           </button>
           {step === Step.ENROLLMENT_FAILED ? (
             <div className="course-run-enrollment__errortext">
-              <FormattedMessage {...messages.enrollmentFailed} />
+              {error?.code === 400 ? (
+                error.message
+              ) : (
+                <FormattedMessage {...messages.enrollmentFailed} />
+              )}
             </div>
           ) : null}
         </React.Fragment>

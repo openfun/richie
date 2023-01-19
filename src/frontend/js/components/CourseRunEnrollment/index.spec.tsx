@@ -141,6 +141,51 @@ describe('<CourseRunEnrollment />', () => {
     );
   });
 
+  it('shows a custom error message and the enrollment button when the user is not authorized to enroll', async () => {
+    const user: User = UserFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    courseRun.state.priority = 0;
+
+    const enrollmentDeferred = new Deferred();
+    fetchMock.get(
+      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
+      enrollmentDeferred.promise,
+    );
+
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createTestQueryClient({ user })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
+
+    screen.getByRole('status', { name: 'Loading enrollment information...' });
+
+    await act(async () => {
+      enrollmentDeferred.resolve({});
+    });
+
+    const button = await screen.findByRole('button', { name: 'Enroll now' });
+
+    // const enrollmentAction = new Deferred();
+    fetchMock.post(`${endpoint}/api/enrollment/v1/enrollment`, {
+      status: 400,
+      body: { message: 'Bad Request' },
+    });
+    await act(async () => {
+      expect(() => fireEvent.click(button)).not.toThrow();
+      // enrollmentAction.reject('500 - Internal Server Error');
+    });
+
+    screen.getByRole('button', { name: 'Enroll now' });
+    screen.getByText('Bad Request');
+  });
+
   it('shows a link to the course if the user is already enrolled', async () => {
     const user: User = UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
