@@ -57,7 +57,7 @@ describe('<DashboardCourses/>', () => {
       );
     });
 
-    await expectSpinner();
+    await expectSpinner('Loading ...');
 
     await act(async () => {
       deferred.resolve({ results: orders, next: null, previous: null, count: null });
