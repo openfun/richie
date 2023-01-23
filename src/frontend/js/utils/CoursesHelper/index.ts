@@ -5,18 +5,18 @@ export class CoursesHelper {
     targetCourse: Joanie.TargetCourse,
     order: Joanie.OrderLite,
   ) {
-    const resourceLinks = targetCourse.course_runs.map(({ resource_link }) => resource_link);
+    const courseRunIds = targetCourse.course_runs.map(({ id }) => id);
     return order.enrollments.find(({ is_active, course_run }) => {
-      return is_active && resourceLinks.includes(course_run.resource_link);
+      return is_active && courseRunIds.includes(course_run.id);
     });
   }
   static findCourseEnrollmentsInOrder(
     targetCourse: Joanie.AbstractCourse,
     order: Joanie.OrderLite,
   ) {
-    const resourceLinks = targetCourse.course_runs.map(({ resource_link }) => resource_link);
+    const courseRunIds = targetCourse.course_runs.map(({ id }) => id);
     return order.enrollments.filter(({ course_run }) => {
-      return resourceLinks.includes(course_run.resource_link);
+      return courseRunIds.includes(course_run.id);
     });
   }
 }
