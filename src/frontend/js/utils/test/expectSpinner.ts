@@ -1,8 +1,7 @@
-import { waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 
-export const expectSpinner = async () => {
+export const expectSpinner = async (name?: string) => {
   await waitFor(() => {
-    const loader = document!.querySelector('.spinner') as HTMLElement;
-    expect(loader).not.toBeNull();
+    screen.getByRole('status', { name });
   });
 };
