@@ -8,13 +8,16 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Added DashboardItemOrder that allows to select course runs
+
 ## [2.18.0]
 
 ### Added
 
 - Allow synchronizing course runs in bulk via the same API hook
 - JoanieBackend to identify course runs managed by Joanie
-- Added DashboardItemOrder that allows to select course runs
 
 ### Changed
 
