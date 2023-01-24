@@ -25,9 +25,9 @@
     "@docusaurus/plugin-content-pages": "2.2.0",
     "@docusaurus/preset-classic": "2.2.0",
     "clsx": "1.2.1",
-    "prettier": "2.8.2",
+    "prettier": "2.8.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-markdown": "8.0.4"
+    "react-markdown": "8.0.5"
   }
 }
