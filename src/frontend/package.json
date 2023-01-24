@@ -130,5 +130,9 @@
     "xhr-mock": "2.5.1",
     "yargs": "17.6.2",
     "yup": "0.32.11"
+  },
+  "resolutions": {
+    "@types/react": "18.0.27",
+    "@types/react-dom": "18.0.10"
   }
 }
