@@ -4,12 +4,12 @@ import { CoursesHelper } from 'utils/CoursesHelper';
 import { Priority } from 'types';
 import { useEnroll } from 'hooks/useEnroll';
 import { AbstractCourse, CourseRun, Enrollment, Order } from 'types/Joanie';
-import { RouterButton } from 'components/RouterButton';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
+import useDateFormat, { DATETIME_FORMAT } from 'utils/useDateFormat';
+import { Button } from 'components/Button';
+import { RouterButton } from 'components/RouterButton';
 import { Icon } from '../Icon';
-import { Button } from '../Button';
-import useDateFormat, { DATETIME_FORMAT } from '../../utils/useDateFormat';
 
 const messages = {
   notEnrolled: {
@@ -30,8 +30,8 @@ const messages = {
   },
   statusOpened: {
     id: 'components.DashboardItemEnrollment.statusOpened',
-    description: 'Text shown on a enrolled course run',
-    defaultMessage: 'OPEN • Happens on {startDate} - {endDate}',
+    description: 'Text shown on an enrolled course run',
+    defaultMessage: 'OPEN • From {startDate} to {endDate}',
   },
   statusNotActive: {
     id: 'components.DashboardItemEnrollment.statusNotActive',
@@ -46,7 +46,7 @@ const messages = {
   runPeriod: {
     id: 'components.DashboardItemEnrollment.runPeriod',
     description: 'Text to display the period of a course run',
-    defaultMessage: 'On {startDate} - {endDate}',
+    defaultMessage: 'From {startDate} to {endDate}',
   },
   enrolled: {
     id: 'components.DashboardItemEnrollment.enrolled',
@@ -65,8 +65,13 @@ const messages = {
   },
   noCourseRunAvailable: {
     defaultMessage: 'No session available for this course.',
-    description: 'Text displayed when no course run are opened for the course',
+    description: 'Text displayed when no course runs are opened for the course',
     id: 'components.DashboardItemCourseEnrollingRun.noCourseRunAvailable',
+  },
+  courseRunsLoading: {
+    defaultMessage: 'Loading course runs...',
+    description: 'Text displayed when course runs list is loading',
+    id: 'components.DashboardItemCourseEnrollingRun.courseRunsLoading',
   },
 };
 
@@ -87,18 +92,24 @@ export const DashboardItemCourseEnrolling = ({
   icon = false,
   notEnrolledUrl = '#',
 }: Props) => {
+  if (writable && !order) {
+    throw new Error('Order is required when writable is true');
+  }
   return (
     <div data-testid={'dashboard-item__course-enrolling__' + course.code}>
       {!writable && (
         <div className="dashboard-item__course-enrolling__infos">
-          {!!activeEnrollment && <Enrolled icon={icon} enrollment={activeEnrollment} />}
-          {!activeEnrollment && <NotEnrolled icon={icon} notEnrolledUrl={notEnrolledUrl} />}
+          {activeEnrollment ? (
+            <Enrolled icon={icon} enrollment={activeEnrollment} />
+          ) : (
+            <NotEnrolled icon={icon} notEnrolledUrl={notEnrolledUrl} />
+          )}
         </div>
       )}
-      {writable && (
+      {writable && order && (
         <DashboardItemCourseEnrollingRuns
           course={course}
-          enrollments={CoursesHelper.findCourseEnrollmentsInOrder(course, order!)}
+          enrollments={CoursesHelper.findCourseEnrollmentsInOrder(course, order)}
           order={order}
         />
       )}
@@ -124,9 +135,7 @@ const DashboardItemCourseEnrollingRuns = ({
         .map((courseRun) => ({
           courseRun,
           selected: !!enrollments.find(
-            (enrollment) =>
-              courseRun.resource_link === enrollment.course_run.resource_link &&
-              enrollment.is_active,
+            (enrollment) => courseRun.id === enrollment.course_run.id && enrollment.is_active,
           ),
         }))
         .filter(
@@ -158,7 +167,11 @@ const DashboardItemCourseEnrollingRuns = ({
           className="dashboard-item__course-enrolling__loading"
           data-testid="dashboard-item__course-enrolling__loading"
         >
-          <Spinner size="large" />
+          <Spinner aria-labelledby="enrolling-loading" size="large">
+            <span id="enrolling-loading">
+              <FormattedMessage {...messages.courseRunsLoading} />
+            </span>
+          </Spinner>
         </div>
       )}
     </div>
@@ -263,7 +276,7 @@ const EnrolledStatus = ({ enrollment }: { enrollment: Enrollment }) => {
     return <FormattedMessage {...messages.statusNotActive} />;
   }
 
-  const isClosed = new Date(enrollment.course_run.end) <= new Date();
+  const isClosed = enrollment.course_run.state.priority >= Priority.FUTURE_CLOSED;
   if (isClosed) {
     return (
       <FormattedMessage

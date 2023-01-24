@@ -38,13 +38,13 @@ const messages = {
 
 interface DashboardItemOrderProps {
   order: Order;
-  detailsButton?: boolean;
+  showDetailsButton?: boolean;
   writable?: boolean;
 }
 
 export const DashboardItemOrder = ({
   order,
-  detailsButton = true,
+  showDetailsButton = true,
   writable,
 }: DashboardItemOrderProps) => {
   const { course } = order;
@@ -80,10 +80,9 @@ export const DashboardItemOrder = ({
               )}
             </div>
           </div>
-          {detailsButton && (
+          {showDetailsButton && (
             <RouterButton
               color="outline-primary"
-              disabled={false}
               href={getRoutePath(DashboardPaths.ORDER, { orderId: order.id })}
               data-testid="dashboard-item-order__button"
             >

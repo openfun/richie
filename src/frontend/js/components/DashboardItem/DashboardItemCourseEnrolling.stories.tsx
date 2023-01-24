@@ -1,8 +1,10 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import faker from 'faker';
 import { CourseFactory } from 'utils/test/factories';
 import { enrollment } from 'components/DashboardItem/mock.stories';
 import { StorybookHelper } from 'utils/StorybookHelper';
+import { Priority } from 'types';
 import { DashboardItemCourseEnrolling } from './DashboardItemCourseEnrolling';
 
 export default {
@@ -46,7 +48,11 @@ ReadonlyEnrolledOpened.args = {
   course: CourseFactory.generate(),
   activeEnrollment: {
     ...enrollment,
-    course_run: { ...enrollment.course_run, end: '2029-10-01T01:23:37+00:00' },
+    course_run: {
+      ...enrollment.course_run,
+      end: faker.date.future(1).toISOString(),
+      state: { ...enrollment.course_run.state, priority: Priority.FUTURE_NOT_YET_OPEN },
+    },
   },
 };
 
@@ -55,7 +61,11 @@ ReadonlyEnrolledClosed.args = {
   course: CourseFactory.generate(),
   activeEnrollment: {
     ...enrollment,
-    course_run: { ...enrollment.course_run, end: '2021-10-01T01:23:37+00:00' },
+    course_run: {
+      ...enrollment.course_run,
+      end: faker.date.past(1).toISOString(),
+      state: { ...enrollment.course_run.state, priority: Priority.FUTURE_CLOSED },
+    },
   },
 };
 

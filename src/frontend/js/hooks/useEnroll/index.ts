@@ -63,7 +63,7 @@ export const useEnroll = (enrollments: Enrollment[], order?: Order) => {
 
     // Is there an existing enrollment (inactive) for this course run?
     const relatedEnrollment = enrollments.find((enrollment) => {
-      return enrollment.course_run.resource_link === courseRun.resource_link;
+      return enrollment.course_run.id === courseRun.id;
     });
 
     const onSettled = () => setLoading(false);
@@ -82,7 +82,6 @@ export const useEnroll = (enrollments: Enrollment[], order?: Order) => {
       await enrollmentResources.methods.create(
         {
           is_active: true,
-          order: order!.id,
           course_run: courseRun.id,
           was_created_by_order: !!order,
         },

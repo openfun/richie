@@ -190,11 +190,11 @@ describe('<DashboardItemOrder/>', () => {
     await resolveAll(order.target_courses, async (course) => {
       await screen.findByRole('heading', { level: 6, name: course.title });
       screen.getByText(
-        'OPEN • Happens on ' +
+        'OPEN • From ' +
           new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
             new Date(order.enrollments[0].course_run.start),
           ) +
-          ' - ' +
+          ' to ' +
           new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
             new Date(order.enrollments[0].course_run.end),
           ),
@@ -231,7 +231,9 @@ describe('<DashboardItemOrder/>', () => {
     order.target_courses = [];
     const product = mockProduct(order);
 
-    render(<DashboardItemOrder order={order} writable={true} detailsButton={false} />, { wrapper });
+    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+      wrapper,
+    });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + order.course!);
@@ -254,7 +256,9 @@ describe('<DashboardItemOrder/>', () => {
 
     const product = mockProduct(order);
 
-    render(<DashboardItemOrder order={order} writable={true} detailsButton={false} />, { wrapper });
+    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+      wrapper,
+    });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + order.course!);
@@ -269,9 +273,9 @@ describe('<DashboardItemOrder/>', () => {
         );
         getByText(
           runElement,
-          'On ' +
+          'From ' +
             new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(courseRun.start)) +
-            ' - ' +
+            ' to ' +
             new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(courseRun.end)),
         );
         // Expect the first courseRun to be enrolled but not the others.
@@ -689,7 +693,9 @@ describe('<DashboardItemOrder/>', () => {
 
     const product = mockProduct(order);
 
-    render(<DashboardItemOrder order={order} writable={true} detailsButton={false} />, { wrapper });
+    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+      wrapper,
+    });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
 
@@ -729,7 +735,9 @@ describe('<DashboardItemOrder/>', () => {
 
     const product = mockProduct(order);
 
-    render(<DashboardItemOrder order={order} writable={true} detailsButton={false} />, { wrapper });
+    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+      wrapper,
+    });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + order.course!);
@@ -758,7 +766,9 @@ describe('<DashboardItemOrder/>', () => {
 
     const product = mockProduct(order);
 
-    render(<DashboardItemOrder order={order} writable={true} detailsButton={false} />, { wrapper });
+    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+      wrapper,
+    });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + order.course!);

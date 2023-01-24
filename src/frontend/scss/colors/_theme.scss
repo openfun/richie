@@ -545,6 +545,8 @@ $r-theme: (
     base-color: r-color(charcoal),
     base-shadow: 0 0 6px r-color('light-grey'),
     base-border: r-color('light-grey'),
+    background-color: r-color('white'),
+    overlay-background-color: r-color('smoke'),
   ),
 ) !default;
 

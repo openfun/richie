@@ -41,17 +41,17 @@ const bind = () => {
 export const StateOther = bind();
 StateOther.args = {
   order: { ...order, state: OrderState.CANCELED },
-  detailsButton: false,
+  showDetailsButton: false,
   writable: true,
 };
 
 export const NoTargetCourses = bind();
-NoTargetCourses.args = { order, detailsButton: false, writable: true };
+NoTargetCourses.args = { order, showDetailsButton: false, writable: true };
 
 export const OneTargetCourse = bind();
 OneTargetCourse.args = {
   order: { ...order, target_courses: [targetsCourses[0]] },
-  detailsButton: false,
+  showDetailsButton: false,
   writable: true,
 };
 
@@ -63,22 +63,14 @@ MultipleTargetCourses.args = {
     enrollments: [
       {
         ...enrollment,
-        course_run: {
-          ...enrollment.course_run,
-          resource_link: targetsCourses[1].course_runs[0].resource_link,
-        },
+        course_run: { ...targetsCourses[1].course_runs[0] },
       },
       {
         ...enrollment,
-        course_run: {
-          ...enrollment.course_run,
-          start: '2030-01-01T00:00:00Z',
-          end: '2030-01-02T13:00:00Z',
-          resource_link: targetsCourses[2].course_runs[0].resource_link,
-        },
+        course_run: { ...targetsCourses[2].course_runs[2] },
       },
     ],
   },
-  detailsButton: false,
+  showDetailsButton: false,
   writable: true,
 };

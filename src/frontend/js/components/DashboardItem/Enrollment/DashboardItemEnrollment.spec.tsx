@@ -3,8 +3,13 @@ import { render, screen } from '@testing-library/react';
 import * as faker from 'faker';
 import { DashboardItemEnrollment } from 'components/DashboardItem/Enrollment/DashboardItemEnrollment';
 import { Enrollment } from 'types/Joanie';
-import { JoanieCourseRunFactory, JoanieEnrollmentFactory } from 'utils/test/factories';
+import {
+  CourseStateFactory,
+  JoanieCourseRunFactory,
+  JoanieEnrollmentFactory,
+} from 'utils/test/factories';
 import { DATETIME_FORMAT } from 'utils/useDateFormat';
+import { Priority } from 'types';
 
 describe('<DashboardItemEnrollment/>', () => {
   it('renders a opened enrollment', () => {
@@ -31,11 +36,11 @@ describe('<DashboardItemEnrollment/>', () => {
     expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
 
     screen.getByText(
-      'OPEN • Happens on ' +
+      'OPEN • From ' +
         new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
           new Date(enrollment.course_run.start),
         ) +
-        ' - ' +
+        ' to ' +
         new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(enrollment.course_run.end)),
     );
   });
@@ -49,6 +54,7 @@ describe('<DashboardItemEnrollment/>', () => {
         enrollment_end: faker.date.past(0.75).toISOString(),
         start: faker.date.past(0.25).toISOString(),
         end: faker.date.past(0.5).toISOString(),
+        state: { ...CourseStateFactory.generate(), priority: Priority.ARCHIVED_CLOSED },
       },
     };
 
