@@ -73,7 +73,7 @@ export const useResourcesOmniscient = <
       return;
     }
     filter();
-  }, [useResources.items, JSON.stringify(filters)]);
+  }, [useResources.states.fetching, useResources.items, JSON.stringify(filters)]);
 
   return { ...useResources, items: data };
 };
