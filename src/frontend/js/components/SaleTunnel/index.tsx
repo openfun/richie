@@ -92,8 +92,11 @@ const SaleTunnel = ({ product, onSuccess }: Props) => {
   const isOpenedCourseRun = (courseRun: Joanie.CourseRun) =>
     courseRun.state.priority <= Priority.FUTURE_NOT_YET_OPEN;
 
-  const oneCourseHasNoCourseRun = useMemo(() => {
-    return product.target_courses.some(({ course_runs }) => !course_runs.some(isOpenedCourseRun));
+  const hasAtLeastOneCourseRun = useMemo(() => {
+    return (
+      product.target_courses.length > 0 &&
+      !product.target_courses.some(({ course_runs }) => !course_runs.some(isOpenedCourseRun))
+    );
   }, [product]);
 
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -131,18 +134,18 @@ const SaleTunnel = ({ product, onSuccess }: Props) => {
     <Fragment>
       <button
         className="product-item__cta"
-        onClick={() => !oneCourseHasNoCourseRun && setIsOpen(true)}
+        onClick={() => hasAtLeastOneCourseRun && setIsOpen(true)}
         // so that the button is explicit on its own, we add a description that doesn't
         // rely on the text coming from the CMS
         // eslint-disable-next-line jsx-a11y/aria-props
         aria-description={intl.formatMessage(messages.callToActionDescription, {
           product: product.title,
         })}
-        disabled={oneCourseHasNoCourseRun}
+        disabled={!hasAtLeastOneCourseRun}
       >
         {product.call_to_action}
       </button>
-      {oneCourseHasNoCourseRun && (
+      {!hasAtLeastOneCourseRun && (
         <p className="product-item__no-course-run">
           <FormattedMessage {...messages.noCourseRunToPurchase} />
         </p>

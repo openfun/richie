@@ -133,9 +133,31 @@ describe('SaleTunnel', () => {
     rafSpy.mockRestore();
   });
 
-  it('render a sale tunnel with one course has no course runs', async () => {
+  it('renders a sale tunnel with one course has no course runs', async () => {
     const product = ProductFactory.generate();
     product.target_courses[0].course_runs = [];
+    fetchMock
+      .get(`https://joanie.test/api/v1.0/products/${product.id}/`, product)
+      .get('https://joanie.test/api/v1.0/addresses/', [])
+      .get('https://joanie.test/api/v1.0/credit-cards/', [])
+      .get('https://joanie.test/api/v1.0/orders/', []);
+
+    await act(async () => {
+      render(
+        <Wrapper client={createTestQueryClient({ user: true })}>
+          <SaleTunnel product={product} />
+        </Wrapper>,
+      );
+    });
+
+    await screen.findByText(
+      'At least one course has no course runs, this product is not currently available for sale',
+    );
+  });
+
+  it('renders a sale tunnel with no courses', async () => {
+    const product = ProductFactory.generate();
+    product.target_courses = [];
     fetchMock
       .get(`https://joanie.test/api/v1.0/products/${product.id}/`, product)
       .get('https://joanie.test/api/v1.0/addresses/', [])
