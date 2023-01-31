@@ -204,6 +204,11 @@ interface OrderAbortPayload {
   payment_id?: Payment['payment_id'];
 }
 
+export interface EnrollmentsQuery extends ResourcesQuery {
+  was_created_by_order?: boolean;
+  page?: number;
+}
+
 interface EnrollmentCreationPayload {
   course_run: CourseRun['resource_link'];
   is_active: boolean;
@@ -254,7 +259,7 @@ interface APIUser {
   enrollments: {
     create(payload: EnrollmentCreationPayload): Promise<any>;
     get(id: Enrollment['id']): Promise<Enrollment>;
-    get(filters?: ResourcesQuery): Promise<PaginatedResponse<Enrollment>>;
+    get(filters?: EnrollmentsQuery): Promise<PaginatedResponse<Enrollment>>;
     update(payload: EnrollmentUpdatePayload): Promise<any>;
   };
   products: {
