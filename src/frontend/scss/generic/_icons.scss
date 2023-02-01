@@ -5,6 +5,7 @@ $iconLargeSize: 2.1875rem;
 .icon {
   display: block;
   fill: currentColor;
+  flex-shrink: 0;
 
   &--small {
     width: $iconSmallSize;

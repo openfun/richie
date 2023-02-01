@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix an issue about CourseProductItem when session state is updated
+- Prevent `.icon` to shrink in flexbox content
 
 ## [2.18.0]
 
