@@ -8,6 +8,7 @@ import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
 import { useOrders } from 'hooks/useOrders';
 import { OrderState } from 'types/Joanie';
+import { Icon } from 'components/Icon';
 import CourseRunItem from './CourseRunItem';
 
 const messages = defineMessages({
@@ -55,12 +56,13 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
 
     return [];
   }, [productQuery.item, order]);
-  
+
+  const hasError = Boolean(productQuery.states.error);
   const isFetching = productQuery.states.fetching || ordersQuery.states.fetching;
 
   return (
     <CourseProductProvider courseCode={courseCode} productId={productId}>
-      <section className="product-widget">
+      <section className={['product-widget', hasError && 'product-widget--has-error'].join(' ')}>
         {isFetching && (
           <div className="product-widget__overlay">
             <Spinner aria-labelledby="loading-course" theme="light" size="large">
@@ -70,7 +72,13 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
             </Spinner>
           </div>
         )}
-        {product && (
+        {hasError && (
+          <p className="product-widget__content">
+            <Icon name="icon-warning" size="small" />
+            {productQuery.states.error}
+          </p>
+        )}
+        {!hasError && product && (
           <>
             <header className="product-widget__header">
               <h3 className="product-widget__title">{product.title}</h3>

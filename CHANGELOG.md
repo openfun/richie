@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Improve accessibility by using darker color for empty course label
 - Update Joanie connection documentation
+- Display error message when CourseProductItem has error
 
 ### Fixed
 

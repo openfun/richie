@@ -279,9 +279,7 @@ const API = (): Joanie.API => {
           url += '?' + queryString.stringify(queryParameters);
         }
 
-        return fetchWithJWT(url).then((response) =>
-          checkStatus(response, { fallbackValue: null, ignoredErrorStatus: [404] }),
-        );
+        return fetchWithJWT(url).then(checkStatus);
       },
     },
   };
