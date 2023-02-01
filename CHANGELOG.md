@@ -13,6 +13,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Improve accessibility by using darker color for empty course label
 - Update Joanie connection documentation
 
+### Fixed
+
+- Fix an issue about CourseProductItem when session state is updated
+
 ## [2.18.0]
 
 ### Added

@@ -5,14 +5,14 @@ import { useJoanieApi } from 'data/JoanieApiProvider';
 
 const messages = defineMessages({
   errorGet: {
-    id: 'hooks.useProduct.errorSelect',
+    id: 'hooks.useProduct.errorGet',
     description: 'Error message shown to the user when product fetch request fails.',
     defaultMessage: 'An error occurred while fetching product. Please retry later.',
   },
   errorNotFound: {
     id: 'hooks.useProduct.errorNotFound',
     description: 'Error message shown to the user when no product matches.',
-    defaultMessage: 'Cannot find the product',
+    defaultMessage: 'Cannot find the product.',
   },
 });
 

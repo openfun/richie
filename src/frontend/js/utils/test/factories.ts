@@ -189,6 +189,7 @@ export const CertificationDefinitionFactory = createSpec({
 export const CertificateProductFactory = createSpec({
   id: faker.datatype.uuid(),
   title: faker.unique(faker.random.words(1, 3)),
+  course: faker.unique(faker.random.alphaNumeric(5)),
   type: ProductType.CERTIFICATE,
   price: faker.datatype.number(),
   price_currency: faker.finance.currencyCode(),

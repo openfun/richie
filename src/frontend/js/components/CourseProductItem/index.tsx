@@ -6,7 +6,7 @@ import SaleTunnel from 'components/SaleTunnel';
 import type * as Joanie from 'types/Joanie';
 import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
-import { useOrder } from 'hooks/useOrders';
+import { useOrders } from 'hooks/useOrders';
 import { OrderState } from 'types/Joanie';
 import CourseRunItem from './CourseRunItem';
 
@@ -32,16 +32,17 @@ export interface Props {
 const CourseProductItem = ({ productId, courseCode }: Props) => {
   const productQuery = useProduct(productId, { course: courseCode });
   const product = productQuery.item;
-  const isOwned = useMemo(() => product?.orders?.length > 0, [productQuery.item]);
-  const { item: order, ...orderQuery } = useOrder(
-    product?.orders?.[0],
-    {
-      state: [OrderState.VALIDATED],
-    },
-    {
-      enabled: isOwned,
-    },
+  const ordersQuery = useOrders({
+    product: productId,
+    course: courseCode,
+    state: [OrderState.VALIDATED, OrderState.PENDING],
+  });
+
+  const order = useMemo(
+    () => ordersQuery.items.find(({ state }) => state === OrderState.VALIDATED),
+    [ordersQuery.items],
   );
+  const isOwned = useMemo(() => ordersQuery.items?.length > 0, [ordersQuery.items]);
 
   const targetCourses = useMemo(() => {
     if (order) {
@@ -54,18 +55,20 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
 
     return [];
   }, [productQuery.item, order]);
+  
+  const isFetching = productQuery.states.fetching || ordersQuery.states.fetching;
 
   return (
     <CourseProductProvider courseCode={courseCode} productId={productId}>
       <section className="product-widget">
-        {(productQuery.states.fetching || orderQuery.states.fetching) && (
-          <section className="product-widget__overlay">
+        {isFetching && (
+          <div className="product-widget__overlay">
             <Spinner aria-labelledby="loading-course" theme="light" size="large">
               <span id="loading-course">
                 <FormattedMessage {...messages.loading} />
               </span>
             </Spinner>
-          </section>
+          </div>
         )}
         {product && (
           <>
@@ -99,7 +102,7 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
                   product={product}
                   onSuccess={() => {
                     productQuery.methods.refetch();
-                    orderQuery.methods.refetch();
+                    ordersQuery.methods.refetch();
                   }}
                 />
               </footer>
