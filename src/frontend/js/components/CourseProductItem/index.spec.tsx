@@ -310,4 +310,23 @@ describe('CourseProductItem', () => {
     // - Does not Render <SaleTunnel />
     expect(screen.queryByTestId('SaleTunnel')).toBeNull();
   });
+
+  it('renders error message when product fetching has failed', async () => {
+    const product: Product = ProductFactory.generate();
+
+    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, 404, {});
+
+    render(
+      <Wrapper>
+        <CourseProductItem productId={product.id} courseCode="00000" />
+      </Wrapper>,
+    );
+
+    // Wait for product information to be fetched
+    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
+    await waitForElementToBeRemoved(loadingMessage);
+
+    // - As product fetching has failed, an error message should be displayed
+    await screen.findByText('An error occurred while fetching product. Please retry later.');
+  });
 });
