@@ -1,3 +1,4 @@
+import { defineMessages } from 'react-intl';
 import { API, Order, Product, Course, OrderState } from 'types/Joanie';
 import { useJoanieApi } from 'data/JoanieApiProvider';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
@@ -14,6 +15,19 @@ type OrderResourcesQuery = ResourcesQuery & {
   product?: Product['id'];
   state?: OrderState[];
 };
+
+const messages = defineMessages({
+  errorGet: {
+    id: 'hooks.useOrders.errorGet',
+    description: 'Error message shown to the user when orders fetch request fails.',
+    defaultMessage: 'An error occurred while fetching orders. Please retry later.',
+  },
+  errorNotFound: {
+    id: 'hooks.useOrders.errorNotFound',
+    description: 'Error message shown to the user when no orders matches.',
+    defaultMessage: 'Cannot find the orders.',
+  },
+});
 
 function omniscientFiltering(data: Order[], filter: OrderResourcesQuery): Order[] {
   if (!filter) return data;
@@ -36,6 +50,7 @@ function omniscientFiltering(data: Order[], filter: OrderResourcesQuery): Order[
 const props: UseResourcesProps<Order, OrderResourcesQuery, API['user']['orders']> = {
   queryKey: ['orders'],
   apiInterface: () => useJoanieApi().user.orders,
+  messages,
   omniscient: true,
   omniscientFiltering,
   session: true,
