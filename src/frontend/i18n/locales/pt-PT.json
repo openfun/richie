@@ -175,6 +175,10 @@
     "description": "Accessible text for the initial loading spinner displayed when product is fetching",
     "message": "A carregar informação do produto..."
   },
+  "components.CourseProductItem.pending": {
+    "description": "Message displayed when authenticated user has purchased the product but order is still pending",
+    "message": "Pending"
+  },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
     "message": "Fim"
@@ -827,13 +831,21 @@
     "description": "Error message shown to the user when enrollment update request fails.",
     "message": "Ocorreu um erro durante a atualização das inscrições. Por favor, tente mais tarde."
   },
+  "hooks.useOrders.errorGet": {
+    "description": "Error message shown to the user when orders fetch request fails.",
+    "message": "Ocorreu um erro durante o processamento das encomendas. Por favor, tente mais tarde."
+  },
+  "hooks.useOrders.errorNotFound": {
+    "description": "Error message shown to the user when no orders matches.",
+    "message": "Não foi possível encontrar encomendas."
+  },
+  "hooks.useProduct.errorGet": {
+    "description": "Error message shown to the user when product fetch request fails.",
+    "message": "Ocorreu um erro durante o processamento do produto. Por favor, tente mais tarde."
+  },
   "hooks.useProduct.errorNotFound": {
     "description": "Error message shown to the user when no product matches.",
-    "message": "Não foi possível localizar o produto"
-  },
-  "hooks.useProduct.errorSelect": {
-    "description": "Error message shown to the user when product fetch request fails.",
-    "message": "Ocorreu um erro durante o processamento do produto. Tente novamente mais tarde."
+    "message": "Não foi possível encontrar o produto."
   },
   "hooks.useResources.errorCreate": {
     "description": "Error message shown to the user when resource creation request fails.",
