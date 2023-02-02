@@ -1,3 +1,20 @@
+.subheader__aside {
+  .course-run-enrollment {
+    &__cta {
+      @include r-button-colors(
+        r-theme-val(course-detail, subheader-run-cta),
+        $apply-border: true,
+        $include-hover: true
+      );
+    }
+
+    &__helptext,
+    &__errortext {
+      color: r-theme-val('course-detail', 'subheader-run-feedback-color');
+    }
+  }
+}
+
 .course-run-enrollment {
   &__cta {
     width: 100%;
@@ -15,19 +32,11 @@
     &.disabled {
       opacity: 0.65;
       cursor: not-allowed;
-
-      &:hover {
-        background: r-color('indianred3');
-      }
     }
 
     &--loading {
       cursor: progress !important;
       opacity: 0.7;
-
-      &:hover {
-        background: r-color('indianred3');
-      }
 
       .spinner-container {
         margin-left: 0.25rem;
@@ -42,9 +51,9 @@
 
   &__helptext,
   &__errortext {
+    color: r-theme-val('course-detail', 'run-feedback-color');
+    font-size: 1rem;
     margin-top: 0.25rem;
     text-align: center;
-    font-size: 1rem;
-    color: r-color('slate-grey');
   }
 }
