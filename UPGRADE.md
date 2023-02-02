@@ -16,6 +16,16 @@ $ make migrate
 
 ## Unreleased
 
+## 2.18.x to 2.19.x
+
+- In `_theme.scss`, `course-detail` scheme now accepts two new optional properties to style 
+  the course run CTA and feedback color in the course detail subheader:
+  - `subheader-run-cta`
+  - `subheader-run-feedback-color`
+
+  If those values are not set, the default values are respectively `run-cta` and
+  `run-feedback-color properties.
+
 ## 2.17.x to 2.18.x
 
 - To manage Joanie's products and course runs, the settings `JOANIE_BACKEND` has to be bound
