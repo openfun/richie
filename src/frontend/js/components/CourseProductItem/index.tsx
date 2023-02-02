@@ -2,7 +2,6 @@ import { Children, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
 import { CourseProductProvider } from 'data/CourseProductProvider';
 import CertificateItem from 'components/CourseProductCertificateItem';
-import SaleTunnel from 'components/SaleTunnel';
 import type * as Joanie from 'types/Joanie';
 import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
@@ -10,6 +9,7 @@ import { useOrders } from 'hooks/useOrders';
 import { OrderState } from 'types/Joanie';
 import { Icon } from 'components/Icon';
 import CourseRunItem from './CourseRunItem';
+import PurchaseButton from './PurchaseButton';
 
 const messages = defineMessages({
   enrolled: {
@@ -43,7 +43,8 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
     () => ordersQuery.items.find(({ state }) => state === OrderState.VALIDATED),
     [ordersQuery.items],
   );
-  const isOwned = useMemo(() => ordersQuery.items?.length > 0, [ordersQuery.items]);
+
+  const hasPurchased = useMemo(() => ordersQuery.items?.length > 0, [ordersQuery.items]);
 
   const targetCourses = useMemo(() => {
     if (order) {
@@ -83,9 +84,8 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
             <header className="product-widget__header">
               <h3 className="product-widget__title">{product.title}</h3>
               <strong className="product-widget__price h6">
-                {isOwned ? (
-                  <FormattedMessage {...messages.enrolled} />
-                ) : (
+                {order && <FormattedMessage {...messages.enrolled} />}
+                {!hasPurchased && (
                   <FormattedNumber
                     currency={product.price_currency}
                     value={product.price}
@@ -104,17 +104,9 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
                 <CertificateItem certificate={product.certificate} order={order} />
               )}
             </ol>
-            {!isOwned && (
-              <footer className="product-widget__footer">
-                <SaleTunnel
-                  product={product}
-                  onSuccess={() => {
-                    productQuery.methods.refetch();
-                    ordersQuery.methods.refetch();
-                  }}
-                />
-              </footer>
-            )}
+            <footer className="product-widget__footer">
+              <PurchaseButton product={product} disabled={hasPurchased} />
+            </footer>
           </>
         )}
       </section>

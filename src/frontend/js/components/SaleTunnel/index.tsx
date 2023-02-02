@@ -1,14 +1,13 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { useEffect, useRef } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
 import { SaleTunnelStepPayment } from 'components/SaleTunnelStepPayment';
 import { SaleTunnelStepResume } from 'components/SaleTunnelStepResume';
 import { SaleTunnelStepValidation } from 'components/SaleTunnelStepValidation';
 import { StepBreadcrumb } from 'components/StepBreadcrumb';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
-import { useSession } from 'data/SessionProvider';
 import type * as Joanie from 'types/Joanie';
-import { Priority } from 'types';
+import { useOrders } from 'hooks/useOrders';
 
 const messages = defineMessages({
   stepValidation: {
@@ -26,23 +25,6 @@ const messages = defineMessages({
     description: 'Label of the Resume step',
     id: 'components.SaleTunnel.stepResume',
   },
-  loginToPurchase: {
-    defaultMessage: 'Login to purchase {product}',
-    description: "Label displayed inside the product's CTA when user is not logged in",
-    id: 'components.SaleTunnel.loginToPurchase',
-  },
-  noCourseRunToPurchase: {
-    defaultMessage:
-      'At least one course has no course runs, this product is not currently available for sale',
-    description: "Label displayed inside the product's when there is no courseRun",
-    id: 'components.SaleTunnel.noCourseRunToPurchase',
-  },
-  callToActionDescription: {
-    defaultMessage: 'Purchase {product}',
-    description:
-      'Additional description announced by screen readers when focusing the call to action buying button',
-    id: 'components.SaleTunnel.callToActionDescription',
-  },
 });
 
 type TunnelSteps = 'validation' | 'payment' | 'resume';
@@ -56,11 +38,13 @@ const focusCurrentStep = (container: HTMLElement) => {
 
 type Props = {
   product: Joanie.Product;
-  onSuccess?: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 };
 
-const SaleTunnel = ({ product, onSuccess }: Props) => {
+const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
   const intl = useIntl();
+  const { methods: ordersMethods } = useOrders();
 
   const manifest: Manifest<TunnelSteps, 'resume'> = {
     start: 'validation',
@@ -80,30 +64,21 @@ const SaleTunnel = ({ product, onSuccess }: Props) => {
         label: intl.formatMessage(messages.stepResume),
         next: null,
         onExit: () => {
-          onSuccess?.();
+          // Once the user has completed the purchase, we need to refetch the orders
+          // to update the ordersQuery cache
+          ordersMethods.refetch();
           handleModalClose();
         },
       },
     },
   };
   const { step, next, reset } = useStepManager(manifest);
-  const { user, login } = useSession();
-  const [isOpen, setIsOpen] = useState(false);
-  const isOpenedCourseRun = (courseRun: Joanie.CourseRun) =>
-    courseRun.state.priority <= Priority.FUTURE_NOT_YET_OPEN;
-
-  const hasAtLeastOneCourseRun = useMemo(() => {
-    return (
-      product.target_courses.length > 0 &&
-      !product.target_courses.some(({ course_runs }) => !course_runs.some(isOpenedCourseRun))
-    );
-  }, [product]);
 
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   const handleModalClose = () => {
     reset();
-    setIsOpen(false);
+    onClose();
   };
 
   /**
@@ -119,60 +94,29 @@ const SaleTunnel = ({ product, onSuccess }: Props) => {
     focusCurrentStep(modalRef.current);
   }, [step]);
 
-  if (!user) {
-    return (
-      <button className="product-item__cta" onClick={login}>
-        <FormattedMessage
-          {...messages.loginToPurchase}
-          values={{ product: <span className="offscreen">&quot;{product.title}&quot;</span> }}
-        />
-      </button>
-    );
-  }
-
   return (
-    <Fragment>
-      <button
-        className="product-item__cta"
-        onClick={() => hasAtLeastOneCourseRun && setIsOpen(true)}
-        // so that the button is explicit on its own, we add a description that doesn't
-        // rely on the text coming from the CMS
-        // eslint-disable-next-line jsx-a11y/aria-props
-        aria-description={intl.formatMessage(messages.callToActionDescription, {
-          product: product.title,
-        })}
-        disabled={!hasAtLeastOneCourseRun}
-      >
-        {product.call_to_action}
-      </button>
-      {!hasAtLeastOneCourseRun && (
-        <p className="product-item__no-course-run">
-          <FormattedMessage {...messages.noCourseRunToPurchase} />
-        </p>
-      )}
-      <Modal
-        className="SaleTunnel__modal"
-        isOpen={isOpen}
-        onAfterOpen={(options) => {
-          if (!options) {
-            return;
-          }
-          focusCurrentStep(options.contentEl);
-        }}
-        contentRef={(ref) => (modalRef.current = ref)}
-        onRequestClose={handleModalClose}
-        shouldCloseOnOverlayClick={false}
-        shouldCloseOnEsc={false}
-        testId="SaleTunnel__modal"
-      >
-        <div className="SaleTunnel__modal-body">
-          <StepBreadcrumb manifest={manifest} step={step} />
-          {step === 'validation' && <SaleTunnelStepValidation product={product} next={next} />}
-          {step === 'payment' && <SaleTunnelStepPayment product={product} next={next} />}
-          {step === 'resume' && <SaleTunnelStepResume next={next} />}
-        </div>
-      </Modal>
-    </Fragment>
+    <Modal
+      className="SaleTunnel__modal"
+      isOpen={isOpen}
+      onAfterOpen={(options) => {
+        if (!options) {
+          return;
+        }
+        focusCurrentStep(options.contentEl);
+      }}
+      contentRef={(ref) => (modalRef.current = ref)}
+      onRequestClose={handleModalClose}
+      shouldCloseOnOverlayClick={false}
+      shouldCloseOnEsc={false}
+      testId="SaleTunnel__modal"
+    >
+      <div className="SaleTunnel__modal-body">
+        <StepBreadcrumb manifest={manifest} step={step} />
+        {step === 'validation' && <SaleTunnelStepValidation product={product} next={next} />}
+        {step === 'payment' && <SaleTunnelStepPayment product={product} next={next} />}
+        {step === 'resume' && <SaleTunnelStepResume next={next} />}
+      </div>
+    </Modal>
   );
 };
 

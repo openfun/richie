@@ -31,11 +31,6 @@ jest.mock('utils/context', () => ({
   }).generate(),
 }));
 
-jest.mock('components/SaleTunnel', () => ({
-  __esModule: true,
-  default: () => <div data-testid="SaleTunnel" />,
-}));
-
 jest.mock('components/CourseProductCertificateItem', () => ({
   __esModule: true,
   default: () => <div data-testid="CertificateItem" />,
@@ -63,6 +58,13 @@ describe('CourseProductItem', () => {
       currency,
       style: 'currency',
     }).format(price);
+
+  beforeAll(() => {
+    // As dialog is rendered through a Portal, we have to add the DOM element in which the dialog will be rendered.
+    const modalExclude = document.createElement('div');
+    modalExclude.setAttribute('id', 'modal-exclude');
+    document.body.appendChild(modalExclude);
+  });
 
   beforeEach(() => {
     fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
@@ -129,8 +131,10 @@ describe('CourseProductItem', () => {
     // - Render <CertificateItem />
     screen.getByTestId('CertificateItem');
 
-    // - Render <SaleTunnel />
-    screen.getByTestId('SaleTunnel');
+    // - Render a login button
+    screen.getByRole('button', { name: `Login to purchase "${product.title}"` });
+    // - Does not render PurchaseButton cta
+    expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
   });
 
   it('does not render <CertificateItem /> if product do not have a certificate', async () => {
@@ -199,8 +203,8 @@ describe('CourseProductItem', () => {
     // - Render <CertificateItem />
     screen.getByTestId('CertificateItem');
 
-    // - Does not Render <SaleTunnel />
-    expect(screen.queryByTestId('SaleTunnel')).toBeNull();
+    // - Does not Render PurchaseButton cta
+    expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
   });
 
   it('renders enrollment information when user is enrolled to a course run', async () => {
@@ -307,8 +311,8 @@ describe('CourseProductItem', () => {
     // - Render <CertificateItem />
     screen.getByTestId('CertificateItem');
 
-    // - Does not Render <SaleTunnel />
-    expect(screen.queryByTestId('SaleTunnel')).toBeNull();
+    // - Does not Render PurchaseButton cta
+    expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
   });
 
   it('renders error message when product fetching has failed', async () => {
