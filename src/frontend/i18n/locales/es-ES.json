@@ -175,6 +175,10 @@
     "description": "Accessible text for the initial loading spinner displayed when product is fetching",
     "message": "Loading product information..."
   },
+  "components.CourseProductItem.pending": {
+    "description": "Message displayed when authenticated user has purchased the product but order is still pending",
+    "message": "Pending"
+  },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
     "message": "Fin"
@@ -827,13 +831,21 @@
     "description": "Error message shown to the user when enrollment update request fails.",
     "message": "An error occurred while updating the enrollment. Please retry later."
   },
-  "hooks.useProduct.errorNotFound": {
-    "description": "Error message shown to the user when no product matches.",
-    "message": "Cannot find the product"
+  "hooks.useOrders.errorGet": {
+    "description": "Error message shown to the user when orders fetch request fails.",
+    "message": "An error occurred while fetching orders. Please retry later."
   },
-  "hooks.useProduct.errorSelect": {
+  "hooks.useOrders.errorNotFound": {
+    "description": "Error message shown to the user when no orders matches.",
+    "message": "Cannot find the orders."
+  },
+  "hooks.useProduct.errorGet": {
     "description": "Error message shown to the user when product fetch request fails.",
     "message": "An error occurred while fetching product. Please retry later."
+  },
+  "hooks.useProduct.errorNotFound": {
+    "description": "Error message shown to the user when no product matches.",
+    "message": "Cannot find the product."
   },
   "hooks.useResources.errorCreate": {
     "description": "Error message shown to the user when resource creation request fails.",
