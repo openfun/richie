@@ -1,8 +1,8 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { Fragment } from 'react';
 import { IntlProvider } from 'react-intl';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { ContextFactory as mockContextFactory, ProductFactory } from 'utils/test/factories';
 import { SessionProvider } from 'data/SessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -47,60 +47,46 @@ describe('SaleTunnel', () => {
     fetchMock.restore();
   });
 
-  const Wrapper = ({ client, children }: React.PropsWithChildren<{ client: QueryClient }>) => (
+  const Wrapper = ({ children }: React.PropsWithChildren<{}>) => (
     <IntlProvider locale="en">
-      <QueryClientProvider client={client}>
+      <QueryClientProvider client={createTestQueryClient({ user: true })}>
         <SessionProvider>{children}</SessionProvider>
       </QueryClientProvider>
     </IntlProvider>
   );
 
-  it('shows a login button if user is not authenticated', async () => {
+  it('does not render when isOpen property is false', async () => {
     const product = ProductFactory.generate();
 
     await act(async () => {
       render(
-        <Wrapper client={createTestQueryClient({ user: null })}>
-          <SaleTunnel product={product} />
+        <Wrapper>
+          <SaleTunnel isOpen={false} product={product} onClose={jest.fn()} />
         </Wrapper>,
       );
     });
 
-    await screen.findByRole('button', { name: `Login to purchase "${product.title}"` });
+    expect(screen.queryByTestId('SaleTunnel__modal')).not.toBeInTheDocument();
   });
 
-  it('shows cta to open sale tunnel when user is authenticated', async () => {
+  it('renders sale tunnel with working steps when isOpen property is true', async () => {
     const product = ProductFactory.generate();
     fetchMock
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
 
-    const onSuccess = jest.fn();
+    const onClose = jest.fn();
 
     await act(async () => {
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
-          <SaleTunnel onSuccess={onSuccess} product={product} />
+        <Wrapper>
+          <SaleTunnel isOpen={true} product={product} onClose={onClose} />
         </Wrapper>,
       );
     });
 
     fetchMock.resetHistory();
-
-    // Only CTA is displayed
-    const button = screen.getByRole('button', { name: product.call_to_action });
-
-    // we need to fake requestAnimationFrame to test the full behavior of react modal that relies on it for its onAfterOpen callback
-    const rafSpy = jest.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
-      cb(Math.random());
-      return Math.random();
-    });
-
-    // Then user can enter into the sale tunnel and follow its 3 steps
-    await act(async () => {
-      fireEvent.click(button);
-    });
 
     // - Dialog should have been displayed
     screen.getByTestId('SaleTunnel__modal');
@@ -108,124 +94,51 @@ describe('SaleTunnel', () => {
     // - Step 1 : Validation
     screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepValidation Component' });
     // focus should be set to the current step
-    expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
+    await waitFor(() => expect(document.activeElement?.getAttribute('aria-current')).toBe('step'));
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    expect(onSuccess).not.toHaveBeenCalled();
 
     // - Step 2 : Payment
     screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepPayment Component' });
     // focus should be set to the current step
     expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    expect(onSuccess).not.toHaveBeenCalled();
 
     // - Step 3 : Resume
     screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepResume Component' });
     // focus should be set to the current step
     expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
-    expect(onSuccess).not.toHaveBeenCalled();
 
-    // - Terminated, resume.onExit callback is triggered, onSuccess callback should have been executed.
+    // - Terminated, resume.onExit callback is triggered, orders should have been refetched.
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    expect(onSuccess).toHaveBeenCalledTimes(1);
+    expect(fetchMock.lastUrl()).toBe('https://joanie.test/api/v1.0/orders/');
 
-    expect(screen.queryByTestId('SaleTunnel__modal')).toBeNull();
-    rafSpy.mockRestore();
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('renders a sale tunnel with one course has no course runs', async () => {
+  it('executes onClose callback when user closes the sale tunnel', async () => {
     const product = ProductFactory.generate();
-    product.target_courses[0].course_runs = [];
-    fetchMock
-      .get(`https://joanie.test/api/v1.0/products/${product.id}/`, product)
-      .get('https://joanie.test/api/v1.0/addresses/', [])
-      .get('https://joanie.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.test/api/v1.0/orders/', []);
-
-    await act(async () => {
-      render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
-          <SaleTunnel product={product} />
-        </Wrapper>,
-      );
-    });
-
-    await screen.findByText(
-      'At least one course has no course runs, this product is not currently available for sale',
-    );
-  });
-
-  it('renders a sale tunnel with no courses', async () => {
-    const product = ProductFactory.generate();
-    product.target_courses = [];
-    fetchMock
-      .get(`https://joanie.test/api/v1.0/products/${product.id}/`, product)
-      .get('https://joanie.test/api/v1.0/addresses/', [])
-      .get('https://joanie.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.test/api/v1.0/orders/', []);
-
-    await act(async () => {
-      render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
-          <SaleTunnel product={product} />
-        </Wrapper>,
-      );
-    });
-
-    await screen.findByText(
-      'At least one course has no course runs, this product is not currently available for sale',
-    );
-  });
-
-  it('renders a sale tunnel with a close button', async () => {
-    const product = ProductFactory.generate();
-
     fetchMock
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
 
+    const onClose = jest.fn();
+
     await act(async () => {
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
-          <SaleTunnel product={product} />
+        <Wrapper>
+          <SaleTunnel isOpen={true} product={product} onClose={onClose} />
         </Wrapper>,
       );
     });
-
-    fetchMock.resetHistory();
-
-    // Only CTA is displayed
-    const $button = screen.getByRole('button', { name: product.call_to_action });
-
-    // Then user can enter into the sale tunnel and follow its 3 steps
-    fireEvent.click($button);
 
     // - Dialog should have been displayed
     screen.getByTestId('SaleTunnel__modal');
 
-    // - A close button should be displayed
-    const $closeButton = screen.getByRole('button', { name: 'Close dialog' });
+    // - Close the dialog
+    const closeButton = screen.getByRole('button', { name: 'Close dialog' });
+    fireEvent.click(closeButton);
 
-    // - Go to step 2
-    screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepValidation Component' });
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepPayment Component' });
-
-    // - Press the escape key should not close the dialog
-    fireEvent.keyDown(screen.getByTestId('SaleTunnel__modal'), { keyCode: 27 });
-    screen.getByTestId('SaleTunnel__modal');
-
-    // - Click on the overlay area should not close the dialog
-    fireEvent.click(document.querySelector('.modal__overlay')!);
-    screen.getByTestId('SaleTunnel__modal');
-
-    // - Click on the close button should close the dialog
-    fireEvent.click($closeButton);
-    expect(screen.queryByTestId('SaleTunnel__modal')).toBeNull();
-
-    // - If user reopens the dialog, the step manager should have been reset so step 1 should be displayed
-    fireEvent.click($button);
-    screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepValidation Component' });
+    expect(onClose).toHaveBeenCalledTimes(1);
   });
 });
