@@ -290,8 +290,8 @@ describe('CourseProductItem', () => {
     await waitForElementToBeRemoved(loadingMessage);
     await screen.findByRole('heading', { level: 3, name: product.title });
 
-    // - In place of product price, a label "Enrolled" should be displayed
-    const $enrolledInfo = await screen.findByText('Enrolled');
+    // - In place of product price, a label "Pending" should be displayed
+    const $enrolledInfo = await screen.findByText('Pending');
     expect($enrolledInfo.tagName).toBe('STRONG');
     expect($enrolledInfo.classList.contains('h6')).toBe(true);
 
