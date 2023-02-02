@@ -4,7 +4,7 @@ type ButtonAnchorAttributes = ButtonHTMLAttributes<HTMLButtonElement> &
   AnchorHTMLAttributes<HTMLAnchorElement>;
 
 export interface ButtonProps extends ButtonAnchorAttributes {
-  color?: 'primary' | 'secondary' | 'outline-primary' | 'outline-secondary';
+  color?: 'primary' | 'secondary' | 'outline-primary' | 'outline-secondary' | 'transparent-darkest';
   size?: 'nano' | 'tiny' | 'small' | 'large';
 }
 
