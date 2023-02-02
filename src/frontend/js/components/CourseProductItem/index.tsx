@@ -17,6 +17,12 @@ const messages = defineMessages({
     description: 'Message displayed when authenticated user owned the product',
     id: 'components.CourseProductItem.enrolled',
   },
+  pending: {
+    defaultMessage: 'Pending',
+    description:
+      'Message displayed when authenticated user has purchased the product but order is still pending',
+    id: 'components.CourseProductItem.pending',
+  },
   loading: {
     defaultMessage: 'Loading product information...',
     description:
@@ -85,6 +91,7 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
               <h3 className="product-widget__title">{product.title}</h3>
               <strong className="product-widget__price h6">
                 {order && <FormattedMessage {...messages.enrolled} />}
+                {hasPurchased && !order && <FormattedMessage {...messages.pending} />}
                 {!hasPurchased && (
                   <FormattedNumber
                     currency={product.price_currency}

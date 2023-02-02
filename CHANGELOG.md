@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Display 'pending' label on CourseProductItem when user owns pending order
+
 ### Changed
 
 - Improve accessibility by using darker color for info course detail label
