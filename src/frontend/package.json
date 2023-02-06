@@ -16,7 +16,8 @@
     "watch-sass": "nodemon -e scss -x 'yarn build-sass'",
     "watch-ts": "yarn build-ts --watch",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "generate:api:client:local": "./scripts/openapi-typescript-codegen/generate_api_client_local.sh"
   },
   "repository": {
     "type": "git",
@@ -134,5 +135,8 @@
   "resolutions": {
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10"
+  },
+  "devDependencies": {
+    "openapi-typescript-codegen": "^0.23.0"
   }
 }
