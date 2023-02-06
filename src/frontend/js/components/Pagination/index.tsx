@@ -1,7 +1,7 @@
 import { Fragment, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'data/useHistory';
-import { location } from 'utils/indirection/window';
+import { location, scroll } from 'utils/indirection/window';
 
 const messages = defineMessages({
   currentlyReadingLastPageN: {
@@ -46,32 +46,45 @@ const messages = defineMessages({
 
 export const usePagination = () => {
   const defaultPage = useMemo(() => {
+    // eslint-disable-next-line compat/compat
     const url = new URL(window.location.href);
     if (url.searchParams.has('page')) {
       return Number(url.searchParams.get('page'));
     }
     return 1;
   }, []);
-  const [maxPage, setMaxPage] = useState(11);
+  const [maxPage, setMaxPage] = useState<number>();
   const [currentPage, setCurrentPage] = useState(defaultPage);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   return {
     maxPage,
     setMaxPage,
     currentPage,
     setCurrentPage,
-    onPageChange: (newPage: number) => setCurrentPage(newPage),
+    itemsPerPage,
+    setItemsPerPage,
+    onPageChange: (newPage: number) => {
+      scroll({
+        behavior: 'smooth',
+        top: 0,
+      });
+      setCurrentPage(newPage);
+    },
+    setItemsCount: (count: number) => {
+      setMaxPage(Math.ceil(count / itemsPerPage));
+    },
   };
 };
 
 export const Pagination = ({
   onPageChange,
-  maxPage,
+  maxPage = 0,
   currentPage,
   renderPageHref,
   updateUrl = true,
 }: {
   currentPage: number;
-  maxPage: number;
+  maxPage?: number;
   onPageChange: (page: number) => void;
   renderPageHref?: (page: number) => string;
   updateUrl?: boolean;
@@ -104,7 +117,7 @@ export const Pagination = ({
     .filter((page) => page <= maxPage)
     // Drop duplicates (this is trivial as our pageList is sorted)
     .filter((page, index, list) => page !== list[index - 1]);
-  const [historyEntry, pushState, replaceState] = useHistory();
+  const [, pushState] = useHistory();
 
   return (
     <div className="pagination">

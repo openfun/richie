@@ -8,7 +8,7 @@ import { useSessionQuery } from 'utils/react-query/useSessionQuery';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import { noop } from 'utils';
-import { ApiResourceInterface } from 'types/Joanie';
+import { ApiResourceInterface, PaginatedResponse } from 'types/Joanie';
 import useLocalizedQueryKey from 'utils/react-query/useLocalizedQueryKey';
 import usePrevious from 'utils/usePrevious';
 import { Resource, ResourcesQuery, UseResourcesProps } from './index';
@@ -157,9 +157,12 @@ export const useResourcesRoot = <
 
   // We want to keep the same reference to the empty array to avoid potential
   // infinite useEffect calls that use `items` as a dependency.
-  const getData = (): TData[] => {
+  const getData = (): {
+    items: TData[];
+    meta?: { pagination?: Omit<PaginatedResponse<TData>, 'results'> };
+  } => {
     if (!readHandler.data) {
-      return emptyArray;
+      return { items: emptyArray };
     }
     // Is it a PaginatedResponse ?
     if (
@@ -169,19 +172,31 @@ export const useResourcesRoot = <
       readHandler.data.hasOwnProperty('previous') &&
       readHandler.data.hasOwnProperty('count')
     ) {
-      return readHandler.data.results;
+      return {
+        items: readHandler.data.results,
+        meta: {
+          pagination: {
+            count: readHandler.data.count,
+            next: readHandler.data.next,
+            prev: readHandler.data.prev,
+          },
+        },
+      };
     }
 
     // If a single resource has been returned by API, we wrap it in an array
     if (!Array.isArray(readHandler.data)) {
-      return [readHandler.data];
+      return { items: readHandler.data };
     }
 
-    return readHandler.data;
+    return { items: readHandler.data };
   };
 
+  const { items, meta } = getData();
+
   return {
-    items: getData(),
+    items,
+    meta,
     methods: {
       invalidate,
       prefetch,
