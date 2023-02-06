@@ -17,7 +17,8 @@
     "watch-ts": "yarn build-ts --watch",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build-theme": "cunningham -g scss -o scss/vendors && cunningham -g css -o scss/vendors/css -g ts -o js/utils/"
+    "build-theme": "cunningham -g scss -o scss/vendors && cunningham -g css -o scss/vendors/css -g ts -o js/utils/",
+    "generate:api:client:local": "./scripts/openapi-typescript-codegen/generate_api_client_local.sh"
   },
   "repository": {
     "type": "git",
@@ -148,5 +149,8 @@
   },
   "volta": {
     "node": "20.11.0"
+  },
+  "devDependencies": {
+    "openapi-typescript-codegen": "0.25.0"
   }
 }
