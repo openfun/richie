@@ -323,6 +323,12 @@ i18n-generate-front: build-ts
 	@$(YARN) extract-translations
 .PHONY: i18n-generate-front
 
+# -- Database
+
+dbshell: ## connect to database shell 
+	docker-compose exec app python sandbox/manage.py dbshell
+.PHONY: dbshell
+
 # -- Misc
 clean: ## restore repository state as it was freshly cloned
 	git clean -idx

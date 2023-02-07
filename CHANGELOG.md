@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Added DashboardItemOrder that allows to select course runs
+- Add make dbshell cmd to access database in cli
 
 ## [2.19.0]
 
