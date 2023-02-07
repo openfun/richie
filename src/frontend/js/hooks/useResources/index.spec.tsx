@@ -473,8 +473,8 @@ describe('useResource (non-omniscient)', () => {
 
     responseDeferred.resolve({
       results: todos,
-      next: '',
-      previous: '',
+      next: 'next',
+      previous: 'prev',
       count: todos.length,
     });
 
@@ -482,6 +482,13 @@ describe('useResource (non-omniscient)', () => {
       expect(result.current.states.fetching).toBe(false);
     });
     expect(result.current.items).toStrictEqual(todos);
+    expect(result.current.meta).toStrictEqual({
+      pagination: {
+        next: 'next',
+        prev: 'prev',
+        count: todos.length,
+      },
+    });
   });
 });
 
