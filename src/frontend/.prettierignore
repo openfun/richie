@@ -1,3 +1,4 @@
 js/translations/*
 i18n/**/*
 public-path.js
+js/api/**/gen/**/*.ts
