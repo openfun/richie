@@ -135,6 +135,11 @@ const getRoutes = () => {
         create: `${baseUrl}/enrollments/`,
         update: `${baseUrl}/enrollments/:id/`,
       },
+      wishlist: {
+        get: `${baseUrl}/wishlist/:id/`,
+        create: `${baseUrl}/wishlist/`,
+        delete: `${baseUrl}/wishlist/:id/`,
+      },
     },
     products: {
       get: `${baseUrl}/products/:id/`,
@@ -266,6 +271,32 @@ const API = (): Joanie.API => {
       certificates: {
         download: async (id: string): Promise<File> =>
           fetchWithJWT(ROUTES.user.certificates.download.replace(':id', id)).then(checkStatus),
+      },
+      wishlist: {
+        get: async (filters) => {
+          let url;
+          const { id = '', ...queryParameters } = filters || {};
+
+          if (id) url = ROUTES.user.wishlist.get.replace(':id', id);
+          else url = ROUTES.user.wishlist.get.replace(':id/', '');
+
+          if (!ObjectHelper.isEmpty(queryParameters)) {
+            url += '?' + queryString.stringify(queryParameters);
+          }
+
+          return fetchWithJWT(url, { method: 'GET' }).then(checkStatus);
+        },
+        create: async (payload) => {
+          return fetchWithJWT(ROUTES.user.wishlist.create, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+          }).then(checkStatus);
+        },
+        delete: async (id) => {
+          return fetchWithJWT(ROUTES.user.wishlist.delete.replace(':id', id), {
+            method: 'DELETE',
+          }).then(checkStatus);
+        },
       },
     },
     products: {

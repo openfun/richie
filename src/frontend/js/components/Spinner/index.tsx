@@ -23,7 +23,7 @@ export const Spinner = (props: PropsWithChildren<SpinnerProps>) => {
   }, [size, theme]);
 
   return (
-    <div className="spinner-container" role="status" {...spinnerProps}>
+    <div className="spinner-container" role="status" {...spinnerProps} data-testid="spinner">
       <div className={spinnerClassList} />
       <div className="offscreen">{children}</div>
     </div>

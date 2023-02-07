@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add CourseAddToWishlist button to add/remove a course from users wishlist
+
 ### Fixed
 
 - Button can be use with a className prop

@@ -140,6 +140,11 @@ export const CourseFactory = createSpec({
   orders: null,
 });
 
+export const UserWishlistCourseFactory = createSpec({
+  course: faker.random.alphaNumeric(5),
+  id: faker.datatype.uuid(),
+});
+
 /**
  * `scopes` allows to conditionally include properties.
  * This is required to avoid circular dependencies when generating mocks.

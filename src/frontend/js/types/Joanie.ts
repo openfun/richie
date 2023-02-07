@@ -170,6 +170,16 @@ export interface Address {
   title: string;
 }
 
+// Wishlist
+export interface UserWishlistCourse {
+  id: string;
+  course: Course['code'];
+}
+
+export interface UserWishlistCreationPayload {
+  course: Course['code'];
+}
+
 // Payment
 export enum PaymentProviders {
   DUMMY = 'dummy',
@@ -266,6 +276,15 @@ interface APIUser {
       ? Promise<Enrollment>
       : Promise<PaginatedResponse<Enrollment>>;
     update(payload: EnrollmentUpdatePayload): Promise<any>;
+  };
+  wishlist: {
+    get<Filters extends ResourcesQuery = ResourcesQuery>(
+      filters?: Filters,
+    ): Filters extends { id: string }
+      ? Promise<Nullable<UserWishlistCourse>>
+      : Promise<UserWishlistCourse[]>;
+    create(payload: UserWishlistCreationPayload): Promise<UserWishlistCourse>;
+    delete(id: UserWishlistCourse['id']): Promise<void>;
   };
 }
 
