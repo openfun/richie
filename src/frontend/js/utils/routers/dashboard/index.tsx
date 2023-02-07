@@ -10,7 +10,7 @@ import { defineMessages, IntlShape } from 'react-intl';
  */
 export enum DashboardPaths {
   COURSES = '/courses',
-  ORDER = '/courses/orders/:code',
+  ORDER = '/courses/orders/:orderId',
   COURSE = '/courses/:code',
   PREFERENCES = '/preferences',
   PREFERENCES_ADDRESS_EDITION = '/preferences/addresses/:addressId',

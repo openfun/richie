@@ -321,7 +321,7 @@ describe('<DashboardItemOrder/>', () => {
       ],
     };
 
-    render(WrapperWithDashboard(DashboardPaths.ORDER.replace(':code', order.id)));
+    render(WrapperWithDashboard(DashboardPaths.ORDER.replace(':orderId', order.id)));
     // Wait for the order to be rendered.
     await screen.findByRole('heading', { level: 5, name: product.title });
 
@@ -395,7 +395,7 @@ describe('<DashboardItemOrder/>', () => {
       body: 'Bad request',
     });
 
-    render(WrapperWithDashboard(DashboardPaths.ORDER.replace(':code', order.id)));
+    render(WrapperWithDashboard(DashboardPaths.ORDER.replace(':orderId', order.id)));
     // Wait for the order to be rendered.
     await screen.findByRole('heading', { level: 5, name: product.title });
 
@@ -465,7 +465,7 @@ describe('<DashboardItemOrder/>', () => {
       ],
     };
 
-    render(WrapperWithDashboard(DashboardPaths.ORDER.replace(':code', order.id)));
+    render(WrapperWithDashboard(DashboardPaths.ORDER.replace(':orderId', order.id)));
 
     // Wait for the order to be rendered.
     await screen.findByRole('heading', { level: 5, name: product.title });
@@ -559,7 +559,7 @@ describe('<DashboardItemOrder/>', () => {
     const courseRun = order.target_courses[0].course_runs[0];
     const newEnrolledCourseRun = order.target_courses[0].course_runs[1];
 
-    render(WrapperWithDashboard(DashboardPaths.ORDER.replace(':code', order.id)));
+    render(WrapperWithDashboard(DashboardPaths.ORDER.replace(':orderId', order.id)));
 
     // Wait for the order to be rendered.
     await screen.findByRole('heading', { level: 5, name: product.title });
@@ -645,7 +645,7 @@ describe('<DashboardItemOrder/>', () => {
       ],
     };
 
-    render(WrapperWithDashboard(DashboardPaths.ORDER.replace(':code', order.id)));
+    render(WrapperWithDashboard(DashboardPaths.ORDER.replace(':orderId', order.id)));
 
     // Wait for the order to be rendered.
     await screen.findByRole('heading', { level: 5, name: product.title });
