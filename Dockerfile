@@ -95,6 +95,11 @@ USER root:root
 
 WORKDIR /app
 
+# Install psql and mysql
+RUN apt-get update && \
+    apt-get install -y postgresql-client default-mysql-client && \
+    rm -rf /var/lib/apt/lists/*
+
 # Upgrade pip to its latest release to speed up dependencies installation
 RUN pip install --upgrade pip
 
