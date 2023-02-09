@@ -1,16 +1,19 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
+import userEvent from '@testing-library/user-event';
 import * as mockFactories from 'utils/test/factories';
-import { OrderFactory, ProductFactory } from 'utils/test/factories';
+import { JoanieEnrollmentFactory } from 'utils/test/factories';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'data/SessionProvider';
 import { DashboardPaths } from 'utils/routers/dashboard';
-import { Order, OrderState, Product } from 'types/Joanie';
-import { Deferred } from 'utils/test/deferred';
+import { Enrollment } from 'types/Joanie';
+import { resolveAll } from 'utils/resolveAll';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
-import { DashboardTest } from '../Dashboard/DashboardTest';
+import { DashboardTest } from 'components/Dashboard/DashboardTest';
+import { History, HistoryContext } from 'data/useHistory';
+import { expectBannerError } from 'utils/test/expectBannerError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -22,10 +25,28 @@ jest.mock('utils/context', () => ({
     .generate(),
 }));
 
+jest.mock('utils/indirection/window', () => ({
+  location: {},
+  scroll: jest.fn(),
+}));
+
 describe('<DashboardCourses/>', () => {
+  const historyPushState = jest.fn();
+  const historyReplaceState = jest.fn();
+  const makeHistoryOf: (params: any) => History = () => [
+    {
+      state: { name: '', data: {} },
+      title: '',
+      url: `/`,
+    },
+    historyPushState,
+    historyReplaceState,
+  ];
+
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
   });
 
   afterEach(() => {
@@ -33,84 +54,88 @@ describe('<DashboardCourses/>', () => {
     fetchMock.restore();
   });
 
-  it('renders a list of orders', async () => {
-    const orders: Order[] = OrderFactory.generate(5);
-    const deferred = new Deferred();
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', deferred.promise);
-    const products: Product[] = ProductFactory.generate(5);
-    orders.forEach((order, i) => {
-      const product = products[i];
-      product.id = order.product;
-      fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/products/${product.id}/?course=${order.course}`,
-        product,
-      );
-    });
+  it('renders 3 pages of enrollments', async () => {
+    const enrollments: Enrollment[] = JoanieEnrollmentFactory.generate(30);
+    const enrollmentsPage1 = enrollments.slice(0, 10);
+    const enrollmentsPage2 = enrollments.slice(10, 20);
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=10&was_created_by_order=false',
+      { results: enrollmentsPage1, next: null, previous: null, count: 30 },
+    );
+
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/enrollments/?page=2&page_size=10&was_created_by_order=false',
+      { results: enrollmentsPage2, next: null, previous: null, count: 30 },
+    );
+
+    render(
+      <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({})}>
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.COURSES} />
             </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
+    );
 
+    // Make sure the spinner appear during first load.
     await expectSpinner('Loading orders and enrollments...');
-
-    await act(async () => {
-      deferred.resolve({ results: orders, next: null, previous: null, count: null });
-    });
 
     await expectNoSpinner('Loading orders and enrollments...');
 
-    await waitFor(() => {
-      orders.forEach((order, i) => {
-        const product = products[i];
-        screen.getByRole('heading', { level: 5, name: product.title });
-      });
+    // Make sure the first page is loaded.
+    expect(document.querySelector('.dashboard__courses__list--loading')).toBeNull();
+    await screen.findByText('Currently reading page 1');
+    await resolveAll(enrollmentsPage1, async (enrollment) => {
+      await screen.findByRole('heading', { level: 5, name: enrollment.course_run.course?.title });
+    });
+
+    // Go to page 2.
+    await userEvent.click(screen.getByText('Next page 2'));
+
+    // Make sure the loading class is set.
+    expect(document.querySelector('.dashboard__courses__list--loading')).toBeDefined();
+
+    // Make sure the second page is loaded.
+    await screen.findByText('Currently reading page 2');
+    await resolveAll(enrollmentsPage2, async (enrollment) => {
+      await screen.findByRole('heading', { level: 5, name: enrollment.course_run.course?.title });
+    });
+
+    // Go back to page 1.
+    await userEvent.click(screen.getByText('Previous page 1'));
+
+    await screen.findByText('Currently reading page 1');
+    await resolveAll(enrollmentsPage1, async (enrollment) => {
+      await screen.findByRole('heading', { level: 5, name: enrollment.course_run.course?.title });
     });
   });
 
-  it('does not render non validated orders', async () => {
-    const orders: Order[] = OrderFactory.generate(4);
-    orders[1].state = OrderState.CANCELED;
-    orders[2].state = OrderState.FAILED;
-    orders[3].state = OrderState.PENDING;
+  it('shows an error', async () => {
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=10&was_created_by_order=false',
+      { status: 500, body: 'Internal error' },
+    );
 
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', {
-      results: orders,
-      next: null,
-      previous: null,
-      count: null,
-    });
-    const products: Product[] = ProductFactory.generate(5);
-    orders.forEach((order, i) => {
-      const product = products[i];
-      product.id = order.product;
-      fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/products/${product.id}/?course=${order.course}`,
-        product,
-      );
-    });
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
+    render(
+      <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({})}>
             <SessionProvider>
               <DashboardTest initialRoute={DashboardPaths.COURSES} />
             </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
+    );
 
-    await screen.findByTestId('dashboard-item-order-' + orders[0].id);
-    expect(screen.queryByTestId('dashboard-item-order-' + orders[1].id)).toBeNull();
-    expect(screen.queryByTestId('dashboard-item-order-' + orders[2].id)).toBeNull();
-    expect(screen.queryByTestId('dashboard-item-order-' + orders[3].id)).toBeNull();
+    // Make sure error is shown.
+    await expectBannerError('An error occurred while fetching enrollments. Please retry later.');
+
+    // ... and the spinner hidden.
+    await expectNoSpinner('Loading ...');
   });
 });
