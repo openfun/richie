@@ -1,19 +1,13 @@
 import { handle } from 'utils/errors/handle';
-import context from 'utils/context';
 import { APIBackend, APILms } from 'types/api';
+
+import { findLmsBackend } from '../configuration';
 import DummyApiInterface from './dummy';
 import OpenEdxDogwoodApiInterface from './openedx-dogwood';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
-const LMS_BACKENDS = context.lms_backends || [];
-
-const selectAPIWithUrl = (url: string) => {
-  const API = LMS_BACKENDS.find((lms) => new RegExp(lms.course_regexp).test(url));
-  return API;
-};
-
 const LmsAPIHandler = (url: string): APILms => {
-  const api = selectAPIWithUrl(url);
+  const api = findLmsBackend(url);
 
   switch (api?.backend) {
     case APIBackend.DUMMY:

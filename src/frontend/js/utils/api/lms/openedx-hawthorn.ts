@@ -73,7 +73,6 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
       get: async (url: string, user: Nullable<User>) => {
         const courseId = extractCourseIdFromUrl(url);
         const params = user ? `${user.username},${courseId}` : courseId;
-
         return fetch(`${ROUTES.enrollment.get}/${params}`, {
           credentials: 'include',
         }).then((response) => {

@@ -43,6 +43,7 @@ export function checkStatus(
     }
     return response.text();
   }
+
   if (options.ignoredErrorStatus.includes(response.status)) {
     return Promise.resolve(options.fallbackValue);
   }

@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Added DashboardItemOrder that allows to select course runs
 - Add make dbshell cmd to access database in cli
+- Added support for courses-run managed by Joanie
 
 ### Fixed
 
