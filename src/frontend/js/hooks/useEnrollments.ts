@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'data/JoanieApiProvider';
-import { ResourcesQuery, useResources, UseResourcesProps } from 'hooks/useResources';
-import { API, Enrollment } from 'types/Joanie';
+import { useResources, UseResourcesProps } from 'hooks/useResources';
+import { API, Enrollment, EnrollmentsQuery } from 'types/Joanie';
 
 const messages = defineMessages({
   errorUpdate: {
@@ -31,7 +31,7 @@ const messages = defineMessages({
   },
 });
 
-const props: UseResourcesProps<Enrollment, ResourcesQuery, API['user']['enrollments']> = {
+const props: UseResourcesProps<Enrollment, EnrollmentsQuery, API['user']['enrollments']> = {
   queryKey: ['enrollments'],
   apiInterface: () => useJoanieApi().user.enrollments,
   session: true,

@@ -172,7 +172,7 @@ export const JoanieCourseRunFactory = (scopes?: { course: Boolean }) => {
 
 export const JoanieEnrollmentFactory = createSpec({
   id: faker.datatype.uuid(),
-  course_run: CourseRunFactory,
+  course_run: derived(() => JoanieCourseRunFactory({ course: true }).generate()),
   is_active: true,
   state: EnrollmentState.SET,
   was_created_by_order: false,

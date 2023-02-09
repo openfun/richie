@@ -25,8 +25,8 @@ import {
 } from 'utils/routers/dashboard';
 import { DashboardEditCreditCardLoader } from 'components/DashboardCreditCardsManagement/DashboardEditCreditCardLoader';
 import { DashboardLayout } from 'components/Dashboard/DashboardLayout';
-import { DashboardCourses } from '../../../../components/DashboardCourses';
-import { DashboardOrderLoader } from '../../../../components/DashboardOrderLoader';
+import { DashboardCourses } from 'components/DashboardCourses';
+import { DashboardOrderLoader } from 'components/DashboardOrderLoader';
 import { getDashboardBasename } from './getDashboardBasename';
 
 /**

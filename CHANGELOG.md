@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add CourseAddToWishlist button to add/remove a course from users wishlist
+- Added Enrollment's pagination in the dashboard
 
 ### Fixed
 

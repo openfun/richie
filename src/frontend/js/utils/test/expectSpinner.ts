@@ -1,4 +1,4 @@
-import { screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 
 export const expectSpinner = async (name?: string) => {
   await waitFor(() => {
@@ -7,7 +7,7 @@ export const expectSpinner = async (name?: string) => {
 };
 
 export const expectNoSpinner = async (name?: string) => {
-  await waitForElementToBeRemoved(() => {
-    return screen.getByRole('status', { name });
+  await waitFor(() => {
+    expect(screen.queryByRole('status', { name })).toBeNull();
   });
 };
