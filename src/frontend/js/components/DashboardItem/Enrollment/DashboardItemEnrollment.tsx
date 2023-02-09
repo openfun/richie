@@ -1,6 +1,6 @@
 import { Enrollment } from 'types/Joanie';
-import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
-import { DashboardItem, DEMO_IMAGE_URL } from '../index';
+import { DashboardItemCourseEnrolling } from 'components/DashboardItem/DashboardItemCourseEnrolling';
+import { DashboardItem } from '../index';
 
 interface DashboardItemCourseRunProps {
   enrollment: Enrollment;
@@ -16,7 +16,6 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
     <DashboardItem
       title={course.title}
       code={'Ref. ' + course.code}
-      imageUrl={DEMO_IMAGE_URL}
       footer={
         <DashboardItemCourseEnrolling course={course} activeEnrollment={enrollment} icon={true} />
       }
