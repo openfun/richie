@@ -4,7 +4,7 @@ import { PropsWithTestId } from '../../types/utils';
 type Props = PropsWithTestId<{
   title: string;
   code: string;
-  imageUrl: string;
+  imageUrl?: string;
   footer?: ReactNode;
 }>;
 
@@ -16,13 +16,20 @@ export const DashboardItem = (props: PropsWithChildren<Props>) => {
   return (
     <div className="dashboard-item" data-testid={props['data-testid']}>
       <div className="dashboard-item__block">
-        <header className="dashboard-item__block__head">
-          <img
-            data-testid="dashboard-item__block__head__thumbnail"
-            className="dashboard-item__block__head__thumbnail"
-            src={props.imageUrl}
-            alt=""
-          />
+        <header
+          className={[
+            'dashboard-item__block__head',
+            props.imageUrl ? 'dashboard-item__block__head--with-image' : '',
+          ].join(' ')}
+        >
+          {!!props.imageUrl && (
+            <img
+              data-testid="dashboard-item__block__head__thumbnail"
+              className="dashboard-item__block__head__thumbnail"
+              src={props.imageUrl}
+              alt=""
+            />
+          )}
           <div className="dashboard-item__block__head__captions">
             <h5 className="dashboard-item__block__head__title">{props.title}</h5>
             <div className="dashboard-item__block__head__code">{props.code}</div>

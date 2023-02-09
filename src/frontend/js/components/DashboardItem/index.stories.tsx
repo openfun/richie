@@ -7,7 +7,6 @@ export default {
   args: {
     code: 'Ref. 30194',
     title: 'Machine learning in Python with sckit-learn',
-    imageUrl: DEMO_IMAGE_URL,
     footer: (
       <>
         <div>Left</div>
@@ -20,3 +19,6 @@ export default {
 const Template: ComponentStory<typeof DashboardItem> = (args) => <DashboardItem {...args} />;
 
 export const Default = Template.bind({});
+
+export const WithImage = Template.bind({});
+WithImage.args = { imageUrl: DEMO_IMAGE_URL };
