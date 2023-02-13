@@ -116,7 +116,7 @@ class CourseState(Mapping):
             "call_to_action": self.STATE_CALLS_TO_ACTION[priority],
             "text": text,
         }
-        self._d = dict(**kwargs)
+        self._d = {**kwargs}
 
     def __iter__(self):
         """Iterate on the inner dictionary."""

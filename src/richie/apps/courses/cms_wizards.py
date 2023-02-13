@@ -386,8 +386,8 @@ class CategoryWizardForm(BaseWizardForm):
             self.page.category
         except models.Category.DoesNotExist:
             return super().parent_page
-        else:
-            return self.page
+
+        return self.page
 
     def save(self):
         """

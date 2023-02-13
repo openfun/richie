@@ -57,8 +57,8 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                     )
                 except Page.DoesNotExist:
                     return None
-                else:
-                    self._base_page = page
+
+                self._base_page = page
 
             return self._base_page
 
