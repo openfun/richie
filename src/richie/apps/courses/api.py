@@ -161,7 +161,10 @@ def sync_course_run(data):
     course_code = normalize_code(lms.extract_course_code(data))
     try:
         course = Course.objects.get(
-            code=course_code, extended_object__publisher_is_draft=True
+            code=course_code,
+            extended_object__publisher_is_draft=True,
+            # Exclude snapshots
+            extended_object__node__parent__cms_pages__course__isnull=True,
         )
     except Course.DoesNotExist as exc:
         # Create the course page in draft

@@ -13,6 +13,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Added DashboardItemOrder that allows to select course runs
 - Add make dbshell cmd to access database in cli
 
+### Fixed
+
+- Prevent internal server error when course runs sync webhook targets
+  a course page having a snapshot
+
 ## [2.19.0]
 
 ### Added
