@@ -55,13 +55,13 @@ def get_plugins_render_tag(
             placeholder = page.placeholders.get(slot=name)
         except ObjectDoesNotExist:
             return ""
-        else:
-            context[varname] = [
-                cms_plugin.get_plugin_instance()[0]
-                for cms_plugin in get_plugins(
-                    request, placeholder, template=page.get_template()
-                )
-            ]
+
+        context[varname] = [
+            cms_plugin.get_plugin_instance()[0]
+            for cms_plugin in get_plugins(
+                request, placeholder, template=page.get_template()
+            )
+        ]
 
         # Default content if there is no plugins in the placeholder
         if not context[varname] and nodelist:

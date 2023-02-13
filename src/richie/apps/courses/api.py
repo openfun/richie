@@ -267,5 +267,5 @@ def sync_course_runs_from_request(request, version):
         sync_course_run(request.data)
     except MissingResourceLinkError:
         return Response({"resource_link": ["This field is required."]}, status=400)
-    else:
-        return Response({"success": True})
+
+    return Response({"success": True})

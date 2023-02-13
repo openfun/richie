@@ -92,7 +92,7 @@ class ItemSearchFormTestCase(TestCase):
         on the form should be single values (limit, offset and query).
         """
         form = ItemSearchForm(
-            data=QueryDict(query_string=("limit=9&offset=3&query=maths"))
+            data=QueryDict(query_string="limit=9&offset=3&query=maths")
         )
         self.assertTrue(form.is_valid())
         self.assertEqual(
