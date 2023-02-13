@@ -19,7 +19,6 @@ def get_plugin_language_fallback_clause(language, is_draft):
 
     for item in range(len(languages)):
         for previous_item, previous_language in enumerate(languages[: item + 1]):
-
             qop_dict = {
                 "extended_object__placeholders__cmsplugin__language": previous_language
             }

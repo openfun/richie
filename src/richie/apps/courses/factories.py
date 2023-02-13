@@ -232,7 +232,6 @@ class CourseFactory(PageExtensionDjangoModelFactory):
 
         if create and extracted:
             for language in self.extended_object.get_languages():
-
                 placeholder = self.extended_object.placeholders.get(
                     slot="course_teaser"
                 )

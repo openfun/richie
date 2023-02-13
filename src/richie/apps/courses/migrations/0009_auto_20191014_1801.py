@@ -6,7 +6,6 @@ import richie.apps.core.fields.multiselect
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("courses", "0008_auto_20191001_1212")]
 
     operations = [

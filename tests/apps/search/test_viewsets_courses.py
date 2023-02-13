@@ -71,6 +71,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
         """
         Happy path: the consumer is filtering courses by matching text
         """
+
         # We use a mock implementation instead of return_value as a pragmatic way to get results
         # from the whole filters pipeline without having to mock too many things.
         # pylint: disable=inconsistent-return-statements

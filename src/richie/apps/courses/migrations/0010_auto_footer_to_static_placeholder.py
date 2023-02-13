@@ -70,7 +70,6 @@ def migrate_footer_to_static_placeholder(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0009_auto_20191014_1801"),
         ("section", "0003_auto_20191119_1650"),

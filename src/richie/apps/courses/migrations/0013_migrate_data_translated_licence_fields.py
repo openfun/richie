@@ -43,7 +43,6 @@ def _get_translation(licence, LicenceTranslation):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("courses", "0012_add_translation_model_for_licence_fields")]
 
     operations = [migrations.RunPython(forwards_func, backwards_func)]

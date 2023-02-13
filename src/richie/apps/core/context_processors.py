@@ -82,7 +82,6 @@ def site_metas(request: HttpRequest):
         settings, "RICHIE_AUTHENTICATION_DELEGATION", None
     )
     if authentication_delegation:
-
         context["AUTHENTICATION"] = {
             "profile_urls": json.dumps(
                 {

@@ -6,7 +6,6 @@ from ..defaults import SECTION_TEMPLATES
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("section", "0001_initial")]
 
     operations = [

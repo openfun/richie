@@ -19,7 +19,6 @@ def normalize_course_code(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("courses", "0030_auto_20210225_1435")]
 
     operations = [

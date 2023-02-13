@@ -6,7 +6,6 @@ import richie.apps.core.fields.multiselect
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("courses", "0010_auto_footer_to_static_placeholder")]
 
     operations = [

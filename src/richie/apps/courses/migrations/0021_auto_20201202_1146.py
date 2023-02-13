@@ -7,7 +7,6 @@ import parler
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("cms", "0022_auto_20180620_1551"),
         ("courses", "0020_auto_20201118_1153"),

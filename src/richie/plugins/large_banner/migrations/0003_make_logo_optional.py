@@ -8,7 +8,6 @@ import filer.fields.image
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("large_banner", "0002_add_template_and_content_fields")]
 
     operations = [
