@@ -13,6 +13,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Added DashboardItemOrder that allows to select course runs
 - Add make dbshell cmd to access database in cli
 - Added support for courses-run managed by Joanie
+- Display message to user when product course it is enrolled is not yet started
 
 ### Fixed
 

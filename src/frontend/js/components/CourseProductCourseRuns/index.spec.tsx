@@ -462,11 +462,11 @@ describe('CourseProductCourseRuns', () => {
       const $link: HTMLLinkElement = screen.getByRole('link', { name: 'Go to course' });
       expect($link).toHaveAttribute('href', enrollment.course_run.resource_link);
 
-      // - a call to action to unroll to the course.
-      screen.getByRole('button', { name: 'Unroll' });
+      // - a call to action to unenroll to the course.
+      screen.getByRole('button', { name: 'Unenroll' });
     });
 
-    it('allows to unroll', async () => {
+    it('allows to unenroll', async () => {
       const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
 
       render(
@@ -475,7 +475,7 @@ describe('CourseProductCourseRuns', () => {
         </Wrapper>,
       );
 
-      const $button: HTMLButtonElement = screen.getByRole('button', { name: 'Unroll' });
+      const $button: HTMLButtonElement = screen.getByRole('button', { name: 'Unenroll' });
 
       fetchMock.resetHistory();
       const enrollmentDeferred = new Deferred();
@@ -489,7 +489,7 @@ describe('CourseProductCourseRuns', () => {
       });
 
       // - While request is pending, an accessible spinner should be displayed
-      await screen.findByRole('status', { name: 'Unrolling...' });
+      await screen.findByRole('status', { name: 'Unenrolling...' });
 
       await act(async () => {
         enrollmentDeferred.resolve(200);
@@ -497,7 +497,7 @@ describe('CourseProductCourseRuns', () => {
 
       const calls = fetchMock.calls();
       expect(calls).toHaveLength(1);
-      // A request to unroll user should have been executed
+      // A request to unenroll user should have been executed
       expect(calls[0][0]).toBe(`https://joanie.test/api/v1.0/enrollments/${enrollment.id}/`);
       expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
         is_active: false,
@@ -506,7 +506,7 @@ describe('CourseProductCourseRuns', () => {
       });
     });
 
-    it('unroll with error', async () => {
+    it('unenroll with error', async () => {
       const course: Course = CourseFactory.generate();
       const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
       fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
@@ -517,7 +517,7 @@ describe('CourseProductCourseRuns', () => {
         </Wrapper>,
       );
 
-      const $button: HTMLButtonElement = screen.getByRole('button', { name: 'Unroll' });
+      const $button: HTMLButtonElement = screen.getByRole('button', { name: 'Unenroll' });
 
       fetchMock.resetHistory();
       const enrollmentDeferred = new Deferred();
@@ -531,7 +531,7 @@ describe('CourseProductCourseRuns', () => {
       });
 
       // - While request is pending, an accessible spinner should be displayed
-      await screen.findByRole('status', { name: 'Unrolling...' });
+      await screen.findByRole('status', { name: 'Unenrolling...' });
 
       await act(async () => {
         enrollmentDeferred.resolve(500);
@@ -540,6 +540,35 @@ describe('CourseProductCourseRuns', () => {
       await screen.findByText(
         'An error occurred while updating the enrollment. Please retry later.',
       );
+    });
+
+    it('renders enrollment not started', async () => {
+      const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
+      const today = new Date();
+      const startDate = new Date(enrollment.course_run.start);
+      const endDate = new Date(enrollment.course_run.end);
+      startDate.setMonth(today.getMonth() + 2);
+      startDate.setFullYear(today.getFullYear());
+      endDate.setMonth(today.getMonth() + 4);
+      endDate.setFullYear(today.getFullYear());
+
+      const newEnrollment = {
+        ...enrollment,
+        course_run: {
+          ...enrollment.course_run,
+          start: startDate.toISOString(),
+          end: endDate.toISOString(),
+        },
+      };
+
+      render(
+        <Wrapper>
+          <EnrolledCourseRun enrollment={newEnrollment} />
+        </Wrapper>,
+      );
+
+      await screen.getByText('You are enrolled');
+      await screen.getByText('The course starts in 2 months');
     });
   });
 });
