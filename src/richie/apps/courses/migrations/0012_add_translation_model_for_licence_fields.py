@@ -9,7 +9,6 @@ import richie.apps.core.fields.multiselect
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("courses", "0011_deprecate_untranslated_licence_fields")]
 
     operations = [

@@ -49,7 +49,6 @@ def populate_direct_course(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0021_auto_20201202_1146"),
     ]

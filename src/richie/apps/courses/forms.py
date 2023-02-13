@@ -19,7 +19,6 @@ class AdminCategoryForm(forms.ModelForm):
     """
 
     class Meta:
-
         fields = ["color"]
         model = models.Category
         widgets = {
@@ -33,7 +32,6 @@ class AdminLicenceForm(TranslatableModelForm):
     """
 
     class Meta:
-
         model = models.Licence
         widgets = {"content": TextEditorWidget}
         fields = ["name", "logo", "url", "content"]
@@ -45,7 +43,6 @@ class LicencePluginForm(forms.ModelForm):
     """
 
     class Meta:
-
         model = models.LicencePluginModel
         widgets = {"description": TextEditorWidget}
         fields = ["licence", "description"]
@@ -72,7 +69,6 @@ class BlogPostPluginForm(forms.ModelForm):
     """
 
     class Meta:
-
         fields = "__all__"
         model = models.BlogPostPluginModel
         widgets = get_plugin_form_widgets("blogpost")
@@ -84,7 +80,6 @@ class CategoryPluginForm(forms.ModelForm):
     """
 
     class Meta:
-
         fields = "__all__"
         model = models.CategoryPluginModel
         widgets = get_plugin_form_widgets("category")
@@ -96,7 +91,6 @@ class CoursePluginForm(forms.ModelForm):
     """
 
     class Meta:
-
         fields = "__all__"
         model = models.CoursePluginModel
         widgets = get_plugin_form_widgets("course")
@@ -108,7 +102,6 @@ class OrganizationsByCategoryPluginForm(forms.ModelForm):
     """
 
     class Meta:
-
         fields = "__all__"
         model = models.OrganizationsByCategoryPluginModel
         widgets = get_plugin_form_widgets("category")
@@ -120,7 +113,6 @@ class OrganizationPluginForm(forms.ModelForm):
     """
 
     class Meta:
-
         fields = "__all__"
         model = models.OrganizationPluginModel
         widgets = get_plugin_form_widgets("organization")
@@ -132,7 +124,6 @@ class PersonPluginForm(forms.ModelForm):
     """
 
     class Meta:
-
         fields = "__all__"
         model = models.PersonPluginModel
         widgets = get_plugin_form_widgets("person")
@@ -144,7 +135,6 @@ class ProgramPluginForm(forms.ModelForm):
     """
 
     class Meta:
-
         fields = "__all__"
         model = models.ProgramPluginModel
         widgets = get_plugin_form_widgets("program")

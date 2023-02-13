@@ -45,7 +45,6 @@ def get_plugins_render_tag(
     request = context.get("request")
 
     if request:
-
         context[varname] = []
         page = _get_page_by_untyped_arg(page_lookup, request, get_site_id(None))
 

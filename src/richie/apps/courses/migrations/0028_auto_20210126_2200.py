@@ -27,7 +27,6 @@ def delete_orphan_course_run_nodes(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("courses", "0027_auto_20210119_1411")]
 
     operations = [

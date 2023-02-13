@@ -6,7 +6,6 @@ from ..defaults import LARGEBANNER_TEMPLATES
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("large_banner", "0001_initial")]
 
     operations = [

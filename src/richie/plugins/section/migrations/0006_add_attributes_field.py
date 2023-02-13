@@ -6,7 +6,6 @@ import djangocms_attributes_field.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("section", "0005_migrate_sectionlist_to_nesteditem"),
     ]

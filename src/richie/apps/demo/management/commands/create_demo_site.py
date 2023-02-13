@@ -811,7 +811,6 @@ class Command(BaseCommand):
     help = __doc__
 
     def add_arguments(self, parser):
-
         parser.add_argument(
             "-f",
             "--force",
@@ -821,7 +820,6 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-
         if not settings.DEBUG and not options["force"]:
             raise CommandError(
                 (

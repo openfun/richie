@@ -13,7 +13,6 @@ import richie.apps.courses.models.category
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0022_auto_20201202_convert_course_runs_to_simple_models"),
     ]

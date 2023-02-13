@@ -6,7 +6,6 @@ import richie.apps.core.fields.multiselect
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0015_add_category_plugin_variant"),
     ]

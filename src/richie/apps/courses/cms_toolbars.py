@@ -73,7 +73,6 @@ class CourseExtensionToolbar(BaseExtensionToolbar):
     model = Course
 
     def populate(self):
-
         super().populate()
         if not self.page:
             # Nothing to do

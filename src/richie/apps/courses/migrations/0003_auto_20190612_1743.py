@@ -7,7 +7,6 @@ import richie.apps.core.fields.effort
 
 
 class Migration(migrations.Migration):
-
     dependencies = [("courses", "0002_auto_20190429_0901")]
 
     operations = [

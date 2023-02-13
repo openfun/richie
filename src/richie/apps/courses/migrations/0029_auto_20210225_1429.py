@@ -6,7 +6,6 @@ import richie.apps.core.fields.duration
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0028_auto_20210126_2200"),
     ]

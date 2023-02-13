@@ -23,7 +23,6 @@ def populate_effort(apps, schema_editor):
     }
 
     for course in Course.objects.iterator():
-
         if course.duration is not None and course.effort_deprecated is not None:
             (duration, duration_unit) = course.duration
             (
@@ -81,7 +80,6 @@ def reverse_populate_effort(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("courses", "0029_auto_20210225_1429"),
     ]

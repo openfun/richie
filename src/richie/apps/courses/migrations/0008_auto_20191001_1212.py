@@ -7,7 +7,6 @@ import richie.apps.core.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("cms", "0022_auto_20180620_1551"),
         ("courses", "0007_auto_20190930_2245"),
