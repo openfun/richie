@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add make dbshell cmd to access database in cli
 - Added support for courses-run managed by Joanie
 - Display message to user when product course it is enrolled is not yet started
+- Add feature flags system with settings and template tag.
 
 ### Fixed
 

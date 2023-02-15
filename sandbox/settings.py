@@ -578,6 +578,9 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         environ_prefix=None,
     )
 
+    # Feature flags
+    FEATURES = values.DictValue(environ_name="FEATURES", environ_prefix=None)
+
     @classmethod
     def _get_environment(cls):
         """Environment in which the application is launched."""
