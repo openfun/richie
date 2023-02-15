@@ -9,7 +9,7 @@ export interface ButtonProps extends ButtonAnchorAttributes {
 }
 
 export const Button = forwardRef<HTMLButtonElement & HTMLAnchorElement, ButtonProps>(
-  ({ disabled = false, ...props }, ref) => {
+  ({ disabled = false, className = '', ...props }, ref) => {
     const classes = ['button'];
     if (props.color) {
       classes.push('button--' + props.color);
@@ -18,9 +18,10 @@ export const Button = forwardRef<HTMLButtonElement & HTMLAnchorElement, ButtonPr
       classes.push('button--' + props.size);
     }
     const elementProps = {
-      className: classes.join(' '),
+      className: [classes.join(' '), className].join(' '),
       disabled,
     };
+
     if (props.href && !disabled) {
       return (
         <a {...elementProps} {...props} ref={ref}>

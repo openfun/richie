@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Button can be use with a className prop
+
 ## [2.20.1] - 2023-02-22
 
 ### Fixed
