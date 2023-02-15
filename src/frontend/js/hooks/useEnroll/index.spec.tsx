@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { Priority } from 'types';
 import * as mockFactories from 'utils/test/factories';
@@ -39,17 +39,24 @@ describe('useEnroll ( edge case )', () => {
     );
   };
 
+  beforeEach(() => {
+    // SessionProvider inital requests
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
     fetchMock.restore();
   });
 
   it('should return early when a course run is not enrollable', async () => {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', {});
     const { result } = renderHook(() => useEnroll([], undefined), { wrapper });
-    await waitFor(() => {
-      expect(result.current?.enroll).toBeDefined();
-    });
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
     const courseRun = JoanieCourseRunFactory().generate();
     courseRun.state.priority = Priority.FUTURE_NOT_YET_OPEN;
     await result.current.enroll(courseRun);
@@ -60,13 +67,19 @@ describe('useEnroll ( edge case )', () => {
   });
 
   it('should not return early when a course run is enrollable', async () => {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', {});
-    const { result } = renderHook(() => useEnroll([], undefined), { wrapper });
-    await waitFor(() => {
-      expect(result.current?.enroll).toBeDefined();
+    const { result } = renderHook(() => useEnroll([], undefined), {
+      wrapper,
     });
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
     const courseRun = JoanieCourseRunFactory().generate();
-    await result.current.enroll(courseRun);
+
+    act(() => {
+      result.current.enroll(courseRun);
+    });
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     expect(
       fetchMock.called('https://joanie.endpoint/api/v1.0/enrollments/', { method: 'post' }),
