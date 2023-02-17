@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.20.0] - 2023-02-17
+
 ### Added
 
 - Added DashboardItemOrder that allows to select course runs
@@ -20,7 +22,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Prevent internal server error when course runs sync webhook targets
   a course page having a snapshot
 
-## [2.19.0]
+## [2.19.0] - 2023-02-03
 
 ### Added
 
@@ -37,7 +39,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix an issue about CourseProductItem when session state is updated
 - Prevent `.icon` to shrink in flexbox content
 
-## [2.18.0]
+## [2.18.0] - 2023-01-12
 
 ### Added
 
@@ -68,7 +70,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Remove CourseProductsList React widget
 
-## [2.17.0]
+## [2.17.0] - 2022-10-28
 
 ### Added
 
@@ -100,7 +102,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   to always display value with a dot no matter active language
 - Language choices should be ordered alphabetically in course run admin form
 
-## [2.16.0]
+## [2.16.0] - 2022-09-09
 
 ### Fixed
 
@@ -1785,7 +1787,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.19.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.20.0...master
+[2.20.0]: https://github.com/openfun/richie/compare/v2.19.0...2.20.0
 [2.19.0]: https://github.com/openfun/richie/compare/v2.18.0...2.19.0
 [2.18.0]: https://github.com/openfun/richie/compare/v2.17.0...2.18.0
 [2.17.0]: https://github.com/openfun/richie/compare/v2.16.0...2.17.0
