@@ -9,6 +9,7 @@ import { Maybe, Nullable } from 'types/utils';
 import { handle } from 'utils/errors/handle';
 import { CommonDataProps } from 'types/commonDataProps';
 import useCourseEnrollment from 'data/useCourseEnrollment';
+import { CourseRunUnenrollButton } from '../CourseRunUnenrollmentButton';
 
 const messages = defineMessages({
   enroll: {
@@ -283,6 +284,7 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
               <FormattedMessage {...messages.enrolled} />
             </p>
           )}
+          {canUnenroll && <CourseRunUnenrollButton onUnenroll={() => setEnroll(false)} />}
           <p className="course-run-enrollment__helptext">{courseRun.starts_in_message}</p>
         </div>
       ) : (
@@ -292,13 +294,7 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
           </a>
           <div className="course-run-enrollment__helptext">
             <FormattedMessage {...messages.enrolled} />
-            {canUnenroll && (
-              <div className="course-run-unenrollment">
-                <button className="button" onClick={() => setEnroll(false)}>
-                  <FormattedMessage {...messages.unenroll} />
-                </button>
-              </div>
-            )}
+            {canUnenroll && <CourseRunUnenrollButton onUnenroll={() => setEnroll(false)} />}
           </div>
         </div>
       );

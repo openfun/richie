@@ -118,9 +118,14 @@
       color: r-theme-val(product-item, feedback-color);
     }
 
+    .course-runs-item__enrolled,
     .course-runs-item__cta {
       padding: 0.5rem 1rem;
       min-width: 100px;
+    }
+
+    .course-runs-item__enrolled {
+      margin-bottom: 0;
     }
   }
 

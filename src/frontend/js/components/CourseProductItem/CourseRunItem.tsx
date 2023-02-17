@@ -20,6 +20,7 @@ const CourseRunItem = ({ targetCourse, order }: Props) => {
     ? CoursesHelper.findActiveCourseEnrollmentInOrder(targetCourse, order)
     : undefined;
   const isEnrolled = !!courseRunEnrollment?.is_active;
+
   const isOpenedCourseRun = (courseRun: Joanie.CourseRun) =>
     courseRun.state.priority <= Priority.FUTURE_NOT_YET_OPEN;
 
