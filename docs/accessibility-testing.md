@@ -6,7 +6,7 @@ sidebar_label: Accessibility testing
 
 Richie includes automated accessibility checks built through a `Cypress` end-to-end testing infrastructure.
 
-Automated accessibility checks can only surface around 30% of possible problems in any given page. This does not mean they are not useful, but they cannot replace human audits and developer proficiency.
+Automated accessibility checks can only surface around 30% of possible problems on any given page. This does not mean they are not useful, but they cannot replace human audits and developer proficiency.
 
 We use `axe` to run these checks. You can find more about axe on the [`axe-core` GitHub repository](https://github.com/dequelabs/axe-core).
 
@@ -23,7 +23,7 @@ This should install everything you need.
 
 ## Running the tests
 
-There are two way to use the `Cypress` tests: through a terminal-based runner and through the `Cypress` UI. Both are started through `yarn` but they have different use cases.
+There are two ways to use the `Cypress` tests: through a terminal-based runner and through the `Cypress` UI. Both are started through `yarn` but they have different use cases.
 
 ```bash
 yarn cypress run
