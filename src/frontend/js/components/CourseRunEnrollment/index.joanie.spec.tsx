@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
@@ -7,37 +7,38 @@ import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
 import * as mockFactories from 'utils/test/factories';
 import { UserFactory } from 'utils/test/factories';
-import { handle } from 'utils/errors/handle';
 import context from 'utils/context';
 import { SessionProvider } from 'data/SessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
-import CourseRunEnrollment from '.';
+import CourseRunEnrollment from './index';
 
 jest.mock('utils/errors/handle');
+
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockFactories
     .ContextFactory({
       authentication: {
         endpoint: 'https://demo.endpoint',
-        backend: 'openedx-hawthorn',
+        backend: 'fonzie',
       },
       lms_backends: [
         {
-          backend: 'openedx-hawthorn',
-          course_regexp: '(?<course_id>.*)',
-          endpoint: 'https://demo.endpoint',
+          backend: 'joanie',
+          course_regexp: '(https://joanie.endpoint/)(?<course_id>.*)',
+          endpoint: 'https://joanie.endpoint',
         },
       ],
+      joanie_backend: {
+        endpoint: 'https://joanie.endpoint',
+      },
     })
     .generate(),
 }));
 
-const mockHandle = handle as jest.MockedFunction<typeof handle>;
-
-describe('<CourseRunEnrollment />', () => {
-  const endpoint = 'https://demo.endpoint';
+describe('<CourseRunEnrollment /> with joanie backend ', () => {
+  const endpoint = 'https://joanie.endpoint';
 
   const getCourseRunProp = (courseRun: CourseRun) => ({
     id: courseRun.id,
@@ -47,62 +48,27 @@ describe('<CourseRunEnrollment />', () => {
     dashboard_link: courseRun.dashboard_link,
   });
 
+  beforeEach(() => {
+    jest.useFakeTimers();
+    sessionStorage.clear();
+    fetchMock
+      .get('https://joanie.endpoint/api/v1.0/addresses/', [])
+      .get('https://joanie.endpoint/api/v1.0/credit-cards/', [])
+      .get('https://joanie.endpoint/api/v1.0/orders/', []);
+  });
+
   afterEach(() => {
     fetchMock.restore();
   });
-
   it('shows an "Enroll" button and allows the user to enroll', async () => {
     const user: User = UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
-    courseRun.state.priority = 0;
-
-    const enrollmentsDeferred = new Deferred();
-    fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
-      enrollmentsDeferred.promise,
-    );
-
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
-    screen.getByRole('status', { name: 'Loading enrollment information...' });
-
-    await act(async () => {
-      enrollmentsDeferred.resolve({});
-    });
-
-    const button = await screen.findByRole('button', { name: 'Enroll now' });
-
-    const enrollActionDeferred = new Deferred();
-    fetchMock.post(`${endpoint}/api/enrollment/v1/enrollment`, enrollActionDeferred.promise);
-    fireEvent.click(button);
-
-    expect(button).toHaveAttribute('aria-busy', 'true');
-
-    await act(async () => {
-      enrollActionDeferred.resolve({ is_active: true });
-    });
-
-    screen.getByRole('link', { name: 'Go to course' });
-    screen.getByText('You are enrolled in this course run');
-  });
-
-  it('shows an error message and the enrollment button when the enrollment fails', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
     courseRun.state.priority = 0;
 
     const enrollmentDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
+      `${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`,
       enrollmentDeferred.promise,
     );
 
@@ -121,35 +87,55 @@ describe('<CourseRunEnrollment />', () => {
     screen.getByRole('status', { name: 'Loading enrollment information...' });
 
     await act(async () => {
-      enrollmentDeferred.resolve({});
+      enrollmentDeferred.resolve({
+        count: 0,
+        results: [],
+      });
     });
 
     const button = await screen.findByRole('button', { name: 'Enroll now' });
-
-    // const enrollmentAction = new Deferred();
-    fetchMock.post(`${endpoint}/api/enrollment/v1/enrollment`, 500);
-
+    const enrollActionDeferred = new Deferred();
+    fetchMock.post(`${endpoint}/api/v1.0/enrollments/`, enrollActionDeferred.promise);
+    fireEvent.click(button);
     await act(async () => {
-      expect(() => fireEvent.click(button)).not.toThrow();
-      // enrollmentAction.reject('500 - Internal Server Error');
+      enrollActionDeferred.resolve(true);
     });
-
-    screen.getByRole('button', { name: 'Enroll now' });
-    screen.getByText('Your enrollment request failed.');
-    expect(mockHandle).toHaveBeenCalledWith(
-      new Error('[SET - Enrollment] > 500 - Internal Server Error'),
-    );
+    await screen.findByText('Unenroll from this course');
   });
 
-  it('shows a link to the course if the user is already enrolled', async () => {
+  it('shows an error message when enrollment get request failed', async () => {
     const user: User = UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
     courseRun.state.priority = 0;
 
-    const enrollmentsDeferred = new Deferred();
+    fetchMock.get(`${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`, 500);
+
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createTestQueryClient({ user })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
+
+    await screen.findByText('Enrollment fetching failed');
+  });
+
+  it('shows an "Unenroll" text and allows the user to unenroll', async () => {
+    const user: User = UserFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
+    courseRun.state.priority = 0;
+
+    const enrollmentDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
-      enrollmentsDeferred.promise,
+      `${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`,
+      enrollmentDeferred.promise,
     );
 
     await act(async () => {
@@ -167,24 +153,85 @@ describe('<CourseRunEnrollment />', () => {
     screen.getByRole('status', { name: 'Loading enrollment information...' });
 
     await act(async () => {
-      enrollmentsDeferred.resolve({ is_active: true });
+      enrollmentDeferred.resolve({
+        count: 1,
+        results: [
+          {
+            course_run: courseRun,
+            id: '57b35536-5c92-4606-bca3-13aa53d04d07',
+            is_active: true,
+            state: 'failed',
+            was_created_by_order: false,
+          },
+        ],
+      });
     });
 
-    await screen.findByRole('link', { name: 'Go to course' });
-    screen.getByText('You are enrolled in this course run');
+    const enrollActionDeferred = new Deferred();
+    fetchMock.put(
+      `${endpoint}/api/v1.0/enrollments/57b35536-5c92-4606-bca3-13aa53d04d07/`,
+      enrollActionDeferred.promise,
+    );
+
+    const unenroll = await screen.findByText('Unenroll from this course');
+    fireEvent.click(unenroll);
+    await act(async () => {
+      enrollActionDeferred.resolve(false);
+    });
+
+    await screen.findByRole('button', { name: 'Enroll now' });
   });
 
-  it("shows remaining course opening time and a link to the lms dashboard if the user is already enrolled and if the course hasn't started yet", async () => {
+  it('shows an error message when the enrollment fails', async () => {
     const user: User = UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
     courseRun.state.priority = 0;
-    courseRun.starts_in_message = 'The course will start in 3 days';
-    courseRun.dashboard_link = 'https://edx.local.dev:8073/dashboard';
 
-    const enrollmentsDeferred = new Deferred();
+    const enrollmentDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
-      enrollmentsDeferred.promise,
+      `${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`,
+      enrollmentDeferred.promise,
+    );
+
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createTestQueryClient({ user })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
+
+    screen.getByRole('status', { name: 'Loading enrollment information...' });
+    await act(async () => {
+      enrollmentDeferred.resolve({
+        count: 0,
+        results: [],
+      });
+    });
+
+    const button = await screen.findByRole('button', { name: 'Enroll now' });
+    fetchMock.post(`${endpoint}/api/v1.0/enrollments/`, 500);
+    await act(async () => {
+      fireEvent.click(button);
+    });
+    await screen.findByText('Your enrollment request failed.');
+  });
+
+  it('shows an error message when the unenrollment fails', async () => {
+    const user: User = UserFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
+    courseRun.state.priority = 0;
+
+    const enrollmentDeferred = new Deferred();
+    fetchMock.get(
+      `${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`,
+      enrollmentDeferred.promise,
     );
 
     await act(async () => {
@@ -202,55 +249,27 @@ describe('<CourseRunEnrollment />', () => {
     screen.getByRole('status', { name: 'Loading enrollment information...' });
 
     await act(async () => {
-      enrollmentsDeferred.resolve({ is_active: true });
+      enrollmentDeferred.resolve({
+        count: 1,
+        results: [
+          {
+            course_run: courseRun,
+            id: '57b35536-5c92-4606-bca3-13aa53d04d07',
+            is_active: true,
+            state: 'failed',
+            was_created_by_order: false,
+          },
+        ],
+      });
     });
 
-    expect(screen.queryByRole('link', { name: 'Go to course' })).toBeNull();
-    await waitFor(() =>
-      expect(screen.getByText('You are enrolled in this course run')).toHaveAttribute(
-        'href',
-        'https://edx.local.dev:8073/dashboard',
-      ),
-    );
-    screen.getByText('The course will start in 3 days');
-  });
+    fetchMock.put(`${endpoint}/api/v1.0/enrollments/57b35536-5c92-4606-bca3-13aa53d04d07/`, 500);
 
-  it('shows a helpful message if the course run is closed', async () => {
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
-    courseRun.state.priority = 4;
-
+    const unenroll = await screen.findByText('Unenroll from this course');
     await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: null })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+      fireEvent.click(unenroll);
     });
 
-    screen.getByText('Enrollment in this course run is closed at the moment');
-    expect(screen.queryByRole('button', { name: 'Enroll now' })).toBeNull();
-  });
-
-  it('prompts anonymous users to log in', async () => {
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
-    courseRun.state.priority = 0;
-
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: null })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
-
-    screen.getByRole('button', { name: 'Log in to enroll' });
+    await screen.findByText('Your unenrollment request failed.');
   });
 });

@@ -22,6 +22,12 @@ const messages = defineMessages({
     description: 'Help text for users who see the "Go to course" CTA on course run enrollment',
     id: 'components.CourseRunEnrollment.enrolled',
   },
+  getEnrollmentFailed: {
+    defaultMessage: 'Enrollment fetching failed',
+    description:
+      'Help text replacing the CTA on a course run when when enrollment fetching failed.',
+    id: 'components.CourseRunEnrollment.getEnrollmentFailed',
+  },
   enrollmentClosed: {
     defaultMessage: 'Enrollment in this course run is closed at the moment',
     description: 'Help text replacing the CTA on a course run when enrollment is closed.',
@@ -32,6 +38,18 @@ const messages = defineMessages({
     description:
       'Help text below the "Enroll now" CTA when an enrollment attempt has already failed.',
     id: 'components.CourseRunEnrollment.enrollmentFailed',
+  },
+  unenroll: {
+    defaultMessage: 'Unenroll from this course',
+    description:
+      'Help text below the "Unenroll now" CTA when an enrollment attempt has already failed.',
+    id: 'components.CourseRunEnrollment.unenroll',
+  },
+  unenrollmentFailed: {
+    defaultMessage: 'Your unenrollment request failed.',
+    description:
+      'Help text below the "Unenroll now" CTA when an enrollment attempt has already failed.',
+    id: 'components.CourseRunEnrollment.unenrollmentFailed',
   },
   goToCourse: {
     defaultMessage: 'Go to course',
@@ -65,9 +83,13 @@ enum Step {
   ANONYMOUS = 'anonymous',
   CLOSED = 'closed',
   LOADING = 'loading',
+  UNENROLLED = 'unenrolled',
   ENROLLED = 'enrolled',
   ENROLLING = 'enrolling',
+
+  UNENROLLING = 'unenrolling',
   ENROLLMENT_FAILED = 'enrollmentFailed',
+  UNENROLLMENT_FAILED = 'unenrollmentFailed',
   FAILED = 'failed',
   IDLE = 'idle',
 }
@@ -75,6 +97,7 @@ enum Step {
 enum ActionType {
   UPDATE_CONTEXT = 'UPDATE_CONTEXT',
   ENROLL = 'ENROLL',
+  UNENROLL = 'UNENROLL',
   ERROR = 'ERROR',
 }
 interface ReducerState {
@@ -89,6 +112,7 @@ interface ReducerState {
 type ReducerAction =
   | { type: ActionType.UPDATE_CONTEXT; payload: Partial<ReducerState['context']> }
   | { type: ActionType.ENROLL }
+  | { type: ActionType.UNENROLL }
   | { type: ActionType.ERROR; payload: { error: Error } };
 
 const getStepFromContext = (
@@ -98,6 +122,8 @@ const getStepFromContext = (
   switch (true) {
     case courseRun.priority > Priority.ARCHIVED_OPEN:
       return Step.CLOSED;
+    case previousStep === Step.UNENROLLING && isEnrolled:
+      return Step.UNENROLLMENT_FAILED;
     case previousStep === Step.ENROLLING && !isEnrolled:
       return Step.ENROLLMENT_FAILED;
     case currentUser === null:
@@ -134,6 +160,8 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
     }
     case ActionType.ENROLL:
       return { step: Step.ENROLLING, context };
+    case ActionType.UNENROLL:
+      return { step: Step.UNENROLLING, context };
     case ActionType.ERROR:
       return { step: Step.FAILED, context, ...action.payload };
     default:
@@ -143,7 +171,9 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
 
 const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = (props) => {
   const { user, login } = useSession();
-  const { enrollmentIsActive, setEnrollment } = useCourseEnrollment(props.courseRun.resource_link);
+  const { enrollmentIsActive, setEnrollment, canUnenroll, states } = useCourseEnrollment(
+    props.courseRun.resource_link,
+  );
 
   const [
     {
@@ -158,17 +188,20 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
     (s) => s,
   );
 
-  const enroll = useCallback(async () => {
-    dispatch({ type: ActionType.ENROLL });
-    if (courseRun && currentUser) {
-      const isEnrolled = await setEnrollment().catch(() => undefined);
+  const setEnroll = useCallback(
+    async (isActive: boolean = true) => {
+      dispatch({ type: isActive ? ActionType.ENROLL : ActionType.UNENROLL });
+      if (courseRun && currentUser) {
+        const isEnrolled = await setEnrollment(isActive).catch(() => undefined);
 
-      dispatch({
-        type: ActionType.UPDATE_CONTEXT,
-        payload: { isEnrolled },
-      });
-    }
-  }, [courseRun, currentUser, dispatch]);
+        dispatch({
+          type: ActionType.UPDATE_CONTEXT,
+          payload: { isEnrolled: isEnrolled === undefined ? enrollmentIsActive : isEnrolled },
+        });
+      }
+    },
+    [courseRun, currentUser, dispatch, enrollmentIsActive],
+  );
 
   useEffect(() => {
     dispatch({
@@ -178,6 +211,12 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
   }, [user, enrollmentIsActive]);
 
   switch (true) {
+    case states.errors.get:
+      return (
+        <div className="course-run-enrollment__helptext">
+          <FormattedMessage {...messages.getEnrollmentFailed} />
+        </div>
+      );
     case step === Step.CLOSED:
       return (
         <div className="course-run-enrollment__helptext">
@@ -200,11 +239,13 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
       );
     case step === Step.IDLE:
     case step === Step.ENROLLING:
+    case step === Step.UNENROLLING:
     case step === Step.ENROLLMENT_FAILED:
+    case step === Step.UNENROLLMENT_FAILED:
       return (
         <React.Fragment>
           <button
-            onClick={enroll}
+            onClick={() => setEnroll(true)}
             className={`course-run-enrollment__cta ${
               step === Step.ENROLLING ? 'course-run-enrollment__cta--loading' : ''
             }`}
@@ -221,6 +262,11 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
           {step === Step.ENROLLMENT_FAILED ? (
             <div className="course-run-enrollment__errortext">
               <FormattedMessage {...messages.enrollmentFailed} />
+            </div>
+          ) : null}
+          {step === Step.UNENROLLMENT_FAILED ? (
+            <div className="course-run-enrollment__errortext">
+              <FormattedMessage {...messages.unenrollmentFailed} />
             </div>
           ) : null}
         </React.Fragment>
@@ -246,6 +292,13 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
           </a>
           <div className="course-run-enrollment__helptext">
             <FormattedMessage {...messages.enrolled} />
+            {canUnenroll && (
+              <div className="course-run-unenrollment">
+                <button className="button" onClick={() => setEnroll(false)}>
+                  <FormattedMessage {...messages.unenroll} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       );

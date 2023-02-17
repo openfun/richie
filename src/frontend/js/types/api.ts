@@ -48,7 +48,15 @@ export interface APIAuthentication {
 export interface APIEnrollment {
   get(url: string, user: Nullable<User>): Promise<Nullable<Enrollment>>;
   isEnrolled(enrollment: Maybe<Nullable<Enrollment>>): Promise<Maybe<boolean>>;
-  set(url: string, user: User): Promise<boolean>;
+  set(
+    url: string,
+    user: User,
+    enrollment?: Maybe<Nullable<Enrollment>>,
+    isActive?: boolean,
+  ): Promise<boolean>;
+  meta?: {
+    canUnenroll?: boolean;
+  };
 }
 
 export interface APILms {

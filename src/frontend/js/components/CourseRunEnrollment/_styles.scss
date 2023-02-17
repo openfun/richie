@@ -15,6 +15,7 @@
   }
 }
 
+.course-run-unenrollment,
 .course-run-enrollment {
   &__cta {
     width: 100%;
@@ -56,4 +57,12 @@
     margin-top: 0.25rem;
     text-align: center;
   }
+}
+
+.course-run-unenrollment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.25rem;
+  font-size: 1rem;
 }

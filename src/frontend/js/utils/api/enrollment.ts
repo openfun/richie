@@ -1,22 +1,17 @@
-import { User } from 'types/User';
-import { Enrollment } from 'types';
-import { Maybe, Nullable } from 'types/utils';
+import { APIBackend, APILms } from 'types/api';
 import APIHandler from './lms';
+import JoanieEnrollmentApiInterface from './lms/joanie';
+import { findLmsBackend } from './configuration';
 
-const EnrollmentApi = (resourceLink: string) => {
+const EnrollmentApi = (resourceLink: string): APILms['enrollment'] => {
+  const apiConf = findLmsBackend(resourceLink);
+
+  if (apiConf?.backend === APIBackend.JOANIE) {
+    return JoanieEnrollmentApiInterface(apiConf);
+  }
+
   const LMS = APIHandler(resourceLink);
-
-  return {
-    get: async (user: Nullable<User>) => {
-      return LMS.enrollment.get(resourceLink, user);
-    },
-    isEnrolled: async (enrollment: Maybe<Nullable<Enrollment>>) => {
-      return LMS.enrollment.isEnrolled(enrollment);
-    },
-    set: async (user: User) => {
-      return LMS.enrollment.set(resourceLink, user);
-    },
-  };
+  return LMS.enrollment;
 };
 
 export default EnrollmentApi;
