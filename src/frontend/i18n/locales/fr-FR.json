@@ -211,6 +211,10 @@
     "description": "Help text below the \"Enroll now\" CTA when an enrollment attempt has already failed.",
     "message": "Votre demande d'inscription a échoué."
   },
+  "components.CourseRunEnrollment.getEnrollmentFailed": {
+    "description": "Help text replacing the CTA on a course run when when enrollment fetching failed.",
+    "message": "Échec de la récupération de l'inscription"
+  },
   "components.CourseRunEnrollment.goToCourse": {
     "description": "CTA for users who are already enrolled in a course run.",
     "message": "Accéder au cours"
@@ -223,6 +227,14 @@
     "description": "Helper text in the enroll button for non logged in users",
     "message": "Connectez-vous pour vous inscrire"
   },
+  "components.CourseRunEnrollment.unenroll": {
+    "description": "Help text below the \"Unenroll now\" CTA when an enrollment attempt has already failed.",
+    "message": "Se désinscrire de ce cours"
+  },
+  "components.CourseRunEnrollment.unenrollmentFailed": {
+    "description": "Help text below the \"Unenroll now\" CTA when an enrollment attempt has already failed.",
+    "message": "Votre demande de désinscription a échoué."
+  },
   "components.CourseRunList.enrollFromTo": {
     "description": "Text label for the enrollment dates",
     "message": "Inscription du {start} au {end}"
@@ -230,6 +242,10 @@
   "components.CourseRunList.noCourseRunAvailable": {
     "description": "Text displayed when no course run are opened for the course",
     "message": "Aucune session disponible pour ce cours."
+  },
+  "components.CourseRunUnenrollmentButton.unenroll": {
+    "description": "Help text below the \"Unenroll now\" CTA when an enrollment attempt has already failed.",
+    "message": "Se désinscrire de ce cours"
   },
   "components.Dashboard.DashboardRoutes.course.path": {
     "description": "The path to display a course detail view.",
@@ -246,6 +262,14 @@
   "components.Dashboard.DashboardRoutes.courses.path": {
     "description": "The path to display the courses view.",
     "message": "/cours"
+  },
+  "components.Dashboard.DashboardRoutes.order.label": {
+    "description": "Label of the order view used in navigation components.",
+    "message": "{orderTitle}"
+  },
+  "components.Dashboard.DashboardRoutes.order.path": {
+    "description": "The path to display an order detail view.",
+    "message": "/fr/cours/commandes/{orderId}"
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.creation.label": {
     "description": "Label of the addresses creation view.",
@@ -314,6 +338,10 @@
   "components.DashboardBreadcrumbs.back": {
     "description": "The dashboard's breadcrumb back button's label",
     "message": "Retour"
+  },
+  "components.DashboardCourses.loading": {
+    "description": "Message displayed while loading orders and enrollments",
+    "message": "Chargement ..."
   },
   "components.DashboardCreateAddressForm.header": {
     "description": "Title of the dashboard address creation form",
@@ -403,6 +431,10 @@
     "description": "Label of the title input on the credit card edit page",
     "message": "Nom de la carte de crédit"
   },
+  "components.DashboardOrderLoader.loading": {
+    "description": "Message displayed while loading an order",
+    "message": "Chargement de la commande..."
+  },
   "components.DashboardSidebar.header": {
     "description": "Title of the dashboard sidebar",
     "message": "Bienvenue {name}"
@@ -447,16 +479,24 @@
     "description": "Label displayed when user do not have select a course run.",
     "message": "Sélectionnez une session"
   },
+  "components.EnrolledCourseRun.courseRunStartIn": {
+    "description": "Error displayed when user is enrolled but the course run is not started",
+    "message": "Le cours commence dans {relativeStartDate}"
+  },
   "components.EnrolledCourseRun.goToCourse": {
     "description": "CTA displayed when user is enrolled to the course run.",
     "message": "Accéder au cours"
   },
-  "components.EnrolledCourseRun.unroll": {
-    "description": "Button label to unroll.",
+  "components.EnrolledCourseRun.isEnroll": {
+    "description": "Message displayed when user is enrolled but the course run is not started",
+    "message": "Vous êtes inscrit"
+  },
+  "components.EnrolledCourseRun.unenroll": {
+    "description": "Button label to unenroll.",
     "message": "Se désinscrire"
   },
-  "components.EnrolledCourseRun.unrolling": {
-    "description": "Accessible label displayed when user is being unrolled.",
+  "components.EnrolledCourseRun.unenrolling": {
+    "description": "Accessible label displayed when user is being unenrolled.",
     "message": "Désinscription en cours..."
   },
   "components.LanguageSelector.currentlySelected": {

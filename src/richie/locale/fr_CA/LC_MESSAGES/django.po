@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-10 15:18+0000\n"
-"PO-Revision-Date: 2023-02-02 10:12\n"
+"POT-Creation-Date: 2023-02-14 14:50+0000\n"
+"PO-Revision-Date: 2023-02-17 14:13\n"
 "Last-Translator: \n"
 "Language-Team: French, Canada\n"
 "Language: fr_CA\n"
@@ -326,11 +326,11 @@ msgstr "Parcours"
 msgid "{!s} settings"
 msgstr "Paramètres de {:s}"
 
-#: apps/courses/cms_toolbars.py:105
+#: apps/courses/cms_toolbars.py:104
 msgid "Snapshot this page..."
 msgstr "Prise d'un instantanée de cette page..."
 
-#: apps/courses/cms_toolbars.py:109
+#: apps/courses/cms_toolbars.py:108
 msgid "This will place a copy of this page as its child and move all its courseruns as children of its new copy."
 msgstr "Ceci copie la page vers une page enfant et les sessions de cours actuelles deviennent des enfants de cette copie."
 
@@ -526,7 +526,7 @@ msgstr "mois"
 msgid "months"
 msgstr "mois"
 
-#: apps/courses/factories.py:406
+#: apps/courses/factories.py:405
 msgid "Run {:d}"
 msgstr "Session {:d}"
 
@@ -1627,7 +1627,7 @@ msgstr "Aucun parcours associé"
 
 #. Translators: delay indicates when the course will start as a duration.
 #. In english the string will be "The course will start in 3 days"
-#: apps/courses/templatetags/extra_tags.py:295
+#: apps/courses/templatetags/extra_tags.py:294
 msgid "The course will start {delay:s}"
 msgstr "Le cours commencera {delay:s}"
 
