@@ -1,6 +1,6 @@
 import context from 'utils/context';
-import { JOANIE_API_VERSION } from 'settings';
-import { ApiClientJoanie, OpenAPIConfig } from './gen';
+import { JOANIE_API_VERSION, RICHIE_USER_TOKEN } from 'settings';
+import { ApiClientJoanie, ApiError, OpenAPIConfig } from './gen';
 
 /**
  * Build Joanie API Routes interface.
@@ -16,14 +16,18 @@ const getAPIEndpoint = () => {
   return `${endpoint}/api/${version}`;
 };
 
-// TODO add auth with jwt
 const config: OpenAPIConfig = {
   BASE: getAPIEndpoint(),
   VERSION: '1',
-  WITH_CREDENTIALS: true,
-  CREDENTIALS: 'include',
-  // TOKEN:
+  WITH_CREDENTIALS: false,
+  CREDENTIALS: 'omit',
+  TOKEN: async () => {
+    return sessionStorage.getItem(RICHIE_USER_TOKEN) || '';
+  },
 };
 
 export const joanieApi = new ApiClientJoanie(config);
-export * from './hooks';
+
+export const isApiError = (error: unknown): error is ApiError => {
+  return (error as ApiError).name === 'ApiError';
+};
