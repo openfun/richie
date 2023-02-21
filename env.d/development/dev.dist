@@ -6,3 +6,6 @@ AUTHENTICATION_BACKEND=dummy
 EDX_BASE_URL=http://localhost:8073
 EDX_BACKEND=richie.apps.courses.lms.base.BaseLMSBackend
 EDX_JS_BACKEND=dummy
+
+# Features
+FEATURES = {'JOANIE_WISHLIST': True}

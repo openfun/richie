@@ -4,3 +4,6 @@ AUTHENTICATION_BACKEND=openedx-hawthorn
 
 # LMS Backend
 EDX_BASE_URL=https://edx.local.dev:8073
+
+# Features
+FEATURES = {'JOANIE_WISHLIST': True}
