@@ -179,7 +179,7 @@ export const JoanieEnrollmentFactory = createSpec({
 });
 
 export const TargetCourseFactory = createSpec({
-  code: faker.unique(faker.random.alphaNumeric(5)),
+  code: faker.unique(faker.random.alphaNumeric(5), { maxRetries: 20 }),
   organizations: [],
   title: derived(({ code }: { code: string }) => {
     return `${faker.random.words(1, 3)()}(${code})`;

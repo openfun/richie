@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
@@ -8,10 +8,9 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'data/SessionProvider';
 import { DashboardPaths } from 'utils/routers/dashboard';
 import { Order, OrderState, Product } from 'types/Joanie';
+import { Deferred } from 'utils/test/deferred';
+import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { DashboardTest } from '../Dashboard/DashboardTest';
-import { resolveAll } from '../../utils/resolveAll';
-import { Deferred } from '../../utils/test/deferred';
-import { expectSpinner } from '../../utils/test/expectSpinner';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -43,7 +42,7 @@ describe('<DashboardCourses/>', () => {
       const product = products[i];
       product.id = order.product;
       fetchMock.get(
-        'https://joanie.endpoint/api/v1.0/products/' + product.id + '/?course=' + order.course,
+        `https://joanie.endpoint/api/v1.0/products/${product.id}/?course=${order.course}`,
         product,
       );
     });
@@ -60,15 +59,19 @@ describe('<DashboardCourses/>', () => {
       );
     });
 
-    await expectSpinner('Loading ...');
+    await expectSpinner('Loading orders and enrollments...');
 
     await act(async () => {
       deferred.resolve({ results: orders, next: null, previous: null, count: null });
     });
 
-    await resolveAll(orders, async (order, i) => {
-      const product = products[i];
-      await screen.findByRole('heading', { level: 5, name: product.title });
+    await expectNoSpinner('Loading orders and enrollments...');
+
+    await waitFor(() => {
+      orders.forEach((order, i) => {
+        const product = products[i];
+        screen.getByRole('heading', { level: 5, name: product.title });
+      });
     });
   });
 
@@ -88,7 +91,10 @@ describe('<DashboardCourses/>', () => {
     orders.forEach((order, i) => {
       const product = products[i];
       product.id = order.product;
-      fetchMock.get('https://joanie.endpoint/api/v1.0/products/' + product.id + '/', product);
+      fetchMock.get(
+        `https://joanie.endpoint/api/v1.0/products/${product.id}/?course=${order.course}`,
+        product,
+      );
     });
     await act(async () => {
       render(
