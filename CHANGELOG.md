@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.20.1] - 2023-02-22
+
 ### Fixed
 
 - Fix a style bug on the course glimpse when used in a section
@@ -1793,7 +1795,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.20.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.20.1...master
+[2.20.1]: https://github.com/openfun/richie/compare/v2.20.0...2.20.1
 [2.20.0]: https://github.com/openfun/richie/compare/v2.19.0...2.20.0
 [2.19.0]: https://github.com/openfun/richie/compare/v2.18.0...2.19.0
 [2.18.0]: https://github.com/openfun/richie/compare/v2.17.0...2.18.0
