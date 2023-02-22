@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix a style bug on the course glimpse when used in a section
+  with variant overriding svg color
+
 ## [2.20.0] - 2023-02-17
 
 ### Added
