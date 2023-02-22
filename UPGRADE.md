@@ -16,6 +16,15 @@ $ make migrate
 
 ## Unreleased
 
+## 2.19.x to 2.20.1
+
+- A new setting "FEATURES" has been added to enable some early features. If you want to test those
+  features you have to add this setting in your settings.py file:
+  ```python
+  # Feature flags
+  FEATURES = values.DictValue(environ_name="FEATURES", environ_prefix=None)
+  ```
+
 ## 2.18.x to 2.19.x
 
 - In `_theme.scss`, `course-detail` scheme now accepts two new optional properties to style 
