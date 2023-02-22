@@ -6,7 +6,7 @@ import { Spinner } from 'components/Spinner';
 
 const messages = defineMessages({
   loading: {
-    defaultMessage: 'Loading ...',
+    defaultMessage: 'Loading orders and enrollments...',
     description: 'Message displayed while loading orders and enrollments',
     id: 'components.DashboardCourses.loading',
   },
