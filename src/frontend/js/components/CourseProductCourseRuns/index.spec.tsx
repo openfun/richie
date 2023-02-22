@@ -547,10 +547,11 @@ describe('CourseProductCourseRuns', () => {
       const today = new Date();
       const startDate = new Date(enrollment.course_run.start);
       const endDate = new Date(enrollment.course_run.end);
-      startDate.setMonth(today.getMonth() + 2);
+
+      startDate.setDate(today.getDate());
+      // keep this before setMonth If the month of today is >= November
       startDate.setFullYear(today.getFullYear());
-      endDate.setMonth(today.getMonth() + 4);
-      endDate.setFullYear(today.getFullYear());
+      startDate.setMonth(today.getMonth() + 2);
 
       const newEnrollment = {
         ...enrollment,
