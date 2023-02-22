@@ -858,15 +858,15 @@ jobs:
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
+    parallelism: 4
+    resource_class: large
     working_directory: ~/fun/src/frontend
     steps:
       - *checkout_fun
       - *restore_node_modules
       - run:
           name: Run tests
-          # Circle CI needs the tests to be ran sequentially, otherwise it hangs. See Jest docs below:
-          # (https://jestjs.io/docs/en/troubleshooting#tests-are-extremely-slow-on-docker-and-or-continuous-integration-ci-server)
-          command: yarn test --runInBand
+          command: yarn test -w 3 --shard "$(($CIRCLE_NODE_INDEX + 1))/$CIRCLE_NODE_TOTAL"
 
   test-front-package:
     docker:
