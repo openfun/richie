@@ -1,8 +1,7 @@
 import { defineMessages } from 'react-intl';
-import { MutateOptions } from '@tanstack/react-query';
-import { useJoanieApi } from 'data/JoanieApiProvider';
-import { Address, AddressCreationPayload, API } from 'types/Joanie';
-import { HttpError } from 'utils/errors/HttpError';
+import { joanieApi } from 'api/joanie';
+import { Address } from 'api/joanie/gen';
+import { ApiResourceInterface } from 'types/Joanie';
 import { ResourcesQuery, useResource, useResources, UseResourcesProps } from './useResources';
 
 const messages = defineMessages({
@@ -33,15 +32,34 @@ const messages = defineMessages({
   },
 });
 
-export type AddressesMutateOptions = MutateOptions<Address, HttpError, AddressCreationPayload>;
-
 /**
  * Joanie Api hook to retrieve/create/update/delete addresses
  * owned by the authenticated user.
  */
-const props: UseResourcesProps<Address, ResourcesQuery, API['user']['addresses']> = {
+const props: UseResourcesProps<Address, ResourcesQuery, ApiResourceInterface<Address>> = {
   queryKey: ['addresses'],
-  apiInterface: () => useJoanieApi().user.addresses,
+  apiInterface: () => ({
+    get: async (filters?: ResourcesQuery) => {
+      if (filters?.id) {
+        return joanieApi.addresses.addressesRead(filters?.id);
+      }
+      return joanieApi.addresses.addressesList();
+    },
+    create: (data: Address) => joanieApi.addresses.addressesCreate(data),
+    update: (data: Address) => {
+      const { id, ...updatedData } = data;
+      if (id) {
+        return joanieApi.addresses.addressesUpdate(id, updatedData);
+      }
+      throw new Error('api.addressesUpdate need a id.');
+    },
+    delete: (id?: string) => {
+      if (id) {
+        return joanieApi.addresses.addressesDelete(id);
+      }
+      throw new Error('api.addressesDelete need a id.');
+    },
+  }),
   omniscient: true,
   session: true,
   messages,

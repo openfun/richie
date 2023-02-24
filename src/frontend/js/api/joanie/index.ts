@@ -1,5 +1,6 @@
 import context from 'utils/context';
 import { JOANIE_API_VERSION, RICHIE_USER_TOKEN } from 'settings';
+import isTestEnv from 'utils/test/isTestEnv';
 import { ApiClientJoanie, ApiError, OpenAPIConfig } from './gen';
 
 /**
@@ -9,7 +10,7 @@ const getAPIEndpoint = () => {
   const endpoint = context?.joanie_backend?.endpoint;
   const version = JOANIE_API_VERSION;
 
-  if (!endpoint) {
+  if (!endpoint && !isTestEnv) {
     throw new Error('[JOANIE] - Joanie API endpoint is not defined.');
   }
 

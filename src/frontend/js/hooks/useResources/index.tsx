@@ -11,7 +11,7 @@ export interface ResourcesQuery {
 }
 
 export interface Resource {
-  id: string;
+  id?: string;
 }
 
 export type QueryOptions<TData extends Resource> = Omit<

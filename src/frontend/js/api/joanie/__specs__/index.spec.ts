@@ -16,7 +16,7 @@ jest.mock('utils/context', () => ({
 describe('joanieApi', () => {
   it('test', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/addressId/', []);
-    await joanieApi.addresses.addressesRead({ id: 'addressId' });
+    await joanieApi.addresses.addressesRead('addressId');
 
     let lastCall = fetchMock.lastCall();
     const visitorHeader = lastCall && lastCall[1]?.headers;
@@ -26,7 +26,7 @@ describe('joanieApi', () => {
     expect(visitorHeader?.get('Authorization')).toBeNull();
 
     sessionStorage.setItem(RICHIE_USER_TOKEN, 'TEST_TOKEN');
-    await joanieApi.addresses.addressesRead({ id: 'addressId' });
+    await joanieApi.addresses.addressesRead('addressId');
     lastCall = fetchMock.lastCall();
     const userHeader = lastCall && lastCall[1]?.headers;
     // @ts-ignore

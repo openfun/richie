@@ -2,6 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { act, findByText, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
+import userEvent from '@testing-library/user-event';
 import * as mockFactories from 'utils/test/factories';
 import { SessionProvider } from 'data/SessionProvider';
 import { DashboardTest } from 'components/Dashboard/DashboardTest';
@@ -41,22 +42,20 @@ describe('<DashboardEditAddress/>', () => {
     const updateUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
     fetchMock.put(updateUrl, 200);
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest
-                initialRoute={DashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
-                  ':addressId',
-                  address.id,
-                )}
-              />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(
+      <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <IntlProvider locale="en">
+          <SessionProvider>
+            <DashboardTest
+              initialRoute={DashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
+                ':addressId',
+                address.id,
+              )}
+            />
+          </SessionProvider>
+        </IntlProvider>
+      </QueryClientProvider>,
+    );
 
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
@@ -95,11 +94,11 @@ describe('<DashboardEditAddress/>', () => {
 
     // Submit of the form calls the API edit route.
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(false);
-    await act(async () => {
-      // it is not necessary to update all fields as it is mocked above.
-      fireEvent.change(titleInput, { target: { value: addressUpdated.title } });
-      fireEvent.click(button);
-    });
+
+    // it is not necessary to update all fields as it is mocked above.
+    await userEvent.clear(titleInput);
+    await userEvent.type(titleInput, addressUpdated.title);
+    await userEvent.click(button);
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
     // The API is called with correct body.
@@ -123,26 +122,23 @@ describe('<DashboardEditAddress/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
     // Mock the edit API route to return a 500 status.
-    const updateUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
+    const updateUrl = `https://joanie.endpoint/api/v1.0/addresses/${address.id}/`;
     fetchMock.put(updateUrl, { status: 500, body: 'Bad request' });
 
-    let container: HTMLElement | undefined;
-    await act(async () => {
-      container = render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <JoanieSessionProvider>
-              <DashboardTest
-                initialRoute={DashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
-                  ':addressId',
-                  address.id,
-                )}
-              />
-            </JoanieSessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      ).container;
-    });
+    const { container } = render(
+      <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <IntlProvider locale="en">
+          <JoanieSessionProvider>
+            <DashboardTest
+              initialRoute={DashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
+                ':addressId',
+                address.id,
+              )}
+            />
+          </JoanieSessionProvider>
+        </IntlProvider>
+      </QueryClientProvider>,
+    );
 
     await expectBreadcrumbsToEqualParts([
       'Back',
