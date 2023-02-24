@@ -1,7 +1,8 @@
 import { defineMessages } from 'react-intl';
-import { useJoanieApi } from 'data/JoanieApiProvider';
+import { Enrollment } from 'api/joanie/gen';
 import { ResourcesQuery, useResources, UseResourcesProps } from 'hooks/useResources';
-import { API, Enrollment } from 'types/Joanie';
+import { ApiResourceInterface } from 'types/Joanie';
+import { joanieApi } from 'api/joanie';
 
 const messages = defineMessages({
   errorUpdate: {
@@ -31,9 +32,24 @@ const messages = defineMessages({
   },
 });
 
-const props: UseResourcesProps<Enrollment, ResourcesQuery, API['user']['enrollments']> = {
+const props: UseResourcesProps<Enrollment, ResourcesQuery, ApiResourceInterface<Enrollment>> = {
   queryKey: ['enrollments'],
-  apiInterface: () => useJoanieApi().user.enrollments,
+  apiInterface: () => ({
+    get: async (filters?: ResourcesQuery) => {
+      if (filters?.id) {
+        return joanieApi.enrollments.enrollmentsRead(filters?.id);
+      }
+      return joanieApi.enrollments.enrollmentsList();
+    },
+    create: (data: Enrollment) => joanieApi.enrollments.enrollmentsCreate(data),
+    update: (data: Enrollment) => {
+      const { id, ...updatedData } = data;
+      if (id) {
+        return joanieApi.enrollments.enrollmentsUpdate(id, updatedData);
+      }
+      throw new Error('api.enrollmentsUpdate need a id.');
+    },
+  }),
   session: true,
   messages,
   onMutationSuccess: async (queryClient) => {
