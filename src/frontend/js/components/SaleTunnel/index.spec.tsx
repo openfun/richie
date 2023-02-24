@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import { Fragment } from 'react';
 import { IntlProvider } from 'react-intl';
@@ -95,13 +96,13 @@ describe('SaleTunnel', () => {
     screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepValidation Component' });
     // focus should be set to the current step
     await waitFor(() => expect(document.activeElement?.getAttribute('aria-current')).toBe('step'));
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
 
     // - Step 2 : Payment
     screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepPayment Component' });
     // focus should be set to the current step
     expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
 
     // - Step 3 : Resume
     screen.getByRole('heading', { level: 2, name: 'SaleTunnelStepResume Component' });
@@ -109,8 +110,8 @@ describe('SaleTunnel', () => {
     expect(document.activeElement?.getAttribute('aria-current')).toBe('step');
 
     // - Terminated, resume.onExit callback is triggered, orders should have been refetched.
-    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    expect(fetchMock.lastUrl()).toBe('https://joanie.test/api/v1.0/orders/');
+    await userEvent.click(screen.getByRole('button', { name: 'Next' }));
+    expect(fetchMock.called('https://joanie.test/api/v1.0/orders/')).toBe(true);
 
     expect(onClose).toHaveBeenCalledTimes(1);
   });

@@ -1,7 +1,7 @@
 import context from 'utils/context';
 import { JOANIE_API_VERSION, RICHIE_USER_TOKEN } from 'settings';
 import isTestEnv from 'utils/test/isTestEnv';
-import { ApiClientJoanie, ApiError, OpenAPIConfig } from './gen';
+import { ApiClientJoanie, OpenAPIConfig } from './gen';
 
 /**
  * Build Joanie API Routes interface.
@@ -29,6 +29,4 @@ const config: OpenAPIConfig = {
 
 export const joanieApi = new ApiClientJoanie(config);
 
-export const isApiError = (error: unknown): error is ApiError => {
-  return (error as ApiError).name === 'ApiError';
-};
+export * from './typeguards';
