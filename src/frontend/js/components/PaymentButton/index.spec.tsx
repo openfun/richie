@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, cleanup } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
@@ -59,6 +59,7 @@ describe('PaymentButton', () => {
   });
 
   afterEach(() => {
+    cleanup();
     fetchMock.restore();
     jest.clearAllTimers();
     jest.resetAllMocks();
@@ -377,11 +378,14 @@ describe('PaymentButton', () => {
     // - Wait until order has been polled 29 times.
     await waitFor(
       async () => {
+        jest.advanceTimersToNextTimer();
         expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit - 1);
       },
       {
+        // - As we run timers manually, the waitFor timeout is impacted.
+        // - Each time we advance timers, we trigger a new waitFor call, so we have
+        //   to increase timeout value according to the poll limit.
         timeout: PAYMENT_SETTINGS.pollLimit * 1000,
-        interval: 5,
       },
     );
 
@@ -390,12 +394,16 @@ describe('PaymentButton', () => {
       jest.runOnlyPendingTimers();
     });
 
-    await waitFor(async () => expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit), {
-      timeout: 2000,
-    });
-    await waitFor(() =>
-      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/abort/`),
+    await waitFor(
+      async () => {
+        expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit);
+        expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/abort/`);
+      },
+      {
+        timeout: 1100,
+      },
     );
+
     expect(JSON.parse(fetchMock.lastOptions()!.body!.toString())).toEqual({
       payment_id: order.payment_info.payment_id,
     });
