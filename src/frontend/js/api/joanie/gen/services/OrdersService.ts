@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Order } from '../models/Order';
+import type { OrderCreateBody } from '../models/OrderCreateBody';
+import type { OrderCreateResponse } from '../models/OrderCreateResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
@@ -24,6 +26,7 @@ export class OrdersService {
    * @param course
    * @param state
    * @param page A page number within the paginated result set.
+   * @param pageSize Number of results to return per page.
    * @returns any
    * @throws ApiError
    */
@@ -32,6 +35,7 @@ export class OrdersService {
     course?: string,
     state?: string,
     page?: number,
+    pageSize?: number,
   ): CancelablePromise<{
     count: number;
     next?: string | null;
@@ -46,6 +50,7 @@ export class OrdersService {
         'course': course,
         'state': state,
         'page': page,
+        'page_size': pageSize,
       },
     });
   }
@@ -53,12 +58,12 @@ export class OrdersService {
   /**
    * Try to create an order and a related payment if the payment is fee.
    * @param data
-   * @returns Order
+   * @returns OrderCreateResponse
    * @throws ApiError
    */
   public ordersCreate(
-    data: Order,
-  ): CancelablePromise<Order> {
+    data: OrderCreateBody,
+  ): CancelablePromise<OrderCreateResponse> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/orders/',

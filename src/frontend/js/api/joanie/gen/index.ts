@@ -17,6 +17,9 @@ export type { CourseRun } from './models/CourseRun';
 export type { CreditCard } from './models/CreditCard';
 export { Enrollment } from './models/Enrollment';
 export { Order } from './models/Order';
+export { OrderCreateBody } from './models/OrderCreateBody';
+export { OrderCreateResponse } from './models/OrderCreateResponse';
+export type { Payment } from './models/Payment';
 export { Product } from './models/Product';
 
 export { AddressesService } from './services/AddressesService';

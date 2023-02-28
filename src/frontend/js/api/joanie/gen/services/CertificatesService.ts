@@ -18,13 +18,24 @@ export class CertificatesService {
    *
    * GET /api/certificates/:certificate_id/download
    * Return the certificate document in PDF format.
-   * @returns Certificate
+   * @param page A page number within the paginated result set.
+   * @returns any
    * @throws ApiError
    */
-  public certificatesList(): CancelablePromise<Array<Certificate>> {
+  public certificatesList(
+    page?: number,
+  ): CancelablePromise<{
+    count: number;
+    next?: string | null;
+    previous?: string | null;
+    results: Array<Certificate>;
+  }> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/certificates/',
+      query: {
+        'page': page,
+      },
     });
   }
 

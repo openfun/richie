@@ -22,13 +22,24 @@ export class CreditCardsService {
    *
    * DELETE /api/credit-cards/<credit_card_id>
    * Delete the selected credit card
-   * @returns CreditCard
+   * @param page A page number within the paginated result set.
+   * @returns any
    * @throws ApiError
    */
-  public creditCardsList(): CancelablePromise<Array<CreditCard>> {
+  public creditCardsList(
+    page?: number,
+  ): CancelablePromise<{
+    count: number;
+    next?: string | null;
+    previous?: string | null;
+    results: Array<CreditCard>;
+  }> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/credit-cards/',
+      query: {
+        'page': page,
+      },
     });
   }
 

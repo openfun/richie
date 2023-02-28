@@ -39,13 +39,24 @@ export class AddressesService {
    *
    * DELETE /api/addresses/<address_id>/
    * Delete selected address
-   * @returns Address
+   * @param page A page number within the paginated result set.
+   * @returns any
    * @throws ApiError
    */
-  public addressesList(): CancelablePromise<Array<Address>> {
+  public addressesList(
+    page?: number,
+  ): CancelablePromise<{
+    count: number;
+    next?: string | null;
+    previous?: string | null;
+    results: Array<Address>;
+  }> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/addresses/',
+      query: {
+        'page': page,
+      },
     });
   }
 
