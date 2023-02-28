@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { joanieApi } from 'api/joanie';
+import { Address, CreditCard, Order, Payment, Product } from 'api/joanie/gen';
 import PaymentInterface from 'components/PaymentInterfaces';
 import { Spinner } from 'components/Spinner';
 import { useCourseProduct } from 'data/CourseProductProvider';
-import { useJoanieApi } from 'data/JoanieApiProvider';
 import { useOrders } from 'hooks/useOrders';
 import { PAYMENT_SETTINGS } from 'settings';
-import type * as Joanie from 'types/Joanie';
-import { OrderState } from 'types/Joanie';
 import type { Nullable } from 'types/utils';
 
 const messages = defineMessages({
@@ -56,14 +55,13 @@ export enum PaymentErrorMessageId {
 }
 
 interface PaymentButtonProps {
-  product: Joanie.Product;
-  billingAddress?: Joanie.Address;
-  creditCard?: Nullable<Joanie.CreditCard['id']>;
+  product: Product;
+  billingAddress?: Address;
+  creditCard?: Nullable<CreditCard['id']>;
   onSuccess: () => void;
 }
 
-type PaymentInfo = Joanie.Payment & { order_id: string };
-type OneClickPaymentInfo = Joanie.PaymentOneClick & { order_id: string };
+type PaymentInfo = Payment & { order_id: string };
 
 enum ComponentStates {
   IDLE = 'idle',
@@ -78,7 +76,6 @@ enum ComponentStates {
  */
 const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: PaymentButtonProps) => {
   const intl = useIntl();
-  const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
   const { courseCode } = useCourseProduct();
   const orderManager = useOrders();
@@ -87,7 +84,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
     return courseCode && product.id && billingAddress;
   }, [product, courseCode, billingAddress]);
 
-  const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
+  const [payment, setPayment] = useState<PaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<PaymentErrorMessageId>(PaymentErrorMessageId.ERROR_DEFAULT);
 
@@ -98,8 +95,8 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
    * @returns {Promise<boolean>} - Promise resolving to true if order is validated
    */
   const isOrderValidated = async (id: string): Promise<Boolean> => {
-    const order = await API.user.orders.get({ id });
-    return order?.state === OrderState.VALIDATED;
+    const order = await joanieApi.orders.ordersRead(id);
+    return order?.state === Order.state.VALIDATED;
   };
 
   /** type guard to check if the payment is a payment one click */
@@ -122,7 +119,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
             billing_address: billingAddress!,
             ...(creditCard && { credit_card_id: creditCard }),
             course: courseCode,
-            product: product.id,
+            product: product.id!,
           },
           {
             onSuccess: (order) => {
@@ -171,7 +168,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   };
 
   useEffect(() => {
-    if (isOneClickPayment(payment) && state === ComponentStates.LOADING) {
+    if (payment?.is_paid && state === ComponentStates.LOADING) {
       handleSuccess();
     }
 

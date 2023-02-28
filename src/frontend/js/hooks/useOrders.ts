@@ -1,10 +1,11 @@
 import { defineMessages } from 'react-intl';
 import { ApiResourceInterface } from 'types/Joanie';
-import { Order, Product, Course } from 'api/joanie/gen';
+import { Order, Product, Course, OrderCreateResponse, OrderCreateBody } from 'api/joanie/gen';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import { joanieApi, isCourse } from 'api/joanie';
 import {
   QueryOptions,
+  Resource,
   ResourcesQuery,
   useResource,
   useResourcesCustom,
@@ -50,7 +51,11 @@ function omniscientFiltering(data: Order[], filter: OrderResourcesQuery): Order[
   );
 }
 
-const props: UseResourcesProps<Order, OrderResourcesQuery, ApiResourceInterface<Order>> = {
+interface OrderApiResourceInterface extends ApiResourceInterface<Order, ResourcesQuery> {
+  create: (payload: OrderCreateBody) => Promise<OrderCreateResponse>;
+}
+
+const props: UseResourcesProps<Order, OrderResourcesQuery, OrderApiResourceInterface> = {
   queryKey: ['orders'],
   apiInterface: () => ({
     get: async (filters?: ResourcesQuery) => {
@@ -59,7 +64,7 @@ const props: UseResourcesProps<Order, OrderResourcesQuery, ApiResourceInterface<
       }
       return joanieApi.orders.ordersList();
     },
-    create: (data: Order) => joanieApi.orders.ordersCreate(data),
+    create: (data: OrderCreateBody) => joanieApi.orders.ordersCreate(data),
   }),
   messages,
   omniscient: true,
