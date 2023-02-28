@@ -203,6 +203,7 @@ export const useResourcesRoot = <
       deleting: writeHandlers.delete?.isLoading,
       updating: writeHandlers.update?.isLoading,
       isLoading: [...Object.values(writeHandlers), readHandler].some((value) => value?.isLoading),
+      isFetched: readHandler.isFetched,
       error,
     },
   };

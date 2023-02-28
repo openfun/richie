@@ -140,6 +140,11 @@ export const CourseFactory = createSpec({
   orders: null,
 });
 
+export const UserWishlistCourseFactory = createSpec({
+  course: faker.random.alphaNumeric(5),
+  id: faker.datatype.uuid(),
+});
+
 /**
  * `scopes` allows to conditionally include properties.
  * This is required to avoid circular dependencies when generating mocks.
@@ -176,7 +181,9 @@ export const JoanieEnrollmentFactory = createSpec({
 export const TargetCourseFactory = createSpec({
   code: faker.unique(faker.random.alphaNumeric(5)),
   organizations: [],
-  title: faker.random.words(1, 3),
+  title: derived(({ code }: { code: string }) => {
+    return `${faker.random.words(1, 3)()}(${code})`;
+  }),
   course_runs: derived(() => JoanieCourseRunFactory().generate(3, 5)),
 });
 
