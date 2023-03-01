@@ -14,6 +14,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix form styles to suffix input label with "*" when a select,
+  radio or checkbox input is required
 - Button can be use with a className prop
 
 ## [2.20.1] - 2023-02-22

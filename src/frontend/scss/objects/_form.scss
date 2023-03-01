@@ -112,6 +112,7 @@
       color: r-theme-val(form, input-placeholder);
       cursor: pointer;
       margin: 0;
+      position: relative;
     }
 
     // Text inputs & Textarea
@@ -158,15 +159,6 @@
     &__textarea:focus + &__label,
     &__textarea:not(:placeholder-shown) + &__label {
       transform: scale(0.66) translateY(-0.25rem);
-    }
-
-    &__input[aria-required='true'] + &__label:after,
-    &__textarea[aria-required='true'] + &__label:after,
-    &__input:required + &__label:after,
-    &__textarea:required + &__label:after {
-      color: r-color('indianred3');
-      content: '*';
-      vertical-align: super;
     }
 
     // Checkbox & Radio
@@ -339,6 +331,14 @@
         right: 0;
         transform-origin: top right;
       }
+    }
+
+    // Required
+    &--required &__label:after {
+      color: r-theme-val(form, required-note-color);
+      content: '*';
+      position: absolute;
+      vertical-align: super;
     }
 
     // Error

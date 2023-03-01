@@ -54,7 +54,7 @@ export const useDashboardAddressForm = (address?: Address) => {
     <form>
       <TextField
         aria-invalid={!!formState.errors.title}
-        aria-required={true}
+        required
         id="title"
         label={intl.formatMessage(managementMessages.titleInputLabel)}
         error={!!formState.errors.title}
@@ -63,7 +63,7 @@ export const useDashboardAddressForm = (address?: Address) => {
       />
       <TextField
         aria-invalid={!!formState.errors.first_name}
-        aria-required={true}
+        required
         id="first_name"
         label={intl.formatMessage(managementMessages.first_nameInputLabel)}
         error={!!formState.errors.first_name}
@@ -72,7 +72,7 @@ export const useDashboardAddressForm = (address?: Address) => {
       />
       <TextField
         aria-invalid={!!formState.errors.last_name}
-        aria-required={true}
+        required
         id="last_name"
         label={intl.formatMessage(managementMessages.last_nameInputLabel)}
         error={!!formState.errors.last_name}
@@ -81,7 +81,7 @@ export const useDashboardAddressForm = (address?: Address) => {
       />
       <TextField
         aria-invalid={!!formState.errors.address}
-        aria-required={true}
+        required
         id="address"
         label={intl.formatMessage(managementMessages.addressInputLabel)}
         error={!!formState.errors.address}
@@ -90,7 +90,7 @@ export const useDashboardAddressForm = (address?: Address) => {
       />
       <TextField
         aria-invalid={!!formState.errors.postcode}
-        aria-required={true}
+        required
         id="postcode"
         label={intl.formatMessage(managementMessages.postcodeInputLabel)}
         error={!!formState.errors.postcode}
@@ -99,7 +99,7 @@ export const useDashboardAddressForm = (address?: Address) => {
       />
       <TextField
         aria-invalid={!!formState.errors.city}
-        aria-required={true}
+        required
         id="city"
         label={intl.formatMessage(managementMessages.cityInputLabel)}
         error={!!formState.errors.city}
@@ -108,7 +108,7 @@ export const useDashboardAddressForm = (address?: Address) => {
       />
       <CountrySelectField
         aria-invalid={!!formState.errors.country}
-        aria-required={false}
+        required
         id="country"
         label={intl.formatMessage(managementMessages.countryInputLabel)}
         error={!!formState.errors.country}
@@ -118,7 +118,6 @@ export const useDashboardAddressForm = (address?: Address) => {
       {!(address && address.is_main) && (
         <CheckboxField
           aria-invalid={!!formState.errors?.is_main}
-          aria-required={false}
           id="save"
           label={intl.formatMessage(messages.isMainInputLabel)}
           error={!!formState.errors?.is_main}

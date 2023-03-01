@@ -144,7 +144,6 @@ export const DashboardEditCreditCard = ({ creditCard, onSettled = noop }: Props)
         {!creditCard.is_main && (
           <CheckboxField
             aria-invalid={!!formState.errors?.is_main}
-            aria-required={false}
             id="is_main"
             label={intl.formatMessage(messages.isMainInputLabel)}
             error={!!formState.errors?.is_main}

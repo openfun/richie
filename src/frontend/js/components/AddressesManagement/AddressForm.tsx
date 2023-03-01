@@ -59,7 +59,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
       </p>
       <TextField
         aria-invalid={!!formState.errors.title}
-        aria-required={true}
+        required
         id="title"
         label={intl.formatMessage(messages.titleInputLabel)}
         error={!!formState.errors.title}
@@ -69,7 +69,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
       <div className="form-group">
         <TextField
           aria-invalid={!!formState.errors.first_name}
-          aria-required={true}
+          required
           id="first_name"
           label={intl.formatMessage(messages.first_nameInputLabel)}
           error={!!formState.errors.first_name}
@@ -78,7 +78,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
         />
         <TextField
           aria-invalid={!!formState.errors.last_name}
-          aria-required={true}
+          required
           id="last_name"
           label={intl.formatMessage(messages.last_nameInputLabel)}
           error={!!formState.errors.last_name}
@@ -88,7 +88,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
       </div>
       <TextField
         aria-invalid={!!formState.errors.address}
-        aria-required={true}
+        required
         id="address"
         label={intl.formatMessage(messages.addressInputLabel)}
         error={!!formState.errors.address}
@@ -98,7 +98,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
       <div className="form-group">
         <TextField
           aria-invalid={!!formState.errors.postcode}
-          aria-required={true}
+          required
           id="postcode"
           label={intl.formatMessage(messages.postcodeInputLabel)}
           error={!!formState.errors.postcode}
@@ -107,7 +107,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
         />
         <TextField
           aria-invalid={!!formState.errors.city}
-          aria-required={true}
+          required
           id="city"
           label={intl.formatMessage(messages.cityInputLabel)}
           error={!!formState.errors.city}
@@ -117,7 +117,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
       </div>
       <CountrySelectField
         aria-invalid={!!formState.errors.country}
-        aria-required={false}
+        required
         id="country"
         label={intl.formatMessage(messages.countryInputLabel)}
         error={!!formState.errors.country}
@@ -127,7 +127,6 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
       {!address ? (
         <CheckboxField
           aria-invalid={!!formState.errors?.save}
-          aria-required={false}
           id="save"
           label={intl.formatMessage(messages.saveInputLabel)}
           error={!!formState.errors?.save}
