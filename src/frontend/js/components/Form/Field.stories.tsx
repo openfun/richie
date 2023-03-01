@@ -6,13 +6,16 @@ export const defaultConfig = {
     id: 'id',
   },
   argTypes: {
+    disabled: {
+      control: 'boolean',
+    },
     error: {
       control: 'boolean',
     },
     message: {
       control: 'text',
     },
-    disabled: {
+    required: {
       control: 'boolean',
     },
   },

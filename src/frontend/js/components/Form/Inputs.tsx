@@ -14,6 +14,7 @@ interface FieldProps {
   error?: Boolean;
   message?: ReactNode | string;
   fieldClasses?: string[];
+  required?: boolean;
 }
 
 // - Field
@@ -22,6 +23,7 @@ const Field = ({
   inputId,
   error,
   message,
+  required = false,
   children,
 }: React.PropsWithChildren<FieldProps>) => {
   const classList = useMemo(() => {
@@ -29,8 +31,11 @@ const Field = ({
     if (error) {
       classes.push('form-field--error');
     }
+    if (required) {
+      classes.push('form-field--required');
+    }
     return classes.join(' ');
-  }, [fieldClasses, error]);
+  }, [fieldClasses, required, error]);
 
   const iconHref = error ? '#icon-warning' : '#icon-info-rounded';
 
@@ -78,14 +83,21 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement>, Fi
  */
 
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
-  ({ fieldClasses = [], label, id, type = 'text', error, message, ...props }, ref) => (
-    <Field inputId={id} error={error} message={message} fieldClasses={fieldClasses}>
+  ({ fieldClasses = [], label, id, type = 'text', error, message, required, ...props }, ref) => (
+    <Field
+      inputId={id}
+      error={error}
+      message={message}
+      fieldClasses={fieldClasses}
+      required={required}
+    >
       <input
         className="form-field__input"
         id={id}
         placeholder={label}
         ref={ref}
         type={type}
+        required={required}
         {...props}
         {...(!!message && {
           'aria-describedby': `${id}-message`,
@@ -116,13 +128,20 @@ interface TextareaFieldProps extends React.TextareaHTMLAttributes<HTMLTextAreaEl
  * @return {HTMLTextAreaElement} HTMLTextAreaElement
  */
 export const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
-  ({ fieldClasses = [], error, message, label, id, ...props }, ref) => (
-    <Field inputId={id} error={error} message={message} fieldClasses={fieldClasses}>
+  ({ fieldClasses = [], error, message, label, id, required, ...props }, ref) => (
+    <Field
+      inputId={id}
+      error={error}
+      message={message}
+      required={required}
+      fieldClasses={fieldClasses}
+    >
       <textarea
         className="form-field__textarea"
         id={id}
         placeholder={label}
         ref={ref}
+        required={required}
         {...props}
         {...(!!message && {
           'aria-describedby': `${id}-message`,
@@ -156,8 +175,14 @@ export interface SelectFieldProps
  * @return {HTMLSelectElement} HTMLSelectElement
  */
 export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
-  ({ fieldClasses = [], error, message, label, id, children, ...props }, ref) => (
-    <Field inputId={id} error={error} message={message} fieldClasses={fieldClasses}>
+  ({ fieldClasses = [], error, message, label, id, required, children, ...props }, ref) => (
+    <Field
+      inputId={id}
+      error={error}
+      message={message}
+      required={required}
+      fieldClasses={fieldClasses}
+    >
       {label && (
         <label className="form-field__label" htmlFor={id}>
           {label}
@@ -168,6 +193,7 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
           className="form-field__select-input"
           id={id}
           ref={ref}
+          required={required}
           {...props}
           {...(!!message && {
             'aria-describedby': `${id}-message`,
@@ -197,13 +223,20 @@ interface CheckboxFieldProps extends Omit<TextFieldProps, 'type'> {
  * @return {HTMLSelectElement} HTMLSelectElement
  */
 export const CheckboxField = forwardRef<HTMLInputElement, CheckboxFieldProps>(
-  ({ fieldClasses = [], error, message, label, id, ...props }, ref) => (
-    <Field inputId={id} error={error} message={message} fieldClasses={fieldClasses}>
+  ({ fieldClasses = [], error, message, label, id, required, ...props }, ref) => (
+    <Field
+      inputId={id}
+      error={error}
+      message={message}
+      required={required}
+      fieldClasses={fieldClasses}
+    >
       <input
         className="form-field__checkbox-input"
         id={id}
         ref={ref}
         type="checkbox"
+        required={required}
         {...props}
         {...(!!message && {
           'aria-describedby': `${id}-message`,
@@ -234,13 +267,20 @@ interface RadioFieldProps extends CheckboxFieldProps {}
  * @return {HTMLSelectElement} HTMLInputElement
  */
 export const RadioField = forwardRef<HTMLInputElement, RadioFieldProps>(
-  ({ fieldClasses = [], error, label, message, id, onClick, ...props }, ref) => (
-    <Field inputId={id} error={error} message={message} fieldClasses={fieldClasses}>
+  ({ fieldClasses = [], error, label, message, id, required, onClick, ...props }, ref) => (
+    <Field
+      inputId={id}
+      error={error}
+      message={message}
+      required={required}
+      fieldClasses={fieldClasses}
+    >
       <input
         className="form-field__radio-input"
         id={id}
         ref={ref}
         type="radio"
+        required={required}
         {...props}
         {...(!!message && {
           'aria-describedby': `${id}-message`,
