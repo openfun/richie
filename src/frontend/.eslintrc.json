@@ -84,6 +84,11 @@
   },
   "settings": {
     "polyfills": ["fetch", "Promise"],
-    "import/resolver": "webpack"
+    "import/resolver": {
+      "webpack": {},
+      "node": {
+        "extensions": [".js", ".cjs"]
+      }
+    }
   }
 }
