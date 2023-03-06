@@ -6,7 +6,9 @@ import {
   queryByText,
   render,
   screen,
+  waitFor,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
@@ -93,17 +95,16 @@ describe('<DashAddressesManagement/>', () => {
   it('deletes an address', async () => {
     const addresses = mockFactories.AddressFactory.generate(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(
+      <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <IntlProvider locale="en">
+          <SessionProvider>
+            <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+          </SessionProvider>
+        </IntlProvider>
+      </QueryClientProvider>,
+    );
+
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
 
@@ -116,7 +117,7 @@ describe('<DashAddressesManagement/>', () => {
     });
 
     // Mock the delete route and the refresh route to returns `addresses` without the first one.
-    const deleteUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
+    const deleteUrl = `https://joanie.endpoint/api/v1.0/addresses/${address.id}/`;
     fetchMock.delete(deleteUrl, []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses.splice(1), {
       overwriteRoutes: true,
@@ -124,13 +125,13 @@ describe('<DashAddressesManagement/>', () => {
 
     // Clicking on the delete button calls the delete API route.
     expect(fetchMock.called(deleteUrl)).toBe(false);
-    await act(async () => {
-      fireEvent.click(deleteButton);
-    });
+    await userEvent.click(deleteButton);
     expect(fetchMock.called(deleteUrl)).toBe(true);
 
     // The address does not appear anymore in the list.
-    expect(screen.queryByText(address.title)).toBeNull();
+    await waitFor(() => {
+      expect(screen.queryByText(address.title)).toBeNull();
+    });
 
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();

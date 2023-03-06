@@ -233,8 +233,8 @@ export interface ApiResourceInterface<
   TResourceQuery extends ResourcesQuery = ResourcesQuery,
 > {
   get: (filters?: TResourceQuery) => any;
-  create?: (payload: any) => Promise<TData>;
-  update?: (payload: any) => Promise<TData>;
+  create?: (payload: any) => Promise<any>;
+  update?: (payload: any) => Promise<any>;
   delete?: (id: TData['id']) => Promise<void>;
 }
 

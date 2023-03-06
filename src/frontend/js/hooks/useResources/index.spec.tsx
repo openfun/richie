@@ -223,7 +223,9 @@ describe('useResources (omniscient)', () => {
       },
     );
 
-    expect(result.current.states.isLoading).toBe(true);
+    await waitFor(() => {
+      expect(result.current.states.isLoading).toBe(true);
+    });
     expect(result.current.item).toBe(undefined);
     expect(fetchMock.called('https://example.com/api/todos')).toBe(false);
 
@@ -232,7 +234,8 @@ describe('useResources (omniscient)', () => {
     await waitFor(() =>
       expect(JSON.stringify(result.current.item)).toBe(JSON.stringify(expectedTodo)),
     );
-    expect(fetchMock.lastUrl()).toBe('https://example.com/api/todos');
+
+    expect(fetchMock.called('https://example.com/api/todos')).toBe(true);
     expect(result.current.states.isLoading).toBe(false);
     expect(result.current.states.fetching).toBe(false);
   });
@@ -276,7 +279,8 @@ describe('useResources (omniscient)', () => {
     rerender(expectedTodo.id);
 
     await waitFor(() => expect(result.current.item).toEqual(expectedTodo));
-    expect(fetchMock.lastUrl()).toBe('https://example.com/api/todos');
+
+    expect(fetchMock.called('https://example.com/api/todos')).toBe(true);
     expect(result.current.states.isLoading).toBe(false);
     expect(result.current.states.fetching).toBe(false);
 

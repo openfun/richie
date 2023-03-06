@@ -1,7 +1,8 @@
 import { defineMessages } from 'react-intl';
-import { Product } from 'types/Joanie';
-import { useResource, UseResourcesProps } from 'hooks/useResources';
+import { Product } from 'api/joanie/gen';
+import { joanieApi } from 'api/joanie';
 import { useJoanieApi } from 'data/JoanieApiProvider';
+import { ResourcesQuery, useResource, UseResourcesProps } from 'hooks/useResources';
 
 const messages = defineMessages({
   errorGet: {
@@ -16,12 +17,24 @@ const messages = defineMessages({
   },
 });
 
+interface UseProductReadQuery extends ResourcesQuery {
+  course?: string;
+}
+
 /**
  * Joanie Api hook to retrieve a product through its id.
  */
 const props: UseResourcesProps<Product> = {
   queryKey: ['products'],
-  apiInterface: () => useJoanieApi().products,
+  apiInterface: () => ({
+    get: async (filters?: UseProductReadQuery) => {
+      const { id, course } = filters || {};
+      if (id) {
+        return joanieApi.products.productsRead(id, course);
+      }
+      useJoanieApi().products.get(filters);
+    },
+  }),
   messages,
 };
 

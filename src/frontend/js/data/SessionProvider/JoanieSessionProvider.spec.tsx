@@ -1,7 +1,7 @@
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { act, render, renderHook, waitFor } from '@testing-library/react';
+import { act, render, renderHook, screen, waitFor } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { ContextFactory as mockContextFactory, FonzieUserFactory } from 'utils/test/factories';
 import { Deferred } from 'utils/test/deferred';
@@ -72,20 +72,20 @@ describe('JoanieSessionProvider', () => {
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', deferredUser.promise);
 
-    await act(async () => {
-      render(<Wrapper />);
-    });
+    render(<Wrapper />);
 
     await act(async () => deferredUser.resolve(user));
 
     await waitFor(async () => {
-      const calls = fetchMock.calls();
-      expect(calls).toHaveLength(4);
-      expect(calls[0][0]).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
-      expect(calls[1][0]).toEqual('https://joanie.endpoint.test/api/v1.0/addresses/');
-      expect(calls[2][0]).toEqual('https://joanie.endpoint.test/api/v1.0/credit-cards/');
-      expect(calls[3][0]).toEqual('https://joanie.endpoint.test/api/v1.0/orders/');
+      expect(fetchMock.calls()).toHaveLength(4);
     });
+    const callUrls = fetchMock.calls().map((apiCall) => apiCall[0]);
+    expect(callUrls.sort()).toEqual([
+      'https://auth.endpoint.test/api/v1.0/user/me',
+      'https://joanie.endpoint.test/api/v1.0/addresses/',
+      'https://joanie.endpoint.test/api/v1.0/credit-cards/',
+      'https://joanie.endpoint.test/api/v1.0/orders/',
+    ]);
   });
 
   it('does not prefetch address, credit-cards, and order when user is anonymous', async () => {

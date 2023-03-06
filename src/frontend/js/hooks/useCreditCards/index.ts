@@ -1,8 +1,9 @@
 import { defineMessages } from 'react-intl';
-import { CreditCard } from 'types/Joanie';
-
-import { useJoanieApi } from '../../data/JoanieApiProvider';
-import { useResource, useResources, UseResourcesProps } from '../useResources';
+// import { CreditCard } from 'types/Joanie';
+import { CreditCard } from 'api/joanie/gen';
+import { joanieApi } from 'api/joanie';
+import { useJoanieApi } from 'data/JoanieApiProvider';
+import { ResourcesQuery, useResource, useResources, UseResourcesProps } from '../useResources';
 
 const messages = defineMessages({
   errorUpdate: {
@@ -38,7 +39,29 @@ const messages = defineMessages({
  */
 const props: UseResourcesProps<CreditCard> = {
   queryKey: ['creditCards'],
-  apiInterface: () => useJoanieApi().user.creditCards,
+  apiInterface: () => ({
+    get: async (filters?: ResourcesQuery) => {
+      if (filters?.id) {
+        return joanieApi.creditCards.creditCardsRead(filters?.id);
+      }
+      return joanieApi.creditCards.creditCardsList();
+    },
+    // FIXME: creditCards.creditCardsCreate doesn't aprear on joanie's openapi schema
+    create: useJoanieApi().user.creditCards.create,
+    update: (data: CreditCard) => {
+      const { id, ...updatedData } = data;
+      if (id) {
+        return joanieApi.creditCards.creditCardsUpdate(id, updatedData);
+      }
+      throw new Error('api.creditCardsUpdate need a id.');
+    },
+    delete: (id?: string) => {
+      if (id) {
+        return joanieApi.creditCards.creditCardsDelete(id);
+      }
+      throw new Error('api.creditCardsDelete need a id.');
+    },
+  }),
   omniscient: true,
   session: true,
   messages,
