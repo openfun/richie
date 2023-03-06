@@ -96,7 +96,6 @@ describe('AddressesManagement', () => {
     const address = addresses[0];
     const $selectButton = screen.getByRole('button', {
       name: `Select "${address.title}" address`,
-      exact: true,
     });
     await act(async () => {
       fireEvent.click($selectButton);
@@ -214,7 +213,6 @@ describe('AddressesManagement', () => {
     // - Then user selects an address to edit
     let $editButton = await screen.findByRole('button', {
       name: `Edit "${address.title}" address`,
-      exact: true,
     });
     await act(async () => {
       fireEvent.click($editButton);
@@ -285,7 +283,7 @@ describe('AddressesManagement', () => {
     screen.getByText('Home');
 
     // User clicks on edit button again
-    $editButton = screen.getByRole('button', { name: 'Edit "Home" address', exact: true });
+    $editButton = screen.getByRole('button', { name: 'Edit "Home" address' });
     await act(async () => {
       fireEvent.click($editButton);
     });
@@ -317,7 +315,7 @@ describe('AddressesManagement', () => {
     expect($saveField).toBeNull();
 
     // - But finally user cancels his action
-    const $cancelButton = screen.getByRole('button', { name: 'Cancel', exact: true });
+    const $cancelButton = screen.getByRole('button', { name: 'Cancel' });
     await act(async () => {
       fireEvent.click($cancelButton);
     });
@@ -353,7 +351,6 @@ describe('AddressesManagement', () => {
 
     const $deleteButton = await screen.findByRole('button', {
       name: `Delete "${address.title}" address`,
-      exact: true,
     });
 
     await act(async () => {
@@ -410,7 +407,6 @@ describe('AddressesManagement', () => {
 
     const $promoteButton = await screen.findByRole('button', {
       name: `Define "${address2.title}" address as main`,
-      exact: true,
     });
 
     await act(async () => {
@@ -419,13 +415,11 @@ describe('AddressesManagement', () => {
 
     const $address1PromoteIndicator = screen.getByRole('button', {
       name: `Define "${address1.title}" address as main`,
-      exact: true,
     });
     const $address1MainIndicator =
       $address1PromoteIndicator.querySelector('.address-main-indicator')!;
     const $address2PromoteButton = screen.getByRole('button', {
       name: `Define "${address2.title}" address as main`,
-      exact: true,
     });
     const $address2MainIndicator = $address2PromoteButton.querySelector('.address-main-indicator')!;
 
