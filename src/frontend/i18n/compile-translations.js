@@ -42,12 +42,9 @@ const OUT_DIR = yargs.argv.outDir || path.resolve(__dirname, `../js/translations
   ];
 
   // Search files and group paths found by filename
-  const files = await Promise.all(filesPattern.map((pattern) => new Promise((resolve, reject) => {
-    glob(pattern, { nodir: true, ignore }, (error, matches) => {
-      if (error) reject(error);
-      resolve(matches);
-    })
-  }))).then((matches) => matches.flat().reduce((outputs, filePath) => {
+  const files = await glob(filesPattern, { nodir: true, ignore }, (error) => {
+      if (error) throw new Error(error);
+  }).then((matches) => matches.flat().reduce((outputs, filePath) => {
     const matchCutter = /.*\/(?<filename>.*)\.(?<ext>.{2,4})$/;
     const [, filename, ext] = filePath.match(matchCutter);
     if (ext !== 'json') throw new Error('Only JSON files are supported!');
