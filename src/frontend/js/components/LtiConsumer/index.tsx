@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { iframeResizer } from 'iframe-resizer';
+import { iframeResize } from 'iframe-resizer';
 import queryString from 'query-string';
 import { LtiConsumerContext, LtiConsumerProps } from 'types/LtiConsumer';
 import { useSession } from 'data/SessionProvider';
@@ -63,7 +63,7 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
         // Retrieve and inject current component container height to prevent flickering
         // and remove aspect-ratio trick which is not compatible with iframeResizer
         const componentContainer = formRef.current?.closest('.richie-react--lti-consumer');
-        iframeResizer({ minHeight: componentContainer?.clientHeight }, iframeRef.current!);
+        iframeResize({ minHeight: componentContainer?.clientHeight }, iframeRef.current!);
         componentContainer?.classList.remove('aspect-ratio');
         if (componentContainer?.attributes.getNamedItem('style')) {
           componentContainer?.attributes.removeNamedItem('style');
