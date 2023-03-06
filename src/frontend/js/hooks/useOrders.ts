@@ -1,11 +1,17 @@
 import { defineMessages } from 'react-intl';
 import { ApiResourceInterface } from 'types/Joanie';
-import { Order, Product, Course, OrderCreateResponse, OrderCreateBody } from 'api/joanie/gen';
+import {
+  Order,
+  Product,
+  Course,
+  OrderCreateResponse,
+  OrderCreateBody,
+  OrderAbortBody,
+} from 'api/joanie/gen';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import { joanieApi, isCourse } from 'api/joanie';
 import {
   QueryOptions,
-  Resource,
   ResourcesQuery,
   useResource,
   useResourcesCustom,
@@ -72,10 +78,14 @@ const props: UseResourcesProps<Order, OrderResourcesQuery, OrderApiResourceInter
   session: true,
 };
 
+interface OrderAbordData extends OrderAbortBody {
+  id: string;
+}
+
 export const useOrders = (filters?: OrderResourcesQuery, queryOptions?: QueryOptions<Order>) => {
   const custom = useResourcesCustom({ ...props, filters, queryOptions });
 
-  const abortHandler = useSessionMutation((data: Order) => {
+  const abortHandler = useSessionMutation((data: OrderAbordData) => {
     const { id, ...updatedData } = data;
     if (id) {
       return joanieApi.orders.ordersAbort(id, updatedData);

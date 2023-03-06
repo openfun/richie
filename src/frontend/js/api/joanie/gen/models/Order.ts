@@ -10,7 +10,7 @@ export type Order = {
   readonly created_on?: string;
   readonly certificate?: string;
   readonly enrollments?: string;
-  readonly id?: string;
+  id: string;
   readonly main_invoice?: string;
   organization?: string;
   readonly owner?: string;

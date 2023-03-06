@@ -19,7 +19,7 @@ export class ProductsService {
    */
   public productsRead(
     id: string,
-    course?: string,
+    course: string,
   ): CancelablePromise<Product> {
     return this.httpRequest.request({
       method: 'GET',

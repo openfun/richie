@@ -66,12 +66,12 @@ export class CertificatesService {
   /**
    * Retrieve a certificate through its id if it is owned by the authenticated user.
    * @param id
-   * @returns Certificate
+   * @returns binary File Attachment
    * @throws ApiError
    */
   public certificatesDownload(
     id: string,
-  ): CancelablePromise<Certificate> {
+  ): CancelablePromise<Blob> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/certificates/{id}/download/',

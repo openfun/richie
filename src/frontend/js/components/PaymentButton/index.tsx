@@ -122,9 +122,9 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
             product: product.id!,
           },
           {
-            onSuccess: (order) => {
+            onSuccess: ({ order, payment_info }) => {
               paymentInfos = {
-                ...order.payment_info,
+                ...payment_info,
                 order_id: order.id,
               };
               setPayment(paymentInfos);

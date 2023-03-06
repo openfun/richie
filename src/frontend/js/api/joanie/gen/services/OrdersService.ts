@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Order } from '../models/Order';
+import type { OrderAbortBody } from '../models/OrderAbortBody';
 import type { OrderCreateBody } from '../models/OrderCreateBody';
 import type { OrderCreateResponse } from '../models/OrderCreateResponse';
 
@@ -101,13 +102,13 @@ export class OrdersService {
    * Abort a pending order and the related payment if there is one.
    * @param id
    * @param data
-   * @returns Order
+   * @returns void
    * @throws ApiError
    */
   public ordersAbort(
     id: string,
-    data: Order,
-  ): CancelablePromise<Order> {
+    data: OrderAbortBody,
+  ): CancelablePromise<void> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/orders/{id}/abort/',
@@ -122,17 +123,22 @@ export class OrdersService {
    * Retrieve an invoice through its reference if it is related to
    * the order instance and owned by the authenticated user.
    * @param id
-   * @returns Order
+   * @param reference
+   * @returns binary File Attachment
    * @throws ApiError
    */
   public ordersInvoice(
     id: string,
-  ): CancelablePromise<Order> {
+    reference: string,
+  ): CancelablePromise<Blob> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/orders/{id}/invoice/',
       path: {
         'id': id,
+      },
+      query: {
+        'reference': reference,
       },
     });
   }

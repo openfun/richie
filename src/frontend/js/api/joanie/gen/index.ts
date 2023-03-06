@@ -15,10 +15,13 @@ export type { CertificationDefinition } from './models/CertificationDefinition';
 export type { Course } from './models/Course';
 export type { CourseRun } from './models/CourseRun';
 export type { CreditCard } from './models/CreditCard';
+export type { EmptyResponse } from './models/EmptyResponse';
 export { Enrollment } from './models/Enrollment';
+export type { ErrorResponse } from './models/ErrorResponse';
 export { Order } from './models/Order';
+export type { OrderAbortBody } from './models/OrderAbortBody';
 export { OrderCreateBody } from './models/OrderCreateBody';
-export { OrderCreateResponse } from './models/OrderCreateResponse';
+export type { OrderCreateResponse } from './models/OrderCreateResponse';
 export type { Payment } from './models/Payment';
 export { Product } from './models/Product';
 

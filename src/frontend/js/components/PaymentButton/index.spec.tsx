@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor, cleanup } from '@testing-library/react';
+simport { act, fireEvent, render, screen, waitFor, cleanup } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
