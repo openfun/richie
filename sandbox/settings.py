@@ -207,6 +207,12 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 "label": _("Dashboard"),
                 "href": _("{base_url:s}/dashboard/"),
             },
+            "dashboard_admin": {
+                "label": _("Dashboard admin"),
+                # FIXME (rlecellier): This menu item have to be
+                # a react widget in order to get the translated url.
+                "href": _("{base_url:s}/dashboard/teacher"),
+            },
         }
 
     # AUTHENTICATION
@@ -270,6 +276,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             "DEFAULT_COURSE_RUN_SYNC_MODE": "sync_to_public",
         }
     ]
+
     RICHIE_COURSE_RUN_SYNC_SECRETS = values.ListValue([])
 
     # Elasticsearch

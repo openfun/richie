@@ -13,6 +13,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add CourseAddToWishlist button to add/remove a course from users wishlist
 - Added Enrollment's pagination in the dashboard
 - Allow multiple web analytics providers at the same time.
+- Add teacher dashboard router.
 
 ### Fixed
 

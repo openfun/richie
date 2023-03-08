@@ -51,7 +51,8 @@ export type IconType =
   | 'icon-stopwatch'
   | 'icon-three-vertical-dots'
   | 'icon-twitter'
-  | 'icon-warning';
+  | 'icon-warning'
+  | 'icon-cog';
 
 export const Icon = ({ name, title, className = '', size = 'medium', ...props }: Props) => {
   return (

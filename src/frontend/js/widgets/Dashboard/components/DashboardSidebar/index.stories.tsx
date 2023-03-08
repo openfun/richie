@@ -14,7 +14,24 @@ const Template: ComponentStory<typeof DashboardSidebar> = () => {
   const router = createMemoryRouter([
     {
       index: true,
-      element: <DashboardSidebar />,
+      element: (
+        <DashboardSidebar
+          menuLinks={[
+            { to: '/test', label: 'Menu link' },
+            { to: '/test/again', label: 'An other menu link' },
+          ]}
+          header={{
+            id: 'stories.Dashboard.header',
+            description: 'Title of the dashboard sidebar',
+            defaultMessage: 'Dashboard story header',
+          }}
+          subHeader={{
+            id: 'stories.Dashboard.subHeader',
+            description: 'Title of the dashboard story sidebar',
+            defaultMessage: 'Dashboard story subHeader',
+          }}
+        />
+      ),
     },
   ]);
 
@@ -22,5 +39,4 @@ const Template: ComponentStory<typeof DashboardSidebar> = () => {
 };
 
 export const Default = Template.bind({});
-
 Default.args = {};

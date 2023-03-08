@@ -275,6 +275,12 @@ $r-theme: (
     active-color: r-color('indianred3'),
     base-border: r-color('light-grey'),
   ),
+  dashboard-settings-link: (
+    border-color: r-color('oceanblue'),
+    base-color: r-color('oceanblue'),
+    focus-background: r-color('oceanblue'),
+    focus-color: r-color('white'),
+  ),
   form: (
     input-placeholder: r-color('grey32'),
     input-color: r-color('charcoal'),

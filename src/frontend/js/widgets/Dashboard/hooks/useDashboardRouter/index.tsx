@@ -4,7 +4,7 @@ import type {
   PrimitiveType,
 } from 'intl-messageformat';
 import { useMemo } from 'react';
-import { useIntl } from 'react-intl';
+import { MessageDescriptor, useIntl } from 'react-intl';
 import {
   createBrowserRouter,
   Navigate,
@@ -13,53 +13,36 @@ import {
   RouteObject,
   useNavigate,
 } from 'react-router-dom';
+import { DashboardLayoutRoute } from 'widgets/Dashboard/components/DashboardLayoutRoute';
+import RouteInfo from 'widgets/Dashboard/components/RouteInfo';
 import { DashboardCreateAddressLoader } from 'pages/DashboardAddressesManagement/DashboardCreateAddressLoader';
 import { DashboardEditAddressLoader } from 'pages/DashboardAddressesManagement/DashboardEditAddressLoader';
 import { DashboardPreferences } from 'pages/DashboardPreferences';
 import { DashboardEditCreditCardLoader } from 'pages/DashboardCreditCardsManagement/DashboardEditCreditCardLoader';
 import { DashboardCourses } from 'pages/DashboardCourses';
-import useRouteInfo from '../useRouteInfo';
+import { getTeacherDashboardRoutes } from 'widgets/Dashboard/hooks/useTeacherDashboardRouter';
+import { DashboardOrderLoader } from 'widgets/Dashboard/components/DashboardOrderLoader';
 import {
   DashboardPaths,
   dashboardRouteLabels,
   getDashboardRouteLabel,
   getDashboardRoutePath,
-} from '../../utils/routers';
-import { DashboardLayout } from '../../components/DashboardLayout';
-import { DashboardOrderLoader } from '../../components/DashboardOrderLoader';
+} from 'widgets/Dashboard/utils/routers';
 import { getDashboardBasename } from './getDashboardBasename';
 
-/**
- * *Temporary
- *
- * A dummy route component for example which displays
- * all data related to the current route
- */
-const RouteInfo = ({ title }: { title: string }) => {
-  const routeInfo = useRouteInfo();
-
-  return (
-    <div data-testid={`RouteInfo-${routeInfo.pathname}`}>
-      <h1>{title}</h1>
-      <dl>
-        <dt>Route information :</dt>
-        <dd>
-          <pre>{JSON.stringify(routeInfo, null, 2)}</pre>
-        </dd>
-      </dl>
-    </div>
-  );
-};
+export interface DashboardRouteHandle {
+  crumbLabel?: MessageDescriptor;
+  renderLayout?: boolean;
+}
 
 export function getDashboardRoutes() {
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
-
   const routes: RouteObject[] = [
     {
       path: '/',
-      element: <DashboardLayout />,
+      element: <DashboardLayoutRoute />,
       children: [
         {
           index: true,
@@ -124,6 +107,7 @@ export function getDashboardRoutes() {
             },
           ],
         },
+        getTeacherDashboardRoutes(),
       ],
     },
   ];

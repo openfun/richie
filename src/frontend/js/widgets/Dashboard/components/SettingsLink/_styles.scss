@@ -1,0 +1,24 @@
+.settings-link {
+  display: flex;
+  width: fit-content;
+  border-radius: 40px;
+  border: 2px solid r-theme-val(dashboard-settings-link, border-color);
+  padding-top: 3px;
+  padding-right: 15px;
+  padding-left: 2px;
+  color: r-theme-val(dashboard-settings-link, base-color);
+  font-weight: bold;
+
+  &:focus,
+  &:active,
+  &:hover {
+    background-color: r-theme-val(dashboard-settings-link, focus-background);
+    color: r-theme-val(dashboard-settings-link, focus-color);
+    text-decoration: none;
+  }
+
+  &-icon {
+    margin-top: -3px;
+    margin-right: 5px;
+  }
+}

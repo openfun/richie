@@ -18,9 +18,10 @@ class TemplatesRichieDashboardTestCase(CMSTestCase):
                 "JS_BACKEND": "joanie",
                 "JS_COURSE_REGEX": r"^.*/api/(course-runs|products)/(.*)/?$",
             }
-        ]
+        ],
+        FEATURES={"ENABLE_REACT_DASHBOARD": True},
     )
-    def test_templates_richie_dashboard_joanie_enabled(self):
+    def test_templates_richie_dashboard_enabled(self):
         """
         Dashboard view should be reachable if JOANIE is enabled
         """
@@ -29,7 +30,16 @@ class TemplatesRichieDashboardTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, r'class="richie-react richie-react--dashboard"')
 
-    @override_settings(RICHIE_LMS_BACKENDS=[])
+    @override_settings(FEATURES={"ENABLE_REACT_DASHBOARD": False})
+    def test_templates_richie_dashboard_feature_disabled(self):
+        """
+        Dashboard view should be reachable if JOANIE is enabled
+        """
+        response = self.client.get("/fr/dashboard/")
+
+        self.assertEqual(response.status_code, 404)
+
+    @override_settings(RICHIE_LMS_BACKENDS=[], FEATURES={})
     def test_templates_richie_dashboard_joanie_is_not_enabled(self):
         """
         Dashboard view should not be reachable if JOANIE is disabled

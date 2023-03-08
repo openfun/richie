@@ -4,6 +4,11 @@ import type {
   PrimitiveType,
 } from 'intl-messageformat';
 import { defineMessages, IntlShape } from 'react-intl';
+import {
+  TeacherDashboardPaths,
+  teacherDashboardRouteLabels,
+  teacherDashboardRoutePaths,
+} from './teacherRouter';
 
 /**
  * All existing dashboard paths.
@@ -113,14 +118,16 @@ const getDashboardRouteAttribute =
   (attribute: RouteAttributes) =>
   (intl: IntlShape) =>
   (
-    path: DashboardPaths,
+    path: DashboardPaths | TeacherDashboardPaths,
     ...options: [
       values?: Record<string, PrimitiveType | FormatXMLElementFn<string, string>>,
       opts?: IntlMessageFormatOptions,
     ]
   ) => {
     const messages =
-      attribute === RouteAttributes.LABEL ? dashboardRouteLabels : dashboardRoutePaths;
+      attribute === RouteAttributes.LABEL
+        ? { ...dashboardRouteLabels, ...teacherDashboardRouteLabels }
+        : { ...dashboardRoutePaths, ...teacherDashboardRoutePaths };
     return intl.formatMessage(messages[path], ...options);
   };
 
@@ -129,6 +136,3 @@ export const getDashboardRouteLabel = getDashboardRouteAttribute(RouteAttributes
 
 /** Get the provided dashboard route path in the active locale */
 export const getDashboardRoutePath = getDashboardRouteAttribute(RouteAttributes.PATH);
-
-/** Type guard to detect if a path is a dashboard path */
-export const isIntlPath = (path: string): path is DashboardPaths => path in dashboardRoutePaths;
