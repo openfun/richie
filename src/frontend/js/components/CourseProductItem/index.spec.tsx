@@ -139,7 +139,7 @@ describe('CourseProductItem', () => {
 
   it('does not render <CertificateItem /> if product do not have a certificate', async () => {
     const product: Product = ProductFactory.afterGenerate(
-      ({ certificate, ...p }: Product) => p,
+      ({ certificate_definition, ...p }: Product) => p,
     ).generate();
 
     fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);

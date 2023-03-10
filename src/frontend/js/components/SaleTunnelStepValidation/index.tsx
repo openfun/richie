@@ -54,16 +54,18 @@ export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValida
             <CourseRunsList courseRuns={course.course_runs.filter(isOpenedCourseRun)} />
           </li>
         ))}
-        {product.certificate ? (
+        {product.certificate_definition ? (
           <li className="SaleTunnelStepValidation__product-detail-row product-detail-row product-detail-row--certificate">
             <span className="product-detail-row__icon product-detail-row__icon--big">
               <svg aria-hidden="true">
                 <use href="#icon-certificate" />
               </svg>
             </span>
-            <h3 className="product-detail-row__title">{product.certificate.title}</h3>
-            {product.certificate.description ? (
-              <p className="product-detail-row__content">{product.certificate.description}</p>
+            <h3 className="product-detail-row__title">{product.certificate_definition.title}</h3>
+            {product.certificate_definition.description ? (
+              <p className="product-detail-row__content">
+                {product.certificate_definition.description}
+              </p>
             ) : null}
           </li>
         ) : null}

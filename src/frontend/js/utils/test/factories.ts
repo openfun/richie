@@ -201,7 +201,7 @@ export const CertificateProductFactory = createSpec({
   price: faker.datatype.number(),
   price_currency: faker.finance.currencyCode(),
   call_to_action: faker.random.words(1, 3),
-  certificate: derived(() => CertificationDefinitionFactory.generate()),
+  certificate_definition: derived(() => CertificationDefinitionFactory.generate()),
   orders: [],
   target_courses: derived(() => TargetCourseFactory.generate(1, 5)),
 });
