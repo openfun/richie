@@ -6,7 +6,7 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useSession } from 'data/SessionProvider';
+import { useSession } from 'contexts/SessionContext';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import type { HttpError } from 'utils/errors/HttpError';
 import type { TSessionQueryKey } from 'utils/react-query/useSessionKey';

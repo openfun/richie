@@ -1,26 +1,6 @@
-import { Course } from 'types/Course';
-import { FacetedFilterDefinition } from 'types/filters';
 import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { Enrollment } from 'types';
-
-export enum RequestStatus {
-  FAILURE = 'failure',
-  LOADING = 'loading',
-  SUCCESS = 'success',
-}
-
-export interface APIResponseListMeta {
-  count: number;
-  offset: number;
-  total_count: number;
-}
-
-export interface APIResponseListFacets {
-  [resourcePropName: string]: {
-    [resourcePropValue: string]: number;
-  };
-}
 
 export interface APIListRequestParams {
   [key: string]: Maybe<string | string[]>;
@@ -29,14 +9,11 @@ export interface APIListRequestParams {
   query?: string;
 }
 
-export interface APICourseSearchResponse {
-  filters: {
-    [filterName: string]: FacetedFilterDefinition;
-  };
-  meta: APIResponseListMeta;
-  objects: Course[];
+export interface APIResponseListMeta {
+  count: number;
+  offset: number;
+  total_count: number;
 }
-
 export interface APIAuthentication {
   accessToken?: () => Nullable<string>;
   login: () => void;

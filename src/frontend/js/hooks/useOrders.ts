@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 import { API, Order, Product, Course, OrderState } from 'types/Joanie';
-import { useJoanieApi } from 'data/JoanieApiProvider';
+import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import {
   QueryOptions,

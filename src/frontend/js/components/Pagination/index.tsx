@@ -1,6 +1,6 @@
 import { Fragment, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'data/useHistory';
+import { useHistory } from 'hooks/useHistory';
 import { location, scroll } from 'utils/indirection/window';
 
 const messages = defineMessages({

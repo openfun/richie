@@ -3,7 +3,7 @@ import { IntlProvider } from 'react-intl';
 import { useEffect } from 'react';
 import userEvent from '@testing-library/user-event';
 import { Pagination, usePagination } from 'components/Pagination/index';
-import { History, HistoryContext } from 'data/useHistory';
+import { History, HistoryContext } from 'hooks/useHistory';
 
 jest.mock('utils/indirection/window', () => ({
   location: {},

@@ -21,6 +21,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Button can be use with a className prop
 
 ### Changed
+
 - Rename web analytics providers, from `google_analytics` to
   `google_universal_analytics`. The `google_tag_manager`
   now uses the correct `gtm.js` and the `google_tag` uses the `gtag.js`.
@@ -31,6 +32,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - For performance reasons the default location for the web analytics js code
   have been changed from `head` to `footer`.
 - Rename product.certificate to certificate_definition due to Joanie API update.
+- Rework frontend file architecture
 
 ## [2.20.1] - 2023-02-22
 

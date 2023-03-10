@@ -5,7 +5,9 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { User } from 'types/User';
 import { createTestQueryClient, CreateTestQueryClientParams } from '../test/createTestQueryClient';
 
-const LazyJoanieSessionProvider = lazy(() => import('data/SessionProvider/JoanieSessionProvider'));
+const LazyJoanieSessionProvider = lazy(
+  () => import('contexts/SessionContext/JoanieSessionProvider'),
+);
 
 export class StorybookHelper {
   static wrapInApp(children: ReactNode, opts?: { user?: User } & CreateTestQueryClientParams) {

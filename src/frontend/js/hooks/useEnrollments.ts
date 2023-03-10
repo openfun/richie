@@ -1,5 +1,5 @@
 import { defineMessages } from 'react-intl';
-import { useJoanieApi } from 'data/JoanieApiProvider';
+import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useResources, UseResourcesProps } from 'hooks/useResources';
 import { API, Enrollment, EnrollmentsQuery } from 'types/Joanie';
 
