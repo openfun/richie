@@ -197,6 +197,18 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     # Mapping between edx and richie profile fields
     EDX_USER_PROFILE_TO_DJANGO = values.DictValue()
 
+    # Feature flags
+    FEATURES = values.DictValue(environ_name="FEATURES", environ_prefix=None)
+
+    dashboard_profile_url = {}
+    if "ENABLE_REACT_DASHBOARD" in FEATURES and FEATURES["ENABLE_REACT_DASHBOARD"]:
+        dashboard_profile_url = {
+            "dashboard": {
+                "label": _("Dashboard"),
+                "href": _("{base_url:s}/dashboard/"),
+            },
+        }
+
     # AUTHENTICATION
     RICHIE_AUTHENTICATION_DELEGATION = {
         "BASE_URL": values.Value(
@@ -212,10 +224,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         # e.g: for user.username = johndoe, /u/(username) will be /u/johndoe
         "PROFILE_URLS": values.DictValue(
             {
-                "dashboard": {
-                    "label": _("Dashboard"),
-                    "href": _("{base_url:s}/dashboard"),
-                },
+                **dashboard_profile_url,
                 "profile": {
                     "label": _("Profile"),
                     "href": _("{base_url:s}/u/(username)"),
@@ -573,9 +582,6 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         environ_name="RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT",
         environ_prefix=None,
     )
-
-    # Feature flags
-    FEATURES = values.DictValue(environ_name="FEATURES", environ_prefix=None)
 
     @classmethod
     def _get_environment(cls):

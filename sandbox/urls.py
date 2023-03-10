@@ -12,6 +12,7 @@ from django.views.static import serve
 
 from cms.sitemaps import CMSSitemap
 
+from richie.apps.core.templatetags.feature_flags import is_feature_enabled
 from richie.apps.core.templatetags.joanie import is_joanie_enabled
 from richie.apps.courses.urls import urlpatterns as courses_urlpatterns
 from richie.apps.search.urls import urlpatterns as search_urlpatterns
@@ -43,7 +44,7 @@ urlpatterns = [
     path(r"", include("filer.server.urls")),
 ]
 
-if is_joanie_enabled():
+if is_joanie_enabled() and is_feature_enabled("ENABLE_REACT_DASHBOARD"):
     urlpatterns += i18n_patterns(
         re_path(
             r"^dashboard/.*",
