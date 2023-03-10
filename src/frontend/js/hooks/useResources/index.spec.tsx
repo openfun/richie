@@ -8,7 +8,7 @@ import queryString from 'query-string';
 import * as mockFactories from 'utils/test/factories';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { Deferred } from 'utils/test/deferred';
-import { SessionProvider, useSession } from 'data/SessionProvider';
+import { SessionProvider, useSession } from 'contexts/SessionContext';
 import { Maybe } from 'types/utils';
 import { ResourcesQuery, useResource, useResources, UseResourcesProps } from './index';
 

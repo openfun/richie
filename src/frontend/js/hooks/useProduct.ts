@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 import { Product } from 'types/Joanie';
 import { useResource, UseResourcesProps } from 'hooks/useResources';
-import { useJoanieApi } from 'data/JoanieApiProvider';
+import { useJoanieApi } from 'contexts/JoanieApiContext';
 
 const messages = defineMessages({
   errorGet: {

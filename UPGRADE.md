@@ -16,6 +16,9 @@ $ make migrate
 
 ## Unreleased
 
+- Frontend folder architecture has been totally reworked. If you have overridden
+  any frontend components, you should have to update your overrides.json file to match new paths. In
+  the same way, you should also check sass import paths in your custom scss files.
 - The web analytics settings have been changed, from multiple settings to a single `WEB_ANALYTICS`
   dict setting. The dict `key` is the web analytics identification string and the `value` is
   a dict with specific configuration for each web analytics solution.

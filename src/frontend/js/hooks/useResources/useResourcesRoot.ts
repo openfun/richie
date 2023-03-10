@@ -10,7 +10,7 @@ import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import { noop } from 'utils';
 import { ApiResourceInterface, PaginatedResponse } from 'types/Joanie';
 import useLocalizedQueryKey from 'utils/react-query/useLocalizedQueryKey';
-import usePrevious from 'utils/usePrevious';
+import usePrevious from 'hooks/usePrevious';
 import { Resource, ResourcesQuery, UseResourcesProps } from './index';
 
 export const messages = defineMessages({

@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 import { MutateOptions } from '@tanstack/react-query';
-import { useJoanieApi } from 'data/JoanieApiProvider';
+import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { Address, AddressCreationPayload, API } from 'types/Joanie';
 import { HttpError } from 'utils/errors/HttpError';
 import { ResourcesQuery, useResource, useResources, UseResourcesProps } from './useResources';

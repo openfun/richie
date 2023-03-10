@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 import { CreditCard } from 'types/Joanie';
 
-import { useJoanieApi } from '../../data/JoanieApiProvider';
+import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useResource, useResources, UseResourcesProps } from '../useResources';
 
 const messages = defineMessages({

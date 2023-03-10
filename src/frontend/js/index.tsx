@@ -14,7 +14,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import countries from 'i18n-iso-countries';
 import { createRoot } from 'react-dom/client';
 import createQueryClient from 'utils/react-query/createQueryClient';
-import { Root } from 'components/Root';
+import { Root } from 'widgets';
 import { handle } from 'utils/errors/handle';
 
 // Wait for the DOM to load before we scour it for an element that requires React to be rendered

@@ -6,7 +6,7 @@ import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import * as mockFactories from 'utils/test/factories';
-import { SessionProvider } from 'data/SessionProvider';
+import { SessionProvider } from 'contexts/SessionContext';
 import type * as Joanie from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import AddressesManagement from '.';

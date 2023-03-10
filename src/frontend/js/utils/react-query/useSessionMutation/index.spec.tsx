@@ -3,9 +3,9 @@ import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
-import BaseSessionProvider from 'data/SessionProvider/BaseSessionProvider';
-import { useSession } from 'data/SessionProvider';
-import { checkStatus } from 'utils/api/joanie';
+import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
+import { useSession } from 'contexts/SessionContext';
+import { checkStatus } from 'api/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { useSessionMutation } from '.';
 
