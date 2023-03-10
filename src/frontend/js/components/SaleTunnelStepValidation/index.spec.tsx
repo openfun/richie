@@ -50,7 +50,9 @@ describe('SaleTunnelStepValidation', () => {
 
     const certificate = container.querySelector('.product-detail-row--certificate');
     expect(certificate).not.toBeNull();
-    expect(getByRole(container, 'heading', { level: 3, name: product.certificate.title }));
+    expect(
+      getByRole(container, 'heading', { level: 3, name: product.certificate_definition.title }),
+    );
 
     // Click on the button trigger the next function
     const button = screen.getByRole('button', { name: 'Proceed to payment' });

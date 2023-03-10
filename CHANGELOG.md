@@ -30,6 +30,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   inside the `web_analytics.html` template.
 - For performance reasons the default location for the web analytics js code
   have been changed from `head` to `footer`.
+- Rename product.certificate to certificate_definition due to Joanie API update.
 
 ## [2.20.1] - 2023-02-22
 

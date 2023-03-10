@@ -62,7 +62,7 @@ export interface Product {
   price: number;
   price_currency: string;
   call_to_action: string;
-  certificate: CertificateDefinition;
+  certificate_definition: CertificateDefinition;
   target_courses: TargetCourse[];
   orders: Order['id'][];
 }

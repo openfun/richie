@@ -3,10 +3,10 @@ import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
 import { CourseProductProvider } from 'data/CourseProductProvider';
 import CertificateItem from 'components/CourseProductCertificateItem';
 import type * as Joanie from 'types/Joanie';
+import { OrderState } from 'types/Joanie';
 import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
 import { useOrders } from 'hooks/useOrders';
-import { OrderState } from 'types/Joanie';
 import { Icon } from 'components/Icon';
 import CourseRunItem from './CourseRunItem';
 import PurchaseButton from './PurchaseButton';
@@ -107,8 +107,8 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
                   <CourseRunItem targetCourse={target_course} order={order} />
                 )),
               )}
-              {product.certificate && (
-                <CertificateItem certificate={product.certificate} order={order} />
+              {product.certificate_definition && (
+                <CertificateItem certificate={product.certificate_definition} order={order} />
               )}
             </ol>
             <footer className="product-widget__footer">
