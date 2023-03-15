@@ -3,7 +3,7 @@ import { PropsWithChildren, useMemo } from 'react';
 interface SpinnerProps {
   'aria-labelledby'?: string;
   size?: 'small' | 'large';
-  theme?: 'light';
+  theme?: 'light' | 'primary';
 }
 
 /** Component. Displays a rotating CSS loader. */
