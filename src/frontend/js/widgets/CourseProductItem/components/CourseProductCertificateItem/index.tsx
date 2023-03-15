@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Spinner } from 'components/Spinner';
-import { useJoanieApi } from 'contexts/JoanieApiContext';
 import type * as Joanie from 'types/Joanie';
-import { handle } from 'utils/errors/handle';
+import { useDownloadCertificate } from 'hooks/useDownloadCertificate';
 
 const messages = defineMessages({
   certificateExplanation: {
@@ -30,37 +28,15 @@ const messages = defineMessages({
 });
 
 interface Props {
-  certificate: Joanie.CertificateDefinition;
+  certificateDefinition: Joanie.CertificateDefinition;
   order?: Joanie.OrderLite;
 }
 
-const CertificateItem = ({ certificate, order }: Props) => {
-  const [loading, setLoading] = useState(false);
-  const API = useJoanieApi();
-  const downloadCertificate = async () => {
-    try {
-      setLoading(true);
-      const $link = document.createElement('a');
-      const certificateId = order!.certificate!;
-      const file = await API.user.certificates.download(certificateId);
-      // eslint-disable-next-line compat/compat
-      const url = URL.createObjectURL(file);
-      $link.href = url;
-      $link.download = '';
+const CertificateItem = ({ certificateDefinition, order }: Props) => {
+  const { download, loading } = useDownloadCertificate();
 
-      const revokeObject = () => {
-        // eslint-disable-next-line compat/compat
-        URL.revokeObjectURL(url);
-        window.removeEventListener('blur', revokeObject);
-      };
-
-      window.addEventListener('blur', revokeObject);
-      $link.click();
-    } catch (error) {
-      handle(error);
-    } finally {
-      setLoading(false);
-    }
+  const onDownloadClick = async () => {
+    await download(order!.certificate!);
   };
 
   return (
@@ -69,7 +45,7 @@ const CertificateItem = ({ certificate, order }: Props) => {
         <use href="#icon-certificate" />
       </svg>
       <div>
-        <strong className="product-widget__item-title h5">{certificate.title}</strong>
+        <strong className="product-widget__item-title h5">{certificateDefinition.title}</strong>
         <p className="product-widget__item-description">
           {order?.certificate ? (
             <>
@@ -77,7 +53,7 @@ const CertificateItem = ({ certificate, order }: Props) => {
               <button
                 disabled={loading}
                 className="button button--primary button--pill"
-                onClick={downloadCertificate}
+                onClick={onDownloadClick}
               >
                 {loading ? (
                   <Spinner theme="light" aria-labelledby="generating-certificate">
@@ -91,7 +67,9 @@ const CertificateItem = ({ certificate, order }: Props) => {
               </button>
             </>
           ) : (
-            certificate.description || <FormattedMessage {...messages.certificateExplanation} />
+            certificateDefinition.description || (
+              <FormattedMessage {...messages.certificateExplanation} />
+            )
           )}
         </p>
       </div>

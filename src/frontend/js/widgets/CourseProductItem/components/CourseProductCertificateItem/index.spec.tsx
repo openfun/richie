@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import faker from 'faker';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
@@ -7,7 +7,6 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { CertificationDefinitionFactory, OrderLiteFactory } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CertificateDefinition, OrderLite } from 'types/Joanie';
-import { handle } from 'utils/errors/handle';
 import CertificateItem from '.';
 
 jest.mock('utils/errors/handle');
@@ -19,9 +18,7 @@ jest.mock('utils/context', () => ({
   }).generate(),
 }));
 
-const mockHandle = handle as jest.MockedFn<typeof handle>;
-
-describe('CoursePorductCertificateItem', () => {
+describe('CourseProductCertificateItem', () => {
   const Wrapper = ({ children }: PropsWithChildren<{}>) => (
     <IntlProvider locale="en">
       <JoanieApiProvider>{children}</JoanieApiProvider>
@@ -47,7 +44,7 @@ describe('CoursePorductCertificateItem', () => {
 
     render(
       <Wrapper>
-        <CertificateItem certificate={certificateDefinition} />
+        <CertificateItem certificateDefinition={certificateDefinition} />
       </Wrapper>,
     );
 
@@ -67,7 +64,7 @@ describe('CoursePorductCertificateItem', () => {
 
     render(
       <Wrapper>
-        <CertificateItem certificate={certificateDefinition} />
+        <CertificateItem certificateDefinition={certificateDefinition} />
       </Wrapper>,
     );
 
@@ -84,7 +81,7 @@ describe('CoursePorductCertificateItem', () => {
 
     render(
       <Wrapper>
-        <CertificateItem certificate={certificateDefinition} order={order} />
+        <CertificateItem certificateDefinition={certificateDefinition} order={order} />
       </Wrapper>,
     );
 
@@ -109,39 +106,5 @@ describe('CoursePorductCertificateItem', () => {
     expect(fetchMock.called()).toBe(true);
     // eslint-disable-next-line compat/compat
     expect(URL.createObjectURL).toHaveBeenCalledTimes(1);
-    // eslint-disable-next-line compat/compat
-    expect(URL.revokeObjectURL).toHaveBeenCalledTimes(0);
-
-    // - A event listener should have attached to window to know when window is blurred.
-    // This event is triggered in browser when the download pop up is displayed.
-    fireEvent.blur(window);
-    // eslint-disable-next-line compat/compat
-    expect(URL.revokeObjectURL).toHaveBeenCalledTimes(1);
-  });
-
-  it('handles an error if certificate download request fails', async () => {
-    const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory.generate();
-    const order: OrderLite = OrderLiteFactory.extend({
-      certificate: faker.datatype.uuid(),
-    }).generate();
-
-    render(
-      <Wrapper>
-        <CertificateItem certificate={certificateDefinition} order={order} />
-      </Wrapper>,
-    );
-
-    const $button: HTMLButtonElement = screen.getByRole('button', { name: 'Download' });
-    expect($button.disabled).toBe(false);
-
-    fetchMock.get(`https://joanie.test/api/v1.0/certificates/${order.certificate}/download/`, 401);
-
-    await act(async () => {
-      // - User ask to download certificate, but the request fails with a 401 response
-      fireEvent.click($button);
-    });
-
-    expect(fetchMock.called()).toBe(true);
-    expect(mockHandle).toHaveBeenNthCalledWith(1, new Error('Unauthorized'));
   });
 });
