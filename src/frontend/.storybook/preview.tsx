@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IntlProvider } from 'react-intl';
-import { useAsyncEffect } from '../js/utils/useAsyncEffect';
 import './__mocks__/utils/context';
+import { useAsyncEffect } from 'hooks/useAsyncEffect';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
