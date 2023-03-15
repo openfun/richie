@@ -38,7 +38,12 @@ export const DashboardOrderLoader = () => {
         <Banner message={(order.states.error ?? product.states.error)!} type={BannerType.ERROR} />
       )}
       {order.item && (
-        <DashboardItemOrder writable={true} order={order.item} showDetailsButton={false} />
+        <DashboardItemOrder
+          writable={true}
+          order={order.item}
+          showDetailsButton={false}
+          showCertificate={true}
+        />
       )}
     </>
   );

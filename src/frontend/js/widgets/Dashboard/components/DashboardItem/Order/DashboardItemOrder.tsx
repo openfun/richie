@@ -1,12 +1,15 @@
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Icon } from 'components/Icon';
-import { Order, OrderState } from 'types/Joanie';
+import { Order, OrderState, Product } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { useProduct } from 'hooks/useProduct';
+import { useCertificate } from 'hooks/useCertificates';
+import { Spinner } from 'components/Spinner';
+import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
+import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
-import { DashboardSubItem } from '../DashboardSubItem';
 import { RouterButton } from '../../RouterButton';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
@@ -35,17 +38,43 @@ const messages = {
     description: "Status shown on the dashboard order' item when order is not validated",
     defaultMessage: '{state}',
   },
+  loadingCertificate: {
+    id: 'components.DashboardItemOrder.loadingCertificate',
+    description: 'Accessible label displayed while certificate is being fetched on the dashboard.',
+    defaultMessage: 'Loading certificate...',
+  },
 };
 
 interface DashboardItemOrderProps {
   order: Order;
   showDetailsButton?: boolean;
+  showCertificate?: boolean;
   writable?: boolean;
 }
+
+const DashboardItemOrderCertificate = ({ order, product }: { order: Order; product: Product }) => {
+  if (!order.certificate) {
+    return <DashboardItemCertificate certificateDefinition={product.certificate_definition} />;
+  }
+  const certificate = useCertificate(order.certificate);
+  return (
+    <>
+      {certificate.states.fetching && (
+        <Spinner aria-labelledby="loading-certificate">
+          <span id="loading-certificate">
+            <FormattedMessage {...messages.loadingCertificate} />
+          </span>
+        </Spinner>
+      )}
+      {certificate.item && <DashboardItemCertificate certificate={certificate.item} />}
+    </>
+  );
+};
 
 export const DashboardItemOrder = ({
   order,
   showDetailsButton = true,
+  showCertificate,
   writable,
 }: DashboardItemOrderProps) => {
   const { course } = order;
@@ -93,25 +122,32 @@ export const DashboardItemOrder = ({
         </div>
       }
     >
-      <DashboardSubItemsList
-        subItems={order.target_courses?.map((targetCourse) => (
-          <DashboardSubItem
-            title={targetCourse.title}
-            footer={
-              <DashboardItemCourseEnrolling
-                writable={writable}
-                course={targetCourse}
-                order={order}
-                activeEnrollment={CoursesHelper.findActiveCourseEnrollmentInOrder(
-                  targetCourse,
-                  order,
-                )}
-                notEnrolledUrl={getRoutePath(LearnerDashboardPaths.ORDER, { orderId: order.id })}
-              />
-            }
-          />
-        ))}
-      />
+      <>
+        <DashboardSubItemsList
+          subItems={order.target_courses?.map((targetCourse) => (
+            <DashboardSubItem
+              title={targetCourse.title}
+              footer={
+                <DashboardItemCourseEnrolling
+                  writable={writable}
+                  course={targetCourse}
+                  order={order}
+                  activeEnrollment={CoursesHelper.findActiveCourseEnrollmentInOrder(
+                    targetCourse,
+                    order,
+                  )}
+                  notEnrolledUrl={getRoutePath(LearnerDashboardPaths.ORDER, { orderId: order.id })}
+                />
+              }
+            />
+          ))}
+        />
+        {showCertificate && !!product.item?.certificate_definition && (
+          <div className="dashboard-item-order__certificate__container">
+            <DashboardItemOrderCertificate order={order} product={product.item} />
+          </div>
+        )}
+      </>
     </DashboardItem>
   );
 };
