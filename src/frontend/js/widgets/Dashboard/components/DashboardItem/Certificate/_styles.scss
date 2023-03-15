@@ -1,0 +1,25 @@
+.dashboard-certificate {
+  &__body {
+    padding: 1rem;
+    border-bottom: $onepixel solid r-theme-val(dashboard-item, base-border);
+    display: flex;
+    align-items: center;
+
+    font-size: 1rem;
+    font-weight: 800;
+    font-family: $r-font-family-montserrat;
+
+    gap: 0.5rem;
+  }
+
+  &__footer {
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+      font-size: 0.875rem;
+    }
+  }
+}

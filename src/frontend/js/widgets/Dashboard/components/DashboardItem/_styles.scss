@@ -11,12 +11,8 @@
     &__head {
       display: flex;
       gap: 1rem;
-      padding: 0.5rem 1rem;
+      padding: 1rem;
       border-bottom: $onepixel solid r-theme-val(dashboard-item, base-border);
-
-      &--with-image {
-        padding: 0.5rem;
-      }
 
       &__captions {
         overflow: hidden;
@@ -26,9 +22,8 @@
 
       &__thumbnail {
         height: 70px;
-        width: 70px;
-        object-fit: contain;
-        box-shadow: r-theme-val(dashboard-item, base-shadow);
+        width: 110px;
+        object-fit: cover;
         border-radius: $border-radius;
         flex-shrink: 0;
       }
@@ -39,6 +34,7 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        font-size: 1.25rem;
       }
 
       &__code {
@@ -183,22 +179,32 @@
   }
 }
 
-.dashboard-item-order__footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  min-height: 3.75rem;
+.dashboard-item-order {
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    min-height: 3.75rem;
 
-  @include media-breakpoint-down(sm) {
-    flex-direction: column;
+    @include media-breakpoint-down(sm) {
+      flex-direction: column;
+
+      .button {
+        width: 100%;
+      }
+    }
 
     .button {
-      width: 100%;
+      flex-shrink: 0;
     }
   }
 
-  .button {
-    flex-shrink: 0;
+  &__certificate__container {
+    padding-top: 1rem;
+
+    .dashboard-item__block__head {
+      display: none;
+    }
   }
 }

@@ -129,6 +129,7 @@ const getRoutes = () => {
       },
       certificates: {
         download: `${baseUrl}/certificates/:id/download/`,
+        get: `${baseUrl}/certificates/:id/`,
       },
       enrollments: {
         get: `${baseUrl}/enrollments/:id/`,
@@ -274,6 +275,19 @@ const API = (): Joanie.API => {
       certificates: {
         download: async (id: string): Promise<File> =>
           fetchWithJWT(ROUTES.user.certificates.download.replace(':id', id)).then(checkStatus),
+        get: async (filters) => {
+          let url;
+          const { id = '', ...queryParameters } = filters || {};
+
+          if (id) url = ROUTES.user.certificates.get.replace(':id', id);
+          else url = ROUTES.user.certificates.get.replace(':id/', '');
+
+          if (!ObjectHelper.isEmpty(queryParameters)) {
+            url += '?' + queryString.stringify(queryParameters);
+          }
+
+          return fetchWithJWT(url).then(checkStatus);
+        },
       },
       wishlist: {
         get: async (filters) => {

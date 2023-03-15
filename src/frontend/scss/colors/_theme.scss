@@ -275,6 +275,9 @@ $r-theme: (
     active-color: r-color('indianred3'),
     base-border: r-color('light-grey'),
   ),
+  dashboard-list: (
+    background-color-loading: r-color('smoke'),
+  ),
   form: (
     input-placeholder: r-color('grey32'),
     input-color: r-color('charcoal'),

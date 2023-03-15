@@ -65,7 +65,7 @@ export const DashboardCourses = () => {
         <div
           className={[
             'dashboard__courses__list',
-            enrollments.states.fetching ? 'dashboard__courses__list--loading' : '',
+            enrollments.states.fetching ? 'dashboard__list--loading' : '',
           ].join(' ')}
         >
           {data.map(

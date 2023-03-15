@@ -12,9 +12,10 @@ import {
   getDashboardRoutePath,
 } from 'widgets/Dashboard/utils/dashboardRoutes';
 import {
-  LearnerDashboardPaths,
   LEARNER_DASHBOARD_ROUTE_LABELS,
+  LearnerDashboardPaths,
 } from 'widgets/Dashboard/utils/learnerRouteMessages';
+import { DashboardCertificates } from 'pages/DashboardCertificates';
 
 export interface DashboardRouteHandle {
   crumbLabel?: MessageDescriptor;
@@ -43,6 +44,11 @@ export function getLearnerDashboardRoutes() {
           handle: { crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.ORDER] },
         },
       ],
+    },
+    {
+      path: getRoutePath(LearnerDashboardPaths.CERTIFICATES),
+      handle: { crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.CERTIFICATES] },
+      element: <DashboardCertificates />,
     },
     {
       path: getRoutePath(LearnerDashboardPaths.COURSE, { code: ':code' }),

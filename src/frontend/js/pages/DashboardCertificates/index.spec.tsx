@@ -4,17 +4,17 @@ import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { History, HistoryContext } from 'hooks/useHistory';
-import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { EnrollmentFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { SessionProvider } from 'contexts/SessionContext';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
-import { Enrollment } from 'types/Joanie';
+import { Certificate } from 'types/Joanie';
 import { resolveAll } from 'utils/resolveAll';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
-import { expectBannerError } from 'utils/test/expectBanner';
+import { expectBannerError, expectBannerInfo } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
+import { History, HistoryContext } from 'hooks/useHistory';
+import { SessionProvider } from 'contexts/SessionContext';
+import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
+import { CertificateFactory } from 'utils/test/factories/joanie';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -29,7 +29,7 @@ jest.mock('utils/indirection/window', () => ({
   scroll: jest.fn(),
 }));
 
-describe('<DashboardCourses/>', () => {
+describe('<DashboardCertificates/>', () => {
   const historyPushState = jest.fn();
   const historyReplaceState = jest.fn();
   const makeHistoryOf: (params: any) => History = () => [
@@ -53,19 +53,49 @@ describe('<DashboardCourses/>', () => {
     fetchMock.restore();
   });
 
-  it('renders 3 pages of enrollments', async () => {
-    const enrollments: Enrollment[] = EnrollmentFactory.generate(30);
-    const enrollmentsPage1 = enrollments.slice(0, 10);
-    const enrollmentsPage2 = enrollments.slice(10, 20);
+  it('renders an empty list of certificates', async () => {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/certificates/?page=1&page_size=10', {
+      results: [],
+      next: null,
+      previous: null,
+      count: 30,
+    });
 
-    fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=10&was_created_by_order=false',
-      { results: enrollmentsPage1, next: null, previous: null, count: 30 },
+    render(
+      <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({})}>
+            <SessionProvider>
+              <DashboardTest initialRoute={LearnerDashboardPaths.CERTIFICATES} />
+            </SessionProvider>
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
+
+    // Make sure the spinner appear during first load.
+    await expectSpinner('Loading certificates...');
+
+    await expectNoSpinner('Loading certificates...');
+
+    await expectBannerInfo('You have no certificates yet.');
+  });
+
+  it('renders 3 pages of certificates', async () => {
+    const certificates: Certificate[] = CertificateFactory.generate(30);
+    const certificatesPage1 = certificates.slice(0, 10);
+    const certificatesPage2 = certificates.slice(10, 20);
+
+    fetchMock.get('https://joanie.endpoint/api/v1.0/certificates/?page=1&page_size=10', {
+      results: certificatesPage1,
+      next: null,
+      previous: null,
+      count: 30,
+    });
 
     const page2Deferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/enrollments/?page=2&page_size=10&was_created_by_order=false',
+      'https://joanie.endpoint/api/v1.0/certificates/?page=2&page_size=10',
       page2Deferred.promise,
     );
 
@@ -74,7 +104,7 @@ describe('<DashboardCourses/>', () => {
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({})}>
             <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.CERTIFICATES} />
             </SessionProvider>
           </HistoryContext.Provider>
         </IntlProvider>
@@ -82,15 +112,15 @@ describe('<DashboardCourses/>', () => {
     );
 
     // Make sure the spinner appear during first load.
-    await expectSpinner('Loading orders and enrollments...');
+    await expectSpinner('Loading certificates...');
 
-    await expectNoSpinner('Loading orders and enrollments...');
+    await expectNoSpinner('Loading certificates...');
 
     // Make sure the first page is loaded.
     expect(document.querySelector('.dashboard__list--loading')).not.toBeInTheDocument();
     await screen.findByText('Currently reading page 1');
-    await resolveAll(enrollmentsPage1, async (enrollment) => {
-      await screen.findByRole('heading', { level: 5, name: enrollment.course_run.course?.title });
+    await resolveAll(certificatesPage1, async (certificate) => {
+      await screen.findByText(certificate.certificate_definition.title);
     });
 
     // Go to page 2.
@@ -100,35 +130,41 @@ describe('<DashboardCourses/>', () => {
     await waitFor(() =>
       expect(document.querySelector('.dashboard__list--loading')).toBeInTheDocument(),
     );
-    page2Deferred.resolve({ results: enrollmentsPage2, next: null, previous: null, count: 30 });
+
+    page2Deferred.resolve({
+      results: certificatesPage2,
+      next: null,
+      previous: null,
+      count: 30,
+    });
 
     // Make sure the second page is loaded.
     await screen.findByText('Currently reading page 2');
-    await resolveAll(enrollmentsPage2, async (enrollment) => {
-      await screen.findByRole('heading', { level: 5, name: enrollment.course_run.course?.title });
+    await resolveAll(certificatesPage2, async (certificate) => {
+      await screen.findByText(certificate.certificate_definition.title);
     });
 
     // Go back to page 1.
     await userEvent.click(screen.getByText('Previous page 1'));
 
     await screen.findByText('Currently reading page 1');
-    await resolveAll(enrollmentsPage1, async (enrollment) => {
-      await screen.findByRole('heading', { level: 5, name: enrollment.course_run.course?.title });
+    await resolveAll(certificatesPage1, async (certificate) => {
+      await screen.findByText(certificate.certificate_definition.title);
     });
   });
 
-  it('shows an error', async () => {
-    fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=10&was_created_by_order=false',
-      { status: 500, body: 'Internal error' },
-    );
+  it('shows an error when request to retrieve certificates fails', async () => {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/certificates/?page=1&page_size=10', {
+      status: 500,
+      body: 'Internal error',
+    });
 
     render(
       <QueryClientProvider client={createTestQueryClient({ user: true })}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({})}>
             <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.CERTIFICATES} />
             </SessionProvider>
           </HistoryContext.Provider>
         </IntlProvider>
@@ -136,7 +172,7 @@ describe('<DashboardCourses/>', () => {
     );
 
     // Make sure error is shown.
-    await expectBannerError('An error occurred while fetching enrollments. Please retry later.');
+    await expectBannerError('An error occurred while fetching certificates. Please retry later.');
 
     // ... and the spinner hidden.
     await expectNoSpinner('Loading ...');

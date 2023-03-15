@@ -7,8 +7,10 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { useDownloadCertificate } from 'hooks/useDownloadCertificate/index';
 import { handle } from 'utils/errors/handle';
+import { Certificate } from 'types/Joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';
+import { CertificateFactory } from 'utils/test/factories/joanie';
 
 jest.mock('utils/errors/handle');
 jest.mock('utils/context', () => ({
