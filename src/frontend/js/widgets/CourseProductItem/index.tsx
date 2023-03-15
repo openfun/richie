@@ -108,7 +108,10 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
                 )),
               )}
               {product.certificate_definition && (
-                <CertificateItem certificate={product.certificate_definition} order={order} />
+                <CertificateItem
+                  certificateDefinition={product.certificate_definition}
+                  order={order}
+                />
               )}
             </ol>
             <footer className="product-widget__footer">
