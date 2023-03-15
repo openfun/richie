@@ -18,13 +18,15 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { DATETIME_FORMAT, DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
+  CertificateFactory,
+  CourseFactory,
   CourseRunFactory,
   EnrollmentFactory,
   OrderFactory,
   ProductFactory,
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
-import { Order, OrderState, Product } from 'types/Joanie';
+import { Certificate, Order, OrderState, Product } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { resolveAll } from 'utils/resolveAll';
@@ -33,6 +35,8 @@ import { CourseRun, Priority } from 'types';
 import { sleep } from 'utils/sleep';
 import { noop } from 'utils';
 import { expectBannerError } from 'utils/test/expectBanner';
+import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
+import { Deferred } from 'utils/test/deferred';
 import { LearnerDashboardPaths } from '../../../utils/learnerRouteMessages';
 import { DashboardTest } from '../../DashboardTest';
 import { DashboardItemOrder } from './DashboardItemOrder';
@@ -124,7 +128,36 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders an order with certificate', async () => {
-    const order: Order = { ...OrderFactory.generate(), certificate: faker.internet.url() };
+    const order: Order = { ...OrderFactory.generate(), certificate: faker.datatype.uuid()() };
+    order.target_courses = [];
+    const product = mockProduct(order);
+
+    const certificate: Certificate = {
+      ...CertificateFactory.generate(),
+      id: order.certificate,
+      order: { ...order, course: CourseFactory.generate() },
+    };
+
+    const deferred = new Deferred();
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/certificates/${order.certificate}/`,
+      deferred.promise,
+    );
+
+    render(<DashboardItemOrder order={order} showCertificate={true} />, { wrapper });
+
+    await screen.findByRole('heading', { level: 5, name: product.title });
+    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Completed');
+    await screen.findByRole('link', { name: 'View details' });
+    await expectSpinner('Loading certificate...');
+    deferred.resolve(certificate);
+    await expectNoSpinner('Loading certificate...');
+    await screen.findByText(certificate.certificate_definition.title);
+  });
+
+  it('does not render an order with certificate', async () => {
+    const order: Order = { ...OrderFactory.generate(), certificate: faker.datatype.uuid()() };
     order.target_courses = [];
     const product = mockProduct(order);
 
@@ -134,6 +167,7 @@ describe('<DashboardItemOrder/>', () => {
     await screen.findByText('Ref. ' + order.course!);
     await screen.findByText('Completed');
     await screen.findByRole('link', { name: 'View details' });
+    await expectNoSpinner('Loading certificate ...');
   });
 
   /**
