@@ -20,7 +20,7 @@ import * as Joanie from 'types/Joanie';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { resolveAll } from 'utils/resolveAll';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { expectBannerError } from 'utils/test/expectBannerError';
+import { expectBannerError } from 'utils/test/expectBanner';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
