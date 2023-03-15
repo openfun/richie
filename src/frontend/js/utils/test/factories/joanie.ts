@@ -41,6 +41,15 @@ export const CertificationDefinitionFactory = createSpec({
   description: faker.lorem.sentences(2),
 });
 
+export const CertificateFactory = createSpec({
+  id: faker.datatype.uuid(),
+  title: faker.random.words(Math.ceil(Math.random() * 3)),
+  description: faker.lorem.sentences(2),
+  certificate_definition: derived(() => CertificationDefinitionFactory.generate()),
+  order: derived(() => ({ ...OrderFactory.generate(), course: CourseFactory.generate() })),
+  issued_on: faker.date.past()().toISOString(),
+});
+
 export const CertificateProductFactory = createSpec({
   id: faker.datatype.uuid(),
   title: faker.unique(faker.random.words(1, 3)),

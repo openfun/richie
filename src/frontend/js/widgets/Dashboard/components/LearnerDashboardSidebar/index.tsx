@@ -30,7 +30,11 @@ export const LearnerDashboardSidebar = () => {
 
   const links = useMemo(
     () =>
-      [LearnerDashboardPaths.COURSES, LearnerDashboardPaths.PREFERENCES].map((path) => ({
+      [
+        LearnerDashboardPaths.COURSES,
+        LearnerDashboardPaths.PREFERENCES,
+        LearnerDashboardPaths.CERTIFICATES,
+      ].map((path) => ({
         to: getRoutePath(path),
         label: getRouteLabel(path),
       })),

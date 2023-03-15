@@ -8,6 +8,7 @@ export enum LearnerDashboardPaths {
   ORDER = '/courses/orders/:orderId',
   COURSE = '/courses/:code',
   PREFERENCES = '/preferences',
+  CERTIFICATES = '/certificates',
   PREFERENCES_ADDRESS_EDITION = '/preferences/addresses/:addressId',
   PREFERENCES_ADDRESS_CREATION = '/preferences/addresses/create',
   PREFERENCES_CREDIT_CARD_EDITION = '/preferences/credit-cards/:creditCardId',
@@ -29,6 +30,11 @@ export const LEARNER_DASHBOARD_ROUTE_PATHS = defineMessages<LearnerDashboardPath
     id: 'components.Dashboard.DashboardRoutes.course.path',
     description: 'The path to display a course detail view.',
     defaultMessage: '/courses/{code}',
+  },
+  [LearnerDashboardPaths.CERTIFICATES]: {
+    id: 'components.Dashboard.DashboardRoutes.certificates.path',
+    description: 'The path to display the certificates view.',
+    defaultMessage: '/certificates',
   },
   [LearnerDashboardPaths.PREFERENCES]: {
     id: 'components.Dashboard.DashboardRoutes.preferences.path',
@@ -68,6 +74,11 @@ export const LEARNER_DASHBOARD_ROUTE_LABELS = defineMessages<LearnerDashboardPat
     id: 'components.Dashboard.DashboardRoutes.course.session.label',
     description: 'Label of the course session view used in navigation components.',
     defaultMessage: 'Course',
+  },
+  [LearnerDashboardPaths.CERTIFICATES]: {
+    id: 'components.Dashboard.DashboardRoutes.certificates.label',
+    description: 'Label of the certificates view used in navigation components.',
+    defaultMessage: 'My certificates',
   },
   [LearnerDashboardPaths.PREFERENCES]: {
     id: 'components.Dashboard.DashboardRoutes.preferences.label',

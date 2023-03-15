@@ -43,6 +43,13 @@ export interface CertificateDefinition {
   description: string;
 }
 
+export interface Certificate {
+  id: string;
+  issued_on: string;
+  certificate_definition: CertificateDefinition;
+  order: Order;
+}
+
 // - Organization
 export interface Organization {
   code: string;
@@ -218,10 +225,13 @@ interface OrderAbortPayload {
   payment_id?: Payment['payment_id'];
 }
 
-export interface EnrollmentsQuery extends ResourcesQuery {
-  was_created_by_order?: boolean;
+export interface PaginatedResourceQuery extends ResourcesQuery {
   page?: number;
   page_size?: number;
+}
+
+export interface EnrollmentsQuery extends PaginatedResourceQuery {
+  was_created_by_order?: boolean;
 }
 
 interface EnrollmentCreationPayload {
@@ -274,6 +284,11 @@ interface APIUser {
   };
   certificates: {
     download(id: string): Promise<File>;
+    get<Filters extends PaginatedResourceQuery = PaginatedResourceQuery>(
+      filters?: Filters,
+    ): Filters extends { id: string }
+      ? Promise<Certificate>
+      : Promise<PaginatedResponse<Certificate>>;
   };
   enrollments: {
     create(payload: EnrollmentCreationPayload): Promise<any>;
