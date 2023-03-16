@@ -7,6 +7,7 @@ import { Priority } from 'types';
 import { User } from 'types/User';
 import { Maybe, Nullable } from 'types/utils';
 import { handle } from 'utils/errors/handle';
+import { HttpError } from 'utils/errors/HttpError';
 import { CommonDataProps } from 'types/commonDataProps';
 import useCourseEnrollment from './hooks/useCourseEnrollment';
 import { CourseRunUnenrollButton } from './components/CourseRunUnenrollmentButton';
@@ -108,13 +109,17 @@ interface ReducerState {
     courseRun: CourseRunEnrollmentProps['courseRun'];
     currentUser: Maybe<Nullable<User>>;
   };
-  error?: Error;
+  error?: HttpError;
 }
 type ReducerAction =
-  | { type: ActionType.UPDATE_CONTEXT; payload: Partial<ReducerState['context']> }
+  | {
+      type: ActionType.UPDATE_CONTEXT;
+      payload: Partial<ReducerState['context']>;
+      error?: HttpError;
+    }
   | { type: ActionType.ENROLL }
   | { type: ActionType.UNENROLL }
-  | { type: ActionType.ERROR; payload: { error: Error } };
+  | { type: ActionType.ERROR; payload: { error: HttpError } };
 
 const getStepFromContext = (
   { currentUser, courseRun, isEnrolled }: ReducerState['context'],
@@ -157,7 +162,11 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
   switch (action.type) {
     case ActionType.UPDATE_CONTEXT: {
       const nextContext = { ...context, ...action.payload };
-      return { step: getStepFromContext(nextContext, step), context: nextContext };
+      return {
+        step: getStepFromContext(nextContext, step),
+        context: nextContext,
+        error: action.error,
+      };
     }
     case ActionType.ENROLL:
       return { step: Step.ENROLLING, context };
@@ -192,13 +201,23 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
   const setEnroll = useCallback(
     async (isActive: boolean = true) => {
       dispatch({ type: isActive ? ActionType.ENROLL : ActionType.UNENROLL });
-      if (courseRun && currentUser) {
-        const isEnrolled = await setEnrollment(isActive).catch(() => undefined);
+      let isEnrolled = enrollmentIsActive;
+      let enrollmentError;
 
-        dispatch({
-          type: ActionType.UPDATE_CONTEXT,
-          payload: { isEnrolled: isEnrolled === undefined ? enrollmentIsActive : isEnrolled },
-        });
+      if (courseRun && currentUser) {
+        try {
+          isEnrolled = await setEnrollment(isActive);
+        } catch (err) {
+          if (err instanceof HttpError) {
+            enrollmentError = err;
+          }
+        } finally {
+          dispatch({
+            type: ActionType.UPDATE_CONTEXT,
+            payload: { isEnrolled },
+            error: enrollmentError,
+          });
+        }
       }
     },
     [courseRun, currentUser, dispatch, enrollmentIsActive],
@@ -262,7 +281,11 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
           </button>
           {step === Step.ENROLLMENT_FAILED ? (
             <div className="course-run-enrollment__errortext">
-              <FormattedMessage {...messages.enrollmentFailed} />
+              {error?.localizedMessage ? (
+                error.localizedMessage
+              ) : (
+                <FormattedMessage {...messages.enrollmentFailed} />
+              )}
             </div>
           ) : null}
           {step === Step.UNENROLLMENT_FAILED ? (

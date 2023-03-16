@@ -4,9 +4,11 @@
  */
 export class HttpError extends Error {
   code: number;
+  localizedMessage?: string;
 
-  constructor(status: number, statusText: string) {
+  constructor(status: number, statusText: string, localizedMessage?: string) {
     super(statusText);
     this.code = status;
+    this.localizedMessage = localizedMessage;
   }
 }

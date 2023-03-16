@@ -153,6 +153,52 @@ describe('<CourseRunEnrollment />', () => {
     );
   });
 
+  it('shows HttpError.localizedMessage on enrollment failure when HttpError owns this property', async () => {
+    const user: User = UserFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    courseRun.state.priority = 0;
+    courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
+
+    const enrollmentDeferred = new Deferred();
+    fetchMock.get(
+      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
+      enrollmentDeferred.promise,
+    );
+
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createTestQueryClient({ user })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
+
+    screen.getByRole('status', { name: 'Loading enrollment information...' });
+
+    await act(async () => {
+      enrollmentDeferred.resolve({});
+    });
+
+    const button = await screen.findByRole('button', { name: 'Enroll now' });
+
+    // const enrollmentAction = new Deferred();
+    fetchMock.post(`${endpoint}/api/enrollment/v1/enrollment`, {
+      status: 400,
+      body: { localizedMessage: 'You are not authorized to enroll' },
+    });
+
+    await act(async () => {
+      expect(() => fireEvent.click(button)).not.toThrow();
+    });
+
+    screen.getByRole('button', { name: 'Enroll now' });
+    screen.getByText('You are not authorized to enroll');
+  });
+
   it('shows a link to the course if the user is already enrolled', async () => {
     const user: User = UserFactory.generate();
     const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();

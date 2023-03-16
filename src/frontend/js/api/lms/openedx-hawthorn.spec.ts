@@ -2,6 +2,7 @@ import fetchMock from 'fetch-mock';
 import faker from 'faker';
 import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import { handle } from 'utils/errors/handle';
+import { HttpError } from 'utils/errors/HttpError';
 import context from 'utils/context';
 import API from './openedx-hawthorn';
 
@@ -155,6 +156,44 @@ describe('OpenEdX Hawthorn API', () => {
         expect(mockHandle).toHaveBeenCalledWith(
           new Error('[SET - Enrollment] > 500 - Internal Server Error'),
         );
+      });
+
+      it('throws HttpError.localizedMessage on enrollment failure', async () => {
+        fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, {
+          status: 400,
+          body: { localizedMessage: 'You are not authorized to enroll in this course' },
+        });
+
+        await expect(
+          HawthornApi.enrollment.set(`https://demo.endpoint/courses?course_id=${courseId}`, {
+            username,
+          }),
+        ).rejects.toThrow(
+          new HttpError(400, 'Bad Request', 'You are not authorized to enroll in this course'),
+        );
+      });
+
+      it('throws HttpError on enrollment failure when localizedMessage property is not present in the payload', async () => {
+        fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, {
+          status: 400,
+          body: { message: 'Bad Request' },
+        });
+
+        await expect(
+          HawthornApi.enrollment.set(`https://demo.endpoint/courses?course_id=${courseId}`, {
+            username,
+          }),
+        ).rejects.toThrow(new HttpError(400, 'Bad Request'));
+      });
+
+      it('throws HttpError when response has no json payload', async () => {
+        fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, 400);
+
+        await expect(
+          HawthornApi.enrollment.set(`https://demo.endpoint/courses?course_id=${courseId}`, {
+            username,
+          }),
+        ).rejects.toThrow('Bad Request');
       });
     });
   });
