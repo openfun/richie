@@ -112,8 +112,14 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
             },
           }),
         })
-          .then((response) => {
+          .then(async (response) => {
             if (response.ok) return response.json();
+            if (response.status === 400) {
+              if (response.headers.get('Content-Type') === 'application/json') {
+                const { localizedMessage } = await response.json();
+                throw new HttpError(response.status, response.statusText, localizedMessage);
+              }
+            }
             if (response.status >= 500) {
               // Send server errors to sentry
               handle(new Error(`[SET - Enrollment] > ${response.status} - ${response.statusText}`));
