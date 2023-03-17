@@ -91,7 +91,7 @@ function fetchWithJWT(routes: RequestInfo, options: RequestInit = {}) {
 /**
  * Build Joanie API Routes interface.
  */
-const getAPIEndpoint = () => {
+export const getAPIEndpoint = () => {
   const endpoint = context?.joanie_backend?.endpoint;
   const version = JOANIE_API_VERSION;
 

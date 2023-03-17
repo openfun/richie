@@ -34,3 +34,5 @@ export const PAYMENT_SETTINGS = {
   // Number of retries
   pollLimit: 30,
 };
+
+export const MOCK_SERVICE_WORKER_ENABLED = false;
