@@ -110,6 +110,7 @@
     "lodash-es": "4.17.21",
     "mdn-polyfills": "5.20.0",
     "node-fetch": ">2.6.6 <3",
+    "msw": "1.1.0",
     "nodemon": "2.0.22",
     "prettier": "2.8.7",
     "query-string": "8.1.0",
@@ -136,5 +137,8 @@
   "resolutions": {
     "@types/react": "18.0.34",
     "@types/react-dom": "18.0.11"
+  },
+  "msw": {
+    "workerDirectory": "../richie/static/richie/js"
   }
 }

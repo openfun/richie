@@ -15,6 +15,7 @@ import countries from 'i18n-iso-countries';
 import { createRoot } from 'react-dom/client';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import { Root } from 'widgets';
+import { MOCK_SERVICE_WORKER_ENABLED } from 'settings';
 import { handle } from 'utils/errors/handle';
 
 // Wait for the DOM to load before we scour it for an element that requires React to be rendered
@@ -102,6 +103,14 @@ async function render() {
 
     // React-query
     const queryClient = createQueryClient({ logger: true, persister: true });
+
+    // Mock service worker
+    if (process.env.NODE_ENV === 'development' && MOCK_SERVICE_WORKER_ENABLED) {
+      const { worker } = require('../mocks/browser');
+      worker.start({
+        onUnhandledRequest: 'bypass',
+      });
+    }
 
     // Render the tree inside a shared `IntlProvider` so all components are able to access translated strings.
     const reactRoot = createRoot(rootContainer);
