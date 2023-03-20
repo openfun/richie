@@ -12,10 +12,10 @@ import PurchaseButton from './components/PurchaseButton';
 import { CourseProductProvider } from './contexts/CourseProductContext';
 
 const messages = defineMessages({
-  enrolled: {
-    defaultMessage: 'Enrolled',
+  purchased: {
+    defaultMessage: 'Purchased',
     description: 'Message displayed when authenticated user owned the product',
-    id: 'components.CourseProductItem.enrolled',
+    id: 'components.CourseProductItem.purchased',
   },
   pending: {
     defaultMessage: 'Pending',
@@ -90,7 +90,7 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
             <header className="product-widget__header">
               <h3 className="product-widget__title">{product.title}</h3>
               <strong className="product-widget__price h6">
-                {order && <FormattedMessage {...messages.enrolled} />}
+                {order && <FormattedMessage {...messages.purchased} />}
                 {hasPurchased && !order && <FormattedMessage {...messages.pending} />}
                 {!hasPurchased && (
                   <FormattedNumber

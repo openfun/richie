@@ -181,7 +181,7 @@ describe('CourseProductItem', () => {
     await screen.findByRole('heading', { level: 3, name: product.title });
 
     // - In place of product price, a label should be displayed
-    const $enrolledInfo = await screen.findByText('Enrolled');
+    const $enrolledInfo = await screen.findByText('Purchased');
     expect($enrolledInfo.tagName).toBe('STRONG');
     expect($enrolledInfo.classList.contains('h6')).toBe(true);
 
@@ -240,7 +240,7 @@ describe('CourseProductItem', () => {
     await screen.findByRole('heading', { level: 3, name: product.title });
 
     // - In place of product price, a label should be displayed
-    const $enrolledInfo: HTMLElement = await screen.findByText('Enrolled');
+    const $enrolledInfo: HTMLElement = await screen.findByText('Purchased');
     expect($enrolledInfo!.tagName).toBe('STRONG');
     expect($enrolledInfo!.classList.contains('h6')).toBe(true);
 
