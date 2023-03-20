@@ -15,6 +15,7 @@
         "bootstrap",
         "faker",
         "node-fetch",
+        "typescript",
         "yup"
       ]
     },
