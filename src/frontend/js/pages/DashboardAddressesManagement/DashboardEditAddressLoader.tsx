@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import Banner, { BannerType } from 'components/Banner';
 import { Spinner } from 'components/Spinner';
 import { useAddress } from 'hooks/useAddresses';
-import { DashboardPaths } from 'widgets/Dashboard/utils/routers';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 import { DashboardEditAddress } from './DashboardEditAddress';
@@ -29,7 +29,7 @@ export const DashboardEditAddressLoader = () => {
         <DashboardEditAddress
           address={address.item}
           onSettled={() => {
-            navigate(DashboardPaths.PREFERENCES);
+            navigate(LearnerDashboardPaths.PREFERENCES);
           }}
         />
       )}

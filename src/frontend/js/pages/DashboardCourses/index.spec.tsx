@@ -9,7 +9,7 @@ import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { JoanieEnrollmentFactory } from 'utils/test/factories';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
-import { DashboardPaths } from 'widgets/Dashboard/utils/routers';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { Enrollment } from 'types/Joanie';
 import { resolveAll } from 'utils/resolveAll';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
@@ -74,7 +74,7 @@ describe('<DashboardCourses/>', () => {
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({})}>
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.COURSES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />
             </SessionProvider>
           </HistoryContext.Provider>
         </IntlProvider>
@@ -125,7 +125,7 @@ describe('<DashboardCourses/>', () => {
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({})}>
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.COURSES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />
             </SessionProvider>
           </HistoryContext.Provider>
         </IntlProvider>

@@ -19,7 +19,7 @@ class TemplatesRichieDashboardTestCase(CMSTestCase):
                 "JS_COURSE_REGEX": r"^.*/api/(course-runs|products)/(.*)/?$",
             }
         ],
-        FEATURES={"ENABLE_REACT_DASHBOARD": True},
+        FEATURES={"REACT_DASHBOARD": True},
     )
     def test_templates_richie_dashboard_enabled(self):
         """
@@ -30,7 +30,7 @@ class TemplatesRichieDashboardTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, r'class="richie-react richie-react--dashboard"')
 
-    @override_settings(FEATURES={"ENABLE_REACT_DASHBOARD": False})
+    @override_settings(FEATURES={"REACT_DASHBOARD": False})
     def test_templates_richie_dashboard_feature_disabled(self):
         """
         Dashboard view should not be reachable if DASHBOARD feature is disabled

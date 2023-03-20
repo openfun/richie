@@ -200,45 +200,6 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     # Feature flags
     FEATURES = values.DictValue(environ_name="FEATURES", environ_prefix=None)
 
-    dashboard_profile_url = {}
-    if "ENABLE_REACT_DASHBOARD" in FEATURES and FEATURES["ENABLE_REACT_DASHBOARD"]:
-        dashboard_profile_url = {
-            "dashboard": {
-                "label": _("Dashboard"),
-                "href": _("{base_url:s}/dashboard/"),
-            },
-        }
-
-    # AUTHENTICATION
-    RICHIE_AUTHENTICATION_DELEGATION = {
-        "BASE_URL": values.Value(
-            "", environ_name="AUTHENTICATION_BASE_URL", environ_prefix=None
-        ),
-        "BACKEND": values.Value(
-            "dummy", environ_name="AUTHENTICATION_BACKEND", environ_prefix=None
-        ),
-        # PROFILE_URLS are custom links to access to Auth profile views
-        # from Richie. Link order will reflect the order of display in frontend.
-        # (i) Info - {base_url} is RICHIE_AUTHENTICATION_DELEGATION.BASE_URL
-        # (i) If you need to bind user data into href url, wrap the property between ()
-        # e.g: for user.username = johndoe, /u/(username) will be /u/johndoe
-        "PROFILE_URLS": values.DictValue(
-            {
-                **dashboard_profile_url,
-                "profile": {
-                    "label": _("Profile"),
-                    "href": _("{base_url:s}/u/(username)"),
-                },
-                "account": {
-                    "label": _("Account"),
-                    "href": _("{base_url:s}/account/settings"),
-                },
-            },
-            environ_name="AUTHENTICATION_PROFILE_URLS",
-            environ_prefix=None,
-        ),
-    }
-
     # LMS
     RICHIE_LMS_BACKENDS = [
         {
@@ -271,6 +232,58 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         }
     ]
     RICHIE_COURSE_RUN_SYNC_SECRETS = values.ListValue([])
+
+    # AUTHENTICATION
+    profile_dashboard_urls = {
+        "dashboard": {
+            "label": _("Dashboard"),
+            "href": _("{base_url:s}/dashboard/"),
+        },
+    }
+    if {**FEATURES}.get("REACT_DASHBOARD", False) and any(
+        lms.get("BACKEND", "") == "richie.apps.courses.lms.joanie.JoanieBackend"
+        for lms in RICHIE_LMS_BACKENDS
+    ):
+        # if {**FEATURES}.get("REACT_DASHBOARD", False):
+        profile_dashboard_urls = {
+            "dashboard": {
+                "label": _("Dashboard"),
+                "href": _("/dashboard/"),
+            },
+            "dashboard_teacher": {
+                "label": _("Teacher dashboard"),
+                "href": _("/dashboard/teacher"),
+            },
+        }
+
+    RICHIE_AUTHENTICATION_DELEGATION = {
+        "BASE_URL": values.Value(
+            "", environ_name="AUTHENTICATION_BASE_URL", environ_prefix=None
+        ),
+        "BACKEND": values.Value(
+            "dummy", environ_name="AUTHENTICATION_BACKEND", environ_prefix=None
+        ),
+        # PROFILE_URLS are custom links to access to Auth profile views
+        # from Richie. Link order will reflect the order of display in frontend.
+        # (i) Info - {base_url} is RICHIE_AUTHENTICATION_DELEGATION.BASE_URL
+        # (i) If you need to bind user data into href url, wrap the property between ()
+        # e.g: for user.username = johndoe, /u/(username) will be /u/johndoe
+        "PROFILE_URLS": values.DictValue(
+            {
+                **profile_dashboard_urls,
+                "profile": {
+                    "label": _("Profile"),
+                    "href": _("{base_url:s}/u/(username)"),
+                },
+                "account": {
+                    "label": _("Account"),
+                    "href": _("{base_url:s}/account/settings"),
+                },
+            },
+            environ_name="AUTHENTICATION_PROFILE_URLS",
+            environ_prefix=None,
+        ),
+    }
 
     # Elasticsearch
     RICHIE_ES_HOST = values.ListValue(

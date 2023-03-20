@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Allow multiple web analytics providers at the same time.
 - Display `localizedMessage` on Course Enrollment when backend has 
   `localizedMessage` on the 400 error payload
+- Navigation skeleton of the teacher dashboard
 
 ### Fixed
 

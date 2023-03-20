@@ -44,7 +44,7 @@ urlpatterns = [
     path(r"", include("filer.server.urls")),
 ]
 
-if is_joanie_enabled() and is_feature_enabled("ENABLE_REACT_DASHBOARD"):
+if is_joanie_enabled() and is_feature_enabled("REACT_DASHBOARD"):
     urlpatterns += i18n_patterns(
         re_path(
             r"^dashboard/.*",

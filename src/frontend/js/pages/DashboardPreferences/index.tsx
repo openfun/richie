@@ -1,6 +1,6 @@
 import { DashboardCreditCardsManagement } from 'pages/DashboardCreditCardsManagement';
 import { DashboardAddressesManagement } from 'pages/DashboardAddressesManagement';
-import { DashboardPaths } from 'widgets/Dashboard/utils/routers';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
 
 /**
@@ -11,16 +11,16 @@ export const DashboardPreferences = () => {
   return (
     <div className="dashboard-preferences">
       <DashboardAddressesManagement
-        onClickCreate={() => navigate(DashboardPaths.PREFERENCES_ADDRESS_CREATION)}
+        onClickCreate={() => navigate(LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION)}
         onClickEdit={(address) =>
-          navigate(DashboardPaths.PREFERENCES_ADDRESS_EDITION, {
+          navigate(LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION, {
             addressId: address.id,
           })
         }
       />
       <DashboardCreditCardsManagement
         onClickEdit={(creditCard) =>
-          navigate(DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
+          navigate(LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
             creditCardId: creditCard.id,
           })
         }

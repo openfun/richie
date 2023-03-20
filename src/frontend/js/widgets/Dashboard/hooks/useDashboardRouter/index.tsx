@@ -4,130 +4,16 @@ import type {
   PrimitiveType,
 } from 'intl-messageformat';
 import { useMemo } from 'react';
-import { useIntl } from 'react-intl';
-import {
-  createBrowserRouter,
-  Navigate,
-  NavigateOptions,
-  Outlet,
-  RouteObject,
-  useNavigate,
-} from 'react-router-dom';
-import { DashboardCreateAddressLoader } from 'pages/DashboardAddressesManagement/DashboardCreateAddressLoader';
-import { DashboardEditAddressLoader } from 'pages/DashboardAddressesManagement/DashboardEditAddressLoader';
-import { DashboardPreferences } from 'pages/DashboardPreferences';
-import { DashboardEditCreditCardLoader } from 'pages/DashboardCreditCardsManagement/DashboardEditCreditCardLoader';
-import { DashboardCourses } from 'pages/DashboardCourses';
-import useRouteInfo from '../useRouteInfo';
-import {
-  DashboardPaths,
-  dashboardRouteLabels,
-  getDashboardRouteLabel,
-  getDashboardRoutePath,
-} from '../../utils/routers';
-import { DashboardLayout } from '../../components/DashboardLayout';
-import { DashboardOrderLoader } from '../../components/DashboardOrderLoader';
+import { MessageDescriptor, useIntl } from 'react-intl';
+import { createBrowserRouter, NavigateOptions, useNavigate } from 'react-router-dom';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
+import { getDashboardRoutes, getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
+import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
 import { getDashboardBasename } from './getDashboardBasename';
 
-/**
- * *Temporary
- *
- * A dummy route component for example which displays
- * all data related to the current route
- */
-const RouteInfo = ({ title }: { title: string }) => {
-  const routeInfo = useRouteInfo();
-
-  return (
-    <div data-testid={`RouteInfo-${routeInfo.pathname}`}>
-      <h1>{title}</h1>
-      <dl>
-        <dt>Route information :</dt>
-        <dd>
-          <pre>{JSON.stringify(routeInfo, null, 2)}</pre>
-        </dd>
-      </dl>
-    </div>
-  );
-};
-
-export function getDashboardRoutes() {
-  const intl = useIntl();
-  const getRoutePath = getDashboardRoutePath(intl);
-  const getRouteLabel = getDashboardRouteLabel(intl);
-
-  const routes: RouteObject[] = [
-    {
-      path: '/',
-      element: <DashboardLayout />,
-      children: [
-        {
-          index: true,
-          element: <Navigate to={getRoutePath(DashboardPaths.COURSES)} replace />,
-        },
-        {
-          path: getRoutePath(DashboardPaths.COURSES),
-          handle: { crumbLabel: dashboardRouteLabels[DashboardPaths.COURSES] },
-          element: <Outlet />,
-          children: [
-            {
-              index: true,
-              element: <DashboardCourses />,
-            },
-            {
-              path: getRoutePath(DashboardPaths.ORDER, {
-                orderId: ':orderId',
-              }),
-              element: <DashboardOrderLoader />,
-              handle: { crumbLabel: dashboardRouteLabels[DashboardPaths.ORDER] },
-            },
-          ],
-        },
-        {
-          path: getRoutePath(DashboardPaths.COURSE, { code: ':code' }),
-          element: <RouteInfo title={getRouteLabel(DashboardPaths.COURSE)} />,
-          handle: { crumbLabel: dashboardRouteLabels[DashboardPaths.COURSE] },
-        },
-        {
-          path: getRoutePath(DashboardPaths.PREFERENCES),
-          handle: { crumbLabel: dashboardRouteLabels[DashboardPaths.PREFERENCES] },
-          element: <Outlet />,
-          children: [
-            {
-              index: true,
-              element: <DashboardPreferences />,
-            },
-            {
-              path: getRoutePath(DashboardPaths.PREFERENCES_ADDRESS_EDITION, {
-                addressId: ':addressId',
-              }),
-              element: <DashboardEditAddressLoader />,
-              handle: {
-                crumbLabel: dashboardRouteLabels[DashboardPaths.PREFERENCES_ADDRESS_EDITION],
-              },
-            },
-            {
-              path: getRoutePath(DashboardPaths.PREFERENCES_ADDRESS_CREATION),
-              element: <DashboardCreateAddressLoader />,
-              handle: {
-                crumbLabel: dashboardRouteLabels[DashboardPaths.PREFERENCES_ADDRESS_CREATION],
-              },
-            },
-            {
-              path: getRoutePath(DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
-                creditCardId: ':creditCardId',
-              }),
-              element: <DashboardEditCreditCardLoader />,
-              handle: {
-                crumbLabel: dashboardRouteLabels[DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION],
-              },
-            },
-          ],
-        },
-      ],
-    },
-  ];
-  return routes;
+export interface DashboardRouteHandle {
+  crumbLabel?: MessageDescriptor;
+  renderLayout?: boolean;
 }
 
 /**
@@ -150,7 +36,7 @@ export const useDashboardNavigate = () => {
   return useMemo(
     () =>
       (
-        to: number | DashboardPaths,
+        to: number | LearnerDashboardPaths | TeacherDashboardPaths,
         values?: Record<string, PrimitiveType | FormatXMLElementFn<string, string>>,
         options?: IntlMessageFormatOptions,
         routerOptions?: NavigateOptions,

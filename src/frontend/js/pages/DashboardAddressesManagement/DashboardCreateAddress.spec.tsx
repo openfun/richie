@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 import * as mockFactories from 'utils/test/factories';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { DashboardPaths } from 'widgets/Dashboard/utils/routers';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { Address } from 'types/Joanie';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
@@ -68,7 +68,7 @@ describe('<DashboardCreateAddress/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES_ADDRESS_CREATION} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -118,7 +118,7 @@ describe('<DashboardCreateAddress/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES_ADDRESS_CREATION} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -171,7 +171,7 @@ describe('<DashboardCreateAddress/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES_ADDRESS_CREATION} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,

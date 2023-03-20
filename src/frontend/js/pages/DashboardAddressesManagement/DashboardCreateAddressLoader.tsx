@@ -1,4 +1,4 @@
-import { DashboardPaths } from 'widgets/Dashboard/utils/routers';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
 import { DashboardCreateAddress } from './DashboardCreateAddress';
 
@@ -7,5 +7,5 @@ import { DashboardCreateAddress } from './DashboardCreateAddress';
  */
 export const DashboardCreateAddressLoader = () => {
   const navigate = useDashboardNavigate();
-  return <DashboardCreateAddress onSettled={() => navigate(DashboardPaths.PREFERENCES)} />;
+  return <DashboardCreateAddress onSettled={() => navigate(LearnerDashboardPaths.PREFERENCES)} />;
 };
