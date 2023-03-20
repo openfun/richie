@@ -1,6 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useMemo } from 'react';
-import { Spinner } from 'components/Spinner';
 import { useEnrollments } from 'hooks/useEnrollments';
 import type * as Joanie from 'types/Joanie';
 import useDateFormat from 'hooks/useDateFormat';
@@ -41,7 +40,7 @@ interface Props {
 
 const EnrolledCourseRun = ({ enrollment }: Props) => {
   const formatDate = useDateFormat();
-  const { methods, states } = useEnrollments();
+  const { states } = useEnrollments();
   const relativeStartDate = useDateRelative(new Date(enrollment.course_run.start));
 
   const isStarded = useMemo(() => {
@@ -49,15 +48,6 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
     const today = new Date();
     return startDateTime <= today;
   }, [enrollment]);
-
-  const unenroll = () => {
-    methods.update({
-      course_run: enrollment.course_run.id,
-      is_active: false,
-      id: enrollment!.id,
-      was_created_by_order: enrollment.was_created_by_order,
-    });
-  };
 
   return (
     <CourseRunSection>
@@ -111,18 +101,6 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
               <FormattedMessage {...messages.isEnroll} />
             </p>
           )}
-
-          <button className="button--tiny" onClick={unenroll}>
-            {states.updating ? (
-              <Spinner aria-labelledby={`unrolling-${enrollment.id}`}>
-                <span id={`unrolling-${enrollment.id}`}>
-                  <FormattedMessage {...messages.unenrolling} />
-                </span>
-              </Spinner>
-            ) : (
-              <FormattedMessage {...messages.unenroll} />
-            )}
-          </button>
         </div>
       </div>
     </CourseRunSection>
