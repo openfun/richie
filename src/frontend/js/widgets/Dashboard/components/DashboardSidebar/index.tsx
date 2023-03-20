@@ -1,20 +1,14 @@
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { matchPath, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ChangeEvent, useMemo, useRef } from 'react';
 import { useSession } from 'contexts/SessionContext';
-import { DashboardPaths, getDashboardRouteLabel, getDashboardRoutePath } from '../../utils/routers';
-import { DashboardAvatar } from '../DashboardAvatar';
+import { DashboardAvatar } from 'widgets/Dashboard/components/DashboardAvatar';
 
 const messages = defineMessages({
-  header: {
-    id: 'components.DashboardSidebar.header',
-    description: 'Title of the dashboard sidebar',
-    defaultMessage: 'Welcome {name}',
-  },
-  subHeader: {
-    id: 'components.DashboardSidebar.subHeader',
-    description: 'Sub title of the dashboard sidebar',
-    defaultMessage: 'You are on your dashboard',
+  settingsLinkLabel: {
+    id: 'components.DashboardSidebar.settingsLinkLabel',
+    description: 'label of the settings link',
+    defaultMessage: 'Settings',
   },
   responsiveNavLabel: {
     id: 'components.DashboardSidebar.responsiveNavLabel',
@@ -23,28 +17,21 @@ const messages = defineMessages({
   },
 });
 
-export const DashboardSidebar = () => {
+interface DashboardSidebarProps {
+  menuLinks: Record<string, string>[];
+  header: string;
+  subHeader: string;
+}
+
+export const DashboardSidebar = ({ menuLinks, header, subHeader }: DashboardSidebarProps) => {
   const { user } = useSession();
-  const intl = useIntl();
   const location = useLocation();
   const navigate = useNavigate();
   const selectNav = useRef<HTMLSelectElement>(null);
   const classes = ['dashboard__sidebar'];
 
-  const getRoutePath = getDashboardRoutePath(intl);
-  const getRouteLabel = getDashboardRouteLabel(intl);
-
-  const links = useMemo(
-    () =>
-      [DashboardPaths.COURSES, DashboardPaths.PREFERENCES].map((path) => ({
-        to: getRoutePath(path),
-        label: getRouteLabel(path),
-      })),
-    [],
-  );
-
   const selectedLink = useMemo(
-    () => links.find((link) => matchPath({ path: link.to, end: false }, location.pathname))?.to,
+    () => menuLinks.find((link) => matchPath({ path: link.to, end: false }, location.pathname))?.to,
     [location],
   );
 
@@ -60,12 +47,8 @@ export const DashboardSidebar = () => {
           <div className="dashboard__sidebar__container__header__avatar">
             <DashboardAvatar user={user!} />
           </div>
-          <h3>
-            <FormattedMessage {...messages.header} values={{ name: user?.username }} />
-          </h3>
-          <p>
-            <FormattedMessage {...messages.subHeader} />
-          </p>
+          <h3>{header}</h3>
+          <p>{subHeader}</p>
         </header>
         <div className="dashboard__sidebar__container__responsive-nav">
           <label htmlFor="dashboard-responsive-nav" className="offscreen">
@@ -78,7 +61,7 @@ export const DashboardSidebar = () => {
             onChange={onSelectChange}
             className="form-field__select-input"
           >
-            {links.map((link) => (
+            {menuLinks.map((link) => (
               <option key={link.to} value={link.to}>
                 {link.label}
               </option>
@@ -87,7 +70,7 @@ export const DashboardSidebar = () => {
         </div>
 
         <ul>
-          {links.map((link) => (
+          {menuLinks.map((link) => (
             <li key={link.to}>
               <NavLink to={link.to}>{link.label}</NavLink>
             </li>

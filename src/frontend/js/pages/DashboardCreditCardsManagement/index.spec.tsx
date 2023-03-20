@@ -15,7 +15,7 @@ import * as faker from 'faker';
 import * as mockFactories from 'utils/test/factories';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { DashboardPaths } from 'widgets/Dashboard/utils/routers';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { CreditCard } from 'types/Joanie';
 import { confirm } from 'utils/indirection/window';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
@@ -54,7 +54,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -80,7 +80,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -117,7 +117,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -153,7 +153,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -182,7 +182,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -231,7 +231,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -284,7 +284,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -316,7 +316,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -344,7 +344,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -371,7 +371,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -415,7 +415,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,

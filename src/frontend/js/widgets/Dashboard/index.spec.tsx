@@ -13,7 +13,7 @@ import { Address } from 'types/Joanie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { expectUrlMatchLocationDisplayed } from 'utils/test/expectUrlMatchLocationDisplayed';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { DashboardPaths } from './utils/routers';
+import { LearnerDashboardPaths } from './utils/learnerRouteMessages';
 import { DashboardTest } from './components/DashboardTest';
 
 jest.mock('utils/context', () => ({
@@ -39,7 +39,7 @@ describe('<Dashboard />', () => {
       <IntlProvider locale="en">
         <QueryClientProvider client={createTestQueryClient({ user })}>
           <JoanieSessionProvider>
-            <DashboardTest initialRoute={DashboardPaths.COURSES} />
+            <DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />
           </JoanieSessionProvider>
         </QueryClientProvider>
       </IntlProvider>
@@ -69,7 +69,7 @@ describe('<Dashboard />', () => {
     render(<DashboardWithUser user={user} />);
 
     expect(location.replace).not.toBeCalled();
-    expectUrlMatchLocationDisplayed(DashboardPaths.COURSES);
+    expectUrlMatchLocationDisplayed(LearnerDashboardPaths.COURSES);
   });
 
   it('should render breadcrumbs', () => {
@@ -83,14 +83,14 @@ describe('<Dashboard />', () => {
     const user = UserFactory.generate();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [], { overwriteRoutes: true });
     render(<DashboardWithUser user={user} />);
-    expectUrlMatchLocationDisplayed(DashboardPaths.COURSES);
+    expectUrlMatchLocationDisplayed(LearnerDashboardPaths.COURSES);
 
     // Go to "My Preferences" route.
     const link = screen.getByRole('link', { name: 'My preferences' });
     await act(async () => {
       fireEvent.click(link);
     });
-    expectUrlMatchLocationDisplayed(DashboardPaths.PREFERENCES);
+    expectUrlMatchLocationDisplayed(LearnerDashboardPaths.PREFERENCES);
   });
 
   it('redirect when clicking on the breadcrumbs back button', async () => {
@@ -100,7 +100,7 @@ describe('<Dashboard />', () => {
       overwriteRoutes: true,
     });
     render(<DashboardWithUser user={user} />);
-    expectUrlMatchLocationDisplayed(DashboardPaths.COURSES);
+    expectUrlMatchLocationDisplayed(LearnerDashboardPaths.COURSES);
     await expectBreadcrumbsToEqualParts(['Back', 'My courses']);
 
     // Go to "My Preferences" route.
@@ -108,7 +108,7 @@ describe('<Dashboard />', () => {
     await act(async () => {
       fireEvent.click(link);
     });
-    expectUrlMatchLocationDisplayed(DashboardPaths.PREFERENCES);
+    expectUrlMatchLocationDisplayed(LearnerDashboardPaths.PREFERENCES);
     await expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
 
     // Go to the address edit route.
@@ -117,7 +117,7 @@ describe('<Dashboard />', () => {
       fireEvent.click(button);
     });
     expectUrlMatchLocationDisplayed(
-      DashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(':addressId', address.id),
+      LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(':addressId', address.id),
     );
     await expectBreadcrumbsToEqualParts([
       'Back',
@@ -130,7 +130,7 @@ describe('<Dashboard />', () => {
     await act(async () => {
       fireEvent.click(backButton);
     });
-    expectUrlMatchLocationDisplayed(DashboardPaths.PREFERENCES);
+    expectUrlMatchLocationDisplayed(LearnerDashboardPaths.PREFERENCES);
     await expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
 
     // Click again on back button to get redirect to website's root.

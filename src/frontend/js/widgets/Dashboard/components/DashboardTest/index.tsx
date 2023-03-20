@@ -1,6 +1,6 @@
 import { createMemoryRouter } from 'react-router-dom';
 import Dashboard from 'widgets/Dashboard';
-import { getDashboardRoutes } from '../../hooks/useDashboardRouter';
+import { getDashboardRoutes } from 'widgets/Dashboard/utils/dashboardRoutes';
 
 interface DashboardTestProps {
   initialRoute?: string;

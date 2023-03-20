@@ -14,7 +14,7 @@ import { findByText } from '@storybook/testing-library';
 import * as mockFactories from 'utils/test/factories';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { DashboardPaths } from 'widgets/Dashboard/utils/routers';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import * as Joanie from 'types/Joanie';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { resolveAll } from 'utils/resolveAll';
@@ -53,7 +53,7 @@ describe('<DashAddressesManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -75,7 +75,7 @@ describe('<DashAddressesManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -98,7 +98,7 @@ describe('<DashAddressesManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -144,7 +144,7 @@ describe('<DashAddressesManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -196,7 +196,7 @@ describe('<DashAddressesManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -220,7 +220,7 @@ describe('<DashAddressesManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -247,7 +247,7 @@ describe('<DashAddressesManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -272,7 +272,7 @@ describe('<DashAddressesManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -295,7 +295,7 @@ describe('<DashAddressesManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -325,7 +325,7 @@ describe('<DashAddressesManagement/>', () => {
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <DashboardTest initialRoute={DashboardPaths.PREFERENCES} />
+              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,

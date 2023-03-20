@@ -4,8 +4,9 @@ import { Order, OrderState } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { useProduct } from 'hooks/useProduct';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
+import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { DashboardSubItem } from '../DashboardSubItem';
-import { DashboardPaths, getDashboardRoutePath } from '../../../utils/routers';
 import { RouterButton } from '../../RouterButton';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
@@ -83,7 +84,7 @@ export const DashboardItemOrder = ({
           {showDetailsButton && (
             <RouterButton
               color="transparent-darkest"
-              href={getRoutePath(DashboardPaths.ORDER, { orderId: order.id })}
+              href={getRoutePath(LearnerDashboardPaths.ORDER, { orderId: order.id })}
               data-testid="dashboard-item-order__button"
             >
               {intl.formatMessage(messages.accessCourse)}
@@ -105,7 +106,7 @@ export const DashboardItemOrder = ({
                   targetCourse,
                   order,
                 )}
-                notEnrolledUrl={getRoutePath(DashboardPaths.ORDER, { orderId: order.id })}
+                notEnrolledUrl={getRoutePath(LearnerDashboardPaths.ORDER, { orderId: order.id })}
               />
             }
           />

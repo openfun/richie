@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { DashboardPaths } from 'widgets/Dashboard/utils/routers';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
 import { useCreditCard } from 'hooks/useCreditCards';
 import { Spinner } from 'components/Spinner';
@@ -32,7 +32,7 @@ export const DashboardEditCreditCardLoader = () => {
     return (
       <DashboardEditCreditCard
         creditCard={creditCard.item}
-        onSettled={() => navigate(DashboardPaths.PREFERENCES)}
+        onSettled={() => navigate(LearnerDashboardPaths.PREFERENCES)}
       />
     );
   }

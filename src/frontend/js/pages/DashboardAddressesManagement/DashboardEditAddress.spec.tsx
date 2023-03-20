@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 import * as mockFactories from 'utils/test/factories';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { DashboardPaths } from 'widgets/Dashboard/utils/routers';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
@@ -47,7 +47,7 @@ describe('<DashboardEditAddress/>', () => {
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest
-                initialRoute={DashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
+                initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
                   ':addressId',
                   address.id,
                 )}
@@ -133,7 +133,7 @@ describe('<DashboardEditAddress/>', () => {
           <IntlProvider locale="en">
             <JoanieSessionProvider>
               <DashboardTest
-                initialRoute={DashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
+                initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
                   ':addressId',
                   address.id,
                 )}

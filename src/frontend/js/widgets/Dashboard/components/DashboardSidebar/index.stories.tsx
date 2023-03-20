@@ -14,7 +14,16 @@ const Template: ComponentStory<typeof DashboardSidebar> = () => {
   const router = createMemoryRouter([
     {
       index: true,
-      element: <DashboardSidebar />,
+      element: (
+        <DashboardSidebar
+          menuLinks={[
+            { to: '/test', label: 'Menu link' },
+            { to: '/test/again', label: 'An other menu link' },
+          ]}
+          header="Dashboard story header"
+          subHeader="Dashboard story subHeader"
+        />
+      ),
     },
   ]);
 
@@ -22,5 +31,4 @@ const Template: ComponentStory<typeof DashboardSidebar> = () => {
 };
 
 export const Default = Template.bind({});
-
 Default.args = {};

@@ -13,7 +13,7 @@ import fetchMock from 'fetch-mock';
 import * as mockFactories from 'utils/test/factories';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { SessionProvider } from 'contexts/SessionContext';
-import { DashboardPaths } from 'widgets/Dashboard/utils/routers';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -61,7 +61,7 @@ describe('<DahsboardEditCreditCard/>', () => {
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest
-                initialRoute={DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
+                initialRoute={LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
                   ':creditCardId',
                   creditCard.id,
                 )}
@@ -157,7 +157,7 @@ describe('<DahsboardEditCreditCard/>', () => {
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest
-                initialRoute={DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
+                initialRoute={LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
                   ':creditCardId',
                   creditCard.id,
                 )}
@@ -249,7 +249,7 @@ describe('<DahsboardEditCreditCard/>', () => {
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest
-                initialRoute={DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
+                initialRoute={LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
                   ':creditCardId',
                   creditCard.id,
                 )}
@@ -322,7 +322,7 @@ describe('<DahsboardEditCreditCard/>', () => {
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest
-                initialRoute={DashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
+                initialRoute={LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
                   ':creditCardId',
                   creditCard.id,
                 )}
