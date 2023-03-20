@@ -35,6 +35,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   have been changed from `head` to `footer`.
 - Rename product.certificate to certificate_definition due to Joanie API update.
 - Rework frontend file architecture
+- Hide unenroll button on CourseProductItem widget
 
 ## [2.20.1] - 2023-02-22
 
