@@ -24,8 +24,8 @@ const messages = defineMessages({
   },
   loading: {
     id: 'components.CourseAddToWishlist.loading',
-    defaultMessage: 'Loading your wishlists...',
-    description: 'Accessible message displayed while loading wishlists',
+    defaultMessage: 'Loading your wishlist...',
+    description: 'Accessible message displayed while loading wishlist',
   },
 });
 

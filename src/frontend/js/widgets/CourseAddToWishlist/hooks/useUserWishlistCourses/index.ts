@@ -28,7 +28,7 @@ const messages = defineMessages({
     id: 'hooks.useWishlist.errorDelete',
     description: 'Error message shown to the user when wishlist deletion request fails.',
     defaultMessage:
-      'An error occurred when removing this course to your wishlist. Please retry later.',
+      'An error occurred when removing this course from your wishlist. Please retry later.',
   },
   errorCreate: {
     id: 'hooks.useWishlist.errorCreate',
