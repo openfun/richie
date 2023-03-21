@@ -123,6 +123,22 @@
     "description": "Error message displayed when a field value is too short.",
     "message": "La longueur minimale est de {min} {min, plural, one {caractère} other {caractères}}."
   },
+  "components.CourseAddToWishlist.labelAdd": {
+    "description": "Label to proceed to add a course to user wishlist.",
+    "message": "M'avertir"
+  },
+  "components.CourseAddToWishlist.labelRemove": {
+    "description": "Label to proceed to remove a course to user wishlist.",
+    "message": "Ne plus m'avertir"
+  },
+  "components.CourseAddToWishlist.loading": {
+    "description": "Accessible message displayed while loading wishlist",
+    "message": "Chargement de votre liste de souhaits..."
+  },
+  "components.CourseAddToWishlist.logMe": {
+    "description": "Label to proceed to login page before being adding a course to user wishlist.",
+    "message": "Connectez-vous pour être averti"
+  },
   "components.CourseGlimpse.categoryLabel": {
     "description": "Category label text for screen reader users",
     "message": "Catégorie"
@@ -167,10 +183,6 @@
     "description": "Accessible label displayed while certificate is being generated.",
     "message": "Certificat en cours de génération..."
   },
-  "components.CourseProductItem.enrolled": {
-    "description": "Message displayed when authenticated user owned the product",
-    "message": "Inscrit"
-  },
   "components.CourseProductItem.loadingInitial": {
     "description": "Accessible text for the initial loading spinner displayed when product is fetching",
     "message": "Chargement des informations produit..."
@@ -178,6 +190,10 @@
   "components.CourseProductItem.pending": {
     "description": "Message displayed when authenticated user has purchased the product but order is still pending",
     "message": "En attente"
+  },
+  "components.CourseProductItem.purchased": {
+    "description": "Message displayed when authenticated user owned the product",
+    "message": "Acheté"
   },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
@@ -341,7 +357,7 @@
   },
   "components.DashboardCourses.loading": {
     "description": "Message displayed while loading orders and enrollments",
-    "message": "Chargement ..."
+    "message": "Chargement des commandes et des inscriptions..."
   },
   "components.DashboardCreateAddressForm.header": {
     "description": "Title of the dashboard address creation form",
@@ -906,5 +922,21 @@
   "hooks.useResources.errorUpdate": {
     "description": "Error message shown to the user when resource update request fails.",
     "message": "Une erreur s'est produite lors de la modification de la ressource. Veuillez réessayer plus tard."
+  },
+  "hooks.useWishlist.errorCreate": {
+    "description": "Error message shown to the user when wishlist creation request fails.",
+    "message": "Une erreur s'est produite lors de l'ajout de ce cours à votre liste de souhaits. Veuillez réessayer plus tard."
+  },
+  "hooks.useWishlist.errorDelete": {
+    "description": "Error message shown to the user when wishlist deletion request fails.",
+    "message": "Une erreur s'est produite lors de la suppression de ce cours de votre liste de souhaits. Veuillez réessayer plus tard."
+  },
+  "hooks.useWishlist.errorGet": {
+    "description": "Error message shown to the user when wishlist fetch request fails.",
+    "message": "Une erreur s'est produite lors de la récupération de votre liste de souhaits. Veuillez réessayer plus tard."
+  },
+  "hooks.useWishlist.errorNotFound": {
+    "description": "Error message shown to the user when no wishlist matches.",
+    "message": "Liste de souhaits introuvable."
   }
 }

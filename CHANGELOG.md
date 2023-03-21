@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.21.0] - 2023-03-21
+
 ### Added
 
 - Add CourseAddToWishlist button to add/remove a course from users wishlist
@@ -1824,7 +1826,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.20.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.21.0...master
+[2.21.0]: https://github.com/openfun/richie/compare/v2.20.1...2.21.0
 [2.20.1]: https://github.com/openfun/richie/compare/v2.20.0...2.20.1
 [2.20.0]: https://github.com/openfun/richie/compare/v2.19.0...2.20.0
 [2.19.0]: https://github.com/openfun/richie/compare/v2.18.0...2.19.0

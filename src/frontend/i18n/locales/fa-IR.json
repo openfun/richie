@@ -123,6 +123,22 @@
     "description": "Error message displayed when a field value is too short.",
     "message": "The minimum length is {min} {min, plural, one {char} other {chars}}."
   },
+  "components.CourseAddToWishlist.labelAdd": {
+    "description": "Label to proceed to add a course to user wishlist.",
+    "message": "Notify me"
+  },
+  "components.CourseAddToWishlist.labelRemove": {
+    "description": "Label to proceed to remove a course to user wishlist.",
+    "message": "Do not notify me anymore"
+  },
+  "components.CourseAddToWishlist.loading": {
+    "description": "Accessible message displayed while loading wishlist",
+    "message": "Loading your wishlist..."
+  },
+  "components.CourseAddToWishlist.logMe": {
+    "description": "Label to proceed to login page before being adding a course to user wishlist.",
+    "message": "Log in to be notified"
+  },
   "components.CourseGlimpse.categoryLabel": {
     "description": "Category label text for screen reader users",
     "message": "Category"
@@ -167,10 +183,6 @@
     "description": "Accessible label displayed while certificate is being generated.",
     "message": "Certificate is being generated..."
   },
-  "components.CourseProductItem.enrolled": {
-    "description": "Message displayed when authenticated user owned the product",
-    "message": "Enrolled"
-  },
   "components.CourseProductItem.loadingInitial": {
     "description": "Accessible text for the initial loading spinner displayed when product is fetching",
     "message": "Loading product information..."
@@ -178,6 +190,10 @@
   "components.CourseProductItem.pending": {
     "description": "Message displayed when authenticated user has purchased the product but order is still pending",
     "message": "Pending"
+  },
+  "components.CourseProductItem.purchased": {
+    "description": "Message displayed when authenticated user owned the product",
+    "message": "Purchased"
   },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
@@ -341,7 +357,7 @@
   },
   "components.DashboardCourses.loading": {
     "description": "Message displayed while loading orders and enrollments",
-    "message": "Loading ..."
+    "message": "Loading orders and enrollments..."
   },
   "components.DashboardCreateAddressForm.header": {
     "description": "Title of the dashboard address creation form",
@@ -906,5 +922,21 @@
   "hooks.useResources.errorUpdate": {
     "description": "Error message shown to the user when resource update request fails.",
     "message": "An error occurred while updating a resource. Please retry later."
+  },
+  "hooks.useWishlist.errorCreate": {
+    "description": "Error message shown to the user when wishlist creation request fails.",
+    "message": "An error occurred when adding this course to your wishlist. Please retry later."
+  },
+  "hooks.useWishlist.errorDelete": {
+    "description": "Error message shown to the user when wishlist deletion request fails.",
+    "message": "An error occurred when removing this course from your wishlist. Please retry later."
+  },
+  "hooks.useWishlist.errorGet": {
+    "description": "Error message shown to the user when wishlist fetch request fails.",
+    "message": "An error occurred while fetching wishlist. Please retry later."
+  },
+  "hooks.useWishlist.errorNotFound": {
+    "description": "Error message shown to the user when no wishlist matches.",
+    "message": "Cannot find the wishlist."
   }
 }

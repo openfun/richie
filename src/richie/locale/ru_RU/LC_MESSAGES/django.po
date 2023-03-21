@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-14 14:50+0000\n"
-"PO-Revision-Date: 2023-02-17 14:13\n"
+"POT-Creation-Date: 2023-03-21 11:01+0000\n"
+"PO-Revision-Date: 2023-03-21 14:09\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -105,32 +105,32 @@ msgstr "Ваш браузер не поддерживает этот форма�
 msgid "You are here:"
 msgstr "Вы находитесь здесь:"
 
-#: apps/core/templates/richie/base.html:84
+#: apps/core/templates/richie/base.html:83
 msgid "Skip to main content"
 msgstr "Перейти к основному содержимому"
 
-#: apps/core/templates/richie/base.html:95
+#: apps/core/templates/richie/base.html:94
 msgid "Go to homepage"
 msgstr "Вернуться на главную страницу"
 
-#: apps/core/templates/richie/base.html:104
+#: apps/core/templates/richie/base.html:103
 msgid "Menu"
 msgstr "Меню"
 
-#: apps/core/templates/richie/base.html:121
+#: apps/core/templates/richie/base.html:120
 msgid "Contact us"
 msgstr "Свяжитесь с нами"
 
-#: apps/core/templates/richie/base.html:168
+#: apps/core/templates/richie/base.html:167
 msgid "Life-changing learning!"
 msgstr "Обучение, меняющее жизнь!"
 
-#: apps/core/templates/richie/base.html:176
+#: apps/core/templates/richie/base.html:175
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr "Узнать больше"
 
-#: apps/core/templates/richie/base.html:188
+#: apps/core/templates/richie/base.html:187
 msgid "Powered by"
 msgstr "Работает на"
 
@@ -1073,13 +1073,13 @@ msgid "Complementary information"
 msgstr "Дополнительная информация"
 
 #: apps/courses/settings/__init__.py:222
-#: apps/courses/templates/courses/cms/course_detail.html:522
+#: apps/courses/templates/courses/cms/course_detail.html:528
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:47
 msgid "License for the course content"
 msgstr "Лицензия на содержимое курса"
 
 #: apps/courses/settings/__init__.py:227
-#: apps/courses/templates/courses/cms/course_detail.html:533
+#: apps/courses/templates/courses/cms/course_detail.html:539
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:56
 msgid "License for the content created by course participants"
 msgstr "Лицензия на контент, созданный участниками курса"
@@ -1310,7 +1310,7 @@ msgid "Add a teaser video or add a cover image below and it will be used as teas
 msgstr "Добавьте видео тизер или добавьте обложку ниже и оно также будет использоваться в качестве тизерного изображения."
 
 #: apps/courses/templates/courses/cms/course_detail.html:154
-#: apps/courses/templates/courses/cms/course_detail.html:255
+#: apps/courses/templates/courses/cms/course_detail.html:261
 msgid "course cover image"
 msgstr "обложка курса"
 
@@ -1318,15 +1318,15 @@ msgstr "обложка курса"
 msgid "No open course runs"
 msgstr "Нет запущенных этапов курса"
 
-#: apps/courses/templates/courses/cms/course_detail.html:192
+#: apps/courses/templates/courses/cms/course_detail.html:198
 msgid "course runs are currently open for this course"
 msgstr "этапы курса открытые в настоящее время для этого курса"
 
-#: apps/courses/templates/courses/cms/course_detail.html:196
+#: apps/courses/templates/courses/cms/course_detail.html:202
 msgid "Choose now"
 msgstr "Выберите сейчас"
 
-#: apps/courses/templates/courses/cms/course_detail.html:227
+#: apps/courses/templates/courses/cms/course_detail.html:233
 #, python-format
 msgid "\n"
 "                        Archived on %(creation_date)s\n"
@@ -1335,107 +1335,107 @@ msgstr "\n"
 "                        Архивировано %(creation_date)s\n"
 "                    "
 
-#: apps/courses/templates/courses/cms/course_detail.html:231
+#: apps/courses/templates/courses/cms/course_detail.html:237
 msgid "Go to current version"
 msgstr "Перейти к текущей версии"
 
-#: apps/courses/templates/courses/cms/course_detail.html:242
+#: apps/courses/templates/courses/cms/course_detail.html:248
 msgid "Glimpse cover"
 msgstr "Glimpse обложка"
 
-#: apps/courses/templates/courses/cms/course_detail.html:244
+#: apps/courses/templates/courses/cms/course_detail.html:250
 msgid "Add an image for course cover on its glimpse."
 msgstr "Добавить изображение для обложки курса на его glimpse."
 
-#: apps/courses/templates/courses/cms/course_detail.html:268
+#: apps/courses/templates/courses/cms/course_detail.html:274
 msgctxt "course_detail__title"
 msgid "What you will learn"
 msgstr "Чему вы научитесь"
 
-#: apps/courses/templates/courses/cms/course_detail.html:269
+#: apps/courses/templates/courses/cms/course_detail.html:275
 msgid "At the end of this course, you will be able to:"
 msgstr "По окончании этого курса вы сможете:"
 
-#: apps/courses/templates/courses/cms/course_detail.html:278
+#: apps/courses/templates/courses/cms/course_detail.html:284
 msgctxt "course_detail__title"
 msgid "Description"
 msgstr "Описание"
 
-#: apps/courses/templates/courses/cms/course_detail.html:289
+#: apps/courses/templates/courses/cms/course_detail.html:295
 msgctxt "course_detail__title"
 msgid "Format"
 msgstr "Формат"
 
-#: apps/courses/templates/courses/cms/course_detail.html:291
+#: apps/courses/templates/courses/cms/course_detail.html:297
 msgid "How is the course structured?"
 msgstr "Как структурирован курс?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:300
+#: apps/courses/templates/courses/cms/course_detail.html:306
 msgctxt "course_detail__title"
 msgid "Prerequisites"
 msgstr "Предварительные условия"
 
-#: apps/courses/templates/courses/cms/course_detail.html:303
+#: apps/courses/templates/courses/cms/course_detail.html:309
 msgid "What are the prerequisites to follow this course?"
 msgstr "Каковы предварительные условия для прохождения этого курса?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:313
+#: apps/courses/templates/courses/cms/course_detail.html:319
 msgctxt "course_detail__title"
 msgid "Assessment and certification"
 msgstr "Оценка и сертификация"
 
-#: apps/courses/templates/courses/cms/course_detail.html:316
+#: apps/courses/templates/courses/cms/course_detail.html:322
 msgid "How is progress evaluated and/or certified?"
 msgstr "Как оценивается и/или сертифицируется прогресс?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:328
+#: apps/courses/templates/courses/cms/course_detail.html:334
 msgctxt "course_detail__title"
 msgid "Course plan"
 msgstr "План курса"
 
-#: apps/courses/templates/courses/cms/course_detail.html:331
+#: apps/courses/templates/courses/cms/course_detail.html:337
 msgid "Enter here the detailed course plan."
 msgstr "Введите подробный план курса."
 
-#: apps/courses/templates/courses/cms/course_detail.html:345
+#: apps/courses/templates/courses/cms/course_detail.html:351
 msgctxt "course_detail__title"
 msgid "Other course runs"
 msgstr "Другие этапы курса"
 
-#: apps/courses/templates/courses/cms/course_detail.html:347
+#: apps/courses/templates/courses/cms/course_detail.html:353
 msgctxt "course_detail__title"
 msgid "Course runs"
 msgstr "Этапы курса"
 
-#: apps/courses/templates/courses/cms/course_detail.html:357
+#: apps/courses/templates/courses/cms/course_detail.html:363
 msgid "No course runs"
 msgstr "Нет этапов курса"
 
-#: apps/courses/templates/courses/cms/course_detail.html:359
+#: apps/courses/templates/courses/cms/course_detail.html:365
 msgid "No other course runs"
 msgstr "Нет других этапов курса"
 
-#: apps/courses/templates/courses/cms/course_detail.html:383
+#: apps/courses/templates/courses/cms/course_detail.html:389
 msgctxt "Course runs to be scheduled (plural)"
 msgid "To be scheduled"
 msgstr "Будет запланировано"
 
-#: apps/courses/templates/courses/cms/course_detail.html:396
+#: apps/courses/templates/courses/cms/course_detail.html:402
 msgctxt "Upcoming course runs (plural)"
 msgid "Upcoming"
 msgstr "Предстоящие"
 
-#: apps/courses/templates/courses/cms/course_detail.html:409
+#: apps/courses/templates/courses/cms/course_detail.html:415
 msgctxt "Ongoing course runs (plural)"
 msgid "Ongoing"
 msgstr "Текущий"
 
-#: apps/courses/templates/courses/cms/course_detail.html:422
+#: apps/courses/templates/courses/cms/course_detail.html:428
 msgctxt "Archived course runs (plural)"
 msgid "Archived"
 msgstr "Архивировано"
 
-#: apps/courses/templates/courses/cms/course_detail.html:447
+#: apps/courses/templates/courses/cms/course_detail.html:453
 msgid "\n"
 "                                        This course is part of a program\n"
 "                                    "
@@ -1455,37 +1455,37 @@ msgstr[3] "\n"
 "                                        Этот курс является частью программ\n"
 "                                    "
 
-#: apps/courses/templates/courses/cms/course_detail.html:473
+#: apps/courses/templates/courses/cms/course_detail.html:479
 msgctxt "course_detail__title"
 msgid "Course team"
 msgstr "Команда курса"
 
-#: apps/courses/templates/courses/cms/course_detail.html:478
+#: apps/courses/templates/courses/cms/course_detail.html:484
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:13
 msgid "Who are the teachers in the course team?"
 msgstr "Кто является преподавателями в команде курсов?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:492
+#: apps/courses/templates/courses/cms/course_detail.html:498
 msgctxt "course_detail__title"
 msgid "Organizations"
 msgstr "Организации"
 
-#: apps/courses/templates/courses/cms/course_detail.html:497
+#: apps/courses/templates/courses/cms/course_detail.html:503
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:32
 msgid "What are the organizations publishing this course?"
 msgstr "Какие организации публикуют этот курс?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:518
+#: apps/courses/templates/courses/cms/course_detail.html:524
 msgctxt "course_detail__title"
 msgid "License"
 msgstr "Лицензия"
 
-#: apps/courses/templates/courses/cms/course_detail.html:525
+#: apps/courses/templates/courses/cms/course_detail.html:531
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:50
 msgid "What is the license for the course content?"
 msgstr "Какова лицензия на содержимое курса?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:536
+#: apps/courses/templates/courses/cms/course_detail.html:542
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:59
 msgid "What is the license for the content created by course participants?"
 msgstr "Какова лицензия на контент, созданный участниками курса?"
