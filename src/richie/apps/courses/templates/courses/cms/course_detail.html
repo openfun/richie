@@ -177,15 +177,10 @@
                     {% block run_open_single %}
                         {% with runs_dict=course.course_runs_dict %}
                             {% with open_visible_runs=runs_dict.0|add:runs_dict.1|add:runs_dict.2|visible_on_course_page:request.toolbar.edit_mode_active %}
-                            {% if is_joanie_enabled %} BELLA {% else %} BILBO {% endif %}
-                            TEST TEST, Bonjour 
-                            {% is_joanie_enabled as is_joanie_enabled_bool %}
-                            {% if is_joanie_enabled_bool %} HELLO {% else %} BYE BYE {% endif %}
                                 {% if open_visible_runs|length == 0 %}
                                     <div class="course-detail__row course-detail__runs course-detail__runs--open">
                                         <div class="course-detail__empty">{% trans "No open course runs" %}</div>
                                         {% is_feature_enabled 'JOANIE_WISHLIST' as joanie_wishlist_enabled %}
-                                        <!-- {% is_joanie_enabled as is_joanie_enabled_bool %} -->
                                         {% if is_joanie_enabled and joanie_wishlist_enabled  %}
                                             <div
                                                 class="richie-react richie-react--course-add-to-wishlist"
