@@ -140,6 +140,9 @@ const getRoutes = () => {
         create: `${baseUrl}/wishlist/`,
         delete: `${baseUrl}/wishlist/:id/`,
       },
+      organizations: {
+        get: `${baseUrl}/organizations/:id/`,
+      },
     },
     products: {
       get: `${baseUrl}/products/:id/`,
@@ -296,6 +299,21 @@ const API = (): Joanie.API => {
           return fetchWithJWT(ROUTES.user.wishlist.delete.replace(':id', id), {
             method: 'DELETE',
           }).then(checkStatus);
+        },
+      },
+      organizations: {
+        get: async (filters) => {
+          let url;
+          const { id = '', ...queryParameters } = filters || {};
+
+          if (id) url = ROUTES.user.organizations.get.replace(':id', id);
+          else url = ROUTES.user.organizations.get.replace(':id/', '');
+
+          if (!ObjectHelper.isEmpty(queryParameters)) {
+            url += '?' + queryString.stringify(queryParameters);
+          }
+
+          return fetchWithJWT(url, { method: 'GET' }).then(checkStatus);
         },
       },
     },

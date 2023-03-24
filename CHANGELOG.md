@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add head_js block into base html template
+- list teacher's organizations in the teacher dashboard sidebar.
 
 ### Fixed
 

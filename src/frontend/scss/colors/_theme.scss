@@ -294,6 +294,10 @@ $r-theme: (
     message-color: r-color('grey32'),
     required-note-color: r-color('indianred3'),
   ),
+  organization-thumb: (
+    border-color: r-color('grey59'),
+    border-color-hover: r-color('firebrick6'),
+  ),
   organization-glimpse-list: (
     empty-color: r-color('slate-grey'),
     empty-background: transparent,
@@ -309,6 +313,9 @@ $r-theme: (
     divider: r-color('light-grey'),
     hover-background: darken(r-color('white'), 2%),
     hover-title-color: r-color('firebrick6'),
+  ),
+  dashboard-sidebar-organization-link-title: (
+    base-color: r-color('firebrick6'),
   ),
   pagination: (
     item-color: r-color('slate-grey'),

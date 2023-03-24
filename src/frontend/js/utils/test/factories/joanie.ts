@@ -19,6 +19,18 @@ export const TargetCourseFactory = createSpec({
 });
 
 export const OrganizationFactory = createSpec({
+  id: faker.random.alphaNumeric(5),
+  code: faker.random.alphaNumeric(5),
+  title: faker.random.words(1),
+  logo: {
+    filename: faker.random.words(1),
+    url: derived(({ id }: { id: string }) => `/organizations/${id}`),
+    height: 40,
+    width: 60,
+  },
+});
+
+export const OrganizationLightFactory = createSpec({
   code: faker.random.alphaNumeric(5),
   title: faker.random.words(1),
 });
@@ -82,7 +94,7 @@ export const CourseRunFactory = (scopes?: { course: Boolean }) => {
 
 export const CourseFactory = createSpec({
   code: faker.random.alphaNumeric(5),
-  organization: OrganizationFactory,
+  organization: OrganizationLightFactory,
   title: faker.unique(faker.random.words(Math.ceil(Math.random() * 3))),
   products: derived(() => ProductFactory.generate(1, 3)),
   course_runs: [],

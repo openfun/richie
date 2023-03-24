@@ -7,6 +7,8 @@ import {
   getDashboardRoutePath,
 } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useSession } from 'contexts/SessionContext';
+import { useOrganizations } from 'hooks/useOrganizations';
+import OrganizationLinks from './components/OrganizationLinks';
 
 const messages = defineMessages({
   header: {
@@ -26,6 +28,7 @@ export const TeacherProfileDashboardSidebar = () => {
   const { user } = useSession();
   const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
+  const { items: organizations } = useOrganizations();
 
   const links = useMemo(
     () =>
@@ -45,6 +48,8 @@ export const TeacherProfileDashboardSidebar = () => {
       menuLinks={links}
       header={intl.formatMessage(messages.header, { name: user?.username })}
       subHeader={intl.formatMessage(messages.subHeader)}
-    />
+    >
+      {organizations.length > 0 && <OrganizationLinks organizations={organizations} />}
+    </DashboardSidebar>
   );
 };

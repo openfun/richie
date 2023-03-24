@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { matchPath, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { ChangeEvent, useMemo, useRef } from 'react';
+import { ChangeEvent, PropsWithChildren, useMemo, useRef } from 'react';
 import { useSession } from 'contexts/SessionContext';
 import { DashboardAvatar } from 'widgets/Dashboard/components/DashboardAvatar';
 
@@ -17,13 +17,18 @@ const messages = defineMessages({
   },
 });
 
-interface DashboardSidebarProps {
+interface DashboardSidebarProps extends PropsWithChildren {
   menuLinks: Record<string, string>[];
   header: string;
   subHeader: string;
 }
 
-export const DashboardSidebar = ({ menuLinks, header, subHeader }: DashboardSidebarProps) => {
+export const DashboardSidebar = ({
+  children,
+  menuLinks,
+  header,
+  subHeader,
+}: DashboardSidebarProps) => {
   const { user } = useSession();
   const location = useLocation();
   const navigate = useNavigate();
@@ -77,6 +82,7 @@ export const DashboardSidebar = ({ menuLinks, header, subHeader }: DashboardSide
           ))}
         </ul>
       </div>
+      {children}
     </aside>
   );
 };
