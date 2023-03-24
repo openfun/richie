@@ -1,0 +1,42 @@
+.dashboard-sidebar {
+  &__organization-section {
+    // padding: rem-calc(5px) rem-calc(8px) rem-calc(40px);
+    padding: rem-calc(20px) rem-calc(8px) rem-calc(40px);
+
+    &__title {
+      font-size: rem-calc(16px);
+      font-weight: normal;
+      color: r-theme-val(dashboard-sidebar-organization-link-title, base-color);
+    }
+
+    &__link_list {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      gap: rem-calc(5px);
+      margin-top: rem-calc(10px);
+    }
+
+    &__link {
+      flex: 0 0 32%;
+      display: flex;
+      border: thin solid r-theme-val(organization-thumb, border-color);
+      border-radius: rem-calc(8px);
+      overflow: hidden;
+      justify-content: center;
+      align-items: center;
+      padding: rem-calc(2px);
+      &:hover,
+      &:focus,
+      &:active {
+        border-color: r-theme-val(organization-thumb, border-color-hover);
+        box-shadow: 0 0 rem-calc(3px) r-theme-val(organization-thumb, border-color);
+      }
+      &__img {
+        object-fit: cover;
+        object-position: center center;
+        aspect-ratio: 2/1;
+      }
+    }
+  }
+}

@@ -91,6 +91,13 @@ module.exports = (env) => {
             },
           ],
         },
+        {
+          test: /\.(jpg|png|svg)$/,
+          loader: 'file-loader',
+          options: {
+            name: '[path][name].[hash].[ext]',
+          },
+        },
         // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
         { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
       ],

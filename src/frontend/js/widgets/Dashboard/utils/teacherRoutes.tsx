@@ -3,7 +3,7 @@ import { Navigate, RouteObject } from 'react-router-dom';
 import { TeacherProfileSettingsDashboardLoader } from 'pages/TeacherProfileSettingsDashboardLoader';
 import { TeacherOrganizationCourseDashboardLoader } from 'pages/TeacherOrganizationCourseDashboardLoader';
 import RouteInfo from 'widgets/Dashboard/components/RouteInfo';
-import { TeacherProfileDashboardLoader } from 'widgets/Dashboard/components/TeacherProfileDashboardLoader';
+import { TeacherCoursesDashboardLoader } from 'pages/TeacherCoursesDashboardLoader';
 import NavigateWithParams from 'widgets/Dashboard/components/NavigateWithParams';
 import {
   getDashboardRouteLabel,
@@ -35,7 +35,7 @@ export function getTeacherDashboardRoutes() {
           handle: {
             crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_COURSES],
           },
-          element: <TeacherProfileDashboardLoader />,
+          element: <TeacherCoursesDashboardLoader />,
         },
         {
           path: getRoutePath(TeacherDashboardPaths.TEACHER_SETTINGS),

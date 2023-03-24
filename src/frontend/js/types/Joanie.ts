@@ -1,6 +1,7 @@
 import type { Priority, StateCTA, StateText } from 'types';
 import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
+import { OrganizationMock } from '../api/mocks/joanie/organizations';
 
 // - Generic
 export interface PaginatedResponse<T> {
@@ -291,6 +292,13 @@ interface APIUser {
       : Promise<UserWishlistCourse[]>;
     create(payload: UserWishlistCreationPayload): Promise<UserWishlistCourse>;
     delete(id: UserWishlistCourse['id']): Promise<void>;
+  };
+  organizations: {
+    get<Filters extends ResourcesQuery = ResourcesQuery>(
+      filters?: Filters,
+    ): Filters extends { id: string }
+      ? Promise<Nullable<OrganizationMock>>
+      : Promise<OrganizationMock[]>;
   };
 }
 

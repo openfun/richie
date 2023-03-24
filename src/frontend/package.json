@@ -100,6 +100,7 @@
     "eslint-plugin-storybook": "0.6.11",
     "faker": "5.5.3",
     "fetch-mock": "9.11.0",
+    "file-loader": "6.2.0",
     "glob": "10.0.0",
     "i18n-iso-countries": "7.5.0",
     "iframe-resizer": "4.3.6",
