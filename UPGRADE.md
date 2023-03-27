@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+- components CourseGlimpse and CourseGlimpseList has been moved from widgets/Search folder to 
+  components folder. Update your overrides.json and path in your custom scss files accordingly.
 - utils/test/factories.ts have been split into multiple files: joanie.ts, richie.ts and 
   reactQuery.ts. Update your import accordingly.
 
