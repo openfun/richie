@@ -6,7 +6,7 @@ import { useCourseSearchParams, CourseSearchParamsAction } from 'hooks/useCourse
 import useMatchMedia from 'hooks/useMatchMedia';
 import { CommonDataProps } from 'types/commonDataProps';
 import { scroll } from 'utils/indirection/window';
-import { CourseGlimpseList } from './components/CourseGlimpseList';
+import { CourseGlimpseList } from 'components/CourseGlimpseList';
 import { PaginateCourseSearch } from './components/PaginateCourseSearch';
 import { SearchFiltersPane } from './components/SearchFiltersPane';
 import { useCourseSearch } from './hooks/useCourseSearch';

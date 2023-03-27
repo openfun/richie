@@ -60,3 +60,33 @@ export const RichieContextFactory = (context: Partial<CommonDataProps['context']
     ...context,
     web_analytics_providers: derived(() => context.web_analytics_providers || null),
   });
+
+export const CourseFactory = createSpec({
+  absolute_url: '',
+  categories: [],
+  code: faker.random.alphaNumeric(5),
+  cover_image: {
+    sizes: '300px',
+    src: '/static/course_cover_image.jpg',
+    srcset: '/static/course_cover_image.jpg',
+  },
+  duration: '',
+  effort: '',
+  icon: {
+    color: null,
+    sizes: '60px',
+    src: '/static/course_icon.png',
+    srcset: '/static/course_icon.png',
+    title: 'Certifiant',
+  },
+  organization_highlighted: faker.unique(faker.random.words(Math.ceil(Math.random() * 3))),
+  organization_highlighted_cover_image: {
+    sizes: '100vh',
+    src: '/static/organization_cover_image.png',
+    srcset: '/static/organization_cover_image.png',
+  },
+  organizations: derived(({ organization_highlighted }: { organization_highlighted: string }) => [
+    organization_highlighted,
+  ]),
+  state: CourseStateFactory,
+});

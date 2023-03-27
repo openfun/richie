@@ -15,6 +15,7 @@ module.exports = {
     builder: '@storybook/builder-webpack5',
   },
   staticDirs: [
+    { from: './public', to: '/static' },
     { from: '../../richie/static', to: '/static' },
     { from: '../../richie/apps/core/static', to: '/static' },
     '../../richie/apps/core/templates/richie',
