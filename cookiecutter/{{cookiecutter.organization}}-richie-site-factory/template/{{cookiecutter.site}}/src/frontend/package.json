@@ -25,8 +25,12 @@
   "devDependencies": {
     "@formatjs/cli": "4.8.2",
     "eslint": "8.9.0",
+    "eslint-import-resolver-webpack": "0.13.2",
     "nodemon": "2.0.15",
     "prettier": "2.5.1",
-    "sass": "1.49.8"
+    "sass": "1.49.8",
+    "source-map-loader": "4.0.1",
+    "webpack": "5.76.3",
+    "webpack-cli": "5.0.1"
   }
 }
