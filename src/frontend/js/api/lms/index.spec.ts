@@ -1,10 +1,10 @@
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { handle } from 'utils/errors/handle';
 import LMSHandler from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     lms_backends: [
       {
         backend: 'dummy',

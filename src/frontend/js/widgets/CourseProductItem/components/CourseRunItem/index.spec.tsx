@@ -1,6 +1,6 @@
 import faker from 'faker';
 import { screen, getByText, render } from '@testing-library/react';
-import { OrderFactory } from 'utils/test/factories';
+import { OrderFactory } from 'utils/test/factories/joanie';
 import type { CourseRun, Order } from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
 import CourseRunItem from '.';

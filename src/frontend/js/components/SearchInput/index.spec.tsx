@@ -2,11 +2,11 @@ import { fireEvent, render } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 
 import { CommonDataProps } from 'types/commonDataProps';
-import { ContextFactory } from 'utils/test/factories';
+import { RichieContextFactory } from 'utils/test/factories/richie';
 import { SearchInput } from '.';
 
 describe('<SearchInput />', () => {
-  const contextProps: CommonDataProps['context'] = ContextFactory().generate();
+  const contextProps: CommonDataProps['context'] = RichieContextFactory().generate();
 
   const inputProps = {};
 

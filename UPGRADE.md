@@ -16,6 +16,9 @@ $ make migrate
 
 ## Unreleased
 
+- utils/test/factories.ts have been split into multiple files: joanie.ts, richie.ts and 
+  reactQuery.ts. Update your import accordingly.
+
 ## 2.20.1 to 2.21.0
 
 - Frontend folder architecture has been totally reworked. If you have overridden

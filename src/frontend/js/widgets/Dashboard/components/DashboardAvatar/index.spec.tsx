@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { UserFactory } from 'utils/test/factories';
+import { UserFactory } from 'utils/test/factories/richie';
 import { User } from 'types/User';
 import { DashboardAvatar } from '.';
 

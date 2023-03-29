@@ -3,10 +3,10 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { History, HistoryContext } from 'hooks/useHistory';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { JoanieEnrollmentFactory } from 'utils/test/factories';
+import { EnrollmentFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
@@ -17,12 +17,10 @@ import { expectBannerError } from 'utils/test/expectBannerError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -55,7 +53,7 @@ describe('<DashboardCourses/>', () => {
   });
 
   it('renders 3 pages of enrollments', async () => {
-    const enrollments: Enrollment[] = JoanieEnrollmentFactory.generate(30);
+    const enrollments: Enrollment[] = EnrollmentFactory.generate(30);
     const enrollmentsPage1 = enrollments.slice(0, 10);
     const enrollmentsPage2 = enrollments.slice(10, 20);
 

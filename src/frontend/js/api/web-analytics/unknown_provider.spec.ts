@@ -1,9 +1,9 @@
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import WebAnalyticsAPIHandler from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     web_analytics_providers: ['unknown_provider'],
   }).generate(),
 }));

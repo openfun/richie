@@ -3,8 +3,11 @@ import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { act } from 'react-dom/test-utils';
-import * as mockFactories from 'utils/test/factories';
-import { UserFactory } from 'utils/test/factories';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
+} from 'utils/test/factories/richie';
+import { AddressFactory } from 'utils/test/factories/joanie';
 import { location } from 'utils/indirection/window';
 import { User } from 'types/User';
 import { Nullable } from 'types/utils';
@@ -18,12 +21,10 @@ import { DashboardTest } from './components/DashboardTest';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -95,7 +96,7 @@ describe('<Dashboard />', () => {
 
   it('redirect when clicking on the breadcrumbs back button', async () => {
     const user = UserFactory.generate();
-    const address: Address = mockFactories.AddressFactory.generate();
+    const address: Address = AddressFactory.generate();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address], {
       overwriteRoutes: true,
     });

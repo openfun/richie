@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { UserFactory } from 'utils/test/factories';
+import { UserFactory } from 'utils/test/factories/richie';
 import { DashboardAvatar } from '.';
 
 export default {

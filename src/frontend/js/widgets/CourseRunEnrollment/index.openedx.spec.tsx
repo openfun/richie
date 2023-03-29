@@ -5,8 +5,11 @@ import { IntlProvider } from 'react-intl';
 
 import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
-import * as mockFactories from 'utils/test/factories';
-import { UserFactory } from 'utils/test/factories';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
+  CourseRunFactory,
+} from 'utils/test/factories/richie';
 import { handle } from 'utils/errors/handle';
 import context from 'utils/context';
 import { SessionProvider } from 'contexts/SessionContext';
@@ -18,21 +21,19 @@ jest.mock('utils/errors/handle');
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: {
-        endpoint: 'https://demo.endpoint',
+  default: mockRichieContextFactory({
+    authentication: {
+      endpoint: 'https://demo.endpoint',
+      backend: 'openedx-hawthorn',
+    },
+    lms_backends: [
+      {
         backend: 'openedx-hawthorn',
+        course_regexp: '(https://openedx.endpoint.*)',
+        endpoint: 'https://demo.endpoint',
       },
-      lms_backends: [
-        {
-          backend: 'openedx-hawthorn',
-          course_regexp: '(https://openedx.endpoint.*)',
-          endpoint: 'https://demo.endpoint',
-        },
-      ],
-    })
-    .generate(),
+    ],
+  }).generate(),
 }));
 
 const mockHandle = handle as jest.MockedFunction<typeof handle>;
@@ -63,7 +64,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it('shows an "Enroll" button and allows the user to enroll', async () => {
     const user: User = UserFactory.generate();
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory.generate();
     courseRun.state.priority = 0;
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
 
@@ -108,7 +109,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it('shows an error message and the enrollment button when the enrollment fails', async () => {
     const user: User = UserFactory.generate();
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory.generate();
     courseRun.state.priority = 0;
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
 
@@ -155,7 +156,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it('shows HttpError.localizedMessage on enrollment failure when HttpError owns this property', async () => {
     const user: User = UserFactory.generate();
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory.generate();
     courseRun.state.priority = 0;
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
 
@@ -201,7 +202,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it('shows a link to the course if the user is already enrolled', async () => {
     const user: User = UserFactory.generate();
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory.generate();
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
     courseRun.state.priority = 0;
 
@@ -235,7 +236,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it("shows remaining course opening time and a link to the lms dashboard if the user is already enrolled and if the course hasn't started yet", async () => {
     const user: User = UserFactory.generate();
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory.generate();
     courseRun.state.priority = 0;
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
     courseRun.starts_in_message = 'The course will start in 3 days';
@@ -276,7 +277,7 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('shows a helpful message if the course run is closed', async () => {
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory.generate();
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
     courseRun.state.priority = 4;
 
@@ -297,7 +298,7 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('prompts anonymous users to log in', async () => {
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory.generate();
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
     courseRun.state.priority = 0;
 

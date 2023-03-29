@@ -4,8 +4,8 @@ import { IntlProvider } from 'react-intl';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { Priority } from 'types';
-import * as mockFactories from 'utils/test/factories';
-import { JoanieCourseRunFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { CourseRunFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { useEnroll } from './index';
@@ -16,12 +16,10 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 /**
@@ -57,7 +55,7 @@ describe('useEnroll ( edge case )', () => {
     const { result } = renderHook(() => useEnroll([], undefined), { wrapper });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-    const courseRun = JoanieCourseRunFactory().generate();
+    const courseRun = CourseRunFactory().generate();
     courseRun.state.priority = Priority.FUTURE_NOT_YET_OPEN;
     await result.current.enroll(courseRun);
 
@@ -74,7 +72,7 @@ describe('useEnroll ( edge case )', () => {
     });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-    const courseRun = JoanieCourseRunFactory().generate();
+    const courseRun = CourseRunFactory().generate();
 
     act(() => {
       result.current.enroll(courseRun);

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import GoogleAnalyticsApi from './google_universal_analytics';
 import GoogleTagManagerApi from './google_tag_manager';
 import WebAnalyticsAPIHandler from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     web_analytics_providers: ['google_universal_analytics', 'google_tag_manager'],
   }).generate(),
 }));

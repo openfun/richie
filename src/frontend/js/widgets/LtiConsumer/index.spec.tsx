@@ -3,7 +3,7 @@ import { act, render, waitFor } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { QueryClient, QueryClientProvider, QueryObserverOptions } from '@tanstack/react-query';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { Deferred } from 'utils/test/deferred';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY } from 'settings';
@@ -21,7 +21,7 @@ const mockHandle: jest.Mock<typeof handle> = handle as any;
 jest.mock('utils/errors/handle');
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory().generate(),
+  default: mockRichieContextFactory().generate(),
 }));
 jest.mock('uuid', () => ({
   v4: () => 'a-random-uuid',

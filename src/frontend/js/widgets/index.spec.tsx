@@ -1,14 +1,14 @@
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { findByText, render } from '@testing-library/react';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { handle as mockHandle } from 'utils/errors/handle';
 import { noop } from 'utils';
 import { Root } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({ authentication: undefined }).generate(),
+  default: mockRichieContextFactory({ authentication: undefined }).generate(),
 }));
 jest.mock('utils/errors/handle');
 jest.mock('widgets/UserLogin', () => ({

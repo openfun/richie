@@ -3,11 +3,8 @@ import faker from 'faker';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
-import {
-  CertificationDefinitionFactory,
-  ContextFactory as mockContextFactory,
-  OrderLiteFactory,
-} from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { CertificationDefinitionFactory, OrderLiteFactory } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CertificateDefinition, OrderLite } from 'types/Joanie';
 import { handle } from 'utils/errors/handle';
@@ -16,7 +13,7 @@ import CertificateItem from '.';
 jest.mock('utils/errors/handle');
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
   }).generate(),

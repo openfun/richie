@@ -3,7 +3,8 @@ import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { act, renderHook, waitFor } from '@testing-library/react';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { useCreditCard, useCreditCards } from 'hooks/useCreditCards/index';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';
@@ -12,12 +13,10 @@ import { CreditCard } from 'types/Joanie';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 describe('useCreditCards', () => {
@@ -42,7 +41,7 @@ describe('useCreditCards', () => {
   };
 
   it('retrieves all the credit cards', async () => {
-    const creditCards = mockFactories.CreditCardFactory.generate(5);
+    const creditCards = CreditCardFactory.generate(5);
     const responseDeferred = new Deferred();
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', responseDeferred.promise);
 
@@ -76,7 +75,7 @@ describe('useCreditCards', () => {
   });
 
   it('retrieves a specific credit card', async () => {
-    const creditCards = mockFactories.CreditCardFactory.generate(5);
+    const creditCards = CreditCardFactory.generate(5);
     const creditCard: CreditCard = creditCards[3];
     const responseDeferred = new Deferred();
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', responseDeferred.promise);

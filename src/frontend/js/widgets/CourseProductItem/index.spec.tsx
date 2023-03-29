@@ -9,13 +9,13 @@ import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   CertificateProductFactory,
-  ContextFactory as mockContextFactory,
-  JoanieEnrollmentFactory,
+  EnrollmentFactory,
   OrderFactory,
   ProductFactory,
-} from 'utils/test/factories';
+} from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CourseRun, Enrollment, Order, OrderState, Product } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -25,7 +25,7 @@ import CourseProductItem from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
   }).generate(),
@@ -73,7 +73,7 @@ describe('CourseProductItem', () => {
 
   afterEach(() => {
     fetchMock.restore();
-    JoanieEnrollmentFactory.afterGenerate((e: Enrollment) => e);
+    EnrollmentFactory.afterGenerate((e: Enrollment) => e);
     ProductFactory.afterGenerate((p: Product) => p);
     OrderFactory.afterGenerate((o: Order) => o);
   });
@@ -212,7 +212,7 @@ describe('CourseProductItem', () => {
   it('renders enrollment information when user is enrolled to a course run', async () => {
     const product: Product = CertificateProductFactory.generate();
     // - Create an order with an active enrollment
-    const enrollment: Enrollment = JoanieEnrollmentFactory.afterGenerate(
+    const enrollment: Enrollment = EnrollmentFactory.afterGenerate(
       ({ state, ...e }: Enrollment): Enrollment => ({
         ...e,
         course_run: product.target_courses[0]!.course_runs[0]! as CourseRun,

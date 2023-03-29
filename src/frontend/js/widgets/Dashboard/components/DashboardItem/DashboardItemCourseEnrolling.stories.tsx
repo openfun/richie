@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import faker from 'faker';
-import { CourseFactory } from 'utils/test/factories';
+import { CourseFactory } from 'utils/test/factories/joanie';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { Priority } from 'types';
 import { enrollment } from './mock.stories';

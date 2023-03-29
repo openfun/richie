@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { createMemoryRouter, Outlet, RouterProvider } from 'react-router-dom';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import LocationDisplay from 'utils/test/LocationDisplay';
 import NavigateWithParams from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory().generate(),
+  default: mockRichieContextFactory().generate(),
 }));
 
 jest.mock('utils/indirection/window', () => ({

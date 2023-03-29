@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { PropsWithChildren } from 'react';
-import { JoanieEnrollmentFactory } from 'utils/test/factories';
+import { EnrollmentFactory } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
 import { Enrollment } from 'types/Joanie';
 import { DATETIME_FORMAT } from 'hooks/useDateFormat';
@@ -17,7 +17,7 @@ describe('<Enrolled/>', () => {
   };
 
   const runTest = (priority: Priority, expectButton: boolean) => {
-    const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
+    const enrollment: Enrollment = EnrollmentFactory.generate();
     enrollment.course_run.state.priority = priority;
     render(<Enrolled enrollment={enrollment} />, { wrapper });
     screen.getByText(

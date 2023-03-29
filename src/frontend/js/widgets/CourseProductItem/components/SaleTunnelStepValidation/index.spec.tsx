@@ -2,7 +2,7 @@ import { fireEvent, getByRole, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
-import { ProductFactory } from 'utils/test/factories';
+import { ProductFactory } from 'utils/test/factories/joanie';
 import { SaleTunnelStepValidation } from '.';
 
 describe('SaleTunnelStepValidation', () => {

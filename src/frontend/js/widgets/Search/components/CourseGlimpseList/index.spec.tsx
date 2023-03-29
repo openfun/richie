@@ -1,13 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 
-import { ContextFactory } from 'utils/test/factories';
+import { RichieContextFactory } from 'utils/test/factories/richie';
 import { CommonDataProps } from 'types/commonDataProps';
 import { Course } from 'types/Course';
 import { CourseGlimpseList } from '.';
 
 describe('widgets/Search/components/CourseGlimpseList', () => {
-  const contextProps: CommonDataProps['context'] = ContextFactory().generate();
+  const contextProps: CommonDataProps['context'] = RichieContextFactory().generate();
 
   it('renders a list of Courses into a list of CourseGlimpses', () => {
     const courses = [

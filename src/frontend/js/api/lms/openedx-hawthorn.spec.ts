@@ -1,6 +1,6 @@
 import fetchMock from 'fetch-mock';
 import faker from 'faker';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { handle } from 'utils/errors/handle';
 import { HttpError } from 'utils/errors/HttpError';
 import context from 'utils/context';
@@ -9,7 +9,7 @@ import API from './openedx-hawthorn';
 jest.mock('utils/errors/handle');
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     lms_backends: [
       {
         backend: 'openedx-hawthorn',

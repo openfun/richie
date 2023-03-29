@@ -2,7 +2,8 @@ import { render, screen } from '@testing-library/react';
 import type * as Joanie from 'types/Joanie';
 import { PaymentProviders } from 'types/Joanie';
 import { handle as mockHandle } from 'utils/errors/handle';
-import { ContextFactory as mockContextFactory, PaymentFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { PaymentFactory } from 'utils/test/factories/joanie';
 import PaymentInterface from '.';
 
 jest.mock('./PayplugLightbox', () => ({
@@ -20,7 +21,7 @@ jest.mock('utils/errors/handle', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory().generate(),
+  default: mockRichieContextFactory().generate(),
 }));
 
 describe('PaymentInterface', () => {

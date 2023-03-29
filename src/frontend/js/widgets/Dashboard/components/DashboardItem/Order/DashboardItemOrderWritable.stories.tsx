@@ -1,11 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Order, OrderState, Product, TargetCourse } from 'types/Joanie';
-import {
-  OrderFactory,
-  ProductFactory,
-  QueryStateFactory,
-  TargetCourseFactory,
-} from 'utils/test/factories';
+import { QueryStateFactory } from 'utils/test/factories/reactQuery';
+import { OrderFactory, ProductFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { enrollment } from '../mock.stories';
 import { DashboardItemOrder } from './DashboardItemOrder';
