@@ -1,6 +1,6 @@
 import { CoursesHelper } from 'utils/CoursesHelper/index';
 import { Order } from 'types/Joanie';
-import { JoanieEnrollmentFactory, OrderFactory, TargetCourseFactory } from 'utils/test/factories';
+import { EnrollmentFactory, OrderFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
 
 describe('CourseHelper', () => {
   it('should find an active course enrollment in order', () => {
@@ -10,12 +10,12 @@ describe('CourseHelper', () => {
     };
     order.enrollments = [
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[0].course_runs[0],
         is_active: false,
       },
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[1].course_runs[0],
         is_active: true,
       },
@@ -31,12 +31,12 @@ describe('CourseHelper', () => {
     };
     order.enrollments = [
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[0].course_runs[0],
         is_active: false,
       },
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[1].course_runs[0],
         is_active: false,
       },
@@ -63,17 +63,17 @@ describe('CourseHelper', () => {
     };
     order.enrollments = [
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[0].course_runs[0],
         is_active: false,
       },
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[1].course_runs[0],
         is_active: true,
       },
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[0].course_runs[1],
         is_active: true,
       },
@@ -90,17 +90,17 @@ describe('CourseHelper', () => {
     };
     order.enrollments = [
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[0].course_runs[0],
         is_active: false,
       },
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[1].course_runs[0],
         is_active: true,
       },
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[0].course_runs[1],
         is_active: true,
       },

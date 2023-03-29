@@ -3,7 +3,10 @@ import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { act, render, renderHook, waitFor } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
-import { ContextFactory as mockContextFactory, FonzieUserFactory } from 'utils/test/factories';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  FonzieUserFactory,
+} from 'utils/test/factories/richie';
 import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -13,7 +16,7 @@ import { useSession } from '.';
 jest.mock('utils/errors/handle');
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
     joanie_backend: { endpoint: 'https://joanie.endpoint.test' },
   }).generate(),

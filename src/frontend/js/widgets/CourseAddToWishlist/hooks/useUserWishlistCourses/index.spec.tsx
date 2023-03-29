@@ -4,7 +4,8 @@ import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { Deferred } from 'utils/test/deferred';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { UserWishlistCourseFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
@@ -12,21 +13,19 @@ import { useUserWishlistCourse, useUserWishlistCourses } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: {
-        backend: 'fonzie',
-        endpoint: 'https://authentication.test',
-      },
-      joanie_backend: {
-        endpoint: 'https://joanie.test',
-      },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: {
+      backend: 'fonzie',
+      endpoint: 'https://authentication.test',
+    },
+    joanie_backend: {
+      endpoint: 'https://joanie.test',
+    },
+  }).generate(),
 }));
 
 describe('useWishlistCourse', () => {
-  const wishlistCourse = mockFactories.UserWishlistCourseFactory.generate();
+  const wishlistCourse = UserWishlistCourseFactory.generate();
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -91,7 +90,7 @@ describe('useWishlistCourse', () => {
   });
 
   it('retrieves all user wishlists', async () => {
-    const wishlistList = mockFactories.UserWishlistCourseFactory.generate(3);
+    const wishlistList = UserWishlistCourseFactory.generate(3);
     const responseDeferred = new Deferred();
 
     const urlGetAllWishlist = 'https://joanie.test/api/v1.0/wishlist/';

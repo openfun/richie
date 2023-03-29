@@ -3,7 +3,7 @@ import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 
 import { location } from 'utils/indirection/window';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import context from 'utils/context';
 import RootSearchSuggestField from '.';
 
@@ -19,7 +19,7 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory().generate(),
+  default: mockRichieContextFactory().generate(),
 }));
 
 describe('<RootSearchSuggestField />', () => {

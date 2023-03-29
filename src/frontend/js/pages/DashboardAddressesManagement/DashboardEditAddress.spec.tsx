@@ -2,7 +2,8 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { act, findByText, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
@@ -13,12 +14,10 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 describe('<DashboardEditAddress/>', () => {
@@ -33,8 +32,8 @@ describe('<DashboardEditAddress/>', () => {
   });
 
   it('updates an address', async () => {
-    const address = mockFactories.AddressFactory.generate();
-    const addressUpdated = mockFactories.AddressFactory.generate();
+    const address = AddressFactory.generate();
+    const addressUpdated = AddressFactory.generate();
     // It must keep the same id.
     addressUpdated.id = address.id;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
@@ -119,7 +118,7 @@ describe('<DashboardEditAddress/>', () => {
   });
 
   it('shows an error in case of API error', async () => {
-    const address = mockFactories.AddressFactory.generate();
+    const address = AddressFactory.generate();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
     // Mock the edit API route to return a 500 status.

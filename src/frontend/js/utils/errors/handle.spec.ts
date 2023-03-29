@@ -2,12 +2,12 @@
  * @jest-environment jsdom
  */
 import * as Sentry from '@sentry/browser';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { handle } from './handle';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     sentry_dsn: 'https://sentry.local.test',
   }).generate(),
 }));

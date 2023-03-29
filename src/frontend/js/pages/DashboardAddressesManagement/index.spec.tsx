@@ -11,7 +11,8 @@ import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { findByText } from '@storybook/testing-library';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
@@ -23,12 +24,10 @@ import { expectBannerError } from 'utils/test/expectBannerError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -68,7 +67,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('renders a list with addresses', async () => {
-    const addresses = mockFactories.AddressFactory.generate(5);
+    const addresses = AddressFactory.generate(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
@@ -91,7 +90,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('deletes an address', async () => {
-    const addresses = mockFactories.AddressFactory.generate(5);
+    const addresses = AddressFactory.generate(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
@@ -137,7 +136,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('promotes an address', async () => {
-    const addresses = mockFactories.AddressFactory.generate(5);
+    const addresses = AddressFactory.generate(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
@@ -188,7 +187,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('shows the main address above all others', async () => {
-    const addresses = mockFactories.AddressFactory.generate(5);
+    const addresses = AddressFactory.generate(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
@@ -212,7 +211,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('cannot delete a main address', async () => {
-    const addresses = mockFactories.AddressFactory.generate(5);
+    const addresses = AddressFactory.generate(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
@@ -239,7 +238,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('cannot promote a main address', async () => {
-    const addresses = mockFactories.AddressFactory.generate(5);
+    const addresses = AddressFactory.generate(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
@@ -288,7 +287,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('redirects to the edit address route', async () => {
-    const address = mockFactories.AddressFactory.generate();
+    const address = AddressFactory.generate();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
     await act(async () => {
       render(
@@ -313,7 +312,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('shows an error banner in case of API error', async () => {
-    mockFactories.AddressFactory.generate();
+    AddressFactory.generate();
     // Mock the API route to return a 500 error.
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', {
       status: 500,

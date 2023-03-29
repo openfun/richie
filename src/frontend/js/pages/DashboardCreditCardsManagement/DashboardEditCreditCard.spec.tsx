@@ -10,7 +10,8 @@ import {
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { SessionProvider } from 'contexts/SessionContext';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
@@ -21,12 +22,10 @@ import { expectBannerError } from 'utils/test/expectBannerError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -45,9 +44,9 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('updates a credit card name', async () => {
-    const creditCard = mockFactories.CreditCardFactory.generate();
-    const creditCards = [...mockFactories.CreditCardFactory.generate(5), creditCard];
-    const creditCardUpdated = mockFactories.CreditCardFactory.generate();
+    const creditCard = CreditCardFactory.generate();
+    const creditCards = [...CreditCardFactory.generate(5), creditCard];
+    const creditCardUpdated = CreditCardFactory.generate();
     // It must keep the same id.
     creditCardUpdated.id = creditCard.id;
 
@@ -142,8 +141,8 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('sets credit card as main', async () => {
-    const creditCard = mockFactories.CreditCardFactory.generate();
-    const creditCards = [...mockFactories.CreditCardFactory.generate(5), creditCard];
+    const creditCard = CreditCardFactory.generate();
+    const creditCards = [...CreditCardFactory.generate(5), creditCard];
     const creditCardUpdated = { ...creditCard };
     creditCardUpdated.is_main = true;
 
@@ -236,8 +235,8 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('deletes a credit card', async () => {
-    const creditCard = mockFactories.CreditCardFactory.generate();
-    let creditCards = [...mockFactories.CreditCardFactory.generate(5), creditCard];
+    const creditCard = CreditCardFactory.generate();
+    let creditCards = [...CreditCardFactory.generate(5), creditCard];
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
@@ -306,8 +305,8 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('shows an error in case of API error', async () => {
-    const creditCard = mockFactories.CreditCardFactory.generate();
-    const creditCards = [...mockFactories.CreditCardFactory.generate(5), creditCard];
+    const creditCard = CreditCardFactory.generate();
+    const creditCards = [...CreditCardFactory.generate(5), creditCard];
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';

@@ -4,8 +4,10 @@ import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { act } from 'react-dom/test-utils';
-import * as mockFactories from 'utils/test/factories';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
+} from 'utils/test/factories/richie';
 import { Deferred } from 'utils/test/deferred';
 import context from 'utils/context';
 import { SessionProvider } from 'contexts/SessionContext';
@@ -27,7 +29,7 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory().generate(),
+  default: mockRichieContextFactory().generate(),
 }));
 
 describe('<UserLogin />', () => {
@@ -36,7 +38,7 @@ describe('<UserLogin />', () => {
   });
 
   it('gets and renders the user name and a dropdown containing a logout link', async () => {
-    const user: User = mockFactories.UserFactory.generate();
+    const user: User = UserFactory.generate();
 
     await act(async () => {
       render(
@@ -85,7 +87,7 @@ describe('<UserLogin />', () => {
   });
 
   it('should renders profile urls and bind user info if needed', async () => {
-    const user: User = mockFactories.UserFactory.generate();
+    const user: User = UserFactory.generate();
     const profileUrls = {
       settings: { label: 'Settings', action: 'https://auth.local.test/settings' },
       account: { label: 'Account', action: 'https://auth.local.test/u/(username)' },

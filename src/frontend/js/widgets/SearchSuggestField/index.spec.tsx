@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 import { CourseSearchParamsAction, useCourseSearchParams } from 'hooks/useCourseSearchParams';
 import { HistoryProvider } from 'hooks/useHistory';
 import { history, location } from 'utils/indirection/window';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { FilterDefinition } from 'types/filters';
 import context from 'utils/context';
 import SearchSuggestField from '.';
@@ -24,7 +24,7 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory().generate(),
+  default: mockRichieContextFactory().generate(),
 }));
 
 describe('widgets/Search/components/SearchSuggestField', () => {

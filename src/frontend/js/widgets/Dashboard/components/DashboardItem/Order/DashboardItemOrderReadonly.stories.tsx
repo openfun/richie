@@ -1,12 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { Order, OrderState, Product, TargetCourse } from 'types/Joanie';
-import {
-  OrderFactory,
-  ProductFactory,
-  QueryStateFactory,
-  TargetCourseFactory,
-} from 'utils/test/factories';
+import { OrderFactory, ProductFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
+import { QueryStateFactory } from 'utils/test/factories/reactQuery';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { enrollment } from '../mock.stories';
 import { DashboardItemOrder } from './DashboardItemOrder';

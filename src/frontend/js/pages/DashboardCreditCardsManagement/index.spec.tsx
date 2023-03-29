@@ -12,7 +12,8 @@ import {
 } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import * as faker from 'faker';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
@@ -24,12 +25,10 @@ import { expectBannerError } from 'utils/test/expectBannerError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -70,7 +69,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   it('renders the correct label for expired date', async () => {
     const date = faker.date.past(0.2);
     const creditCard: CreditCard = {
-      ...mockFactories.CreditCardFactory.generate(),
+      ...CreditCardFactory.generate(),
       expiration_month: date.getMonth() + 1,
       expiration_year: date.getFullYear(),
     };
@@ -107,7 +106,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     offset.setDate(1);
     const date = faker.date.future(2 / 12, offset);
     const creditCard: CreditCard = {
-      ...mockFactories.CreditCardFactory.generate(),
+      ...CreditCardFactory.generate(),
       expiration_month: date.getMonth() + 1,
       expiration_year: date.getFullYear(),
     };
@@ -143,7 +142,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     limit.setMonth(limit.getMonth() + 4);
     const date = faker.date.future(0.2, limit);
     const creditCard: CreditCard = {
-      ...mockFactories.CreditCardFactory.generate(),
+      ...CreditCardFactory.generate(),
       expiration_month: date.getMonth() + 1,
       expiration_year: date.getFullYear(),
     };
@@ -175,7 +174,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('deletes a credit card', async () => {
-    const creditCards = mockFactories.CreditCardFactory.generate(5);
+    const creditCards = CreditCardFactory.generate(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
@@ -224,7 +223,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('promotes a credit card', async () => {
-    const creditCards = mockFactories.CreditCardFactory.generate(5);
+    const creditCards = CreditCardFactory.generate(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
@@ -275,7 +274,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('shows the main credit card above all others', async () => {
-    const creditCards = mockFactories.CreditCardFactory.generate(5);
+    const creditCards = CreditCardFactory.generate(5);
     const mainCreditCard = creditCards[3];
     mainCreditCard.is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
@@ -307,7 +306,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('cannot delete a main credit card', async () => {
-    const creditCards = mockFactories.CreditCardFactory.generate(5);
+    const creditCards = CreditCardFactory.generate(5);
     const mainCreditCard = creditCards[3];
     mainCreditCard.is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
@@ -335,7 +334,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('cannot promote a main credit card', async () => {
-    const creditCards = mockFactories.CreditCardFactory.generate(5);
+    const creditCards = CreditCardFactory.generate(5);
     const mainCreditCard = creditCards[3];
     mainCreditCard.is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
@@ -363,7 +362,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('redirects to the edit credit card route', async () => {
-    const creditCards = mockFactories.CreditCardFactory.generate(5);
+    const creditCards = CreditCardFactory.generate(5);
     const creditCard = creditCards[2];
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {

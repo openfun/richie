@@ -1,12 +1,12 @@
 import type { PropsWithChildren } from 'react';
 import { renderHook } from '@testing-library/react';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { noop } from 'utils';
 import JoanieApiProvider, { useJoanieApi } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     joanie_backend: {
       endpoint: 'https://joanie.test',
     },

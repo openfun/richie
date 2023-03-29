@@ -1,10 +1,10 @@
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import GoogleTagManagerApi from './google_tag_manager';
 import WebAnalyticsAPIHandler from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     web_analytics_providers: ['google_tag_manager'],
   }).generate(),
 }));

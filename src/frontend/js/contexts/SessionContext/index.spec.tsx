@@ -3,7 +3,10 @@ import faker from 'faker';
 import fetchMock from 'fetch-mock';
 import { act, render, renderHook, screen, waitFor } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
-import { ContextFactory as mockContextFactory, UserFactory } from 'utils/test/factories';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
+} from 'utils/test/factories/richie';
 import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -13,7 +16,7 @@ import { useSession } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     authentication: {
       endpoint: 'https://endpoint.test',
       backend: 'openedx-hawthorn',

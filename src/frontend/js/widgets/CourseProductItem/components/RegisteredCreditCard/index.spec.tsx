@@ -2,7 +2,7 @@ import { fireEvent, getByRole, getByText, render } from '@testing-library/react'
 import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { CreditCard } from 'types/Joanie';
-import { CreditCardFactory } from 'utils/test/factories';
+import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { RegisteredCreditCard } from '.';
 
 describe('RegisteredCreditCard', () => {

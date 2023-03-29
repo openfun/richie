@@ -3,7 +3,8 @@ import fetchMock from 'fetch-mock';
 import { Fragment } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { ContextFactory as mockContextFactory, ProductFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { ProductFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import SaleTunnel from '.';
@@ -29,7 +30,7 @@ jest.mock('../SaleTunnelStepResume', () => ({
 }));
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
   }).generate(),

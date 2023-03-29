@@ -1,4 +1,4 @@
-import { ContextFactory } from 'utils/test/factories';
+import { RichieContextFactory } from 'utils/test/factories/richie';
 
 let context = {
   joanie_backend: {
@@ -11,5 +11,5 @@ let context = {
 };
 
 (window as any).__richie_frontend_context__ = {
-  context: ContextFactory(context).generate(),
+  context: RichieContextFactory(context).generate(),
 };

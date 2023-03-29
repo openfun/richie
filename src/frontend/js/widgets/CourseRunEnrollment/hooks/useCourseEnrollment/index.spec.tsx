@@ -5,7 +5,11 @@ import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
-import * as mockFactories from 'utils/test/factories';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
+  CourseRunFactory,
+} from 'utils/test/factories/richie';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
@@ -13,21 +17,19 @@ import useCourseEnrollment from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: {
+  default: mockRichieContextFactory({
+    authentication: {
+      backend: 'openedx-hawthorn',
+      endpoint: 'https://endpoint.test',
+    },
+    lms_backends: [
+      {
         backend: 'openedx-hawthorn',
+        course_regexp: '(.*)',
         endpoint: 'https://endpoint.test',
       },
-      lms_backends: [
-        {
-          backend: 'openedx-hawthorn',
-          course_regexp: '(.*)',
-          endpoint: 'https://endpoint.test',
-        },
-      ],
-    })
-    .generate(),
+    ],
+  }).generate(),
 }));
 
 describe('useCourseEnrollment', () => {
@@ -46,8 +48,8 @@ describe('useCourseEnrollment', () => {
   });
 
   it('does not make request when user is not authenticated', async () => {
-    const user: User = mockFactories.UserFactory.generate();
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    const user: User = UserFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory.generate();
 
     fetchMock.get(
       `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
@@ -64,8 +66,8 @@ describe('useCourseEnrollment', () => {
   });
 
   it('retrieves enrollment when user is authenticated', async () => {
-    const user: User = mockFactories.UserFactory.generate();
-    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
+    const user: User = UserFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory.generate();
 
     const enrollmentResponse = { title: courseRun.id, is_active: faker.datatype.boolean() };
     const enrollementDefered = new Deferred();

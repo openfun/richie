@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import { UserFactory } from 'utils/test/factories';
+import { UserFactory } from 'utils/test/factories/richie';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { DashboardSidebar } from '.';
 

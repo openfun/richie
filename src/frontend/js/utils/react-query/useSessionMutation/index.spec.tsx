@@ -2,7 +2,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { useSession } from 'contexts/SessionContext';
 import { checkStatus } from 'api/joanie';
@@ -11,7 +11,7 @@ import { useSessionMutation } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     authentication: {
       endpoint: 'https://endpoint.test',
       backend: 'openedx-hawthorn',

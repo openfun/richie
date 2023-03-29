@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { StorybookHelper } from 'utils/StorybookHelper';
-import { AddressFactory } from 'utils/test/factories';
+import { AddressFactory } from 'utils/test/factories/joanie';
 import { DashboardEditAddress } from './DashboardEditAddress';
 
 export default {

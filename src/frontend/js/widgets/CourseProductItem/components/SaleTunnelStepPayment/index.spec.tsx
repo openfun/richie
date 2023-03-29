@@ -2,8 +2,11 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
-import * as mockFactories from 'utils/test/factories';
-import { UserFactory } from 'utils/test/factories';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
+} from 'utils/test/factories/richie';
+import { ProductFactory, AddressFactory, CreditCardFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Address, CreditCard } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -17,12 +20,10 @@ jest.mock('../PaymentButton', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 describe('SaleTunnelStepPayment', () => {
@@ -40,7 +41,7 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display product title and its price', async () => {
-    const product = mockFactories.ProductFactory.generate();
+    const product = ProductFactory.generate();
 
     await act(async () => {
       render(
@@ -67,7 +68,7 @@ describe('SaleTunnelStepPayment', () => {
 
   it('should display authenticated user information', async () => {
     const user: User = UserFactory.generate();
-    const product = mockFactories.ProductFactory.generate();
+    const product = ProductFactory.generate();
 
     await act(async () => {
       render(
@@ -87,7 +88,7 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display a button to create an address if user has no address ', async () => {
-    const product = mockFactories.ProductFactory.generate();
+    const product = ProductFactory.generate();
 
     await act(() => {
       render(
@@ -119,8 +120,8 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display registered addresses', async () => {
-    const product = mockFactories.ProductFactory.generate();
-    const addresses = mockFactories.AddressFactory.generate(3) as Address[];
+    const product = ProductFactory.generate();
+    const addresses = AddressFactory.generate(3) as Address[];
     const randomIndex = Math.floor(Math.random() * addresses.length);
     addresses[randomIndex].is_main = true;
 
@@ -189,7 +190,7 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should not display registered credit cards section if user has no credit cards', async () => {
-    const product = mockFactories.ProductFactory.generate();
+    const product = ProductFactory.generate();
 
     await act(async () => {
       render(
@@ -211,8 +212,8 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display registered credit cards', async () => {
-    const product = mockFactories.ProductFactory.generate();
-    const creditCards = mockFactories.CreditCardFactory.generate(3) as CreditCard[];
+    const product = ProductFactory.generate();
+    const creditCards = CreditCardFactory.generate(3) as CreditCard[];
     const randomIndex = Math.floor(Math.random() * creditCards.length);
     creditCards[randomIndex].is_main = true;
 
@@ -275,7 +276,7 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should render <PaymentButton />', async () => {
-    const product = mockFactories.ProductFactory.generate();
+    const product = ProductFactory.generate();
 
     render(
       <QueryClientProvider client={createTestQueryClient({ user: true })}>

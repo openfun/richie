@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { StorybookHelper } from 'utils/StorybookHelper';
-import { CreditCardFactory } from 'utils/test/factories';
+import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { DashboardEditCreditCard } from './DashboardEditCreditCard';
 
 export default {

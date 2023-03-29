@@ -4,13 +4,13 @@ import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
-  ContextFactory as mockContextFactory,
   CourseFactory,
-  JoanieCourseRunFactory,
-  JoanieEnrollmentFactory,
+  CourseRunFactory,
+  EnrollmentFactory,
   OrderFactory,
-} from 'utils/test/factories';
+} from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import type { Course, CourseRun, Enrollment, OrderLite } from 'types/Joanie';
 import { Deferred } from 'utils/test/deferred';
@@ -21,7 +21,7 @@ import { CourseRunList, EnrollableCourseRunList, EnrolledCourseRun } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
   }).generate(),
@@ -36,7 +36,7 @@ describe('CourseProductCourseRuns', () => {
 
   afterEach(() => {
     fetchMock.restore();
-    JoanieCourseRunFactory().afterGenerate((cr: CourseRun) => cr);
+    CourseRunFactory().afterGenerate((cr: CourseRun) => cr);
   });
 
   describe('CourseRunList', () => {
@@ -55,7 +55,7 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('renders a list of course runs', () => {
-      const courseRuns: CourseRun[] = JoanieCourseRunFactory().generate(2);
+      const courseRuns: CourseRun[] = CourseRunFactory().generate(2);
 
       const { container } = render(
         <Wrapper>
@@ -134,7 +134,7 @@ describe('CourseProductCourseRuns', () => {
 
     it('renders a list of course runs with a call to action to enroll', async () => {
       const course: Course = CourseFactory.generate();
-      const courseRuns: CourseRun[] = JoanieCourseRunFactory().generate(2);
+      const courseRuns: CourseRun[] = CourseRunFactory().generate(2);
       const order: OrderLite = OrderFactory.generate();
 
       render(
@@ -234,7 +234,7 @@ describe('CourseProductCourseRuns', () => {
 
     it('enroll with errors', async () => {
       const course: Course = CourseFactory.generate();
-      const courseRuns: CourseRun[] = JoanieCourseRunFactory().generate(2);
+      const courseRuns: CourseRun[] = CourseRunFactory().generate(2);
       const order: OrderLite = OrderFactory.generate();
       fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
 
@@ -328,7 +328,7 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('does not allow to enroll if course run is not opened for enrollment', async () => {
-      const courseRun: CourseRun = JoanieCourseRunFactory()
+      const courseRun: CourseRun = CourseRunFactory()
         .afterGenerate((cr: CourseRun) => ({
           // - Course Run not yet opened for enrollment
           ...cr,
@@ -428,7 +428,7 @@ describe('CourseProductCourseRuns', () => {
     );
 
     it('renders enrollment information', () => {
-      const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
+      const enrollment: Enrollment = EnrollmentFactory.generate();
 
       render(
         <Wrapper>
@@ -464,7 +464,7 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('renders enrollment not started', async () => {
-      const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
+      const enrollment: Enrollment = EnrollmentFactory.generate();
       const today = new Date();
       const startDate = new Date();
       startDate.setMonth(today.getMonth() + 2);

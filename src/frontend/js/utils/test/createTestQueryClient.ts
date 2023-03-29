@@ -1,5 +1,6 @@
 import { DehydratedState, hydrate } from '@tanstack/react-query';
-import * as mockFactories from 'utils/test/factories';
+import { UserFactory } from 'utils/test/factories/richie';
+import { QueryStateFactory, PersistedClientFactory } from 'utils/test/factories/reactQuery';
 import createQueryClient, { QueryClientOptions } from 'utils/react-query/createQueryClient';
 import { User } from 'types/User';
 import { Maybe, Nullable } from 'types/utils';
@@ -20,7 +21,7 @@ export interface CreateTestQueryClientParams extends QueryClientOptions {
 export const createTestQueryClient = (params?: CreateTestQueryClientParams) => {
   let userToUse: Maybe<Nullable<User>>;
   if (params?.user === true) {
-    userToUse = mockFactories.UserFactory.generate();
+    userToUse = UserFactory.generate();
   } else if (params?.user) {
     userToUse = params.user as User;
   } else if (params?.user === null) {
@@ -29,12 +30,12 @@ export const createTestQueryClient = (params?: CreateTestQueryClientParams) => {
 
   const queries: DehydratedState['queries'] = [];
   if (userToUse || userToUse === null) {
-    queries.push(mockFactories.QueryStateFactory(['user'], { data: userToUse }));
+    queries.push(QueryStateFactory(['user'], { data: userToUse }));
   }
 
   params?.queriesCallback?.(queries);
 
-  const { clientState } = mockFactories.PersistedClientFactory({
+  const { clientState } = PersistedClientFactory({
     queries,
   });
   const client = createQueryClient(params);

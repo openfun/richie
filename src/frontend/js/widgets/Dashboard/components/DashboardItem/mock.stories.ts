@@ -1,4 +1,4 @@
-import { CourseStateFactory } from 'utils/test/factories';
+import { CourseStateFactory } from 'utils/test/factories/richie';
 import { Enrollment, EnrollmentState } from 'types/Joanie';
 
 export const enrollment: Enrollment = {

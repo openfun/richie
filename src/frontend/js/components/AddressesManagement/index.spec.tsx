@@ -5,7 +5,8 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import type * as Joanie from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -13,12 +14,10 @@ import AddressesManagement from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -64,7 +63,7 @@ describe('AddressesManagement', () => {
   });
 
   it("renders the user's addresses", async () => {
-    const addresses = mockFactories.AddressFactory.generate(Math.ceil(Math.random() * 5));
+    const addresses = AddressFactory.generate(Math.ceil(Math.random() * 5));
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
 
     let container: HTMLElement;
@@ -136,7 +135,7 @@ describe('AddressesManagement', () => {
     expect($submitButton.disabled).toBe(false);
 
     // - User fulfills address fields
-    let address = mockFactories.AddressFactory.generate();
+    let address = AddressFactory.generate();
     expect(selectAddress).not.toHaveBeenCalled();
     await act(async () => {
       fireEvent.input($titleField, { target: { value: address.title } });
@@ -165,7 +164,7 @@ describe('AddressesManagement', () => {
     });
 
     // - User fulfills the form again but wants to save the address this time
-    address = mockFactories.AddressFactory.generate();
+    address = AddressFactory.generate();
     fetchMock.post('https://joanie.endpoint/api/v1.0/addresses/', {
       ...address,
       is_main: true,
@@ -189,7 +188,7 @@ describe('AddressesManagement', () => {
   });
 
   it('renders a form to edit an address when user selects an address to edit', async () => {
-    const address = mockFactories.AddressFactory.generate();
+    const address = AddressFactory.generate();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
     await act(async () => {
@@ -328,7 +327,7 @@ describe('AddressesManagement', () => {
   });
 
   it('allows user to delete an existing address', async () => {
-    const address = mockFactories.AddressFactory.generate();
+    const address = AddressFactory.generate();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
     let container: HTMLElement;
@@ -366,7 +365,7 @@ describe('AddressesManagement', () => {
   });
 
   it('allows user to promote an address as main', async () => {
-    const [address1, address2] = mockFactories.AddressFactory.generate(2);
+    const [address1, address2] = AddressFactory.generate(2);
     address1.is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address1, address2]);
 

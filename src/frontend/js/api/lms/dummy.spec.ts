@@ -1,4 +1,4 @@
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import context from 'utils/context';
 import { location } from 'utils/indirection/window';
 import API from './dummy';
@@ -11,7 +11,7 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     authentication: {
       backend: 'dummy',
       endpoint: 'https://demo.endpoint/api',

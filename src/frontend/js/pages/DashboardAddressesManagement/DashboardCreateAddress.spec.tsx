@@ -2,7 +2,8 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { act, findByText, fireEvent, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
@@ -14,12 +15,10 @@ import { expectBannerError } from 'utils/test/expectBannerError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -128,7 +127,7 @@ describe('<DashboardCreateAddress/>', () => {
 
     // Fill the form with random data.
     const button = await screen.findByRole('button', { name: 'Create' });
-    const address = mockFactories.AddressFactory.generate();
+    const address = AddressFactory.generate();
     await fillForm(address);
 
     // Form submit calls the API create route.
@@ -182,7 +181,7 @@ describe('<DashboardCreateAddress/>', () => {
 
     // Fill the form with random data.
     const button = await screen.findByRole('button', { name: 'Create' });
-    const address = mockFactories.AddressFactory.generate();
+    const address = AddressFactory.generate();
     await fillForm(address);
 
     // The create API route is called when submitting form.

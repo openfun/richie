@@ -6,7 +6,7 @@ import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'hooks/useHistory';
 import * as mockWindow from 'utils/indirection/window';
-import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import context from 'utils/context';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import Search from '.';
@@ -25,7 +25,7 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory().generate(),
+  default: mockRichieContextFactory().generate(),
 }));
 
 describe('<Search />', () => {

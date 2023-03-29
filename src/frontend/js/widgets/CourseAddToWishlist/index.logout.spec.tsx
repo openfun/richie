@@ -7,7 +7,8 @@ import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { UserWishlistCourseFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { SessionProvider } from 'contexts/SessionContext';
@@ -23,17 +24,15 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: {
-        backend: 'fonzie',
-        endpoint: 'https://authentication.test',
-      },
-      joanie_backend: {
-        endpoint: 'https://joanie.test',
-      },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: {
+      backend: 'fonzie',
+      endpoint: 'https://authentication.test',
+    },
+    joanie_backend: {
+      endpoint: 'https://joanie.test',
+    },
+  }).generate(),
 }));
 
 const renderCourseAddToWishlist = (courseCode: string) =>
@@ -50,7 +49,7 @@ const renderCourseAddToWishlist = (courseCode: string) =>
   );
 
 describe('CourseAddToWishlist', () => {
-  const wishlistCourse = mockFactories.UserWishlistCourseFactory.generate();
+  const wishlistCourse = UserWishlistCourseFactory.generate();
 
   afterEach(() => {
     jest.clearAllMocks();

@@ -16,14 +16,14 @@ import { PropsWithChildren } from 'react';
 import fetchMock from 'fetch-mock';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { DATETIME_FORMAT, DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
-import * as mockFactories from 'utils/test/factories';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
-  JoanieCourseRunFactory,
-  JoanieEnrollmentFactory,
+  CourseRunFactory,
+  EnrollmentFactory,
   OrderFactory,
   ProductFactory,
   TargetCourseFactory,
-} from 'utils/test/factories';
+} from 'utils/test/factories/joanie';
 import { Order, OrderState, Product } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
@@ -39,12 +39,10 @@ import { DashboardItemOrder } from './DashboardItemOrder';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockFactories
-    .ContextFactory({
-      authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
-      joanie_backend: { endpoint: 'https://joanie.endpoint' },
-    })
-    .generate(),
+  default: mockRichieContextFactory({
+    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
+  }).generate(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -173,12 +171,12 @@ describe('<DashboardItemOrder/>', () => {
     const order: Order = {
       ...OrderFactory.generate(),
       target_courses: [TargetCourseFactory.generate()],
-      enrollment: JoanieEnrollmentFactory.generate(),
+      enrollment: EnrollmentFactory.generate(),
     };
     // Make target course enrolled.
     order.enrollments = [
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[0].course_runs[0],
       },
     ];
@@ -253,7 +251,7 @@ describe('<DashboardItemOrder/>', () => {
     // Make target course enrolled.
     order.enrollments = [
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: order.target_courses[0].course_runs[0],
       },
     ];
@@ -315,7 +313,7 @@ describe('<DashboardItemOrder/>', () => {
       ...order,
       enrollments: [
         {
-          ...JoanieEnrollmentFactory.generate(),
+          ...EnrollmentFactory.generate(),
           course_run: order.target_courses[0].course_runs[0],
         },
       ],
@@ -433,7 +431,7 @@ describe('<DashboardItemOrder/>', () => {
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
     order.enrollments = [
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: initialEnrolledCourseRun,
       },
     ];
@@ -459,7 +457,7 @@ describe('<DashboardItemOrder/>', () => {
       ...order,
       enrollments: [
         {
-          ...JoanieEnrollmentFactory.generate(),
+          ...EnrollmentFactory.generate(),
           course_run: newEnrolledCourseRun,
         },
       ],
@@ -543,7 +541,7 @@ describe('<DashboardItemOrder/>', () => {
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
     order.enrollments = [
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: initialEnrolledCourseRun,
       },
     ];
@@ -617,7 +615,7 @@ describe('<DashboardItemOrder/>', () => {
     };
     const courseRun = order.target_courses[0].course_runs[0];
     const enrollment = {
-      ...JoanieEnrollmentFactory.generate(),
+      ...EnrollmentFactory.generate(),
       course_run: courseRun,
       is_active: false,
     };
@@ -703,7 +701,7 @@ describe('<DashboardItemOrder/>', () => {
           ...TargetCourseFactory.generate(),
           course_runs: [
             {
-              ...JoanieCourseRunFactory().generate(),
+              ...CourseRunFactory().generate(),
               enrollment_start: faker.date.past(0.5)().toISOString(),
               enrollment_end: faker.date.past(0.25)().toISOString(),
               state: {
@@ -738,7 +736,7 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with enrolled target course with finished enrollment phase and it is shown', async () => {
     const courseRun: CourseRun = {
-      ...JoanieCourseRunFactory().generate(),
+      ...CourseRunFactory().generate(),
       enrollment_end: faker.date.past(0.5)().toISOString(),
       enrollment_start: faker.date.past(1)().toISOString(),
       state: {
@@ -752,7 +750,7 @@ describe('<DashboardItemOrder/>', () => {
     // Make target course enrolled.
     order.enrollments = [
       {
-        ...JoanieEnrollmentFactory.generate(),
+        ...EnrollmentFactory.generate(),
         course_run: courseRun,
       },
     ];
@@ -775,7 +773,7 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with non enrolled target course, course run with enrollment phase finished is not shown ', async () => {
     const courseRun: CourseRun = {
-      ...JoanieCourseRunFactory().generate(),
+      ...CourseRunFactory().generate(),
       enrollment_end: faker.date.past(0.5)().toISOString(),
       enrollment_start: faker.date.past(1)().toISOString(),
       state: {

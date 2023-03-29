@@ -1,8 +1,7 @@
 import { act, fireEvent, getByText, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { Address } from 'types/Joanie';
-import * as mockFactories from 'utils/test/factories';
-import { AddressFactory } from 'utils/test/factories';
+import { AddressFactory } from 'utils/test/factories/joanie';
 import AddressForm from './AddressForm';
 import { ErrorKeys } from './ValidationErrors';
 
@@ -96,7 +95,7 @@ describe('AddressForm', () => {
     expect($submitButton.disabled).toBe(false);
 
     // - User fulfills address fields
-    const address = mockFactories.AddressFactory.generate();
+    const address = AddressFactory.generate();
 
     await act(async () => {
       fireEvent.input($titleInput, { target: { value: address.title } });
@@ -171,7 +170,7 @@ describe('AddressForm', () => {
     expect($submitButton.disabled).toBe(false);
 
     // - User fulfills address fields
-    const address = mockFactories.AddressFactory.generate();
+    const address = AddressFactory.generate();
 
     await act(async () => {
       fireEvent.input($titleInput, { target: { value: address.title } });

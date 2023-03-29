@@ -3,14 +3,14 @@ import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   AddressFactory,
-  ContextFactory as mockContextFactory,
   CreditCardFactory,
   OrderWithOneClickPaymentFactory,
   OrderWithPaymentFactory,
   ProductFactory,
-} from 'utils/test/factories';
+} from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
@@ -21,7 +21,7 @@ import PaymentButton from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockContextFactory({
+  default: mockRichieContextFactory({
     authentication: {
       backend: 'fonzie',
       endpoint: 'https://authentication.test',

@@ -1,6 +1,6 @@
 import * as faker from 'faker';
 import { CreditCardExpirationStatus, CreditCardHelper } from 'utils/CreditCardHelper/index';
-import { CreditCardFactory } from 'utils/test/factories';
+import { CreditCardFactory } from 'utils/test/factories/joanie';
 
 describe('CreditCardHelper', () => {
   it('handles falsy values', () => {
