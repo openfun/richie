@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from 'react-intl';
 import { HistoryProvider } from 'hooks/useHistory';
@@ -37,17 +37,16 @@ describe('<LanguageSelector />', () => {
       selector: 'button',
     });
 
-    await userEvent.click(button);
+    await act(async () => {
+      await userEvent.click(button);
+    });
 
     screen.getByRole('listbox', { name: 'Select a language:' });
-    screen.getByRole('option', { name: 'Switch to Anglais' });
-    screen.getByRole('link', { name: 'Switch to Anglais' });
-    screen.getByRole('option', {
-      name: 'Switch to Français (currently selected)',
-    });
-    screen.getByRole('link', {
-      name: 'Switch to Français (currently selected)',
-    });
+    screen.getByRole('option', { name: 'Anglais' });
+    screen.getByRole('link', { name: 'Anglais' });
+    expect(screen.getByRole('link', { name: 'Français' }).title).toEqual(
+      'Switch to Français (currently selected)',
+    );
   });
 
   it('should preserve location search parameters if there are any', async () => {
@@ -71,13 +70,15 @@ describe('<LanguageSelector />', () => {
         </IntlProvider>
       </HistoryProvider>,
     );
-
     const button = screen.getByLabelText('Select a language:', {
       selector: 'button',
     });
 
-    await userEvent.click(button);
-    const link = screen.getByRole('link', { name: 'Switch to Anglais' });
+    await act(async () => {
+      await userEvent.click(button);
+    });
+    const link = await screen.findByRole('link', { name: 'Anglais' });
     expect(link).toHaveAttribute('href', '/switch/to/en/?args=0');
+    expect(link.title).toEqual('Switch to Anglais');
   });
 });
