@@ -110,9 +110,11 @@ describe('CourseProductItem', () => {
     await screen.findByRole('heading', { level: 3, name: product.title });
     // the price shouldn't be a heading to prevent misdirection for screen reader users,
     // but we want to it to visually look like a h6
+
     const $price = screen.getByText(
       // the price formatter generates non-breaking spaces and getByText doesn't seem to handle that well, replace it
-      priceFormatter(product.price_currency, product.price).replace(/\u00a0/g, ' '),
+      // with a regular space. We replace NNBSP (\u202F) and NBSP (\u00a0) with a regular space
+      priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
     );
     expect($price.tagName).toBe('STRONG');
     expect($price.classList.contains('h6')).toBe(true);

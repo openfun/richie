@@ -466,12 +466,7 @@ describe('CourseProductCourseRuns', () => {
     it('renders enrollment not started', async () => {
       const enrollment: Enrollment = JoanieEnrollmentFactory.generate();
       const today = new Date();
-      const startDate = new Date(enrollment.course_run.start);
-      const endDate = new Date(enrollment.course_run.end);
-
-      startDate.setDate(today.getDate());
-      // keep this before setMonth If the month of today is >= November
-      startDate.setFullYear(today.getFullYear());
+      const startDate = new Date();
       startDate.setMonth(today.getMonth() + 2);
 
       const newEnrollment = {
@@ -479,7 +474,6 @@ describe('CourseProductCourseRuns', () => {
         course_run: {
           ...enrollment.course_run,
           start: startDate.toISOString(),
-          end: endDate.toISOString(),
         },
       };
 
