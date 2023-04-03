@@ -81,41 +81,41 @@ describe('validationSchema', () => {
 
     type ErrorMessageObject = Maybe<{ key: string; values: Record<any, any> }>;
 
-    expect(formState.errors.address?.type).toEqual('required');
+    expect(formState.errors.address?.type).toEqual('optionality');
     expect((formState.errors.address?.message as ErrorMessageObject)?.key).toEqual('mixedRequired');
     expect((formState.errors.address?.message as ErrorMessageObject)?.values?.path).toEqual(
       'address',
     );
-    expect(formState.errors.city?.type).toEqual('required');
+    expect(formState.errors.city?.type).toEqual('optionality');
     expect((formState.errors.city?.message as ErrorMessageObject)?.key).toEqual('mixedRequired');
     expect((formState.errors.city?.message as ErrorMessageObject)?.values?.path).toEqual('city');
-    expect(formState.errors.country?.type).toEqual('required');
+    expect(formState.errors.country?.type).toEqual('optionality');
     expect((formState.errors.country?.message as ErrorMessageObject)?.key).toEqual('mixedRequired');
     expect((formState.errors.country?.message as ErrorMessageObject)?.values?.path).toEqual(
       'country',
     );
-    expect(formState.errors.first_name?.type).toEqual('required');
+    expect(formState.errors.first_name?.type).toEqual('optionality');
     expect((formState.errors.first_name?.message as ErrorMessageObject)?.key).toEqual(
       'mixedRequired',
     );
     expect((formState.errors.first_name?.message as ErrorMessageObject)?.values?.path).toEqual(
       'first_name',
     );
-    expect(formState.errors.last_name?.type).toEqual('required');
+    expect(formState.errors.last_name?.type).toEqual('optionality');
     expect((formState.errors.last_name?.message as ErrorMessageObject)?.key).toEqual(
       'mixedRequired',
     );
     expect((formState.errors.last_name?.message as ErrorMessageObject)?.values?.path).toEqual(
       'last_name',
     );
-    expect(formState.errors.postcode?.type).toEqual('required');
+    expect(formState.errors.postcode?.type).toEqual('optionality');
     expect((formState.errors.postcode?.message as ErrorMessageObject)?.key).toEqual(
       'mixedRequired',
     );
     expect((formState.errors.postcode?.message as ErrorMessageObject)?.values?.path).toEqual(
       'postcode',
     );
-    expect(formState.errors.title?.type).toEqual('required');
+    expect(formState.errors.title?.type).toEqual('optionality');
     expect((formState.errors.title?.message as ErrorMessageObject)?.key).toEqual('mixedRequired');
     expect((formState.errors.title?.message as ErrorMessageObject)?.values?.path).toEqual('title');
     expect(formState.errors.save).not.toBeDefined();
