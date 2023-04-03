@@ -129,7 +129,7 @@
     "whatwg-fetch": "3.6.2",
     "xhr-mock": "2.5.1",
     "yargs": "17.7.1",
-    "yup": "<1.0.0"
+    "yup": "1.0.2"
   },
   "resolutions": {
     "@types/react": "18.0.32",
