@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Layout issue on enrollable course run of CourseProductItem
+
 ## [2.21.0] - 2023-03-21
 
 ### Added
