@@ -60,8 +60,6 @@
     }
 
     &.form-field {
-      padding-left: 1.5rem;
-
       .form-field__radio-control {
         position: absolute;
         left: 0;
@@ -70,9 +68,10 @@
 
       .form-field__label {
         display: flex;
+        flex: 1;
         flex-direction: column;
         justify-content: space-between;
-        flex: 1;
+        padding-left: 1.5rem;
       }
     }
 
