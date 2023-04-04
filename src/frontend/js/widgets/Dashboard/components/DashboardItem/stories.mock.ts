@@ -6,6 +6,7 @@ export const enrollment: Enrollment = {
   state: EnrollmentState.SET,
   is_active: true,
   was_created_by_order: true,
+  created_on: '2022-09-09T12:00:00+00:00',
   course_run: {
     id: '1',
     title: '',
