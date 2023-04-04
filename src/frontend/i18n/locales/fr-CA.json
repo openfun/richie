@@ -1,11 +1,11 @@
 {
   "16uca+": {
     "description": "",
-    "message": "Sub \"{value}\""
+    "message": "Sous \"{value}\""
   },
   "9vqPaF": {
     "description": "",
-    "message": "Root"
+    "message": "Racine"
   },
   "components.AddressesManagement.actionPromotion": {
     "description": "Action name for address promotion.",
@@ -273,7 +273,7 @@
   },
   "components.Dashboard.DashboardRoutes.courses.label": {
     "description": "Label of the courses view used in navigation components.",
-    "message": "My courses"
+    "message": "Mes cours"
   },
   "components.Dashboard.DashboardRoutes.courses.path": {
     "description": "The path to display the courses view.",
@@ -289,7 +289,7 @@
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.creation.label": {
     "description": "Label of the addresses creation view.",
-    "message": "Create address"
+    "message": "Créer une adresse"
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.creation.path": {
     "description": "The path to display the addresses creation view.",
@@ -297,7 +297,7 @@
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.edition.label": {
     "description": "Label of the addresses edition view.",
-    "message": "Edit address \"{addressTitle}\""
+    "message": "Modifier l'adresse \"{addressTitle}\""
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.edition.path": {
     "description": "The path to display the addresses edition view.",
@@ -309,7 +309,7 @@
   },
   "components.Dashboard.DashboardRoutes.preferences.creditCards.label": {
     "description": "Label of the credit cards edition view.",
-    "message": "Edit credit card \"{creditCardTitle}\""
+    "message": "Modifier la carte de crédit \"{creditCardTitle}\""
   },
   "components.Dashboard.DashboardRoutes.preferences.label": {
     "description": "Label of the preferences view used in navigation components.",
@@ -353,7 +353,7 @@
   },
   "components.DashboardBreadcrumbs.back": {
     "description": "The dashboard's breadcrumb back button's label",
-    "message": "Back"
+    "message": "Précédent"
   },
   "components.DashboardCourses.loading": {
     "description": "Message displayed while loading orders and enrollments",
@@ -451,17 +451,13 @@
     "description": "Message displayed while loading an order",
     "message": "Loading order ..."
   },
-  "components.DashboardSidebar.header": {
-    "description": "Title of the dashboard sidebar",
-    "message": "Welcome {name}"
-  },
   "components.DashboardSidebar.responsiveNavLabel": {
     "description": "a11y related label for select input used to navigate on responsive",
-    "message": "Navigate to"
+    "message": "Naviguer vers"
   },
-  "components.DashboardSidebar.subHeader": {
-    "description": "Sub title of the dashboard sidebar",
-    "message": "You are on your dashboard"
+  "components.DashboardSidebar.settingsLinkLabel": {
+    "description": "label of the settings link",
+    "message": "Settings"
   },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
@@ -613,7 +609,7 @@
   },
   "components.SaleTunnel.noCourseRunToPurchase": {
     "description": "Label displayed inside the product's when there is no courseRun",
-    "message": "At least one course has no course runs, this product is not currently available for sale"
+    "message": "Au moins un cours n'a aucune session, ce produit n'est pas disponible à la vente actuellement"
   },
   "components.SaleTunnel.stepPayment": {
     "description": "Label of the Payment step",
@@ -779,6 +775,146 @@
     "description": "Info about current step, not visible, only announced by screen readers",
     "message": "« Étape {current, number} de {total, number} {active, select, true {(active)} other {}}»"
   },
+  "components.StudentDashboardSidebar.header": {
+    "description": "Title of the dashboard sidebar",
+    "message": "Welcome {name}"
+  },
+  "components.StudentDashboardSidebar.subHeader": {
+    "description": "Sub title of the dashboard sidebar",
+    "message": "You are on your dashboard"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.label": {
+    "description": "Label of the course classrooms view.",
+    "message": "Classrooms"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.path": {
+    "description": "The path to display the course classrooms view.",
+    "message": "/teacher/course/{courseCode}/classrooms"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.label": {
+    "description": "Label of the course view.",
+    "message": "General informations"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.path": {
+    "description": "The path to display the course view.",
+    "message": "/teacher/course/{courseCode}"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.records.label": {
+    "description": "Label of the course's records view.",
+    "message": "Records"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.records.path": {
+    "description": "The path to display the course's records view.",
+    "message": "/teacher/course/{courseCode}/records"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.settings.label": {
+    "description": "Label of the course settings view.",
+    "message": "Settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.settings.path": {
+    "description": "The path to display the course settings view.",
+    "message": "/teacher/course/{courseCode}/settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.label": {
+    "description": "Label of the organization courses view.",
+    "message": "Cours"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.path": {
+    "description": "The path to display the organization courses view.",
+    "message": "/teacher/organization/{organizationId}/courses"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.label": {
+    "description": "Label of the organization view.",
+    "message": "General informations"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.members.label": {
+    "description": "Label of the unisersity members view.",
+    "message": "Members"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.members.path": {
+    "description": "The path to display the unisersity members view.",
+    "message": "/teacher/organization/{organizationId}/members"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.path": {
+    "description": "The path to display the organization view.",
+    "message": "/teacher/organization/{organizationId}"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.settings.label": {
+    "description": "Label of the organization settings view.",
+    "message": "Settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.settings.path": {
+    "description": "The path to display the organization settings view.",
+    "message": "/teacher/organization/{organizationId}/settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.label": {
+    "description": "Label of the teacher courses liste view.",
+    "message": "All my courses"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.path": {
+    "description": "The path to display the teacher courses liste view.",
+    "message": "/teacher/profile/courses"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.label": {
+    "description": "Label of the teacher profile view.",
+    "message": "Profile"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.notifications.label": {
+    "description": "Label of the teacher notifications view.",
+    "message": "Notifications"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.notifications.path": {
+    "description": "The path to display the teacher notifications view.",
+    "message": "/teacher/profile/notifications"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.path": {
+    "description": "The path to display the teacher profile view.",
+    "message": "/teacher/profile"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.settings.label": {
+    "description": "Label of the teacher profile settings view.",
+    "message": "Settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.settings.path": {
+    "description": "The path to display the teacher profile settings view.",
+    "message": "/teacher/profile/settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.root.label": {
+    "description": "Label of the teacher dashboard root view.",
+    "message": "Teacher dashboard"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.root.path": {
+    "description": "The path to display the teacher dashboard root view.",
+    "message": "/teacher"
+  },
+  "components.TeacherOrganizationCourseDashboardLoader.loading": {
+    "description": "Message displayed while loading an organization",
+    "message": "Loading organization ..."
+  },
+  "components.TeacherOrganizationDashboardSidebar.header": {
+    "description": "Title of the organization dashboard sidebar",
+    "message": "{organizationName}"
+  },
+  "components.TeacherOrganizationDashboardSidebar.subHeader": {
+    "description": "Sub title of the organization dashboard sidebar",
+    "message": "You are on the organization dashboard"
+  },
+  "components.TeacherProfileDashboardLoader.loading": {
+    "description": "Message displayed while loading profile",
+    "message": "Loading profile ..."
+  },
+  "components.TeacherProfileDashboardSidebar.header": {
+    "description": "Title of the dashboard sidebar",
+    "message": "{name}"
+  },
+  "components.TeacherProfileDashboardSidebar.subHeader": {
+    "description": "Sub title of the dashboard sidebar",
+    "message": "You are on your teacher dashboard"
+  },
+  "components.TeacherProfileSettingsDashboardLoader.loading": {
+    "description": "Message displayed while loading settings",
+    "message": "Loading settings..."
+  },
   "components.UserLogin.logIn": {
     "description": "Text for the login button.",
     "message": "Connexion"
@@ -837,11 +973,11 @@
   },
   "hooks.useCreditCards.errorCreate": {
     "description": "Error message shown to the user when credit card creation request fails.",
-    "message": "An error occurred while creating the credit card. Please retry later."
+    "message": "Une erreur s'est produite lors de la création de la carte de crédit. Veuillez réessayer plus tard."
   },
   "hooks.useCreditCards.errorDelete": {
     "description": "Error message shown to the user when credit card deletion request fails.",
-    "message": "An error occurred while deleting the credit card. Please retry later."
+    "message": "Une erreur s'est produite lors de la suppression de la carte de crédit. Veuillez réessayer plus tard."
   },
   "hooks.useCreditCards.errorNotFound": {
     "description": "Error message shown to the user when no credit cards matches.",
@@ -849,11 +985,11 @@
   },
   "hooks.useCreditCards.errorSelect": {
     "description": "Error message shown to the user when credit cards fetch request fails.",
-    "message": "An error occurred while fetching credit cards. Please retry later."
+    "message": "Une erreur s'est produite lors de la récupération des cartes de crédit. Veuillez réessayer plus tard."
   },
   "hooks.useCreditCards.errorUpdate": {
     "description": "Error message shown to the user when credit card update request fails.",
-    "message": "An error occurred while updating the credit card. Please retry later."
+    "message": "Une erreur s'est produite lors de la mise à jour de la carte de crédit. Veuillez réessayer plus tard."
   },
   "hooks.useCreditCardsManagement.deletionConfirmation": {
     "description": "Confirmation message shown to the user when he wants to delete a credit card",
@@ -869,74 +1005,74 @@
   },
   "hooks.useEnrollments.errorCreate": {
     "description": "Error message shown to the user when enrollment creation request fails.",
-    "message": "An error occurred while creating the enrollment. Please retry later."
+    "message": "Une erreur s'est produite lors de la création de l'inscription. Veuillez réessayer plus tard."
   },
   "hooks.useEnrollments.errorDelete": {
     "description": "Error message shown to the user when enrollment deletion request fails.",
-    "message": "An error occurred while deleting the enrollment. Please retry later."
+    "message": "Une erreur s'est produite lors de la suppression de l'inscription. Veuillez réessayer plus tard."
   },
   "hooks.useEnrollments.errorNotFound": {
     "description": "Error message shown to the user when no enrollment matches.",
-    "message": "Cannot find the enrollment"
+    "message": "Impossible de trouver l'inscription"
   },
   "hooks.useEnrollments.errorSelect": {
     "description": "Error message shown to the user when enrollments fetch request fails.",
-    "message": "An error occurred while fetching enrollments. Please retry later."
+    "message": "Une erreur s'est produite lors de la récupération des inscriptions. Veuillez réessayer plus tard."
   },
   "hooks.useEnrollments.errorUpdate": {
     "description": "Error message shown to the user when enrollment update request fails.",
-    "message": "An error occurred while updating the enrollment. Please retry later."
+    "message": "Une erreur s'est produite lors de la mise à jour de l'inscription. Veuillez réessayer plus tard."
   },
   "hooks.useOrders.errorGet": {
     "description": "Error message shown to the user when orders fetch request fails.",
-    "message": "An error occurred while fetching orders. Please retry later."
+    "message": "Une erreur s'est produite lors de la récupération de vos commandes. Veuillez réessayer plus tard."
   },
   "hooks.useOrders.errorNotFound": {
     "description": "Error message shown to the user when no orders matches.",
-    "message": "Cannot find the orders."
+    "message": "Commandes introuvables."
   },
   "hooks.useProduct.errorGet": {
     "description": "Error message shown to the user when product fetch request fails.",
-    "message": "An error occurred while fetching product. Please retry later."
+    "message": "Une erreur s'est produite lors de la récupération du produit. Veuillez réessayer plus tard."
   },
   "hooks.useProduct.errorNotFound": {
     "description": "Error message shown to the user when no product matches.",
-    "message": "Cannot find the product."
+    "message": "Impossible de trouver le produit."
   },
   "hooks.useResources.errorCreate": {
     "description": "Error message shown to the user when resource creation request fails.",
-    "message": "An error occurred while creating a resource. Please retry later."
+    "message": "Une erreur s'est produite lors de la création d'une ressource. Veuillez réessayer plus tard."
   },
   "hooks.useResources.errorDelete": {
     "description": "Error message shown to the user when resource deletion request fails.",
-    "message": "An error occurred while deleting a resource. Please retry later."
+    "message": "Une erreur s'est produite lors de la suppression d'une ressource. Veuillez réessayer plus tard."
   },
   "hooks.useResources.errorGet": {
     "description": "Error message shown to the user when resource fetch request fails.",
-    "message": "An error occurred while fetching resources. Please retry later."
+    "message": "Une erreur est survenue lors de la récupération des ressources. Veuillez réessayer plus tard."
   },
   "hooks.useResources.errorNotFound": {
     "description": "Error message shown to the user when no resources matches.",
-    "message": "Cannot find the resource."
+    "message": "Impossible de trouver la ressource."
   },
   "hooks.useResources.errorUpdate": {
     "description": "Error message shown to the user when resource update request fails.",
-    "message": "An error occurred while updating a resource. Please retry later."
+    "message": "Une erreur s'est produite lors de la mise à jour d'une ressource. Veuillez réessayer plus tard."
   },
   "hooks.useWishlist.errorCreate": {
     "description": "Error message shown to the user when wishlist creation request fails.",
-    "message": "An error occurred when adding this course to your wishlist. Please retry later."
+    "message": "Une erreur s'est produite lors de l'ajout de ce cours à votre liste de souhaits. Veuillez réessayer plus tard."
   },
   "hooks.useWishlist.errorDelete": {
     "description": "Error message shown to the user when wishlist deletion request fails.",
-    "message": "An error occurred when removing this course from your wishlist. Please retry later."
+    "message": "Une erreur s'est produite lors de la suppression de ce cours de votre liste de souhaits. Veuillez réessayer plus tard."
   },
   "hooks.useWishlist.errorGet": {
     "description": "Error message shown to the user when wishlist fetch request fails.",
-    "message": "An error occurred while fetching wishlist. Please retry later."
+    "message": "Une erreur s'est produite lors de la récupération de votre liste de souhaits. Veuillez réessayer plus tard."
   },
   "hooks.useWishlist.errorNotFound": {
     "description": "Error message shown to the user when no wishlist matches.",
-    "message": "Cannot find the wishlist."
+    "message": "Liste de souhaits introuvable."
   }
 }

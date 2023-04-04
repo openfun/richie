@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.21.1] - 2023-04-04
+
 ### Fixed
 
 - Layout issue on enrollable course run of CourseProductItem
@@ -1831,7 +1833,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.21.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.21.1...master
+[2.21.1]: https://github.com/openfun/richie/compare/v2.21.0...2.21.1
 [2.21.0]: https://github.com/openfun/richie/compare/v2.20.1...2.21.0
 [2.20.1]: https://github.com/openfun/richie/compare/v2.20.0...2.20.1
 [2.20.0]: https://github.com/openfun/richie/compare/v2.19.0...2.20.0

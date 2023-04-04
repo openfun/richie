@@ -451,17 +451,13 @@
     "description": "Message displayed while loading an order",
     "message": "Loading order ..."
   },
-  "components.DashboardSidebar.header": {
-    "description": "Title of the dashboard sidebar",
-    "message": "Welcome {name}"
-  },
   "components.DashboardSidebar.responsiveNavLabel": {
     "description": "a11y related label for select input used to navigate on responsive",
     "message": "Navigate to"
   },
-  "components.DashboardSidebar.subHeader": {
-    "description": "Sub title of the dashboard sidebar",
-    "message": "You are on your dashboard"
+  "components.DashboardSidebar.settingsLinkLabel": {
+    "description": "label of the settings link",
+    "message": "Settings"
   },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
@@ -778,6 +774,146 @@
   "components.StepBreadcrumb.stepCount": {
     "description": "Info about current step, not visible, only announced by screen readers",
     "message": "Step {current, number} of {total, number} {active, select, true {(active)} other {}}"
+  },
+  "components.StudentDashboardSidebar.header": {
+    "description": "Title of the dashboard sidebar",
+    "message": "Welcome {name}"
+  },
+  "components.StudentDashboardSidebar.subHeader": {
+    "description": "Sub title of the dashboard sidebar",
+    "message": "You are on your dashboard"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.label": {
+    "description": "Label of the course classrooms view.",
+    "message": "Classrooms"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.path": {
+    "description": "The path to display the course classrooms view.",
+    "message": "/teacher/course/{courseCode}/classrooms"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.label": {
+    "description": "Label of the course view.",
+    "message": "General informations"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.path": {
+    "description": "The path to display the course view.",
+    "message": "/teacher/course/{courseCode}"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.records.label": {
+    "description": "Label of the course's records view.",
+    "message": "Records"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.records.path": {
+    "description": "The path to display the course's records view.",
+    "message": "/teacher/course/{courseCode}/records"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.settings.label": {
+    "description": "Label of the course settings view.",
+    "message": "Settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.settings.path": {
+    "description": "The path to display the course settings view.",
+    "message": "/teacher/course/{courseCode}/settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.label": {
+    "description": "Label of the organization courses view.",
+    "message": "Courses"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.path": {
+    "description": "The path to display the organization courses view.",
+    "message": "/teacher/organization/{organizationId}/courses"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.label": {
+    "description": "Label of the organization view.",
+    "message": "General informations"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.members.label": {
+    "description": "Label of the unisersity members view.",
+    "message": "Members"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.members.path": {
+    "description": "The path to display the unisersity members view.",
+    "message": "/teacher/organization/{organizationId}/members"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.path": {
+    "description": "The path to display the organization view.",
+    "message": "/teacher/organization/{organizationId}"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.settings.label": {
+    "description": "Label of the organization settings view.",
+    "message": "Settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.settings.path": {
+    "description": "The path to display the organization settings view.",
+    "message": "/teacher/organization/{organizationId}/settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.label": {
+    "description": "Label of the teacher courses liste view.",
+    "message": "All my courses"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.path": {
+    "description": "The path to display the teacher courses liste view.",
+    "message": "/teacher/profile/courses"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.label": {
+    "description": "Label of the teacher profile view.",
+    "message": "Profile"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.notifications.label": {
+    "description": "Label of the teacher notifications view.",
+    "message": "Notifications"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.notifications.path": {
+    "description": "The path to display the teacher notifications view.",
+    "message": "/teacher/profile/notifications"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.path": {
+    "description": "The path to display the teacher profile view.",
+    "message": "/teacher/profile"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.settings.label": {
+    "description": "Label of the teacher profile settings view.",
+    "message": "Settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.profile.settings.path": {
+    "description": "The path to display the teacher profile settings view.",
+    "message": "/teacher/profile/settings"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.root.label": {
+    "description": "Label of the teacher dashboard root view.",
+    "message": "Teacher dashboard"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.root.path": {
+    "description": "The path to display the teacher dashboard root view.",
+    "message": "/teacher"
+  },
+  "components.TeacherOrganizationCourseDashboardLoader.loading": {
+    "description": "Message displayed while loading an organization",
+    "message": "Loading organization ..."
+  },
+  "components.TeacherOrganizationDashboardSidebar.header": {
+    "description": "Title of the organization dashboard sidebar",
+    "message": "{organizationName}"
+  },
+  "components.TeacherOrganizationDashboardSidebar.subHeader": {
+    "description": "Sub title of the organization dashboard sidebar",
+    "message": "You are on the organization dashboard"
+  },
+  "components.TeacherProfileDashboardLoader.loading": {
+    "description": "Message displayed while loading profile",
+    "message": "Loading profile ..."
+  },
+  "components.TeacherProfileDashboardSidebar.header": {
+    "description": "Title of the dashboard sidebar",
+    "message": "{name}"
+  },
+  "components.TeacherProfileDashboardSidebar.subHeader": {
+    "description": "Sub title of the dashboard sidebar",
+    "message": "You are on your teacher dashboard"
+  },
+  "components.TeacherProfileSettingsDashboardLoader.loading": {
+    "description": "Message displayed while loading settings",
+    "message": "Loading settings..."
   },
   "components.UserLogin.logIn": {
     "description": "Text for the login button.",
