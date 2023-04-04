@@ -1,16 +1,13 @@
-import { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { useEnrollments } from 'hooks/useEnrollments';
+import { useRef } from 'react';
 import { Enrollment, Order } from 'types/Joanie';
-import { Pagination, usePagination } from 'components/Pagination';
 import { Spinner } from 'components/Spinner';
 import { DashboardItemEnrollment } from 'widgets/Dashboard/components/DashboardItem/Enrollment/DashboardItemEnrollment';
+import { DashboardItemOrder } from 'widgets/Dashboard/components/DashboardItem/Order/DashboardItemOrder';
+import { useOrdersEnrollments } from 'pages/DashboardCourses/useOrdersEnrollments';
 import Banner, { BannerType } from 'components/Banner';
-
-type Data = {
-  type: 'enrollment' | 'order';
-  item: Enrollment | Order;
-};
+import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
+import { Button } from 'components/Button';
 
 const messages = defineMessages({
   loading: {
@@ -18,70 +15,69 @@ const messages = defineMessages({
     description: 'Message displayed while loading orders and enrollments',
     id: 'components.DashboardCourses.loading',
   },
+  loadMore: {
+    defaultMessage: 'Load more',
+    description: 'Button to manually load more orders and enrollments',
+    id: 'components.DashboardCourses.loadMoreResults',
+  },
+  emptyList: {
+    id: 'components.DashboardCourses.emptyList',
+    description: "Empty placeholder of the dashboard's list of orders and enrollments",
+    defaultMessage: 'You have no enrollments nor orders yet.',
+  },
 });
 
 export const DashboardCourses = () => {
-  const pagination = usePagination({ itemsPerPage: 10 });
-  const [data, setData] = useState<Data[]>([]);
+  const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments();
 
-  const enrollments = useEnrollments(
-    {
-      was_created_by_order: false,
-      page: pagination.currentPage,
-      page_size: pagination.itemsPerPage,
-    },
-    { keepPreviousData: true },
-  );
-
-  useEffect(() => {
-    const newData = enrollments.items.map(
-      (item) =>
-        ({
-          type: 'enrollment',
-          item,
-        } as Data),
-    );
-    setData(newData);
-  }, [enrollments.items]);
-
-  useEffect(() => {
-    if (enrollments.meta?.pagination?.count) {
-      pagination.setItemsCount(enrollments.meta.pagination.count);
-    }
-  }, [enrollments.meta?.pagination?.count]);
+  const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
+  useIntersectionObserver({
+    target: loadMoreButtonRef,
+    onIntersect: next,
+    enabled: hasMore,
+  });
 
   return (
     <div className="dashboard__courses">
-      {enrollments.states.error && (
-        <Banner message={enrollments.states.error} type={BannerType.ERROR} />
-      )}
-      {data.length === 0 && enrollments.states.fetching ? (
-        <Spinner aria-labelledby="loading-courses-data">
-          <span id="loading-courses-data">
-            <FormattedMessage {...messages.loading} />
-          </span>
-        </Spinner>
+      {error ? (
+        <Banner message={error} type={BannerType.ERROR} />
       ) : (
-        <div
-          className={[
-            'dashboard__courses__list',
-            enrollments.states.fetching ? 'dashboard__list--loading' : '',
-          ].join(' ')}
-        >
-          {data.map(
-            (datum) =>
-              datum.type === 'enrollment' && (
-                <DashboardItemEnrollment
-                  key={datum.item.id}
-                  enrollment={datum.item as Enrollment}
-                />
-              ),
+        <>
+          {count === 0 && (
+            <p className="dashboard__courses__empty">
+              <FormattedMessage {...messages.emptyList} />
+            </p>
           )}
-        </div>
+          <div className="dashboard__courses__list">
+            {data.map((datum) => (
+              <div key={datum.item.id} className="dashboard__courses__list__item">
+                {datum.type === 'enrollment' && (
+                  <DashboardItemEnrollment enrollment={datum.item as Enrollment} />
+                )}
+                {datum.type === 'order' && <DashboardItemOrder order={datum.item as Order} />}
+              </div>
+            ))}
+          </div>
+          {isLoading && (
+            <Spinner aria-labelledby="loading-orders-enrollments">
+              <span id="loading-orders-enrollments">
+                <FormattedMessage {...messages.loading} />
+              </span>
+            </Spinner>
+          )}
+          {hasMore && (
+            <Button
+              className="dashboard__courses__list__more-results"
+              onClick={() => next()}
+              disabled={isLoading}
+              ref={loadMoreButtonRef}
+              color="transparent-darkest"
+            >
+              <FormattedMessage {...messages.loadMore} />
+            </Button>
+          )}
+        </>
       )}
-      <div>
-        <Pagination {...pagination} />
-      </div>
     </div>
   );
 };

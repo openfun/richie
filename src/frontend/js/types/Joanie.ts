@@ -1,6 +1,7 @@
 import type { Priority, StateCTA, StateText } from 'types';
 import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
+import { OrderResourcesQuery } from 'hooks/useOrders';
 import { OrganizationMock } from '../api/mocks/joanie/organizations';
 
 // - Generic
@@ -122,6 +123,7 @@ export interface Enrollment {
   state: EnrollmentState;
   course_run: CourseRun;
   was_created_by_order: boolean;
+  created_on: string;
 }
 
 // Order
@@ -273,11 +275,11 @@ interface APIUser {
   orders: {
     abort(payload: OrderAbortPayload): Promise<void>;
     create(payload: OrderCreationPayload): Promise<OrderWithPaymentInfo>;
-    get<Filters extends ResourcesQuery = ResourcesQuery>(
+    get<Filters extends OrderResourcesQuery = OrderResourcesQuery>(
       filters?: Filters,
     ): Filters extends { id: string }
       ? Promise<Nullable<Order>>
-      : Promise<PaginatedResponse<Nullable<Order>>>;
+      : Promise<PaginatedResponse<Order>>;
     invoice: {
       download(payload: { order_id: Order['id']; invoice_reference: string }): Promise<File>;
     };

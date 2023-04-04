@@ -10,18 +10,6 @@
   }
 }
 
-.dashboard__list--loading {
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: r-theme-val(dashboard-list, background-color-loading);
-    opacity: 0.4;
-    z-index: 2;
-    animation: pulse 1s infinite;
-  }
-}
-
 .dashboard__courses {
   display: flex;
   flex-direction: column;
@@ -31,6 +19,11 @@
     gap: 1rem;
     display: flex;
     flex-direction: column;
-    position: relative;
+  }
+
+  &__empty {
+    text-align: center;
+    color: r-theme-val(dashboard-addresses, empty-color);
+    margin: 0;
   }
 }
