@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-21 11:01+0000\n"
-"PO-Revision-Date: 2023-03-21 14:09\n"
+"PO-Revision-Date: 2023-04-04 15:29\n"
 "Last-Translator: \n"
 "Language-Team: French, Canada\n"
 "Language: fr_CA\n"
@@ -101,7 +101,7 @@ msgstr "Votre navigateur ne supporte pas ce format de vidéo."
 
 #: apps/core/templates/menu/breadcrumbs.html:4
 msgid "You are here:"
-msgstr "Vous êtes ici:"
+msgstr "Vous êtes ici :"
 
 #: apps/core/templates/richie/base.html:83
 msgid "Skip to main content"
