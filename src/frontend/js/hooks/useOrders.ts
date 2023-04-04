@@ -1,16 +1,10 @@
 import { defineMessages } from 'react-intl';
-import { API, Order, Product, Course, OrderState } from 'types/Joanie';
+import { API, Course, Order, OrderState, PaginatedResourceQuery, Product } from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
-import {
-  QueryOptions,
-  ResourcesQuery,
-  useResource,
-  useResourcesCustom,
-  UseResourcesProps,
-} from './useResources';
+import { QueryOptions, useResource, useResourcesCustom, UseResourcesProps } from './useResources';
 
-type OrderResourcesQuery = ResourcesQuery & {
+export type OrderResourcesQuery = PaginatedResourceQuery & {
   course?: Course['code'];
   product?: Product['id'];
   state?: OrderState[];
