@@ -7,6 +7,7 @@ export const EnrollmentFactory = createSpec({
   is_active: true,
   state: EnrollmentState.SET,
   was_created_by_order: false,
+  created_on: derived(() => faker.date.past(1)().toISOString()),
 });
 
 export const TargetCourseFactory = createSpec({
@@ -52,7 +53,7 @@ export const CertificateFactory = createSpec({
 
 export const CertificateProductFactory = createSpec({
   id: faker.datatype.uuid(),
-  title: faker.unique(faker.random.words(1, 3)),
+  title: faker.unique(faker.random.words(5, 10)),
   course: faker.unique(faker.random.alphaNumeric(5)),
   type: ProductType.CERTIFICATE,
   price: faker.datatype.number(),
@@ -86,7 +87,9 @@ export const CourseRunFactory = (scopes?: { course: Boolean }) => {
     enrollment_end: derived(() => faker.date.future(0.5)().toISOString()),
     enrollment_start: derived(() => faker.date.past(0.5)().toISOString()),
     id: faker.datatype.uuid(),
-    resource_link: faker.unique(faker.internet.url()),
+    resource_link: faker.unique(
+      () => faker.internet.url()() + '/' + faker.random.alphaNumeric(5)(),
+    ),
     start: derived(() => faker.date.past(0.25)().toISOString()),
     title: faker.random.words(Math.ceil(Math.random() * 3)),
     state: {
@@ -117,7 +120,7 @@ export const UserWishlistCourseFactory = createSpec({
 
 export const OrderFactory = createSpec({
   id: faker.datatype.uuid(),
-  created_on: faker.date.past()().toISOString(),
+  created_on: derived(() => faker.date.past(1)().toISOString()),
   owner: faker.internet.userName(),
   total: faker.datatype.number(),
   total_currency: faker.finance.currencyCode(),
