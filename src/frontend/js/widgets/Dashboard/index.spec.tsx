@@ -34,6 +34,12 @@ jest.mock('utils/indirection/window', () => ({
   },
 }));
 
+jest.mock('hooks/useIntersectionObserver', () => ({
+  useIntersectionObserver: (props: any) => {
+    (globalThis as any).__intersection_observer_props__ = props;
+  },
+}));
+
 describe('<Dashboard />', () => {
   const DashboardWithUser = ({ user }: { user: Nullable<User> }) => {
     return (
