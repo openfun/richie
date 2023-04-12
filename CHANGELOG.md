@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add head_js block into base html template
+
 ### Fixed
 
 - Fix error `MultipleObjectsReturned` during synchronization due to missing

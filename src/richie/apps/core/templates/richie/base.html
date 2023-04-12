@@ -60,6 +60,7 @@
         {% endif %}
         {% endspaceless %}
 
+        {% block head_js %}{% endblock head_js %}
         {% include "richie/web_analytics.html" with location='head' %}
 
         {% render_block "css" %}
@@ -268,7 +269,7 @@
             });
         </script>
         {% endif %}
-        {% include "richie/web_analytics.html" with location='footer' %}
         {% block body_js %}{% endblock body_js %}
+        {% include "richie/web_analytics.html" with location='footer' %}
     </body>
 </html>
