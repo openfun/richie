@@ -2,7 +2,7 @@
 const path = require('path');
 const fs = require('fs');
 const yargs = require('yargs');
-const glob = require('glob');
+const { glob } = require('glob');
 const { merge } = require('cljs-merge');
 
 /**
