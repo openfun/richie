@@ -1,35 +1,37 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { CreditCard, CreditCardBrand } from 'types/Joanie';
 import { CreditCardBrandLogo } from './CreditCardBrandLogo';
 
 export default {
-  title: 'Components/CreditCardBrandLogo',
   component: CreditCardBrandLogo,
-} as ComponentMeta<typeof CreditCardBrandLogo>;
+  render: (args) => <CreditCardBrandLogo {...args} />,
+} as Meta<typeof CreditCardBrandLogo>;
 
-const Template: ComponentStory<typeof CreditCardBrandLogo> = (args) => (
-  <CreditCardBrandLogo {...args} />
-);
+type Story = StoryObj<typeof CreditCardBrandLogo>;
 
 const creditCard: CreditCard = CreditCardFactory.generate();
 
-export const Visa = Template.bind({});
-Visa.args = {
-  creditCard: { ...creditCard, brand: CreditCardBrand.VISA },
+export const Visa: Story = {
+  args: {
+    creditCard: { ...creditCard, brand: CreditCardBrand.VISA },
+  },
 };
 
-export const Mastercard = Template.bind({});
-Mastercard.args = {
-  creditCard: { ...creditCard, brand: CreditCardBrand.MASTERCARD },
+export const Mastercard: Story = {
+  args: {
+    creditCard: { ...creditCard, brand: CreditCardBrand.MASTERCARD },
+  },
 };
 
-export const Maestro = Template.bind({});
-Maestro.args = {
-  creditCard: { ...creditCard, brand: CreditCardBrand.MAESTRO },
+export const Maestro: Story = {
+  args: {
+    creditCard: { ...creditCard, brand: CreditCardBrand.MAESTRO },
+  },
 };
 
-export const CB = Template.bind({});
-CB.args = {
-  creditCard: { ...creditCard, brand: CreditCardBrand.CB },
+export const CB: Story = {
+  args: {
+    creditCard: { ...creditCard, brand: CreditCardBrand.CB },
+  },
 };

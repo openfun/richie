@@ -1,13 +1,12 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { defaultConfig } from './Field.stories';
-import { CheckboxField as Base } from './index';
+import { Meta, StoryObj } from '@storybook/react';
+import { defaultConfig } from './Field.stories.config';
+import { CheckboxField } from './index';
 
 export default {
-  title: 'Components/Inputs',
-  component: Base,
+  component: CheckboxField,
   ...defaultConfig,
-} as ComponentMeta<typeof Base>;
+} as Meta<typeof CheckboxField>;
 
-const Template: ComponentStory<typeof Base> = (args) => <Base {...args} />;
+type Story = StoryObj<typeof CheckboxField>;
 
-export const CheckboxField = Template.bind({});
+export const Default: Story = {};

@@ -1,9 +1,7 @@
-import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { StoryObj, Meta } from '@storybook/react';
 import { Spinner } from './index';
 
 export default {
-  title: 'Components/Spinner',
   component: Spinner,
   argTypes: {
     theme: {
@@ -11,16 +9,18 @@ export default {
       options: [undefined, 'light'],
     },
   },
-} as ComponentMeta<typeof Spinner>;
+} as Meta<typeof Spinner>;
 
-const Template: ComponentStory<typeof Spinner> = (args) => <Spinner {...args} />;
+type Story = StoryObj<typeof Spinner>;
 
-export const Small = Template.bind({});
-Small.args = {
-  size: 'small',
+export const Small: Story = {
+  args: {
+    size: 'small',
+  },
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  size: 'large',
+export const Large: Story = {
+  args: {
+    size: 'large',
+  },
 };

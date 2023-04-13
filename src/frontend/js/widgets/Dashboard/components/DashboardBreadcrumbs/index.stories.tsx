@@ -1,14 +1,9 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { createMemoryRouter, Outlet, RouteObject, RouterProvider } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import { DashboardBreadcrumbsProvider } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 import { DashboardBreadcrumbs } from '.';
-
-export default {
-  title: 'Components/Dashboard/DashboardBreadcrumbs',
-  component: DashboardBreadcrumbs,
-} as ComponentMeta<typeof DashboardBreadcrumbs>;
 
 const messages = defineMessages({
   root: {
@@ -58,9 +53,14 @@ const routes: RouteObject[] = [
   },
 ];
 
-const Template: ComponentStory<typeof DashboardBreadcrumbs> = () => {
-  const router = createMemoryRouter(routes, { initialEntries: ['/sub'] });
-  return <RouterProvider router={router} />;
-};
+export default {
+  component: DashboardBreadcrumbs,
+  render: () => {
+    const router = createMemoryRouter(routes, { initialEntries: ['/sub'] });
+    return <RouterProvider router={router} />;
+  },
+} as Meta<typeof DashboardBreadcrumbs>;
 
-export const Default = Template.bind({});
+type Story = StoryObj<typeof DashboardBreadcrumbs>;
+
+export const Default: Story = {};

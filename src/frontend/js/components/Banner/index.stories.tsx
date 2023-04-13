@@ -1,32 +1,35 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import Banner, { BannerType } from './index';
 
 export default {
-  title: 'Components/Banner',
   component: Banner,
   args: {
     message: 'Hello world',
   },
-} as ComponentMeta<typeof Banner>;
+} as Meta<typeof Banner>;
 
-const Template: ComponentStory<typeof Banner> = (args) => <Banner {...args} />;
+type Story = StoryObj<typeof Banner>;
 
-export const Error = Template.bind({});
-Error.args = {
-  type: BannerType.ERROR,
+export const Error: Story = {
+  args: {
+    type: BannerType.ERROR,
+  },
 };
 
-export const Info = Template.bind({});
-Info.args = {
-  type: BannerType.INFO,
+export const Info: Story = {
+  args: {
+    type: BannerType.INFO,
+  },
 };
 
-export const Success = Template.bind({});
-Success.args = {
-  type: BannerType.SUCCESS,
+export const Success: Story = {
+  args: {
+    type: BannerType.SUCCESS,
+  },
 };
 
-export const Warning = Template.bind({});
-Warning.args = {
-  type: BannerType.WARNING,
+export const Warning: Story = {
+  args: {
+    type: BannerType.WARNING,
+  },
 };

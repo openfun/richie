@@ -1,8 +1,7 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { DashboardItem, DEMO_IMAGE_URL } from './index';
 
 export default {
-  title: 'Components/Dashboard/Item',
   component: DashboardItem,
   args: {
     code: 'Ref. 30194',
@@ -14,11 +13,12 @@ export default {
       </>
     ),
   },
-} as ComponentMeta<typeof DashboardItem>;
+} as Meta<typeof DashboardItem>;
 
-const Template: ComponentStory<typeof DashboardItem> = (args) => <DashboardItem {...args} />;
+type Story = StoryObj<typeof DashboardItem>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};
 
-export const WithImage = Template.bind({});
-WithImage.args = { imageUrl: DEMO_IMAGE_URL };
+export const WithImage: Story = {
+  args: { imageUrl: DEMO_IMAGE_URL },
+};

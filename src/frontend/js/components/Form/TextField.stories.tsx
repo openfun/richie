@@ -1,13 +1,12 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { defaultConfig } from './Field.stories';
-import { TextField as Base } from './index';
+import { Meta, StoryObj } from '@storybook/react';
+import { defaultConfig } from './Field.stories.config';
+import { TextField } from './index';
 
 export default {
-  title: 'Components/Inputs',
-  component: Base,
+  component: TextField,
   ...defaultConfig,
-} as ComponentMeta<typeof Base>;
+} as Meta<typeof TextField>;
 
-const Template: ComponentStory<typeof Base> = (args) => <Base {...args} />;
+type Story = StoryObj<typeof TextField>;
 
-export const TextField = Template.bind({});
+export const Default: Story = {};

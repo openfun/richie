@@ -1,9 +1,8 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Modal } from './index';
 
 export default {
-  title: 'Components/Modal',
   component: Modal,
   argTypes: {
     shouldCloseOnOverlayClick: {
@@ -16,23 +15,24 @@ export default {
       control: 'text',
     },
   },
-} as ComponentMeta<typeof Modal>;
+  render: (args) => {
+    const [modalIsOpen, setModalIsOpen] = useState(true);
 
-const Template: ComponentStory<typeof Modal> = (args) => {
-  const [modalIsOpen, setModalIsOpen] = useState(true);
+    return (
+      <>
+        <button onClick={() => setModalIsOpen(true)}>Open modal</button>
+        <Modal {...args} isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
+          <div style={{ padding: '20px' }}>
+            {[...Array(50)].map(() => (
+              <div>Any content you want here.</div>
+            ))}
+          </div>
+        </Modal>
+      </>
+    );
+  },
+} as Meta<typeof Modal>;
 
-  return (
-    <>
-      <button onClick={() => setModalIsOpen(true)}>Open modal</button>
-      <Modal {...args} isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
-        <div style={{ padding: '20px' }}>
-          {[...Array(50)].map(() => (
-            <div>Any content you want here.</div>
-          ))}
-        </div>
-      </Modal>
-    </>
-  );
-};
+type Story = StoryObj<typeof Modal>;
 
-export const Default = Template.bind({});
+export const Default: Story = {};

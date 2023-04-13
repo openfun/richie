@@ -1,23 +1,21 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { RichieContextFactory, CourseFactory } from 'utils/test/factories/richie';
 import { CourseGlimpseList } from '.';
 
 export default {
-  title: 'Components/CourseGlimpseList',
   component: CourseGlimpseList,
-} as ComponentMeta<typeof CourseGlimpseList>;
+} as Meta<typeof CourseGlimpseList>;
 
-const Template: ComponentStory<typeof CourseGlimpseList> = (args) => (
-  <CourseGlimpseList {...args} />
-);
+type Story = StoryObj<typeof CourseGlimpseList>;
 
-export const RichieCourseList = Template.bind({});
-RichieCourseList.args = {
-  context: RichieContextFactory().generate(),
-  courses: CourseFactory.generate(10),
-  meta: {
-    count: 10,
-    offset: 0,
-    total_count: 100,
+export const RichieCourseList: Story = {
+  args: {
+    context: RichieContextFactory().generate(),
+    courses: CourseFactory.generate(10),
+    meta: {
+      count: 10,
+      offset: 0,
+      total_count: 100,
+    },
   },
 };
