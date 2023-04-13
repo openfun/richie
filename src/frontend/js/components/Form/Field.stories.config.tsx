@@ -1,4 +1,6 @@
-export const defaultConfig = {
+import { Meta } from '@storybook/react';
+
+export const defaultConfig: Partial<Meta> = {
   args: {
     label: 'Any label here',
     message: 'Any message here',

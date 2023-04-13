@@ -70,6 +70,7 @@ export const CourseFactory = createSpec({
     src: '/static/course_cover_image.jpg',
     srcset: '/static/course_cover_image.jpg',
   },
+  title: faker.random.words(Math.ceil(Math.random() * 10)),
   duration: '',
   effort: '',
   icon: {

@@ -1,18 +1,18 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { defaultConfig } from './Field.stories';
-import { RadioField as Base } from './index';
+import { Meta, StoryObj } from '@storybook/react';
+import { defaultConfig } from './Field.stories.config';
+import { RadioField } from './index';
 
 export default {
-  title: 'Components/Inputs',
-  component: Base,
+  component: RadioField,
   ...defaultConfig,
-} as ComponentMeta<typeof Base>;
+  render: (args) => (
+    <div>
+      <RadioField {...args} value="French" id="French" name="input" />
+      <RadioField {...args} value="German" id="German" name="input" />
+    </div>
+  ),
+} as Meta<typeof RadioField>;
 
-const Template: ComponentStory<typeof Base> = (args) => (
-  <div>
-    <Base {...args} value="French" id="French" name="input" />
-    <Base {...args} value="German" id="German" name="input" />
-  </div>
-);
+type Story = StoryObj<typeof RadioField>;
 
-export const RadioField = Template.bind({});
+export const Default: Story = {};

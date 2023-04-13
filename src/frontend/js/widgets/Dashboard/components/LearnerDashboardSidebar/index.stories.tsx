@@ -1,25 +1,24 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { UserFactory } from 'utils/test/factories/richie';
 import { LearnerDashboardSidebar } from 'widgets/Dashboard/components/LearnerDashboardSidebar';
 import { StorybookHelper } from 'utils/StorybookHelper';
 
 export default {
-  title: 'Components/Dashboard/DashboardSidebar',
   component: LearnerDashboardSidebar,
-} as ComponentMeta<typeof LearnerDashboardSidebar>;
+  render: () => {
+    const user = UserFactory.generate();
+    const router = createMemoryRouter([
+      {
+        index: true,
+        element: <LearnerDashboardSidebar />,
+      },
+    ]);
 
-const Template: ComponentStory<typeof LearnerDashboardSidebar> = () => {
-  const user = UserFactory.generate();
-  const router = createMemoryRouter([
-    {
-      index: true,
-      element: <LearnerDashboardSidebar />,
-    },
-  ]);
+    return StorybookHelper.wrapInApp(<RouterProvider router={router} />, { user });
+  },
+} as Meta<typeof LearnerDashboardSidebar>;
 
-  return StorybookHelper.wrapInApp(<RouterProvider router={router} />, { user });
-};
+type Story = StoryObj<typeof LearnerDashboardSidebar>;
 
-export const Learner = Template.bind({});
-Learner.args = {};
+export const Learner: Story = {};

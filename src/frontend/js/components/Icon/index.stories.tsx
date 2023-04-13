@@ -1,11 +1,14 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { Icon } from './index';
 
 export default {
-  title: 'Components/Icon',
   component: Icon,
-} as ComponentMeta<typeof Icon>;
+} as Meta<typeof Icon>;
 
-const Template: ComponentStory<typeof Icon> = (args) => <Icon {...args} />;
+type Story = StoryObj<typeof Icon>;
 
-export const Default = Template.bind({});
+export const Default: Story = {
+  args: {
+    name: 'icon-check',
+  },
+};
