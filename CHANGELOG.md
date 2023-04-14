@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix error `MultipleObjectsReturned` during synchronization due to missing
+  `distinct`.
+
 ## [2.21.1] - 2023-04-04
 
 ### Fixed
