@@ -160,7 +160,7 @@ def sync_course_run(data):
     # Look for the course targeted by the resource link
     course_code = normalize_code(lms.extract_course_code(data))
     try:
-        course = Course.objects.get(
+        course = Course.objects.distinct().get(
             code=course_code,
             extended_object__publisher_is_draft=True,
             # Exclude snapshots

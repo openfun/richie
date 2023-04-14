@@ -12,6 +12,7 @@ from cms.models import Page, Title
 from cms.signals import post_publish
 from cms.test_utils.testcases import CMSTestCase
 
+from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 from richie.apps.courses.models import Course, CourseRun
 from richie.apps.courses.serializers import SyncCourseRunSerializer
@@ -1258,3 +1259,82 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
         self.assertEqual(CourseRun.objects.count(), 1)
+
+    def test_api_course_run_sync_create_course_run_on_published_course_page(
+        self, mock_signal
+    ):
+        """
+        When a course run is created on a published course page, the course run should
+        be created successfully.
+        """
+        CourseFactory(code="DemoX", should_publish=True)
+
+        # Two courses with the same code should be created
+        Course.objects.get(code="DEMOX", extended_object__publisher_is_draft=True)
+        Course.objects.get(code="DEMOX", extended_object__publisher_is_draft=False)
+        self.assertEqual(CourseRun.objects.count(), 0)
+
+        data = {
+            "resource_link": "http://example.edx:8073/courses/course-v1:edX+DemoX+01/course/",
+            "start": "2020-12-09T09:31:59.417817Z",
+            "end": "2021-03-14T09:31:59.417895Z",
+            "enrollment_start": "2020-11-09T09:31:59.417936Z",
+            "enrollment_end": "2020-12-24T09:31:59.417972Z",
+            "languages": ["en", "fr"],
+            "enrollment_count": 46782,
+            "catalog_visibility": "course_and_search",
+        }
+
+        mock_signal.reset_mock()
+
+        authorization = (
+            "SIG-HMAC-SHA256 "
+            "5bdfb326b35fccaef9961e03cf617c359c86ffbb6c64e0f7e074aa011e8af9d6"
+        )
+        response = self.client.post(
+            "/api/v1.0/course-runs-sync",
+            data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=authorization,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"success": True})
+        self.assertEqual(CourseRun.objects.count(), 2)
+
+    def test_api_course_with_parent_courses_page(self, mock_signal):
+        """
+        Verify that a course is updated when it has a parent courses page.
+        """
+        mock_signal.reset_mock()
+        courses_page = create_i18n_page(
+            "Courses page",
+            published=True,
+            reverse_id="courses",
+        )
+        CourseFactory(code="DemoX", page_parent=courses_page, should_publish=False)
+
+        data = {
+            "resource_link": "http://example.edx:8073/courses/course-v1:edX+DemoX+01/course/",
+            "start": "2020-12-09T09:31:59.417817Z",
+            "end": "2021-03-14T09:31:59.417895Z",
+            "enrollment_start": "2020-11-09T09:31:59.417936Z",
+            "enrollment_end": "2020-12-24T09:31:59.417972Z",
+            "languages": ["en", "fr"],
+            "enrollment_count": 46782,
+            "catalog_visibility": "course_and_search",
+        }
+
+        authorization = (
+            "SIG-HMAC-SHA256 "
+            "5bdfb326b35fccaef9961e03cf617c359c86ffbb6c64e0f7e074aa011e8af9d6"
+        )
+        response = self.client.post(
+            "/api/v1.0/course-runs-sync",
+            data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=authorization,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"success": True})
