@@ -48,33 +48,32 @@ export const TeacherCoursesDashboardLoader = () => {
   }, [searchParams.get('status'), searchParams.get('type')]);
 
   return (
-    <DashboardLayout sidebar={<TeacherProfileDashboardSidebar />}>
+    <DashboardLayout
+      sidebar={<TeacherProfileDashboardSidebar />}
+      filters={<TeacherCourseSearchFiltersBar filters={filters} />}
+    >
       <div className="teacher-courses-page">
-        <TeacherCourseSearchFiltersBar filters={filters} />
-
-        <div className="teacher-courses">
-          {filters.status === CourseStatusFilter.ALL ? (
-            <>
-              <DashboardCourseList
-                titleTranslated={intl.formatMessage(messages.incoming)}
-                filters={{ ...filters, status: CourseStatusFilter.INCOMING, perPage: 3 }}
-              />
-              <DashboardCourseList
-                titleTranslated={intl.formatMessage(messages.ongoing)}
-                filters={{ ...filters, status: CourseStatusFilter.ONGOING, perPage: 3 }}
-              />
-              <DashboardCourseList
-                titleTranslated={intl.formatMessage(messages.archived)}
-                filters={{ ...filters, status: CourseStatusFilter.ARCHIVED, perPage: 3 }}
-              />
-            </>
-          ) : (
+        {filters.status === CourseStatusFilter.ALL ? (
+          <>
             <DashboardCourseList
-              titleTranslated={intl.formatMessage(messages.courses)}
-              filters={filters}
+              titleTranslated={intl.formatMessage(messages.incoming)}
+              filters={{ ...filters, status: CourseStatusFilter.INCOMING, perPage: 3 }}
             />
-          )}
-        </div>
+            <DashboardCourseList
+              titleTranslated={intl.formatMessage(messages.ongoing)}
+              filters={{ ...filters, status: CourseStatusFilter.ONGOING, perPage: 3 }}
+            />
+            <DashboardCourseList
+              titleTranslated={intl.formatMessage(messages.archived)}
+              filters={{ ...filters, status: CourseStatusFilter.ARCHIVED, perPage: 3 }}
+            />
+          </>
+        ) : (
+          <DashboardCourseList
+            titleTranslated={intl.formatMessage(messages.courses)}
+            filters={filters}
+          />
+        )}
       </div>
     </DashboardLayout>
   );

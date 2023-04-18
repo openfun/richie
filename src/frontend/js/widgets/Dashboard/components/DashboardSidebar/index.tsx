@@ -33,7 +33,7 @@ export const DashboardSidebar = ({
   const location = useLocation();
   const navigate = useNavigate();
   const selectNav = useRef<HTMLSelectElement>(null);
-  const classes = ['dashboard__sidebar'];
+  const classes = ['dashboard-sidebar'];
 
   const selectedLink = useMemo(
     () => menuLinks.find((link) => matchPath({ path: link.to, end: false }, location.pathname))?.to,
@@ -47,15 +47,15 @@ export const DashboardSidebar = ({
 
   return (
     <aside className={classes.join(' ')} data-testid="dashboard__sidebar">
-      <div className="dashboard__sidebar__container">
-        <header className="dashboard__sidebar__container__header">
-          <div className="dashboard__sidebar__container__header__avatar">
+      <div className="dashboard-sidebar__container">
+        <header className="dashboard-sidebar__container__header">
+          <div className="dashboard-sidebar__container__header__avatar">
             <DashboardAvatar user={user!} />
           </div>
           <h3>{header}</h3>
           <p>{subHeader}</p>
         </header>
-        <div className="dashboard__sidebar__container__responsive-nav">
+        <div className="dashboard-sidebar__container__responsive-nav">
           <label htmlFor="dashboard-responsive-nav" className="offscreen">
             <FormattedMessage {...messages.responsiveNavLabel} />
           </label>
