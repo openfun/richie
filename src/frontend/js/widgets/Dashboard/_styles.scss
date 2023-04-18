@@ -5,18 +5,6 @@
 $avatar-size: 100px;
 
 .dashboard {
-  @include make-container();
-  @include make-container-max-widths();
-  margin: auto;
-  display: flex;
-  align-items: flex-start;
-  padding-bottom: calc(5vw + 2rem);
-
-  @include media-breakpoint-down(lg) {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   &__avatar {
     box-shadow: r-theme-val(dashboard-sidebar, base-shadow);
     background-color: r-theme-val(dashboard-avatar, background-color);
@@ -117,33 +105,5 @@ $avatar-size: 100px;
       padding-bottom: 1rem;
       overflow: auto;
     }
-  }
-}
-
-.dashboard-breadcrumbs {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  align-items: center;
-  white-space: nowrap;
-
-  .button:first-child {
-    padding-left: 0;
-  }
-
-  .button {
-    text-transform: uppercase;
-    font-weight: bold;
-    color: r-theme-val(dashboard-breadcrumbs, base-color);
-  }
-
-  li {
-    margin-right: 1rem;
-    padding-right: 0.5rem;
-  }
-
-  li:not(:last-child) {
-    border-right: 1px r-theme-val(dashboard-breadcrumbs, base-color) solid;
   }
 }
