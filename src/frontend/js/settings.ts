@@ -16,7 +16,7 @@ export const REACT_QUERY_SETTINGS = {
     throttleTime: 500,
   },
   // Cache is garbage collected after this delay
-  cacheTime: 24 * 60 * 60 * 1000, // 24h in ms
+  cacheTime: 0, // 24 * 60 * 60 * 1000, // 24h in ms
   // Data are considered as stale after this delay
   staleTimes: {
     default: 0, // Stale immediately
@@ -35,4 +35,4 @@ export const PAYMENT_SETTINGS = {
   pollLimit: 30,
 };
 
-export const MOCK_SERVICE_WORKER_ENABLED = false;
+export const MOCK_SERVICE_WORKER_ENABLED = true;
