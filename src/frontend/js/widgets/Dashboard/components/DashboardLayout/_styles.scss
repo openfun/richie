@@ -1,13 +1,56 @@
+$dashboard-breadcrumb-height: rem-calc(32.4px);
+$dashboard-breadcrumb-filters-spacing: rem-calc(30px);
+$dashboard-filters-height: rem-calc(48px);
+$dashboard-header-spacing: rem-calc(16px);
+$sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-filters-height +
+  $dashboard-header-spacing + $dashboard-breadcrumb-filters-spacing;
+
 .dashboard {
   @include make-container();
   @include make-container-max-widths();
   margin: auto;
+  padding-top: rem-calc(16px);
   display: flex;
   align-items: flex-start;
-  padding-bottom: calc(5vw + 2rem);
+  padding-bottom: calc(5vw + rem-calc(32px));
 
   @include media-breakpoint-down(lg) {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  &__sidebar {
+    flex-shrink: 0;
+    width: 300px;
+    margin-top: $sidebar-spacing-top;
+    margin-right: rem-calc(32px);
+
+    @include media-breakpoint-down(lg) {
+      width: auto;
+    }
+  }
+
+  &__filters {
+    min-height: $dashboard-filters-height;
+    margin-top: $dashboard-breadcrumb-filters-spacing;
+  }
+
+  &__main {
+    flex-grow: 1;
+    overflow: hidden;
+
+    @include media-breakpoint-down(lg) {
+      padding: rem-calc(16px) 0 0 0;
+    }
+
+    > header {
+      // Padding instead of margin to give room to the scrollbar.
+      padding-bottom: $dashboard-header-spacing;
+      overflow: auto;
+    }
+  }
+
+  &__content {
+    padding-right: rem-calc(32px);
   }
 }

@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Replace helix factories by homemade engine using typescript.
+- Improve design of the dashboards layouts.
 
 ## [2.22.0] - 2023-04-20
 

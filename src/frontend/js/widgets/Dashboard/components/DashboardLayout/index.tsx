@@ -6,20 +6,24 @@ import { DashboardBreadcrumbs } from 'widgets/Dashboard/components/DashboardBrea
 
 interface DashboardLayoutProps extends PropsWithChildren<any> {
   sidebar?: ReactNode;
+  filters?: ReactNode;
 }
 
-export const DashboardLayout = ({ children, sidebar }: DashboardLayoutProps) => {
+export const DashboardLayout = ({ children, sidebar, filters }: DashboardLayoutProps) => {
   const location = useLocation();
   return (
     <DashboardBreadcrumbsProvider>
       <div className="dashboard">
-        {sidebar || <LearnerDashboardSidebar />}
-        <div className="dashboard__content">
+        <div className="dashboard__sidebar">{sidebar || <LearnerDashboardSidebar />}</div>
+        <main className="dashboard__main">
           <header>
             <DashboardBreadcrumbs />
+            <div className="dashboard__filters">{filters}</div>
           </header>
-          <main data-testid={`location-display-${location.pathname}`}>{children}</main>
-        </div>
+          <div className="dashboard__content" data-testid={`location-display-${location.pathname}`}>
+            {children}
+          </div>
+        </main>
       </div>
     </DashboardBreadcrumbsProvider>
   );
