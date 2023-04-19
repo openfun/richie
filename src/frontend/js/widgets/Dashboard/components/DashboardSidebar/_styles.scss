@@ -5,6 +5,7 @@
   border-radius: $border-radius;
   box-shadow: r-theme-val(dashboard-sidebar, base-shadow);
   color: r-theme-val(dashboard-sidebar, base-color);
+  padding-bottom: rem-calc(27px);
 
   @include media-breakpoint-down(lg) {
     width: auto;
@@ -12,7 +13,7 @@
 
   &__container {
     &__header {
-      padding: 4rem 1rem 1rem 1rem;
+      padding: rem-calc(64px) rem-calc(16px) rem-calc(50px) rem-calc(16px);
       position: relative;
       display: flex;
       flex-direction: column;
@@ -26,10 +27,12 @@
       h3 {
         font-weight: bold;
         text-align: center;
+        margin-bottom: rem-calc(12px);
       }
 
       p {
         color: r-theme-val(dashboard-sidebar, sub-title-color);
+        margin-bottom: 0;
       }
     }
 
@@ -52,17 +55,40 @@
       }
 
       li {
-        padding: 0.5rem;
-        border-top: 1px r-theme-val(dashboard-sidebar, base-border) solid;
+        height: rem-calc(16px);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        font-size: rem-calc(16px);
+        margin-top: rem-calc(8px);
+        line-height: 1em;
+        &:first-child {
+          padding-top: 0;
+        }
 
-        a {
-          color: r-theme-val(dashboard-sidebar, base-color);
-          font-weight: 600;
-          font-family: $r-font-family-montserrat;
+        &:hover {
+          border-left: 3px solid r-theme-val(dashboard-sidebar, base-color);
+          a {
+            padding-left: rem-calc(r-theme-val(dashboard-sidebar, menu-link-left-padding) - 3px);
+          }
+        }
 
-          &.active {
+        &.active {
+          border-left: 3px solid r-theme-val(dashboard-sidebar, active-color);
+          a {
+            padding-left: rem-calc(r-theme-val(dashboard-sidebar, menu-link-left-padding) - 3px);
+            font-weight: 600;
             color: r-theme-val(dashboard-sidebar, active-color);
           }
+        }
+
+        a {
+          display: flex;
+          flex: 1;
+          align-items: center;
+          height: rem-calc(24px);
+          padding-left: r-theme-val(dashboard-sidebar, menu-link-left-padding);
+          color: r-theme-val(dashboard-sidebar, base-color);
         }
       }
     }
