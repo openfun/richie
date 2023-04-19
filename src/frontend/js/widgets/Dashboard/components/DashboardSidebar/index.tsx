@@ -76,7 +76,10 @@ export const DashboardSidebar = ({
 
         <ul>
           {menuLinks.map((link) => (
-            <li key={link.to}>
+            <li
+              key={link.to}
+              className={selectedLink && selectedLink === link.to ? 'active' : undefined}
+            >
               <NavLink to={link.to}>{link.label}</NavLink>
             </li>
           ))}

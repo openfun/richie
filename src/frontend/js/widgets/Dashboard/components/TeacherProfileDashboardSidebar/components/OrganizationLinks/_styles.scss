@@ -1,6 +1,7 @@
 .dashboard-sidebar {
   &__organization-section {
-    padding: rem-calc(20px) rem-calc(8px) rem-calc(40px);
+    $padding-left: r-theme-val(dashboard-sidebar, menu-link-left-padding);
+    padding: rem-calc(20px) rem-calc(8px) 0 rem-calc($padding-left);
 
     &__title {
       font-size: rem-calc(16px);
