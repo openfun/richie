@@ -36,19 +36,19 @@
             <div class="organization-detail__row organization-detail__row--unpadded">
                 <div class="organization-detail__banner">
                     {% placeholder_as_plugins "banner" as plugins or %}
-                        <img src="{% static "richie/images/empty/organization_banner.jpg" %}"
+                        <img src="{% static 'richie/images/empty/organization_banner.jpg' %}"
                             class="organization-detail__banner--empty"
                             alt="">
                     {% endplaceholder_as_plugins %}
                     {% blockplugin plugins.0 %}
                         <img
-                            src="{% thumbnail instance.picture 320x100 replace_alpha='#FFFFFF' upscale %}"
+                            src="{% thumbnail instance.picture 320x100 replace_alpha='#FFFFFF' crop upscale %}"
                             srcset="
-                                {% thumbnail instance.picture 640x200 replace_alpha='#FFFFFF' upscale %} 640w,
-                                {% thumbnail instance.picture 1280x300 replace_alpha='#FFFFFF' upscale %} 1280w,
-                                {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x351 replace_alpha='#FFFFFF' upscale %} 1500w,{% endif %}
-                                {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x468 replace_alpha='#FFFFFF' upscale %} 2000w,{% endif %}
-                                {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x585 replace_alpha='#FFFFFF' upscale %} 2500w,{% endif %}
+                                {% thumbnail instance.picture 640x200 replace_alpha='#FFFFFF' crop upscale %} 640w,
+                                {% thumbnail instance.picture 1280x300 replace_alpha='#FFFFFF' crop upscale %} 1280w,
+                                {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x351 replace_alpha='#FFFFFF' crop upscale %} 1500w,{% endif %}
+                                {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x468 replace_alpha='#FFFFFF' crop upscale %} 2000w,{% endif %}
+                                {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x585 replace_alpha='#FFFFFF' crop upscale %} 2500w,{% endif %}
                             "
                             sizes="(min-width: 576px) 80vw, (min-width: 1200px) 1140px, 100vw"
                             alt=""
@@ -58,7 +58,7 @@
 
                 <div class="organization-detail__logo">
                     {% placeholder_as_plugins "logo" as plugins or %}
-                        <img src="{% static "richie/images/empty/organization_logo.png" %}"
+                        <img src="{% static 'richie/images/empty/organization_logo.png' %}"
                             class="organization-detail__logo--empty"
                             alt="">
                     {% endplaceholder_as_plugins %}
