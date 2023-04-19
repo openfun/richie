@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix error `MultipleObjectsReturned` during synchronization due to missing
   `distinct`.
+- Fix images sizes for course detail cover and organization banner
 
 ## [2.21.1] - 2023-04-04
 
