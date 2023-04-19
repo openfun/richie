@@ -23,14 +23,15 @@
     "richie-education": "2.21.1"
   },
   "devDependencies": {
-    "@formatjs/cli": "6.0.4",
+    "babel-loader": "9.1.2",
+    "@formatjs/cli": "6.1.0",
     "eslint": "8.38.0",
     "eslint-import-resolver-webpack": "0.13.2",
     "nodemon": "2.0.22",
     "prettier": "2.8.7",
     "sass": "1.62.0",
     "source-map-loader": "4.0.1",
-    "webpack": "5.79.0",
+    "webpack": "5.80.0",
     "webpack-cli": "5.0.1"
   }
 }
