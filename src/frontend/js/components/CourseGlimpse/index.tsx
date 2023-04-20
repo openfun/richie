@@ -6,11 +6,13 @@ import { CommonDataProps } from 'types/commonDataProps';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CourseState } from 'types';
 import { CourseGlimpseFooter } from './CourseGlimpseFooter';
+import CourseLink from './CourseLink';
 
 export interface CourseGlimpseCourse {
   id: string;
   code: Nullable<string>;
   course_url?: string;
+  course_route?: string;
   cover_image?: Nullable<{
     src: string;
     sizes?: string;
@@ -68,7 +70,12 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
       {/* the media link is only here for mouse users, so hide it for keyboard/screen reader users.
       Keyboard/sr will focus the link on the title */}
       <div aria-hidden="true" className="course-glimpse__media">
-        <a tabIndex={-1} href={course.course_url}>
+        <CourseLink
+          tabIndex={-1}
+          className="course-glimpse__link"
+          href={course.course_url}
+          to={course.course_route}
+        >
           {/* alt forced to empty string because it's a decorative image */}
           {course.cover_image ? (
             <img
@@ -82,14 +89,18 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
               <FormattedMessage {...messages.cover} />
             </div>
           )}
-        </a>
+        </CourseLink>
       </div>
       <div className="course-glimpse__content">
         <div className="course-glimpse__wrapper">
           <h3 className="course-glimpse__title">
-            <a className="course-glimpse__link" href={course.course_url}>
+            <CourseLink
+              className="course-glimpse__link"
+              href={course.course_url}
+              to={course.course_route}
+            >
               <span className="course-glimpse__title-text">{course.title}</span>
-            </a>
+            </CourseLink>
           </h3>
           {course.organization.image ? (
             <div className="course-glimpse__organization-logo">

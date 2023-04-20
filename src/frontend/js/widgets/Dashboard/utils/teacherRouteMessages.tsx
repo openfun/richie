@@ -13,7 +13,7 @@ export enum TeacherDashboardPaths {
   ORGANIZATION_COURSES = '/teacher/organization/{organizationId}/courses',
   ORGANIZATION_SETTINGS = '/teacher/organization/{organizationId}/settings',
   ORGANIZATION_MEMBERS = '/teacher/organization/{organizationId}/members',
-  COURSE = '/teacher/course',
+  COURSE = '/teacher/course/{courseCode}',
   COURSE_SETTINGS = '/teacher/course/{courseCode}/settings',
   COURSE_CLASSROOMS = '/teacher/course/{courseCode}/classrooms',
   COURSE_RECORDS = '/teacher/course/{courseCode}/records',

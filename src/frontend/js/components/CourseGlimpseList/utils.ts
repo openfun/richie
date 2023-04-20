@@ -4,6 +4,7 @@ import { CourseGlimpseCourse, getCourseGlimpseProps } from 'components/CourseGli
 
 export const getCourseGlimpseListProps = (
   courses: JoanieCourse[] | RichieCourse[],
+  locale?: string,
 ): CourseGlimpseCourse[] => {
-  return courses.map((course) => getCourseGlimpseProps(course));
+  return courses.map((course) => getCourseGlimpseProps(course, locale));
 };
