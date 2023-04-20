@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 11:01+0000\n"
-"PO-Revision-Date: 2023-04-04 15:46\n"
+"POT-Creation-Date: 2023-04-17 08:30+0000\n"
+"PO-Revision-Date: 2023-04-21 08:46\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -103,32 +103,32 @@ msgstr "Votre navigateur ne supporte pas ce format de vidéo."
 msgid "You are here:"
 msgstr "Vous êtes ici:"
 
-#: apps/core/templates/richie/base.html:83
+#: apps/core/templates/richie/base.html:84
 msgid "Skip to main content"
 msgstr "Passer au contenu principal"
 
-#: apps/core/templates/richie/base.html:94
+#: apps/core/templates/richie/base.html:95
 msgid "Go to homepage"
 msgstr "Retour à la page d'accueil"
 
-#: apps/core/templates/richie/base.html:103
+#: apps/core/templates/richie/base.html:104
 msgid "Menu"
 msgstr "Menu"
 
-#: apps/core/templates/richie/base.html:120
+#: apps/core/templates/richie/base.html:121
 msgid "Contact us"
 msgstr "Nous contacter"
 
-#: apps/core/templates/richie/base.html:167
+#: apps/core/templates/richie/base.html:168
 msgid "Life-changing learning!"
 msgstr "Apprendre pour changer de vie !"
 
-#: apps/core/templates/richie/base.html:175
+#: apps/core/templates/richie/base.html:176
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr "En savoir plus"
 
-#: apps/core/templates/richie/base.html:187
+#: apps/core/templates/richie/base.html:188
 msgid "Powered by"
 msgstr "Propulsé par"
 

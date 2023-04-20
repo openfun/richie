@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-21 11:01+0000\n"
-"PO-Revision-Date: 2023-04-04 15:29\n"
+"POT-Creation-Date: 2023-04-17 08:30+0000\n"
+"PO-Revision-Date: 2023-04-20 15:24\n"
 "Last-Translator: \n"
 "Language-Team: French, Canada\n"
 "Language: fr_CA\n"
@@ -48,7 +48,7 @@ msgstr "Définir un effort"
 
 #: apps/core/fields/effort.py:242
 msgid "An effort should be a triplet: number, time unit and reference unit."
-msgstr "Un effort doit être un triplet: numéro / unité de temps / unité de référence."
+msgstr "Un effort doit être un triplet : numéro / unité de temps / unité de référence."
 
 #: apps/core/fields/effort.py:255
 msgid "An effort should be a round number of time units."
@@ -103,32 +103,32 @@ msgstr "Votre navigateur ne supporte pas ce format de vidéo."
 msgid "You are here:"
 msgstr "Vous êtes ici :"
 
-#: apps/core/templates/richie/base.html:83
+#: apps/core/templates/richie/base.html:84
 msgid "Skip to main content"
 msgstr "Passer au contenu principal"
 
-#: apps/core/templates/richie/base.html:94
+#: apps/core/templates/richie/base.html:95
 msgid "Go to homepage"
 msgstr "Aller à la page d'accueil"
 
-#: apps/core/templates/richie/base.html:103
+#: apps/core/templates/richie/base.html:104
 msgid "Menu"
 msgstr "Menu"
 
-#: apps/core/templates/richie/base.html:120
+#: apps/core/templates/richie/base.html:121
 msgid "Contact us"
 msgstr "Contactez-nous"
 
-#: apps/core/templates/richie/base.html:167
+#: apps/core/templates/richie/base.html:168
 msgid "Life-changing learning!"
 msgstr "Un apprentissage renversant!"
 
-#: apps/core/templates/richie/base.html:175
+#: apps/core/templates/richie/base.html:176
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr "En savoir plus"
 
-#: apps/core/templates/richie/base.html:187
+#: apps/core/templates/richie/base.html:188
 msgid "Powered by"
 msgstr "Propulsé par"
 
@@ -225,7 +225,7 @@ msgstr "Suivre un cours en ligne avec Richie"
 #: apps/core/templates/social-networks/course-badges.html:4
 #, python-format
 msgid "I just enrolled to the course \"%(title)s\" on Richie: %(url)s"
-msgstr "Je viens de m'inscrire au cours \"%(title)s\" sur Richie: %(url)s"
+msgstr "Je viens de m'inscrire au cours \"%(title)s\" sur Richie : %(url)s"
 
 #: apps/core/templates/social-networks/footer-badges.html:7
 #: apps/core/templates/social-networks/footer-badges.html:8
@@ -852,7 +852,7 @@ msgstr "Bio adaptée"
 
 #: apps/courses/models/person.py:80
 msgid "Optional: provide a custom bio (if you leave it empty, it will display the person's bio)."
-msgstr "Optionnel: adaptez la bio (si vous laissez le champs vide, la biographie par défaut de la personne s'affichera)."
+msgstr "Optionnel : adaptez la bio (si vous laissez le champs vide, la biographie par défaut de la personne s'affichera)."
 
 #: apps/courses/models/person.py:87
 msgid "person plugin"
@@ -984,7 +984,7 @@ msgstr "Colonne unique"
 
 #: apps/courses/settings/__init__.py:92
 msgid "Three columns: (33% | 33% | 33%)"
-msgstr "Trois colonnes: (33% | 33% | 33%)"
+msgstr "Trois colonnes : (33% | 33% | 33%)"
 
 #: apps/courses/settings/__init__.py:93
 msgid "Two columns: (50% | 50%)"
@@ -992,11 +992,11 @@ msgstr "Deux colonnes: (50% | 50%)"
 
 #: apps/courses/settings/__init__.py:94
 msgid "Two columns: (25% | 75%)"
-msgstr "Deux colonnes: (25% | 75%)"
+msgstr "Deux colonnes : (25% | 75%)"
 
 #: apps/courses/settings/__init__.py:95
 msgid "Two columns: (75% | 25%)"
-msgstr "Deux colonnes: (75% | 25%)"
+msgstr "Deux colonnes : (75% | 25%)"
 
 #: apps/courses/settings/__init__.py:102
 msgid "Footer"
@@ -1288,7 +1288,7 @@ msgstr "Effort :"
 
 #: apps/courses/templates/courses/cms/course_detail.html:112
 msgid "Pace:"
-msgstr "Rythme:"
+msgstr "Rythme :"
 
 #: apps/courses/templates/courses/cms/course_detail.html:122
 msgid "Enter here a introduction of your course."

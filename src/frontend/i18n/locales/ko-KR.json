@@ -263,6 +263,14 @@
     "description": "Help text below the \"Unenroll now\" CTA when an enrollment attempt has already failed.",
     "message": "Unenroll from this course"
   },
+  "components.Dashboard.DashboardRoutes.certificates.label": {
+    "description": "Label of the certificates view used in navigation components.",
+    "message": "My certificates"
+  },
+  "components.Dashboard.DashboardRoutes.certificates.path": {
+    "description": "The path to display the certificates view.",
+    "message": "/certificates"
+  },
   "components.Dashboard.DashboardRoutes.course.path": {
     "description": "The path to display a course detail view.",
     "message": "/courses/{code}"
@@ -354,6 +362,42 @@
   "components.DashboardBreadcrumbs.back": {
     "description": "The dashboard's breadcrumb back button's label",
     "message": "Back"
+  },
+  "components.DashboardCertificate.details": {
+    "description": "Label for the details button of a certificate",
+    "message": "Details"
+  },
+  "components.DashboardCertificate.download": {
+    "description": "Label for the download button of a certificate",
+    "message": "Download"
+  },
+  "components.DashboardCertificate.generatingCertificate": {
+    "description": "Accessible label displayed while certificate is being generated on the dashboard.",
+    "message": "Certificate is being generated..."
+  },
+  "components.DashboardCertificate.issuedOn": {
+    "description": "Label for the date of issue of a certificate",
+    "message": "Issued on {date}"
+  },
+  "components.DashboardCertificate.noCertificate": {
+    "description": "Label displayed when no certificate is available",
+    "message": "When all your courses will be passed, you will be able to download your certificate here."
+  },
+  "components.DashboardCertificates.empty": {
+    "description": "Message displayed when there are no certificates",
+    "message": "You have no certificates yet."
+  },
+  "components.DashboardCertificates.loading": {
+    "description": "Message displayed while loading certificates",
+    "message": "Loading certificates..."
+  },
+  "components.DashboardCourses.emptyList": {
+    "description": "Empty placeholder of the dashboard's list of orders and enrollments",
+    "message": "You have no enrollments nor orders yet."
+  },
+  "components.DashboardCourses.loadMoreResults": {
+    "description": "Button to manually load more orders and enrollments",
+    "message": "Load more"
   },
   "components.DashboardCourses.loading": {
     "description": "Message displayed while loading orders and enrollments",
@@ -888,7 +932,7 @@
     "message": "/teacher"
   },
   "components.TeacherOrganizationCourseDashboardLoader.loading": {
-    "description": "Message displayed while loading an organization",
+    "description": "Message displayed while loading courses on the teacher's dashboard'",
     "message": "Loading organization ..."
   },
   "components.TeacherOrganizationDashboardSidebar.header": {
@@ -899,9 +943,13 @@
     "description": "Sub title of the organization dashboard sidebar",
     "message": "You are on the organization dashboard"
   },
-  "components.TeacherProfileDashboardLoader.loading": {
-    "description": "Message displayed while loading profile",
-    "message": "Loading profile ..."
+  "components.TeacherProfileDashboardSidebar.OrganizationLinks.organizationLinkTitle": {
+    "description": "Organization link title",
+    "message": "Link to organization \"{organizationTitle}\""
+  },
+  "components.TeacherProfileDashboardSidebar.OrganizationLinks.organizationsTitle": {
+    "description": "Title of the organizations section",
+    "message": "My universities"
   },
   "components.TeacherProfileDashboardSidebar.header": {
     "description": "Title of the dashboard sidebar",
@@ -971,6 +1019,14 @@
     "description": "Error shown if a user tries to remove a main address",
     "message": "Cannot remove main address."
   },
+  "hooks.useCertificates.errorGet": {
+    "description": "Error message shown to the user when certificates fetch request fails.",
+    "message": "An error occurred while fetching certificates. Please retry later."
+  },
+  "hooks.useCertificates.errorNotFound": {
+    "description": "Error message shown to the user when no certificate matches.",
+    "message": "Cannot find the certificate"
+  },
   "hooks.useCreditCards.errorCreate": {
     "description": "Error message shown to the user when credit card creation request fails.",
     "message": "An error occurred while creating the credit card. Please retry later."
@@ -1030,6 +1086,18 @@
   "hooks.useOrders.errorNotFound": {
     "description": "Error message shown to the user when no orders matches.",
     "message": "Cannot find the orders."
+  },
+  "hooks.useOrdersEnrollments.errorGet": {
+    "description": "Error message shown to the user when orders or enrollments fetch request fails.",
+    "message": "An error occurred while fetching orders and enrollments. Please retry later."
+  },
+  "hooks.useOrganizations.errorNotFound": {
+    "description": "Error message shown to the user when no organizations matches.",
+    "message": "Cannot find the organization"
+  },
+  "hooks.useOrganizations.errorSelect": {
+    "description": "Error message shown to the user when organizations fetch request fails.",
+    "message": "An error occurred while fetching organizations. Please retry later."
   },
   "hooks.useProduct.errorGet": {
     "description": "Error message shown to the user when product fetch request fails.",
