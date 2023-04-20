@@ -1,8 +1,7 @@
-import { fireEvent, getByText, render, screen } from '@testing-library/react';
+import { fireEvent, getByText, render, screen, act } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
-import { act } from 'react-dom/test-utils';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
@@ -58,14 +57,20 @@ describe('<Dashboard />', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=10&was_created_by_order=false',
+      [],
+    );
   });
 
   afterEach(() => {
     fetchMock.restore();
   });
 
-  it('should redirect to the site root if user is not authenticated', () => {
-    render(<DashboardWithUser user={null} />);
+  it('should redirect to the site root if user is not authenticated', async () => {
+    await act(async () => {
+      render(<DashboardWithUser user={null} />);
+    });
 
     expect(location.replace).toHaveBeenNthCalledWith(1, '/');
   });
