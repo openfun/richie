@@ -28,6 +28,7 @@ interface DashboardCourseListProps {
 
 const DashboardCourseList = ({ titleTranslated, filters }: DashboardCourseListProps) => {
   const intl = useIntl();
+  const routerLocal = intl.locale.split('-')[0];
   const coursesResults = useCourses(filters);
 
   const {
@@ -56,7 +57,7 @@ const DashboardCourseList = ({ titleTranslated, filters }: DashboardCourseListPr
       {!fetching &&
         (courses.length > 0 ? (
           <CourseGlimpseList
-            courses={getCourseGlimpseListProps(courses)}
+            courses={getCourseGlimpseListProps(courses, routerLocal)}
             context={context}
             className="dashboard__course-glimpse-list"
           />

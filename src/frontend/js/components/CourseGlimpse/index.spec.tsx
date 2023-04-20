@@ -1,9 +1,26 @@
 import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
+import { MemoryRouter } from 'react-router-dom';
 import { CommonDataProps } from 'types/commonDataProps';
 import { RichieContextFactory } from 'utils/test/factories/richie';
 import { CourseStateTextEnum } from 'types';
 import { CourseGlimpse, CourseGlimpseCourse } from '.';
+
+const renderCourseGlimpse = ({
+  course,
+  contextProps,
+}: {
+  course: CourseGlimpseCourse;
+  contextProps: CommonDataProps['context'];
+}) => {
+  return render(
+    <IntlProvider locale="en">
+      <MemoryRouter>
+        <CourseGlimpse context={contextProps} course={course} />
+      </MemoryRouter>
+    </IntlProvider>,
+  );
+};
 
 describe('widgets/Search/components/CourseGlimpse', () => {
   const course: CourseGlimpseCourse = {
@@ -41,11 +58,7 @@ describe('widgets/Search/components/CourseGlimpse', () => {
   const contextProps: CommonDataProps['context'] = RichieContextFactory().one();
 
   it('renders a course glimpse with its data', () => {
-    const { container } = render(
-      <IntlProvider locale="en">
-        <CourseGlimpse context={contextProps} course={course} />
-      </IntlProvider>,
-    );
+    const { container } = renderCourseGlimpse({ course, contextProps });
 
     // first text we encounter should be the title, so that screen reader users get it first
     expect(container.textContent?.indexOf('Course 42')).toBe(0);
@@ -87,21 +100,17 @@ describe('widgets/Search/components/CourseGlimpse', () => {
   });
 
   it('works when there is no call to action or datetime on the state (eg. an archived course)', () => {
-    render(
-      <IntlProvider locale="en">
-        <CourseGlimpse
-          context={contextProps}
-          course={{
-            ...course,
-            state: {
-              ...course.state,
-              call_to_action: undefined,
-              text: CourseStateTextEnum.ARCHIVED,
-            },
-          }}
-        />
-      </IntlProvider>,
-    );
+    renderCourseGlimpse({
+      contextProps,
+      course: {
+        ...course,
+        state: {
+          ...course.state,
+          call_to_action: null,
+          text: CourseStateTextEnum.ARCHIVED,
+        },
+      },
+    });
 
     // Make sure the component renders and shows the state
     screen.getByRole('heading', { name: 'Course 42', level: 3 });
@@ -126,11 +135,10 @@ describe('widgets/Search/components/CourseGlimpse', () => {
   });
 
   it('does include "-" if the course code is not set', () => {
-    render(
-      <IntlProvider locale="en">
-        <CourseGlimpse context={contextProps} course={{ ...course, code: null }} />
-      </IntlProvider>,
-    );
+    renderCourseGlimpse({
+      contextProps,
+      course: { ...course, code: null },
+    });
 
     expect(screen.getByText('-').parentElement).toHaveClass(
       'course-glimpse__metadata',
