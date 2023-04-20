@@ -263,6 +263,14 @@
     "description": "Help text below the \"Unenroll now\" CTA when an enrollment attempt has already failed.",
     "message": "Desinscrever deste curso"
   },
+  "components.Dashboard.DashboardRoutes.certificates.label": {
+    "description": "Label of the certificates view used in navigation components.",
+    "message": "Os meus certificados"
+  },
+  "components.Dashboard.DashboardRoutes.certificates.path": {
+    "description": "The path to display the certificates view.",
+    "message": "/certificados"
+  },
   "components.Dashboard.DashboardRoutes.course.path": {
     "description": "The path to display a course detail view.",
     "message": "/cursos/{code}"
@@ -354,6 +362,42 @@
   "components.DashboardBreadcrumbs.back": {
     "description": "The dashboard's breadcrumb back button's label",
     "message": "Voltar"
+  },
+  "components.DashboardCertificate.details": {
+    "description": "Label for the details button of a certificate",
+    "message": "Detalhes"
+  },
+  "components.DashboardCertificate.download": {
+    "description": "Label for the download button of a certificate",
+    "message": "Descarregar"
+  },
+  "components.DashboardCertificate.generatingCertificate": {
+    "description": "Accessible label displayed while certificate is being generated on the dashboard.",
+    "message": "O certificado está a ser gerado..."
+  },
+  "components.DashboardCertificate.issuedOn": {
+    "description": "Label for the date of issue of a certificate",
+    "message": "Emitido em {date}"
+  },
+  "components.DashboardCertificate.noCertificate": {
+    "description": "Label displayed when no certificate is available",
+    "message": "Quando todos os seus cursos forem aprovados, poderá descarregar aqui o seu certificado."
+  },
+  "components.DashboardCertificates.empty": {
+    "description": "Message displayed when there are no certificates",
+    "message": "Ainda não tem certificados."
+  },
+  "components.DashboardCertificates.loading": {
+    "description": "Message displayed while loading certificates",
+    "message": "Carregando os certificados..."
+  },
+  "components.DashboardCourses.emptyList": {
+    "description": "Empty placeholder of the dashboard's list of orders and enrollments",
+    "message": "Não tem inscrições nem pedidos."
+  },
+  "components.DashboardCourses.loadMoreResults": {
+    "description": "Button to manually load more orders and enrollments",
+    "message": "Carregar mais"
   },
   "components.DashboardCourses.loading": {
     "description": "Message displayed while loading orders and enrollments",
@@ -457,7 +501,7 @@
   },
   "components.DashboardSidebar.settingsLinkLabel": {
     "description": "label of the settings link",
-    "message": "Settings"
+    "message": "Definições"
   },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
@@ -777,15 +821,15 @@
   },
   "components.StudentDashboardSidebar.header": {
     "description": "Title of the dashboard sidebar",
-    "message": "Welcome {name}"
+    "message": "Bem vindo {name}"
   },
   "components.StudentDashboardSidebar.subHeader": {
     "description": "Sub title of the dashboard sidebar",
-    "message": "You are on your dashboard"
+    "message": "Está no seu painel de controlo"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.label": {
     "description": "Label of the course classrooms view.",
-    "message": "Classrooms"
+    "message": "Salas de aula"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.path": {
     "description": "The path to display the course classrooms view.",
@@ -793,7 +837,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.label": {
     "description": "Label of the course view.",
-    "message": "General informations"
+    "message": "Informações gerais"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.path": {
     "description": "The path to display the course view.",
@@ -801,7 +845,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.records.label": {
     "description": "Label of the course's records view.",
-    "message": "Records"
+    "message": "Registos"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.records.path": {
     "description": "The path to display the course's records view.",
@@ -809,7 +853,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.settings.label": {
     "description": "Label of the course settings view.",
-    "message": "Settings"
+    "message": "Definições"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.settings.path": {
     "description": "The path to display the course settings view.",
@@ -817,7 +861,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.label": {
     "description": "Label of the organization courses view.",
-    "message": "Courses"
+    "message": "Cursos"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.path": {
     "description": "The path to display the organization courses view.",
@@ -825,11 +869,11 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.label": {
     "description": "Label of the organization view.",
-    "message": "General informations"
+    "message": "Informações gerais"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.members.label": {
     "description": "Label of the unisersity members view.",
-    "message": "Members"
+    "message": "Membros"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.members.path": {
     "description": "The path to display the unisersity members view.",
@@ -841,7 +885,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.settings.label": {
     "description": "Label of the organization settings view.",
-    "message": "Settings"
+    "message": "Definições"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.settings.path": {
     "description": "The path to display the organization settings view.",
@@ -849,7 +893,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.label": {
     "description": "Label of the teacher courses liste view.",
-    "message": "All my courses"
+    "message": "Todos os meus cursos"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.path": {
     "description": "The path to display the teacher courses liste view.",
@@ -857,11 +901,11 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.label": {
     "description": "Label of the teacher profile view.",
-    "message": "Profile"
+    "message": "Perfil"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.notifications.label": {
     "description": "Label of the teacher notifications view.",
-    "message": "Notifications"
+    "message": "Notificações"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.notifications.path": {
     "description": "The path to display the teacher notifications view.",
@@ -873,7 +917,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.settings.label": {
     "description": "Label of the teacher profile settings view.",
-    "message": "Settings"
+    "message": "Definições"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.settings.path": {
     "description": "The path to display the teacher profile settings view.",
@@ -881,15 +925,15 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.root.label": {
     "description": "Label of the teacher dashboard root view.",
-    "message": "Teacher dashboard"
+    "message": "Painel do professor"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.root.path": {
     "description": "The path to display the teacher dashboard root view.",
     "message": "/teacher"
   },
   "components.TeacherOrganizationCourseDashboardLoader.loading": {
-    "description": "Message displayed while loading an organization",
-    "message": "Loading organization ..."
+    "description": "Message displayed while loading courses on the teacher's dashboard'",
+    "message": "Carregando organização..."
   },
   "components.TeacherOrganizationDashboardSidebar.header": {
     "description": "Title of the organization dashboard sidebar",
@@ -897,11 +941,15 @@
   },
   "components.TeacherOrganizationDashboardSidebar.subHeader": {
     "description": "Sub title of the organization dashboard sidebar",
-    "message": "You are on the organization dashboard"
+    "message": "Está no painel da organização"
   },
-  "components.TeacherProfileDashboardLoader.loading": {
-    "description": "Message displayed while loading profile",
-    "message": "Loading profile ..."
+  "components.TeacherProfileDashboardSidebar.OrganizationLinks.organizationLinkTitle": {
+    "description": "Organization link title",
+    "message": "Link para a organização \"{organizationTitle}\""
+  },
+  "components.TeacherProfileDashboardSidebar.OrganizationLinks.organizationsTitle": {
+    "description": "Title of the organizations section",
+    "message": "Minhas universidades"
   },
   "components.TeacherProfileDashboardSidebar.header": {
     "description": "Title of the dashboard sidebar",
@@ -909,11 +957,11 @@
   },
   "components.TeacherProfileDashboardSidebar.subHeader": {
     "description": "Sub title of the dashboard sidebar",
-    "message": "You are on your teacher dashboard"
+    "message": "Está no seu painel de controlo do professor"
   },
   "components.TeacherProfileSettingsDashboardLoader.loading": {
     "description": "Message displayed while loading settings",
-    "message": "Loading settings..."
+    "message": "A carregar definições..."
   },
   "components.UserLogin.logIn": {
     "description": "Text for the login button.",
@@ -970,6 +1018,14 @@
   "hooks.useAddressesManagement.errorCannotRemoveMain": {
     "description": "Error shown if a user tries to remove a main address",
     "message": "Impossível remover o endereço principal."
+  },
+  "hooks.useCertificates.errorGet": {
+    "description": "Error message shown to the user when certificates fetch request fails.",
+    "message": "Ocorreu um erro ao ir buscar certificados. Por favor, tente novamente mais tarde."
+  },
+  "hooks.useCertificates.errorNotFound": {
+    "description": "Error message shown to the user when no certificate matches.",
+    "message": "Não é possível encontrar o certificado"
   },
   "hooks.useCreditCards.errorCreate": {
     "description": "Error message shown to the user when credit card creation request fails.",
@@ -1030,6 +1086,18 @@
   "hooks.useOrders.errorNotFound": {
     "description": "Error message shown to the user when no orders matches.",
     "message": "Não foi possível encontrar encomendas."
+  },
+  "hooks.useOrdersEnrollments.errorGet": {
+    "description": "Error message shown to the user when orders or enrollments fetch request fails.",
+    "message": "Ocorreu um erro durante a obtenção das inscrições. Por favor, tente mais tarde."
+  },
+  "hooks.useOrganizations.errorNotFound": {
+    "description": "Error message shown to the user when no organizations matches.",
+    "message": "Não foi possível encontrar a organização"
+  },
+  "hooks.useOrganizations.errorSelect": {
+    "description": "Error message shown to the user when organizations fetch request fails.",
+    "message": "Ocorreu um erro durante a busca de organizações. Por favor, tente novamente mais tarde."
   },
   "hooks.useProduct.errorGet": {
     "description": "Error message shown to the user when product fetch request fails.",

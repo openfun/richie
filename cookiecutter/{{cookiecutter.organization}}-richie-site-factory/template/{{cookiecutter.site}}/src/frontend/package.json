@@ -20,7 +20,7 @@
     "CMS"
   ],
   "dependencies": {
-    "richie-education": "2.21.1"
+    "richie-education": "2.22.0"
   },
   "devDependencies": {
     "babel-loader": "9.1.2",
