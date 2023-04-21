@@ -47,6 +47,8 @@
     "@formatjs/cli": "6.1.1",
     "@formatjs/intl-relativetimeformat": "11.2.2",
     "@hookform/resolvers": "3.1.0",
+    "@openfun/cunningham-react": "0.5.0",
+    "@openfun/cunningham-tokens": "0.4.0",
     "@sentry/browser": "7.50.0",
     "@sentry/types": "7.50.0",
     "@storybook/addon-actions": "7.0.7",
