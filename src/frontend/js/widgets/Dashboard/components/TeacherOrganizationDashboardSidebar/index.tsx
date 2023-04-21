@@ -9,11 +9,6 @@ import {
 } from 'widgets/Dashboard/utils/dashboardRoutes';
 
 const messages = defineMessages({
-  header: {
-    id: 'components.TeacherOrganizationDashboardSidebar.header',
-    description: 'Title of the organization dashboard sidebar',
-    defaultMessage: '{organizationName}',
-  },
   subHeader: {
     id: 'components.TeacherOrganizationDashboardSidebar.subHeader',
     description: 'Sub title of the organization dashboard sidebar',
@@ -48,7 +43,7 @@ export const TeacherOrganizationDashboardSidebar = () => {
   return (
     <DashboardSidebar
       menuLinks={links}
-      header={intl.formatMessage(messages.header, { organizationName: 'Dummy Organization' })}
+      header="Dummy Organization"
       subHeader={intl.formatMessage(messages.subHeader)}
     />
   );
