@@ -11,11 +11,6 @@ import { useOrganizations } from 'hooks/useOrganizations';
 import OrganizationLinks from './components/OrganizationLinks';
 
 const messages = defineMessages({
-  header: {
-    id: 'components.TeacherProfileDashboardSidebar.header',
-    description: 'Title of the dashboard sidebar',
-    defaultMessage: '{name}',
-  },
   subHeader: {
     id: 'components.TeacherProfileDashboardSidebar.subHeader',
     description: 'Sub title of the dashboard sidebar',
@@ -46,7 +41,7 @@ export const TeacherProfileDashboardSidebar = () => {
   return (
     <DashboardSidebar
       menuLinks={links}
-      header={intl.formatMessage(messages.header, { name: user?.username })}
+      header={user?.username || ''}
       subHeader={intl.formatMessage(messages.subHeader)}
     >
       {organizations.length > 0 && <OrganizationLinks organizations={organizations} />}
