@@ -8,9 +8,17 @@ $r-fonts: () !default;
 }
 
 // Build text color helpers
-@each $name, $value in $palette {
-  .text-#{$name} {
-    color: $value !important;
+@each $name, $value in $colors {
+  @if type-of($value) == 'map' {
+    @each $sub-name, $sub-value in $value {
+      .text-#{($name + '-' + $sub-name)} {
+        color: $sub-value !important;
+      }
+    }
+  } @else {
+    .text-#{$name} {
+      color: $value !important;
+    }
   }
 }
 

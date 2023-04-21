@@ -8,9 +8,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add cunningham and design system.
+
 ### Changed
 
 - Replace helix factories by homemade engine using typescript.
+- Use css colors from cunningham instead of palette.scss
 - Improve the design of the dashboards layouts.
 - Improve the design of the dashboards sidebars.
 

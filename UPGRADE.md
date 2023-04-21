@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+- palette.scss have been removed. Legacy colors are now defined in cunningham.cjs. 
+  `yarn build-theme` command generates tokens files scss/cunningham-tokens.scss and /utils/cunningham-tokens.ts.
 - components CourseGlimpse and CourseGlimpseList has been moved from widgets/Search folder to 
   components folder. Update your overrides.json and path in your custom scss files accordingly.
 - utils/test/factories.ts have been split into multiple files: joanie.ts, richie.ts and 
