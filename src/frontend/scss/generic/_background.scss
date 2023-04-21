@@ -6,7 +6,15 @@ $gradient-colors: () !default;
 
 // Build background colors
 @each $name, $value in $palette {
-  .bg-#{$name} {
-    background-color: $value !important;
+  @if type-of($value) == 'map' {
+    @each $sub-name, $sub-value in $value {
+      .bg-#{($name + '-' + $sub-name)} {
+        background-color: $sub-value !important;
+      }
+    }
+  } @else {
+    .bg-#{$name} {
+      background-color: $value !important;
+    }
   }
 }

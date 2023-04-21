@@ -32,6 +32,20 @@
   }
 }
 
+// build a modifier which define values for each color
+@mixin build-color-modifier($palette-sel, $key, $value) {
+  &__item--#{$key} {
+    #{$palette-sel}__color {
+      background-color: $value;
+    }
+
+    // Display color code value as a pseudo element
+    #{$palette-sel}__code::before {
+      content: '#{$value}';
+    }
+  }
+}
+
 .styleguide {
   @if $body-padding-fix {
     @include content-padding-fix;
@@ -124,15 +138,12 @@
     // Iterate through color palette to build a modifier which define
     // values for each color
     @each $key, $value in $palette {
-      &__item--#{$key} {
-        #{$palette-sel}__color {
-          background-color: $value;
+      @if type-of($value) == 'map' {
+        @each $sub-key, $sub-value in $value {
+          @include build-color-modifier($palette-sel, $key + '-' + $sub-key, $sub-value);
         }
-
-        // Display color code value as a pseudo element
-        #{$palette-sel}__code::before {
-          content: '#{$value}';
-        }
+      } @else {
+        @include build-color-modifier($palette-sel, $key, $value);
       }
     }
     // Doing the same for available gradient backgrounds
