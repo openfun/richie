@@ -16,15 +16,17 @@ export interface AuthenticationBackend {
   endpoint: string;
 }
 
+export interface RichieContext {
+  authentication: AuthenticationBackend;
+  csrftoken: string;
+  environment: string;
+  lms_backends?: LMSBackend[];
+  joanie_backend?: JoanieBackend;
+  release: string;
+  sentry_dsn: Nullable<string>;
+  web_analytics_providers?: Nullable<string[]>;
+}
+
 export interface CommonDataProps {
-  context: {
-    authentication: AuthenticationBackend;
-    csrftoken: string;
-    environment: string;
-    lms_backends?: LMSBackend[];
-    joanie_backend?: JoanieBackend;
-    release: string;
-    sentry_dsn: Nullable<string>;
-    web_analytics_providers?: Nullable<string[]>;
-  };
+  context: RichieContext;
 }

@@ -151,6 +151,9 @@ const getRoutes = () => {
     courseRuns: {
       get: `${baseUrl}/course-runs/:id/`,
     },
+    courses: {
+      get: `${baseUrl}/courses/`,
+    },
   };
 };
 
@@ -338,6 +341,21 @@ const API = (): Joanie.API => {
 
         if (id) url = ROUTES.products.get.replace(':id', id);
         else url = ROUTES.products.get.replace(':id/', '');
+
+        if (!ObjectHelper.isEmpty(queryParameters)) {
+          url += '?' + queryString.stringify(queryParameters);
+        }
+
+        return fetchWithJWT(url).then(checkStatus);
+      },
+    },
+    courses: {
+      get: (filters) => {
+        const { id, ...queryParameters } = filters || {};
+        let url;
+
+        if (id) url = ROUTES.courses.get.replace(':id', id);
+        else url = ROUTES.courses.get.replace(':id/', '');
 
         if (!ObjectHelper.isEmpty(queryParameters)) {
           url += '?' + queryString.stringify(queryParameters);

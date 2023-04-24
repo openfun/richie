@@ -1,0 +1,40 @@
+.dashboard-course-list {
+  $gutter: rem-calc(30px);
+  $nb-columns: 3;
+  $nb-gutters: calc($nb-columns - 1);
+  $glimpse-width: calc(calc(100% / $nb-columns) - calc($gutter / $nb-columns * $nb-gutters));
+
+  margin-bottom: rem-calc(40px);
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &__title {
+    font-size: rem-calc(22px);
+    color: r-theme-val(dashboard-course-list, title-color);
+    white-space: nowrap;
+    margin-bottom: rem-calc(10px);
+  }
+
+  //
+  // Course Glimpse in dashboards
+  //
+
+  .dashboard {
+    &__course-glimpse-list {
+      padding-top: 0;
+      margin-top: 0;
+      .course-glimpse-list__content {
+        gap: $gutter;
+        .course-glimpse,
+        .course-glimpse__large {
+          @include media-breakpoint-up(lg) {
+            @include sv-flex(1, 0, $glimpse-width);
+          }
+          min-width: auto;
+          margin: 0;
+        }
+      }
+    }
+  }
+}

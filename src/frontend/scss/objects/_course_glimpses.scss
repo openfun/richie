@@ -10,8 +10,16 @@ $r-course-glimpse-gutter: 0.8rem !default;
   display: flex;
   margin: 0 auto;
   padding-top: 1rem;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+
+  &__header,
+  &__content {
+    display: flex;
+    flex-direction: row;
+  }
+  &__content {
+    flex-wrap: wrap;
+  }
 
   &__title {
     @include sv-flex(1, 0, 100%);

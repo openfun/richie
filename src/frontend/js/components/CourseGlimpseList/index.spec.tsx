@@ -3,7 +3,8 @@ import { IntlProvider } from 'react-intl';
 
 import { RichieContextFactory } from 'utils/test/factories/richie';
 import { CommonDataProps } from 'types/commonDataProps';
-import { Course } from 'types/Course';
+import { CourseGlimpseCourse } from 'components/CourseGlimpse';
+import { Priority } from 'types';
 import { CourseGlimpseList } from '.';
 
 describe('widgets/Search/components/CourseGlimpseList', () => {
@@ -13,15 +14,33 @@ describe('widgets/Search/components/CourseGlimpseList', () => {
     const courses = [
       {
         id: '44',
-        state: { datetime: '2019-03-14T10:35:47.823Z', text: '' },
+        code: 'AAA',
+        organization: {
+          title: "Awesome univ'",
+        },
+        state: {
+          datetime: '2019-03-14T10:35:47.823Z',
+          text: 'archived',
+          call_to_action: null,
+          priority: Priority.ARCHIVED_CLOSED,
+        },
         title: 'Course 44',
       },
       {
         id: '45',
-        state: { datetime: '2019-03-14T10:35:47.823Z', text: '' },
+        code: 'BBB',
+        organization: {
+          title: "Bad univ'",
+        },
+        state: {
+          datetime: '2019-03-14T10:35:47.823Z',
+          text: 'archived',
+          call_to_action: null,
+          priority: Priority.ARCHIVED_CLOSED,
+        },
         title: 'Course 45',
       },
-    ] as Course[];
+    ] as CourseGlimpseCourse[];
     const { container } = render(
       <IntlProvider locale="en">
         <CourseGlimpseList

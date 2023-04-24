@@ -1,0 +1,14 @@
+.dashboard-course-search-filters {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+
+  &__filter_select {
+    margin-left: 30px;
+
+    // override select form field default
+    &.form-field {
+      margin-bottom: 0;
+    }
+  }
+}
