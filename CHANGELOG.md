@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - list teacher's organizations in the teacher dashboard sidebar.
 - Added Certificates in the dashboard
 - Dashboard infinite scroll of orders and enrollments
+- list teacher's courses in the teacher courses dashboard page.
 
 ### Fixed
 

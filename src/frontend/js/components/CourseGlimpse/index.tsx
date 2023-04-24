@@ -1,13 +1,41 @@
 import React, { memo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import { Nullable } from 'types/utils';
 import { CommonDataProps } from 'types/commonDataProps';
-import { Course } from 'types/Course';
 import { Icon } from 'components/Icon';
+import { CourseState } from 'types';
 import { CourseGlimpseFooter } from './CourseGlimpseFooter';
 
+export interface CourseGlimpseCourse {
+  id: string;
+  code: Nullable<string>;
+  course_url?: string;
+  cover_image?: Nullable<{
+    src: string;
+    sizes?: string;
+    srcset?: string;
+  }>;
+  title: string;
+  organization: {
+    title: string;
+    image?: Nullable<{
+      src: string;
+      sizes?: string;
+      srcset?: string;
+    }>;
+  };
+  icon?: Nullable<{
+    title: string;
+    src: string;
+    sizes?: string;
+    srcset?: string;
+  }>;
+  state: CourseState;
+}
+
 export interface CourseGlimpseProps {
-  course: Course;
+  course: CourseGlimpseCourse;
 }
 
 const messages = defineMessages({
@@ -40,7 +68,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
       {/* the media link is only here for mouse users, so hide it for keyboard/screen reader users.
       Keyboard/sr will focus the link on the title */}
       <div aria-hidden="true" className="course-glimpse__media">
-        <a tabIndex={-1} href={course.absolute_url}>
+        <a tabIndex={-1} href={course.course_url}>
           {/* alt forced to empty string because it's a decorative image */}
           {course.cover_image ? (
             <img
@@ -59,18 +87,18 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
       <div className="course-glimpse__content">
         <div className="course-glimpse__wrapper">
           <h3 className="course-glimpse__title">
-            <a className="course-glimpse__link" href={course.absolute_url}>
+            <a className="course-glimpse__link" href={course.course_url}>
               <span className="course-glimpse__title-text">{course.title}</span>
             </a>
           </h3>
-          {course.organization_highlighted_cover_image ? (
+          {course.organization.image ? (
             <div className="course-glimpse__organization-logo">
               {/* alt forced to empty string because the organization name is rendered after */}
               <img
                 alt=""
-                sizes={course.organization_highlighted_cover_image.sizes}
-                src={course.organization_highlighted_cover_image.src}
-                srcSet={course.organization_highlighted_cover_image.srcset}
+                sizes={course.organization.image.sizes}
+                src={course.organization.image.src}
+                srcSet={course.organization.image.srcset}
               />
             </div>
           ) : null}
@@ -80,7 +108,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
               title={intl.formatMessage(messages.organizationIconAlt)}
               size="small"
             />
-            <span className="title">{course.organization_highlighted}</span>
+            <span className="title">{course.organization.title}</span>
           </div>
           <div className="course-glimpse__metadata course-glimpse__metadata--code">
             <Icon
@@ -109,7 +137,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
             </span>
           </div>
         ) : null}
-        <CourseGlimpseFooter context={context} course={course} />
+        <CourseGlimpseFooter context={context} courseState={course.state} />
       </div>
     </div>
   );
@@ -122,3 +150,4 @@ const areEqual: (
   prevProps.context === newProps.context && prevProps.course.id === newProps.course.id;
 
 export const CourseGlimpse = memo(CourseGlimpseBase, areEqual);
+export { getCourseGlimpsProps } from './utils';

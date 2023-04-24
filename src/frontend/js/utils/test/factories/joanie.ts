@@ -1,4 +1,5 @@
 import { compose, createSpec, derived, faker, oneOf } from '@helpscout/helix';
+import { Priority } from 'types';
 import { EnrollmentState, OrderState, PaymentProviders, ProductType } from 'types/Joanie';
 
 export const EnrollmentFactory = createSpec({
@@ -105,6 +106,7 @@ export const CourseRunFactory = (scopes?: { course: Boolean }) => {
 };
 
 export const CourseFactory = createSpec({
+  id: faker.datatype.uuid(),
   code: faker.random.alphaNumeric(5),
   organization: OrganizationFactory,
   title: faker.unique(faker.random.words(Math.ceil(Math.random() * 3))),
