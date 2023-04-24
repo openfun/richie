@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import { CSSTransition } from 'react-transition-group';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
@@ -7,6 +9,7 @@ import { useCourses, TeacherCourseSearchFilters } from 'hooks/useCourses';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
 import context from 'utils/context';
+import useIsLoading from 'hooks/useIsLoading';
 
 const messages = defineMessages({
   loading: {
@@ -30,6 +33,10 @@ const DashboardCourseList = ({ titleTranslated, filters }: DashboardCourseListPr
     states: { fetching },
   } = coursesResults;
 
+  const isLoading = useIsLoading([fetching], 300);
+
+  const fadeInNodeRef = useRef(null);
+
   return (
     <div className="dashboard-course-list">
       {titleTranslated && (
@@ -41,20 +48,31 @@ const DashboardCourseList = ({ titleTranslated, filters }: DashboardCourseListPr
           <h2 className="dashboard-course-list__title">{titleTranslated}</h2>
         </Link>
       )}
-      {fetching && (
-        <Spinner aria-labelledby="loading-courses-data">
-          <span id="loading-courses-data">
-            <FormattedMessage {...messages.loading} />
-          </span>
-        </Spinner>
+      {isLoading && (
+        <div className="dashboard-course-list__placeholder">
+          <Spinner aria-labelledby="loading-courses-data">
+            <span id="loading-courses-data">
+              <FormattedMessage {...messages.loading} />
+            </span>
+          </Spinner>
+        </div>
       )}
-      {!fetching && courses.length && (
-        <CourseGlimpseList
-          courses={getCourseGlimpsListProps(courses)}
-          context={context}
-          className="dashboard__course-glimpse-list"
-        />
-      )}
+
+      <CSSTransition
+        in={!isLoading && !!courses.length}
+        nodeRef={fadeInNodeRef}
+        timeout={300}
+        classNames="fade-in"
+        unmountOnExit
+      >
+        <div ref={fadeInNodeRef}>
+          <CourseGlimpseList
+            courses={getCourseGlimpsListProps(courses)}
+            context={context}
+            className="dashboard__course-glimpse-list"
+          />
+        </div>
+      </CSSTransition>
     </div>
   );
 };

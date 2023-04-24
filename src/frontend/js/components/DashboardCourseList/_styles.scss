@@ -14,8 +14,33 @@ $r-course-glimpse-dashboard-gutter: rem-calc(30px) !default;
   }
 
   //
+  // Loading transition
+  //
+  .fade-in-enter {
+    opacity: 0;
+  }
+  .fade-in-enter-active {
+    opacity: 1;
+    transition: opacity 300ms;
+  }
+  .fade-in-exit {
+    display: none;
+    opacity: 0;
+  }
+  .fade-in-exit-active {
+    display: none;
+    opacity: 0;
+  }
+
+  //
   // Course Glimpse in dashboards
   //
+  &__placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: rem-calc(360px);
+  }
 
   .dashboard {
     &__course-glimpse-list {
