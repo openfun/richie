@@ -24,7 +24,7 @@ jest.mock('utils/context', () => ({
     joanie_backend: {
       endpoint: 'https://joanie.test',
     },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -176,7 +176,7 @@ describe('SessionProvider', () => {
     });
 
     it('does not make request if there is a valid session in cache', async () => {
-      const user: User = UserFactory.generate();
+      const user: User = UserFactory().one();
       fetchMock.get('https://endpoint.test/api/user/v1/me', 200);
 
       const { result } = renderHook(useSession, {
@@ -188,7 +188,7 @@ describe('SessionProvider', () => {
     });
 
     it('clears session storage on login', async () => {
-      const user = UserFactory.generate();
+      const user = UserFactory().one();
       const userDeferred = new Deferred();
 
       fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
@@ -222,7 +222,7 @@ describe('SessionProvider', () => {
     });
 
     it('clears session storage on register', async () => {
-      const user = UserFactory.generate();
+      const user = UserFactory().one();
       const userDeferred = new Deferred();
 
       fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);

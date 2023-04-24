@@ -23,7 +23,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -76,7 +76,7 @@ describe('<Dashboard />', () => {
   });
 
   it('should redirect from dashboard index route to courses route', () => {
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
 
     render(<DashboardWithUser user={user} />);
 
@@ -85,14 +85,14 @@ describe('<Dashboard />', () => {
   });
 
   it('should render breadcrumbs', () => {
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
 
     render(<DashboardWithUser user={user} />);
     expectBreadcrumbsToEqualParts(['Back', 'My courses']);
   });
 
   it('changes route when using the sidebar', async () => {
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [], { overwriteRoutes: true });
     render(<DashboardWithUser user={user} />);
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.COURSES);
@@ -106,8 +106,8 @@ describe('<Dashboard />', () => {
   });
 
   it('redirect when clicking on the breadcrumbs back button', async () => {
-    const user = UserFactory.generate();
-    const address: Address = AddressFactory.generate();
+    const user = UserFactory().one();
+    const address: Address = AddressFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address], {
       overwriteRoutes: true,
     });
@@ -154,7 +154,7 @@ describe('<Dashboard />', () => {
   });
 
   it('should render username in sidebar', () => {
-    const user: User = UserFactory.generate();
+    const user: User = UserFactory().one();
     render(<DashboardWithUser user={user} />);
     const sidebar = screen.getByTestId('dashboard__sidebar');
     getByText(sidebar, user.username, { exact: false });

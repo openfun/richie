@@ -19,7 +19,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
     joanie_backend: { endpoint: 'https://joanie.endpoint.test' },
-  }).generate(),
+  }).one(),
 }));
 jest.mock('utils/indirection/window', () => ({
   location: {
@@ -54,7 +54,7 @@ describe('JoanieSessionProvider', () => {
   });
 
   it('stores user access token within session storage', async () => {
-    const user = FonzieUserFactory.generate();
+    const user = FonzieUserFactory().one();
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', user);
 
@@ -70,7 +70,7 @@ describe('JoanieSessionProvider', () => {
   });
 
   it('prefetches addresses, credit-cards and order when user is authenticated', async () => {
-    const user = FonzieUserFactory.generate();
+    const user = FonzieUserFactory().one();
     const deferredUser = new Deferred();
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', deferredUser.promise);
@@ -111,7 +111,7 @@ describe('JoanieSessionProvider', () => {
   });
 
   it('clears session storage on login', async () => {
-    const user = FonzieUserFactory.generate();
+    const user = FonzieUserFactory().one();
     const userDeferred = new Deferred();
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', userDeferred.promise);
@@ -143,7 +143,7 @@ describe('JoanieSessionProvider', () => {
   });
 
   it('clears session storage on register', async () => {
-    const user = FonzieUserFactory.generate();
+    const user = FonzieUserFactory().one();
     const userDeferred = new Deferred();
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', userDeferred.promise);

@@ -20,7 +20,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 describe('components/DashboardCourseList', () => {
@@ -36,21 +36,10 @@ describe('components/DashboardCourseList', () => {
   });
 
   it('do render', async () => {
-    CourseFactory.beforeGenerate((shape: CourseListItemMock) => {
-      return {
-        ...shape,
-        title: 'How to cook birds',
-      };
-    });
-    const courseCooking: CourseListItemMock = CourseFactory.generate();
-
-    CourseFactory.beforeGenerate((shape: CourseListItemMock) => {
-      return {
-        ...shape,
-        title: "Let's dance, the online leason",
-      };
-    });
-    const courseDancing: CourseListItemMock = CourseFactory.generate();
+    const courseCooking: CourseListItemMock = CourseFactory({ title: 'How to cook birds' }).one();
+    const courseDancing: CourseListItemMock = CourseFactory({
+      title: "Let's dance, the online leason",
+    }).one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/courses/?status=all&type=all', [
       courseCooking,
       courseDancing,
@@ -61,7 +50,7 @@ describe('components/DashboardCourseList', () => {
       type: CourseTypeFilter.ALL,
     };
 
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     render(
       <IntlProvider locale="en">
         <QueryClientProvider client={createTestQueryClient({ user })}>
@@ -100,7 +89,7 @@ describe('components/DashboardCourseList', () => {
       type: CourseTypeFilter.ALL,
     };
 
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     render(
       <IntlProvider locale="en">
         <QueryClientProvider client={createTestQueryClient({ user })}>

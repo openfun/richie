@@ -18,7 +18,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
-  }).generate(),
+  }).one(),
 }));
 
 const mockHandle = handle as jest.MockedFn<typeof handle>;
@@ -54,7 +54,7 @@ describe('useDownloadCertificate', () => {
   };
 
   it('downloads the certificate', async () => {
-    const certificate: Certificate = CertificateFactory.generate();
+    const certificate: Certificate = CertificateFactory().one();
     const DOWNLOAD_URL = `https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`;
     const deferred = new Deferred();
     fetchMock.get(DOWNLOAD_URL, deferred.promise);
@@ -92,7 +92,7 @@ describe('useDownloadCertificate', () => {
   });
 
   it('handles an error if certificate download request fails', async () => {
-    const certificate: Certificate = CertificateFactory.generate();
+    const certificate: Certificate = CertificateFactory().one();
     const DOWNLOAD_URL = `https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`;
     fetchMock.get(DOWNLOAD_URL, 401);
 

@@ -17,7 +17,7 @@ describe('<Enrolled/>', () => {
   };
 
   const runTest = (priority: Priority, expectButton: boolean) => {
-    const enrollment: Enrollment = EnrollmentFactory.generate();
+    const enrollment: Enrollment = EnrollmentFactory().one();
     enrollment.course_run.state.priority = priority;
     render(<Enrolled enrollment={enrollment} />, { wrapper });
     screen.getByText(

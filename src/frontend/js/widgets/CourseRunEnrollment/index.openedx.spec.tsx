@@ -33,7 +33,7 @@ jest.mock('utils/context', () => ({
         endpoint: 'https://demo.endpoint',
       },
     ],
-  }).generate(),
+  }).one(),
 }));
 
 const mockHandle = handle as jest.MockedFunction<typeof handle>;
@@ -63,8 +63,8 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('shows an "Enroll" button and allows the user to enroll', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.state.priority = 0;
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
 
@@ -108,8 +108,8 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('shows an error message and the enrollment button when the enrollment fails', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.state.priority = 0;
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
 
@@ -155,8 +155,8 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('shows HttpError.localizedMessage on enrollment failure when HttpError owns this property', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.state.priority = 0;
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
 
@@ -201,8 +201,8 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('shows a link to the course if the user is already enrolled', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
     courseRun.state.priority = 0;
 
@@ -235,8 +235,8 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it("shows remaining course opening time and a link to the lms dashboard if the user is already enrolled and if the course hasn't started yet", async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.state.priority = 0;
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
     courseRun.starts_in_message = 'The course will start in 3 days';
@@ -277,7 +277,7 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('shows a helpful message if the course run is closed', async () => {
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
     courseRun.state.priority = 4;
 
@@ -298,7 +298,7 @@ describe('<CourseRunEnrollment />', () => {
   });
 
   it('prompts anonymous users to log in', async () => {
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
     courseRun.state.priority = 0;
 

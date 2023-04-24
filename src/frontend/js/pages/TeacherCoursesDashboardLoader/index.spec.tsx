@@ -20,7 +20,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 describe('components/TeacherCoursesDashboardLoader', () => {
@@ -37,14 +37,7 @@ describe('components/TeacherCoursesDashboardLoader', () => {
   });
 
   it('do render', async () => {
-    CourseFactory.beforeGenerate((shape: Course) => {
-      return {
-        ...shape,
-        title: 'Incoming leason',
-      };
-    });
-
-    const courseIncoming: Course = CourseFactory.generate();
+    const courseIncoming: Course = CourseFactory({ title: 'Incoming leason' }).one();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=incoming&type=all',
       [courseIncoming],
@@ -52,13 +45,7 @@ describe('components/TeacherCoursesDashboardLoader', () => {
         repeat: 1,
       },
     );
-    CourseFactory.beforeGenerate((shape: Course) => {
-      return {
-        ...shape,
-        title: 'Ongoing leason',
-      };
-    });
-    const courseOngoing: Course = CourseFactory.generate();
+    const courseOngoing: Course = CourseFactory({ title: 'Ongoing leason' }).one();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=ongoing&type=all',
       [courseOngoing],
@@ -67,13 +54,7 @@ describe('components/TeacherCoursesDashboardLoader', () => {
         overwriteRoutes: false,
       },
     );
-    CourseFactory.beforeGenerate((shape: Course) => {
-      return {
-        ...shape,
-        title: 'Archived leason',
-      };
-    });
-    const courseAchived: Course = CourseFactory.generate();
+    const courseAchived: Course = CourseFactory({ title: 'Archived leason' }).one();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=archived&type=all',
       [courseAchived],
@@ -83,7 +64,7 @@ describe('components/TeacherCoursesDashboardLoader', () => {
       },
     );
 
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     render(
       <IntlProvider locale="en">
         <QueryClientProvider client={createTestQueryClient({ user })}>

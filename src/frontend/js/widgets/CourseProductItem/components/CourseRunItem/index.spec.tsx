@@ -16,7 +16,7 @@ describe('CourseRunItem', () => {
     const order: Order = OrderFactory.afterGenerate((o: Order) => ({
       ...o,
       state: faker.helpers.randomize([OrderState.CANCELED, OrderState.PENDING]),
-    })).generate();
+    })).one();
     const targetCourse = order.target_courses[0];
 
     render(<CourseRunItem targetCourse={targetCourse} order={order} />);

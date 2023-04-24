@@ -21,7 +21,7 @@ export interface CreateTestQueryClientParams extends QueryClientOptions {
 export const createTestQueryClient = (params?: CreateTestQueryClientParams) => {
   let userToUse: Maybe<Nullable<User>>;
   if (params?.user === true) {
-    userToUse = UserFactory.generate();
+    userToUse = UserFactory().one();
   } else if (params?.user) {
     userToUse = params.user as User;
   } else if (params?.user === null) {

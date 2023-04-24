@@ -25,6 +25,6 @@ type Story = StoryObj<typeof DashboardEditAddress>;
 
 export const Default: Story = {
   args: {
-    address: AddressFactory.generate(),
+    address: AddressFactory().one(),
   },
 };

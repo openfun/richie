@@ -17,7 +17,7 @@ jest.mock('utils/context', () => ({
         course_regexp: '.*edx.org/.*',
       },
     ],
-  }).generate(),
+  }).one(),
 }));
 
 const mockHandle: jest.Mock<typeof handle> = handle as any;

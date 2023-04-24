@@ -32,7 +32,7 @@ jest.mock('utils/context', () => ({
     joanie_backend: {
       endpoint: 'https://joanie.test',
     },
-  }).generate(),
+  }).one(),
 }));
 
 const renderCourseAddToWishlist = (courseCode: string) =>
@@ -49,7 +49,7 @@ const renderCourseAddToWishlist = (courseCode: string) =>
   );
 
 describe('CourseAddToWishlist', () => {
-  const wishlistCourse = UserWishlistCourseFactory.generate();
+  const wishlistCourse = UserWishlistCourseFactory().one();
 
   afterEach(() => {
     jest.clearAllMocks();

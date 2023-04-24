@@ -11,7 +11,7 @@ describe('SaleTunnelStepValidation', () => {
   });
 
   it('shows product information and details course runs included', () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
 
     const mockNext = jest.fn();
 

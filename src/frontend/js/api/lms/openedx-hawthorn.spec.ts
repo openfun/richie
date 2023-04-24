@@ -17,7 +17,7 @@ jest.mock('utils/context', () => ({
         endpoint: 'https://demo.endpoint/api',
       },
     ],
-  }).generate(),
+  }).one(),
 }));
 const mockHandle: jest.Mock<typeof handle> = handle as any;
 

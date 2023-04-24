@@ -10,7 +10,7 @@ jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: undefined,
-  }).generate(),
+  }).one(),
 }));
 
 describe('SessionProvider with no authentication', () => {

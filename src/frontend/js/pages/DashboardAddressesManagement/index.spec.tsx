@@ -27,7 +27,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -67,7 +67,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('renders a list with addresses', async () => {
-    const addresses = AddressFactory.generate(5);
+    const addresses = AddressFactory().many(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
@@ -90,7 +90,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('deletes an address', async () => {
-    const addresses = AddressFactory.generate(5);
+    const addresses = AddressFactory().many(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
@@ -136,7 +136,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('promotes an address', async () => {
-    const addresses = AddressFactory.generate(5);
+    const addresses = AddressFactory().many(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
       render(
@@ -187,7 +187,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('shows the main address above all others', async () => {
-    const addresses = AddressFactory.generate(5);
+    const addresses = AddressFactory().many(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
@@ -211,7 +211,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('cannot delete a main address', async () => {
-    const addresses = AddressFactory.generate(5);
+    const addresses = AddressFactory().many(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
@@ -238,7 +238,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('cannot promote a main address', async () => {
-    const addresses = AddressFactory.generate(5);
+    const addresses = AddressFactory().many(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
     await act(async () => {
@@ -287,7 +287,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('redirects to the edit address route', async () => {
-    const address = AddressFactory.generate();
+    const address = AddressFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
     await act(async () => {
       render(
@@ -312,7 +312,7 @@ describe('<DashAddressesManagement/>', () => {
   });
 
   it('shows an error banner in case of API error', async () => {
-    AddressFactory.generate();
+    AddressFactory().one();
     // Mock the API route to return a 500 error.
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', {
       status: 500,

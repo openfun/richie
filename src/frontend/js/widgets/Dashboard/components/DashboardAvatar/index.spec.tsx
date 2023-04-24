@@ -5,7 +5,7 @@ import { DashboardAvatar } from '.';
 
 describe('<DashboardAvatar/>', () => {
   it('should work with empty username', () => {
-    const user: User = UserFactory.generate();
+    const user: User = UserFactory().one();
     user.username = '';
     render(<DashboardAvatar user={user} />);
     const container = document.querySelector('.dashboard__avatar')!;
@@ -13,7 +13,7 @@ describe('<DashboardAvatar/>', () => {
   });
 
   it('should display the first letter of username', () => {
-    const user: User = UserFactory.generate();
+    const user: User = UserFactory().one();
     user.username = 'Bob';
     render(<DashboardAvatar user={user} />);
     const container = document.querySelector('.dashboard__avatar')!;

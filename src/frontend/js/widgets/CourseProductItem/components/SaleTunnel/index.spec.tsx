@@ -33,7 +33,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
-  }).generate(),
+  }).one(),
 }));
 
 describe('SaleTunnel', () => {
@@ -57,7 +57,7 @@ describe('SaleTunnel', () => {
   );
 
   it('does not render when isOpen property is false', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
 
     await act(async () => {
       render(
@@ -71,7 +71,7 @@ describe('SaleTunnel', () => {
   });
 
   it('renders sale tunnel with working steps when isOpen property is true', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
     fetchMock
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
@@ -117,7 +117,7 @@ describe('SaleTunnel', () => {
   });
 
   it('executes onClose callback when user closes the sale tunnel', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
     fetchMock
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])

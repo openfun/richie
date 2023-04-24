@@ -7,9 +7,9 @@ import { StorybookHelper } from 'utils/StorybookHelper';
 import { enrollment } from '../stories.mock';
 import { DashboardItemOrder } from './DashboardItemOrder';
 
-const order: Order = { ...OrderFactory.generate(), target_courses: [] };
-const product: Product = ProductFactory.generate();
-const targetsCourses: TargetCourse[] = TargetCourseFactory.generate(3);
+const order: Order = { ...OrderFactory().one(), target_courses: [] };
+const product: Product = ProductFactory().one();
+const targetsCourses: TargetCourse[] = TargetCourseFactory().many(3);
 
 export default {
   title: 'Widgets/Dashboard/Order/Readonly',

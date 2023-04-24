@@ -29,7 +29,7 @@ jest.mock('utils/context', () => ({
     joanie_backend: {
       endpoint: 'https://joanie.test',
     },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('../PaymentInterfaces');
@@ -66,7 +66,7 @@ describe('PaymentButton', () => {
   });
 
   it('should render a payment button', async () => {
-    const product: Joanie.Product = ProductFactory.generate();
+    const product: Joanie.Product = ProductFactory().one();
 
     render(
       <Wrapper>
@@ -95,8 +95,8 @@ describe('PaymentButton', () => {
       If a credit card is provided, it seems that the payment should be a one click,
       so the payment button label should mention this information.
     */
-    const product: Joanie.Product = ProductFactory.generate();
-    const creditCard: Joanie.CreditCard = CreditCardFactory.generate();
+    const product: Joanie.Product = ProductFactory().one();
+    const creditCard: Joanie.CreditCard = CreditCardFactory().one();
 
     const { rerender } = render(
       <Wrapper>
@@ -112,7 +112,7 @@ describe('PaymentButton', () => {
     // this allows the user to get feedback on what's missing to make the payment by clicking on the button
     expect($button.disabled).toBe(false);
 
-    const billingAddress: Joanie.Address = AddressFactory.generate();
+    const billingAddress: Joanie.Address = AddressFactory().one();
 
     rerender(
       <Wrapper>
@@ -130,8 +130,8 @@ describe('PaymentButton', () => {
   });
 
   it('should render an enabled payment button if a billing address is provided', () => {
-    const product: Joanie.Product = ProductFactory.generate();
-    const billingAddress: Joanie.Address = AddressFactory.generate();
+    const product: Joanie.Product = ProductFactory().one();
+    const billingAddress: Joanie.Address = AddressFactory().one();
 
     render(
       <Wrapper>
@@ -148,9 +148,9 @@ describe('PaymentButton', () => {
   });
 
   it('should create an order then display the payment interface when user clicks on payment button', async () => {
-    const product: Joanie.Product = ProductFactory.generate();
-    const billingAddress: Joanie.Address = AddressFactory.generate();
-    const order: Joanie.OrderWithPaymentInfo = OrderWithPaymentFactory.generate();
+    const product: Joanie.Product = ProductFactory().one();
+    const billingAddress: Joanie.Address = AddressFactory().one();
+    const order: Joanie.OrderWithPaymentInfo = OrderWithPaymentFactory().one();
     const handleSuccess = jest.fn();
 
     fetchMock
@@ -233,10 +233,10 @@ describe('PaymentButton', () => {
   });
 
   it('should render only a spinner if payment is a one click when user clicks on payment button', async () => {
-    const product: Joanie.Product = ProductFactory.generate();
-    const billingAddress: Joanie.Address = AddressFactory.generate();
-    const creditCard: Joanie.CreditCard = CreditCardFactory.generate();
-    const order: Joanie.OrderWithPaymentInfo = OrderWithOneClickPaymentFactory.generate();
+    const product: Joanie.Product = ProductFactory().one();
+    const billingAddress: Joanie.Address = AddressFactory().one();
+    const creditCard: Joanie.CreditCard = CreditCardFactory().one();
+    const order: Joanie.OrderWithPaymentInfo = OrderWithOneClickPaymentFactory().one();
     const handleSuccess = jest.fn();
 
     fetchMock
@@ -319,10 +319,10 @@ describe('PaymentButton', () => {
   });
 
   it('should abort the order if payment does not succeed after a given delay', async () => {
-    const product: Joanie.Product = ProductFactory.generate();
-    const billingAddress: Joanie.Address = AddressFactory.generate();
-    const creditCard: Joanie.CreditCard = CreditCardFactory.generate();
-    const order: Joanie.OrderWithPaymentInfo = OrderWithOneClickPaymentFactory.generate();
+    const product: Joanie.Product = ProductFactory().one();
+    const billingAddress: Joanie.Address = AddressFactory().one();
+    const creditCard: Joanie.CreditCard = CreditCardFactory().one();
+    const order: Joanie.OrderWithPaymentInfo = OrderWithOneClickPaymentFactory().one();
     const handleSuccess = jest.fn();
 
     fetchMock
@@ -414,9 +414,9 @@ describe('PaymentButton', () => {
   }, 10000);
 
   it('should render an error message when payment failed', async () => {
-    const product: Joanie.Product = ProductFactory.generate();
-    const billingAddress: Joanie.Address = AddressFactory.generate();
-    const order: Joanie.OrderWithPaymentInfo = OrderWithPaymentFactory.generate();
+    const product: Joanie.Product = ProductFactory().one();
+    const billingAddress: Joanie.Address = AddressFactory().one();
+    const order: Joanie.OrderWithPaymentInfo = OrderWithPaymentFactory().one();
     const handleSuccess = jest.fn();
 
     fetchMock

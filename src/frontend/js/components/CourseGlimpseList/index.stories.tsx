@@ -10,8 +10,8 @@ type Story = StoryObj<typeof CourseGlimpseList>;
 
 export const RichieCourseList: Story = {
   args: {
-    context: RichieContextFactory().generate(),
-    courses: getCourseGlimpseListProps(CourseLightFactory.generate(10)),
+    context: RichieContextFactory().one(),
+    courses: getCourseGlimpseListProps(CourseLightFactory().many(10)),
     meta: {
       count: 10,
       offset: 0,

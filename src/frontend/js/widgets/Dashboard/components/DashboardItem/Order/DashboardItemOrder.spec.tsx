@@ -46,7 +46,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -92,7 +92,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   const mockProduct = (order: Order) => {
-    const product: Product = ProductFactory.generate();
+    const product: Product = ProductFactory().one();
     product.id = order.product;
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/products/' + product.id + '/?course=' + order.course,
@@ -106,7 +106,7 @@ describe('<DashboardItemOrder/>', () => {
    */
 
   it('crashes if no course is provided', async () => {
-    const order: Order = { ...OrderFactory.generate(), course: undefined };
+    const order: Order = { ...OrderFactory().one(), course: undefined };
     // Hide console.error ( https://stackoverflow.com/questions/66328549/testing-an-error-thrown-by-a-react-component-using-testing-library-and-jest )
     jest.spyOn(console, 'error').mockImplementation(noop);
     expect(() => render(<DashboardItemOrder order={order} />)).toThrow(
@@ -115,7 +115,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a pending order', async () => {
-    const order: Order = { ...OrderFactory.generate(), state: OrderState.PENDING };
+    const order: Order = { ...OrderFactory().one(), state: OrderState.PENDING };
     order.target_courses = [];
     const product = mockProduct(order);
 
@@ -128,14 +128,14 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders an order with certificate', async () => {
-    const order: Order = { ...OrderFactory.generate(), certificate: faker.datatype.uuid()() };
+    const order: Order = { ...OrderFactory().one(), certificate: faker.datatype.uuid()() };
     order.target_courses = [];
     const product = mockProduct(order);
 
     const certificate: Certificate = {
-      ...CertificateFactory.generate(),
+      ...CertificateFactory().one(),
       id: order.certificate,
-      order: { ...order, course: CourseFactory.generate() },
+      order: { ...order, course: CourseFactory().one() },
     };
 
     const deferred = new Deferred();
@@ -157,7 +157,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('does not render an order with certificate', async () => {
-    const order: Order = { ...OrderFactory.generate(), certificate: faker.datatype.uuid()() };
+    const order: Order = { ...OrderFactory().one(), certificate: faker.datatype.uuid()() };
     order.target_courses = [];
     const product = mockProduct(order);
 
@@ -175,7 +175,7 @@ describe('<DashboardItemOrder/>', () => {
    */
 
   it('renders a non-writable order without target courses without certificate', async () => {
-    const order: Order = OrderFactory.generate();
+    const order: Order = OrderFactory().one();
     order.target_courses = [];
     const product = mockProduct(order);
 
@@ -188,7 +188,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a non-writable order with target courses', async () => {
-    const order: Order = OrderFactory.generate();
+    const order: Order = OrderFactory().one();
     const product = mockProduct(order);
 
     render(<DashboardItemOrder order={order} />, { wrapper });
@@ -203,14 +203,14 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a non-writable order with enrolled target course ', async () => {
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: [TargetCourseFactory.generate()],
-      enrollment: EnrollmentFactory.generate(),
+      ...OrderFactory().one(),
+      target_courses: [TargetCourseFactory().one()],
+      enrollment: EnrollmentFactory().one(),
     };
     // Make target course enrolled.
     order.enrollments = [
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],
       },
     ];
@@ -240,8 +240,8 @@ describe('<DashboardItemOrder/>', () => {
   });
   it('renders a non-writable order with not enrolled target course', async () => {
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: [TargetCourseFactory.generate()],
+      ...OrderFactory().one(),
+      target_courses: [TargetCourseFactory().one()],
       enrollment: [],
     };
     const product = mockProduct(order);
@@ -263,7 +263,7 @@ describe('<DashboardItemOrder/>', () => {
    */
 
   it('renders a writable order with no target courses', async () => {
-    const order: Order = OrderFactory.generate();
+    const order: Order = OrderFactory().one();
     order.target_courses = [];
     const product = mockProduct(order);
 
@@ -279,13 +279,13 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with enrolled target course', async () => {
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: [TargetCourseFactory.generate()],
+      ...OrderFactory().one(),
+      target_courses: [TargetCourseFactory().one()],
     };
     // Make target course enrolled.
     order.enrollments = [
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],
       },
     ];
@@ -329,8 +329,8 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with not enrolled target course and enrolls it', async () => {
     // Initial order without enrollment.
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: [TargetCourseFactory.generate()],
+      ...OrderFactory().one(),
+      target_courses: [TargetCourseFactory().one()],
       enrollments: [],
     };
     const product = mockProduct(order);
@@ -347,7 +347,7 @@ describe('<DashboardItemOrder/>', () => {
       ...order,
       enrollments: [
         {
-          ...EnrollmentFactory.generate(),
+          ...EnrollmentFactory().one(),
           course_run: order.target_courses[0].course_runs[0],
         },
       ],
@@ -411,8 +411,8 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with not enrolled target course and try to enroll it, but the API returns an error and it is shown', async () => {
     // Initial order without enrollment.
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: [TargetCourseFactory.generate()],
+      ...OrderFactory().one(),
+      target_courses: [TargetCourseFactory().one()],
       enrollments: [],
     };
     const product = mockProduct(order);
@@ -459,13 +459,13 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with enrolled target course and changes the enrollment', async () => {
     // Initial order with first course run enrolled.
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: [TargetCourseFactory.generate()],
+      ...OrderFactory().one(),
+      target_courses: [TargetCourseFactory().one()],
     };
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
     order.enrollments = [
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: initialEnrolledCourseRun,
       },
     ];
@@ -491,7 +491,7 @@ describe('<DashboardItemOrder/>', () => {
       ...order,
       enrollments: [
         {
-          ...EnrollmentFactory.generate(),
+          ...EnrollmentFactory().one(),
           course_run: newEnrolledCourseRun,
         },
       ],
@@ -569,13 +569,13 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with enrolled target course and refuse the confirm message when enrolling', async () => {
     // Initial order without enrollment.
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: [TargetCourseFactory.generate()],
+      ...OrderFactory().one(),
+      target_courses: [TargetCourseFactory().one()],
     };
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
     order.enrollments = [
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: initialEnrolledCourseRun,
       },
     ];
@@ -644,12 +644,12 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with non-enrolled (is_active=false) target course and changes the enrollment', async () => {
     // Initial order with first course run enrolled.
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: [TargetCourseFactory.generate()],
+      ...OrderFactory().one(),
+      target_courses: [TargetCourseFactory().one()],
     };
     const courseRun = order.target_courses[0].course_runs[0];
     const enrollment = {
-      ...EnrollmentFactory.generate(),
+      ...EnrollmentFactory().one(),
       course_run: courseRun,
       is_active: false,
     };
@@ -729,10 +729,10 @@ describe('<DashboardItemOrder/>', () => {
   });
   it('renders a writable order with not yet-opened course runs', async () => {
     const order: Order = {
-      ...OrderFactory.generate(),
+      ...OrderFactory().one(),
       target_courses: [
         {
-          ...TargetCourseFactory.generate(),
+          ...TargetCourseFactory().one(),
           course_runs: [
             {
               ...CourseRunFactory().generate(),
@@ -778,13 +778,13 @@ describe('<DashboardItemOrder/>', () => {
       },
     };
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: [{ ...TargetCourseFactory.generate(), course_runs: [courseRun] }],
+      ...OrderFactory().one(),
+      target_courses: [{ ...TargetCourseFactory().one(), course_runs: [courseRun] }],
     };
     // Make target course enrolled.
     order.enrollments = [
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: courseRun,
       },
     ];
@@ -815,8 +815,8 @@ describe('<DashboardItemOrder/>', () => {
       },
     };
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: [{ ...TargetCourseFactory.generate(), course_runs: [courseRun] }],
+      ...OrderFactory().one(),
+      target_courses: [{ ...TargetCourseFactory().one(), course_runs: [courseRun] }],
       enrollments: [],
     };
 

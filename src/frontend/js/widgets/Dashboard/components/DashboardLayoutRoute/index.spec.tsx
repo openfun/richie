@@ -15,11 +15,11 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 const renderDashboardLayoutRoute = ({ renderLayout }: { renderLayout: boolean }) => {
-  const user = UserFactory.generate();
+  const user = UserFactory().one();
   const routes = [
     {
       path: '/',

@@ -21,6 +21,6 @@ type Story = StoryObj<typeof DashboardEditCreditCard>;
 
 export const Default: Story = {
   args: {
-    creditCard: CreditCardFactory.generate(),
+    creditCard: CreditCardFactory().one(),
   },
 };

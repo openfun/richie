@@ -29,7 +29,7 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockRichieContextFactory().generate(),
+  default: mockRichieContextFactory().one(),
 }));
 
 describe('<UserLogin />', () => {
@@ -38,7 +38,7 @@ describe('<UserLogin />', () => {
   });
 
   it('gets and renders the user name and a dropdown containing a logout link', async () => {
-    const user: User = UserFactory.generate();
+    const user: User = UserFactory().one();
 
     await act(async () => {
       render(
@@ -87,7 +87,7 @@ describe('<UserLogin />', () => {
   });
 
   it('should renders profile urls and bind user info if needed', async () => {
-    const user: User = UserFactory.generate();
+    const user: User = UserFactory().one();
     const profileUrls = {
       settings: { label: 'Settings', action: 'https://auth.local.test/settings' },
       account: { label: 'Account', action: 'https://auth.local.test/u/(username)' },

@@ -17,7 +17,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -63,7 +63,7 @@ describe('AddressesManagement', () => {
   });
 
   it("renders the user's addresses", async () => {
-    const addresses = AddressFactory.generate(Math.ceil(Math.random() * 5));
+    const addresses = AddressFactory().many(Math.ceil(Math.random() * 5));
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
 
     let container: HTMLElement;
@@ -135,7 +135,7 @@ describe('AddressesManagement', () => {
     expect($submitButton.disabled).toBe(false);
 
     // - User fulfills address fields
-    let address = AddressFactory.generate();
+    let address = AddressFactory().one();
     expect(selectAddress).not.toHaveBeenCalled();
     await act(async () => {
       fireEvent.input($titleField, { target: { value: address.title } });
@@ -164,7 +164,7 @@ describe('AddressesManagement', () => {
     });
 
     // - User fulfills the form again but wants to save the address this time
-    address = AddressFactory.generate();
+    address = AddressFactory().one();
     fetchMock.post('https://joanie.endpoint/api/v1.0/addresses/', {
       ...address,
       is_main: true,
@@ -188,7 +188,7 @@ describe('AddressesManagement', () => {
   });
 
   it('renders a form to edit an address when user selects an address to edit', async () => {
-    const address = AddressFactory.generate();
+    const address = AddressFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
     await act(async () => {
@@ -327,7 +327,7 @@ describe('AddressesManagement', () => {
   });
 
   it('allows user to delete an existing address', async () => {
-    const address = AddressFactory.generate();
+    const address = AddressFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
     let container: HTMLElement;
@@ -365,7 +365,7 @@ describe('AddressesManagement', () => {
   });
 
   it('allows user to promote an address as main', async () => {
-    const [address1, address2] = AddressFactory.generate(2);
+    const [address1, address2] = AddressFactory().many(2);
     address1.is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address1, address2]);
 

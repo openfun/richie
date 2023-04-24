@@ -7,7 +7,7 @@ import { StorybookHelper } from 'utils/StorybookHelper';
 export default {
   component: LearnerDashboardSidebar,
   render: () => {
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     const router = createMemoryRouter([
       {
         index: true,

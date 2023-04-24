@@ -10,7 +10,7 @@ export default {
 
 type Story = StoryObj<typeof CreditCardBrandLogo>;
 
-const creditCard: CreditCard = CreditCardFactory.generate();
+const creditCard: CreditCard = CreditCardFactory().one();
 
 export const Visa: Story = {
   args: {

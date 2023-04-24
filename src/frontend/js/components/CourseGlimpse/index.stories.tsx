@@ -10,7 +10,7 @@ type Story = StoryObj<typeof CourseGlimpse>;
 
 export const RichieCourse: Story = {
   args: {
-    context: RichieContextFactory().generate(),
-    course: getCourseGlimpseProps(CourseLightFactory.generate()),
+    context: RichieContextFactory().one(),
+    course: getCourseGlimpseProps(CourseLightFactory().one()),
   },
 };

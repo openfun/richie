@@ -38,7 +38,7 @@ describe('widgets/Search/components/CourseGlimpse', () => {
     title: 'Course 42',
   };
 
-  const contextProps: CommonDataProps['context'] = RichieContextFactory().generate();
+  const contextProps: CommonDataProps['context'] = RichieContextFactory().one();
 
   it('renders a course glimpse with its data', () => {
     const { container } = render(

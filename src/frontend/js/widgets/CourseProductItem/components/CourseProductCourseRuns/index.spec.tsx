@@ -24,7 +24,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
-  }).generate(),
+  }).one(),
 }));
 
 describe('CourseProductCourseRuns', () => {
@@ -36,7 +36,6 @@ describe('CourseProductCourseRuns', () => {
 
   afterEach(() => {
     fetchMock.restore();
-    CourseRunFactory().afterGenerate((cr: CourseRun) => cr);
   });
 
   describe('CourseRunList', () => {
@@ -55,7 +54,7 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('renders a list of course runs', () => {
-      const courseRuns: CourseRun[] = CourseRunFactory().generate(2);
+      const courseRuns: CourseRun[] = CourseRunFactory().many(2);
 
       const { container } = render(
         <Wrapper>
@@ -121,7 +120,7 @@ describe('CourseProductCourseRuns', () => {
     );
 
     it('renders a warning message when no course runs are provided', () => {
-      const order: OrderLite = OrderFactory.generate();
+      const order: OrderLite = OrderFactory().one();
 
       render(
         <Wrapper productId={order.product} code="00000">
@@ -133,9 +132,9 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('renders a list of course runs with a call to action to enroll', async () => {
-      const course: CourseLight = CourseLightFactory.generate();
-      const courseRuns: CourseRun[] = CourseRunFactory().generate(2);
-      const order: OrderLite = OrderFactory.generate();
+      const course: CourseLight = CourseLightFactory().one();
+      const courseRuns: CourseRun[] = CourseRunFactory().many(2);
+      const order: OrderLite = OrderFactory().one();
 
       render(
         <Wrapper productId={order.product} code={course.code}>
@@ -233,9 +232,9 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('enroll with errors', async () => {
-      const course: CourseLight = CourseLightFactory.generate();
-      const courseRuns: CourseRun[] = CourseRunFactory().generate(2);
-      const order: OrderLite = OrderFactory.generate();
+      const course: CourseLight = CourseLightFactory().one();
+      const courseRuns: CourseRun[] = CourseRunFactory().many(2);
+      const order: OrderLite = OrderFactory().one();
       fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
 
       render(
@@ -328,29 +327,26 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('does not allow to enroll if course run is not opened for enrollment', async () => {
-      const courseRun: CourseRun = CourseRunFactory()
-        .afterGenerate((cr: CourseRun) => ({
-          // - Course Run not yet opened for enrollment
-          ...cr,
-          enrollment_start: faker.date.future(0.25)().toISOString(),
-          enrollment_end: faker.date.future(0.5)().toISOString(),
-          start: faker.date.future(0.75)().toISOString(),
-          end: faker.date.future(1.0)().toISOString(),
-          state: {
-            priority: faker.random.arrayElement([
-              Priority.FUTURE_NOT_YET_OPEN,
-              Priority.FUTURE_CLOSED,
-              Priority.ONGOING_CLOSED,
-              Priority.ARCHIVED_CLOSED,
-              Priority.TO_BE_SCHEDULED,
-            ])(),
-            datetime: faker.date.future(0.25)().toISOString(),
-            call_to_action: undefined,
-            text: 'starting on',
-          },
-        }))
-        .generate();
-      const order = OrderFactory.generate();
+      // - Course Run not yet opened for enrollment
+      const courseRun: CourseRun = CourseRunFactory({
+        enrollment_start: faker.date.future(0.25)().toISOString(),
+        enrollment_end: faker.date.future(0.5)().toISOString(),
+        start: faker.date.future(0.75)().toISOString(),
+        end: faker.date.future(1.0)().toISOString(),
+        state: {
+          priority: faker.random.arrayElement([
+            Priority.FUTURE_NOT_YET_OPEN,
+            Priority.FUTURE_CLOSED,
+            Priority.ONGOING_CLOSED,
+            Priority.ARCHIVED_CLOSED,
+            Priority.TO_BE_SCHEDULED,
+          ])(),
+          datetime: faker.date.future(0.25)().toISOString(),
+          call_to_action: undefined,
+          text: 'starting on',
+        },
+      }).one();
+      const order = OrderFactory().one();
 
       render(
         <Wrapper productId={order.product} code="00000">
@@ -428,7 +424,7 @@ describe('CourseProductCourseRuns', () => {
     );
 
     it('renders enrollment information', () => {
-      const enrollment: Enrollment = EnrollmentFactory.generate();
+      const enrollment: Enrollment = EnrollmentFactory().one();
 
       render(
         <Wrapper>
@@ -464,7 +460,7 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('renders enrollment not started', async () => {
-      const enrollment: Enrollment = EnrollmentFactory.generate();
+      const enrollment: Enrollment = EnrollmentFactory().one();
       const today = new Date();
       const startDate = new Date();
       startDate.setMonth(today.getMonth() + 2);
