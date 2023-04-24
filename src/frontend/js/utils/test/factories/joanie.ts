@@ -1,4 +1,5 @@
 import { compose, createSpec, derived, faker, oneOf } from '@helpscout/helix';
+import { Priority } from 'types';
 import { EnrollmentState, OrderState, PaymentProviders, ProductType } from 'types/Joanie';
 
 export const EnrollmentFactory = createSpec({
@@ -99,12 +100,28 @@ export const CourseRunFactory = (scopes?: { course: Boolean }) => {
       text: 'closing on',
     },
     ...(scopes?.course && {
-      course: CourseFactory.generate(),
+      course: CourseLightFactory.generate(),
     }),
   });
 };
 
 export const CourseFactory = createSpec({
+  id: faker.datatype.uuid(),
+  code: faker.random.alphaNumeric(5),
+  organization: OrganizationFactory,
+  title: faker.unique(faker.random.words(Math.ceil(Math.random() * 3))),
+  state: {
+    call_to_action: null,
+    datetime: derived(() => faker.date.past(0.25)().toISOString()),
+    priority: Priority.ONGOING_OPEN,
+    text: 'Ongoing',
+  },
+  cover_image: {
+    src: '/static/course_cover_image.jpg',
+  },
+});
+
+export const CourseLightFactory = createSpec({
   code: faker.random.alphaNumeric(5),
   organization: OrganizationLightFactory,
   title: faker.unique(faker.random.words(Math.ceil(Math.random() * 3))),

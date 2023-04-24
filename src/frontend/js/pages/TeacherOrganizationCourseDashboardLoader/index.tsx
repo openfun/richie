@@ -6,7 +6,7 @@ import { TeacherOrganizationDashboardSidebar } from 'widgets/Dashboard/component
 const messages = defineMessages({
   loading: {
     defaultMessage: 'Loading organization ...',
-    description: "Message displayed while loading courses on the teacher's dashboard'",
+    description: 'Message displayed while loading an organization',
     id: 'components.TeacherOrganizationCourseDashboardLoader.loading',
   },
 });

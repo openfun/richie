@@ -1,0 +1,62 @@
+$r-course-glimpse-dashboard-gutter: rem-calc(30px) !default;
+
+.dashboard-course-list {
+  margin-bottom: rem-calc(40px);
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &__title {
+    font-size: rem-calc(22px);
+    color: r-theme-val(dashboard-course-list, title-color);
+    white-space: nowrap;
+    margin-bottom: rem-calc(10px);
+  }
+
+  //
+  // Loading transition
+  //
+  .fade-in-enter {
+    opacity: 0;
+  }
+  .fade-in-enter-active {
+    opacity: 1;
+    transition: opacity 300ms;
+  }
+  .fade-in-exit {
+    display: none;
+    opacity: 0;
+  }
+  .fade-in-exit-active {
+    display: none;
+    opacity: 0;
+  }
+
+  //
+  // Course Glimpse in dashboards
+  //
+  &__placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: rem-calc(360px);
+  }
+
+  .dashboard {
+    &__course-glimpse-list {
+      padding-top: 0;
+      margin-top: 0;
+      .course-glimpse-list__content {
+        gap: $r-course-glimpse-dashboard-gutter;
+        .course-glimpse,
+        .course-glimpse__large {
+          @include media-breakpoint-up(lg) {
+            @include sv-flex(1, 0, calc(32% - ($r-course-glimpse-dashboard-gutter / 3)));
+          }
+          min-width: auto;
+          margin: 0;
+        }
+      }
+    }
+  }
+}

@@ -36,8 +36,8 @@ export enum Priority {
 
 export interface CourseState {
   priority: Priority;
-  datetime: string;
-  call_to_action: StateCTA;
+  datetime: Nullable<string>;
+  call_to_action: Nullable<StateCTA>;
   text: StateText;
 }
 

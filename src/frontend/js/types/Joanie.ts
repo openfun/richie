@@ -2,6 +2,8 @@ import type { Priority, StateCTA, StateText } from 'types';
 import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
+import { CourseListItemMock } from 'api/mocks/joanie/courses';
+import { CourseStatusFilter, CourseTypeFilter } from 'hooks/useCourses';
 import { OrganizationMock } from '../api/mocks/joanie/organizations';
 
 // - Generic
@@ -34,7 +36,13 @@ export interface CourseRun {
     text: StateText;
   };
   title: string;
-  course?: Course;
+  course?: CourseLight;
+}
+
+export interface CourseFilters extends ResourcesQuery {
+  status: CourseStatusFilter;
+  type: CourseTypeFilter;
+  per_page?: number;
 }
 
 // - Certificate
@@ -78,6 +86,7 @@ export interface Product {
 
 // - Course
 export interface AbstractCourse {
+  id: string;
   code: string;
   organizations: Organization[];
   title: string;
@@ -106,7 +115,7 @@ export interface CourseProduct extends Product {
   target_courses: TargetCourse[];
 }
 
-export interface Course extends AbstractCourse {
+export interface CourseLight extends AbstractCourse {
   products: CourseProduct[];
   orders?: OrderLite[];
 }
@@ -136,7 +145,7 @@ export enum OrderState {
 
 export interface Order {
   id: string;
-  course?: Course['code'] | Course;
+  course?: CourseLight['code'] | CourseLight;
   created_on: string;
   enrollments: Enrollment[];
   main_proforma_invoice: string;
@@ -183,11 +192,11 @@ export interface Address {
 // Wishlist
 export interface UserWishlistCourse {
   id: string;
-  course: Course['code'];
+  course: CourseLight['code'];
 }
 
 export interface UserWishlistCreationPayload {
-  course: Course['code'];
+  course: CourseLight['code'];
 }
 
 // Payment
@@ -217,7 +226,7 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
 
 interface OrderCreationPayload {
   product: Product['id'];
-  course: Course['code'];
+  course: CourseLight['code'];
   billing_address?: Omit<Address, 'id' | 'is_main'>;
   credit_card_id?: CreditCard['id'];
 }
@@ -323,6 +332,11 @@ export interface API {
   user: APIUser;
   products: {
     get(filters?: ResourcesQuery): Promise<Nullable<Product>>;
+  };
+  courses: {
+    get<Filters extends ResourcesQuery = CourseFilters>(
+      filters?: Filters,
+    ): Promise<Nullable<CourseListItemMock[]>>;
   };
 }
 

@@ -6,7 +6,7 @@ import { useCourseSearchParams, CourseSearchParamsAction } from 'hooks/useCourse
 import useMatchMedia from 'hooks/useMatchMedia';
 import { CommonDataProps } from 'types/commonDataProps';
 import { scroll } from 'utils/indirection/window';
-import { CourseGlimpseList } from 'components/CourseGlimpseList';
+import { CourseGlimpseList, getCourseGlimpsListProps } from 'components/CourseGlimpseList';
 import { PaginateCourseSearch } from './components/PaginateCourseSearch';
 import { SearchFiltersPane } from './components/SearchFiltersPane';
 import { useCourseSearch } from './hooks/useCourseSearch';
@@ -148,7 +148,7 @@ const Search = ({ context }: CommonDataProps) => {
             ) : null}
             <CourseGlimpseList
               context={context}
-              courses={courseSearchResponse.content.objects}
+              courses={getCourseGlimpsListProps(courseSearchResponse.content.objects)}
               meta={courseSearchResponse.content.meta}
             />
             <PaginateCourseSearch
