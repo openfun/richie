@@ -21,7 +21,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -82,7 +82,7 @@ describe('<DashboardCertificates/>', () => {
   });
 
   it('renders 3 pages of certificates', async () => {
-    const certificates: Certificate[] = CertificateFactory.generate(30);
+    const certificates: Certificate[] = CertificateFactory().many(30);
     const certificatesPage1 = certificates.slice(0, 10);
     const certificatesPage2 = certificates.slice(10, 20);
 

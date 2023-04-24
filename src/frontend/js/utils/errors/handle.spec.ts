@@ -9,7 +9,7 @@ jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     sentry_dsn: 'https://sentry.local.test',
-  }).generate(),
+  }).one(),
 }));
 jest.mock('@sentry/browser', () => ({
   init: jest.fn(),

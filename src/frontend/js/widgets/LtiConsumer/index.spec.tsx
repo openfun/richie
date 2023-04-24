@@ -21,7 +21,7 @@ const mockHandle: jest.Mock<typeof handle> = handle as any;
 jest.mock('utils/errors/handle');
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockRichieContextFactory().generate(),
+  default: mockRichieContextFactory().one(),
 }));
 jest.mock('uuid', () => ({
   v4: () => 'a-random-uuid',

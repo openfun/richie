@@ -8,7 +8,7 @@ jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     web_analytics_providers: ['google_universal_analytics', 'google_tag_manager'],
-  }).generate(),
+  }).one(),
 }));
 
 describe('Web Analytics', () => {

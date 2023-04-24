@@ -28,7 +28,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('./components/CourseProductCertificateItem', () => ({
@@ -89,7 +89,7 @@ describe('CourseProductItem', () => {
   );
 
   it('renders product information', async () => {
-    const product: Product = ProductFactory.generate();
+    const product: Product = ProductFactory().one();
     const productDeferred = new Deferred();
     fetchMock.get(
       `https://joanie.test/api/v1.0/products/${product.id}/?course=00000`,
@@ -160,7 +160,7 @@ describe('CourseProductItem', () => {
   });
 
   it('adapts information when user purchased the product', async () => {
-    const product: Product = ProductFactory.generate();
+    const product: Product = ProductFactory().one();
     const order: Order = OrderFactory.afterGenerate((o: Order) => ({
       ...o,
       product: product.id,
@@ -210,7 +210,7 @@ describe('CourseProductItem', () => {
   });
 
   it('renders enrollment information when user is enrolled to a course run', async () => {
-    const product: Product = CertificateProductFactory.generate();
+    const product: Product = CertificateProductFactory().one();
     // - Create an order with an active enrollment
     const enrollment: Enrollment = EnrollmentFactory.afterGenerate(
       ({ state, ...e }: Enrollment): Enrollment => ({
@@ -269,7 +269,7 @@ describe('CourseProductItem', () => {
   });
 
   it('does not render sale tunnel button if user already has a pending order', async () => {
-    const product: Product = ProductFactory.generate();
+    const product: Product = ProductFactory().one();
     const order: Order = OrderFactory.afterGenerate((o: Order) => ({
       ...o,
       product: product.id,
@@ -318,7 +318,7 @@ describe('CourseProductItem', () => {
   });
 
   it('renders error message when product fetching has failed', async () => {
-    const product: Product = ProductFactory.generate();
+    const product: Product = ProductFactory().one();
 
     fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, 404, {});
 

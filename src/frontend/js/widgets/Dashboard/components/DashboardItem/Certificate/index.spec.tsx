@@ -17,7 +17,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
-  }).generate(),
+  }).one(),
 }));
 
 describe('<DashboardCertificate/>', () => {
@@ -48,7 +48,7 @@ describe('<DashboardCertificate/>', () => {
   });
 
   it('displays a certificate', async () => {
-    const certificate: Certificate = CertificateFactory.generate();
+    const certificate: Certificate = CertificateFactory().one();
     render(<DashboardItemCertificate certificate={certificate} />, { wrapper: Wrapper });
 
     await waitFor(() => screen.getByText(certificate.certificate_definition.title));
@@ -60,7 +60,7 @@ describe('<DashboardCertificate/>', () => {
   });
 
   it('downloads the certificate', async () => {
-    const certificate: Certificate = CertificateFactory.generate();
+    const certificate: Certificate = CertificateFactory().one();
 
     fetchMock.get(`https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`, 200);
 

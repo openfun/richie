@@ -16,7 +16,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 describe('useCreditCards', () => {
@@ -41,7 +41,7 @@ describe('useCreditCards', () => {
   };
 
   it('retrieves all the credit cards', async () => {
-    const creditCards = CreditCardFactory.generate(5);
+    const creditCards = CreditCardFactory().many(5);
     const responseDeferred = new Deferred();
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', responseDeferred.promise);
 
@@ -75,7 +75,7 @@ describe('useCreditCards', () => {
   });
 
   it('retrieves a specific credit card', async () => {
-    const creditCards = CreditCardFactory.generate(5);
+    const creditCards = CreditCardFactory().many(5);
     const creditCard: CreditCard = creditCards[3];
     const responseDeferred = new Deferred();
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', responseDeferred.promise);

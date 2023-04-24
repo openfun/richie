@@ -37,7 +37,7 @@ const intl = createIntl({ locale: 'en' });
 const renderTeacherProfileDashboardSidebar = () =>
   render(
     <IntlProvider locale="en">
-      <QueryClientProvider client={createTestQueryClient({ user: UserFactory.generate() })}>
+      <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
         <JoanieSessionProvider>
           <MemoryRouter>
             <TeacherProfileDashboardSidebar />
@@ -95,7 +95,7 @@ describe('<TeacherProfileDashboardSidebar/>', () => {
   });
 
   it('should display menu items', async () => {
-    const organizations = OrganizationFactory.generate(3);
+    const organizations = OrganizationFactory().many(3);
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', organizations, {
       overwriteRoutes: true,
     });

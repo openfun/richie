@@ -15,7 +15,7 @@ export const enrollment: Enrollment = {
     enrollment_end: '2022-09-21T20:57:58+00:00',
     enrollment_start: '2022-08-11T20:39:46+00:00',
     resource_link: 'https://lms.fun-mooc.fr/courses/course-v1:supagro+120001+archive_ouvert/info',
-    state: CourseStateFactory.generate(),
+    state: CourseStateFactory().one(),
     course: {
       id: '1cc49d2b-fc08-46d2-9fb8-594d90494cd3',
       code: '09391',

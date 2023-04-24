@@ -20,7 +20,7 @@ describe('RegisteredCreditCard', () => {
   });
 
   it('should render credit card information', () => {
-    const creditCard: CreditCard = CreditCardFactory.generate();
+    const creditCard: CreditCard = CreditCardFactory().one();
 
     const { container } = render(
       <Wrapper>
@@ -63,7 +63,7 @@ describe('RegisteredCreditCard', () => {
   });
 
   it('should have a controlled checkbox to select/unselect the current credit card', () => {
-    const creditCard: CreditCard = CreditCardFactory.generate();
+    const creditCard: CreditCard = CreditCardFactory().one();
     let selected = false;
     const handleSelect = jest.fn();
 

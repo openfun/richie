@@ -23,7 +23,7 @@ jest.mock('utils/context', () => ({
         endpoint: 'https://demo.endpoint/api',
       },
     ],
-  }).generate(),
+  }).one(),
 }));
 
 describe('Dummy API', () => {

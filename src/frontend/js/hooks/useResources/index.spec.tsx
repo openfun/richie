@@ -17,7 +17,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 interface Todo {
@@ -96,7 +96,7 @@ describe('useResources (omniscient)', () => {
   });
 
   it('loads todos', async () => {
-    const todos: Todo[] = TodoFactory.generate(5);
+    const todos: Todo[] = TodoFactory().many(5);
     const responseDeferred = new Deferred();
     fetchMock.get('https://example.com/api/todos', responseDeferred.promise);
 
@@ -116,7 +116,7 @@ describe('useResources (omniscient)', () => {
   });
 
   it('loads todos with filtering', async () => {
-    const todos: Todo[] = TodoFactory.generate(5);
+    const todos: Todo[] = TodoFactory().many(5);
     const todosToFind = [todos[2], todos[3]];
     todosToFind.forEach((todo) => {
       todo.name = 'Find me ' + todo.name;
@@ -152,7 +152,7 @@ describe('useResources (omniscient)', () => {
   });
 
   it('invalidates after mutation', async () => {
-    const todos: Todo[] = TodoFactory.generate(5);
+    const todos: Todo[] = TodoFactory().many(5);
     const todo = todos[0];
 
     const mutatedTodos = [{ ...todo, name: 'My super new task' }, ...todos.slice(1)];
@@ -189,7 +189,7 @@ describe('useResources (omniscient)', () => {
   });
 
   it('loads a specific todo', async () => {
-    const todos: Todo[] = TodoFactory.generate(5);
+    const todos: Todo[] = TodoFactory().many(5);
     const responseDeferred = new Deferred();
     fetchMock.get('https://example.com/api/todos', responseDeferred.promise);
 
@@ -210,7 +210,7 @@ describe('useResources (omniscient)', () => {
   });
 
   it('waits for id to be defined before fetching', async () => {
-    const todos: Todo[] = TodoFactory.generate(5);
+    const todos: Todo[] = TodoFactory().many(5);
     fetchMock.get('https://example.com/api/todos', todos);
 
     const expectedTodo = pickRandomlyFromArray(todos);
@@ -236,7 +236,7 @@ describe('useResources (omniscient)', () => {
   });
 
   it('fails to load a specific todo', async () => {
-    const todos: Todo[] = TodoFactory.generate(5);
+    const todos: Todo[] = TodoFactory().many(5);
     const responseDeferred = new Deferred();
     fetchMock.get('https://example.com/api/todos', responseDeferred.promise);
 
@@ -256,7 +256,7 @@ describe('useResources (omniscient)', () => {
   });
 
   it('waits for id to be defined before returning data even if the data is already in cache', async () => {
-    const todos: Todo[] = TodoFactory.generate(5);
+    const todos: Todo[] = TodoFactory().many(5);
     fetchMock.get('https://example.com/api/todos', todos);
 
     const expectedTodo = pickRandomlyFromArray(todos);
@@ -314,7 +314,7 @@ describe('useResource (omniscient) with session', () => {
   });
 
   it('re-fetches todos on user logout', async () => {
-    const todos: Todo[] = TodoFactory.generate(5);
+    const todos: Todo[] = TodoFactory().many(5);
     fetchMock.get('https://example.com/api/todos', todos);
 
     const LogoutComponent = () => {
@@ -371,7 +371,7 @@ describe('useResource (non-omniscient)', () => {
   });
 
   it('triggers a new requests each time the filters change', async () => {
-    const todos: Todo[] = TodoFactory.generate(5);
+    const todos: Todo[] = TodoFactory().many(5);
     fetchMock.get('https://example.com/api/todos', todos);
     fetchMock.get('https://example.com/api/todos?name=e', todos);
     fetchMock.get('https://example.com/api/todos?name=ef', todos);
@@ -429,7 +429,7 @@ describe('useResource (non-omniscient)', () => {
   });
 
   it('retrieves a todo through provided filters', async () => {
-    const todo: Todo = TodoFactory.generate();
+    const todo: Todo = TodoFactory().one();
     const responseDeferred = new Deferred();
     fetchMock.get(
       `https://example.com/api/todos/${todo.id}?name=${todo.name}`,
@@ -457,7 +457,7 @@ describe('useResource (non-omniscient)', () => {
   });
 
   it('handles PaginatedResponse', async () => {
-    const todos: Todo[] = TodoFactory.generate(5);
+    const todos: Todo[] = TodoFactory().many(5);
     const responseDeferred = new Deferred();
     fetchMock.get(`https://example.com/api/todos`, responseDeferred.promise);
 

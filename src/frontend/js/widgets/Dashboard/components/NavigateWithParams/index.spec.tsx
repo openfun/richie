@@ -6,7 +6,7 @@ import NavigateWithParams from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockRichieContextFactory().generate(),
+  default: mockRichieContextFactory().one(),
 }));
 
 jest.mock('utils/indirection/window', () => ({

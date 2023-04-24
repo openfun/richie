@@ -22,7 +22,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -77,7 +77,7 @@ describe('<DashboardCourses/>', () => {
   const mockOrders = (orders: Order[], client?: QueryClient) => {
     const products: Record<string, Product> = {};
     orders.forEach((order) => {
-      const product: Product = ProductFactory.generate();
+      const product: Product = ProductFactory().one();
       product.id = order.product;
       fetchMock.get(
         'https://joanie.endpoint/api/v1.0/products/' + product.id + '/?course=' + order.course,
@@ -145,7 +145,7 @@ describe('<DashboardCourses/>', () => {
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
   });
   it('renders only < 1 page of orders', async () => {
-    const { orders, products } = mockOrders(OrderFactory.generate(5));
+    const { orders, products } = mockOrders(OrderFactory().many(5));
     const ordersDeferred = new Deferred();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50',
@@ -180,7 +180,7 @@ describe('<DashboardCourses/>', () => {
   });
 
   it('renders only < 1 page of enrollments', async () => {
-    const enrollments: Enrollment[] = EnrollmentFactory.generate(5);
+    const enrollments: Enrollment[] = EnrollmentFactory().many(5);
     enrollments.sort((a, b) => {
       const aDate = new Date(a.created_on);
       const bDate = new Date(b.created_on);
@@ -246,13 +246,13 @@ describe('<DashboardCourses/>', () => {
   };
 
   it('renders only < 1 page of both enrollments and orders', async () => {
-    const { orders, products } = mockOrders(OrderFactory.generate(5));
+    const { orders, products } = mockOrders(OrderFactory().many(5));
     const ordersDeferred = new Deferred();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50',
       ordersDeferred.promise,
     );
-    const enrollments: Enrollment[] = EnrollmentFactory.generate(5);
+    const enrollments: Enrollment[] = EnrollmentFactory().many(5);
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=50&was_created_by_order=false',
@@ -286,7 +286,7 @@ describe('<DashboardCourses/>', () => {
 
   it('renders multiple pages of enrollments and orders', async () => {
     const client = createTestQueryClient({ user: true });
-    const { orders, products } = mockOrders(OrderFactory.generate(120), client);
+    const { orders, products } = mockOrders(OrderFactory().many(120), client);
 
     fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50`, {
       results: orders.slice(0, 50),
@@ -307,7 +307,7 @@ describe('<DashboardCourses/>', () => {
       count: orders.length,
     });
 
-    const enrollments: Enrollment[] = EnrollmentFactory.generate(110);
+    const enrollments: Enrollment[] = EnrollmentFactory().many(110);
     enrollments.sort((a, b) => {
       const aDate = new Date(a.created_on);
       const bDate = new Date(b.created_on);

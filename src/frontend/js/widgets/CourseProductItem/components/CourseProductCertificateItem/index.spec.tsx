@@ -40,7 +40,7 @@ describe('CourseProductCertificateItem', () => {
   });
 
   it('displays certificate information', () => {
-    const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory.generate();
+    const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory().one();
 
     render(
       <Wrapper>
@@ -74,7 +74,7 @@ describe('CourseProductCertificateItem', () => {
   });
 
   it('displays a download button when order contains a certificate', async () => {
-    const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory.generate();
+    const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory().one();
     const order: OrderLite = OrderLiteFactory.extend({
       certificate: faker.datatype.uuid(),
     }).generate();

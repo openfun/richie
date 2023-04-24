@@ -17,7 +17,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 describe('<DashboardEditAddress/>', () => {
@@ -32,8 +32,8 @@ describe('<DashboardEditAddress/>', () => {
   });
 
   it('updates an address', async () => {
-    const address = AddressFactory.generate();
-    const addressUpdated = AddressFactory.generate();
+    const address = AddressFactory().one();
+    const addressUpdated = AddressFactory().one();
     // It must keep the same id.
     addressUpdated.id = address.id;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
@@ -118,7 +118,7 @@ describe('<DashboardEditAddress/>', () => {
   });
 
   it('shows an error in case of API error', async () => {
-    const address = AddressFactory.generate();
+    const address = AddressFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
     // Mock the edit API route to return a 500 status.

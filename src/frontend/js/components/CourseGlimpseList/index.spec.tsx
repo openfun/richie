@@ -8,7 +8,7 @@ import { Priority } from 'types';
 import { CourseGlimpseList } from '.';
 
 describe('widgets/Search/components/CourseGlimpseList', () => {
-  const contextProps: CommonDataProps['context'] = RichieContextFactory().generate();
+  const contextProps: CommonDataProps['context'] = RichieContextFactory().one();
 
   it('renders a list of Courses into a list of CourseGlimpses', () => {
     const courses = [

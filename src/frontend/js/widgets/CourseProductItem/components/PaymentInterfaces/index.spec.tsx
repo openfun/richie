@@ -21,7 +21,7 @@ jest.mock('utils/errors/handle', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockRichieContextFactory().generate(),
+  default: mockRichieContextFactory().one(),
 }));
 
 describe('PaymentInterface', () => {

@@ -16,7 +16,7 @@ jest.mock('utils/context', () => ({
       endpoint: 'https://endpoint.test',
       backend: 'openedx-hawthorn',
     },
-  }).generate(),
+  }).one(),
 }));
 
 describe('useSessionQuery', () => {

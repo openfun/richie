@@ -19,7 +19,7 @@ export default {
 
 type Story = StoryObj<typeof DashboardItemCertificate>;
 
-const certificate: Certificate = CertificateFactory.generate();
+const certificate: Certificate = CertificateFactory().one();
 
 export const Default: Story = {
   args: {

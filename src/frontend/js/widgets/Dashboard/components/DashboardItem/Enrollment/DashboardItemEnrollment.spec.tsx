@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import * as faker from 'faker';
 import { Enrollment } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
-import { CourseRunFactory, EnrollmentFactory } from 'utils/test/factories/joanie';
+import { CourseRunWithCourseFactory, EnrollmentFactory } from 'utils/test/factories/joanie';
 import { DATETIME_FORMAT } from 'hooks/useDateFormat';
 import { Priority } from 'types';
 import { DashboardItemEnrollment } from './DashboardItemEnrollment';
@@ -11,9 +11,9 @@ import { DashboardItemEnrollment } from './DashboardItemEnrollment';
 describe('<DashboardItemEnrollment/>', () => {
   it('renders a opened enrollment', () => {
     const enrollment: Enrollment = {
-      ...EnrollmentFactory.generate(),
+      ...EnrollmentFactory().one(),
       course_run: {
-        ...CourseRunFactory({ course: true }).generate(),
+        ...CourseRunWithCourseFactory().one(),
         enrollment_start: faker.date.past(0.25).toISOString(),
         enrollment_end: faker.date.future(0.5).toISOString(),
         start: faker.date.future(0.75).toISOString(),
@@ -45,14 +45,14 @@ describe('<DashboardItemEnrollment/>', () => {
 
   it('renders a closed enrollment', () => {
     const enrollment: Enrollment = {
-      ...EnrollmentFactory.generate(),
+      ...EnrollmentFactory().one(),
       course_run: {
-        ...CourseRunFactory({ course: true }).generate(),
+        ...CourseRunWithCourseFactory().one(),
         enrollment_start: faker.date.past(1).toISOString(),
         enrollment_end: faker.date.past(0.75).toISOString(),
         start: faker.date.past(0.25).toISOString(),
         end: faker.date.past(0.5).toISOString(),
-        state: { ...CourseStateFactory.generate(), priority: Priority.ARCHIVED_CLOSED },
+        state: { ...CourseStateFactory().one(), priority: Priority.ARCHIVED_CLOSED },
       },
     };
 
@@ -78,10 +78,10 @@ describe('<DashboardItemEnrollment/>', () => {
 
   it('renders an inactive enrollment', () => {
     const enrollment: Enrollment = {
-      ...EnrollmentFactory.generate(),
+      ...EnrollmentFactory().one(),
       is_active: false,
       course_run: {
-        ...CourseRunFactory({ course: true }).generate(),
+        ...CourseRunWithCourseFactory().one(),
       },
     };
 

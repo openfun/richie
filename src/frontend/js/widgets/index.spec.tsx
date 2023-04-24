@@ -8,7 +8,7 @@ import { Root } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockRichieContextFactory({ authentication: undefined }).generate(),
+  default: mockRichieContextFactory({ authentication: undefined }).one(),
 }));
 jest.mock('utils/errors/handle');
 jest.mock('widgets/UserLogin', () => ({

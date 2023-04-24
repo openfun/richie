@@ -19,7 +19,7 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('utils/context', () => ({
   __esModule: true,
-  default: mockRichieContextFactory().generate(),
+  default: mockRichieContextFactory().one(),
 }));
 
 describe('<RootSearchSuggestField />', () => {

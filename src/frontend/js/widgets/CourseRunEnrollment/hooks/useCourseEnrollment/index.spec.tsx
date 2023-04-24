@@ -29,7 +29,7 @@ jest.mock('utils/context', () => ({
         endpoint: 'https://endpoint.test',
       },
     ],
-  }).generate(),
+  }).one(),
 }));
 
 describe('useCourseEnrollment', () => {
@@ -48,8 +48,8 @@ describe('useCourseEnrollment', () => {
   });
 
   it('does not make request when user is not authenticated', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
 
     fetchMock.get(
       `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
@@ -66,8 +66,8 @@ describe('useCourseEnrollment', () => {
   });
 
   it('retrieves enrollment when user is authenticated', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
 
     const enrollmentResponse = { title: courseRun.id, is_active: faker.datatype.boolean() };
     const enrollementDefered = new Deferred();

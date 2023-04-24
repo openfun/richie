@@ -55,7 +55,7 @@ describe('AddressForm', () => {
   });
 
   it('renders a button with label "Use this address" and a cancel button when no address is provided', async () => {
-    const address: Address = AddressFactory.generate();
+    const address: Address = AddressFactory().one();
     render(
       <IntlProvider locale="en">
         <AddressForm handleReset={handleReset} onSubmit={onSubmit} address={address} />
@@ -95,7 +95,7 @@ describe('AddressForm', () => {
     expect($submitButton.disabled).toBe(false);
 
     // - User fulfills address fields
-    const address = AddressFactory.generate();
+    const address = AddressFactory().one();
 
     await act(async () => {
       fireEvent.input($titleInput, { target: { value: address.title } });
@@ -170,7 +170,7 @@ describe('AddressForm', () => {
     expect($submitButton.disabled).toBe(false);
 
     // - User fulfills address fields
-    const address = AddressFactory.generate();
+    const address = AddressFactory().one();
 
     await act(async () => {
       fireEvent.input($titleInput, { target: { value: address.title } });

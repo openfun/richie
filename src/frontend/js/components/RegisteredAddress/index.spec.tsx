@@ -17,7 +17,7 @@ describe('RegisteredAddress', () => {
   });
 
   it('renders address information', () => {
-    const address: Address = AddressFactory.generate();
+    const address: Address = AddressFactory().one();
 
     const { container } = render(
       <Wrapper>
@@ -42,7 +42,7 @@ describe('RegisteredAddress', () => {
   });
 
   it('renders a button to promote the current address', () => {
-    const address: Address = AddressFactory.generate();
+    const address: Address = AddressFactory().one();
     const mockPromote = jest.fn();
 
     const { container } = render(
@@ -65,7 +65,7 @@ describe('RegisteredAddress', () => {
   });
 
   it('renders a button to remove the current address ', () => {
-    const address: Address = AddressFactory.generate();
+    const address: Address = AddressFactory().one();
     const mockRemove = jest.fn();
 
     const { container } = render(
@@ -115,7 +115,7 @@ describe('RegisteredAddress', () => {
   });
 
   it('renders a button to edit the current address', () => {
-    const address: Address = AddressFactory.generate();
+    const address: Address = AddressFactory().one();
     const mockEdit = jest.fn();
 
     const { container } = render(
@@ -138,7 +138,7 @@ describe('RegisteredAddress', () => {
   });
 
   it('renders a button to select the current address', () => {
-    const address: Address = AddressFactory.generate();
+    const address: Address = AddressFactory().one();
     const mockSelect = jest.fn();
 
     const { container } = render(

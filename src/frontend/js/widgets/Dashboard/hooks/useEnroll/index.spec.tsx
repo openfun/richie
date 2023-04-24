@@ -19,7 +19,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 /**
@@ -55,7 +55,7 @@ describe('useEnroll ( edge case )', () => {
     const { result } = renderHook(() => useEnroll([], undefined), { wrapper });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-    const courseRun = CourseRunFactory().generate();
+    const courseRun = CourseRunFactory().one();
     courseRun.state.priority = Priority.FUTURE_NOT_YET_OPEN;
     await result.current.enroll(courseRun);
 
@@ -72,7 +72,7 @@ describe('useEnroll ( edge case )', () => {
     });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-    const courseRun = CourseRunFactory().generate();
+    const courseRun = CourseRunFactory().one();
 
     act(() => {
       result.current.enroll(courseRun);

@@ -10,7 +10,7 @@ jest.mock('utils/context', () => ({
     joanie_backend: {
       endpoint: 'https://joanie.test',
     },
-  }).generate(),
+  }).one(),
 }));
 
 describe('useJoanieApi', () => {

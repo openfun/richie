@@ -30,18 +30,15 @@ export const listCourses = rest.get<CourseListItemMock[]>(
 
     const organizationCover001 = require('./assets/organization_cover_001.jpg');
     const courseCover001 = require('./assets/course_cover_001.jpg');
-    const courses: CourseListItemMock[] = CourseFactory.generate(perPage).map(
-      (course: CourseListItemMock) => ({
-        ...course,
-        organization: {
-          title: 'Awesome university',
-          logo: {
-            url: organizationCover001.default,
-          },
+    const courses: CourseListItemMock[] = CourseFactory({
+      organization: {
+        title: 'Awesome university',
+        logo: {
+          url: organizationCover001.default,
         },
-        cover: { url: courseCover001.default },
-      }),
-    );
+      },
+      cover: { url: courseCover001.default },
+    }).many(perPage);
 
     return res(ctx.status(200), ctx.json(courses));
   },

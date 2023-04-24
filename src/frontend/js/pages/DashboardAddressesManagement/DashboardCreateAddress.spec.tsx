@@ -18,7 +18,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -127,7 +127,7 @@ describe('<DashboardCreateAddress/>', () => {
 
     // Fill the form with random data.
     const button = await screen.findByRole('button', { name: 'Create' });
-    const address = AddressFactory.generate();
+    const address = AddressFactory().one();
     await fillForm(address);
 
     // Form submit calls the API create route.
@@ -181,7 +181,7 @@ describe('<DashboardCreateAddress/>', () => {
 
     // Fill the form with random data.
     const button = await screen.findByRole('button', { name: 'Create' });
-    const address = AddressFactory.generate();
+    const address = AddressFactory().one();
     await fillForm(address);
 
     // The create API route is called when submitting form.

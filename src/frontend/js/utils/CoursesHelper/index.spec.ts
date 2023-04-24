@@ -5,17 +5,17 @@ import { EnrollmentFactory, OrderFactory, TargetCourseFactory } from 'utils/test
 describe('CourseHelper', () => {
   it('should find an active course enrollment in order', () => {
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: TargetCourseFactory.generate(3),
+      ...OrderFactory().one(),
+      target_courses: TargetCourseFactory().many(3),
     };
     order.enrollments = [
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],
         is_active: false,
       },
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[1].course_runs[0],
         is_active: true,
       },
@@ -26,17 +26,17 @@ describe('CourseHelper', () => {
   });
   it('should not find active course enrollment in an order containing only is_active=false enrollments', () => {
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: TargetCourseFactory.generate(3),
+      ...OrderFactory().one(),
+      target_courses: TargetCourseFactory().many(3),
     };
     order.enrollments = [
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],
         is_active: false,
       },
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[1].course_runs[0],
         is_active: false,
       },
@@ -47,8 +47,8 @@ describe('CourseHelper', () => {
   });
   it('should not find active course enrollment in an order without enrollment', () => {
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: TargetCourseFactory.generate(3),
+      ...OrderFactory().one(),
+      target_courses: TargetCourseFactory().many(3),
       enrollments: [],
     };
     expect(
@@ -58,22 +58,22 @@ describe('CourseHelper', () => {
 
   it('should find enrollments', () => {
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: TargetCourseFactory.generate(3),
+      ...OrderFactory().one(),
+      target_courses: TargetCourseFactory().many(3),
     };
     order.enrollments = [
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],
         is_active: false,
       },
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[1].course_runs[0],
         is_active: true,
       },
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[1],
         is_active: true,
       },
@@ -85,22 +85,22 @@ describe('CourseHelper', () => {
   });
   it('should not find enrollments', () => {
     const order: Order = {
-      ...OrderFactory.generate(),
-      target_courses: TargetCourseFactory.generate(3),
+      ...OrderFactory().one(),
+      target_courses: TargetCourseFactory().many(3),
     };
     order.enrollments = [
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],
         is_active: false,
       },
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[1].course_runs[0],
         is_active: true,
       },
       {
-        ...EnrollmentFactory.generate(),
+        ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[1],
         is_active: true,
       },

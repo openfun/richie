@@ -6,7 +6,7 @@ import { RichieContextFactory } from 'utils/test/factories/richie';
 import { SearchInput } from '.';
 
 describe('<SearchInput />', () => {
-  const contextProps: CommonDataProps['context'] = RichieContextFactory().generate();
+  const contextProps: CommonDataProps['context'] = RichieContextFactory().one();
 
   const inputProps = {};
 

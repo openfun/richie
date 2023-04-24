@@ -21,11 +21,11 @@ jest.mock('utils/context', () => ({
     joanie_backend: {
       endpoint: 'https://joanie.test',
     },
-  }).generate(),
+  }).one(),
 }));
 
 describe('useWishlistCourse', () => {
-  const wishlistCourse = UserWishlistCourseFactory.generate();
+  const wishlistCourse = UserWishlistCourseFactory().one();
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -90,7 +90,7 @@ describe('useWishlistCourse', () => {
   });
 
   it('retrieves all user wishlists', async () => {
-    const wishlistList = UserWishlistCourseFactory.generate(3);
+    const wishlistList = UserWishlistCourseFactory().many(3);
     const responseDeferred = new Deferred();
 
     const urlGetAllWishlist = 'https://joanie.test/api/v1.0/wishlist/';

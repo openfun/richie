@@ -7,7 +7,7 @@ import { DashboardSidebar } from '.';
 export default {
   component: DashboardSidebar,
   render: () => {
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     const router = createMemoryRouter([
       {
         index: true,

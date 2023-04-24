@@ -13,7 +13,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
-  }).generate(),
+  }).one(),
 }));
 
 describe('PurchaseButton', () => {
@@ -37,7 +37,7 @@ describe('PurchaseButton', () => {
   );
 
   it('shows a login button if user is not authenticated', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
 
     await act(async () => {
       render(
@@ -51,7 +51,7 @@ describe('PurchaseButton', () => {
   });
 
   it('shows cta to open sale tunnel when user is authenticated', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
     fetchMock
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
@@ -83,7 +83,7 @@ describe('PurchaseButton', () => {
   });
 
   it('renders a disabled CTA if one target course has no course runs', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
     product.target_courses[0].course_runs = [];
     fetchMock
       .get('https://joanie.test/api/v1.0/addresses/', [])
@@ -109,7 +109,7 @@ describe('PurchaseButton', () => {
   });
 
   it('renders a disabled CTA if product has no target courses', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
     product.target_courses = [];
     fetchMock
       .get('https://joanie.test/api/v1.0/addresses/', [])
@@ -135,7 +135,7 @@ describe('PurchaseButton', () => {
   });
 
   it('does not render CTA if disabled property is false', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
     fetchMock
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])

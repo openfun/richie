@@ -25,7 +25,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -44,9 +44,9 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('updates a credit card name', async () => {
-    const creditCard = CreditCardFactory.generate();
-    const creditCards = [...CreditCardFactory.generate(5), creditCard];
-    const creditCardUpdated = CreditCardFactory.generate();
+    const creditCard = CreditCardFactory().one();
+    const creditCards = [...CreditCardFactory().many(5), creditCard];
+    const creditCardUpdated = CreditCardFactory().one();
     // It must keep the same id.
     creditCardUpdated.id = creditCard.id;
 
@@ -141,8 +141,8 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('sets credit card as main', async () => {
-    const creditCard = CreditCardFactory.generate();
-    const creditCards = [...CreditCardFactory.generate(5), creditCard];
+    const creditCard = CreditCardFactory().one();
+    const creditCards = [...CreditCardFactory().many(5), creditCard];
     const creditCardUpdated = { ...creditCard };
     creditCardUpdated.is_main = true;
 
@@ -235,8 +235,8 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('deletes a credit card', async () => {
-    const creditCard = CreditCardFactory.generate();
-    let creditCards = [...CreditCardFactory.generate(5), creditCard];
+    const creditCard = CreditCardFactory().one();
+    let creditCards = [...CreditCardFactory().many(5), creditCard];
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
@@ -305,8 +305,8 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('shows an error in case of API error', async () => {
-    const creditCard = CreditCardFactory.generate();
-    const creditCards = [...CreditCardFactory.generate(5), creditCard];
+    const creditCard = CreditCardFactory().one();
+    const creditCards = [...CreditCardFactory().many(5), creditCard];
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';

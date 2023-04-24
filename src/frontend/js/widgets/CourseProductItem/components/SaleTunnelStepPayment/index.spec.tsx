@@ -23,7 +23,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 describe('SaleTunnelStepPayment', () => {
@@ -41,7 +41,7 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display product title and its price', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
 
     await act(async () => {
       render(
@@ -67,8 +67,8 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display authenticated user information', async () => {
-    const user: User = UserFactory.generate();
-    const product = ProductFactory.generate();
+    const user: User = UserFactory().one();
+    const product = ProductFactory().one();
 
     await act(async () => {
       render(
@@ -88,7 +88,7 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display a button to create an address if user has no address ', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
 
     await act(() => {
       render(
@@ -120,8 +120,8 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display registered addresses', async () => {
-    const product = ProductFactory.generate();
-    const addresses = AddressFactory.generate(3) as Address[];
+    const product = ProductFactory().one();
+    const addresses = AddressFactory().many(3) as Address[];
     const randomIndex = Math.floor(Math.random() * addresses.length);
     addresses[randomIndex].is_main = true;
 
@@ -190,7 +190,7 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should not display registered credit cards section if user has no credit cards', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
 
     await act(async () => {
       render(
@@ -212,8 +212,8 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display registered credit cards', async () => {
-    const product = ProductFactory.generate();
-    const creditCards = CreditCardFactory.generate(3) as CreditCard[];
+    const product = ProductFactory().one();
+    const creditCards = CreditCardFactory().many(3) as CreditCard[];
     const randomIndex = Math.floor(Math.random() * creditCards.length);
     creditCards[randomIndex].is_main = true;
 
@@ -276,7 +276,7 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should render <PaymentButton />', async () => {
-    const product = ProductFactory.generate();
+    const product = ProductFactory().one();
 
     render(
       <QueryClientProvider client={createTestQueryClient({ user: true })}>

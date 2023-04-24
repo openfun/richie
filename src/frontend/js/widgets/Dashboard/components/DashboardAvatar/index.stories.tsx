@@ -10,6 +10,6 @@ type Story = StoryObj<typeof DashboardAvatar>;
 
 export const Default: Story = {
   args: {
-    user: UserFactory.generate(),
+    user: UserFactory().one(),
   },
 };

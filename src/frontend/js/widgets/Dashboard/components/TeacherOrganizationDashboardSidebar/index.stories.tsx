@@ -7,7 +7,7 @@ import { StorybookHelper } from 'utils/StorybookHelper';
 export default {
   component: TeacherOrganizationDashboardSidebar,
   render: () => {
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     const router = createMemoryRouter(
       [
         {

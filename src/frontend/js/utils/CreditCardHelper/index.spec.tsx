@@ -6,7 +6,7 @@ describe('CreditCardHelper', () => {
   it('handles falsy values', () => {
     expect(
       CreditCardHelper.isExpiredSoon({
-        ...CreditCardFactory.generate(),
+        ...CreditCardFactory().one(),
         expiration_month: null,
         expiration_year: undefined,
       }),
@@ -18,7 +18,7 @@ describe('CreditCardHelper', () => {
     const date = faker.date.future(0.2, limit);
     expect(
       CreditCardHelper.getExpirationState({
-        ...CreditCardFactory.generate(),
+        ...CreditCardFactory().one(),
         expiration_month: date.getMonth() + 1,
         expiration_year: date.getFullYear(),
       }),
@@ -31,7 +31,7 @@ describe('CreditCardHelper', () => {
     const date = faker.date.future(2 / 12, offset);
     expect(
       CreditCardHelper.getExpirationState({
-        ...CreditCardFactory.generate(),
+        ...CreditCardFactory().one(),
         expiration_month: date.getMonth() + 1,
         expiration_year: date.getFullYear(),
       }),
@@ -41,7 +41,7 @@ describe('CreditCardHelper', () => {
     const date = faker.date.past(0.2);
     expect(
       CreditCardHelper.getExpirationState({
-        ...CreditCardFactory.generate(),
+        ...CreditCardFactory().one(),
         expiration_month: date.getMonth() + 1,
         expiration_year: date.getFullYear(),
       }),

@@ -20,7 +20,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
-  }).generate(),
+  }).one(),
 }));
 
 interface RenderUseCoursesProps extends PropsWithChildren {
@@ -57,7 +57,7 @@ describe('hooks/useCourses', () => {
       responseDeferred.promise,
     );
 
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     const { result } = renderUseCourses({ user });
 
     await waitFor(() => {
@@ -71,7 +71,7 @@ describe('hooks/useCourses', () => {
     expect(result.current.states.isLoading).toBe(true);
     expect(result.current.states.error).toBeUndefined();
 
-    const courses = CourseFactory.generate(3);
+    const courses = CourseFactory().many(3);
     await act(async () => {
       responseDeferred.resolve(courses);
     });
@@ -88,10 +88,10 @@ describe('hooks/useCourses', () => {
   });
 
   it('fetch with filter "incoming"', async () => {
-    const courseRuns = CourseFactory.generate(3);
+    const courseRuns = CourseFactory().many(3);
     fetchMock.get('https://joanie.endpoint/api/v1.0/courses/?status=incoming&type=all', courseRuns);
 
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     const filters: TeacherCourseSearchFilters = {
       status: CourseStatusFilter.INCOMING,
       type: CourseTypeFilter.ALL,
@@ -109,10 +109,10 @@ describe('hooks/useCourses', () => {
   });
 
   it('fetch with filter "ongoing"', async () => {
-    const courseRuns = CourseFactory.generate(3);
+    const courseRuns = CourseFactory().many(3);
     fetchMock.get('https://joanie.endpoint/api/v1.0/courses/?status=ongoing&type=all', courseRuns);
 
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     const filters: TeacherCourseSearchFilters = {
       status: CourseStatusFilter.ONGOING,
       type: CourseTypeFilter.ALL,
@@ -130,10 +130,10 @@ describe('hooks/useCourses', () => {
   });
 
   it('fetch with filter "archived"', async () => {
-    const courseRuns = CourseFactory.generate(3);
+    const courseRuns = CourseFactory().many(3);
     fetchMock.get('https://joanie.endpoint/api/v1.0/courses/?status=archived&type=all', courseRuns);
 
-    const user = UserFactory.generate();
+    const user = UserFactory().one();
     const filters: TeacherCourseSearchFilters = {
       status: CourseStatusFilter.ARCHIVED,
       type: CourseTypeFilter.ALL,

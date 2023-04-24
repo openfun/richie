@@ -11,5 +11,5 @@ let context = {
 };
 
 (window as any).__richie_frontend_context__ = {
-  context: RichieContextFactory(context).generate(),
+  context: RichieContextFactory(context).one(),
 };

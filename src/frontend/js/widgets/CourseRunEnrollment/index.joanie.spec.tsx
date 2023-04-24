@@ -35,7 +35,7 @@ jest.mock('utils/context', () => ({
     joanie_backend: {
       endpoint: 'https://joanie.endpoint',
     },
-  }).generate(),
+  }).one(),
 }));
 
 describe('<CourseRunEnrollment /> with joanie backend ', () => {
@@ -62,8 +62,8 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
     fetchMock.restore();
   });
   it('shows an "Enroll" button and allows the user to enroll', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
     courseRun.state.priority = 0;
 
@@ -105,8 +105,8 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
   });
 
   it('shows an error message when enrollment get request failed', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
     courseRun.state.priority = 0;
 
@@ -128,8 +128,8 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
   });
 
   it('shows an "Unenroll" text and allows the user to unenroll', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
     courseRun.state.priority = 0;
 
@@ -184,8 +184,8 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
   });
 
   it('shows an error message when the enrollment fails', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
     courseRun.state.priority = 0;
 
@@ -224,8 +224,8 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
   });
 
   it('shows an error message when the unenrollment fails', async () => {
-    const user: User = UserFactory.generate();
-    const courseRun: CourseRun = CourseRunFactory.generate();
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
     courseRun.state.priority = 0;
 
