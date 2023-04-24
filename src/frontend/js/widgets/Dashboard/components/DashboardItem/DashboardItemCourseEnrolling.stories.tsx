@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import faker from 'faker';
-import { CourseFactory } from 'utils/test/factories/joanie';
+import { CourseLightFactory } from 'utils/test/factories/joanie';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { Priority } from 'types';
 import { enrollment } from './stories.mock';
@@ -39,7 +39,7 @@ type Story = StoryObj<typeof DashboardItemCourseEnrolling>;
 
 export const ReadonlyEnrolledOpened: Story = {
   args: {
-    course: CourseFactory.generate(),
+    course: CourseLightFactory.generate(),
     activeEnrollment: {
       ...enrollment,
       course_run: {
@@ -53,7 +53,7 @@ export const ReadonlyEnrolledOpened: Story = {
 
 export const ReadonlyEnrolledClosed: Story = {
   args: {
-    course: CourseFactory.generate(),
+    course: CourseLightFactory.generate(),
     activeEnrollment: {
       ...enrollment,
       course_run: {
@@ -67,6 +67,6 @@ export const ReadonlyEnrolledClosed: Story = {
 
 export const ReadonlyNotEnrolled: Story = {
   args: {
-    course: CourseFactory.generate(),
+    course: CourseLightFactory.generate(),
   },
 };

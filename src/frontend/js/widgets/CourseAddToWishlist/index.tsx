@@ -37,7 +37,7 @@ enum ComponentStates {
 }
 
 export interface Props {
-  courseCode: Joanie.Course['code'];
+  courseCode: Joanie.CourseLight['code'];
 }
 
 const CourseAddToWishlist = ({ courseCode }: Props) => {

@@ -61,7 +61,7 @@ export const RichieContextFactory = (context: Partial<CommonDataProps['context']
     web_analytics_providers: derived(() => context.web_analytics_providers || null),
   });
 
-export const CourseFactory = createSpec({
+export const CourseLightFactory = createSpec({
   absolute_url: '',
   categories: [],
   code: faker.random.alphaNumeric(5),
