@@ -33,7 +33,7 @@ const messages = defineMessages({
 
 export interface Props {
   productId: Joanie.Product['id'];
-  courseCode: Joanie.Course['code'];
+  courseCode: Joanie.CourseLight['code'];
 }
 
 const CourseProductItem = ({ productId, courseCode }: Props) => {

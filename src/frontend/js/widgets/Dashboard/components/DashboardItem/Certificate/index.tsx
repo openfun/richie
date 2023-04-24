@@ -1,7 +1,7 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from 'components/Button';
 import { Icon } from 'components/Icon';
-import { Certificate, CertificateDefinition, Course } from 'types/Joanie';
+import { Certificate, CertificateDefinition, CourseLight } from 'types/Joanie';
 import { useDownloadCertificate } from 'hooks/useDownloadCertificate';
 import { Spinner } from 'components/Spinner';
 import useDateFormat from 'hooks/useDateFormat';
@@ -58,7 +58,7 @@ export const DashboardItemCertificate = ({
     throw new Error('certificate or certificateDefinition is required');
   }
 
-  const course = certificate?.order.course as Maybe<Course>;
+  const course = certificate?.order.course as Maybe<CourseLight>;
   const { download, loading } = useDownloadCertificate();
   const formatDate = useDateFormat();
 

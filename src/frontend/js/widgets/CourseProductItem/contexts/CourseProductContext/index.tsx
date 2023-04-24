@@ -4,13 +4,13 @@ import type * as Joanie from 'types/Joanie';
 
 const Context = createContext<
   Maybe<{
-    courseCode: Joanie.Course['code'];
+    courseCode: Joanie.CourseLight['code'];
     productId: Joanie.Product['id'];
   }>
 >(undefined);
 
 export interface CourseProductProviderProps {
-  courseCode: Joanie.Course['code'];
+  courseCode: Joanie.CourseLight['code'];
   productId: Joanie.Product['id'];
 }
 

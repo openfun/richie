@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { Certificate, Course } from 'types/Joanie';
+import { Certificate, CourseLight } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate/index';
@@ -52,7 +52,7 @@ describe('<DashboardCertificate/>', () => {
     render(<DashboardItemCertificate certificate={certificate} />, { wrapper: Wrapper });
 
     await waitFor(() => screen.getByText(certificate.certificate_definition.title));
-    screen.getByText((certificate.order.course as Course).title);
+    screen.getByText((certificate.order.course as CourseLight).title);
     screen.getByText(
       'Issued on ' +
         new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(certificate.issued_on)),
