@@ -34,7 +34,7 @@ export interface CourseRun {
     text: StateText;
   };
   title: string;
-  course?: Course;
+  course?: CourseLight;
 }
 
 // - Certificate
@@ -106,7 +106,7 @@ export interface CourseProduct extends Product {
   target_courses: TargetCourse[];
 }
 
-export interface Course extends AbstractCourse {
+export interface CourseLight extends AbstractCourse {
   products: CourseProduct[];
   orders?: OrderLite[];
 }
@@ -136,7 +136,7 @@ export enum OrderState {
 
 export interface Order {
   id: string;
-  course?: Course['code'] | Course;
+  course?: CourseLight['code'] | CourseLight;
   created_on: string;
   enrollments: Enrollment[];
   main_proforma_invoice: string;
@@ -183,11 +183,11 @@ export interface Address {
 // Wishlist
 export interface UserWishlistCourse {
   id: string;
-  course: Course['code'];
+  course: CourseLight['code'];
 }
 
 export interface UserWishlistCreationPayload {
-  course: Course['code'];
+  course: CourseLight['code'];
 }
 
 // Payment
@@ -217,7 +217,7 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
 
 interface OrderCreationPayload {
   product: Product['id'];
-  course: Course['code'];
+  course: CourseLight['code'];
   billing_address?: Omit<Address, 'id' | 'is_main'>;
   credit_card_id?: CreditCard['id'];
 }

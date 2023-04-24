@@ -6,13 +6,13 @@ import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
-  CourseFactory,
+  CourseLightFactory,
   CourseRunFactory,
   EnrollmentFactory,
   OrderFactory,
 } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
-import type { Course, CourseRun, Enrollment, OrderLite } from 'types/Joanie';
+import type { CourseLight, CourseRun, Enrollment, OrderLite } from 'types/Joanie';
 import { Deferred } from 'utils/test/deferred';
 import { Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -133,7 +133,7 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('renders a list of course runs with a call to action to enroll', async () => {
-      const course: Course = CourseFactory.generate();
+      const course: CourseLight = CourseLightFactory.generate();
       const courseRuns: CourseRun[] = CourseRunFactory().generate(2);
       const order: OrderLite = OrderFactory.generate();
 
@@ -233,7 +233,7 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('enroll with errors', async () => {
-      const course: Course = CourseFactory.generate();
+      const course: CourseLight = CourseLightFactory.generate();
       const courseRuns: CourseRun[] = CourseRunFactory().generate(2);
       const order: OrderLite = OrderFactory.generate();
       fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
