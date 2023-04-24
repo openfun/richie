@@ -1,6 +1,7 @@
-import { Priority } from 'types';
+import { CourseState } from 'types';
 import { Resource } from 'types/Resource';
 import { Nullable } from 'types/utils';
+import { CourseListItemMock as JoanieCourse } from 'api/mocks/joanie/courses';
 
 export interface Course extends Resource {
   absolute_url: string;
@@ -27,10 +28,9 @@ export interface Course extends Resource {
     srcset: string;
   }>;
   organizations: string[];
-  state: {
-    call_to_action: Nullable<string>;
-    datetime: Nullable<string>;
-    priority: Priority;
-    text: string;
-  };
+  state: CourseState;
+}
+
+export function isRichieCourse(course: Course | JoanieCourse): course is Course {
+  return (course as Course).organization_highlighted !== undefined;
 }

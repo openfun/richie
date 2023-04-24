@@ -3,40 +3,37 @@ import { IntlProvider } from 'react-intl';
 import { CommonDataProps } from 'types/commonDataProps';
 import { RichieContextFactory } from 'utils/test/factories/richie';
 
-import { CourseGlimpse } from '.';
+import { CourseGlimpse, CourseGlimpseCourse } from '.';
 
 describe('widgets/Search/components/CourseGlimpse', () => {
-  const course = {
-    absolute_url: 'https://example/com/courses/42/',
-    categories: ['24', '42'],
+  const course: CourseGlimpseCourse = {
+    course_url: 'https://example/com/courses/42/',
     code: '123abc',
     cover_image: {
       sizes: '330px',
       src: '/thumbs/small.png',
       srcset: 'some srcset',
     },
-    duration: '3 months',
-    effort: '3 hours',
     icon: {
       sizes: '60px',
       src: '/thumbs/icon_small.png',
       srcset: 'some srcset',
       title: 'Some icon',
-      color: 'red',
     },
     id: '742',
-    organization_highlighted: 'Some Organization',
-    organization_highlighted_cover_image: {
-      sizes: '330px',
-      src: '/thumbs/org_small.png',
-      srcset: 'some srcset',
+    organization: {
+      title: 'Some Organization',
+      image: {
+        sizes: '330px',
+        src: '/thumbs/org_small.png',
+        srcset: 'some srcset',
+      },
     },
-    organizations: ['36', '63'],
     state: {
-      call_to_action: 'Enroll now',
+      call_to_action: 'enroll now',
       datetime: '2019-03-14T10:35:47.823Z',
       priority: 0,
-      text: 'starts on',
+      text: 'starting on',
     },
     title: 'Course 42',
   };
@@ -46,14 +43,7 @@ describe('widgets/Search/components/CourseGlimpse', () => {
   it('renders a course glimpse with its data', () => {
     const { container } = render(
       <IntlProvider locale="en">
-        <CourseGlimpse
-          context={contextProps}
-          course={{
-            ...course,
-            duration: '3 months',
-            effort: '3 hours',
-          }}
-        />
+        <CourseGlimpse context={contextProps} course={course} />
       </IntlProvider>,
     );
 
@@ -70,9 +60,9 @@ describe('widgets/Search/components/CourseGlimpse', () => {
     screen.getByLabelText('Organization');
     screen.getByText('Some Organization');
     screen.getByText('Category');
-    // Matches on 'Starts on Mar 14, 2019', date is wrapped with intl <span>
+    // Matches on 'Starting on Mar 14, 2019', date is wrapped with intl <span>
     screen.getByLabelText('Course date');
-    screen.getByText('Starts on Mar 14, 2019');
+    screen.getByText('Starting on Mar 14, 2019');
 
     // Check course logo
     const courseGlipseMedia = container.getElementsByClassName('course-glimpse__media');

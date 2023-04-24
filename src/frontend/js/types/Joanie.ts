@@ -2,6 +2,8 @@ import type { Priority, StateCTA, StateText } from 'types';
 import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
+import { CourseListItemMock } from 'api/mocks/joanie/courses';
+import { CourseStatusFilter, CourseTypeFilter } from 'hooks/useCourses';
 import { OrganizationMock } from '../api/mocks/joanie/organizations';
 
 // - Generic
@@ -35,6 +37,12 @@ export interface CourseRun {
   };
   title: string;
   course?: CourseLight;
+}
+
+export interface CourseFilters extends ResourcesQuery {
+  status: CourseStatusFilter;
+  type: CourseTypeFilter;
+  per_page?: number;
 }
 
 // - Certificate
@@ -78,6 +86,7 @@ export interface Product {
 
 // - Course
 export interface AbstractCourse {
+  id: string;
   code: string;
   organizations: Organization[];
   title: string;
@@ -323,6 +332,11 @@ export interface API {
   user: APIUser;
   products: {
     get(filters?: ResourcesQuery): Promise<Nullable<Product>>;
+  };
+  courses: {
+    get<Filters extends ResourcesQuery = CourseFilters>(
+      filters?: Filters,
+    ): Promise<Nullable<CourseListItemMock[]>>;
   };
 }
 
