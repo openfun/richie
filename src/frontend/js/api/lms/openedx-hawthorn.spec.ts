@@ -1,5 +1,5 @@
 import fetchMock from 'fetch-mock';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { handle } from 'utils/errors/handle';
 import { HttpError } from 'utils/errors/HttpError';

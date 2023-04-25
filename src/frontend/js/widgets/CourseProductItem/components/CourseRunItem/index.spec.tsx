@@ -1,4 +1,4 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { screen, getByText, render } from '@testing-library/react';
 import { OrderFactory } from 'utils/test/factories/joanie';
 import type { CourseRun, Order } from 'types/Joanie';

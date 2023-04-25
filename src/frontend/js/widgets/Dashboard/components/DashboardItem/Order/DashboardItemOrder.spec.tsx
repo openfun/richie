@@ -10,7 +10,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import { faker } from '@helpscout/helix';
+import { faker } from '@faker-js/faker';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { PropsWithChildren } from 'react';
 import fetchMock from 'fetch-mock';

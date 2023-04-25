@@ -1,4 +1,4 @@
-import { faker } from '@helpscout/helix';
+import { faker } from '@faker-js/faker';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';

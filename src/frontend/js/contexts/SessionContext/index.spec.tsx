@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import fetchMock from 'fetch-mock';
 import { act, render, renderHook, screen, waitFor } from '@testing-library/react';
 import { PropsWithChildren } from 'react';

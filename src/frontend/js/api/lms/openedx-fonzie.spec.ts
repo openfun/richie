@@ -1,4 +1,4 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import fetchMock from 'fetch-mock';
 import { RICHIE_USER_TOKEN } from 'settings';
 import FonzieAPIInterface from './openedx-fonzie';
