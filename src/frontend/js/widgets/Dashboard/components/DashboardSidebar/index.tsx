@@ -17,10 +17,11 @@ const messages = defineMessages({
   },
 });
 
-interface DashboardSidebarProps extends PropsWithChildren {
+export interface DashboardSidebarProps extends PropsWithChildren {
   menuLinks: Record<string, string>[];
   header: string;
   subHeader: string;
+  title?: string;
 }
 
 export const DashboardSidebar = ({
@@ -28,6 +29,7 @@ export const DashboardSidebar = ({
   menuLinks,
   header,
   subHeader,
+  title,
 }: DashboardSidebarProps) => {
   const { user } = useSession();
   const location = useLocation();
@@ -55,6 +57,7 @@ export const DashboardSidebar = ({
           <h3>{header}</h3>
           <p>{subHeader}</p>
         </header>
+        {title && <h4 className="dashboard-sidebar__container__title">{title}</h4>}
         <div className="dashboard-sidebar__container__responsive-nav">
           <label htmlFor="dashboard-responsive-nav" className="offscreen">
             <FormattedMessage {...messages.responsiveNavLabel} />

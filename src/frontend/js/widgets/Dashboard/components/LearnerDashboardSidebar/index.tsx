@@ -5,7 +5,10 @@ import {
   getDashboardRouteLabel,
   getDashboardRoutePath,
 } from 'widgets/Dashboard/utils/dashboardRoutes';
-import { DashboardSidebar } from 'widgets/Dashboard/components/DashboardSidebar';
+import {
+  DashboardSidebar,
+  DashboardSidebarProps,
+} from 'widgets/Dashboard/components/DashboardSidebar';
 import { useSession } from 'contexts/SessionContext';
 
 const messages = defineMessages({
@@ -21,7 +24,7 @@ const messages = defineMessages({
   },
 });
 
-export const LearnerDashboardSidebar = () => {
+export const LearnerDashboardSidebar = (props: Partial<DashboardSidebarProps>) => {
   const intl = useIntl();
   const { user } = useSession();
 
@@ -45,6 +48,7 @@ export const LearnerDashboardSidebar = () => {
       menuLinks={links}
       header={intl.formatMessage(messages.header, { name: user?.username })}
       subHeader={intl.formatMessage(messages.subHeader)}
+      {...props}
     />
   );
 };

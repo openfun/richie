@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add cunningham and design system.
+- Specific sidebar for order related routes
 
 ### Changed
 

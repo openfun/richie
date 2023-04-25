@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 import { useOrder } from 'hooks/useOrders';
 import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
@@ -18,13 +17,9 @@ const messages = defineMessages({
 export const DashboardOrderLoader = () => {
   const params = useParams<{ orderId: string }>();
   const order = useOrder(params.orderId);
-
   const product = useProduct(order.item?.product, { course: order.item?.course });
-  useBreadcrumbsPlaceholders({
-    orderTitle: product.item?.title ?? '',
-  });
-
   const fetching = order.states.fetching || product.states.fetching;
+
   return (
     <>
       {fetching && !order.item && (
