@@ -11,7 +11,7 @@ import {
   screen,
 } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';

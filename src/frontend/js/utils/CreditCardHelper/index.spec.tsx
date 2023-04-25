@@ -1,15 +1,13 @@
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { CreditCardExpirationStatus, CreditCardHelper } from 'utils/CreditCardHelper/index';
 import { CreditCardFactory } from 'utils/test/factories/joanie';
 
 describe('CreditCardHelper', () => {
   it('handles falsy values', () => {
     expect(
-      CreditCardHelper.isExpiredSoon({
-        ...CreditCardFactory().one(),
-        expiration_month: null,
-        expiration_year: undefined,
-      }),
+      CreditCardHelper.isExpiredSoon(
+        CreditCardFactory({ expiration_month: undefined, expiration_year: undefined }).one(),
+      ),
     ).toBe(false);
   });
   it('is not soon expired', () => {

@@ -1,6 +1,6 @@
 import { IntlProvider } from 'react-intl';
 import { render, screen } from '@testing-library/react';
-import * as faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { Enrollment } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { CourseRunWithCourseFactory, EnrollmentFactory } from 'utils/test/factories/joanie';

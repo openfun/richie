@@ -1,6 +1,6 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { CourseRun } from 'types';
