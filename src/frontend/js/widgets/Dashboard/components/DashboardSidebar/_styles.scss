@@ -36,6 +36,12 @@
       }
     }
 
+    &__title {
+      $titlePadding: rem-calc(r-theme-val(dashboard-sidebar, menu-link-left-padding) + 3px);
+      padding: 0 $titlePadding 1rem $titlePadding;
+      margin: 0;
+    }
+
     &__responsive-nav {
       display: none;
 
@@ -49,6 +55,7 @@
       list-style: none;
       padding: 0;
       margin: 0;
+      min-height: 8rem;
 
       @include media-breakpoint-down(lg) {
         display: none;

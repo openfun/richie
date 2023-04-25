@@ -16,6 +16,7 @@ import {
   LearnerDashboardPaths,
 } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { DashboardCertificates } from 'pages/DashboardCertificates';
+import { DashboardOrderLayout } from 'pages/DashboardOrderLayout';
 
 export interface DashboardRouteHandle {
   crumbLabel?: MessageDescriptor;
@@ -29,7 +30,9 @@ export function getLearnerDashboardRoutes() {
   const routes: RouteObject[] = [
     {
       path: getRoutePath(LearnerDashboardPaths.COURSES),
-      handle: { crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.COURSES] },
+      handle: {
+        crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.COURSES],
+      },
       element: <Outlet />,
       children: [
         {
@@ -40,8 +43,17 @@ export function getLearnerDashboardRoutes() {
           path: getRoutePath(LearnerDashboardPaths.ORDER, {
             orderId: ':orderId',
           }),
-          element: <DashboardOrderLoader />,
-          handle: { crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.ORDER] },
+          element: <DashboardOrderLayout />,
+          handle: {
+            renderLayout: true,
+            crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.ORDER],
+          },
+          children: [
+            {
+              index: true,
+              element: <DashboardOrderLoader />,
+            },
+          ],
         },
       ],
     },

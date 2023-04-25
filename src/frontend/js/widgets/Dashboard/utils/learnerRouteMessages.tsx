@@ -6,6 +6,7 @@ import { defineMessages } from 'react-intl';
 export enum LearnerDashboardPaths {
   COURSES = '/courses',
   ORDER = '/courses/orders/:orderId',
+  ORDER_RUNS = '/courses/orders/:orderId/runs',
   COURSE = '/courses/:code',
   PREFERENCES = '/preferences',
   CERTIFICATES = '/certificates',
@@ -25,6 +26,11 @@ export const LEARNER_DASHBOARD_ROUTE_PATHS = defineMessages<LearnerDashboardPath
     id: 'components.Dashboard.DashboardRoutes.order.path',
     description: 'The path to display an order detail view.',
     defaultMessage: '/courses/orders/{orderId}',
+  },
+  [LearnerDashboardPaths.ORDER_RUNS]: {
+    id: 'components.Dashboard.DashboardRoutes.order.runs.path',
+    description: 'The path to display an order runs view.',
+    defaultMessage: '/courses/orders/{orderId}/runs',
   },
   [LearnerDashboardPaths.COURSE]: {
     id: 'components.Dashboard.DashboardRoutes.course.path',
@@ -69,6 +75,11 @@ export const LEARNER_DASHBOARD_ROUTE_LABELS = defineMessages<LearnerDashboardPat
     id: 'components.Dashboard.DashboardRoutes.order.label',
     description: 'Label of the order view used in navigation components.',
     defaultMessage: '{orderTitle}',
+  },
+  [LearnerDashboardPaths.ORDER_RUNS]: {
+    id: 'components.Dashboard.DashboardRoutes.order.runs.label',
+    description: 'Label of the order runs view used in navigation components.',
+    defaultMessage: 'General informations',
   },
   [LearnerDashboardPaths.COURSE]: {
     id: 'components.Dashboard.DashboardRoutes.course.session.label',
