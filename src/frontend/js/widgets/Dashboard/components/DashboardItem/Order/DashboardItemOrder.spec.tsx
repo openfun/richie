@@ -23,10 +23,9 @@ import {
   CourseRunFactory,
   EnrollmentFactory,
   OrderFactory,
-  ProductFactory,
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
-import { Certificate, Order, OrderState, Product, CourseRun } from 'types/Joanie';
+import { Certificate, CourseRun, Order, OrderState } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { resolveAll } from 'utils/resolveAll';
@@ -37,6 +36,8 @@ import { noop } from 'utils';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { Deferred } from 'utils/test/deferred';
+import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
+import { mockProductWithOrder } from 'utils/test/mockProductWithOrder';
 import { LearnerDashboardPaths } from '../../../utils/learnerRouteMessages';
 import { DashboardTest } from '../../DashboardTest';
 import { DashboardItemOrder } from './DashboardItemOrder';
@@ -91,16 +92,6 @@ describe('<DashboardItemOrder/>', () => {
     fetchMock.restore();
   });
 
-  const mockProduct = (order: Order) => {
-    const product: Product = ProductFactory().one();
-    product.id = order.product;
-    fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/products/' + product.id + '/?course=' + order.course,
-      product,
-    );
-    return product;
-  };
-
   /**
    * Global
    */
@@ -117,7 +108,7 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a pending order', async () => {
     const order: Order = OrderFactory({ state: OrderState.PENDING }).one();
     order.target_courses = [];
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} />, { wrapper });
 
@@ -130,7 +121,7 @@ describe('<DashboardItemOrder/>', () => {
   it('renders an order with certificate', async () => {
     const order: Order = OrderFactory({ certificate: faker.datatype.uuid() }).one();
     order.target_courses = [];
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     const certificate: Certificate = {
       ...CertificateFactory({
@@ -160,7 +151,7 @@ describe('<DashboardItemOrder/>', () => {
   it('does not render an order with certificate', async () => {
     const order: Order = OrderFactory({ certificate: faker.datatype.uuid() }).one();
     order.target_courses = [];
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} />, { wrapper });
 
@@ -178,7 +169,7 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a non-writable order without target courses without certificate', async () => {
     const order: Order = OrderFactory().one();
     order.target_courses = [];
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} />, { wrapper });
 
@@ -190,7 +181,7 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a non-writable order with target courses', async () => {
     const order: Order = OrderFactory().one();
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} />, { wrapper });
 
@@ -214,7 +205,7 @@ describe('<DashboardItemOrder/>', () => {
 
     order.enrollments[0].course_run.state.priority = Priority.ONGOING_OPEN;
 
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} />, { wrapper });
 
@@ -242,7 +233,7 @@ describe('<DashboardItemOrder/>', () => {
       enrollments: [],
     }).one();
 
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} />, { wrapper });
 
@@ -263,7 +254,7 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with no target courses', async () => {
     const order: Order = OrderFactory().one();
     order.target_courses = [];
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
       wrapper,
@@ -285,7 +276,7 @@ describe('<DashboardItemOrder/>', () => {
       },
     ];
 
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
       wrapper,
@@ -327,7 +318,7 @@ describe('<DashboardItemOrder/>', () => {
       target_courses: TargetCourseFactory().many(1),
       enrollments: [],
     }).one();
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', []);
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
@@ -406,7 +397,7 @@ describe('<DashboardItemOrder/>', () => {
       enrollments: [],
     }).one();
 
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
       { results: [order], next: null, previous: null, count: null },
@@ -421,6 +412,8 @@ describe('<DashboardItemOrder/>', () => {
     render(WrapperWithDashboard(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
     // Wait for the order to be rendered.
     await screen.findByRole('heading', { level: 5, name: product.title });
+
+    await expectBreadcrumbsToEqualParts(['Back', 'My courses', product.title]);
 
     const courseRun = order.target_courses[0].course_runs[0];
     const runElement = await screen.findByTestId(
@@ -459,7 +452,7 @@ describe('<DashboardItemOrder/>', () => {
       [],
     );
 
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', []);
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
@@ -556,7 +549,7 @@ describe('<DashboardItemOrder/>', () => {
       },
     ];
 
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', []);
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
@@ -632,7 +625,7 @@ describe('<DashboardItemOrder/>', () => {
     // When the existing enrollment will be set as is_active: true.
     fetchMock.put('https://joanie.endpoint/api/v1.0/enrollments/' + enrollment.id + '/', []);
 
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
       { results: [order], next: null, previous: null, count: null },
@@ -713,7 +706,7 @@ describe('<DashboardItemOrder/>', () => {
         }).many(1),
       }).many(1),
     }).one();
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
       wrapper,
@@ -749,7 +742,7 @@ describe('<DashboardItemOrder/>', () => {
     // Make target course enrolled.
     order.enrollments = EnrollmentFactory({ course_run: courseRun }).many(1);
 
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
       wrapper,
@@ -779,7 +772,7 @@ describe('<DashboardItemOrder/>', () => {
       enrollments: [],
     }).one();
 
-    const product = mockProduct(order);
+    const product = mockProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
       wrapper,
