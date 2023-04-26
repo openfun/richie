@@ -102,8 +102,8 @@ describe('<DashboardEditAddress/>', () => {
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
     // The API is called with correct body.
-    const expectedBody = { ...address, title: addressUpdated.title };
-    delete expectedBody.id;
+    const { id, ...addressResponse } = address;
+    const expectedBody = { ...addressResponse, title: addressUpdated.title };
     expectFetchCall(
       updateUrl,
       { method: 'put' },

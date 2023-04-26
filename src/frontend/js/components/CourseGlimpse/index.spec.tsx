@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { CommonDataProps } from 'types/commonDataProps';
 import { RichieContextFactory } from 'utils/test/factories/richie';
-
 import { CourseGlimpse, CourseGlimpseCourse } from '.';
 
 describe('widgets/Search/components/CourseGlimpse', () => {
@@ -95,8 +94,7 @@ describe('widgets/Search/components/CourseGlimpse', () => {
             ...course,
             state: {
               ...course.state,
-              call_to_action: null,
-              datetime: null,
+              call_to_action: undefined,
               text: 'archived',
             },
           }}
@@ -106,7 +104,13 @@ describe('widgets/Search/components/CourseGlimpse', () => {
 
     // Make sure the component renders and shows the state
     screen.getByRole('heading', { name: 'Course 42', level: 3 });
-    screen.getByText('Archived');
+    const dateFormatter = Intl.DateTimeFormat('en', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+    const formatedDatetime = dateFormatter.format(new Date(course.state.datetime!));
+    screen.getByText(`Archived ${formatedDatetime}`);
   });
 
   it('shows the "Cover" placeholder div when the course is missing a cover image', () => {

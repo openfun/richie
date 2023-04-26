@@ -142,8 +142,8 @@ describe('<DashboardCreateAddress/>', () => {
     ).toBe(true);
 
     // The API is called with correct body.
-    const expectedBody = { ...address, is_main: true };
-    delete expectedBody.id;
+    const { id, ...addressResponse } = address;
+    const expectedBody = { ...addressResponse, is_main: true };
     expectFetchCall(
       'https://joanie.endpoint/api/v1.0/addresses/',
       { method: 'post' },

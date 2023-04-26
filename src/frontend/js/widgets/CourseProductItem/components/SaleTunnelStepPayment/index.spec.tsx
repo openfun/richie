@@ -67,7 +67,7 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display authenticated user information', async () => {
-    const user: User = UserFactory().one();
+    const user: User = UserFactory({ fullname: undefined }).one();
     const product = ProductFactory().one();
 
     await act(async () => {

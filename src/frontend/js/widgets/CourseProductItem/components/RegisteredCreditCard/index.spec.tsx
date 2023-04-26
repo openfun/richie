@@ -15,10 +15,6 @@ describe('RegisteredCreditCard', () => {
     <IntlProvider locale="en">{children}</IntlProvider>
   );
 
-  afterEach(() => {
-    CreditCardFactory.afterGenerate((c: CreditCard) => c);
-  });
-
   it('should render credit card information', () => {
     const creditCard: CreditCard = CreditCardFactory().one();
 
@@ -49,9 +45,7 @@ describe('RegisteredCreditCard', () => {
   });
 
   it('should display the credit card brand if it has not title', () => {
-    const creditCard: CreditCard = CreditCardFactory.afterGenerate(
-      ({ title, ...rest }: CreditCard) => rest,
-    ).generate();
+    const creditCard: CreditCard = CreditCardFactory({ title: undefined }).one();
 
     const { container } = render(
       <Wrapper>

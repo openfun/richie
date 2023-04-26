@@ -192,7 +192,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
 
     // Find the delete button of the first credit card.
     const creditCard = creditCards[0];
-    await screen.findByText(creditCard.title);
+    await screen.findByText(creditCard.title!);
     const creditCardContainer = screen.getByTestId('dashboard-credit-card__' + creditCard.id);
     const deleteButton = getByRole(creditCardContainer, 'button', {
       name: 'Delete',
@@ -219,7 +219,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
 
     // The address does not appear anymore in the list.
-    expect(screen.queryByText(creditCard.title)).toBeNull();
+    expect(screen.queryByText(creditCard.title!)).toBeNull();
   });
 
   it('promotes a credit card', async () => {
@@ -241,7 +241,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
 
     // Find the promote button of the first credit card.
     const creditCard = creditCards[0];
-    await screen.findByText(creditCard.title);
+    await screen.findByText(creditCard.title!);
     let creditCardContainer = screen.getByTestId('dashboard-credit-card__' + creditCard.id);
     const promoteButton = getByRole(creditCardContainer, 'button', {
       name: 'Use by default',
@@ -295,7 +295,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     });
     expect(creditCardsContainers.length).toEqual(5);
     getByText(creditCardsContainers[0], 'Default credit card');
-    getByText(creditCardsContainers[0], mainCreditCard.title);
+    getByText(creditCardsContainers[0], mainCreditCard.title!);
 
     // All other credit cards container are not displayed as main.
     creditCardsContainers

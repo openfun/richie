@@ -13,10 +13,9 @@ jest.mock('../CourseProductCourseRuns', () => ({
 
 describe('CourseRunItem', () => {
   it('does not allow user which purchase the product to enroll to course if order state is not validated', async () => {
-    const order: Order = OrderFactory.afterGenerate((o: Order) => ({
-      ...o,
-      state: faker.helpers.randomize([OrderState.CANCELED, OrderState.PENDING]),
-    })).one();
+    const order: Order = OrderFactory({
+      state: faker.helpers.arrayElement([OrderState.CANCELED, OrderState.PENDING]),
+    }).one();
     const targetCourse = order.target_courses[0];
 
     render(<CourseRunItem targetCourse={targetCourse} order={order} />);

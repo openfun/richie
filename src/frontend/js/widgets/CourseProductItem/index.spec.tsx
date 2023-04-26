@@ -73,9 +73,6 @@ describe('CourseProductItem', () => {
 
   afterEach(() => {
     fetchMock.restore();
-    EnrollmentFactory.afterGenerate((e: Enrollment) => e);
-    ProductFactory.afterGenerate((p: Product) => p);
-    OrderFactory.afterGenerate((o: Order) => o);
   });
 
   const Wrapper = ({ withSession, children }: PropsWithChildren<{ withSession?: boolean }>) => (
@@ -140,10 +137,7 @@ describe('CourseProductItem', () => {
   });
 
   it('does not render <CertificateItem /> if product do not have a certificate', async () => {
-    const product: Product = ProductFactory.afterGenerate(
-      ({ certificate_definition, ...p }: Product) => p,
-    ).generate();
-
+    const product: Product = ProductFactory({ certificate_definition: undefined }).one();
     fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
 
     render(
@@ -161,12 +155,11 @@ describe('CourseProductItem', () => {
 
   it('adapts information when user purchased the product', async () => {
     const product: Product = ProductFactory().one();
-    const order: Order = OrderFactory.afterGenerate((o: Order) => ({
-      ...o,
+    const order: Order = OrderFactory({
       product: product.id,
       course: '00000',
       target_courses: product.target_courses,
-    })).generate();
+    }).one();
 
     fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
     fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
@@ -212,20 +205,15 @@ describe('CourseProductItem', () => {
   it('renders enrollment information when user is enrolled to a course run', async () => {
     const product: Product = CertificateProductFactory().one();
     // - Create an order with an active enrollment
-    const enrollment: Enrollment = EnrollmentFactory.afterGenerate(
-      ({ state, ...e }: Enrollment): Enrollment => ({
-        ...e,
-        course_run: product.target_courses[0]!.course_runs[0]! as CourseRun,
-        state,
-      }),
-    ).generate();
-    const order: Order = OrderFactory.afterGenerate((o: Order) => ({
-      ...o,
+    const enrollment: Enrollment = EnrollmentFactory({
+      course_run: product.target_courses[0]!.course_runs[0]! as CourseRun,
+    }).one();
+    const order: Order = OrderFactory({
       product: product.id,
       course: '00000',
       target_courses: product.target_courses,
       enrollments: [enrollment],
-    })).generate();
+    }).one();
 
     fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
     fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
@@ -270,14 +258,12 @@ describe('CourseProductItem', () => {
 
   it('does not render sale tunnel button if user already has a pending order', async () => {
     const product: Product = ProductFactory().one();
-    const order: Order = OrderFactory.afterGenerate((o: Order) => ({
-      ...o,
+    const order: Order = OrderFactory({
       product: product.id,
       course: '00000',
       target_courses: product.target_courses,
       state: OrderState.PENDING,
-    })).generate();
-
+    }).one();
     fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
     fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
 

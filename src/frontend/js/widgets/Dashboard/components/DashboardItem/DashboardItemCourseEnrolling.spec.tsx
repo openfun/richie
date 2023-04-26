@@ -5,6 +5,7 @@ import { EnrollmentFactory } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
 import { Enrollment } from 'types/Joanie';
 import { DATETIME_FORMAT } from 'hooks/useDateFormat';
+import { FactoryConfig } from 'utils/test/factories/factories';
 import { Enrolled } from './DashboardItemCourseEnrolling';
 
 /**
@@ -36,6 +37,10 @@ describe('<Enrolled/>', () => {
       expect(screen.queryByRole('link', { name: 'Access course' })).toBeNull();
     }
   };
+
+  afterEach(() => {
+    FactoryConfig.resetUniqueStore();
+  });
 
   it('handles enrollments with priority=ONGOING_OPEN', () => {
     runTest(Priority.ONGOING_OPEN, true);
