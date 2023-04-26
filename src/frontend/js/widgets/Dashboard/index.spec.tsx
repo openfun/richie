@@ -117,7 +117,7 @@ describe('<Dashboard />', () => {
     });
     render(<DashboardWithUser user={user} />);
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.COURSES);
-    await expectBreadcrumbsToEqualParts(['Back', 'My courses']);
+    expectBreadcrumbsToEqualParts(['Back', 'My courses']);
 
     // Go to "My Preferences" route.
     const link = screen.getByRole('link', { name: 'My preferences' });
@@ -125,7 +125,7 @@ describe('<Dashboard />', () => {
       fireEvent.click(link);
     });
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.PREFERENCES);
-    await expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
+    expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
 
     // Go to the address edit route.
     const button = await screen.findByRole('button', { name: 'Edit' });
@@ -135,7 +135,7 @@ describe('<Dashboard />', () => {
     expectUrlMatchLocationDisplayed(
       LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(':addressId', address.id),
     );
-    await expectBreadcrumbsToEqualParts([
+    expectBreadcrumbsToEqualParts([
       'Back',
       'My preferences',
       'Edit address "' + address.title + '"',
@@ -147,7 +147,7 @@ describe('<Dashboard />', () => {
       fireEvent.click(backButton);
     });
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.PREFERENCES);
-    await expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
+    expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
 
     // Click again on back button to get redirect to website's root.
     expect(location.replace).not.toHaveBeenCalled();

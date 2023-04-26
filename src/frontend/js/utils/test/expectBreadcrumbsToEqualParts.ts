@@ -1,11 +1,8 @@
-import { screen, waitFor } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 
-export const expectBreadcrumbsToEqualParts = async (parts: string[]) => {
-  await waitFor(() => {
-    const element = screen.getByTestId('dashboard-breadcrumbs');
-    const actualBreadcrumbs = Array.from(element.querySelectorAll('li')).map((listElement) => {
-      return listElement.textContent;
-    });
-    expect(actualBreadcrumbs).toEqual(parts);
-  });
+export const expectBreadcrumbsToEqualParts = (parts: string[]) => {
+  const breadcrumb = screen.getByTestId('dashboard-breadcrumbs');
+  const breadcrumbParts = within(breadcrumb).getAllByRole('link');
+  const breadcrumbTextContents = breadcrumbParts.map((node) => node.textContent);
+  expect(breadcrumbTextContents).toEqual(parts);
 };

@@ -59,7 +59,7 @@ describe('<DashboardEditAddress/>', () => {
 
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-    await expectBreadcrumbsToEqualParts([
+    expectBreadcrumbsToEqualParts([
       'Back',
       'My preferences',
       'Edit address "' + address.title + '"',
@@ -143,7 +143,7 @@ describe('<DashboardEditAddress/>', () => {
       ).container;
     });
 
-    await expectBreadcrumbsToEqualParts([
+    expectBreadcrumbsToEqualParts([
       'Back',
       'My preferences',
       'Edit address "' + address.title + '"',

@@ -76,7 +76,7 @@ describe('<DashboardCreateAddress/>', () => {
 
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-    await expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
+    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Submit the empty form to trigger validation errors.
     const button = await screen.findByRole('button', { name: 'Create' });
@@ -123,7 +123,7 @@ describe('<DashboardCreateAddress/>', () => {
         </QueryClientProvider>,
       );
     });
-    await expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
+    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Fill the form with random data.
     const button = await screen.findByRole('button', { name: 'Create' });
@@ -177,7 +177,7 @@ describe('<DashboardCreateAddress/>', () => {
       );
     });
 
-    await expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
+    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Fill the form with random data.
     const button = await screen.findByRole('button', { name: 'Create' });

@@ -59,7 +59,7 @@ describe('<DashAddressesManagement/>', () => {
       );
     });
 
-    await expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
+    expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
     // The empty placeholder is shown.
     await screen.findByText("You haven't created any addresses yet.");
     // No error is shown.
