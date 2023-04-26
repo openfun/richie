@@ -1,93 +1,104 @@
-import { compose, createSpec, derived, faker } from '@helpscout/helix';
+import { faker } from '@faker-js/faker';
+import { User } from 'types/User';
 import { APIBackend } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
+import { CourseRun, CourseState, Enrollment, Priority } from 'types';
+import { Course } from 'types/Course';
+import { factory } from './factories';
 
-export const CourseStateFactory = createSpec({
-  priority: derived(() => Math.floor(Math.random() * 7)),
-  datetime: derived(() => faker.date.past()().toISOString()),
-  call_to_action: faker.random.words(1, 3),
-  text: faker.random.words(1, 3),
+export const CourseStateFactory = factory<CourseState>(() => {
+  return {
+    priority: Priority.ONGOING_OPEN,
+    datetime: faker.date.past().toISOString(),
+    call_to_action: 'enroll now',
+    text: 'on-going',
+  };
 });
 
-export const CourseRunFactory = createSpec({
-  id: faker.datatype.number(),
-  resource_link: faker.unique(faker.internet.url()),
-  start: derived(() => faker.date.past()().toISOString()),
-  end: derived(() => faker.date.past()().toISOString()),
-  enrollment_start: derived(() => faker.date.past()().toISOString()),
-  enrollment_end: derived(() => faker.date.past()().toISOString()),
-  languages: faker.random.locale(),
-  state: CourseStateFactory,
-  starts_in_message: null,
+export const CourseRunFactory = factory<CourseRun>(() => {
+  return {
+    id: faker.datatype.number(),
+    resource_link: faker.helpers.unique(faker.internet.url),
+    start: faker.date.past().toISOString(),
+    end: faker.date.past().toISOString(),
+    enrollment_start: faker.date.past().toISOString(),
+    enrollment_end: faker.date.past().toISOString(),
+    languages: [faker.random.locale()],
+    state: CourseStateFactory().one(),
+    starts_in_message: null,
+    dashboard_link: null,
+  };
 });
 
-export const EnrollmentFactory = createSpec({
-  id: faker.datatype.number(),
-  created_at: derived(() => faker.date.past()().toISOString()),
-  user: faker.datatype.number(),
-  course_run: faker.datatype.number(),
+export const EnrollmentFactory = factory<Enrollment>(() => {
+  return {
+    id: faker.datatype.number(),
+    created_at: faker.date.past().toISOString(),
+    user: faker.datatype.number(),
+    course_run: faker.datatype.number(),
+  };
 });
 
-export const UserFactory = createSpec({
-  full_name: faker.fake('{{name.firstName}} {{name.lastName}}'),
+export const UserFactory = factory<User>(() => ({
+  access_token: faker.lorem.word(12),
+  fullname: faker.name.fullName(),
+  email: faker.internet.email(),
   username: faker.internet.userName(),
-});
+}));
 
-export const FonzieUserFactory = compose(
-  UserFactory,
-  createSpec({
-    access_token: btoa(faker.datatype.uuid()),
-  }),
-);
+export const FonzieUserFactory = factory<User>(() => ({
+  ...UserFactory().one(),
+  access_token: btoa(faker.datatype.uuid()),
+}));
 
-export const RichieContextFactory = (context: Partial<CommonDataProps['context']> = {}) =>
-  createSpec({
-    csrftoken: faker.random.alphaNumeric(64),
-    environment: 'test',
-    authentication: {
-      backend: APIBackend.OPENEDX_HAWTHORN,
+export const RichieContextFactory = factory<CommonDataProps['context']>(() => ({
+  csrftoken: faker.random.alphaNumeric(64),
+  environment: 'test',
+  authentication: {
+    backend: APIBackend.OPENEDX_HAWTHORN,
+    endpoint: 'https://endpoint.test',
+  },
+  lms_backends: [
+    {
+      backend: APIBackend.DUMMY,
+      course_regexp: '.*',
       endpoint: 'https://endpoint.test',
     },
-    lms_backends: [
-      {
-        backend: APIBackend.DUMMY,
-        course_regexp: '.*',
-        endpoint: 'https://endpoint.test',
-      },
-    ],
-    release: faker.system.semver(),
-    sentry_dsn: null,
-    ...context,
-    web_analytics_providers: derived(() => context.web_analytics_providers || null),
-  });
+  ],
+  release: faker.system.semver(),
+  sentry_dsn: null,
+  web_analytics_providers: null,
+}));
 
-export const CourseLightFactory = createSpec({
-  absolute_url: '',
-  categories: [],
-  code: faker.random.alphaNumeric(5),
-  cover_image: {
-    sizes: '300px',
-    src: '/static/course_cover_image.jpg',
-    srcset: '/static/course_cover_image.jpg',
-  },
-  title: faker.random.words(Math.ceil(Math.random() * 10)),
-  duration: '',
-  effort: '',
-  icon: {
-    color: null,
-    sizes: '60px',
-    src: '/static/course_icon.png',
-    srcset: '/static/course_icon.png',
-    title: 'Certifiant',
-  },
-  organization_highlighted: faker.unique(faker.random.words(Math.ceil(Math.random() * 3))),
-  organization_highlighted_cover_image: {
-    sizes: '100vh',
-    src: '/static/organization_cover_image.png',
-    srcset: '/static/organization_cover_image.png',
-  },
-  organizations: derived(({ organization_highlighted }: { organization_highlighted: string }) => [
-    organization_highlighted,
-  ]),
-  state: CourseStateFactory,
+export const CourseLightFactory = factory<Course>(() => {
+  const organizationName = faker.helpers.unique(faker.random.words, [Math.ceil(Math.random() * 3)]);
+  return {
+    id: faker.datatype.uuid(),
+    absolute_url: '',
+    categories: [],
+    code: faker.random.alphaNumeric(5),
+    cover_image: {
+      sizes: '300px',
+      src: '/static/course_cover_image.jpg',
+      srcset: '/static/course_cover_image.jpg',
+    },
+    title: faker.random.words(Math.ceil(Math.random() * 10)),
+    duration: '',
+    effort: '',
+    icon: {
+      color: 'blue',
+      sizes: '60px',
+      src: '/static/course_icon.png',
+      srcset: '/static/course_icon.png',
+      title: 'Certifiant',
+    },
+    organization_highlighted: organizationName,
+    organization_highlighted_cover_image: {
+      sizes: '100vh',
+      src: '/static/organization_cover_image.png',
+      srcset: '/static/organization_cover_image.png',
+    },
+    organizations: [organizationName],
+    state: CourseStateFactory().one(),
+  };
 });
