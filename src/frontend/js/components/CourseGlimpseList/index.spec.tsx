@@ -1,23 +1,20 @@
 import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 
-import { RichieContextFactory } from 'utils/test/factories/richie';
+import { RichieContextFactory, CourseLightFactory } from 'utils/test/factories/richie';
 import { CommonDataProps } from 'types/commonDataProps';
-import { CourseGlimpseCourse } from 'components/CourseGlimpse';
 import { Priority } from 'types';
-import { CourseGlimpseList } from '.';
+import { CourseGlimpseList, getCourseGlimpseListProps } from '.';
 
 describe('widgets/Search/components/CourseGlimpseList', () => {
   const contextProps: CommonDataProps['context'] = RichieContextFactory().one();
 
   it('renders a list of Courses into a list of CourseGlimpses', () => {
     const courses = [
-      {
+      CourseLightFactory({
         id: '44',
         code: 'AAA',
-        organization: {
-          title: "Awesome univ'",
-        },
+        organizations: ["Awesome univ'"],
         state: {
           datetime: '2019-03-14T10:35:47.823Z',
           text: 'archived',
@@ -25,13 +22,11 @@ describe('widgets/Search/components/CourseGlimpseList', () => {
           priority: Priority.ARCHIVED_CLOSED,
         },
         title: 'Course 44',
-      },
-      {
+      }).one(),
+      CourseLightFactory({
         id: '45',
         code: 'BBB',
-        organization: {
-          title: "Bad univ'",
-        },
+        organizations: ["Bad univ'"],
         state: {
           datetime: '2019-03-14T10:35:47.823Z',
           text: 'archived',
@@ -39,13 +34,13 @@ describe('widgets/Search/components/CourseGlimpseList', () => {
           priority: Priority.ARCHIVED_CLOSED,
         },
         title: 'Course 45',
-      },
-    ] as CourseGlimpseCourse[];
+      }).one(),
+    ];
     const { container } = render(
       <IntlProvider locale="en">
         <CourseGlimpseList
           context={contextProps}
-          courses={courses}
+          courses={getCourseGlimpseListProps(courses)}
           meta={{ count: 20, offset: 0, total_count: 45 }}
         />
       </IntlProvider>,

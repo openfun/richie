@@ -57,7 +57,7 @@ describe('CourseAddToWishlist', () => {
   });
 
   it('renders a log me link', async () => {
-    renderCourseAddToWishlist(wishlistCourse.course_code);
+    renderCourseAddToWishlist(wishlistCourse.course);
     // wait for JoanieSession initialization
     await waitFor(() => expect(screen.queryByText('loading...')).not.toBeInTheDocument());
 

@@ -10,16 +10,14 @@ import { DashboardItemEnrollment } from './DashboardItemEnrollment';
 
 describe('<DashboardItemEnrollment/>', () => {
   it('renders a opened enrollment', () => {
-    const enrollment: Enrollment = {
-      ...EnrollmentFactory().one(),
-      course_run: {
-        ...CourseRunWithCourseFactory().one(),
+    const enrollment: Enrollment = EnrollmentFactory({
+      course_run: CourseRunWithCourseFactory({
         enrollment_start: faker.date.past(0.25).toISOString(),
         enrollment_end: faker.date.future(0.5).toISOString(),
         start: faker.date.future(0.75).toISOString(),
         end: faker.date.future(1.0).toISOString(),
-      },
-    };
+      }).one(),
+    }).one();
     enrollment.course_run.state.priority = Priority.ONGOING_OPEN;
 
     render(
@@ -44,17 +42,15 @@ describe('<DashboardItemEnrollment/>', () => {
   });
 
   it('renders a closed enrollment', () => {
-    const enrollment: Enrollment = {
-      ...EnrollmentFactory().one(),
-      course_run: {
-        ...CourseRunWithCourseFactory().one(),
+    const enrollment: Enrollment = EnrollmentFactory({
+      course_run: CourseRunWithCourseFactory({
         enrollment_start: faker.date.past(1).toISOString(),
         enrollment_end: faker.date.past(0.75).toISOString(),
         start: faker.date.past(0.25).toISOString(),
         end: faker.date.past(0.5).toISOString(),
-        state: { ...CourseStateFactory().one(), priority: Priority.ARCHIVED_CLOSED },
-      },
-    };
+        state: CourseStateFactory({ priority: Priority.ARCHIVED_CLOSED }).one(),
+      }).one(),
+    }).one();
 
     render(
       <IntlProvider locale="en">
@@ -80,9 +76,7 @@ describe('<DashboardItemEnrollment/>', () => {
     const enrollment: Enrollment = {
       ...EnrollmentFactory().one(),
       is_active: false,
-      course_run: {
-        ...CourseRunWithCourseFactory().one(),
-      },
+      course_run: CourseRunWithCourseFactory().one(),
     };
 
     render(

@@ -19,24 +19,25 @@ import { DATETIME_FORMAT, DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   CertificateFactory,
-  CourseFactory,
+  CourseLightFactory,
   CourseRunFactory,
   EnrollmentFactory,
   OrderFactory,
   ProductFactory,
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
-import { Certificate, Order, OrderState, Product } from 'types/Joanie';
+import { Certificate, Order, OrderState, Product, CourseRun } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { resolveAll } from 'utils/resolveAll';
 import { confirm } from 'utils/indirection/window';
-import { CourseRun, Priority } from 'types';
+import { Priority } from 'types';
 import { sleep } from 'utils/sleep';
 import { noop } from 'utils';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { Deferred } from 'utils/test/deferred';
+import { FactoryConfig } from 'utils/test/factories/factories';
 import { LearnerDashboardPaths } from '../../../utils/learnerRouteMessages';
 import { DashboardTest } from '../../DashboardTest';
 import { DashboardItemOrder } from './DashboardItemOrder';
@@ -89,6 +90,7 @@ describe('<DashboardItemOrder/>', () => {
     jest.restoreAllMocks();
     jest.clearAllMocks();
     fetchMock.restore();
+    FactoryConfig.resetUniqueStore();
   });
 
   const mockProduct = (order: Order) => {
@@ -115,7 +117,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a pending order', async () => {
-    const order: Order = { ...OrderFactory().one(), state: OrderState.PENDING };
+    const order: Order = OrderFactory({ state: OrderState.PENDING }).one();
     order.target_courses = [];
     const product = mockProduct(order);
 
@@ -128,14 +130,15 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders an order with certificate', async () => {
-    const order: Order = { ...OrderFactory().one(), certificate: faker.datatype.uuid()() };
+    const order: Order = OrderFactory({ certificate: faker.datatype.uuid() }).one();
     order.target_courses = [];
     const product = mockProduct(order);
 
     const certificate: Certificate = {
-      ...CertificateFactory().one(),
-      id: order.certificate,
-      order: { ...order, course: CourseFactory().one() },
+      ...CertificateFactory({
+        id: order.certificate,
+        order: { ...order, course: CourseLightFactory().one() },
+      }).one(),
     };
 
     const deferred = new Deferred();
@@ -157,7 +160,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('does not render an order with certificate', async () => {
-    const order: Order = { ...OrderFactory().one(), certificate: faker.datatype.uuid()() };
+    const order: Order = OrderFactory({ certificate: faker.datatype.uuid() }).one();
     order.target_courses = [];
     const product = mockProduct(order);
 
@@ -202,18 +205,15 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a non-writable order with enrolled target course ', async () => {
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [TargetCourseFactory().one()],
-      enrollment: EnrollmentFactory().one(),
-    };
+    const order: Order = OrderFactory({
+      target_courses: TargetCourseFactory().many(1),
+    }).one();
+
     // Make target course enrolled.
-    order.enrollments = [
-      {
-        ...EnrollmentFactory().one(),
-        course_run: order.target_courses[0].course_runs[0],
-      },
-    ];
+    order.enrollments = EnrollmentFactory({
+      course_run: order.target_courses[0].course_runs[0],
+    }).many(1);
+
     order.enrollments[0].course_run.state.priority = Priority.ONGOING_OPEN;
 
     const product = mockProduct(order);
@@ -239,11 +239,11 @@ describe('<DashboardItemOrder/>', () => {
     });
   });
   it('renders a non-writable order with not enrolled target course', async () => {
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [TargetCourseFactory().one()],
-      enrollment: [],
-    };
+    const order: Order = OrderFactory({
+      target_courses: TargetCourseFactory().many(1),
+      enrollments: [],
+    }).one();
+
     const product = mockProduct(order);
 
     render(<DashboardItemOrder order={order} />, { wrapper });
@@ -278,10 +278,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a writable order with enrolled target course', async () => {
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [TargetCourseFactory().one()],
-    };
+    const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
     // Make target course enrolled.
     order.enrollments = [
       {
@@ -328,11 +325,10 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with not enrolled target course and enrolls it', async () => {
     // Initial order without enrollment.
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [TargetCourseFactory().one()],
+    const order: Order = OrderFactory({
+      target_courses: TargetCourseFactory().many(1),
       enrollments: [],
-    };
+    }).one();
     const product = mockProduct(order);
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', []);
     fetchMock.get(
@@ -345,12 +341,9 @@ describe('<DashboardItemOrder/>', () => {
     // invalided after the click on the Enroll button.
     const orderWithEnrollment = {
       ...order,
-      enrollments: [
-        {
-          ...EnrollmentFactory().one(),
-          course_run: order.target_courses[0].course_runs[0],
-        },
-      ],
+      enrollments: EnrollmentFactory({ course_run: order.target_courses[0].course_runs[0] }).many(
+        1,
+      ),
     };
 
     render(WrapperWithDashboard(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
@@ -410,11 +403,11 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with not enrolled target course and try to enroll it, but the API returns an error and it is shown', async () => {
     // Initial order without enrollment.
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [TargetCourseFactory().one()],
+    const order: Order = OrderFactory({
+      target_courses: TargetCourseFactory().many(1),
       enrollments: [],
-    };
+    }).one();
+
     const product = mockProduct(order);
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
@@ -458,17 +451,9 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with enrolled target course and changes the enrollment', async () => {
     // Initial order with first course run enrolled.
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [TargetCourseFactory().one()],
-    };
+    const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
-    order.enrollments = [
-      {
-        ...EnrollmentFactory().one(),
-        course_run: initialEnrolledCourseRun,
-      },
-    ];
+    order.enrollments = EnrollmentFactory({ course_run: initialEnrolledCourseRun }).many(1);
 
     // When the existing enrollment will be set as is_active: false.
     fetchMock.put(
@@ -489,12 +474,7 @@ describe('<DashboardItemOrder/>', () => {
     const newEnrolledCourseRun = order.target_courses[0].course_runs[1];
     const orderWithNewEnrollment = {
       ...order,
-      enrollments: [
-        {
-          ...EnrollmentFactory().one(),
-          course_run: newEnrolledCourseRun,
-        },
-      ],
+      enrollments: EnrollmentFactory({ course_run: newEnrolledCourseRun }).many(1),
     };
 
     render(WrapperWithDashboard(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
@@ -568,10 +548,8 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with enrolled target course and refuse the confirm message when enrolling', async () => {
     // Initial order without enrollment.
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [TargetCourseFactory().one()],
-    };
+    const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
+
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
     order.enrollments = [
       {
@@ -643,10 +621,8 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with non-enrolled (is_active=false) target course and changes the enrollment', async () => {
     // Initial order with first course run enrolled.
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [TargetCourseFactory().one()],
-    };
+    const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
+
     const courseRun = order.target_courses[0].course_runs[0];
     const enrollment = {
       ...EnrollmentFactory().one(),
@@ -728,25 +704,17 @@ describe('<DashboardItemOrder/>', () => {
     expect(queryByRole(runElement, 'button', { name: 'Enroll' })).toBeNull();
   });
   it('renders a writable order with not yet-opened course runs', async () => {
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [
-        {
-          ...TargetCourseFactory().one(),
-          course_runs: [
-            {
-              ...CourseRunFactory().generate(),
-              enrollment_start: faker.date.past(0.5)().toISOString(),
-              enrollment_end: faker.date.past(0.25)().toISOString(),
-              state: {
-                priority: Priority.FUTURE_NOT_YET_OPEN,
-              },
-            },
-          ],
-        },
-      ],
-    };
-
+    const order: Order = OrderFactory({
+      target_courses: TargetCourseFactory({
+        course_runs: CourseRunFactory({
+          enrollment_start: faker.date.past(0.5).toISOString(),
+          enrollment_end: faker.date.past(0.25).toISOString(),
+          state: {
+            priority: Priority.FUTURE_NOT_YET_OPEN,
+          },
+        }).many(1),
+      }).many(1),
+    }).one();
     const product = mockProduct(order);
 
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
@@ -769,25 +737,19 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a writable order with enrolled target course with finished enrollment phase and it is shown', async () => {
-    const courseRun: CourseRun = {
-      ...CourseRunFactory().generate(),
-      enrollment_end: faker.date.past(0.5)().toISOString(),
-      enrollment_start: faker.date.past(1)().toISOString(),
+    const courseRun: CourseRun = CourseRunFactory({
+      enrollment_end: faker.date.past(0.5).toISOString(),
+      enrollment_start: faker.date.past(1).toISOString(),
       state: {
         priority: Priority.FUTURE_CLOSED,
       },
-    };
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [{ ...TargetCourseFactory().one(), course_runs: [courseRun] }],
-    };
+    }).one();
+    const order: Order = OrderFactory({
+      target_courses: TargetCourseFactory({ course_runs: [courseRun] }).many(1),
+    }).one();
+
     // Make target course enrolled.
-    order.enrollments = [
-      {
-        ...EnrollmentFactory().one(),
-        course_run: courseRun,
-      },
-    ];
+    order.enrollments = EnrollmentFactory({ course_run: courseRun }).many(1);
 
     const product = mockProduct(order);
 
@@ -806,19 +768,18 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a writable order with non enrolled target course, course run with enrollment phase finished is not shown ', async () => {
-    const courseRun: CourseRun = {
-      ...CourseRunFactory().generate(),
-      enrollment_end: faker.date.past(0.5)().toISOString(),
-      enrollment_start: faker.date.past(1)().toISOString(),
+    const courseRun: CourseRun = CourseRunFactory({
+      enrollment_end: faker.date.past(0.5).toISOString(),
+      enrollment_start: faker.date.past(1).toISOString(),
       state: {
         priority: Priority.FUTURE_CLOSED,
       },
-    };
-    const order: Order = {
-      ...OrderFactory().one(),
-      target_courses: [{ ...TargetCourseFactory().one(), course_runs: [courseRun] }],
+    }).one();
+
+    const order: Order = OrderFactory({
+      target_courses: TargetCourseFactory({ course_runs: [courseRun] }).many(1),
       enrollments: [],
-    };
+    }).one();
 
     const product = mockProduct(order);
 

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Replace helix factories by homemade engine using typescript.
+
 ## [2.22.0] - 2023-04-20
 
 ### Added

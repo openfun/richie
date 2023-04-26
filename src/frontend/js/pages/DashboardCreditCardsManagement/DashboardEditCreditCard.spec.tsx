@@ -112,8 +112,8 @@ describe('<DahsboardEditCreditCard/>', () => {
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
     // The API is called with correct body.
-    const expectedBody = { ...creditCard, title: creditCardUpdated.title };
-    delete expectedBody.id;
+    const { id, ...creditCardResponse } = creditCard;
+    const expectedBody = { ...creditCardResponse, title: creditCardUpdated.title };
     expectFetchCall(
       updateUrl,
       { method: 'put' },
@@ -204,8 +204,8 @@ describe('<DahsboardEditCreditCard/>', () => {
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
     // The API is called with correct body.
-    const expectedBody = { ...creditCard, is_main: true };
-    delete expectedBody.id;
+    const { id, ...creditCardResponse } = creditCard;
+    const expectedBody = { ...creditCardResponse, is_main: true };
     expectFetchCall(
       updateUrl,
       { method: 'put' },
@@ -224,7 +224,7 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     // Assert that `creditCard` is main and the first of the list.
     getByText(creditCardsContainers[0], 'Default credit card');
-    getByText(creditCardsContainers[0], creditCard.title);
+    getByText(creditCardsContainers[0], creditCard.title!);
 
     // All other credit cards container are not displayed as main.
     creditCardsContainers

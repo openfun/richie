@@ -1,10 +1,11 @@
 import fetchMock from 'fetch-mock';
-import { createSpec, faker } from '@helpscout/helix';
+import { faker } from '@faker-js/faker';
 import { PropsWithChildren } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import { act, fireEvent, renderHook, screen, waitFor } from '@testing-library/react';
 import queryString from 'query-string';
+import { factory } from 'utils/test/factories/factories';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { Deferred } from 'utils/test/deferred';
@@ -28,10 +29,10 @@ interface TodoQuery extends ResourcesQuery {
   name?: string;
 }
 
-export const TodoFactory = createSpec({
+export const TodoFactory = factory<Todo>(() => ({
   id: faker.datatype.uuid(),
-  name: faker.random.words(1, 3),
-});
+  name: faker.random.words(Math.ceil(Math.random() * 3)),
+}));
 
 const API = {
   todos: {

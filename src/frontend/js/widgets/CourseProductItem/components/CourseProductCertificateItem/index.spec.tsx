@@ -7,6 +7,7 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { CertificationDefinitionFactory, OrderLiteFactory } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CertificateDefinition, OrderLite } from 'types/Joanie';
+import { FactoryConfig } from 'utils/test/factories/factories';
 import CertificateItem from '.';
 
 jest.mock('utils/errors/handle');
@@ -15,7 +16,7 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
     joanie_backend: { endpoint: 'https://joanie.test' },
-  }).generate(),
+  }).one(),
 }));
 
 describe('CourseProductCertificateItem', () => {
@@ -36,7 +37,7 @@ describe('CourseProductCertificateItem', () => {
   afterEach(() => {
     fetchMock.restore();
     jest.resetAllMocks();
-    CertificationDefinitionFactory.afterGenerate((s: CertificateDefinition) => s);
+    FactoryConfig.resetUniqueStore();
   });
 
   it('displays certificate information', () => {
@@ -56,11 +57,9 @@ describe('CourseProductCertificateItem', () => {
   });
 
   it('displays a default description when certificate description is not defined ', () => {
-    const certificateDefinition: CertificateDefinition =
-      CertificationDefinitionFactory.afterGenerate((c: CertificateDefinition) => ({
-        ...c,
-        description: '',
-      })).generate();
+    const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory({
+      description: '',
+    }).one();
 
     render(
       <Wrapper>
@@ -75,9 +74,7 @@ describe('CourseProductCertificateItem', () => {
 
   it('displays a download button when order contains a certificate', async () => {
     const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory().one();
-    const order: OrderLite = OrderLiteFactory.extend({
-      certificate: faker.datatype.uuid(),
-    }).generate();
+    const order: OrderLite = OrderLiteFactory({ certificate: faker.datatype.uuid() }).one();
 
     render(
       <Wrapper>

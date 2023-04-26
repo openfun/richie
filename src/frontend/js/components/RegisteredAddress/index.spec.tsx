@@ -12,7 +12,6 @@ describe('RegisteredAddress', () => {
   );
 
   afterEach(() => {
-    AddressFactory.afterGenerate((a: Address) => a);
     jest.resetAllMocks();
   });
 
@@ -88,10 +87,7 @@ describe('RegisteredAddress', () => {
   });
 
   it('renders a disabled button to delete the current address if this is the main one', () => {
-    const address: Address = AddressFactory.afterGenerate((a: Address) => ({
-      ...a,
-      is_main: true,
-    })).generate();
+    const address: Address = AddressFactory({ is_main: true }).one();
     const mockRemove = jest.fn();
 
     const { container } = render(
