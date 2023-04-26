@@ -1,4 +1,4 @@
-import type { Priority, StateCTA, StateText } from 'types';
+import type { CourseState } from 'types';
 import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
@@ -29,12 +29,7 @@ export interface CourseRun {
   id: string;
   resource_link: string;
   start: string;
-  state: {
-    priority: Priority;
-    datetime: Date;
-    call_to_action: StateCTA;
-    text: StateText;
-  };
+  state: CourseState;
   title: string;
   course?: CourseLight;
 }
@@ -47,7 +42,7 @@ export interface CourseFilters extends ResourcesQuery {
 
 // - Certificate
 export interface CertificateDefinition {
-  id: number;
+  id: string;
   title: string;
   description: string;
 }
@@ -60,7 +55,7 @@ export interface Certificate {
 }
 
 // - Organization
-export interface Organization {
+export interface OrganizationLight {
   code: string;
   title: string;
 }
@@ -84,11 +79,16 @@ export interface Product {
   orders: Order['id'][];
 }
 
+export interface CourseProduct extends Product {
+  order: Nullable<OrderLite>;
+  target_courses: TargetCourse[];
+}
+
 // - Course
 export interface AbstractCourse {
   id: string;
   code: string;
-  organizations: Organization[];
+  organizations: OrganizationLight[];
   title: string;
   course_runs: CourseRun[];
 }
@@ -109,11 +109,6 @@ export type OrderLite = Pick<
   | 'main_proforma_invoice'
   | 'certificate'
 >;
-
-export interface CourseProduct extends Product {
-  order: Nullable<OrderLite>;
-  target_courses: TargetCourse[];
-}
 
 export interface CourseLight extends AbstractCourse {
   products: CourseProduct[];
