@@ -71,7 +71,7 @@ describe('<DahsboardEditCreditCard/>', () => {
       );
     });
 
-    await expectBreadcrumbsToEqualParts([
+    expectBreadcrumbsToEqualParts([
       'Back',
       'My preferences',
       'Edit credit card "' + creditCard.title + '"',
