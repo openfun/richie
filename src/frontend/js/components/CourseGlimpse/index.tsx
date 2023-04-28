@@ -150,4 +150,4 @@ const areEqual: (
   prevProps.context === newProps.context && prevProps.course.id === newProps.course.id;
 
 export const CourseGlimpse = memo(CourseGlimpseBase, areEqual);
-export { getCourseGlimpsProps } from './utils';
+export { getCourseGlimpseProps } from './utils';
