@@ -15,7 +15,6 @@ import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { CertificateFactory } from 'utils/test/factories/joanie';
-import { FactoryConfig } from 'utils/test/factories/factories';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -52,7 +51,6 @@ describe('<DashboardCertificates/>', () => {
   afterEach(() => {
     jest.clearAllMocks();
     fetchMock.restore();
-    FactoryConfig.resetUniqueStore();
   });
 
   it('renders an empty list of certificates', async () => {

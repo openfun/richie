@@ -1,6 +1,7 @@
 // Extend jest matchers with jest-dom's
 import '@testing-library/jest-dom/extend-expect';
 import { Request, Response } from 'node-fetch';
+import { FactoryConfig } from 'utils/test/factories/factories';
 
 // Mock Request & Reponse objects
 global.Request = Request as any;
@@ -21,4 +22,8 @@ RESET_MODULE_EXCEPTIONS.forEach((moduleName) => {
     }
     return mockActualRegistry[moduleName];
   });
+});
+
+afterEach(() => {
+  FactoryConfig.resetUniqueStore();
 });

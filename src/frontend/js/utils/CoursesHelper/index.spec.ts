@@ -1,13 +1,8 @@
 import { CoursesHelper } from 'utils/CoursesHelper/index';
 import { Order } from 'types/Joanie';
 import { EnrollmentFactory, OrderFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
-import { FactoryConfig } from 'utils/test/factories/factories';
 
 describe('CourseHelper', () => {
-  afterEach(() => {
-    FactoryConfig.resetUniqueStore();
-  });
-
   it('should find an active course enrollment in order', () => {
     const order: Order = {
       ...OrderFactory().one(),
