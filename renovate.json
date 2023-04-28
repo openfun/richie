@@ -11,9 +11,7 @@
         "npm"
       ],
       "matchPackageNames": [
-        "@types/faker",
         "bootstrap",
-        "faker",
         "node-fetch",
         "typescript"
       ]
