@@ -1,7 +1,7 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import queryString from 'query-string';
-import { CourseGlimpseList, getCourseGlimpsListProps } from 'components/CourseGlimpseList';
+import { CourseGlimpseList, getCourseGlimpseListProps } from 'components/CourseGlimpseList';
 import { Spinner } from 'components/Spinner';
 import { useCourses, TeacherCourseSearchFilters } from 'hooks/useCourses';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
@@ -56,7 +56,7 @@ const DashboardCourseList = ({ titleTranslated, filters }: DashboardCourseListPr
       {!fetching &&
         (courses.length > 0 ? (
           <CourseGlimpseList
-            courses={getCourseGlimpsListProps(courses)}
+            courses={getCourseGlimpseListProps(courses)}
             context={context}
             className="dashboard__course-glimpse-list"
           />

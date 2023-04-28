@@ -1,9 +1,9 @@
 import { CourseListItemMock as JoanieCourse } from 'api/mocks/joanie/courses';
 import { Course as RichieCourse } from 'types/Course';
-import { CourseGlimpseCourse, getCourseGlimpsProps } from 'components/CourseGlimpse';
+import { CourseGlimpseCourse, getCourseGlimpseProps } from 'components/CourseGlimpse';
 
-export const getCourseGlimpsListProps = (
+export const getCourseGlimpseListProps = (
   courses: JoanieCourse[] | RichieCourse[],
 ): CourseGlimpseCourse[] => {
-  return courses.map((course) => getCourseGlimpsProps(course));
+  return courses.map((course) => getCourseGlimpseProps(course));
 };

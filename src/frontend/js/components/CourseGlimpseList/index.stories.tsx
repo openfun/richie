@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { RichieContextFactory, CourseLightFactory } from 'utils/test/factories/richie';
-import { CourseGlimpseList } from '.';
+import { CourseGlimpseList, getCourseGlimpseListProps } from '.';
 
 export default {
   component: CourseGlimpseList,
@@ -11,7 +11,7 @@ type Story = StoryObj<typeof CourseGlimpseList>;
 export const RichieCourseList: Story = {
   args: {
     context: RichieContextFactory().generate(),
-    courses: CourseLightFactory.generate(10),
+    courses: getCourseGlimpseListProps(CourseLightFactory.generate(10)),
     meta: {
       count: 10,
       offset: 0,

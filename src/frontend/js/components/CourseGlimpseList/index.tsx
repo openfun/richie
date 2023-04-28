@@ -75,4 +75,4 @@ export const CourseGlimpseList = ({
   );
 };
 
-export { getCourseGlimpsListProps } from './utils';
+export { getCourseGlimpseListProps } from './utils';

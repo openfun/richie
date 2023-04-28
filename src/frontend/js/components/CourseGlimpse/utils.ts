@@ -36,7 +36,7 @@ const getCourseGlimpsePropsFromJoanieCourse = (course: JoanieCourse): CourseGlim
   state: course.state,
 });
 
-export const getCourseGlimpsProps = (course: JoanieCourse | RichieCourse): CourseGlimpseCourse => {
+export const getCourseGlimpseProps = (course: JoanieCourse | RichieCourse): CourseGlimpseCourse => {
   return isRichieCourse(course)
     ? getCourseGlimpsePropsFromRichieCourse(course)
     : getCourseGlimpsePropsFromJoanieCourse(course);
