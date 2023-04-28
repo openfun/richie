@@ -37,7 +37,6 @@ import { noop } from 'utils';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { Deferred } from 'utils/test/deferred';
-import { FactoryConfig } from 'utils/test/factories/factories';
 import { LearnerDashboardPaths } from '../../../utils/learnerRouteMessages';
 import { DashboardTest } from '../../DashboardTest';
 import { DashboardItemOrder } from './DashboardItemOrder';
@@ -90,7 +89,6 @@ describe('<DashboardItemOrder/>', () => {
     jest.restoreAllMocks();
     jest.clearAllMocks();
     fetchMock.restore();
-    FactoryConfig.resetUniqueStore();
   });
 
   const mockProduct = (order: Order) => {

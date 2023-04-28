@@ -16,7 +16,6 @@ import { expectBannerError } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
 import { Data, DataType } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { noop } from 'utils';
-import { FactoryConfig } from 'utils/test/factories/factories';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -59,7 +58,6 @@ describe('<DashboardCourses/>', () => {
   afterEach(() => {
     jest.clearAllMocks();
     fetchMock.restore();
-    FactoryConfig.resetUniqueStore();
   });
 
   const Wrapper = ({ client }: { client?: QueryClient }) => {

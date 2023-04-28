@@ -7,7 +7,6 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { CertificationDefinitionFactory, OrderLiteFactory } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CertificateDefinition, OrderLite } from 'types/Joanie';
-import { FactoryConfig } from 'utils/test/factories/factories';
 import CertificateItem from '.';
 
 jest.mock('utils/errors/handle');
@@ -37,7 +36,6 @@ describe('CourseProductCertificateItem', () => {
   afterEach(() => {
     fetchMock.restore();
     jest.resetAllMocks();
-    FactoryConfig.resetUniqueStore();
   });
 
   it('displays certificate information', () => {
