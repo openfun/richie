@@ -52,7 +52,6 @@ describe('<DashboardCourses/>', () => {
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
   });
 
   afterEach(() => {

@@ -58,9 +58,13 @@ describe('<Dashboard />', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=10&was_created_by_order=false',
-      [],
+      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=50&was_created_by_order=false',
+      { count: 0, results: [] },
     );
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50', {
+      count: 0,
+      results: [],
+    });
   });
 
   afterEach(() => {
