@@ -30,6 +30,12 @@ aliases:
         - v8-front-dependencies-{{ checksum "~/fun/src/frontend/yarn.lock" }}
         - v8-front-dependencies-
 
+  - &install-libcairo2-dev
+    run:
+      name: Install cairo package (required by easy_thumbnails[svg])
+      command: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo2-dev
 jobs:
   # Git jobs
   # Check that the git history is clean and complies with our expectations
@@ -186,6 +192,7 @@ jobs:
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
+      - *install-libcairo2-dev
       - run:
           name: Install development dependencies
           command: pip install --user .[dev,sandbox]
@@ -328,6 +335,7 @@ jobs:
       # Attach the frontend production build
       - attach_workspace:
           at: ~/fun
+      - *install-libcairo2-dev
       # While running tests, we need to make the /data directory writable for
       # the circleci user
       - run:
@@ -420,6 +428,7 @@ jobs:
       # Attach the frontend production build
       - attach_workspace:
           at: ~/fun
+      - *install-libcairo2-dev
       # While running tests, we need to make the /data directory writable for
       # the circleci user
       - run:
@@ -506,6 +515,7 @@ jobs:
       # Attach the frontend production build
       - attach_workspace:
           at: ~/fun
+      - *install-libcairo2-dev
       # While running tests, we need to make the /data directory writable for
       # the circleci user
       - run:
@@ -586,6 +596,7 @@ jobs:
       # Attach the frontend production build
       - attach_workspace:
           at: ~/fun
+      - *install-libcairo2-dev
       # While running tests, we need to make the /data directory writable for
       # the circleci user
       - run:
