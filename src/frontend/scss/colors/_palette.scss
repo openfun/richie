@@ -4,29 +4,5 @@
 
 // Named colors
 // ---------
-$palette: (
-  'black': map-get($colors, 'black'),
-  'dark-grey': map-get($colors, 'dark-grey'),
-  'charcoal': map-get($colors, 'charcoal'),
-  'slate-grey': map-get($colors, 'slate-grey'),
-  'battleship-grey': map-get($colors, 'battleship-grey'),
-  'light-grey': map-get($colors, 'light-grey'),
-  'silver': map-get($colors, 'silver'),
-  'azure2': map-get($colors, 'azure2'),
-  'smoke': map-get($colors, 'smoke'),
-  'white': map-get($colors, 'white'),
-  'denim': map-get($colors, 'denim'),
-  'firebrick6': map-get($colors, 'firebrick6'),
-  'purplish-grey': map-get($colors, 'purplish-grey'),
-  'grey32': map-get($colors, 'grey32'),
-  'grey59': map-get($colors, 'grey59'),
-  'grey87': map-get($colors, 'grey87'),
-  'indianred3': map-get($colors, 'indianred3'),
-  'midnightblue': map-get($colors, 'midnightblue'),
-  'mantis': map-get($colors, 'mantis'),
-) !default;
-
-// On a Richie child project you can easily change a specific value using:
-// $palette: recursive-map-merge($palette, (
-//   'firebrick6': #123,
-// ));
+@warn "[DEPRECATION] - $palette will be removed on the next major release. Use $colors instead.";
+$palette: $colors;
