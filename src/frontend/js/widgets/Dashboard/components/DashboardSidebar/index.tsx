@@ -38,7 +38,7 @@ export const DashboardSidebar = ({
   const classes = ['dashboard-sidebar'];
 
   const selectedLink = useMemo(
-    () => menuLinks.find((link) => matchPath({ path: link.to, end: false }, location.pathname))?.to,
+    () => menuLinks.find((link) => matchPath({ path: link.to, end: true }, location.pathname))?.to,
     [location],
   );
 
@@ -83,7 +83,9 @@ export const DashboardSidebar = ({
               key={link.to}
               className={selectedLink && selectedLink === link.to ? 'active' : undefined}
             >
-              <NavLink to={link.to}>{link.label}</NavLink>
+              <NavLink to={link.to} end>
+                {link.label}
+              </NavLink>
             </li>
           ))}
         </ul>
