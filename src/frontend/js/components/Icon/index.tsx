@@ -18,11 +18,16 @@ type Props = PropsWithTestId<{
 
 // icons from src/richie/apps/core/templates/richie/icons.html
 export enum IconTypeEnum {
+  ARCHIVE = 'icon-archive',
   ARROW_RIGHT = 'icon-arrow-right',
+  ARROW_RIGHT_ROUNDED = 'icon-arrow-right-rounded',
   BARCODE = 'icon-barcode',
+  CAL = 'icon-cal',
   CALENDAR = 'icon-calendar',
+  CAMERA = 'icon-camera',
   CERTIFICATE = 'icon-certificate',
   CHECK = 'icon-check',
+  CHECK_ROUNDED = 'icon-check-rounded',
   CHECKLIST = 'icon-checklist',
   CHEVRON_DOWN = 'icon-chevron-down',
   CHEVRON_DOWN_OUTLINE = 'icon-chevron-down-outline',
@@ -39,8 +44,10 @@ export enum IconTypeEnum {
   INFO_ROUNDED = 'icon-info-rounded',
   LINKEDIN = 'icon-linkedin',
   LOGIN = 'icon-login',
+  LOGOUT_SQUARE = 'icon-logout-square',
   MAGNIFYING_GLASS = 'icon-magnifying-glass',
   MENU = 'icon-menu',
+  MORE = 'icon-more',
   ORG = 'icon-org',
   PACE = 'icon-pace',
   PLUS = 'icon-plus',
@@ -51,6 +58,7 @@ export enum IconTypeEnum {
   STOPWATCH = 'icon-stopwatch',
   THREE_VERTICAL_DOTS = 'icon-three-vertical-dots',
   TWITTER = 'icon-twitter',
+  UNIVERSITY = 'icon-univerity',
   WARNING = 'icon-warning',
 }
 
