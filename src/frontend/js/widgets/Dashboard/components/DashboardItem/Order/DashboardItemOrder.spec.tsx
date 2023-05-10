@@ -25,7 +25,7 @@ import {
   OrderFactory,
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
-import { Certificate, CourseRun, Order, OrderState } from 'types/Joanie';
+import { Certificate, CourseLight, CourseRun, Order, OrderState } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { resolveAll } from 'utils/resolveAll';
@@ -113,7 +113,7 @@ describe('<DashboardItemOrder/>', () => {
     render(<DashboardItemOrder order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('Pending');
     await screen.findByRole('link', { name: 'View details' });
   });
@@ -139,7 +139,7 @@ describe('<DashboardItemOrder/>', () => {
     render(<DashboardItemOrder order={order} showCertificate={true} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('Completed');
     await screen.findByRole('link', { name: 'View details' });
     await expectSpinner('Loading certificate...');
@@ -156,7 +156,7 @@ describe('<DashboardItemOrder/>', () => {
     render(<DashboardItemOrder order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('Completed');
     await screen.findByRole('link', { name: 'View details' });
     await expectNoSpinner('Loading certificate ...');
@@ -174,7 +174,7 @@ describe('<DashboardItemOrder/>', () => {
     render(<DashboardItemOrder order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('On going');
     await screen.findByRole('link', { name: 'View details' });
   });
@@ -186,7 +186,7 @@ describe('<DashboardItemOrder/>', () => {
     render(<DashboardItemOrder order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('On going');
     await resolveAll(order.target_courses, async (course) => {
       await screen.findByRole('heading', { level: 6, name: course.title });
@@ -210,7 +210,7 @@ describe('<DashboardItemOrder/>', () => {
     render(<DashboardItemOrder order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('On going');
     await resolveAll(order.target_courses, async (course) => {
       await screen.findByRole('heading', { level: 6, name: course.title });
@@ -238,7 +238,7 @@ describe('<DashboardItemOrder/>', () => {
     render(<DashboardItemOrder order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('On going');
     await resolveAll(order.target_courses, async (course) => {
       await screen.findByRole('heading', { level: 6, name: course.title });
@@ -261,7 +261,7 @@ describe('<DashboardItemOrder/>', () => {
     });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('On going');
     expect(screen.queryByRole('link', { name: 'View details' })).toBeNull();
   });
@@ -283,7 +283,7 @@ describe('<DashboardItemOrder/>', () => {
     });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('On going');
     await resolveAll(order.target_courses, async (course) => {
       await screen.findByRole('heading', { level: 6, name: course.title });
@@ -749,7 +749,7 @@ describe('<DashboardItemOrder/>', () => {
     });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('On going');
 
     // The course run should be shown as enrolled even if is it past.
@@ -779,7 +779,7 @@ describe('<DashboardItemOrder/>', () => {
     });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
-    await screen.findByText('Ref. ' + order.course!);
+    await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('On going');
 
     // The course run should not be shown.

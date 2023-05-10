@@ -4,6 +4,7 @@ import { useOrder } from 'hooks/useOrders';
 import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
+import { CourseLight } from 'types/Joanie';
 import { DashboardItemOrder } from '../DashboardItem/Order/DashboardItemOrder';
 
 const messages = defineMessages({
@@ -17,7 +18,8 @@ const messages = defineMessages({
 export const DashboardOrderLoader = () => {
   const params = useParams<{ orderId: string }>();
   const order = useOrder(params.orderId);
-  const product = useProduct(order.item?.product, { course: order.item?.course });
+  const course = order.item?.course as CourseLight;
+  const product = useProduct(order.item?.product, { course: course?.code });
   const fetching = order.states.fetching || product.states.fetching;
 
   return (
