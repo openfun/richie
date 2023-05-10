@@ -36,10 +36,10 @@ const getCourseGlimpsePropsFromJoanieCourse = (
       : null,
     title: course.title,
     organization: {
-      title: course.organization.title,
-      image: course.organization.logo
+      title: course.organizations[0].title,
+      image: course.organizations[0].logo
         ? {
-            src: course.organization.logo.url,
+            src: course.organizations[0].logo.url,
           }
         : null,
     },

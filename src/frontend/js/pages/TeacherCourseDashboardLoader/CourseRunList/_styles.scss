@@ -1,0 +1,43 @@
+.teacher-dashboard-course-run-list {
+  margin-left: rem-calc(32px);
+  .c__datagrid {
+    > table tbody tr {
+      border-right: none;
+      border-left: none;
+    }
+    td {
+      height: rem-calc(60px);
+    }
+  }
+
+  &__cell {
+    color: r-color(secondary-800);
+    font-size: rem-calc(16px);
+    &.variant__small {
+      font-size: rem-calc(11px);
+    }
+    display: flex;
+    align-items: center;
+    &.variant__justify-right {
+      justify-content: right;
+    }
+    &__icon {
+      height: rem-calc(16px);
+      width: rem-calc(16px);
+      margin-right: rem-calc(8px);
+    }
+
+    &__content {
+      line-height: rem-calc(18px);
+    }
+
+    &.variant__content-ellipsis {
+      flex-wrap: nowrap;
+      .teacher-dashboard-course-run-list__cell__content {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}

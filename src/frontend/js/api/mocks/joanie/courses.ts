@@ -16,10 +16,9 @@ import { OrganizationMock } from './organizations';
 export interface CourseListItemMock extends Resource {
   id: string;
   title: string;
-  absolute_url?: string;
   code: string;
-  organization: OrganizationMock;
   course_runs: CourseRun['id'][];
+  organizations: OrganizationMock[];
   cover: Nullable<{
     filename: string;
     url: string;
@@ -39,10 +38,8 @@ export interface CourseMock {
     height: number;
     width: number;
   }>;
-  organization: OrganizationMock;
   organizations: OrganizationMock[];
   selling_organizations: OrganizationMock[];
-  absolute_url?: string;
   products: Product[];
   course_runs: CourseRun[];
   state: CourseState;
@@ -57,12 +54,14 @@ export const listCourses = rest.get<CourseListItemMock[]>(
     const organizationCover001 = require('./assets/organization_cover_001.jpg');
     const courseCover001 = require('./assets/course_cover_001.jpg');
     const courses: CourseListItemMock[] = CourseListItemFactory({
-      organization: {
-        title: 'Awesome university',
-        logo: {
-          url: organizationCover001.default,
+      organizations: [
+        {
+          title: 'Awesome university',
+          logo: {
+            url: organizationCover001.default,
+          },
         },
-      },
+      ],
       cover: { url: courseCover001.default },
     }).many(perPage);
 
@@ -76,7 +75,6 @@ export const getCourse = rest.get<Nullable<CourseMock>>(
     const courseCover001 = require('./assets/course_cover_001.jpg');
     const courseCode = req.params.courseCode as string;
     const course: CourseMock = CourseFactory({
-      absolute_url: 'http://demo.openedx.url/courseMock',
       code: courseCode,
       cover: { url: courseCover001.default },
       course_runs: [

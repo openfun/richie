@@ -1,4 +1,5 @@
 import { Outlet, useMatches } from 'react-router-dom';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { DashboardRouteHandle } from 'widgets/Dashboard/hooks/useDashboardRouter';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 
@@ -8,11 +9,15 @@ export const DashboardLayoutRoute = () => {
     const handle = match.handle || {};
     return !!(handle as DashboardRouteHandle).renderLayout;
   });
-  return renderOutletOnly ? (
-    <Outlet />
-  ) : (
-    <DashboardLayout>
-      <Outlet />
-    </DashboardLayout>
+  return (
+    <CunninghamProvider>
+      {renderOutletOnly ? (
+        <Outlet />
+      ) : (
+        <DashboardLayout>
+          <Outlet />
+        </DashboardLayout>
+      )}
+    </CunninghamProvider>
   );
 };
