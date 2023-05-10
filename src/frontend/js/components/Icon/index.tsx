@@ -3,7 +3,7 @@ import { PropsWithTestId } from 'types/utils';
 export type IconSize = 'small' | 'medium' | 'large';
 
 type Props = PropsWithTestId<{
-  name: IconTypeEnum | IconType;
+  name: IconTypeEnum;
   /**
    * Optional title, will be announced by screen readers
    * and set as `title` attribute for mouse users
@@ -15,8 +15,6 @@ type Props = PropsWithTestId<{
   className?: string;
   size?: IconSize;
 }>;
-
-export type IconType = `${IconTypeEnum}`;
 
 // icons from src/richie/apps/core/templates/richie/icons.html
 export enum IconTypeEnum {

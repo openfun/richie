@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
 import { Spinner } from 'components/Spinner';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { useSession } from 'contexts/SessionContext';
 import { CommonDataProps } from 'types/commonDataProps';
 import { UserMenu } from './components/UserMenu';
@@ -86,7 +86,7 @@ const UserLogin = ({ profileUrls = {} }: UserLoginProps) => {
             <FormattedMessage {...messages.signUp} />
           </button>
           <button onClick={login} className="user-login__btn user-login__btn--log-in">
-            <Icon name="icon-login" size="small" />
+            <Icon name={IconTypeEnum.LOGIN} size="small" />
             <FormattedMessage {...messages.logIn} />
           </button>
         </Fragment>

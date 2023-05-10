@@ -7,6 +7,7 @@ import {
   renderHook,
 } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
+import { IconTypeEnum } from 'components/Icon';
 import { type Manifest, useStepManager } from '../../hooks/useStepManager';
 import { StepBreadcrumb } from '.';
 
@@ -84,12 +85,12 @@ describe('StepBreadcrumb', () => {
       steps: {
         step0: {
           label: '0. Step',
-          icon: 'icon-arrow-right',
+          icon: IconTypeEnum.ARROW_RIGHT,
           next: 'step1',
         },
         step1: {
           label: '1. Step',
-          icon: 'icon-arrow-right',
+          icon: IconTypeEnum.ARROW_RIGHT,
           next: null,
         },
       },

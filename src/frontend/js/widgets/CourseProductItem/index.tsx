@@ -5,7 +5,7 @@ import { OrderState } from 'types/Joanie';
 import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
 import { useOrders } from 'hooks/useOrders';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import CertificateItem from './components/CourseProductCertificateItem';
 import CourseRunItem from './components/CourseRunItem';
 import PurchaseButton from './components/PurchaseButton';
@@ -81,7 +81,7 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
         )}
         {hasError && (
           <p className="product-widget__content">
-            <Icon name="icon-warning" size="small" />
+            <Icon name={IconTypeEnum.WARNING} size="small" />
             {productQuery.states.error}
           </p>
         )}

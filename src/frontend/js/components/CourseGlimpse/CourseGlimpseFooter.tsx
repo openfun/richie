@@ -1,6 +1,6 @@
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { CommonDataProps } from 'types/commonDataProps';
 import { CourseState } from 'types';
 
@@ -23,7 +23,7 @@ export const CourseGlimpseFooter: React.FC<{ courseState: CourseState } & Common
   return (
     <div className="course-glimpse-footer">
       <div className="course-glimpse-footer__date">
-        <Icon name="icon-calendar" title={intl.formatMessage(messages.dateIconAlt)} />
+        <Icon name={IconTypeEnum.CALENDAR} title={intl.formatMessage(messages.dateIconAlt)} />
         {courseState.text.charAt(0).toUpperCase() +
           courseState.text.substr(1) +
           (courseState.datetime

@@ -1,6 +1,6 @@
 import { Children, type FormEventHandler, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { Spinner } from 'components/Spinner';
 import { useEnrollments } from 'hooks/useEnrollments';
 import { Priority } from 'types';
@@ -124,7 +124,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
   if (courseRuns.length === 0) {
     return (
       <p className="course-runs-not-available product-widget__item-description">
-        <Icon name="icon-warning" size="small" />
+        <Icon name={IconTypeEnum.WARNING} size="small" />
         <FormattedMessage {...messages.noCourseRunAvailable} />
       </p>
     );

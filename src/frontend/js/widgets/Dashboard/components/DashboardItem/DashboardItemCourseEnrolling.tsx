@@ -7,7 +7,7 @@ import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import useDateFormat, { DATETIME_FORMAT } from 'hooks/useDateFormat';
 import { Button } from 'components/Button';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { RouterButton } from '../RouterButton';
 import { useEnroll } from '../../hooks/useEnroll';
 
@@ -142,7 +142,7 @@ const DashboardItemCourseEnrollingRuns = ({
       {error && <Banner message={error} type={BannerType.ERROR} />}
       {datas.length === 0 && (
         <div className="dashboard-item__course-enrolling__no-runs">
-          <Icon name="icon-warning" size="small" />
+          <Icon name={IconTypeEnum.WARNING} size="small" />
           <FormattedMessage {...messages.noCourseRunAvailable} />
         </div>
       )}
@@ -212,7 +212,7 @@ const DashboardItemCourseEnrollingRun = ({
         {selected ? (
           <div className="dashboard-item__course-enrolling__run__enrolled">
             <FormattedMessage {...messages.enrolled} />
-            <Icon name="icon-check" size="small" />
+            <Icon name={IconTypeEnum.CHECK} size="small" />
           </div>
         ) : (
           <Button disabled={!isOpenedForEnrollment} color="outline-primary" onClick={enroll}>
@@ -228,7 +228,7 @@ const NotEnrolled = ({ icon, notEnrolledUrl }: { icon: boolean; notEnrolledUrl: 
   return (
     <>
       <div className="dashboard-item__block__status">
-        {icon && <Icon name="icon-school" />}
+        {icon && <Icon name={IconTypeEnum.SCHOOL} />}
         <FormattedMessage {...messages.notEnrolled} />
       </div>
       <RouterButton
@@ -259,7 +259,7 @@ export const Enrolled = ({
   return (
     <>
       <div className="dashboard-item__block__status">
-        {icon && <Icon name="icon-school" />}
+        {icon && <Icon name={IconTypeEnum.SCHOOL} />}
         <EnrolledStatus enrollment={enrollment} />
       </div>
       {SHOW_ACCESS_COURSE_PRIORITIES.includes(enrollment.course_run.state.priority) && (
