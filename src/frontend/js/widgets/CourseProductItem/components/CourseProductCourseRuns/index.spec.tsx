@@ -14,7 +14,7 @@ import {
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import type { CourseLight, CourseRun, Enrollment, OrderLite } from 'types/Joanie';
 import { Deferred } from 'utils/test/deferred';
-import { Priority } from 'types';
+import { CourseStateTextEnum, Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseProductProvider } from '../../contexts/CourseProductContext';
 import { CourseRunList, EnrollableCourseRunList, EnrolledCourseRun } from '.';
@@ -342,7 +342,7 @@ describe('CourseProductCourseRuns', () => {
           ]),
           datetime: faker.date.future(0.25).toISOString(),
           call_to_action: undefined,
-          text: 'starting on',
+          text: CourseStateTextEnum.STARTING_ON,
         },
       }).one();
       const order = OrderFactory().one();

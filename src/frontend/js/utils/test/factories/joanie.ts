@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Priority } from 'types';
+import { CourseStateTextEnum, Priority } from 'types';
 import { OrganizationMock } from 'api/mocks/joanie/organizations';
 import {
   Address,
@@ -145,7 +145,7 @@ export const CourseRunFactory = factory((): CourseRun => {
       priority: Priority.FUTURE_OPEN,
       datetime: faker.date.past(0.25).toISOString(),
       call_to_action: 'enroll now',
-      text: 'closing on',
+      text: CourseStateTextEnum.CLOSING_ON,
     }).one(),
   };
 });

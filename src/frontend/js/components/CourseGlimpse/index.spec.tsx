@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { CommonDataProps } from 'types/commonDataProps';
 import { RichieContextFactory } from 'utils/test/factories/richie';
+import { CourseStateTextEnum } from 'types';
 import { CourseGlimpse, CourseGlimpseCourse } from '.';
 
 describe('widgets/Search/components/CourseGlimpse', () => {
@@ -32,7 +33,7 @@ describe('widgets/Search/components/CourseGlimpse', () => {
       call_to_action: 'enroll now',
       datetime: '2019-03-14T10:35:47.823Z',
       priority: 0,
-      text: 'starting on',
+      text: CourseStateTextEnum.STARTING_ON,
     },
     title: 'Course 42',
   };
@@ -95,7 +96,7 @@ describe('widgets/Search/components/CourseGlimpse', () => {
             state: {
               ...course.state,
               call_to_action: undefined,
-              text: 'archived',
+              text: CourseStateTextEnum.ARCHIVED,
             },
           }}
         />

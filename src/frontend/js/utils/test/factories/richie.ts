@@ -2,16 +2,38 @@ import { faker } from '@faker-js/faker';
 import { User } from 'types/User';
 import { APIBackend } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
-import { CourseRun, CourseState, Enrollment, Priority } from 'types';
+import { CourseRun, CourseState, CourseStateTextEnum, Enrollment, Priority } from 'types';
 import { Course } from 'types/Course';
 import { factory } from './factories';
 
+/**
+ * mapping between priority and text
+ * | Priority | Text |
+ * | ----------- | ----------- |
+ * |ONGOING_OPEN        | CLOSING_ON|
+ * |FUTURE_OPEN         | STARTING_ON|
+ * |ARCHIVED_OPEN       | CLOSING_ON|
+ * |FUTURE_NOT_YET_OPEN | STARTING_ON|
+ * |FUTURE_CLOSED       | ENROLLMENT_CLOSED|
+ * |ONGOING_CLOSED      | ON_GOING|
+ * |ARCHIVED_CLOSED     | ARCHIVED|
+ * |TO_BE_SCHEDULED     | TO_BE_SCHEDULED|
+ */
 export const CourseStateFactory = factory<CourseState>(() => {
   return {
     priority: Priority.ONGOING_OPEN,
     datetime: faker.date.past().toISOString(),
     call_to_action: 'enroll now',
-    text: 'on-going',
+    text: CourseStateTextEnum.CLOSING_ON,
+  };
+});
+
+export const CourseStateFutureOpenFactory = factory<CourseState>(() => {
+  return {
+    priority: Priority.FUTURE_OPEN,
+    datetime: faker.date.future().toISOString(),
+    call_to_action: undefined,
+    text: CourseStateTextEnum.STARTING_ON,
   };
 });
 

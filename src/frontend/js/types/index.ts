@@ -1,12 +1,13 @@
 import { Nullable } from 'types/utils';
 
-export type StateText =
-  | 'closing on'
-  | 'starting on'
-  | 'enrollment closed'
-  | 'on-going'
-  | 'archived'
-  | 'to be scheduled';
+export enum CourseStateTextEnum {
+  CLOSING_ON = 'closing on',
+  STARTING_ON = 'starting on',
+  ENROLLMENT_CLOSED = 'enrollment closed',
+  ON_GOING = 'on-going',
+  ARCHIVED = 'archived',
+  TO_BE_SCHEDULED = 'to be scheduled',
+}
 
 export type StateCTA = 'enroll now' | 'study now' | undefined;
 
@@ -38,7 +39,7 @@ export interface CourseState {
   priority: Priority;
   datetime: Nullable<string>;
   call_to_action: Nullable<StateCTA>;
-  text: StateText;
+  text: CourseStateTextEnum;
 }
 
 export interface OpenEdXEnrollment {

@@ -3,7 +3,7 @@ import { IntlProvider } from 'react-intl';
 
 import { RichieContextFactory, CourseLightFactory } from 'utils/test/factories/richie';
 import { CommonDataProps } from 'types/commonDataProps';
-import { Priority } from 'types';
+import { CourseStateTextEnum, Priority } from 'types';
 import { CourseGlimpseList, getCourseGlimpseListProps } from '.';
 
 describe('widgets/Search/components/CourseGlimpseList', () => {
@@ -17,7 +17,7 @@ describe('widgets/Search/components/CourseGlimpseList', () => {
         organizations: ["Awesome univ'"],
         state: {
           datetime: '2019-03-14T10:35:47.823Z',
-          text: 'archived',
+          text: CourseStateTextEnum.ARCHIVED,
           call_to_action: null,
           priority: Priority.ARCHIVED_CLOSED,
         },
@@ -29,7 +29,7 @@ describe('widgets/Search/components/CourseGlimpseList', () => {
         organizations: ["Bad univ'"],
         state: {
           datetime: '2019-03-14T10:35:47.823Z',
-          text: 'archived',
+          text: CourseStateTextEnum.ARCHIVED,
           call_to_action: null,
           priority: Priority.ARCHIVED_CLOSED,
         },
