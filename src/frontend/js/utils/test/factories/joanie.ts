@@ -26,7 +26,7 @@ import {
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { CourseListItemMock } from 'api/mocks/joanie/courses';
-import { FactoryConfig, factory } from './factories';
+import { factory, FactoryConfig } from './factories';
 
 export const EnrollmentFactory = factory<Enrollment>(() => {
   return {
@@ -228,7 +228,7 @@ export const OrderFactory = factory<Order>(() => {
     state: OrderState.VALIDATED,
     product: faker.datatype.uuid(),
     target_courses: TargetCourseFactory().many(5),
-    course: faker.random.alphaNumeric(5),
+    course: CourseLightFactory().one(),
     enrollments: [],
   };
 });

@@ -1,6 +1,6 @@
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Icon } from 'components/Icon';
-import { Order, OrderState, Product } from 'types/Joanie';
+import { CourseLight, Order, OrderState, Product } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { useProduct } from 'hooks/useProduct';
@@ -13,7 +13,7 @@ import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { RouterButton } from '../../RouterButton';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
-import { DashboardItem, DEMO_IMAGE_URL } from '../index';
+import { DashboardItem } from '../index';
 
 const messages = {
   accessCourse: {
@@ -77,20 +77,20 @@ export const DashboardItemOrder = ({
   showCertificate,
   writable,
 }: DashboardItemOrderProps) => {
-  const { course } = order;
+  const course = order.course as CourseLight;
   if (!course) {
     throw new Error('Order must provide course object attribute.');
   }
   const intl = useIntl();
-  const product = useProduct(order.product, { course });
+  const product = useProduct(order.product, { course: course.code });
   const getRoutePath = getDashboardRoutePath(useIntl());
 
   return (
     <DashboardItem
       data-testid={`dashboard-item-order-${order.id}`}
       title={product.item?.title ?? ''}
-      code={'Ref. ' + course}
-      imageUrl={DEMO_IMAGE_URL}
+      code={'Ref. ' + course.code}
+      imageUrl={course.cover?.src}
       footer={
         <div className="dashboard-item-order__footer">
           <div className="dashboard-item__block__status">

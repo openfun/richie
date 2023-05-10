@@ -91,6 +91,16 @@ export interface AbstractCourse {
   organizations: OrganizationLight[];
   title: string;
   course_runs: CourseRun[];
+  cover?: JoanieFile;
+}
+
+export interface JoanieFile {
+  filename: string;
+  height: number;
+  size: number;
+  src: string;
+  srcset: string;
+  width: number;
 }
 
 export interface TargetCourse extends AbstractCourse {

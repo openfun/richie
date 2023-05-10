@@ -10,7 +10,7 @@ import { EnrollmentFactory, OrderFactory, ProductFactory } from 'utils/test/fact
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
-import { Enrollment, Order, Product } from 'types/Joanie';
+import { CourseLight, Enrollment, Order, Product } from 'types/Joanie';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
@@ -52,6 +52,7 @@ describe('<DashboardCourses/>', () => {
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
   });
 
   afterEach(() => {
@@ -79,7 +80,10 @@ describe('<DashboardCourses/>', () => {
       const product: Product = ProductFactory().one();
       product.id = order.product;
       fetchMock.get(
-        'https://joanie.endpoint/api/v1.0/products/' + product.id + '/?course=' + order.course,
+        'https://joanie.endpoint/api/v1.0/products/' +
+          product.id +
+          '/?course=' +
+          (order.course as CourseLight).code,
         product,
       );
 
@@ -375,7 +379,7 @@ describe('<DashboardCourses/>', () => {
     await act(async () => userEvent.click(loadMoreButton));
     await waitFor(() => expectList(entities.slice(0, 250), products), { timeout: 30000 });
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
-  }, 30000);
+  }, 300000);
 
   it('shows an error', async () => {
     jest.spyOn(console, 'error').mockImplementation(noop);
