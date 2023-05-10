@@ -1,13 +1,24 @@
 import { PropsWithChildren, ReactNode, useMemo, useRef, useState } from 'react';
+import c from 'classnames';
 import { Button } from 'components/Button';
 import { Icon, IconTypeEnum } from 'components/Icon';
 
 interface Props {
   header: ReactNode | string;
   footer?: ReactNode;
+  expandable?: boolean;
+  fullWidth?: boolean;
+  className?: string;
 }
 
-export const DashboardCard = (props: PropsWithChildren<Props>) => {
+export const DashboardCard = ({
+  children,
+  header,
+  footer,
+  className,
+  expandable = true,
+  fullWidth = false,
+}: PropsWithChildren<Props>) => {
   const [opened, setOpened] = useState(true);
   const expandableRef = useRef<HTMLDivElement>(null);
   const [wrapperHeight, setWrapperHeight] = useState('auto');
@@ -35,26 +46,29 @@ export const DashboardCard = (props: PropsWithChildren<Props>) => {
     }
   };
 
-  const classes = useMemo(() => {
-    const c = ['dashboard-card'];
-    if (opened) {
-      c.push('dashboard-card--opened');
-    } else {
-      c.push('dashboard-card--closed');
-    }
-    return c;
-  }, [opened]);
+  const classes = useMemo(
+    () =>
+      c('dashboard-card', {
+        'dashboard-card--opened': opened,
+        'dashboard-card--closed': !opened,
+        'dashboard-card--content-full-width': fullWidth,
+        [`${className}`]: className !== undefined,
+      }),
+    [className, fullWidth, opened],
+  );
 
   return (
-    <div className={classes.join(' ')}>
+    <div className={classes}>
       <header className="dashboard-card__header">
-        <div>{props.header}</div>
-        <Button onClick={toggle} size="nano">
-          <Icon
-            name={IconTypeEnum.CHEVRON_DOWN_OUTLINE}
-            data-testid="dashboard-card__header__toggle"
-          />
-        </Button>
+        <div>{header}</div>
+        {expandable && (
+          <Button onClick={toggle} size="nano">
+            <Icon
+              name={IconTypeEnum.CHEVRON_DOWN_OUTLINE}
+              data-testid="dashboard-card__header__toggle"
+            />
+          </Button>
+        )}
       </header>
       <div
         className="dashboard-card__wrapper"
@@ -62,8 +76,8 @@ export const DashboardCard = (props: PropsWithChildren<Props>) => {
         data-testid="dashboard-card__wrapper"
       >
         <div className="dashboard-card__expandable" ref={expandableRef}>
-          <div className="dashboard-card__content">{props.children}</div>
-          {!!props.footer && <footer className="dashboard-card__footer">{props.footer}</footer>}
+          <div className="dashboard-card__content">{children}</div>
+          {!!footer && <footer className="dashboard-card__footer">{footer}</footer>}
         </div>
       </div>
     </div>

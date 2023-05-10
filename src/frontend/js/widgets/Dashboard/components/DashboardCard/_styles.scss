@@ -52,6 +52,15 @@
     }
   }
 
+  &.dashboard-card--content-full-width {
+    .dashboard-card__content {
+      padding: 0;
+      @include media-breakpoint-down(sm) {
+        padding: 0;
+      }
+    }
+  }
+
   &__footer {
     border-top: 1px solid r-theme-val(dashboard-card, base-border);
     display: flex;
