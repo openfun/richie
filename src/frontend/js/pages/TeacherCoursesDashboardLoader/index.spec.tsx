@@ -9,7 +9,7 @@ import {
   UserFactory,
 } from 'utils/test/factories/richie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { CourseFactory } from 'utils/test/factories/joanie';
+import { CourseListItemFactory } from 'utils/test/factories/joanie';
 import { CourseListItemMock as Course } from 'api/mocks/joanie/courses';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
@@ -37,7 +37,7 @@ describe('components/TeacherCoursesDashboardLoader', () => {
   });
 
   it('do render', async () => {
-    const courseIncoming: Course = CourseFactory({ title: 'Incoming leason' }).one();
+    const courseIncoming: Course = CourseListItemFactory({ title: 'Incoming leason' }).one();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=incoming&type=all',
       [courseIncoming],
@@ -45,7 +45,7 @@ describe('components/TeacherCoursesDashboardLoader', () => {
         repeat: 1,
       },
     );
-    const courseOngoing: Course = CourseFactory({ title: 'Ongoing leason' }).one();
+    const courseOngoing: Course = CourseListItemFactory({ title: 'Ongoing leason' }).one();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=ongoing&type=all',
       [courseOngoing],
@@ -54,7 +54,7 @@ describe('components/TeacherCoursesDashboardLoader', () => {
         overwriteRoutes: false,
       },
     );
-    const courseAchived: Course = CourseFactory({ title: 'Archived leason' }).one();
+    const courseAchived: Course = CourseListItemFactory({ title: 'Archived leason' }).one();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=archived&type=all',
       [courseAchived],

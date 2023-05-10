@@ -2,7 +2,7 @@ import type { CourseState } from 'types';
 import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
-import { CourseListItemMock } from 'api/mocks/joanie/courses';
+import { CourseListItemMock, CourseMock } from 'api/mocks/joanie/courses';
 import { CourseStatusFilter, CourseTypeFilter } from 'hooks/useCourses';
 import { OrganizationMock } from '../api/mocks/joanie/organizations';
 
@@ -341,7 +341,9 @@ export interface API {
   courses: {
     get<Filters extends ResourcesQuery = CourseFilters>(
       filters?: Filters,
-    ): Promise<Nullable<CourseListItemMock[]>>;
+    ): Filters extends { id: string }
+      ? Promise<Nullable<CourseMock>>
+      : Promise<CourseListItemMock[]>;
   };
 }
 
