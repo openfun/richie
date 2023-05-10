@@ -8,7 +8,7 @@ import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
-import { CourseFactory } from 'utils/test/factories/joanie';
+import { CourseListItemFactory } from 'utils/test/factories/joanie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
@@ -71,7 +71,7 @@ describe('hooks/useCourses', () => {
     expect(result.current.states.isLoading).toBe(true);
     expect(result.current.states.error).toBeUndefined();
 
-    const courses = CourseFactory().many(3);
+    const courses = CourseListItemFactory().many(3);
     await act(async () => {
       responseDeferred.resolve(courses);
     });
@@ -88,7 +88,7 @@ describe('hooks/useCourses', () => {
   });
 
   it('fetch with filter "incoming"', async () => {
-    const courseRuns = CourseFactory().many(3);
+    const courseRuns = CourseListItemFactory().many(3);
     fetchMock.get('https://joanie.endpoint/api/v1.0/courses/?status=incoming&type=all', courseRuns);
 
     const user = UserFactory().one();
@@ -109,7 +109,7 @@ describe('hooks/useCourses', () => {
   });
 
   it('fetch with filter "ongoing"', async () => {
-    const courseRuns = CourseFactory().many(3);
+    const courseRuns = CourseListItemFactory().many(3);
     fetchMock.get('https://joanie.endpoint/api/v1.0/courses/?status=ongoing&type=all', courseRuns);
 
     const user = UserFactory().one();
@@ -130,7 +130,7 @@ describe('hooks/useCourses', () => {
   });
 
   it('fetch with filter "archived"', async () => {
-    const courseRuns = CourseFactory().many(3);
+    const courseRuns = CourseListItemFactory().many(3);
     fetchMock.get('https://joanie.endpoint/api/v1.0/courses/?status=archived&type=all', courseRuns);
 
     const user = UserFactory().one();

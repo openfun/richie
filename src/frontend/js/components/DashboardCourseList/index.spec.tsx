@@ -10,7 +10,7 @@ import {
 } from 'utils/test/factories/richie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { CourseListItemMock } from 'api/mocks/joanie/courses';
-import { CourseFactory } from 'utils/test/factories/joanie';
+import { CourseListItemFactory } from 'utils/test/factories/joanie';
 import { TeacherCourseSearchFilters, CourseTypeFilter, CourseStatusFilter } from 'hooks/useCourses';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import DashboardCourseList from '.';
@@ -36,8 +36,10 @@ describe('components/DashboardCourseList', () => {
   });
 
   it('do render', async () => {
-    const courseCooking: CourseListItemMock = CourseFactory({ title: 'How to cook birds' }).one();
-    const courseDancing: CourseListItemMock = CourseFactory({
+    const courseCooking: CourseListItemMock = CourseListItemFactory({
+      title: 'How to cook birds',
+    }).one();
+    const courseDancing: CourseListItemMock = CourseListItemFactory({
       title: "Let's dance, the online leason",
     }).one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/courses/?status=all&type=all', [

@@ -1,8 +1,8 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { CourseListItemMock } from 'api/mocks/joanie/courses';
+import { CourseListItemMock, CourseMock } from 'api/mocks/joanie/courses';
 import { API, CourseFilters } from 'types/Joanie';
-import { useResources, UseResourcesProps } from 'hooks/useResources';
+import { ResourcesQuery, useResource, useResources, UseResourcesProps } from 'hooks/useResources';
 
 const messages = defineMessages({
   errorGet: {
@@ -40,7 +40,7 @@ export interface TeacherCourseSearchFilters {
  * Joanie Api hook to retrieve/create/update/delete course
  * owned by the authenticated user.
  */
-const props: UseResourcesProps<CourseListItemMock, CourseFilters, API['courses']> = {
+const listProps: UseResourcesProps<CourseListItemMock, CourseFilters, API['courses']> = {
   queryKey: ['courses'],
   apiInterface: () => useJoanieApi().courses,
   session: true,
@@ -65,5 +65,14 @@ const filtersToApiFilters = (
 
 export const useCourses = (filters?: TeacherCourseSearchFilters) => {
   const apiFilters: CourseFilters = filtersToApiFilters(filters);
-  return useResources<CourseListItemMock, CourseFilters, API['courses']>(props)(apiFilters);
+  return useResources<CourseListItemMock, CourseFilters, API['courses']>(listProps)(apiFilters);
 };
+
+const getProps: UseResourcesProps<CourseMock, ResourcesQuery, API['courses']> = {
+  queryKey: ['courses'],
+  apiInterface: () => useJoanieApi().courses,
+  session: true,
+  messages,
+};
+
+export const useCourse = (courseCode: string) => useResource<CourseMock>(getProps)(courseCode);

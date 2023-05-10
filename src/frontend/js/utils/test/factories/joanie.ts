@@ -25,7 +25,7 @@ import {
   UserWishlistCourse,
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
-import { CourseListItemMock } from 'api/mocks/joanie/courses';
+import { CourseListItemMock, CourseMock } from 'api/mocks/joanie/courses';
 import { factory, FactoryConfig } from './factories';
 
 export const EnrollmentFactory = factory((): Enrollment => {
@@ -157,7 +157,30 @@ export const CourseRunWithCourseFactory = factory((): CourseRun => {
   };
 });
 
-export const CourseFactory = factory((): CourseListItemMock => {
+export const CourseFactory = factory((): CourseMock => {
+  const organizations = OrganizationFactory().many(1);
+  return {
+    id: faker.datatype.uuid(),
+    code: faker.random.alphaNumeric(5),
+    organization: organizations[0],
+    organizations,
+    selling_organizations: OrganizationFactory().many(3),
+    title: faker.helpers.unique(() => faker.random.words(Math.ceil(Math.random() * 3)), undefined, {
+      store: FactoryConfig.GLOBAL_UNIQUE_STORE,
+    }),
+    products: CertificateCourseProductFactory().many(3),
+    course_runs: CourseRunFactory().many(3),
+    state: CourseStateFactory().one(),
+    cover: {
+      filename: 'course_cover_image.jpg',
+      url: '/static/course_cover_image.jpg',
+      height: 100,
+      width: 200,
+    },
+  };
+});
+
+export const CourseListItemFactory = factory((): CourseListItemMock => {
   const organizations = OrganizationFactory().many(1);
   return {
     id: faker.datatype.uuid(),

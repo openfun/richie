@@ -1,4 +1,4 @@
 import { listOrganizations } from '../js/api/mocks/joanie/organizations';
-import { listCourses } from '../js/api/mocks/joanie/courses';
+import { listCourses, getCourse } from '../js/api/mocks/joanie/courses';
 
-export const handlers = [listOrganizations, listCourses];
+export const handlers = [listOrganizations, listCourses, getCourse];
