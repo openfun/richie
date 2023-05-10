@@ -81,7 +81,7 @@ describe('components/TeacherCoursesDashboardLoader', () => {
         </QueryClientProvider>
       </IntlProvider>,
     );
-    await expectNoSpinner('Loading courses ...');
+    await expectNoSpinner('Loading courses...');
 
     nbApiCalls += 1; // incoming courses api call
     nbApiCalls += 1; // ongoing courses api call
@@ -121,17 +121,17 @@ describe('components/TeacherCoursesDashboardLoader', () => {
     // Leason titles
     expect(
       await screen.getByRole('heading', {
-        name: /Incoming/,
+        name: 'Incoming',
       }),
     ).toBeInTheDocument();
     expect(
       await screen.getByRole('heading', {
-        name: /Ongoing/,
+        name: 'Ongoing',
       }),
     ).toBeInTheDocument();
     expect(
       await screen.getByRole('heading', {
-        name: /Archived/,
+        name: 'Archived',
       }),
     ).toBeInTheDocument();
   });

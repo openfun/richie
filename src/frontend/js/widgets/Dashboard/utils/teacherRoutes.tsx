@@ -13,6 +13,7 @@ import {
   TeacherDashboardPaths,
   TEACHER_DASHBOARD_ROUTE_LABELS,
 } from 'widgets/Dashboard/utils/teacherRouteMessages';
+import { TeacherCourseDashboardLoader } from 'pages/TeacherCourseDashboardLoader';
 
 export function getTeacherDashboardRoutes() {
   const intl = useIntl();
@@ -105,7 +106,7 @@ export function getTeacherDashboardRoutes() {
       children: [
         {
           index: true,
-          element: <RouteInfo title={getRouteLabel(TeacherDashboardPaths.COURSE)} />,
+          element: <TeacherCourseDashboardLoader />,
         },
         {
           path: getRoutePath(TeacherDashboardPaths.COURSE_SETTINGS, {

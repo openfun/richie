@@ -16,6 +16,7 @@ export enum TeacherDashboardPaths {
   COURSE = '/teacher/course/{courseCode}',
   COURSE_SETTINGS = '/teacher/course/{courseCode}/settings',
   COURSE_CLASSROOMS = '/teacher/course/{courseCode}/classrooms',
+  COURSE_STUDENTS = '/teacher/course/{courseCode}/students',
   COURSE_RECORDS = '/teacher/course/{courseCode}/records',
 }
 
@@ -80,6 +81,11 @@ export const TEACHER_DASHBOARD_ROUTE_PATHS = defineMessages<TeacherDashboardPath
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.path',
     description: 'The path to display the course classrooms view.',
     defaultMessage: '/teacher/course/{courseCode}/classrooms',
+  },
+  [TeacherDashboardPaths.COURSE_STUDENTS]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.students.path',
+    description: 'The path to display the course students view.',
+    defaultMessage: '/teacher/course/{courseCode}/students',
   },
   [TeacherDashboardPaths.COURSE_RECORDS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.records.path',
@@ -149,6 +155,11 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.label',
     description: 'Label of the course classrooms view.',
     defaultMessage: 'Classrooms',
+  },
+  [TeacherDashboardPaths.COURSE_STUDENTS]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.students.label',
+    description: 'Label of the course students view.',
+    defaultMessage: 'Students',
   },
   [TeacherDashboardPaths.COURSE_RECORDS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.records.label',
