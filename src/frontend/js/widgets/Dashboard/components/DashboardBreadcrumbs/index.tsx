@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import { useMatches } from 'react-router-dom';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 import { IntlHelper } from 'utils/IntlHelper';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { DashboardBreadcrumbsContext } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
 import { RouterButton } from '../RouterButton';
 
@@ -55,7 +55,7 @@ export const DashboardBreadcrumbs = () => {
     <ul className="dashboard-breadcrumbs" data-testid="dashboard-breadcrumbs">
       <li>
         <RouterButton href={backPath} size="tiny">
-          <Icon name="icon-chevron-left-outline" className="button__icon" />
+          <Icon name={IconTypeEnum.CHEVRON_LEFT_OUTLINE} className="button__icon" />
           <FormattedMessage {...messages.back} />
         </RouterButton>
       </li>

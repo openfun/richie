@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode, useMemo, useRef, useState } from 'react';
 import { Button } from 'components/Button';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 
 interface Props {
   header: ReactNode | string;
@@ -50,7 +50,10 @@ export const DashboardCard = (props: PropsWithChildren<Props>) => {
       <header className="dashboard-card__header">
         <div>{props.header}</div>
         <Button onClick={toggle} size="nano">
-          <Icon name="icon-chevron-down-outline" data-testid="dashboard-card__header__toggle" />
+          <Icon
+            name={IconTypeEnum.CHEVRON_DOWN_OUTLINE}
+            data-testid="dashboard-card__header__toggle"
+          />
         </Button>
       </header>
       <div

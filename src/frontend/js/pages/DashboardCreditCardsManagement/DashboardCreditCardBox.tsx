@@ -4,7 +4,7 @@ import { CreditCard } from 'types/Joanie';
 import { DashboardBox } from 'widgets/Dashboard/components/DashboardBox';
 import { Button } from 'components/Button';
 import { CreditCardExpirationStatus, CreditCardHelper } from 'utils/CreditCardHelper';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { CreditCardBrandLogo } from './CreditCardBrandLogo';
 
 const messages = defineMessages({
@@ -105,7 +105,7 @@ export const DashboardCreditCardBox = ({ creditCard, promote, edit, remove }: Pr
                 }
               >
                 {expirationState === CreditCardExpirationStatus.EXPIRED && (
-                  <Icon name="icon-warning" size="small" />
+                  <Icon name={IconTypeEnum.WARNING} size="small" />
                 )}
                 <FormattedMessage
                   {...expirationMessage}

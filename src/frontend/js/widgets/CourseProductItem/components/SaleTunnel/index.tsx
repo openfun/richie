@@ -3,6 +3,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
 import type * as Joanie from 'types/Joanie';
 import { useOrders } from 'hooks/useOrders';
+import { IconTypeEnum } from 'components/Icon';
 import { StepBreadcrumb } from '../StepBreadcrumb';
 import { Manifest, useStepManager } from '../../hooks/useStepManager';
 import { SaleTunnelStepResume } from '../SaleTunnelStepResume';
@@ -50,17 +51,17 @@ const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
     start: 'validation',
     steps: {
       validation: {
-        icon: 'icon-checklist',
+        icon: IconTypeEnum.CHECKLIST,
         label: intl.formatMessage(messages.stepValidation),
         next: 'payment',
       },
       payment: {
-        icon: 'icon-creditCard',
+        icon: IconTypeEnum.CREDIT_CARD,
         label: intl.formatMessage(messages.stepPayment),
         next: 'resume',
       },
       resume: {
-        icon: 'icon-check',
+        icon: IconTypeEnum.CHECK,
         label: intl.formatMessage(messages.stepResume),
         next: null,
         onExit: () => {

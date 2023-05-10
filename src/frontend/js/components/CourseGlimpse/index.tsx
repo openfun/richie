@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { Nullable } from 'types/utils';
 import { CommonDataProps } from 'types/commonDataProps';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { CourseState } from 'types';
 import { CourseGlimpseFooter } from './CourseGlimpseFooter';
 
@@ -104,7 +104,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
           ) : null}
           <div className="course-glimpse__metadata course-glimpse__metadata--organization">
             <Icon
-              name="icon-org"
+              name={IconTypeEnum.ORG}
               title={intl.formatMessage(messages.organizationIconAlt)}
               size="small"
             />
@@ -112,7 +112,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
           </div>
           <div className="course-glimpse__metadata course-glimpse__metadata--code">
             <Icon
-              name="icon-barcode"
+              name={IconTypeEnum.BARCODE}
               title={intl.formatMessage(messages.codeIconAlt)}
               size="small"
             />

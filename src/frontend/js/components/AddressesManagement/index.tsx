@@ -2,7 +2,7 @@ import { Children, forwardRef, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import AddressForm, { type AddressFormValues } from 'components/AddressesManagement/AddressForm';
 import Banner, { BannerType } from 'components/Banner';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import RegisteredAddress from 'components/RegisteredAddress';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
 import type * as Joanie from 'types/Joanie';
@@ -189,7 +189,7 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
           className="AddressesManagement__closeButton button button-sale--tertiary"
           onClick={handleClose}
         >
-          <Icon name="icon-chevron-left-outline" className="button__icon" />
+          <Icon name={IconTypeEnum.CHEVRON_LEFT_OUTLINE} className="button__icon" />
           <FormattedMessage {...messages.closeButton} />
         </button>
         {error && <Banner message={error} type={BannerType.ERROR} rounded />}

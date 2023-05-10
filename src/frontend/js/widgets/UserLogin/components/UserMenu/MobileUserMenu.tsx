@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { UserMenuProps } from '.';
 
 export const MobileUserMenu: FC<UserMenuProps> = ({ user }) => (
   <div className="user-menu user-menu--mobile">
     <h6 className="user-menu__username">
-      <Icon name="icon-login" />
+      <Icon name={IconTypeEnum.LOGIN} />
       {user.username}
     </h6>
     <ul className="user-menu__list">

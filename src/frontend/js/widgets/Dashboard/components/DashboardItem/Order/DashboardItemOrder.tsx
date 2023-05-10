@@ -1,6 +1,6 @@
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Icon } from 'components/Icon';
 import { CourseLight, Order, OrderState, Product } from 'types/Joanie';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { StringHelper } from 'utils/StringHelper';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { useProduct } from 'hooks/useProduct';
@@ -94,7 +94,7 @@ export const DashboardItemOrder = ({
       footer={
         <div className="dashboard-item-order__footer">
           <div className="dashboard-item__block__status">
-            <Icon name="icon-school" />
+            <Icon name={IconTypeEnum.SCHOOL} />
             <div>
               {order.state === OrderState.VALIDATED && !order.certificate && (
                 <FormattedMessage {...messages.statusOnGoing} />

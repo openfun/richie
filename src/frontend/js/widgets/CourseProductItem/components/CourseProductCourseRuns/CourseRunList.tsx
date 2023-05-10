@@ -1,6 +1,6 @@
 import { Children } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import type * as Joanie from 'types/Joanie';
 import useDateFormat from 'hooks/useDateFormat';
 import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
@@ -28,7 +28,7 @@ const CourseRunList = ({ courseRuns }: Props) => {
   if (courseRuns.length === 0) {
     return (
       <p className="course-runs-not-available product-widget__item-description">
-        <Icon name="icon-warning" size="small" />
+        <Icon name={IconTypeEnum.WARNING} size="small" />
         <FormattedMessage {...messages.noCourseRunAvailable} />
       </p>
     );

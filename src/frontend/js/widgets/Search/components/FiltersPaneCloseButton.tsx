@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 
 const messages = defineMessages({
   hideFiltersPane: {
@@ -29,7 +29,7 @@ const FiltersPaneCloseButton = ({
   onClick,
   type = 'top',
 }: FiltersPaneCloseButtonProps) => {
-  const iconName = expanded ? 'icon-cross' : 'icon-filter';
+  const iconName = expanded ? IconTypeEnum.CROSS : IconTypeEnum.FILTER;
   const message = expanded ? messages.hideFiltersPane : messages.showFiltersPane;
   return (
     <button

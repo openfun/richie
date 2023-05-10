@@ -7,7 +7,7 @@ import { useAddresses } from 'hooks/useAddresses';
 import { useCreditCards } from 'hooks/useCreditCards';
 import type * as Joanie from 'types/Joanie';
 import type { Maybe, Nullable } from 'types/utils';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { RegisteredCreditCard } from '../RegisteredCreditCard';
 import PaymentButton from '../PaymentButton';
 
@@ -206,7 +206,7 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
                 className="button button--tiny button--pill button-sale--secondary"
                 onClick={() => setShowAddressCreationForm(true)}
               >
-                <Icon name="icon-plus" className="button__icon" size="small" />
+                <Icon name={IconTypeEnum.PLUS} className="button__icon" size="small" />
                 <FormattedMessage {...messages.userBillingAddressAddLabel} />
               </button>
             )}
@@ -250,7 +250,7 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
                 className="button button--tiny button--pill button-sale--primary"
                 onClick={() => setShowAddressCreationForm(true)}
               >
-                <Icon name="icon-plus" size="small" className="button__icon" />
+                <Icon name={IconTypeEnum.PLUS} size="small" className="button__icon" />
                 <FormattedMessage {...messages.userBillingAddressCreateLabel} />
               </button>
             </Fragment>

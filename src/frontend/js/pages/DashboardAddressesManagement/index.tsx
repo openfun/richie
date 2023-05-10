@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import Banner, { BannerType } from 'components/Banner';
 import { Button } from 'components/Button';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { Spinner } from 'components/Spinner';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
 import { Address } from 'types/Joanie';
@@ -82,7 +82,7 @@ export const DashboardAddressesManagement = ({
               />
             ))}
             <Button color="outline-primary" onClick={() => onClickCreate?.()}>
-              <Icon name="icon-plus" className="button__icon" />
+              <Icon name={IconTypeEnum.PLUS} className="button__icon" />
               <FormattedMessage {...messages.add} />
             </Button>
           </>

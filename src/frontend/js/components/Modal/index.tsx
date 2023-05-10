@@ -2,7 +2,7 @@ import { ReactNode, useMemo } from 'react';
 import ReactModal from 'react-modal';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { StringHelper } from 'utils/StringHelper';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 
 const messages = defineMessages({
   closeDialog: {
@@ -77,7 +77,7 @@ export const Modal = ({
             onClick={(e) => props.onRequestClose?.(e)}
             title={intl.formatMessage(messages.closeDialog)}
           >
-            <Icon name="icon-round-close" />
+            <Icon name={IconTypeEnum.ROUND_CLOSE} />
             <span className="offscreen">
               <FormattedMessage {...messages.closeDialog} />
             </span>

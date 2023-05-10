@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from 'components/Button';
-import { Icon } from 'components/Icon';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { Certificate, CertificateDefinition, CourseLight } from 'types/Joanie';
 import { useDownloadCertificate } from 'hooks/useDownloadCertificate';
 import { Spinner } from 'components/Spinner';
@@ -77,7 +77,7 @@ export const DashboardItemCertificate = ({
       footer={
         <>
           <div className="dashboard-certificate__body">
-            <Icon name="icon-certificate" />
+            <Icon name={IconTypeEnum.CERTIFICATE} />
             <span>{certificateDefinition!.title}</span>
           </div>
           <div className="dashboard-certificate__footer">
