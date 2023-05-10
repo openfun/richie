@@ -152,7 +152,7 @@ const getRoutes = () => {
       get: `${baseUrl}/course-runs/:id/`,
     },
     courses: {
-      get: `${baseUrl}/courses/`,
+      get: `${baseUrl}/courses/:id/`,
     },
   };
 };
