@@ -39,7 +39,7 @@ export const DashboardSidebar = ({
 
   const selectedLink = useMemo(
     () => menuLinks.find((link) => matchPath({ path: link.to, end: true }, location.pathname))?.to,
-    [location],
+    [location, menuLinks],
   );
 
   const onSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
