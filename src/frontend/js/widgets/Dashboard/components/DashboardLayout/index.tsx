@@ -28,3 +28,7 @@ export const DashboardLayout = ({ children, sidebar, filters }: DashboardLayoutP
     </DashboardBreadcrumbsProvider>
   );
 };
+
+DashboardLayout.Section = ({ children }: PropsWithChildren) => (
+  <div className="dashboard__section">{children}</div>
+);

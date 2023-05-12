@@ -30,6 +30,13 @@ $sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-filters-height +
     }
   }
 
+  &__section {
+    margin-top: rem-calc(20px);
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
   &__filters {
     min-height: $dashboard-filters-height;
     margin-top: $dashboard-breadcrumb-filters-spacing;
@@ -52,5 +59,13 @@ $sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-filters-height +
 
   &__content {
     padding-right: rem-calc(32px);
+  }
+
+  &__title-h1 {
+    font-size: rem-calc(22px);
+  }
+
+  &__title-h2 {
+    font-size: rem-calc(18px);
   }
 }

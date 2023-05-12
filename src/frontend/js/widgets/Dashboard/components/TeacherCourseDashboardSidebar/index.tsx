@@ -9,7 +9,8 @@ import {
 } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourse } from 'hooks/useCourses';
 import { Spinner } from 'components/Spinner';
-import { Icon, IconTypeEnum } from 'components/Icon';
+import { getCourseUrl } from 'widgets/Dashboard/utils/course';
+import SyllabusLink from '../SyllabusLink';
 
 export const messages = defineMessages({
   header: {
@@ -47,7 +48,8 @@ export const TeacherCourseDashboardSidebar = () => {
         ? []
         : [
             TeacherDashboardPaths.COURSE,
-            TeacherDashboardPaths.COURSE_CLASSROOMS,
+            // FIXME: we cannot build COURSE_CLASSROOMS url untile we get a courseRunId to load
+            // TeacherDashboardPaths.COURSE_CLASSROOMS,
             TeacherDashboardPaths.COURSE_RECORDS,
             TeacherDashboardPaths.COURSE_STUDENTS,
             TeacherDashboardPaths.COURSE_SETTINGS,
@@ -75,12 +77,12 @@ export const TeacherCourseDashboardSidebar = () => {
           </span>
         </Spinner>
       ) : (
-        <a className="syllabus-link" href={`/${intl.locale.split('-')[0]}/courses/${course.code}`}>
-          <Icon name={IconTypeEnum.LOGOUT_SQUARE} />
-          <span>
-            <FormattedMessage {...messages.syllabusLinkLabel} />
-          </span>
-        </a>
+        <SyllabusLink
+          className="dashboard-sidebar__link-bottom"
+          href={getCourseUrl(course.code, intl)}
+        >
+          <FormattedMessage {...messages.syllabusLinkLabel} />
+        </SyllabusLink>
       )}
     </DashboardSidebar>
   );

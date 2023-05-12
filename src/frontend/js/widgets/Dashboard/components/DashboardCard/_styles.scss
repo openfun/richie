@@ -25,7 +25,12 @@
     font-weight: 600;
     font-size: 16px;
     justify-content: space-between;
-    padding: 1rem 1rem 1rem 2rem;
+    padding: rem-calc(16px) rem-calc(16px) rem-calc(16px) rem-calc(32px);
+
+    &__left {
+      flex: 1 1 auto;
+      display: flex;
+    }
 
     .icon {
       cursor: pointer;

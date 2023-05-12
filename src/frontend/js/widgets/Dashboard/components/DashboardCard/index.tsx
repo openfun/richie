@@ -60,7 +60,7 @@ export const DashboardCard = ({
   return (
     <div className={classes}>
       <header className="dashboard-card__header">
-        <div>{header}</div>
+        <div className="dashboard-card__header__left">{header}</div>
         {expandable && (
           <Button onClick={toggle} size="nano">
             <Icon

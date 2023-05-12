@@ -1,14 +1,18 @@
 import { IntlProvider, createIntl } from 'react-intl';
 import { render, screen } from '@testing-library/react';
 import { capitalize } from 'lodash-es';
+import { NavigateFunction, To } from 'react-router-dom';
 import { CourseRunFactory } from 'utils/test/factories/joanie';
+import { CourseMock } from 'api/mocks/joanie/courses';
 import { buildCourseRunData, messages } from './utils';
 
 describe('pages/TeacherCourseDashboardLoader/CourseRunList/buildCourseRunData', () => {
+  const navigate: NavigateFunction = (to: To | number) => { }; // eslint-disable-line
+  const courseCode: CourseMock['code'] = 'akeuj';
   it('should return the right keys', () => {
     const courseRunList = CourseRunFactory().many(1);
     const intl = createIntl({ locale: 'en' });
-    const listData = buildCourseRunData(intl, courseRunList);
+    const listData = buildCourseRunData(intl, navigate, courseCode, courseRunList);
     expect(listData.length).toBe(1);
 
     const listItem = listData[0];
@@ -17,7 +21,7 @@ describe('pages/TeacherCourseDashboardLoader/CourseRunList/buildCourseRunData', 
   it('should contain a valid title', () => {
     const courseRun = CourseRunFactory().one();
     const intl = createIntl({ locale: 'en' });
-    const listItem = buildCourseRunData(intl, [courseRun])[0];
+    const listItem = buildCourseRunData(intl, navigate, courseCode, [courseRun])[0];
 
     render(listItem.title);
     expect(screen.getByText(capitalize(courseRun.title), { exact: false })).toBeInTheDocument();
@@ -26,7 +30,7 @@ describe('pages/TeacherCourseDashboardLoader/CourseRunList/buildCourseRunData', 
   it('should contain a valid period', () => {
     const courseRun = CourseRunFactory().one();
     const intl = createIntl({ locale: 'en' });
-    const listItem = buildCourseRunData(intl, [courseRun])[0];
+    const listItem = buildCourseRunData(intl, navigate, courseCode, [courseRun])[0];
 
     render(listItem.period);
     expect(
@@ -39,7 +43,7 @@ describe('pages/TeacherCourseDashboardLoader/CourseRunList/buildCourseRunData', 
   it('should contain a valid status', () => {
     const courseRun = CourseRunFactory().one();
     const intl = createIntl({ locale: 'en' });
-    const listItem = buildCourseRunData(intl, [courseRun])[0];
+    const listItem = buildCourseRunData(intl, navigate, courseCode, [courseRun])[0];
 
     render(listItem.status);
     expect(screen.getByText(courseRun.state.text, { exact: false })).toBeInTheDocument();
@@ -47,7 +51,7 @@ describe('pages/TeacherCourseDashboardLoader/CourseRunList/buildCourseRunData', 
   it('should contain a valid action', () => {
     const courseRun = CourseRunFactory().one();
     const intl = createIntl({ locale: 'en' });
-    const listItem = buildCourseRunData(intl, [courseRun])[0];
+    const listItem = buildCourseRunData(intl, navigate, courseCode, [courseRun])[0];
 
     render(<IntlProvider locale="en">{listItem.action}</IntlProvider>);
     expect(
