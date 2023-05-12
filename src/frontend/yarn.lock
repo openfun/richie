@@ -2106,16 +2106,17 @@
   resolved "https://registry.yarnpkg.com/@open-draft/until/-/until-1.0.3.tgz#db9cc719191a62e7d9200f6e7bab21c5b848adca"
   integrity sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==
 
-"@openfun/cunningham-react@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@openfun/cunningham-react/-/cunningham-react-0.5.0.tgz#4102da55caa47ae64092628683465323316bae76"
-  integrity sha512-dwh1p7hfvNvyRifgjYYMFfBB1itLDt1lQnhqstJrgbErWiboc8jWbPrpjah0uDRcUqPgdgq/86zdd1gV+/Rzyg==
+"@openfun/cunningham-react@0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@openfun/cunningham-react/-/cunningham-react-0.6.1.tgz#d1b4b027fede3ce8cbdee40552d29bf2bd7b6110"
+  integrity sha512-ZiujOUuLlUPSSSm6HjpNk81qD2Qi2JvApwavGC4CGgvaBGfbKTtxksr9ITOW/x3M/BzVnMpA4dhadvHvwGv1eA==
   dependencies:
     "@fontsource/material-icons" "4.5.4"
     "@fontsource/roboto" "4.5.8"
     "@openfun/cunningham-tokens" "*"
     "@tanstack/react-table" "8.8.4"
     classnames "2.3.2"
+    downshift "7.6.0"
     react "18.2.0"
     react-dom "18.2.0"
 
