@@ -85,7 +85,7 @@ export const OrganizationLightFactory = factory((): OrganizationLight => {
 export const CertificationDefinitionFactory = factory((): CertificateDefinition => {
   return {
     id: faker.datatype.uuid(),
-    title: faker.random.words(Math.ceil(Math.random() * 3)),
+    title: faker.helpers.unique(faker.random.words, [Math.ceil(Math.random() * 5)]),
     description: faker.lorem.sentences(2),
   };
 });
@@ -158,12 +158,10 @@ export const CourseRunWithCourseFactory = factory((): CourseRun => {
 });
 
 export const CourseFactory = factory((): CourseMock => {
-  const organizations = OrganizationFactory().many(1);
   return {
     id: faker.datatype.uuid(),
     code: faker.random.alphaNumeric(5),
-    organization: organizations[0],
-    organizations,
+    organizations: OrganizationFactory().many(1),
     selling_organizations: OrganizationFactory().many(3),
     title: faker.helpers.unique(() => faker.random.words(Math.ceil(Math.random() * 3)), undefined, {
       store: FactoryConfig.GLOBAL_UNIQUE_STORE,
@@ -181,11 +179,10 @@ export const CourseFactory = factory((): CourseMock => {
 });
 
 export const CourseListItemFactory = factory((): CourseListItemMock => {
-  const organizations = OrganizationFactory().many(1);
   return {
     id: faker.datatype.uuid(),
     code: faker.random.alphaNumeric(5),
-    organization: organizations[0],
+    organizations: OrganizationFactory().many(1),
     title: faker.helpers.unique(() => faker.random.words(Math.ceil(Math.random() * 3)), undefined, {
       store: FactoryConfig.GLOBAL_UNIQUE_STORE,
     }),
