@@ -15,6 +15,7 @@ import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
 import { Data, DataType } from 'pages/DashboardCourses/useOrdersEnrollments';
+import { PAGE_SIZE } from 'pages/DashboardCourses/constants';
 import { noop } from 'utils';
 
 jest.mock('utils/context', () => ({
@@ -23,6 +24,11 @@ jest.mock('utils/context', () => ({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
+}));
+
+jest.mock('pages/DashboardCourses/constants', () => ({
+  __esModule: true,
+  PAGE_SIZE: 4,
 }));
 
 jest.mock('utils/indirection/window', () => ({
@@ -124,12 +130,12 @@ describe('<DashboardCourses/>', () => {
   it('renders an empty placeholder', async () => {
     const ordersDeferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50',
+      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${PAGE_SIZE}`,
       ordersDeferred.promise,
     );
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=50&was_created_by_order=false',
+      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${PAGE_SIZE}&was_created_by_order=false`,
       enrollmentsDeferred.promise,
     );
 
@@ -148,15 +154,15 @@ describe('<DashboardCourses/>', () => {
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
   });
   it('renders only < 1 page of orders', async () => {
-    const { orders, products } = mockOrders(OrderFactory().many(5));
+    const { orders, products } = mockOrders(OrderFactory().many(2));
     const ordersDeferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50',
+      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${PAGE_SIZE}`,
       ordersDeferred.promise,
     );
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=50&was_created_by_order=false',
+      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${PAGE_SIZE}&was_created_by_order=false`,
       enrollmentsDeferred.promise,
     );
 
@@ -183,7 +189,7 @@ describe('<DashboardCourses/>', () => {
   });
 
   it('renders only < 1 page of enrollments', async () => {
-    const enrollments: Enrollment[] = EnrollmentFactory().many(5);
+    const enrollments: Enrollment[] = EnrollmentFactory().many(2);
     enrollments.sort((a, b) => {
       const aDate = new Date(a.created_on);
       const bDate = new Date(b.created_on);
@@ -191,12 +197,12 @@ describe('<DashboardCourses/>', () => {
     });
     const ordersDeferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50',
+      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${PAGE_SIZE}`,
       ordersDeferred.promise,
     );
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=50&was_created_by_order=false',
+      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${PAGE_SIZE}&was_created_by_order=false`,
       enrollmentsDeferred.promise,
     );
 
@@ -249,16 +255,16 @@ describe('<DashboardCourses/>', () => {
   };
 
   it('renders only < 1 page of both enrollments and orders', async () => {
-    const { orders, products } = mockOrders(OrderFactory().many(5));
+    const { orders, products } = mockOrders(OrderFactory().many(2));
     const ordersDeferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50',
+      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${PAGE_SIZE}`,
       ordersDeferred.promise,
     );
-    const enrollments: Enrollment[] = EnrollmentFactory().many(5);
+    const enrollments: Enrollment[] = EnrollmentFactory().many(2);
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=50&was_created_by_order=false',
+      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${PAGE_SIZE}&was_created_by_order=false`,
       enrollmentsDeferred.promise,
     );
 
@@ -289,28 +295,28 @@ describe('<DashboardCourses/>', () => {
 
   it('renders multiple pages of enrollments and orders', async () => {
     const client = createTestQueryClient({ user: true });
-    const { orders, products } = mockOrders(OrderFactory().many(120), client);
-
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50`, {
-      results: orders.slice(0, 50),
-      next: `https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=50`,
+    const pageSize = 3;
+    const { orders, products } = mockOrders(OrderFactory().many(PAGE_SIZE * 2 + 1), client);
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${PAGE_SIZE}`, {
+      results: orders.slice(0, PAGE_SIZE),
+      next: `https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=${PAGE_SIZE}`,
       prev: null,
       count: orders.length,
     });
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=50`, {
-      results: orders.slice(50, 100),
-      next: `https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=50`,
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=${PAGE_SIZE}`, {
+      results: orders.slice(PAGE_SIZE, PAGE_SIZE * 2),
+      next: `https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=${PAGE_SIZE}`,
       prev: null,
       count: orders.length,
     });
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=50`, {
-      results: orders.slice(100, 150),
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=${PAGE_SIZE}`, {
+      results: orders.slice(PAGE_SIZE * 2, PAGE_SIZE * 3),
       next: null,
       prev: null,
       count: orders.length,
     });
 
-    const enrollments: Enrollment[] = EnrollmentFactory().many(110);
+    const enrollments: Enrollment[] = EnrollmentFactory().many(pageSize * 2 + 2);
     enrollments.sort((a, b) => {
       const aDate = new Date(a.created_on);
       const bDate = new Date(b.created_on);
@@ -318,27 +324,27 @@ describe('<DashboardCourses/>', () => {
     });
 
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=50&was_created_by_order=false`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${PAGE_SIZE}&was_created_by_order=false`,
       {
-        results: enrollments.slice(0, 50),
-        next: `https://joanie.endpoint/api/v1.0/enrollments/?page=2&page_size=50&was_created_by_order=false`,
+        results: enrollments.slice(0, PAGE_SIZE),
+        next: `https://joanie.endpoint/api/v1.0/enrollments/?page=2&page_size=${PAGE_SIZE}&was_created_by_order=false`,
         prev: null,
         count: enrollments.length,
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=2&page_size=50&was_created_by_order=false`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?page=2&page_size=${PAGE_SIZE}&was_created_by_order=false`,
       {
-        results: enrollments.slice(50, 100),
-        next: `https://joanie.endpoint/api/v1.0/enrollments/?page=3&page_size=50&was_created_by_order=false`,
+        results: enrollments.slice(PAGE_SIZE, PAGE_SIZE * 2),
+        next: `https://joanie.endpoint/api/v1.0/enrollments/?page=3&page_size=${PAGE_SIZE}&was_created_by_order=false`,
         prev: null,
         count: enrollments.length,
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=3&page_size=50&was_created_by_order=false`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?page=3&page_size=${PAGE_SIZE}&was_created_by_order=false`,
       {
-        results: enrollments.slice(100, 150),
+        results: enrollments.slice(PAGE_SIZE * 2, PAGE_SIZE * 3),
         next: null,
         prev: null,
         count: enrollments.length,
@@ -354,30 +360,30 @@ describe('<DashboardCourses/>', () => {
     expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
     let loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
-    await waitFor(() => expectList(entities.slice(0, 50), products), { interval: 200 });
+    await waitFor(() => expectList(entities.slice(0, PAGE_SIZE), products), { interval: 200 });
 
     // Click on load more button to load slice 2.
     await act(async () => userEvent.click(loadMoreButton));
-    await waitFor(() => expectList(entities.slice(0, 100), products));
+    await waitFor(() => expectList(entities.slice(0, PAGE_SIZE * 2), products));
     loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
 
     // Activate intersection observe to load slice 3.
     const { onIntersect } = (globalThis as any).__intersection_observer_props__;
     await waitFor(async () => onIntersect());
-    await waitFor(() => expectList(entities.slice(0, 150), products), { timeout: 30000 });
+    await waitFor(() => expectList(entities.slice(0, PAGE_SIZE * 3), products), { timeout: 30000 });
     loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
 
     // Click on load more button to load slice 4.
     await act(async () => userEvent.click(loadMoreButton));
-    await waitFor(() => expectList(entities.slice(0, 200), products), { timeout: 30000 });
+    await waitFor(() => expectList(entities.slice(0, PAGE_SIZE * 4), products), { timeout: 30000 });
     loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
 
     // Click on load more button to load slice 5.
     await act(async () => userEvent.click(loadMoreButton));
-    await waitFor(() => expectList(entities.slice(0, 250), products), { timeout: 30000 });
+    await waitFor(() => expectList(entities.slice(0, PAGE_SIZE * 5), products), { timeout: 30000 });
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
   }, 300000);
 
@@ -385,11 +391,11 @@ describe('<DashboardCourses/>', () => {
     jest.spyOn(console, 'error').mockImplementation(noop);
     const ordersDeferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50',
+      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${PAGE_SIZE}`,
       ordersDeferred.promise,
     );
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=50&was_created_by_order=false',
+      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${PAGE_SIZE}&was_created_by_order=false`,
       { results: [], next: null, previous: null, count: 0 },
     );
 

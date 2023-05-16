@@ -13,6 +13,7 @@ import {
 import { Maybe } from 'types/utils';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 import { REACT_QUERY_SETTINGS } from 'settings';
+import { PAGE_SIZE } from './constants';
 
 export enum DataType {
   ENROLLMENT = 'enrollment',
@@ -23,8 +24,6 @@ export type Data = {
   type: DataType;
   item: Enrollment | Order;
 };
-
-const PAGE_SIZE = 50;
 
 const messages = defineMessages({
   errorGet: {
