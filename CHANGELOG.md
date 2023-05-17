@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a shortcut route to redirect to the course page through a course code.
 - Add cunningham and design system.
 - Specific sidebar for order related routes
 - List teacher's course's course runs in the teacher course dashboard page.

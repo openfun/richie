@@ -2,8 +2,13 @@
 Courses model views
 """
 
+from django.http import Http404
+from django.views.generic import RedirectView
+
 from cms.api import Page
 from dal import autocomplete
+
+from richie.apps.courses import models
 
 
 class PageAdminAutocomplete(autocomplete.Select2QuerySetView):
@@ -43,3 +48,31 @@ class PageAdminAutocomplete(autocomplete.Select2QuerySetView):
         # NOTE: Order is currently not taken care of since correct implementation
         # with page language fallback is something complicated to achieve
         return qs.distinct()
+
+
+class CourseCodeRedirectView(RedirectView):
+    """
+    Redirect to the course page from the course code
+    """
+
+    permanent = True
+    query_string = False
+    pattern_name = None
+    http_method_names = ["get"]
+
+    def get_redirect_url(self, *args, **kwargs):
+        """
+        Get the course page from the course code or return a 404
+        """
+        course_code = kwargs.get("course_code", None)
+        try:
+            course = models.Course.objects.distinct().get(
+                code=course_code,
+                extended_object__publisher_is_draft=False,
+                # Exclude snapshots
+                extended_object__node__parent__cms_pages__course__isnull=True,
+            )
+        except models.Course.DoesNotExist as exception:
+            raise Http404(f"No page found for course {course_code}.") from exception
+
+        return course.extended_object.get_public_url()

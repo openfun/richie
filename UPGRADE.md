@@ -16,6 +16,15 @@ $ make migrate
 
 ## Unreleased
 
+- `courses` app export new routes named `redirects_urlpatterns`. You have to add those new routes to
+  the urls module of your app.
+  ```python
+  from richie.apps.courses.urls import redirects_urlpatterns as courses_redirects_urlpatterns
+  
+  urlpatterns += [
+    re_path(r"^redirects/", include([*courses_redirects_urlpatterns])),
+  ]
+  ```
 - Legacy colors are now defined in cunningham.cjs instead of palette.scss.
   `yarn build-theme` command generates tokens files scss/cunningham-tokens.scss and /utils/cunningham-tokens.ts.
   $palette variable is now deprecated and will be removed in the next major release.
