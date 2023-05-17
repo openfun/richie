@@ -6,7 +6,7 @@ from django.urls import path, re_path
 from rest_framework import routers
 
 from .api import CourseRunsViewSet, sync_course_runs_from_request
-from .views import PageAdminAutocomplete
+from .views import CourseCodeRedirectView, PageAdminAutocomplete
 
 ROUTER = routers.SimpleRouter()
 
@@ -21,5 +21,13 @@ urlpatterns = ROUTER.urls + [
         "page-admin-autocomplete/<slug:model_name>>/",
         PageAdminAutocomplete.as_view(),
         name="page-admin-autocomplete",
+    ),
+]
+
+redirects_urlpatterns = [
+    re_path(
+        r"^courses/(?P<course_code>[\w]+)/?$",
+        CourseCodeRedirectView.as_view(),
+        name="redirect-course-code-to-course-url",
     ),
 ]
