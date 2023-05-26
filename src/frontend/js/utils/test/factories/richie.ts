@@ -39,13 +39,13 @@ export const CourseStateFutureOpenFactory = factory<CourseState>(() => {
 
 export const CourseRunFactory = factory<CourseRun>(() => {
   return {
-    id: faker.datatype.number(),
+    id: faker.number.int(),
     resource_link: faker.helpers.unique(faker.internet.url),
     start: faker.date.past().toISOString(),
     end: faker.date.past().toISOString(),
     enrollment_start: faker.date.past().toISOString(),
     enrollment_end: faker.date.past().toISOString(),
-    languages: [faker.random.locale()],
+    languages: [faker.location.countryCode('alpha-2')],
     state: CourseStateFactory().one(),
     starts_in_message: null,
     dashboard_link: null,
@@ -54,27 +54,27 @@ export const CourseRunFactory = factory<CourseRun>(() => {
 
 export const EnrollmentFactory = factory<Enrollment>(() => {
   return {
-    id: faker.datatype.number(),
+    id: faker.string.uuid(),
     created_at: faker.date.past().toISOString(),
-    user: faker.datatype.number(),
-    course_run: faker.datatype.number(),
+    user: faker.string.uuid(),
+    course_run: faker.string.uuid(),
   };
 });
 
 export const UserFactory = factory<User>(() => ({
   access_token: faker.lorem.word(12),
-  fullname: faker.name.fullName(),
+  fullname: faker.person.fullName(),
   email: faker.internet.email(),
   username: faker.internet.userName(),
 }));
 
 export const FonzieUserFactory = factory<User>(() => ({
   ...UserFactory().one(),
-  access_token: btoa(faker.datatype.uuid()),
+  access_token: btoa(faker.string.uuid()),
 }));
 
 export const RichieContextFactory = factory<CommonDataProps['context']>(() => ({
-  csrftoken: faker.random.alphaNumeric(64),
+  csrftoken: faker.string.alphanumeric(64),
   environment: 'test',
   authentication: {
     backend: APIBackend.OPENEDX_HAWTHORN,
@@ -93,18 +93,18 @@ export const RichieContextFactory = factory<CommonDataProps['context']>(() => ({
 }));
 
 export const CourseLightFactory = factory<Course>(() => {
-  const organizationName = faker.helpers.unique(faker.random.words, [Math.ceil(Math.random() * 3)]);
+  const organizationName = faker.helpers.unique(faker.lorem.words, [Math.ceil(Math.random() * 3)]);
   return {
-    id: faker.datatype.uuid(),
+    id: faker.string.uuid(),
     absolute_url: '',
     categories: [],
-    code: faker.random.alphaNumeric(5),
+    code: faker.string.alphanumeric(5),
     cover_image: {
       sizes: '300px',
       src: '/static/course_cover_image.jpg',
       srcset: '/static/course_cover_image.jpg',
     },
-    title: faker.random.words(Math.ceil(Math.random() * 10)),
+    title: faker.word.words(Math.ceil(Math.random() * 10)),
     duration: '',
     effort: '',
     icon: {

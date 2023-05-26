@@ -72,7 +72,7 @@ describe('CourseProductCertificateItem', () => {
 
   it('displays a download button when order contains a certificate', async () => {
     const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory().one();
-    const order: OrderLite = OrderLiteFactory({ certificate: faker.datatype.uuid() }).one();
+    const order: OrderLite = OrderLiteFactory({ certificate: faker.string.uuid() }).one();
 
     render(
       <Wrapper>

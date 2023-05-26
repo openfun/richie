@@ -30,8 +30,8 @@ interface TodoQuery extends ResourcesQuery {
 }
 
 export const TodoFactory = factory<Todo>(() => ({
-  id: faker.datatype.uuid(),
-  name: faker.random.words(Math.ceil(Math.random() * 3)),
+  id: faker.string.uuid(),
+  name: faker.lorem.words(Math.ceil(Math.random() * 3)),
 }));
 
 const API = {

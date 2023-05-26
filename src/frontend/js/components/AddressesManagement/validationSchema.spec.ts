@@ -9,13 +9,13 @@ describe('validationSchema', () => {
   // Creation and Update form validation relies on a schema resolves by Yup.
   it('should not have error if values are valid', async () => {
     const defaultValues = {
-      address: faker.address.streetAddress(),
-      city: faker.address.city(),
-      country: faker.address.countryCode(),
-      first_name: faker.name.firstName(),
-      last_name: faker.name.lastName(),
-      postcode: faker.address.zipCode(),
-      title: faker.random.word(),
+      address: faker.location.streetAddress(),
+      city: faker.location.city(),
+      country: faker.location.countryCode(),
+      first_name: faker.person.firstName(),
+      last_name: faker.person.lastName(),
+      postcode: faker.location.zipCode(),
+      title: faker.lorem.word(),
       save: false,
     };
 
@@ -123,14 +123,14 @@ describe('validationSchema', () => {
 
     // - Set values for all field but with a wrong one for country field
     await act(async () => {
-      result.current.setValue('address', faker.address.streetAddress());
-      result.current.setValue('city', faker.address.city());
+      result.current.setValue('address', faker.location.streetAddress());
+      result.current.setValue('city', faker.location.city());
       // set country value with an invalid country code
       result.current.setValue('country', 'AA');
-      result.current.setValue('first_name', faker.name.firstName());
-      result.current.setValue('last_name', faker.name.lastName());
-      result.current.setValue('postcode', faker.address.zipCode());
-      result.current.setValue('title', faker.random.word());
+      result.current.setValue('first_name', faker.person.firstName());
+      result.current.setValue('last_name', faker.person.lastName());
+      result.current.setValue('postcode', faker.location.zipCode());
+      result.current.setValue('title', faker.lorem.word());
       result.current.trigger();
     });
 

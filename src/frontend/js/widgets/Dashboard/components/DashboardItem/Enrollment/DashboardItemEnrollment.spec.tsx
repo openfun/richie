@@ -12,10 +12,10 @@ describe('<DashboardItemEnrollment/>', () => {
   it('renders a opened enrollment', () => {
     const enrollment: Enrollment = EnrollmentFactory({
       course_run: CourseRunWithCourseFactory({
-        enrollment_start: faker.date.past(0.25).toISOString(),
-        enrollment_end: faker.date.future(0.5).toISOString(),
-        start: faker.date.future(0.75).toISOString(),
-        end: faker.date.future(1.0).toISOString(),
+        enrollment_start: faker.date.past({ years: 0.25 }).toISOString(),
+        enrollment_end: faker.date.future({ years: 0.5 }).toISOString(),
+        start: faker.date.future({ years: 0.75 }).toISOString(),
+        end: faker.date.future({ years: 1.0 }).toISOString(),
       }).one(),
     }).one();
     enrollment.course_run.state.priority = Priority.ONGOING_OPEN;
@@ -44,10 +44,10 @@ describe('<DashboardItemEnrollment/>', () => {
   it('renders a closed enrollment', () => {
     const enrollment: Enrollment = EnrollmentFactory({
       course_run: CourseRunWithCourseFactory({
-        enrollment_start: faker.date.past(1).toISOString(),
-        enrollment_end: faker.date.past(0.75).toISOString(),
-        start: faker.date.past(0.25).toISOString(),
-        end: faker.date.past(0.5).toISOString(),
+        enrollment_start: faker.date.past({ years: 1 }).toISOString(),
+        enrollment_end: faker.date.past({ years: 0.75 }).toISOString(),
+        start: faker.date.past({ years: 0.25 }).toISOString(),
+        end: faker.date.past({ years: 0.5 }).toISOString(),
         state: CourseStateFactory({ priority: Priority.ARCHIVED_CLOSED }).one(),
       }).one(),
     }).one();
