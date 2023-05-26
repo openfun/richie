@@ -44,7 +44,7 @@ export const ReadonlyEnrolledOpened: Story = {
       ...enrollment,
       course_run: {
         ...enrollment.course_run,
-        end: faker.date.future(1).toISOString(),
+        end: faker.date.future({ years: 1 }).toISOString(),
         state: { ...enrollment.course_run.state, priority: Priority.FUTURE_NOT_YET_OPEN },
       },
     },
@@ -58,7 +58,7 @@ export const ReadonlyEnrolledClosed: Story = {
       ...enrollment,
       course_run: {
         ...enrollment.course_run,
-        end: faker.date.past(1).toISOString(),
+        end: faker.date.past({ years: 1 }).toISOString(),
         state: { ...enrollment.course_run.state, priority: Priority.FUTURE_CLOSED },
       },
     },

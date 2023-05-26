@@ -328,10 +328,10 @@ describe('CourseProductCourseRuns', () => {
 
     it('does not allow to enroll if course run is not opened for enrollment', async () => {
       const courseRun: CourseRun = CourseRunFactory({
-        enrollment_start: faker.date.future(0.25).toISOString(),
-        enrollment_end: faker.date.future(0.5).toISOString(),
-        start: faker.date.future(0.75).toISOString(),
-        end: faker.date.future(1.0).toISOString(),
+        enrollment_start: faker.date.future({ years: 0.25 }).toISOString(),
+        enrollment_end: faker.date.future({ years: 0.5 }).toISOString(),
+        start: faker.date.future({ years: 0.75 }).toISOString(),
+        end: faker.date.future({ years: 1.0 }).toISOString(),
         state: {
           priority: faker.helpers.arrayElement([
             Priority.FUTURE_NOT_YET_OPEN,
@@ -340,7 +340,7 @@ describe('CourseProductCourseRuns', () => {
             Priority.ARCHIVED_CLOSED,
             Priority.TO_BE_SCHEDULED,
           ]),
-          datetime: faker.date.future(0.25).toISOString(),
+          datetime: faker.date.future({ years: 0.25 }).toISOString(),
           call_to_action: undefined,
           text: CourseStateTextEnum.STARTING_ON,
         },

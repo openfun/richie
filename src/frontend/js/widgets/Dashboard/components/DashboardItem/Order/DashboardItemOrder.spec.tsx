@@ -119,7 +119,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders an order with certificate', async () => {
-    const order: Order = OrderFactory({ certificate: faker.datatype.uuid() }).one();
+    const order: Order = OrderFactory({ certificate: faker.string.uuid() }).one();
     order.target_courses = [];
     const product = mockProductWithOrder(order);
 
@@ -149,7 +149,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('does not render an order with certificate', async () => {
-    const order: Order = OrderFactory({ certificate: faker.datatype.uuid() }).one();
+    const order: Order = OrderFactory({ certificate: faker.string.uuid() }).one();
     order.target_courses = [];
     const product = mockProductWithOrder(order);
 
@@ -698,8 +698,8 @@ describe('<DashboardItemOrder/>', () => {
     const order: Order = OrderFactory({
       target_courses: TargetCourseFactory({
         course_runs: CourseRunFactory({
-          enrollment_start: faker.date.past(0.5).toISOString(),
-          enrollment_end: faker.date.past(0.25).toISOString(),
+          enrollment_start: faker.date.past({ years: 0.5 }).toISOString(),
+          enrollment_end: faker.date.past({ years: 0.25 }).toISOString(),
           state: {
             priority: Priority.FUTURE_NOT_YET_OPEN,
           },
@@ -729,8 +729,8 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with enrolled target course with finished enrollment phase and it is shown', async () => {
     const courseRun: CourseRun = CourseRunFactory({
-      enrollment_end: faker.date.past(0.5).toISOString(),
-      enrollment_start: faker.date.past(1).toISOString(),
+      enrollment_end: faker.date.past({ years: 0.5 }).toISOString(),
+      enrollment_start: faker.date.past({ years: 1 }).toISOString(),
       state: {
         priority: Priority.FUTURE_CLOSED,
       },
@@ -760,8 +760,8 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with non enrolled target course, course run with enrollment phase finished is not shown ', async () => {
     const courseRun: CourseRun = CourseRunFactory({
-      enrollment_end: faker.date.past(0.5).toISOString(),
-      enrollment_start: faker.date.past(1).toISOString(),
+      enrollment_end: faker.date.past({ years: 0.5 }).toISOString(),
+      enrollment_start: faker.date.past({ years: 1 }).toISOString(),
       state: {
         priority: Priority.FUTURE_CLOSED,
       },

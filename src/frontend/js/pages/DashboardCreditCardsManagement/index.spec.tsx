@@ -67,7 +67,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('renders the correct label for expired date', async () => {
-    const date = faker.date.past(0.2);
+    const date = faker.date.past();
     const creditCard: CreditCard = {
       ...CreditCardFactory().one(),
       expiration_month: date.getMonth() + 1,
@@ -101,14 +101,14 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('renders the correct label for an expiration date that will soon expire', async () => {
-    const offset = new Date();
-    offset.setMonth(offset.getMonth() + 1);
-    offset.setDate(1);
-    const date = faker.date.future(2 / 12, offset);
+    const refDate = new Date();
+    refDate.setMonth(refDate.getMonth() + 1);
+    refDate.setDate(1);
+    const futureLessThan3Months = faker.date.future({ years: 2.99 / 12, refDate });
     const creditCard: CreditCard = {
       ...CreditCardFactory().one(),
-      expiration_month: date.getMonth() + 1,
-      expiration_year: date.getFullYear(),
+      expiration_month: futureLessThan3Months.getMonth() + 1,
+      expiration_year: futureLessThan3Months.getFullYear(),
     };
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
     await act(async () => {
@@ -126,11 +126,11 @@ describe('<DashboardCreditCardsManagement/>', () => {
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
     const element = await screen.findByText(
       'Expires on ' +
-        (date.getMonth() + 1).toLocaleString(undefined, {
+        (futureLessThan3Months.getMonth() + 1).toLocaleString(undefined, {
           minimumIntegerDigits: 2,
         }) +
         '/' +
-        date.getFullYear(),
+        futureLessThan3Months.getFullYear(),
     );
     expect(element.classList).toContain('dashboard-credit-card__expiration');
     expect(element.classList).not.toContain('dashboard-credit-card__expiration--expired');
@@ -138,9 +138,9 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('renders the correct label for an expiration date that will not soon expire', async () => {
-    const limit = new Date();
-    limit.setMonth(limit.getMonth() + 4);
-    const date = faker.date.future(0.2, limit);
+    const refDate = new Date();
+    refDate.setMonth(refDate.getMonth() + 4);
+    const date = faker.date.future({ refDate });
     const creditCard: CreditCard = {
       ...CreditCardFactory().one(),
       expiration_month: date.getMonth() + 1,

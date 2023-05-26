@@ -21,18 +21,18 @@ interface DemoUser {
 describe('factory', () => {
   const DemoPointOfInterestFactory = factory<DemoPointOfInterest>(() => {
     return {
-      name: faker.random.word(),
+      name: faker.lorem.word(),
     };
   });
   const DemoAddressFactory = factory<DemoAddress>(() => {
     return {
-      city: faker.address.city(),
-      street: faker.address.street(),
+      city: faker.location.city(),
+      street: faker.location.street(),
       pointOfInterests: DemoPointOfInterestFactory().many(3),
     };
   });
   const DemoUserFactory = factory<DemoUser>((options) => {
-    let fullname = faker.name.fullName();
+    let fullname = faker.person.fullName();
     if (options?.generateIndex !== undefined) {
       fullname += `_${options.generateIndex}`;
     }

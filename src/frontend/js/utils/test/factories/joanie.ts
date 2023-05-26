@@ -30,27 +30,27 @@ import { factory, FactoryConfig } from './factories';
 
 export const EnrollmentFactory = factory((): Enrollment => {
   return {
-    id: faker.datatype.uuid(),
+    id: faker.string.uuid(),
     course_run: CourseRunWithCourseFactory().one(),
     is_active: true,
     state: EnrollmentState.SET,
     was_created_by_order: false,
-    created_on: faker.date.past(1).toISOString(),
+    created_on: faker.date.past({ years: 1 }).toISOString(),
   };
 });
 
 export const TargetCourseFactory = factory((): TargetCourse => {
-  const code = faker.helpers.unique(faker.random.alphaNumeric, [5], {
+  const code = faker.helpers.unique(faker.string.alphanumeric, [5], {
     maxRetries: 20,
     store: FactoryConfig.GLOBAL_UNIQUE_STORE,
   });
   const courseRuns: CourseRun[] = CourseRunFactory().many(3);
 
   return {
-    id: faker.datatype.uuid(),
+    id: faker.string.uuid(),
     code,
     organizations: [],
-    title: faker.helpers.unique(() => `${faker.random.words(3)}(${code})`, undefined, {
+    title: faker.helpers.unique(() => `${faker.lorem.words(3)}(${code})`, undefined, {
       maxRetries: 20,
       store: FactoryConfig.GLOBAL_UNIQUE_STORE,
     }),
@@ -61,13 +61,13 @@ export const TargetCourseFactory = factory((): TargetCourse => {
 });
 
 export const OrganizationFactory = factory((): OrganizationMock => {
-  const uuid = faker.datatype.uuid();
+  const uuid = faker.string.uuid();
   return {
     id: uuid,
-    code: faker.random.alphaNumeric(5),
-    title: faker.random.words(1),
+    code: faker.string.alphanumeric(5),
+    title: faker.lorem.words(1),
     logo: {
-      filename: faker.random.words(1),
+      filename: faker.lorem.words(1),
       url: `/organizations/${uuid}`,
       height: 40,
       width: 60,
@@ -77,22 +77,22 @@ export const OrganizationFactory = factory((): OrganizationMock => {
 
 export const OrganizationLightFactory = factory((): OrganizationLight => {
   return {
-    code: faker.random.alphaNumeric(5),
-    title: faker.random.words(1),
+    code: faker.string.alphanumeric(5),
+    title: faker.lorem.words(1),
   };
 });
 
 export const CertificationDefinitionFactory = factory((): CertificateDefinition => {
   return {
-    id: faker.datatype.uuid(),
-    title: faker.helpers.unique(faker.random.words, [Math.ceil(Math.random() * 5)]),
+    id: faker.string.uuid(),
+    title: faker.helpers.unique(faker.lorem.words, [Math.ceil(Math.random() * 5)]),
     description: faker.lorem.sentences(2),
   };
 });
 
 export const CertificateFactory = factory((): Certificate => {
   return {
-    id: faker.datatype.uuid(),
+    id: faker.string.uuid(),
     certificate_definition: CertificationDefinitionFactory().one(),
     order: OrderWithFullCourseFactory().one(),
     issued_on: faker.date.past().toISOString(),
@@ -101,12 +101,12 @@ export const CertificateFactory = factory((): Certificate => {
 
 export const CertificateProductFactory = factory((): Product => {
   return {
-    id: faker.datatype.uuid(),
-    title: faker.helpers.unique(faker.random.words, [10]),
+    id: faker.string.uuid(),
+    title: faker.helpers.unique(faker.lorem.words, [10]),
     type: ProductType.CERTIFICATE,
-    price: faker.datatype.number(),
+    price: faker.number.int(),
     price_currency: faker.finance.currencyCode(),
-    call_to_action: faker.random.words(3),
+    call_to_action: faker.lorem.words(3),
     certificate_definition: CertificationDefinitionFactory().one(),
     orders: [],
     target_courses: TargetCourseFactory().many(5),
@@ -128,22 +128,22 @@ export const ProductFactory = CertificateProductFactory;
 
 export const CourseRunFactory = factory((): CourseRun => {
   return {
-    end: faker.date.future(0.75).toISOString(),
-    enrollment_end: faker.date.future(0.5).toISOString(),
-    enrollment_start: faker.date.past(0.5).toISOString(),
-    id: faker.datatype.uuid(),
+    end: faker.date.future({ years: 0.75 }).toISOString(),
+    enrollment_end: faker.date.future({ years: 0.5 }).toISOString(),
+    enrollment_start: faker.date.past({ years: 0.5 }).toISOString(),
+    id: faker.string.uuid(),
     resource_link: faker.helpers.unique(
-      () => faker.internet.url() + '/' + faker.random.alphaNumeric(5),
+      () => faker.internet.url() + '/' + faker.string.alphanumeric(5),
       undefined,
       {
         store: FactoryConfig.GLOBAL_UNIQUE_STORE,
       },
     ),
-    start: faker.date.past(0.25).toISOString(),
-    title: faker.random.words(Math.ceil(Math.random() * 3)),
+    start: faker.date.past({ years: 0.25 }).toISOString(),
+    title: faker.lorem.words(Math.ceil(Math.random() * 3)),
     state: CourseStateFactory({
       priority: Priority.FUTURE_OPEN,
-      datetime: faker.date.past(0.25).toISOString(),
+      datetime: faker.date.past({ years: 0.25 }).toISOString(),
       call_to_action: 'enroll now',
       text: CourseStateTextEnum.CLOSING_ON,
     }).one(),
@@ -159,11 +159,11 @@ export const CourseRunWithCourseFactory = factory((): CourseRun => {
 
 export const CourseFactory = factory((): CourseMock => {
   return {
-    id: faker.datatype.uuid(),
-    code: faker.random.alphaNumeric(5),
+    id: faker.string.uuid(),
+    code: faker.string.alphanumeric(5),
     organizations: OrganizationFactory().many(1),
     selling_organizations: OrganizationFactory().many(3),
-    title: faker.helpers.unique(() => faker.random.words(Math.ceil(Math.random() * 3)), undefined, {
+    title: faker.helpers.unique(() => faker.lorem.words(Math.ceil(Math.random() * 3)), undefined, {
       store: FactoryConfig.GLOBAL_UNIQUE_STORE,
     }),
     products: CertificateCourseProductFactory().many(3),
@@ -180,10 +180,10 @@ export const CourseFactory = factory((): CourseMock => {
 
 export const CourseListItemFactory = factory((): CourseListItemMock => {
   return {
-    id: faker.datatype.uuid(),
-    code: faker.random.alphaNumeric(5),
+    id: faker.string.uuid(),
+    code: faker.string.alphanumeric(5),
     organizations: OrganizationFactory().many(1),
-    title: faker.helpers.unique(() => faker.random.words(Math.ceil(Math.random() * 3)), undefined, {
+    title: faker.helpers.unique(() => faker.lorem.words(Math.ceil(Math.random() * 3)), undefined, {
       store: FactoryConfig.GLOBAL_UNIQUE_STORE,
     }),
     course_runs: [],
@@ -199,10 +199,10 @@ export const CourseListItemFactory = factory((): CourseListItemMock => {
 
 export const CourseLightFactory = factory((): CourseLight => {
   return {
-    id: faker.datatype.uuid(),
-    code: faker.random.alphaNumeric(5),
+    id: faker.string.uuid(),
+    code: faker.string.alphanumeric(5),
     organizations: OrganizationLightFactory().many(1),
-    title: faker.helpers.unique(() => faker.random.words(Math.ceil(Math.random() * 3)), undefined, {
+    title: faker.helpers.unique(() => faker.lorem.words(Math.ceil(Math.random() * 3)), undefined, {
       store: FactoryConfig.GLOBAL_UNIQUE_STORE,
     }),
     products: CertificateCourseProductFactory().many(3),
@@ -213,8 +213,8 @@ export const CourseLightFactory = factory((): CourseLight => {
 
 export const UserWishlistCourseFactory = factory((): UserWishlistCourse => {
   return {
-    course: faker.random.alphaNumeric(5),
-    id: faker.datatype.uuid(),
+    course: faker.string.alphanumeric(5),
+    id: faker.string.uuid(),
   };
 });
 
@@ -222,24 +222,24 @@ export const OrderLiteFactory = factory((): OrderLite => {
   return {
     created_on: faker.date.past().toISOString(),
     enrollments: [],
-    id: faker.datatype.uuid(),
-    main_proforma_invoice: faker.datatype.uuid(),
-    total: faker.datatype.number(),
-    product: faker.datatype.uuid(),
+    id: faker.string.uuid(),
+    main_proforma_invoice: faker.string.uuid(),
+    total: faker.number.int(),
+    product: faker.string.uuid(),
     state: OrderState.VALIDATED,
   };
 });
 
 export const OrderFactory = factory((): Order => {
   return {
-    id: faker.datatype.uuid(),
-    created_on: faker.date.past(1).toISOString(),
+    id: faker.string.uuid(),
+    created_on: faker.date.past({ years: 1 }).toISOString(),
     owner: faker.internet.userName(),
-    total: faker.datatype.number(),
+    total: faker.number.int(),
     total_currency: faker.finance.currencyCode(),
-    main_proforma_invoice: faker.datatype.uuid(),
+    main_proforma_invoice: faker.string.uuid(),
     state: OrderState.VALIDATED,
-    product: faker.datatype.uuid(),
+    product: faker.string.uuid(),
     target_courses: TargetCourseFactory().many(5),
     course: CourseLightFactory().one(),
     enrollments: [],
@@ -272,15 +272,15 @@ export const OrderWithOneClickPaymentFactory = factory((): OrderWithPaymentInfo 
 
 export const AddressFactory = factory((): Address => {
   return {
-    address: faker.address.streetAddress(),
-    city: faker.address.city(),
-    country: faker.address.countryCode(),
-    first_name: faker.name.firstName(),
-    last_name: faker.name.lastName(),
-    id: faker.datatype.uuid(),
+    address: faker.location.streetAddress(),
+    city: faker.location.city(),
+    country: faker.location.countryCode(),
+    first_name: faker.person.firstName(),
+    last_name: faker.person.lastName(),
+    id: faker.string.uuid(),
     is_main: false,
-    postcode: faker.address.zipCode(),
-    title: faker.helpers.unique(faker.random.words, [5], {
+    postcode: faker.location.zipCode(),
+    title: faker.helpers.unique(faker.lorem.words, [5], {
       store: FactoryConfig.GLOBAL_UNIQUE_STORE,
     }),
   };
@@ -291,10 +291,10 @@ export const CreditCardFactory = factory((): CreditCard => {
     brand: CreditCardBrand.VISA,
     expiration_month: faker.date.future().getMonth(),
     expiration_year: faker.date.future().getFullYear(),
-    id: faker.datatype.uuid(),
+    id: faker.string.uuid(),
     is_main: false,
     last_numbers: faker.finance.creditCardNumber('visa').slice(-4),
-    title: faker.helpers.unique(faker.random.words, [5], {
+    title: faker.helpers.unique(faker.lorem.words, [5], {
       store: FactoryConfig.GLOBAL_UNIQUE_STORE,
     }),
   };

@@ -31,7 +31,7 @@ describe('Fonzie API', () => {
   });
 
   it('is able to retrieve access token within the session storage', () => {
-    const accessToken = faker.datatype.uuid();
+    const accessToken = faker.string.uuid();
     sessionStorage.setItem(RICHIE_USER_TOKEN, accessToken);
 
     const api = FonzieAPIInterface(configuration);
