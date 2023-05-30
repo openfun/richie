@@ -4,6 +4,7 @@ import { APIBackend } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
 import { CourseRun, CourseState, CourseStateTextEnum, Enrollment, Priority } from 'types';
 import { Course } from 'types/Course';
+import { FactoryHelper } from 'utils/test/factories/helper';
 import { factory } from './factories';
 
 /**
@@ -40,7 +41,7 @@ export const CourseStateFutureOpenFactory = factory<CourseState>(() => {
 export const CourseRunFactory = factory<CourseRun>(() => {
   return {
     id: faker.number.int(),
-    resource_link: faker.helpers.unique(faker.internet.url),
+    resource_link: FactoryHelper.unique(faker.internet.url),
     start: faker.date.past().toISOString(),
     end: faker.date.past().toISOString(),
     enrollment_start: faker.date.past().toISOString(),
@@ -93,7 +94,7 @@ export const RichieContextFactory = factory<CommonDataProps['context']>(() => ({
 }));
 
 export const CourseLightFactory = factory<Course>(() => {
-  const organizationName = faker.helpers.unique(faker.lorem.words, [Math.ceil(Math.random() * 3)]);
+  const organizationName = FactoryHelper.sequence((counter) => `Organization ${counter}`);
   return {
     id: faker.string.uuid(),
     absolute_url: '',

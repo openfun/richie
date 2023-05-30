@@ -1,4 +1,3 @@
-import { RecordKey } from '@faker-js/faker/modules/helpers/unique';
 import mergeWith from 'lodash-es/mergeWith';
 import isPlainObject from 'lodash-es/isPlainObject';
 
@@ -69,7 +68,7 @@ export const factory = <TData>(builder: FactoryBuilder<TData>): Factory<TData> =
 export class FactoryConfig {
   static #isInternalConstructing = false;
   static #instance: FactoryConfig;
-  static GLOBAL_UNIQUE_STORE: Record<RecordKey, RecordKey> = {};
+  static GLOBAL_UNIQUE_STORE = new Map<string, any>();
 
   constructor() {
     if (!FactoryConfig.#isInternalConstructing) {
@@ -88,6 +87,6 @@ export class FactoryConfig {
   }
 
   static resetUniqueStore(): void {
-    FactoryConfig.GLOBAL_UNIQUE_STORE = {};
+    FactoryConfig.GLOBAL_UNIQUE_STORE.clear();
   }
 }
