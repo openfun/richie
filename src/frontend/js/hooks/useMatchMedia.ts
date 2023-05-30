@@ -16,10 +16,18 @@ const useMatchMedia = (query: string): boolean => {
   );
 
   useEffect(() => {
-    mediaQuery.addListener(handleChange);
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+    } else {
+      mediaQuery.addListener(handleChange);
+    }
 
     return () => {
-      mediaQuery.removeListener(handleChange);
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleChange);
+      } else {
+        mediaQuery.removeListener(handleChange);
+      }
     };
   }, [mediaQuery]);
 

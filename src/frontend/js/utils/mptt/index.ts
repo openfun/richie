@@ -14,7 +14,7 @@ const isMPTTPath = (candidate: string) =>
 export const isMPTTParentOf = (parentKey: string, childKey: string) =>
   isMPTTPath(parentKey) &&
   isMPTTPath(childKey) &&
-  childKey.substr(2).startsWith(parentKey.substr(2));
+  childKey.substring(2).startsWith(parentKey.substring(2));
 
 /**
  * Use entity MPTT paths to determine if one is a parent of the other. Will always return false if
@@ -36,5 +36,5 @@ export const getMPTTChildrenPathMatcher = (parentMPTTPath: string) => {
     throw new Error(`${parentMPTTPath} is not an MPTT path, cannot build a children path matcher.`);
   }
 
-  return `.-${parentMPTTPath.substr(2)}.{4,}`;
+  return `.-${parentMPTTPath.substring(2)}.{4,}`;
 };
