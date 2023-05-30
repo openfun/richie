@@ -25,7 +25,7 @@ export const CourseGlimpseFooter: React.FC<{ courseState: CourseState } & Common
       <div className="course-glimpse-footer__date">
         <Icon name={IconTypeEnum.CALENDAR} title={intl.formatMessage(messages.dateIconAlt)} />
         {courseState.text.charAt(0).toUpperCase() +
-          courseState.text.substr(1) +
+          courseState.text.substring(1) +
           (courseState.datetime
             ? ` ${intl.formatDate(new Date(courseState.datetime!), {
                 year: 'numeric',

@@ -202,7 +202,7 @@ describe('<RootSearchSuggestField />', () => {
     // Simulate the user typing in some text in the autocomplete field
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'some query' } });
-    fireEvent.keyDown(field, { keyCode: 13 });
+    fireEvent.keyDown(field, { key: 'Enter', code: 'Enter', charCode: 13 });
 
     await waitFor(() => {
       expect(location.assign).toHaveBeenCalledTimes(1);
@@ -246,8 +246,8 @@ describe('<RootSearchSuggestField />', () => {
     expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut')).toEqual(true);
     expect(screen.queryByText('Subjects')).toEqual(null);
 
-    fireEvent.keyDown(field, { keyCode: 40 }); // Select the desired suggestion (there is only one)
-    fireEvent.keyDown(field, { keyCode: 13 }); // Press enter
+    fireEvent.keyDown(field, { key: 'ArrowDown', code: 'ArrowDown', keyCode: 40 }); // Select the desired suggestion (there is only one)
+    fireEvent.keyDown(field, { key: 'Enter', code: 'Enter', keyCode: 13 }); // Press enter
     await waitFor(() => {
       expect(location.assign).toHaveBeenCalledTimes(1);
       expect(location.assign).toHaveBeenCalledWith('/en/courses/42');

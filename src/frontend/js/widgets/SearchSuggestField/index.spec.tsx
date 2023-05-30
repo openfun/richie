@@ -441,7 +441,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
       // Simulate the user deleting the text in the autocomplete field
       fireEvent.focus(field);
       fireEvent.change(field, { target: { value: '' } });
-      fireEvent.keyDown(field, { keyCode: 13 });
+      fireEvent.keyDown(field, { key: 'Enter', code: 'Enter', charCode: 13 });
     });
 
     await waitFor(() => {

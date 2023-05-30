@@ -1,14 +1,21 @@
 import { Link } from 'react-router-dom';
+import { FunctionComponent, ReactElement } from 'react';
 
 interface CourseLinkProps {
   href?: string;
   to?: string;
   tabIndex?: number;
   className?: string;
-  children: JSX.Element;
+  children?: ReactElement;
 }
 
-const CourseLink = ({ href, to, className, children, tabIndex }: CourseLinkProps): JSX.Element => {
+const CourseLink: FunctionComponent<CourseLinkProps> = ({
+  href,
+  to,
+  className,
+  tabIndex,
+  children = null,
+}) => {
   if (href) {
     return (
       <a href={href} className={className} tabIndex={tabIndex}>

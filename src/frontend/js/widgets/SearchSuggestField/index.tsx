@@ -111,7 +111,7 @@ const SearchSuggestField = ({ context }: CommonDataProps) => {
       updateCourseSearchParamsDebounced(_, { method, newValue });
     },
     onKeyDown: (event) => {
-      if (event.keyCode === 13 /* enter */ && !value) {
+      if (event.code === 'Enter' && !value) {
         dispatchCourseSearchParamsUpdate({
           query: '',
           type: CourseSearchParamsAction.queryUpdate,

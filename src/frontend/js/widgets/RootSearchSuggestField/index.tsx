@@ -82,7 +82,7 @@ const RootSearchSuggestField = ({
       // When ther user presses enter from the search field, move to the course search view with
       // whatever is currently in the field as a text query.
       // Unless they are currently highlighting a suggestion, in which case we let Autosuggest handle it.
-      if (event.keyCode === 13 /* enter */ && !hasHighlightedSuggestion) {
+      if (event.code === 'Enter' && !hasHighlightedSuggestion) {
         moveToSearchViewWithQuery();
       }
     },
