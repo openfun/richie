@@ -1,6 +1,7 @@
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { useMemo } from 'react';
+import { capitalize } from 'lodash-es';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
 import { DashboardSidebar } from 'widgets/Dashboard/components/DashboardSidebar';
 import {
@@ -10,6 +11,7 @@ import {
 import { useCourse } from 'hooks/useCourses';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
+import { useCourseProductRelation } from 'hooks/useCourseProductRelation';
 
 export const messages = defineMessages({
   header: {
@@ -38,37 +40,69 @@ export const TeacherCourseDashboardSidebar = () => {
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
-  const { courseId } = useParams<{ courseId: string }>();
-  const { item: course } = useCourse(courseId);
+  const { courseId, courseProductRelationId = '' } = useParams<{
+    courseId: string;
+    courseProductRelationId: string;
+  }>();
 
-  const links = useMemo(
-    () =>
-      course === undefined
-        ? []
-        : [
-            TeacherDashboardPaths.COURSE,
-            TeacherDashboardPaths.COURSE_CLASSROOMS,
-            TeacherDashboardPaths.COURSE_RECORDS,
-            TeacherDashboardPaths.COURSE_STUDENTS,
-            TeacherDashboardPaths.COURSE_SETTINGS,
-          ].map((path) => ({
-            to: getRoutePath(path, { courseId: course.id }),
-            label: getRouteLabel(path),
-          })),
-    [course?.id],
+  const {
+    item: singleCourse,
+    states: { fetching: courseFetching },
+  } = useCourse(courseId!);
+  const {
+    item: courseProductRelation,
+    states: { fetching: courseProductRelationFetching },
+  } = useCourseProductRelation(courseProductRelationId);
+  const fetching = useMemo(
+    () => courseFetching || courseProductRelationFetching,
+    [courseFetching, courseProductRelationFetching],
   );
+  const product = useMemo(
+    () => (courseProductRelation ? courseProductRelation.product : undefined),
+    [courseProductRelation],
+  );
+  const course = useMemo(
+    () => (courseProductRelation ? courseProductRelation.course : singleCourse),
+    [courseProductRelation, singleCourse],
+  );
+
+  const menuLinks = [
+    TeacherDashboardPaths.COURSE,
+    TeacherDashboardPaths.COURSE_CLASSROOMS,
+    TeacherDashboardPaths.COURSE_RECORDS,
+    TeacherDashboardPaths.COURSE_STUDENTS,
+    TeacherDashboardPaths.COURSE_SETTINGS,
+  ].map((path) => ({
+    to: getRoutePath(path, { courseId }),
+    label: getRouteLabel(path),
+  }));
+
+  if (courseProductRelationId) {
+    menuLinks.shift();
+    menuLinks.unshift({
+      to: getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, {
+        courseId,
+        courseProductRelationId,
+      }),
+      label: getRouteLabel(TeacherDashboardPaths.COURSE_PRODUCT),
+    });
+  }
 
   return (
     <DashboardSidebar
-      menuLinks={links}
+      menuLinks={menuLinks}
       header={
         course === undefined
           ? ''
-          : intl.formatMessage(messages.header, { courseTitle: course.title })
+          : capitalize(
+              intl.formatMessage(messages.header, {
+                courseTitle: product ? product.title : course.title,
+              }),
+            )
       }
       subHeader={intl.formatMessage(messages.subHeader)}
     >
-      {course === undefined ? (
+      {fetching ? (
         <Spinner aria-labelledby="loading-courses-data">
           <span id="loading-courses-data">
             <FormattedMessage {...messages.loading} />

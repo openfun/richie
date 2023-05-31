@@ -92,6 +92,7 @@ export enum ProductType {
 export interface Product {
   id: string;
   title: string;
+  description?: string;
   type: ProductType;
   price: number;
   price_currency: string;

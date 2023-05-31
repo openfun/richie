@@ -30,6 +30,18 @@ $sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-filters-height +
     }
   }
 
+  &__section,
+  &__nested_section {
+    margin-top: rem-calc(10px);
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  &__nested_section {
+    margin-left: rem-calc(20px);
+  }
+
   &__filters {
     min-height: $dashboard-filters-height;
     margin-top: $dashboard-breadcrumb-filters-spacing;
