@@ -1,4 +1,4 @@
-import { FormattedMessage, defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
 import { capitalize } from 'lodash-es';
@@ -9,28 +9,19 @@ import { Spinner } from 'components/Spinner';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { useCourseRuns } from 'hooks/useCourseRuns';
+import Banner, { BannerType } from 'components/Banner';
 import CourseRunList from './CourseRunList';
 
 const messages = defineMessages({
-  courses: {
-    defaultMessage: 'Your courses',
-    description: 'Filtered courses title',
-    id: 'components.TeacherCourseDashboardLoader.title.filteredCourses',
+  pageTitle: {
+    defaultMessage: 'Course area',
+    description: 'Use for the page title of the course area',
+    id: 'components.TeacherCourseDashboardLoader.pageTitle',
   },
-  incoming: {
-    defaultMessage: 'Incoming',
-    description: 'Incoming courses title',
-    id: 'components.TeacherCourseDashboardLoader.title.incoming',
-  },
-  ongoing: {
-    defaultMessage: 'Ongoing',
-    description: 'Ongoing courses title',
-    id: 'components.TeacherCourseDashboardLoader.title.ongoing',
-  },
-  archived: {
-    defaultMessage: 'Archived',
-    description: 'Archived courses title',
-    id: 'components.TeacherCourseDashboardLoader.title.archived',
+  errorNoCourse: {
+    defaultMessage: "This course doesn't exist",
+    description: 'Message displayed when requested course is not found',
+    id: 'components.TeacherCourseDashboardLoader.errorNoCourse',
   },
   loading: {
     defaultMessage: 'Loading course...',
@@ -40,7 +31,12 @@ const messages = defineMessages({
 });
 
 export const TeacherCourseDashboardLoader = () => {
-  const { courseId } = useParams<{ courseId: string }>();
+  const intl = useIntl();
+  const { courseId } = useParams<{
+    courseId?: string;
+    courseCodeAndProductId?: string;
+  }>();
+
   const {
     item: course,
     states: { fetching: fetchingCourse },
@@ -52,23 +48,39 @@ export const TeacherCourseDashboardLoader = () => {
   const fetching = fetchingCourse || fetchingCourseRuns;
   return (
     <DashboardLayout sidebar={<TeacherCourseDashboardSidebar />}>
-      {fetching ? (
+      <div className="dashboard__page_title_container">
+        <h1 className="dashboard__page_title">
+          <FormattedMessage {...messages.pageTitle} />
+        </h1>
+      </div>
+
+      {fetching && (
         <Spinner aria-labelledby="loading-courses-data">
           <span id="loading-courses-data">
             <FormattedMessage {...messages.loading} />
           </span>
         </Spinner>
-      ) : (
+      )}
+
+      {!fetching && !course && (
+        <Banner
+          message={intl.formatMessage(messages.errorNoCourse)}
+          type={BannerType.ERROR}
+          rounded
+        />
+      )}
+
+      {!fetching && course && (
         <div className="teacher-course-page">
           <DashboardCard
             className="icon-arrow-right-rounded"
             header={
-              <h2 className="teacher-course-page__course-title">
-                <Icon name={IconTypeEnum.ARROW_RIGHT_ROUNDED} />
-                <span className="teacher-course-page__course-title__text">
-                  {capitalize(course.title)}
-                </span>
-              </h2>
+              <div className="dashboard__title_container--large">
+                <h2 className="dashboard__title--small">
+                  <Icon name={IconTypeEnum.ARROW_RIGHT_ROUNDED} />
+                  <span className="dashboard__text_icon_left">{capitalize(course.title)}</span>
+                </h2>
+              </div>
             }
             expandable={false}
             fullWidth

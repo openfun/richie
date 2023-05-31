@@ -16,6 +16,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - List teacher's course's course runs in the teacher course dashboard page.
 - Teacher dashboard course list now includes courses and courses product 
 relations.
+- Add a page for training details (courseProductRelation) in the teacher
+dashboard.
 
 ### Changed
 

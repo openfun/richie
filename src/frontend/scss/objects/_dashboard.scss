@@ -1,0 +1,55 @@
+.dashboard {
+  &__page_title,
+  &__--small,
+  &__--large {
+    // reset bootstrap bottom margin
+    margin: 0;
+    color: r-color(secondary-900);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+
+  &__title--large,
+  &__page_title {
+    font-size: rem-calc(22px);
+  }
+
+  &__title--small {
+    font-size: rem-calc(18px);
+  }
+
+  &__page_title_container,
+  &__title_container--small,
+  &__title_container--large {
+    display: flex;
+    align-items: center;
+  }
+
+  &__page_title_container {
+    margin-bottom: rem-calc(20px);
+  }
+
+  &__title_container--small {
+    margin: rem-calc(9px) 0 rem-calc(9px) 0;
+  }
+
+  &__title_container--large {
+    margin: rem-calc(15px) 0 rem-calc(24px) 0;
+  }
+
+  &__quote {
+    display: flex;
+    align-items: center;
+    font-size: rem-calc(13px);
+    border-left: 1px solid r-theme-val(dashboard-card, base-color);
+    font-weight: normal;
+    position: relative;
+    padding-left: 20px;
+  }
+
+  // add space between icon and text
+  &__text_icon_left {
+    margin-left: rem-calc(8px);
+  }
+}

@@ -28,3 +28,11 @@ export const DashboardLayout = ({ children, sidebar, filters }: DashboardLayoutP
     </DashboardBreadcrumbsProvider>
   );
 };
+
+DashboardLayout.Section = ({ children }: PropsWithChildren) => (
+  <div className="dashboard__section">{children}</div>
+);
+
+DashboardLayout.NestedSection = ({ children }: PropsWithChildren) => (
+  <div className="dashboard__nested_section">{children}</div>
+);
