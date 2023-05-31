@@ -1,4 +1,4 @@
-{% load i18n menu_tags cms_tags %}{% spaceless %}
+{% load i18n menu_tags cms_tags language_name %}{% spaceless %}
 {% get_current_language as current_language_code %}
 {% if languages|length > 1 %}
   <script data-language-selector type="application/json">
@@ -8,7 +8,8 @@
       {% for code, name in languages %}
       "{{ code }}": {
         "code": "{{ code }}",
-        "name": "{{ name }}",
+        {% get_original_language_name code as original_language_name %}
+        "name": "{{ original_language_name }}",
         "url": "{% page_language_url code %}"
       {% if forloop.last %}
       }
