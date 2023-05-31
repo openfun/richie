@@ -35,7 +35,7 @@ class LanguageChooserTests(CMSTestCase):
         self.assertContains(response, '"name": "English"')
         self.assertContains(response, '"url": "/en/language-test-page/"')
         self.assertContains(response, '"code": "fr"')
-        self.assertContains(response, '"name": "French"')
+        self.assertContains(response, '"name": "Français"')
         self.assertContains(response, '"url": "/fr/language-test-page/"')
 
     @override_settings(

@@ -27,6 +27,8 @@ information message when the product have no remaining order.
 
 ### Changed
 
+- Show original language name on the menu instead of translating it on the
+  current language.
 - Replace helix factories by homemade engine using typescript.
 - Use css colors from cunningham instead of palette.scss
 - Improve the design of the dashboards layouts.
