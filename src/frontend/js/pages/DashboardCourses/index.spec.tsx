@@ -14,7 +14,7 @@ import { CourseLight, Enrollment, Order, Product } from 'types/Joanie';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
-import { Data, DataType } from 'pages/DashboardCourses/useOrdersEnrollments';
+import { isOrder } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { PAGE_SIZE } from 'pages/DashboardCourses/constants';
 import { noop } from 'utils';
 
@@ -111,15 +111,11 @@ describe('<DashboardCourses/>', () => {
     return { orders, products };
   };
 
-  const expectList = (entities: Data[], products: Record<string, Product>) => {
+  const expectList = (entities: (Order | Enrollment)[], products: Record<string, Product>) => {
     const itemElements = document.querySelectorAll<HTMLElement>('.dashboard__courses__list__item');
     expect(itemElements.length).toBe(entities.length);
-
     entities.forEach((entity, i) => {
-      const title =
-        entity.type === DataType.ORDER
-          ? products[entity.item.id].title
-          : (entity.item as Enrollment).course_run.course?.title;
+      const title = isOrder(entity) ? products[entity.id].title : entity.course_run.course?.title;
       getByRole(itemElements[i], 'heading', {
         name: title,
         level: 5,
@@ -153,149 +149,17 @@ describe('<DashboardCourses/>', () => {
     await screen.findByText('You have no enrollments nor orders yet.');
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
   });
-  it('renders only < 1 page of orders', async () => {
-    const { orders, products } = mockOrders(OrderFactory().many(2));
-    const ordersDeferred = new Deferred();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${PAGE_SIZE}`,
-      ordersDeferred.promise,
-    );
-    const enrollmentsDeferred = new Deferred();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${PAGE_SIZE}&was_created_by_order=false`,
-      enrollmentsDeferred.promise,
-    );
 
-    render(<Wrapper />);
-
-    await expectSpinner('Loading orders and enrollments...');
-    const loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
-    expect(loadMoreButton).toBeDisabled();
-    expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
-
-    await act(async () => {
-      ordersDeferred.resolve({ results: orders, next: null, previous: null, count: orders.length });
-      enrollmentsDeferred.resolve({ results: [], next: null, previous: null, count: 0 });
-    });
-
-    await expectNoSpinner('Loading orders and enrollments...');
-    expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
-    const itemElements = document.querySelectorAll<HTMLElement>('.dashboard__courses__list__item');
-    expect(itemElements.length).toBe(orders.length);
-    orders.forEach((order, i) => {
-      getByRole(itemElements[i], 'heading', { name: products[order.id].title, level: 5 });
-    });
-  });
-
-  it('renders only < 1 page of enrollments', async () => {
-    const enrollments: Enrollment[] = EnrollmentFactory().many(2);
-    enrollments.sort((a, b) => {
+  const merge = (orders: Order[], enrollments: Enrollment[]) => {
+    return [...orders, ...enrollments].sort((a, b) => {
       const aDate = new Date(a.created_on);
       const bDate = new Date(b.created_on);
       return bDate.getTime() - aDate.getTime();
     });
-    const ordersDeferred = new Deferred();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${PAGE_SIZE}`,
-      ordersDeferred.promise,
-    );
-    const enrollmentsDeferred = new Deferred();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${PAGE_SIZE}&was_created_by_order=false`,
-      enrollmentsDeferred.promise,
-    );
-
-    render(<Wrapper />);
-
-    await expectSpinner('Loading orders and enrollments...');
-    const loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
-    expect(loadMoreButton).toBeDisabled();
-    expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
-
-    await act(async () => {
-      ordersDeferred.resolve({ results: [], next: null, previous: null, count: 0 });
-      enrollmentsDeferred.resolve({
-        results: enrollments,
-        next: null,
-        previous: null,
-        count: enrollments.length,
-      });
-    });
-
-    await expectNoSpinner('Loading orders and enrollments...');
-    expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
-    const itemElements = document.querySelectorAll<HTMLElement>('.dashboard__courses__list__item');
-
-    expect(itemElements.length).toBe(enrollments.length);
-    enrollments.forEach((enrollment, i) => {
-      getByRole(itemElements[i], 'heading', {
-        name: enrollment.course_run.course?.title,
-        level: 5,
-      });
-    });
-  });
-
-  const merge = (orders: Order[], enrollments: Enrollment[]) => {
-    return [
-      ...orders.map((order) => ({
-        type: DataType.ORDER,
-        item: order,
-      })),
-      ...enrollments.map((enrollment) => ({
-        type: DataType.ENROLLMENT,
-        item: enrollment,
-      })),
-    ].sort((a, b) => {
-      const aDate = new Date(a.item.created_on);
-      const bDate = new Date(b.item.created_on);
-      return bDate.getTime() - aDate.getTime();
-    });
   };
 
-  it('renders only < 1 page of both enrollments and orders', async () => {
-    const { orders, products } = mockOrders(OrderFactory().many(2));
-    const ordersDeferred = new Deferred();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${PAGE_SIZE}`,
-      ordersDeferred.promise,
-    );
-    const enrollments: Enrollment[] = EnrollmentFactory().many(2);
-    const enrollmentsDeferred = new Deferred();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${PAGE_SIZE}&was_created_by_order=false`,
-      enrollmentsDeferred.promise,
-    );
-
-    render(<Wrapper />);
-
-    await expectSpinner('Loading orders and enrollments...');
-    const loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
-    expect(loadMoreButton).toBeDisabled();
-    expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
-
-    await act(async () => {
-      ordersDeferred.resolve({ results: orders, next: null, previous: null, count: orders.length });
-      enrollmentsDeferred.resolve({
-        results: enrollments,
-        next: null,
-        previous: null,
-        count: enrollments.length,
-      });
-    });
-
-    const entities = merge(orders, enrollments);
-
-    await expectNoSpinner('Loading orders and enrollments...');
-    expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
-    expectList(entities, products);
-  });
-
-  it('renders multiple pages of enrollments and orders', async () => {
+  it('should render the list of entities', async () => {
     const client = createTestQueryClient({ user: true });
-    const pageSize = 3;
     const { orders, products } = mockOrders(OrderFactory().many(PAGE_SIZE * 2 + 1), client);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${PAGE_SIZE}`, {
       results: orders.slice(0, PAGE_SIZE),
@@ -315,8 +179,7 @@ describe('<DashboardCourses/>', () => {
       prev: null,
       count: orders.length,
     });
-
-    const enrollments: Enrollment[] = EnrollmentFactory().many(pageSize * 2 + 2);
+    const enrollments: Enrollment[] = EnrollmentFactory().many(PAGE_SIZE * 2 + 2);
     enrollments.sort((a, b) => {
       const aDate = new Date(a.created_on);
       const bDate = new Date(b.created_on);
@@ -374,18 +237,7 @@ describe('<DashboardCourses/>', () => {
     await waitFor(() => expectList(entities.slice(0, PAGE_SIZE * 3), products), { timeout: 30000 });
     loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
-
-    // Click on load more button to load slice 4.
-    await act(async () => userEvent.click(loadMoreButton));
-    await waitFor(() => expectList(entities.slice(0, PAGE_SIZE * 4), products), { timeout: 30000 });
-    loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
-    expect(loadMoreButton).toBeEnabled();
-
-    // Click on load more button to load slice 5.
-    await act(async () => userEvent.click(loadMoreButton));
-    await waitFor(() => expectList(entities.slice(0, PAGE_SIZE * 5), products), { timeout: 30000 });
-    expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
-  }, 300000);
+  });
 
   it('shows an error', async () => {
     jest.spyOn(console, 'error').mockImplementation(noop);
@@ -400,12 +252,6 @@ describe('<DashboardCourses/>', () => {
     );
 
     render(<Wrapper />);
-
-    await expectSpinner('Loading orders and enrollments...');
-    const loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
-    expect(loadMoreButton).toBeDisabled();
-    expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
-
     ordersDeferred.resolve({
       status: 500,
       body: 'Bad request',

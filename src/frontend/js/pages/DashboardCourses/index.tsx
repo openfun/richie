@@ -1,13 +1,17 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useRef } from 'react';
-import { Enrollment, Order } from 'types/Joanie';
+import {
+  useOrdersEnrollments,
+  isEnrollement,
+  isOrder,
+} from 'pages/DashboardCourses/useOrdersEnrollments';
 import { Spinner } from 'components/Spinner';
 import { DashboardItemEnrollment } from 'widgets/Dashboard/components/DashboardItem/Enrollment/DashboardItemEnrollment';
 import { DashboardItemOrder } from 'widgets/Dashboard/components/DashboardItem/Order/DashboardItemOrder';
-import { useOrdersEnrollments } from 'pages/DashboardCourses/useOrdersEnrollments';
 import Banner, { BannerType } from 'components/Banner';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { Button } from 'components/Button';
+import { PAGE_SIZE } from './constants';
 
 const messages = defineMessages({
   loading: {
@@ -28,7 +32,10 @@ const messages = defineMessages({
 });
 
 export const DashboardCourses = () => {
-  const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments();
+  const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments({
+    // This PAGE_SIZE constant can be override in tests
+    perPage: PAGE_SIZE,
+  });
 
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   useIntersectionObserver({
@@ -50,11 +57,13 @@ export const DashboardCourses = () => {
           )}
           <div className="dashboard__courses__list">
             {data.map((datum) => (
-              <div key={datum.item.id} className="dashboard__courses__list__item">
-                {datum.type === 'enrollment' && (
-                  <DashboardItemEnrollment enrollment={datum.item as Enrollment} />
-                )}
-                {datum.type === 'order' && <DashboardItemOrder order={datum.item as Order} />}
+              <div
+                key={datum.id}
+                className="dashboard__courses__list__item"
+                data-testid="order-enrollment-list-item"
+              >
+                {isEnrollement(datum) && <DashboardItemEnrollment enrollment={datum} />}
+                {isOrder(datum) && <DashboardItemOrder order={datum} />}
               </div>
             ))}
           </div>

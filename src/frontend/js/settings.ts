@@ -36,3 +36,5 @@ export const PAYMENT_SETTINGS = {
 };
 
 export const MOCK_SERVICE_WORKER_ENABLED = false;
+
+export const DEBUG_UNION_RESOURCES_HOOK = process.env.NODE_ENV !== 'production' && false;
