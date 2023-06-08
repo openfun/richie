@@ -15,7 +15,7 @@ export enum TeacherDashboardPaths {
   ORGANIZATION_MEMBERS = '/teacher/organization/{organizationId}/members',
   COURSE = '/teacher/course/{courseCode}',
   COURSE_SETTINGS = '/teacher/course/{courseCode}/settings',
-  COURSE_CLASSROOMS = '/teacher/course/{courseCode}/classrooms',
+  COURSE_CLASSROOMS = '/teacher/course/{courseCode}/run/{courseRunId}',
   COURSE_STUDENTS = '/teacher/course/{courseCode}/students',
   COURSE_RECORDS = '/teacher/course/{courseCode}/records',
 }
@@ -80,7 +80,7 @@ export const TEACHER_DASHBOARD_ROUTE_PATHS = defineMessages<TeacherDashboardPath
   [TeacherDashboardPaths.COURSE_CLASSROOMS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.path',
     description: 'The path to display the course classrooms view.',
-    defaultMessage: '/teacher/course/{courseCode}/classrooms',
+    defaultMessage: '/teacher/course/{courseCode}/run/{courseRunId}',
   },
   [TeacherDashboardPaths.COURSE_STUDENTS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.students.path',

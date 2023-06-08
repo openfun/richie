@@ -58,17 +58,19 @@ export const TeacherCourseDashboardLoader = () => {
           <DashboardCard
             className="icon-arrow-right-rounded"
             header={
-              <h2 className="teacher-course-page__course-title">
-                <Icon name={IconTypeEnum.ARROW_RIGHT_ROUNDED} />
-                <span className="teacher-course-page__course-title__text">
-                  {capitalize(course.title)}
-                </span>
-              </h2>
+              <div className="teacher-course-page__course-title__container">
+                <h2 className="teacher-course-page__course-title dashboard__title-h2">
+                  <Icon name={IconTypeEnum.ARROW_RIGHT_ROUNDED} />
+                  <span className="teacher-course-page__course-title__text">
+                    {capitalize(course.title)}
+                  </span>
+                </h2>
+              </div>
             }
             expandable={false}
             fullWidth
           >
-            <CourseRunList courseRuns={course.course_runs} />
+            <CourseRunList courseCode={course.code} courseRuns={course.course_runs} />
           </DashboardCard>
         </div>
       )}

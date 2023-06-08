@@ -1,13 +1,24 @@
 .teacher-course-page {
   &__course-title {
     color: r-color(secondary-900);
-    margin: rem-calc(17px) 0 rem-calc(22px);
-    font-size: rem-calc(18px);
     font-weight: bold;
     display: flex;
     align-items: center;
+    margin: 0;
+
     &__text {
       margin-left: rem-calc(8px);
+    }
+
+    &__container,
+    &__container-small {
+      margin: rem-calc(17px) 0 rem-calc(22px);
+      display: flex;
+      align-items: center;
+    }
+
+    &__container-small {
+      margin: rem-calc(9px) 0;
     }
   }
 }

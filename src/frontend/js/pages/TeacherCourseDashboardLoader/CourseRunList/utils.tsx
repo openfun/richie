@@ -1,9 +1,13 @@
 import { FormattedMessage, IntlShape, defineMessages } from 'react-intl';
 import { capitalize } from 'lodash-es';
 import { Button } from '@openfun/cunningham-react';
+import { NavigateFunction } from 'react-router-dom';
 import { IconTypeEnum } from 'components/Icon';
 import { CourseStateTextEnum, Priority } from 'types';
 import { CourseRun } from 'types/Joanie';
+import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
+import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
+import { CourseMock } from 'api/mocks/joanie/courses';
 import CourseRunListCell from './CourseRunListCell';
 
 export const messages = defineMessages({
@@ -19,7 +23,13 @@ export const messages = defineMessages({
   },
 });
 
-export const buildCourseRunData = (intl: IntlShape, courseRuns: CourseRun[]) => {
+export const buildCourseRunData = (
+  intl: IntlShape,
+  navigate: NavigateFunction,
+  courseCode: CourseMock['code'],
+  courseRuns: CourseRun[],
+) => {
+  const getRoutePath = getDashboardRoutePath(intl);
   const CourseStateIconMap: Record<CourseStateTextEnum, IconTypeEnum> = {
     [CourseStateTextEnum.CLOSING_ON]: IconTypeEnum.MORE,
     [CourseStateTextEnum.STARTING_ON]: IconTypeEnum.CHECK_ROUNDED,
@@ -67,7 +77,18 @@ export const buildCourseRunData = (intl: IntlShape, courseRuns: CourseRun[]) => 
     ),
     action: (
       <CourseRunListCell variant={CourseRunListCell.ALIGN_RIGHT}>
-        <Button size="small" color="secondary">
+        <Button
+          size="small"
+          color="secondary"
+          onClick={() =>
+            navigate(
+              getRoutePath(TeacherDashboardPaths.COURSE_CLASSROOMS, {
+                courseCode,
+                courseRunId: courseRun.id,
+              }),
+            )
+          }
+        >
           <FormattedMessage {...messages.dataCourseRunLink} />
         </Button>
       </CourseRunListCell>
