@@ -3,7 +3,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import {
+  UserFactory,
+  RichieContextFactory as mockRichieContextFactory,
+} from 'utils/test/factories/richie';
 import { History, HistoryContext } from 'hooks/useHistory';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { EnrollmentFactory, OrderFactory, ProductFactory } from 'utils/test/factories/joanie';
@@ -67,8 +70,9 @@ describe('<DashboardCourses/>', () => {
   });
 
   const Wrapper = ({ client }: { client?: QueryClient }) => {
+    const user = UserFactory().one();
     return (
-      <QueryClientProvider client={client ?? createTestQueryClient({ user: true })}>
+      <QueryClientProvider client={client ?? createTestQueryClient({ user })}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({})}>
             <SessionProvider>

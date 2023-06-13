@@ -7,7 +7,7 @@ import {
   UserFactory,
 } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { SessionProvider } from 'contexts/SessionContext';
+import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { DashboardLayoutRoute } from '.';
 
 jest.mock('utils/context', () => ({
@@ -51,9 +51,9 @@ const renderDashboardLayoutRoute = ({ renderLayout }: { renderLayout: boolean })
   return render(
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user })}>
-        <SessionProvider>
+        <JoanieSessionProvider>
           <RouterProvider router={router} />
-        </SessionProvider>
+        </JoanieSessionProvider>
       </QueryClientProvider>
     </IntlProvider>,
   );

@@ -3,13 +3,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
-import { PaginatedResponse, PaginatedResourceQuery } from 'types/Joanie';
+import { PaginatedResourceQuery } from 'types/Joanie';
 import { History, HistoryContext } from 'hooks/useHistory';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';
 
 import { noop } from 'utils';
+import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { FetchEntityData } from './utils/fetchEntities';
 import { QueryConfig, FetchDataFunction } from './utils/fetchEntity';
 import useUnionResource from '.';
@@ -27,19 +28,6 @@ interface TestDataB {
   id: string;
   created_on: string;
 }
-
-const mockPaginatedResponse: <Data>(
-  results?: Data[],
-  totalCount?: number,
-  haveNextPage?: boolean,
-) => PaginatedResponse<Data> = (results = [], totalCount = 0, haveNextPage = true) => {
-  return {
-    count: totalCount,
-    next: haveNextPage ? 'next' : null,
-    prev: null,
-    results,
-  };
-};
 
 const renderUseUnionResource = <
   DataA extends FetchEntityData,

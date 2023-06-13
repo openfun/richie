@@ -26,6 +26,13 @@ interface CourseGlimpseListProps {
   className?: string;
 }
 
+const getCourseKey = (course: CourseGlimpseCourse) => {
+  if (!course.product_id) {
+    return course.code;
+  }
+  return [course.product_id, course.code].join('-');
+};
+
 export const CourseGlimpseList = ({
   context,
   courses,
@@ -68,7 +75,7 @@ export const CourseGlimpseList = ({
       )}
       <div className="course-glimpse-list__content">
         {courses.map((course) => (
-          <CourseGlimpse context={context} course={course} key={course.code} />
+          <CourseGlimpse context={context} course={course} key={getCourseKey(course)} />
         ))}
       </div>
     </div>

@@ -2,9 +2,7 @@ import type { CourseState } from 'types';
 import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
-import { CourseListItemMock, CourseMock } from 'api/mocks/joanie/courses';
-import { CourseStatusFilter, CourseTypeFilter } from 'hooks/useCourses';
-import { OrganizationMock } from '../api/mocks/joanie/organizations';
+import { Course as RichieCourse } from 'types/Course';
 
 // - Generic
 export interface PaginatedResponse<T> {
@@ -19,7 +17,37 @@ export interface PaginatedParameters {
   offset: number;
 }
 
-export interface QueryParameters extends PaginatedParameters {}
+export interface Organization {
+  id: string;
+  code: string;
+  title: string;
+  logo: {
+    filename: string;
+    src: string;
+    srcset: string[];
+    height: number;
+    width: number;
+    size: number;
+  };
+}
+
+export interface CourseListItem extends Resource {
+  id: string;
+  title: string;
+  code: string;
+  course_runs: CourseRun[];
+  organizations: Organization[];
+  selling_organizations: Organization[];
+  cover: Nullable<{
+    filename: string;
+    url: string;
+    height: number;
+    width: number;
+  }>;
+  products: Product[];
+  state: CourseState;
+  created_on: string;
+}
 
 // - Course Run
 export interface CourseRun {
@@ -32,12 +60,6 @@ export interface CourseRun {
   state: CourseState;
   title: string;
   course?: CourseLight;
-}
-
-export interface CourseFilters extends ResourcesQuery {
-  status: CourseStatusFilter;
-  type: CourseTypeFilter;
-  per_page?: number;
 }
 
 // - Certificate
@@ -76,12 +98,25 @@ export interface Product {
   call_to_action: string;
   certificate_definition: CertificateDefinition;
   target_courses: TargetCourse[];
+  created_on: string;
   orders: Order['id'][];
 }
 
 export interface CourseProduct extends Product {
   order: Nullable<OrderLite>;
   target_courses: TargetCourse[];
+}
+
+export interface CourseProductRelation {
+  id: string;
+  course: CourseListItem;
+  product: Product;
+  created_on: string;
+}
+export function isCourseProductRelation(
+  entity: CourseListItem | CourseProductRelation | RichieCourse,
+): entity is CourseProductRelation {
+  return 'course' in entity && 'product' in entity;
 }
 
 // - Course
@@ -261,6 +296,10 @@ interface EnrollmentUpdatePayload extends EnrollmentCreationPayload {
   id: Enrollment['id'];
 }
 
+export interface CourseRunFilters extends ResourcesQuery {
+  course_id?: CourseListItem['id'];
+}
+
 export interface ApiResourceInterface<
   TData extends Resource,
   TResourceQuery extends ResourcesQuery = ResourcesQuery,
@@ -327,23 +366,37 @@ interface APIUser {
   organizations: {
     get<Filters extends ResourcesQuery = ResourcesQuery>(
       filters?: Filters,
-    ): Filters extends { id: string }
-      ? Promise<Nullable<OrganizationMock>>
-      : Promise<OrganizationMock[]>;
+    ): Filters extends { id: string } ? Promise<Nullable<Organization>> : Promise<Organization[]>;
   };
 }
 
 export interface API {
   user: APIUser;
   products: {
-    get(filters?: ResourcesQuery): Promise<Nullable<Product>>;
-  };
-  courses: {
-    get<Filters extends ResourcesQuery = CourseFilters>(
+    get<Filters extends ResourcesQuery = ResourcesQuery>(
       filters?: Filters,
     ): Filters extends { id: string }
-      ? Promise<Nullable<CourseMock>>
-      : Promise<CourseListItemMock[]>;
+      ? Promise<Nullable<Product>>
+      : Promise<PaginatedResponse<Product>>;
+  };
+  courses: {
+    get<Filters extends PaginatedResourceQuery = PaginatedResourceQuery>(
+      filters?: Filters,
+    ): Filters extends { id: string }
+      ? Promise<Nullable<CourseListItem>>
+      : Promise<PaginatedResponse<CourseListItem>>;
+  };
+  courseRuns: {
+    get(
+      filters?: CourseRunFilters,
+    ): CourseRunFilters extends { id: string } ? Promise<Nullable<CourseRun>> : Promise<CourseRun>;
+  };
+  courseProductRelations: {
+    get<Filters extends PaginatedResourceQuery = PaginatedResourceQuery>(
+      filters?: Filters,
+    ): Filters extends { id: string }
+      ? Promise<Nullable<CourseProductRelation>>
+      : Promise<PaginatedResponse<CourseProductRelation>>;
   };
 }
 

@@ -38,8 +38,8 @@ export const TeacherCourseDashboardSidebar = () => {
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
-  const { courseCode } = useParams<{ courseCode: string }>();
-  const { item: course } = useCourse(courseCode!);
+  const { courseId } = useParams<{ courseId: string }>();
+  const { item: course } = useCourse(courseId);
 
   const links = useMemo(
     () =>
@@ -52,10 +52,10 @@ export const TeacherCourseDashboardSidebar = () => {
             TeacherDashboardPaths.COURSE_STUDENTS,
             TeacherDashboardPaths.COURSE_SETTINGS,
           ].map((path) => ({
-            to: getRoutePath(path, { courseCode: course.code }),
+            to: getRoutePath(path, { courseId: course.id }),
             label: getRouteLabel(path),
           })),
-    [course?.code],
+    [course?.id],
   );
 
   return (

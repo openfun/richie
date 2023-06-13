@@ -1,7 +1,7 @@
 import { CourseState } from 'types';
 import { Resource } from 'types/Resource';
 import { Nullable } from 'types/utils';
-import { CourseListItemMock as JoanieCourse } from 'api/mocks/joanie/courses';
+import { CourseListItem as JoanieCourse } from 'types/Joanie';
 
 export interface Course extends Resource {
   absolute_url: string;

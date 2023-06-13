@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { OrganizationMock } from 'api/mocks/joanie/organizations';
+import { Organization } from 'types/Joanie';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
 
@@ -18,7 +18,7 @@ export const messages = defineMessages({
 });
 
 interface OrganizationLinksProps {
-  organizations: OrganizationMock[];
+  organizations: Organization[];
 }
 
 const OrganizationLinks = ({ organizations }: OrganizationLinksProps) => {
@@ -43,7 +43,7 @@ const OrganizationLinks = ({ organizations }: OrganizationLinksProps) => {
             <img
               className="dashboard-sidebar__organization-section__link__img"
               alt={organization.title}
-              src={organization.logo.url}
+              src={organization.logo.src}
             />
           </Link>
         ))}

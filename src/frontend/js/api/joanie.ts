@@ -148,11 +148,17 @@ const getRoutes = () => {
     products: {
       get: `${baseUrl}/products/:id/`,
     },
+    courses: {
+      get: `${baseUrl}/courses/:id/`,
+      courseRuns: {
+        get: `${baseUrl}/courses/:id/course-runs/`,
+      },
+    },
     courseRuns: {
       get: `${baseUrl}/course-runs/:id/`,
     },
-    courses: {
-      get: `${baseUrl}/courses/:id/`,
+    courseProductRelations: {
+      get: `${baseUrl}/course-product-relations/:id/`,
     },
   };
 };
@@ -335,7 +341,7 @@ const API = (): Joanie.API => {
       },
     },
     products: {
-      get: async (filters = {}) => {
+      get: async (filters: ResourcesQuery = {}) => {
         let url;
         const { id = '', ...queryParameters } = filters;
 
@@ -356,6 +362,38 @@ const API = (): Joanie.API => {
 
         if (id) url = ROUTES.courses.get.replace(':id', id);
         else url = ROUTES.courses.get.replace(':id/', '');
+
+        if (!ObjectHelper.isEmpty(queryParameters)) {
+          url += '?' + queryString.stringify(queryParameters);
+        }
+
+        return fetchWithJWT(url).then(checkStatus);
+      },
+    },
+    courseRuns: {
+      get: (filters: Joanie.CourseRunFilters) => {
+        const { id, course_id: courseId, ...queryParameters } = filters || {};
+        let url;
+
+        if (courseId) {
+          url = ROUTES.courses.courseRuns.get.replace(':id', courseId);
+        } else if (id) url = ROUTES.courseRuns.get.replace(':id', id);
+        else url = ROUTES.courseRuns.get.replace(':id/', '');
+
+        if (!ObjectHelper.isEmpty(queryParameters)) {
+          url += '?' + queryString.stringify(queryParameters);
+        }
+
+        return fetchWithJWT(url).then(checkStatus);
+      },
+    },
+    courseProductRelations: {
+      get: (filters) => {
+        const { id, ...queryParameters } = filters || {};
+        let url;
+
+        if (id) url = ROUTES.courseProductRelations.get.replace(':id', id);
+        else url = ROUTES.courseProductRelations.get.replace(':id/', '');
 
         if (!ObjectHelper.isEmpty(queryParameters)) {
           url += '?' + queryString.stringify(queryParameters);
