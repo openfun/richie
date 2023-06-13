@@ -10,6 +10,7 @@ import CourseLink from './CourseLink';
 
 export interface CourseGlimpseCourse {
   id: string;
+  product_id?: string;
   code: Nullable<string>;
   course_url?: string;
   course_route?: string;
@@ -34,6 +35,7 @@ export interface CourseGlimpseCourse {
     srcset?: string;
   }>;
   state: CourseState;
+  nb_course_runs?: number;
 }
 
 export interface CourseGlimpseProps {
@@ -66,7 +68,7 @@ const messages = defineMessages({
 const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataProps) => {
   const intl = useIntl();
   return (
-    <div className="course-glimpse">
+    <div className="course-glimpse" data-testid="course-glimpse">
       {/* the media link is only here for mouse users, so hide it for keyboard/screen reader users.
       Keyboard/sr will focus the link on the title */}
       <div aria-hidden="true" className="course-glimpse__media">

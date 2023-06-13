@@ -9,10 +9,10 @@ import {
   UserFactory,
 } from 'utils/test/factories/richie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { CourseListItemFactory } from 'utils/test/factories/joanie';
-import { CourseListItemMock as Course } from 'api/mocks/joanie/courses';
+import { CourseListItemFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
+import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { TeacherCoursesDashboardLoader } from '.';
 
 jest.mock('utils/context', () => ({
@@ -21,6 +21,12 @@ jest.mock('utils/context', () => ({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
+}));
+
+jest.mock('hooks/useIntersectionObserver', () => ({
+  useIntersectionObserver: (props: any) => {
+    (globalThis as any).__intersection_observer_props__ = props;
+  },
 }));
 
 describe('components/TeacherCoursesDashboardLoader', () => {
@@ -37,31 +43,13 @@ describe('components/TeacherCoursesDashboardLoader', () => {
   });
 
   it('do render', async () => {
-    const courseIncoming: Course = CourseListItemFactory({ title: 'Incoming leason' }).one();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=incoming&type=all',
-      [courseIncoming],
-      {
-        repeat: 1,
-      },
+      'https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=25',
+      mockPaginatedResponse(CourseListItemFactory().many(15), 15, false),
     );
-    const courseOngoing: Course = CourseListItemFactory({ title: 'Ongoing leason' }).one();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=ongoing&type=all',
-      [courseOngoing],
-      {
-        repeat: 1,
-        overwriteRoutes: false,
-      },
-    );
-    const courseAchived: Course = CourseListItemFactory({ title: 'Archived leason' }).one();
-    fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=archived&type=all',
-      [courseAchived],
-      {
-        repeat: 1,
-        overwriteRoutes: false,
-      },
+      'https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=25',
+      mockPaginatedResponse(CourseProductRelationFactory().many(15), 15, false),
     );
 
     const user = UserFactory().one();
@@ -83,56 +71,23 @@ describe('components/TeacherCoursesDashboardLoader', () => {
     );
     await expectNoSpinner('Loading courses...');
 
-    nbApiCalls += 1; // incoming courses api call
-    nbApiCalls += 1; // ongoing courses api call
-    nbApiCalls += 1; // archived courses api call
+    nbApiCalls += 1; // courses api call
+    nbApiCalls += 1; // course-product-relations api call
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
+    expect(calledUrls).toContain('https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=25');
     expect(calledUrls).toContain(
-      'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=incoming&type=all',
+      'https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=25',
     );
-    expect(calledUrls).toContain(
-      'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=ongoing&type=all',
-    );
-    expect(calledUrls).toContain(
-      'https://joanie.endpoint/api/v1.0/courses/?per_page=3&status=archived&type=all',
-    );
-
-    expect(screen.getByDisplayValue('Status: All')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Training type: All')).toBeInTheDocument();
 
     // section titles
     expect(
       await screen.getByRole('heading', {
-        name: 'Incoming',
-      }),
-    ).toBeInTheDocument();
-    expect(
-      await screen.getByRole('heading', {
-        name: 'Ongoing',
-      }),
-    ).toBeInTheDocument();
-    expect(
-      await screen.getByRole('heading', {
-        name: 'Archived',
+        name: 'Your courses',
       }),
     ).toBeInTheDocument();
 
-    // Leason titles
-    expect(
-      await screen.getByRole('heading', {
-        name: 'Incoming',
-      }),
-    ).toBeInTheDocument();
-    expect(
-      await screen.getByRole('heading', {
-        name: 'Ongoing',
-      }),
-    ).toBeInTheDocument();
-    expect(
-      await screen.getByRole('heading', {
-        name: 'Archived',
-      }),
-    ).toBeInTheDocument();
+    // Lessons
+    expect(await screen.findAllByTestId('course-glimpse')).toHaveLength(25);
   });
 });

@@ -42,7 +42,6 @@ export const fetchEntities = async <
   const entitiesStackIds: Record<string, boolean> = {};
   newStack.forEach((entity) => (entitiesStackIds[entity.id] = true));
   newStack.push(...entities.filter((entity) => !entitiesStackIds[entity.id]));
-
   // Sort according to created_on
   newStack.sort((a, b) => {
     const aDate = new Date(a.created_on);

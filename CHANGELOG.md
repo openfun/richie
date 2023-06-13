@@ -14,6 +14,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add cunningham and design system.
 - Specific sidebar for order related routes
 - List teacher's course's course runs in the teacher course dashboard page.
+- Teacher dashboard course list now includes courses and courses product 
+relations.
 
 ### Changed
 

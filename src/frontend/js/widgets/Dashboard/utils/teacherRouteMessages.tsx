@@ -13,11 +13,12 @@ export enum TeacherDashboardPaths {
   ORGANIZATION_COURSES = '/teacher/organization/{organizationId}/courses',
   ORGANIZATION_SETTINGS = '/teacher/organization/{organizationId}/settings',
   ORGANIZATION_MEMBERS = '/teacher/organization/{organizationId}/members',
-  COURSE = '/teacher/course/{courseCode}',
-  COURSE_SETTINGS = '/teacher/course/{courseCode}/settings',
-  COURSE_CLASSROOMS = '/teacher/course/{courseCode}/classrooms',
-  COURSE_STUDENTS = '/teacher/course/{courseCode}/students',
-  COURSE_RECORDS = '/teacher/course/{courseCode}/records',
+  COURSE = '/teacher/course/{courseId}',
+  COURSE_PRODUCT = '/teacher/course/{courseId}/product/{courseProductRelationId}',
+  COURSE_SETTINGS = '/teacher/course/{courseId}/settings',
+  COURSE_CLASSROOMS = '/teacher/course/{courseId}/classrooms',
+  COURSE_STUDENTS = '/teacher/course/{courseId}/students',
+  COURSE_RECORDS = '/teacher/course/{courseId}/records',
 }
 
 // Translations of dashboard route paths
@@ -70,27 +71,32 @@ export const TEACHER_DASHBOARD_ROUTE_PATHS = defineMessages<TeacherDashboardPath
   [TeacherDashboardPaths.COURSE]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.path',
     description: 'The path to display the course view.',
-    defaultMessage: '/teacher/course/{courseCode}',
+    defaultMessage: '/teacher/course/{courseId}',
+  },
+  [TeacherDashboardPaths.COURSE_PRODUCT]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.path',
+    description: 'The path to display the product view.',
+    defaultMessage: '/teacher/course/{courseId}/product/{courseProductRelationId}',
   },
   [TeacherDashboardPaths.COURSE_SETTINGS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.settings.path',
     description: 'The path to display the course settings view.',
-    defaultMessage: '/teacher/course/{courseCode}/settings',
+    defaultMessage: '/teacher/course/{courseId}/settings',
   },
   [TeacherDashboardPaths.COURSE_CLASSROOMS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.path',
     description: 'The path to display the course classrooms view.',
-    defaultMessage: '/teacher/course/{courseCode}/classrooms',
+    defaultMessage: '/teacher/course/{courseId}/classrooms',
   },
   [TeacherDashboardPaths.COURSE_STUDENTS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.students.path',
     description: 'The path to display the course students view.',
-    defaultMessage: '/teacher/course/{courseCode}/students',
+    defaultMessage: '/teacher/course/{courseId}/students',
   },
   [TeacherDashboardPaths.COURSE_RECORDS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.records.path',
     description: "The path to display the course's records view.",
-    defaultMessage: '/teacher/course/{courseCode}/records',
+    defaultMessage: '/teacher/course/{courseId}/records',
   },
 });
 
@@ -145,6 +151,11 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.label',
     description: 'Label of the course view.',
     defaultMessage: 'General informations',
+  },
+  [TeacherDashboardPaths.COURSE_PRODUCT]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.label',
+    description: 'Label of the product view.',
+    defaultMessage: 'Training',
   },
   [TeacherDashboardPaths.COURSE_SETTINGS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.settings.label',

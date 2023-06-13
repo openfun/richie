@@ -8,6 +8,7 @@ import { useCourse } from 'hooks/useCourses';
 import { Spinner } from 'components/Spinner';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Icon, IconTypeEnum } from 'components/Icon';
+import { useCourseRuns } from 'hooks/useCourseRuns';
 import CourseRunList from './CourseRunList';
 
 const messages = defineMessages({
@@ -39,12 +40,16 @@ const messages = defineMessages({
 });
 
 export const TeacherCourseDashboardLoader = () => {
-  const { courseCode } = useParams<{ courseCode: string }>();
+  const { courseId } = useParams<{ courseId: string }>();
   const {
     item: course,
-    states: { fetching },
-  } = useCourse(courseCode!);
-
+    states: { fetching: fetchingCourse },
+  } = useCourse(courseId);
+  const {
+    items: courseRuns,
+    states: { fetching: fetchingCourseRuns },
+  } = useCourseRuns({ course_id: course?.id }, { enabled: !!course });
+  const fetching = fetchingCourse || fetchingCourseRuns;
   return (
     <DashboardLayout sidebar={<TeacherCourseDashboardSidebar />}>
       {fetching ? (
@@ -68,7 +73,7 @@ export const TeacherCourseDashboardLoader = () => {
             expandable={false}
             fullWidth
           >
-            <CourseRunList courseRuns={course.course_runs} />
+            <CourseRunList courseRuns={courseRuns} />
           </DashboardCard>
         </div>
       )}

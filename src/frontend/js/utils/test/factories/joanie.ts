@@ -1,12 +1,13 @@
 import { faker } from '@faker-js/faker';
 import { CourseStateTextEnum, Priority } from 'types';
-import { OrganizationMock } from 'api/mocks/joanie/organizations';
 import {
   Address,
   Certificate,
   CertificateDefinition,
+  CourseListItem,
   CourseLight,
   CourseProduct,
+  CourseProductRelation,
   CourseRun,
   CreditCard,
   CreditCardBrand,
@@ -16,6 +17,7 @@ import {
   OrderLite,
   OrderState,
   OrderWithPaymentInfo,
+  Organization,
   OrganizationLight,
   Payment,
   PaymentProviders,
@@ -25,7 +27,6 @@ import {
   UserWishlistCourse,
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
-import { CourseListItemMock, CourseMock } from 'api/mocks/joanie/courses';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { factory } from './factories';
 
@@ -54,7 +55,7 @@ export const TargetCourseFactory = factory((): TargetCourse => {
   };
 });
 
-export const OrganizationFactory = factory((): OrganizationMock => {
+export const OrganizationFactory = factory((): Organization => {
   const uuid = faker.string.uuid();
   return {
     id: uuid,
@@ -62,9 +63,11 @@ export const OrganizationFactory = factory((): OrganizationMock => {
     title: faker.lorem.words(1),
     logo: {
       filename: faker.lorem.words(1),
-      url: `/organizations/${uuid}`,
+      src: `/organizations/${uuid}`,
+      srcset: [],
       height: 40,
       width: 60,
+      size: 300,
     },
   };
 });
@@ -96,6 +99,7 @@ export const CertificateFactory = factory((): Certificate => {
 export const CertificateProductFactory = factory((): Product => {
   return {
     id: faker.string.uuid(),
+    created_on: faker.date.past().toISOString(),
     title: FactoryHelper.sequence((counter) => `Certificate Product ${counter}`),
     type: ProductType.CERTIFICATE,
     price: faker.number.int(),
@@ -145,10 +149,11 @@ export const CourseRunWithCourseFactory = factory((): CourseRun => {
   };
 });
 
-export const CourseFactory = factory((): CourseMock => {
+export const CourseFactory = factory((): CourseListItem => {
   return {
     id: faker.string.uuid(),
     code: faker.string.alphanumeric(5),
+    created_on: faker.date.past().toISOString(),
     organizations: OrganizationFactory().many(1),
     selling_organizations: OrganizationFactory().many(3),
     title: FactoryHelper.sequence((counter) => `Course ${counter}`),
@@ -164,11 +169,23 @@ export const CourseFactory = factory((): CourseMock => {
   };
 });
 
-export const CourseListItemFactory = factory((): CourseListItemMock => {
+export const CourseProductRelationFactory = factory((): CourseProductRelation => {
+  return {
+    id: faker.string.uuid(),
+    created_on: faker.date.past().toISOString(),
+    course: CourseFactory().one(),
+    product: ProductFactory().one(),
+  };
+});
+
+export const CourseListItemFactory = factory((): CourseListItem => {
   return {
     id: faker.string.uuid(),
     code: faker.string.alphanumeric(5),
+    created_on: faker.date.past().toISOString(),
     organizations: OrganizationFactory().many(1),
+    selling_organizations: OrganizationFactory().many(1),
+    products: ProductFactory().many(2),
     title: FactoryHelper.sequence((counter) => `Course list item ${counter}`),
     course_runs: [],
     state: CourseStateFactory().one(),

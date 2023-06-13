@@ -3,6 +3,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { IntlProvider, createIntl } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { CourseListItem } from 'types/Joanie';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
@@ -15,7 +16,6 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 
 import { CourseFactory } from 'utils/test/factories/joanie';
-import { CourseMock } from 'api/mocks/joanie/courses';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { TeacherCourseDashboardSidebar, messages } from '.';
 
@@ -36,18 +36,18 @@ jest.mock('utils/indirection/window', () => ({
 const intl = createIntl({ locale: 'en' });
 
 interface RenderTeacherCourseDashboardSidebarProps {
-  courseCode: string;
+  courseId: string;
 }
 const renderTeacherCourseDashboardSidebar = ({
-  courseCode,
+  courseId,
 }: RenderTeacherCourseDashboardSidebarProps) =>
   render(
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
         <JoanieSessionProvider>
-          <MemoryRouter initialEntries={[`/${courseCode}`]}>
+          <MemoryRouter initialEntries={[`/${courseId}`]}>
             <Routes>
-              <Route path="/:courseCode" element={<TeacherCourseDashboardSidebar />} />
+              <Route path="/:courseId" element={<TeacherCourseDashboardSidebar />} />
             </Routes>
           </MemoryRouter>
         </JoanieSessionProvider>
@@ -70,11 +70,11 @@ describe('<TeacherCourseDashboardSidebar/>', () => {
   });
 
   it('should display syllabus link', async () => {
-    const course: CourseMock = CourseFactory().one();
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.code}/`, course);
+    const course: CourseListItem = CourseFactory().one();
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.id}/`, course);
     nbApiRequest += 1; // call to course
 
-    renderTeacherCourseDashboardSidebar({ courseCode: course.code });
+    renderTeacherCourseDashboardSidebar({ courseId: course.id });
     await expectNoSpinner('Loading course...');
     expect(
       screen.getByRole('link', {
@@ -84,11 +84,11 @@ describe('<TeacherCourseDashboardSidebar/>', () => {
   });
 
   it('should display menu items', async () => {
-    const course: CourseMock = CourseFactory().one();
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.code}/`, course);
+    const course: CourseListItem = CourseFactory().one();
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.id}/`, course);
     nbApiRequest += 1; // call to course
 
-    renderTeacherCourseDashboardSidebar({ courseCode: course.code });
+    renderTeacherCourseDashboardSidebar({ courseId: course.id });
     await expectNoSpinner('Loading course...');
     expect(
       screen.getByRole('link', {
