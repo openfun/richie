@@ -19,6 +19,9 @@ relations.
 - Add a page for training details (courseProductRelation) in the teacher
 dashboard.
 - Add a link to the LMS course run session in teacher dashbaord course run lists
+- Finalize the design of teacher dashboard organization sidebar.
+- Use union of organization courses and course product relations on organization
+course's listing page.
 
 ### Changed
 

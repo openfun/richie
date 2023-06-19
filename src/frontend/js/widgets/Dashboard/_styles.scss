@@ -1,21 +1,3 @@
 .richie-react--dashboard {
   background-color: r-theme-val(dashboard, background-color);
 }
-
-$avatar-size: 100px;
-
-.dashboard {
-  &__avatar {
-    box-shadow: r-theme-val(dashboard-sidebar, base-shadow);
-    background-color: r-theme-val(dashboard-avatar, background-color);
-    border-radius: 100%;
-    width: $avatar-size;
-    height: $avatar-size;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: r-theme-val(dashboard-avatar, base-color);
-    font-size: 3rem;
-    font-weight: bold;
-  }
-}

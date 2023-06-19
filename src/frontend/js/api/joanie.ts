@@ -102,7 +102,7 @@ export const getAPIEndpoint = () => {
   return `${endpoint}/api/${version}`;
 };
 
-const getRoutes = () => {
+export const getRoutes = () => {
   const baseUrl = getAPIEndpoint();
 
   return {
@@ -143,6 +143,12 @@ const getRoutes = () => {
       },
       organizations: {
         get: `${baseUrl}/organizations/:id/`,
+        courseProductRelations: {
+          get: `${baseUrl}/organizations/:id/course-product-relations/`,
+        },
+        courses: {
+          get: `${baseUrl}/organizations/:id/courses/`,
+        },
       },
     },
     products: {
@@ -356,11 +362,13 @@ const API = (): Joanie.API => {
       },
     },
     courses: {
-      get: (filters) => {
-        const { id, ...queryParameters } = filters || {};
+      get: (filters?: Joanie.CourseQueryFilters) => {
+        const { id, organization_id: organizationId, ...queryParameters } = filters || {};
         let url;
 
-        if (id) url = ROUTES.courses.get.replace(':id', id);
+        if (organizationId)
+          url = ROUTES.user.organizations.courses.get.replace(':id', organizationId);
+        else if (id) url = ROUTES.courses.get.replace(':id', id);
         else url = ROUTES.courses.get.replace(':id/', '');
 
         if (!ObjectHelper.isEmpty(queryParameters)) {
@@ -375,9 +383,8 @@ const API = (): Joanie.API => {
         const { id, course_id: courseId, ...queryParameters } = filters || {};
         let url;
 
-        if (courseId) {
-          url = ROUTES.courses.courseRuns.get.replace(':id', courseId);
-        } else if (id) url = ROUTES.courseRuns.get.replace(':id', id);
+        if (courseId) url = ROUTES.courses.courseRuns.get.replace(':id', courseId);
+        else if (id) url = ROUTES.courseRuns.get.replace(':id', id);
         else url = ROUTES.courseRuns.get.replace(':id/', '');
 
         if (!ObjectHelper.isEmpty(queryParameters)) {
@@ -388,11 +395,13 @@ const API = (): Joanie.API => {
       },
     },
     courseProductRelations: {
-      get: (filters) => {
-        const { id, ...queryParameters } = filters || {};
+      get: (filters?: Joanie.CourseProductRelationQueryFilters) => {
+        const { id, organization_id: organizationId, ...queryParameters } = filters || {};
         let url;
 
-        if (id) url = ROUTES.courseProductRelations.get.replace(':id', id);
+        if (organizationId)
+          url = ROUTES.user.organizations.courseProductRelations.get.replace(':id', organizationId);
+        else if (id) url = ROUTES.courseProductRelations.get.replace(':id', id);
         else url = ROUTES.courseProductRelations.get.replace(':id/', '');
 
         if (!ObjectHelper.isEmpty(queryParameters)) {

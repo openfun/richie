@@ -3,11 +3,11 @@ import { useJoanieApi } from 'contexts/JoanieApiContext';
 import {
   CourseListItem,
   Product,
-  PaginatedResourceQuery,
   CourseProductRelation,
+  CourseQueryFilters,
+  CourseProductRelationQueryFilters,
 } from 'types/Joanie';
 import useUnionResource, { ResourceUnionPaginationProps } from 'hooks/useUnionResource';
-import { PER_PAGE } from 'settings';
 
 export const isCourseListItem = (obj: CourseListItem | Product): obj is CourseListItem => {
   return 'course_runs' in obj;
@@ -24,25 +24,30 @@ const messages = defineMessages({
   },
 });
 
+interface UseCourseProductUnionProps extends ResourceUnionPaginationProps {
+  organizationId?: string;
+}
+
 export const useCourseProductUnion = ({
-  perPage = PER_PAGE.useCourseProductUnion,
-}: ResourceUnionPaginationProps = {}) => {
+  perPage = 50,
+  organizationId,
+}: UseCourseProductUnionProps = {}) => {
   const api = useJoanieApi();
   return useUnionResource<
     CourseListItem,
     CourseProductRelation,
-    PaginatedResourceQuery,
-    PaginatedResourceQuery
+    CourseQueryFilters,
+    CourseProductRelationQueryFilters
   >({
     queryAConfig: {
       queryKey: ['user', 'courses'],
       fn: api.courses.get,
-      filters: {},
+      filters: { organization_id: organizationId },
     },
     queryBConfig: {
       queryKey: ['user', 'course_product_relations'],
       fn: api.courseProductRelations.get,
-      filters: {},
+      filters: { organization_id: organizationId },
     },
     perPage,
     errorGetMessage: messages.errorGet,

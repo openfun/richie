@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { UserFactory } from 'utils/test/factories/richie';
-import { DashboardAvatar } from '.';
+import { OrganizationFactory } from 'utils/test/factories/joanie';
+import { DashboardAvatar, DashboardAvatarVariantEnum } from '.';
 
 export default {
   component: DashboardAvatar,
@@ -10,6 +11,13 @@ type Story = StoryObj<typeof DashboardAvatar>;
 
 export const Default: Story = {
   args: {
-    user: UserFactory().one(),
+    title: UserFactory().one().username,
+  },
+};
+
+export const Organization: Story = {
+  args: {
+    title: OrganizationFactory().one().title,
+    variant: DashboardAvatarVariantEnum.SQUARE,
   },
 };

@@ -30,13 +30,22 @@ const messages = defineMessages({
 
 interface TeacherDashboardCourseListProps {
   titleTranslated: string;
+  organizationId?: string;
 }
 
-const TeacherDashboardCourseList = ({ titleTranslated }: TeacherDashboardCourseListProps) => {
+const TeacherDashboardCourseList = ({
+  titleTranslated,
+  organizationId,
+}: TeacherDashboardCourseListProps) => {
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   const intl = useIntl();
   const routerLocal = intl.locale.split('-')[0];
-  const { data: courseAndProductList, isLoading, next, hasMore } = useCourseProductUnion();
+  const {
+    data: courseAndProductList,
+    isLoading,
+    next,
+    hasMore,
+  } = useCourseProductUnion({ perPage: 25, organizationId });
   useIntersectionObserver({
     target: loadMoreButtonRef,
     onIntersect: next,
