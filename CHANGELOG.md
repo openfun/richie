@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 relations.
 - Add a page for training details (courseProductRelation) in the teacher
 dashboard.
+- Add a link to the LMS course run session in teacher dashbaord course run lists
 
 ### Changed
 

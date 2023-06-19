@@ -98,6 +98,6 @@ describe('components/TeacherTrainingDashboardLoader', () => {
       (acc, course) => acc + course.course_runs.length,
       0,
     );
-    expect(screen.getAllByRole('button', { name: 'go to classroom' })).toHaveLength(nbCourseRun);
+    expect(screen.getAllByRole('link', { name: 'go to classroom' })).toHaveLength(nbCourseRun);
   });
 });
