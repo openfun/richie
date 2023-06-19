@@ -1,9 +1,17 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { useParams } from 'react-router-dom';
 import { Spinner } from 'components/Spinner';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { TeacherOrganizationDashboardSidebar } from 'widgets/Dashboard/components/TeacherOrganizationDashboardSidebar';
+import { useOrganization } from 'hooks/useOrganizations';
+import TeacherDashboardCourseList from 'components/TeacherDashboardCourseList';
 
 const messages = defineMessages({
+  title: {
+    defaultMessage: 'Courses of {organizationTitle}',
+    description: 'Message displayed as title of organization courses page',
+    id: 'components.TeacherOrganizationCourseDashboardLoader.title',
+  },
   loading: {
     defaultMessage: 'Loading organization ...',
     description: 'Message displayed while loading an organization',
@@ -12,8 +20,12 @@ const messages = defineMessages({
 });
 
 export const TeacherOrganizationCourseDashboardLoader = () => {
-  // FIXME: fetch data
-  const fetching = false;
+  const intl = useIntl();
+  const { organizationId } = useParams<{ organizationId: string }>();
+  const {
+    item: organization,
+    states: { fetching },
+  } = useOrganization(organizationId);
   return (
     <DashboardLayout sidebar={<TeacherOrganizationDashboardSidebar />}>
       {fetching && (
@@ -22,6 +34,14 @@ export const TeacherOrganizationCourseDashboardLoader = () => {
             <FormattedMessage {...messages.loading} />
           </span>
         </Spinner>
+      )}
+      {!fetching && (
+        <TeacherDashboardCourseList
+          titleTranslated={intl.formatMessage(messages.title, {
+            organizationTitle: organization.title,
+          })}
+          organizationId={organization.id}
+        />
       )}
     </DashboardLayout>
   );

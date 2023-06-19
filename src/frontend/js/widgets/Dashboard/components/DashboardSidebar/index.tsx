@@ -1,6 +1,7 @@
+import c from 'classnames';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { matchPath, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { ChangeEvent, PropsWithChildren, useMemo, useRef } from 'react';
+import { ChangeEvent, PropsWithChildren, ReactNode, useMemo, useRef } from 'react';
 import { useSession } from 'contexts/SessionContext';
 import { DashboardAvatar } from 'widgets/Dashboard/components/DashboardAvatar';
 
@@ -17,11 +18,18 @@ const messages = defineMessages({
   },
 });
 
+export enum DashboardAvatarPositionEnum {
+  CENTER = 'center',
+  THREE_QUARTER = 'three_quarter',
+}
+
 export interface DashboardSidebarProps extends PropsWithChildren {
   menuLinks: Record<string, string>[];
   header: string;
   subHeader: string;
   title?: string;
+  avatarPosition?: DashboardAvatarPositionEnum;
+  avatar?: ReactNode;
 }
 
 export const DashboardSidebar = ({
@@ -30,6 +38,8 @@ export const DashboardSidebar = ({
   header,
   subHeader,
   title,
+  avatar,
+  avatarPosition = DashboardAvatarPositionEnum.CENTER,
 }: DashboardSidebarProps) => {
   const { user } = useSession();
   const location = useLocation();
@@ -51,8 +61,13 @@ export const DashboardSidebar = ({
     <aside className={classes.join(' ')} data-testid="dashboard__sidebar">
       <div className="dashboard-sidebar__container">
         <header className="dashboard-sidebar__container__header">
-          <div className="dashboard-sidebar__container__header__avatar">
-            <DashboardAvatar user={user!} />
+          <div
+            className={c('dashboard-sidebar__container__header__avatar', {
+              'dashboard-sidebar__container__header__avatar--three_quarter':
+                avatarPosition === DashboardAvatarPositionEnum.THREE_QUARTER,
+            })}
+          >
+            {avatar || <DashboardAvatar title={user!.username} />}
           </div>
           <h3>{header}</h3>
           <p>{subHeader}</p>
