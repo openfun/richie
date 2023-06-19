@@ -1,6 +1,6 @@
 import { FormattedMessage, IntlShape, defineMessages } from 'react-intl';
 import { capitalize } from 'lodash-es';
-import { Button } from '@openfun/cunningham-react';
+import { Link } from 'react-router-dom';
 import { IconTypeEnum } from 'components/Icon';
 import { CourseStateTextEnum, Priority } from 'types';
 import { CourseRun } from 'types/Joanie';
@@ -67,9 +67,13 @@ export const buildCourseRunData = (intl: IntlShape, courseRuns: CourseRun[]) => 
     ),
     action: (
       <CourseRunListCell variant={CourseRunListCell.ALIGN_RIGHT}>
-        <Button size="small" color="secondary">
+        <Link
+          to={courseRun.resource_link}
+          // FIXME: cunningham should provider us a ButtonLink of some kind
+          className="c__button c__button--secondary c__button--small "
+        >
           <FormattedMessage {...messages.dataCourseRunLink} />
-        </Button>
+        </Link>
       </CourseRunListCell>
     ),
   }));

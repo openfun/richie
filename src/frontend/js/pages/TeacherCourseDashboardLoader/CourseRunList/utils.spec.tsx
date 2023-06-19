@@ -1,6 +1,7 @@
 import { IntlProvider, createIntl } from 'react-intl';
 import { render, screen } from '@testing-library/react';
 import { capitalize } from 'lodash-es';
+import { MemoryRouter } from 'react-router-dom';
 import { CourseRunFactory } from 'utils/test/factories/joanie';
 import { buildCourseRunData, messages } from './utils';
 
@@ -49,9 +50,13 @@ describe('pages/TeacherCourseDashboardLoader/CourseRunList/buildCourseRunData', 
     const intl = createIntl({ locale: 'en' });
     const listItem = buildCourseRunData(intl, [courseRun])[0];
 
-    render(<IntlProvider locale="en">{listItem.action}</IntlProvider>);
+    render(
+      <MemoryRouter>
+        <IntlProvider locale="en">{listItem.action}</IntlProvider>
+      </MemoryRouter>,
+    );
     expect(
-      screen.getByRole('button', { name: intl.formatMessage(messages.dataCourseRunLink) }),
+      screen.getByRole('link', { name: intl.formatMessage(messages.dataCourseRunLink) }),
     ).toBeInTheDocument();
   });
 });
