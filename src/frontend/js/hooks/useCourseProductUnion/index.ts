@@ -6,7 +6,8 @@ import {
   PaginatedResourceQuery,
   CourseProductRelation,
 } from 'types/Joanie';
-import useUnionResource from 'hooks/useUnionResource';
+import useUnionResource, { ResourceUnionPaginationProps } from 'hooks/useUnionResource';
+import { PER_PAGE } from 'settings';
 
 export const isCourseListItem = (obj: CourseListItem | Product): obj is CourseListItem => {
   return 'course_runs' in obj;
@@ -23,11 +24,9 @@ const messages = defineMessages({
   },
 });
 
-interface UseCourseProductUnionProps {
-  perPage?: number;
-}
-
-export const useCourseProductUnion = ({ perPage = 50 }: UseCourseProductUnionProps = {}) => {
+export const useCourseProductUnion = ({
+  perPage = PER_PAGE.useCourseProductUnion,
+}: ResourceUnionPaginationProps = {}) => {
   const api = useJoanieApi();
   return useUnionResource<
     CourseListItem,

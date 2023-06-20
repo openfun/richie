@@ -14,6 +14,7 @@ import { CourseListItemFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
+import { PER_PAGE } from 'settings';
 import TeacherDashboardCourseList from '.';
 
 jest.mock('utils/context', () => ({
@@ -24,6 +25,12 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
+jest.mock('settings', () => ({
+  __esModule: true,
+  ...jest.requireActual('settings'),
+  PER_PAGE: { useCourseProductUnion: 25 },
+}));
+
 jest.mock('hooks/useIntersectionObserver', () => ({
   useIntersectionObserver: (props: any) => {
     (globalThis as any).__intersection_observer_props__ = props;
@@ -31,6 +38,7 @@ jest.mock('hooks/useIntersectionObserver', () => ({
 }));
 
 describe('components/TeacherDashboardCourseList', () => {
+  const perPage = PER_PAGE.useCourseProductUnion;
   let nbApiCalls: number;
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', [], { overwriteRoutes: true });
@@ -50,7 +58,7 @@ describe('components/TeacherDashboardCourseList', () => {
       title: "One lesson about: Let's dance, the online lesson",
     }).one();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=25',
+      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
       mockPaginatedResponse([courseCooking, courseDancing], 15, false),
     );
     const productCooking: CourseListItem = CourseListItemFactory({
@@ -60,7 +68,7 @@ describe('components/TeacherDashboardCourseList', () => {
       title: "Full training: Let's dance, the online lesson",
     }).one();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=25',
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
       mockPaginatedResponse([productCooking, productDancing], 15, false),
     );
 
@@ -86,9 +94,11 @@ describe('components/TeacherDashboardCourseList', () => {
 
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
-    expect(calledUrls).toContain('https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=25');
     expect(calledUrls).toContain(
-      'https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=25',
+      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
+    );
+    expect(calledUrls).toContain(
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
     );
 
     expect(
@@ -107,14 +117,14 @@ describe('components/TeacherDashboardCourseList', () => {
 
   it('should render empty list', async () => {
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=25',
+      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
       mockPaginatedResponse([], 0, false),
       {
         overwriteRoutes: true,
       },
     );
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=25',
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
       mockPaginatedResponse([], 0, false),
       {
         overwriteRoutes: true,
@@ -140,9 +150,11 @@ describe('components/TeacherDashboardCourseList', () => {
 
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
-    expect(calledUrls).toContain('https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=25');
     expect(calledUrls).toContain(
-      'https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=25',
+      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
+    );
+    expect(calledUrls).toContain(
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
     );
 
     expect(await screen.findByText('You have no courses yet.')).toBeInTheDocument();

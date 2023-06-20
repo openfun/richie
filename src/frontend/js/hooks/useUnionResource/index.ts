@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { MessageDescriptor, defineMessages, useIntl } from 'react-intl';
 import { Maybe } from 'yup';
 import { PaginatedResourceQuery, PaginatedResponse } from 'types/Joanie';
+import { PER_PAGE } from 'settings';
 import { syncIntegrityCount } from './utils/syncIntegrityCount';
 import { FetchEntityData } from './utils/fetchEntities';
 import { QueryConfig } from './utils/fetchEntity';
@@ -29,10 +30,14 @@ export type FetchDataFunction<Data, FetchDataFilter> = (
   filters: FetchDataFilter,
 ) => Promise<PaginatedResponse<Data>>;
 
-interface UseUnionResourceProps<DataA, DataB, FiltersA, FiltersB> {
+export interface ResourceUnionPaginationProps {
+  perPage?: number;
+}
+
+interface UseUnionResourceProps<DataA, DataB, FiltersA, FiltersB>
+  extends ResourceUnionPaginationProps {
   queryAConfig: QueryConfig<DataA, FiltersA>;
   queryBConfig: QueryConfig<DataB, FiltersB>;
-  perPage?: number;
   errorGetMessage?: MessageDescriptor;
 }
 
@@ -51,7 +56,7 @@ const useUnionResource = <
 >({
   queryAConfig,
   queryBConfig,
-  perPage = 25,
+  perPage = PER_PAGE.useUnionResources,
   errorGetMessage = messages.errorGet,
 }: UseUnionResourceProps<DataA, DataB, FiltersA, FiltersB>): UseUnionResourceReturns<
   DataA,

@@ -11,9 +11,16 @@ import { Deferred } from 'utils/test/deferred';
 
 import { noop } from 'utils';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
+import { PER_PAGE } from 'settings';
 import { FetchEntityData } from './utils/fetchEntities';
 import { QueryConfig, FetchDataFunction } from './utils/fetchEntity';
 import useUnionResource from '.';
+
+jest.mock('settings', () => ({
+  __esModule: true,
+  ...jest.requireActual('settings'),
+  PER_PAGE: { useUnionResources: 3 },
+}));
 
 interface TestDataA {
   name: 'TestDataA';
@@ -67,21 +74,19 @@ const renderUseUnionResource = <
       useUnionResource<DataA, DataB, FiltersA, FiltersB>({
         queryAConfig,
         queryBConfig,
-        perPage: 3,
       }),
     { wrapper: Wrapper },
   );
 };
 
 describe('useUnionResource', () => {
-  let perPage: number;
+  const perPage = PER_PAGE.useUnionResources;
   let dataAList: TestDataA[];
   let dataBList: TestDataB[];
   let queryAConfig: QueryConfig<TestDataA, TestDataAFilters>;
   let queryBConfig: QueryConfig<TestDataB, PaginatedResourceQuery>;
 
   beforeEach(() => {
-    perPage = 3;
     dataAList = [
       { name: 'TestDataA', id: '1', created_on: '2022-01-01' },
       { name: 'TestDataA', id: '2', created_on: '2022-02-01' },
