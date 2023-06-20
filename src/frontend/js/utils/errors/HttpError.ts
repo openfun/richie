@@ -12,3 +12,6 @@ export class HttpError extends Error {
     this.localizedMessage = localizedMessage;
   }
 }
+export function isHttpError(error: any): error is HttpError {
+  return typeof error === 'object' && error instanceof HttpError;
+}

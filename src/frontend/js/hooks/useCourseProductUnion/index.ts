@@ -35,12 +35,12 @@ export const useCourseProductUnion = ({
     PaginatedResourceQuery
   >({
     queryAConfig: {
-      queryKey: ['courses'],
+      queryKey: ['user', 'courses'],
       fn: api.courses.get,
       filters: {},
     },
     queryBConfig: {
-      queryKey: ['course_product_relations'],
+      queryKey: ['user', 'course_product_relations'],
       fn: api.courseProductRelations.get,
       filters: {},
     },
