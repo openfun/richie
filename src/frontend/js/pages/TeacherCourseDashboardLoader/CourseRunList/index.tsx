@@ -1,5 +1,5 @@
 import { useIntl } from 'react-intl';
-import { DataList } from '@openfun/cunningham-react';
+import { Column, DataList } from '@openfun/cunningham-react';
 import { CourseRun } from 'types/Joanie';
 
 import { buildCourseRunData } from './utils';
@@ -10,7 +10,12 @@ interface CourseRunListProps {
 
 const CourseRunList = ({ courseRuns }: CourseRunListProps) => {
   const intl = useIntl();
-  const columns = ['title', 'period', 'status', 'action'].map((field: string) => ({ field }));
+  const columns = ['title', 'period', 'status', 'action'].map(
+    (field: string): Column => ({
+      headerName: field,
+      renderCell: (params) => params.row[field],
+    }),
+  );
 
   return (
     <div className="teacher-dashboard-course-run-list">
