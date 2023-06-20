@@ -2,10 +2,10 @@ import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { defineMessages, useIntl } from 'react-intl';
+import * as Yup from 'yup';
+import countries from 'i18n-iso-countries';
 import { messages as managementMessages } from 'components/AddressesManagement';
-import validationSchema, {
-  getLocalizedErrorMessage,
-} from 'components/AddressesManagement/validationSchema';
+import { getLocalizedErrorMessage } from 'components/AddressesManagement/validationSchema';
 import { CheckboxField, TextField } from 'components/Form';
 import { CountrySelectField } from 'components/Form/CountrySelectField';
 import { Address } from 'types/Joanie';
@@ -16,6 +16,19 @@ const messages = defineMessages({
     description: 'Label of the "is_main" input',
     defaultMessage: 'Use this address as default',
   },
+});
+
+// / ! \ If you need to edit the validation schema,
+// you should also add/edit error messages above.
+const validationSchema = Yup.object().shape({
+  address: Yup.string().required(),
+  city: Yup.string().required(),
+  country: Yup.string().oneOf(Object.keys(countries.getAlpha2Codes())).required(),
+  first_name: Yup.string().required(),
+  last_name: Yup.string().required(),
+  postcode: Yup.string().required(),
+  title: Yup.string().required().min(2),
+  is_main: Yup.boolean().required(),
 });
 
 export type AddressFormValues = Omit<Address, 'id'>;
@@ -118,7 +131,7 @@ export const useDashboardAddressForm = (address?: Address) => {
       {!(address && address.is_main) && (
         <CheckboxField
           aria-invalid={!!formState.errors?.is_main}
-          id="save"
+          id="is_main"
           label={intl.formatMessage(messages.isMainInputLabel)}
           error={!!formState.errors?.is_main}
           message={getLocalizedErrorMessage(intl, formState.errors.is_main?.message)}
