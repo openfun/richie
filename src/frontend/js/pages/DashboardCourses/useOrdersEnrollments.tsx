@@ -1,7 +1,8 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { Enrollment, Order, PaginatedResourceQuery } from 'types/Joanie';
-import useUnionResource from 'hooks/useUnionResource';
+import useUnionResource, { ResourceUnionPaginationProps } from 'hooks/useUnionResource';
+import { PER_PAGE } from 'settings';
 
 export const isOrder = (obj: Order | Enrollment): obj is Order => {
   return 'total' in obj && 'enrollments' in obj;
@@ -18,11 +19,9 @@ const messages = defineMessages({
   },
 });
 
-interface UserOrderEnrollmentsProps {
-  perPage?: number;
-}
-
-export const useOrdersEnrollments = ({ perPage = 50 }: UserOrderEnrollmentsProps = {}) => {
+export const useOrdersEnrollments = ({
+  perPage = PER_PAGE.useOrdersEnrollments,
+}: ResourceUnionPaginationProps = {}) => {
   const api = useJoanieApi();
   return useUnionResource<
     Order,

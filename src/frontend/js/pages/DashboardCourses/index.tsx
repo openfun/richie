@@ -11,7 +11,6 @@ import { DashboardItemOrder } from 'widgets/Dashboard/components/DashboardItem/O
 import Banner, { BannerType } from 'components/Banner';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { Button } from 'components/Button';
-import { PAGE_SIZE } from './constants';
 
 const messages = defineMessages({
   loading: {
@@ -32,10 +31,7 @@ const messages = defineMessages({
 });
 
 export const DashboardCourses = () => {
-  const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments({
-    // This PAGE_SIZE constant can be override in tests
-    perPage: PAGE_SIZE,
-  });
+  const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments();
 
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   useIntersectionObserver({

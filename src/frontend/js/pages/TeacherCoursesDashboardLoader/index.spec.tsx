@@ -13,6 +13,7 @@ import { CourseListItemFactory, CourseProductRelationFactory } from 'utils/test/
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
+import { PER_PAGE } from 'settings';
 import { TeacherCoursesDashboardLoader } from '.';
 
 jest.mock('utils/context', () => ({
@@ -23,6 +24,12 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
+jest.mock('settings', () => ({
+  __esModule: true,
+  ...jest.requireActual('settings'),
+  PER_PAGE: { useCourseProductUnion: 25 },
+}));
+
 jest.mock('hooks/useIntersectionObserver', () => ({
   useIntersectionObserver: (props: any) => {
     (globalThis as any).__intersection_observer_props__ = props;
@@ -30,6 +37,7 @@ jest.mock('hooks/useIntersectionObserver', () => ({
 }));
 
 describe('components/TeacherCoursesDashboardLoader', () => {
+  const perPage = PER_PAGE.useCourseProductUnion;
   let nbApiCalls: number;
   beforeEach(() => {
     // Joanie providers calls
@@ -42,13 +50,13 @@ describe('components/TeacherCoursesDashboardLoader', () => {
     nbApiCalls = 4;
   });
 
-  it('do render', async () => {
+  it('should render', async () => {
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=25',
+      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseListItemFactory().many(15), 15, false),
     );
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=25',
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseProductRelationFactory().many(15), 15, false),
     );
 
@@ -75,9 +83,11 @@ describe('components/TeacherCoursesDashboardLoader', () => {
     nbApiCalls += 1; // course-product-relations api call
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
-    expect(calledUrls).toContain('https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=25');
     expect(calledUrls).toContain(
-      'https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=25',
+      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
+    );
+    expect(calledUrls).toContain(
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
     );
 
     // section titles

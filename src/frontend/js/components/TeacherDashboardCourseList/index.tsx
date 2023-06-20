@@ -36,12 +36,7 @@ const TeacherDashboardCourseList = ({ titleTranslated }: TeacherDashboardCourseL
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   const intl = useIntl();
   const routerLocal = intl.locale.split('-')[0];
-  const {
-    data: courseAndProductList,
-    isLoading,
-    next,
-    hasMore,
-  } = useCourseProductUnion({ perPage: 25 });
+  const { data: courseAndProductList, isLoading, next, hasMore } = useCourseProductUnion();
   useIntersectionObserver({
     target: loadMoreButtonRef,
     onIntersect: next,
