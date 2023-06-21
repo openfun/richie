@@ -10,6 +10,7 @@ import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { useCourseRuns } from 'hooks/useCourseRuns';
 import Banner, { BannerType } from 'components/Banner';
+import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 import CourseRunList from './CourseRunList';
 
 const messages = defineMessages({
@@ -46,6 +47,10 @@ export const TeacherCourseDashboardLoader = () => {
     states: { fetching: fetchingCourseRuns },
   } = useCourseRuns({ course_id: course?.id }, { enabled: !!course });
   const fetching = fetchingCourse || fetchingCourseRuns;
+  useBreadcrumbsPlaceholders({
+    courseTitle: course?.title ?? '',
+  });
+
   return (
     <DashboardLayout sidebar={<TeacherCourseDashboardSidebar />}>
       <div className="dashboard__page_title_container">
