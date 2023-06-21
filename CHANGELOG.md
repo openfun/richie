@@ -38,6 +38,7 @@ information message when the product have no remaining order.
 ### Removed
 
 - Remove unused route in teacher dashboard.
+- Fix teacher dashbaord breadcrumb.
 
 ## [2.22.0] - 2023-04-20
 

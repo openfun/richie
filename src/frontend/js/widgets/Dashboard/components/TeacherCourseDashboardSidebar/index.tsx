@@ -66,7 +66,7 @@ export const TeacherCourseDashboardSidebar = () => {
     [courseProductRelation, singleCourse],
   );
 
-  const menuLinks = [TeacherDashboardPaths.COURSE].map((path) => ({
+  const menuLinks = [TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS].map((path) => ({
     to: getRoutePath(path, { courseId }),
     label: getRouteLabel(path),
   }));

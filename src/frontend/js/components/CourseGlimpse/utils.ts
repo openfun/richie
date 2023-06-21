@@ -50,7 +50,9 @@ const getCourseGlimpsePropsFromJoanieCourse = (
   return {
     id: course.id,
     code: course.code,
-    course_route: getRoutePath(TeacherDashboardPaths.COURSE, { courseId: course.id }),
+    course_route: getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS, {
+      courseId: course.id,
+    }),
     cover_image: course.cover
       ? {
           src: course.cover.url,

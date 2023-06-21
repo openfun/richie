@@ -41,6 +41,7 @@ export function getDashboardRoutes() {
           path: getRoutePath(TeacherDashboardPaths.ROOT),
           handle: {
             renderLayout: true,
+            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_COURSES],
           },
           children: getTeacherDashboardRoutes(),
         },
@@ -86,7 +87,6 @@ const getDashboardRouteAttribute =
     const isLabel = attribute === RouteAttributes.LABEL;
 
     const message = isLabel ? DASHBOARD_ROUTE_LABELS[path] : DASHBOARD_ROUTE_PATHS[path];
-
     return intl.formatMessage(message, ...options);
   };
 

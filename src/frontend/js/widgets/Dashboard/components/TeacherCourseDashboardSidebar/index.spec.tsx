@@ -92,7 +92,9 @@ describe('<TeacherCourseDashboardSidebar/>', () => {
     await expectNoSpinner('Loading course...');
     expect(
       screen.getByRole('link', {
-        name: intl.formatMessage(TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE]),
+        name: intl.formatMessage(
+          TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS],
+        ),
       }),
     ).toBeInTheDocument();
 

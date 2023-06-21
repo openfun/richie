@@ -17,21 +17,51 @@ export function getTeacherDashboardRoutes() {
   const routes: RouteObject[] = [
     {
       index: true,
-      element: <Navigate to={getRoutePath(TeacherDashboardPaths.TEACHER_PROFILE)} replace />,
+      element: <Navigate to={getRoutePath(TeacherDashboardPaths.TEACHER_COURSES)} replace />,
     },
     {
-      path: getRoutePath(TeacherDashboardPaths.TEACHER_PROFILE),
+      path: getRoutePath(TeacherDashboardPaths.TEACHER_COURSES),
       children: [
         {
           index: true,
-          element: <Navigate to={getRoutePath(TeacherDashboardPaths.TEACHER_COURSES)} replace />,
+          element: <TeacherCoursesDashboardLoader />,
         },
         {
-          path: getRoutePath(TeacherDashboardPaths.TEACHER_COURSES),
-          handle: {
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_COURSES],
-          },
-          element: <TeacherCoursesDashboardLoader />,
+          path: getRoutePath(TeacherDashboardPaths.COURSE, {
+            courseId: ':courseId',
+          }),
+          children: [
+            {
+              index: true,
+              element: (
+                <NavigateWithParams
+                  to={getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS, {
+                    courseId: ':courseId',
+                  })}
+                  replace
+                />
+              ),
+            },
+            {
+              path: getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS, {
+                courseId: ':courseId',
+              }),
+              element: <TeacherCourseDashboardLoader />,
+              handle: {
+                crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
+              },
+            },
+            {
+              path: getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, {
+                courseId: ':courseId',
+                courseProductRelationId: ':courseProductRelationId',
+              }),
+              element: <TeacherTrainingDashboardLoader />,
+              handle: {
+                crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_PRODUCT],
+              },
+            },
+          ],
         },
       ],
     },
@@ -39,6 +69,9 @@ export function getTeacherDashboardRoutes() {
       path: getRoutePath(TeacherDashboardPaths.ORGANIZATION, {
         organizationId: ':organizationId',
       }),
+      handle: {
+        crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION],
+      },
       children: [
         {
           index: true,
@@ -55,31 +88,7 @@ export function getTeacherDashboardRoutes() {
           path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSES, {
             organizationId: ':organizationId',
           }),
-          handle: {
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION_COURSES],
-          },
           element: <TeacherOrganizationCourseDashboardLoader />,
-        },
-      ],
-    },
-    {
-      path: getRoutePath(TeacherDashboardPaths.COURSE, {
-        courseId: ':courseId',
-      }),
-      children: [
-        {
-          index: true,
-          element: <TeacherCourseDashboardLoader />,
-        },
-        {
-          path: getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, {
-            courseId: ':courseId',
-            courseProductRelationId: ':courseProductRelationId',
-          }),
-          handle: {
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_PRODUCT],
-          },
-          element: <TeacherTrainingDashboardLoader />,
         },
       ],
     },
