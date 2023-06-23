@@ -1,7 +1,7 @@
 .dashboard {
   &__page_title,
-  &__--small,
-  &__--large {
+  &__title--small,
+  &__title--large {
     // reset bootstrap bottom margin
     margin: 0;
     color: r-color(secondary-900);
