@@ -14,8 +14,14 @@ const messages = defineMessages({
   noCourseRunToPurchase: {
     defaultMessage:
       'At least one course has no course runs, this product is not currently available for sale',
-    description: "Label displayed inside the product's when there is no courseRun",
+    description: "Label displayed below the product's CTA when there is no courseRun",
     id: 'components.SaleTunnel.noCourseRunToPurchase',
+  },
+  noRemainingOrder: {
+    defaultMessage: 'There are no more places available for this product.',
+    description:
+      "Label displayed below the product's CTA when there is no remaining available seat for the product",
+    id: 'components.SaleTunnel.noRemainingOrder',
   },
   callToActionDescription: {
     defaultMessage: 'Purchase {product}',
@@ -56,6 +62,10 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
     );
   }
 
+  const hasAtLeastOneRemainingOrder =
+    product.remaining_order_count === null || product.remaining_order_count > 0;
+  const isPurchasable = hasAtLeastOneRemainingOrder && hasAtLeastOneCourseRun;
+
   return (
     <>
       {!disabled && (
@@ -70,13 +80,18 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
             aria-description={intl.formatMessage(messages.callToActionDescription, {
               product: product.title,
             })}
-            disabled={!hasAtLeastOneCourseRun}
+            disabled={!isPurchasable}
           >
             {product.call_to_action}
           </button>
           {!hasAtLeastOneCourseRun && (
             <p className="product-item__no-course-run">
               <FormattedMessage {...messages.noCourseRunToPurchase} />
+            </p>
+          )}
+          {hasAtLeastOneCourseRun && !hasAtLeastOneRemainingOrder && (
+            <p className="product-item__no-course-run">
+              <FormattedMessage {...messages.noRemainingOrder} />
             </p>
           )}
         </>

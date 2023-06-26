@@ -7,6 +7,7 @@ import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
 import type { Nullable } from 'types/utils';
+import { HttpError } from 'utils/errors/HttpError';
 import { useCourseProduct } from '../../contexts/CourseProductContext';
 import PaymentInterface from '../PaymentInterfaces';
 
@@ -25,6 +26,12 @@ const messages = defineMessages({
     defaultMessage: 'An error occurred during payment. Please retry later.',
     description: 'Error message shown when payment creation request failed.',
     id: 'components.PaymentButton.errorDefault',
+  },
+  errorFullProduct: {
+    defaultMessage: 'There are no more places available for this product.',
+    description:
+      'Error message shown when payment creation request failed because there is no remaining available seat for the product.',
+    id: 'components.PaymentButton.errorFullProduct',
   },
   errorAddress: {
     defaultMessage: 'You must have a billing address.',
@@ -53,6 +60,7 @@ export enum PaymentErrorMessageId {
   ERROR_ABORTING = 'errorAborting',
   ERROR_ADDRESS = 'errorAddress',
   ERROR_DEFAULT = 'errorDefault',
+  ERROR_FULL_PRODUCT = 'errorFullProduct',
 }
 
 interface PaymentButtonProps {
@@ -132,7 +140,13 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
               };
               setPayment(paymentInfos);
             },
-            onError: () => {
+            onError: async (createPaymentError: HttpError) => {
+              if (createPaymentError.responseBody) {
+                const responseErrors = await createPaymentError.responseBody;
+                if ('max_validated_orders' in responseErrors) {
+                  setError(PaymentErrorMessageId.ERROR_FULL_PRODUCT);
+                }
+              }
               setState(ComponentStates.ERROR);
             },
           },

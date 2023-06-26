@@ -22,6 +22,8 @@ dashboard.
 - Finalize the design of teacher dashboard organization sidebar.
 - Use union of organization courses and course product relations on organization
 course's listing page.
+- The product purchase button is now disabled and display a contextual 
+information message when the product have no remaining order.
 
 ### Changed
 
