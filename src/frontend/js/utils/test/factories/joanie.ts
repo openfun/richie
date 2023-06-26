@@ -108,6 +108,7 @@ export const CertificateProductFactory = factory((): Product => {
     certificate_definition: CertificationDefinitionFactory().one(),
     orders: [],
     target_courses: TargetCourseFactory().many(5),
+    remaining_order_count: faker.number.int({ min: 1, max: 100 }),
   };
 });
 

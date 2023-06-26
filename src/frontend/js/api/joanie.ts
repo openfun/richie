@@ -21,6 +21,17 @@ interface CheckStatusOptions {
   fallbackValue: any;
   ignoredErrorStatus: number[];
 }
+
+export function getResponseBody(response: Response) {
+  if (response.headers.get('Content-Type') === 'application/json') {
+    return response.json();
+  }
+  if (response.headers.get('Content-Type') === 'application/pdf') {
+    return response.blob();
+  }
+  return response.text();
+}
+
 /*
   A util to manage Joanie API responses.
   It parses properly the response according to its `Content-Type`
@@ -35,20 +46,14 @@ export function checkStatus(
   options: CheckStatusOptions = { fallbackValue: null, ignoredErrorStatus: [] },
 ): Promise<any> {
   if (response.ok) {
-    if (response.headers.get('Content-Type') === 'application/json') {
-      return response.json();
-    }
-    if (response.headers.get('Content-Type') === 'application/pdf') {
-      return response.blob();
-    }
-    return response.text();
+    return getResponseBody(response);
   }
 
   if (options.ignoredErrorStatus.includes(response.status)) {
     return Promise.resolve(options.fallbackValue);
   }
 
-  throw new HttpError(response.status, response.statusText);
+  throw new HttpError(response.status, response.statusText, undefined, getResponseBody(response));
 }
 
 /*

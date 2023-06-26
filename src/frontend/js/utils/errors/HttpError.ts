@@ -5,11 +5,18 @@
 export class HttpError extends Error {
   code: number;
   localizedMessage?: string;
+  responseBody?: any;
 
-  constructor(status: number, statusText: string, localizedMessage?: string) {
+  constructor(
+    status: number,
+    statusText: string,
+    localizedMessage?: string,
+    responseBody?: Promise<any>,
+  ) {
     super(statusText);
     this.code = status;
     this.localizedMessage = localizedMessage;
+    this.responseBody = responseBody;
   }
 }
 export function isHttpError(error: any): error is HttpError {
