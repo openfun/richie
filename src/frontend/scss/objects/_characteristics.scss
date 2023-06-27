@@ -44,4 +44,11 @@
       @include r-button-colors(r-theme-val(characteristics, tertiary-item), $apply-border: true);
     }
   }
+
+  &__enrollment-count {
+    @include make-container();
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 1rem;
+  }
 }

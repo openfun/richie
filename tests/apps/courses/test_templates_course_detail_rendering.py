@@ -404,12 +404,12 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         pattern = (
             r'<div class="subheader__content">'
-            r'<div class="characteristics">'
-            r"<ul.*</ul>"
-            r'</div><div property="description">'
+            r'<div property="description">'
             r'<div class="cms-placeholder'
         )
 
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        pattern = r'<div class="characteristics"><ul.*</ul></div></div>'
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         pattern = (
             r'<div class="section__items section__items--organizations">'

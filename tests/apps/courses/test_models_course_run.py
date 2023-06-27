@@ -865,3 +865,41 @@ class CourseRunModelsTestCase(TestCase):
         self.assertEqual(
             str(french_run_translation), "Course Run Translation: Empty title"
         )
+
+    def test_course_languages_all_languages_available_in_course_runs(self):
+        """
+        Test a course with multiple runs where each run has the same languages.
+        It returns a 'str' with formed sentence.
+        """
+        course = CourseFactory(page_languages=["en", "fr"])
+        CourseRunFactory.create_batch(5, direct_course=course, languages=["en", "fr"])
+        course_languages = course.course_languages_display
+
+        self.assertEqual(course_languages, "English and french")
+
+    def test_course_languages_available_in_course_runs_more_languages(self):
+        """
+        Test course language presentation where each run has different languages.
+        It returns a 'str' formed sentence with right sort.
+        """
+        course = CourseFactory(page_languages=["en", "fr"])
+        CourseRunFactory.create(direct_course=course, languages=["en", "fr"])
+        CourseRunFactory.create(direct_course=course, languages=["de", "it"])
+        course_languages = course.course_languages_display
+
+        self.assertEqual("German, english, french and italian", course_languages)
+
+    def test_course_languages_not_show_hidden_course_runs(self):
+        """
+        A Course languages available searching in all course runs it returns.
+        It returns a 'str' formed sentence with right sort and excluding course runs
+        who still in hidden category visibility.
+        """
+        course = CourseFactory(page_languages=["en", "fr"])
+        CourseRunFactory.create_batch(5, direct_course=course, languages=["en", "fr"])
+        CourseRunFactory.create_batch(
+            2, direct_course=course, languages=["de", "it"], catalog_visibility="hidden"
+        )
+        course_languages = course.course_languages_display
+
+        self.assertEqual(course_languages, "English and french")

@@ -19,6 +19,8 @@ relations.
 - Add a page for training details (courseProductRelation) in the teacher
 dashboard.
 - Add a link to the LMS course run session in teacher dashbaord course run lists
+- Add all available languages for the course in the characteristics section 
+on the course details page.
 
 ### Changed
 
