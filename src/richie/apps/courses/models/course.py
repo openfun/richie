@@ -63,7 +63,7 @@ class CourseState(Mapping):
     }
 
     STATE_TEXTS = {
-        ONGOING_OPEN: _("closing on"),
+        ONGOING_OPEN: _("open for enrollment"),
         FUTURE_OPEN: _("starting on"),
         ARCHIVED_OPEN: _("closing on"),
         FUTURE_NOT_YET_OPEN: _("starting on"),
@@ -110,12 +110,16 @@ class CourseState(Mapping):
         ):
             text = _("forever open")
             date_time = None
+        elif priority == CourseState.ONGOING_OPEN:
+            date_time = None
+
         kwargs = {
             "priority": priority,
             "datetime": date_time,
             "call_to_action": self.STATE_CALLS_TO_ACTION[priority],
             "text": text,
         }
+
         self._d = {**kwargs}
 
     def __iter__(self):
@@ -604,7 +608,6 @@ class Course(EsIdMixin, BasePageExtension):
             if state["priority"] == CourseState.ONGOING_OPEN:
                 # We found the best state, don't waste more time
                 break
-
         return best_state
 
     def copy_relations(self, oldinstance, language=None):

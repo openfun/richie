@@ -21,7 +21,7 @@ export const messages = defineMessages({
 
 export const buildCourseRunData = (intl: IntlShape, courseRuns: CourseRun[]) => {
   const CourseStateIconMap: Record<CourseStateTextEnum, IconTypeEnum> = {
-    [CourseStateTextEnum.CLOSING_ON]: IconTypeEnum.MORE,
+    [CourseStateTextEnum.ENROLLMENT_OPENED]: IconTypeEnum.MORE,
     [CourseStateTextEnum.STARTING_ON]: IconTypeEnum.CHECK_ROUNDED,
     [CourseStateTextEnum.ENROLLMENT_CLOSED]: IconTypeEnum.MORE,
     [CourseStateTextEnum.ON_GOING]: IconTypeEnum.MORE,

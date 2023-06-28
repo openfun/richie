@@ -24,6 +24,7 @@ dashboard.
 course's listing page.
 - The product purchase button is now disabled and display a contextual 
 information message when the product have no remaining order.
+- Change footer text and remove datime on glimpse course according state.
 
 ### Changed
 
