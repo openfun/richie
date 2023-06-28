@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { StorybookHelper } from 'utils/StorybookHelper';
+import { AddressFactory } from 'utils/test/factories/joanie';
 import AddressForm from '.';
 
 export default {
@@ -26,10 +27,10 @@ export default {
 
 type Story = StoryObj<typeof AddressForm>;
 
-export const Default: Story = {};
-//   export const RichieCourse: Story = {
-//     args: {
-//       context: RichieContextFactory().one(),
-//       course: getCourseGlimpseProps(CourseLightFactory().one()),
-//     },
-//   };
+export const CreateAddress: Story = {};
+
+export const EditAddress: Story = {
+  args: {
+    address: AddressFactory().one(),
+  },
+};
