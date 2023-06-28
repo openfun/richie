@@ -138,7 +138,7 @@ export const CourseRunFactory = factory((): CourseRun => {
       priority: Priority.FUTURE_OPEN,
       datetime: faker.date.past({ years: 0.25 }).toISOString(),
       call_to_action: 'enroll now',
-      text: CourseStateTextEnum.CLOSING_ON,
+      text: CourseStateTextEnum.ENROLLMENT_OPENED,
     }).one(),
   };
 });

@@ -633,10 +633,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "state": {
                             "priority": 0,
                             "call_to_action": "enroll now",
-                            "datetime": data["course_runs"]["A"]["enrollment_end"]
-                            .isoformat()
-                            .replace("+00:00", "Z"),
-                            "text": "closing on",
+                            "datetime": None,
+                            "text": "open for enrollment",
                         },
                         "title": "Artificial intelligence for mushroom picking",
                     },
@@ -686,11 +684,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                         "state": {
                             "priority": 0,
-                            "datetime": data["course_runs"]["B"]["enrollment_end"]
-                            .isoformat()
-                            .replace("+00:00", "Z"),
+                            "datetime": None,
                             "call_to_action": "enroll now",
-                            "text": "closing on",
+                            "text": "open for enrollment",
                         },
                         "title": "Building a data lake out of mountain springs",
                     },
@@ -1043,11 +1039,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {
                     "call_to_action": "enroll now",
-                    "datetime": data["course_runs"]["A"]["enrollment_end"]
-                    .isoformat()
-                    .replace("+00:00", "Z"),
+                    "datetime": None,
                     "priority": 0,
-                    "text": "closing on",
+                    "text": "open for enrollment",
                 },
                 {
                     "call_to_action": "enroll now",
@@ -1141,11 +1135,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {
                     "call_to_action": "enroll now",
-                    "datetime": data["course_runs"]["A"]["enrollment_end"]
-                    .isoformat()
-                    .replace("+00:00", "Z"),
+                    "datetime": None,
                     "priority": 0,
-                    "text": "closing on",
+                    "text": "open for enrollment",
                 },
                 {
                     "call_to_action": "enroll now",
@@ -1310,11 +1302,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {
                     "call_to_action": "enroll now",
-                    "datetime": data["course_runs"]["A"]["enrollment_end"]
-                    .isoformat()
-                    .replace("+00:00", "Z"),
+                    "datetime": None,
                     "priority": 0,
-                    "text": "closing on",
+                    "text": "open for enrollment",
                 },
                 {
                     "call_to_action": None,
@@ -1468,11 +1458,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {
                     "call_to_action": "enroll now",
-                    "datetime": data["course_runs"]["B"]["enrollment_end"]
-                    .isoformat()
-                    .replace("+00:00", "Z"),
+                    "datetime": None,
                     "priority": 0,
-                    "text": "closing on",
+                    "text": "open for enrollment",
                 },
                 {
                     "call_to_action": None,

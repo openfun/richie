@@ -11,9 +11,9 @@ import { factory } from './factories';
  * mapping between priority and text
  * | Priority | Text |
  * | ----------- | ----------- |
- * |ONGOING_OPEN        | CLOSING_ON|
+ * |ONGOING_OPEN        | ENROLLMENT_OPENED|
  * |FUTURE_OPEN         | STARTING_ON|
- * |ARCHIVED_OPEN       | CLOSING_ON|
+ * |ARCHIVED_OPEN       | ENROLLMENT_OPENED|
  * |FUTURE_NOT_YET_OPEN | STARTING_ON|
  * |FUTURE_CLOSED       | ENROLLMENT_CLOSED|
  * |ONGOING_CLOSED      | ON_GOING|
@@ -25,7 +25,7 @@ export const CourseStateFactory = factory<CourseState>(() => {
     priority: Priority.ONGOING_OPEN,
     datetime: faker.date.past().toISOString(),
     call_to_action: 'enroll now',
-    text: CourseStateTextEnum.CLOSING_ON,
+    text: CourseStateTextEnum.ENROLLMENT_OPENED,
   };
 });
 

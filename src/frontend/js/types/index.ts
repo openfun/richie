@@ -1,7 +1,7 @@
 import { Nullable } from 'types/utils';
 
 export enum CourseStateTextEnum {
-  CLOSING_ON = 'closing on',
+  ENROLLMENT_OPENED = 'open for enrollment',
   STARTING_ON = 'starting on',
   ENROLLMENT_CLOSED = 'enrollment closed',
   ON_GOING = 'on-going',

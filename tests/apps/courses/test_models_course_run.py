@@ -286,7 +286,7 @@ class CourseRunModelsTestCase(TestCase):
             },
         )
 
-    def test_models_course_run_state_archived_open_closing_on(self):
+    def test_models_course_run_state_archived_open_enrollment_opened(self):
         """
         A course run that is passed and has an enrollment end in the future should return
         a state with priority 2 and "closing on" as text.
@@ -341,9 +341,9 @@ class CourseRunModelsTestCase(TestCase):
             dict(course_run.state),
             {
                 "priority": 0,
-                "text": "closing on",
+                "text": "open for enrollment",
                 "call_to_action": "enroll now",
-                "datetime": self.now + timedelta(hours=1),
+                "datetime": None,
             },
         )
 
