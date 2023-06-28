@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import { messages } from 'components/AddressesManagement/index';
 import { CheckboxField, TextField } from 'components/Form';
 import { CountrySelectField } from 'components/Form/CountrySelectField';
@@ -137,29 +138,21 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
       <footer className="form__footer">
         {address ? (
           <Fragment>
-            <button
-              className="button button-sale--tertiary"
+            <Button
+              color="tertiary"
               onClick={handleCancel}
               title={intl.formatMessage(messages.cancelTitleButton)}
             >
               <FormattedMessage {...messages.cancelButton} />
-            </button>
-            <button
-              className="button button-sale--primary"
-              disabled={addresses.states.updating}
-              type="submit"
-            >
+            </Button>
+            <Button disabled={addresses.states.updating} type="submit">
               <FormattedMessage {...messages.updateButton} />
-            </button>
+            </Button>
           </Fragment>
         ) : (
-          <button
-            className="button button-sale--primary"
-            disabled={addresses.states.creating || addresses.states.updating}
-            type="submit"
-          >
+          <Button disabled={addresses.states.creating || addresses.states.updating} type="submit">
             <FormattedMessage {...messages.selectButton} />
-          </button>
+          </Button>
         )}
       </footer>
     </form>
