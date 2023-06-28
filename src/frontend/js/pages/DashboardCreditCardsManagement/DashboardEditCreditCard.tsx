@@ -7,7 +7,7 @@ import { Button } from 'components/Button';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { CheckboxField, TextField } from 'components/Form';
-import { getLocalizedErrorMessage } from 'components/AddressesManagement/validationSchema';
+import { getLocalizedErrorMessage } from 'components/AddressesManagement/AddressForm/validationSchema';
 import { useCreditCardsManagement } from 'hooks/useCreditCardsManagement';
 import { noop } from 'utils';
 import { CreditCardBrandLogo } from './CreditCardBrandLogo';

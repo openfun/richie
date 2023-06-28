@@ -1,8 +1,8 @@
 import countries from 'i18n-iso-countries';
 import { IntlShape } from 'react-intl';
 import * as Yup from 'yup';
-import { ErrorKeys, errorMessages } from 'components/AddressesManagement/ValidationErrors';
 import { Maybe } from 'types/utils';
+import { ErrorKeys, errorMessages } from './ValidationErrors';
 
 Yup.setLocale({
   mixed: {
