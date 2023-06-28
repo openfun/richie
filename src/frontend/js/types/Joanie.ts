@@ -301,6 +301,13 @@ export interface CourseRunFilters extends ResourcesQuery {
   course_id?: CourseListItem['id'];
 }
 
+export interface CourseQueryFilters extends ResourcesQuery {
+  organization_id?: Organization['id'];
+}
+export interface CourseProductRelationQueryFilters extends ResourcesQuery {
+  organization_id?: Organization['id'];
+}
+
 export interface ApiResourceInterface<
   TData extends Resource,
   TResourceQuery extends ResourcesQuery = ResourcesQuery,

@@ -1,0 +1,28 @@
+$avatar-size: 100px;
+
+.dashboard {
+  &__avatar {
+    box-shadow: r-theme-val(dashboard-sidebar, base-shadow);
+    background-color: r-theme-val(dashboard-avatar, background-color);
+    border-radius: 100%;
+    width: $avatar-size;
+    height: $avatar-size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: r-theme-val(dashboard-avatar, base-color);
+    font-size: 3rem;
+    font-weight: bold;
+
+    &--square {
+      border-radius: rem-calc(8px);
+      background: r-theme-val(dashboard-sidebar, background-color);
+      border: 1px solid r-theme-val(dashboard-avatar, background-color);
+      color: r-theme-val(dashboard-avatar, background-color);
+
+      img {
+        border-radius: rem-calc(6px);
+      }
+    }
+  }
+}

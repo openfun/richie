@@ -21,6 +21,9 @@ dashboard.
 - Add a link to the LMS course run session in teacher dashbaord course run lists
 - Add all available languages for the course in the characteristics section 
 on the course details page.
+- Finalize the design of teacher dashboard organization sidebar.
+- Use union of organization courses and course product relations on organization
+course's listing page.
 
 ### Changed
 
