@@ -21,6 +21,8 @@ export default {
         <div className="AddressesManagement">
           <div className="address-form">
             <RegisteredAddress {...args} />
+            <RegisteredAddress {...args} address={{ ...args.address, is_main: false }} />
+            <RegisteredAddress {...args} address={{ ...args.address, is_main: false }} />
           </div>
         </div>
       </div>,

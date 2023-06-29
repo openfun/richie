@@ -56,7 +56,7 @@ describe('RegisteredAddress', () => {
       </Wrapper>,
     );
 
-    const $button = getByRole(container, 'button', {
+    const $button = getByRole(container, 'radio', {
       name: `Define "${address.title}" address as main`,
     });
     fireEvent.click($button);
