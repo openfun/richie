@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import { Spinner } from 'components/Spinner';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useOrders } from 'hooks/useOrders';
@@ -224,8 +225,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
 
   return (
     <div className="payment-button">
-      <button
-        className="button button-sale--primary"
+      <Button
         disabled={state === ComponentStates.LOADING}
         onClick={createPayment}
         {...(state === ComponentStates.ERROR && {
@@ -249,7 +249,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
             }}
           />
         )}
-      </button>
+      </Button>
       {state === ComponentStates.LOADING && payment && !isOneClickPayment(payment) && (
         <PaymentInterface {...payment} onError={handleError} onSuccess={handleSuccess} />
       )}
