@@ -1,4 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import { Spinner } from 'components/Spinner';
 import type * as Joanie from 'types/Joanie';
 import { useDownloadCertificate } from 'hooks/useDownloadCertificate';
@@ -50,11 +51,7 @@ const CertificateItem = ({ certificateDefinition, order }: Props) => {
           {order?.certificate ? (
             <>
               <FormattedMessage {...messages.congratulations} />
-              <button
-                disabled={loading}
-                className="button button--primary button--pill"
-                onClick={onDownloadClick}
-              >
+              <Button disabled={loading} onClick={onDownloadClick}>
                 {loading ? (
                   <Spinner theme="light" aria-labelledby="generating-certificate">
                     <span id="generating-certificate">
@@ -64,7 +61,7 @@ const CertificateItem = ({ certificateDefinition, order }: Props) => {
                 ) : (
                   <FormattedMessage {...messages.download} />
                 )}
-              </button>
+              </Button>
             </>
           ) : (
             certificateDefinition.description || (
