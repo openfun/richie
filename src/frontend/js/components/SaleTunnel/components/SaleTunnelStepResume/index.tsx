@@ -1,3 +1,4 @@
+import { Button } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 const messages = defineMessages({
@@ -51,9 +52,9 @@ export const SaleTunnelStepResume = ({ next }: SaleTunnelStepResumeProps) => (
       <FormattedMessage {...messages.successDetailMessage} />
     </p>
     <footer className="SaleTunnelStepResume__footer">
-      <button className="button button-sale--primary" onClick={next}>
+      <Button onClick={next}>
         <FormattedMessage {...messages.cta} />
-      </button>
+      </Button>
     </footer>
   </section>
 );
