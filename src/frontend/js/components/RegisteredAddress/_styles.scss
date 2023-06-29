@@ -72,9 +72,7 @@
     display: flex;
     gap: 0.5rem;
 
-    & > .button {
-      min-width: 100px;
-
+    & > .c__button {
       &:disabled {
         visibility: hidden;
       }

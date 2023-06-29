@@ -1,3 +1,4 @@
+import { Button, Radio } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import type { Address } from 'types/Joanie';
 
@@ -57,19 +58,14 @@ const RegisteredAddress = ({ promote, select, edit, remove, address }: Props) =>
 
   return (
     <li className="registered-addresses-item">
-      <button
+      <Radio
         aria-describedby={`address-${address.id}-infos`}
         aria-label={intl.formatMessage(messages.promoteButtonLabel, { title: address.title })}
-        className="button"
         onClick={() => promote(address)}
         title={intl.formatMessage(messages.promoteButtonLabel, { title: address.title })}
-      >
-        <span
-          className={`address-main-indicator ${
-            address.is_main ? 'address-main-indicator--is-main' : ''
-          }`}
-        />
-      </button>
+        name="registered-addresses"
+        checked={address.is_main}
+      />
       <strong
         data-testid={`address-${address.id}-title`}
         className="h6 registered-addresses-item__title"
@@ -86,30 +82,32 @@ const RegisteredAddress = ({ promote, select, edit, remove, address }: Props) =>
         {address.address} {address.postcode} {address.city}, {address.country}
       </address>
       <p className="registered-addresses-item__actions">
-        <button
+        <Button
           aria-label={intl.formatMessage(messages.selectButtonLabel, { title: address.title })}
-          className="button button--tiny button--pill button-sale--primary"
+          size="small"
           onClick={() => select(address)}
         >
           <FormattedMessage {...messages.selectButton} />
-        </button>
-        <button
+        </Button>
+        <Button
           aria-label={intl.formatMessage(messages.editButtonLabel, { title: address.title })}
-          className="button button--tiny button--pill  button-sale--secondary"
+          color="secondary"
+          size="small"
           onClick={() => edit(address)}
         >
           <FormattedMessage {...messages.editButton} />
-        </button>
-        <button
+        </Button>
+        <Button
           aria-label={intl.formatMessage(messages.deleteButtonLabel, {
             title: address.title,
           })}
-          className="button button--tiny button--pill  button-sale--secondary"
+          color="secondary"
+          size="small"
           disabled={address.is_main}
           onClick={() => remove(address)}
         >
           <FormattedMessage {...messages.deleteButton} />
-        </button>
+        </Button>
       </p>
     </li>
   );
