@@ -1,4 +1,5 @@
 import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
 import CourseRunsList from './CourseRunsList';
@@ -71,9 +72,9 @@ export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValida
         ) : null}
       </ol>
       <footer className="SaleTunnelStepValidation__footer">
-        <button className="button button-sale--primary" onClick={next}>
+        <Button onClick={next}>
           <FormattedMessage {...messages.proceedToPayment} />
-        </button>
+        </Button>
       </footer>
     </section>
   );
