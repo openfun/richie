@@ -1,5 +1,6 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useMemo, useState } from 'react';
+import { Button } from '@openfun/cunningham-react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
 import { Priority } from 'types';
@@ -53,12 +54,12 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
 
   if (!user) {
     return (
-      <button className="purchase-button__cta" onClick={login}>
+      <Button fullWidth onClick={login}>
         <FormattedMessage
           {...messages.loginToPurchase}
           values={{ product: <span className="offscreen">&quot;{product.title}&quot;</span> }}
         />
-      </button>
+      </Button>
     );
   }
 
@@ -70,10 +71,9 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
     <>
       {!disabled && (
         <>
-          {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
-          <button
+          <Button
             data-testid="PurchaseButton__cta"
-            className="purchase-button__cta"
+            fullWidth
             onClick={() => hasAtLeastOneCourseRun && setIsSaleTunnelOpen(true)}
             // so that the button is explicit on its own, we add a description that doesn't
             // rely on the text coming from the CMS
@@ -84,7 +84,7 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
             disabled={!isPurchasable}
           >
             {product.call_to_action}
-          </button>
+          </Button>
           {!hasAtLeastOneCourseRun && (
             <p className="purchase-button__no-course-run">
               <FormattedMessage {...messages.noCourseRunToPurchase} />
