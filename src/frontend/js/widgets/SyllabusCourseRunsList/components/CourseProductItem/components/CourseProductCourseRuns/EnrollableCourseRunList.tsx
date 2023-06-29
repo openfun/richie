@@ -1,5 +1,6 @@
 import { Children, type FormEventHandler, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { Spinner } from 'components/Spinner';
 import { useEnrollments } from 'hooks/useEnrollments';
@@ -209,7 +210,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
                 <FormattedMessage {...messages.selectCourseRun} />
               ))}
           </span>
-          <button className="course-runs-item__cta button--primary button--pill button--tiny">
+          <Button size="small" className="course-runs-item__cta">
             {loading ? (
               <Spinner theme="light" aria-labelledby="enrolling">
                 <span id="enrolling">
@@ -219,7 +220,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
             ) : (
               <FormattedMessage {...messages.enroll} />
             )}
-          </button>
+          </Button>
         </div>
       </form>
     </CourseRunSection>
