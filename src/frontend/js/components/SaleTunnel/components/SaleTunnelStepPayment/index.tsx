@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import PaymentButton from 'components/PaymentButton';
 import AddressesManagement, { LOCAL_BILLING_ADDRESS_ID } from 'components/AddressesManagement';
 import { SelectField } from 'components/Form';
@@ -202,13 +203,14 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
               <FormattedMessage {...messages.userBillingAddressFieldset} />
             </h3>
             {addressesItems.length > 0 && (
-              <button
-                className="button button--tiny button--pill button-sale--secondary"
+              <Button
+                size="small"
+                color="secondary"
                 onClick={() => setShowAddressCreationForm(true)}
+                icon={<Icon name={IconTypeEnum.PLUS} className="button__icon" size="small" />}
               >
-                <Icon name={IconTypeEnum.PLUS} className="button__icon" size="small" />
                 <FormattedMessage {...messages.userBillingAddressAddLabel} />
-              </button>
+              </Button>
             )}
           </header>
           {addressesItems.length > 0 ? (
@@ -246,13 +248,13 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
                   <FormattedMessage {...messages.userBillingAddressNoEntry} />
                 </em>
               </p>
-              <button
-                className="button button--tiny button--pill button-sale--primary"
+              <Button
+                size="small"
                 onClick={() => setShowAddressCreationForm(true)}
+                icon={<Icon name={IconTypeEnum.PLUS} size="small" className="button__icon" />}
               >
-                <Icon name={IconTypeEnum.PLUS} size="small" className="button__icon" />
                 <FormattedMessage {...messages.userBillingAddressCreateLabel} />
-              </button>
+              </Button>
             </Fragment>
           )}
         </div>
