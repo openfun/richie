@@ -1,3 +1,4 @@
+import { Button } from '@openfun/cunningham-react';
 import * as React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -17,9 +18,9 @@ interface Props {
 export const CourseRunUnenrollButton = (props: Props) => {
   return (
     <div className="course-run-unenrollment">
-      <button className="button course-run-unenrollment__button" onClick={props.onUnenroll}>
+      <Button fullWidth onClick={props.onUnenroll}>
         <FormattedMessage {...messages.unenroll} />
-      </button>
+      </Button>
     </div>
   );
 };
