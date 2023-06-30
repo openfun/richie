@@ -12,6 +12,7 @@ import context from 'utils/context';
 const CourseProductItem = lazy(() => import('widgets/CourseProductItem'));
 const CourseAddToWishlist = lazy(() => import('widgets/CourseAddToWishlist'));
 const CourseRunEnrollment = lazy(() => import('widgets/CourseRunEnrollment'));
+const CourseRunsSubHeader = lazy(() => import('widgets/CourseRunsSubHeader'));
 const LanguageSelector = lazy(() => import('widgets/LanguageSelector'));
 const LtiConsumer = lazy(() => import('widgets/LtiConsumer'));
 const RootSearchSuggestField = lazy(() => import('widgets/RootSearchSuggestField'));
@@ -27,6 +28,7 @@ interface ComponentLibrary {
   CourseAddToWishlist: typeof CourseAddToWishlist;
   CourseProductItem: typeof CourseProductItem;
   CourseRunEnrollment: typeof CourseRunEnrollment;
+  CourseRunsSubHeader: typeof CourseRunsSubHeader;
   Dashboard: typeof Dashboard;
   LanguageSelector: typeof LanguageSelector;
   LtiConsumer: typeof LtiConsumer;
@@ -40,6 +42,7 @@ const componentLibrary: ComponentLibrary = {
   CourseAddToWishlist,
   CourseProductItem,
   CourseRunEnrollment,
+  CourseRunsSubHeader,
   Dashboard,
   LanguageSelector,
   LtiConsumer,

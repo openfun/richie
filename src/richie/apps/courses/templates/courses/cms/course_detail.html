@@ -190,6 +190,9 @@
                                 {% elif open_visible_runs|length == 1 %}
                                     <div class="course-detail__row course-detail__runs course-detail__runs--open">
                                         {% for run in open_visible_runs|slice:":1" %}
+                                        {% render_model_block run %}
+                                            <div class="richie-react richie-react--course-runs-sub-header"></div>
+                                        {% endrender_model_block %}
                                             {% include "courses/cms/fragment_course_run.html" %}
                                         {% endfor %}
                                     </div>
