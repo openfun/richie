@@ -120,7 +120,7 @@
                                         <svg role="img" class="characteristics__icon" aria-hidden="true">
                                             <use href="#icon-languages" />
                                         </svg>
-                                        <span class="characteristics__term">{% trans "Languages:" %} {{ course.course_languages_display|default:"NA" }}</span>
+                                        <span class="characteristics__term">{% trans "Languages:" %} {{ course.languages_display|default:"NA" }}</span>
                                     </li>
                                 </div>
                                 {% block enrollment_count %}

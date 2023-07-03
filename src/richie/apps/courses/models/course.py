@@ -483,11 +483,11 @@ class Course(EsIdMixin, BasePageExtension):
         ).aggregate(sum=Sum("enrollment_count"))["sum"]
 
     @cached_property
-    def course_languages_display(self):
+    def languages_display(self):
         """
         Returns a string listing of languages available for this course across all its
         course runs (merged).
-        They may be directly related to the course or to a snapshot of the course.
+        Languages related to the course's snapshots should not be taken into account.
 
         The draft and the public page have their own course runs. The course runs on the draft
         page are copied to the public page when the course is published (for any language).
@@ -507,10 +507,7 @@ class Course(EsIdMixin, BasePageExtension):
         languages = list(
             {x for course_languages in course_runs for x in course_languages.languages}
         )
-
-        languages.sort()
         instance = CourseRun(languages=languages)
-
         return instance.get_languages_display()
 
     @property

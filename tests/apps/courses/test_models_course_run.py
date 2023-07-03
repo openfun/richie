@@ -8,7 +8,7 @@ from unittest import mock
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.client import RequestFactory
-from django.utils import timezone
+from django.utils import timezone, translation
 
 import pytz
 from cms.constants import PUBLISHER_STATE_DEFAULT, PUBLISHER_STATE_DIRTY
@@ -510,7 +510,7 @@ class CourseRunModelsTestCase(TestCase):
         With 2 languages, it should return them joined with "them".
         """
         course_run = CourseRunFactory(languages=["fr", "en"])
-        self.assertEqual(course_run.get_languages_display(), "French and english")
+        self.assertEqual(course_run.get_languages_display(), "English and french")
 
     def test_models_course_run_get_languages_display_three_languages(self):
         """
@@ -519,8 +519,17 @@ class CourseRunModelsTestCase(TestCase):
         """
         course_run = CourseRunFactory(languages=["fr", "en", "de"])
         self.assertEqual(
-            course_run.get_languages_display(), "French, english and german"
+            course_run.get_languages_display(), "English, french and german"
         )
+
+    def test_models_course_run_get_languages_display_translation_specific(self):
+        """The languages display should be sorted by language display."""
+        course_run = CourseRunFactory(languages=["fr", "en", "de"])
+
+        with translation.override("fr"):
+            self.assertEqual(
+                course_run.get_languages_display(), "Allemand, anglais et français"
+            )
 
     def test_models_course_run_get_languages_display_request(self):
         """
@@ -870,12 +879,28 @@ class CourseRunModelsTestCase(TestCase):
         """
         Test a course with multiple runs where each run has the same languages.
         It returns a 'str' with formed sentence.
+        Sorting should be language specific.
         """
         course = CourseFactory(page_languages=["en", "fr"])
-        CourseRunFactory.create_batch(5, direct_course=course, languages=["en", "fr"])
-        course_languages = course.course_languages_display
+        CourseRunFactory.create_batch(
+            5, direct_course=course, languages=["en", "fr", "de"]
+        )
 
-        self.assertEqual(course_languages, "English and french")
+        course_languages = course.languages_display
+
+        self.assertEqual(course_languages, "English, french and german")
+
+    def test_course_languages_translation_specific_sorting(self):
+        """Course languages display sorting should be language specific."""
+        course = CourseFactory(page_languages=["en", "fr"])
+        CourseRunFactory.create_batch(
+            5, direct_course=course, languages=["en", "fr", "de"]
+        )
+
+        with translation.override("fr"):
+            course_languages = course.languages_display
+
+        self.assertEqual(course_languages, "Allemand, anglais et français")
 
     def test_course_languages_available_in_course_runs_more_languages(self):
         """
@@ -885,21 +910,55 @@ class CourseRunModelsTestCase(TestCase):
         course = CourseFactory(page_languages=["en", "fr"])
         CourseRunFactory.create(direct_course=course, languages=["en", "fr"])
         CourseRunFactory.create(direct_course=course, languages=["de", "it"])
-        course_languages = course.course_languages_display
 
-        self.assertEqual("German, english, french and italian", course_languages)
+        course_languages = course.languages_display
+
+        self.assertEqual("English, french, german and italian", course_languages)
+
+    def test_course_languages_all_languages_with_snapshot(self):
+        """
+        Languages of a snapshot should be taken into account to display all languages
+        for a course.
+        """
+        course = CourseFactory(page_languages=["en", "fr"])
+        CourseRunFactory.create_batch(5, direct_course=course, languages=["en", "fr"])
+        snapshot = CourseFactory(
+            page_parent=course.extended_object, should_publish=True
+        )
+        CourseRunFactory.create_batch(5, direct_course=snapshot, languages=["pt", "de"])
+
+        course_languages = course.languages_display
+
+        self.assertEqual(course_languages, "English, french, german and portuguese")
 
     def test_course_languages_not_show_hidden_course_runs(self):
         """
-        A Course languages available searching in all course runs it returns.
-        It returns a 'str' formed sentence with right sort and excluding course runs
-        who still in hidden category visibility.
+        A hidden course run should not be taken into account to display all languages
+        for a course
         """
         course = CourseFactory(page_languages=["en", "fr"])
         CourseRunFactory.create_batch(5, direct_course=course, languages=["en", "fr"])
         CourseRunFactory.create_batch(
             2, direct_course=course, languages=["de", "it"], catalog_visibility="hidden"
         )
-        course_languages = course.course_languages_display
+
+        course_languages = course.languages_display
 
         self.assertEqual(course_languages, "English and french")
+
+    def test_course_languages_draft_vs_public(self):
+        """
+        The languages display of the draft and public course should be differentiated.
+        """
+        course = CourseFactory()
+        course_run = CourseRunFactory(direct_course=course, languages=["en", "fr"])
+        course.extended_object.publish("en")
+
+        course_run.languages = ["de", "pt"]
+        course_run.save()
+        course.refresh_from_db()
+
+        self.assertEqual(course.languages_display, "German and portuguese")
+        self.assertEqual(
+            course.public_extension.languages_display, "English and french"
+        )
