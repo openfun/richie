@@ -84,8 +84,43 @@ describe('PurchaseButton', () => {
     expect(screen.getByTestId('SaleTunnel__modal')).toBeInTheDocument();
   });
 
-  it('shows cta to open sale tunnel when remaning orders is null', async () => {
+  it('shows cta to open sale tunnel when remaining orders is null', async () => {
     const product = ProductFactory({ remaining_order_count: null }).one();
+    fetchMock
+      .get('https://joanie.test/api/v1.0/addresses/', [])
+      .get('https://joanie.test/api/v1.0/credit-cards/', [])
+      .get('https://joanie.test/api/v1.0/orders/', []);
+
+    act(() => {
+      render(
+        <Wrapper client={createTestQueryClient({ user: true })}>
+          <PurchaseButton product={product} disabled={false} />
+        </Wrapper>,
+      );
+    });
+
+    fetchMock.resetHistory();
+
+    // Only CTA is displayed
+    const button = await screen.findByRole('button', { name: product.call_to_action });
+    expect(button).toBeInTheDocument();
+    expect(button).not.toBeDisabled();
+
+    // - SaleTunnel should not be opened
+    expect(screen.queryByTestId('SaleTunnel__modal')).not.toBeInTheDocument();
+
+    // act is needed here because we've no way, in SaleTunnel, to check useOrder !fetching state from the DOM
+    // Then user can enter into the sale tunnel and follow its 3 steps
+    await act(async () => userEvent.click(button));
+
+    // - SaleTunnel should have been opened
+    expect(await screen.findByTestId('SaleTunnel__modal')).toBeInTheDocument();
+  });
+
+  it('shows cta to open sale tunnel when remaining orders is undefined', async () => {
+    const product = ProductFactory().one();
+    delete product.remaining_order_count;
+
     fetchMock
       .get('https://joanie.test/api/v1.0/addresses/', [])
       .get('https://joanie.test/api/v1.0/credit-cards/', [])

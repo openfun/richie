@@ -63,7 +63,7 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
   }
 
   const hasAtLeastOneRemainingOrder =
-    product.remaining_order_count === null || product.remaining_order_count > 0;
+    typeof product?.remaining_order_count !== 'number' || product.remaining_order_count > 0;
   const isPurchasable = hasAtLeastOneRemainingOrder && hasAtLeastOneCourseRun;
 
   return (
