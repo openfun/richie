@@ -101,7 +101,7 @@ export interface Product {
   target_courses: TargetCourse[];
   created_on: string;
   orders: Order['id'][];
-  remaining_order_count: number | null;
+  remaining_order_count?: number | null;
 }
 
 export interface CourseProduct extends Product {
