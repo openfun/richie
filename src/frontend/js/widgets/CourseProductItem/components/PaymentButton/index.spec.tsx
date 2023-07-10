@@ -376,18 +376,8 @@ describe('PaymentButton', () => {
 
     fetchMock.resetHistory();
     // - Wait until order has been polled 29 times.
-    await waitFor(
-      async () => {
-        jest.advanceTimersToNextTimer();
-        expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit - 1);
-      },
-      {
-        // - As we run timers manually, the waitFor timeout is impacted.
-        // - Each time we advance timers, we trigger a new waitFor call, so we have
-        //   to increase timeout value according to the poll limit.
-        timeout: PAYMENT_SETTINGS.pollLimit * 1000,
-      },
-    );
+    await jest.advanceTimersToNextTimerAsync(PAYMENT_SETTINGS.pollLimit);
+    expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit - 1);
 
     // - This round should be the last after which the order should be aborted
     await act(async () => {
