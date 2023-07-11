@@ -53,6 +53,87 @@ export const CourseRunFactory = factory<CourseRun>(() => {
   };
 });
 
+export const CourseRunFactoryFromPriority = (priority: Priority) => {
+  return factory<CourseRun>(() => {
+    let courseRun = CourseRunFactory().one();
+    switch (priority) {
+      case Priority.ONGOING_OPEN:
+        courseRun = {
+          ...courseRun,
+          start: faker.date.past().toISOString(),
+          end: faker.date.future().toISOString(),
+          enrollment_start: faker.date.past().toISOString(),
+          enrollment_end: faker.date.future().toISOString(),
+        };
+        break;
+      case Priority.ONGOING_CLOSED:
+        courseRun = {
+          ...courseRun,
+          start: faker.date.past().toISOString(),
+          end: faker.date.future().toISOString(),
+          enrollment_start: faker.date.past().toISOString(),
+          enrollment_end: faker.date.past().toISOString(),
+        };
+        break;
+      case Priority.ARCHIVED_OPEN:
+        courseRun = {
+          ...courseRun,
+          start: faker.date.past().toISOString(),
+          end: faker.date.past().toISOString(),
+          enrollment_start: faker.date.past().toISOString(),
+          enrollment_end: faker.date.future().toISOString(),
+        };
+        break;
+      case Priority.ARCHIVED_CLOSED:
+        courseRun = {
+          ...courseRun,
+          start: faker.date.past().toISOString(),
+          end: faker.date.past().toISOString(),
+          enrollment_start: faker.date.past().toISOString(),
+          enrollment_end: faker.date.past().toISOString(),
+        };
+        break;
+      case Priority.FUTURE_NOT_YET_OPEN:
+        courseRun = {
+          ...courseRun,
+          start: faker.date.future().toISOString(),
+          end: faker.date.future().toISOString(),
+          enrollment_start: faker.date.future().toISOString(),
+          enrollment_end: faker.date.future().toISOString(),
+        };
+        break;
+      case Priority.FUTURE_OPEN:
+        courseRun = {
+          ...courseRun,
+          start: faker.date.future().toISOString(),
+          end: faker.date.future().toISOString(),
+          enrollment_start: faker.date.past().toISOString(),
+          enrollment_end: faker.date.future().toISOString(),
+        };
+        break;
+      case Priority.FUTURE_CLOSED:
+        courseRun = {
+          ...courseRun,
+          start: faker.date.future().toISOString(),
+          end: faker.date.future().toISOString(),
+          enrollment_start: faker.date.past().toISOString(),
+          enrollment_end: faker.date.past().toISOString(),
+        };
+        break;
+      case Priority.TO_BE_SCHEDULED:
+        courseRun = {
+          ...courseRun,
+          start: undefined,
+          end: faker.date.future().toISOString(),
+          enrollment_start: undefined,
+          enrollment_end: faker.date.past().toISOString(),
+        } as unknown as CourseRun;
+        break;
+    }
+    return courseRun;
+  });
+};
+
 export const EnrollmentFactory = factory<Enrollment>(() => {
   return {
     id: faker.string.uuid(),
