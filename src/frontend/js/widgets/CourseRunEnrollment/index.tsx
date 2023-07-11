@@ -3,12 +3,11 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { Spinner } from 'components/Spinner';
 import { useSession } from 'contexts/SessionContext';
-import { Priority } from 'types';
+import { CourseRun, Priority } from 'types';
 import { User } from 'types/User';
 import { Maybe, Nullable } from 'types/utils';
 import { handle } from 'utils/errors/handle';
 import { HttpError } from 'utils/errors/HttpError';
-import { CommonDataProps } from 'types/commonDataProps';
 import useCourseEnrollment from './hooks/useCourseEnrollment';
 import { CourseRunUnenrollButton } from './components/CourseRunUnenrollmentButton';
 
@@ -72,13 +71,7 @@ const messages = defineMessages({
 });
 
 interface CourseRunEnrollmentProps {
-  courseRun: {
-    id: number;
-    resource_link: string;
-    priority: Priority;
-    starts_in_message: Nullable<string>;
-    dashboard_link: Nullable<string>;
-  };
+  courseRun: CourseRun;
 }
 
 enum Step {
@@ -126,7 +119,7 @@ const getStepFromContext = (
   previousStep?: Maybe<Step>,
 ) => {
   switch (true) {
-    case courseRun.priority > Priority.ARCHIVED_OPEN:
+    case courseRun.state.priority > Priority.ARCHIVED_OPEN:
       return Step.CLOSED;
     case previousStep === Step.UNENROLLING && isEnrolled:
       return Step.UNENROLLMENT_FAILED;
