@@ -8,6 +8,10 @@ declare global {
       config: {
         auth: boolean;
         PropertyKey?: any;
+        mode?: string;
+      };
+      Plugin: {
+        _initializeTree: Function;
       };
       PropertyKey?: any;
     }>;

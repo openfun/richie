@@ -10,6 +10,7 @@ import { RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY } from 'settings';
 import { handle } from 'utils/errors/handle';
 import { resolveAll } from 'utils/resolveAll';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { noop } from 'utils';
 import {
   LtiConsumerContentParameters,
   LtiConsumerContext,
@@ -286,6 +287,9 @@ describe('widgets/LtiConsumer', () => {
     window.CMS = {
       config: {
         auth: true,
+      },
+      Plugin: {
+        _initializeTree: noop,
       },
     };
 
