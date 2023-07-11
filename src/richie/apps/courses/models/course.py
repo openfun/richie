@@ -527,7 +527,7 @@ class Course(EsIdMixin, BasePageExtension):
 
     def get_pace(self):
         """
-        Returns the course pace computed according to duration and effort fields or
+        Returns the course pace computed according to duration and effort fields or
         None if one of these fields is blank or if `is_self_paced` flag is equal to False.
 
         This method returns a tuple of three values:
