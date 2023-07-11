@@ -6,12 +6,11 @@ import { IntlProvider } from 'react-intl';
 import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
 import {
+  CourseRunFactory,
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
-  CourseRunFactory,
 } from 'utils/test/factories/richie';
 import { handle } from 'utils/errors/handle';
-import context from 'utils/context';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
@@ -40,14 +39,6 @@ const mockHandle = handle as jest.MockedFunction<typeof handle>;
 
 describe('<CourseRunEnrollment />', () => {
   const endpoint = 'https://demo.endpoint';
-
-  const getCourseRunProp = (courseRun: CourseRun) => ({
-    id: courseRun.id,
-    resource_link: courseRun.resource_link,
-    priority: courseRun.state.priority,
-    starts_in_message: courseRun.starts_in_message,
-    dashboard_link: courseRun.dashboard_link,
-  });
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -79,7 +70,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment courseRun={courseRun} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -124,7 +115,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment courseRun={courseRun} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -171,7 +162,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment courseRun={courseRun} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -217,7 +208,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment courseRun={courseRun} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -253,7 +244,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createTestQueryClient({ user })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment courseRun={courseRun} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -286,7 +277,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createTestQueryClient({ user: null })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment courseRun={courseRun} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -307,7 +298,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createTestQueryClient({ user: null })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment courseRun={courseRun} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
