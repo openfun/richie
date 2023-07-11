@@ -172,7 +172,7 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
   }
 };
 
-const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = (props) => {
+const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
   const { user, login } = useSession();
   const { enrollmentIsActive, setEnrollment, canUnenroll, states } = useCourseEnrollment(
     props.courseRun.resource_link,

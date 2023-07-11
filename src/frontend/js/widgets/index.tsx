@@ -11,7 +11,6 @@ import context from 'utils/context';
 
 const CourseProductItem = lazy(() => import('widgets/CourseProductItem'));
 const CourseAddToWishlist = lazy(() => import('widgets/CourseAddToWishlist'));
-const CourseRunEnrollment = lazy(() => import('widgets/CourseRunEnrollment'));
 const LanguageSelector = lazy(() => import('widgets/LanguageSelector'));
 const LtiConsumer = lazy(() => import('widgets/LtiConsumer'));
 const RootSearchSuggestField = lazy(() => import('widgets/RootSearchSuggestField'));
@@ -19,6 +18,7 @@ const Search = lazy(() => import('widgets/Search'));
 const SearchSuggestField = lazy(() => import('widgets/SearchSuggestField'));
 const UserLogin = lazy(() => import('widgets/UserLogin'));
 const Dashboard = lazy(() => import('widgets/Dashboard'));
+const SyllabusCourseRunsList = lazy(() => import('widgets/SyllabusCourseRunsList'));
 
 // List the top-level components that can be directly called from the Django templates in an interface
 // for type-safety when we call them. This will let us use the props for any top-level component in a
@@ -26,20 +26,19 @@ const Dashboard = lazy(() => import('widgets/Dashboard'));
 interface ComponentLibrary {
   CourseAddToWishlist: typeof CourseAddToWishlist;
   CourseProductItem: typeof CourseProductItem;
-  CourseRunEnrollment: typeof CourseRunEnrollment;
   Dashboard: typeof Dashboard;
   LanguageSelector: typeof LanguageSelector;
   LtiConsumer: typeof LtiConsumer;
   RootSearchSuggestField: typeof RootSearchSuggestField;
   Search: typeof Search;
   SearchSuggestField: typeof SearchSuggestField;
+  SyllabusCourseRunsList: typeof SyllabusCourseRunsList;
   UserLogin: typeof UserLogin;
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
   CourseAddToWishlist,
   CourseProductItem,
-  CourseRunEnrollment,
   Dashboard,
   LanguageSelector,
   LtiConsumer,
@@ -47,6 +46,7 @@ const componentLibrary: ComponentLibrary = {
   Search,
   SearchSuggestField,
   UserLogin,
+  SyllabusCourseRunsList,
 };
 // Type guard: ensures a given string (candidate) is indeed a proper key of the componentLibrary with a corresponding
 // component. This is a runtime check but it allows TS to check the component prop types at compile time

@@ -50,6 +50,7 @@ export const CourseRunFactory = factory<CourseRun>(() => {
     state: CourseStateFactory().one(),
     starts_in_message: null,
     dashboard_link: null,
+    title: faker.lorem.sentence(3),
   };
 });
 

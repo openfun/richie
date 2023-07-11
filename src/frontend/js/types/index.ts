@@ -22,6 +22,8 @@ export interface CourseRun {
   state: CourseState;
   starts_in_message: Nullable<string>;
   dashboard_link: Nullable<string>;
+  title?: string;
+  snapshot?: string;
 }
 
 export enum Priority {
