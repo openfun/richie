@@ -1,10 +1,42 @@
 import JoanieApi from 'api/joanie';
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
-import { APILms } from 'types/api';
+import { APIBackend, APILms } from 'types/api';
 
 import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
-import { Enrollment, API } from 'types/Joanie';
+import { API, Enrollment } from 'types/Joanie';
+import { CourseRun } from 'types';
+import { findLmsBackend } from 'api/configuration';
+
+enum JoanieResourceTypes {
+  PRODUCTS = 'products',
+  COURSE_RUNS = 'course-runs',
+}
+
+export const isJoanieProduct = (courseRun: CourseRun) => {
+  const handler = findLmsBackend(courseRun.resource_link) as Maybe<LMSBackend>;
+  if (handler?.backend !== APIBackend.JOANIE) {
+    return false;
+  }
+  const matches = courseRun.resource_link.match(handler.course_regexp);
+  if (!matches) {
+    return false;
+  }
+  const resourceType = matches[1];
+  return resourceType === JoanieResourceTypes.PRODUCTS;
+};
+
+export const extractResourceId = (courseRun: CourseRun) => {
+  const handler = findLmsBackend(courseRun.resource_link) as Maybe<LMSBackend>;
+  if (handler?.backend !== APIBackend.JOANIE) {
+    return null;
+  }
+  const matches = courseRun.resource_link.match(handler.course_regexp);
+  if (!matches) {
+    return null;
+  }
+  return matches[2];
+};
 
 const JoanieEnrollmentApiInterface = (
   APIConf: AuthenticationBackend | LMSBackend,
