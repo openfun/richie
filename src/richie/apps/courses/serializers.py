@@ -18,6 +18,40 @@ class ListMultipleChoiceField(serializers.MultipleChoiceField):
         return sorted(list(super().to_representation(value)))
 
 
+class ReactPropsCourseRunSerializer(serializers.ModelSerializer):
+    """
+    Course run serializer for React Course Runs List Widget props.
+    """
+
+    languages = ListMultipleChoiceField(choices=lazy(lambda: ALL_LANGUAGES, tuple)())
+    snapshot = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CourseRun
+        fields = [
+            "id",
+            "title",
+            "resource_link",
+            "start",
+            "end",
+            "enrollment_start",
+            "enrollment_end",
+            "languages",
+            "catalog_visibility",
+            "snapshot",
+        ]
+
+    def get_snapshot(self, course_run):
+        """
+        Get the snapshot url for the course run.
+        """
+        course = self.context.get("course")
+        if course is not None and course != course_run.direct_course:
+            return course_run.direct_course.extended_object.get_absolute_url()
+
+        return None
+
+
 class CourseRunSerializer(serializers.ModelSerializer):
     """
     Course run serializer. Includes state but not any nested object.

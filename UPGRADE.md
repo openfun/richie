@@ -16,6 +16,9 @@ $ make migrate
 
 ## Unreleased
 
+- Within course_detail template, course runs list is now rendered as a React widget. As consequence
+`fragment_course_run` and `fragment_course_runs_list` have been removed. If you have overridden those
+templates, you have now to override corresponding React widget (`SyllabusCourseRunsList`).
 - `courses` app export new routes named `redirects_urlpatterns`. You have to add those new routes to
   the urls module of your app.
   ```python

@@ -2,7 +2,9 @@
 import json
 
 from django import template
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.template.defaultfilters import stringfilter
 from django.template.loader import render_to_string
 from django.utils import timezone, translation
@@ -23,8 +25,12 @@ from cms.toolbar.utils import get_toolbar_from_request
 from cms.utils import get_site_id
 from cms.utils.plugins import get_plugins
 
+from richie.apps.courses.defaults import RICHIE_MAX_ARCHIVED_COURSE_RUNS
+
 from .. import defaults
 from ..lms import LMSHandler
+from ..models import CourseRunCatalogVisibility
+from ..serializers import ReactPropsCourseRunSerializer
 
 # pylint: disable=invalid-name
 register = template.Library()
@@ -321,6 +327,44 @@ def joanie_product_widget_props(context):
     course_code = course_run.direct_course.code
 
     return json.dumps({"productId": product_id, "courseCode": course_code})
+
+
+@register.simple_tag(takes_context=True)
+def course_runs_list_widget_props(context):
+    """
+    Return a json dumps which contains all properties required
+    by CourseRunsList React widget.
+    """
+    request = context.get("request")
+    toolbar = get_toolbar_from_request(request)
+    edit = toolbar.edit_mode_active
+    course = context["course"]
+
+    queryset = course.course_runs
+
+    if not edit:
+        # Except if we are in edit mode,
+        # we don't want to show "hidden" and "to be scheduled" course runs
+        queryset = queryset.exclude(
+            Q(catalog_visibility=CourseRunCatalogVisibility.HIDDEN)
+            | Q(start__isnull=True)
+        )
+
+    course_runs = ReactPropsCourseRunSerializer(
+        queryset, many=True, context={"course": course}
+    ).data
+
+    return json.dumps(
+        {
+            "course": {"id": course.id, "code": course.code},
+            "courseRuns": course_runs,
+            "maxArchivedCourseRuns": getattr(
+                settings,
+                "RICHIE_MAX_ARCHIVED_COURSE_RUNS",
+                RICHIE_MAX_ARCHIVED_COURSE_RUNS,
+            ),
+        }
+    )
 
 
 @register.filter
