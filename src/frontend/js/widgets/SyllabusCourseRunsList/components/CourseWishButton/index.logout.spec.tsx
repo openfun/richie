@@ -7,13 +7,16 @@ import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { UserWishlistCourseFactory } from 'utils/test/factories/joanie';
+import {
+  CourseLightFactory,
+  RichieContextFactory as mockRichieContextFactory,
+} from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { SessionProvider } from 'contexts/SessionContext';
 import { location } from 'utils/indirection/window';
-import CourseAddToWishlist from '.';
+import { Course } from 'types/Course';
+import CourseWishButton from '.';
 
 jest.mock('utils/indirection/window', () => ({
   location: {
@@ -35,21 +38,21 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
-const renderCourseAddToWishlist = (courseCode: string) =>
+const renderButton = (course: Course) =>
   render(
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: null })}>
         <JoanieApiProvider>
           <SessionProvider>
-            <CourseAddToWishlist courseCode={courseCode} />
+            <CourseWishButton course={course} />
           </SessionProvider>
         </JoanieApiProvider>
       </QueryClientProvider>
     </IntlProvider>,
   );
 
-describe('CourseAddToWishlist', () => {
-  const wishlistCourse = UserWishlistCourseFactory().one();
+describe('CourseWishButton', () => {
+  const course = CourseLightFactory().one();
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -57,7 +60,7 @@ describe('CourseAddToWishlist', () => {
   });
 
   it('renders a log me link', async () => {
-    renderCourseAddToWishlist(wishlistCourse.course);
+    renderButton(course);
     // wait for JoanieSession initialization
     await waitFor(() => expect(screen.queryByText('loading...')).not.toBeInTheDocument());
 

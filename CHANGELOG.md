@@ -39,6 +39,7 @@ through `context_processor`
 - Improve the design of the dashboards layouts.
 - Improve the design of the dashboards sidebars.
 - Move course's syllabus course runs list to React.
+- Migrate wishlist to new API.
 
 ### Removed
 

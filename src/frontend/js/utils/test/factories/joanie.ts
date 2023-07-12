@@ -24,7 +24,6 @@ import {
   Product,
   ProductType,
   TargetCourse,
-  UserWishlistCourse,
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
@@ -208,13 +207,6 @@ export const CourseLightFactory = factory((): CourseLight => {
     products: CertificateCourseProductFactory().many(3),
     course_runs: [],
     orders: [],
-  };
-});
-
-export const UserWishlistCourseFactory = factory((): UserWishlistCourse => {
-  return {
-    course: faker.string.alphanumeric(5),
-    id: faker.string.uuid(),
   };
 });
 

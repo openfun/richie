@@ -7,6 +7,9 @@ import { computeStates } from 'utils/CourseRuns';
 import { SyllabusAsideList } from 'widgets/SyllabusCourseRunsList/SyllabusAsideList';
 import { SyllabusCourseRun } from 'widgets/SyllabusCourseRunsList/SyllabusCourseRun';
 import { DjangoCMSPluginsInit } from 'components/DjangoCMSTemplate';
+import { isJoanieEnabled } from 'api/joanie';
+import context from 'utils/context';
+import CourseWishButton from './components/CourseWishButton';
 
 const OPENED_COURSES_ELEMENT_ID = 'courseDetailsRunsOpen';
 
@@ -71,6 +74,9 @@ const SyllabusCourseRunsList = ({
         <div className="course-detail__row course-detail__runs course-detail__runs--open">
           <div className="course-detail__empty">
             <FormattedMessage {...messages.noOpenedCourseRuns} />
+            {isJoanieEnabled && Boolean(context?.features.WISHLIST) && (
+              <CourseWishButton course={course} />
+            )}
           </div>
         </div>
       )}

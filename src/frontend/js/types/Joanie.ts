@@ -232,9 +232,8 @@ export interface Address {
 }
 
 // Wishlist
-export interface UserWishlistCourse {
-  id: string;
-  course: CourseLight['code'];
+export interface CourseWish extends Resource {
+  status: boolean;
 }
 
 export interface UserWishlistCreationPayload {
@@ -363,14 +362,12 @@ interface APIUser {
       : Promise<PaginatedResponse<Enrollment>>;
     update(payload: EnrollmentUpdatePayload): Promise<any>;
   };
-  wishlist: {
+  wish: {
     get<Filters extends ResourcesQuery = ResourcesQuery>(
       filters?: Filters,
-    ): Filters extends { id: string }
-      ? Promise<Nullable<UserWishlistCourse>>
-      : Promise<UserWishlistCourse[]>;
-    create(payload: UserWishlistCreationPayload): Promise<UserWishlistCourse>;
-    delete(id: UserWishlistCourse['id']): Promise<void>;
+    ): Filters extends { id: string } ? Promise<Nullable<CourseWish>> : Promise<CourseWish[]>;
+    create(id: string): Promise<CourseWish>;
+    delete(id: string): Promise<void>;
   };
   organizations: {
     get<Filters extends ResourcesQuery = ResourcesQuery>(
