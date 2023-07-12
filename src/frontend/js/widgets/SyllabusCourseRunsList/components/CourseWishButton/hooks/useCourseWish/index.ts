@@ -1,15 +1,9 @@
 import { defineMessages } from 'react-intl';
-import { API, UserWishlistCourse } from 'types/Joanie';
-import {
-  QueryOptions,
-  useResource,
-  useResourcesCustom,
-  UseResourcesProps,
-} from 'hooks/useResources';
+import { API, CourseWish } from 'types/Joanie';
+import { ResourcesQuery, useResource, UseResourcesProps } from 'hooks/useResources';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 
-interface UserWishlistCoursesFilters {
-  id?: string;
+interface CourseWishFilters extends ResourcesQuery {
   course_code?: string;
 }
 
@@ -41,26 +35,11 @@ const messages = defineMessages({
 /**
  * Joanie Api hook to retrieve a wishlist product through its id.
  */
-const props: UseResourcesProps<
-  UserWishlistCourse,
-  UserWishlistCoursesFilters,
-  API['user']['wishlist']
-> = {
+const props: UseResourcesProps<CourseWish, CourseWishFilters, API['user']['wish']> = {
   queryKey: ['wishlist_course'],
-  apiInterface: () => useJoanieApi().user.wishlist,
+  apiInterface: () => useJoanieApi().user.wish,
   session: true,
   messages,
 };
 
-export const useUserWishlistCourses = (
-  filters?: UserWishlistCoursesFilters,
-  queryOptions?: QueryOptions<UserWishlistCourse>,
-) =>
-  useResourcesCustom<UserWishlistCourse, UserWishlistCoursesFilters>({
-    ...props,
-    filters,
-    queryOptions,
-  });
-export const useUserWishlistCourse = useResource<UserWishlistCourse, UserWishlistCoursesFilters>(
-  props,
-);
+export const useCourseWish = useResource<CourseWish, CourseWishFilters>(props);

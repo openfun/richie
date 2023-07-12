@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import type * as Joanie from 'types/Joanie';
 import { Button } from 'components/Button';
 import { Spinner } from 'components/Spinner';
 import { useSession } from 'contexts/SessionContext';
-import { useUserWishlistCourses } from './hooks/useUserWishlistCourses';
+import { Course } from 'types/Course';
+import { useCourseWish } from './hooks/useCourseWish';
 
 const messages = defineMessages({
   labelAdd: {
@@ -37,27 +37,26 @@ enum ComponentStates {
 }
 
 export interface Props {
-  courseCode: Joanie.CourseLight['code'];
+  course: Course;
 }
 
-const CourseAddToWishlist = ({ courseCode }: Props) => {
+const CourseWishButton = ({ course }: Props) => {
+  const code = course.code!;
   const { user, login } = useSession();
-  const wishlistCourse = useUserWishlistCourses({ course_code: courseCode });
+  const courseWish = useCourseWish(code);
 
   const componentState = useMemo<ComponentStates>(() => {
-    if (wishlistCourse.states.fetching) return ComponentStates.LOADING;
-    if (wishlistCourse.states.error) return ComponentStates.ERROR;
+    if (courseWish.states.fetching) return ComponentStates.LOADING;
+    if (courseWish.states.error) return ComponentStates.ERROR;
     return ComponentStates.IDLE;
-  }, [wishlistCourse.states.fetching, wishlistCourse.states.error]);
-  const isInWishListCourse = useMemo(
-    () => wishlistCourse.items?.length > 0,
-    [wishlistCourse.items],
-  );
+  }, [courseWish.states.fetching, courseWish.states.error]);
 
-  const removeFromWishlist = () => wishlistCourse.methods.delete(wishlistCourse.items[0].id);
-  const addToWishlist = () => wishlistCourse.methods.create({ course: courseCode });
+  const isWished = courseWish.item?.status;
 
-  if (user && !wishlistCourse.states.isFetched) {
+  const removeFromWishlist = () => courseWish.methods.delete(code);
+  const addToWishlist = () => courseWish.methods.create(code);
+
+  if (user && !courseWish.states.isFetched) {
     return (
       <Spinner aria-labelledby="loading-wishlist">
         <span id="loading-wishlist">
@@ -71,18 +70,18 @@ const CourseAddToWishlist = ({ courseCode }: Props) => {
     <>
       <Button
         color="primary"
-        onClick={isInWishListCourse ? removeFromWishlist : addToWishlist}
+        onClick={isWished ? removeFromWishlist : addToWishlist}
         className="user-wishlist-button"
         disabled={componentState === ComponentStates.LOADING}
         {...(componentState === ComponentStates.ERROR && {
           'aria-describedby': 'user-wishlist-error',
         })}
       >
-        <FormattedMessage {...messages[isInWishListCourse ? 'labelRemove' : 'labelAdd']} />
+        <FormattedMessage {...messages[isWished ? 'labelRemove' : 'labelAdd']} />
       </Button>
-      {wishlistCourse.states.error && (
+      {courseWish.states.error && (
         <p className="user-wishlist-button__error" id="user-wishlist-error" tabIndex={-1}>
-          {wishlistCourse.states.error}
+          {courseWish.states.error}
         </p>
       )}
     </>
@@ -98,4 +97,4 @@ const CourseAddToWishlist = ({ courseCode }: Props) => {
   );
 };
 
-export default CourseAddToWishlist;
+export default CourseWishButton;

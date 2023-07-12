@@ -10,7 +10,6 @@ import ErrorBoundary from 'utils/errors/ErrorBoundary';
 import context from 'utils/context';
 
 const CourseProductItem = lazy(() => import('widgets/CourseProductItem'));
-const CourseAddToWishlist = lazy(() => import('widgets/CourseAddToWishlist'));
 const LanguageSelector = lazy(() => import('widgets/LanguageSelector'));
 const LtiConsumer = lazy(() => import('widgets/LtiConsumer'));
 const RootSearchSuggestField = lazy(() => import('widgets/RootSearchSuggestField'));
@@ -24,7 +23,6 @@ const SyllabusCourseRunsList = lazy(() => import('widgets/SyllabusCourseRunsList
 // for type-safety when we call them. This will let us use the props for any top-level component in a
 // way TypeScript understand and accepts
 interface ComponentLibrary {
-  CourseAddToWishlist: typeof CourseAddToWishlist;
   CourseProductItem: typeof CourseProductItem;
   Dashboard: typeof Dashboard;
   LanguageSelector: typeof LanguageSelector;
@@ -37,7 +35,6 @@ interface ComponentLibrary {
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
-  CourseAddToWishlist,
   CourseProductItem,
   Dashboard,
   LanguageSelector,

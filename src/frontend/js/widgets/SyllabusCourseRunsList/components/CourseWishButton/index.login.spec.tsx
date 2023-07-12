@@ -2,17 +2,20 @@
  * Test suite for CourseAddToWishlist component
  * for logged visitors
  */
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { UserWishlistCourseFactory } from 'utils/test/factories/joanie';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  CourseLightFactory,
+} from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { SessionProvider } from 'contexts/SessionContext';
-import CourseAddToWishlist from '.';
+import { Course } from 'types/Course';
+import CourseWishButton from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -27,21 +30,21 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
-const renderCourseAddToWishlist = (courseCode: string) =>
+const renderButton = (course: Course) =>
   render(
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: true })}>
         <JoanieApiProvider>
           <SessionProvider>
-            <CourseAddToWishlist courseCode={courseCode} />
+            <CourseWishButton course={course} />
           </SessionProvider>
         </JoanieApiProvider>
       </QueryClientProvider>
     </IntlProvider>,
   );
 
-describe('CourseAddToWishlist', () => {
-  const wishlistCourse = UserWishlistCourseFactory().one();
+describe('CourseWishButton', () => {
+  const course = CourseLightFactory().one();
 
   beforeEach(() => {
     // JoanieSessionProvider inital requests
@@ -56,11 +59,13 @@ describe('CourseAddToWishlist', () => {
   });
 
   it('renders a notify me button', async () => {
-    fetchMock.get(
-      `https://joanie.test/api/v1.0/wishlist/?course_code=${wishlistCourse.course}`,
-      [],
-    );
-    renderCourseAddToWishlist(wishlistCourse.course);
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, {
+      status: 200,
+      body: {
+        status: false,
+      },
+    });
+    renderButton(course);
 
     // wait for JoanieSession initialization
     await waitFor(() => expect(screen.queryByText('loading...')).not.toBeInTheDocument());
@@ -74,19 +79,21 @@ describe('CourseAddToWishlist', () => {
     nbApiCalls += 1; // useUserWishlistCourses inital fetch
     expect(fetchMock.calls().length).toBe(nbApiCalls);
 
-    // We dont care about POST request return values,
-    // react-query will refetch data using the GET url.
-    fetchMock.post(`https://joanie.test/api/v1.0/wishlist/`, []);
+    fetchMock.post(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, 200);
     fetchMock.get(
-      `https://joanie.test/api/v1.0/wishlist/?course_code=${wishlistCourse.course}`,
-      [wishlistCourse],
+      `https://joanie.test/api/v1.0/courses/${course.code}/wish/`,
+      {
+        status: 200,
+        body: {
+          status: true,
+        },
+      },
       { overwriteRoutes: true },
     );
-    await userEvent.click($notifyButton);
 
-    expect(
-      await screen.findByRole('button', { name: 'Do not notify me anymore' }),
-    ).toBeInTheDocument();
+    await act(async () => userEvent.click($notifyButton));
+
+    await screen.findByRole('button', { name: 'Do not notify me anymore' });
     expect(screen.queryByRole('button', { name: 'Notify me' })).not.toBeInTheDocument();
 
     nbApiCalls += 1; // useUserWishlistCourses POST
@@ -95,12 +102,13 @@ describe('CourseAddToWishlist', () => {
   });
 
   it('renders a "do not notify me" button', async () => {
-    fetchMock.get(
-      `https://joanie.test/api/v1.0/wishlist/?course_code=${wishlistCourse.course}`,
-      [wishlistCourse],
-      { overwriteRoutes: true },
-    );
-    renderCourseAddToWishlist(wishlistCourse.course);
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, {
+      status: 200,
+      body: {
+        status: true,
+      },
+    });
+    renderButton(course);
 
     // wait for JoanieSession initialization
     await waitFor(() => expect(screen.queryByText('loading...')).not.toBeInTheDocument());
@@ -118,13 +126,20 @@ describe('CourseAddToWishlist', () => {
 
     // We dont care about POST request return values,
     // react-query will refetch data using the GET url.
-    fetchMock.delete(`https://joanie.test/api/v1.0/wishlist/${wishlistCourse.id}/`, []);
+
+    fetchMock.delete(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, 200);
     fetchMock.get(
-      `https://joanie.test/api/v1.0/wishlist/?course_code=${wishlistCourse.course}`,
-      [],
+      `https://joanie.test/api/v1.0/courses/${course.code}/wish/`,
+      {
+        status: 200,
+        body: {
+          status: false,
+        },
+      },
       { overwriteRoutes: true },
     );
-    await userEvent.click($stopNotifyButton);
+
+    await act(async () => userEvent.click($stopNotifyButton));
 
     expect(await screen.findByRole('button', { name: 'Notify me' })).toBeInTheDocument();
     expect(
