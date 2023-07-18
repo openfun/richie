@@ -126,7 +126,7 @@ export const useDashboardAddressForm = (address?: Address) => {
         label={intl.formatMessage(managementMessages.countryInputLabel)}
         error={!!formState.errors.country}
         message={getLocalizedErrorMessage(intl, formState.errors.country?.message)}
-        {...register('country', { value: '', required: true })}
+        {...register('country', { required: true })}
       />
       {!(address && address.is_main) && (
         <CheckboxField
