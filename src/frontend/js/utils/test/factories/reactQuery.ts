@@ -56,4 +56,4 @@ export const PersistedClientFactory = ({
       mutations: mutations || [],
       queries: queries || [],
     },
-  } as PersistedClient);
+  }) as PersistedClient;

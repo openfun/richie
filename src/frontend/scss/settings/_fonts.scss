@@ -3,28 +3,32 @@
   font-family: 'Montserrat';
   font-display: swap;
   font-weight: 300;
-  src: url('/static/richie/fonts/montserrat/montserrat-light.woff') format('woff'),
+  src:
+    url('/static/richie/fonts/montserrat/montserrat-light.woff') format('woff'),
     url('/static/richie/fonts/montserrat/montserrat-light.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Montserrat';
   font-display: swap;
   font-weight: 500;
-  src: url('/static/richie/fonts/montserrat/montserrat-medium.woff') format('woff'),
+  src:
+    url('/static/richie/fonts/montserrat/montserrat-medium.woff') format('woff'),
     url('/static/richie/fonts/montserrat/montserrat-medium.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Montserrat';
   font-display: swap;
   font-weight: 700;
-  src: url('/static/richie/fonts/montserrat/montserrat-bold.woff') format('woff'),
+  src:
+    url('/static/richie/fonts/montserrat/montserrat-bold.woff') format('woff'),
     url('/static/richie/fonts/montserrat/montserrat-bold.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Montserrat';
   font-display: swap;
   font-weight: 800;
-  src: url('/static/richie/fonts/montserrat/montserrat-extrabold.woff') format('woff'),
+  src:
+    url('/static/richie/fonts/montserrat/montserrat-extrabold.woff') format('woff'),
     url('/static/richie/fonts/montserrat/montserrat-extrabold.woff2') format('woff2');
 }
 
@@ -33,14 +37,16 @@
   font-family: 'Hind';
   font-display: swap;
   font-weight: 400;
-  src: url('/static/richie/fonts/hind/hind-regular.woff') format('woff'),
+  src:
+    url('/static/richie/fonts/hind/hind-regular.woff') format('woff'),
     url('/static/richie/fonts/hind/hind-regular.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Hind';
   font-display: swap;
   font-weight: 600;
-  src: url('/static/richie/fonts/hind/hind-semibold.woff') format('woff'),
+  src:
+    url('/static/richie/fonts/hind/hind-semibold.woff') format('woff'),
     url('/static/richie/fonts/hind/hind-semibold.woff2') format('woff2');
 }
 

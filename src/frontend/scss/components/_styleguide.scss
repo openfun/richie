@@ -25,8 +25,15 @@
       ),
       linear-gradient(transparent $onepixel, transparent $onepixel), transparent;
   }
-  background-size: 0.625rem 0.625rem, 0.625rem 0.625rem, 0.625rem 0.625rem, 0.625rem 0.625rem,
-    0.625rem 0.625rem, 0.625rem 0.625rem, 0.625rem 0.625rem, 0.625rem 0.625rem;
+  background-size:
+    0.625rem 0.625rem,
+    0.625rem 0.625rem,
+    0.625rem 0.625rem,
+    0.625rem 0.625rem,
+    0.625rem 0.625rem,
+    0.625rem 0.625rem,
+    0.625rem 0.625rem,
+    0.625rem 0.625rem;
   @if $border-color {
     border: $onepixel solid $border-color;
   }

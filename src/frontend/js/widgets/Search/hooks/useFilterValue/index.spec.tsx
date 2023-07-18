@@ -20,8 +20,9 @@ describe('widgets/Search/hooks/useFilterValue', () => {
   ];
   const wrapper =
     ({ history }: { history: History }) =>
-    ({ children }: PropsWithChildren) =>
-      <HistoryContext.Provider value={history}>{children}</HistoryContext.Provider>;
+    ({ children }: PropsWithChildren) => (
+      <HistoryContext.Provider value={history}>{children}</HistoryContext.Provider>
+    );
 
   beforeEach(jest.resetAllMocks);
 
