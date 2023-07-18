@@ -77,6 +77,7 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
             onClick={() => hasAtLeastOneCourseRun && setIsSaleTunnelOpen(true)}
             // so that the button is explicit on its own, we add a description that doesn't
             // rely on the text coming from the CMS
+            /* eslint-disable-next-line jsx-a11y/aria-props */
             aria-description={intl.formatMessage(messages.callToActionDescription, {
               product: product.title,
             })}
