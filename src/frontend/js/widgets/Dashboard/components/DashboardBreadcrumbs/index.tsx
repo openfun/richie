@@ -27,18 +27,22 @@ const useBreadcrumbsParts = () => {
   const context = useContext(DashboardBreadcrumbsContext);
   const matches = useMatches();
   const intl = useIntl();
-  return matches.reduce((crumbs, match) => {
-    const crumbLabel: MessageDescriptor = (match.handle as any)?.crumbLabel;
-    // Make sure that the current crumbLabel formatjs values are present in placeholders to prevent
-    // error throwing.
-    if (crumbLabel && IntlHelper.doValuesExist(crumbLabel, context.meta.placeholders)) {
-      crumbs.push({
-        pathname: match.pathname,
-        name: intl.formatMessage(crumbLabel, context.meta.placeholders),
-      });
-    }
-    return crumbs;
-  }, [] as { pathname: string; name: string }[]);
+  return matches.reduce(
+    (crumbs, match) => {
+      const crumbLabel: MessageDescriptor = (match.handle as any)?.crumbLabel;
+      // Make sure that the current crumbLabel formatjs values are present in placeholders to prevent
+      // error throwing.
+
+      if (crumbLabel && IntlHelper.doValuesExist(crumbLabel, context.meta.placeholders)) {
+        crumbs.push({
+          pathname: match.pathname,
+          name: intl.formatMessage(crumbLabel, context.meta.placeholders),
+        });
+      }
+      return crumbs;
+    },
+    [] as { pathname: string; name: string }[],
+  );
 };
 
 export const DashboardBreadcrumbs = () => {

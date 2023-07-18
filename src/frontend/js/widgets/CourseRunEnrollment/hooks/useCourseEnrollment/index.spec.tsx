@@ -36,12 +36,11 @@ describe('useCourseEnrollment', () => {
   const endpoint = 'https://endpoint.test';
   const wrapper =
     (client: QueryClient) =>
-    ({ children }: PropsWithChildren) =>
-      (
-        <QueryClientProvider client={client}>
-          <BaseSessionProvider>{children}</BaseSessionProvider>
-        </QueryClientProvider>
-      );
+    ({ children }: PropsWithChildren) => (
+      <QueryClientProvider client={client}>
+        <BaseSessionProvider>{children}</BaseSessionProvider>
+      </QueryClientProvider>
+    );
 
   beforeEach(() => {
     fetchMock.restore();

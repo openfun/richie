@@ -11,13 +11,12 @@ import SaleTunnel from '.';
 
 const StepComponent =
   (title: string) =>
-  ({ next }: { next: () => void }) =>
-    (
-      <Fragment>
-        <h2>{title}</h2>
-        <button onClick={next}>Next</button>
-      </Fragment>
-    );
+  ({ next }: { next: () => void }) => (
+    <Fragment>
+      <h2>{title}</h2>
+      <button onClick={next}>Next</button>
+    </Fragment>
+  );
 
 jest.mock('../SaleTunnelStepValidation', () => ({
   SaleTunnelStepValidation: StepComponent('SaleTunnelStepValidation Component'),

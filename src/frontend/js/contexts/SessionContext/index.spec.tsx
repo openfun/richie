@@ -36,12 +36,11 @@ jest.mock('utils/indirection/window', () => ({
 describe('SessionProvider', () => {
   const wrapper =
     (client?: QueryClient) =>
-    ({ children }: PropsWithChildren) =>
-      (
-        <QueryClientProvider client={client ?? createTestQueryClient({ persister: true })}>
-          <BaseSessionProvider>{children}</BaseSessionProvider>
-        </QueryClientProvider>
-      );
+    ({ children }: PropsWithChildren) => (
+      <QueryClientProvider client={client ?? createTestQueryClient({ persister: true })}>
+        <BaseSessionProvider>{children}</BaseSessionProvider>
+      </QueryClientProvider>
+    );
 
   beforeEach(() => {
     jest.useFakeTimers();
