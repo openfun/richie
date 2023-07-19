@@ -256,7 +256,12 @@ class MultiSelectField(models.CharField):
                 """
                 return capfirst(
                     to_sentence(
-                        [choicedict.get(value, value) for value in getattr(self, name)]
+                        sorted(
+                            [
+                                choicedict.get(value, value)
+                                for value in getattr(self, name)
+                            ]
+                        )
                     )
                 )
 

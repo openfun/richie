@@ -81,6 +81,9 @@
                     {% endblock categories %}
 
                     <div class="subheader__content">
+                        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
+                            <div property="description">{% placeholder "course_introduction" or %}<p>{% trans 'Enter here an introduction of your course.' %}</p>{% endplaceholder %}</div>
+                        {% endif %}
                         {% block synopsis %}
                         {% if course.duration or course.effort or current_page.publisher_is_draft %}
                         <div class="characteristics">
@@ -112,28 +115,36 @@
                                     <span class="characteristics__term">{% trans "Pace:" %} {{ instance.get_pace_display|default:"NA" }}</span>
                                 </li>
                                 {% endif %}
+                                <div class="characteristics__row">
+                                    <li class="characteristics__item">
+                                        <svg role="img" class="characteristics__icon" aria-hidden="true">
+                                            <use href="#icon-languages" />
+                                        </svg>
+                                        <span class="characteristics__term">{% trans "Languages:" %} {{ course.languages_display|default:"NA" }}</span>
+                                    </li>
+                                </div>
+                                {% block enrollment_count %}
+                                    {% with enrollment_count=course.course_runs_enrollment_count %}
+                                        {% if enrollment_count > 0 and RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT > 0 and enrollment_count >= RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT %}
+                                            <div class="characteristics__enrollment-count">
+                                                <li class="characteristics__item">
+                                                <svg role="img" class="characteristics__icon" aria-hidden="true">
+                                                    <use href="#icon-groups" />
+                                                </svg>
+                                                {% blocktrans with count=enrollment_count|intcomma %}
+                                                    {{ count }} already enrolled!
+                                                </li>
+                                                {% endblocktrans %}
+                                            </div>
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endblock enrollment_count %}
                             {% endrender_model_block %}
                             </ul>
                         </div>
                         {% endif %}
                         {% endblock synopsis %}
-
-                        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
-                            <div property="description">{% placeholder "course_introduction" or %}<p>{% trans 'Enter here a introduction of your course.' %}</p>{% endplaceholder %}</div>
-                        {% endif %}
                     </div>
-
-                    {% block enrollment_count %}
-                        {% with enrollment_count=course.course_runs_enrollment_count %}
-                            {% if enrollment_count > 0 and RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT > 0 and enrollment_count >= RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT %}
-                                <div class="subheader__enrollment-count">
-                                    {% blocktrans with count=enrollment_count|intcomma %}
-                                        {{ count }} already enrolled!
-                                    {% endblocktrans %}
-                                </div>
-                            {% endif %}
-                        {% endwith %}
-                    {% endblock enrollment_count %}
 
                     <div class="subheader__teaser">
                         {% placeholder "course_teaser" or %}
