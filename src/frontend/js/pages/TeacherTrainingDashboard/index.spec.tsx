@@ -14,6 +14,7 @@ import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider
 import { CourseProductRelationFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
+import { DashboardBreadcrumbsProvider } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
 import { TeacherTrainingDashboardLoader } from '.';
 
 jest.mock('utils/context', () => ({
@@ -52,21 +53,23 @@ describe('components/TeacherTrainingDashboardLoader', () => {
       <IntlProvider locale="en">
         <QueryClientProvider client={createTestQueryClient({ user })}>
           <JoanieSessionProvider>
-            <CunninghamProvider>
-              <RouterProvider
-                router={createMemoryRouter(
-                  [
+            <DashboardBreadcrumbsProvider>
+              <CunninghamProvider>
+                <RouterProvider
+                  router={createMemoryRouter(
+                    [
+                      {
+                        path: ':courseProductRelationId',
+                        element: <TeacherTrainingDashboardLoader />,
+                      },
+                    ],
                     {
-                      path: ':courseProductRelationId',
-                      element: <TeacherTrainingDashboardLoader />,
+                      initialEntries: [`/${courseProductRelation.id}`],
                     },
-                  ],
-                  {
-                    initialEntries: [`/${courseProductRelation.id}`],
-                  },
-                )}
-              />
-            </CunninghamProvider>
+                  )}
+                />
+              </CunninghamProvider>
+            </DashboardBreadcrumbsProvider>
           </JoanieSessionProvider>
         </QueryClientProvider>
       </IntlProvider>,

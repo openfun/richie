@@ -70,7 +70,7 @@ const TeacherDashboardCourseList = ({
         (courseAndProductList.length > 0 ? (
           <>
             <CourseGlimpseList
-              courses={getCourseGlimpseListProps(courseAndProductList, routerLocal)}
+              courses={getCourseGlimpseListProps(courseAndProductList, routerLocal, organizationId)}
               context={context}
               className="dashboard__course-glimpse-list"
             />

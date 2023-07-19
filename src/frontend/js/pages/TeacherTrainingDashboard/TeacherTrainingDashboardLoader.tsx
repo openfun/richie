@@ -5,6 +5,7 @@ import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { TeacherCourseDashboardSidebar } from 'widgets/Dashboard/components/TeacherCourseDashboardSidebar';
 import { Spinner } from 'components/Spinner';
 import { useCourseProductRelation } from 'hooks/useCourseProductRelation';
+import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 import { TeacherTrainingDashboard } from '.';
 
 const messages = defineMessages({
@@ -29,7 +30,9 @@ export const TeacherTrainingDashboardLoader = () => {
     item: courseProductRelation,
     states: { fetching },
   } = useCourseProductRelation(courseProductRelationId);
-
+  useBreadcrumbsPlaceholders({
+    courseTitle: courseProductRelation?.product.title ?? '',
+  });
   return (
     <DashboardLayout sidebar={<TeacherCourseDashboardSidebar />}>
       <div className="dashboard__page_title_container">

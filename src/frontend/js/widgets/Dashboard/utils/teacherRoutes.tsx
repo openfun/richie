@@ -58,7 +58,7 @@ export function getTeacherDashboardRoutes() {
               }),
               element: <TeacherTrainingDashboardLoader />,
               handle: {
-                crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_PRODUCT],
+                crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
               },
             },
           ],
@@ -88,7 +88,33 @@ export function getTeacherDashboardRoutes() {
           path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSES, {
             organizationId: ':organizationId',
           }),
-          element: <TeacherOrganizationCourseDashboardLoader />,
+          children: [
+            {
+              index: true,
+              element: <TeacherOrganizationCourseDashboardLoader />,
+            },
+            {
+              path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATIONS, {
+                organizationId: ':organizationId',
+                courseId: ':courseId',
+              }),
+              element: <TeacherCourseDashboardLoader />,
+              handle: {
+                crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
+              },
+            },
+            {
+              path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT, {
+                organizationId: ':organizationId',
+                courseId: ':courseId',
+                courseProductRelationId: ':courseProductRelationId',
+              }),
+              element: <TeacherTrainingDashboardLoader />,
+              handle: {
+                crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
+              },
+            },
+          ],
         },
       ],
     },

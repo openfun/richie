@@ -8,9 +8,11 @@ export enum TeacherDashboardPaths {
   TEACHER_COURSES = '/teacher/courses',
   ORGANIZATION = '/teacher/organization/{organizationId}',
   ORGANIZATION_COURSES = '/teacher/organization/{organizationId}/courses',
+  ORGANIZATION_COURSE_GENERAL_INFORMATIONS = '/teacher/organization/{organizationId}/courses/{courseId}/informations',
+  ORGANIZATION_PRODUCT = '/teacher/organization/{organizationId}/courses/{courseId}/product/{courseProductRelationId}',
   COURSE = '/teacher/courses/{courseId}',
   COURSE_GENERAL_INFORMATIONS = '/teacher/courses/{courseId}/informations',
-  COURSE_PRODUCT = '/teacher/courses/{courseId}/product/{courseProductRelationId}',
+  COURSE_PRODUCT = '/teacer/courses/{courseId}/product/{courseProductRelationId}',
 }
 
 // Translations of dashboard route paths
@@ -34,6 +36,17 @@ export const TEACHER_DASHBOARD_ROUTE_PATHS = defineMessages<TeacherDashboardPath
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.path',
     description: 'The path to display the organization courses view.',
     defaultMessage: '/teacher/organization/{organizationId}/courses',
+  },
+  [TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATIONS]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformations.path',
+    description: 'The path to display the organization course general informations view.',
+    defaultMessage: '/teacher/organization/{organizationId}/courses/{courseId}/informations',
+  },
+  [TeacherDashboardPaths.ORGANIZATION_PRODUCT]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.path',
+    description: 'The path to display the organization product view.',
+    defaultMessage:
+      '/teacher/organization/{organizationId}/courses/{courseId}/product/{courseProductRelationId}',
   },
   [TeacherDashboardPaths.COURSE]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.path',
@@ -67,12 +80,22 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
   [TeacherDashboardPaths.ORGANIZATION]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.label',
     description: 'Label of the organization view.',
-    defaultMessage: 'Dummy Organization',
+    defaultMessage: '{organizationTitle}',
   },
   [TeacherDashboardPaths.ORGANIZATION_COURSES]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.label',
     description: 'Label of the organization courses view.',
     defaultMessage: 'Courses',
+  },
+  [TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATIONS]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformations.label',
+    description: 'Label of the organization course general informations view.',
+    defaultMessage: 'General informations',
+  },
+  [TeacherDashboardPaths.ORGANIZATION_PRODUCT]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.label',
+    description: 'Label of the organization product view.',
+    defaultMessage: 'Training',
   },
   [TeacherDashboardPaths.COURSE]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.label',
