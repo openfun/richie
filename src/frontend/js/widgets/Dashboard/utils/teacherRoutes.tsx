@@ -1,14 +1,9 @@
 import { useIntl } from 'react-intl';
 import { Navigate, RouteObject } from 'react-router-dom';
-import { TeacherProfileSettingsDashboardLoader } from 'pages/TeacherProfileSettingsDashboardLoader';
 import { TeacherOrganizationCourseDashboardLoader } from 'pages/TeacherOrganizationCourseDashboardLoader';
-import RouteInfo from 'widgets/Dashboard/components/RouteInfo';
 import { TeacherCoursesDashboardLoader } from 'pages/TeacherCoursesDashboardLoader';
 import NavigateWithParams from 'widgets/Dashboard/components/NavigateWithParams';
-import {
-  getDashboardRouteLabel,
-  getDashboardRoutePath,
-} from 'widgets/Dashboard/utils/dashboardRoutes';
+import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import {
   TeacherDashboardPaths,
   TEACHER_DASHBOARD_ROUTE_LABELS,
@@ -19,7 +14,6 @@ import { TeacherTrainingDashboardLoader } from 'pages/TeacherTrainingDashboard';
 export function getTeacherDashboardRoutes() {
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);
-  const getRouteLabel = getDashboardRouteLabel(intl);
   const routes: RouteObject[] = [
     {
       index: true,
@@ -38,20 +32,6 @@ export function getTeacherDashboardRoutes() {
             crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_COURSES],
           },
           element: <TeacherCoursesDashboardLoader />,
-        },
-        {
-          path: getRoutePath(TeacherDashboardPaths.TEACHER_SETTINGS),
-          handle: {
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_SETTINGS],
-          },
-          element: <TeacherProfileSettingsDashboardLoader />,
-        },
-        {
-          path: getRoutePath(TeacherDashboardPaths.TEACHER_NOTIFICATIONS),
-          handle: {
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_NOTIFICATIONS],
-          },
-          element: <RouteInfo title={getRouteLabel(TeacherDashboardPaths.TEACHER_NOTIFICATIONS)} />,
         },
       ],
     },
@@ -80,24 +60,6 @@ export function getTeacherDashboardRoutes() {
           },
           element: <TeacherOrganizationCourseDashboardLoader />,
         },
-        {
-          path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_SETTINGS, {
-            organizationId: ':organizationId',
-          }),
-          handle: {
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION_SETTINGS],
-          },
-          element: <RouteInfo title={getRouteLabel(TeacherDashboardPaths.ORGANIZATION_SETTINGS)} />,
-        },
-        {
-          path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_MEMBERS, {
-            organizationId: ':organizationId',
-          }),
-          handle: {
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION_MEMBERS],
-          },
-          element: <RouteInfo title={getRouteLabel(TeacherDashboardPaths.ORGANIZATION_MEMBERS)} />,
-        },
       ],
     },
     {
@@ -118,33 +80,6 @@ export function getTeacherDashboardRoutes() {
             crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_PRODUCT],
           },
           element: <TeacherTrainingDashboardLoader />,
-        },
-        {
-          path: getRoutePath(TeacherDashboardPaths.COURSE_SETTINGS, {
-            courseId: ':courseId',
-          }),
-          handle: {
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_SETTINGS],
-          },
-          element: <RouteInfo title={getRouteLabel(TeacherDashboardPaths.COURSE_SETTINGS)} />,
-        },
-        {
-          path: getRoutePath(TeacherDashboardPaths.COURSE_CLASSROOMS, {
-            courseId: ':courseId',
-          }),
-          handle: {
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_CLASSROOMS],
-          },
-          element: <RouteInfo title={getRouteLabel(TeacherDashboardPaths.COURSE_CLASSROOMS)} />,
-        },
-        {
-          path: getRoutePath(TeacherDashboardPaths.COURSE_RECORDS, {
-            courseId: ':courseId',
-          }),
-          handle: {
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_RECORDS],
-          },
-          element: <RouteInfo title={getRouteLabel(TeacherDashboardPaths.COURSE_RECORDS)} />,
         },
       ],
     },

@@ -70,27 +70,13 @@ describe('<TeacherProfileDashboardSidebar/>', () => {
     expect(
       screen.getByRole('link', {
         name: intl.formatMessage(
-          TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_NOTIFICATIONS],
-        ),
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', {
-        name: intl.formatMessage(
-          TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_SETTINGS],
-        ),
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', {
-        name: intl.formatMessage(
           TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_COURSES],
         ),
       }),
     ).toBeInTheDocument();
 
     expect(screen.queryByTestId('organization-links')).not.toBeInTheDocument();
-    expect(screen.getAllByRole('link')).toHaveLength(3);
+    expect(screen.getAllByRole('link')).toHaveLength(1);
     expect(fetchMock.calls()).toHaveLength(nbApiRequest);
   });
 
@@ -128,7 +114,7 @@ describe('<TeacherProfileDashboardSidebar/>', () => {
     ).toBeInTheDocument();
 
     let nbExpectedLinks = 3; // menu items
-    nbExpectedLinks += 3; // organization links
+    nbExpectedLinks += 1; // organization links
     expect(screen.getAllByRole('link')).toHaveLength(nbExpectedLinks);
   });
 });
