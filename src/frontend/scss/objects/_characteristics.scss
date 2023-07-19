@@ -4,7 +4,7 @@
 
 // Simple inline with optional color scheme features
 .characteristics {
-  @include feature-list($margin: 0 0 0.5rem 0);
+  @include feature-list($margin: 0.5rem 0 0.5rem 0);
 
   color: inherit;
 
@@ -43,5 +43,12 @@
       @include button-tiny($form-factor: 'pill', $display: flex);
       @include r-button-colors(r-theme-val(characteristics, tertiary-item), $apply-border: true);
     }
+  }
+
+  &__enrollment-count {
+    @include make-container();
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 1rem;
   }
 }

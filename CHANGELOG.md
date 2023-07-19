@@ -24,6 +24,8 @@ dashboard.
 course's listing page.
 - The product purchase button is now disabled and display a contextual 
 information message when the product have no remaining order.
+- Add all available languages for the course in the characteristics section 
+on the course details page.
 - Change footer text and remove datime on glimpse course according state.
 
 ### Changed

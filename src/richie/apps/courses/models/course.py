@@ -486,6 +486,34 @@ class Course(EsIdMixin, BasePageExtension):
             direct_course__extended_object__publisher_is_draft=is_draft,
         ).aggregate(sum=Sum("enrollment_count"))["sum"]
 
+    @cached_property
+    def languages_display(self):
+        """
+        Returns a string listing languages available for this course across all its
+        course runs (merged).
+        Languages related to the course's snapshots should not be taken into account.
+
+        The draft and the public page have their own course runs. The course runs on the draft
+        page are copied to the public page when the course is published (for any language).
+        """
+        is_draft = self.extended_object.publisher_is_draft
+        node = self.extended_object.node
+        current_and_descendant_nodes = node.__class__.get_tree(parent=node)
+
+        course_runs = (
+            CourseRun.objects.filter(
+                direct_course__extended_object__node__in=current_and_descendant_nodes,
+                direct_course__extended_object__publisher_is_draft=is_draft,
+            )
+            .exclude(catalog_visibility="hidden")
+            .only("languages")
+        )
+        languages = list(
+            {x for course_languages in course_runs for x in course_languages.languages}
+        )
+        instance = CourseRun(languages=languages)
+        return instance.get_languages_display()
+
     @property
     def course_runs_dict(self):
         """Returns a dict of course runs grouped by their state."""
