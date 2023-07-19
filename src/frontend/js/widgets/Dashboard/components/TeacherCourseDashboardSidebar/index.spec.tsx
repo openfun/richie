@@ -95,37 +95,9 @@ describe('<TeacherCourseDashboardSidebar/>', () => {
         name: intl.formatMessage(TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE]),
       }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', {
-        name: intl.formatMessage(
-          TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_CLASSROOMS],
-        ),
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', {
-        name: intl.formatMessage(
-          TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_RECORDS],
-        ),
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', {
-        name: intl.formatMessage(
-          TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_STUDENTS],
-        ),
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', {
-        name: intl.formatMessage(
-          TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_SETTINGS],
-        ),
-      }),
-    ).toBeInTheDocument();
 
     expect(screen.queryByTestId('organization-links')).not.toBeInTheDocument();
-    expect(screen.getAllByRole('link')).toHaveLength(6); // 5 menu items + 1 syllabus link
+    expect(screen.getAllByRole('link')).toHaveLength(2); // 1 menu items + 1 syllabus link
     expect(fetchMock.calls()).toHaveLength(nbApiRequest);
   });
 });

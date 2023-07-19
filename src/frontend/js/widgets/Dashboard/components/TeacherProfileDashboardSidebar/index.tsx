@@ -27,11 +27,7 @@ export const TeacherProfileDashboardSidebar = () => {
 
   const links = useMemo(
     () =>
-      [
-        TeacherDashboardPaths.TEACHER_COURSES,
-        TeacherDashboardPaths.TEACHER_NOTIFICATIONS,
-        TeacherDashboardPaths.TEACHER_SETTINGS,
-      ].map((path) => ({
+      [TeacherDashboardPaths.TEACHER_COURSES].map((path) => ({
         to: getRoutePath(path),
         label: getRouteLabel(path),
       })),
