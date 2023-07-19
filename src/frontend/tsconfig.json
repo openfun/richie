@@ -22,6 +22,7 @@
       "intl-pluralrules": ["types/libs/intl-pluralrules"]
     },
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "strict": true,
     "sourceMap": true,
     "target": "es6"
