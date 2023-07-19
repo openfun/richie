@@ -5,6 +5,7 @@ import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { TeacherOrganizationDashboardSidebar } from 'widgets/Dashboard/components/TeacherOrganizationDashboardSidebar';
 import { useOrganization } from 'hooks/useOrganizations';
 import TeacherDashboardCourseList from 'components/TeacherDashboardCourseList';
+import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 
 const messages = defineMessages({
   title: {
@@ -26,6 +27,9 @@ export const TeacherOrganizationCourseDashboardLoader = () => {
     item: organization,
     states: { fetching },
   } = useOrganization(organizationId);
+  useBreadcrumbsPlaceholders({
+    organizationTitle: organization.title ?? '',
+  });
   return (
     <DashboardLayout sidebar={<TeacherOrganizationDashboardSidebar />}>
       {fetching && (

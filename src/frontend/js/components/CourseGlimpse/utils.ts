@@ -12,18 +12,26 @@ import { CourseGlimpseCourse } from '.';
 const getCourseGlimpsePropsFromCourseProductRelation = (
   courseProductRelation: CourseProductRelation,
   locale: string = 'en',
+  organizationId?: string,
 ): CourseGlimpseCourse => {
   const intl = createIntl({ locale });
   const getRoutePath = getDashboardRoutePath(intl);
+  const courseRouteParams = {
+    courseId: courseProductRelation.course.id,
+    courseProductRelationId: courseProductRelation.id,
+  };
+  const courseRoute = organizationId
+    ? getRoutePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT, {
+        ...courseRouteParams,
+        organizationId,
+      })
+    : getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, courseRouteParams);
   return {
     ...getCourseGlimpsePropsFromJoanieCourse(courseProductRelation.course),
     id: courseProductRelation.id,
     title: courseProductRelation.product.title,
     product_id: courseProductRelation.product.id,
-    course_route: getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, {
-      courseId: courseProductRelation.course.id,
-      courseProductRelationId: courseProductRelation.id,
-    }),
+    course_route: courseRoute,
   };
 };
 
@@ -44,15 +52,23 @@ const getCourseGlimpsePropsFromRichieCourse = (course: RichieCourse): CourseGlim
 const getCourseGlimpsePropsFromJoanieCourse = (
   course: JoanieCourse,
   locale: string = 'en',
+  organizationId?: string,
 ): CourseGlimpseCourse => {
   const intl = createIntl({ locale });
   const getRoutePath = getDashboardRoutePath(intl);
+  const courseRouteParams = {
+    courseId: course.id,
+  };
+  const courseRoute = organizationId
+    ? getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATIONS, {
+        ...courseRouteParams,
+        organizationId,
+      })
+    : getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS, courseRouteParams);
   return {
     id: course.id,
     code: course.code,
-    course_route: getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS, {
-      courseId: course.id,
-    }),
+    course_route: courseRoute,
     cover_image: course.cover
       ? {
           src: course.cover.url,
@@ -75,14 +91,15 @@ const getCourseGlimpsePropsFromJoanieCourse = (
 export const getCourseGlimpseProps = (
   course: RichieCourse | (JoanieCourse | CourseProductRelation),
   locale?: string,
+  organizationId?: string,
 ): CourseGlimpseCourse => {
   if (isCourseProductRelation(course)) {
-    return getCourseGlimpsePropsFromCourseProductRelation(course, locale);
+    return getCourseGlimpsePropsFromCourseProductRelation(course, locale, organizationId);
   }
 
   if (isRichieCourse(course)) {
     return getCourseGlimpsePropsFromRichieCourse(course);
   }
 
-  return getCourseGlimpsePropsFromJoanieCourse(course, locale);
+  return getCourseGlimpsePropsFromJoanieCourse(course, locale, organizationId);
 };
