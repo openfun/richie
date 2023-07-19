@@ -4,5 +4,5 @@
 
 // Named colors
 // ---------
-@warn "[DEPRECATION] - $palette will be removed on the next major release. Use $colors instead.";
-$palette: $colors;
+@warn "[DEPRECATION] - $palette will be removed on the next major release. Use map-get($theme, 'colors') instead.";
+$palette: map-get($theme, 'colors') !default;
