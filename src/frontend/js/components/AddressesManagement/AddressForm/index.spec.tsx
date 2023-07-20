@@ -2,8 +2,8 @@ import { act, fireEvent, getByText, render, screen } from '@testing-library/reac
 import { IntlProvider } from 'react-intl';
 import { Address } from 'types/Joanie';
 import { AddressFactory } from 'utils/test/factories/joanie';
-import AddressForm from './AddressForm';
 import { ErrorKeys } from './ValidationErrors';
+import AddressForm from './index';
 
 jest.mock('hooks/useAddresses', () => ({
   useAddresses: () => ({
@@ -146,7 +146,7 @@ describe('AddressForm', () => {
     }));
 
     // Import locally to get module with mocked error messages.
-    const Form = jest.requireActual('./AddressForm').default;
+    const Form = jest.requireActual('./index').default;
 
     render(
       <IntlProvider locale="en">

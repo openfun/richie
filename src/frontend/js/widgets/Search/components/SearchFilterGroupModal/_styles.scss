@@ -59,16 +59,7 @@
   }
 
   &-button {
-    @include button-small();
     margin-top: 1rem;
-    width: 100%;
     font-weight: $font-weight-boldest;
-    text-transform: uppercase;
-    background: r-theme-val(search-filters-group-modal, button-background);
-    color: r-theme-val(search-filters-group-modal, button-color);
-
-    &:hover {
-      color: r-theme-val(search-filters-group-modal, button-color);
-    }
   }
 }
