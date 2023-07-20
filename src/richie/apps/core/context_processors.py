@@ -120,6 +120,10 @@ def site_metas(request: HttpRequest):
             for lms in getattr(settings, "RICHIE_LMS_BACKENDS", [])
         ]
 
+    context["FRONTEND_CONTEXT"]["context"]["features"] = getattr(
+        settings, "FEATURES", {}
+    )
+
     context["FRONTEND_CONTEXT"] = json.dumps(context["FRONTEND_CONTEXT"])
 
     if getattr(settings, "RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT", None):
