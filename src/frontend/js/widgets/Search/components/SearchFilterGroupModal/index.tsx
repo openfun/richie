@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
+import { Button } from '@openfun/cunningham-react';
 import { Modal } from 'components/Modal';
 import { Spinner } from 'components/Spinner';
 import { CourseSearchParamsAction, useCourseSearchParams } from 'hooks/useCourseSearchParams';
@@ -241,7 +242,6 @@ interface SearchFilterGroupModalProps {
 export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const intl = useIntl();
-
   const modalExclude = useMemo(() => {
     const exclude = document.getElementById('modal-exclude');
     if (exclude) {
@@ -252,10 +252,15 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
 
   return (
     <Fragment>
-      <button className="search-filter-group-modal-button" onClick={() => setModalIsOpen(true)}>
+      <Button
+        className="search-filter-group-modal-button"
+        fullWidth
+        size="small"
+        onClick={() => setModalIsOpen(true)}
+      >
         <FormattedMessage {...messages.moreOptionsButton} />
         <span className="offscreen">({filter.human_name})</span>
-      </button>
+      </Button>
       <Modal
         appElement={modalExclude}
         bodyOpenClassName="has-search-filter-group-modal"
