@@ -5,6 +5,8 @@ AUTHENTICATION_BACKEND=dummy
 # LMS Backend
 EDX_BASE_URL=http://localhost:8073
 EDX_BACKEND=richie.apps.courses.lms.base.BaseLMSBackend
+EDX_COURSE_REGEX='^.*/courses/(?P<course_id>.*)/info/?$'
+EDX_JS_COURSE_REGEX='^.*/courses/(.*)/info/?$'
 EDX_JS_BACKEND=dummy
 
 # Features
