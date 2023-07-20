@@ -6,4 +6,4 @@ AUTHENTICATION_BACKEND=openedx-hawthorn
 EDX_BASE_URL=https://edx.local.dev:8073
 
 # Features
-FEATURES = {'JOANIE_WISHLIST': True}
+FEATURES={'WISHLIST': True, 'REACT_DASHBOARD': True}

@@ -180,7 +180,7 @@
                                 {% if open_visible_runs|length == 0 %}
                                     <div class="course-detail__row course-detail__runs course-detail__runs--open">
                                         <div class="course-detail__empty">{% trans "No open course runs" %}</div>
-                                        {% is_feature_enabled 'JOANIE_WISHLIST' as joanie_wishlist_enabled %}
+                                        {% is_feature_enabled 'WISHLIST' as joanie_wishlist_enabled %}
                                         {% if is_joanie_enabled and joanie_wishlist_enabled  %}
                                             <div
                                                 class="richie-react richie-react--course-add-to-wishlist"
