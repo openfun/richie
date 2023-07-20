@@ -148,6 +148,62 @@ const ModalContent = ({ filter, modalIsOpen, setModalIsOpen }: ModalContentProps
     enabled: !!hasNextPage,
   });
 
+  const getSearchResultsList = () => {
+    if (error) {
+      return (
+        <div className="search-filter-group-modal__form__error">
+          <FormattedMessage {...messages.error} values={{ filterName: filter.human_name }} />
+        </div>
+      );
+    }
+    if (query.length > 0 && query.length < 3) {
+      return (
+        <div className="search-filter-group-modal__form__error">
+          <FormattedMessage {...messages.queryTooShort} />
+        </div>
+      );
+    }
+    if (status === 'error') {
+      return (
+        <div>
+          <FormattedMessage {...messages.error} values={{ filterName: filter.human_name }} />
+        </div>
+      );
+    }
+    if (['idle', 'loading'].includes(status)) {
+      return (
+        <Spinner>
+          <FormattedMessage {...messages.loadingResults} />
+        </Spinner>
+      );
+    }
+    return (
+      <ul className="search-filter-group-modal__form__values">
+        {data!.pages.map((page, pageIndex) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <Fragment key={`search_results_${pageIndex}`}>
+            {page!.objects.map((value) => (
+              <li className="search-filter-group-modal__form__values__item" key={value.key}>
+                <button
+                  onClick={() => {
+                    dispatchCourseSearchParamsUpdate({
+                      filter,
+                      payload: value.key,
+                      type: CourseSearchParamsAction.filterAdd,
+                    });
+                    setModalIsOpen(false);
+                  }}
+                >
+                  {value.human_name}&nbsp;{`(${value.count})`}
+                </button>
+              </li>
+            ))}
+          </Fragment>
+        ))}
+      </ul>
+    );
+  };
+
   return (
     <Fragment>
       <fieldset className="search-filter-group-modal__form">
@@ -162,46 +218,7 @@ const ModalContent = ({ filter, modalIsOpen, setModalIsOpen }: ModalContentProps
           })}
           ref={searchInputRef}
         />
-        {error ? (
-          <div className="search-filter-group-modal__form__error">
-            <FormattedMessage {...messages.error} values={{ filterName: filter.human_name }} />
-          </div>
-        ) : query.length > 0 && query.length < 3 ? (
-          <div className="search-filter-group-modal__form__error">
-            <FormattedMessage {...messages.queryTooShort} />
-          </div>
-        ) : status === 'error' ? (
-          <div>
-            <FormattedMessage {...messages.error} values={{ filterName: filter.human_name }} />
-          </div>
-        ) : ['idle', 'loading'].includes(status) ? (
-          <Spinner>
-            <FormattedMessage {...messages.loadingResults} />
-          </Spinner>
-        ) : (
-          <ul className="search-filter-group-modal__form__values">
-            {data!.pages.map((page, pageIndex) => (
-              <Fragment key={pageIndex}>
-                {page!.objects.map((value) => (
-                  <li className="search-filter-group-modal__form__values__item" key={value.key}>
-                    <button
-                      onClick={() => {
-                        dispatchCourseSearchParamsUpdate({
-                          filter,
-                          payload: value.key,
-                          type: CourseSearchParamsAction.filterAdd,
-                        });
-                        setModalIsOpen(false);
-                      }}
-                    >
-                      {value.human_name}&nbsp;{`(${value.count})`}
-                    </button>
-                  </li>
-                ))}
-              </Fragment>
-            ))}
-          </ul>
-        )}
+        {getSearchResultsList()}
       </fieldset>
       {hasNextPage ? (
         <button
