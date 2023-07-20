@@ -28,7 +28,7 @@ export const TeacherOrganizationCourseDashboardLoader = () => {
     states: { fetching },
   } = useOrganization(organizationId);
   useBreadcrumbsPlaceholders({
-    organizationTitle: organization.title ?? '',
+    organizationTitle: organization?.title ?? '',
   });
   return (
     <DashboardLayout sidebar={<TeacherOrganizationDashboardSidebar />}>
