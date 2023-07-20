@@ -85,7 +85,8 @@ class PagesTests(CMSTestCase):
         ]
     )
     @override_settings(
-        WEB_ANALYTICS={"google_universal_analytics": {"tracking_id": "TRACKING_ID"}}
+        FEATURES={"FEATURE_FLAG": True},
+        WEB_ANALYTICS={"google_universal_analytics": {"tracking_id": "TRACKING_ID"}},
     )
     def test_page_includes_frontend_context(self):
         """
@@ -122,4 +123,9 @@ class PagesTests(CMSTestCase):
         self.assertContains(
             response,
             r"\u0022web_analytics_providers\u0022: \u0022[\u005C\u0022google_universal_analytics\u005C\u0022]\u0022,",  # noqa pylint: disable=line-too-long
+        )
+
+        self.assertContains(
+            response,
+            r"\u0022features\u0022: {\u0022FEATURE_FLAG\u0022: true}",  # noqa pylint: disable=line-too-long
         )

@@ -28,6 +28,8 @@ information message when the product have no remaining order.
 
 ### Changed
 
+- Bind `settings.FEATURES` into `FRONTEND_CONTEXT['context']`
+through `context_processor`
 - Show original language name on the menu instead of translating it on the
   current language.
 - Replace helix factories by homemade engine using typescript.
