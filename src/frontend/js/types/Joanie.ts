@@ -294,6 +294,7 @@ export interface CourseRunFilters extends ResourcesQuery {
 
 export interface CourseQueryFilters extends ResourcesQuery {
   organization_id?: Organization['id'];
+  has_listed_course_runs?: Boolean;
 }
 export interface CourseProductQueryFilters extends ResourcesQuery {
   productId?: Product['id'];

@@ -52,7 +52,7 @@ describe('components/TeacherCoursesDashboardLoader', () => {
 
   it('should render', async () => {
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseListItemFactory().many(15), 15, false),
     );
     fetchMock.get(
@@ -79,13 +79,10 @@ describe('components/TeacherCoursesDashboardLoader', () => {
     );
     await expectNoSpinner('Loading courses...');
 
-    nbApiCalls += 1; // courses api call
+    nbApiCalls += 1; // course api call
     nbApiCalls += 1; // course-product-relations api call
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
-    expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
-    );
     expect(calledUrls).toContain(
       `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
     );
