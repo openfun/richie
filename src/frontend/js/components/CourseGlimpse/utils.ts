@@ -27,11 +27,21 @@ const getCourseGlimpsePropsFromCourseProductRelation = (
       })
     : getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, courseRouteParams);
   return {
-    ...getCourseGlimpsePropsFromJoanieCourse(courseProductRelation.course),
     id: courseProductRelation.id,
+    code: courseProductRelation.course.code,
     title: courseProductRelation.product.title,
+    cover_image: courseProductRelation.course.cover
+      ? {
+          src: courseProductRelation.course.cover.src,
+        }
+      : null,
+    organization: {
+      title: courseProductRelation.organizations[0].title,
+      image: courseProductRelation.organizations[0].logo || null,
+    },
     product_id: courseProductRelation.product.id,
     course_route: courseRoute,
+    state: courseProductRelation.product.state,
   };
 };
 
@@ -75,17 +85,13 @@ const getCourseGlimpsePropsFromJoanieCourse = (
     course_route: courseRoute,
     cover_image: course.cover
       ? {
-          src: course.cover.url,
+          src: course.cover.src,
         }
       : null,
     title: course.title,
     organization: {
       title: course.organizations[0].title,
-      image: course.organizations[0].logo
-        ? {
-            src: course.organizations[0].logo.src,
-          }
-        : null,
+      image: course.organizations[0].logo || null,
     },
     state: course.state,
     nb_course_runs: course.course_runs.length,

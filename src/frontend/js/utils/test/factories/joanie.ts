@@ -24,10 +24,23 @@ import {
   Product,
   ProductType,
   TargetCourse,
+  CourseProductRelationCourse,
+  JoanieFile,
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { factory } from './factories';
+
+export const JoanieFileFactory = factory((): JoanieFile => {
+  return {
+    filename: faker.lorem.words(1),
+    src: '/image/url',
+    height: 40,
+    width: 60,
+    srcset: '/image/url',
+    size: 300,
+  };
+});
 
 export const EnrollmentFactory = factory((): Enrollment => {
   return {
@@ -60,14 +73,7 @@ export const OrganizationFactory = factory((): Organization => {
     id: uuid,
     code: faker.string.alphanumeric(5),
     title: faker.lorem.words(1),
-    logo: {
-      filename: faker.lorem.words(1),
-      src: `/organizations/${uuid}`,
-      srcset: [],
-      height: 40,
-      width: 60,
-      size: 300,
-    },
+    logo: JoanieFileFactory().one(),
   };
 });
 
@@ -107,6 +113,7 @@ export const CertificateProductFactory = factory((): Product => {
     certificate_definition: CertificationDefinitionFactory().one(),
     target_courses: TargetCourseFactory().many(5),
     remaining_order_count: faker.number.int({ min: 1, max: 100 }),
+    state: CourseStateFactory().one(),
   };
 });
 
@@ -159,12 +166,16 @@ export const CourseFactory = factory((): CourseListItem => {
     products: CertificateCourseProductFactory().many(3),
     course_runs: CourseRunFactory().many(3),
     state: CourseStateFactory().one(),
-    cover: {
-      filename: 'course_cover_image.jpg',
-      url: '/static/course_cover_image.jpg',
-      height: 100,
-      width: 200,
-    },
+    cover: JoanieFileFactory().one(),
+  };
+});
+
+export const CourseProductRelationCourseFactory = factory((): CourseProductRelationCourse => {
+  return {
+    id: faker.string.uuid(),
+    code: faker.string.alphanumeric(5),
+    title: FactoryHelper.sequence((counter) => `Course ${counter}`),
+    cover: JoanieFileFactory().one(),
   };
 });
 
@@ -174,6 +185,7 @@ export const CourseProductRelationFactory = factory((): CourseProductRelation =>
     created_on: faker.date.past().toISOString(),
     course: CourseFactory().one(),
     product: ProductFactory().one(),
+    organizations: OrganizationFactory().many(1),
   };
 });
 
@@ -188,12 +200,7 @@ export const CourseListItemFactory = factory((): CourseListItem => {
     title: FactoryHelper.sequence((counter) => `Course list item ${counter}`),
     course_runs: [],
     state: CourseStateFactory().one(),
-    cover: {
-      filename: 'course_cover_image.jpg',
-      url: '/static/course_cover_image.jpg',
-      height: 100,
-      width: 200,
-    },
+    cover: JoanieFileFactory().one(),
   };
 });
 

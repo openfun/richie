@@ -21,14 +21,7 @@ export interface Organization {
   id: string;
   code: string;
   title: string;
-  logo: {
-    filename: string;
-    src: string;
-    srcset: string[];
-    height: number;
-    width: number;
-    size: number;
-  };
+  logo: JoanieFile;
 }
 
 export interface CourseListItem extends Resource {
@@ -38,12 +31,7 @@ export interface CourseListItem extends Resource {
   course_runs: CourseRun[];
   organizations: Organization[];
   selling_organizations: Organization[];
-  cover: Nullable<{
-    filename: string;
-    url: string;
-    height: number;
-    width: number;
-  }>;
+  cover: JoanieFile;
   products: Product[];
   state: CourseState;
   created_on: string;
@@ -101,6 +89,7 @@ export interface Product {
   target_courses: TargetCourse[];
   created_on: string;
   remaining_order_count?: number | null;
+  state: CourseState;
 }
 
 export interface CourseProduct extends Product {
@@ -110,7 +99,8 @@ export interface CourseProduct extends Product {
 
 export interface CourseProductRelation {
   id: string;
-  course: CourseListItem;
+  course: CourseProductRelationCourse;
+  organizations: Organization[];
   product: Product;
   created_on: string;
 }
@@ -118,6 +108,15 @@ export function isCourseProductRelation(
   entity: CourseListItem | CourseProductRelation | RichieCourse,
 ): entity is CourseProductRelation {
   return 'course' in entity && 'product' in entity;
+}
+
+export interface JoanieFile {
+  filename: string;
+  height: number;
+  size: number;
+  src: string;
+  srcset: string;
+  width: number;
 }
 
 // - Course
@@ -130,18 +129,16 @@ export interface AbstractCourse {
   cover?: JoanieFile;
 }
 
-export interface JoanieFile {
-  filename: string;
-  height: number;
-  size: number;
-  src: string;
-  srcset: string;
-  width: number;
-}
+export type CourseProductRelationCourse = Pick<AbstractCourse, 'id' | 'code' | 'title' | 'cover'>;
 
 export interface TargetCourse extends AbstractCourse {
   is_graded: boolean;
   position: number;
+}
+
+export interface CourseLight extends AbstractCourse {
+  products: CourseProduct[];
+  orders?: OrderLite[];
 }
 
 export type OrderLite = Pick<
@@ -155,11 +152,6 @@ export type OrderLite = Pick<
   | 'main_proforma_invoice'
   | 'certificate'
 >;
-
-export interface CourseLight extends AbstractCourse {
-  products: CourseProduct[];
-  orders?: OrderLite[];
-}
 
 // Enrollment
 export enum EnrollmentState {
