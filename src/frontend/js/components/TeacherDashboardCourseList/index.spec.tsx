@@ -58,7 +58,7 @@ describe('components/TeacherDashboardCourseList', () => {
       title: "One lesson about: Let's dance, the online lesson",
     }).one();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
       mockPaginatedResponse([courseCooking, courseDancing], 15, false),
     );
     const productCooking: CourseListItem = CourseListItemFactory({
@@ -95,7 +95,7 @@ describe('components/TeacherDashboardCourseList', () => {
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
     expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
     );
     expect(calledUrls).toContain(
       `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
@@ -117,7 +117,7 @@ describe('components/TeacherDashboardCourseList', () => {
 
   it('should render empty list', async () => {
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
       mockPaginatedResponse([], 0, false),
       {
         overwriteRoutes: true,
@@ -151,7 +151,7 @@ describe('components/TeacherDashboardCourseList', () => {
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
     expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/courses/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
     );
     expect(calledUrls).toContain(
       `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,

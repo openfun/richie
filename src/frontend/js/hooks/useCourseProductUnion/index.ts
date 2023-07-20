@@ -42,7 +42,7 @@ export const useCourseProductUnion = ({
     queryAConfig: {
       queryKey: ['user', 'courses'],
       fn: api.courses.get,
-      filters: { organization_id: organizationId },
+      filters: { organization_id: organizationId, has_listed_course_runs: true },
     },
     queryBConfig: {
       queryKey: ['user', 'course_product_relations'],

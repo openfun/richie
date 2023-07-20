@@ -78,7 +78,7 @@ describe('useCourseProductUnion', () => {
     const coursesUrl = ROUTES.courses.get.replace(':id/', '');
     const courseProductRelationsUrl = ROUTES.courseProductRelations.get.replace(':id/', '');
     fetchMock.get(
-      `${coursesUrl}?page=1&page_size=${PER_PAGE}`,
+      `${coursesUrl}?has_listed_course_runs=true&page=1&page_size=${PER_PAGE}`,
       mockPaginatedResponse(courseList.slice(0, PER_PAGE), 0, false),
     );
     fetchMock.get(
@@ -92,7 +92,9 @@ describe('useCourseProductUnion', () => {
     nbApiCalls += 1; // course product relations page 1
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
-    expect(calledUrls).toContain(`${coursesUrl}?page=1&page_size=${PER_PAGE}`);
+    expect(calledUrls).toContain(
+      `${coursesUrl}?has_listed_course_runs=true&page=1&page_size=${PER_PAGE}`,
+    );
     expect(calledUrls).toContain(`${courseProductRelationsUrl}?page=1&page_size=${PER_PAGE}`);
   });
 
@@ -106,7 +108,7 @@ describe('useCourseProductUnion', () => {
     const organizationCourseProductRelationsUrl =
       ROUTES.user.organizations.courseProductRelations.get.replace(':id', organizationId);
     fetchMock.get(
-      `${organizationCoursesUrl}?page=1&page_size=${PER_PAGE}`,
+      `${organizationCoursesUrl}?has_listed_course_runs=true&page=1&page_size=${PER_PAGE}`,
       mockPaginatedResponse(courseList.slice(0, PER_PAGE), 0, false),
     );
     fetchMock.get(
@@ -120,7 +122,9 @@ describe('useCourseProductUnion', () => {
     nbApiCalls += 1; // course product relations page 1
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
-    expect(calledUrls).toContain(`${organizationCoursesUrl}?page=1&page_size=${PER_PAGE}`);
+    expect(calledUrls).toContain(
+      `${organizationCoursesUrl}?has_listed_course_runs=true&page=1&page_size=${PER_PAGE}`,
+    );
     expect(calledUrls).toContain(
       `${organizationCourseProductRelationsUrl}?page=1&page_size=${PER_PAGE}`,
     );
