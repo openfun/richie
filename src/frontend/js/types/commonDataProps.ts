@@ -16,12 +16,18 @@ export interface AuthenticationBackend {
   endpoint: string;
 }
 
+enum FEATURES {
+  REACT_DASHBOARD = 'REACT_DASHBOARD',
+  WISHLIST = 'WISHLIST',
+}
+
 export interface RichieContext {
   authentication: AuthenticationBackend;
   csrftoken: string;
   environment: string;
-  lms_backends?: LMSBackend[];
+  features: Partial<Record<FEATURES, boolean>>;
   joanie_backend?: JoanieBackend;
+  lms_backends?: LMSBackend[];
   release: string;
   sentry_dsn: Nullable<string>;
   web_analytics_providers?: Nullable<string[]>;

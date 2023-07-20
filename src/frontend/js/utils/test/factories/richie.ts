@@ -75,12 +75,13 @@ export const FonzieUserFactory = factory<User>(() => ({
 }));
 
 export const RichieContextFactory = factory<CommonDataProps['context']>(() => ({
-  csrftoken: faker.string.alphanumeric(64),
-  environment: 'test',
   authentication: {
     backend: APIBackend.OPENEDX_HAWTHORN,
     endpoint: 'https://endpoint.test',
   },
+  csrftoken: faker.string.alphanumeric(64),
+  environment: 'test',
+  features: {},
   lms_backends: [
     {
       backend: APIBackend.DUMMY,
