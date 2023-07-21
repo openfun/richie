@@ -1,12 +1,13 @@
 import { FormattedMessage } from 'react-intl';
 import { useMemo } from 'react';
+import { Button } from '@openfun/cunningham-react';
+import { Button as RichieButton } from 'components/Button';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { Priority } from 'types';
 import { AbstractCourse, CourseRun, Enrollment, Order } from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import useDateFormat, { DATETIME_FORMAT } from 'hooks/useDateFormat';
-import { Button } from 'components/Button';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { RouterButton } from '../RouterButton';
 import { useEnroll } from '../../hooks/useEnroll';
@@ -215,7 +216,7 @@ const DashboardItemCourseEnrollingRun = ({
             <Icon name={IconTypeEnum.CHECK} size="small" />
           </div>
         ) : (
-          <Button disabled={!isOpenedForEnrollment} color="outline-primary" onClick={enroll}>
+          <Button disabled={!isOpenedForEnrollment} color="secondary" onClick={enroll}>
             <FormattedMessage {...messages.enrollRun} />
           </Button>
         )}
@@ -263,13 +264,14 @@ export const Enrolled = ({
         <EnrolledStatus enrollment={enrollment} />
       </div>
       {SHOW_ACCESS_COURSE_PRIORITIES.includes(enrollment.course_run.state.priority) && (
-        <Button
+        // FIXME: cunningham button should allow usage of href.
+        <RichieButton
           color="outline-primary"
           href={enrollment.course_run.resource_link}
           data-testid="dashboard-item-enrollment__button"
         >
           <FormattedMessage {...messages.accessCourse} />
-        </Button>
+        </RichieButton>
       )}
     </>
   );
