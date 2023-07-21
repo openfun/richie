@@ -58,6 +58,8 @@ $ make migrate
   `js/components` folder. Update your overrides.json and path in your custom scss files accordingly.
 - `js/utils/test/factories.ts` have been split into multiple files: joanie.ts, richie.ts and 
   reactQuery.ts. Update your import accordingly.
+- We now using Button components from cunningham design system. They can be customise with cunningham tokens
+  configuration. See https://openfun.github.io/cunningham/?path=/docs/getting-started-customization--docs
 
 ## 2.20.1 to 2.21.0
 
