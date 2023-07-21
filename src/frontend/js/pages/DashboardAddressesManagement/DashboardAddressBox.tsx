@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from 'components/Button';
+import { Button } from '@openfun/cunningham-react';
 import { DashboardBox } from 'widgets/Dashboard/components/DashboardBox';
 import { Address } from 'types/Joanie';
 
