@@ -9,21 +9,7 @@
     color: r-theme-val(search-filters-pane, title-color);
   }
 
-  &__clear {
-    @include button-reset-style();
-    display: block;
-    cursor: pointer;
-    margin: 0.2rem $r-search-filters-gutter;
-    padding: 0rem 0.5rem 0;
-
-    &,
-    &:hover,
-    &:active {
-      color: r-theme-val(search-filters-pane, clearer-hover-color);
-    }
-
-    &--hidden {
-      visibility: hidden;
-    }
+  &__clear--hidden {
+    visibility: hidden;
   }
 }

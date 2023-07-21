@@ -1,6 +1,8 @@
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import c from 'classnames';
 
+import { Button } from '@openfun/cunningham-react';
 import { CourseSearchParamsAction, useCourseSearchParams } from 'hooks/useCourseSearchParams';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { Nullable } from 'types/utils';
@@ -31,7 +33,6 @@ export const SearchFiltersPane = ({
   ...passThroughProps
 }: SearchFiltersPaneProps & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
   const filterList = filters && Object.values(filters).sort((f1, f2) => f1.position - f2.position);
-
   const { courseSearchParams, dispatchCourseSearchParamsUpdate } = useCourseSearchParams();
 
   const relevantFilters = Object.entries(courseSearchParams)
@@ -74,10 +75,12 @@ export const SearchFiltersPane = ({
       >
         <FormattedMessage {...messages.filter} />
       </h2>
-      <button
-        className={`search-filters-pane__clear ${
-          !activeFilterCount ? 'search-filters-pane__clear--hidden' : ''
-        }`}
+      <Button
+        color="secondary"
+        size="small"
+        className={c({
+          'search-filters-pane__clear--hidden': !activeFilterCount,
+        })}
         tabIndex={0}
         onClick={() =>
           dispatchCourseSearchParamsUpdate({
@@ -87,7 +90,7 @@ export const SearchFiltersPane = ({
       >
         <FormattedMessage {...messages.clearFilters} values={{ activeFilterCount }} />
         <span className="offscreen">&nbsp;({activeFilterNames})</span>
-      </button>
+      </Button>
       {filterList &&
         filterList.map((filter) => <SearchFilterGroup filter={filter} key={filter.name} />)}
     </div>
