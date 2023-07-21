@@ -1,8 +1,8 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useMemo } from 'react';
+import { Button } from '@openfun/cunningham-react';
 import { CreditCard } from 'types/Joanie';
 import { DashboardBox } from 'widgets/Dashboard/components/DashboardBox';
-import { Button } from 'components/Button';
 import { CreditCardExpirationStatus, CreditCardHelper } from 'utils/CreditCardHelper';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CreditCardBrandLogo } from './CreditCardBrandLogo';
