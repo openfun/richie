@@ -185,7 +185,7 @@
                         {% include "social-networks/course-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
                     {% endblock social_networks %}
 
-                    {% block run_open_single %}
+                    {% block course_run_subheader %}
                         <div class="richie-react richie-react--syllabus-course-runs-list" data-props='{% course_runs_list_widget_props %}'></div>
                         {% for run in course.course_runs %}
                             {% if request.toolbar.edit_mode_active %}
@@ -194,7 +194,7 @@
                                 {% endrender_model_block %}
                             {% endif %}
                         {% endfor %}
-                    {% endblock run_open_single %}
+                    {% endblock course_run_subheader %}
                 </div>
             </div>
         </div>
@@ -333,8 +333,24 @@
             </div>
 
             {% block runs %}
-                <div class="course-detail__aside" property="isAccessibleForFree" content="true">
+                <div class="course-detail__aside">
                     {% render_model_add course "" "" "get_admin_url_to_add_run" %}
+                    {% with runs_dict=current_page.course.course_runs_dict %}
+                        {% with open_visible_runs=runs_dict.0|add:runs_dict.1|add:runs_dict.2|visible_on_course_page:request.toolbar.edit_mode_active %}
+                            <!--
+                                As course runs are rendered through React, we use meta tags to
+                                setup course runs RFDa properties.
+                             -->
+                            {% for run in open_visible_runs %}
+                                <span rel="hasCourseInstance" typeof="CourseInstance">
+                                    <meta property="title" content="Run 0"  />
+                                    <meta property="courseMode" content="online"  />
+                                    <meta property="startDate" content="{{ run.start|date:'Y-m-d' }}"  />
+                                    <meta property="endDate" content="{{ run.end|date:'Y-m-d' }}"  />
+                                </span>
+                            {% endfor %}
+                        {% endwith %}
+                    {% endwith %}
                 </div>
             {% endblock runs %}
         </div>
