@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import Banner, { BannerType } from 'components/Banner';
-import { Button } from 'components/Button';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { Spinner } from 'components/Spinner';
@@ -81,7 +81,7 @@ export const DashboardAddressesManagement = ({
                 promote={promote}
               />
             ))}
-            <Button color="outline-primary" onClick={() => onClickCreate?.()}>
+            <Button color="secondary" fullWidth onClick={() => onClickCreate?.()}>
               <Icon name={IconTypeEnum.PLUS} className="button__icon" />
               <FormattedMessage {...messages.add} />
             </Button>
