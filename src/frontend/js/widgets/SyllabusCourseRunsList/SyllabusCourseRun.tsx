@@ -3,13 +3,13 @@ import React from 'react';
 import { CourseRun } from 'types';
 import useDateFormat from 'hooks/useDateFormat';
 import { joinAnd } from 'utils/JoinAnd';
-import CourseRunEnrollment from 'widgets/CourseRunEnrollment';
 import { Course } from 'types/Course';
 import { extractResourceId, isJoanieProduct } from 'api/lms/joanie';
 import CourseProductItem from 'widgets/CourseProductItem';
 import { findLmsBackend } from 'api/configuration';
 import { StringHelper } from 'utils/StringHelper';
 import { DjangoCMSPluginCourseRun, DjangoCMSTemplate } from 'components/DjangoCMSTemplate';
+import CourseRunEnrollment from './components/CourseRunEnrollment';
 
 const messages = defineMessages({
   enrollment: {

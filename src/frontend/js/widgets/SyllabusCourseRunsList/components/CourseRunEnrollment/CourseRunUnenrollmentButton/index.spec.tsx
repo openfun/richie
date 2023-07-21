@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import { CourseRunUnenrollButton } from './index';
+import { CourseRunUnenrollButton } from 'widgets/SyllabusCourseRunsList/components/CourseRunEnrollment/CourseRunUnenrollmentButton/index';
 
 describe('CourseRunUnenrollmentButton', () => {
   it('renders a CourseRunUnenrollButton', async () => {
