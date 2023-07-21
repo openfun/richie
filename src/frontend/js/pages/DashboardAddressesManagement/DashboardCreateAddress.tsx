@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import Banner, { BannerType } from 'components/Banner';
-import { Button } from 'components/Button';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Spinner } from 'components/Spinner';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
