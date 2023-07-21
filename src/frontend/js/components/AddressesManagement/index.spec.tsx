@@ -404,7 +404,7 @@ describe('AddressesManagement', () => {
         },
       );
 
-    const $promoteButton = await screen.findByRole('button', {
+    const $promoteButton = await screen.findByRole('radio', {
       name: `Define "${address2.title}" address as main`,
     });
 
@@ -412,17 +412,15 @@ describe('AddressesManagement', () => {
       fireEvent.click($promoteButton);
     });
 
-    const $address1PromoteIndicator = screen.getByRole('button', {
-      name: `Define "${address1.title}" address as main`,
-    });
-    const $address1MainIndicator =
-      $address1PromoteIndicator.querySelector('.address-main-indicator')!;
-    const $address2PromoteButton = screen.getByRole('button', {
-      name: `Define "${address2.title}" address as main`,
-    });
-    const $address2MainIndicator = $address2PromoteButton.querySelector('.address-main-indicator')!;
-
-    expect($address1MainIndicator.classList).not.toContain('address-main-indicator--is-main');
-    expect($address2MainIndicator.classList).toContain('address-main-indicator--is-main');
+    expect(
+      screen.getByRole('radio', {
+        name: `Define "${address1.title}" address as main`,
+      }),
+    ).not.toBeChecked();
+    expect(
+      screen.getByRole('radio', {
+        name: `Define "${address2.title}" address as main`,
+      }),
+    ).toBeChecked();
   });
 });
