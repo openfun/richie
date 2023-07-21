@@ -1,6 +1,7 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { useRef } from 'react';
+import { Button } from '@openfun/cunningham-react';
 import { CourseGlimpseList, getCourseGlimpseListProps } from 'components/CourseGlimpseList';
 import { Spinner } from 'components/Spinner';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
@@ -8,7 +9,6 @@ import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessa
 import context from 'utils/context';
 import { useCourseProductUnion } from 'hooks/useCourseProductUnion';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
-import { Button } from 'components/Button';
 
 const messages = defineMessages({
   loading: {
@@ -79,7 +79,7 @@ const TeacherDashboardCourseList = ({
                 onClick={() => next()}
                 disabled={isLoading}
                 ref={loadMoreButtonRef}
-                color="transparent-darkest"
+                color="tertiary"
               >
                 <FormattedMessage {...messages.loadMore} />
               </Button>
