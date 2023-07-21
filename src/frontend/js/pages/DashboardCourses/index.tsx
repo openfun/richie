@@ -1,5 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useRef } from 'react';
+import { Button } from '@openfun/cunningham-react';
 import {
   useOrdersEnrollments,
   isEnrollement,
@@ -10,7 +11,6 @@ import { DashboardItemEnrollment } from 'widgets/Dashboard/components/DashboardI
 import { DashboardItemOrder } from 'widgets/Dashboard/components/DashboardItem/Order/DashboardItemOrder';
 import Banner, { BannerType } from 'components/Banner';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
-import { Button } from 'components/Button';
 
 const messages = defineMessages({
   loading: {
@@ -72,11 +72,10 @@ export const DashboardCourses = () => {
           )}
           {hasMore && (
             <Button
-              className="dashboard__courses__list__more-results"
               onClick={() => next()}
               disabled={isLoading}
               ref={loadMoreButtonRef}
-              color="transparent-darkest"
+              color="tertiary"
             >
               <FormattedMessage {...messages.loadMore} />
             </Button>
