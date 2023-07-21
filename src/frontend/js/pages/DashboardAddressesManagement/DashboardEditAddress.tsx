@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import Banner, { BannerType } from 'components/Banner';
-import { Button } from 'components/Button';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Spinner } from 'components/Spinner';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
@@ -54,12 +54,12 @@ export const DashboardEditAddress = ({ address, onSettled = noop }: DashboardEdi
       header={<FormattedMessage {...messages.header} values={{ title: address.title }} />}
       footer={
         <>
-          <Button color="outline-primary" onClick={handleSubmit(onSubmit)}>
+          <Button color="secondary" onClick={handleSubmit(onSubmit)}>
             <FormattedMessage {...messages.submit} />
           </Button>
           {!address.is_main && (
             <Button
-              color="outline-primary"
+              color="secondary"
               onClick={() => {
                 remove(address, {
                   onSuccess: () => onSettled(),
