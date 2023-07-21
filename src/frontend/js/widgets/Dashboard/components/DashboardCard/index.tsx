@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode, useMemo, useRef, useState } from 'react';
 import c from 'classnames';
-import { Button } from 'components/Button';
+import { Button } from '@openfun/cunningham-react';
 import { Icon, IconTypeEnum } from 'components/Icon';
 
 interface Props {
@@ -62,7 +62,7 @@ export const DashboardCard = ({
       <header className="dashboard-card__header">
         <div>{header}</div>
         {expandable && (
-          <Button onClick={toggle} size="nano">
+          <Button onClick={toggle} color="tertiary" size="small">
             <Icon
               name={IconTypeEnum.CHEVRON_DOWN_OUTLINE}
               data-testid="dashboard-card__header__toggle"
