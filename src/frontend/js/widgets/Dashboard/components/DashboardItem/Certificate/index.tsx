@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from 'components/Button';
+import { Button } from '@openfun/cunningham-react';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { Certificate, CertificateDefinition, CourseLight } from 'types/Joanie';
 import { useDownloadCertificate } from 'hooks/useDownloadCertificate';
@@ -93,7 +93,7 @@ export const DashboardItemCertificate = ({
             </span>
             <div>
               {certificate && (
-                <Button color="outline-primary" disabled={loading} onClick={onDownloadClick}>
+                <Button color="secondary" disabled={loading} onClick={onDownloadClick}>
                   {loading ? (
                     <Spinner theme="primary" aria-labelledby="generating-certificate">
                       <span id="generating-certificate">
