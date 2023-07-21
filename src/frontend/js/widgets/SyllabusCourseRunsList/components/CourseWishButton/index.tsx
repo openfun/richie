@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from 'components/Button';
+import { Button } from '@openfun/cunningham-react';
 import { Spinner } from 'components/Spinner';
 import { useSession } from 'contexts/SessionContext';
 import { Course } from 'types/Course';
@@ -71,7 +71,7 @@ const CourseWishButton = ({ course }: Props) => {
       <Button
         color="primary"
         onClick={isWished ? removeFromWishlist : addToWishlist}
-        className="user-wishlist-button"
+        fullWidth
         disabled={componentState === ComponentStates.LOADING}
         {...(componentState === ComponentStates.ERROR && {
           'aria-describedby': 'user-wishlist-error',
@@ -89,7 +89,7 @@ const CourseWishButton = ({ course }: Props) => {
     <Button
       color="primary"
       onClick={login}
-      className="user-wishlist-button"
+      fullWidth
       disabled={componentState === ComponentStates.LOADING}
     >
       <FormattedMessage {...messages.logMe} />
