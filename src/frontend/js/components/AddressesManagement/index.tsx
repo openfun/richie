@@ -1,5 +1,6 @@
 import { Children, forwardRef, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import AddressForm, { type AddressFormValues } from 'components/AddressesManagement/AddressForm';
 import Banner, { BannerType } from 'components/Banner';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -185,13 +186,15 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
 
     return (
       <div className="AddressesManagement" ref={ref}>
-        <button
-          className="AddressesManagement__closeButton button button-sale--tertiary"
+        <Button
+          className="AddressesManagement__closeButton"
+          color="tertiary"
+          size="small"
           onClick={handleClose}
         >
           <Icon name={IconTypeEnum.CHEVRON_LEFT_OUTLINE} className="button__icon" />
           <FormattedMessage {...messages.closeButton} />
-        </button>
+        </Button>
         {error && <Banner message={error} type={BannerType.ERROR} rounded />}
         {addresses.items.length > 0 ? (
           <section className="address-registered">
