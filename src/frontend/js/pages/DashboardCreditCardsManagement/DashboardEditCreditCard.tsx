@@ -1,9 +1,9 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
+import { Button } from '@openfun/cunningham-react';
 import { CreditCard } from 'types/Joanie';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
-import { Button } from 'components/Button';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { CheckboxField, TextField } from 'components/Form';
@@ -160,12 +160,12 @@ export const DashboardEditCreditCard = ({ creditCard, onSettled = noop }: Props)
       header={<FormattedMessage {...messages.header} />}
       footer={
         <>
-          <Button color="outline-primary" onClick={handleSubmit(onSubmit)}>
+          <Button color="secondary" onClick={handleSubmit(onSubmit)}>
             <FormattedMessage {...messages.submit} />
           </Button>
           {!creditCard.is_main && (
             <Button
-              color="outline-primary"
+              color="secondary"
               onClick={() =>
                 safeDelete(creditCard, {
                   onSuccess: () => {
