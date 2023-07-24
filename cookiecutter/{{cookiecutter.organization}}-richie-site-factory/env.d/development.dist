@@ -22,10 +22,11 @@ DB_PORT=5432
 
 # LMS Backend
 EDX_BACKEND=richie.apps.courses.lms.base.BaseLMSBackend
-EDX_JS_BACKEND=base
-EDX_JS_COURSE_REGEX='^.*/courses/(.*)/info$'
 EDX_BASE_URL=http://localhost:8073
+EDX_COURSE_REGEX='^.*/courses/(?P<course_id>.*)/info/?$'
+EDX_JS_COURSE_REGEX='^.*/courses/(.*)/info/?$'
+EDX_JS_BACKEND=openedx-hawthorn
 
 # Authentication Backend
 AUTHENTICATION_BASE_URL=http://localhost:8073
-AUTHENTICATION_BACKEND=base
+AUTHENTICATION_BACKEND=openedx-hawthorn
