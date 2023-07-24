@@ -2,21 +2,11 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { CourseRun } from 'types';
-import useDateFormat from 'hooks/useDateFormat';
 import { DjangoCMSPluginCourseRun, DjangoCMSTemplate } from 'components/DjangoCMSTemplate';
-import { StringHelper } from 'utils/StringHelper';
+import CourseRunItem from 'widgets/SyllabusCourseRunsList/components/CourseRunItem';
+import CourseRunItemWithEnrollment from 'widgets/SyllabusCourseRunsList/components/CourseRunItemWithEnrollment';
 
-const messages = defineMessages({
-  courseRunTitleWithDates: {
-    id: 'components.SyllabusSimpleCourseRunsList.courseRunTitleWithDates',
-    description: 'Course run details displayed on the syllabus',
-    defaultMessage: '{title}, from {start} to {end}',
-  },
-  courseRunWithDates: {
-    id: 'components.SyllabusSimpleCourseRunsList.courseRunWithDates',
-    description: 'Course run details displayed on the syllabus when it has no title',
-    defaultMessage: 'From {start} to {end}',
-  },
+export const messages = defineMessages({
   viewMore: {
     id: 'components.SyllabusSimpleCourseRunsList.viewMore',
     description: 'Button displayed on the syllabus when not all course runs are displayed',
@@ -24,13 +14,17 @@ const messages = defineMessages({
   },
 });
 
-export const SyllabusSimpleCourseRunsList = ({
-  courseRuns,
-  maxCourseRuns,
-}: {
+type Props = {
   courseRuns: CourseRun[];
   maxCourseRuns?: number;
-}) => {
+  checkEnrollment?: boolean;
+};
+
+export const SyllabusSimpleCourseRunsList = ({
+  courseRuns,
+  checkEnrollment = false,
+  maxCourseRuns,
+}: Props) => {
   const [displayCount, setDisplayCount] = useState(maxCourseRuns ?? courseRuns.length);
   if (!courseRuns.length) {
     return null;
@@ -59,6 +53,8 @@ export const SyllabusSimpleCourseRunsList = ({
                 <a href={run.snapshot}>
                   <CourseRunItem item={run} />
                 </a>
+              ) : checkEnrollment ? (
+                <CourseRunItemWithEnrollment item={run} />
               ) : (
                 <CourseRunItem item={run} />
               )}
@@ -76,28 +72,5 @@ export const SyllabusSimpleCourseRunsList = ({
         </button>
       )}
     </>
-  );
-};
-
-const CourseRunItem = ({ item }: { item: CourseRun }) => {
-  const formatDate = useDateFormat();
-
-  return item.title ? (
-    <FormattedMessage
-      {...messages.courseRunTitleWithDates}
-      values={{
-        start: item.start ? formatDate(item.start) : '...',
-        end: item.end ? formatDate(item.end) : '...',
-        title: StringHelper.capitalizeFirst(item.title),
-      }}
-    />
-  ) : (
-    <FormattedMessage
-      {...messages.courseRunWithDates}
-      values={{
-        start: item.start ? formatDate(item.start) : '...',
-        end: item.end ? formatDate(item.end) : '...',
-      }}
-    />
   );
 };

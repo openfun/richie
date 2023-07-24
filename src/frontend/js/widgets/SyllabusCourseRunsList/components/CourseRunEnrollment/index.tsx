@@ -8,7 +8,7 @@ import { User } from 'types/User';
 import { Maybe, Nullable } from 'types/utils';
 import { handle } from 'utils/errors/handle';
 import { HttpError } from 'utils/errors/HttpError';
-import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/components/CourseRunEnrollment/hooks/useCourseEnrollment';
+import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/hooks/useCourseEnrollment';
 import { CourseRunUnenrollButton } from 'widgets/SyllabusCourseRunsList/components/CourseRunEnrollment/CourseRunUnenrollmentButton';
 
 const messages = defineMessages({

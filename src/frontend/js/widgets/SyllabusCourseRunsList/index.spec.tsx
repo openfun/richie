@@ -19,6 +19,7 @@ import {
   CourseLightFactory,
   CourseRunFactoryFromPriority,
   RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
 } from 'utils/test/factories/richie';
 import SyllabusCourseRunsList from 'widgets/SyllabusCourseRunsList/index';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -30,6 +31,9 @@ import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { joinAnd } from 'utils/JoinAnd';
 import { StringHelper } from 'utils/StringHelper';
 import { computeStates } from 'utils/CourseRuns';
+import { User } from 'types/User';
+import { Nullable } from 'types/utils';
+import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 
 jest.mock('utils/context', () => {
   const mock = mockRichieContextFactory().one();
@@ -66,13 +70,16 @@ describe('<SyllabusCourseRunsList/>', () => {
   afterEach(() => {
     // @ts-ignore
     ReactDOM.createPortal.mockClear();
+    fetchMock.restore();
   });
 
-  const Wrapper = ({ children }: PropsWithChildren) => {
+  const Wrapper = ({ children, user = null }: PropsWithChildren<{ user?: Nullable<User> }>) => {
     return (
-      <QueryClientProvider client={createTestQueryClient()}>
+      <QueryClientProvider client={createTestQueryClient({ user })}>
         <IntlProvider locale="en">
-          <JoanieApiProvider>{children}</JoanieApiProvider>
+          <JoanieApiProvider>
+            <BaseSessionProvider>{children}</BaseSessionProvider>
+          </JoanieApiProvider>
         </IntlProvider>
       </QueryClientProvider>
     );
@@ -161,8 +168,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = CourseLightFactory().one();
     const courseRuns = [
       CourseRunFactoryFromPriority(Priority.FUTURE_NOT_YET_OPEN)().one(),
-      CourseRunFactoryFromPriority(Priority.FUTURE_CLOSED)().one(),
-      CourseRunFactoryFromPriority(Priority.ONGOING_CLOSED)().one(),
+      CourseRunFactoryFromPriority(Priority.FUTURE_CLOSED)({
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ONGOING_CLOSED)({
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+      }).one(),
       CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)().one(),
       CourseRunFactoryFromPriority(Priority.TO_BE_SCHEDULED)().one(),
     ];
@@ -194,8 +205,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = CourseLightFactory().one();
     const courseRuns = [
       CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)().one(),
-      CourseRunFactoryFromPriority(Priority.FUTURE_CLOSED)().one(),
-      CourseRunFactoryFromPriority(Priority.ONGOING_CLOSED)().one(),
+      CourseRunFactoryFromPriority(Priority.FUTURE_CLOSED)({
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ONGOING_CLOSED)({
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+      }).one(),
       CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)().one(),
       CourseRunFactoryFromPriority(Priority.TO_BE_SCHEDULED)().one(),
     ];
@@ -230,8 +245,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const courseRuns = [
       CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)().one(),
       CourseRunFactoryFromPriority(Priority.FUTURE_OPEN)().one(),
-      CourseRunFactoryFromPriority(Priority.FUTURE_CLOSED)().one(),
-      CourseRunFactoryFromPriority(Priority.ONGOING_CLOSED)().one(),
+      CourseRunFactoryFromPriority(Priority.FUTURE_CLOSED)({
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ONGOING_CLOSED)({
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+      }).one(),
       CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)().one(),
       CourseRunFactoryFromPriority(Priority.TO_BE_SCHEDULED)().one(),
     ];
@@ -340,18 +359,23 @@ describe('<SyllabusCourseRunsList/>', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('renders different categories correctly', () => {
+  it('renders different categories correctly', async () => {
     const course = CourseLightFactory().one();
     const courseRuns = [
       CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)().one(),
       CourseRunFactoryFromPriority(Priority.FUTURE_OPEN)().one(),
       CourseRunFactoryFromPriority(Priority.ARCHIVED_OPEN)().one(),
       CourseRunFactoryFromPriority(Priority.FUTURE_NOT_YET_OPEN)().one(),
-      CourseRunFactoryFromPriority(Priority.FUTURE_CLOSED)().one(),
-      CourseRunFactoryFromPriority(Priority.ONGOING_CLOSED)().one(),
+      CourseRunFactoryFromPriority(Priority.FUTURE_CLOSED)({
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ONGOING_CLOSED)({
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+      }).one(),
       CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)().one(),
       CourseRunFactoryFromPriority(Priority.TO_BE_SCHEDULED)().one(),
     ];
+
     render(
       <SyllabusCourseRunsList
         courseRuns={courseRuns}
@@ -571,22 +595,21 @@ describe('<SyllabusCourseRunsList/>', () => {
 
   it('renders course runs with snapshot link if needed', async () => {
     const course = CourseLightFactory().one();
-    const refDate = faker.date.future();
-    const futureDate = (days: number) => {
+    const refDate = faker.date.past();
+    const pastDate = (days: number) => {
       const date = new Date(refDate.getTime());
       date.setDate(date.getDate() + days);
       return date;
     };
+
     const courseRuns: CourseRun[] = [
-      {
-        ...CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)().one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
         snapshot: faker.internet.url(),
-        start: futureDate(1).toISOString(),
-      },
-      {
-        ...CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)().one(),
-        start: futureDate(2).toISOString(),
-      },
+        start: pastDate(1).toISOString(),
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        start: pastDate(2).toISOString(),
+      }).one(),
     ];
 
     render(
@@ -613,5 +636,75 @@ describe('<SyllabusCourseRunsList/>', () => {
 
     // Assert the second course run to not be wrapped in a link.
     expect(within(listElements[1]).queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('renders ongoing course runs with enrollment information', async () => {
+    const user = UserFactory().one();
+    const course = CourseLightFactory().one();
+
+    const onGoingCourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_CLOSED)({
+      title: 'Ongoing course run',
+      resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session2/info/',
+    }).one();
+
+    const courseRuns: CourseRun[] = [
+      onGoingCourseRun,
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        title: 'Closed course run',
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.TO_BE_SCHEDULED)({
+        title: 'To be scheduled course run',
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session4/info/',
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.FUTURE_NOT_YET_OPEN)({
+        title: 'Future course run',
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session3/info/',
+      }).one(),
+    ];
+
+    courseRuns.forEach((courseRun) => {
+      fetchMock.get(
+        `https://demo.endpoint/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
+        {
+          is_active: true,
+        },
+      );
+    });
+
+    render(
+      <SyllabusCourseRunsList
+        courseRuns={courseRuns}
+        course={course}
+        maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
+      />,
+      {
+        wrapper: ({ children }) => <Wrapper user={user}>{children}</Wrapper>,
+      },
+    );
+
+    const portalContainer = getPortalContainer();
+    expectCourseRunInList(portalContainer, courseRuns[0]);
+    expectCourseRunInList(portalContainer, courseRuns[1]);
+    expectCourseRunInList(portalContainer, courseRuns[2]);
+    expectCourseRunInList(portalContainer, courseRuns[3]);
+
+    const listElements = screen.getAllByRole('listitem');
+    expect(listElements.length).toBe(4);
+
+    // Assert there is only one link, one label "Enrolled" and one request to retrieve enrollment.
+    expect(await screen.findAllByText('Enrolled')).toHaveLength(1);
+
+    const links = screen.getAllByRole('link');
+    expect(links.length).toBe(1);
+    const calledUrls = fetchMock.calls().map((call) => call[0]);
+    expect(calledUrls).toHaveLength(1);
+
+    // Assert user's enrollment state has been checked for the ongoing course run.
+    const link = within(portalContainer).getByRole('link');
+    expect(link.getAttribute('href')).toBe(courseRuns[0].resource_link);
+    expect(calledUrls).toContain(
+      `https://demo.endpoint/api/enrollment/v1/enrollment/${user.username},${onGoingCourseRun.resource_link}`,
+    );
   });
 });

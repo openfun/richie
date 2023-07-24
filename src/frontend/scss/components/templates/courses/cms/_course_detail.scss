@@ -225,6 +225,14 @@
         r-theme-val(course-detail, run-catalog-visibility-course-only-logo)
       );
     }
+
+    & .category-tag {
+      display: inline-block;
+      color: map-get(r-theme-val(category-tags, primary-item), font-color);
+      background-color: map-get(r-theme-val(category-tags, primary-item), background);
+      margin-left: 0.5rem;
+      line-height: 1em;
+    }
   }
 
   &__programs {
