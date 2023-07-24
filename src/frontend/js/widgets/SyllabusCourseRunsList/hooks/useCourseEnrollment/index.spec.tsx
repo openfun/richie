@@ -13,7 +13,7 @@ import {
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
-import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/components/CourseRunEnrollment/hooks/useCourseEnrollment/index';
+import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/hooks/useCourseEnrollment/index';
 
 jest.mock('utils/context', () => ({
   __esModule: true,

@@ -159,7 +159,7 @@ export const SyllabusAsideList = ({
           <h3 className="course-detail__title">
             <FormattedMessage {...messages.ongoing} />
           </h3>
-          <SyllabusSimpleCourseRunsList courseRuns={ongoingRuns} />
+          <SyllabusSimpleCourseRunsList courseRuns={ongoingRuns} checkEnrollment />
         </div>
       )}
       {archivedRuns.length > 0 && (
