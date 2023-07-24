@@ -1,6 +1,5 @@
 {
     "_organization": null,
     "site": null,
-    "domain": null,
-    "_extensions": ["jinja2_time.TimeExtension"]
+    "domain": null
 }
