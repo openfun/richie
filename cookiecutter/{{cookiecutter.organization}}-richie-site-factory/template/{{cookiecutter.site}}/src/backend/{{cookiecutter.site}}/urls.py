@@ -11,10 +11,7 @@ from django.views.generic import TemplateView
 from django.views.static import serve
 
 from cms.sitemaps import CMSSitemap
-from richie.apps.courses.urls import (
-    redirects_urlpatterns as courses_redirects_urlpatterns,
-    urlpatterns as courses_urlpatterns,
-)
+from richie.apps.courses.urls import urlpatterns as courses_urlpatterns
 from richie.apps.search.urls import urlpatterns as search_urlpatterns
 from richie.plugins.urls import urlpatterns as plugins_urlpatterns
 
