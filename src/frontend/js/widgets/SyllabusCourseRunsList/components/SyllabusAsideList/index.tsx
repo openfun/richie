@@ -2,8 +2,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import React from 'react';
 import { CourseRun, Priority } from 'types';
 import { Course } from 'types/Course';
-import { SyllabusSimpleCourseRunsList } from 'widgets/SyllabusCourseRunsList/SyllabusSimpleCourseRunsList';
-import { SyllabusCourseRun } from 'widgets/SyllabusCourseRunsList/SyllabusCourseRun';
+import { SyllabusSimpleCourseRunsList } from 'widgets/SyllabusCourseRunsList/components/SyllabusSimpleCourseRunsList';
+import { SyllabusCourseRun } from 'widgets/SyllabusCourseRunsList/components/SyllabusCourseRun';
 
 const messages = defineMessages({
   otherCourseRuns: {

@@ -9,7 +9,7 @@ import CourseProductItem from 'widgets/CourseProductItem';
 import { findLmsBackend } from 'api/configuration';
 import { StringHelper } from 'utils/StringHelper';
 import { DjangoCMSPluginCourseRun, DjangoCMSTemplate } from 'components/DjangoCMSTemplate';
-import CourseRunEnrollment from './components/CourseRunEnrollment';
+import CourseRunEnrollment from 'widgets/SyllabusCourseRunsList/components/CourseRunEnrollment';
 
 const messages = defineMessages({
   enrollment: {
