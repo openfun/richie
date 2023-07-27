@@ -260,7 +260,7 @@ jobs:
   # translation management tool
   upload-i18n-strings:
     docker:
-      - image: crowdin/cli:3.3.0
+      - image: crowdin/cli:3.13.0
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS

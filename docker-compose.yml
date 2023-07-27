@@ -82,7 +82,7 @@ services:
       - .:/app
 
   crowdin:
-    image: crowdin/cli:3.5.5
+    image: crowdin/cli:3.13.0
     volumes:
       - ".:/app"
     env_file:
