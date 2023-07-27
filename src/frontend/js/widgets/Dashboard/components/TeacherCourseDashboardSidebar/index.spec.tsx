@@ -93,7 +93,7 @@ describe('<TeacherCourseDashboardSidebar/>', () => {
     expect(
       screen.getByRole('link', {
         name: intl.formatMessage(
-          TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS],
+          TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_GENERAL_INFORMATION],
         ),
       }),
     ).toBeInTheDocument();

@@ -13,7 +13,7 @@ export const messages = defineMessages({
     id: 'components.CourseRunList.dataCourseRunPeriod',
   },
   dataCourseRunLink: {
-    defaultMessage: 'go to classroom',
+    defaultMessage: 'go to course area',
     description: 'Message displayed in course run datagrid for course run link',
     id: 'components.CourseRunList.dataCourseRunLink',
   },

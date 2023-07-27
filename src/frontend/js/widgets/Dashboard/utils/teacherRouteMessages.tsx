@@ -6,13 +6,13 @@ import { defineMessages } from 'react-intl';
 export enum TeacherDashboardPaths {
   ROOT = '/teacher',
   TEACHER_COURSES = '/teacher/courses',
-  ORGANIZATION = '/teacher/organization/{organizationId}',
-  ORGANIZATION_COURSES = '/teacher/organization/{organizationId}/courses',
-  ORGANIZATION_COURSE_GENERAL_INFORMATIONS = '/teacher/organization/{organizationId}/courses/{courseId}/informations',
-  ORGANIZATION_PRODUCT = '/teacher/organization/{organizationId}/courses/{courseId}/product/{courseProductRelationId}',
+  ORGANIZATION = '/teacher/organizations/{organizationId}',
+  ORGANIZATION_COURSES = '/teacher/organizations/{organizationId}/courses',
+  ORGANIZATION_COURSE_GENERAL_INFORMATION = '/teacher/organizations/{organizationId}/courses/{courseId}/information',
+  ORGANIZATION_PRODUCT = '/teacher/organizations/{organizationId}/courses/{courseId}/products/{courseProductRelationId}',
   COURSE = '/teacher/courses/{courseId}',
-  COURSE_GENERAL_INFORMATIONS = '/teacher/courses/{courseId}/informations',
-  COURSE_PRODUCT = '/teacer/courses/{courseId}/product/{courseProductRelationId}',
+  COURSE_GENERAL_INFORMATION = '/teacher/courses/{courseId}/information',
+  COURSE_PRODUCT = '/teacer/courses/{courseId}/products/{courseProductRelationId}',
 }
 
 // Translations of dashboard route paths
@@ -30,38 +30,38 @@ export const TEACHER_DASHBOARD_ROUTE_PATHS = defineMessages<TeacherDashboardPath
   [TeacherDashboardPaths.ORGANIZATION]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.path',
     description: 'The path to display the organization view.',
-    defaultMessage: '/teacher/organization/{organizationId}',
+    defaultMessage: '/teacher/organizations/{organizationId}',
   },
   [TeacherDashboardPaths.ORGANIZATION_COURSES]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.path',
     description: 'The path to display the organization courses view.',
-    defaultMessage: '/teacher/organization/{organizationId}/courses',
+    defaultMessage: '/teacher/organizations/{organizationId}/courses',
   },
-  [TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATIONS]: {
-    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformations.path',
-    description: 'The path to display the organization course general informations view.',
-    defaultMessage: '/teacher/organization/{organizationId}/courses/{courseId}/informations',
+  [TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformation.path',
+    description: 'The path to display the organization course general information view.',
+    defaultMessage: '/teacher/organizations/{organizationId}/courses/{courseId}/information',
   },
   [TeacherDashboardPaths.ORGANIZATION_PRODUCT]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.path',
     description: 'The path to display the organization product view.',
     defaultMessage:
-      '/teacher/organization/{organizationId}/courses/{courseId}/product/{courseProductRelationId}',
+      '/teacher/organizations/{organizationId}/courses/{courseId}/products/{courseProductRelationId}',
   },
   [TeacherDashboardPaths.COURSE]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.path',
     description: 'The path to display the course view.',
     defaultMessage: '/teacher/courses/{courseId}',
   },
-  [TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS]: {
-    id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.generalInformations.path',
-    description: 'The path to display the course general informations view.',
-    defaultMessage: '/teacher/courses/{courseId}/informations',
+  [TeacherDashboardPaths.COURSE_GENERAL_INFORMATION]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.generalInformation.path',
+    description: 'The path to display the course general information view.',
+    defaultMessage: '/teacher/courses/{courseId}/information',
   },
   [TeacherDashboardPaths.COURSE_PRODUCT]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.path',
     description: 'The path to display the product view.',
-    defaultMessage: '/teacher/courses/{courseId}/product/{courseProductRelationId}',
+    defaultMessage: '/teacher/courses/{courseId}/products/{courseProductRelationId}',
   },
 });
 
@@ -87,10 +87,10 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
     description: 'Label of the organization courses view.',
     defaultMessage: 'Courses',
   },
-  [TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATIONS]: {
-    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformations.label',
-    description: 'Label of the organization course general informations view.',
-    defaultMessage: 'General informations',
+  [TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformation.label',
+    description: 'Label of the organization course general information view.',
+    defaultMessage: 'General information',
   },
   [TeacherDashboardPaths.ORGANIZATION_PRODUCT]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.label',
@@ -102,10 +102,10 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
     description: 'Label of the course root view.',
     defaultMessage: '{courseTitle}',
   },
-  [TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS]: {
-    id: 'components.TeacherDashboard.TeacherDashboardRoutes.generalInformations.label',
+  [TeacherDashboardPaths.COURSE_GENERAL_INFORMATION]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.generalInformation.label',
     description: 'Label of the course general information view.',
-    defaultMessage: 'General informations',
+    defaultMessage: 'General information',
   },
   [TeacherDashboardPaths.COURSE_PRODUCT]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.label',

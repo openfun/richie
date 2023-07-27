@@ -60,11 +60,11 @@ const getCourseGlimpsePropsFromJoanieCourse = (
     courseId: course.id,
   };
   const courseRoute = organizationId
-    ? getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATIONS, {
+    ? getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION, {
         ...courseRouteParams,
         organizationId,
       })
-    : getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS, courseRouteParams);
+    : getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATION, courseRouteParams);
   return {
     id: course.id,
     code: course.code,
