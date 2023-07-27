@@ -6,12 +6,12 @@ import { useResource, useResources, UseResourcesProps } from 'hooks/useResources
 const messages = defineMessages({
   errorGet: {
     id: 'hooks.useCourseRuns.errorGet',
-    description: 'Error message shown to the user when course run fetch request fails.',
-    defaultMessage: 'An error occurred while fetching course run. Please retry later.',
+    description: 'Error message shown to the user when course runs fetch request fails.',
+    defaultMessage: 'An error occurred while fetching course runs. Please retry later.',
   },
   errorNotFound: {
     id: 'hooks.useCourseRuns.errorNotFound',
-    description: 'Error message shown to the user when not course runs matches.',
+    description: 'Error message shown to the user when no course runs matches.',
     defaultMessage: 'Cannot find the course runs.',
   },
 });

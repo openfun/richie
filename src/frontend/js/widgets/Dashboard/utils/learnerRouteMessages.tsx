@@ -79,7 +79,7 @@ export const LEARNER_DASHBOARD_ROUTE_LABELS = defineMessages<LearnerDashboardPat
   [LearnerDashboardPaths.ORDER_RUNS]: {
     id: 'components.Dashboard.DashboardRoutes.order.runs.label',
     description: 'Label of the order runs view used in navigation components.',
-    defaultMessage: 'General informations',
+    defaultMessage: 'General information',
   },
   [LearnerDashboardPaths.COURSE]: {
     id: 'components.Dashboard.DashboardRoutes.course.session.label',

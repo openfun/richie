@@ -27,7 +27,7 @@ export const messages = defineMessages({
   syllabusLinkLabel: {
     id: 'components.TeacherCourseDashboardSidebar.syllabusLinkLabel',
     description: 'Syllabus link label',
-    defaultMessage: 'Accéder au syllabus',
+    defaultMessage: 'Go to syllabus',
   },
   loading: {
     defaultMessage: 'Loading course...',
@@ -66,7 +66,7 @@ export const TeacherCourseDashboardSidebar = () => {
     [courseProductRelation, singleCourse],
   );
 
-  const menuLinks = [TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS].map((path) => ({
+  const menuLinks = [TeacherDashboardPaths.COURSE_GENERAL_INFORMATION].map((path) => ({
     to: getRoutePath(path, { courseId }),
     label: getRouteLabel(path),
   }));

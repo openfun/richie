@@ -82,7 +82,7 @@
 
                     <div class="subheader__content">
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
-                            <div property="description">{% placeholder "course_introduction" or %}<p>{% trans 'Enter here an introduction of your course.' %}</p>{% endplaceholder %}</div>
+                            <div property="description">{% placeholder "course_introduction" or %}<p>{% trans 'Enter here an introduction to your course.' %}</p>{% endplaceholder %}</div>
                         {% endif %}
                         {% block synopsis %}
                         {% if course.duration or course.effort or current_page.publisher_is_draft %}
@@ -128,13 +128,13 @@
                                         {% if enrollment_count > 0 and RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT > 0 and enrollment_count >= RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT %}
                                             <div class="characteristics__enrollment-count">
                                                 <li class="characteristics__item">
-                                                <svg role="img" class="characteristics__icon" aria-hidden="true">
-                                                    <use href="#icon-groups" />
-                                                </svg>
-                                                {% blocktrans with count=enrollment_count|intcomma %}
-                                                    {{ count }} already enrolled!
+                                                    <svg role="img" class="characteristics__icon" aria-hidden="true">
+                                                        <use href="#icon-groups" />
+                                                    </svg>
+                                                    {% blocktrans with count=enrollment_count|intcomma %}
+                                                        {{ count }} already enrolled!
+                                                    {% endblocktrans %}
                                                 </li>
-                                                {% endblocktrans %}
                                             </div>
                                         {% endif %}
                                     {% endwith %}

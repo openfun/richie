@@ -8,12 +8,12 @@ const messages = defineMessages({
     id: 'hooks.useCourseProductRelations.errorGet',
     description:
       'Error message shown to the user when course product relation fetch request fails.',
-    defaultMessage: 'An error occurred while fetching course product relation. Please retry later.',
+    defaultMessage: 'An error occurred while fetching trainings. Please retry later.',
   },
   errorNotFound: {
     id: 'hooks.useCourseProductRelations.errorNotFound',
     description: 'Error message shown to the user when no course product relation matches.',
-    defaultMessage: 'Cannot find the course product relation.',
+    defaultMessage: 'Cannot find the training.',
   },
 });
 

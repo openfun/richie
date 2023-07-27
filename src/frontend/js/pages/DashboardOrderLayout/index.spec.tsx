@@ -69,7 +69,7 @@ describe('<DashboardOrderLayout />', () => {
     await findByRole(sidebar, 'heading', { name: product.title });
 
     screen.getByRole('link', {
-      name: 'General informations',
+      name: 'General information',
     });
   });
 });

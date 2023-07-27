@@ -35,7 +35,7 @@ export function getTeacherDashboardRoutes() {
               index: true,
               element: (
                 <NavigateWithParams
-                  to={getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS, {
+                  to={getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATION, {
                     courseId: ':courseId',
                   })}
                   replace
@@ -43,7 +43,7 @@ export function getTeacherDashboardRoutes() {
               ),
             },
             {
-              path: getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATIONS, {
+              path: getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATION, {
                 courseId: ':courseId',
               }),
               element: <TeacherCourseDashboardLoader />,
@@ -94,7 +94,7 @@ export function getTeacherDashboardRoutes() {
               element: <TeacherOrganizationCourseDashboardLoader />,
             },
             {
-              path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATIONS, {
+              path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION, {
                 organizationId: ':organizationId',
                 courseId: ':courseId',
               }),
