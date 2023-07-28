@@ -62,6 +62,8 @@ $ make migrate
   configuration. See https://openfun.github.io/cunningham/?path=/docs/getting-started-customization--docs
 - scss themes variable for SaleTunnel button have been removed. These are now cunningham buttons and can be 
   customised using cunningham-tokens.
+- scss themes variable for Modal 'close button' have been removed. It is now a cunningham button and can be 
+  customised using cunningham-tokens.
  
 ## 2.20.1 to 2.21.0
 
