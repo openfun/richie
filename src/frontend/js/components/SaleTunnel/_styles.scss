@@ -8,34 +8,4 @@
       padding: 0 1rem 1.5rem 1rem;
     }
   }
-
-  .button-sale--primary {
-    $scheme: r-theme-val(sale-tunnel, primary-button-scheme);
-    $outline: r-theme-val(sale-tunnel, primary-button-is-outlined);
-    @include r-button-apply-scheme($scheme, $apply-border: true, $outline: $outline);
-
-    &:hover {
-      @include r-button-apply-scheme($scheme, $apply-border: true, $prefix: 'hover');
-    }
-  }
-
-  .button-sale--secondary {
-    $scheme: r-theme-val(sale-tunnel, secondary-button-scheme);
-    $outline: r-theme-val(sale-tunnel, secondary-button-is-outlined);
-    @include r-button-apply-scheme($scheme, $apply-border: true, $outline: $outline);
-
-    &:hover {
-      @include r-button-apply-scheme($scheme, $apply-border: true, $prefix: 'hover');
-    }
-  }
-
-  .button-sale--tertiary {
-    $scheme: r-theme-val(sale-tunnel, tertiary-button-scheme);
-    $outline: r-theme-val(sale-tunnel, tertiary-button-is-outlined);
-    @include r-button-apply-scheme($scheme, $apply-border: true, $outline: $outline);
-
-    &:hover {
-      @include r-button-apply-scheme($scheme, $apply-border: true, $prefix: 'hover');
-    }
-  }
 }
