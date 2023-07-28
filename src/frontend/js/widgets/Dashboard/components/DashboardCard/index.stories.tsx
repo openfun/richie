@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { Button } from 'components/Button';
+import { Button } from '@openfun/cunningham-react';
 import { TextField } from 'components/Form';
 import { DashboardBox } from '../DashboardBox';
 import { DashboardCard } from './index';
