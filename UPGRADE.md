@@ -17,8 +17,8 @@ $ make migrate
 ## Unreleased
 
 - Within course_detail template, course runs list is now rendered as a React widget. As consequence
-`fragment_course_run` and `fragment_course_runs_list` have been removed. If you have overridden those
-templates, you have now to override corresponding React widget (`SyllabusCourseRunsList`).
+  `fragment_course_run` and `fragment_course_runs_list` have been removed. If you have overridden
+  those templates, you have now to override corresponding React widget (`SyllabusCourseRunsList`).
 - `courses` app export new routes named `redirects_urlpatterns`. You have to add those new routes to
   the urls module of your app.
   ```python
@@ -28,12 +28,27 @@ templates, you have now to override corresponding React widget (`SyllabusCourseR
     re_path(r"^redirects/", include([*courses_redirects_urlpatterns])),
   ]
   ```
-- Legacy colors are now defined in cunningham.cjs instead of palette.scss.
-  `yarn build-theme` command generates tokens files scss/cunningham-tokens.scss and /utils/cunningham-tokens.ts.
-  $palette variable is now deprecated and will be removed in the next major release.
-- components CourseGlimpse and CourseGlimpseList has been moved from widgets/Search folder to 
-  components folder. Update your overrides.json and path in your custom scss files accordingly.
-- utils/test/factories.ts have been split into multiple files: joanie.ts, richie.ts and 
+- Legacy colors are now defined in cunningham.cjs instead of palette.scss. You must import cunningham
+  scss tokens in your _main.scss files above the override of colors/palette.
+  ```scss
+  // ...
+  // Import Cunningham tokens and icons
+  @import '@openfun/cunningham-react/dist/icons';
+  @import '@openfun/cunningham-react/dist/style';
+  @import 'richie-education/vendors/cunningham-tokens';
+  @import 'richie-education/vendors/css/cunningham-tokens';
+  
+  // Override default Richie settings variables
+  @import 'richie-education/scss/colors/palette';
+  // ...
+  ```
+  `yarn build-theme` command generates tokens files `scss/vendors/cunningham-tokens.scss` and
+  `scss/vendors/css/cunningham-tokens.css`. `$palette` variable is now deprecated and will be
+  removed in the next major release. Currently this is only an alias to the
+  `map.get($theme, colors)` ($theme is a sass variable exported by `cunninghtam-tokens.scss`). 
+- Components `CourseGlimpse` and `CourseGlimpseList` has been moved from `js/widgets/Search` folder to 
+  `js/components` folder. Update your overrides.json and path in your custom scss files accordingly.
+- `js/utils/test/factories.ts` have been split into multiple files: joanie.ts, richie.ts and 
   reactQuery.ts. Update your import accordingly.
 
 ## 2.20.1 to 2.21.0
