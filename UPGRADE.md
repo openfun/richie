@@ -60,7 +60,9 @@ $ make migrate
   reactQuery.ts. Update your import accordingly.
 - We now using Button components from cunningham design system. They can be customise with cunningham tokens
   configuration. See https://openfun.github.io/cunningham/?path=/docs/getting-started-customization--docs
-
+- scss themes variable for SaleTunnel button have been removed. These are now cunningham buttons and can be 
+  customised using cunningham-tokens.
+ 
 ## 2.20.1 to 2.21.0
 
 - Frontend folder architecture has been totally reworked. If you have overridden

@@ -456,14 +456,6 @@ $r-theme: (
     title-color: r-color('charcoal'),
     base-color: r-color('purplish-grey'),
   ),
-  sale-tunnel: (
-    primary-button-scheme: $firebrick6-scheme,
-    primary-button-is-outlined: false,
-    secondary-button-scheme: $purplish-grey-scheme,
-    secondary-button-is-outlined: true,
-    tertiary-button-scheme: $smoke-scheme,
-    tertiary-button-is-outlined: false,
-  ),
   search-results: (
     overlay: r-color('black'),
     color: r-color('light-grey'),
