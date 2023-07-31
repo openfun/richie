@@ -251,6 +251,30 @@
     "description": "Help text below the \"Unenroll now\" CTA when an enrollment attempt has already failed.",
     "message": "Ocorreu um erro ao remover a inscrição."
   },
+  "components.CourseRunItem.courseRunTitleWithDates": {
+    "description": "Course run details displayed on the syllabus",
+    "message": "{title}, de {start} a {end}"
+  },
+  "components.CourseRunItem.courseRunWithDates": {
+    "description": "Course run details displayed on the syllabus when it has no title",
+    "message": "De {start} a {end}"
+  },
+  "components.CourseRunItemWithEnrollment.enrolled": {
+    "description": "Help text for users are enrolled in the course run.",
+    "message": "Está inscrito nesta edição do curso"
+  },
+  "components.CourseRunItemWithEnrollment.goToCourse": {
+    "description": "Link title for users to go to the course run in which they are enrolled.",
+    "message": "Ir para o curso"
+  },
+  "components.CourseRunList.dataCourseRunLink": {
+    "description": "Message displayed in course run datagrid for course run link",
+    "message": "go to course area"
+  },
+  "components.CourseRunList.dataCourseRunPeriod": {
+    "description": "Message displayed in course run datagrid for course run period",
+    "message": "de {from} a {to}"
+  },
   "components.CourseRunList.enrollFromTo": {
     "description": "Text label for the enrollment dates",
     "message": "Inscrição de {start} a {end}"
@@ -294,6 +318,14 @@
   "components.Dashboard.DashboardRoutes.order.path": {
     "description": "The path to display an order detail view.",
     "message": "/courses/orders/{orderId}"
+  },
+  "components.Dashboard.DashboardRoutes.order.runs.label": {
+    "description": "Label of the order runs view used in navigation components.",
+    "message": "General information"
+  },
+  "components.Dashboard.DashboardRoutes.order.runs.path": {
+    "description": "The path to display an order runs view.",
+    "message": "/cursos/pedidos/{orderId}/edições"
   },
   "components.Dashboard.DashboardRoutes.preferences.addresses.creation.label": {
     "description": "Label of the addresses creation view.",
@@ -619,6 +651,10 @@
     "description": "Error message shown when payment creation request failed.",
     "message": "Ocorreu um erro durante o pagamento. Por favor, tente novamente mais tarde."
   },
+  "components.PaymentButton.errorFullProduct": {
+    "description": "Error message shown when payment creation request failed because there is no remaining available seat for the product.",
+    "message": "Não existem lugares disponíveis neste produto."
+  },
   "components.PaymentButton.pay": {
     "description": "CTA label to proceed to the payment of the product",
     "message": "Pagar {price}"
@@ -652,8 +688,12 @@
     "message": "Faça entrar para comprar {product}"
   },
   "components.SaleTunnel.noCourseRunToPurchase": {
-    "description": "Label displayed inside the product's when there is no courseRun",
+    "description": "Label displayed below the product's CTA when there is no courseRun",
     "message": "Pelo menos um curso não tem edições ativas e não está disponível para venda"
+  },
+  "components.SaleTunnel.noRemainingOrder": {
+    "description": "Label displayed below the product's CTA when there is no remaining available seat for the product",
+    "message": "Não existem lugares disponíveis neste produto."
   },
   "components.SaleTunnel.stepPayment": {
     "description": "Label of the Payment step",
@@ -827,37 +867,157 @@
     "description": "Sub title of the dashboard sidebar",
     "message": "Está no seu painel de controlo"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.label": {
-    "description": "Label of the course classrooms view.",
-    "message": "Salas de aula"
+  "components.SyllabusAsideList.archived": {
+    "description": "Message displayed on syllabus when there are archived course runs",
+    "message": "Arquivado"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.classrooms.path": {
-    "description": "The path to display the course classrooms view.",
-    "message": "/teacher/course/{courseCode}/classrooms"
+  "components.SyllabusAsideList.courseRunsTitle": {
+    "description": "Message displayed on the top of course runs list on syllabus when there is 0 or multiple course runs opened",
+    "message": "Edições do curso"
+  },
+  "components.SyllabusAsideList.noCourseRuns": {
+    "description": "Message displayed on syllabus when there are no course runs to show",
+    "message": "Sem edições disponíveis"
+  },
+  "components.SyllabusAsideList.noOtherCourseRuns": {
+    "description": "Message displayed on syllabus when there are no other course runs to show than the only one opened",
+    "message": "Sem outras edições disponíveis"
+  },
+  "components.SyllabusAsideList.ongoing": {
+    "description": "Message displayed on syllabus when there are ongoing course runs",
+    "message": "A decorrer"
+  },
+  "components.SyllabusAsideList.otherCourseRuns": {
+    "description": "Message displayed on the top of course runs list on syllabus when there is only one course run opened",
+    "message": "Outras edições do curso"
+  },
+  "components.SyllabusAsideList.toBeScheduled": {
+    "description": "Message displayed on syllabus when there are course runs to be scheduled",
+    "message": "Por agendar"
+  },
+  "components.SyllabusAsideList.upcoming": {
+    "description": "Message displayed on syllabus when there are upcoming course runs",
+    "message": "Brevemente"
+  },
+  "components.SyllabusCourseRun.course": {
+    "description": "Title of the course dates section of an opened course run block",
+    "message": "Curso"
+  },
+  "components.SyllabusCourseRun.coursePeriod": {
+    "description": "Course date of an opened course run block",
+    "message": "De {startDate} a {endDate}"
+  },
+  "components.SyllabusCourseRun.enrollment": {
+    "description": "Title of the enrollment dates section of an opened course run block",
+    "message": "Inscrição"
+  },
+  "components.SyllabusCourseRun.enrollmentPeriod": {
+    "description": "Enrollment date of an opened course run block",
+    "message": "De {startDate} a {endDate}"
+  },
+  "components.SyllabusCourseRun.languages": {
+    "description": "Title of the languages section of an opened course run block",
+    "message": "Idiomas"
+  },
+  "components.SyllabusCourseRunsList.multipleOpenedCourseRuns": {
+    "description": "Message displayed when there are multiple opened course runs on a syllabus",
+    "message": "{count} edições estão abertas para este curso"
+  },
+  "components.SyllabusCourseRunsList.multipleOpenedCourseRunsButton": {
+    "description": "Message displayed on the button when there are multiple opened course runs on a syllabus",
+    "message": "Selecionar agora"
+  },
+  "components.SyllabusCourseRunsList.noOpenedCourseRuns": {
+    "description": "Message displayed when there are no opened course runs on a syllabus",
+    "message": "Sem edições disponíveis"
+  },
+  "components.SyllabusSimpleCourseRunsList.viewMore": {
+    "description": "Button displayed on the syllabus when not all course runs are displayed",
+    "message": "Ver Mais"
+  },
+  "components.TeacherCourseDashboardLoader.errorNoCourse": {
+    "description": "Message displayed when requested course is not found",
+    "message": "Este curso não existe"
+  },
+  "components.TeacherCourseDashboardLoader.loading": {
+    "description": "Message displayed while loading a course",
+    "message": "A carregar o curso..."
+  },
+  "components.TeacherCourseDashboardLoader.pageTitle": {
+    "description": "Use for the page title of the course area",
+    "message": "Área do curso"
+  },
+  "components.TeacherCourseDashboardSidebar.header": {
+    "description": "Title of the course dashboard sidebar",
+    "message": "{courseTitle}"
+  },
+  "components.TeacherCourseDashboardSidebar.loading": {
+    "description": "Message displayed while loading a course",
+    "message": "A carregar o curso..."
+  },
+  "components.TeacherCourseDashboardSidebar.subHeader": {
+    "description": "Sub title of the course dashboard sidebar",
+    "message": "Está no seu painel de controlo"
+  },
+  "components.TeacherCourseDashboardSidebar.syllabusLinkLabel": {
+    "description": "Syllabus link label",
+    "message": "Go to syllabus"
+  },
+  "components.TeacherCoursesDashboardLoader.title.archived": {
+    "description": "Archived courses title",
+    "message": "Arquivado"
+  },
+  "components.TeacherCoursesDashboardLoader.title.filteredCourses": {
+    "description": "Filtered courses title",
+    "message": "Os seus cursos"
+  },
+  "components.TeacherCoursesDashboardLoader.title.incoming": {
+    "description": "Incoming courses title",
+    "message": "A receber"
+  },
+  "components.TeacherCoursesDashboardLoader.title.ongoing": {
+    "description": "Ongoing courses title",
+    "message": "A decorrer"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.generalInformation.path": {
+    "description": "The path to display the course general information view.",
+    "message": "/teacher/courses/{courseId}/information"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.label": {
-    "description": "Label of the course view.",
-    "message": "Informações gerais"
+    "description": "Label of the course root view.",
+    "message": "{courseTitle}"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.path": {
     "description": "The path to display the course view.",
-    "message": "/teacher/course/{courseCode}"
+    "message": "/formador/cursos/{courseId}"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.records.label": {
-    "description": "Label of the course's records view.",
-    "message": "Registos"
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.product.label": {
+    "description": "Label of the product view.",
+    "message": "Formação"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.records.path": {
-    "description": "The path to display the course's records view.",
-    "message": "/teacher/course/{courseCode}/records"
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.product.path": {
+    "description": "The path to display the product view.",
+    "message": "/teacher/courses/{courseId}/products/{courseProductRelationId}"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.settings.label": {
-    "description": "Label of the course settings view.",
-    "message": "Definições"
+  "components.TeacherDashboard.TeacherDashboardRoutes.generalInformation.label": {
+    "description": "Label of the course general information view.",
+    "message": "General information"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.settings.path": {
-    "description": "The path to display the course settings view.",
-    "message": "/teacher/course/{courseCode}/settings"
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformation.label": {
+    "description": "Label of the organization course general information view.",
+    "message": "General information"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformation.path": {
+    "description": "The path to display the organization course general information view.",
+    "message": "/teacher/organizations/{organizationId}/courses/{courseId}/information"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.label": {
+    "description": "Label of the organization product view.",
+    "message": "Formação"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.path": {
+    "description": "The path to display the organization product view.",
+    "message": "/teacher/organizations/{organizationId}/courses/{courseId}/products/{courseProductRelationId}"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.label": {
     "description": "Label of the organization courses view.",
@@ -865,31 +1025,15 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.path": {
     "description": "The path to display the organization courses view.",
-    "message": "/teacher/organization/{organizationId}/courses"
+    "message": "/teacher/organizations/{organizationId}/courses"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.label": {
     "description": "Label of the organization view.",
-    "message": "Informações gerais"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.members.label": {
-    "description": "Label of the unisersity members view.",
-    "message": "Membros"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.members.path": {
-    "description": "The path to display the unisersity members view.",
-    "message": "/teacher/organization/{organizationId}/members"
+    "message": "{organizationTitle}"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.path": {
     "description": "The path to display the organization view.",
-    "message": "/teacher/organization/{organizationId}"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.settings.label": {
-    "description": "Label of the organization settings view.",
-    "message": "Definições"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.settings.path": {
-    "description": "The path to display the organization settings view.",
-    "message": "/teacher/organization/{organizationId}/settings"
+    "message": "/teacher/organizations/{organizationId}"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.label": {
     "description": "Label of the teacher courses liste view.",
@@ -897,31 +1041,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.path": {
     "description": "The path to display the teacher courses liste view.",
-    "message": "/teacher/profile/courses"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.profile.label": {
-    "description": "Label of the teacher profile view.",
-    "message": "Perfil"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.profile.notifications.label": {
-    "description": "Label of the teacher notifications view.",
-    "message": "Notificações"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.profile.notifications.path": {
-    "description": "The path to display the teacher notifications view.",
-    "message": "/teacher/profile/notifications"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.profile.path": {
-    "description": "The path to display the teacher profile view.",
-    "message": "/teacher/profile"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.profile.settings.label": {
-    "description": "Label of the teacher profile settings view.",
-    "message": "Definições"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.profile.settings.path": {
-    "description": "The path to display the teacher profile settings view.",
-    "message": "/teacher/profile/settings"
+    "message": "/formador/cursos"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.root.label": {
     "description": "Label of the teacher dashboard root view.",
@@ -929,15 +1049,31 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.root.path": {
     "description": "The path to display the teacher dashboard root view.",
-    "message": "/teacher"
+    "message": "/formador"
+  },
+  "components.TeacherDashboardCourseList.emptyList": {
+    "description": "Empty placeholder of the dashboard's list of trainings",
+    "message": "Ainda não tem cursos."
+  },
+  "components.TeacherDashboardCourseList.loadMore": {
+    "description": "Button to manually load more trainings",
+    "message": "Carregar mais"
+  },
+  "components.TeacherDashboardCourseList.loading": {
+    "description": "Message displayed while loading trainings on the teacher's dashboard'",
+    "message": "A carregar cursos..."
   },
   "components.TeacherOrganizationCourseDashboardLoader.loading": {
-    "description": "Message displayed while loading courses on the teacher's dashboard'",
+    "description": "Message displayed while loading an organization",
     "message": "Carregando organização..."
   },
-  "components.TeacherOrganizationDashboardSidebar.header": {
-    "description": "Title of the organization dashboard sidebar",
-    "message": "{organizationName}"
+  "components.TeacherOrganizationCourseDashboardLoader.title": {
+    "description": "Message displayed as title of organization courses page",
+    "message": "Cursos da {organizationTitle}"
+  },
+  "components.TeacherOrganizationDashboardSidebar.loading": {
+    "description": "Message displayed while loading an organization",
+    "message": "A carregar a organização..."
   },
   "components.TeacherOrganizationDashboardSidebar.subHeader": {
     "description": "Sub title of the organization dashboard sidebar",
@@ -951,17 +1087,21 @@
     "description": "Title of the organizations section",
     "message": "Minhas universidades"
   },
-  "components.TeacherProfileDashboardSidebar.header": {
-    "description": "Title of the dashboard sidebar",
-    "message": "{name}"
-  },
   "components.TeacherProfileDashboardSidebar.subHeader": {
     "description": "Sub title of the dashboard sidebar",
     "message": "Está no seu painel de controlo do professor"
   },
-  "components.TeacherProfileSettingsDashboardLoader.loading": {
-    "description": "Message displayed while loading settings",
-    "message": "A carregar definições..."
+  "components.TeacherTrainingDashboard.errorNoCourseProductRelation": {
+    "description": "Message displayed when requested course product relation is not found",
+    "message": "Este produto não existe"
+  },
+  "components.TeacherTrainingDashboardLoader.loading": {
+    "description": "Message displayed while loading a course",
+    "message": "A carregar a formação..."
+  },
+  "components.TeacherTrainingDashboardLoader.pageTitle": {
+    "description": "Use for the page title of the training area",
+    "message": "Área de formação"
   },
   "components.UserLogin.logIn": {
     "description": "Text for the login button.",
@@ -1026,6 +1166,34 @@
   "hooks.useCertificates.errorNotFound": {
     "description": "Error message shown to the user when no certificate matches.",
     "message": "Não é possível encontrar o certificado"
+  },
+  "hooks.useCourseProductRelations.errorGet": {
+    "description": "Error message shown to the user when course product relation fetch request fails.",
+    "message": "An error occurred while fetching trainings. Please retry later."
+  },
+  "hooks.useCourseProductRelations.errorNotFound": {
+    "description": "Error message shown to the user when no course product relation matches.",
+    "message": "Cannot find the training."
+  },
+  "hooks.useCourseProductUnion.errorGet": {
+    "description": "Error message shown to the user when trainings fetch request fails.",
+    "message": "Ocorreu um erro durante o processamento de formações. Por favor, tente mais tarde."
+  },
+  "hooks.useCourseRuns.errorGet": {
+    "description": "Error message shown to the user when course runs fetch request fails.",
+    "message": "An error occurred while fetching course runs. Please retry later."
+  },
+  "hooks.useCourseRuns.errorNotFound": {
+    "description": "Error message shown to the user when no course runs matches.",
+    "message": "Não foi possível encontrar a edição do curso."
+  },
+  "hooks.useCourses.errorNotFound": {
+    "description": "Error message shown to the user when not course matches.",
+    "message": "Não foi possível encontrar o curso."
+  },
+  "hooks.useCourses.errorSelect": {
+    "description": "Error message shown to the user when course fetch request fails.",
+    "message": "Ocorreu um erro durante a transferência do curso. Por favor, tente novamente mais tarde."
   },
   "hooks.useCreditCards.errorCreate": {
     "description": "Error message shown to the user when credit card creation request fails.",
@@ -1127,6 +1295,10 @@
     "description": "Error message shown to the user when resource update request fails.",
     "message": "Ocorreu um erro ao atualizar um recurso. Por favor, tente mais tarde."
   },
+  "hooks.useUnionResource.errorGet": {
+    "description": "Error message shown to the user when union resources fetch request fails.",
+    "message": "Ocorreu um erro durante o processamento de informação. Por favor, tente mais tarde."
+  },
   "hooks.useWishlist.errorCreate": {
     "description": "Error message shown to the user when wishlist creation request fails.",
     "message": "Ocorreu um erro ao adicionar este curso à sua lista de desejos. Por favor, tente novamente mais tarde."
@@ -1142,5 +1314,9 @@
   "hooks.useWishlist.errorNotFound": {
     "description": "Error message shown to the user when no wishlist matches.",
     "message": "Não é possível encontrar a lista de desejos."
+  },
+  "utils.joinAnd.and": {
+    "description": "The and word",
+    "message": "e"
   }
 }
