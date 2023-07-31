@@ -24,7 +24,8 @@
       ],
       "matchPackageNames": [
         "Django",
-        "elasticsearch"
+        "elasticsearch",
+        "responses"
       ]
     }
   ]
