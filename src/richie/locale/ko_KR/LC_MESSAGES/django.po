@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-31 11:26+0200\n"
-"PO-Revision-Date: 2023-04-20 15:24\n"
+"POT-Creation-Date: 2023-07-31 11:07+0200\n"
+"PO-Revision-Date: 2023-07-31 09:55\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -87,9 +87,7 @@ msgid_plural "Values %(value)s are not valid choices."
 msgstr[0] ""
 
 #: apps/core/fields/multiselect.py:133
-msgid ""
-"Storing {:d} choices could require storing a CharField of up to {:d} "
-"characters. Please reduce 'max_choices' or increase 'max_length'."
+msgid "Storing {:d} choices could require storing a CharField of up to {:d} characters. Please reduce 'max_choices' or increase 'max_length'."
 msgstr ""
 
 #: apps/core/templates/djangocms_video/default/video_player.html:11
@@ -331,9 +329,7 @@ msgid "Snapshot this page..."
 msgstr ""
 
 #: apps/courses/cms_toolbars.py:108
-msgid ""
-"This will place a copy of this page as its child and move all its courseruns "
-"as children of its new copy."
+msgid "This will place a copy of this page as its child and move all its courseruns as children of its new copy."
 msgstr ""
 
 #: apps/courses/cms_wizards.py:56
@@ -369,10 +365,7 @@ msgid "Slug of the page in current language"
 msgstr ""
 
 #: apps/courses/cms_wizards.py:117
-msgid ""
-"This slug is too long. The length of the path built by prepending the slug "
-"of the parent page would be {:d} characters long and it should be less than "
-"255"
+msgid "This slug is too long. The length of the path built by prepending the slug of the parent page would be {:d} characters long and it should be less than 255"
 msgstr ""
 
 #: apps/courses/cms_wizards.py:130
@@ -696,8 +689,7 @@ msgid "Synchronization to public page"
 msgstr ""
 
 #: apps/courses/models/course.py:698
-msgid ""
-"course_and_search - show on the course page and include in search results"
+msgid "course_and_search - show on the course page and include in search results"
 msgstr ""
 
 #: apps/courses/models/course.py:701
@@ -861,9 +853,7 @@ msgid "Custom bio"
 msgstr ""
 
 #: apps/courses/models/person.py:80
-msgid ""
-"Optional: provide a custom bio (if you leave it empty, it will display the "
-"person's bio)."
+msgid "Optional: provide a custom bio (if you leave it empty, it will display the person's bio)."
 msgstr ""
 
 #: apps/courses/models/person.py:87
@@ -895,9 +885,7 @@ msgid "role"
 msgstr ""
 
 #: apps/courses/models/role.py:22
-msgid ""
-"A role describes all the permissions that should be granted to the user "
-"group."
+msgid "A role describes all the permissions that should be granted to the user group."
 msgstr ""
 
 #: apps/courses/models/role.py:29
@@ -1236,10 +1224,8 @@ msgstr ""
 
 #: apps/courses/templates/courses/cms/category_detail.html:136
 #, python-format
-msgid ""
-"\n"
-"                                        See all courses related to "
-"%(category_title)s\n"
+msgid "\n"
+"                                        See all courses related to %(category_title)s\n"
 "                                    "
 msgstr ""
 
@@ -1314,17 +1300,13 @@ msgstr ""
 
 #: apps/courses/templates/courses/cms/course_detail.html:134
 #, python-format
-msgid ""
-"\n"
-"                                                        %(count)s already "
-"enrolled!\n"
+msgid "\n"
+"                                                        %(count)s already enrolled!\n"
 "                                                    "
 msgstr ""
 
 #: apps/courses/templates/courses/cms/course_detail.html:153
-msgid ""
-"Add a teaser video or add a cover image below and it will be used as teaser "
-"image as well."
+msgid "Add a teaser video or add a cover image below and it will be used as teaser image as well."
 msgstr ""
 
 #: apps/courses/templates/courses/cms/course_detail.html:165
@@ -1334,8 +1316,7 @@ msgstr ""
 
 #: apps/courses/templates/courses/cms/course_detail.html:222
 #, python-format
-msgid ""
-"\n"
+msgid "\n"
 "                        Archived on %(creation_date)s\n"
 "                    "
 msgstr ""
@@ -1403,12 +1384,10 @@ msgid "Enter here the detailed course plan."
 msgstr ""
 
 #: apps/courses/templates/courses/cms/course_detail.html:369
-msgid ""
-"\n"
+msgid "\n"
 "                                        This course is part of a program\n"
 "                                    "
-msgid_plural ""
-"\n"
+msgid_plural "\n"
 "                                        This course is part of programs\n"
 "                                    "
 msgstr[0] ""
@@ -1468,13 +1447,10 @@ msgstr ""
 
 #: apps/courses/templates/courses/cms/fragment_error_detail_template_banner.html:7
 #, python-format
-msgid ""
-"\n"
-"        A %(model)s object is missing on this %(model)s page. Please select "
-"another page template.\n"
+msgid "\n"
+"        A %(model)s object is missing on this %(model)s page. Please select another page template.\n"
 "        <br />\n"
-"        If what you need is a %(model)s page, you need to create it via the "
-"wizard and choose \"New %(model)s page\".\n"
+"        If what you need is a %(model)s page, you need to create it via the wizard and choose \"New %(model)s page\".\n"
 "        "
 msgstr ""
 
@@ -1491,10 +1467,8 @@ msgstr ""
 
 #: apps/courses/templates/courses/cms/organization_detail.html:128
 #, python-format
-msgid ""
-"\n"
-"                                        See all courses related to "
-"%(organization_title)s\n"
+msgid "\n"
+"                                        See all courses related to %(organization_title)s\n"
 "                                    "
 msgstr ""
 
@@ -1517,10 +1491,8 @@ msgstr ""
 
 #: apps/courses/templates/courses/cms/person_detail.html:137
 #, python-format
-msgid ""
-"\n"
-"                                        See all courses related to "
-"%(person_title)s\n"
+msgid "\n"
+"                                        See all courses related to %(person_title)s\n"
 "                                    "
 msgstr ""
 
@@ -1714,9 +1686,7 @@ msgid "HTML Sitemap"
 msgstr ""
 
 #: plugins/html_sitemap/cms_plugins.py:72
-msgid ""
-"Press save to create a site map. You will then be able to add a child plugin "
-"for each subtree in your sitemap."
+msgid "Press save to create a site map. You will then be able to add a child plugin for each subtree in your sitemap."
 msgstr ""
 
 #: plugins/html_sitemap/cms_plugins.py:82
@@ -1728,9 +1698,7 @@ msgid "root page"
 msgstr ""
 
 #: plugins/html_sitemap/models.py:27
-msgid ""
-"This page will be at the root of your sitemap (or its children if the "
-"\"include root page\" flag is unticked)."
+msgid "This page will be at the root of your sitemap (or its children if the \"include root page\" flag is unticked)."
 msgstr ""
 
 #: plugins/html_sitemap/models.py:34
@@ -1738,9 +1706,7 @@ msgid "max depth"
 msgstr ""
 
 #: plugins/html_sitemap/models.py:36
-msgid ""
-"Limit the level of nesting that your sitemap will contain below this page. "
-"An empty field or 0 equals to no limit."
+msgid "Limit the level of nesting that your sitemap will contain below this page. An empty field or 0 equals to no limit."
 msgstr ""
 
 #: plugins/html_sitemap/models.py:44
@@ -1748,8 +1714,7 @@ msgid "in navigation"
 msgstr ""
 
 #: plugins/html_sitemap/models.py:46
-msgid ""
-"Tick to exclude from sitemap the pages that are excluded from navigation."
+msgid "Tick to exclude from sitemap the pages that are excluded from navigation."
 msgstr ""
 
 #: plugins/html_sitemap/models.py:51
@@ -1757,9 +1722,7 @@ msgid "include root page"
 msgstr ""
 
 #: plugins/html_sitemap/models.py:53
-msgid ""
-"Tick to include the root page and its descendants. Untick to include only "
-"its descendants."
+msgid "Tick to include the root page and its descendants. Untick to include only its descendants."
 msgstr ""
 
 #: plugins/html_sitemap/models.py:60
@@ -1819,8 +1782,7 @@ msgid "shared secret"
 msgstr ""
 
 #: plugins/lti_consumer/forms.py:78
-msgid ""
-"The url is not valid for this provider. It should be of the form \"{:s}\"."
+msgid "The url is not valid for this provider. It should be of the form \"{:s}\"."
 msgstr ""
 
 #: plugins/lti_consumer/forms.py:84
@@ -1844,8 +1806,7 @@ msgid "LTI url"
 msgstr ""
 
 #: plugins/lti_consumer/models.py:31
-msgid ""
-"For a predefined provider, leave this field empty for uploading new content."
+msgid "For a predefined provider, leave this field empty for uploading new content."
 msgstr ""
 
 #: plugins/lti_consumer/models.py:37
@@ -1942,10 +1903,7 @@ msgstr ""
 
 #: plugins/simple_text_ckeditor/validators.py:19
 #, python-format
-msgid ""
-"Ensure this text has at most %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this text has at most %(limit_value)d characters (it has "
-"%(show_value)d)."
+msgid "Ensure this text has at most %(limit_value)d character (it has %(show_value)d)."
+msgid_plural "Ensure this text has at most %(limit_value)d characters (it has %(show_value)d)."
 msgstr[0] ""
+

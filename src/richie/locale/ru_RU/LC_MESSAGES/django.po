@@ -2,17 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-31 11:26+0200\n"
-"PO-Revision-Date: 2023-04-20 15:24\n"
+"POT-Creation-Date: 2023-07-31 11:07+0200\n"
+"PO-Revision-Date: 2023-07-31 09:55\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 "
-"&& n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 "
-"&& n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
 "X-Crowdin-Project: richie\n"
 "X-Crowdin-Project-ID: 308578\n"
 "X-Crowdin-Language: ru\n"
@@ -38,9 +36,7 @@ msgstr "Составная длительность должна быть пар
 
 #: apps/core/fields/duration.py:222
 msgid "A composite duration should be a round number of time units."
-msgstr ""
-"Составная продолжительность должна представлять собой круглое число единиц "
-"времени."
+msgstr "Составная продолжительность должна представлять собой круглое число единиц времени."
 
 #: apps/core/fields/duration.py:230
 msgid "A composite duration should be positive."
@@ -52,8 +48,7 @@ msgstr "Определить усилия"
 
 #: apps/core/fields/effort.py:242
 msgid "An effort should be a triplet: number, time unit and reference unit."
-msgstr ""
-"Усилие должно быть триплетом: число, единица времени и единица отсчета."
+msgstr "Усилие должно быть триплетом: число, единица времени и единица отсчета."
 
 #: apps/core/fields/effort.py:255
 msgid "An effort should be a round number of time units."
@@ -95,13 +90,8 @@ msgstr[2] "Значения %(value)s не являются допустимым
 msgstr[3] "Значения %(value)s не являются допустимыми вариантами."
 
 #: apps/core/fields/multiselect.py:133
-msgid ""
-"Storing {:d} choices could require storing a CharField of up to {:d} "
-"characters. Please reduce 'max_choices' or increase 'max_length'."
-msgstr ""
-"Хранение {:d} вариантов может потребовать хранения CharField размером до {:"
-"d} символов. Уменьшите значение 'max_choices' или увеличьте значение "
-"'max_length'."
+msgid "Storing {:d} choices could require storing a CharField of up to {:d} characters. Please reduce 'max_choices' or increase 'max_length'."
+msgstr "Хранение {:d} вариантов может потребовать хранения CharField размером до {:d} символов. Уменьшите значение 'max_choices' или увеличьте значение 'max_length'."
 
 #: apps/core/templates/djangocms_video/default/video_player.html:11
 msgid "Video"
@@ -260,9 +250,7 @@ msgstr "Неверный запрос"
 
 #: apps/core/views/error.py:9
 msgid "Your query seems to be malformed. Please check your data and try again."
-msgstr ""
-"Похоже, ваш запрос имеет неправильный формат. Пожалуйста, проверьте ваши "
-"данные и повторите попытку."
+msgstr "Похоже, ваш запрос имеет неправильный формат. Пожалуйста, проверьте ваши данные и повторите попытку."
 
 #: apps/core/views/error.py:13
 msgid "Forbidden"
@@ -344,12 +332,8 @@ msgid "Snapshot this page..."
 msgstr "Снимок этой страницы..."
 
 #: apps/courses/cms_toolbars.py:108
-msgid ""
-"This will place a copy of this page as its child and move all its courseruns "
-"as children of its new copy."
-msgstr ""
-"Это поместит копию этой страницы в качестве ее дочерней и переместит все её "
-"этапы курса в качестве дочерних для ее новой копии."
+msgid "This will place a copy of this page as its child and move all its courseruns as children of its new copy."
+msgstr "Это поместит копию этой страницы в качестве ее дочерней и переместит все её этапы курса в качестве дочерних для ее новой копии."
 
 #: apps/courses/cms_wizards.py:56
 msgid "New page"
@@ -384,14 +368,8 @@ msgid "Slug of the page in current language"
 msgstr "Slug страницы на текущем языке"
 
 #: apps/courses/cms_wizards.py:117
-msgid ""
-"This slug is too long. The length of the path built by prepending the slug "
-"of the parent page would be {:d} characters long and it should be less than "
-"255"
-msgstr ""
-"Этот slug слишком длинный. Длина пути, созданного в ожидании slug "
-"родительской страницы, будет равна {:d} символам, и она должна быть меньше "
-"255"
+msgid "This slug is too long. The length of the path built by prepending the slug of the parent page would be {:d} characters long and it should be less than 255"
+msgstr "Этот slug слишком длинный. Длина пути, созданного в ожидании slug родительской страницы, будет равна {:d} символам, и она должна быть меньше 255"
 
 #: apps/courses/cms_wizards.py:130
 msgid "This slug is already in use"
@@ -399,9 +377,7 @@ msgstr "Этот slug уже используется"
 
 #: apps/courses/cms_wizards.py:149
 msgid "You must first create a parent page and set its `reverse_id` to `{:s}`."
-msgstr ""
-"Сначала вы должны создать родительскую страницу и установить `reverse_id` в "
-"`{:s}`."
+msgstr "Сначала вы должны создать родительскую страницу и установить `reverse_id` в `{:s}`."
 
 #: apps/courses/cms_wizards.py:180 apps/courses/cms_wizards.py:296
 msgid "Code"
@@ -624,10 +600,8 @@ msgid "study now"
 msgstr "начать обучение"
 
 #: apps/courses/models/course.py:66
-#, fuzzy
-#| msgid "Open for enrollment"
 msgid "open for enrollment"
-msgstr "Открыть для зачисления"
+msgstr ""
 
 #: apps/courses/models/course.py:67 apps/courses/models/course.py:69
 msgid "starting on"
@@ -718,15 +692,12 @@ msgid "Synchronization to public page"
 msgstr "Синхронизация с публичной страницей"
 
 #: apps/courses/models/course.py:698
-msgid ""
-"course_and_search - show on the course page and include in search results"
-msgstr ""
-"course_and_search - показать на странице курса и включить в результаты поиска"
+msgid "course_and_search - show on the course page and include in search results"
+msgstr "course_and_search - показать на странице курса и включить в результаты поиска"
 
 #: apps/courses/models/course.py:701
 msgid "course_only - show on the course page and hide from search results"
-msgstr ""
-"course_only - показывать на странице курса и скрыть от результатов поиска"
+msgstr "course_only - показывать на странице курса и скрыть от результатов поиска"
 
 #: apps/courses/models/course.py:703
 msgid "hidden - hide on the course page and from search results"
@@ -885,12 +856,8 @@ msgid "Custom bio"
 msgstr "Пользовательская биография"
 
 #: apps/courses/models/person.py:80
-msgid ""
-"Optional: provide a custom bio (if you leave it empty, it will display the "
-"person's bio)."
-msgstr ""
-"Необязательно: укажите пользовательскую биографию (если оставить ее пустым, "
-"она отобразит биографию человека)."
+msgid "Optional: provide a custom bio (if you leave it empty, it will display the person's bio)."
+msgstr "Необязательно: укажите пользовательскую биографию (если оставить ее пустым, она отобразит биографию человека)."
 
 #: apps/courses/models/person.py:87
 msgid "person plugin"
@@ -921,12 +888,8 @@ msgid "role"
 msgstr "роль"
 
 #: apps/courses/models/role.py:22
-msgid ""
-"A role describes all the permissions that should be granted to the user "
-"group."
-msgstr ""
-"Роль описывает все разрешения, которые должны быть предоставлены группе "
-"пользователей."
+msgid "A role describes all the permissions that should be granted to the user group."
+msgstr "Роль описывает все разрешения, которые должны быть предоставлены группе пользователей."
 
 #: apps/courses/models/role.py:29
 msgid "page"
@@ -1264,15 +1227,11 @@ msgstr "Пагинация курсов"
 
 #: apps/courses/templates/courses/cms/category_detail.html:136
 #, python-format
-msgid ""
-"\n"
-"                                        See all courses related to "
-"%(category_title)s\n"
+msgid "\n"
+"                                        See all courses related to %(category_title)s\n"
 "                                    "
-msgstr ""
-"\n"
-"                                        Смотрите все курсы, относящиеся к "
-"%(category_title)s\n"
+msgstr "\n"
+"                                        Смотрите все курсы, относящиеся к %(category_title)s\n"
 "                                    "
 
 #: apps/courses/templates/courses/cms/category_detail.html:142
@@ -1325,10 +1284,8 @@ msgid "No associated categories"
 msgstr "Нет связанных категорий"
 
 #: apps/courses/templates/courses/cms/course_detail.html:85
-#, fuzzy
-#| msgid "Enter here a introduction of your course."
 msgid "Enter here an introduction to your course."
-msgstr "Введите введение к вашему курсу."
+msgstr ""
 
 #: apps/courses/templates/courses/cms/course_detail.html:97
 msgid "Duration:"
@@ -1343,34 +1300,19 @@ msgid "Pace:"
 msgstr "Темп:"
 
 #: apps/courses/templates/courses/cms/course_detail.html:123
-#, fuzzy
-#| msgid "Languages"
 msgid "Languages:"
-msgstr "Языки"
+msgstr ""
 
 #: apps/courses/templates/courses/cms/course_detail.html:134
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                        %(count)s already enrolled!\n"
-#| "                                    "
-msgid ""
-"\n"
-"                                                        %(count)s already "
-"enrolled!\n"
+#, python-format
+msgid "\n"
+"                                                        %(count)s already enrolled!\n"
 "                                                    "
 msgstr ""
-"\n"
-"                                        %(count)s уже зачислены!\n"
-"                                    "
 
 #: apps/courses/templates/courses/cms/course_detail.html:153
-msgid ""
-"Add a teaser video or add a cover image below and it will be used as teaser "
-"image as well."
-msgstr ""
-"Добавьте видео тизер или добавьте обложку ниже и оно также будет "
-"использоваться в качестве тизерного изображения."
+msgid "Add a teaser video or add a cover image below and it will be used as teaser image as well."
+msgstr "Добавьте видео тизер или добавьте обложку ниже и оно также будет использоваться в качестве тизерного изображения."
 
 #: apps/courses/templates/courses/cms/course_detail.html:165
 #: apps/courses/templates/courses/cms/course_detail.html:250
@@ -1379,12 +1321,10 @@ msgstr "обложка курса"
 
 #: apps/courses/templates/courses/cms/course_detail.html:222
 #, python-format
-msgid ""
-"\n"
+msgid "\n"
 "                        Archived on %(creation_date)s\n"
 "                    "
-msgstr ""
-"\n"
+msgstr "\n"
 "                        Архивировано %(creation_date)s\n"
 "                    "
 
@@ -1451,28 +1391,22 @@ msgid "Enter here the detailed course plan."
 msgstr "Введите подробный план курса."
 
 #: apps/courses/templates/courses/cms/course_detail.html:369
-msgid ""
-"\n"
+msgid "\n"
 "                                        This course is part of a program\n"
 "                                    "
-msgid_plural ""
-"\n"
+msgid_plural "\n"
 "                                        This course is part of programs\n"
 "                                    "
-msgstr[0] ""
-"\n"
+msgstr[0] "\n"
 "                                        Этот курс является частью программы\n"
 "                                    "
-msgstr[1] ""
-"\n"
+msgstr[1] "\n"
 "                                        Этот курс является частью программ\n"
 "                                    "
-msgstr[2] ""
-"\n"
+msgstr[2] "\n"
 "                                        Этот курс является частью программ\n"
 "                                    "
-msgstr[3] ""
-"\n"
+msgstr[3] "\n"
 "                                        Этот курс является частью программ\n"
 "                                    "
 
@@ -1531,21 +1465,15 @@ msgstr "Лицензия"
 
 #: apps/courses/templates/courses/cms/fragment_error_detail_template_banner.html:7
 #, python-format
-msgid ""
-"\n"
-"        A %(model)s object is missing on this %(model)s page. Please select "
-"another page template.\n"
+msgid "\n"
+"        A %(model)s object is missing on this %(model)s page. Please select another page template.\n"
 "        <br />\n"
-"        If what you need is a %(model)s page, you need to create it via the "
-"wizard and choose \"New %(model)s page\".\n"
+"        If what you need is a %(model)s page, you need to create it via the wizard and choose \"New %(model)s page\".\n"
 "        "
-msgstr ""
-"\n"
-"        На этой странице %(model)s отсутствует объект %(model)s. Пожалуйста, "
-"выберите другой шаблон страницы.\n"
+msgstr "\n"
+"        На этой странице %(model)s отсутствует объект %(model)s. Пожалуйста, выберите другой шаблон страницы.\n"
 "        <br />\n"
-"        Если вам нужна страница %(model)s, вы должны создать его через "
-"мастер и выбрать \"Новая %(model)s страница\".\n"
+"        Если вам нужна страница %(model)s, вы должны создать его через мастер и выбрать \"Новая %(model)s страница\".\n"
 "        "
 
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:8
@@ -1561,15 +1489,11 @@ msgstr "Пагинация связанных курсов"
 
 #: apps/courses/templates/courses/cms/organization_detail.html:128
 #, python-format
-msgid ""
-"\n"
-"                                        See all courses related to "
-"%(organization_title)s\n"
+msgid "\n"
+"                                        See all courses related to %(organization_title)s\n"
 "                                    "
-msgstr ""
-"\n"
-"                                        Смотрите все курсы, относящиеся к "
-"%(organization_title)s\n"
+msgstr "\n"
+"                                        Смотрите все курсы, относящиеся к %(organization_title)s\n"
 "                                    "
 
 #: apps/courses/templates/courses/cms/organization_list.html:24
@@ -1591,15 +1515,11 @@ msgstr "Нет связанных организаций"
 
 #: apps/courses/templates/courses/cms/person_detail.html:137
 #, python-format
-msgid ""
-"\n"
-"                                        See all courses related to "
-"%(person_title)s\n"
+msgid "\n"
+"                                        See all courses related to %(person_title)s\n"
 "                                    "
-msgstr ""
-"\n"
-"                                        Смотрите все курсы, относящиеся к "
-"%(person_title)s\n"
+msgstr "\n"
+"                                        Смотрите все курсы, относящиеся к %(person_title)s\n"
 "                                    "
 
 #: apps/courses/templates/courses/cms/person_detail.html:155
@@ -1792,12 +1712,8 @@ msgid "HTML Sitemap"
 msgstr "HTML карта сайта"
 
 #: plugins/html_sitemap/cms_plugins.py:72
-msgid ""
-"Press save to create a site map. You will then be able to add a child plugin "
-"for each subtree in your sitemap."
-msgstr ""
-"Нажмите кнопку «Сохранить», чтобы создать карту сайта. Затем вы сможете "
-"добавить дочерний плагин для каждого поддерева на карте сайта."
+msgid "Press save to create a site map. You will then be able to add a child plugin for each subtree in your sitemap."
+msgstr "Нажмите кнопку «Сохранить», чтобы создать карту сайта. Затем вы сможете добавить дочерний плагин для каждого поддерева на карте сайта."
 
 #: plugins/html_sitemap/cms_plugins.py:82
 msgid "HTML sitemap page"
@@ -1808,46 +1724,32 @@ msgid "root page"
 msgstr "корневая страница"
 
 #: plugins/html_sitemap/models.py:27
-msgid ""
-"This page will be at the root of your sitemap (or its children if the "
-"\"include root page\" flag is unticked)."
-msgstr ""
-"Эта страница будет в корне вашей карты сайта (или её дочерних частей, если "
-"флаг \"включая корневую страницу\" не отмечен)."
+msgid "This page will be at the root of your sitemap (or its children if the \"include root page\" flag is unticked)."
+msgstr "Эта страница будет в корне вашей карты сайта (или её дочерних частей, если флаг \"включая корневую страницу\" не отмечен)."
 
 #: plugins/html_sitemap/models.py:34
 msgid "max depth"
 msgstr "максимальная глубина"
 
 #: plugins/html_sitemap/models.py:36
-msgid ""
-"Limit the level of nesting that your sitemap will contain below this page. "
-"An empty field or 0 equals to no limit."
-msgstr ""
-"Ограничить уровень вложения, который ваша карта сайта будет содержать ниже "
-"этой страницы. Пустое поле или 0 означает без ограничений."
+msgid "Limit the level of nesting that your sitemap will contain below this page. An empty field or 0 equals to no limit."
+msgstr "Ограничить уровень вложения, который ваша карта сайта будет содержать ниже этой страницы. Пустое поле или 0 означает без ограничений."
 
 #: plugins/html_sitemap/models.py:44
 msgid "in navigation"
 msgstr "в навигации"
 
 #: plugins/html_sitemap/models.py:46
-msgid ""
-"Tick to exclude from sitemap the pages that are excluded from navigation."
-msgstr ""
-"Отметьте, чтобы исключить из карты сайта страницы, исключенные из навигации."
+msgid "Tick to exclude from sitemap the pages that are excluded from navigation."
+msgstr "Отметьте, чтобы исключить из карты сайта страницы, исключенные из навигации."
 
 #: plugins/html_sitemap/models.py:51
 msgid "include root page"
 msgstr "включая корневую страницу"
 
 #: plugins/html_sitemap/models.py:53
-msgid ""
-"Tick to include the root page and its descendants. Untick to include only "
-"its descendants."
-msgstr ""
-"Отметьте, чтобы включить корневую страницу и ее потомков. Удалите отметку "
-"для включения только его потомков."
+msgid "Tick to include the root page and its descendants. Untick to include only its descendants."
+msgstr "Отметьте, чтобы включить корневую страницу и ее потомков. Удалите отметку для включения только его потомков."
 
 #: plugins/html_sitemap/models.py:60
 msgid "HTML Sitemaps"
@@ -1906,15 +1808,12 @@ msgid "shared secret"
 msgstr "общий секрет"
 
 #: plugins/lti_consumer/forms.py:78
-msgid ""
-"The url is not valid for this provider. It should be of the form \"{:s}\"."
-msgstr ""
-"URL не действителен для этого провайдера. Он должен быть в форме \"{:s}\"."
+msgid "The url is not valid for this provider. It should be of the form \"{:s}\"."
+msgstr "URL не действителен для этого провайдера. Он должен быть в форме \"{:s}\"."
 
 #: plugins/lti_consumer/forms.py:84
 msgid "The url is not valid for this provider. It should start with \"{:s}\"."
-msgstr ""
-"URL не действителен для этого провайдера. Он должен начинаться с \"{:s}\"."
+msgstr "URL не действителен для этого провайдера. Он должен начинаться с \"{:s}\"."
 
 #: plugins/lti_consumer/forms.py:97
 msgid "Please choose a predefined provider, or fill fields below"
@@ -1933,11 +1832,8 @@ msgid "LTI url"
 msgstr "LTI url"
 
 #: plugins/lti_consumer/models.py:31
-msgid ""
-"For a predefined provider, leave this field empty for uploading new content."
-msgstr ""
-"Для предопределенного поставщика оставьте это поле пустым для загрузки "
-"нового содержимого."
+msgid "For a predefined provider, leave this field empty for uploading new content."
+msgstr "Для предопределенного поставщика оставьте это поле пустым для загрузки нового содержимого."
 
 #: plugins/lti_consumer/models.py:37
 msgid "Predefined LTI provider"
@@ -2033,90 +1929,10 @@ msgstr "тело"
 
 #: plugins/simple_text_ckeditor/validators.py:19
 #, python-format
-msgid ""
-"Ensure this text has at most %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this text has at most %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-"Убедитесь, что текст содержит не более %(limit_value)d символа (сейчас "
-"%(show_value)d)."
-msgstr[1] ""
-"Убедитесь, что текст содержит не более %(limit_value)d символов (сейчас "
-"%(show_value)d)."
-msgstr[2] ""
-"Убедитесь, что текст содержит не более %(limit_value)d символов (сейчас "
-"%(show_value)d)."
-msgstr[3] ""
-"Убедитесь, что текст содержит не более %(limit_value)d символов (сейчас "
-"%(show_value)d)."
+msgid "Ensure this text has at most %(limit_value)d character (it has %(show_value)d)."
+msgid_plural "Ensure this text has at most %(limit_value)d characters (it has %(show_value)d)."
+msgstr[0] "Убедитесь, что текст содержит не более %(limit_value)d символа (сейчас %(show_value)d)."
+msgstr[1] "Убедитесь, что текст содержит не более %(limit_value)d символов (сейчас %(show_value)d)."
+msgstr[2] "Убедитесь, что текст содержит не более %(limit_value)d символов (сейчас %(show_value)d)."
+msgstr[3] "Убедитесь, что текст содержит не более %(limit_value)d символов (сейчас %(show_value)d)."
 
-#~ msgid "No open course runs"
-#~ msgstr "Нет запущенных этапов курса"
-
-#~ msgid "course runs are currently open for this course"
-#~ msgstr "этапы курса открытые в настоящее время для этого курса"
-
-#~ msgid "Choose now"
-#~ msgstr "Выберите сейчас"
-
-#~ msgctxt "course_detail__title"
-#~ msgid "Other course runs"
-#~ msgstr "Другие этапы курса"
-
-#~ msgctxt "course_detail__title"
-#~ msgid "Course runs"
-#~ msgstr "Этапы курса"
-
-#~ msgid "No course runs"
-#~ msgstr "Нет этапов курса"
-
-#~ msgid "No other course runs"
-#~ msgstr "Нет других этапов курса"
-
-#~ msgctxt "Course runs to be scheduled (plural)"
-#~ msgid "To be scheduled"
-#~ msgstr "Будет запланировано"
-
-#~ msgctxt "Upcoming course runs (plural)"
-#~ msgid "Upcoming"
-#~ msgstr "Предстоящие"
-
-#~ msgctxt "Ongoing course runs (plural)"
-#~ msgid "Ongoing"
-#~ msgstr "Текущий"
-
-#~ msgctxt "Archived course runs (plural)"
-#~ msgid "Archived"
-#~ msgstr "Архивировано"
-
-#~ msgid "Enrollment"
-#~ msgstr "Зачисление"
-
-#~ msgid "From %(enrollment_start)s to %(enrollment_end)s"
-#~ msgstr "С %(enrollment_start)s по %(enrollment_end)s"
-
-#~ msgid "From %(start)s to %(end)s"
-#~ msgstr "С %(start)s по %(end)s"
-
-#~ msgid ""
-#~ "\n"
-#~ "                                %(title)s, from %(start)s to %(end)s\n"
-#~ "                            "
-#~ msgstr ""
-#~ "\n"
-#~ "                                %(title)s, с %(start)s по %(end)s\n"
-#~ "                            "
-
-#~ msgid ""
-#~ "\n"
-#~ "                                From %(start)s to %(end)s\n"
-#~ "                            "
-#~ msgstr ""
-#~ "\n"
-#~ "                            С %(start)s по %(end)s\n"
-#~ "                            "
-
-#~ msgid "View more"
-#~ msgstr "Показать еще"
