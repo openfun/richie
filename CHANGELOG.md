@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Course details characteristics overflow issue
+
 ## [2.23.0] - 2023-07-28
 
 ### Added

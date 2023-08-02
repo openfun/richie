@@ -5,22 +5,22 @@
 // Simple inline with optional color scheme features
 .characteristics {
   @include feature-list($margin: 0.5rem 0 0.5rem 0);
-
   color: inherit;
 
-  &__row {
-    text-align: center;
-  }
-
   &__item {
-    @include feature-item($parent_selector: '.characteristics');
+    @include feature-item($parent_selector: '.characteristics', $valign: flex-start, $expand: true);
     color: inherit;
+    margin-bottom: 0.5rem;
+
+    &--full-width {
+      width: 100%;
+    }
   }
 
   &__term {
     align-items: center;
     color: inherit;
-    padding-top: 0.2125rem; // Fine tune vertical alignment with icons
+    margin-top: rem-calc(-2px); // Fine tune vertical alignment with icons
   }
 
   // When using through a color scheme, item adopt button behaviors
@@ -43,12 +43,5 @@
       @include button-tiny($form-factor: 'pill', $display: flex);
       @include r-button-colors(r-theme-val(characteristics, tertiary-item), $apply-border: true);
     }
-  }
-
-  &__enrollment-count {
-    @include make-container();
-    padding-left: 0;
-    padding-right: 0;
-    font-size: 1rem;
   }
 }
