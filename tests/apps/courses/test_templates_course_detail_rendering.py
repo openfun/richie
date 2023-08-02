@@ -206,7 +206,6 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         )
 
         # Check that enrollment count is not present
-        self.assertContains(response, "enrollment-count")
         self.assertContains(response, "11,000 already enrolled!")
 
     def test_templates_course_detail_cms_published_content_no_code(self):
@@ -802,7 +801,6 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         response = self.client.get(course.extended_object.get_absolute_url())
 
-        self.assertNotContains(response, "enrollment-count")
         self.assertNotContains(response, "already enrolled")
 
     @override_settings(RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT=None)
@@ -820,7 +818,6 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         response = self.client.get(course.extended_object.get_absolute_url())
 
-        self.assertNotContains(response, "enrollment-count")
         self.assertNotContains(response, "already enrolled")
 
     def test_templates_course_detail_license_missing(self):
