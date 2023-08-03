@@ -10,7 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Update `JOANIE_BACKEND` settings to match new API endpoint to retrieve course products
+- Update `JOANIE_BACKEND` settings and frontend widgets
+  to match new API endpoint to retrieve course products
 
 ### Fixed
 

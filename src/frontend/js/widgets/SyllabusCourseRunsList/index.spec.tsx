@@ -25,8 +25,8 @@ import SyllabusCourseRunsList from 'widgets/SyllabusCourseRunsList/index';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseRun, Priority } from 'types';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
-import { Product } from 'types/Joanie';
-import { ProductFactory } from 'utils/test/factories/joanie';
+import { CourseProductRelation } from 'types/Joanie';
+import { CourseProductRelationFactory } from 'utils/test/factories/joanie';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { joinAnd } from 'utils/JoinAnd';
 import { StringHelper } from 'utils/StringHelper';
@@ -40,7 +40,7 @@ jest.mock('utils/context', () => {
   mock.lms_backends = [
     {
       backend: 'joanie',
-      course_regexp: '^.*/api/v1.0/(course-runs|products)/([^/]*)/?$',
+      course_regexp: '^.*/api/v1.0((?:/(?:courses|course-runs|products)/[^/]+)+)/?$',
       endpoint: 'https://joanie.test',
     },
     {
@@ -151,9 +151,9 @@ describe('<SyllabusCourseRunsList/>', () => {
     });
   };
 
-  const expectProduct = async (container: HTMLElement, product: Product) => {
+  const expectCourseProduct = async (container: HTMLElement, relation: CourseProductRelation) => {
     const heading = await findByRole(container, 'heading', {
-      name: product.title,
+      name: relation.product.title,
     });
     expect(Array.from(heading.classList)).toContain('product-widget__title');
   };
@@ -281,14 +281,13 @@ describe('<SyllabusCourseRunsList/>', () => {
 
   it('has one opened product', async () => {
     const course = CourseLightFactory().one();
-    const product: Product = ProductFactory().one();
-    fetchMock.get(
-      `https://joanie.test/api/v1.0/products/${product.id}/?course=${course.code}`,
-      product,
-    );
+    const relation = CourseProductRelationFactory().one();
+    const resourceLink = `https://joanie.test/api/v1.0/courses/${course.code}/products/${relation.product.id}/`;
+    fetchMock.get(resourceLink, relation);
 
-    const courseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)().one();
-    courseRun.resource_link = 'https://joanie.test/api/v1.0/products/' + product.id + '/';
+    const courseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+      resource_link: resourceLink,
+    }).one();
 
     render(
       <SyllabusCourseRunsList
@@ -305,7 +304,7 @@ describe('<SyllabusCourseRunsList/>', () => {
     expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
       1,
     );
-    await expectProduct(getHeaderContainer(), product);
+    await expectCourseProduct(getHeaderContainer(), relation);
 
     // Portal.
     expectEmptyPortalContainer();
