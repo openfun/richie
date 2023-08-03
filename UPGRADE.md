@@ -16,6 +16,12 @@ $ make migrate
 
 ## Unreleased
 
+- `JOANIE_BACKEND` must be updated. `COURSE_REGEX` and `JS_COURSE_REGEX` must be updated to match
+  new api routes. Take a look at [joanie connection documentation](/docs/joanie-connection.md) for
+  more details.
+
+## 2.21.0 to 2.23.0
+
 - Within course_detail template, course runs list is now rendered as a React widget. As consequence
   `fragment_course_run` and `fragment_course_runs_list` have been removed. If you have overridden
   those templates, you have now to override corresponding React widget (`SyllabusCourseRunsList`).

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Update `JOANIE_BACKEND` settings to match new API endpoint to retrieve course products
+
 ### Fixed
 
 - Course details characteristics overflow issue
