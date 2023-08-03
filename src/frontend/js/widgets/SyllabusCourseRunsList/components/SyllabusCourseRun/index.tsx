@@ -5,11 +5,11 @@ import useDateFormat from 'hooks/useDateFormat';
 import { joinAnd } from 'utils/JoinAnd';
 import { Course } from 'types/Course';
 import { extractResourceId, isJoanieResourceLinkProduct } from 'api/lms/joanie';
-import CourseProductItem from 'widgets/CourseProductItem';
 import { findLmsBackend } from 'api/configuration';
 import { StringHelper } from 'utils/StringHelper';
 import { DjangoCMSPluginCourseRun, DjangoCMSTemplate } from 'components/DjangoCMSTemplate';
-import CourseRunEnrollment from 'widgets/SyllabusCourseRunsList/components/CourseRunEnrollment';
+import CourseRunEnrollment from '../CourseRunEnrollment';
+import CourseProductItem from '../CourseProductItem';
 
 const messages = defineMessages({
   enrollment: {

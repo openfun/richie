@@ -17,6 +17,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Course details characteristics overflow issue
 
+### Removed
+
+- Remove `CourseProductItem` as a widget
+
 ## [2.23.0] - 2023-07-28
 
 ### Added
