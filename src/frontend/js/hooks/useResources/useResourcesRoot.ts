@@ -11,7 +11,7 @@ import { noop } from 'utils';
 import { ApiResourceInterface, PaginatedResponse } from 'types/Joanie';
 import useLocalizedQueryKey from 'utils/react-query/useLocalizedQueryKey';
 import usePrevious from 'hooks/usePrevious';
-import { Resource, ResourcesQuery, UseResourcesProps } from './index';
+import { Resource, ResourcesQuery, UseResourcesCallbackProps } from './index';
 
 export const messages = defineMessages({
   errorGet: {
@@ -74,7 +74,7 @@ export const useResourcesRoot = <
   localized,
   messages: resourceMessages,
   onMutationSuccess,
-}: UseResourcesProps<TData, TResourceQuery, TApiResource>) => {
+}: UseResourcesCallbackProps<TData, TResourceQuery, TApiResource>) => {
   const queryClient = useQueryClient();
   const [error, setError] = useState<Maybe<string>>();
   const intl = useIntl();

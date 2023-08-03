@@ -2,7 +2,7 @@ import { useIntl } from 'react-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ApiResourceInterface } from 'types/Joanie';
 import { messages, useResourcesRoot } from './useResourcesRoot';
-import { Resource, ResourcesQuery, UseResourcesProps } from './index';
+import { Resource, ResourcesQuery, UseResourcesCallbackProps } from './index';
 
 /**
  * This hook internally wraps `useResourcesRoot` but will bulk-fetch all the whole set of resources
@@ -20,7 +20,7 @@ export const useResourcesOmniscient = <
 >({
   filters,
   ...props
-}: UseResourcesProps<TData, TResourceQuery, TApiResource>) => {
+}: UseResourcesCallbackProps<TData, TResourceQuery, TApiResource>) => {
   const intl = useIntl();
   const useResources = useResourcesRoot({ ...props, frozenQueryKey: true });
   const [data, setData] = useState<TData[]>([]);

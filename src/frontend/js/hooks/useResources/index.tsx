@@ -25,16 +25,23 @@ export interface UseResourcesProps<
   TApiResource extends ApiResourceInterface<TData> = ApiResourceInterface<TData>,
 > {
   queryKey: QueryKey;
-  filters?: TResourceQuery;
   apiInterface: () => TApiResource;
   omniscient?: boolean;
   omniscientFiltering?: (data: TData[], filters: TResourceQuery) => TData[];
   session?: boolean;
   localized?: boolean;
   messages?: Record<string, MessageDescriptor>;
-  queryOptions?: QueryOptions<TData>;
   frozenQueryKey?: boolean;
   onMutationSuccess?: (queryClient: QueryClient) => void;
+}
+
+export interface UseResourcesCallbackProps<
+  TData extends Resource,
+  TResourceQuery extends ResourcesQuery = ResourcesQuery,
+  TApiResource extends ApiResourceInterface<TData> = ApiResourceInterface<TData>,
+> extends UseResourcesProps<TData, TResourceQuery, TApiResource> {
+  filters?: TResourceQuery;
+  queryOptions?: QueryOptions<TData>;
 }
 
 export const useResourcesCustom = <
@@ -42,7 +49,7 @@ export const useResourcesCustom = <
   TResourceQuery extends ResourcesQuery = ResourcesQuery,
   TApiResource extends ApiResourceInterface<TData> = ApiResourceInterface<TData>,
 >(
-  props: UseResourcesProps<TData, TResourceQuery, TApiResource>,
+  props: UseResourcesCallbackProps<TData, TResourceQuery, TApiResource>,
 ) => {
   if (props.omniscient) {
     return useResourcesOmniscient(props);
