@@ -156,13 +156,13 @@ export const getRoutes = () => {
         },
       },
     },
-    products: {
-      get: `${baseUrl}/products/:id/`,
-    },
     courses: {
       get: `${baseUrl}/courses/:id/`,
       courseRuns: {
         get: `${baseUrl}/courses/:id/course-runs/`,
+      },
+      products: {
+        get: `${baseUrl}/courses/:id/products/:product_id/`,
       },
     },
     courseRuns: {
@@ -350,21 +350,6 @@ const API = (): Joanie.API => {
         },
       },
     },
-    products: {
-      get: async (filters: ResourcesQuery = {}) => {
-        let url;
-        const { id = '', ...queryParameters } = filters;
-
-        if (id) url = ROUTES.products.get.replace(':id', id);
-        else url = ROUTES.products.get.replace(':id/', '');
-
-        if (!ObjectHelper.isEmpty(queryParameters)) {
-          url += '?' + queryString.stringify(queryParameters);
-        }
-
-        return fetchWithJWT(url).then(checkStatus);
-      },
-    },
     courses: {
       get: (filters?: Joanie.CourseQueryFilters) => {
         const { id, organization_id: organizationId, ...queryParameters } = filters || {};
@@ -380,6 +365,25 @@ const API = (): Joanie.API => {
         }
 
         return fetchWithJWT(url).then(checkStatus);
+      },
+      products: {
+        get: async (filters?: Joanie.CourseProductQueryFilters) => {
+          if (!filters) {
+            throw new Error(
+              'A course code and a product id are required to fetch a course product',
+            );
+          } else if (!filters.id) {
+            throw new Error('A course code is required to fetch a course product');
+          } else if (!filters.productId) {
+            throw new Error('A product id is required to fetch a course product');
+          }
+
+          const url = ROUTES.courses.products.get
+            .replace(':id', filters.id)
+            .replace(':product_id', filters.productId);
+
+          return fetchWithJWT(url).then(checkStatus);
+        },
       },
     },
     courseRuns: {

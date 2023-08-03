@@ -100,7 +100,6 @@ export interface Product {
   certificate_definition: CertificateDefinition;
   target_courses: TargetCourse[];
   created_on: string;
-  orders: Order['id'][];
   remaining_order_count?: number | null;
 }
 
@@ -304,6 +303,9 @@ export interface CourseRunFilters extends ResourcesQuery {
 export interface CourseQueryFilters extends ResourcesQuery {
   organization_id?: Organization['id'];
 }
+export interface CourseProductQueryFilters extends ResourcesQuery {
+  productId?: Product['id'];
+}
 export interface CourseProductRelationQueryFilters extends ResourcesQuery {
   organization_id?: Organization['id'];
 }
@@ -378,19 +380,15 @@ interface APIUser {
 
 export interface API {
   user: APIUser;
-  products: {
-    get<Filters extends ResourcesQuery = ResourcesQuery>(
-      filters?: Filters,
-    ): Filters extends { id: string }
-      ? Promise<Nullable<Product>>
-      : Promise<PaginatedResponse<Product>>;
-  };
   courses: {
     get<Filters extends PaginatedResourceQuery = PaginatedResourceQuery>(
       filters?: Filters,
     ): Filters extends { id: string }
       ? Promise<Nullable<CourseListItem>>
       : Promise<PaginatedResponse<CourseListItem>>;
+    products: {
+      get(filters?: CourseProductQueryFilters): Promise<Nullable<CourseProductRelation>>;
+    };
   };
   courseRuns: {
     get(
