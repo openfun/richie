@@ -22,12 +22,12 @@ JOANIE_BACKEND = {
     "BACKEND": values.Value("richie.apps.courses.lms.joanie.JoanieBackend", environ_name="JOANIE_BACKEND", environ_prefix=None),
     "JS_BACKEND": values.Value("joanie", environ_name="JOANIE_JS_BACKEND", environ_prefix=None),
     "COURSE_REGEX": values.Value(
-        r"^.*/api/v1.0/(?P<resource_type>(course-runs|products))/(?P<resource_id>[^/]*)/?$",
+        r"^.*/api/v1.0(?P<resource_uri>(?:/(?:courses|course-runs|products)/[^/]+)+)/?$",
         environ_name="JOANIE_COURSE_REGEX",
         environ_prefix=None,
     ),
     "JS_COURSE_REGEX": values.Value(
-        r"^.*/api/v1.0/(course-runs|products)/([^/]*)/?$",
+        r"^.*/api/v1.0((?:/(?:courses|course-runs|products)/[^/]+)+)/?$",
         environ_name="JOANIE_JS_COURSE_REGEX",
         environ_prefix=None,
     ),
@@ -76,23 +76,25 @@ until you want to customize the behavior of the js Joanie backend.
 ### COURSE_REGEX
 
 A python regex that should match the ressource api urls of Joanie and return a
-`resource_type` named group ("course_runs" or "products") and also a `resource_id`
-named group corresponding to the resource uuid.
+`resource_uri` named group. The `resource_uri` group should contain the url part containing
+all resources type and id implied.
+e.g: `https://joanie.test/courses/00003/products/000001/` -> `/courses/00003/products/000001`
 
 - Type: string
 - Required: No
-- Value: for example `r"^.*/api/v1.0/(?P<resource_type>(course-runs|products))/(?P<resource_id>[^/]*)/?$"`
+- Value: for example `r"^.*/api/v1.0(?P<resource_uri>(?:/(?:courses|course-runs|products)/[^/]+)+)/?$"`
 
 
 ### JS_COURSE_REGEX
 
-A Javascript regex that should match the ressource api urls of Joanie and return two
-unnamed groups. The first one corresponds to the resource type ("course_runs" or "products") and
-the second one corresponds to the resource uuid.
+A Javascript regex that should match the ressource api urls of Joanie and return an unamed group 
+corresponding to the `resource_uri` named group described in `COURSE_REGEX` section. Extracting
+properly this information is mandatory as this group is parsed under the hood
+by the frontend application to extract resource types and resource ids.
 
 - Type: string
 - Required: No
-- Value: for example `r"^.*/api/v1.0/(course-runs|products)/([^/]*)/?$"`
+- Value: for example `r"^.*/api/v1.0((?:/(?:courses|course-runs|products)/[^/]+)+)/?$"`
 
 ### COURSE_RUN_SYNC_NO_UPDATE_FIELDS
 
