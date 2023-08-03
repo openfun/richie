@@ -9,21 +9,19 @@ import { Spinner } from 'components/Spinner';
 import ErrorBoundary from 'utils/errors/ErrorBoundary';
 import context from 'utils/context';
 
-const CourseProductItem = lazy(() => import('widgets/CourseProductItem'));
+const Dashboard = lazy(() => import('widgets/Dashboard'));
 const LanguageSelector = lazy(() => import('widgets/LanguageSelector'));
 const LtiConsumer = lazy(() => import('widgets/LtiConsumer'));
 const RootSearchSuggestField = lazy(() => import('widgets/RootSearchSuggestField'));
 const Search = lazy(() => import('widgets/Search'));
 const SearchSuggestField = lazy(() => import('widgets/SearchSuggestField'));
-const UserLogin = lazy(() => import('widgets/UserLogin'));
-const Dashboard = lazy(() => import('widgets/Dashboard'));
 const SyllabusCourseRunsList = lazy(() => import('widgets/SyllabusCourseRunsList'));
+const UserLogin = lazy(() => import('widgets/UserLogin'));
 
 // List the top-level components that can be directly called from the Django templates in an interface
 // for type-safety when we call them. This will let us use the props for any top-level component in a
 // way TypeScript understand and accepts
 interface ComponentLibrary {
-  CourseProductItem: typeof CourseProductItem;
   Dashboard: typeof Dashboard;
   LanguageSelector: typeof LanguageSelector;
   LtiConsumer: typeof LtiConsumer;
@@ -35,15 +33,14 @@ interface ComponentLibrary {
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
-  CourseProductItem,
   Dashboard,
   LanguageSelector,
   LtiConsumer,
   RootSearchSuggestField,
   Search,
   SearchSuggestField,
-  UserLogin,
   SyllabusCourseRunsList,
+  UserLogin,
 };
 // Type guard: ensures a given string (candidate) is indeed a proper key of the componentLibrary with a corresponding
 // component. This is a runtime check but it allows TS to check the component prop types at compile time

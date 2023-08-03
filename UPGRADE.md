@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+- `CourseProductItem` has been moved into `SyllabusCourseRunsList/components` folder. If you have
+  overridden this component, you have to update your overrides.json file accordingly.
 - `JOANIE_BACKEND` must be updated. `COURSE_REGEX` and `JS_COURSE_REGEX` must be updated to match
   new api routes. Take a look at [joanie connection documentation](/docs/joanie-connection.md) for
   more details.
