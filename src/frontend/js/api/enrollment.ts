@@ -7,7 +7,7 @@ const EnrollmentApi = (resourceLink: string): APILms['enrollment'] => {
   const apiConf = findLmsBackend(resourceLink);
 
   if (apiConf?.backend === APIBackend.JOANIE) {
-    return JoanieEnrollmentApiInterface(apiConf);
+    return JoanieEnrollmentApiInterface();
   }
 
   const LMS = APIHandler(resourceLink);

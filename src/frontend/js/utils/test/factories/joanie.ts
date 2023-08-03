@@ -105,7 +105,6 @@ export const CertificateProductFactory = factory((): Product => {
     price_currency: faker.finance.currencyCode(),
     call_to_action: faker.lorem.words(3),
     certificate_definition: CertificationDefinitionFactory().one(),
-    orders: [],
     target_courses: TargetCourseFactory().many(5),
     remaining_order_count: faker.number.int({ min: 1, max: 100 }),
   };

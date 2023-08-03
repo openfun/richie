@@ -1,5 +1,6 @@
+import { matchPath, PathMatch } from 'react-router-dom';
 import JoanieApi from 'api/joanie';
-import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
+import { LMSBackend } from 'types/commonDataProps';
 import { APIBackend, APILms } from 'types/api';
 
 import { Maybe, Nullable } from 'types/utils';
@@ -9,48 +10,65 @@ import { CourseRun } from 'types';
 import { findLmsBackend } from 'api/configuration';
 
 enum JoanieResourceTypes {
-  PRODUCTS = 'products',
-  COURSE_RUNS = 'course-runs',
+  PRODUCT = 'course-product',
+  COURSE_RUN = 'course_run',
 }
 
-export const isJoanieProduct = (courseRun: CourseRun) => {
-  const handler = findLmsBackend(courseRun.resource_link) as Maybe<LMSBackend>;
-  if (handler?.backend !== APIBackend.JOANIE) {
-    return false;
-  }
-  const matches = courseRun.resource_link.match(handler.course_regexp);
-  if (!matches) {
-    return false;
-  }
-  const resourceType = matches[1];
-  return resourceType === JoanieResourceTypes.PRODUCTS;
+export const isJoanieResourceLinkProduct = (resource_link: CourseRun['resource_link']) => {
+  const resources = extractResourceMetadata(resource_link);
+  if (resources === null) return false;
+
+  return Object.keys(resources).join('-') === JoanieResourceTypes.PRODUCT;
 };
 
-export const extractResourceId = (courseRun: CourseRun) => {
-  const handler = findLmsBackend(courseRun.resource_link) as Maybe<LMSBackend>;
-  if (handler?.backend !== APIBackend.JOANIE) {
+export const extractResourceMetadata = (resource_link: CourseRun['resource_link']) => {
+  const handler = findLmsBackend(resource_link) as Maybe<LMSBackend>;
+  if (handler?.backend !== APIBackend.JOANIE) return null;
+
+  const matches: Nullable<RegExpMatchArray> | RegExpMatchArray[] = resource_link.match(
+    handler.course_regexp,
+  );
+  if (!matches) return null;
+
+  const resourceUri = matches[1];
+  const existingPathPatterns = ['/course-runs/:course_run', '/courses/:course/products/:product'];
+  let match: Nullable<PathMatch<string>>;
+
+  existingPathPatterns.some((pattern) => {
+    match = matchPath(
+      {
+        path: pattern,
+        end: true,
+      },
+      resourceUri,
+    );
+
+    return match !== null;
+  });
+
+  // @ts-ignore
+  if (!match) return null;
+  return match.params;
+};
+export const extractResourceId = (
+  resource_link: CourseRun['resource_link'],
+  resource_name?: 'product' | 'course' | 'course_run',
+) => {
+  const resources = extractResourceMetadata(resource_link);
+
+  if (resources === null || (resource_name && !resources.hasOwnProperty(resource_name)))
     return null;
-  }
-  const matches = courseRun.resource_link.match(handler.course_regexp);
-  if (!matches) {
-    return null;
-  }
-  return matches[2];
+
+  return resource_name ? resources[resource_name] : Object.values(resources)[0];
 };
 
-const JoanieEnrollmentApiInterface = (
-  APIConf: AuthenticationBackend | LMSBackend,
-): APILms['enrollment'] => {
+const JoanieEnrollmentApiInterface = (): APILms['enrollment'] => {
   const joanieAPI: API = JoanieApi();
 
-  const extractCourseRunIdFromUrl = (url: string): Maybe<Nullable<string>> => {
-    const matches = url.match((APIConf as LMSBackend).course_regexp);
-    return matches && matches[2] ? matches[2] : null;
-  };
   return {
     get(url: string) {
       return new Promise((resolve, reject) => {
-        const courseRunId = extractCourseRunIdFromUrl(url);
+        const courseRunId = extractResourceId(url, 'course_run');
         joanieAPI.user.enrollments
           .get<{ id?: string; course_run: string }>({ course_run: courseRunId as string })
           .then((res) => {
@@ -71,7 +89,7 @@ const JoanieEnrollmentApiInterface = (
       enrollment: Maybe<Nullable<Enrollment>>,
       isActive = true,
     ): Promise<boolean> {
-      const courseRunId = extractCourseRunIdFromUrl(url);
+      const courseRunId = extractResourceId(url, 'course_run');
       if (!courseRunId) {
         return new Promise((resolve) => resolve(false));
       }
