@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useOrder } from 'hooks/useOrders';
-import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { CourseLight } from 'types/Joanie';
+import { useCourseProduct } from 'hooks/useCourseProducts';
 import { DashboardItemOrder } from '../DashboardItem/Order/DashboardItemOrder';
 
 const messages = defineMessages({
@@ -19,8 +19,8 @@ export const DashboardOrderLoader = () => {
   const params = useParams<{ orderId: string }>();
   const order = useOrder(params.orderId);
   const course = order.item?.course as CourseLight;
-  const product = useProduct(order.item?.product, { course: course?.code });
-  const fetching = order.states.fetching || product.states.fetching;
+  const courseProduct = useCourseProduct(course?.code, { productId: order.item?.product });
+  const fetching = order.states.fetching || courseProduct.states.fetching;
 
   return (
     <>
@@ -31,8 +31,11 @@ export const DashboardOrderLoader = () => {
           </span>
         </Spinner>
       )}
-      {(order.states.error || product.states.error) && (
-        <Banner message={(order.states.error ?? product.states.error)!} type={BannerType.ERROR} />
+      {(order.states.error || courseProduct.states.error) && (
+        <Banner
+          message={(order.states.error ?? courseProduct.states.error)!}
+          type={BannerType.ERROR}
+        />
       )}
       {order.item && (
         <DashboardItemOrder

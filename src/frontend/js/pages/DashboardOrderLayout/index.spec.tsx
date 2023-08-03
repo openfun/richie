@@ -5,7 +5,7 @@ import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { Order } from 'types/Joanie';
 import { OrderFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
-import { mockProductWithOrder } from 'utils/test/mockProductWithOrder';
+import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
@@ -52,7 +52,7 @@ describe('<DashboardOrderLayout />', () => {
       target_courses: [TargetCourseFactory().one()],
       enrollments: [],
     };
-    const product = mockProductWithOrder(order);
+    const { product } = mockCourseProductWithOrder(order);
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
       { results: [order], next: null, previous: null, count: null },

@@ -3,13 +3,13 @@ import { CourseLight, Order, OrderState, Product } from 'types/Joanie';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { StringHelper } from 'utils/StringHelper';
 import { CoursesHelper } from 'utils/CoursesHelper';
-import { useProduct } from 'hooks/useProduct';
 import { useCertificate } from 'hooks/useCertificates';
 import { Spinner } from 'components/Spinner';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
 import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
+import { useCourseProduct } from 'hooks/useCourseProducts';
 import { RouterButton } from '../../RouterButton';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
@@ -82,13 +82,14 @@ export const DashboardItemOrder = ({
     throw new Error('Order must provide course object attribute.');
   }
   const intl = useIntl();
-  const product = useProduct(order.product, { course: course.code });
+  const query = useCourseProduct(course.code, { productId: order.product });
+  const product = query?.item?.product;
   const getRoutePath = getDashboardRoutePath(useIntl());
 
   return (
     <DashboardItem
       data-testid={`dashboard-item-order-${order.id}`}
-      title={product.item?.title ?? ''}
+      title={product?.title ?? ''}
       code={'Ref. ' + course.code}
       imageUrl={course.cover?.src}
       footer={
@@ -142,9 +143,9 @@ export const DashboardItemOrder = ({
             />
           ))}
         />
-        {showCertificate && !!product.item?.certificate_definition && (
+        {showCertificate && !!product?.certificate_definition && (
           <div className="dashboard-item-order__certificate__container">
-            <DashboardItemOrderCertificate order={order} product={product.item} />
+            <DashboardItemOrderCertificate order={order} product={product} />
           </div>
         )}
       </>

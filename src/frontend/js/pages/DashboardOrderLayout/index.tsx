@@ -8,16 +8,17 @@ import {
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { useOrder } from 'hooks/useOrders';
-import { useProduct } from 'hooks/useProduct';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 import { CourseLight, Product } from 'types/Joanie';
 import { LearnerDashboardSidebar } from 'widgets/Dashboard/components/LearnerDashboardSidebar';
+import { useCourseProduct } from 'hooks/useCourseProducts';
 
 export const DashboardOrderLayout = () => {
   const params = useParams<{ orderId: string }>();
   const order = useOrder(params.orderId);
   const course = order.item?.course as CourseLight;
-  const product = useProduct(order.item?.product, { course: course?.code });
+  const courseProduct = useCourseProduct(course?.code, { productId: order.item?.product });
+  const product = courseProduct?.item?.product;
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
@@ -33,10 +34,8 @@ export const DashboardOrderLayout = () => {
   );
 
   return (
-    <DashboardLayout
-      sidebar={<LearnerDashboardSidebar menuLinks={links} title={product.item?.title} />}
-    >
-      <DashboardOrderLayoutContent product={product.item} />
+    <DashboardLayout sidebar={<LearnerDashboardSidebar menuLinks={links} title={product?.title} />}>
+      <DashboardOrderLayoutContent product={product} />
     </DashboardLayout>
   );
 };
