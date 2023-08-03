@@ -1,8 +1,8 @@
 import { Children, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
+import { useCourseProduct } from 'hooks/useCourseProducts';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
-import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
 import { useOrders } from 'hooks/useOrders';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -37,8 +37,8 @@ export interface Props {
 }
 
 const CourseProductItem = ({ productId, courseCode }: Props) => {
-  const productQuery = useProduct(productId, { course: courseCode });
-  const product = productQuery.item;
+  const productQuery = useCourseProduct(courseCode, { productId });
+  const product = productQuery.item?.product;
   const ordersQuery = useOrders({
     product: productId,
     course: courseCode,
@@ -103,7 +103,7 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
             </header>
             <ol className="product-widget__content">
               {Children.toArray(
-                targetCourses.map((target_course) => (
+                targetCourses.map((target_course: any) => (
                   <CourseRunItem targetCourse={target_course} order={order} />
                 )),
               )}

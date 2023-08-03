@@ -11,13 +11,13 @@ import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
-  CertificateProductFactory,
+  CourseProductRelationFactory,
   EnrollmentFactory,
   OrderFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
-import { CourseRun, Enrollment, Order, OrderState, Product } from 'types/Joanie';
+import { CourseRun, Enrollment, Order, OrderState } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { Deferred } from 'utils/test/deferred';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
@@ -86,10 +86,11 @@ describe('CourseProductItem', () => {
   );
 
   it('renders product information', async () => {
-    const product: Product = ProductFactory().one();
+    const relation = CourseProductRelationFactory().one();
+    const { product } = relation;
     const productDeferred = new Deferred();
     fetchMock.get(
-      `https://joanie.test/api/v1.0/products/${product.id}/?course=00000`,
+      `https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`,
       productDeferred.promise,
     );
 
@@ -102,7 +103,7 @@ describe('CourseProductItem', () => {
     // - A loader should be displayed while product information are fetching
     screen.getByRole('status', { name: 'Loading product information...' });
 
-    productDeferred.resolve(product);
+    productDeferred.resolve(relation);
 
     await screen.findByRole('heading', { level: 3, name: product.title });
     // the price shouldn't be a heading to prevent misdirection for screen reader users,
@@ -117,7 +118,7 @@ describe('CourseProductItem', () => {
     expect($price.classList.contains('h6')).toBe(true);
 
     // - Render all target courses information
-    product.target_courses.forEach((course) => {
+    relation.product.target_courses.forEach((course) => {
       const $item = screen.getByTestId(`course-item-${course.code}`);
       // the course title shouldn't be a heading to prevent misdirection for screen reader users,
       // but we want to it to visually look like a h5
@@ -137,8 +138,13 @@ describe('CourseProductItem', () => {
   });
 
   it('does not render <CertificateItem /> if product do not have a certificate', async () => {
-    const product: Product = ProductFactory({ certificate_definition: undefined }).one();
-    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
+    const relation = CourseProductRelationFactory({
+      product: ProductFactory({
+        certificate_definition: undefined,
+      }).one(),
+    }).one();
+    const { product } = relation;
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
 
     render(
       <Wrapper>
@@ -154,14 +160,15 @@ describe('CourseProductItem', () => {
   });
 
   it('adapts information when user purchased the product', async () => {
-    const product: Product = ProductFactory().one();
-    const order: Order = OrderFactory({
+    const relation = CourseProductRelationFactory().one();
+    const { product } = relation;
+    const order = OrderFactory({
       product: product.id,
       course: '00000',
       target_courses: product.target_courses,
     }).one();
 
-    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
 
     render(
@@ -203,7 +210,8 @@ describe('CourseProductItem', () => {
   });
 
   it('renders enrollment information when user is enrolled to a course run', async () => {
-    const product: Product = CertificateProductFactory().one();
+    const relation = CourseProductRelationFactory().one();
+    const { product } = relation;
     // - Create an order with an active enrollment
     const enrollment: Enrollment = EnrollmentFactory({
       course_run: product.target_courses[0]!.course_runs[0]! as CourseRun,
@@ -215,7 +223,7 @@ describe('CourseProductItem', () => {
       enrollments: [enrollment],
     }).one();
 
-    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
 
     render(
@@ -257,14 +265,15 @@ describe('CourseProductItem', () => {
   });
 
   it('does not render sale tunnel button if user already has a pending order', async () => {
-    const product: Product = ProductFactory().one();
-    const order: Order = OrderFactory({
+    const relation = CourseProductRelationFactory().one();
+    const { product } = relation;
+    const order = OrderFactory({
       product: product.id,
       course: '00000',
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
-    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
 
     render(
@@ -304,9 +313,9 @@ describe('CourseProductItem', () => {
   });
 
   it('renders error message when product fetching has failed', async () => {
-    const product: Product = ProductFactory().one();
+    const { product } = CourseProductRelationFactory().one();
 
-    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, 404, {});
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, 404, {});
 
     render(
       <Wrapper>

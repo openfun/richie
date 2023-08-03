@@ -3,7 +3,6 @@ import fetchMock from 'fetch-mock';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 
-import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
 import {
   CourseRunFactory,
@@ -12,7 +11,6 @@ import {
 } from 'utils/test/factories/richie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { User } from 'types/User';
 import CourseRunEnrollment from './index';
 
 jest.mock('utils/errors/handle');
@@ -27,7 +25,7 @@ jest.mock('utils/context', () => ({
     lms_backends: [
       {
         backend: 'joanie',
-        course_regexp: '(https://joanie.endpoint/)(?<course_id>.*)',
+        course_regexp: '^.*/api/v1.0((?:/(?:courses|course-runs|products)/[^/]+)+)/?$',
         endpoint: 'https://joanie.endpoint',
       },
     ],
@@ -53,10 +51,9 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
     fetchMock.restore();
   });
   it('shows an "Enroll" button and allows the user to enroll', async () => {
-    const user: User = UserFactory().one();
-    const courseRun: CourseRun = CourseRunFactory().one();
-    courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
-    courseRun.state.priority = 0;
+    const user = UserFactory().one();
+    const courseRun = CourseRunFactory().one();
+    courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
 
     const enrollmentDeferred = new Deferred();
     fetchMock.get(
@@ -96,10 +93,9 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
   });
 
   it('shows an error message when enrollment get request failed', async () => {
-    const user: User = UserFactory().one();
-    const courseRun: CourseRun = CourseRunFactory().one();
-    courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
-    courseRun.state.priority = 0;
+    const user = UserFactory().one();
+    const courseRun = CourseRunFactory().one();
+    courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
 
     fetchMock.get(`${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`, 500);
 
@@ -119,10 +115,9 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
   });
 
   it('shows an "Unenroll" text and allows the user to unenroll', async () => {
-    const user: User = UserFactory().one();
-    const courseRun: CourseRun = CourseRunFactory().one();
-    courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
-    courseRun.state.priority = 0;
+    const user = UserFactory().one();
+    const courseRun = CourseRunFactory().one();
+    courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
 
     const enrollmentDeferred = new Deferred();
     fetchMock.get(
@@ -175,10 +170,9 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
   });
 
   it('shows an error message when the enrollment fails', async () => {
-    const user: User = UserFactory().one();
-    const courseRun: CourseRun = CourseRunFactory().one();
-    courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
-    courseRun.state.priority = 0;
+    const user = UserFactory().one();
+    const courseRun = CourseRunFactory().one();
+    courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
 
     const enrollmentDeferred = new Deferred();
     fetchMock.get(
@@ -215,10 +209,9 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
   });
 
   it('shows an error message when the unenrollment fails', async () => {
-    const user: User = UserFactory().one();
-    const courseRun: CourseRun = CourseRunFactory().one();
-    courseRun.resource_link = 'https://joanie.endpoint/' + courseRun.id;
-    courseRun.state.priority = 0;
+    const user = UserFactory().one();
+    const courseRun = CourseRunFactory().one();
+    courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
 
     const enrollmentDeferred = new Deferred();
     fetchMock.get(

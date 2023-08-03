@@ -4,7 +4,7 @@ import { CourseRun } from 'types';
 import useDateFormat from 'hooks/useDateFormat';
 import { joinAnd } from 'utils/JoinAnd';
 import { Course } from 'types/Course';
-import { extractResourceId, isJoanieProduct } from 'api/lms/joanie';
+import { extractResourceId, isJoanieResourceLinkProduct } from 'api/lms/joanie';
 import CourseProductItem from 'widgets/CourseProductItem';
 import { findLmsBackend } from 'api/configuration';
 import { StringHelper } from 'utils/StringHelper';
@@ -103,8 +103,11 @@ export const SyllabusCourseRun = ({
   return (
     <DjangoCMSTemplate plugin={DjangoCMSPluginCourseRun(courseRun)}>
       <div className="course-detail__run-descriptions course-detail__run-descriptions--course_and_search">
-        {isJoanieProduct(courseRun) ? (
-          <CourseProductItem productId={extractResourceId(courseRun)!} courseCode={course.code!} />
+        {isJoanieResourceLinkProduct(courseRun.resource_link) ? (
+          <CourseProductItem
+            productId={extractResourceId(courseRun.resource_link, 'product')!}
+            courseCode={course.code!}
+          />
         ) : (
           <OpenedCourseRun courseRun={courseRun} />
         )}
