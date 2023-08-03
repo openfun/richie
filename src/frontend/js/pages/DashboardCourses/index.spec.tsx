@@ -9,11 +9,15 @@ import {
 } from 'utils/test/factories/richie';
 import { History, HistoryContext } from 'hooks/useHistory';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { EnrollmentFactory, OrderFactory, ProductFactory } from 'utils/test/factories/joanie';
+import {
+  CourseProductRelationFactory,
+  EnrollmentFactory,
+  OrderFactory,
+} from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
-import { CourseLight, Enrollment, Order, Product } from 'types/Joanie';
+import { CourseLight, CourseProductRelation, Enrollment, Order } from 'types/Joanie';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
@@ -87,41 +91,45 @@ describe('<DashboardCourses/>', () => {
   };
 
   const mockOrders = (orders: Order[], client?: QueryClient) => {
-    const products: Record<string, Product> = {};
+    const relations: Record<string, CourseProductRelation> = {};
     orders.forEach((order) => {
-      const product: Product = ProductFactory().one();
-      product.id = order.product;
+      const productId = order.product;
+      const courseCode = (order.course as CourseLight).code;
+      const relation = CourseProductRelationFactory().one();
+
       fetchMock.get(
-        'https://joanie.endpoint/api/v1.0/products/' +
-          product.id +
-          '/?course=' +
-          (order.course as CourseLight).code,
-        product,
+        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${productId}/`,
+        relation,
       );
 
       // Allowing this option boosts the test performances. Without it, the tests case with 200+
       // items was taking ~60s to complete.
       if (client) {
         client.setQueryData(
-          ['products', JSON.stringify({ id: product.id, course: order.course })],
-          product,
+          ['courses-products', JSON.stringify({ id: courseCode, productId })],
+          relation,
         );
       }
-      products[order.id] = product;
+      relations[order.id] = relation;
     });
     orders.sort((a, b) => {
       const aDate = new Date(a.created_on);
       const bDate = new Date(b.created_on);
       return bDate.getTime() - aDate.getTime();
     });
-    return { orders, products };
+    return { orders, relations };
   };
 
-  const expectList = (entities: (Order | Enrollment)[], products: Record<string, Product>) => {
+  const expectList = (
+    entities: (Order | Enrollment)[],
+    relations: Record<string, CourseProductRelation>,
+  ) => {
     const itemElements = document.querySelectorAll<HTMLElement>('.dashboard__courses__list__item');
     expect(itemElements.length).toBe(entities.length);
     entities.forEach((entity, i) => {
-      const title = isOrder(entity) ? products[entity.id].title : entity.course_run.course?.title;
+      const title = isOrder(entity)
+        ? relations[entity.id].product.title
+        : entity.course_run.course?.title;
       getByRole(itemElements[i], 'heading', {
         name: title,
         level: 5,
@@ -166,7 +174,7 @@ describe('<DashboardCourses/>', () => {
 
   it('should render the list of entities', async () => {
     const client = createTestQueryClient({ user: true });
-    const { orders, products } = mockOrders(OrderFactory().many(perPage * 2 + 1), client);
+    const { orders, relations } = mockOrders(OrderFactory().many(perPage * 2 + 1), client);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}`, {
       results: orders.slice(0, perPage),
       next: `https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=${perPage}`,
@@ -229,18 +237,18 @@ describe('<DashboardCourses/>', () => {
     expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
     let loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
-    await waitFor(() => expectList(entities.slice(0, perPage), products), { interval: 200 });
+    await waitFor(() => expectList(entities.slice(0, perPage), relations), { interval: 200 });
 
     // Click on load more button to load slice 2.
     await act(async () => userEvent.click(loadMoreButton));
-    await waitFor(() => expectList(entities.slice(0, perPage * 2), products));
+    await waitFor(() => expectList(entities.slice(0, perPage * 2), relations));
     loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
 
     // Activate intersection observe to load slice 3.
     const { onIntersect } = (globalThis as any).__intersection_observer_props__;
     await waitFor(async () => onIntersect());
-    await waitFor(() => expectList(entities.slice(0, perPage * 3), products), { timeout: 30000 });
+    await waitFor(() => expectList(entities.slice(0, perPage * 3), relations), { timeout: 30000 });
     loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
   });
