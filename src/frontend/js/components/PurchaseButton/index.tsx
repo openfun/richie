@@ -53,7 +53,7 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
 
   if (!user) {
     return (
-      <button className="product-item__cta" onClick={login}>
+      <button className="purchase-button__cta" onClick={login}>
         <FormattedMessage
           {...messages.loginToPurchase}
           values={{ product: <span className="offscreen">&quot;{product.title}&quot;</span> }}
@@ -73,7 +73,7 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
           {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
           <button
             data-testid="PurchaseButton__cta"
-            className="product-item__cta"
+            className="purchase-button__cta"
             onClick={() => hasAtLeastOneCourseRun && setIsSaleTunnelOpen(true)}
             // so that the button is explicit on its own, we add a description that doesn't
             // rely on the text coming from the CMS
@@ -86,12 +86,12 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
             {product.call_to_action}
           </button>
           {!hasAtLeastOneCourseRun && (
-            <p className="product-item__no-course-run">
+            <p className="purchase-button__no-course-run">
               <FormattedMessage {...messages.noCourseRunToPurchase} />
             </p>
           )}
           {hasAtLeastOneCourseRun && !hasAtLeastOneRemainingOrder && (
-            <p className="product-item__no-course-run">
+            <p className="purchase-button__no-course-run">
               <FormattedMessage {...messages.noRemainingOrder} />
             </p>
           )}

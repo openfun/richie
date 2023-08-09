@@ -7,9 +7,9 @@ import { Spinner } from 'components/Spinner';
 import { useOrders } from 'hooks/useOrders';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
+import PurchaseButton from 'components/PurchaseButton';
 import CertificateItem from './components/CourseProductCertificateItem';
 import CourseRunItem from './components/CourseRunItem';
-import PurchaseButton from './components/PurchaseButton';
 
 const messages = defineMessages({
   purchased: {

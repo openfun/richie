@@ -122,23 +122,5 @@
 
   &__footer {
     padding: 0 0.875rem 1rem 0.875rem;
-
-    .product-item__no-course-run {
-      color: r-theme-val(product-item, feedback-color);
-      font-size: 0.8125rem;
-      line-height: 1.2em;
-      padding: 0.5rem 0.5rem 0 0.5rem;
-      text-align: center;
-    }
-    .product-item__cta {
-      @include button-base(
-        $font-color: r-theme-val(product-item, button-color),
-        $font-family: $r-font-family-montserrat,
-        $font-size: 1rem,
-        $font-weight: $font-weight-bold
-      );
-      background-color: r-theme-val(product-item, button-background);
-      width: 100%;
-    }
   }
 }
