@@ -6,10 +6,10 @@ import { OrderState } from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
 import { useOrders } from 'hooks/useOrders';
 import { Icon, IconTypeEnum } from 'components/Icon';
+import { CourseProductProvider } from 'contexts/CourseProductContext';
 import CertificateItem from './components/CourseProductCertificateItem';
 import CourseRunItem from './components/CourseRunItem';
 import PurchaseButton from './components/PurchaseButton';
-import { CourseProductProvider } from './contexts/CourseProductContext';
 
 const messages = defineMessages({
   purchased: {
