@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
+import PaymentButton from 'components/PaymentButton';
 import AddressesManagement, { LOCAL_BILLING_ADDRESS_ID } from 'components/AddressesManagement';
 import { SelectField } from 'components/Form';
 import { useSession } from 'contexts/SessionContext';
@@ -9,7 +10,6 @@ import type * as Joanie from 'types/Joanie';
 import type { Maybe, Nullable } from 'types/utils';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { RegisteredCreditCard } from '../RegisteredCreditCard';
-import PaymentButton from '../PaymentButton';
 
 const messages = defineMessages({
   resumeTile: {

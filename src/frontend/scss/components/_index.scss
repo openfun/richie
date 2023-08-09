@@ -1,6 +1,13 @@
 @import '../../js/components/AddressesManagement/styles';
 @import '../../js/components/TeacherDashboardCourseList/styles';
 @import '../../js/components/Modal/styles';
+@import '../../js/components/PaymentButton/styles';
+@import '../../js/components/SaleTunnel/styles';
+@import '../../js/components/SaleTunnel/components/RegisteredCreditCard/styles';
+@import '../../js/components/SaleTunnel/components/SaleTunnelStepPayment/styles';
+@import '../../js/components/SaleTunnel/components/SaleTunnelStepResume/styles';
+@import '../../js/components/SaleTunnel/components/SaleTunnelStepValidation/styles';
+@import '../../js/components/SaleTunnel/components/StepBreadcrumb/styles';
 @import '../../js/components/RegisteredAddress/styles';
 @import '../../js/components/SearchInput/styles';
 @import '../../js/components/Spinner/styles';
@@ -28,13 +35,6 @@
 @import '../../js/widgets/Search/components/SearchFiltersPane/styles';
 @import '../../js/widgets/SyllabusCourseRunsList/components/CourseProductItem/components/CourseProductCertificateItem/styles';
 @import '../../js/widgets/SyllabusCourseRunsList/components/CourseProductItem/components/CourseProductCourseRuns/styles';
-@import '../../js/widgets/SyllabusCourseRunsList/components/CourseProductItem/components/PaymentButton/styles';
-@import '../../js/widgets/SyllabusCourseRunsList/components/CourseProductItem/components/RegisteredCreditCard/styles';
-@import '../../js/widgets/SyllabusCourseRunsList/components/CourseProductItem/components/SaleTunnel/styles';
-@import '../../js/widgets/SyllabusCourseRunsList/components/CourseProductItem/components/SaleTunnelStepPayment/styles';
-@import '../../js/widgets/SyllabusCourseRunsList/components/CourseProductItem/components/SaleTunnelStepResume/styles';
-@import '../../js/widgets/SyllabusCourseRunsList/components/CourseProductItem/components/SaleTunnelStepValidation/styles';
-@import '../../js/widgets/SyllabusCourseRunsList/components/CourseProductItem/components/StepBreadcrumb/styles';
 @import '../../js/widgets/SyllabusCourseRunsList/components/CourseProductItem/styles';
 @import '../../js/widgets/SyllabusCourseRunsList/components/CourseRunEnrollment/CourseRunUnenrollmentButton/styles';
 @import '../../js/widgets/SyllabusCourseRunsList/components/CourseRunEnrollment/styles';

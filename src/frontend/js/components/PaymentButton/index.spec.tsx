@@ -32,7 +32,7 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
-jest.mock('../PaymentInterfaces');
+jest.mock('./components/PaymentInterfaces');
 
 describe('PaymentButton', () => {
   const formatPrice = (price: number, currency: string) =>

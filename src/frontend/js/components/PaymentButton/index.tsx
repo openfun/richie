@@ -9,7 +9,7 @@ import { OrderState } from 'types/Joanie';
 import type { Nullable } from 'types/utils';
 import { HttpError } from 'utils/errors/HttpError';
 import { useCourseProduct } from 'contexts/CourseProductContext';
-import PaymentInterface from '../PaymentInterfaces';
+import PaymentInterface from './components/PaymentInterfaces';
 
 const messages = defineMessages({
   errorAbort: {

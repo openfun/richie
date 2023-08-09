@@ -13,7 +13,7 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
 import { SaleTunnelStepPayment } from '.';
 
-jest.mock('../PaymentButton', () => ({
+jest.mock('components/PaymentButton', () => ({
   __esModule: true,
   default: () => <h1>Payment Button</h1>,
 }));

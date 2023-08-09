@@ -1,6 +1,6 @@
 import { handle } from 'utils/errors/handle';
 import { useAsyncEffect } from 'hooks/useAsyncEffect';
-import { PaymentErrorMessageId } from '../PaymentButton';
+import { PaymentErrorMessageId } from 'components/PaymentButton';
 import type { PaymentInterfaceProps } from '.';
 
 /**

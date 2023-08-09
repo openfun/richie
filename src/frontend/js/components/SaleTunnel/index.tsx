@@ -4,11 +4,11 @@ import { Modal } from 'components/Modal';
 import type * as Joanie from 'types/Joanie';
 import { useOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
-import { Manifest, useStepManager } from '../../hooks/useStepManager';
-import { SaleTunnelStepValidation } from '../SaleTunnelStepValidation';
-import { SaleTunnelStepPayment } from '../SaleTunnelStepPayment';
-import { SaleTunnelStepResume } from '../SaleTunnelStepResume';
-import { StepBreadcrumb } from '../StepBreadcrumb';
+import { Manifest, useStepManager } from 'hooks/useStepManager';
+import { SaleTunnelStepValidation } from './components/SaleTunnelStepValidation';
+import { SaleTunnelStepPayment } from './components/SaleTunnelStepPayment';
+import { SaleTunnelStepResume } from './components/SaleTunnelStepResume';
+import { StepBreadcrumb } from './components/StepBreadcrumb';
 
 const messages = defineMessages({
   stepValidation: {
