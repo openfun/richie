@@ -18,13 +18,13 @@ const StepComponent =
     </Fragment>
   );
 
-jest.mock('../SaleTunnelStepValidation', () => ({
+jest.mock('./components/SaleTunnelStepValidation', () => ({
   SaleTunnelStepValidation: StepComponent('SaleTunnelStepValidation Component'),
 }));
-jest.mock('../SaleTunnelStepPayment', () => ({
+jest.mock('./components/SaleTunnelStepPayment', () => ({
   SaleTunnelStepPayment: StepComponent('SaleTunnelStepPayment Component'),
 }));
-jest.mock('../SaleTunnelStepResume', () => ({
+jest.mock('./components/SaleTunnelStepResume', () => ({
   SaleTunnelStepResume: StepComponent('SaleTunnelStepResume Component'),
 }));
 jest.mock('utils/context', () => ({

@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
 import { Priority } from 'types';
-import SaleTunnel from '../SaleTunnel';
+import SaleTunnel from 'components/SaleTunnel';
 
 const messages = defineMessages({
   loginToPurchase: {

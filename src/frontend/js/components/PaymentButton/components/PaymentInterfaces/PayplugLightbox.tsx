@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { handle } from 'utils/errors/handle';
-import { PaymentErrorMessageId } from '../PaymentButton';
+import { PaymentErrorMessageId } from 'components/PaymentButton';
 import type { PaymentInterfaceProps } from '.';
 
 /**

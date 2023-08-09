@@ -5,7 +5,7 @@ import { Children, Fragment, useCallback } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Nullable } from 'types/utils';
 import { Icon } from 'components/Icon';
-import { Manifest, Step, useStepManager } from '../../hooks/useStepManager';
+import { Manifest, Step, useStepManager } from 'hooks/useStepManager';
 
 interface Props<Keys extends PropertyKey, LastKey extends Keys> {
   manifest: Manifest<Keys, LastKey>;

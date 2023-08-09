@@ -8,7 +8,7 @@ import {
 } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { IconTypeEnum } from 'components/Icon';
-import { type Manifest, useStepManager } from '../../hooks/useStepManager';
+import { type Manifest, useStepManager } from 'hooks/useStepManager';
 import { StepBreadcrumb } from '.';
 
 describe('StepBreadcrumb', () => {
