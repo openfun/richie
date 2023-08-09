@@ -16,7 +16,7 @@ import type { CourseLight, CourseRun, Enrollment, OrderLite } from 'types/Joanie
 import { Deferred } from 'utils/test/deferred';
 import { CourseStateTextEnum, Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { CourseProductProvider } from '../../contexts/CourseProductContext';
+import { CourseProductProvider } from 'contexts/CourseProductContext';
 import { CourseRunList, EnrollableCourseRunList, EnrolledCourseRun } from '.';
 
 jest.mock('utils/context', () => ({

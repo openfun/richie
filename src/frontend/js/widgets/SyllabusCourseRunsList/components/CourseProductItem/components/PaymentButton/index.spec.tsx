@@ -16,7 +16,7 @@ import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { CourseProductProvider } from '../../contexts/CourseProductContext';
+import { CourseProductProvider } from 'contexts/CourseProductContext';
 import PaymentButton from '.';
 
 jest.mock('utils/context', () => ({
