@@ -62,4 +62,9 @@ module.exports = {
       mantis: '#76ce68',
     },
   },
+  components: {
+    button: {
+      'font-family': 'Montserrat',
+    },
+  },
 };
