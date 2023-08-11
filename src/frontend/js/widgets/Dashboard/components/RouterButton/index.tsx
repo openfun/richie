@@ -13,6 +13,7 @@ export const RouterButton = (props: ButtonProps) => {
   const ref = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   return (
     <Button
+      className={props.className}
       ref={ref}
       href={hrefBase + props.href}
       onClick={(event: MouseEvent) => {
