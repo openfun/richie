@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Course details characteristics overflow issue
+- Map all richie course properties into `getCourseGlimpseProps` util
 
 ### Removed
 

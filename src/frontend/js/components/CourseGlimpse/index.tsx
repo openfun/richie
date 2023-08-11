@@ -36,6 +36,10 @@ export interface CourseGlimpseCourse {
   }>;
   state: CourseState;
   nb_course_runs?: number;
+  organizations?: string[];
+  duration?: string;
+  effort?: string;
+  categories?: string[];
 }
 
 export interface CourseGlimpseProps {
@@ -150,7 +154,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
             </span>
           </div>
         ) : null}
-        <CourseGlimpseFooter context={context} courseState={course.state} />
+        <CourseGlimpseFooter context={context} course={course} />
       </div>
     </div>
   );
