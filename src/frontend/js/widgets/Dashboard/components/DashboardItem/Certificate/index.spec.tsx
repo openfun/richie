@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { Certificate, CourseLight } from 'types/Joanie';
+import { Certificate, CourseLight, ProductType } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate/index';
@@ -49,7 +49,10 @@ describe('<DashboardCertificate/>', () => {
 
   it('displays a certificate', async () => {
     const certificate: Certificate = CertificateFactory().one();
-    render(<DashboardItemCertificate certificate={certificate} />, { wrapper: Wrapper });
+    render(
+      <DashboardItemCertificate certificate={certificate} productType={ProductType.CREDENTIAL} />,
+      { wrapper: Wrapper },
+    );
 
     await waitFor(() => screen.getByText(certificate.certificate_definition.title));
     screen.getByText((certificate.order.course as CourseLight).title);
@@ -64,7 +67,10 @@ describe('<DashboardCertificate/>', () => {
 
     fetchMock.get(`https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`, 200);
 
-    render(<DashboardItemCertificate certificate={certificate} />, { wrapper: Wrapper });
+    render(
+      <DashboardItemCertificate certificate={certificate} productType={ProductType.CREDENTIAL} />,
+      { wrapper: Wrapper },
+    );
 
     await waitFor(() => screen.getByText(certificate.certificate_definition.title));
 
