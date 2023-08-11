@@ -43,8 +43,8 @@ $ make migrate
   // Import Cunningham tokens and icons
   @import '@openfun/cunningham-react/dist/icons';
   @import '@openfun/cunningham-react/dist/style';
-  @import 'richie-education/vendors/cunningham-tokens';
-  @import 'richie-education/vendors/css/cunningham-tokens';
+  @import 'richie-education/scss/vendors/cunningham-tokens';
+  @import 'richie-education/scss/vendors/css/cunningham-tokens';
   
   // Override default Richie settings variables
   @import 'richie-education/scss/colors/palette';
