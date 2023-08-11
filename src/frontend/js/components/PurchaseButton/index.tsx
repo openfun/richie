@@ -1,10 +1,12 @@
+import c from 'classnames';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useMemo, useState } from 'react';
 import { Button } from '@openfun/cunningham-react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
-import { Priority } from 'types';
 import SaleTunnel from 'components/SaleTunnel';
+import { isOpenedCourseRunCertificate, isOpenedCourseRunCredential } from 'utils/CourseRuns';
+import { CourseState } from 'types';
 
 const messages = defineMessages({
   loginToPurchase: {
@@ -12,11 +14,17 @@ const messages = defineMessages({
     description: "Label displayed inside the product's CTA when user is not logged in",
     id: 'components.SaleTunnel.loginToPurchase',
   },
-  noCourseRunToPurchase: {
+  noCourseRunToPurchaseCredential: {
     defaultMessage:
       'At least one course has no course runs, this product is not currently available for sale',
     description: "Label displayed below the product's CTA when there is no courseRun",
-    id: 'components.SaleTunnel.noCourseRunToPurchase',
+    id: 'components.SaleTunnel.noCourseRunToPurchaseCredential',
+  },
+  noCourseRunToPurchaseCertificate: {
+    defaultMessage:
+      'The course run is not active, this product is not currently available for sale',
+    description: "Label displayed below the product's CTA when there is no courseRun",
+    id: 'components.SaleTunnel.noCourseRunToPurchaseCertificate',
   },
   noRemainingOrder: {
     defaultMessage: 'There are no more places available for this product.',
@@ -34,21 +42,35 @@ const messages = defineMessages({
 
 interface PurchaseButtonProps {
   product: Joanie.Product;
-  disabled: boolean;
+  courseRunState?: CourseState;
+  disabled?: boolean;
+  className?: string;
 }
 
-const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
+const PurchaseButton = ({
+  product,
+  courseRunState,
+  disabled = false,
+  className,
+}: PurchaseButtonProps) => {
   const intl = useIntl();
   const { user, login } = useSession();
   const [isSaleTunnelOpen, setIsSaleTunnelOpen] = useState(false);
 
-  const isOpenedCourseRun = (courseRun: Joanie.CourseRun) =>
-    courseRun.state.priority <= Priority.FUTURE_NOT_YET_OPEN;
-
   const hasAtLeastOneCourseRun = useMemo(() => {
+    if (product.type === Joanie.ProductType.CERTIFICATE) {
+      if (!courseRunState) {
+        throw new Error(
+          'Unable to instanciate PurchaseButton with a product CERTIFICATE without the according courseRunState.',
+        );
+      }
+      return isOpenedCourseRunCertificate(courseRunState);
+    }
     return (
       product.target_courses.length > 0 &&
-      !product.target_courses.some(({ course_runs }) => !course_runs.some(isOpenedCourseRun))
+      product.target_courses.every(({ course_runs }) =>
+        course_runs.some((targetCourseRun) => isOpenedCourseRunCredential(targetCourseRun.state)),
+      )
     );
   }, [product]);
 
@@ -73,7 +95,7 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
         <>
           <Button
             data-testid="PurchaseButton__cta"
-            fullWidth
+            className={c('purchase-button__cta', className)}
             onClick={() => hasAtLeastOneCourseRun && setIsSaleTunnelOpen(true)}
             // so that the button is explicit on its own, we add a description that doesn't
             // rely on the text coming from the CMS
@@ -87,7 +109,11 @@ const PurchaseButton = ({ product, disabled }: PurchaseButtonProps) => {
           </Button>
           {!hasAtLeastOneCourseRun && (
             <p className="purchase-button__no-course-run">
-              <FormattedMessage {...messages.noCourseRunToPurchase} />
+              <FormattedMessage
+                {...(product.type === Joanie.ProductType.CREDENTIAL
+                  ? messages.noCourseRunToPurchaseCredential
+                  : messages.noCourseRunToPurchaseCertificate)}
+              />
             </p>
           )}
           {hasAtLeastOneCourseRun && !hasAtLeastOneRemainingOrder && (
