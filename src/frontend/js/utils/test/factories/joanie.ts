@@ -101,12 +101,12 @@ export const CertificateFactory = factory((): Certificate => {
   };
 });
 
-export const CertificateProductFactory = factory((): Product => {
+export const CredentialProductFactory = factory((): Product => {
   return {
     id: faker.string.uuid(),
     created_on: faker.date.past().toISOString(),
     title: FactoryHelper.sequence((counter) => `Certificate Product ${counter}`),
-    type: ProductType.CERTIFICATE,
+    type: ProductType.CREDENTIAL,
     price: faker.number.int(),
     price_currency: faker.finance.currencyCode(),
     call_to_action: faker.lorem.words(3),
@@ -119,16 +119,16 @@ export const CertificateProductFactory = factory((): Product => {
 
 export const CertificateCourseProductFactory = factory((): CourseProduct => {
   return {
-    ...CertificateProductFactory().one(),
+    ...CredentialProductFactory().one(),
     order: OrderLiteFactory().one(),
     target_courses: TargetCourseFactory().many(3),
   };
 });
 
-// ProductFactory is an alias for CertificateProductFactory
+// ProductFactory is an alias for CredentialProductFactory
 // in the future we'll have differents types of products,
 // factories.js need a feature that return a random factory from a list.
-export const ProductFactory = CertificateProductFactory;
+export const ProductFactory = CredentialProductFactory;
 
 export const CourseRunFactory = factory((): CourseRun => {
   return {
@@ -210,7 +210,8 @@ export const CourseLightFactory = factory((): CourseLight => {
     code: faker.string.alphanumeric(5),
     organizations: OrganizationLightFactory().many(1),
     title: FactoryHelper.sequence((counter) => `Course light ${counter}`),
-    products: CertificateCourseProductFactory().many(3),
+    // products: CertificateCourseProductFactory().many(3),
+    products: [],
     course_runs: [],
     orders: [],
   };

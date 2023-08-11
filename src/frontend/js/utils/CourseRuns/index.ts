@@ -77,3 +77,15 @@ export const computeState = (courseRun: CourseRun): CourseState => {
     text: CourseStateTextEnum.ENROLLMENT_CLOSED,
   };
 };
+
+export const isOpenedCourseRunCredential = (courseRunState: CourseState) =>
+  courseRunState.priority <= Priority.FUTURE_NOT_YET_OPEN;
+
+export const isOpenedCourseRunCertificate = (courseRunState: CourseState) =>
+  [
+    Priority.ONGOING_OPEN,
+    Priority.FUTURE_OPEN,
+    Priority.FUTURE_NOT_YET_OPEN,
+    Priority.FUTURE_CLOSED,
+    Priority.ONGOING_CLOSED,
+  ].includes(courseRunState.priority);
