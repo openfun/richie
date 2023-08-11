@@ -266,6 +266,7 @@ export const Enrolled = ({
       {SHOW_ACCESS_COURSE_PRIORITIES.includes(enrollment.course_run.state.priority) && (
         // FIXME: cunningham button should allow usage of href.
         <RichieButton
+          className="dashboard-item__button"
           color="outline-primary"
           href={enrollment.course_run.resource_link}
           data-testid="dashboard-item-enrollment__button"

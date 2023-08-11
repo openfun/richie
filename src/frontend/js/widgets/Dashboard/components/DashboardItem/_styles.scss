@@ -52,6 +52,11 @@
       }
     }
   }
+
+  &__button {
+    justify-content: center;
+    min-width: rem-calc(140px);
+  }
 }
 
 .dashboard-sub-item-list {
@@ -119,12 +124,14 @@
     @include media-breakpoint-down(sm) {
       flex-direction: column;
 
-      .button {
+      .button,
+      .dashboard-item__button {
         width: 100%;
       }
     }
 
-    .button {
+    .button,
+    .dashboard-item__button {
       flex-shrink: 0;
     }
 

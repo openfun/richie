@@ -125,6 +125,7 @@ export const DashboardItemOrder = ({
           </div>
           {showDetailsButton && (
             <RouterButton
+              className="dashboard-item__button"
               color="transparent-darkest"
               href={getRoutePath(LearnerDashboardPaths.ORDER, { orderId: order.id })}
               data-testid="dashboard-item-order__button"
