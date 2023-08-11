@@ -52,9 +52,19 @@ interface DashboardItemOrderProps {
   writable?: boolean;
 }
 
-const DashboardItemOrderCertificate = ({ order, product }: { order: Order; product: Product }) => {
+interface DashboardItemOrderCertificateProps {
+  order: Order;
+  product: Product;
+}
+
+const DashboardItemOrderCertificate = ({ order, product }: DashboardItemOrderCertificateProps) => {
   if (!order.certificate) {
-    return <DashboardItemCertificate certificateDefinition={product.certificate_definition} />;
+    return (
+      <DashboardItemCertificate
+        certificateDefinition={product.certificate_definition}
+        productType={product.type}
+      />
+    );
   }
   const certificate = useCertificate(order.certificate);
   return (
@@ -66,7 +76,9 @@ const DashboardItemOrderCertificate = ({ order, product }: { order: Order; produ
           </span>
         </Spinner>
       )}
-      {certificate.item && <DashboardItemCertificate certificate={certificate.item} />}
+      {certificate.item && (
+        <DashboardItemCertificate certificate={certificate.item} productType={product.type} />
+      )}
     </>
   );
 };

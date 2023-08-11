@@ -1,50 +1,20 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@openfun/cunningham-react';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { Certificate, CertificateDefinition, CourseLight } from 'types/Joanie';
-import { useDownloadCertificate } from 'hooks/useDownloadCertificate';
-import { Spinner } from 'components/Spinner';
-import useDateFormat from 'hooks/useDateFormat';
+import { Certificate, CertificateDefinition, CourseLight, ProductType } from 'types/Joanie';
 import { DashboardItem } from 'widgets/Dashboard/components/DashboardItem/index';
 import { Maybe } from 'types/utils';
+import DownloadCertificateButton from 'components/DownloadCertificateButton';
+import CertificateStatus from '../CertificateStatus';
 
-const messages = defineMessages({
-  download: {
-    defaultMessage: 'Download',
-    description: 'Label for the download button of a certificate',
-    id: 'components.DashboardCertificate.download',
-  },
-  details: {
-    defaultMessage: 'Details',
-    description: 'Label for the details button of a certificate',
-    id: 'components.DashboardCertificate.details',
-  },
-  issuedOn: {
-    defaultMessage: 'Issued on {date}',
-    description: 'Label for the date of issue of a certificate',
-    id: 'components.DashboardCertificate.issuedOn',
-  },
-  noCertificate: {
-    defaultMessage:
-      'When all your courses will be passed, you will be able to download your certificate here.',
-    description: 'Label displayed when no certificate is available',
-    id: 'components.DashboardCertificate.noCertificate',
-  },
-  generatingCertificate: {
-    defaultMessage: 'Certificate is being generated...',
-    description:
-      'Accessible label displayed while certificate is being generated on the dashboard.',
-    id: 'components.DashboardCertificate.generatingCertificate',
-  },
-});
-
+interface DashboardItemCertificateProps {
+  certificate?: Certificate;
+  certificateDefinition?: CertificateDefinition;
+  productType?: ProductType;
+}
 export const DashboardItemCertificate = ({
   certificate,
   certificateDefinition,
-}: {
-  certificate?: Certificate;
-  certificateDefinition?: CertificateDefinition;
-}) => {
+  productType,
+}: DashboardItemCertificateProps) => {
   if (certificate) {
     if (certificateDefinition) {
       throw new Error('certificate and certificateDefinition are mutually exclusive');
@@ -59,16 +29,6 @@ export const DashboardItemCertificate = ({
   }
 
   const course = certificate?.order.course as Maybe<CourseLight>;
-  const { download, loading } = useDownloadCertificate();
-  const formatDate = useDateFormat();
-
-  const onDownloadClick = async () => {
-    if (!certificate) {
-      return;
-    }
-    await download(certificate.id);
-  };
-
   return (
     <DashboardItem
       title={course?.title ?? ''}
@@ -82,30 +42,9 @@ export const DashboardItemCertificate = ({
           </div>
           <div className="dashboard-certificate__footer">
             <span>
-              {certificate ? (
-                <FormattedMessage
-                  {...messages.issuedOn}
-                  values={{ date: formatDate(certificate!.issued_on) }}
-                />
-              ) : (
-                <FormattedMessage {...messages.noCertificate} />
-              )}
+              <CertificateStatus certificate={certificate} productType={productType} />
             </span>
-            <div>
-              {certificate && (
-                <Button color="secondary" disabled={loading} onClick={onDownloadClick}>
-                  {loading ? (
-                    <Spinner theme="primary" aria-labelledby="generating-certificate">
-                      <span id="generating-certificate">
-                        <FormattedMessage {...messages.generatingCertificate} />
-                      </span>
-                    </Spinner>
-                  ) : (
-                    <FormattedMessage {...messages.download} />
-                  )}
-                </Button>
-              )}
-            </div>
+            <div>{certificate && <DownloadCertificateButton certificateId={certificate.id} />}</div>
           </div>
         </>
       }
