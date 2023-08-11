@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add a footer on enrollment's item in the learner dashboard. It give the
+  possibility to purchase linked product or download linked certificate.
+
 ### Changed
 
 - When a course have multiple seller organizations, CourseGlimpse now display

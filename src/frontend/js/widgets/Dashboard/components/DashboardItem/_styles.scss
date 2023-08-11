@@ -121,6 +121,11 @@
     padding: 0.5rem 1rem;
     min-height: 3.75rem;
 
+    border-top: $onepixel solid r-theme-val(dashboard-item, base-border);
+    &:first-child {
+      border-top: 0;
+    }
+
     @include media-breakpoint-down(sm) {
       flex-direction: column;
 
