@@ -47,6 +47,7 @@ export const EnrollmentFactory = factory((): Enrollment => {
     id: faker.string.uuid(),
     course_run: CourseRunWithCourseFactory().one(),
     is_active: true,
+    products: ProductFactory().many(1),
     state: EnrollmentState.SET,
     was_created_by_order: false,
     created_on: faker.date.past({ years: 1 }).toISOString(),
@@ -132,6 +133,7 @@ export const ProductFactory = CredentialProductFactory;
 
 export const CourseRunFactory = factory((): CourseRun => {
   return {
+    course: CourseLightFactory().one(),
     end: faker.date.future({ years: 0.75 }).toISOString(),
     enrollment_end: faker.date.future({ years: 0.5 }).toISOString(),
     enrollment_start: faker.date.past({ years: 0.5 }).toISOString(),
@@ -210,7 +212,10 @@ export const CourseLightFactory = factory((): CourseLight => {
     code: faker.string.alphanumeric(5),
     organizations: OrganizationLightFactory().many(1),
     title: FactoryHelper.sequence((counter) => `Course light ${counter}`),
-    // products: CertificateCourseProductFactory().many(3),
+    // do not use a ProductFactory here.
+    // ProductFactory will call CourseLightFactory and create a infinit loop.
+    // if we need a factory of course with a product, it should be a
+    // different one than CourseLightFactory.
     products: [],
     course_runs: [],
     orders: [],

@@ -30,4 +30,5 @@ export const enrollment: Enrollment = {
       ],
     },
   },
+  products: [],
 };
