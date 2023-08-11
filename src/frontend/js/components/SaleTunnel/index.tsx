@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
-import type * as Joanie from 'types/Joanie';
-import { useOmniscientOrders } from 'hooks/useOrders';
+import { Product } from 'types/Joanie';
+import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
 import { SaleTunnelStepValidation } from './components/SaleTunnelStepValidation';
@@ -38,14 +38,19 @@ const focusCurrentStep = (container: HTMLElement) => {
 };
 
 type Props = {
-  product: Joanie.Product;
+  product: Product;
   isOpen: boolean;
   onClose: () => void;
 };
 
 const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
   const intl = useIntl();
-  const { methods: ordersMethods } = useOmniscientOrders();
+  const {
+    methods: { refetch: refetchOmniscientOrders },
+  } = useOmniscientOrders();
+  const {
+    methods: { invalidate: invalidateOrders },
+  } = useOrders(undefined, { enabled: false });
 
   const manifest: Manifest<TunnelSteps, 'resume'> = {
     start: 'validation',
@@ -67,7 +72,9 @@ const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
         onExit: () => {
           // Once the user has completed the purchase, we need to refetch the orders
           // to update the ordersQuery cache
-          ordersMethods.refetch();
+          invalidateOrders();
+          refetchOmniscientOrders();
+
           handleModalClose();
         },
       },
