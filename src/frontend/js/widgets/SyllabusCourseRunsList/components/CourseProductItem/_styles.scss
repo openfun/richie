@@ -122,5 +122,9 @@
 
   &__footer {
     padding: 0 0.875rem 1rem 0.875rem;
+
+    .purchase-button__cta {
+      width: 100%;
+    }
   }
 }
