@@ -47,6 +47,10 @@ const getCourseGlimpsePropsFromRichieCourse = (course: RichieCourse): CourseGlim
   },
   icon: course.icon,
   state: course.state,
+  duration: course.duration,
+  effort: course.effort,
+  categories: course.categories,
+  organizations: course.organizations,
 });
 
 const getCourseGlimpsePropsFromJoanieCourse = (

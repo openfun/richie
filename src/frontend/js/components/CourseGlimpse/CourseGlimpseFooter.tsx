@@ -2,7 +2,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CommonDataProps } from 'types/commonDataProps';
-import { CourseState } from 'types';
+import { CourseGlimpseCourse } from 'components/CourseGlimpse/index';
 
 const messages = defineMessages({
   dateIconAlt: {
@@ -16,18 +16,18 @@ const messages = defineMessages({
  * <CourseGlimpseFooter />.
  * This is spun off from <CourseGlimpse /> to allow easier override through webpack.
  */
-export const CourseGlimpseFooter: React.FC<{ courseState: CourseState } & CommonDataProps> = ({
-  courseState,
+export const CourseGlimpseFooter: React.FC<{ course: CourseGlimpseCourse } & CommonDataProps> = ({
+  course,
 }) => {
   const intl = useIntl();
   return (
     <div className="course-glimpse-footer">
       <div className="course-glimpse-footer__date">
         <Icon name={IconTypeEnum.CALENDAR} title={intl.formatMessage(messages.dateIconAlt)} />
-        {courseState.text.charAt(0).toUpperCase() +
-          courseState.text.substring(1) +
-          (courseState.datetime
-            ? ` ${intl.formatDate(new Date(courseState.datetime!), {
+        {course.state.text.charAt(0).toUpperCase() +
+          course.state.text.substring(1) +
+          (course.state.datetime
+            ? ` ${intl.formatDate(new Date(course.state.datetime!), {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric',
