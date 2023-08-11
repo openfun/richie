@@ -47,7 +47,7 @@ export interface CourseRun {
   start: string;
   state: CourseState;
   title: string;
-  course?: CourseLight;
+  course: CourseLight;
 }
 
 // - Certificate
@@ -166,6 +166,7 @@ export interface Enrollment {
   course_run: CourseRun;
   was_created_by_order: boolean;
   created_on: string;
+  products: Product[];
 }
 
 // Order
