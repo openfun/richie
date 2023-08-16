@@ -1,5 +1,5 @@
 // Extend jest matchers with jest-dom's
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { Request, Response } from 'node-fetch';
 import { FactoryConfig } from 'utils/test/factories/factories';
 
