@@ -1,5 +1,5 @@
 {
-  "name": "cookiecutter-site",
+  "name": "{{cookiecutter.site}}",
   "version": "0.1.0",
   "description": "Richie {{cookiecutter.site}} site on {{cookiecutter.domain}}",
   "scripts": {
