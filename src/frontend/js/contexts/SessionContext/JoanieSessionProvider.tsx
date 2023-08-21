@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { useAddresses } from 'hooks/useAddresses';
-import { useOrders } from 'hooks/useOrders';
+import { useOmniscientOrders } from 'hooks/useOrders';
 import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
 import type { User } from 'types/User';
 import type { Nullable } from 'types/utils';
@@ -57,7 +57,7 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
   const queryClient = useQueryClient();
   const addresses = useAddresses();
   const creditCards = useCreditCards();
-  const orders = useOrders();
+  const orders = useOmniscientOrders();
 
   const login = useCallback(() => {
     queryClient.clear();

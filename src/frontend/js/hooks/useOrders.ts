@@ -41,25 +41,29 @@ function omniscientFiltering(data: Order[], filter: OrderResourcesQuery): Order[
   );
 }
 
+const useOrdersBase =
+  (props: UseResourcesProps<Order, OrderResourcesQuery, API['user']['orders']>) =>
+  (filters?: OrderResourcesQuery, queryOptions?: QueryOptions<Order>) => {
+    const custom = useResourcesCustom({ ...props, filters, queryOptions });
+    const abortHandler = useSessionMutation(useJoanieApi().user.orders.abort);
+    return {
+      ...custom,
+      methods: {
+        ...custom.methods,
+        abort: abortHandler.mutateAsync,
+      },
+    };
+  };
+
 const props: UseResourcesProps<Order, OrderResourcesQuery, API['user']['orders']> = {
   queryKey: ['orders'],
   apiInterface: () => useJoanieApi().user.orders,
   messages,
-  omniscient: true,
-  omniscientFiltering,
   session: true,
 };
+const propsOmniscient = { ...props, omniscient: true, omniscientFiltering };
+export const useOmniscientOrders = useOrdersBase(propsOmniscient);
+export const useOmniscientOrder = useResource(propsOmniscient);
 
-export const useOrders = (filters?: OrderResourcesQuery, queryOptions?: QueryOptions<Order>) => {
-  const custom = useResourcesCustom({ ...props, filters, queryOptions });
-  const abortHandler = useSessionMutation(useJoanieApi().user.orders.abort);
-  return {
-    ...custom,
-    methods: {
-      ...custom.methods,
-      abort: abortHandler.mutateAsync,
-    },
-  };
-};
-
+export const useOrders = useOrdersBase(props);
 export const useOrder = useResource(props);

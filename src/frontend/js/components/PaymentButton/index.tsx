@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
 import { Spinner } from 'components/Spinner';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { useOrders } from 'hooks/useOrders';
+import { useOmniscientOrders } from 'hooks/useOrders';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
@@ -90,7 +90,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
   const { courseCode } = useCourseProduct();
-  const orderManager = useOrders();
+  const orderManager = useOmniscientOrders();
 
   const isReadyToPay = useMemo(() => {
     return courseCode && product.id && billingAddress;

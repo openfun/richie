@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
 import type * as Joanie from 'types/Joanie';
-import { useOrders } from 'hooks/useOrders';
+import { useOmniscientOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
 import { SaleTunnelStepValidation } from './components/SaleTunnelStepValidation';
@@ -45,7 +45,7 @@ type Props = {
 
 const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
   const intl = useIntl();
-  const { methods: ordersMethods } = useOrders();
+  const { methods: ordersMethods } = useOmniscientOrders();
 
   const manifest: Manifest<TunnelSteps, 'resume'> = {
     start: 'validation',
