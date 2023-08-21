@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { useOrder } from 'hooks/useOrders';
+import { useOmniscientOrder } from 'hooks/useOrders';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { CourseLight } from 'types/Joanie';
@@ -17,7 +17,7 @@ const messages = defineMessages({
 
 export const DashboardOrderLoader = () => {
   const params = useParams<{ orderId: string }>();
-  const order = useOrder(params.orderId);
+  const order = useOmniscientOrder(params.orderId);
   const course = order.item?.course as CourseLight;
   const courseProduct = useCourseProduct(course?.code, { productId: order.item?.product });
   const fetching = order.states.fetching || courseProduct.states.fetching;

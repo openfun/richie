@@ -4,7 +4,7 @@ import { useCourseProduct } from 'hooks/useCourseProducts';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
-import { useOrders } from 'hooks/useOrders';
+import { useOmniscientOrders } from 'hooks/useOrders';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
 import PurchaseButton from 'components/PurchaseButton';
@@ -39,7 +39,7 @@ export interface Props {
 const CourseProductItem = ({ productId, courseCode }: Props) => {
   const productQuery = useCourseProduct(courseCode, { productId });
   const product = productQuery.item?.product;
-  const ordersQuery = useOrders({
+  const ordersQuery = useOmniscientOrders({
     product: productId,
     course: courseCode,
     state: [OrderState.VALIDATED, OrderState.PENDING],
