@@ -29,11 +29,13 @@ export const DashboardItemCertificate = ({
   }
 
   const course = certificate?.order.course as Maybe<CourseLight>;
+
   return (
     <DashboardItem
       title={course?.title ?? ''}
       code={'Ref. ' + (course?.code ?? '')}
       imageUrl="https://d29emq8to944i.cloudfront.net/cba69447-b9f7-b4d7-c0d5-4d98b5280a4e/thumbnails/1659356729_1080.jpg"
+      imageFile={course?.cover}
       footer={
         <>
           <div className="dashboard-certificate__body">
