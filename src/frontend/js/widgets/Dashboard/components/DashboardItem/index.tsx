@@ -1,10 +1,12 @@
 import { PropsWithChildren, ReactNode } from 'react';
+import { JoanieFile } from 'types/Joanie';
 import { PropsWithTestId } from 'types/utils';
 
 type Props = PropsWithTestId<{
   title: string;
   code: string;
   imageUrl?: string;
+  imageFile?: JoanieFile;
   footer?: ReactNode;
 }>;
 
@@ -22,13 +24,24 @@ export const DashboardItem = (props: PropsWithChildren<Props>) => {
             props.imageUrl ? 'dashboard-item__block__head--with-image' : '',
           ].join(' ')}
         >
-          {!!props.imageUrl && (
+          {props.imageFile ? (
             <img
               data-testid="dashboard-item__block__head__thumbnail"
               className="dashboard-item__block__head__thumbnail"
-              src={props.imageUrl}
+              sizes={props.imageFile.size + ''}
+              src={props.imageFile.src}
+              srcSet={props.imageFile.srcset}
               alt=""
             />
+          ) : (
+            props.imageUrl && (
+              <img
+                data-testid="dashboard-item__block__head__thumbnail"
+                className="dashboard-item__block__head__thumbnail"
+                src={props.imageUrl}
+                alt=""
+              />
+            )
           )}
           <div className="dashboard-item__block__head__captions">
             <h5 className="dashboard-item__block__head__title">{props.title}</h5>
