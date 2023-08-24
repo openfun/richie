@@ -16,11 +16,11 @@ describe('<Enrolled/>', () => {
     return <IntlProvider locale="en">{children}</IntlProvider>;
   };
 
-  const runTest = (priority: Priority, expectButton: boolean) => {
+  const runTest = async (priority: Priority, expectButton: boolean) => {
     const enrollment: Enrollment = EnrollmentFactory().one();
     enrollment.course_run.state.priority = priority;
     render(<Enrolled enrollment={enrollment} />, { wrapper });
-    screen.getByText(
+    await screen.findByText(
       'You are enrolled for the session from ' +
         new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
           new Date(enrollment.course_run.start),

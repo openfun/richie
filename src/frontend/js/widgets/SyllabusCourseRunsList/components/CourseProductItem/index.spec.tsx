@@ -528,7 +528,7 @@ describe('CourseProductItem', () => {
       product: relation.product.id,
       course: '00000',
       target_courses: relation.product.target_courses,
-      state: OrderState.PENDING,
+      state: OrderState.SUBMITTED,
     }).one();
     fetchMock.get(
       `https://joanie.test/api/v1.0/courses/00000/products/${relation.product.id}/`,
@@ -538,7 +538,7 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper withSession>
-        <CourseProductItem productId={relation.product.id} courseCode="00000" compact />
+        <CourseProductItem productId={relation.product.id} courseCode="00000" compact={true} />
       </Wrapper>,
     );
 
