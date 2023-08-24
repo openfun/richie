@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add `display_mode` choice field to `CourseRun` model
 
+### Changed
+
+- In `SaleTunnelStepValidation`, allow user to show/hide target course details
+
 ## [2.23.0] - 2023-07-28
 
 ### Added

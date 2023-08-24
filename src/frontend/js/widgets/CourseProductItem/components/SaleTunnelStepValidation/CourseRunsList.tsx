@@ -1,7 +1,9 @@
 import { PropsWithChildren } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as Joanie from 'types/Joanie';
 import useDateFormat from 'hooks/useDateFormat';
+import { IntlHelper } from 'utils/IntlHelper';
+import EnrollmentDate from 'widgets/CourseProductItem/components/EnrollmentDate';
 
 const messages = defineMessages({
   availableCourseRuns: {
@@ -23,16 +25,22 @@ other {# course runs}
   noCourseRunAvailable: {
     defaultMessage: 'No session available for this course.',
     description: 'Text displayed when no course run are opened for the course',
-    id: 'components.CourseProductsLists.noCourseRunAvailable',
+    id: 'components.SaleTunnelStepValidation.noCourseRunAvailable',
   },
-  enrollOn: {
-    defaultMessage: 'Enrollment from {start} to {end}',
-    description: 'Text label for the enrollment dates',
-    id: 'components.CourseProductsLists.enrollOn',
+  language: {
+    defaultMessage: `{
+count,
+plural,
+one {Language:}
+other {Languages:}
+}`,
+    description: 'Label displayed before the list of languages',
+    id: 'components.SaleTunnelStepValidation.language',
   },
 });
 
 const CourseRunsList = ({ courseRuns }: PropsWithChildren<{ courseRuns: Joanie.CourseRun[] }>) => {
+  const intl = useIntl();
   const formatDate = useDateFormat({ month: 'long' });
 
   if (courseRuns.length === 0) {
@@ -66,14 +74,19 @@ const CourseRunsList = ({ courseRuns }: PropsWithChildren<{ courseRuns: Joanie.C
                 end: formatDate(courseRun.end),
               }}
             />
-            <span className="course-run__enrollment-dates">
-              <FormattedMessage
-                {...messages.enrollOn}
-                values={{
-                  start: formatDate(courseRun.enrollment_start),
-                  end: formatDate(courseRun.enrollment_end),
-                }}
+            <span className="course-run__metadata">
+              <EnrollmentDate
+                enrollment_start={courseRun.enrollment_start}
+                enrollment_end={courseRun.enrollment_end}
+                formatOptions={{ month: 'long' }}
               />
+            </span>
+            <span className="course-run__metadata">
+              <FormattedMessage
+                {...messages.language}
+                values={{ count: courseRun.languages.length }}
+              />{' '}
+              {IntlHelper.getLocalizedLanguages(courseRun.languages, intl)}
             </span>
           </li>
         ))}

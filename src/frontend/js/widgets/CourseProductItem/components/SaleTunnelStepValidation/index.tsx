@@ -1,7 +1,6 @@
 import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
-import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
-import CourseRunsList from './CourseRunsList';
+import TargetCourseDetail from './TargetCourseDetail';
 
 const messages = defineMessages({
   includingVAT: {
@@ -22,9 +21,6 @@ interface SaleTunnelStepValidationProps {
 }
 
 export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValidationProps) => {
-  const isOpenedCourseRun = (courseRun: Joanie.CourseRun) =>
-    courseRun.state.priority <= Priority.FUTURE_NOT_YET_OPEN;
-
   return (
     <section className="SaleTunnelStepValidation">
       <header className="SaleTunnelStepValidation__header">
@@ -50,8 +46,7 @@ export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValida
                 <use href="#icon-check" />
               </svg>
             </span>
-            <h3 className="product-detail-row__title">{course.title}</h3>
-            <CourseRunsList courseRuns={course.course_runs.filter(isOpenedCourseRun)} />
+            <TargetCourseDetail course={course} />
           </li>
         ))}
         {product.certificate_definition ? (
@@ -61,7 +56,9 @@ export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValida
                 <use href="#icon-certificate" />
               </svg>
             </span>
-            <h3 className="product-detail-row__title">{product.certificate_definition.title}</h3>
+            <h3 className="product-detail-row__summary h4">
+              {product.certificate_definition.title}
+            </h3>
             {product.certificate_definition.description ? (
               <p className="product-detail-row__content">
                 {product.certificate_definition.description}
