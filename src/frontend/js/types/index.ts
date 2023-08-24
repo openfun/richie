@@ -11,6 +11,11 @@ export enum CourseStateTextEnum {
 
 export type StateCTA = 'enroll now' | 'study now' | undefined;
 
+export enum CourseRunDisplayMode {
+  COMPACT = 'compact',
+  DETAILED = 'detailed',
+}
+
 export interface CourseRun {
   id: number;
   resource_link: string;
@@ -24,6 +29,7 @@ export interface CourseRun {
   dashboard_link: Nullable<string>;
   title?: string;
   snapshot?: string;
+  display_mode: CourseRunDisplayMode;
 }
 
 export enum Priority {

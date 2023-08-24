@@ -28,12 +28,12 @@ import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CourseProductRelation } from 'types/Joanie';
 import { CourseProductRelationFactory } from 'utils/test/factories/joanie';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
-import { joinAnd } from 'utils/JoinAnd';
 import { StringHelper } from 'utils/StringHelper';
 import { computeStates } from 'utils/CourseRuns';
 import { User } from 'types/User';
 import { Nullable } from 'types/utils';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
+import { IntlHelper } from 'utils/IntlHelper';
 
 jest.mock('utils/context', () => {
   const mock = mockRichieContextFactory().one();
@@ -135,15 +135,7 @@ describe('<SyllabusCourseRunsList/>', () => {
     expect(languagesNode.textContent).toEqual('Languages');
 
     const languagesContainer = languagesNode.nextSibling! as HTMLElement;
-    getByText(
-      languagesContainer,
-      joinAnd(
-        courseRun.languages.map(
-          (language) => intl.formatDisplayName(language, { type: 'language' })!,
-        ),
-        intl,
-      ),
-    );
+    getByText(languagesContainer, IntlHelper.getLocalizedLanguages(courseRun.languages, intl));
 
     expect(languagesContainer.nextSibling).toBeNull();
     getByRole(runContainer, 'link', {

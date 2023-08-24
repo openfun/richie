@@ -1,12 +1,11 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import React from 'react';
-import { CourseRun } from 'types';
+import { CourseRun, CourseRunDisplayMode } from 'types';
 import useDateFormat from 'hooks/useDateFormat';
-import { joinAnd } from 'utils/JoinAnd';
 import { Course } from 'types/Course';
 import { extractResourceId, isJoanieResourceLinkProduct } from 'api/lms/joanie';
 import { findLmsBackend } from 'api/configuration';
 import { StringHelper } from 'utils/StringHelper';
+import { IntlHelper } from 'utils/IntlHelper';
 import { DjangoCMSPluginCourseRun, DjangoCMSTemplate } from 'components/DjangoCMSTemplate';
 import CourseRunEnrollment from '../CourseRunEnrollment';
 import CourseProductItem from '../CourseProductItem';
@@ -73,14 +72,7 @@ const OpenedCourseRun = ({ courseRun }: { courseRun: CourseRun }) => {
         <dt>
           <FormattedMessage {...messages.languages} />
         </dt>
-        <dd>
-          {joinAnd(
-            courseRun.languages.map(
-              (language) => intl.formatDisplayName(language, { type: 'language' })!,
-            ),
-            intl,
-          )}
-        </dd>
+        <dd>{IntlHelper.getLocalizedLanguages(courseRun.languages, intl)}</dd>
       </dl>
       {findLmsBackend(courseRun.resource_link) ? (
         <CourseRunEnrollment courseRun={courseRun} />
@@ -107,6 +99,7 @@ export const SyllabusCourseRun = ({
           <CourseProductItem
             productId={extractResourceId(courseRun.resource_link, 'product')!}
             courseCode={course.code!}
+            compact={courseRun.display_mode === CourseRunDisplayMode.COMPACT}
           />
         ) : (
           <OpenedCourseRun courseRun={courseRun} />
