@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- When a course have multiple seller organizations, CourseGlimpse now display
+  the number of seller organization instead of the title of the first one.
 - Update `JOANIE_BACKEND` settings, frontend widgets and learner dashboard
   to match new API endpoint to retrieve course products
 
