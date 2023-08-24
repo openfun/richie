@@ -1,4 +1,5 @@
-import { IntlHelper } from 'utils/IntlHelper/index';
+import { createIntl } from 'react-intl';
+import { IntlHelper } from '.';
 
 describe('IntlHelper', () => {
   it('extract multiple value names', () => {
@@ -54,5 +55,12 @@ describe('IntlHelper', () => {
         },
       ),
     ).toBe(false);
+  });
+  it('should return localized and sorted languages', () => {
+    const intl = createIntl({ locale: 'en' });
+    const languages = ['fr', 'en', 'de', 'es'];
+    expect(IntlHelper.getLocalizedLanguages(languages, intl)).toEqual(
+      'English, French, German and Spanish',
+    );
   });
 });
