@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add `display_mode` choice field to `CourseRun` model
 - Add a footer on enrollment's item in the learner dashboard. It give the
   possibility to purchase linked product or download linked certificate.
 
@@ -19,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   the number of seller organization instead of the title of the first one.
 - Update `JOANIE_BACKEND` settings, frontend widgets and learner dashboard
   to match new API endpoint to retrieve course products
+- Use cunningham Button component.
 
 ### Fixed
 
@@ -64,7 +66,6 @@ through `context_processor`
 - Improve the design of the dashboards sidebars.
 - Move course's syllabus course runs list to React.
 - Migrate wishlist to new API.
-- Use cunningham Button component.
 
 ### Removed
 

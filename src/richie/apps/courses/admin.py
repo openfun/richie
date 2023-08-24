@@ -57,6 +57,7 @@ class CourseRunAdminForm(TranslatableModelForm):
             "enrollment_count",
             "catalog_visibility",
             "sync_mode",
+            "display_mode",
         ]
 
     def __init__(self, *args, **kwargs):

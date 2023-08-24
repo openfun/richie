@@ -622,6 +622,7 @@ class CourseRunModelsTestCase(TestCase):
         stub = CourseRunFactory(
             sync_mode="manual",
             catalog_visibility=CourseRunCatalogVisibility.COURSE_ONLY,
+            display_mode="compact",
         )  # New random values to update our course run
 
         for field in fields:

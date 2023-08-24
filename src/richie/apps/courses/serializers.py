@@ -38,6 +38,7 @@ class ReactPropsCourseRunSerializer(serializers.ModelSerializer):
             "enrollment_end",
             "languages",
             "catalog_visibility",
+            "display_mode",
             "snapshot",
         ]
 

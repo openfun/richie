@@ -75,6 +75,7 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             else None,
                             "languages": sorted(course_run.languages),
                             "catalog_visibility": course_run.catalog_visibility,
+                            "display_mode": "detailed",
                             "snapshot": None,
                         }
                     ],
@@ -129,6 +130,7 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             else None,
                             "languages": sorted(course_run.languages),
                             "catalog_visibility": course_run.catalog_visibility,
+                            "display_mode": "detailed",
                             "snapshot": snapshot.extended_object.get_absolute_url(),
                         }
                     ],
@@ -200,6 +202,7 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             else None,
                             "languages": sorted(course_run.languages),
                             "catalog_visibility": course_run.catalog_visibility,
+                            "display_mode": "detailed",
                             "snapshot": None,
                         }
                         for course_run in course.course_runs.all()
