@@ -12,6 +12,7 @@ import { HttpError } from 'utils/errors/HttpError';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { useCourseProduct } from 'contexts/CourseProductContext';
+import { useOrderContext } from '../../contexts/OrderContext';
 import PaymentInterface from './components/PaymentInterfaces';
 
 const messages = defineMessages({
@@ -92,6 +93,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
   const { courseCode, key } = useCourseProduct();
+  const { order, setOrder } = useOrderContext();
   const orderManager = useOmniscientOrders();
 
   const isReadyToPay = useMemo(() => {
@@ -109,15 +111,15 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
    * @returns {Promise<boolean>} - Promise resolving to true if order is validated
    */
   const isOrderValidated = async (id: string): Promise<Boolean> => {
-    const order = await API.user.orders.get({ id });
-    return order?.state === OrderState.VALIDATED;
+    const orderToCheck = await API.user.orders.get({ id });
+    return orderToCheck?.state === OrderState.VALIDATED;
   };
 
   /** type guard to check if the payment is a payment one click */
   const isOneClickPayment = (p: typeof payment): p is OneClickPaymentInfo =>
     (p as OneClickPaymentInfo)?.is_paid === true;
 
-  const createPayment = async () => {
+  const createPayment = async (orderId: string) => {
     WebAnalyticsAPIHandler()?.sendCourseProductEvent(CourseProductEvent.PAYMENT_CREATION, key);
 
     if (!billingAddress) {
@@ -130,18 +132,17 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
       let paymentInfos = payment;
 
       if (!paymentInfos) {
-        orderManager.methods.create(
+        orderManager.methods.submit(
           {
+            id: orderId,
             billing_address: billingAddress!,
             ...(creditCard && { credit_card_id: creditCard }),
-            course: courseCode,
-            product: product.id,
           },
           {
-            onSuccess: (order) => {
+            onSuccess: (orderPayment) => {
               paymentInfos = {
-                ...order.payment_info,
-                order_id: order.id,
+                ...orderPayment.payment_info,
+                order_id: orderId,
               };
               setPayment(paymentInfos);
             },
@@ -157,6 +158,39 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
           },
         );
       }
+    }
+  };
+
+  const createOrder = async () => {
+    if (!billingAddress) {
+      setError(PaymentErrorMessageId.ERROR_ADDRESS);
+      setState(ComponentStates.ERROR);
+    }
+
+    if (!isReadyToPay) {
+      return;
+    }
+
+    setState(ComponentStates.LOADING);
+
+    if (order) {
+      createPayment(order.id);
+    } else {
+      orderManager.methods.create(
+        {
+          course: courseCode,
+          product: product.id,
+        },
+        {
+          onSuccess: (newOrder) => {
+            setOrder(newOrder);
+            createPayment(newOrder.id);
+          },
+          onError: async () => {
+            setState(ComponentStates.ERROR);
+          },
+        },
+      );
     }
   };
 
@@ -231,7 +265,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
     <div className="payment-button">
       <Button
         disabled={state === ComponentStates.LOADING}
-        onClick={createPayment}
+        onClick={createOrder}
         {...(state === ComponentStates.ERROR && {
           'aria-describedby': 'sale-tunnel-payment-error',
         })}
