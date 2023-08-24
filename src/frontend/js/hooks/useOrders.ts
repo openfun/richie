@@ -1,5 +1,13 @@
 import { defineMessages } from 'react-intl';
-import { API, CourseLight, Order, OrderState, PaginatedResourceQuery, Product } from 'types/Joanie';
+import {
+  API,
+  CourseLight,
+  Order,
+  OrderState,
+  PaginatedResourceQuery,
+  Product,
+  ProductType,
+} from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import { QueryOptions, useResource, useResourcesCustom, UseResourcesProps } from './useResources';
@@ -8,6 +16,7 @@ export type OrderResourcesQuery = PaginatedResourceQuery & {
   course?: CourseLight['code'];
   product?: Product['id'];
   state?: OrderState[];
+  product__type?: ProductType[];
 };
 
 const messages = defineMessages({
