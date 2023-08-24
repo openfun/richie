@@ -55,11 +55,13 @@ const useOrdersBase =
   (filters?: OrderResourcesQuery, queryOptions?: QueryOptions<Order>) => {
     const custom = useResourcesCustom({ ...props, filters, queryOptions });
     const abortHandler = useSessionMutation(useJoanieApi().user.orders.abort);
+    const submitHandler = useSessionMutation(useJoanieApi().user.orders.submit);
     return {
       ...custom,
       methods: {
         ...custom.methods,
         abort: abortHandler.mutateAsync,
+        submit: submitHandler.mutateAsync,
       },
     };
   };

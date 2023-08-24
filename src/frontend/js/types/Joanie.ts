@@ -172,8 +172,9 @@ export interface Enrollment {
 
 // Order
 export enum OrderState {
+  DRAFT = 'draft',
+  SUBMITTED = 'submitted',
   CANCELED = 'canceled',
-  FAILED = 'failed',
   PENDING = 'pending',
   VALIDATED = 'validated',
 }
@@ -253,6 +254,10 @@ export interface OrderWithPaymentInfo extends Order {
   payment_info: Payment | PaymentOneClick;
 }
 
+export interface OrderPaymentInfo {
+  payment_info: Payment | PaymentOneClick;
+}
+
 // - API
 export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> {
   is_main?: boolean;
@@ -261,13 +266,17 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
 interface OrderCreationPayload {
   product: Product['id'];
   course: CourseLight['code'];
-  billing_address?: Omit<Address, 'id' | 'is_main'>;
-  credit_card_id?: CreditCard['id'];
 }
 
 interface OrderAbortPayload {
   id: Order['id'];
   payment_id?: Payment['payment_id'];
+}
+
+interface OrderSubmitPayload {
+  id: Order['id'];
+  billing_address: Omit<Address, 'id' | 'is_main'>;
+  credit_card_id?: CreditCard['id'];
 }
 
 export interface PaginatedResourceQuery extends ResourcesQuery {
@@ -332,7 +341,7 @@ interface APIUser {
   };
   orders: {
     abort(payload: OrderAbortPayload): Promise<void>;
-    create(payload: OrderCreationPayload): Promise<OrderWithPaymentInfo>;
+    create(payload: OrderCreationPayload): Promise<Order>;
     get<Filters extends OrderResourcesQuery = OrderResourcesQuery>(
       filters?: Filters,
     ): Filters extends { id: string }
@@ -341,6 +350,7 @@ interface APIUser {
     invoice: {
       download(payload: { order_id: Order['id']; invoice_reference: string }): Promise<File>;
     };
+    submit(payload: OrderSubmitPayload): Promise<OrderPaymentInfo>;
   };
   certificates: {
     download(id: string): Promise<File>;

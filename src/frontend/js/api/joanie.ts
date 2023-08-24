@@ -127,6 +127,7 @@ export const getRoutes = () => {
       orders: {
         abort: `${baseUrl}/orders/:id/abort/`,
         create: `${baseUrl}/orders/`,
+        submit: `${baseUrl}/orders/:id/submit/`,
         get: `${baseUrl}/orders/:id/`,
         invoice: {
           download: `${baseUrl}/orders/:id/invoice/`,
@@ -243,6 +244,11 @@ const API = (): Joanie.API => {
         create: async (payload) =>
           fetchWithJWT(ROUTES.user.orders.create, {
             method: 'POST',
+            body: JSON.stringify(payload),
+          }).then(checkStatus),
+        submit: async ({ id, ...payload }) =>
+          fetchWithJWT(ROUTES.user.orders.submit.replace(':id', id), {
+            method: 'PATCH',
             body: JSON.stringify(payload),
           }).then(checkStatus),
         get: async (filters) => {
