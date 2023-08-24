@@ -1,5 +1,6 @@
-import { MessageDescriptor, MessageFormatElement } from 'react-intl';
+import { IntlShape, MessageDescriptor, MessageFormatElement } from 'react-intl';
 import { Maybe } from 'types/utils';
+import { joinAnd } from 'utils/JoinAnd';
 
 export class IntlHelper {
   /**
@@ -39,5 +40,14 @@ export class IntlHelper {
     }
     const matches = Array.from(str.matchAll(/{(\w+)}/g), (m) => m[1]);
     return matches;
+  }
+
+  static getLocalizedLanguages(languages: string[], intl: IntlShape) {
+    return joinAnd(
+      languages
+        .map((language) => intl.formatDisplayName(language, { type: 'language' })!)
+        .sort((a, b) => a.localeCompare(b, [intl.locale, intl.defaultLocale])),
+      intl,
+    );
   }
 }
