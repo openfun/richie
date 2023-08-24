@@ -21,6 +21,14 @@ $ make migrate
 - `JOANIE_BACKEND` must be updated. `COURSE_REGEX` and `JS_COURSE_REGEX` must be updated to match
   new api routes. Take a look at [joanie connection documentation](/docs/joanie-connection.md) for
   more details.
+- We now using Button components from cunningham design system. They can be customise with cunningham tokens
+  configuration. See https://openfun.github.io/cunningham/?path=/docs/getting-started-customization--docs
+- scss themes variable for SaleTunnel button have been removed. These are now cunningham buttons and can be
+  customised using cunningham-tokens.
+- scss themes variable for Modal 'close button' have been removed. It is now a cunningham button and can be
+  customised using cunningham-tokens.
+- In `_theme.scss`, `steps-content` map has one more property `summary-hover-color`, if you have
+  overriden this map, you must add this new property.
 
 ## 2.21.0 to 2.23.0
 
@@ -58,12 +66,6 @@ $ make migrate
   `js/components` folder. Update your overrides.json and path in your custom scss files accordingly.
 - `js/utils/test/factories.ts` have been split into multiple files: joanie.ts, richie.ts and 
   reactQuery.ts. Update your import accordingly.
-- We now using Button components from cunningham design system. They can be customise with cunningham tokens
-  configuration. See https://openfun.github.io/cunningham/?path=/docs/getting-started-customization--docs
-- scss themes variable for SaleTunnel button have been removed. These are now cunningham buttons and can be 
-  customised using cunningham-tokens.
-- scss themes variable for Modal 'close button' have been removed. It is now a cunningham button and can be 
-  customised using cunningham-tokens.
  
 ## 2.20.1 to 2.21.0
 

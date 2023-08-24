@@ -2,7 +2,14 @@ import { faker } from '@faker-js/faker';
 import { User } from 'types/User';
 import { APIBackend } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
-import { CourseRun, CourseState, CourseStateTextEnum, Enrollment, Priority } from 'types';
+import {
+  CourseRun,
+  CourseRunDisplayMode,
+  CourseState,
+  CourseStateTextEnum,
+  Enrollment,
+  Priority,
+} from 'types';
 import { Course } from 'types/Course';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { factory } from './factories';
@@ -51,6 +58,7 @@ export const CourseRunFactory = factory<CourseRun>(() => {
     starts_in_message: null,
     dashboard_link: null,
     title: faker.lorem.sentence(3),
+    display_mode: CourseRunDisplayMode.DETAILED,
   };
 });
 
