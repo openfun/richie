@@ -1,10 +1,10 @@
 import { Children, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import c from 'classnames';
+import { useCourseProduct } from 'hooks/useCourseProducts';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
-import { useCourseProduct } from 'hooks/useCourseProducts';
 import { useOmniscientOrders } from 'hooks/useOrders';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
@@ -12,6 +12,7 @@ import PurchaseButton from 'components/PurchaseButton';
 import { Maybe } from 'types/utils';
 import useDateFormat from 'hooks/useDateFormat';
 import { ProductHelper } from 'utils/ProductHelper';
+import { OrderProvider } from 'contexts/OrderContext';
 import CertificateItem from './components/CourseProductCertificateItem';
 import CourseRunItem from './components/CourseRunItem';
 
@@ -54,10 +55,11 @@ export interface Props {
 type HeaderProps = {
   compact: boolean;
   hasPurchased: boolean;
+  isPendingState: boolean;
   order: Maybe<Joanie.Order>;
   product: Joanie.Product;
 };
-const Header = ({ product, order, hasPurchased, compact }: HeaderProps) => {
+const Header = ({ product, order, hasPurchased, isPendingState, compact }: HeaderProps) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
 
@@ -80,9 +82,9 @@ const Header = ({ product, order, hasPurchased, compact }: HeaderProps) => {
       <div className="product-widget__header-main">
         <h3 className="product-widget__title">{product.title}</h3>
         <strong className="product-widget__price h6">
-          {order && <FormattedMessage {...messages.purchased} />}
-          {hasPurchased && !order && <FormattedMessage {...messages.pending} />}
-          {!hasPurchased && (
+          {order?.state === OrderState.VALIDATED && <FormattedMessage {...messages.purchased} />}
+          {order?.state === OrderState.SUBMITTED && <FormattedMessage {...messages.pending} />}
+          {isPendingState && (
             <FormattedNumber
               currency={product.price_currency}
               value={product.price}
@@ -151,53 +153,67 @@ const CourseProductItem = ({ productId, courseCode, compact = false }: Props) =>
   const ordersQuery = useOmniscientOrders({
     product: productId,
     course: courseCode,
-    state: [OrderState.VALIDATED, OrderState.PENDING],
+    state: [OrderState.VALIDATED, OrderState.PENDING, OrderState.SUBMITTED],
   });
 
-  const order = useMemo(
-    () => ordersQuery.items.find(({ state }) => state === OrderState.VALIDATED),
-    [ordersQuery.items],
-  );
+  const order = useMemo(() => {
+    if (ordersQuery.items.length === 0) {
+      return undefined;
+    }
+    return ordersQuery.items.reduce((last, newOrder) =>
+      last.created_on > newOrder.created_on ? last : newOrder,
+    );
+  }, [ordersQuery.items]);
 
-  const hasPurchased = useMemo(() => ordersQuery.items?.length > 0, [ordersQuery.items]);
+  const isPendingState = !order || order.state === OrderState.PENDING;
+  const hasPurchased = (order && order.state === OrderState.VALIDATED) ?? false;
+
   const hasError = Boolean(productQuery.states.error);
   const isFetching = productQuery.states.fetching || ordersQuery.states.fetching;
-  const canShowContent = !compact || order;
+  const canShowContent = !compact || hasPurchased;
 
   return (
     <CourseProductProvider courseCode={courseCode} productId={productId}>
-      <section
-        className={c('product-widget', {
-          'product-widget--has-error': hasError,
-          'product-widget--compact': compact,
-          'product-widget--purchased': hasPurchased,
-        })}
-      >
-        {isFetching && (
-          <div className="product-widget__overlay">
-            <Spinner aria-labelledby="loading-course" theme="light" size="large">
-              <span id="loading-course">
-                <FormattedMessage {...messages.loading} />
-              </span>
-            </Spinner>
-          </div>
-        )}
-        {hasError && (
-          <p className="product-widget__content">
-            <Icon name={IconTypeEnum.WARNING} size="small" />
-            {productQuery.states.error}
-          </p>
-        )}
-        {!hasError && product && (
-          <>
-            <Header product={product} order={order} hasPurchased={hasPurchased} compact={compact} />
-            {canShowContent && <Content product={product} order={order} />}
-            <footer className="product-widget__footer">
-              <PurchaseButton product={product} disabled={hasPurchased} />
-            </footer>
-          </>
-        )}
-      </section>
+      <OrderProvider defaultOrder={order}>
+        <section
+          className={c('product-widget', {
+            'product-widget--has-error': hasError,
+            'product-widget--compact': compact,
+            'product-widget--purchased': hasPurchased,
+          })}
+        >
+          {isFetching && (
+            <div className="product-widget__overlay">
+              <Spinner aria-labelledby="loading-course" theme="light" size="large">
+                <span id="loading-course">
+                  <FormattedMessage {...messages.loading} />
+                </span>
+              </Spinner>
+            </div>
+          )}
+          {hasError && (
+            <p className="product-widget__content">
+              <Icon name={IconTypeEnum.WARNING} size="small" />
+              {productQuery.states.error}
+            </p>
+          )}
+          {!hasError && product && (
+            <>
+              <Header
+                product={product}
+                order={order}
+                isPendingState={isPendingState}
+                hasPurchased={hasPurchased}
+                compact={compact}
+              />
+              {canShowContent && <Content product={product} order={order} />}
+              <footer className="product-widget__footer">
+                <PurchaseButton product={product} disabled={!isPendingState} />
+              </footer>
+            </>
+          )}
+        </section>
+      </OrderProvider>
     </CourseProductProvider>
   );
 };

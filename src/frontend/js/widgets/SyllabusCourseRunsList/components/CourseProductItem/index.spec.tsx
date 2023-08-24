@@ -386,7 +386,7 @@ describe('CourseProductItem', () => {
     });
   });
 
-  it('does not render sale tunnel button if user already has a pending order', async () => {
+  it('renders sale tunnel button if user already has a pending order', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
     const order = OrderFactory({
@@ -394,6 +394,94 @@ describe('CourseProductItem', () => {
       course: '00000',
       target_courses: product.target_courses,
       state: OrderState.PENDING,
+    }).one();
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
+
+    render(
+      <Wrapper withSession>
+        <CourseProductItem productId={product.id} courseCode="00000" />
+      </Wrapper>,
+    );
+
+    // Wait for product information to be fetched
+    await screen.findByRole('status', { name: 'Loading product information...' });
+    await screen.findByRole('heading', { level: 3, name: product.title });
+
+    const $price = screen.getByText(
+      // the price formatter generates non-breaking spaces and getByText doesn't seem to handle that well, replace it
+      // with a regular space. We replace NNBSP (\u202F) and NBSP (\u00a0) with a regular space
+      priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+    );
+    expect($price.tagName).toBe('STRONG');
+    expect($price.classList.contains('h6')).toBe(true);
+
+    // - Render all target courses information
+    relation.product.target_courses.forEach((course) => {
+      const $item = screen.getByTestId(`course-item-${course.code}`);
+      // the course title shouldn't be a heading to prevent misdirection for screen reader users,
+      // but we want to it to visually look like a h5
+      const $courseTitle = getByText($item, course.title);
+      expect($courseTitle.tagName).toBe('STRONG');
+      expect($courseTitle.classList.contains('h5')).toBe(true);
+      screen.getByTestId(`CourseRunList-${course.course_runs.map(({ id }) => id).join('-')}`);
+    });
+
+    screen.getByRole('button', { name: product.call_to_action });
+  });
+
+  it('renders sale tunnel button if user already has a canceled order', async () => {
+    const relation = CourseProductRelationFactory().one();
+    const { product } = relation;
+    const order = OrderFactory({
+      product: product.id,
+      course: '00000',
+      target_courses: product.target_courses,
+      state: OrderState.CANCELED,
+    }).one();
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
+
+    render(
+      <Wrapper withSession>
+        <CourseProductItem productId={product.id} courseCode="00000" />
+      </Wrapper>,
+    );
+
+    // Wait for product information to be fetched
+    await screen.findByRole('status', { name: 'Loading product information...' });
+    await screen.findByRole('heading', { level: 3, name: product.title });
+
+    const $price = screen.getByText(
+      // the price formatter generates non-breaking spaces and getByText doesn't seem to handle that well, replace it
+      // with a regular space. We replace NNBSP (\u202F) and NBSP (\u00a0) with a regular space
+      priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+    );
+    expect($price.tagName).toBe('STRONG');
+    expect($price.classList.contains('h6')).toBe(true);
+
+    // - Render all target courses information
+    relation.product.target_courses.forEach((course) => {
+      const $item = screen.getByTestId(`course-item-${course.code}`);
+      // the course title shouldn't be a heading to prevent misdirection for screen reader users,
+      // but we want to it to visually look like a h5
+      const $courseTitle = getByText($item, course.title);
+      expect($courseTitle.tagName).toBe('STRONG');
+      expect($courseTitle.classList.contains('h5')).toBe(true);
+      screen.getByTestId(`CourseRunList-${course.course_runs.map(({ id }) => id).join('-')}`);
+    });
+
+    screen.getByRole('button', { name: product.call_to_action });
+  });
+
+  it('does not render sale tunnel button if user already has a submitted order', async () => {
+    const relation = CourseProductRelationFactory().one();
+    const { product } = relation;
+    const order = OrderFactory({
+      product: product.id,
+      course: '00000',
+      target_courses: product.target_courses,
+      state: OrderState.SUBMITTED,
     }).one();
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);

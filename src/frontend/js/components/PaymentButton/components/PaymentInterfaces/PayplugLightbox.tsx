@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { handle } from 'utils/errors/handle';
 import { PaymentErrorMessageId } from 'components/PaymentButton';
 import type { PaymentInterfaceProps } from '.';
@@ -10,17 +10,29 @@ import type { PaymentInterfaceProps } from '.';
  * https://docs.payplug.com/api/lightbox.html#lightbox
  */
 const PayplugLightbox = ({ url, onSuccess, onError }: PaymentInterfaceProps) => {
+  const ref = useRef<ReturnType<typeof setTimeout>>();
   const listenPayplugIframeMessage = (event: MessageEvent) => {
     if (typeof event.data === 'string') {
       switch (event.data) {
         case 'closePayPlugFrame':
-          onError(PaymentErrorMessageId.ERROR_ABORTING);
+          ref.current = setTimeout(() => {
+            onError(PaymentErrorMessageId.ERROR_ABORTING);
+          }, 2000);
           break;
       }
     } else if (typeof event.data === 'object') {
       switch (event.data.event) {
         case 'paidByPayPlug':
-          window.Payplug._closeIframe();
+          /**
+           * We have to do this because for One Click Payments, PayPlug no longer returns is_paid
+           * to true when the payment was successful. This opens a confirmation modal.
+           * When we want to close it, the two events are trigger and are concurrency.
+           */
+          if (ref.current) {
+            clearTimeout(ref.current);
+          } else {
+            window.Payplug._closeIframe();
+          }
           onSuccess();
       }
     } else {
