@@ -48,6 +48,7 @@ export interface CourseRun {
   state: CourseState;
   title: string;
   course: CourseLight;
+  languages: string[];
 }
 
 // - Certificate
