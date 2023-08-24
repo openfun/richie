@@ -11,6 +11,7 @@ import { DashboardItemEnrollment } from 'widgets/Dashboard/components/DashboardI
 import { DashboardItemOrder } from 'widgets/Dashboard/components/DashboardItem/Order/DashboardItemOrder';
 import Banner, { BannerType } from 'components/Banner';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
+import { ProductType } from 'types/Joanie';
 
 const messages = defineMessages({
   loading: {
@@ -31,7 +32,9 @@ const messages = defineMessages({
 });
 
 export const DashboardCourses = () => {
-  const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments();
+  const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments({
+    orderFilters: { product__type: [ProductType.CREDENTIAL] },
+  });
 
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   useIntersectionObserver({

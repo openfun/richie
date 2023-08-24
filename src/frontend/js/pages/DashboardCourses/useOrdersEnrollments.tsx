@@ -3,6 +3,7 @@ import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { Enrollment, Order, PaginatedResourceQuery } from 'types/Joanie';
 import useUnionResource, { ResourceUnionPaginationProps } from 'hooks/useUnionResource';
 import { PER_PAGE } from 'settings';
+import { OrderResourcesQuery } from 'hooks/useOrders';
 
 export const isOrder = (obj: Order | Enrollment): obj is Order => {
   return 'total' in obj && 'enrollments' in obj;
@@ -19,9 +20,14 @@ const messages = defineMessages({
   },
 });
 
+interface UseOrdersEnrollmentsProps extends ResourceUnionPaginationProps {
+  orderFilters?: OrderResourcesQuery;
+}
+
 export const useOrdersEnrollments = ({
   perPage = PER_PAGE.useOrdersEnrollments,
-}: ResourceUnionPaginationProps = {}) => {
+  orderFilters = {},
+}: UseOrdersEnrollmentsProps = {}) => {
   const api = useJoanieApi();
   return useUnionResource<
     Order,
@@ -32,7 +38,7 @@ export const useOrdersEnrollments = ({
     queryAConfig: {
       queryKey: ['user', 'order'],
       fn: api.user.orders.get,
-      filters: {},
+      filters: orderFilters,
     },
     queryBConfig: {
       queryKey: ['user', 'enrollments'],
