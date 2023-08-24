@@ -1,3 +1,5 @@
+import path from 'path';
+import fs from 'fs';
 import { render, screen } from '@testing-library/react';
 
 import { Icon, IconTypeEnum } from '.';
@@ -47,5 +49,39 @@ describe('components/Icon', () => {
     expect($svg).not.toBeNull();
     expect($svg?.classList.contains('icon')).toEqual(true);
     expect($svg?.classList.contains('test')).toEqual(true);
+  });
+});
+
+describe('IconTypeEnum', () => {
+  it('has no missing symbols', () => {
+    const iconsPath = path.join(
+      __dirname,
+      '../../../../richie/apps/core/templates/richie/icons.html',
+    );
+    const iconRawHtml = fs.readFileSync(iconsPath, 'utf8');
+    const symbolIdRegexp = /id="(icon-[a-z-]+)"/g;
+    const IconTypes: string[] = Object.values(IconTypeEnum);
+    let match;
+    // eslint-disable-next-line no-cond-assign
+    while ((match = symbolIdRegexp.exec(iconRawHtml)) !== null) {
+      // Uncomment the following line to known which icon is missing in the IconTypeEnum
+      // console.log(match[1]);
+      expect(IconTypes.includes(match[1])).toBe(true);
+    }
+  });
+
+  it('has no unknown symbols', () => {
+    const iconsPath = path.join(
+      __dirname,
+      '../../../../richie/apps/core/templates/richie/icons.html',
+    );
+    const iconRawHtml = fs.readFileSync(iconsPath, 'utf8');
+    const IconTypes: string[] = Object.values(IconTypeEnum);
+
+    IconTypes.forEach((iconType) => {
+      // Uncomment the following line to known which icon does not exist in the icons.html file
+      // console.log(iconType);
+      expect(iconRawHtml).toMatch(`id=\"${iconType}\"`);
+    });
   });
 });
