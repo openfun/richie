@@ -1,11 +1,24 @@
 .SaleTunnelStepValidation {
-  align-items: center;
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
+  width: fit-content;
+  max-width: 100%;
 
   &__header {
-    margin-bottom: 2.375rem;
+    margin-bottom: rem-calc(38px);
     text-align: center;
+  }
+
+  &__metadata {
+    &__item {
+      margin-bottom: rem-calc(8px);
+
+      .icon {
+        display: inline-block;
+        margin-right: rem-calc(8px);
+      }
+    }
   }
 
   &__title {
@@ -23,7 +36,6 @@
   }
 
   &__product-detail-list {
-    align-self: center;
     list-style: none;
 
     @include media-breakpoint-up(md) {
@@ -80,15 +92,33 @@
         }
       }
     }
-    &__title {
+
+    &__summary {
       color: r-theme-val(steps-content, title-color);
-      margin-bottom: 0.5rem;
-      font-size: $h4-font-size;
+      margin-bottom: rem-calc(8px);
+      list-style: none;
+
+      & > .icon {
+        display: inline-block;
+        margin-left: rem-calc(4px);
+      }
+    }
+
+    &__details {
+      .product-detail-row__summary:hover {
+        color: r-theme-val(steps-content, summary-hover-color);
+      }
+
+      &[open] {
+        .product-detail-row__summary > .icon {
+          transform: rotate(180deg);
+        }
+      }
     }
 
     &__content {
       color: r-theme-val(steps-content, title-color);
-      font-size: 0.875rem;
+      font-size: rem-calc(14px);
       margin: 0;
       padding: 0;
     }
@@ -118,7 +148,7 @@
         margin-bottom: 0.5rem;
       }
 
-      &__item > .course-run__enrollment-dates {
+      &__item > .course-run__metadata {
         color: r-theme-val(steps-content, content-color);
         display: block;
       }
@@ -126,6 +156,7 @@
   }
 
   &__footer {
+    align-self: center;
     margin-top: 2.5rem;
   }
 }
