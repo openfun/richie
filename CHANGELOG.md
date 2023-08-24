@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add `display_mode` choice field to `CourseRun` model
+
 ## [2.23.0] - 2023-07-28
 
 ### Added

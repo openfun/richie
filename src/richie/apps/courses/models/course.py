@@ -703,6 +703,17 @@ class CourseRunCatalogVisibility(models.TextChoices):
     HIDDEN = "hidden", _("hidden - hide on the course page and from search results")
 
 
+class CourseRunDisplayMode(models.TextChoices):
+    """Course run catalog display modes."""
+
+    COMPACT = "compact", _(
+        "compact - show minimal information about the course run (only for products)."
+    )
+    DETAILED = "detailed", _(
+        "detailed - show all information about the course run (only for products)."
+    )
+
+
 class CourseRun(TranslatableModel):
     """
     The course run represents and records the occurence of a course between a start
@@ -758,6 +769,12 @@ class CourseRun(TranslatableModel):
         _("catalog visibility"),
         choices=CourseRunCatalogVisibility.choices,
         default=CourseRunCatalogVisibility.COURSE_AND_SEARCH,
+        blank=False,
+        max_length=20,
+    )
+    display_mode = models.CharField(
+        choices=CourseRunDisplayMode.choices,
+        default=CourseRunDisplayMode.DETAILED,
         blank=False,
         max_length=20,
     )
