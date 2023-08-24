@@ -1,4 +1,4 @@
-import { fireEvent, getByRole, render, screen } from '@testing-library/react';
+import { fireEvent, getByRole, getByTestId, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
@@ -33,12 +33,21 @@ describe('SaleTunnelStepValidation', () => {
     expect(courses).toHaveLength(product.target_courses.length);
     courses.forEach((course, index) => {
       const courseItem = product.target_courses[index];
-      expect(
-        getByRole(course as HTMLElement, 'heading', {
-          level: 3,
-          name: courseItem.title,
-        }),
+      const courseDetail: HTMLDetailsElement = getByTestId(
+        course as HTMLElement,
+        `target-course-detail-${courseItem.code}`,
       );
+
+      // Details should be closed by default
+      expect(courseDetail).not.toHaveAttribute('open');
+
+      // Check if the course title is displayed
+      const summary = courseDetail.querySelector('summary')!;
+      expect(summary).toHaveTextContent(courseItem.title);
+
+      // Click on summary should open the details
+      fireEvent.click(summary);
+      expect(courseDetail).toHaveAttribute('open');
 
       const courseRuns = course.querySelectorAll('.product-detail-row__course-run-dates__item');
       // Only course runs opened for enrollment should be displayed
