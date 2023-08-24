@@ -29,5 +29,6 @@ export const enrollment: Enrollment = {
         },
       ],
     },
+    languages: ['en'],
   },
 };
