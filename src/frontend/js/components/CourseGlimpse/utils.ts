@@ -39,6 +39,7 @@ const getCourseGlimpsePropsFromCourseProductRelation = (
       title: courseProductRelation.organizations[0].title,
       image: courseProductRelation.organizations[0].logo || null,
     },
+    nb_seller_organizations: courseProductRelation.organizations.length,
     product_id: courseProductRelation.product.id,
     course_route: courseRoute,
     state: courseProductRelation.product.state,
@@ -55,6 +56,7 @@ const getCourseGlimpsePropsFromRichieCourse = (course: RichieCourse): CourseGlim
     title: course.organization_highlighted,
     image: course.organization_highlighted_cover_image,
   },
+  nb_seller_organizations: course.organizations.length,
   icon: course.icon,
   state: course.state,
   duration: course.duration,
@@ -93,6 +95,7 @@ const getCourseGlimpsePropsFromJoanieCourse = (
       title: course.organizations[0].title,
       image: course.organizations[0].logo || null,
     },
+    nb_seller_organizations: course.organizations.length,
     state: course.state,
     nb_course_runs: course.course_runs.length,
   };

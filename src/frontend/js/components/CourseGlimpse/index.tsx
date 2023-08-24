@@ -28,6 +28,7 @@ export interface CourseGlimpseCourse {
       srcset?: string;
     }>;
   };
+  nb_seller_organizations: number;
   icon?: Nullable<{
     title: string;
     src: string;
@@ -66,6 +67,11 @@ const messages = defineMessages({
     defaultMessage: 'Category',
     description: 'Category label text for screen reader users',
     id: 'components.CourseGlimpse.categoryLabel',
+  },
+  organizationsTitle: {
+    defaultMessage: 'Produced by {nbOrganizations} partners',
+    description: 'Organizations title for multiple organizations',
+    id: 'components.CourseGlimpse.organizationsTitle',
   },
 });
 
@@ -108,7 +114,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
               <span className="course-glimpse__title-text">{course.title}</span>
             </CourseLink>
           </h3>
-          {course.organization.image ? (
+          {course.nb_seller_organizations === 1 && course.organization.image ? (
             <div className="course-glimpse__organization-logo">
               {/* alt forced to empty string because the organization name is rendered after */}
               <img
@@ -125,7 +131,16 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
               title={intl.formatMessage(messages.organizationIconAlt)}
               size="small"
             />
-            <span className="title">{course.organization.title}</span>
+            <span className="title">
+              {course.nb_seller_organizations === 1 ? (
+                course.organization.title
+              ) : (
+                <FormattedMessage
+                  {...messages.organizationsTitle}
+                  values={{ nbOrganizations: course.nb_seller_organizations }}
+                />
+              )}
+            </span>
           </div>
           <div className="course-glimpse__metadata course-glimpse__metadata--code">
             <Icon
