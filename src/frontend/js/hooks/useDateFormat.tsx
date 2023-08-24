@@ -29,7 +29,7 @@ export const DATETIME_FORMAT: FormatDateOptions = {
 const useDateFormat = (formatOptions: FormatDateOptions = {}) => {
   const intl = useIntl();
 
-  function formatDate(date: string, options: FormatDateOptions = {}) {
+  function formatDate(date: string | Date | number, options: FormatDateOptions = {}) {
     return intl.formatDate(date, {
       ...DEFAULT_DATE_FORMAT,
       ...formatOptions,
