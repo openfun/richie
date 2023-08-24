@@ -1,8 +1,6 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import React from 'react';
-import { CourseRun } from 'types';
+import { CourseRun, CourseRunDisplayMode } from 'types';
 import useDateFormat from 'hooks/useDateFormat';
-import { joinAnd } from 'utils/JoinAnd';
 import { Course } from 'types/Course';
 import { extractResourceId, isJoanieProduct } from 'api/lms/joanie';
 import CourseProductItem from 'widgets/CourseProductItem';
@@ -10,6 +8,7 @@ import { findLmsBackend } from 'api/configuration';
 import { StringHelper } from 'utils/StringHelper';
 import { DjangoCMSPluginCourseRun, DjangoCMSTemplate } from 'components/DjangoCMSTemplate';
 import CourseRunEnrollment from 'widgets/SyllabusCourseRunsList/components/CourseRunEnrollment';
+import { IntlHelper } from 'utils/IntlHelper';
 
 const messages = defineMessages({
   enrollment: {
@@ -73,14 +72,7 @@ const OpenedCourseRun = ({ courseRun }: { courseRun: CourseRun }) => {
         <dt>
           <FormattedMessage {...messages.languages} />
         </dt>
-        <dd>
-          {joinAnd(
-            courseRun.languages.map(
-              (language) => intl.formatDisplayName(language, { type: 'language' })!,
-            ),
-            intl,
-          )}
-        </dd>
+        <dd>{IntlHelper.getLocalizedLanguages(courseRun.languages, intl)}</dd>
       </dl>
       {findLmsBackend(courseRun.resource_link) ? (
         <CourseRunEnrollment courseRun={courseRun} />
@@ -104,7 +96,11 @@ export const SyllabusCourseRun = ({
     <DjangoCMSTemplate plugin={DjangoCMSPluginCourseRun(courseRun)}>
       <div className="course-detail__run-descriptions course-detail__run-descriptions--course_and_search">
         {isJoanieProduct(courseRun) ? (
-          <CourseProductItem productId={extractResourceId(courseRun)!} courseCode={course.code!} />
+          <CourseProductItem
+            productId={extractResourceId(courseRun)!}
+            courseCode={course.code!}
+            compact={courseRun.display_mode === CourseRunDisplayMode.COMPACT}
+          />
         ) : (
           <OpenedCourseRun courseRun={courseRun} />
         )}

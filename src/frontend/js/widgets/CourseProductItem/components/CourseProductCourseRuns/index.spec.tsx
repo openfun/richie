@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
-import { IntlProvider } from 'react-intl';
+import { IntlProvider, createIntl } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
@@ -16,6 +16,7 @@ import type { CourseLight, CourseRun, Enrollment, OrderLite } from 'types/Joanie
 import { Deferred } from 'utils/test/deferred';
 import { CourseStateTextEnum, Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { IntlHelper } from 'utils/IntlHelper';
 import { CourseProductProvider } from '../../contexts/CourseProductContext';
 import { CourseRunList, EnrollableCourseRunList, EnrolledCourseRun } from '.';
 
@@ -96,9 +97,20 @@ describe('CourseProductCourseRuns', () => {
         // - Course run enrollment dates should be displayed
         const $enrollmentDates = screen.getByTestId(`course-run-${courseRun.id}-enrollment-dates`);
         expect($enrollmentDates.textContent).toEqual(
-          `Enrollment from ${dateFormatter.format(
-            new Date(courseRun.enrollment_start),
-          )} to ${dateFormatter.format(new Date(courseRun.enrollment_end))}`,
+          new Date(courseRun.enrollment_start) > new Date()
+            ? // Enrollment is not yet opened
+              `Enrollment from ${dateFormatter.format(new Date(courseRun.enrollment_start))}`
+            : // Enrollment is open
+              `Enrollment until ${dateFormatter.format(new Date(courseRun.enrollment_end))}`,
+        );
+
+        // - Course run languages should be displayed
+        const $courseRunLanguages = screen.getByTestId(`course-run-${courseRun.id}-languages`);
+        const intl = createIntl({ locale: 'en' });
+
+        expect($courseRunLanguages.textContent).toEqual(
+          (courseRun.languages.length > 1 ? 'Languages: ' : 'Language: ') +
+            IntlHelper.getLocalizedLanguages(courseRun.languages, intl),
         );
       });
     });
@@ -159,9 +171,20 @@ describe('CourseProductCourseRuns', () => {
         // - Course run enrollment dates should be displayed
         const $enrollmentDates = screen.getByTestId(`course-run-${courseRun.id}-enrollment-dates`);
         expect($enrollmentDates.textContent).toEqual(
-          `Enrollment from ${dateFormatter.format(
-            new Date(courseRun.enrollment_start),
-          )} to ${dateFormatter.format(new Date(courseRun.enrollment_end))}`,
+          new Date(courseRun.enrollment_start) > new Date()
+            ? // Enrollment is not yet opened
+              `Enrollment from ${dateFormatter.format(new Date(courseRun.enrollment_start))}`
+            : // Enrollment is open
+              `Enrollment until ${dateFormatter.format(new Date(courseRun.enrollment_end))}`,
+        );
+
+        // - Course run languages should be displayed
+        const $courseRunLanguages = screen.getByTestId(`course-run-${courseRun.id}-languages`);
+        const intl = createIntl({ locale: 'en' });
+
+        expect($courseRunLanguages.textContent).toEqual(
+          (courseRun.languages.length > 1 ? 'Languages: ' : 'Language: ') +
+            IntlHelper.getLocalizedLanguages(courseRun.languages, intl),
         );
 
         // - A radio input
@@ -260,9 +283,11 @@ describe('CourseProductCourseRuns', () => {
         // - Course run enrollment dates should be displayed
         const $enrollmentDates = screen.getByTestId(`course-run-${courseRun.id}-enrollment-dates`);
         expect($enrollmentDates.textContent).toEqual(
-          `Enrollment from ${dateFormatter.format(
-            new Date(courseRun.enrollment_start),
-          )} to ${dateFormatter.format(new Date(courseRun.enrollment_end))}`,
+          new Date(courseRun.enrollment_start) > new Date()
+            ? // Enrollment is not yet opened
+              `Enrollment from ${dateFormatter.format(new Date(courseRun.enrollment_start))}`
+            : // Enrollment is open
+              `Enrollment until ${dateFormatter.format(new Date(courseRun.enrollment_end))}`,
         );
 
         // - A radio input
@@ -369,9 +394,7 @@ describe('CourseProductCourseRuns', () => {
       // - Course run enrollment dates should be displayed
       const $enrollmentDates = screen.getByTestId(`course-run-${courseRun.id}-enrollment-dates`);
       expect($enrollmentDates.textContent).toEqual(
-        `Enrollment from ${dateFormatter.format(
-          new Date(courseRun.enrollment_start),
-        )} to ${dateFormatter.format(new Date(courseRun.enrollment_end))}`,
+        `Enrollment from ${dateFormatter.format(new Date(courseRun.enrollment_start))}`,
       );
 
       // - A radio input

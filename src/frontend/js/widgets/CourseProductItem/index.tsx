@@ -1,11 +1,15 @@
 import { Children, useMemo } from 'react';
-import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
+import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
+import c from 'classnames';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
 import { useProduct } from 'hooks/useProduct';
 import { Spinner } from 'components/Spinner';
 import { useOrders } from 'hooks/useOrders';
 import { Icon, IconTypeEnum } from 'components/Icon';
+import { Maybe } from 'types/utils';
+import useDateFormat from 'hooks/useDateFormat';
+import { ProductHelper } from 'utils/ProductHelper';
 import CertificateItem from './components/CourseProductCertificateItem';
 import CourseRunItem from './components/CourseRunItem';
 import PurchaseButton from './components/PurchaseButton';
@@ -29,14 +33,119 @@ const messages = defineMessages({
       'Accessible text for the initial loading spinner displayed when product is fetching',
     id: 'components.CourseProductItem.loadingInitial',
   },
+  fromTo: {
+    defaultMessage: 'From {from} to {to}',
+    description: 'Course run date range',
+    id: 'components.CourseProductItem.fromTo',
+  },
+  availableIn: {
+    defaultMessage: 'Available in {languages}',
+    description: 'Course run languages',
+    id: 'components.CourseProductItem.availableIn',
+  },
 });
 
 export interface Props {
-  productId: Joanie.Product['id'];
+  compact?: boolean;
   courseCode: Joanie.CourseLight['code'];
+  productId: Joanie.Product['id'];
 }
 
-const CourseProductItem = ({ productId, courseCode }: Props) => {
+type HeaderProps = {
+  compact: boolean;
+  hasPurchased: boolean;
+  order: Maybe<Joanie.Order>;
+  product: Joanie.Product;
+};
+const Header = ({ product, order, hasPurchased, compact }: HeaderProps) => {
+  const intl = useIntl();
+  const formatDate = useDateFormat();
+
+  const canShowMetadata = useMemo(() => {
+    return compact && !order;
+  }, [compact, hasPurchased]);
+
+  const [minDate, maxDate] = useMemo(() => {
+    if (!canShowMetadata) return [undefined, undefined];
+    return ProductHelper.getDateRange(product);
+  }, [canShowMetadata, product]);
+
+  const languages = useMemo(() => {
+    if (!canShowMetadata) return '';
+    return ProductHelper.getLanguages(product, true, intl);
+  }, [canShowMetadata, product, intl]);
+
+  return (
+    <header className="product-widget__header">
+      <div className="product-widget__header-main">
+        <h3 className="product-widget__title">{product.title}</h3>
+        <strong className="product-widget__price h6">
+          {order && <FormattedMessage {...messages.purchased} />}
+          {hasPurchased && !order && <FormattedMessage {...messages.pending} />}
+          {!hasPurchased && (
+            <FormattedNumber
+              currency={product.price_currency}
+              value={product.price}
+              style="currency"
+            />
+          )}
+        </strong>
+      </div>
+      {canShowMetadata && (
+        <>
+          <p
+            className="product-widget__header-metadata"
+            data-testid="product-widget__header-metadata-dates"
+          >
+            <Icon name={IconTypeEnum.CALENDAR} size="small" />
+            <FormattedMessage
+              {...messages.fromTo}
+              values={{
+                from: formatDate(minDate!),
+                to: formatDate(maxDate!),
+              }}
+            />
+          </p>
+          <p
+            className="product-widget__header-metadata"
+            data-testid="product-widget__header-metadata-languages"
+          >
+            <Icon name={IconTypeEnum.LANGUAGES} size="small" />
+            <FormattedMessage {...messages.availableIn} values={{ languages }} />
+          </p>
+        </>
+      )}
+    </header>
+  );
+};
+const Content = ({ product, order }: { product: Joanie.Product; order?: Joanie.Order }) => {
+  const targetCourses = useMemo(() => {
+    if (order) {
+      return order.target_courses;
+    }
+
+    if (product) {
+      return product.target_courses;
+    }
+
+    return [];
+  }, [product, order]);
+
+  return (
+    <ol className="product-widget__content">
+      {Children.toArray(
+        targetCourses.map((target_course) => (
+          <CourseRunItem targetCourse={target_course} order={order} />
+        )),
+      )}
+      {product.certificate_definition && (
+        <CertificateItem certificateDefinition={product.certificate_definition} order={order} />
+      )}
+    </ol>
+  );
+};
+
+const CourseProductItem = ({ productId, courseCode, compact = false }: Props) => {
   const productQuery = useProduct(productId, { course: courseCode });
   const product = productQuery.item;
   const ordersQuery = useOrders({
@@ -51,25 +160,19 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
   );
 
   const hasPurchased = useMemo(() => ordersQuery.items?.length > 0, [ordersQuery.items]);
-
-  const targetCourses = useMemo(() => {
-    if (order) {
-      return order.target_courses;
-    }
-
-    if (product) {
-      return product.target_courses;
-    }
-
-    return [];
-  }, [productQuery.item, order]);
-
   const hasError = Boolean(productQuery.states.error);
   const isFetching = productQuery.states.fetching || ordersQuery.states.fetching;
+  const canShowContent = !compact || order;
 
   return (
     <CourseProductProvider courseCode={courseCode} productId={productId}>
-      <section className={['product-widget', hasError && 'product-widget--has-error'].join(' ')}>
+      <section
+        className={c('product-widget', {
+          'product-widget--has-error': hasError,
+          'product-widget--compact': compact,
+          'product-widget--purchased': hasPurchased,
+        })}
+      >
         {isFetching && (
           <div className="product-widget__overlay">
             <Spinner aria-labelledby="loading-course" theme="light" size="large">
@@ -87,33 +190,8 @@ const CourseProductItem = ({ productId, courseCode }: Props) => {
         )}
         {!hasError && product && (
           <>
-            <header className="product-widget__header">
-              <h3 className="product-widget__title">{product.title}</h3>
-              <strong className="product-widget__price h6">
-                {order && <FormattedMessage {...messages.purchased} />}
-                {hasPurchased && !order && <FormattedMessage {...messages.pending} />}
-                {!hasPurchased && (
-                  <FormattedNumber
-                    currency={product.price_currency}
-                    value={product.price}
-                    style="currency"
-                  />
-                )}
-              </strong>
-            </header>
-            <ol className="product-widget__content">
-              {Children.toArray(
-                targetCourses.map((target_course) => (
-                  <CourseRunItem targetCourse={target_course} order={order} />
-                )),
-              )}
-              {product.certificate_definition && (
-                <CertificateItem
-                  certificateDefinition={product.certificate_definition}
-                  order={order}
-                />
-              )}
-            </ol>
+            <Header product={product} order={order} hasPurchased={hasPurchased} compact={compact} />
+            {canShowContent && <Content product={product} order={order} />}
             <footer className="product-widget__footer">
               <PurchaseButton product={product} disabled={hasPurchased} />
             </footer>

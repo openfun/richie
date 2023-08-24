@@ -16,6 +16,11 @@ $ make migrate
 
 ## Unreleased
 
+- In `_theme.scss`, `steps-content` map has one more property `summary-hover-color`, if you have
+  overriden this map, you must add this new property.
+
+## 2.21.0 to 2.23.0
+
 - Within course_detail template, course runs list is now rendered as a React widget. As consequence
   `fragment_course_run` and `fragment_course_runs_list` have been removed. If you have overridden
   those templates, you have now to override corresponding React widget (`SyllabusCourseRunsList`).

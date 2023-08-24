@@ -116,6 +116,12 @@ describe('CourseProductItem', () => {
     expect($price.tagName).toBe('STRONG');
     expect($price.classList.contains('h6')).toBe(true);
 
+    // Languages and date range should not be displayed
+    expect(screen.queryByTestId('product-widget__header-metadata-dates')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('product-widget__header-metadata-languages'),
+    ).not.toBeInTheDocument();
+
     // - Render all target courses information
     product.target_courses.forEach((course) => {
       const $item = screen.getByTestId(`course-item-${course.code}`);
@@ -153,6 +159,61 @@ describe('CourseProductItem', () => {
     expect(screen.queryByTestId('CertificateItem')).toBeNull();
   });
 
+  it('adapts its layout if compact is set', async () => {
+    const product: Product = ProductFactory().one();
+    const productDeferred = new Deferred();
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/products/${product.id}/?course=00000`,
+      productDeferred.promise,
+    );
+
+    const { container } = render(
+      <Wrapper>
+        <CourseProductItem courseCode="00000" productId={product.id} compact />
+      </Wrapper>,
+    );
+
+    // - A loader should be displayed while product information are fetching
+    screen.getByRole('status', { name: 'Loading product information...' });
+
+    productDeferred.resolve(product);
+
+    // In the header, we should display the product title, the product price
+    // and product date range and languages
+    await screen.findByRole('heading', { level: 3, name: product.title });
+    // the price shouldn't be a heading to prevent misdirection for screen reader users,
+    // but we want to it to visually look like a h6
+
+    const $price = screen.getByText(
+      // the price formatter generates non-breaking spaces and getByText doesn't seem to handle that well, replace it
+      // with a regular space. We replace NNBSP (\u202F) and NBSP (\u00a0) with a regular space
+      priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+    );
+    expect($price.tagName).toBe('STRONG');
+    expect($price.classList.contains('h6')).toBe(true);
+
+    screen.getByTestId('product-widget__header-metadata-dates');
+    screen.getByTestId('product-widget__header-metadata-languages');
+
+    // Then the content block should only display the purchase button.
+    const $productWidgetContent = container.querySelector('.product-widget__content');
+    expect($productWidgetContent).not.toBeInTheDocument();
+
+    // - Any target courses information should be displayed
+    product.target_courses.forEach((course) => {
+      const $item = screen.queryByTestId(`course-item-${course.code}`);
+      expect($item).not.toBeInTheDocument();
+    });
+
+    // - Any <CertificateItem /> should be displayed
+    expect(screen.queryByTestId('CertificateItem')).not.toBeInTheDocument();
+
+    // - Render a login button
+    screen.getByRole('button', { name: `Login to purchase "${product.title}"` });
+    // - Does not render PurchaseButton cta
+    expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
+  });
+
   it('adapts information when user purchased the product', async () => {
     const product: Product = ProductFactory().one();
     const order: Order = OrderFactory({
@@ -179,6 +240,61 @@ describe('CourseProductItem', () => {
     const $enrolledInfo = await screen.findByText('Purchased');
     expect($enrolledInfo.tagName).toBe('STRONG');
     expect($enrolledInfo.classList.contains('h6')).toBe(true);
+
+    // - Render all order's target courses information with EnrollableCourseRunList component
+    await waitFor(() => {
+      order.target_courses.forEach((course) => {
+        const $item = screen.getByTestId(`course-item-${course.code}`);
+        // the course title shouldn't be a heading to prevent misdirection for screen reader users,
+        // but we want to it to visually look like a h5
+        const $courseTitle = getByText($item, course.title);
+        expect($courseTitle.tagName).toBe('STRONG');
+        expect($courseTitle.classList.contains('h5')).toBe(true);
+        screen.getByTestId(
+          `EnrollableCourseRunList-${course.course_runs.map(({ id }) => id).join('-')}-${order.id}`,
+        );
+      });
+    });
+
+    // - Render <CertificateItem />
+    screen.getByTestId('CertificateItem');
+
+    // - Does not Render PurchaseButton cta
+    expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
+  });
+
+  it('adapts information when user purchased the product even if compact is set', async () => {
+    const product: Product = ProductFactory().one();
+    const order: Order = OrderFactory({
+      product: product.id,
+      course: '00000',
+      target_courses: product.target_courses,
+    }).one();
+
+    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
+    fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
+
+    render(
+      <Wrapper withSession>
+        <CourseProductItem productId={product.id} courseCode="00000" compact />
+      </Wrapper>,
+    );
+
+    // Wait for product information to be fetched
+    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
+    await waitForElementToBeRemoved(loadingMessage);
+    await screen.findByRole('heading', { level: 3, name: product.title });
+
+    // - In place of product price, a label should be displayed
+    const $enrolledInfo = await screen.findByText('Purchased');
+    expect($enrolledInfo.tagName).toBe('STRONG');
+    expect($enrolledInfo.classList.contains('h6')).toBe(true);
+
+    // - Product date range and languages should not be displayed anymore
+    expect(screen.queryByTestId('product-widget__header-metadata-dates')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('product-widget__header-metadata-languages'),
+    ).not.toBeInTheDocument();
 
     // - Render all order's target courses information with EnrollableCourseRunList component
     await waitFor(() => {
@@ -298,6 +414,52 @@ describe('CourseProductItem', () => {
 
     // - Render <CertificateItem />
     screen.getByTestId('CertificateItem');
+
+    // - Does not Render PurchaseButton cta
+    expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
+  });
+
+  it('adapts layout when user has a pending order and compact prop is set', async () => {
+    const product: Product = ProductFactory().one();
+    const order: Order = OrderFactory({
+      product: product.id,
+      course: '00000',
+      target_courses: product.target_courses,
+      state: OrderState.PENDING,
+    }).one();
+    fetchMock.get(`https://joanie.test/api/v1.0/products/${product.id}/?course=00000`, product);
+    fetchMock.get(`https://joanie.test/api/v1.0/orders/`, [order]);
+
+    render(
+      <Wrapper withSession>
+        <CourseProductItem productId={product.id} courseCode="00000" compact />
+      </Wrapper>,
+    );
+
+    // Wait for product information to be fetched
+    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
+    await waitForElementToBeRemoved(loadingMessage);
+    await screen.findByRole('heading', { level: 3, name: product.title });
+
+    // - In place of product price, a label should be displayed
+    const $enrolledInfo = await screen.findByText('Pending');
+    expect($enrolledInfo.tagName).toBe('STRONG');
+    expect($enrolledInfo.classList.contains('h6')).toBe(true);
+
+    // - Product date range and languages should be displayed
+    screen.getByTestId('product-widget__header-metadata-dates');
+    screen.getByTestId('product-widget__header-metadata-languages');
+
+    // - Target courses should not be rendered
+    await waitFor(() => {
+      order.target_courses.forEach((course) => {
+        const $item = screen.queryByTestId(`course-item-${course.code}`);
+        expect($item).not.toBeInTheDocument();
+      });
+    });
+
+    // - <CertificateItem /> should not be rendered
+    expect(screen.queryByTestId('CertificateItem')).not.toBeInTheDocument();
 
     // - Does not Render PurchaseButton cta
     expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();

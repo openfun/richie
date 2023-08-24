@@ -1,16 +1,14 @@
 import { Children } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import type * as Joanie from 'types/Joanie';
 import useDateFormat from 'hooks/useDateFormat';
+import { IntlHelper } from 'utils/IntlHelper';
+import EnrollmentDate from 'widgets/CourseProductItem/components/EnrollmentDate';
+import { messages as sharedMessages } from '../CourseRunItem';
 import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
 
 const messages = defineMessages({
-  enrollFromTo: {
-    defaultMessage: 'Enrollment from {start} to {end}',
-    description: 'Text label for the enrollment dates',
-    id: 'components.CourseRunList.enrollFromTo',
-  },
   noCourseRunAvailable: {
     defaultMessage: 'No session available for this course.',
     description: 'Text displayed when no course run are opened for the course',
@@ -23,6 +21,7 @@ interface Props {
 }
 
 const CourseRunList = ({ courseRuns }: Props) => {
+  const intl = useIntl();
   const formatDate = useDateFormat();
 
   if (courseRuns.length === 0) {
@@ -69,15 +68,22 @@ const CourseRunList = ({ courseRuns }: Props) => {
               </strong>
               <span
                 data-testid={`course-run-${courseRun.id}-enrollment-dates`}
-                className="course-runs-item__enrollment-dates"
+                className="course-runs-item__metadata"
+              >
+                <EnrollmentDate
+                  enrollment_start={courseRun.enrollment_start}
+                  enrollment_end={courseRun.enrollment_end}
+                />
+              </span>
+              <span
+                data-testid={`course-run-${courseRun.id}-languages`}
+                className="course-runs-item__metadata"
               >
                 <FormattedMessage
-                  {...messages.enrollFromTo}
-                  values={{
-                    start: formatDate(courseRun.enrollment_start),
-                    end: formatDate(courseRun.enrollment_end),
-                  }}
-                />
+                  {...sharedMessages.language}
+                  values={{ count: courseRun.languages.length }}
+                />{' '}
+                {IntlHelper.getLocalizedLanguages(courseRun.languages, intl)}
               </span>
             </li>
           )),

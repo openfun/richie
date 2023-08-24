@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { defineMessages } from 'react-intl';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
@@ -8,6 +9,19 @@ import {
   EnrollableCourseRunList,
   EnrolledCourseRun,
 } from '../CourseProductCourseRuns';
+
+export const messages = defineMessages({
+  language: {
+    defaultMessage: `{
+count,
+plural,
+one {Language:}
+other {Languages:}
+}`,
+    description: 'Label displayed before the list of languages',
+    id: 'components.SaleTunnelStepValidation.language',
+  },
+});
 
 interface Props {
   targetCourse: Joanie.TargetCourse;
