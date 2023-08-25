@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { CourseRun } from 'types';
 import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/hooks/useCourseEnrollment';
 import CourseRunItem from 'widgets/SyllabusCourseRunsList/components/CourseRunItem';
@@ -10,8 +10,13 @@ const messages = defineMessages({
     description: 'Link title for users to go to the course run in which they are enrolled.',
     id: 'components.CourseRunItemWithEnrollment.goToCourse',
   },
-  enrolled: {
+  enrolledAriaLabel: {
     defaultMessage: 'You are enrolled in this course run',
+    description: 'Help text for users are enrolled in the course run.',
+    id: 'components.CourseRunItemWithEnrollment.enrolledAriaLabel',
+  },
+  enrolled: {
+    defaultMessage: 'Enrolled',
     description: 'Help text for users are enrolled in the course run.',
     id: 'components.CourseRunItemWithEnrollment.enrolled',
   },
@@ -35,8 +40,8 @@ const CourseRunItemWithEnrollment = ({ item }: Props) => {
         <CourseRunItem item={item} />
       )}
       {enrollmentIsActive && (
-        <p className="category-tag" aria-label={intl.formatMessage(messages.enrolled)}>
-          Enrolled
+        <p className="category-tag" aria-label={intl.formatMessage(messages.enrolledAriaLabel)}>
+          <FormattedMessage {...messages.enrolled} />
         </p>
       )}
     </>
