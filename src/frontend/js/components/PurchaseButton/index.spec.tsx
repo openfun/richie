@@ -9,6 +9,7 @@ import {
 } from 'utils/test/factories/richie';
 import { ProductFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
+import { CourseProductProvider } from 'contexts/CourseProductContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ProductType } from 'types/Joanie';
 import { Priority } from 'types';
@@ -35,11 +36,13 @@ describe('PurchaseButton', () => {
   });
 
   const Wrapper = ({ client, children }: React.PropsWithChildren<{ client: QueryClient }>) => (
-    <IntlProvider locale="en">
-      <QueryClientProvider client={client}>
-        <SessionProvider>{children}</SessionProvider>
-      </QueryClientProvider>
-    </IntlProvider>
+    <CourseProductProvider courseCode="00000" productId="00000">
+      <IntlProvider locale="en">
+        <QueryClientProvider client={client}>
+          <SessionProvider>{children}</SessionProvider>
+        </QueryClientProvider>
+      </IntlProvider>
+    </CourseProductProvider>
   );
 
   it('shows a login button if user is not authenticated', async () => {

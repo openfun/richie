@@ -6,6 +6,7 @@ const Context = createContext<
   Maybe<{
     courseCode: Joanie.CourseLight['code'];
     productId: Joanie.Product['id'];
+    key: string;
   }>
 >(undefined);
 
@@ -23,7 +24,10 @@ export const CourseProductProvider = ({
   productId,
   children,
 }: PropsWithChildren<CourseProductProviderProps>) => {
-  const value = useMemo(() => ({ productId, courseCode }), [productId, courseCode]);
+  const value = useMemo(
+    () => ({ productId, courseCode, key: `${courseCode}+${productId}` }),
+    [productId, courseCode],
+  );
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
 

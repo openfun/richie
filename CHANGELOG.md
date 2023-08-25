@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add tracking events on product interactions
 - Add `display_mode` choice field to `CourseRun` model
 - Add a footer on enrollment's item in the learner dashboard. It give the
   possibility to purchase linked product or download linked certificate.

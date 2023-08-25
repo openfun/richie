@@ -1,5 +1,5 @@
 import { Maybe } from 'types/utils';
-import { WebAnalyticsAPI, WebAnalyticsAPIBackend } from 'types/web-analytics';
+import { CourseProductEvent, WebAnalyticsAPI, WebAnalyticsAPIBackend } from 'types/web-analytics';
 import context from 'utils/context';
 import { handle } from 'utils/errors/handle';
 import GoogleTagManagerApi from './google_tag_manager';
@@ -19,6 +19,10 @@ class WebAnalyticsAPIDelegator2Providers implements WebAnalyticsAPI {
 
   sendEnrolledEvent(resourceLink: string): void {
     this.providers.forEach((provider) => provider.sendEnrolledEvent(resourceLink));
+  }
+
+  sendCourseProductEvent(category: CourseProductEvent, productKey: string): void {
+    this.providers.forEach((provider) => provider.sendCourseProductEvent(category, productKey));
   }
 }
 
