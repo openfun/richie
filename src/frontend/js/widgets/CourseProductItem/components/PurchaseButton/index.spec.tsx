@@ -7,6 +7,7 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { ProductFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { CourseProductProvider } from 'widgets/CourseProductItem/contexts/CourseProductContext';
 import PurchaseButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -30,11 +31,13 @@ describe('PurchaseButton', () => {
   });
 
   const Wrapper = ({ client, children }: React.PropsWithChildren<{ client: QueryClient }>) => (
-    <IntlProvider locale="en">
-      <QueryClientProvider client={client}>
-        <SessionProvider>{children}</SessionProvider>
-      </QueryClientProvider>
-    </IntlProvider>
+    <CourseProductProvider courseCode="00000" productId="00000">
+      <IntlProvider locale="en">
+        <QueryClientProvider client={client}>
+          <SessionProvider>{children}</SessionProvider>
+        </QueryClientProvider>
+      </IntlProvider>
+    </CourseProductProvider>
   );
 
   it('shows a login button if user is not authenticated', async () => {

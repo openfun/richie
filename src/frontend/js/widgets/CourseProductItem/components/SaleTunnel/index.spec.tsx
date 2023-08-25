@@ -7,6 +7,7 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { ProductFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { CourseProductProvider } from 'widgets/CourseProductItem/contexts/CourseProductContext';
 import SaleTunnel from '.';
 
 const StepComponent =
@@ -48,11 +49,13 @@ describe('SaleTunnel', () => {
   });
 
   const Wrapper = ({ children }: React.PropsWithChildren<{}>) => (
-    <IntlProvider locale="en">
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <SessionProvider>{children}</SessionProvider>
-      </QueryClientProvider>
-    </IntlProvider>
+    <CourseProductProvider courseCode="00000" productId="00000">
+      <IntlProvider locale="en">
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+          <SessionProvider>{children}</SessionProvider>
+        </QueryClientProvider>
+      </IntlProvider>
+    </CourseProductProvider>
   );
 
   it('does not render when isOpen property is false', async () => {

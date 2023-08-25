@@ -8,6 +8,7 @@ import type * as Joanie from 'types/Joanie';
 import type { Maybe } from 'types/utils';
 import useDateFormat from 'hooks/useDateFormat';
 import { IntlHelper } from 'utils/IntlHelper';
+import WebAnalyticsAPIHandler from 'api/web-analytics';
 import EnrollmentDate from 'widgets/CourseProductItem/components/EnrollmentDate';
 import { messages as sharedMessages } from '../CourseRunItem';
 import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
@@ -99,6 +100,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
     }
 
     if (selectedCourseRun) {
+      WebAnalyticsAPIHandler()?.sendEnrolledEvent(selectedCourseRun.resource_link);
       const relatedEnrollment = order.enrollments.find(({ course_run }) => {
         return course_run.id === selectedCourseRun.id;
       });

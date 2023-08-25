@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add tracking events on product interactions
 - Add `display_mode` choice field to `CourseRun` model
 
 ### Changed

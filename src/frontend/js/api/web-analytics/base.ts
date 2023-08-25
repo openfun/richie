@@ -1,4 +1,4 @@
-import { WebAnalyticsAPI } from 'types/web-analytics';
+import { CourseProductEvent, WebAnalyticsAPI } from 'types/web-analytics';
 
 /**
  * Base implementation for each web analytics provider.
@@ -25,5 +25,15 @@ export abstract class BaseWebAnalyticsApi implements WebAnalyticsAPI {
    */
   sendEnrolledEvent(resourceLink: string): void {
     return this.sendEvent('courseEnroll', 'courseEnroll', 'courseEnrollApi', resourceLink);
+  }
+
+  /**
+   * Method to send all events related to interactions with a product.
+   *
+   * The product key is composed of the course code concatenated with the product id
+   * `<course_code>+<product_id>`.
+   */
+  sendCourseProductEvent(category: CourseProductEvent, productKey: string): void {
+    return this.sendEvent('courseProductEvent', category, '', productKey);
   }
 }

@@ -8,6 +8,8 @@ import type * as Joanie from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
 import type { Nullable } from 'types/utils';
 import { HttpError } from 'utils/errors/HttpError';
+import WebAnalyticsAPIHandler from 'api/web-analytics';
+import { CourseProductEvent } from 'types/web-analytics';
 import { useCourseProduct } from '../../contexts/CourseProductContext';
 import PaymentInterface from '../PaymentInterfaces';
 
@@ -88,7 +90,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   const intl = useIntl();
   const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const { courseCode } = useCourseProduct();
+  const { courseCode, key } = useCourseProduct();
   const orderManager = useOrders();
 
   const isReadyToPay = useMemo(() => {
@@ -115,6 +117,8 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
     (p as OneClickPaymentInfo)?.is_paid === true;
 
   const createPayment = async () => {
+    WebAnalyticsAPIHandler()?.sendCourseProductEvent(CourseProductEvent.PAYMENT_CREATION, key);
+
     if (!billingAddress) {
       setError(PaymentErrorMessageId.ERROR_ADDRESS);
       setState(ComponentStates.ERROR);

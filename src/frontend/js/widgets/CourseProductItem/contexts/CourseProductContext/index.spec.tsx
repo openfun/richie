@@ -20,6 +20,7 @@ describe('useCourseProduct', () => {
     expect(result.current).toStrictEqual({
       courseCode: '00013',
       productId: 'dce9acb4-df59-4856-a5a8-1b732bc9b565',
+      key: '00013+dce9acb4-df59-4856-a5a8-1b732bc9b565',
     });
   });
 
