@@ -4,11 +4,14 @@ import { Modal } from 'components/Modal';
 import { Product } from 'types/Joanie';
 import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
+import WebAnalyticsAPIHandler from 'api/web-analytics';
+import { CourseProductEvent } from 'types/web-analytics';
+import { useCourseProduct } from 'contexts/CourseProductContext';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
+import { StepBreadcrumb } from './components/StepBreadcrumb';
 import { SaleTunnelStepValidation } from './components/SaleTunnelStepValidation';
 import { SaleTunnelStepPayment } from './components/SaleTunnelStepPayment';
 import { SaleTunnelStepResume } from './components/SaleTunnelStepResume';
-import { StepBreadcrumb } from './components/StepBreadcrumb';
 
 const messages = defineMessages({
   stepValidation: {
@@ -51,6 +54,7 @@ const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
   const {
     methods: { invalidate: invalidateOrders },
   } = useOrders(undefined, { enabled: false });
+  const { key } = useCourseProduct();
 
   const manifest: Manifest<TunnelSteps, 'resume'> = {
     start: 'validation',
@@ -64,11 +68,20 @@ const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
         icon: IconTypeEnum.CREDIT_CARD,
         label: intl.formatMessage(messages.stepPayment),
         next: 'resume',
+        onEnter: () => {
+          WebAnalyticsAPIHandler()?.sendCourseProductEvent(
+            CourseProductEvent.PAYMENT_STEP_DISPLAYED,
+            key,
+          );
+        },
       },
       resume: {
         icon: IconTypeEnum.CHECK,
         label: intl.formatMessage(messages.stepResume),
         next: null,
+        onEnter: () => {
+          WebAnalyticsAPIHandler()?.sendCourseProductEvent(CourseProductEvent.PAYMENT_SUCCEED, key);
+        },
         onExit: () => {
           // Once the user has completed the purchase, we need to refetch the orders
           // to update the ordersQuery cache
@@ -84,9 +97,12 @@ const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
 
   const modalRef = useRef<HTMLDivElement | null>(null);
 
-  const handleModalClose = () => {
-    reset();
+  const handleModalClose = (track: boolean = false) => {
+    if (track) {
+      WebAnalyticsAPIHandler()?.sendCourseProductEvent(CourseProductEvent.CLOSE_SALE_TUNNEL, key);
+    }
     onClose();
+    reset();
   };
 
   /**
@@ -107,13 +123,14 @@ const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
       className="SaleTunnel__modal"
       isOpen={isOpen}
       onAfterOpen={(options) => {
+        WebAnalyticsAPIHandler()?.sendCourseProductEvent(CourseProductEvent.OPEN_SALE_TUNNEL, key);
         if (!options) {
           return;
         }
         focusCurrentStep(options.contentEl);
       }}
       contentRef={(ref) => (modalRef.current = ref)}
-      onRequestClose={handleModalClose}
+      onRequestClose={() => handleModalClose(true)}
       shouldCloseOnOverlayClick={false}
       shouldCloseOnEsc={false}
       testId="SaleTunnel__modal"
