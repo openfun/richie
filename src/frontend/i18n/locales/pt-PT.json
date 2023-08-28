@@ -183,6 +183,14 @@
     "description": "Accessible label displayed while certificate is being generated.",
     "message": "O certificado está a ser gerado..."
   },
+  "components.CourseProductItem.availableIn": {
+    "description": "Course run languages",
+    "message": "Available in {languages}"
+  },
+  "components.CourseProductItem.fromTo": {
+    "description": "Course run date range",
+    "message": "From {from} to {to}"
+  },
   "components.CourseProductItem.loadingInitial": {
     "description": "Accessible text for the initial loading spinner displayed when product is fetching",
     "message": "A carregar informação do produto..."
@@ -202,14 +210,6 @@
   "components.CourseProductsList.start": {
     "description": "Start label displayed in the header of course run dates section",
     "message": "Início"
-  },
-  "components.CourseProductsLists.enrollOn": {
-    "description": "Text label for the enrollment dates",
-    "message": "Inscrições de {start} a {end}"
-  },
-  "components.CourseProductsLists.noCourseRunAvailable": {
-    "description": "Text displayed when no course run are opened for the course",
-    "message": "Nenhuma sessão disponível para este curso."
   },
   "components.CourseRunEnrollment.enroll": {
     "description": "CTA for users who can enroll in the course run or could enroll if they logged in.",
@@ -261,7 +261,11 @@
   },
   "components.CourseRunItemWithEnrollment.enrolled": {
     "description": "Help text for users are enrolled in the course run.",
-    "message": "Está inscrito nesta edição do curso"
+    "message": "Enrolled"
+  },
+  "components.CourseRunItemWithEnrollment.enrolledAriaLabel": {
+    "description": "Help text for users are enrolled in the course run.",
+    "message": "You are enrolled in this course run"
   },
   "components.CourseRunItemWithEnrollment.goToCourse": {
     "description": "Link title for users to go to the course run in which they are enrolled.",
@@ -274,10 +278,6 @@
   "components.CourseRunList.dataCourseRunPeriod": {
     "description": "Message displayed in course run datagrid for course run period",
     "message": "de {from} a {to}"
-  },
-  "components.CourseRunList.enrollFromTo": {
-    "description": "Text label for the enrollment dates",
-    "message": "Inscrição de {start} a {end}"
   },
   "components.CourseRunList.noCourseRunAvailable": {
     "description": "Text displayed when no course run are opened for the course",
@@ -397,15 +397,15 @@
   },
   "components.DashboardCertificate.details": {
     "description": "Label for the details button of a certificate",
-    "message": "Detalhes"
+    "message": "Details"
   },
   "components.DashboardCertificate.download": {
     "description": "Label for the download button of a certificate",
-    "message": "Descarregar"
+    "message": "Download"
   },
   "components.DashboardCertificate.generatingCertificate": {
     "description": "Accessible label displayed while certificate is being generated on the dashboard.",
-    "message": "O certificado está a ser gerado..."
+    "message": "Certificate is being generated..."
   },
   "components.DashboardCertificate.issuedOn": {
     "description": "Label for the date of issue of a certificate",
@@ -413,7 +413,7 @@
   },
   "components.DashboardCertificate.noCertificate": {
     "description": "Label displayed when no certificate is available",
-    "message": "Quando todos os seus cursos forem aprovados, poderá descarregar aqui o seu certificado."
+    "message": "When all your courses will be passed, you will be able to download your certificate here."
   },
   "components.DashboardCertificates.empty": {
     "description": "Message displayed when there are no certificates",
@@ -547,10 +547,6 @@
     "description": "Text label for the enroll button",
     "message": "Inscrever"
   },
-  "components.EnrollableCourseRunList.enrollOn": {
-    "description": "Text label for the enrollment dates",
-    "message": "Inscrições de {enrollment_start} a {enrollment_end}"
-  },
   "components.EnrollableCourseRunList.enrolling": {
     "description": "Label displayed when a request to enroll to a course run is loading",
     "message": "Inscrevendo..."
@@ -586,6 +582,14 @@
   "components.EnrolledCourseRun.unenrolling": {
     "description": "Accessible label displayed when user is being unenrolled.",
     "message": "Desinscrevendo..."
+  },
+  "components.EnrollmentDate.enrollFrom": {
+    "description": "Text label for the enrollment dates when enrollment is not yet opened",
+    "message": "Enrollment from {date}"
+  },
+  "components.EnrollmentDate.enrollUntil": {
+    "description": "Text label for the enrollment dates when enrollment is opened",
+    "message": "Enrollment until {date}"
   },
   "components.LanguageSelector.currentlySelected": {
     "description": "Accessible hint to mark the currently selected language in the language selector",
@@ -689,7 +693,7 @@
   },
   "components.SaleTunnel.noCourseRunToPurchase": {
     "description": "Label displayed below the product's CTA when there is no courseRun",
-    "message": "Pelo menos um curso não tem edições ativas e não está disponível para venda"
+    "message": "At least one course has no course runs, this product is not currently available for sale"
   },
   "components.SaleTunnel.noRemainingOrder": {
     "description": "Label displayed below the product's CTA when there is no remaining available seat for the product",
@@ -766,6 +770,14 @@
   "components.SaleTunnelStepValidation.includingVAT": {
     "description": "Text displayed next to the price to mention this is the price including VAT.",
     "message": "IVA incluído"
+  },
+  "components.SaleTunnelStepValidation.language": {
+    "description": "Label displayed before the list of languages",
+    "message": "{ count, plural, one {Language:} other {Languages:} }"
+  },
+  "components.SaleTunnelStepValidation.noCourseRunAvailable": {
+    "description": "Text displayed when no course run are opened for the course",
+    "message": "No session available for this course."
   },
   "components.SaleTunnelStepValidation.proceedToPayment": {
     "description": "CTA to go to payment step",
@@ -1269,11 +1281,11 @@
   },
   "hooks.useProduct.errorGet": {
     "description": "Error message shown to the user when product fetch request fails.",
-    "message": "Ocorreu um erro durante o processamento do produto. Por favor, tente mais tarde."
+    "message": "An error occurred while fetching product. Please retry later."
   },
   "hooks.useProduct.errorNotFound": {
     "description": "Error message shown to the user when no product matches.",
-    "message": "Não foi possível encontrar o produto."
+    "message": "Cannot find the product."
   },
   "hooks.useResources.errorCreate": {
     "description": "Error message shown to the user when resource creation request fails.",
