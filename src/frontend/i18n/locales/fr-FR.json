@@ -183,6 +183,14 @@
     "description": "Accessible label displayed while certificate is being generated.",
     "message": "Certificat en cours de génération..."
   },
+  "components.CourseProductItem.availableIn": {
+    "description": "Course run languages",
+    "message": "Disponible en {languages}"
+  },
+  "components.CourseProductItem.fromTo": {
+    "description": "Course run date range",
+    "message": "Du {from} au {to}"
+  },
   "components.CourseProductItem.loadingInitial": {
     "description": "Accessible text for the initial loading spinner displayed when product is fetching",
     "message": "Chargement des informations produit..."
@@ -202,14 +210,6 @@
   "components.CourseProductsList.start": {
     "description": "Start label displayed in the header of course run dates section",
     "message": "Début"
-  },
-  "components.CourseProductsLists.enrollOn": {
-    "description": "Text label for the enrollment dates",
-    "message": "Inscription du {start} au {end}"
-  },
-  "components.CourseProductsLists.noCourseRunAvailable": {
-    "description": "Text displayed when no course run are opened for the course",
-    "message": "Aucune session disponible pour ce cours."
   },
   "components.CourseRunEnrollment.enroll": {
     "description": "CTA for users who can enroll in the course run or could enroll if they logged in.",
@@ -261,6 +261,10 @@
   },
   "components.CourseRunItemWithEnrollment.enrolled": {
     "description": "Help text for users are enrolled in the course run.",
+    "message": "Inscrit"
+  },
+  "components.CourseRunItemWithEnrollment.enrolledAriaLabel": {
+    "description": "Help text for users are enrolled in the course run.",
     "message": "Vous êtes inscrit à cette session"
   },
   "components.CourseRunItemWithEnrollment.goToCourse": {
@@ -274,10 +278,6 @@
   "components.CourseRunList.dataCourseRunPeriod": {
     "description": "Message displayed in course run datagrid for course run period",
     "message": "du {from} au {to}"
-  },
-  "components.CourseRunList.enrollFromTo": {
-    "description": "Text label for the enrollment dates",
-    "message": "Inscription du {start} au {end}"
   },
   "components.CourseRunList.noCourseRunAvailable": {
     "description": "Text displayed when no course run are opened for the course",
@@ -547,10 +547,6 @@
     "description": "Text label for the enroll button",
     "message": "S'inscrire"
   },
-  "components.EnrollableCourseRunList.enrollOn": {
-    "description": "Text label for the enrollment dates",
-    "message": "Inscription du {enrollment_start} au {enrollment_end}"
-  },
   "components.EnrollableCourseRunList.enrolling": {
     "description": "Label displayed when a request to enroll to a course run is loading",
     "message": "Inscription en cours..."
@@ -586,6 +582,14 @@
   "components.EnrolledCourseRun.unenrolling": {
     "description": "Accessible label displayed when user is being unenrolled.",
     "message": "Désinscription en cours..."
+  },
+  "components.EnrollmentDate.enrollFrom": {
+    "description": "Text label for the enrollment dates when enrollment is not yet opened",
+    "message": "Inscription à partir du {date}"
+  },
+  "components.EnrollmentDate.enrollUntil": {
+    "description": "Text label for the enrollment dates when enrollment is opened",
+    "message": "Inscription jusqu'au {date}"
   },
   "components.LanguageSelector.currentlySelected": {
     "description": "Accessible hint to mark the currently selected language in the language selector",
@@ -766,6 +770,14 @@
   "components.SaleTunnelStepValidation.includingVAT": {
     "description": "Text displayed next to the price to mention this is the price including VAT.",
     "message": "TTC"
+  },
+  "components.SaleTunnelStepValidation.language": {
+    "description": "Label displayed before the list of languages",
+    "message": "{ count, plural, one {Langue :} other {Langues :} }"
+  },
+  "components.SaleTunnelStepValidation.noCourseRunAvailable": {
+    "description": "Text displayed when no course run are opened for the course",
+    "message": "Aucune session disponible pour ce cours."
   },
   "components.SaleTunnelStepValidation.proceedToPayment": {
     "description": "CTA to go to payment step",

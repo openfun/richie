@@ -183,6 +183,14 @@
     "description": "Accessible label displayed while certificate is being generated.",
     "message": "Сертификат создается..."
   },
+  "components.CourseProductItem.availableIn": {
+    "description": "Course run languages",
+    "message": "Available in {languages}"
+  },
+  "components.CourseProductItem.fromTo": {
+    "description": "Course run date range",
+    "message": "From {from} to {to}"
+  },
   "components.CourseProductItem.loadingInitial": {
     "description": "Accessible text for the initial loading spinner displayed when product is fetching",
     "message": "Loading product information..."
@@ -202,14 +210,6 @@
   "components.CourseProductsList.start": {
     "description": "Start label displayed in the header of course run dates section",
     "message": "Начало"
-  },
-  "components.CourseProductsLists.enrollOn": {
-    "description": "Text label for the enrollment dates",
-    "message": "Зачисление с {start} на {end}"
-  },
-  "components.CourseProductsLists.noCourseRunAvailable": {
-    "description": "Text displayed when no course run are opened for the course",
-    "message": "Нет доступных сессий для этого курса."
   },
   "components.CourseRunEnrollment.enroll": {
     "description": "CTA for users who can enroll in the course run or could enroll if they logged in.",
@@ -261,6 +261,10 @@
   },
   "components.CourseRunItemWithEnrollment.enrolled": {
     "description": "Help text for users are enrolled in the course run.",
+    "message": "Enrolled"
+  },
+  "components.CourseRunItemWithEnrollment.enrolledAriaLabel": {
+    "description": "Help text for users are enrolled in the course run.",
     "message": "You are enrolled in this course run"
   },
   "components.CourseRunItemWithEnrollment.goToCourse": {
@@ -274,10 +278,6 @@
   "components.CourseRunList.dataCourseRunPeriod": {
     "description": "Message displayed in course run datagrid for course run period",
     "message": "from {from} to {to}"
-  },
-  "components.CourseRunList.enrollFromTo": {
-    "description": "Text label for the enrollment dates",
-    "message": "Зачисление с {start} на {end}"
   },
   "components.CourseRunList.noCourseRunAvailable": {
     "description": "Text displayed when no course run are opened for the course",
@@ -547,10 +547,6 @@
     "description": "Text label for the enroll button",
     "message": "Присоединиться"
   },
-  "components.EnrollableCourseRunList.enrollOn": {
-    "description": "Text label for the enrollment dates",
-    "message": "Зачисление с {enrollment_start} на {enrollment_end}"
-  },
   "components.EnrollableCourseRunList.enrolling": {
     "description": "Label displayed when a request to enroll to a course run is loading",
     "message": "Зачисление..."
@@ -586,6 +582,14 @@
   "components.EnrolledCourseRun.unenrolling": {
     "description": "Accessible label displayed when user is being unenrolled.",
     "message": "Unenrolling..."
+  },
+  "components.EnrollmentDate.enrollFrom": {
+    "description": "Text label for the enrollment dates when enrollment is not yet opened",
+    "message": "Enrollment from {date}"
+  },
+  "components.EnrollmentDate.enrollUntil": {
+    "description": "Text label for the enrollment dates when enrollment is opened",
+    "message": "Enrollment until {date}"
   },
   "components.LanguageSelector.currentlySelected": {
     "description": "Accessible hint to mark the currently selected language in the language selector",
@@ -766,6 +770,14 @@
   "components.SaleTunnelStepValidation.includingVAT": {
     "description": "Text displayed next to the price to mention this is the price including VAT.",
     "message": "в том числе НДС"
+  },
+  "components.SaleTunnelStepValidation.language": {
+    "description": "Label displayed before the list of languages",
+    "message": "{ count, plural, one {Language:} other {Languages:} }"
+  },
+  "components.SaleTunnelStepValidation.noCourseRunAvailable": {
+    "description": "Text displayed when no course run are opened for the course",
+    "message": "No session available for this course."
   },
   "components.SaleTunnelStepValidation.proceedToPayment": {
     "description": "CTA to go to payment step",
