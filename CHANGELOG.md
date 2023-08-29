@@ -10,8 +10,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Add tracking events on product interactions
-- Add `display_mode` choice field to `CourseRun` model
 - Add a footer on enrollment's item in the learner dashboard. It give the
   possibility to purchase linked product or download linked certificate.
 
@@ -31,6 +29,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Removed
 
 - Remove `CourseProductItem` as a widget
+
+## [2.24.0] - 2023-08-29
+
+### Added
+
+- Add tracking events on product interactions
+- Add `display_mode` choice field to `CourseRun` model
 
 ### Changed
 
@@ -1918,7 +1923,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.23.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.24.0...master
+[2.24.0]: https://github.com/openfun/richie/compare/v2.23.0...2.24.0
 [2.23.0]: https://github.com/openfun/richie/compare/v2.22.0...2.23.0
 [2.22.0]: https://github.com/openfun/richie/compare/v2.21.1...2.22.0
 [2.21.1]: https://github.com/openfun/richie/compare/v2.21.0...2.21.1
