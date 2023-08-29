@@ -27,6 +27,9 @@ $ make migrate
   customised using cunningham-tokens.
 - scss themes variable for Modal 'close button' have been removed. It is now a cunningham button and can be
   customised using cunningham-tokens.
+
+## 2.23.0 to 2.24.0
+
 - In `_theme.scss`, `steps-content` map has one more property `summary-hover-color`, if you have
   overriden this map, you must add this new property.
 
