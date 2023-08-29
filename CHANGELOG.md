@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.24.0] - 2023-08-29
+
 ### Added
 
 - Add tracking events on product interactions
@@ -1899,7 +1901,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.23.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.24.0...master
+[2.24.0]: https://github.com/openfun/richie/compare/v2.23.0...2.24.0
 [2.23.0]: https://github.com/openfun/richie/compare/v2.22.0...2.23.0
 [2.22.0]: https://github.com/openfun/richie/compare/v2.21.1...2.22.0
 [2.21.1]: https://github.com/openfun/richie/compare/v2.21.0...2.21.1

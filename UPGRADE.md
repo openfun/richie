@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.23.0 to 2.24.0
+
 - In `_theme.scss`, `steps-content` map has one more property `summary-hover-color`, if you have
   overriden this map, you must add this new property.
 
