@@ -122,6 +122,11 @@
       margin: 0;
       padding: 0;
     }
+
+    &__instructions {
+      margin-top: rem-calc(8px);
+      max-width: rem-calc(600px);
+    }
   }
 
   .product-detail-row__course-run {

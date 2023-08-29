@@ -7,7 +7,7 @@ import {
   CourseStateFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
-import { ProductFactory } from 'utils/test/factories/joanie';
+import { CourseRunFactory, ProductFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -239,7 +239,9 @@ describe('PurchaseButton', () => {
     'renders a disabled CTA for product certificate if the linked course run is not open',
     async ({ courseRunStateData }) => {
       const product = ProductFactory({ type: ProductType.CERTIFICATE }).one();
-      const courseRunState = CourseStateFactory(courseRunStateData).one();
+      const courseRun = CourseRunFactory({
+        state: CourseStateFactory(courseRunStateData).one(),
+      }).one();
       fetchMock
         .get('https://joanie.test/api/v1.0/addresses/', [])
         .get('https://joanie.test/api/v1.0/credit-cards/', [])
@@ -248,7 +250,7 @@ describe('PurchaseButton', () => {
       act(() => {
         render(
           <Wrapper client={createTestQueryClient({ user: true })}>
-            <PurchaseButton product={product} disabled={false} courseRunState={courseRunState} />
+            <PurchaseButton product={product} disabled={false} courseRun={courseRun} />
           </Wrapper>,
         );
       });
@@ -293,7 +295,10 @@ describe('PurchaseButton', () => {
     'do not renders a disabled CTA for product certificate if the linked course run is open',
     async ({ courseRunStateData }) => {
       const product = ProductFactory({ type: ProductType.CERTIFICATE }).one();
-      const courseRunState = CourseStateFactory(courseRunStateData).one();
+      const courseRun = CourseRunFactory({
+        state: CourseStateFactory(courseRunStateData).one(),
+      }).one();
+
       fetchMock
         .get('https://joanie.test/api/v1.0/addresses/', [])
         .get('https://joanie.test/api/v1.0/credit-cards/', [])
@@ -302,7 +307,7 @@ describe('PurchaseButton', () => {
       act(() => {
         render(
           <Wrapper client={createTestQueryClient({ user: true })}>
-            <PurchaseButton product={product} disabled={false} courseRunState={courseRunState} />
+            <PurchaseButton product={product} disabled={false} courseRun={courseRun} />
           </Wrapper>,
         );
       });

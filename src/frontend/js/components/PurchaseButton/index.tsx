@@ -6,7 +6,6 @@ import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
 import SaleTunnel from 'components/SaleTunnel';
 import { isOpenedCourseRunCertificate, isOpenedCourseRunCredential } from 'utils/CourseRuns';
-import { CourseState } from 'types';
 
 const messages = defineMessages({
   loginToPurchase: {
@@ -42,14 +41,14 @@ const messages = defineMessages({
 
 interface PurchaseButtonProps {
   product: Joanie.Product;
-  courseRunState?: CourseState;
+  courseRun?: Joanie.CourseRun;
   disabled?: boolean;
   className?: string;
 }
 
 const PurchaseButton = ({
   product,
-  courseRunState,
+  courseRun,
   disabled = false,
   className,
 }: PurchaseButtonProps) => {
@@ -59,12 +58,12 @@ const PurchaseButton = ({
 
   const hasAtLeastOneCourseRun = useMemo(() => {
     if (product.type === Joanie.ProductType.CERTIFICATE) {
-      if (!courseRunState) {
+      if (!courseRun) {
         throw new Error(
-          'Unable to instanciate PurchaseButton with a product CERTIFICATE without the according courseRunState.',
+          'Unable to instanciate PurchaseButton with a product CERTIFICATE without the according CourseRun.',
         );
       }
-      return isOpenedCourseRunCertificate(courseRunState);
+      return isOpenedCourseRunCertificate(courseRun.state);
     }
     return (
       product.target_courses.length > 0 &&
@@ -126,6 +125,7 @@ const PurchaseButton = ({
       <SaleTunnel
         isOpen={isSaleTunnelOpen}
         product={product}
+        courseRun={courseRun}
         onClose={() => setIsSaleTunnelOpen(false)}
       />
     </>

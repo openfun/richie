@@ -132,6 +132,7 @@ export const CertificateCourseProductFactory = factory((): CourseProduct => {
     ...CredentialProductFactory().one(),
     order: OrderLiteFactory().one(),
     target_courses: TargetCourseFactory().many(3),
+    instructions: faker.lorem.paragraphs(5),
   };
 });
 

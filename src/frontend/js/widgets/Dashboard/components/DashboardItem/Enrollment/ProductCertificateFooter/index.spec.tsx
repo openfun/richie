@@ -12,6 +12,7 @@ import {
 import {
   CertificateFactory,
   CourseLightFactory,
+  CourseRunFactory,
   OrderFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
@@ -30,15 +31,11 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('<ProductCertificateFooter/>', () => {
-  const Wrapper = ({ course, product, courseRunState }: ProductCertificateFooterProps) => (
+  const Wrapper = ({ product, courseRun }: ProductCertificateFooterProps) => (
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
         <JoanieSessionProvider>
-          <ProductCertificateFooter
-            course={course}
-            product={product}
-            courseRunState={courseRunState}
-          />
+          <ProductCertificateFooter product={product} courseRun={courseRun} />
         </JoanieSessionProvider>
       </QueryClientProvider>
     </IntlProvider>
@@ -103,8 +100,11 @@ describe('<ProductCertificateFooter/>', () => {
   ])(
     'should display purchase button for a open course run without order (state $courseRunStateData.priority).',
     async ({ courseRunStateData }) => {
-      const courseRunState = CourseStateFactory(courseRunStateData).one();
-      render(<Wrapper course={course} product={product} courseRunState={courseRunState} />);
+      const courseRun = CourseRunFactory({
+        state: CourseStateFactory(courseRunStateData).one(),
+        course,
+      }).one();
+      render(<Wrapper product={product} courseRun={courseRun} />);
       expect(screen.getByTestId('PurchaseButton__cta')).toBeInTheDocument();
     },
   );
@@ -125,14 +125,16 @@ describe('<ProductCertificateFooter/>', () => {
   ])(
     "shouldn't display purchase button for a closed course run without order (state $courseRunStateData.priority).",
     async ({ courseRunStateData }) => {
-      const courseRunState = CourseStateFactory(courseRunStateData).one();
-      render(<Wrapper course={course} product={product} courseRunState={courseRunState} />);
+      const courseRun = CourseRunFactory({
+        state: CourseStateFactory(courseRunStateData).one(),
+        course,
+      }).one();
+      render(<Wrapper product={product} courseRun={courseRun} />);
       expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
     },
   );
 
   it('should display download button for a course run with certificate.', async () => {
-    const courseRunState = CourseStateFactory().one();
     fetchMock.get(
       `https://joanie.endpoint.test/api/v1.0/orders/?${queryString.stringify(
         orderQueryParameters,
@@ -145,7 +147,8 @@ describe('<ProductCertificateFooter/>', () => {
       'https://joanie.endpoint.test/api/v1.0/certificates/FAKE_CERTIFICATE_ID/',
       CertificateFactory(),
     );
-    render(<Wrapper course={course} product={product} courseRunState={courseRunState} />);
+    const courseRun = CourseRunFactory({ course }).one();
+    render(<Wrapper product={product} courseRun={courseRun} />);
     expect(await screen.findByRole('button', { name: 'Download' })).toBeInTheDocument();
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
@@ -154,8 +157,8 @@ describe('<ProductCertificateFooter/>', () => {
     'should not display button (download or purchase) for a course run with order but without certificate (product type: "%s").',
     async ([productType]) => {
       product.type = productType as ProductType;
-      const courseRunState = CourseStateFactory().one();
-      render(<Wrapper course={course} product={product} courseRunState={courseRunState} />);
+      const courseRun = CourseRunFactory({ course }).one();
+      render(<Wrapper product={product} courseRun={courseRun} />);
       expect(await screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
       expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
     },

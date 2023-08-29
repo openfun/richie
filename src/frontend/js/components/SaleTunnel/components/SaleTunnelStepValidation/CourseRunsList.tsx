@@ -66,7 +66,11 @@ const CourseRunsList = ({ courseRuns }: PropsWithChildren<{ courseRuns: Joanie.C
       </p>
       <ul className="product-detail-row__course-run-dates__list">
         {courseRuns.map((courseRun) => (
-          <li className="product-detail-row__course-run-dates__item" key={courseRun.id}>
+          <li
+            className="product-detail-row__course-run-dates__item"
+            key={courseRun.id}
+            data-testid="course-run-list-item"
+          >
             <FormattedMessage
               {...messages.courseRunDates}
               values={{
