@@ -2,6 +2,7 @@ import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
 import type * as Joanie from 'types/Joanie';
 import TargetCourseDetail from './TargetCourseDetail';
+import CourseRunsList from './CourseRunsList';
 
 const messages = defineMessages({
   includingVAT: {
@@ -19,9 +20,14 @@ const messages = defineMessages({
 interface SaleTunnelStepValidationProps {
   next: () => void;
   product: Joanie.Product;
+  courseRun?: Joanie.CourseRun;
 }
 
-export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValidationProps) => {
+export const SaleTunnelStepValidation = ({
+  product,
+  courseRun,
+  next,
+}: SaleTunnelStepValidationProps) => {
   return (
     <section className="SaleTunnelStepValidation">
       <header className="SaleTunnelStepValidation__header">
@@ -37,21 +43,41 @@ export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValida
         </strong>
       </header>
       <ol className="SaleTunnelStepValidation__product-detail-list">
-        {product.target_courses.map((course) => (
+        {courseRun ? (
           <li
-            key={`SaleTunnelStepValidation__product-detail-row--${course.code}`}
+            key={`SaleTunnelStepValidation__product-detail-row--${courseRun.course.code}`}
             className="SaleTunnelStepValidation__product-detail-row product-detail-row product-detail-row--course"
+            data-testid="product-course"
           >
             <span className="product-detail-row__icon">
               <svg aria-hidden="true">
                 <use href="#icon-check" />
               </svg>
             </span>
-            <TargetCourseDetail course={course} />
+            <h3 className="product-detail-row__summary h4">{courseRun.course.title}</h3>
+            <CourseRunsList courseRuns={[courseRun]} />
           </li>
-        ))}
+        ) : (
+          product.target_courses.map((targetCourse) => (
+            <li
+              key={`SaleTunnelStepValidation__product-detail-row--${targetCourse.code}`}
+              className="SaleTunnelStepValidation__product-detail-row product-detail-row"
+              data-testid="product-target-course"
+            >
+              <span className="product-detail-row__icon">
+                <svg aria-hidden="true">
+                  <use href="#icon-check" />
+                </svg>
+              </span>
+              <TargetCourseDetail course={targetCourse} />
+            </li>
+          ))
+        )}
         {product.certificate_definition ? (
-          <li className="SaleTunnelStepValidation__product-detail-row product-detail-row product-detail-row--certificate">
+          <li
+            className="SaleTunnelStepValidation__product-detail-row product-detail-row"
+            data-testid="product-certificate"
+          >
             <span className="product-detail-row__icon product-detail-row__icon--big">
               <svg aria-hidden="true">
                 <use href="#icon-certificate" />
@@ -68,6 +94,13 @@ export const SaleTunnelStepValidation = ({ product, next }: SaleTunnelStepValida
           </li>
         ) : null}
       </ol>
+      {product.instructions ? (
+        <div
+          className="product-detail-row__content product-detail-row__instructions"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: product.instructions }}
+        />
+      ) : null}
       <footer className="SaleTunnelStepValidation__footer">
         <Button onClick={next}>
           <FormattedMessage {...messages.proceedToPayment} />

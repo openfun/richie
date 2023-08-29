@@ -98,6 +98,7 @@ export interface Product {
   created_on: string;
   remaining_order_count?: number | null;
   state: CourseState;
+  instructions: Nullable<string>;
 }
 
 export interface CourseProduct extends Product {

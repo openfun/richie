@@ -9,7 +9,7 @@ interface DashboardItemCourseRunProps {
 }
 
 export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunProps) => {
-  const { course, state: courseRunState } = enrollment.course_run;
+  const { course } = enrollment.course_run;
   if (!course) {
     throw new Error("Enrollment's course_run must provide course attribute");
   }
@@ -29,8 +29,7 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
           <ProductCertificateFooter
             key={[enrollment.id, product.id].join('_')}
             product={product}
-            course={course}
-            courseRunState={courseRunState}
+            courseRun={enrollment.course_run}
           />,
         );
       }

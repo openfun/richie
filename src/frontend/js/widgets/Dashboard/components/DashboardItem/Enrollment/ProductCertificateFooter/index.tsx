@@ -1,11 +1,10 @@
 import { FormattedMessage } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { CourseLight, Product, ProductType } from 'types/Joanie';
+import { CourseRun, Product, ProductType } from 'types/Joanie';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
 import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import { useCertificate } from 'hooks/useCertificates';
-import { CourseState } from 'types';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
 import useProductOrder from 'hooks/useProductOrder';
 import CertificateStatus from '../../CertificateStatus';
@@ -29,30 +28,28 @@ const messages = {
 };
 
 export interface ProductCertificateFooterProps {
-  course: CourseLight;
   product: Product;
-  courseRunState: CourseState;
+  courseRun: CourseRun;
 }
 
-const ProductCertificateFooter = ({
-  course,
-  product,
-  courseRunState,
-}: ProductCertificateFooterProps) => {
+const ProductCertificateFooter = ({ product, courseRun }: ProductCertificateFooterProps) => {
   if (product.type !== ProductType.CERTIFICATE) {
     return null;
   }
-  const { item: order } = useProductOrder({ productId: product.id, courseCode: course.code });
+  const { item: order } = useProductOrder({
+    productId: product.id,
+    courseCode: courseRun.course.code,
+  });
   const { item: certificate } = useCertificate(order?.certificate);
 
   // The course run is no longer available
   // and no product certificate had been bought therefore there isn't any certifcate to download.
-  if (!order && !isOpenedCourseRunCertificate(courseRunState)) {
+  if (!order && !isOpenedCourseRunCertificate(courseRun.state)) {
     return null;
   }
 
   return (
-    <CourseProductProvider courseCode={course.code} productId={product.id}>
+    <CourseProductProvider courseCode={courseRun.course.code} productId={product.id}>
       <div className="dashboard-item__course-enrolling__infos">
         <div className="dashboard-item__block__status">
           <Icon name={IconTypeEnum.CERTIFICATE} />
@@ -76,7 +73,7 @@ const ProductCertificateFooter = ({
           <PurchaseButton
             className="dashboard-item__button"
             product={product}
-            courseRunState={courseRunState}
+            courseRun={courseRun}
           />
         )}
       </div>

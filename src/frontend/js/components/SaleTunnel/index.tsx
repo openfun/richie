@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
-import { Product } from 'types/Joanie';
+import { CourseRun, Product } from 'types/Joanie';
 import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
@@ -42,11 +42,12 @@ const focusCurrentStep = (container: HTMLElement) => {
 
 type Props = {
   product: Product;
+  courseRun?: CourseRun;
   isOpen: boolean;
   onClose: () => void;
 };
 
-const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
+const SaleTunnel = ({ product, courseRun, isOpen = false, onClose }: Props) => {
   const intl = useIntl();
   const {
     methods: { refetch: refetchOmniscientOrders },
@@ -137,7 +138,9 @@ const SaleTunnel = ({ product, isOpen = false, onClose }: Props) => {
     >
       <div className="SaleTunnel__modal-body">
         <StepBreadcrumb manifest={manifest} step={step} />
-        {step === 'validation' && <SaleTunnelStepValidation product={product} next={next} />}
+        {step === 'validation' && (
+          <SaleTunnelStepValidation product={product} courseRun={courseRun} next={next} />
+        )}
         {step === 'payment' && <SaleTunnelStepPayment product={product} next={next} />}
         {step === 'resume' && <SaleTunnelStepResume next={next} />}
       </div>
