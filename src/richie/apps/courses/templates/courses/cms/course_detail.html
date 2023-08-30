@@ -363,21 +363,25 @@
                     <div id="page{{ page_suffix }}" class="course-detail__programs course-detail__block">
                         <div class="course-detail__row">
                             <section class="course-glimpse-list">
-                                <h2 class="course-detail__title">
-                                    {% blocktrans count counter=programs|length %}
-                                        This course is part of a program
-                                    {% plural %}
-                                        This course is part of programs
-                                    {% endblocktrans %}
-                                </h2>
-                                <div class="section__items section__items--programs">
-                                    {% for program in page_obj.object_list %}
-                                        {% include "courses/cms/fragment_program_glimpse.html" with program=program header_level=3 %}
-                                    {% endfor %}
+                                <div class="course-glimpse-list__header">
+                                    <h2 class="course-detail__title">
+                                        {% blocktrans count counter=programs|length %}
+                                            This course is part of a program
+                                        {% plural %}
+                                            This course is part of programs
+                                        {% endblocktrans %}
+                                    </h2>
                                 </div>
-                                {% if paginator.num_pages > 1 %}
-                                    {% include "richie/pagination.html" %}
-                                {% endif %}
+                                <div class="course-glimpse-list__content">
+                                    <div class="section__items section__items--programs">
+                                        {% for program in page_obj.object_list %}
+                                            {% include "courses/cms/fragment_program_glimpse.html" with program=program header_level=3 %}
+                                        {% endfor %}
+                                    </div>
+                                    {% if paginator.num_pages > 1 %}
+                                        {% include "richie/pagination.html" %}
+                                    {% endif %}
+                                </div>
                             </section>
                         </div>
                     </div>

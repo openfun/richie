@@ -25,6 +25,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Course details characteristics overflow issue
 - Map all richie course properties into `getCourseGlimpseProps` util
+- Fix django templates using course-glimpse-list block
 
 ### Removed
 
