@@ -25,7 +25,7 @@ If you chose to install Cookiecutter, you can now run it against our
 [template][2] as follows:
 
 ```bash
-cookiecutter gh:openfun/richie --directory cookiecutter  --checkout v2.24.0
+cookiecutter gh:openfun/richie --directory cookiecutter  --checkout v2.24.1
 ```
 
 If you didn't want to install it on your machine, we provide a Docker image
@@ -33,7 +33,7 @@ built with our [own repository][4] that you can use as follows:
 
 ```bash
 docker run --rm -it -u $(id -u):$(id -g) -v $PWD:/app \
-fundocker/cookiecutter gh:openfun/richie --directory cookiecutter --checkout v2.24.0
+fundocker/cookiecutter gh:openfun/richie --directory cookiecutter --checkout v2.24.1
 ```
 
 The `--directory` option is to indicate that our Cookiecutter template is in

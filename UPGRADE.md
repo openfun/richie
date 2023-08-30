@@ -27,11 +27,11 @@ $ make migrate
   customised using cunningham-tokens.
 - scss themes variable for Modal 'close button' have been removed. It is now a cunningham button and can be
   customised using cunningham-tokens.
+
+## 2.23.0 to 2.24.x
+
 - `*_detail.html` django templates have been updated to use new course-glimpse-list structure. If
   have overridden those templates, you must update them. (https://github.com/openfun/richie/pull/2069/commits/e36fa58a579c3b58384baf896fcf4b7579a46342)
-
-## 2.23.0 to 2.24.0
-
 - In `_theme.scss`, `steps-content` map has one more property `summary-hover-color`, if you have
   overriden this map, you must add this new property.
 
