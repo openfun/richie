@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix django templates using course-glimpse-list block
+
 ## [2.24.0] - 2023-08-29
 
 ### Added
