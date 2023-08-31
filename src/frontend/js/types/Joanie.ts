@@ -103,7 +103,6 @@ export interface Product {
 
 export interface CourseProduct extends Product {
   order: Nullable<OrderLite>;
-  target_courses: TargetCourse[];
 }
 
 export interface CourseProductRelation {
