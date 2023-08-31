@@ -124,15 +124,22 @@ export const CredentialProductFactory = factory((): Product => {
     target_courses: TargetCourseFactory().many(5),
     remaining_order_count: faker.number.int({ min: 1, max: 100 }),
     state: CourseStateFactory().one(),
+    instructions: null,
+  };
+});
+
+export const CertificateProductFactory = factory((): Product => {
+  return {
+    ...CredentialProductFactory().one(),
+    target_courses: [],
+    instructions: faker.lorem.paragraphs(5),
   };
 });
 
 export const CertificateCourseProductFactory = factory((): CourseProduct => {
   return {
-    ...CredentialProductFactory().one(),
+    ...CertificateProductFactory().one(),
     order: OrderLiteFactory().one(),
-    target_courses: TargetCourseFactory().many(3),
-    instructions: faker.lorem.paragraphs(5),
   };
 });
 
