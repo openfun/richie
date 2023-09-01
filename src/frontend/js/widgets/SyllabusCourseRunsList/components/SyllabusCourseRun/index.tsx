@@ -41,6 +41,12 @@ const messages = defineMessages({
 const OpenedCourseRun = ({ courseRun }: { courseRun: CourseRun }) => {
   const formatDate = useDateFormat();
   const intl = useIntl();
+  const enrollmentStart = courseRun.enrollment_start
+    ? formatDate(courseRun.enrollment_start)
+    : '...';
+  const enrollmentEnd = courseRun.enrollment_end ? formatDate(courseRun.enrollment_end) : '...';
+  const start = courseRun.start ? formatDate(courseRun.start) : '...';
+  const end = courseRun.end ? formatDate(courseRun.end) : '...';
   return (
     <>
       {courseRun.title && <h3>{StringHelper.capitalizeFirst(courseRun.title)}</h3>}
@@ -52,8 +58,8 @@ const OpenedCourseRun = ({ courseRun }: { courseRun: CourseRun }) => {
           <FormattedMessage
             {...messages.runPeriod}
             values={{
-              startDate: formatDate(courseRun.enrollment_start),
-              endDate: formatDate(courseRun.enrollment_end),
+              startDate: enrollmentStart,
+              endDate: enrollmentEnd,
             }}
           />
         </dd>
@@ -64,8 +70,8 @@ const OpenedCourseRun = ({ courseRun }: { courseRun: CourseRun }) => {
           <FormattedMessage
             {...messages.runPeriod}
             values={{
-              startDate: formatDate(courseRun.start),
-              endDate: formatDate(courseRun.end),
+              startDate: start,
+              endDate: end,
             }}
           />
         </dd>

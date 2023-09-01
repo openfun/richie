@@ -27,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Map all richie course properties into `getCourseGlimpseProps` util
 - Fix course run computed state. A run without end date must be ONGOING_OPEN
 - Fix cookiecutter circleci gitlint configuration
+- Opened Course Run show empty date as '...'
 
 ### Removed
 
