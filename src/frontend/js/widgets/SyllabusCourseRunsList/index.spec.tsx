@@ -232,6 +232,36 @@ describe('<SyllabusCourseRunsList/>', () => {
     courseRuns.slice(1).forEach((run) => expectCourseRunInList(portalContainer, run));
   });
 
+  it('has one forever open course run', async () => {
+    const course = CourseLightFactory().one();
+    const courseRuns = [
+      CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+        start: 'Dec 31, 2020',
+        end: undefined,
+        enrollment_start: 'Dec 01, 2020',
+        enrollment_end: undefined,
+        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+      }).one(),
+    ];
+
+    render(
+      <SyllabusCourseRunsList
+        courseRuns={courseRuns}
+        course={course}
+        maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
+      />,
+      {
+        wrapper: Wrapper,
+      },
+    );
+
+    expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
+      1,
+    );
+    screen.getByText('From Dec 31, 2020 to ...');
+    screen.getByText('From Dec 01, 2020 to ...');
+  });
+
   it('has multiple opened course run', async () => {
     const course = CourseLightFactory().one();
     const courseRuns = [
