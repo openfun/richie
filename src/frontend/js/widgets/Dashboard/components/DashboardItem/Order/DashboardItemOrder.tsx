@@ -1,42 +1,25 @@
 import { FormattedMessage, useIntl } from 'react-intl';
-import { CourseLight, Order, OrderState, Product } from 'types/Joanie';
+import { CourseLight, Order, Product } from 'types/Joanie';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { StringHelper } from 'utils/StringHelper';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { useCertificate } from 'hooks/useCertificates';
 import { Spinner } from 'components/Spinner';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
 import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate';
+import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourseProduct } from 'hooks/useCourseProducts';
-import { RouterButton } from '../../RouterButton';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
 import { DashboardItem } from '../index';
+import OrderStateMessage from './OrderStateMessage';
 
 const messages = {
   accessCourse: {
     id: 'components.DashboardItemOrder.gotoCourse',
     description: 'Button that redirects to the order details',
     defaultMessage: 'View details',
-  },
-  statusOnGoing: {
-    id: 'components.DashboardItemOrder.statusOnGoing',
-    description:
-      "Status shown on the dashboard order' item when order is validated with no certificate",
-    defaultMessage: 'On going',
-  },
-  statusCompleted: {
-    id: 'components.DashboardItemOrder.statusCompleted',
-    description:
-      "Status shown on the dashboard order' item when order is validated with certificate",
-    defaultMessage: 'Completed',
-  },
-  statusOther: {
-    id: 'components.DashboardItemOrder.statusOther',
-    description: "Status shown on the dashboard order' item when order is not validated",
-    defaultMessage: '{state}',
   },
   loadingCertificate: {
     id: 'components.DashboardItemOrder.loadingCertificate',
@@ -108,20 +91,7 @@ export const DashboardItemOrder = ({
         <div className="dashboard-item-order__footer">
           <div className="dashboard-item__block__status">
             <Icon name={IconTypeEnum.SCHOOL} />
-            <div>
-              {order.state === OrderState.VALIDATED && !order.certificate && (
-                <FormattedMessage {...messages.statusOnGoing} />
-              )}
-              {order.state === OrderState.VALIDATED && !!order.certificate && (
-                <FormattedMessage {...messages.statusCompleted} />
-              )}
-              {order.state !== OrderState.VALIDATED && (
-                <FormattedMessage
-                  {...messages.statusOther}
-                  values={{ state: StringHelper.capitalizeFirst(order.state) }}
-                />
-              )}
-            </div>
+            <OrderStateMessage order={order} />
           </div>
           {showDetailsButton && (
             <RouterButton
