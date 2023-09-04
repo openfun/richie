@@ -10,7 +10,9 @@ import { useAddresses } from 'hooks/useAddresses';
 import type { Address } from 'types/Joanie';
 import validationSchema, { getLocalizedErrorMessage } from './validationSchema';
 
-export type AddressFormValues = Omit<Address, 'id' | 'is_main'> & { save: boolean | undefined };
+export interface AddressFormValues extends Omit<Address, 'id' | 'is_main'> {
+  save?: boolean;
+}
 
 interface Props {
   address?: Address;
