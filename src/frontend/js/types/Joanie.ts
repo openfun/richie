@@ -194,6 +194,7 @@ export interface Order {
   enrollment?: string;
   main_proforma_invoice: string;
   certificate?: string;
+  contract?: Contract;
   owner: string;
   total: number;
   total_currency: string;
