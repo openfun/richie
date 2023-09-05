@@ -64,7 +64,7 @@ describe('<ProductCertificateFooter/>', () => {
     orderQueryParameters = {
       product: product.id,
       course: course.code,
-      state: [OrderState.PENDING, OrderState.VALIDATED],
+      state: [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED],
     };
     fetchMock.get(
       `https://joanie.endpoint.test/api/v1.0/orders/?${queryString.stringify(

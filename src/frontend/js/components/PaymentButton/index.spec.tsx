@@ -11,13 +11,12 @@ import {
   OrderWithPaymentFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
-import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
-import { Order, OrderState } from 'types/Joanie';
+import { OrderState } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
-import { OrderProvider } from '../../contexts/OrderContext';
+import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import PaymentButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -36,6 +35,7 @@ jest.mock('utils/context', () => ({
 jest.mock('./components/PaymentInterfaces');
 
 describe('PaymentButton', () => {
+  let nbApiCalls: number;
   const formatPrice = (price: number, currency: string) =>
     new Intl.NumberFormat('en', {
       currency,
@@ -43,35 +43,49 @@ describe('PaymentButton', () => {
     }).format(price);
 
   const Wrapper = ({
-    client = new QueryClient(),
-    order,
+    client = createTestQueryClient({ user: true }),
     children,
-  }: PropsWithChildren<{ order?: Order; client?: QueryClient }>) => (
-    <OrderProvider defaultOrder={order}>
+  }: PropsWithChildren<{ client?: QueryClient }>) => {
+    return (
       <IntlProvider locale="en">
-        <JoanieApiProvider>
-          <CourseProductProvider productId="" courseCode="00000">
-            <QueryClientProvider client={client}>{children}</QueryClientProvider>
-          </CourseProductProvider>
-        </JoanieApiProvider>
+        <QueryClientProvider client={client}>
+          <JoanieSessionProvider>
+            <CourseProductProvider productId="" courseCode="00000">
+              {children}
+            </CourseProductProvider>
+          </JoanieSessionProvider>
+        </QueryClientProvider>
       </IntlProvider>
-    </OrderProvider>
-  );
+    );
+  };
 
   beforeEach(() => {
     jest.useFakeTimers();
+    jest.clearAllTimers();
+    jest.resetAllMocks();
+
+    fetchMock.restore();
+    sessionStorage.clear();
+
+    // Joanie providers calls
+    fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
+    fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
+    fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
+    nbApiCalls = 3;
   });
 
   afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
     cleanup();
-    fetchMock.restore();
-    jest.clearAllTimers();
-    jest.resetAllMocks();
   });
 
   it('should render a payment button', async () => {
     const product: Joanie.Product = ProductFactory().one();
-
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+      [],
+    );
     render(
       <Wrapper>
         <PaymentButton product={product} onSuccess={jest.fn()} />
@@ -102,6 +116,10 @@ describe('PaymentButton', () => {
     const product: Joanie.Product = ProductFactory().one();
     const creditCard: Joanie.CreditCard = CreditCardFactory().one();
 
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+      [],
+    );
     const { rerender } = render(
       <Wrapper>
         <PaymentButton product={product} creditCard={creditCard.id} onSuccess={jest.fn()} />
@@ -137,6 +155,10 @@ describe('PaymentButton', () => {
     const product: Joanie.Product = ProductFactory().one();
     const billingAddress: Joanie.Address = AddressFactory().one();
 
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+      [],
+    );
     render(
       <Wrapper>
         <PaymentButton billingAddress={billingAddress} product={product} onSuccess={jest.fn()} />
@@ -157,8 +179,11 @@ describe('PaymentButton', () => {
     const handleSuccess = jest.fn();
     const { payment_info: paymentInfo, ...order }: Joanie.OrderWithPaymentInfo =
       OrderWithPaymentFactory().one();
-
     fetchMock
+      .get(
+        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        [],
+      )
       .post('https://joanie.test/api/v1.0/orders/', order)
       .patch(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`, {
         paymentInfo,
@@ -168,7 +193,7 @@ describe('PaymentButton', () => {
       });
 
     render(
-      <Wrapper order={undefined} client={createTestQueryClient({ user: { username: 'John Doe' } })}>
+      <Wrapper client={createTestQueryClient({ user: true })}>
         <PaymentButton
           billingAddress={billingAddress}
           product={product}
@@ -176,6 +201,8 @@ describe('PaymentButton', () => {
         />
       </Wrapper>,
     );
+    nbApiCalls += 1; // fetch order for useProductOrder
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
     const $button = screen.getByRole('button', {
       name: `Pay ${formatPrice(product.price, product.price_currency)}`,
@@ -190,7 +217,12 @@ describe('PaymentButton', () => {
     });
 
     // - Route to create order should have been called
-    expect(fetchMock.calls()).toHaveLength(2);
+    nbApiCalls += 1; // order post create (invalidate queries)
+    nbApiCalls += 1; // refetch omniscient orders
+    nbApiCalls += 1; // refetch useProductOrder
+    nbApiCalls += 1; // order submit
+
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
 
     // - Spinner should be displayed
@@ -205,7 +237,8 @@ describe('PaymentButton', () => {
     });
 
     // - Once payment succeeded, order should be refetch
-    expect(fetchMock.calls()).toHaveLength(3);
+    nbApiCalls += 1; // fetch validated order
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
     // - Order should be polled until its state is validated
@@ -226,7 +259,7 @@ describe('PaymentButton', () => {
     });
 
     // - Order should have been refetched
-    expect(fetchMock.calls()).toHaveLength(3);
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
     // - As order state is validated, the onSuccess callback should be triggered.
@@ -236,7 +269,7 @@ describe('PaymentButton', () => {
     await act(async () => {
       jest.runOnlyPendingTimers();
     });
-    expect(fetchMock.calls()).toHaveLength(3);
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
   });
 
   it('should render only a spinner if payment is a one click when user clicks on payment button', async () => {
@@ -248,6 +281,10 @@ describe('PaymentButton', () => {
     const handleSuccess = jest.fn();
 
     fetchMock
+      .get(
+        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        [],
+      )
       .post('https://joanie.test/api/v1.0/orders/', order)
       .patch(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`, {
         payment_info: paymentInfo,
@@ -347,19 +384,24 @@ describe('PaymentButton', () => {
       ...order,
       state: OrderState.PENDING,
     };
+    const orderSubmitted = {
+      ...order,
+      state: OrderState.SUBMITTED,
+    };
 
     fetchMock
+      .get(
+        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        [initialOrder],
+      )
       .post('https://joanie.test/api/v1.0/orders/', order)
       .patch(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`, {
         payment_info: paymentInfo,
       })
-      .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, {
-        ...order,
-        state: OrderState.SUBMITTED,
-      });
+      .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, orderSubmitted);
 
     render(
-      <Wrapper order={initialOrder} client={createTestQueryClient({ user: null })}>
+      <Wrapper client={createTestQueryClient({ user: true })}>
         <PaymentButton
           billingAddress={billingAddress}
           creditCard={creditCard.id}
@@ -368,7 +410,12 @@ describe('PaymentButton', () => {
         />
       </Wrapper>,
     );
+    await waitFor(() => {
+      expect(screen.getByTestId('payment-button-order-loaded')).toBeInTheDocument();
+    });
 
+    nbApiCalls += 1; // useProductOrder get order with filters
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     const $button = screen.getByRole('button', {
       name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
     }) as HTMLButtonElement;
@@ -377,21 +424,30 @@ describe('PaymentButton', () => {
     expect($button.disabled).toBe(false);
 
     // - User clicks on pay button
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+      [orderSubmitted],
+      { overwriteRoutes: true },
+    );
     await act(async () => {
       fireEvent.click($button);
     });
 
     // - Route to submit an existing order
     // - Furthermore, as payment succeeded immediately, order should have been refetched
-    expect(fetchMock.calls()).toHaveLength(2);
+    nbApiCalls += 1; // order submit
+    nbApiCalls += 1; // order get on id
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
-    expect(fetchMock.calls()[0][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
-    expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
+    const submitCall = fetchMock
+      .calls()
+      .find((call) => call[0] === `https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
+    expect(submitCall).not.toBeUndefined();
+    expect(JSON.parse(submitCall![1]!.body as string)).toEqual({
       billing_address: billingAddress,
       credit_card_id: creditCard.id,
     });
-
-    expect(fetchMock.calls()[1][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
+    expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
     // - Spinner should be displayed
     screen.getByText('Payment in progress');
@@ -417,7 +473,8 @@ describe('PaymentButton', () => {
     });
 
     // - Order should have been refetched
-    expect(fetchMock.calls()).toHaveLength(3);
+    nbApiCalls += 1; // order get on id
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
     // - As order state is validated, the onSuccess callback should be triggered.
@@ -426,7 +483,7 @@ describe('PaymentButton', () => {
     await act(async () => {
       jest.runOnlyPendingTimers();
     });
-    expect(fetchMock.calls()).toHaveLength(3);
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
   });
 
   it('should abort the order if payment does not succeed after a given delay', async () => {
@@ -435,21 +492,26 @@ describe('PaymentButton', () => {
     const creditCard: Joanie.CreditCard = CreditCardFactory().one();
     const { payment_info: paymentInfo, ...order }: Joanie.OrderWithPaymentInfo =
       OrderWithOneClickPaymentFactory().one();
+    const orderSubmitted = {
+      ...order,
+      state: OrderState.SUBMITTED,
+    };
     const handleSuccess = jest.fn();
 
     fetchMock
+      .get(
+        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        [orderSubmitted],
+      )
       .post('https://joanie.test/api/v1.0/orders/', order)
       .patch(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`, {
         payment_info: paymentInfo,
       })
-      .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, {
-        ...order,
-        state: OrderState.SUBMITTED,
-      })
+      .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, orderSubmitted)
       .post(`https://joanie.test/api/v1.0/orders/${order.id}/abort/`, 200);
 
     render(
-      <Wrapper client={createTestQueryClient({ user: { username: 'John Doe' } })}>
+      <Wrapper client={createTestQueryClient({ user: true })}>
         <PaymentButton
           billingAddress={billingAddress}
           creditCard={creditCard.id}
@@ -457,6 +519,14 @@ describe('PaymentButton', () => {
           onSuccess={handleSuccess}
         />
       </Wrapper>,
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId('payment-button-order-loaded')).toBeInTheDocument();
+    });
+    nbApiCalls += 1; // fetcher order for userProductOrder
+    const apiCalls = fetchMock.calls().map((call) => call[0]);
+    expect(apiCalls).toContain(
+      `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
     );
 
     const $button = screen.getByRole('button', {
@@ -473,20 +543,18 @@ describe('PaymentButton', () => {
 
     // - Route to create order should have been called
     // - Furthermore, as payment succeeded immediately, order should have been refetched
-    expect(fetchMock.calls()).toHaveLength(3);
-    expect(fetchMock.calls()[0][0]).toBe('https://joanie.test/api/v1.0/orders/');
-    expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
-      course: '00000',
-      product: product.id,
-    });
+    const onClickApiCalls = fetchMock.calls().splice(nbApiCalls);
+    nbApiCalls += 1; // order submit
+    nbApiCalls += 1; // fetch validated order
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
-    expect(fetchMock.calls()[1][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
-    expect(JSON.parse(fetchMock.calls()[1][1]!.body as string)).toEqual({
+    expect(onClickApiCalls[0][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
+    expect(JSON.parse(onClickApiCalls[0][1]!.body as string)).toEqual({
       billing_address: billingAddress,
       credit_card_id: creditCard.id,
     });
 
-    expect(fetchMock.calls()[2][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
+    expect(onClickApiCalls[1][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
     // - Spinner should be displayed
     screen.getByText('Payment in progress');
@@ -531,6 +599,10 @@ describe('PaymentButton', () => {
     const handleSuccess = jest.fn();
 
     fetchMock
+      .get(
+        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        [],
+      )
       .post('https://joanie.test/api/v1.0/orders/', order)
       .patch(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`, {
         payment_info: paymentInfo,
@@ -541,7 +613,7 @@ describe('PaymentButton', () => {
       });
 
     render(
-      <Wrapper client={createTestQueryClient({ user: { username: 'John Doe' } })}>
+      <Wrapper client={createTestQueryClient({ user: true })}>
         <PaymentButton
           billingAddress={billingAddress}
           product={product}
@@ -549,6 +621,8 @@ describe('PaymentButton', () => {
         />
       </Wrapper>,
     );
+    nbApiCalls += 1; // useProductOrder get order with filters
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
     const $button = screen.getByRole('button', {
       name: `Pay ${formatPrice(product.price, product.price_currency)}`,
@@ -563,7 +637,12 @@ describe('PaymentButton', () => {
     });
 
     // - Route to create order should have been called
-    expect(fetchMock.calls()).toHaveLength(2);
+    nbApiCalls += 1; // order post create (invalidate queries)
+    nbApiCalls += 1; // refetch omniscient orders
+    nbApiCalls += 1; // refetch useProductOrder
+    nbApiCalls += 1; // order submit
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+
     expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
     expect(JSON.parse(fetchMock.lastOptions()!.body!.toString())).toEqual({
       billing_address: billingAddress,

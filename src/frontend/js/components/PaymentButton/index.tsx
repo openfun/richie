@@ -12,7 +12,7 @@ import { HttpError } from 'utils/errors/HttpError';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { useCourseProduct } from 'contexts/CourseProductContext';
-import { useOrderContext } from '../../contexts/OrderContext';
+import useProductOrder from 'hooks/useProductOrder';
 import PaymentInterface from './components/PaymentInterfaces';
 
 const messages = defineMessages({
@@ -93,7 +93,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
   const { courseCode, key } = useCourseProduct();
-  const { order, setOrder } = useOrderContext();
+  const { item: order } = useProductOrder({ courseCode, productId: product.id });
   const orderManager = useOmniscientOrders();
 
   const isReadyToPay = useMemo(() => {
@@ -183,7 +183,6 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
         },
         {
           onSuccess: (newOrder) => {
-            setOrder(newOrder);
             createPayment(newOrder.id);
           },
           onError: async () => {
@@ -262,7 +261,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   }, [state]);
 
   return (
-    <div className="payment-button">
+    <div className="payment-button" data-testid={order && 'payment-button-order-loaded'}>
       <Button
         disabled={state === ComponentStates.LOADING}
         onClick={createOrder}
