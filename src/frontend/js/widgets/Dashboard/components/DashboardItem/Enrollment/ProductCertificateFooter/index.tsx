@@ -1,14 +1,13 @@
-import { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { CourseLight, Order, OrderState, Product, ProductType } from 'types/Joanie';
-import { useOrders } from 'hooks/useOrders';
+import { CourseLight, Product, ProductType } from 'types/Joanie';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
 import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import { useCertificate } from 'hooks/useCertificates';
 import { CourseState } from 'types';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
+import useProductOrder from 'hooks/useProductOrder';
 import CertificateStatus from '../../CertificateStatus';
 
 const messages = {
@@ -43,22 +42,7 @@ const ProductCertificateFooter = ({
   if (product.type !== ProductType.CERTIFICATE) {
     return null;
   }
-  const { items: orders } = useOrders({
-    product: product.id,
-    course: course.code,
-    state: [OrderState.PENDING, OrderState.VALIDATED],
-  });
-
-  // Only one order can existe for a product and a course.
-  if (orders.length > 1) {
-    throw Error(
-      `Multiple orders found (${orders.length}) for product: "${product.id}" and course "${course.id}"`,
-    );
-  }
-
-  const order: Order | null = useMemo(() => {
-    return orders.length ? orders[0] : null;
-  }, [orders]);
+  const { item: order } = useProductOrder({ productId: product.id, courseCode: course.code });
   const { item: certificate } = useCertificate(order?.certificate);
 
   // The course run is no longer available
