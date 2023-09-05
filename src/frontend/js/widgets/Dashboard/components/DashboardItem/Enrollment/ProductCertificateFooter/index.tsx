@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -8,7 +9,6 @@ import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import { useCertificate } from 'hooks/useCertificates';
 import { CourseState } from 'types';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
-import { useMemo } from 'react';
 import CertificateStatus from '../../CertificateStatus';
 
 const messages = {
