@@ -19,8 +19,8 @@ export const computeState = (courseRun: CourseRun): CourseState => {
     };
   }
   const now = new Date();
-  const end = new Date(courseRun.end) ?? MAX_DATE;
-  const enrollmentEnd = new Date(courseRun.enrollment_end) ?? MAX_DATE;
+  const end = courseRun.end ? new Date(courseRun.end) : MAX_DATE;
+  const enrollmentEnd = courseRun.enrollment_end ? new Date(courseRun.enrollment_end) : MAX_DATE;
 
   if (new Date(courseRun.start) < now) {
     if (end > now) {
