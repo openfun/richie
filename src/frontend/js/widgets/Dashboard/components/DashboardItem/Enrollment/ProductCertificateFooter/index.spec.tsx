@@ -2,6 +2,7 @@ import { IntlProvider } from 'react-intl';
 import { render, screen } from '@testing-library/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
+import queryString from 'query-string';
 import { CourseLight, OrderState, Product, ProductType } from 'types/Joanie';
 import {
   CourseStateFactory,
@@ -17,7 +18,6 @@ import {
 import { Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import queryString from 'query-string';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 import ProductCertificateFooter, { ProductCertificateFooterProps } from '.';
 
