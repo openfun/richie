@@ -20,7 +20,7 @@ lint-git:
     - run:
         name: Install gitlint
         command: |
-          pip install --user gitlint
+          pip install --user requests gitlint
     - run:
         name: lint commit messages added to main
         command: |
