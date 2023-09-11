@@ -3065,10 +3065,10 @@
   resolved "https://registry.yarnpkg.com/@open-draft/until/-/until-1.0.3.tgz#db9cc719191a62e7d9200f6e7bab21c5b848adca"
   integrity sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==
 
-"@openfun/cunningham-react@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@openfun/cunningham-react/-/cunningham-react-1.0.1.tgz#19db23ba2afb18bac654d005f398480367c4fe4a"
-  integrity sha512-PEX/idXa0UuePYMVvdvFWmZPsy//Q3s8cjpkINLFQJYkaBuPg79N//bP4gKzTJdKIWLmYK03QIYvB5DAARSA7w==
+"@openfun/cunningham-react@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@openfun/cunningham-react/-/cunningham-react-1.0.2.tgz#9137993e6d394c897b190ad355e8c093e6489c68"
+  integrity sha512-jIl4+ILoT/BDRf5yro4w5Uoknqdh2onH68jXfuP8lwth/69TtA9dAiFhcsmXGSPqZnE7WvJPXcUAtHCS1e3pQg==
   dependencies:
     "@fontsource-variable/roboto-flex" "5.0.8"
     "@fontsource/material-icons" "5.0.7"
