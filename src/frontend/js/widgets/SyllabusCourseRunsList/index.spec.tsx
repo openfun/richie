@@ -234,19 +234,19 @@ describe('<SyllabusCourseRunsList/>', () => {
 
   it('has one forever open course run', async () => {
     const course = CourseLightFactory().one();
-    const courseRuns = [
-      CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
-        start: 'Dec 31, 2020',
-        end: undefined,
-        enrollment_start: 'Dec 01, 2020',
-        enrollment_end: undefined,
-        resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
-      }).one(),
-    ];
+    const startDate = faker.date.past();
+    const enrollmentStartDate = faker.date.past();
+    const courseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+      start: startDate.toISOString(),
+      end: undefined,
+      enrollment_start: enrollmentStartDate.toISOString(),
+      enrollment_end: undefined,
+      resource_link: 'https://openedx.endpoint/course-v1:edX+DemoX+Session1/info/',
+    }).one();
 
     render(
       <SyllabusCourseRunsList
-        courseRuns={courseRuns}
+        courseRuns={[courseRun]}
         course={course}
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
@@ -258,10 +258,22 @@ describe('<SyllabusCourseRunsList/>', () => {
     expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
       1,
     );
-    screen.getByText('From Dec 31, 2020 to ...');
-    screen.getByText('From Dec 01, 2020 to ...');
-  });
+    getByRole(getHeaderContainer(), 'heading', {
+      name: courseRun.title,
+    });
+    // Make sure that CourseRunEnrollment is well rendered.
+    getByRole(getHeaderContainer(), 'button', { name: 'Log in to enroll' });
 
+    const intl = createIntl({ locale: 'en' });
+    getByText(
+      getHeaderContainer(),
+      'From ' + intl.formatDate(enrollmentStartDate, DEFAULT_DATE_FORMAT) + ' to ...',
+    );
+    getByText(
+      getHeaderContainer(),
+      'From ' + intl.formatDate(startDate, DEFAULT_DATE_FORMAT) + ' to ...',
+    );
+  });
   it('has multiple opened course run', async () => {
     const course = CourseLightFactory().one();
     const courseRuns = [
