@@ -80,7 +80,7 @@ describe('<TeacherProfileDashboardSidebar/>', () => {
     expect(fetchMock.calls()).toHaveLength(nbApiRequest);
   });
 
-  it('should display menu items', async () => {
+  it('should display organization links', async () => {
     const organizations = OrganizationFactory().many(3);
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', organizations, {
       overwriteRoutes: true,

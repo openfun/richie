@@ -73,7 +73,7 @@ export const OrganizationFactory = factory((): Organization => {
   return {
     id: uuid,
     code: faker.string.alphanumeric(5),
-    title: faker.lorem.words(1),
+    title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
     logo: JoanieFileFactory().one(),
   };
 });
