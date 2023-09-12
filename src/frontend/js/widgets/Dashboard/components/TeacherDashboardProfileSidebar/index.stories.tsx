@@ -1,24 +1,24 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { UserFactory } from 'utils/test/factories/richie';
-import { TeacherProfileDashboardSidebar } from 'widgets/Dashboard/components/TeacherProfileDashboardSidebar';
+import { TeacherDashboardProfileSidebar } from 'widgets/Dashboard/components/TeacherDashboardProfileSidebar';
 import { StorybookHelper } from 'utils/StorybookHelper';
 
 export default {
-  component: TeacherProfileDashboardSidebar,
+  component: TeacherDashboardProfileSidebar,
   render: () => {
     const user = UserFactory().one();
     const router = createMemoryRouter([
       {
         index: true,
-        element: <TeacherProfileDashboardSidebar />,
+        element: <TeacherDashboardProfileSidebar />,
       },
     ]);
 
     return StorybookHelper.wrapInApp(<RouterProvider router={router} />, { user });
   },
-} as Meta<typeof TeacherProfileDashboardSidebar>;
+} as Meta<typeof TeacherDashboardProfileSidebar>;
 
-type Story = StoryObj<typeof TeacherProfileDashboardSidebar>;
+type Story = StoryObj<typeof TeacherDashboardProfileSidebar>;
 
 export const TeacherProfile: Story = {};

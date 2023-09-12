@@ -6,12 +6,12 @@ import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessa
 
 export const messages = defineMessages({
   organizationsTitle: {
-    id: 'components.TeacherProfileDashboardSidebar.OrganizationLinks.organizationsTitle',
+    id: 'components.TeacherDashboardProfileSidebar.OrganizationLinks.organizationsTitle',
     description: 'Title of the organizations section',
     defaultMessage: 'My universities',
   },
   organizationLinkTitle: {
-    id: 'components.TeacherProfileDashboardSidebar.OrganizationLinks.organizationLinkTitle',
+    id: 'components.TeacherDashboardProfileSidebar.OrganizationLinks.organizationLinkTitle',
     description: 'Organization link title',
     defaultMessage: 'Link to organization "{organizationTitle}"',
   },

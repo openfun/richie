@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { CourseRunFactory } from 'utils/test/factories/joanie';
 import { buildCourseRunData, messages } from './utils';
 
-describe('pages/TeacherCourseDashboardLoader/CourseRunList/buildCourseRunData', () => {
+describe('pages/TeacherDashboardCourseLoader/CourseRunList/buildCourseRunData', () => {
   it('should return the right keys', () => {
     const courseRunList = CourseRunFactory().many(1);
     const intl = createIntl({ locale: 'en' });

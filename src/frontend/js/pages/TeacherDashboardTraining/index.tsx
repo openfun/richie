@@ -1,7 +1,7 @@
 import { defineMessages, useIntl } from 'react-intl';
 
 import { capitalize } from 'lodash-es';
-import CourseRunList from 'pages/TeacherCourseDashboardLoader/CourseRunList';
+import CourseRunList from 'pages/TeacherDashboardCourseLoader/CourseRunList';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -12,17 +12,17 @@ const messages = defineMessages({
   errorNoCourseProductRelation: {
     defaultMessage: "This product doesn't exist",
     description: 'Message displayed when requested course product relation is not found',
-    id: 'components.TeacherTrainingDashboard.errorNoCourseProductRelation',
+    id: 'components.TeacherDashboardTraining.errorNoCourseProductRelation',
   },
 });
 
-interface TeacherTrainingDashboardProps {
+interface TeacherDashboardTrainingProps {
   courseProductRelation: CourseProductRelation;
 }
 
-export const TeacherTrainingDashboard = ({
+export const TeacherDashboardTraining = ({
   courseProductRelation,
-}: TeacherTrainingDashboardProps) => {
+}: TeacherDashboardTrainingProps) => {
   const intl = useIntl();
   return courseProductRelation ? (
     <div className="teacher-course-page">
@@ -74,4 +74,4 @@ export const TeacherTrainingDashboard = ({
   );
 };
 
-export { TeacherTrainingDashboardLoader } from './TeacherTrainingDashboardLoader';
+export { TeacherDashboardTrainingLoader } from './TeacherDashboardTrainingLoader';

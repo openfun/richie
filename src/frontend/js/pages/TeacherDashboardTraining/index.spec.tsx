@@ -15,7 +15,7 @@ import { CourseProductRelationFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { DashboardBreadcrumbsProvider } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
-import { TeacherTrainingDashboardLoader } from '.';
+import { TeacherDashboardTrainingLoader } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -31,7 +31,7 @@ jest.mock('hooks/useIntersectionObserver', () => ({
   },
 }));
 
-describe('components/TeacherTrainingDashboardLoader', () => {
+describe('components/TeacherDashboardTrainingLoader', () => {
   let nbApiCalls: number;
   beforeEach(() => {
     // Joanie providers calls
@@ -41,7 +41,7 @@ describe('components/TeacherTrainingDashboardLoader', () => {
     nbApiCalls = 3;
   });
 
-  it('should render TeacherTrainingDashboardLoader page', async () => {
+  it('should render TeacherDashboardTrainingLoader page', async () => {
     const courseProductRelation = CourseProductRelationFactory().one();
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/course-product-relations/${courseProductRelation.id}/`,
@@ -60,7 +60,7 @@ describe('components/TeacherTrainingDashboardLoader', () => {
                     [
                       {
                         path: ':courseProductRelationId',
-                        element: <TeacherTrainingDashboardLoader />,
+                        element: <TeacherDashboardTrainingLoader />,
                       },
                     ],
                     {

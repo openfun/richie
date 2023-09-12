@@ -16,18 +16,18 @@ import { DashboardAvatar, DashboardAvatarVariantEnum } from '../DashboardAvatar'
 
 const messages = defineMessages({
   subHeader: {
-    id: 'components.TeacherOrganizationDashboardSidebar.subHeader',
+    id: 'components.TeacherDashboardOrganizationSidebar.subHeader',
     description: 'Sub title of the organization dashboard sidebar',
     defaultMessage: 'You are on the organization dashboard',
   },
   loading: {
     defaultMessage: 'Loading organization...',
     description: 'Message displayed while loading an organization',
-    id: 'components.TeacherOrganizationDashboardSidebar.loading',
+    id: 'components.TeacherDashboardOrganizationSidebar.loading',
   },
 });
 
-export const TeacherOrganizationDashboardSidebar = () => {
+export const TeacherDashboardOrganizationSidebar = () => {
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);

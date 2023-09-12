@@ -12,13 +12,13 @@ import OrganizationLinks from './components/OrganizationLinks';
 
 const messages = defineMessages({
   subHeader: {
-    id: 'components.TeacherProfileDashboardSidebar.subHeader',
+    id: 'components.TeacherDashboardProfileSidebar.subHeader',
     description: 'Sub title of the dashboard sidebar',
     defaultMessage: 'You are on your teacher dashboard',
   },
 });
 
-export const TeacherProfileDashboardSidebar = () => {
+export const TeacherDashboardProfileSidebar = () => {
   const intl = useIntl();
   const { user } = useSession();
   const getRoutePath = getDashboardRoutePath(intl);

@@ -1,15 +1,15 @@
 import { useIntl } from 'react-intl';
 import { Navigate, RouteObject } from 'react-router-dom';
-import { TeacherOrganizationCourseDashboardLoader } from 'pages/TeacherOrganizationCourseDashboardLoader';
-import { TeacherCoursesDashboardLoader } from 'pages/TeacherCoursesDashboardLoader';
+import { TeacherDashboardOrganizationCourseLoader } from 'pages/TeacherDashboardOrganizationCourseLoader';
+import { TeacherDashboardCoursesLoader } from 'pages/TeacherDashboardCoursesLoader';
 import NavigateWithParams from 'widgets/Dashboard/components/NavigateWithParams';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import {
   TeacherDashboardPaths,
   TEACHER_DASHBOARD_ROUTE_LABELS,
 } from 'widgets/Dashboard/utils/teacherRouteMessages';
-import { TeacherCourseDashboardLoader } from 'pages/TeacherCourseDashboardLoader';
-import { TeacherTrainingDashboardLoader } from 'pages/TeacherTrainingDashboard';
+import { TeacherDashboardCourseLoader } from 'pages/TeacherDashboardCourseLoader';
+import { TeacherDashboardTrainingLoader } from 'pages/TeacherDashboardTraining';
 
 export function getTeacherDashboardRoutes() {
   const intl = useIntl();
@@ -24,7 +24,7 @@ export function getTeacherDashboardRoutes() {
       children: [
         {
           index: true,
-          element: <TeacherCoursesDashboardLoader />,
+          element: <TeacherDashboardCoursesLoader />,
         },
         {
           path: getRoutePath(TeacherDashboardPaths.COURSE, {
@@ -46,7 +46,7 @@ export function getTeacherDashboardRoutes() {
               path: getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATION, {
                 courseId: ':courseId',
               }),
-              element: <TeacherCourseDashboardLoader />,
+              element: <TeacherDashboardCourseLoader />,
               handle: {
                 crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
               },
@@ -56,7 +56,7 @@ export function getTeacherDashboardRoutes() {
                 courseId: ':courseId',
                 courseProductRelationId: ':courseProductRelationId',
               }),
-              element: <TeacherTrainingDashboardLoader />,
+              element: <TeacherDashboardTrainingLoader />,
               handle: {
                 crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
               },
@@ -91,14 +91,14 @@ export function getTeacherDashboardRoutes() {
           children: [
             {
               index: true,
-              element: <TeacherOrganizationCourseDashboardLoader />,
+              element: <TeacherDashboardOrganizationCourseLoader />,
             },
             {
               path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION, {
                 organizationId: ':organizationId',
                 courseId: ':courseId',
               }),
-              element: <TeacherCourseDashboardLoader />,
+              element: <TeacherDashboardCourseLoader />,
               handle: {
                 crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
               },
@@ -109,7 +109,7 @@ export function getTeacherDashboardRoutes() {
                 courseId: ':courseId',
                 courseProductRelationId: ':courseProductRelationId',
               }),
-              element: <TeacherTrainingDashboardLoader />,
+              element: <TeacherDashboardTrainingLoader />,
               handle: {
                 crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
               },

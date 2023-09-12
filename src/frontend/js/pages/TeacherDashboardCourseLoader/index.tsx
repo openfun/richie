@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { capitalize } from 'lodash-es';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
-import { TeacherCourseDashboardSidebar } from 'widgets/Dashboard/components/TeacherCourseDashboardSidebar';
+import { TeacherDashboardCourseSidebar } from 'widgets/Dashboard/components/TeacherDashboardCourseSidebar';
 import { useCourse } from 'hooks/useCourses';
 import { Spinner } from 'components/Spinner';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
@@ -17,21 +17,21 @@ const messages = defineMessages({
   pageTitle: {
     defaultMessage: 'Course area',
     description: 'Use for the page title of the course area',
-    id: 'components.TeacherCourseDashboardLoader.pageTitle',
+    id: 'components.TeacherDashboardCourseLoader.pageTitle',
   },
   errorNoCourse: {
     defaultMessage: "This course doesn't exist",
     description: 'Message displayed when requested course is not found',
-    id: 'components.TeacherCourseDashboardLoader.errorNoCourse',
+    id: 'components.TeacherDashboardCourseLoader.errorNoCourse',
   },
   loading: {
     defaultMessage: 'Loading course...',
     description: 'Message displayed while loading a course',
-    id: 'components.TeacherCourseDashboardLoader.loading',
+    id: 'components.TeacherDashboardCourseLoader.loading',
   },
 });
 
-export const TeacherCourseDashboardLoader = () => {
+export const TeacherDashboardCourseLoader = () => {
   const intl = useIntl();
   const { courseId } = useParams<{
     courseId?: string;
@@ -52,7 +52,7 @@ export const TeacherCourseDashboardLoader = () => {
   });
 
   return (
-    <DashboardLayout sidebar={<TeacherCourseDashboardSidebar />}>
+    <DashboardLayout sidebar={<TeacherDashboardCourseSidebar />}>
       <div className="dashboard__page_title_container">
         <h1 className="dashboard__page_title">
           <FormattedMessage {...messages.pageTitle} />

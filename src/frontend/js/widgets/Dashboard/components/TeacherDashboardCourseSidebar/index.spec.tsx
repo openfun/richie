@@ -17,7 +17,7 @@ import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider
 
 import { CourseFactory } from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
-import { TeacherCourseDashboardSidebar, messages } from '.';
+import { TeacherDashboardCourseSidebar, messages } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -35,19 +35,19 @@ jest.mock('utils/indirection/window', () => ({
 
 const intl = createIntl({ locale: 'en' });
 
-interface RenderTeacherCourseDashboardSidebarProps {
+interface RenderTeacherDashboardCourseSidebarProps {
   courseId: string;
 }
-const renderTeacherCourseDashboardSidebar = ({
+const renderTeacherDashboardCourseSidebar = ({
   courseId,
-}: RenderTeacherCourseDashboardSidebarProps) =>
+}: RenderTeacherDashboardCourseSidebarProps) =>
   render(
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
         <JoanieSessionProvider>
           <MemoryRouter initialEntries={[`/${courseId}`]}>
             <Routes>
-              <Route path="/:courseId" element={<TeacherCourseDashboardSidebar />} />
+              <Route path="/:courseId" element={<TeacherDashboardCourseSidebar />} />
             </Routes>
           </MemoryRouter>
         </JoanieSessionProvider>
@@ -55,7 +55,7 @@ const renderTeacherCourseDashboardSidebar = ({
     </IntlProvider>,
   );
 
-describe('<TeacherCourseDashboardSidebar/>', () => {
+describe('<TeacherDashboardCourseSidebar/>', () => {
   let nbApiRequest: number;
   beforeEach(() => {
     // JoanieSessionProvider inital requests
@@ -74,7 +74,7 @@ describe('<TeacherCourseDashboardSidebar/>', () => {
     fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.id}/`, course);
     nbApiRequest += 1; // call to course
 
-    renderTeacherCourseDashboardSidebar({ courseId: course.id });
+    renderTeacherDashboardCourseSidebar({ courseId: course.id });
     await expectNoSpinner('Loading course...');
     expect(
       screen.getByRole('link', {
@@ -88,7 +88,7 @@ describe('<TeacherCourseDashboardSidebar/>', () => {
     fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.id}/`, course);
     nbApiRequest += 1; // call to course
 
-    renderTeacherCourseDashboardSidebar({ courseId: course.id });
+    renderTeacherDashboardCourseSidebar({ courseId: course.id });
     await expectNoSpinner('Loading course...');
     expect(
       screen.getByRole('link', {

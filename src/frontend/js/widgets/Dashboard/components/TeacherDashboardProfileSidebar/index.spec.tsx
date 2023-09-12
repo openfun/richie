@@ -14,9 +14,9 @@ import {
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { OrganizationFactory } from 'utils/test/factories/joanie';
-import { messages as organizationLinksMessages } from 'widgets/Dashboard/components/TeacherProfileDashboardSidebar/components/OrganizationLinks';
+import { messages as organizationLinksMessages } from 'widgets/Dashboard/components/TeacherDashboardProfileSidebar/components/OrganizationLinks';
 
-import { TeacherProfileDashboardSidebar } from '.';
+import { TeacherDashboardProfileSidebar } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -34,20 +34,20 @@ jest.mock('utils/indirection/window', () => ({
 
 const intl = createIntl({ locale: 'en' });
 
-const renderTeacherProfileDashboardSidebar = () =>
+const renderTeacherDashboardProfileSidebar = () =>
   render(
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
         <JoanieSessionProvider>
           <MemoryRouter>
-            <TeacherProfileDashboardSidebar />
+            <TeacherDashboardProfileSidebar />
           </MemoryRouter>
         </JoanieSessionProvider>
       </QueryClientProvider>
     </IntlProvider>,
   );
 
-describe('<TeacherProfileDashboardSidebar/>', () => {
+describe('<TeacherDashboardProfileSidebar/>', () => {
   let nbApiRequest: number;
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', []);
@@ -65,7 +65,7 @@ describe('<TeacherProfileDashboardSidebar/>', () => {
 
   it('should display menu items', async () => {
     nbApiRequest += 1; // call to organizations
-    renderTeacherProfileDashboardSidebar();
+    renderTeacherDashboardProfileSidebar();
 
     expect(
       screen.getByRole('link', {
@@ -86,7 +86,7 @@ describe('<TeacherProfileDashboardSidebar/>', () => {
       overwriteRoutes: true,
     });
     nbApiRequest += 1; // call to organizations
-    renderTeacherProfileDashboardSidebar();
+    renderTeacherDashboardProfileSidebar();
     expect(await screen.findByTestId('organization-links')).toBeInTheDocument();
     expect(fetchMock.calls()).toHaveLength(nbApiRequest);
 
