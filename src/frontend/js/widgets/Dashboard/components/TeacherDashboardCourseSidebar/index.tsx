@@ -15,28 +15,28 @@ import { useCourseProductRelation } from 'hooks/useCourseProductRelation';
 
 export const messages = defineMessages({
   header: {
-    id: 'components.TeacherCourseDashboardSidebar.header',
+    id: 'components.TeacherDashboardCourseSidebar.header',
     description: 'Title of the course dashboard sidebar',
     defaultMessage: '{courseTitle}',
   },
   subHeader: {
-    id: 'components.TeacherCourseDashboardSidebar.subHeader',
+    id: 'components.TeacherDashboardCourseSidebar.subHeader',
     description: 'Sub title of the course dashboard sidebar',
     defaultMessage: 'You are on the course dashboard',
   },
   syllabusLinkLabel: {
-    id: 'components.TeacherCourseDashboardSidebar.syllabusLinkLabel',
+    id: 'components.TeacherDashboardCourseSidebar.syllabusLinkLabel',
     description: 'Syllabus link label',
     defaultMessage: 'Go to syllabus',
   },
   loading: {
     defaultMessage: 'Loading course...',
     description: 'Message displayed while loading a course',
-    id: 'components.TeacherCourseDashboardSidebar.loading',
+    id: 'components.TeacherDashboardCourseSidebar.loading',
   },
 });
 
-export const TeacherCourseDashboardSidebar = () => {
+export const TeacherDashboardCourseSidebar = () => {
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);

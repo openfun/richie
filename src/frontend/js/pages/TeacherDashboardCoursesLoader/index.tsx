@@ -2,35 +2,35 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import TeacherDashboardCourseList from 'components/TeacherDashboardCourseList';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
-import { TeacherProfileDashboardSidebar } from 'widgets/Dashboard/components/TeacherProfileDashboardSidebar';
+import { TeacherDashboardProfileSidebar } from 'widgets/Dashboard/components/TeacherDashboardProfileSidebar';
 
 const messages = defineMessages({
   courses: {
     defaultMessage: 'Your courses',
     description: 'Filtered courses title',
-    id: 'components.TeacherCoursesDashboardLoader.title.filteredCourses',
+    id: 'components.TeacherDashboardCoursesLoader.title.filteredCourses',
   },
   incoming: {
     defaultMessage: 'Incoming',
     description: 'Incoming courses title',
-    id: 'components.TeacherCoursesDashboardLoader.title.incoming',
+    id: 'components.TeacherDashboardCoursesLoader.title.incoming',
   },
   ongoing: {
     defaultMessage: 'Ongoing',
     description: 'Ongoing courses title',
-    id: 'components.TeacherCoursesDashboardLoader.title.ongoing',
+    id: 'components.TeacherDashboardCoursesLoader.title.ongoing',
   },
   archived: {
     defaultMessage: 'Archived',
     description: 'Archived courses title',
-    id: 'components.TeacherCoursesDashboardLoader.title.archived',
+    id: 'components.TeacherDashboardCoursesLoader.title.archived',
   },
 });
 
-export const TeacherCoursesDashboardLoader = () => {
+export const TeacherDashboardCoursesLoader = () => {
   const intl = useIntl();
   return (
-    <DashboardLayout sidebar={<TeacherProfileDashboardSidebar />}>
+    <DashboardLayout sidebar={<TeacherDashboardProfileSidebar />}>
       <div className="teacher-courses-page">
         <TeacherDashboardCourseList titleTranslated={intl.formatMessage(messages.courses)} />
       </div>

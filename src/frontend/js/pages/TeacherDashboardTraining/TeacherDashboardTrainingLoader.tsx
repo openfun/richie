@@ -2,26 +2,26 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
-import { TeacherCourseDashboardSidebar } from 'widgets/Dashboard/components/TeacherCourseDashboardSidebar';
+import { TeacherDashboardCourseSidebar } from 'widgets/Dashboard/components/TeacherDashboardCourseSidebar';
 import { Spinner } from 'components/Spinner';
 import { useCourseProductRelation } from 'hooks/useCourseProductRelation';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
-import { TeacherTrainingDashboard } from '.';
+import { TeacherDashboardTraining } from '.';
 
 const messages = defineMessages({
   pageTitle: {
     defaultMessage: 'Training area',
     description: 'Use for the page title of the training area',
-    id: 'components.TeacherTrainingDashboardLoader.pageTitle',
+    id: 'components.TeacherDashboardTrainingLoader.pageTitle',
   },
   loading: {
     defaultMessage: 'Loading training...',
     description: 'Message displayed while loading a course',
-    id: 'components.TeacherTrainingDashboardLoader.loading',
+    id: 'components.TeacherDashboardTrainingLoader.loading',
   },
 });
 
-export const TeacherTrainingDashboardLoader = () => {
+export const TeacherDashboardTrainingLoader = () => {
   const { courseProductRelationId } = useParams<{
     courseProductRelationId: string;
   }>();
@@ -34,7 +34,7 @@ export const TeacherTrainingDashboardLoader = () => {
     courseTitle: courseProductRelation?.product.title ?? '',
   });
   return (
-    <DashboardLayout sidebar={<TeacherCourseDashboardSidebar />}>
+    <DashboardLayout sidebar={<TeacherDashboardCourseSidebar />}>
       <div className="dashboard__page_title_container">
         <h1 className="dashboard__page_title">
           <FormattedMessage {...messages.pageTitle} />
@@ -47,7 +47,7 @@ export const TeacherTrainingDashboardLoader = () => {
           </span>
         </Spinner>
       ) : (
-        <TeacherTrainingDashboard courseProductRelation={courseProductRelation} />
+        <TeacherDashboardTraining courseProductRelation={courseProductRelation} />
       )}
     </DashboardLayout>
   );

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import CourseRunListCell from '.';
 
-describe('pages/TeacherCourseDashboardLoader/CourseRunListCell', () => {
+describe('pages/TeacherDashboardCourseLoader/CourseRunListCell', () => {
   it('should render text', async () => {
     render(<CourseRunListCell textContent="CourseRunListCell button" />);
     expect(screen.getByText('CourseRunListCell button')).toBeInTheDocument();

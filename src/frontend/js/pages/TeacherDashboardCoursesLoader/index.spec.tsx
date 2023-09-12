@@ -14,7 +14,7 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { PER_PAGE } from 'settings';
-import { TeacherCoursesDashboardLoader } from '.';
+import { TeacherDashboardCoursesLoader } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -36,7 +36,7 @@ jest.mock('hooks/useIntersectionObserver', () => ({
   },
 }));
 
-describe('components/TeacherCoursesDashboardLoader', () => {
+describe('components/TeacherDashboardCoursesLoader', () => {
   const perPage = PER_PAGE.useCourseProductUnion;
   let nbApiCalls: number;
   beforeEach(() => {
@@ -69,7 +69,7 @@ describe('components/TeacherCoursesDashboardLoader', () => {
               router={createMemoryRouter([
                 {
                   path: '',
-                  element: <TeacherCoursesDashboardLoader />,
+                  element: <TeacherDashboardCoursesLoader />,
                 },
               ])}
             />

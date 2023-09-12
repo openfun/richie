@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { CourseRunFactory } from 'utils/test/factories/joanie';
 import CourseRunList from '.';
 
-describe('pages/TeacherCourseDashboardLoader/CourseRunList', () => {
+describe('pages/TeacherDashboardCourseLoader/CourseRunList', () => {
   it('should render', () => {
     const courseRuns = CourseRunFactory().many(2);
     render(
