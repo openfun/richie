@@ -156,6 +156,9 @@ export const getRoutes = () => {
           get: `${baseUrl}/organizations/:id/courses/`,
         },
       },
+      contracts: {
+        get: `${baseUrl}/contracts/:id/`,
+      },
     },
     courses: {
       get: `${baseUrl}/courses/:id/`,
@@ -315,6 +318,21 @@ const API = (): Joanie.API => {
           return fetchWithJWT(buildApiUrl(ROUTES.user.organizations.get, filters), {
             method: 'GET',
           }).then(checkStatus);
+        },
+      },
+      contracts: {
+        get: async (filters) => {
+          let url;
+          const { id = '', ...queryParameters } = filters || {};
+
+          if (id) url = ROUTES.user.contracts.get.replace(':id', id);
+          else url = ROUTES.user.contracts.get.replace(':id/', '');
+
+          if (!ObjectHelper.isEmpty(queryParameters)) {
+            url += '?' + queryString.stringify(queryParameters);
+          }
+
+          return fetchWithJWT(url, { method: 'GET' }).then(checkStatus);
         },
       },
     },

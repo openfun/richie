@@ -26,6 +26,7 @@ import {
   TargetCourse,
   CourseProductRelationCourse,
   JoanieFile,
+  Contract,
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
@@ -65,6 +66,16 @@ export const TargetCourseFactory = factory((): TargetCourse => {
     course_runs: courseRuns,
     is_graded: true,
     position: 1,
+  };
+});
+
+export const ContractFactory = factory((): Contract => {
+  const uuid = faker.string.uuid();
+  return {
+    id: uuid,
+    learner_name: faker.person.fullName(),
+    product_title: faker.lorem.words(10),
+    sign_date: faker.date.past().toISOString(),
   };
 });
 
