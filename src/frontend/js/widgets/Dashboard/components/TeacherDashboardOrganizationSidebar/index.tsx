@@ -39,7 +39,10 @@ export const TeacherDashboardOrganizationSidebar = () => {
 
   const links = useMemo(
     () =>
-      [TeacherDashboardPaths.ORGANIZATION_COURSES].map((path) => ({
+      [
+        TeacherDashboardPaths.ORGANIZATION_COURSES,
+        TeacherDashboardPaths.ORGANIZATION_CONTRACTS,
+      ].map((path) => ({
         to: generatePath(
           getRoutePath(path, {
             organizationId: ':organizationId',

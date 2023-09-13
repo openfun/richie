@@ -2,7 +2,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import { capitalize } from 'lodash-es';
-import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
 import { DashboardSidebar } from 'widgets/Dashboard/components/DashboardSidebar';
 import {
   getDashboardRouteLabel,
@@ -12,6 +11,7 @@ import { useCourse } from 'hooks/useCourses';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { useCourseProductRelation } from 'hooks/useCourseProductRelation';
+import { getMenuRoutes } from './utils';
 
 export const messages = defineMessages({
   header: {
@@ -40,9 +40,14 @@ export const TeacherDashboardCourseSidebar = () => {
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
-  const { courseId, courseProductRelationId = '' } = useParams<{
+  const {
+    courseId,
+    courseProductRelationId = '',
+    organizationId,
+  } = useParams<{
     courseId: string;
     courseProductRelationId: string;
+    organizationId?: string;
   }>();
 
   const {
@@ -66,21 +71,10 @@ export const TeacherDashboardCourseSidebar = () => {
     [courseProductRelation, singleCourse],
   );
 
-  const menuLinks = [TeacherDashboardPaths.COURSE_GENERAL_INFORMATION].map((path) => ({
-    to: getRoutePath(path, { courseId }),
+  const menuLinks = getMenuRoutes({ courseProductRelationId, organizationId }).map((path) => ({
+    to: getRoutePath(path, { courseId, courseProductRelationId, organizationId }),
     label: getRouteLabel(path),
   }));
-
-  if (courseProductRelationId) {
-    menuLinks.shift();
-    menuLinks.unshift({
-      to: getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, {
-        courseId,
-        courseProductRelationId,
-      }),
-      label: getRouteLabel(TeacherDashboardPaths.COURSE_PRODUCT),
-    });
-  }
 
   return (
     <DashboardSidebar
