@@ -24,6 +24,13 @@ export interface Organization {
   logo: JoanieFile;
 }
 
+export interface Contract {
+  id: string;
+  learner_name: string;
+  product_title: string;
+  sign_date: string;
+}
+
 export interface CourseListItem extends Resource {
   id: string;
   title: string;
@@ -313,6 +320,10 @@ export interface CourseProductQueryFilters extends ResourcesQuery {
 export interface CourseProductRelationQueryFilters extends ResourcesQuery {
   organization_id?: Organization['id'];
 }
+export interface ContractFilters extends PaginatedResourceQuery {
+  organization_id?: Organization['id'];
+  course_id?: CourseListItem['id'];
+}
 
 export interface ApiResourceInterface<
   TData extends Resource,
@@ -380,6 +391,13 @@ interface APIUser {
     get<Filters extends ResourcesQuery = ResourcesQuery>(
       filters?: Filters,
     ): Filters extends { id: string } ? Promise<Nullable<Organization>> : Promise<Organization[]>;
+  };
+  contracts: {
+    get(
+      filters?: ContractFilters,
+    ): ContractFilters extends { id: string }
+      ? Promise<Nullable<Contract>>
+      : Promise<PaginatedResponse<Contract[]>>;
   };
 }
 
