@@ -99,7 +99,10 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
     ).toBeInTheDocument();
 
     expect(screen.queryByTestId('organization-links')).not.toBeInTheDocument();
-    expect(screen.getAllByRole('link')).toHaveLength(2); // 1 menu items + 1 syllabus link
+    // general informations
+    // contracts
+    // go to syllabus
+    expect(screen.getAllByRole('link')).toHaveLength(3);
     expect(fetchMock.calls()).toHaveLength(nbApiRequest);
   });
 });

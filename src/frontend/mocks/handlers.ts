@@ -1,3 +1,3 @@
-import { getContracts } from './handlers/contracts';
+import contractHandlers from './handlers/contracts';
 
-export const handlers = [getContracts];
+export const handlers = [...contractHandlers];

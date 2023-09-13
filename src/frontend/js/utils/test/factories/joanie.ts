@@ -70,9 +70,8 @@ export const TargetCourseFactory = factory((): TargetCourse => {
 });
 
 export const ContractFactory = factory((): Contract => {
-  const uuid = faker.string.uuid();
   return {
-    id: uuid,
+    id: faker.string.uuid(),
     learner_name: faker.person.fullName(),
     product_title: faker.lorem.words(10),
     sign_date: faker.date.past().toISOString(),

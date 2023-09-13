@@ -1,5 +1,9 @@
 import { useIntl } from 'react-intl';
 import { Navigate, RouteObject } from 'react-router-dom';
+import {
+  TeacherDashboardCourseContractsLoader,
+  TeacherDashboardOrganizationContractsLoader,
+} from 'pages/TeacherDashboardContractsLoader';
 import { TeacherDashboardOrganizationCourseLoader } from 'pages/TeacherDashboardOrganizationCourseLoader';
 import { TeacherDashboardCoursesLoader } from 'pages/TeacherDashboardCoursesLoader';
 import NavigateWithParams from 'widgets/Dashboard/components/NavigateWithParams';
@@ -56,9 +60,36 @@ export function getTeacherDashboardRoutes() {
                 courseId: ':courseId',
                 courseProductRelationId: ':courseProductRelationId',
               }),
-              element: <TeacherDashboardTrainingLoader />,
+              children: [
+                {
+                  index: true,
+                  element: <TeacherDashboardTrainingLoader />,
+                  handle: {
+                    crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
+                  },
+                },
+                {
+                  path: getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS, {
+                    courseId: ':courseId',
+                    courseProductRelationId: ':courseProductRelationId',
+                  }),
+                  element: <TeacherDashboardCourseContractsLoader />,
+                  handle: {
+                    crumbLabel:
+                      TEACHER_DASHBOARD_ROUTE_LABELS[
+                        TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS
+                      ],
+                  },
+                },
+              ],
+            },
+            {
+              path: getRoutePath(TeacherDashboardPaths.COURSE_CONTRACTS, {
+                courseId: ':courseId',
+              }),
+              element: <TeacherDashboardCourseContractsLoader />,
               handle: {
-                crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
+                crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_CONTRACTS],
               },
             },
           ],
@@ -104,17 +135,60 @@ export function getTeacherDashboardRoutes() {
               },
             },
             {
+              path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_CONTRACTS, {
+                organizationId: ':organizationId',
+                courseId: ':courseId',
+                courseProductRelationId: ':courseProductRelationId',
+              }),
+              element: <TeacherDashboardCourseContractsLoader />,
+              handle: {
+                crumbLabel:
+                  TEACHER_DASHBOARD_ROUTE_LABELS[
+                    TeacherDashboardPaths.ORGANIZATION_COURSE_CONTRACTS
+                  ],
+              },
+            },
+            {
               path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT, {
                 organizationId: ':organizationId',
                 courseId: ':courseId',
                 courseProductRelationId: ':courseProductRelationId',
               }),
-              element: <TeacherDashboardTrainingLoader />,
-              handle: {
-                crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
-              },
+              children: [
+                {
+                  index: true,
+                  element: <TeacherDashboardTrainingLoader />,
+                  handle: {
+                    crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
+                  },
+                },
+                {
+                  path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT_CONTRACTS, {
+                    organizationId: ':organizationId',
+                    courseId: ':courseId',
+                    courseProductRelationId: ':courseProductRelationId',
+                  }),
+                  element: <TeacherDashboardCourseContractsLoader />,
+                  handle: {
+                    crumbLabel:
+                      TEACHER_DASHBOARD_ROUTE_LABELS[
+                        TeacherDashboardPaths.ORGANIZATION_PRODUCT_CONTRACTS
+                      ],
+                  },
+                },
+              ],
             },
           ],
+        },
+        {
+          path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_CONTRACTS, {
+            organizationId: ':organizationId',
+          }),
+          element: <TeacherDashboardOrganizationContractsLoader />,
+          handle: {
+            crumbLabel:
+              TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION_CONTRACTS],
+          },
         },
       ],
     },
