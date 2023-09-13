@@ -1,0 +1,11 @@
+.teacher-contract-page {
+  .product-title-column {
+    max-width: rem-calc(200px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .actions-column {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+}

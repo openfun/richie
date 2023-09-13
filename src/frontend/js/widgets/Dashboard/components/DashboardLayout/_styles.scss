@@ -45,6 +45,10 @@ $sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-filters-height +
   &__filters {
     min-height: $dashboard-filters-height;
     margin-top: $dashboard-breadcrumb-filters-spacing;
+    display: flex;
+    flex-direction: row;
+    gap: rem-calc(15px);
+    justify-content: right;
   }
 
   &__main {
@@ -58,7 +62,6 @@ $sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-filters-height +
     > header {
       // Padding instead of margin to give room to the scrollbar.
       padding-bottom: $dashboard-header-spacing;
-      overflow: auto;
     }
   }
 

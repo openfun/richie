@@ -37,6 +37,7 @@ export const PAYMENT_SETTINGS = {
 
 const DEFAULT_PER_PAGE = 50;
 export const PER_PAGE = {
+  teacherContractList: 25,
   useUnionResources: DEFAULT_PER_PAGE,
   useCourseProductUnion: DEFAULT_PER_PAGE,
   useOrdersEnrollments: DEFAULT_PER_PAGE,
