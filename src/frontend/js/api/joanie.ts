@@ -180,6 +180,20 @@ export const getRoutes = () => {
  */
 export const isJoanieEnabled = !!context.joanie_backend;
 
+export const buildApiUrl = <ApiFilters extends ResourcesQuery = ResourcesQuery>(
+  url: string,
+  filters?: ApiFilters,
+) => {
+  const { id = '', ...queryParameters } = filters || {};
+  if (id) url = url.replace(':id', id);
+  else url = url.replace(':id/', '');
+
+  if (!ObjectHelper.isEmpty(queryParameters)) {
+    url += '?' + queryString.stringify(queryParameters);
+  }
+  return url;
+};
+
 const API = (): Joanie.API => {
   const ROUTES = getRoutes();
 
@@ -187,12 +201,7 @@ const API = (): Joanie.API => {
     user: {
       creditCards: {
         get: async (filters?: ResourcesQuery) => {
-          let url;
-
-          if (filters?.id) url = ROUTES.user.creditCards.get.replace(':id', filters.id);
-          else url = ROUTES.user.creditCards.get.replace(':id/', '');
-
-          return fetchWithJWT(url).then(checkStatus);
+          return fetchWithJWT(buildApiUrl(ROUTES.user.creditCards.get, filters)).then(checkStatus);
         },
         create: async (creditCard) =>
           fetchWithJWT(ROUTES.user.creditCards.create, {
@@ -212,12 +221,7 @@ const API = (): Joanie.API => {
       },
       addresses: {
         get: (id?: string) => {
-          let url;
-
-          if (id) url = ROUTES.user.addresses.get.replace(':id', id);
-          else url = ROUTES.user.addresses.get.replace(':id/', '');
-
-          return fetchWithJWT(url).then(checkStatus);
+          return fetchWithJWT(buildApiUrl(ROUTES.user.addresses.get, { id })).then(checkStatus);
         },
         create: async (payload) =>
           fetchWithJWT(ROUTES.user.addresses.create, {
@@ -252,17 +256,7 @@ const API = (): Joanie.API => {
             body: JSON.stringify(payload),
           }).then(checkStatus),
         get: async (filters) => {
-          let url;
-          const { id = '', ...queryParameters } = filters || {};
-
-          if (id) url = ROUTES.user.orders.get.replace(':id', id);
-          else url = ROUTES.user.orders.get.replace(':id/', '');
-
-          if (!ObjectHelper.isEmpty(queryParameters)) {
-            url += '?' + queryString.stringify(queryParameters);
-          }
-
-          return fetchWithJWT(url).then(checkStatus);
+          return fetchWithJWT(buildApiUrl(ROUTES.user.orders.get, filters)).then(checkStatus);
         },
         invoice: {
           download: async ({ order_id, invoice_reference }) => {
@@ -280,17 +274,7 @@ const API = (): Joanie.API => {
             body: JSON.stringify(payload),
           }).then(checkStatus),
         get: async (filters) => {
-          let url;
-          const { id = '', ...queryParameters } = filters || {};
-
-          if (id) url = ROUTES.user.enrollments.get.replace(':id', id);
-          else url = ROUTES.user.enrollments.get.replace(':id/', '');
-
-          if (!ObjectHelper.isEmpty(queryParameters)) {
-            url += '?' + queryString.stringify(queryParameters);
-          }
-
-          return fetchWithJWT(url).then(checkStatus);
+          return fetchWithJWT(buildApiUrl(ROUTES.user.enrollments.get, filters)).then(checkStatus);
         },
         update: async ({ id, ...payload }) =>
           fetchWithJWT(ROUTES.user.enrollments.update.replace(':id', id), {
@@ -302,32 +286,18 @@ const API = (): Joanie.API => {
         download: async (id: string): Promise<File> =>
           fetchWithJWT(ROUTES.user.certificates.download.replace(':id', id)).then(checkStatus),
         get: async (filters) => {
-          let url;
-          const { id = '', ...queryParameters } = filters || {};
-
-          if (id) url = ROUTES.user.certificates.get.replace(':id', id);
-          else url = ROUTES.user.certificates.get.replace(':id/', '');
-
-          if (!ObjectHelper.isEmpty(queryParameters)) {
-            url += '?' + queryString.stringify(queryParameters);
-          }
-
-          return fetchWithJWT(url).then(checkStatus);
+          return fetchWithJWT(buildApiUrl(ROUTES.user.certificates.get, filters)).then(checkStatus);
         },
       },
       wish: {
         get: async (filters) => {
-          let url;
-          const { id = '', ...queryParameters } = filters || {};
-
+          const { id = '', ...parsedFilters } = filters || {};
+          let url: string;
           if (id) url = ROUTES.user.wishlist.get.replace(':course_code', id);
           else url = ROUTES.user.wishlist.get.replace(':course_code/', '');
-
-          if (!ObjectHelper.isEmpty(queryParameters)) {
-            url += '?' + queryString.stringify(queryParameters);
-          }
-
-          return fetchWithJWT(url, { method: 'GET' }).then(checkStatus);
+          return fetchWithJWT(buildApiUrl(url, parsedFilters), {
+            method: 'GET',
+          }).then(checkStatus);
         },
         create: async (id) => {
           return fetchWithJWT(ROUTES.user.wishlist.create.replace(':course_code', id), {
@@ -342,35 +312,23 @@ const API = (): Joanie.API => {
       },
       organizations: {
         get: async (filters) => {
-          let url;
-          const { id = '', ...queryParameters } = filters || {};
-
-          if (id) url = ROUTES.user.organizations.get.replace(':id', id);
-          else url = ROUTES.user.organizations.get.replace(':id/', '');
-
-          if (!ObjectHelper.isEmpty(queryParameters)) {
-            url += '?' + queryString.stringify(queryParameters);
-          }
-
-          return fetchWithJWT(url, { method: 'GET' }).then(checkStatus);
+          return fetchWithJWT(buildApiUrl(ROUTES.user.organizations.get, filters), {
+            method: 'GET',
+          }).then(checkStatus);
         },
       },
     },
     courses: {
       get: (filters?: Joanie.CourseQueryFilters) => {
-        const { id, organization_id: organizationId, ...queryParameters } = filters || {};
-        let url;
-
-        if (organizationId)
-          url = ROUTES.user.organizations.courses.get.replace(':id', organizationId);
-        else if (id) url = ROUTES.courses.get.replace(':id', id);
-        else url = ROUTES.courses.get.replace(':id/', '');
-
-        if (!ObjectHelper.isEmpty(queryParameters)) {
-          url += '?' + queryString.stringify(queryParameters);
-        }
-
-        return fetchWithJWT(url).then(checkStatus);
+        const { organization_id: organizationId, ...parsedFilters } = filters || {};
+        return fetchWithJWT(
+          organizationId
+            ? buildApiUrl(ROUTES.user.organizations.courses.get, {
+                id: organizationId,
+                ...parsedFilters,
+              })
+            : buildApiUrl(ROUTES.courses.get, parsedFilters),
+        ).then(checkStatus);
       },
       products: {
         get: async (filters?: Joanie.CourseProductQueryFilters) => {
@@ -384,45 +342,36 @@ const API = (): Joanie.API => {
             throw new Error('A product id is required to fetch a course product');
           }
 
+          const { id: courseId, productId, ...queryFilters } = filters;
           const url = ROUTES.courses.products.get
-            .replace(':id', filters.id)
-            .replace(':product_id', filters.productId);
+            .replace(':id', courseId)
+            .replace(':product_id', productId);
 
-          return fetchWithJWT(url).then(checkStatus);
+          return fetchWithJWT(buildApiUrl(url, queryFilters)).then(checkStatus);
         },
       },
     },
     courseRuns: {
       get: (filters: Joanie.CourseRunFilters) => {
-        const { id, course_id: courseId, ...queryParameters } = filters || {};
-        let url;
-
-        if (courseId) url = ROUTES.courses.courseRuns.get.replace(':id', courseId);
-        else if (id) url = ROUTES.courseRuns.get.replace(':id', id);
-        else url = ROUTES.courseRuns.get.replace(':id/', '');
-
-        if (!ObjectHelper.isEmpty(queryParameters)) {
-          url += '?' + queryString.stringify(queryParameters);
-        }
-
-        return fetchWithJWT(url).then(checkStatus);
+        const { course_id: courseId, ...parsedFilters } = filters || {};
+        return fetchWithJWT(
+          courseId
+            ? buildApiUrl(ROUTES.courses.courseRuns.get, { id: courseId, ...parsedFilters })
+            : buildApiUrl(ROUTES.courseRuns.get, parsedFilters),
+        ).then(checkStatus);
       },
     },
     courseProductRelations: {
       get: (filters?: Joanie.CourseProductRelationQueryFilters) => {
-        const { id, organization_id: organizationId, ...queryParameters } = filters || {};
-        let url;
-
-        if (organizationId)
-          url = ROUTES.user.organizations.courseProductRelations.get.replace(':id', organizationId);
-        else if (id) url = ROUTES.courseProductRelations.get.replace(':id', id);
-        else url = ROUTES.courseProductRelations.get.replace(':id/', '');
-
-        if (!ObjectHelper.isEmpty(queryParameters)) {
-          url += '?' + queryString.stringify(queryParameters);
-        }
-
-        return fetchWithJWT(url).then(checkStatus);
+        const { organization_id: organizationId, ...parsedFilters } = filters || {};
+        return fetchWithJWT(
+          organizationId
+            ? buildApiUrl(ROUTES.user.organizations.courseProductRelations.get, {
+                id: organizationId,
+                ...parsedFilters,
+              })
+            : buildApiUrl(ROUTES.courseProductRelations.get, parsedFilters),
+        ).then(checkStatus);
       },
     },
   };
