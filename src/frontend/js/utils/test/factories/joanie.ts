@@ -79,9 +79,8 @@ export const ContractFactory = factory((): Contract => {
 });
 
 export const OrganizationFactory = factory((): Organization => {
-  const uuid = faker.string.uuid();
   return {
-    id: uuid,
+    id: faker.string.uuid(),
     code: faker.string.alphanumeric(5),
     title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
     logo: JoanieFileFactory().one(),
