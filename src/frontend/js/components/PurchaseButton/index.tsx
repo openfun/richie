@@ -15,13 +15,13 @@ const messages = defineMessages({
   },
   noCourseRunToPurchaseCredential: {
     defaultMessage:
-      'At least one course has no course runs, this product is not currently available for sale',
+      'At least one course has no course runs. This product is not currently available for sale.',
     description: "Label displayed below the product's CTA when there is no courseRun",
     id: 'components.SaleTunnel.noCourseRunToPurchaseCredential',
   },
   noCourseRunToPurchaseCertificate: {
     defaultMessage:
-      'The course run is not active, this product is not currently available for sale',
+      'The course run is not active. This product is not currently available for sale.',
     description: "Label displayed below the product's CTA when there is no courseRun",
     id: 'components.SaleTunnel.noCourseRunToPurchaseCertificate',
   },

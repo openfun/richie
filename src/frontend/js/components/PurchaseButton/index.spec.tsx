@@ -216,7 +216,7 @@ describe('PurchaseButton', () => {
       // Further, a message is displayed to explain why the CTA is disabled
       expect(
         await screen.findByText(
-          'At least one course has no course runs, this product is not currently available for sale',
+          'At least one course has no course runs. This product is not currently available for sale.',
         ),
       ).toBeInTheDocument();
     },
@@ -264,7 +264,7 @@ describe('PurchaseButton', () => {
       // Further, a message is displayed to explain why the CTA is disabled
       expect(
         screen.getByText(
-          'The course run is not active, this product is not currently available for sale',
+          'The course run is not active. This product is not currently available for sale.',
         ),
       ).toBeInTheDocument();
     },
