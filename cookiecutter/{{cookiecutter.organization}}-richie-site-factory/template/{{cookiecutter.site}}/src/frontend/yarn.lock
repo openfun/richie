@@ -7808,9 +7808,9 @@ graphemer@^1.4.0:
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
 "graphql@^15.0.0 || ^16.0.0":
-  version "16.7.1"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.7.1.tgz#11475b74a7bff2aefd4691df52a0eca0abd9b642"
-  integrity sha512-DRYR9tf+UGU0KOsMcKAlXeFfX89UiiIZ0dRU3mR0yJfu6OjZqUcp68NnFLnqQU5RexygFoDy1EW+ccOYcPfmHg==
+  version "16.8.1"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.8.1.tgz#1930a965bef1170603702acdb68aedd3f3cf6f07"
+  integrity sha512-59LZHPdGZVh695Ud9lRzPBVTtlX9ZCV150Er2W43ro37wVof0ctenSaskPPjN7lVTIN8mSZt8PHUNKZuNQUuxw==
 
 gunzip-maybe@^1.4.2:
   version "1.4.2"
@@ -11120,10 +11120,10 @@ reusify@^1.0.4:
   resolved "https://registry.yarnpkg.com/reusify/-/reusify-1.0.4.tgz#90da382b1e126efc02146e90845a88db12925d76"
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
-richie-education@2.23.0:
-  version "2.23.0"
-  resolved "https://registry.yarnpkg.com/richie-education/-/richie-education-2.23.0.tgz#1e4b680883e911977171f883087f79a5e850b911"
-  integrity sha512-oyXHkuvatYFzrL15pGUhWdGVooeAioDUwumanfbNn26oiPE5Lw5UKkUKV+BXSE4uv7Tfg18ggbQOsmqbQzUnSg==
+richie-education@2.24.1:
+  version "2.24.1"
+  resolved "https://registry.yarnpkg.com/richie-education/-/richie-education-2.24.1.tgz#4f51218be1be000acc48e9b032a9398d159b7048"
+  integrity sha512-vDlNBcYct8GGPY+JUku7NzkR29kOimeJgY1N3czqVOeZ7MtTHqcJkcweLEy3MoFaaJvcVfa65szuX8y9DdJxcQ==
   dependencies:
     "@babel/core" "7.22.9"
     "@babel/plugin-syntax-dynamic-import" "7.8.3"
