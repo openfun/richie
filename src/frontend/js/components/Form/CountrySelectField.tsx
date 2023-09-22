@@ -1,22 +1,34 @@
 import countries from 'i18n-iso-countries';
-import { forwardRef } from 'react';
-import { useIntl } from 'react-intl';
-import { SelectField, SelectFieldProps } from 'components/Form/Inputs';
+import { defineMessages, useIntl } from 'react-intl';
+import Select, { SelectProps } from './Select';
 
-export const CountrySelectField = forwardRef<HTMLSelectElement, SelectFieldProps>((props, ref) => {
+export const messages = defineMessages({
+  label: {
+    id: 'components.CountrySelectField.label',
+    description: 'label of the country select',
+    defaultMessage: 'Country',
+  },
+});
+
+export const CountrySelectField = ({
+  label: selectLabel,
+  ...props
+}: Omit<SelectProps, 'options'>) => {
   const intl = useIntl();
   const [languageCode] = intl.locale.split('-');
-  const countryList = countries.getNames(languageCode);
-  return (
-    <SelectField {...props} ref={ref}>
-      <option disabled value="-">
-        -
-      </option>
-      {Object.entries(countryList).map(([value, label]) => (
-        <option key={`address-countryList-${value}`} value={value}>
-          {label}
-        </option>
-      ))}
-    </SelectField>
+
+  const countryList = Object.entries(countries.getNames(languageCode)).map(
+    ([value, label]: [string, string]) => {
+      return { value, label };
+    },
+    [],
   );
-});
+
+  return (
+    <Select
+      label={selectLabel || intl.formatMessage(messages.label)}
+      options={countryList}
+      {...props}
+    />
+  );
+};
