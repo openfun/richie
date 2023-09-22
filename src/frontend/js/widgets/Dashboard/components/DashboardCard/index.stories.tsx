@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { Button } from '@openfun/cunningham-react';
-import { TextField } from 'components/Form';
+import Input from 'components/Form/Input';
 import { DashboardBox } from '../DashboardBox';
 import { DashboardCard } from './index';
 
@@ -18,7 +18,7 @@ type Story = StoryObj<typeof DashboardCard>;
 export const Default: Story = {
   args: {
     header: 'Billing Addresses',
-    children: <TextField id="default" label="Country" />,
+    children: <Input name="default" label="Country" />,
     footer: <Button color="primary">Update</Button>,
   },
 };
