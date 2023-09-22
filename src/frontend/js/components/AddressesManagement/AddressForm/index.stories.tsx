@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { AddressFactory } from 'utils/test/factories/joanie';
 import AddressForm from '.';
@@ -17,7 +18,10 @@ export default {
       <div className="SaleTunnel__modal">
         <div className="AddressesManagement" style={{ width: '600px' }}>
           <div className="address-form">
-            <AddressForm {...args} />
+            <CunninghamProvider>
+              <AddressForm {...args} />
+            </CunninghamProvider>
+            ,
           </div>
         </div>
       </div>,

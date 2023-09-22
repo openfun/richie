@@ -1,8 +1,6 @@
 import countries from 'i18n-iso-countries';
-import { IntlShape } from 'react-intl';
 import * as Yup from 'yup';
-import { Maybe } from 'types/utils';
-import { ErrorKeys, errorMessages } from './ValidationErrors';
+import { ErrorKeys } from 'components/Form/ValidationErrors';
 
 Yup.setLocale({
   mixed: {
@@ -15,26 +13,6 @@ Yup.setLocale({
     min: (values) => ({ key: ErrorKeys.STRING_MIN, values }),
   },
 });
-
-export const getLocalizedErrorMessage = (
-  intl: IntlShape,
-  error: Maybe<
-    | string
-    | {
-        key: ErrorKeys;
-        values: Record<PropertyKey, string | number | Array<string | number>>;
-      }
-  >,
-) => {
-  if (!error) return undefined;
-
-  if (typeof error === 'string' || errorMessages[error.key] === undefined) {
-    // If the error has not been translated we return a default error message.
-    return intl.formatMessage(errorMessages[ErrorKeys.MIXED_INVALID]);
-  }
-
-  return intl.formatMessage(errorMessages[error.key], error.values);
-};
 
 // / ! \ If you need to edit the validation schema,
 // you should also add/edit error messages above.

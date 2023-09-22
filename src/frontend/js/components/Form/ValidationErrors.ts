@@ -15,27 +15,27 @@ export enum ErrorKeys {
 
 export const errorMessages = defineMessages<ErrorKeys>({
   [ErrorKeys.MIXED_INVALID]: {
-    id: 'components.Form.utils.mixedInvalid',
+    id: 'components.Form.utils.errors.mixedInvalid',
     defaultMessage: 'This field is invalid.',
     description: 'Error message displayed when a field value is invalid.',
   },
   [ErrorKeys.MIXED_REQUIRED]: {
-    id: 'components.Form.utils.mixedRequired',
+    id: 'components.Form.utils.errors.mixedRequired',
     defaultMessage: 'This field is required.',
     description: 'Error message displayed when a field is required.',
   },
   [ErrorKeys.MIXED_ONEOF]: {
-    id: 'components.Form.utils.mixedOneOf',
+    id: 'components.Form.utils.errors.mixedOneOf',
     defaultMessage: 'You must select a value.',
     description: 'Error message displayed when a field value must be one of a list.',
   },
   [ErrorKeys.STRING_MAX]: {
-    id: 'components.Form.utils.stringMax',
+    id: 'components.Form.utils.errors.stringMax',
     defaultMessage: 'The maximum length is {max} {max, plural, one {char} other {chars}}.',
     description: 'Error message displayed when a field value is too long.',
   },
   [ErrorKeys.STRING_MIN]: {
-    id: 'components.Form.utils.stringMin',
+    id: 'components.Form.utils.errors.stringMin',
     defaultMessage: 'The minimum length is {min} {min, plural, one {char} other {chars}}.',
     description: 'Error message displayed when a field value is too short.',
   },

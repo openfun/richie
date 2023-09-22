@@ -1,14 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Button } from '@openfun/cunningham-react';
+import { Button, Checkbox } from '@openfun/cunningham-react';
+import { getLocalizedCunninghamErrorProp } from 'components/Form/utils';
 import { messages } from 'components/AddressesManagement/index';
-import { CheckboxField, TextField } from 'components/Form';
 import { CountrySelectField } from 'components/Form/CountrySelectField';
+import Input from 'components/Form/Input';
 import { useAddresses } from 'hooks/useAddresses';
 import type { Address } from 'types/Joanie';
-import validationSchema, { getLocalizedErrorMessage } from './validationSchema';
+import { messages as formMessages } from 'components/Form/messages';
+import validationSchema from './validationSchema';
 
 export interface AddressFormValues extends Omit<Address, 'id' | 'is_main'> {
   save?: boolean;
@@ -32,15 +34,20 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
     save: false,
   } as AddressFormValues;
 
-  const { register, handleSubmit, reset, formState } = useForm<AddressFormValues>({
-    defaultValues,
-    mode: 'onChange',
+  const form = useForm<AddressFormValues>({
+    defaultValues: address || defaultValues,
+    mode: 'onBlur',
     reValidateMode: 'onChange',
     resolver: yupResolver(validationSchema),
   });
+  const { register, handleSubmit, reset, formState } = form;
 
   const addresses = useAddresses();
   const intl = useIntl();
+
+  useEffect(() => {
+    reset(address);
+  }, [address]);
 
   /**
    * Prevent form to be submitted and clear `editedAddress` state.
@@ -51,113 +58,105 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
     return false;
   };
 
-  useEffect(() => {
-    reset(address || defaultValues);
-  }, [address]);
-
   return (
-    <form className="form" name="address-form" onSubmit={handleSubmit(onSubmit)}>
-      <p className="form__required-fields-note">
-        <FormattedMessage {...messages.requiredFields} values={{ symbol: <span>*</span> }} />
-      </p>
-      <TextField
-        aria-invalid={!!formState.errors.title}
-        required
-        id="title"
-        label={intl.formatMessage(messages.titleInputLabel)}
-        error={!!formState.errors.title}
-        message={getLocalizedErrorMessage(intl, formState.errors.title?.message)}
-        {...register('title')}
-      />
-      <div className="form-group">
-        <TextField
-          aria-invalid={!!formState.errors.first_name}
-          required
-          id="first_name"
-          label={intl.formatMessage(messages.first_nameInputLabel)}
-          error={!!formState.errors.first_name}
-          message={getLocalizedErrorMessage(intl, formState.errors.first_name?.message)}
-          {...register('first_name')}
-        />
-        <TextField
-          aria-invalid={!!formState.errors.last_name}
-          required
-          id="last_name"
-          label={intl.formatMessage(messages.last_nameInputLabel)}
-          error={!!formState.errors.last_name}
-          message={getLocalizedErrorMessage(intl, formState.errors.last_name?.message)}
-          {...register('last_name')}
-        />
-      </div>
-      <TextField
-        aria-invalid={!!formState.errors.address}
-        required
-        id="address"
-        label={intl.formatMessage(messages.addressInputLabel)}
-        error={!!formState.errors.address}
-        message={getLocalizedErrorMessage(intl, formState.errors.address?.message)}
-        {...register('address')}
-      />
-      <div className="form-group">
-        <TextField
-          aria-invalid={!!formState.errors.postcode}
-          required
-          id="postcode"
-          label={intl.formatMessage(messages.postcodeInputLabel)}
-          error={!!formState.errors.postcode}
-          message={getLocalizedErrorMessage(intl, formState.errors.postcode?.message)}
-          {...register('postcode')}
-        />
-        <TextField
-          aria-invalid={!!formState.errors.city}
-          required
-          id="city"
-          label={intl.formatMessage(messages.cityInputLabel)}
-          error={!!formState.errors.city}
-          message={getLocalizedErrorMessage(intl, formState.errors.city?.message)}
-          {...register('city')}
-        />
-      </div>
-      <CountrySelectField
-        aria-invalid={!!formState.errors.country}
-        required
-        id="country"
-        label={intl.formatMessage(messages.countryInputLabel)}
-        error={!!formState.errors.country}
-        message={getLocalizedErrorMessage(intl, formState.errors.country?.message)}
-        {...register('country', { value: address?.country, required: true })}
-      />
-      {!address ? (
-        <CheckboxField
-          aria-invalid={!!formState.errors?.save}
-          id="save"
-          label={intl.formatMessage(messages.saveInputLabel)}
-          error={!!formState.errors?.save}
-          message={getLocalizedErrorMessage(intl, formState.errors.save?.message)}
-          {...register('save')}
-        />
-      ) : null}
-      <footer className="form__footer">
-        {address ? (
-          <Fragment>
-            <Button
-              color="tertiary"
-              onClick={handleCancel}
-              title={intl.formatMessage(messages.cancelTitleButton)}
-            >
-              <FormattedMessage {...messages.cancelButton} />
+    <FormProvider {...form}>
+      <form className="form" name="address-form" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <p className="form__required-fields-note">
+          <FormattedMessage {...formMessages.formOptionalFieldsText} />
+        </p>
+        <div className="form-row">
+          <Input
+            className="form-field"
+            required
+            fullWidth
+            name="title"
+            label={intl.formatMessage(messages.titleInputLabel)}
+          />
+        </div>
+        <div className="form-row">
+          <Input
+            className="form-field"
+            required
+            name="first_name"
+            label={intl.formatMessage(messages.first_nameInputLabel)}
+          />
+          <Input
+            className="form-field"
+            required
+            name="last_name"
+            label={intl.formatMessage(messages.last_nameInputLabel)}
+          />
+        </div>
+        <div className="form-row">
+          <Input
+            required
+            fullWidth
+            name="address"
+            label={intl.formatMessage(messages.addressInputLabel)}
+          />
+        </div>
+        <div className="form-row">
+          <Input
+            className="form-field"
+            required
+            name="postcode"
+            label={intl.formatMessage(messages.postcodeInputLabel)}
+          />
+
+          <Input
+            className="form-field"
+            required
+            name="city"
+            label={intl.formatMessage(messages.cityInputLabel)}
+          />
+        </div>
+        <div className="form-row">
+          <CountrySelectField
+            name="country"
+            label={intl.formatMessage(messages.countryInputLabel)}
+            state={formState.errors.country ? 'error' : 'default'}
+          />
+        </div>
+
+        {!address ? (
+          <div className="form-row">
+            <Checkbox
+              aria-invalid={!!formState.errors?.save}
+              id="save"
+              label={intl.formatMessage(messages.saveInputLabel)}
+              state={formState.errors?.save ? 'error' : 'default'}
+              {...getLocalizedCunninghamErrorProp(
+                intl,
+                formState.errors.save?.message,
+                intl.formatMessage(formMessages.optionalFieldText),
+              )}
+              {...register('save')}
+            />
+          </div>
+        ) : null}
+
+        <footer className="form__footer">
+          {address ? (
+            <Fragment>
+              <Button
+                color="tertiary"
+                onClick={handleCancel}
+                title={intl.formatMessage(messages.cancelTitleButton)}
+              >
+                <FormattedMessage {...messages.cancelButton} />
+              </Button>
+              <Button disabled={addresses.states.updating} type="submit">
+                <FormattedMessage {...messages.updateButton} />
+              </Button>
+            </Fragment>
+          ) : (
+            <Button disabled={addresses.states.creating || addresses.states.updating} type="submit">
+              <FormattedMessage {...messages.selectButton} />
             </Button>
-            <Button disabled={addresses.states.updating} type="submit">
-              <FormattedMessage {...messages.updateButton} />
-            </Button>
-          </Fragment>
-        ) : (
-          <Button disabled={addresses.states.creating || addresses.states.updating} type="submit">
-            <FormattedMessage {...messages.selectButton} />
-          </Button>
-        )}
-      </footer>
-    </form>
+          )}
+        </footer>
+      </form>
+    </FormProvider>
   );
 };
 

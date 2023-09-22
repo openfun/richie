@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { DashboardAddressesManagement } from './index';
 
@@ -14,7 +15,9 @@ export default {
   render: (args) => {
     return StorybookHelper.wrapInApp(
       <div style={{ width: '600px' }}>
-        <DashboardAddressesManagement {...args} />
+        <CunninghamProvider>
+          <DashboardAddressesManagement {...args} />
+        </CunninghamProvider>
       </div>,
     );
   },

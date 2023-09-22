@@ -1,15 +1,20 @@
 /**
  * Test suite for AddressesManagement component
  */
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
+import countries from 'i18n-iso-countries';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { PropsWithChildren } from 'react';
+import { CunninghamProvider } from '@openfun/cunningham-react';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import type * as Joanie from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { changeSelect } from 'components/Form/test-utils';
 import AddressesManagement from '.';
 
 jest.mock('utils/context', () => ({
@@ -27,10 +32,21 @@ jest.mock('utils/indirection/window', () => ({
 describe('AddressesManagement', () => {
   const handleClose = jest.fn();
   const selectAddress = jest.fn();
+  const Wrapper = ({ children }: PropsWithChildren) => (
+    <QueryClientProvider client={createTestQueryClient({ user: true })}>
+      <IntlProvider locale="en">
+        <CunninghamProvider>
+          <SessionProvider>{children}</SessionProvider>
+        </CunninghamProvider>
+      </IntlProvider>
+    </QueryClientProvider>
+  );
+  let user: UserEvent;
 
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -40,25 +56,18 @@ describe('AddressesManagement', () => {
 
   it('renders a go back button', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
+    render(
+      <Wrapper>
+        <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
+      </Wrapper>,
+    );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
-
-    const $closeButton = screen.getByRole('button', { name: 'Go back' });
-    expect($closeButton).toBeDefined();
+    const $closeButton = await screen.findByRole('button', { name: 'Go back' });
+    expect($closeButton).toBeInTheDocument();
 
     // - Click on go back button should trigger onClose callback
     expect(handleClose).toHaveBeenCalledTimes(0);
-    fireEvent.click($closeButton);
+    await user.click($closeButton);
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
 
@@ -66,19 +75,11 @@ describe('AddressesManagement', () => {
     const addresses = AddressFactory().many(Math.ceil(Math.random() * 5));
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
 
-    let container: HTMLElement;
-
-    await act(async () => {
-      ({ container } = render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      ));
-    });
+    const { container } = render(
+      <Wrapper>
+        <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
+      </Wrapper>,
+    );
 
     await waitFor(() => {
       // All user's addresses should be displayed
@@ -93,32 +94,29 @@ describe('AddressesManagement', () => {
 
     // - User selects one of its existing address
     const address = addresses[0];
-    const $selectButton = screen.getByRole('button', {
-      name: `Select "${address.title}" address`,
-    });
-    await act(async () => {
-      fireEvent.click($selectButton);
-    });
+    await user.click(
+      screen.getByRole('button', {
+        name: `Select "${address.title}" address`,
+      }),
+    );
+
     expect(selectAddress).toHaveBeenNthCalledWith(1, address);
   });
 
   it('renders a form to create an address', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(
+      <Wrapper>
+        <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
+      </Wrapper>,
+    );
 
-    screen.getByRole('heading', { level: 2, name: 'Add a new address' });
-    screen.getByRole('form');
+    expect(
+      await screen.findByRole('heading', { level: 2, name: 'Add a new address' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('form')).toBeInTheDocument();
+
     const $titleField = screen.getByRole('textbox', { name: 'Address title' });
     const $firstnameField = screen.getByRole('textbox', { name: "Recipient's first name" });
     const $lastnameField = screen.getByRole('textbox', { name: "Recipient's last name" });
@@ -126,7 +124,7 @@ describe('AddressesManagement', () => {
     const $cityField = screen.getByRole('textbox', { name: 'City' });
     const $postcodeField = screen.getByRole('textbox', { name: 'Postcode' });
     const $countryField = screen.getByRole('combobox', { name: 'Country' });
-    const $saveField = screen.getByRole('checkbox', { name: 'Save this address' });
+    const $saveField = screen.getByRole('checkbox', { name: /Save this address/ });
     const $submitButton = screen.getByRole('button', {
       name: 'Use this address',
     }) as HTMLButtonElement;
@@ -137,25 +135,19 @@ describe('AddressesManagement', () => {
     // - User fulfills address fields
     let address = AddressFactory().one();
     expect(selectAddress).not.toHaveBeenCalled();
-    await act(async () => {
-      fireEvent.input($titleField, { target: { value: address.title } });
-      fireEvent.change($firstnameField, { target: { value: address.first_name } });
-      fireEvent.change($lastnameField, { target: { value: address.last_name } });
-      fireEvent.change($addressField, { target: { value: address.address } });
-      fireEvent.change($cityField, { target: { value: address.city } });
-      fireEvent.change($postcodeField, { target: { value: address.postcode } });
-      fireEvent.change($countryField, { target: { value: address.country } });
-      // - As form validation is triggered on blur, we need to trigger this event in
-      //   order to update form state.
-      fireEvent.blur($countryField);
-    });
+
+    await user.type($titleField, address.title);
+    await user.type($firstnameField, address.first_name);
+    await user.type($lastnameField, address.last_name);
+    await user.type($addressField, address.address);
+    await user.type($cityField, address.city);
+    await user.type($postcodeField, address.postcode);
+    await changeSelect($countryField, countries.getName(address?.country, 'en')!, user);
 
     // Once the form has been fulfilled properly, submit button should still be enabled.
     expect($submitButton.disabled).toBe(false);
 
-    await act(async () => {
-      fireEvent.click($submitButton);
-    });
+    await user.click($submitButton);
 
     expect(selectAddress).toHaveBeenNthCalledWith(1, {
       ...address,
@@ -169,17 +161,17 @@ describe('AddressesManagement', () => {
       ...address,
       is_main: true,
     });
-    await act(async () => {
-      fireEvent.change($titleField, { target: { value: address.title } });
-      fireEvent.change($firstnameField, { target: { value: address.first_name } });
-      fireEvent.change($lastnameField, { target: { value: address.last_name } });
-      fireEvent.change($addressField, { target: { value: address.address } });
-      fireEvent.change($cityField, { target: { value: address.city } });
-      fireEvent.change($postcodeField, { target: { value: address.postcode } });
-      fireEvent.change($countryField, { target: { value: address.country } });
-      fireEvent.click($saveField);
-      fireEvent.click($submitButton);
-    });
+
+    await user.type($titleField, address.title);
+    await user.type($firstnameField, address.first_name);
+    await user.type($lastnameField, address.last_name);
+    await user.type($addressField, address.address);
+    await user.type($cityField, address.city);
+    await user.type($postcodeField, address.postcode);
+    await user.click($saveField);
+    await changeSelect($countryField, countries.getName(address?.country, 'en')!, user);
+
+    await user.click($submitButton);
 
     expect(selectAddress).toHaveBeenNthCalledWith(2, {
       ...address,
@@ -191,56 +183,53 @@ describe('AddressesManagement', () => {
     const address = AddressFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+    render(
+      <Wrapper>
+        <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
+      </Wrapper>,
+    );
+    await waitFor(() => {
+      expect(fetchMock.calls().map((call) => call[0])).toContain(
+        'https://joanie.endpoint/api/v1.0/addresses/',
       );
     });
 
     // - First the creation form should be displayed
-    screen.getByRole('heading', { level: 2, name: 'Add a new address' });
-    screen.getByRole('form');
-    screen.getByRole('checkbox', { name: 'Save this address' });
-    screen.getByRole('button', { name: 'Use this address' });
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Add a new address' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('form')).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /Save this address/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Use this address' })).toBeInTheDocument();
 
     // - Then user selects an address to edit
-    let $editButton = await screen.findByRole('button', {
+    const $editButton = await screen.findByRole('button', {
       name: `Edit "${address.title}" address`,
     });
-    await act(async () => {
-      fireEvent.click($editButton);
-    });
+    await user.click($editButton);
 
     // - Form should be updated
     screen.getByRole('heading', { level: 2, name: `Update address ${address.title}` });
 
-    let $titleField = screen.getByRole('textbox', { name: 'Address title' }) as HTMLInputElement;
-    let $firstnameField = screen.getByRole('textbox', {
+    const $titleField = screen.getByRole('textbox', { name: 'Address title' }) as HTMLInputElement;
+    const $firstnameField = screen.getByRole('textbox', {
       name: "Recipient's first name",
     }) as HTMLInputElement;
-    let $lastnameField = screen.getByRole('textbox', {
+    const $lastnameField = screen.getByRole('textbox', {
       name: "Recipient's last name",
     }) as HTMLInputElement;
-    let $addressField = screen.queryByRole('textbox', { name: 'Address' }) as HTMLInputElement;
-    let $cityField = screen.queryByRole('textbox', { name: 'City' }) as HTMLInputElement;
-    let $postcodeField = screen.queryByRole('textbox', { name: 'Postcode' }) as HTMLInputElement;
-    let $countryField = screen.queryByRole('combobox', { name: 'Country' }) as HTMLSelectElement;
-    let $saveField = screen.queryByRole('checkbox', { name: 'Save this address' });
-    let $submitButton = screen.getByRole('button', { name: 'Update this address' });
 
-    expect($titleField.value).toEqual(address.title);
-    expect($firstnameField.value).toEqual(address.first_name);
-    expect($lastnameField.value).toEqual(address.last_name);
-    expect($addressField.value).toEqual(address.address);
-    expect($cityField.value).toEqual(address.city);
-    expect($postcodeField.value).toEqual(address.postcode);
-    expect($countryField.value).toEqual(address.country);
+    expect($titleField).toHaveValue(address.title);
+    expect($firstnameField).toHaveValue(address.first_name);
+    expect($lastnameField).toHaveValue(address.last_name);
+    expect(screen.getByRole('textbox', { name: 'Address' })).toHaveValue(address.address);
+    expect(screen.getByRole('textbox', { name: 'City' })).toHaveValue(address.city);
+    expect(screen.getByRole('textbox', { name: 'Postcode' })).toHaveValue(address.postcode);
+    expect(
+      within(screen.getByRole('combobox', { name: 'Country' })).getByDisplayValue(address.country),
+    ).toBeInTheDocument();
+
+    const $saveField = screen.queryByRole('checkbox', { name: 'Save this address' });
     expect($saveField).toBeNull();
 
     // focus should be set to the first input as a way to notify screen reader users
@@ -267,80 +256,73 @@ describe('AddressesManagement', () => {
         { overwriteRoutes: true },
       );
 
-    await act(async () => {
-      fireEvent.change($titleField, 'Home');
-      fireEvent.change($firstnameField, 'John');
-      fireEvent.change($lastnameField, 'DOE');
-      fireEvent.click($submitButton);
-    });
+    await user.type($titleField, 'Home');
+    await user.type($firstnameField, 'John');
+    await user.type($lastnameField, 'DOE');
+    await user.click(screen.getByRole('button', { name: 'Update this address' }));
 
     // - Form should be restored and addresses should be updated
-    screen.getByRole('heading', { level: 2, name: 'Add a new address' });
-    screen.getByRole('form');
-    screen.getByRole('checkbox', { name: 'Save this address' });
-    screen.getByRole('button', { name: 'Use this address' });
-    screen.getByText('Home');
+    expect(screen.getByRole('checkbox', { name: /Save this address/ })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Add a new address' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('form')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Use this address' })).toBeInTheDocument();
+    expect(screen.getByText('Home')).toBeInTheDocument();
 
     // User clicks on edit button again
-    $editButton = screen.getByRole('button', { name: 'Edit "Home" address' });
-    await act(async () => {
-      fireEvent.click($editButton);
-    });
+    await user.click(screen.getByRole('button', { name: 'Edit "Home" address' }));
 
     // - Form should be updated
-    screen.getByRole('heading', { level: 2, name: `Update address Home` });
+    expect(
+      screen.getByRole('heading', { level: 2, name: `Update address Home` }),
+    ).toBeInTheDocument();
 
-    $titleField = screen.getByRole('textbox', { name: 'Address title' }) as HTMLInputElement;
-    $firstnameField = screen.getByRole('textbox', {
-      name: "Recipient's first name",
-    }) as HTMLInputElement;
-    $lastnameField = screen.getByRole('textbox', {
-      name: "Recipient's last name",
-    }) as HTMLInputElement;
-    $addressField = screen.queryByRole('textbox', { name: 'Address' }) as HTMLInputElement;
-    $cityField = screen.queryByRole('textbox', { name: 'City' }) as HTMLInputElement;
-    $postcodeField = screen.queryByRole('textbox', { name: 'Postcode' }) as HTMLInputElement;
-    $countryField = screen.queryByRole('combobox', { name: 'Country' }) as HTMLSelectElement;
-    $saveField = screen.queryByRole('checkbox', { name: 'Save this address' });
-    $submitButton = screen.getByRole('button', { name: 'Update this address' });
+    expect(screen.getByRole('textbox', { name: 'Address title' })).toHaveValue('Home');
+    expect(
+      screen.getByRole('textbox', {
+        name: "Recipient's first name",
+      }),
+    ).toHaveValue('John');
+    expect(
+      screen.getByRole('textbox', {
+        name: "Recipient's last name",
+      }),
+    ).toHaveValue('DOE');
 
-    expect($titleField.value).toEqual('Home');
-    expect($firstnameField.value).toEqual('John');
-    expect($lastnameField.value).toEqual('DOE');
-    expect($addressField.value).toEqual(address.address);
-    expect($cityField.value).toEqual(address.city);
-    expect($postcodeField.value).toEqual(address.postcode);
-    expect($countryField.value).toEqual(address.country);
+    expect(screen.getByRole('textbox', { name: 'Address' })).toHaveValue(address.address);
+    expect(screen.queryByRole('textbox', { name: 'City' })).toHaveValue(address.city);
+    expect(screen.queryByRole('textbox', { name: 'Postcode' })).toHaveValue(address.postcode);
+    expect(
+      within(screen.getByRole('combobox', { name: 'Country' })).getByDisplayValue(address.country),
+    ).toBeInTheDocument();
     expect($saveField).toBeNull();
 
     // - But finally user cancels his action
-    const $cancelButton = screen.getByRole('button', { name: 'Cancel' });
-    await act(async () => {
-      fireEvent.click($cancelButton);
-    });
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
     // - Form should be restored and addresses should be updated
-    screen.getByRole('heading', { level: 2, name: 'Add a new address' });
-    screen.getByRole('form');
-    screen.getByRole('checkbox', { name: 'Save this address' });
-    screen.getByRole('button', { name: 'Use this address' });
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Add a new address' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('form')).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /Save this address/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Use this address' })).toBeInTheDocument();
   });
 
   it('allows user to delete an existing address', async () => {
     const address = AddressFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
 
-    let container: HTMLElement;
-    await act(async () => {
-      ({ container } = render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      ));
+    const { container } = render(
+      <Wrapper>
+        <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
+      </Wrapper>,
+    );
+    await waitFor(() => {
+      expect(fetchMock.calls().map((call) => call[0])).toContain(
+        'https://joanie.endpoint/api/v1.0/addresses/',
+      );
     });
 
     // - User deletes his only existing address
@@ -348,17 +330,14 @@ describe('AddressesManagement', () => {
       .delete(`https://joanie.endpoint/api/v1.0/addresses/${address.id}/`, {})
       .get('https://joanie.endpoint/api/v1.0/addresses/', [], { overwriteRoutes: true });
 
-    const $deleteButton = await screen.findByRole('button', {
-      name: `Delete "${address.title}" address`,
-    });
-
-    await act(async () => {
-      fireEvent.click($deleteButton);
-    });
+    await user.click(
+      await screen.findByRole('button', {
+        name: `Delete "${address.title}" address`,
+      }),
+    );
 
     // - As this was the only existing address,
     //   registered addresses section should be hidden
-
     expect(screen.queryByRole('heading', { level: 2, name: 'Your addresses' })).toBeNull();
     const $addresses = container!.querySelectorAll('.registered-addresses-item');
     expect($addresses).toHaveLength(0);
@@ -369,17 +348,11 @@ describe('AddressesManagement', () => {
     address1.is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address1, address2]);
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(
+      <Wrapper>
+        <AddressesManagement handleClose={handleClose} selectAddress={selectAddress} />
+      </Wrapper>,
+    );
 
     // - User promotes address2 as main
     fetchMock
@@ -408,9 +381,7 @@ describe('AddressesManagement', () => {
       name: `Define "${address2.title}" address as main`,
     });
 
-    await act(async () => {
-      fireEvent.click($promoteButton);
-    });
+    await user.click($promoteButton);
 
     expect(
       screen.getByRole('radio', {

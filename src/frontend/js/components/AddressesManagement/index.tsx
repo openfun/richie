@@ -14,6 +14,11 @@ import { Maybe } from 'types/utils';
 export const LOCAL_BILLING_ADDRESS_ID = 'local-billing-address';
 
 export const messages = defineMessages({
+  optionalFieldText: {
+    id: 'components.AddressesManagement.optionalFieldText',
+    description: 'text Displayed below form elements that are optional',
+    defaultMessage: '(optional)',
+  },
   registeredAddresses: {
     id: 'components.AddressesManagement.registeredAddresses',
     description: 'Title of the registered addresses block',

@@ -1,5 +1,4 @@
-import { fireEvent, within } from '@testing-library/dom';
-import { act } from '@testing-library/react';
+import { within } from '@testing-library/dom';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 
 export const changeSelect = async (
@@ -16,10 +15,5 @@ export const changeSelect = async (
   );
 };
 
-export const clearSelect = async ($input: HTMLElement) => {
-  await act(async () => {
-    fireEvent.click(
-      within($input.closest('.c__field')!).getByRole('button', { name: 'Clear selection' }),
-    );
-  });
-};
+export const clearSelect = async ($input: HTMLElement, user: UserEvent = userEvent.setup()) =>
+  user.click(within($input.closest('.c__field')!).getByRole('button', { name: 'Clear selection' }));

@@ -1,6 +1,14 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
-import { act, findByText, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  findByText,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { AddressFactory } from 'utils/test/factories/joanie';
@@ -66,26 +74,26 @@ describe('<DashboardEditAddress/>', () => {
     ]);
 
     // The form fields are correctly set to the `address` ones.
-    const button = await screen.findByRole('button', { name: 'Save updates' });
-    const titleInput: HTMLInputElement = screen.getByRole('textbox', { name: 'Address title' });
-    const firstnameInput: HTMLInputElement = screen.getByRole('textbox', {
+    const $button = await screen.findByRole('button', { name: 'Save updates' });
+    const $titleInput: HTMLInputElement = screen.getByRole('textbox', { name: 'Address title' });
+    const $firstnameInput: HTMLInputElement = screen.getByRole('textbox', {
       name: "Recipient's first name",
     });
-    const lastnameInput: HTMLInputElement = screen.getByRole('textbox', {
+    const $lastnameInput: HTMLInputElement = screen.getByRole('textbox', {
       name: "Recipient's last name",
     });
-    const addressInput: HTMLInputElement = screen.getByRole('textbox', { name: 'Address' });
-    const cityInput: HTMLInputElement = screen.getByRole('textbox', { name: 'City' });
-    const postcodeInput: HTMLInputElement = screen.getByRole('textbox', { name: 'Postcode' });
-    const countryInput: HTMLSelectElement = screen.getByRole('combobox', { name: 'Country' });
+    const $addressInput: HTMLInputElement = screen.getByRole('textbox', { name: 'Address' });
+    const $cityInput: HTMLInputElement = screen.getByRole('textbox', { name: 'City' });
+    const $postcodeInput: HTMLInputElement = screen.getByRole('textbox', { name: 'Postcode' });
+    const $countryInput: HTMLSelectElement = screen.getByRole('combobox', { name: 'Country' });
 
-    await waitFor(() => expect(titleInput.value).toBe(address.title));
-    expect(firstnameInput.value).toBe(address.first_name);
-    expect(lastnameInput.value).toBe(address.last_name);
-    expect(addressInput.value).toBe(address.address);
-    expect(cityInput.value).toBe(address.city);
-    expect(postcodeInput.value).toBe(address.postcode);
-    expect(countryInput.value).toBe(address.country);
+    await waitFor(() => expect($titleInput.value).toBe(address.title));
+    expect($firstnameInput.value).toBe(address.first_name);
+    expect($lastnameInput.value).toBe(address.last_name);
+    expect($addressInput.value).toBe(address.address);
+    expect($cityInput.value).toBe(address.city);
+    expect($postcodeInput.value).toBe(address.postcode);
+    expect(within($countryInput).getByDisplayValue(address.country)).toBeInTheDocument();
 
     // Mock refresh route.
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [addressUpdated], {
@@ -96,8 +104,8 @@ describe('<DashboardEditAddress/>', () => {
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(false);
     await act(async () => {
       // it is not necessary to update all fields as it is mocked above.
-      fireEvent.change(titleInput, { target: { value: addressUpdated.title } });
-      fireEvent.click(button);
+      fireEvent.change($titleInput, { target: { value: addressUpdated.title } });
+      fireEvent.click($button);
     });
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
