@@ -1,13 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { defineMessages, useIntl } from 'react-intl';
+import { FormProvider, useForm } from 'react-hook-form';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as Yup from 'yup';
 import countries from 'i18n-iso-countries';
-import { getLocalizedErrorMessage } from 'components/AddressesManagement/AddressForm/validationSchema';
+import { Checkbox } from '@openfun/cunningham-react';
+
+import { getLocalizedCunninghamErrorProp } from 'components/Form/utils';
 import { messages as managementMessages } from 'components/AddressesManagement';
-import { CheckboxField, TextField } from 'components/Form';
+import { messages as formMessages } from 'components/Form/messages';
 import { CountrySelectField } from 'components/Form/CountrySelectField';
+import Input from 'components/Form/Input';
 import { Address } from 'types/Joanie';
 
 const messages = defineMessages({
@@ -52,93 +54,89 @@ export const useDashboardAddressForm = (address?: Address) => {
     is_main: true,
   } as AddressFormValues;
 
-  const { register, handleSubmit, reset, formState } = useForm<AddressFormValues>({
-    defaultValues,
-    mode: 'onChange',
+  const form = useForm<AddressFormValues>({
+    defaultValues: address || defaultValues,
+    mode: 'onBlur',
     reValidateMode: 'onChange',
     resolver: yupResolver(validationSchema),
   });
-
-  useEffect(() => {
-    reset(address || defaultValues);
-  }, [address]);
+  const { register, handleSubmit, formState } = form;
 
   const FormView = (
-    <form>
-      <TextField
-        aria-invalid={!!formState.errors.title}
-        required
-        id="title"
-        label={intl.formatMessage(managementMessages.titleInputLabel)}
-        error={!!formState.errors.title}
-        message={getLocalizedErrorMessage(intl, formState.errors.title?.message)}
-        {...register('title')}
-      />
-      <TextField
-        aria-invalid={!!formState.errors.first_name}
-        required
-        id="first_name"
-        label={intl.formatMessage(managementMessages.first_nameInputLabel)}
-        error={!!formState.errors.first_name}
-        message={getLocalizedErrorMessage(intl, formState.errors.first_name?.message)}
-        {...register('first_name')}
-      />
-      <TextField
-        aria-invalid={!!formState.errors.last_name}
-        required
-        id="last_name"
-        label={intl.formatMessage(managementMessages.last_nameInputLabel)}
-        error={!!formState.errors.last_name}
-        message={getLocalizedErrorMessage(intl, formState.errors.last_name?.message)}
-        {...register('last_name')}
-      />
-      <TextField
-        aria-invalid={!!formState.errors.address}
-        required
-        id="address"
-        label={intl.formatMessage(managementMessages.addressInputLabel)}
-        error={!!formState.errors.address}
-        message={getLocalizedErrorMessage(intl, formState.errors.address?.message)}
-        {...register('address')}
-      />
-      <TextField
-        aria-invalid={!!formState.errors.postcode}
-        required
-        id="postcode"
-        label={intl.formatMessage(managementMessages.postcodeInputLabel)}
-        error={!!formState.errors.postcode}
-        message={getLocalizedErrorMessage(intl, formState.errors.postcode?.message)}
-        {...register('postcode')}
-      />
-      <TextField
-        aria-invalid={!!formState.errors.city}
-        required
-        id="city"
-        label={intl.formatMessage(managementMessages.cityInputLabel)}
-        error={!!formState.errors.city}
-        message={getLocalizedErrorMessage(intl, formState.errors.city?.message)}
-        {...register('city')}
-      />
-      <CountrySelectField
-        aria-invalid={!!formState.errors.country}
-        required
-        id="country"
-        label={intl.formatMessage(managementMessages.countryInputLabel)}
-        error={!!formState.errors.country}
-        message={getLocalizedErrorMessage(intl, formState.errors.country?.message)}
-        {...register('country', { required: true })}
-      />
-      {!(address && address.is_main) && (
-        <CheckboxField
-          aria-invalid={!!formState.errors?.is_main}
-          id="is_main"
-          label={intl.formatMessage(messages.isMainInputLabel)}
-          error={!!formState.errors?.is_main}
-          message={getLocalizedErrorMessage(intl, formState.errors.is_main?.message)}
-          {...register('is_main')}
-        />
-      )}
-    </form>
+    <FormProvider {...form}>
+      <form className="form" noValidate>
+        <p className="form__required-fields-note">
+          <FormattedMessage {...formMessages.formOptionalFieldsText} />
+        </p>
+        <div className="form-row">
+          <Input
+            required
+            fullWidth
+            name="title"
+            label={intl.formatMessage(managementMessages.titleInputLabel)}
+          />
+        </div>
+        <div className="form-row">
+          <Input
+            className="form-field"
+            required
+            name="first_name"
+            label={intl.formatMessage(managementMessages.first_nameInputLabel)}
+          />
+
+          <Input
+            className="form-field"
+            required
+            name="last_name"
+            label={intl.formatMessage(managementMessages.last_nameInputLabel)}
+          />
+        </div>
+        <div className="form-row">
+          <Input
+            required
+            fullWidth
+            name="address"
+            label={intl.formatMessage(managementMessages.addressInputLabel)}
+          />
+        </div>
+
+        <div className="form-row">
+          <Input
+            className="form-field"
+            required
+            name="postcode"
+            label={intl.formatMessage(managementMessages.postcodeInputLabel)}
+          />
+
+          <Input
+            className="form-field"
+            required
+            name="city"
+            label={intl.formatMessage(managementMessages.cityInputLabel)}
+          />
+        </div>
+        <div className="form-row">
+          <CountrySelectField
+            name="country"
+            label={intl.formatMessage(managementMessages.countryInputLabel)}
+          />
+        </div>
+        {!(address && address.is_main) && (
+          <Checkbox
+            aria-invalid={!!formState.errors?.is_main}
+            id="is_main"
+            label={intl.formatMessage(messages.isMainInputLabel)}
+            state={formState.errors?.is_main ? 'error' : 'default'}
+            {...getLocalizedCunninghamErrorProp(
+              intl,
+              formState.errors.is_main?.message,
+              intl.formatMessage(formMessages.optionalFieldText),
+            )}
+            {...register('is_main')}
+          />
+        )}
+      </form>
+    </FormProvider>
   );
 
   return {

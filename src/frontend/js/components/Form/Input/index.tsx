@@ -12,7 +12,7 @@ export interface InputProps extends CunninghamInputProps {
 
 const Input = (props: InputProps) => {
   const intl = useIntl();
-  const { control, setValue, formState, register } = useFormContext();
+  const { control, setValue, formState } = useFormContext();
   const error = props.name in formState.errors ? formState.errors[props.name] : undefined;
   return (
     <Controller
@@ -28,7 +28,6 @@ const Input = (props: InputProps) => {
               intl,
               error ? (error.message as string) : undefined,
             )}
-            {...register(props.name)}
             onBlur={(e) => {
               field.onBlur();
               props.onBlur?.(e);

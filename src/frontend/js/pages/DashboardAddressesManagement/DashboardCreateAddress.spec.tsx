@@ -1,7 +1,10 @@
 import { QueryClientProvider } from '@tanstack/react-query';
+import countries from 'i18n-iso-countries';
 import fetchMock from 'fetch-mock';
-import { act, findByText, fireEvent, render, screen } from '@testing-library/react';
+import { getByText, render, screen, waitFor } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
+import userEvent, { UserEvent } from '@testing-library/user-event';
+import { PropsWithChildren } from 'react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
@@ -12,6 +15,7 @@ import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectBannerError } from 'utils/test/expectBanner';
+import { changeSelect } from 'components/Form/test-utils';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -29,28 +33,38 @@ jest.mock('utils/indirection/window', () => ({
  * Fills the form with `address` data.
  * @param address
  */
-const fillForm = async (address: Address) => {
-  const titleInput = await screen.findByRole('textbox', { name: 'Address title' });
-  const firstnameInput = screen.getByRole('textbox', { name: "Recipient's first name" });
-  const lastnameInput = screen.getByRole('textbox', { name: "Recipient's last name" });
-  const addressInput = screen.getByRole('textbox', { name: 'Address' });
-  const cityInput = screen.getByRole('textbox', { name: 'City' });
-  const postcodeInput = screen.getByRole('textbox', { name: 'Postcode' });
-  const countryInput = screen.getByRole('combobox', { name: 'Country' });
+const fillForm = async (address: Address, user: UserEvent = userEvent.setup()) => {
+  const $titleInput = await screen.findByRole('textbox', { name: 'Address title' });
+  const $firstnameInput = screen.getByRole('textbox', { name: "Recipient's first name" });
+  const $lastnameInput = screen.getByRole('textbox', { name: "Recipient's last name" });
+  const $addressInput = screen.getByRole('textbox', { name: 'Address' });
+  const $cityInput = screen.getByRole('textbox', { name: 'City' });
+  const $postcodeInput = screen.getByRole('textbox', { name: 'Postcode' });
+  const $countryInput = screen.getByRole('combobox', { name: 'Country' });
 
-  await act(async () => {
-    fireEvent.input(titleInput, { target: { value: address?.title } });
-    fireEvent.change(firstnameInput, { target: { value: address?.first_name } });
-    fireEvent.change(lastnameInput, { target: { value: address?.last_name } });
-    fireEvent.change(addressInput, { target: { value: address?.address } });
-    fireEvent.change(cityInput, { target: { value: address?.city } });
-    fireEvent.change(postcodeInput, { target: { value: address?.postcode } });
-    fireEvent.change(countryInput, { target: { value: address?.country } });
-  });
+  await user.type($titleInput, address?.title);
+  await user.type($firstnameInput, address?.first_name);
+  await user.type($lastnameInput, address?.last_name);
+  await user.type($addressInput, address?.address);
+  await user.type($cityInput, address?.city);
+  await user.type($postcodeInput, address?.postcode);
+  await changeSelect($countryInput, countries.getName(address?.country, 'en')!, user);
+
+  return Promise.resolve();
 };
 
 describe('<DashboardCreateAddress/>', () => {
+  const Wrapper = ({ children }: PropsWithChildren) => (
+    <QueryClientProvider client={createTestQueryClient({ user: true })}>
+      <IntlProvider locale="en">
+        <SessionProvider>{children}</SessionProvider>
+      </IntlProvider>
+    </QueryClientProvider>
+  );
+  let user: UserEvent;
+
   beforeEach(() => {
+    user = userEvent.setup();
     fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
   });
@@ -62,15 +76,14 @@ describe('<DashboardCreateAddress/>', () => {
 
   it('renders error for each field', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+    render(
+      <Wrapper>
+        <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION} />
+      </Wrapper>,
+    );
+    await waitFor(() => {
+      expect(fetchMock.calls().map((call) => call[0])).toContain(
+        'https://joanie.endpoint/api/v1.0/addresses/',
       );
     });
 
@@ -79,10 +92,7 @@ describe('<DashboardCreateAddress/>', () => {
     expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Submit the empty form to trigger validation errors.
-    const button = await screen.findByRole('button', { name: 'Create' });
-    await act(async () => {
-      fireEvent.click(button);
-    });
+    await user.click(screen.getByRole('button', { name: 'Create' }));
 
     const titleInput = screen.getByRole('textbox', { name: 'Address title' });
     const firstnameInput = screen.getByRole('textbox', { name: "Recipient's first name" });
@@ -92,13 +102,13 @@ describe('<DashboardCreateAddress/>', () => {
     const postcodeInput = screen.getByRole('textbox', { name: 'Postcode' });
     const countryInput = screen.getByRole('combobox', { name: 'Country' });
 
-    await findByText(titleInput.closest('.form-field')!, 'This field is required.');
-    await findByText(firstnameInput.closest('.form-field')!, 'This field is required.');
-    await findByText(lastnameInput.closest('.form-field')!, 'This field is required.');
-    await findByText(addressInput.closest('.form-field')!, 'This field is required.');
-    await findByText(cityInput.closest('.form-field')!, 'This field is required.');
-    await findByText(postcodeInput.closest('.form-field')!, 'This field is required.');
-    await findByText(countryInput.closest('.form-field')!, 'You must select a value.');
+    getByText(titleInput.closest('.c__field')!, 'This field is required.');
+    getByText(firstnameInput.closest('.c__field')!, 'This field is required.');
+    getByText(lastnameInput.closest('.c__field')!, 'This field is required.');
+    getByText(addressInput.closest('.c__field')!, 'This field is required.');
+    getByText(cityInput.closest('.c__field')!, 'This field is required.');
+    getByText(postcodeInput.closest('.c__field')!, 'This field is required.');
+    getByText(countryInput.closest('.c__field')!, 'You must select a value.');
 
     // The create API route is not called.
     expect(
@@ -112,31 +122,28 @@ describe('<DashboardCreateAddress/>', () => {
   it('creates an address and redirect to preferences', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     fetchMock.post('https://joanie.endpoint/api/v1.0/addresses/', []);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+    render(
+      <Wrapper>
+        <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION} />
+      </Wrapper>,
+    );
+    await waitFor(() => {
+      expect(fetchMock.calls().map((call) => call[0])).toContain(
+        'https://joanie.endpoint/api/v1.0/addresses/',
       );
     });
     expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Fill the form with random data.
-    const button = await screen.findByRole('button', { name: 'Create' });
     const address = AddressFactory().one();
-    await fillForm(address);
+    await fillForm(address, user);
 
     // Form submit calls the API create route.
     expect(
       fetchMock.called('https://joanie.endpoint/api/v1.0/addresses/', { method: 'post' }),
     ).toBe(false);
-    await act(async () => {
-      fireEvent.click(button);
-    });
+    await user.click(screen.getByRole('button', { name: 'Create' }));
+
     expect(
       fetchMock.called('https://joanie.endpoint/api/v1.0/addresses/', { method: 'post' }),
     ).toBe(true);
@@ -152,8 +159,9 @@ describe('<DashboardCreateAddress/>', () => {
       },
     );
 
-    // It is redirected to the addresses list.
-    await screen.findByText('Billing addresses');
+    await waitFor(() => {
+      expect(screen.getByText('Billing addresses')).toBeInTheDocument();
+    });
   });
 
   it('shows an error in case of API error', async () => {
@@ -165,22 +173,20 @@ describe('<DashboardCreateAddress/>', () => {
       body: 'Bad request',
     });
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+    render(
+      <Wrapper>
+        <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION} />
+      </Wrapper>,
+    );
+    await waitFor(() => {
+      expect(fetchMock.calls().map((call) => call[0])).toContain(
+        'https://joanie.endpoint/api/v1.0/addresses/',
       );
     });
 
     expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
 
     // Fill the form with random data.
-    const button = await screen.findByRole('button', { name: 'Create' });
     const address = AddressFactory().one();
     await fillForm(address);
 
@@ -188,9 +194,9 @@ describe('<DashboardCreateAddress/>', () => {
     expect(
       fetchMock.called('https://joanie.endpoint/api/v1.0/addresses/', { method: 'post' }),
     ).toBe(false);
-    await act(async () => {
-      fireEvent.click(button);
-    });
+
+    await user.click(screen.getByRole('button', { name: 'Create' }));
+
     expect(
       fetchMock.called('https://joanie.endpoint/api/v1.0/addresses/', { method: 'post' }),
     ).toBe(true);

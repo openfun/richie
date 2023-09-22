@@ -8,7 +8,7 @@ export const getLocalizedErrorMessage = (
   error: Maybe<string | ValidationError>,
 ) => {
   if (!error) return undefined;
-  if (typeof error === 'string' || errorMessages[error.key] === undefined) {
+  if (typeof error === 'string' || !(error.key in errorMessages)) {
     // If the error has not been translated we return a default error message.
     return intl.formatMessage(errorMessages[ErrorKeys.MIXED_INVALID]);
   }
