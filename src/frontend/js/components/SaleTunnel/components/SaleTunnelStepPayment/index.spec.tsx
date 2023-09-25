@@ -1,7 +1,10 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { CunninghamProvider } from '@openfun/cunningham-react';
+import { PropsWithChildren } from 'react';
+import userEvent from '@testing-library/user-event';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
@@ -27,6 +30,15 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('SaleTunnelStepPayment', () => {
+  const Wrapper = ({ children, user }: PropsWithChildren<{ user?: User }>) => (
+    <QueryClientProvider client={createTestQueryClient({ user: user || true })}>
+      <IntlProvider locale="en">
+        <SessionProvider>
+          <CunninghamProvider>{children}</CunninghamProvider>
+        </SessionProvider>
+      </IntlProvider>
+    </QueryClientProvider>
+  );
   const mockNext = jest.fn();
 
   beforeEach(() => {
@@ -45,13 +57,9 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <SaleTunnelStepPayment product={product} next={mockNext} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <Wrapper>
+          <SaleTunnelStepPayment product={product} next={mockNext} />
+        </Wrapper>,
       );
     });
 
@@ -67,18 +75,13 @@ describe('SaleTunnelStepPayment', () => {
   });
 
   it('should display authenticated user information', async () => {
-    const user: User = UserFactory({ fullname: undefined }).one();
     const product = ProductFactory().one();
-
+    const user: User = UserFactory({ fullname: undefined }).one();
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <SaleTunnelStepPayment product={product} next={mockNext} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <Wrapper user={user}>
+          <SaleTunnelStepPayment product={product} next={mockNext} />
+        </Wrapper>,
       );
     });
 
@@ -92,13 +95,9 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(() => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <SaleTunnelStepPayment product={product} next={mockNext} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <Wrapper>
+          <SaleTunnelStepPayment product={product} next={mockNext} />
+        </Wrapper>,
       );
     });
 
@@ -131,13 +130,9 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <SaleTunnelStepPayment product={product} next={mockNext} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <Wrapper>
+          <SaleTunnelStepPayment product={product} next={mockNext} />
+        </Wrapper>,
       );
     });
 
@@ -148,12 +143,22 @@ describe('SaleTunnelStepPayment', () => {
 
     // - A select field containing all addresses should be displayed
     const dropdown = screen.getByRole('combobox', { name: 'Select a billing address' });
-    addresses.forEach((address) => {
-      const $option = screen.getByTestId(`address-${address.id}-option`) as HTMLOptionElement;
-      // - By default, the main address should be selected
-      expect($option.selected).toBe(address.is_main);
+    const addressListBox = screen.getByRole('listbox');
+    const $addressOptionById: Record<string, HTMLOptionElement> = {};
+    await act(async () => {
+      const user = userEvent.setup();
+      await user.click(dropdown);
     });
-
+    addresses.forEach((address) => {
+      $addressOptionById[address.id] = within(addressListBox).getByRole('option', {
+        name: new RegExp(address.title),
+      }) as HTMLOptionElement;
+      // - By default, the main address should be selected
+      expect($addressOptionById[address.id]).toHaveAttribute(
+        'aria-selected',
+        address.is_main.toString(),
+      );
+    });
     const mainAddress = addresses.find((address) => address.is_main)!;
     screen.getByText(
       new RegExp(
@@ -167,7 +172,7 @@ describe('SaleTunnelStepPayment', () => {
     // Select another address should update the combobox
     const notMainAddress = addresses.find((a) => !a.is_main)!;
     await act(async () => {
-      fireEvent.change(dropdown, { target: { value: notMainAddress.id } });
+      await userEvent.click($addressOptionById[notMainAddress.id]);
     });
     screen.getByText(
       new RegExp(
@@ -194,13 +199,9 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <SaleTunnelStepPayment product={product} next={mockNext} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <Wrapper>
+          <SaleTunnelStepPayment product={product} next={mockNext} />
+        </Wrapper>,
       );
     });
 
@@ -223,13 +224,9 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <SaleTunnelStepPayment product={product} next={mockNext} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <Wrapper>
+          <SaleTunnelStepPayment product={product} next={mockNext} />
+        </Wrapper>,
       );
     });
 
@@ -279,13 +276,9 @@ describe('SaleTunnelStepPayment', () => {
     const product = ProductFactory().one();
 
     render(
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <SessionProvider>
-            <SaleTunnelStepPayment product={product} next={mockNext} />
-          </SessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>,
+      <Wrapper>
+        <SaleTunnelStepPayment product={product} next={mockNext} />
+      </Wrapper>,
     );
 
     await waitFor(() => {

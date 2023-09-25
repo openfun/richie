@@ -1,9 +1,8 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
-import { Button } from '@openfun/cunningham-react';
+import { Button, Select } from '@openfun/cunningham-react';
 import PaymentButton from 'components/PaymentButton';
 import AddressesManagement, { LOCAL_BILLING_ADDRESS_ID } from 'components/AddressesManagement';
-import { SelectField } from 'components/Form';
 import { useSession } from 'contexts/SessionContext';
 import { useAddresses } from 'hooks/useAddresses';
 import { useCreditCards } from 'hooks/useCreditCards';
@@ -124,8 +123,8 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
    *
    * @param {React.ChangeEvent<HTMLSelectElement>} event
    */
-  const handleSelectAddress = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const targetedAddress = addresses.items.find((a) => a.id === event.target.value);
+  const handleSelectAddress = (newValue: string) => {
+    const targetedAddress = addresses.items.find((a) => a.id === newValue);
     if (targetedAddress) {
       setAddress(targetedAddress);
     }
@@ -213,50 +212,45 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
               </Button>
             )}
           </header>
-          {addressesItems.length > 0 ? (
-            <Fragment>
-              <SelectField
-                fieldClasses={['form-field--minimal']}
-                id="invoice_address"
-                name="invoice_address"
-                label={intl.formatMessage(messages.userBillingAddressSelectLabel)}
-                onChange={handleSelectAddress}
-                defaultValue={selectedAddress!.id || ''}
-              >
-                {addressesItems.map(({ id, title }) => (
-                  <option
-                    data-testid={`address-${id}-option`}
-                    key={`address-${id}-option`}
-                    value={id}
-                  >
-                    {title}
-                  </option>
-                ))}
-              </SelectField>
-              <address className="SaleTunnelStepPayment__block--buyer__address">
-                {selectedAddress!.first_name}&nbsp;{selectedAddress!.last_name}
-                <br />
-                {selectedAddress!.address}
-                <br />
-                {selectedAddress!.postcode} {selectedAddress!.city}, {selectedAddress!.country}
-              </address>
-            </Fragment>
-          ) : (
-            <Fragment>
-              <p className="SaleTunnelStepPayment__block--buyer__address__noAddress">
-                <em>
-                  <FormattedMessage {...messages.userBillingAddressNoEntry} />
-                </em>
-              </p>
-              <Button
-                size="small"
-                onClick={() => setShowAddressCreationForm(true)}
-                icon={<Icon name={IconTypeEnum.PLUS} size="small" className="button__icon" />}
-              >
-                <FormattedMessage {...messages.userBillingAddressCreateLabel} />
-              </Button>
-            </Fragment>
-          )}
+          <div className="SaleTunnelStepPayment__block--buyer__address-selection">
+            {addressesItems.length > 0 ? (
+              <Fragment>
+                <Select
+                  className="form-field--minimal"
+                  name="invoice_address"
+                  label={intl.formatMessage(messages.userBillingAddressSelectLabel)}
+                  onChange={(e) => handleSelectAddress((e.target.value || '') as string)}
+                  defaultValue={selectedAddress!.id || ''}
+                  options={addressesItems.map(({ id, title }) => ({
+                    label: title,
+                    value: id,
+                  }))}
+                />
+                <address className="SaleTunnelStepPayment__block--buyer__address-selection__address">
+                  {selectedAddress!.first_name}&nbsp;{selectedAddress!.last_name}
+                  <br />
+                  {selectedAddress!.address}
+                  <br />
+                  {selectedAddress!.postcode} {selectedAddress!.city}, {selectedAddress!.country}
+                </address>
+              </Fragment>
+            ) : (
+              <Fragment>
+                <p className="SaleTunnelStepPayment__block--buyer__address__noAddress">
+                  <em>
+                    <FormattedMessage {...messages.userBillingAddressNoEntry} />
+                  </em>
+                </p>
+                <Button
+                  size="small"
+                  onClick={() => setShowAddressCreationForm(true)}
+                  icon={<Icon name={IconTypeEnum.PLUS} size="small" className="button__icon" />}
+                >
+                  <FormattedMessage {...messages.userBillingAddressCreateLabel} />
+                </Button>
+              </Fragment>
+            )}
+          </div>
         </div>
       </section>
       {creditCards.items?.length > 0 ? (
