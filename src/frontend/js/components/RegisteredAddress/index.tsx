@@ -65,7 +65,6 @@ const RegisteredAddress = ({ promote, select, edit, remove, address }: Props) =>
         title={intl.formatMessage(messages.promoteButtonLabel, { title: address.title })}
         name="registered-addresses"
         checked={address.is_main}
-        onChange={() => {}}
       />
       <strong
         data-testid={`address-${address.id}-title`}

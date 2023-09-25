@@ -1,3 +1,4 @@
+import { Checkbox } from '@openfun/cunningham-react';
 import { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import type * as Joanie from 'types/Joanie';
@@ -36,7 +37,7 @@ export const RegisteredCreditCard = ({ selected, handleSelect, ...creditCard }: 
   return (
     <label className="registered-credit-card">
       <p className="form-field">
-        <input
+        <Checkbox
           aria-label={intl.formatMessage(messages.inputAriaLabel, {
             title: creditCard.title,
             selected,
@@ -48,13 +49,6 @@ export const RegisteredCreditCard = ({ selected, handleSelect, ...creditCard }: 
           type="checkbox"
           id={inputId}
         />
-        <label htmlFor={inputId} className="form-field__label">
-          <span className="form-field__checkbox-control">
-            <svg role="img" aria-hidden="true">
-              <use href="#icon-check" />
-            </svg>
-          </span>
-        </label>
       </p>
       <div id={`credit-card-${creditCard.id}-infos`} className="registered-credit-card__infos">
         <strong className="h6 registered-credit-card__name">
