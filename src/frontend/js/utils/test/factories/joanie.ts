@@ -243,7 +243,7 @@ export const CourseLightFactory = factory((): CourseLight => {
 export const OrderLiteFactory = factory((): OrderLite => {
   return {
     created_on: faker.date.past().toISOString(),
-    enrollments: [],
+    target_enrollments: [],
     id: faker.string.uuid(),
     main_proforma_invoice: faker.string.uuid(),
     total: faker.number.int(),
@@ -264,7 +264,8 @@ export const OrderFactory = factory((): Order => {
     product: faker.string.uuid(),
     target_courses: TargetCourseFactory().many(5),
     course: CourseLightFactory().one(),
-    enrollments: [],
+    enrollment: undefined,
+    target_enrollments: [],
   };
 });
 

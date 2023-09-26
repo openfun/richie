@@ -102,7 +102,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
 
     if (selectedCourseRun) {
       WebAnalyticsAPIHandler()?.sendEnrolledEvent(selectedCourseRun.resource_link);
-      const relatedEnrollment = order.enrollments.find(({ course_run }) => {
+      const relatedEnrollment = order.target_enrollments.find(({ course_run }) => {
         return course_run.id === selectedCourseRun.id;
       });
       if (relatedEnrollment) {

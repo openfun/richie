@@ -155,7 +155,7 @@ export type OrderLite = Pick<
   | 'created_on'
   | 'state'
   | 'total'
-  | 'enrollments'
+  | 'target_enrollments'
   | 'product'
   | 'main_proforma_invoice'
   | 'certificate'
@@ -190,7 +190,8 @@ export interface Order {
   id: string;
   course?: CourseLight['code'] | CourseLight;
   created_on: string;
-  enrollments: Enrollment[];
+  target_enrollments: Enrollment[];
+  enrollment?: string;
   main_proforma_invoice: string;
   certificate?: string;
   owner: string;

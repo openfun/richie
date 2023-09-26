@@ -60,7 +60,7 @@ export const MultipleTargetCourses: Story = {
     order: {
       ...order,
       target_courses: targetsCourses,
-      enrollments: [
+      target_enrollments: [
         {
           ...enrollment,
           course_run: { ...targetsCourses[1].course_runs[0] },

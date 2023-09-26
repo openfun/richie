@@ -3,7 +3,7 @@ import { Enrollment } from 'types/Joanie';
 
 export class CoursesHelper {
   static findActiveCourseEnrollmentInOrder(targetCourse: Joanie.TargetCourse, order: Joanie.Order) {
-    return CoursesHelper.findActiveEnrollment(targetCourse, order.enrollments);
+    return CoursesHelper.findActiveEnrollment(targetCourse, order.target_enrollments);
   }
   static findActiveEnrollment(targetCourse: Joanie.AbstractCourse, enrollments: Enrollment[]) {
     const courseRunIds = targetCourse.course_runs.map(({ id }) => id);
@@ -13,7 +13,7 @@ export class CoursesHelper {
   }
   static findCourseEnrollmentsInOrder(targetCourse: Joanie.AbstractCourse, order: Joanie.Order) {
     const courseRunIds = targetCourse.course_runs.map(({ id }) => id);
-    return order.enrollments.filter(({ course_run }) => {
+    return order.target_enrollments.filter(({ course_run }) => {
       return courseRunIds.includes(course_run.id);
     });
   }

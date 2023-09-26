@@ -50,7 +50,7 @@ describe('<DashboardOrderLayout />', () => {
     const order: Order = {
       ...OrderFactory().one(),
       target_courses: [TargetCourseFactory().one()],
-      enrollments: [],
+      target_enrollments: [],
     };
     const { product } = mockCourseProductWithOrder(order);
     fetchMock.get(
