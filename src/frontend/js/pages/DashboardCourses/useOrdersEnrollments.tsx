@@ -6,7 +6,7 @@ import { PER_PAGE } from 'settings';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 
 export const isOrder = (obj: Order | Enrollment): obj is Order => {
-  return 'total' in obj && 'enrollments' in obj;
+  return 'total' in obj && 'target_enrollments' in obj;
 };
 export const isEnrollement = (obj: Order | Enrollment): obj is Enrollment => {
   return 'was_created_by_order' in obj && 'course_run' in obj;

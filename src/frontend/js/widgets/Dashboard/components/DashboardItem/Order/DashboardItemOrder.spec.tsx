@@ -199,11 +199,11 @@ describe('<DashboardItemOrder/>', () => {
     }).one();
 
     // Make target course enrolled.
-    order.enrollments = EnrollmentFactory({
+    order.target_enrollments = EnrollmentFactory({
       course_run: order.target_courses[0].course_runs[0],
     }).many(1);
 
-    order.enrollments[0].course_run.state.priority = Priority.ONGOING_OPEN;
+    order.target_enrollments[0].course_run.state.priority = Priority.ONGOING_OPEN;
 
     const { product } = mockCourseProductWithOrder(order);
 
@@ -217,11 +217,11 @@ describe('<DashboardItemOrder/>', () => {
       screen.getByText(
         'You are enrolled for the session from ' +
           new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
-            new Date(order.enrollments[0].course_run.start),
+            new Date(order.target_enrollments[0].course_run.start),
           ) +
           ' to ' +
           new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
-            new Date(order.enrollments[0].course_run.end),
+            new Date(order.target_enrollments[0].course_run.end),
           ),
       );
       screen.getByRole('link', { name: 'Access course' });
@@ -230,7 +230,7 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a non-writable order with not enrolled target course', async () => {
     const order: Order = OrderFactory({
       target_courses: TargetCourseFactory().many(1),
-      enrollments: [],
+      target_enrollments: [],
     }).one();
 
     const { product } = mockCourseProductWithOrder(order);
@@ -269,7 +269,7 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with enrolled target course', async () => {
     const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
     // Make target course enrolled.
-    order.enrollments = [
+    order.target_enrollments = [
       {
         ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],
@@ -316,7 +316,7 @@ describe('<DashboardItemOrder/>', () => {
     // Initial order without enrollment.
     const order: Order = OrderFactory({
       target_courses: TargetCourseFactory().many(1),
-      enrollments: [],
+      target_enrollments: [],
     }).one();
     const { product } = mockCourseProductWithOrder(order);
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', []);
@@ -330,9 +330,9 @@ describe('<DashboardItemOrder/>', () => {
     // invalided after the click on the Enroll button.
     const orderWithEnrollment = {
       ...order,
-      enrollments: EnrollmentFactory({ course_run: order.target_courses[0].course_runs[0] }).many(
-        1,
-      ),
+      target_enrollments: EnrollmentFactory({
+        course_run: order.target_courses[0].course_runs[0],
+      }).many(1),
     };
 
     render(WrapperWithDashboard(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
@@ -394,7 +394,7 @@ describe('<DashboardItemOrder/>', () => {
     // Initial order without enrollment.
     const order: Order = OrderFactory({
       target_courses: TargetCourseFactory().many(1),
-      enrollments: [],
+      target_enrollments: [],
     }).one();
 
     const { product } = mockCourseProductWithOrder(order);
@@ -444,11 +444,11 @@ describe('<DashboardItemOrder/>', () => {
     // Initial order with first course run enrolled.
     const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
-    order.enrollments = EnrollmentFactory({ course_run: initialEnrolledCourseRun }).many(1);
+    order.target_enrollments = EnrollmentFactory({ course_run: initialEnrolledCourseRun }).many(1);
 
     // When the existing enrollment will be set as is_active: false.
     fetchMock.put(
-      'https://joanie.endpoint/api/v1.0/enrollments/' + order.enrollments[0].id + '/',
+      'https://joanie.endpoint/api/v1.0/enrollments/' + order.target_enrollments[0].id + '/',
       [],
     );
 
@@ -465,7 +465,7 @@ describe('<DashboardItemOrder/>', () => {
     const newEnrolledCourseRun = order.target_courses[0].course_runs[1];
     const orderWithNewEnrollment = {
       ...order,
-      enrollments: EnrollmentFactory({ course_run: newEnrolledCourseRun }).many(1),
+      target_enrollments: EnrollmentFactory({ course_run: newEnrolledCourseRun }).many(1),
     };
 
     render(WrapperWithDashboard(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
@@ -513,7 +513,7 @@ describe('<DashboardItemOrder/>', () => {
 
     // Expect the existing enrollment to be set as is_active: false.
     const calls = fetchMock.calls(
-      'https://joanie.endpoint/api/v1.0/enrollments/' + order.enrollments[0].id + '/',
+      'https://joanie.endpoint/api/v1.0/enrollments/' + order.target_enrollments[0].id + '/',
       { method: 'put' },
     );
     expect(calls.length).toBe(1);
@@ -521,7 +521,7 @@ describe('<DashboardItemOrder/>', () => {
 
     expect(
       fetchMock.called(
-        'https://joanie.endpoint/api/v1.0/enrollments/' + order.enrollments[0].id + '/',
+        'https://joanie.endpoint/api/v1.0/enrollments/' + order.target_enrollments[0].id + '/',
         { method: 'put' },
       ),
     ).toBe(true);
@@ -542,7 +542,7 @@ describe('<DashboardItemOrder/>', () => {
     const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
 
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
-    order.enrollments = [
+    order.target_enrollments = [
       {
         ...EnrollmentFactory().one(),
         course_run: initialEnrolledCourseRun,
@@ -620,7 +620,7 @@ describe('<DashboardItemOrder/>', () => {
       course_run: courseRun,
       is_active: false,
     };
-    order.enrollments = [enrollment];
+    order.target_enrollments = [enrollment];
 
     // When the existing enrollment will be set as is_active: true.
     fetchMock.put('https://joanie.endpoint/api/v1.0/enrollments/' + enrollment.id + '/', []);
@@ -636,7 +636,7 @@ describe('<DashboardItemOrder/>', () => {
     // invalided after the click on the Enroll button.
     const orderWithActiveEnrollment = {
       ...order,
-      enrollments: [
+      target_enrollments: [
         {
           ...enrollment,
           is_active: true,
@@ -740,7 +740,7 @@ describe('<DashboardItemOrder/>', () => {
     }).one();
 
     // Make target course enrolled.
-    order.enrollments = EnrollmentFactory({ course_run: courseRun }).many(1);
+    order.target_enrollments = EnrollmentFactory({ course_run: courseRun }).many(1);
 
     const { product } = mockCourseProductWithOrder(order);
 
@@ -769,7 +769,7 @@ describe('<DashboardItemOrder/>', () => {
 
     const order: Order = OrderFactory({
       target_courses: TargetCourseFactory({ course_runs: [courseRun] }).many(1),
-      enrollments: [],
+      target_enrollments: [],
     }).one();
 
     const { product } = mockCourseProductWithOrder(order);

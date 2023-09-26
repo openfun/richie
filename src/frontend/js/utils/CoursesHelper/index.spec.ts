@@ -8,7 +8,7 @@ describe('CourseHelper', () => {
       ...OrderFactory().one(),
       target_courses: TargetCourseFactory().many(3),
     };
-    order.enrollments = [
+    order.target_enrollments = [
       {
         ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],
@@ -21,7 +21,7 @@ describe('CourseHelper', () => {
       },
     ];
     expect(CoursesHelper.findActiveCourseEnrollmentInOrder(order.target_courses[1], order)).toEqual(
-      order.enrollments[1],
+      order.target_enrollments[1],
     );
   });
   it('should not find active course enrollment in an order containing only is_active=false enrollments', () => {
@@ -29,7 +29,7 @@ describe('CourseHelper', () => {
       ...OrderFactory().one(),
       target_courses: TargetCourseFactory().many(3),
     };
-    order.enrollments = [
+    order.target_enrollments = [
       {
         ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],
@@ -49,7 +49,7 @@ describe('CourseHelper', () => {
     const order: Order = {
       ...OrderFactory().one(),
       target_courses: TargetCourseFactory().many(3),
-      enrollments: [],
+      target_enrollments: [],
     };
     expect(
       CoursesHelper.findActiveCourseEnrollmentInOrder(order.target_courses[0], order),
@@ -61,7 +61,7 @@ describe('CourseHelper', () => {
       ...OrderFactory().one(),
       target_courses: TargetCourseFactory().many(3),
     };
-    order.enrollments = [
+    order.target_enrollments = [
       {
         ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],
@@ -79,8 +79,8 @@ describe('CourseHelper', () => {
       },
     ];
     expect(CoursesHelper.findCourseEnrollmentsInOrder(order.target_courses[0], order)).toEqual([
-      order.enrollments[0],
-      order.enrollments[2],
+      order.target_enrollments[0],
+      order.target_enrollments[2],
     ]);
   });
   it('should not find enrollments', () => {
@@ -88,7 +88,7 @@ describe('CourseHelper', () => {
       ...OrderFactory().one(),
       target_courses: TargetCourseFactory().many(3),
     };
-    order.enrollments = [
+    order.target_enrollments = [
       {
         ...EnrollmentFactory().one(),
         course_run: order.target_courses[0].course_runs[0],

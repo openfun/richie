@@ -55,7 +55,7 @@ export const MultipleTargetCourses: Story = {
     order: {
       ...order,
       target_courses: [...targetsCourses, { ...TargetCourseFactory().one(), course_runs: [] }],
-      enrollments: [
+      target_enrollments: [
         {
           ...enrollment,
           course_run: { ...targetsCourses[1].course_runs[0] },

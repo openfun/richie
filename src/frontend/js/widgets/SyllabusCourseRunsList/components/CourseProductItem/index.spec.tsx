@@ -361,7 +361,7 @@ describe('CourseProductItem', () => {
       product: product.id,
       course: '00000',
       target_courses: product.target_courses,
-      enrollments: [enrollment],
+      target_enrollments: [enrollment],
     }).one();
 
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
