@@ -24,6 +24,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update `JOANIE_BACKEND` settings, frontend widgets and learner dashboard
   to match new API endpoint to retrieve course products
 - Use cunningham Button component.
+- Use cunningham form components (input, select, radio, checkbox).
 
 ### Fixed
 
