@@ -3,6 +3,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { IntlProvider, createIntl } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { PropsWithChildren } from 'react';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
@@ -34,20 +36,18 @@ jest.mock('utils/indirection/window', () => ({
 
 const intl = createIntl({ locale: 'en' });
 
-const renderTeacherDashboardProfileSidebar = () =>
-  render(
+describe('<TeacherDashboardProfileSidebar/>', () => {
+  const Wrapper = ({ children }: PropsWithChildren) => (
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
         <JoanieSessionProvider>
           <MemoryRouter>
-            <TeacherDashboardProfileSidebar />
+            <CunninghamProvider>{children}</CunninghamProvider>
           </MemoryRouter>
         </JoanieSessionProvider>
       </QueryClientProvider>
-    </IntlProvider>,
+    </IntlProvider>
   );
-
-describe('<TeacherDashboardProfileSidebar/>', () => {
   let nbApiRequest: number;
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', []);
@@ -65,7 +65,11 @@ describe('<TeacherDashboardProfileSidebar/>', () => {
 
   it('should display menu items', async () => {
     nbApiRequest += 1; // call to organizations
-    renderTeacherDashboardProfileSidebar();
+    render(
+      <Wrapper>
+        <TeacherDashboardProfileSidebar />
+      </Wrapper>,
+    );
 
     expect(
       screen.getByRole('link', {
@@ -86,7 +90,11 @@ describe('<TeacherDashboardProfileSidebar/>', () => {
       overwriteRoutes: true,
     });
     nbApiRequest += 1; // call to organizations
-    renderTeacherDashboardProfileSidebar();
+    render(
+      <Wrapper>
+        <TeacherDashboardProfileSidebar />
+      </Wrapper>,
+    );
     expect(await screen.findByTestId('organization-links')).toBeInTheDocument();
     expect(fetchMock.calls()).toHaveLength(nbApiRequest);
 

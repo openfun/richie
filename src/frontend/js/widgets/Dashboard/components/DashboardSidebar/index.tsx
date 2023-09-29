@@ -1,22 +1,9 @@
 import c from 'classnames';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { matchPath, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { ChangeEvent, PropsWithChildren, ReactNode, useMemo, useRef } from 'react';
+import { matchPath, NavLink, useLocation } from 'react-router-dom';
+import { PropsWithChildren, ReactNode, useMemo } from 'react';
 import { useSession } from 'contexts/SessionContext';
 import { DashboardAvatar } from 'widgets/Dashboard/components/DashboardAvatar';
-
-const messages = defineMessages({
-  settingsLinkLabel: {
-    id: 'components.DashboardSidebar.settingsLinkLabel',
-    description: 'label of the settings link',
-    defaultMessage: 'Settings',
-  },
-  responsiveNavLabel: {
-    id: 'components.DashboardSidebar.responsiveNavLabel',
-    description: 'a11y related label for select input used to navigate on responsive',
-    defaultMessage: 'Navigate to',
-  },
-});
+import NavigationSelect from './components/NavigationSelect';
 
 export enum DashboardAvatarPositionEnum {
   CENTER = 'center',
@@ -43,19 +30,12 @@ export const DashboardSidebar = ({
 }: DashboardSidebarProps) => {
   const { user } = useSession();
   const location = useLocation();
-  const navigate = useNavigate();
-  const selectNav = useRef<HTMLSelectElement>(null);
   const classes = ['dashboard-sidebar'];
 
   const selectedLink = useMemo(
     () => menuLinks.find((link) => matchPath({ path: link.to, end: true }, location.pathname))?.to,
     [location, menuLinks],
   );
-
-  const onSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    navigate(event.target.value);
-    selectNav.current?.blur();
-  };
 
   return (
     <aside className={classes.join(' ')} data-testid="dashboard__sidebar">
@@ -74,25 +54,10 @@ export const DashboardSidebar = ({
         </header>
         {title && <h4 className="dashboard-sidebar__container__title">{title}</h4>}
         <div className="dashboard-sidebar__container__responsive-nav">
-          <label htmlFor="dashboard-responsive-nav" className="offscreen">
-            <FormattedMessage {...messages.responsiveNavLabel} />
-          </label>
-          <select
-            ref={selectNav}
-            id="dashboard-responsive-nav"
-            value={selectedLink}
-            onChange={onSelectChange}
-            className="form-field__select-input"
-          >
-            {menuLinks.map((link) => (
-              <option key={link.to} value={link.to}>
-                {link.label}
-              </option>
-            ))}
-          </select>
+          <NavigationSelect menuLinks={menuLinks} />
         </div>
 
-        <ul>
+        <ul className="dashboard-sidebar__container__nav">
           {menuLinks.map((link) => (
             <li
               key={link.to}
