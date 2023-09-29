@@ -75,6 +75,9 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
   @include media-breakpoint-up(lg) {
     @include sv-flex(1, 0, calc(25% - #{$r-course-glimpse-gutter * 2}));
   }
+  @include media-breakpoint-down(lg) {
+    max-width: 100%;
+  }
 
   // We want to trigger the card shadow on hovering links inside the card,
   // but not when hovering non-interactive text.

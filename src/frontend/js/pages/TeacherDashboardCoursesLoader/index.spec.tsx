@@ -4,6 +4,7 @@ import { render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
@@ -65,14 +66,16 @@ describe('components/TeacherDashboardCoursesLoader', () => {
       <IntlProvider locale="en">
         <QueryClientProvider client={createTestQueryClient({ user })}>
           <JoanieSessionProvider>
-            <RouterProvider
-              router={createMemoryRouter([
-                {
-                  path: '',
-                  element: <TeacherDashboardCoursesLoader />,
-                },
-              ])}
-            />
+            <CunninghamProvider>
+              <RouterProvider
+                router={createMemoryRouter([
+                  {
+                    path: '',
+                    element: <TeacherDashboardCoursesLoader />,
+                  },
+                ])}
+              />
+            </CunninghamProvider>
           </JoanieSessionProvider>
         </QueryClientProvider>
       </IntlProvider>,

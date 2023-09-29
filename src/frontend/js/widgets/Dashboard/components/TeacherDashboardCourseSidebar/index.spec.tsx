@@ -3,6 +3,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { IntlProvider, createIntl } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { CourseListItem } from 'types/Joanie';
 import {
   RichieContextFactory as mockRichieContextFactory,
@@ -45,11 +46,13 @@ const renderTeacherDashboardCourseSidebar = ({
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
         <JoanieSessionProvider>
-          <MemoryRouter initialEntries={[`/${courseId}`]}>
-            <Routes>
-              <Route path="/:courseId" element={<TeacherDashboardCourseSidebar />} />
-            </Routes>
-          </MemoryRouter>
+          <CunninghamProvider>
+            <MemoryRouter initialEntries={[`/${courseId}`]}>
+              <Routes>
+                <Route path="/:courseId" element={<TeacherDashboardCourseSidebar />} />
+              </Routes>
+            </MemoryRouter>
+          </CunninghamProvider>
         </JoanieSessionProvider>
       </QueryClientProvider>
     </IntlProvider>,

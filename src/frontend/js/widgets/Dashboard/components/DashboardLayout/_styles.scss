@@ -27,6 +27,7 @@ $sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-filters-height +
 
     @include media-breakpoint-down(lg) {
       width: auto;
+      margin-right: 0;
     }
   }
 
@@ -67,5 +68,8 @@ $sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-filters-height +
 
   &__content {
     padding-right: rem-calc(32px);
+    @include media-breakpoint-down(lg) {
+      padding-right: 0;
+    }
   }
 }
