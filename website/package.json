@@ -21,13 +21,13 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
-    "@docusaurus/core": "2.4.1",
-    "@docusaurus/plugin-content-pages": "2.4.1",
-    "@docusaurus/preset-classic": "2.4.1",
+    "@docusaurus/core": "2.4.3",
+    "@docusaurus/plugin-content-pages": "2.4.3",
+    "@docusaurus/preset-classic": "2.4.3",
     "clsx": "2.0.0",
     "prettier": "3.0.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-markdown": "8.0.7"
+    "react-markdown": "9.0.0"
   }
 }
