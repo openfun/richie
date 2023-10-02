@@ -7,8 +7,6 @@
 //  .form-row
 //    .c__field ( should be form-field when cunningham is improved)
 .form {
-  // FIXME (rlecellier): fix of cunningham, multiple field in the same
-  // row do not size properly
   .c__field {
     width: auto;
     display: flex;
@@ -22,6 +20,10 @@
     margin-bottom: rem-calc(10px);
     &:last-child {
       margin-bottom: 0;
+    }
+
+    @include media-breakpoint-down(xs) {
+      flex-direction: column;
     }
   }
 }
