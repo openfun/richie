@@ -7,6 +7,7 @@ export const enrollment: Enrollment = {
   is_active: true,
   was_created_by_order: true,
   created_on: '2022-09-09T12:00:00+00:00',
+  orders: [],
   course_run: {
     id: '18cede01-231e-4061-92d1-5716cd990e33',
     title: '',

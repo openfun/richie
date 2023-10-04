@@ -82,7 +82,6 @@ export interface OrganizationLight {
 export enum ProductType {
   CERTIFICATE = 'certificate',
   CREDENTIAL = 'credential',
-  ENROLLMENT = 'enrollment',
 }
 
 export interface Product {
@@ -149,18 +148,6 @@ export interface CourseLight extends AbstractCourse {
   orders?: OrderLite[];
 }
 
-export type OrderLite = Pick<
-  Order,
-  | 'id'
-  | 'created_on'
-  | 'state'
-  | 'total'
-  | 'target_enrollments'
-  | 'product'
-  | 'main_proforma_invoice'
-  | 'certificate'
->;
-
 // Enrollment
 export enum EnrollmentState {
   FAILED = 'failed',
@@ -174,6 +161,7 @@ export interface Enrollment {
   course_run: CourseRun;
   was_created_by_order: boolean;
   created_on: string;
+  orders: OrderEnrollment[];
   products: Product[];
 }
 
@@ -202,6 +190,20 @@ export interface Order {
   product: Product['id'];
   target_courses: TargetCourse[];
 }
+
+export type OrderLite = Pick<
+  Order,
+  | 'id'
+  | 'created_on'
+  | 'state'
+  | 'total'
+  | 'target_enrollments'
+  | 'product'
+  | 'main_proforma_invoice'
+  | 'certificate'
+>;
+
+export type OrderEnrollment = Pick<Order, 'id' | 'state' | 'product' | 'certificate'>;
 
 export enum CreditCardBrand {
   MASTERCARD = 'Mastercard',
@@ -272,10 +274,18 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
   is_main?: boolean;
 }
 
-interface OrderCreationPayload {
+interface OrderProductCertificateCreationPayload {
+  product: Product['id'];
+  enrollment: Enrollment['id'];
+}
+interface OrderCredentialCreationPayload {
   product: Product['id'];
   course: CourseLight['code'];
 }
+
+export type OrderCreationPayload =
+  | OrderProductCertificateCreationPayload
+  | OrderCredentialCreationPayload;
 
 interface OrderAbortPayload {
   id: Order['id'];
