@@ -45,7 +45,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
     return null;
   }
   return (
-    <ProductRelationProvider courseCode={enrollment.course_run.course.code} productId={product.id}>
+    <ProductRelationProvider enrollmentId={enrollment.id} productId={product.id}>
       <div className="dashboard-item__course-enrolling__infos">
         <div className="dashboard-item__block__status">
           <Icon name={IconTypeEnum.CERTIFICATE} />

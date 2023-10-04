@@ -4,16 +4,26 @@ import type * as Joanie from 'types/Joanie';
 
 const Context = createContext<
   Maybe<{
-    courseCode: Joanie.CourseLight['code'];
+    enrollmentId?: Joanie.Enrollment['id'];
+    courseCode?: Joanie.CourseLight['code'];
     productId: Joanie.Product['id'];
     key: string;
   }>
 >(undefined);
 
-export interface ProductRelationProviderProps {
+export interface ProductCredentialRelationProviderProps {
   courseCode: Joanie.CourseLight['code'];
   productId: Joanie.Product['id'];
+  enrollmentId?: undefined;
 }
+interface ProductCertificateRelationProviderProps {
+  enrollmentId: Joanie.Enrollment['id'];
+  productId: Joanie.Product['id'];
+  courseCode?: undefined;
+}
+export type ProductRelationProviderProps =
+  | ProductCredentialRelationProviderProps
+  | ProductCertificateRelationProviderProps;
 
 /**
  * A React Provider which aims to wrap components related to a specific course. In this
@@ -22,11 +32,17 @@ export interface ProductRelationProviderProps {
 export const ProductRelationProvider = ({
   courseCode,
   productId,
+  enrollmentId,
   children,
 }: PropsWithChildren<ProductRelationProviderProps>) => {
   const value = useMemo(
-    () => ({ productId, courseCode, key: `${courseCode}+${productId}` }),
-    [productId, courseCode],
+    () => ({
+      productId,
+      courseCode,
+      enrollmentId,
+      key: enrollmentId ? `${enrollmentId}_${productId}` : `${courseCode}_${productId}`,
+    }),
+    [productId, courseCode, enrollmentId],
   );
   return <Context.Provider value={value}>{children}</Context.Provider>;
 };
