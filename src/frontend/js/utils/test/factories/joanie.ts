@@ -27,6 +27,7 @@ import {
   CourseProductRelationCourse,
   JoanieFile,
   Contract,
+  OrderEnrollment,
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
@@ -52,6 +53,7 @@ export const EnrollmentFactory = factory((): Enrollment => {
     state: EnrollmentState.SET,
     was_created_by_order: false,
     created_on: faker.date.past({ years: 1 }).toISOString(),
+    orders: [],
   };
 });
 
@@ -237,6 +239,14 @@ export const CourseLightFactory = factory((): CourseLight => {
     products: [],
     course_runs: [],
     orders: [],
+  };
+});
+
+export const OrderEnrollmentFactory = factory((): OrderEnrollment => {
+  return {
+    id: faker.string.uuid(),
+    product: faker.string.uuid(),
+    state: OrderState.VALIDATED,
   };
 });
 
