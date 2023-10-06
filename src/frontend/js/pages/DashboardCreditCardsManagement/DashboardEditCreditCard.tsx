@@ -1,13 +1,13 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useEffect } from 'react';
-import { Button } from '@openfun/cunningham-react';
+import { Button, Checkbox } from '@openfun/cunningham-react';
+import { getLocalizedCunninghamErrorProp } from 'components/Form/utils';
+import Input from 'components/Form/Input';
 import { CreditCard } from 'types/Joanie';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
-import { CheckboxField, TextField } from 'components/Form';
-import { getLocalizedErrorMessage } from 'components/AddressesManagement/AddressForm/validationSchema';
 import { useCreditCardsManagement } from 'hooks/useCreditCardsManagement';
 import { noop } from 'utils';
 import { CreditCardBrandLogo } from './CreditCardBrandLogo';
@@ -77,11 +77,12 @@ export const DashboardEditCreditCard = ({ creditCard, onSettled = noop }: Props)
     is_main: true,
   };
 
-  const { register, handleSubmit, reset, formState } = useForm<FormValues>({
+  const form = useForm<FormValues>({
     defaultValues,
-    mode: 'onChange',
+    mode: 'onBlur',
     reValidateMode: 'onChange',
   });
+  const { register, handleSubmit, reset, formState } = form;
 
   useEffect(() => {
     reset({
@@ -114,44 +115,41 @@ export const DashboardEditCreditCard = ({ creditCard, onSettled = noop }: Props)
       return <Banner message={error} type={BannerType.ERROR} rounded />;
     }
     return (
-      <form>
-        <TextField
-          aria-invalid={!!formState.errors.title}
-          id="title"
-          label={intl.formatMessage(messages.titleInputLabel)}
-          error={!!formState.errors.title}
-          message={getLocalizedErrorMessage(intl, formState.errors.title?.message)}
-          {...register('title')}
-        />
-        <div className="dashboard-edit-credit-card__sensitive">
-          <TextField
-            id="last_numbers"
-            disabled={true}
-            label={intl.formatMessage(messages.lastNumbersInputLabel)}
-            {...register('last_numbers')}
-          />
-          <div className="dashboard-edit-credit-card__sensitive__sub">
-            <CreditCardBrandLogo creditCard={creditCard} />
-            <TextField
-              size={8}
-              id="expiration"
-              disabled={true}
-              label={intl.formatMessage(messages.expirationInputLabel)}
-              {...register('expiration')}
-            />
+      <FormProvider {...form}>
+        <form className="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+          <div className="form-row">
+            <Input name="title" label={intl.formatMessage(messages.titleInputLabel)} />
           </div>
-        </div>
-        {!creditCard.is_main && (
-          <CheckboxField
-            aria-invalid={!!formState.errors?.is_main}
-            id="is_main"
-            label={intl.formatMessage(messages.isMainInputLabel)}
-            error={!!formState.errors?.is_main}
-            message={getLocalizedErrorMessage(intl, formState.errors.is_main?.message)}
-            {...register('is_main')}
-          />
-        )}
-      </form>
+          <div className="form-row dashboard-edit-credit-card__sensitive">
+            <Input
+              name="last_numbers"
+              disabled={true}
+              label={intl.formatMessage(messages.lastNumbersInputLabel)}
+            />
+            <div className="dashboard-edit-credit-card__sensitive__sub">
+              <CreditCardBrandLogo creditCard={creditCard} />
+              <Input
+                size={8}
+                name="expiration"
+                disabled={true}
+                label={intl.formatMessage(messages.expirationInputLabel)}
+              />
+            </div>
+          </div>
+          {!creditCard.is_main && (
+            <div className="form-row">
+              <Checkbox
+                aria-invalid={!!formState.errors?.is_main}
+                id="is_main"
+                label={intl.formatMessage(messages.isMainInputLabel)}
+                state={formState.errors.is_main ? 'error' : 'default'}
+                {...getLocalizedCunninghamErrorProp(intl, formState.errors.is_main?.message)}
+                {...register('is_main')}
+              />
+            </div>
+          )}
+        </form>
+      </FormProvider>
     );
   };
 
