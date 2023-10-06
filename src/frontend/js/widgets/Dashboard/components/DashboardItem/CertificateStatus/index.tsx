@@ -37,8 +37,6 @@ const CertificateStatus = ({ certificate, productType }: CertificateStatusProps)
     const messagesByProductType: Record<ProductType, MessageDescriptor> = {
       [ProductType.CREDENTIAL]: messages.noCertificateCredential,
       [ProductType.CERTIFICATE]: messages.noCertificateCertificate,
-      // ProductType.ENROLLMENT doesn't exist yet
-      [ProductType.ENROLLMENT]: messages.noCertificateUnknown,
     };
 
     if (!productType) {
