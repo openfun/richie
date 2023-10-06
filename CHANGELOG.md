@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Update cunnigham to 2.0.0
 - Update SaleTunnel to add certificate product course run information.
 - Update SaleTunnel to display product instructions.
 - When a course have multiple seller organizations, CourseGlimpse now display

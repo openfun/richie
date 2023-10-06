@@ -8,7 +8,7 @@ $r-fonts: () !default;
 }
 
 // Build text color helpers
-@each $name, $value in map-get($theme, 'colors') {
+@each $name, $value in map-get(map-get(map-get($themes, 'default'), 'theme'), 'colors') {
   @if type-of($value) == 'map' {
     @each $sub-name, $sub-value in $value {
       .text-#{($name + '-' + $sub-name)} {
