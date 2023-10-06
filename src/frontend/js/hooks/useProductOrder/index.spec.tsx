@@ -9,7 +9,7 @@ import { OrderFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { OrderState } from 'types/Joanie';
+import { ACTIVE_ORDER_STATES } from 'types/Joanie';
 import useProductOrder from '.';
 
 jest.mock('utils/context', () => ({
@@ -45,7 +45,7 @@ describe('useProductOrder', () => {
     );
   };
 
-  it.each([OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED])(
+  it.each(ACTIVE_ORDER_STATES)(
     'should retrieves the last order when order.state is %s',
     async (currentState) => {
       // the most recent order of accepted state will be return
@@ -54,16 +54,15 @@ describe('useProductOrder', () => {
         created_on: new Date().toISOString(),
         course: '00000',
       }).one();
-      const ordersByState = [OrderState.SUBMITTED, OrderState.PENDING, OrderState.VALIDATED]
-        .filter((state) => state !== currentState)
-        .map((state) =>
+      const ordersByState = ACTIVE_ORDER_STATES.filter((state) => state !== currentState).map(
+        (state) =>
           OrderFactory({
             state,
             created_on: faker.date.past({ years: 1 }).toISOString(),
             course: '00000',
             product: order.product,
           }).one(),
-        );
+      );
       ordersByState.push(order);
 
       const responseDeferred = new Deferred();

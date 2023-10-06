@@ -2,7 +2,6 @@ import { IntlProvider } from 'react-intl';
 import { render, screen } from '@testing-library/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
-import queryString from 'query-string';
 import { CourseLight, OrderState, Product, ProductType } from 'types/Joanie';
 import {
   CourseStateFactory,
@@ -13,13 +12,13 @@ import {
   CertificateFactory,
   CourseLightFactory,
   CourseRunFactory,
-  OrderFactory,
+  OrderEnrollmentFactory,
+  EnrollmentFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { OrderResourcesQuery } from 'hooks/useOrders';
 import ProductCertificateFooter, { ProductCertificateFooterProps } from '.';
 
 jest.mock('utils/context', () => ({
@@ -31,18 +30,17 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('<ProductCertificateFooter/>', () => {
-  const Wrapper = ({ product, courseRun }: ProductCertificateFooterProps) => (
+  const Wrapper = ({ product, enrollment }: ProductCertificateFooterProps) => (
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
         <JoanieSessionProvider>
-          <ProductCertificateFooter product={product} courseRun={courseRun} />
+          <ProductCertificateFooter product={product} enrollment={enrollment} />
         </JoanieSessionProvider>
       </QueryClientProvider>
     </IntlProvider>
   );
   let product: Product;
   let course: CourseLight;
-  let orderQueryParameters: OrderResourcesQuery;
 
   beforeAll(() => {
     // As dialog is rendered through a Portal, we have to add the DOM element in which the dialog will be rendered.
@@ -58,17 +56,6 @@ describe('<ProductCertificateFooter/>', () => {
 
     product = ProductFactory({ type: ProductType.CERTIFICATE }).one();
     course = CourseLightFactory().one();
-    orderQueryParameters = {
-      product: product.id,
-      course: course.code,
-      state: [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED],
-    };
-    fetchMock.get(
-      `https://joanie.endpoint.test/api/v1.0/orders/?${queryString.stringify(
-        orderQueryParameters,
-      )}`,
-      [OrderFactory().one()],
-    );
   });
 
   afterEach(() => {
@@ -100,11 +87,17 @@ describe('<ProductCertificateFooter/>', () => {
   ])(
     'should display purchase button for a open course run without order (state $courseRunStateData.priority).',
     async ({ courseRunStateData }) => {
-      const courseRun = CourseRunFactory({
-        state: CourseStateFactory(courseRunStateData).one(),
-        course,
-      }).one();
-      render(<Wrapper product={product} courseRun={courseRun} />);
+      render(
+        <Wrapper
+          product={product}
+          enrollment={EnrollmentFactory({
+            course_run: CourseRunFactory({
+              state: CourseStateFactory(courseRunStateData).one(),
+              course,
+            }).one(),
+          }).one()}
+        />,
+      );
       expect(screen.getByTestId('PurchaseButton__cta')).toBeInTheDocument();
     },
   );
@@ -125,30 +118,36 @@ describe('<ProductCertificateFooter/>', () => {
   ])(
     "shouldn't display purchase button for a closed course run without order (state $courseRunStateData.priority).",
     async ({ courseRunStateData }) => {
-      const courseRun = CourseRunFactory({
-        state: CourseStateFactory(courseRunStateData).one(),
-        course,
-      }).one();
-      render(<Wrapper product={product} courseRun={courseRun} />);
+      render(
+        <Wrapper
+          product={product}
+          enrollment={EnrollmentFactory({
+            course_run: CourseRunFactory({
+              state: CourseStateFactory(courseRunStateData).one(),
+              course,
+            }).one(),
+          }).one()}
+        />,
+      );
       expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
     },
   );
 
   it('should display download button for a course run with certificate.', async () => {
-    fetchMock.get(
-      `https://joanie.endpoint.test/api/v1.0/orders/?${queryString.stringify(
-        orderQueryParameters,
-      )}`,
-      [OrderFactory({ certificate: 'FAKE_CERTIFICATE_ID' }).one()],
-      { overwriteRoutes: true },
-    );
-
+    const order = OrderEnrollmentFactory({
+      certificate: 'FAKE_CERTIFICATE_ID',
+      state: OrderState.VALIDATED,
+      product: product.id,
+    }).one();
+    const enrollment = EnrollmentFactory({
+      orders: [order],
+      course_run: CourseRunFactory({ course }).one(),
+    }).one();
     fetchMock.get(
       'https://joanie.endpoint.test/api/v1.0/certificates/FAKE_CERTIFICATE_ID/',
-      CertificateFactory(),
+      CertificateFactory({ id: order.certificate }).one(),
     );
-    const courseRun = CourseRunFactory({ course }).one();
-    render(<Wrapper product={product} courseRun={courseRun} />);
+    render(<Wrapper product={product} enrollment={enrollment} />);
     expect(await screen.findByRole('button', { name: 'Download' })).toBeInTheDocument();
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
@@ -157,8 +156,12 @@ describe('<ProductCertificateFooter/>', () => {
     'should not display button (download or purchase) for a course run with order but without certificate (product type: "%s").',
     async ([productType]) => {
       product.type = productType as ProductType;
-      const courseRun = CourseRunFactory({ course }).one();
-      render(<Wrapper product={product} courseRun={courseRun} />);
+      const order = OrderEnrollmentFactory({ certificate: undefined }).one();
+      const enrollment = EnrollmentFactory({
+        orders: [order],
+        course_run: CourseRunFactory({ course }).one(),
+      }).one();
+      render(<Wrapper product={product} enrollment={enrollment} />);
       expect(await screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
       expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
     },

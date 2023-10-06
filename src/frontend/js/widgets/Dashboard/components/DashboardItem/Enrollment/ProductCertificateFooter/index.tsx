@@ -1,13 +1,13 @@
 import { FormattedMessage } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { CourseRun, Product, ProductType } from 'types/Joanie';
+import { Enrollment, Product, ProductType } from 'types/Joanie';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
 import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import { useCertificate } from 'hooks/useCertificates';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
-import useProductOrder from 'hooks/useProductOrder';
 import CertificateStatus from '../../CertificateStatus';
+import { getActiveEnrollmentOrder } from '../../utils/order';
 
 const messages = {
   buyProductCertificateLabel: {
@@ -29,31 +29,27 @@ const messages = {
 
 export interface ProductCertificateFooterProps {
   product: Product;
-  courseRun: CourseRun;
+  enrollment: Enrollment;
 }
 
-const ProductCertificateFooter = ({ product, courseRun }: ProductCertificateFooterProps) => {
+const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFooterProps) => {
   if (product.type !== ProductType.CERTIFICATE) {
     return null;
   }
-  const { item: order } = useProductOrder({
-    productId: product.id,
-    courseCode: courseRun.course.code,
-  });
-  const { item: certificate } = useCertificate(order?.certificate);
+  const activeOrder = getActiveEnrollmentOrder(enrollment.orders || [], product.id);
+  const { item: certificate } = useCertificate(activeOrder?.certificate);
 
   // The course run is no longer available
   // and no product certificate had been bought therefore there isn't any certifcate to download.
-  if (!order && !isOpenedCourseRunCertificate(courseRun.state)) {
+  if (!activeOrder && !isOpenedCourseRunCertificate(enrollment.course_run.state)) {
     return null;
   }
-
   return (
-    <CourseProductProvider courseCode={courseRun.course.code} productId={product.id}>
+    <CourseProductProvider courseCode={enrollment.course_run.course.code} productId={product.id}>
       <div className="dashboard-item__course-enrolling__infos">
         <div className="dashboard-item__block__status">
           <Icon name={IconTypeEnum.CERTIFICATE} />
-          {order ? (
+          {activeOrder ? (
             <>
               {product.certificate_definition.title + '. '}
               <CertificateStatus certificate={certificate} productType={product.type} />
@@ -62,18 +58,18 @@ const ProductCertificateFooter = ({ product, courseRun }: ProductCertificateFoot
             <FormattedMessage {...messages.buyProductCertificateLabel} />
           )}
         </div>
-        {order ? (
-          order.certificate && (
+        {activeOrder ? (
+          activeOrder.certificate && (
             <DownloadCertificateButton
               className="dashboard-item__button"
-              certificateId={order.certificate}
+              certificateId={activeOrder.certificate}
             />
           )
         ) : (
           <PurchaseButton
             className="dashboard-item__button"
             product={product}
-            courseRun={courseRun}
+            courseRun={enrollment.course_run}
           />
         )}
       </div>

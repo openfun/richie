@@ -29,7 +29,7 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
           <ProductCertificateFooter
             key={[enrollment.id, product.id].join('_')}
             product={product}
-            courseRun={enrollment.course_run}
+            enrollment={enrollment}
           />,
         );
       }
