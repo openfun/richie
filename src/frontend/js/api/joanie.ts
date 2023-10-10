@@ -99,7 +99,6 @@ function fetchWithJWT(routes: RequestInfo, options: RequestInit = {}) {
 export const getAPIEndpoint = () => {
   const endpoint = context?.joanie_backend?.endpoint;
   const version = JOANIE_API_VERSION;
-
   if (!endpoint) {
     throw new Error('[JOANIE] - Joanie API endpoint is not defined.');
   }
@@ -112,6 +111,9 @@ export const getRoutes = () => {
 
   return {
     user: {
+      me: {
+        get: `${baseUrl}/users/me/`,
+      },
       creditCards: {
         get: `${baseUrl}/credit-cards/:id/`,
         create: `${baseUrl}/credit-cards/`,
@@ -207,6 +209,11 @@ const API = (): Joanie.API => {
 
   return {
     user: {
+      me: {
+        get: async (filters?: ResourcesQuery) => {
+          return fetchWithJWT(buildApiUrl(ROUTES.user.me.get, filters)).then(checkStatus);
+        },
+      },
       creditCards: {
         get: async (filters?: ResourcesQuery) => {
           return fetchWithJWT(buildApiUrl(ROUTES.user.creditCards.get, filters)).then(checkStatus);
