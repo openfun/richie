@@ -1,4 +1,5 @@
 import fetchMock from 'fetch-mock';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 import { RequestStatus } from '../../types/api';
 import { fetchList } from '.';
@@ -68,7 +69,7 @@ describe('widgets/Search/utils/getResourceList', () => {
     });
 
     it('rejects with a FetchListResponse containing an error when the API returns an error code', async () => {
-      fetchMock.mock('/api/v1.0/courses/?limit=2&offset=43', 404);
+      fetchMock.mock('/api/v1.0/courses/?limit=2&offset=43', HttpStatusCode.NOT_FOUND);
 
       const response = (await fetchList('courses', {
         limit: '2',

@@ -13,6 +13,7 @@ import context from 'utils/context';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import UserLogin from '.';
 
 jest.mock('utils/errors/handle', () => ({
@@ -78,7 +79,7 @@ describe('<UserLogin />', () => {
     );
 
     await act(async () => {
-      loginDeferred.resolve(401);
+      loginDeferred.resolve(HttpStatusCode.UNAUTHORIZED);
     });
 
     await findByText('Log in');

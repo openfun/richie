@@ -19,6 +19,7 @@ import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectBannerError } from 'utils/test/expectBanner';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -52,7 +53,7 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
-    fetchMock.put(updateUrl, 200);
+    fetchMock.put(updateUrl, HttpStatusCode.OK);
 
     await act(async () => {
       render(
@@ -148,7 +149,7 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
-    fetchMock.put(updateUrl, 200);
+    fetchMock.put(updateUrl, HttpStatusCode.OK);
 
     await act(async () => {
       render(
@@ -240,7 +241,7 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
-    fetchMock.put(updateUrl, 200);
+    fetchMock.put(updateUrl, HttpStatusCode.OK);
 
     await act(async () => {
       render(
@@ -311,8 +312,8 @@ describe('<DahsboardEditCreditCard/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, {
-      status: 500,
-      body: 'Internal error',
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
+      body: 'Internal Server Error',
     });
 
     await act(async () => {

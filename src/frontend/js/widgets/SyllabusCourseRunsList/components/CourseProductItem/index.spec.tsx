@@ -22,6 +22,7 @@ import { CourseRun, Enrollment, Order, OrderState } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { Deferred } from 'utils/test/deferred';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import CourseProductItem from '.';
 
 jest.mock('utils/context', () => ({
@@ -627,7 +628,11 @@ describe('CourseProductItem', () => {
   it('renders error message when product fetching has failed', async () => {
     const { product } = CourseProductRelationFactory().one();
 
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, 404, {});
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`,
+      HttpStatusCode.NOT_FOUND,
+      {},
+    );
 
     render(
       <Wrapper>

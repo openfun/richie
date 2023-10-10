@@ -2,6 +2,7 @@ import take from 'lodash-es/take';
 import queryString from 'query-string';
 
 import { Suggestion } from 'types/Suggestion';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { handle } from 'utils/errors/handle';
 
 /**
@@ -29,7 +30,9 @@ export const getSuggestionsSection = async (kind: string, title: string, query: 
   // The ok flag is the way to discriminate
   if (!response.ok) {
     const error = new Error(`Failed to get list from ${kind} autocomplete : ${response.status}`);
-    return response.status === 400 ? handle(error, await response.json()) : handle(error);
+    return response.status === HttpStatusCode.BAD_REQUEST
+      ? handle(error, await response.json())
+      : handle(error);
   }
 
   let responseData: Suggestion<string>[];

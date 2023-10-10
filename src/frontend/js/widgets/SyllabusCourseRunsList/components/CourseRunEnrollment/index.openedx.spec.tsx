@@ -14,6 +14,7 @@ import { handle } from 'utils/errors/handle';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import CourseRunEnrollment from './index';
 
 jest.mock('utils/errors/handle');
@@ -131,7 +132,10 @@ describe('<CourseRunEnrollment />', () => {
     const button = await screen.findByRole('button', { name: 'Enroll now' });
 
     // const enrollmentAction = new Deferred();
-    fetchMock.post(`${endpoint}/api/enrollment/v1/enrollment`, 500);
+    fetchMock.post(
+      `${endpoint}/api/enrollment/v1/enrollment`,
+      HttpStatusCode.INTERNAL_SERVER_ERROR,
+    );
 
     await act(async () => {
       expect(() => fireEvent.click(button)).not.toThrow();
@@ -179,7 +183,7 @@ describe('<CourseRunEnrollment />', () => {
 
     // const enrollmentAction = new Deferred();
     fetchMock.post(`${endpoint}/api/enrollment/v1/enrollment`, {
-      status: 400,
+      status: HttpStatusCode.BAD_REQUEST,
       body: { localizedMessage: 'You are not authorized to enroll' },
     });
 

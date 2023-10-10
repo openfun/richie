@@ -16,6 +16,7 @@ import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqu
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { changeSelect } from 'components/Form/test-utils';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -169,7 +170,7 @@ describe('<DashboardCreateAddress/>', () => {
 
     // Mock the create API route to return a 500 status.
     fetchMock.post('https://joanie.endpoint/api/v1.0/addresses/', {
-      status: 500,
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
       body: 'Bad request',
     });
 

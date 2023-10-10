@@ -11,6 +11,7 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { Deferred } from 'utils/test/deferred';
 import { SessionProvider, useSession } from 'contexts/SessionContext';
 import { Maybe } from 'types/utils';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { ResourcesQuery, useResource, useResources, UseResourcesProps } from './index';
 
 jest.mock('utils/context', () => ({
@@ -306,7 +307,7 @@ describe('useResource (omniscient) with session', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
-    fetchMock.get('https://demo.endpoint/logout', 200);
+    fetchMock.get('https://demo.endpoint/logout', HttpStatusCode.OK);
   });
 
   afterEach(() => {
@@ -417,7 +418,7 @@ describe('useResource (non-omniscient)', () => {
     expect(result.current.items).toEqual([]);
 
     responseDeferred.reject({
-      status: 500,
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
       body: 'Bad request',
     });
 

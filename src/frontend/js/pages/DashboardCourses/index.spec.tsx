@@ -24,6 +24,7 @@ import { Deferred } from 'utils/test/deferred';
 import { isOrder } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { noop } from 'utils';
 import { PER_PAGE } from 'settings';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -276,8 +277,8 @@ describe('<DashboardCourses/>', () => {
 
     render(<Wrapper />);
     ordersDeferred.resolve({
-      status: 500,
-      body: 'Bad request',
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
+      body: 'Internal Server Error',
     });
 
     await expectNoSpinner('Loading orders and enrollments...');

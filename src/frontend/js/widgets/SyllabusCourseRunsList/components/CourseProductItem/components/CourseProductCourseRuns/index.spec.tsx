@@ -18,6 +18,7 @@ import { CourseStateTextEnum, Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { IntlHelper } from 'utils/IntlHelper';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { CourseRunList, EnrollableCourseRunList, EnrolledCourseRun } from '.';
 
 jest.mock('utils/context', () => ({
@@ -240,7 +241,7 @@ describe('CourseProductCourseRuns', () => {
       screen.getByRole('status', { name: 'Enrolling...' });
 
       await act(async () => {
-        enrollmentDeferred.resolve(200);
+        enrollmentDeferred.resolve(HttpStatusCode.OK);
       });
 
       const calls = fetchMock.calls();
@@ -258,7 +259,7 @@ describe('CourseProductCourseRuns', () => {
       const course: CourseLight = CourseLightFactory().one();
       const courseRuns: CourseRun[] = CourseRunFactory().many(2);
       const order: OrderLite = OrderFactory().one();
-      fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, 200);
+      fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, HttpStatusCode.OK);
 
       render(
         <Wrapper productId={order.product} code={course.code}>
@@ -343,7 +344,7 @@ describe('CourseProductCourseRuns', () => {
       screen.getByRole('status', { name: 'Enrolling...' });
 
       await act(async () => {
-        enrollmentDeferred.resolve(500);
+        enrollmentDeferred.resolve(HttpStatusCode.INTERNAL_SERVER_ERROR);
       });
 
       await screen.findByText(

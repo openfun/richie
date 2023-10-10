@@ -11,6 +11,7 @@ import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import BaseSessionProvider from './BaseSessionProvider';
 import { useSession } from '.';
 
@@ -103,7 +104,7 @@ describe('SessionProvider', () => {
       });
 
       await act(async () => {
-        userDeferred.resolve(401);
+        userDeferred.resolve(HttpStatusCode.UNAUTHORIZED);
       });
 
       await waitFor(() => {
@@ -148,7 +149,7 @@ describe('SessionProvider', () => {
       const userDeferred = new Deferred();
 
       fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
-      fetchMock.get('https://endpoint.test/logout', 200);
+      fetchMock.get('https://endpoint.test/logout', HttpStatusCode.OK);
       const { result } = renderHook(useSession, { wrapper: wrapper() });
 
       await act(async () => {
@@ -176,7 +177,7 @@ describe('SessionProvider', () => {
 
     it('does not make request if there is a valid session in cache', async () => {
       const user: User = UserFactory().one();
-      fetchMock.get('https://endpoint.test/api/user/v1/me', 200);
+      fetchMock.get('https://endpoint.test/api/user/v1/me', HttpStatusCode.OK);
 
       const { result } = renderHook(useSession, {
         wrapper: wrapper(createTestQueryClient({ user })),

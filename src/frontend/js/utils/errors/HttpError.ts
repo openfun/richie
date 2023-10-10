@@ -22,3 +22,12 @@ export class HttpError extends Error {
 export function isHttpError(error: any): error is HttpError {
   return typeof error === 'object' && error instanceof HttpError;
 }
+
+export enum HttpStatusCode {
+  OK = 200,
+  UNAUTHORIZED = 401,
+  BAD_REQUEST = 400,
+  FORBIDDEN = 403,
+  NOT_FOUND = 404,
+  INTERNAL_SERVER_ERROR = 500,
+}

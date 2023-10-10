@@ -1,6 +1,7 @@
 import fetchMock from 'fetch-mock';
 
 import { handle } from 'utils/errors/handle';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { getSuggestionsSection } from '.';
 
 const mockHandle: jest.Mock<typeof handle> = handle as any;
@@ -47,7 +48,7 @@ describe('utils/search/getSuggestionsSection', () => {
   it('reports the error when the server returns an error code', async () => {
     fetchMock.get('/api/v1.0/courses/autocomplete/?query=some%20search', {
       body: {},
-      status: 403,
+      status: HttpStatusCode.FORBIDDEN,
     });
     await getSuggestionsSection('courses', 'Courses', 'some search');
     expect(mockHandle).toHaveBeenCalledWith(
@@ -60,7 +61,7 @@ describe('utils/search/getSuggestionsSection', () => {
       body: {
         errors: ['Missing autocomplete "query" for request to richie_courses.'],
       },
-      status: 400,
+      status: HttpStatusCode.BAD_REQUEST,
     });
     await getSuggestionsSection('courses', 'Courses', 'error');
     expect(mockHandle).toHaveBeenCalledWith(
