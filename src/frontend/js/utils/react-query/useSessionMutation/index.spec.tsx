@@ -7,6 +7,7 @@ import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { useSession } from 'contexts/SessionContext';
 import { checkStatus } from 'api/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { useSessionMutation } from '.';
 
 jest.mock('utils/context', () => ({
@@ -32,8 +33,8 @@ describe('useSessionMutation', () => {
   });
 
   it('should invalidate user queries if it fails with a 401 response status', async () => {
-    fetchMock.post('http://api.endpoint/orders/create', 401);
-    fetchMock.get('https://endpoint.test/api/user/v1/me', 401);
+    fetchMock.post('http://api.endpoint/orders/create', HttpStatusCode.UNAUTHORIZED);
+    fetchMock.get('https://endpoint.test/api/user/v1/me', HttpStatusCode.UNAUTHORIZED);
     const handleError = jest.fn();
 
     const useHooks = () => {

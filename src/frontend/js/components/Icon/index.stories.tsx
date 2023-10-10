@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { PropsWithChildren, useState, useRef, CSSProperties } from 'react';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { Icon, IconTypeEnum } from './index';
 
 export default {
@@ -74,7 +75,7 @@ const IconContainer = ({ name, enumKey }: IconContainerProps) => {
 
     timeoutRef.current = setTimeout(() => {
       setShowTooltip(false);
-    }, 500);
+    }, HttpStatusCode.INTERNAL_SERVER_ERROR);
   };
 
   return (

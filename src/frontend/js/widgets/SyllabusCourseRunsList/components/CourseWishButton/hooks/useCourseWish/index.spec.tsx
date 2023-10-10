@@ -11,6 +11,7 @@ import {
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { useCourseWish } from '.';
 
 jest.mock('utils/context', () => ({
@@ -57,7 +58,7 @@ describe('useCourseWish', () => {
     await waitFor(() => expect(result.current.states.fetching).toBe(true));
     await act(async () => {
       responseDeferred.resolve({
-        status: 200,
+        status: HttpStatusCode.OK,
         body: {
           status: false,
         },
@@ -73,7 +74,7 @@ describe('useCourseWish', () => {
   it('adds a course wish', async () => {
     const urlWishlist = `https://joanie.test/api/v1.0/courses/${course.code}/wish/`;
     fetchMock.get(urlWishlist, {
-      status: 200,
+      status: HttpStatusCode.OK,
       body: {
         status: false,
       },
@@ -85,9 +86,9 @@ describe('useCourseWish', () => {
 
     // We dont care about POST request return values,
     // react-query will refetch data using the GET url.
-    fetchMock.post(urlWishlist, 200);
+    fetchMock.post(urlWishlist, HttpStatusCode.OK);
     fetchMock.get(urlWishlist, {
-      status: 200,
+      status: HttpStatusCode.OK,
       body: {
         status: true,
       },
@@ -106,7 +107,7 @@ describe('useCourseWish', () => {
   it('removes a course to user wishlist', async () => {
     const url = `https://joanie.test/api/v1.0/courses/${course.code}/wish/`;
     fetchMock.get(url, {
-      status: 200,
+      status: HttpStatusCode.OK,
       body: {
         status: true,
       },
@@ -116,9 +117,9 @@ describe('useCourseWish', () => {
     });
     fetchMock.restore();
 
-    fetchMock.delete(url, 200);
+    fetchMock.delete(url, HttpStatusCode.OK);
     fetchMock.get(url, {
-      status: 200,
+      status: HttpStatusCode.OK,
       body: {
         status: false,
       },

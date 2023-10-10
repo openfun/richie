@@ -7,6 +7,7 @@ import {
   SearchSuggestionSection,
 } from 'types/Suggestion';
 import { handle } from 'utils/errors/handle';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { getSuggestionsSection } from './getSuggestionsSection';
 
 /**
@@ -62,9 +63,13 @@ const onSuggestionsFetchRequested = async (
   );
 };
 
-export const onSuggestionsFetchRequestedDebounced = debounce(onSuggestionsFetchRequested, 200, {
-  maxWait: 1000,
-});
+export const onSuggestionsFetchRequestedDebounced = debounce(
+  onSuggestionsFetchRequested,
+  HttpStatusCode.OK,
+  {
+    maxWait: 1000,
+  },
+);
 
 /**
  * Helper to pick out the relevant filter for a suggestion from the general filters object.

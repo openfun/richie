@@ -8,7 +8,7 @@ import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
 import { EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
 import { Enrollment, OpenEdXEnrollment } from 'types';
-import { HttpError } from 'utils/errors/HttpError';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 
 /**
  *
@@ -48,7 +48,8 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
         return fetch(ROUTES.user.me, { credentials: 'include' })
           .then((res) => {
             if (res.ok) return res.json();
-            if ([403, 401].includes(res.status)) return null;
+            if ([HttpStatusCode.FORBIDDEN, HttpStatusCode.UNAUTHORIZED].includes(res.status))
+              return null;
             throw new Error(`[SESSION OpenEdX API] > Cannot retrieve user`);
           })
           .catch((error) => {
@@ -56,7 +57,7 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
             return null;
           });
       },
-      /* 
+      /*
         / ! \ Prefix next param with richie.
         In this way, OpenEdX Nginx conf knows that we want to go back to richie app after login/redirect
       */
@@ -81,7 +82,7 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
               ? response.json()
               : null;
           }
-          if (response.status >= 500) {
+          if (response.status >= HttpStatusCode.INTERNAL_SERVER_ERROR) {
             handle(new Error(`[GET - Enrollment] > ${response.status} - ${response.statusText}`));
           }
           throw new HttpError(response.status, response.statusText);
@@ -114,13 +115,13 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
         })
           .then(async (response) => {
             if (response.ok) return response.json();
-            if (response.status === 400) {
+            if (response.status === HttpStatusCode.BAD_REQUEST) {
               if (response.headers.get('Content-Type') === 'application/json') {
                 const { localizedMessage } = await response.json();
                 throw new HttpError(response.status, response.statusText, localizedMessage);
               }
             }
-            if (response.status >= 500) {
+            if (response.status >= HttpStatusCode.INTERNAL_SERVER_ERROR) {
               // Send server errors to sentry
               handle(new Error(`[SET - Enrollment] > ${response.status} - ${response.statusText}`));
             }

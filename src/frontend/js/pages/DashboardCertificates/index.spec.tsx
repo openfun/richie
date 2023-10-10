@@ -15,6 +15,7 @@ import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { CertificateFactory } from 'utils/test/factories/joanie';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -155,8 +156,8 @@ describe('<DashboardCertificates/>', () => {
 
   it('shows an error when request to retrieve certificates fails', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/certificates/?page=1&page_size=10', {
-      status: 500,
-      body: 'Internal error',
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
+      body: 'Internal Server Error',
     });
 
     render(

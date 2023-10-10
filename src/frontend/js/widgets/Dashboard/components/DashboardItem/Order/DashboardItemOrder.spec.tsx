@@ -38,6 +38,7 @@ import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { Deferred } from 'utils/test/deferred';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { LearnerDashboardPaths } from '../../../utils/learnerRouteMessages';
 import { DashboardTest } from '../../DashboardTest';
 import { DashboardItemOrder } from './DashboardItemOrder';
@@ -405,8 +406,8 @@ describe('<DashboardItemOrder/>', () => {
     );
 
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', {
-      status: 500,
-      body: 'Bad request',
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
+      body: 'Internal Server Error',
     });
 
     render(WrapperWithDashboard(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));

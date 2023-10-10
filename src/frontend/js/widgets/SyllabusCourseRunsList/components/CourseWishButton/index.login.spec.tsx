@@ -15,6 +15,7 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Course } from 'types/Course';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import CourseWishButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -60,7 +61,7 @@ describe('CourseWishButton', () => {
 
   it('renders a notify me button', async () => {
     fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, {
-      status: 200,
+      status: HttpStatusCode.OK,
       body: {
         status: false,
       },
@@ -79,11 +80,11 @@ describe('CourseWishButton', () => {
     nbApiCalls += 1; // useUserWishlistCourses inital fetch
     expect(fetchMock.calls().length).toBe(nbApiCalls);
 
-    fetchMock.post(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, 200);
+    fetchMock.post(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, HttpStatusCode.OK);
     fetchMock.get(
       `https://joanie.test/api/v1.0/courses/${course.code}/wish/`,
       {
-        status: 200,
+        status: HttpStatusCode.OK,
         body: {
           status: true,
         },
@@ -103,7 +104,7 @@ describe('CourseWishButton', () => {
 
   it('renders a "do not notify me" button', async () => {
     fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, {
-      status: 200,
+      status: HttpStatusCode.OK,
       body: {
         status: true,
       },
@@ -127,11 +128,14 @@ describe('CourseWishButton', () => {
     // We dont care about POST request return values,
     // react-query will refetch data using the GET url.
 
-    fetchMock.delete(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, 200);
+    fetchMock.delete(
+      `https://joanie.test/api/v1.0/courses/${course.code}/wish/`,
+      HttpStatusCode.OK,
+    );
     fetchMock.get(
       `https://joanie.test/api/v1.0/courses/${course.code}/wish/`,
       {
-        status: 200,
+        status: HttpStatusCode.OK,
         body: {
           status: false,
         },

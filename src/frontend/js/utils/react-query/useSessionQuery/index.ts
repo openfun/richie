@@ -8,7 +8,7 @@ import type {
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'contexts/SessionContext';
 import { REACT_QUERY_SETTINGS } from 'settings';
-import type { HttpError } from 'utils/errors/HttpError';
+import { HttpStatusCode, type HttpError } from 'utils/errors/HttpError';
 import type { TSessionQueryKey } from 'utils/react-query/useSessionKey';
 import useSessionQueryKey from 'utils/react-query/useSessionKey';
 
@@ -41,7 +41,7 @@ export function useSessionQuery<
   const sessionQueryKey = useSessionQueryKey(queryKey);
 
   const handleError = async (error: HttpError) => {
-    if (error.code === 401) {
+    if (error.code === HttpStatusCode.UNAUTHORIZED) {
       queryClient.invalidateQueries(['user'], { exact: true });
     }
 

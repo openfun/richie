@@ -19,6 +19,7 @@ import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -46,7 +47,7 @@ describe('<DashboardEditAddress/>', () => {
     addressUpdated.id = address.id;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
     const updateUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
-    fetchMock.put(updateUrl, 200);
+    fetchMock.put(updateUrl, HttpStatusCode.OK);
 
     await act(async () => {
       render(
@@ -131,7 +132,7 @@ describe('<DashboardEditAddress/>', () => {
 
     // Mock the edit API route to return a 500 status.
     const updateUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
-    fetchMock.put(updateUrl, { status: 500, body: 'Bad request' });
+    fetchMock.put(updateUrl, { status: HttpStatusCode.INTERNAL_SERVER_ERROR, body: 'Bad request' });
 
     let container: HTMLElement | undefined;
     await act(async () => {

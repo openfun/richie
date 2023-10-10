@@ -7,6 +7,7 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { CertificationDefinitionFactory, OrderLiteFactory } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CertificateDefinition, OrderLite } from 'types/Joanie';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import CertificateItem from '.';
 
 jest.mock('utils/errors/handle');
@@ -88,7 +89,10 @@ describe('CourseProductCertificateItem', () => {
     expect($button.disabled).toBe(false);
 
     // When user clicks on "Download" button, the certificate should be downloaded
-    fetchMock.get(`https://joanie.test/api/v1.0/certificates/${order.certificate}/download/`, 200);
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/certificates/${order.certificate}/download/`,
+      HttpStatusCode.OK,
+    );
 
     fireEvent.click($button);
 

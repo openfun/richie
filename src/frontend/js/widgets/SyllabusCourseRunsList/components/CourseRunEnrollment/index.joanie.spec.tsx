@@ -11,6 +11,7 @@ import {
 } from 'utils/test/factories/richie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import CourseRunEnrollment from './index';
 
 jest.mock('utils/errors/handle');
@@ -97,7 +98,10 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
     const courseRun = CourseRunFactory().one();
     courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
 
-    fetchMock.get(`${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`, 500);
+    fetchMock.get(
+      `${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`,
+      HttpStatusCode.INTERNAL_SERVER_ERROR,
+    );
 
     await act(async () => {
       render(
@@ -201,7 +205,7 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
     });
 
     const button = await screen.findByRole('button', { name: 'Enroll now' });
-    fetchMock.post(`${endpoint}/api/v1.0/enrollments/`, 500);
+    fetchMock.post(`${endpoint}/api/v1.0/enrollments/`, HttpStatusCode.INTERNAL_SERVER_ERROR);
     await act(async () => {
       fireEvent.click(button);
     });
@@ -248,7 +252,10 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
       });
     });
 
-    fetchMock.put(`${endpoint}/api/v1.0/enrollments/57b35536-5c92-4606-bca3-13aa53d04d07/`, 500);
+    fetchMock.put(
+      `${endpoint}/api/v1.0/enrollments/57b35536-5c92-4606-bca3-13aa53d04d07/`,
+      HttpStatusCode.INTERNAL_SERVER_ERROR,
+    );
 
     const unenroll = await screen.findByText('Unenroll from this course');
     await act(async () => {

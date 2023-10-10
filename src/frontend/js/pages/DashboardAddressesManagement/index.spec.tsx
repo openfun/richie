@@ -21,6 +21,7 @@ import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqu
 import { resolveAll } from 'utils/resolveAll';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectBannerError } from 'utils/test/expectBanner';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -315,8 +316,8 @@ describe('<DashAddressesManagement/>', () => {
     AddressFactory().one();
     // Mock the API route to return a 500 error.
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', {
-      status: 500,
-      body: 'Bad request',
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
+      body: 'Internal Server Error',
     });
 
     await act(async () => {

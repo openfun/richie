@@ -12,7 +12,7 @@ import { Deferred } from 'utils/test/deferred';
 import { noop } from 'utils';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { PER_PAGE } from 'settings';
-import { HttpError } from 'utils/errors/HttpError';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 import { FetchEntityData } from './utils/fetchEntities';
 import { QueryConfig, FetchDataFunction } from './utils/fetchEntity';
 import useUnionResource from '.';
@@ -305,7 +305,9 @@ describe('useUnionResource', () => {
     expect(result.current.isLoading).toBe(true);
 
     await act(() => {
-      dataADeferred.reject(new HttpError(500, 'Bad request'));
+      dataADeferred.reject(
+        new HttpError(HttpStatusCode.INTERNAL_SERVER_ERROR, 'Internal Server Error'),
+      );
     });
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBe('An error occurred while fetching data. Please retry later.');
