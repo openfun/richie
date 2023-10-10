@@ -25,6 +25,7 @@
       "matchPackageNames": [
         "Django",
         "elasticsearch",
+        "pylint"
       ]
     }
   ]
