@@ -39,7 +39,26 @@ import {
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
+import { JoanieUserApiAbilityActions, JoanieUserProfile } from 'types/User';
 import { factory } from './factories';
+
+export const JoanieUserProfileFactory = factory((): JoanieUserProfile => {
+  return {
+    id: faker.string.uuid(),
+    username: faker.internet.userName(),
+    full_name: faker.person.fullName(),
+    is_superuser: false,
+    is_staff: false,
+    abilities: {
+      [JoanieUserApiAbilityActions.DELETE]: true,
+      [JoanieUserApiAbilityActions.GET]: true,
+      [JoanieUserApiAbilityActions.PATCH]: true,
+      [JoanieUserApiAbilityActions.PUT]: true,
+      [JoanieUserApiAbilityActions.HAS_COURSE_ACCESS]: true,
+      [JoanieUserApiAbilityActions.HAS_ORGANIZATION_ACCESS]: true,
+    },
+  };
+});
 
 export const JoanieFileFactory = factory((): JoanieFile => {
   return {
