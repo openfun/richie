@@ -2,7 +2,7 @@ import fetchMock from 'fetch-mock';
 import { faker } from '@faker-js/faker';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { handle } from 'utils/errors/handle';
-import { HttpError } from 'utils/errors/HttpError';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 import context from 'utils/context';
 import API from './openedx-hawthorn';
 
@@ -39,7 +39,7 @@ describe('OpenEdX Hawthorn API', () => {
         },
       });
 
-      fetchMock.get(`${EDX_ENDPOINT}/my-custom-api/user/v2.0/whoami`, 401);
+      fetchMock.get(`${EDX_ENDPOINT}/my-custom-api/user/v2.0/whoami`, HttpStatusCode.UNAUTHORIZED);
 
       await expect(CustomApi.user.me()).resolves.toBe(null);
     });
@@ -55,7 +55,10 @@ describe('OpenEdX Hawthorn API', () => {
 
     describe('get', () => {
       it('returns null if the user is not enrolled to the provided course_id', async () => {
-        fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`, 200);
+        fetchMock.get(
+          `${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`,
+          HttpStatusCode.OK,
+        );
         const response = await HawthornApi.enrollment.get(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           { username },
@@ -73,7 +76,10 @@ describe('OpenEdX Hawthorn API', () => {
       });
 
       it('throws HttpError if request fails', async () => {
-        fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`, 500);
+        fetchMock.get(
+          `${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`,
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+        );
 
         await expect(
           HawthornApi.enrollment.get(`https://demo.endpoint/courses?course_id=${courseId}`, {
@@ -118,7 +124,10 @@ describe('OpenEdX Hawthorn API', () => {
       });
 
       it('returns false if user is not enrolled', async () => {
-        fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`, 200);
+        fetchMock.get(
+          `${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`,
+          HttpStatusCode.OK,
+        );
 
         const enrollment = await HawthornApi.enrollment.get(
           `https://demo.endpoint/courses?course_id=${courseId}`,
@@ -145,7 +154,10 @@ describe('OpenEdX Hawthorn API', () => {
       });
 
       it('throws HttpError if request fails', async () => {
-        fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, 500);
+        fetchMock.post(
+          `${EDX_ENDPOINT}/api/enrollment/v1/enrollment`,
+          HttpStatusCode.INTERNAL_SERVER_ERROR,
+        );
 
         await expect(
           HawthornApi.enrollment.set(`https://demo.endpoint/courses?course_id=${courseId}`, {
@@ -160,7 +172,7 @@ describe('OpenEdX Hawthorn API', () => {
 
       it('throws HttpError.localizedMessage on enrollment failure', async () => {
         fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, {
-          status: 400,
+          status: HttpStatusCode.BAD_REQUEST,
           body: { localizedMessage: 'You are not authorized to enroll in this course' },
         });
 
@@ -169,13 +181,17 @@ describe('OpenEdX Hawthorn API', () => {
             username,
           }),
         ).rejects.toThrow(
-          new HttpError(400, 'Bad Request', 'You are not authorized to enroll in this course'),
+          new HttpError(
+            HttpStatusCode.BAD_REQUEST,
+            'Bad Request',
+            'You are not authorized to enroll in this course',
+          ),
         );
       });
 
       it('throws HttpError on enrollment failure when localizedMessage property is not present in the payload', async () => {
         fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, {
-          status: 400,
+          status: HttpStatusCode.BAD_REQUEST,
           body: { message: 'Bad Request' },
         });
 
@@ -183,11 +199,11 @@ describe('OpenEdX Hawthorn API', () => {
           HawthornApi.enrollment.set(`https://demo.endpoint/courses?course_id=${courseId}`, {
             username,
           }),
-        ).rejects.toThrow(new HttpError(400, 'Bad Request'));
+        ).rejects.toThrow(new HttpError(HttpStatusCode.BAD_REQUEST, 'Bad Request'));
       });
 
       it('throws HttpError when response has no json payload', async () => {
-        fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, 400);
+        fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, HttpStatusCode.BAD_REQUEST);
 
         await expect(
           HawthornApi.enrollment.set(`https://demo.endpoint/courses?course_id=${courseId}`, {

@@ -4,7 +4,7 @@ import type {
   UseMutationResult,
 } from '@tanstack/react-query';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { HttpError } from 'utils/errors/HttpError';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 
 /**
  * Hook to use when the mutation relies on the current session. In this way, if the
@@ -24,7 +24,7 @@ export function useSessionMutation<TData = unknown, TVariables = void, TContext 
     variables: TVariables,
     context: TContext | undefined,
   ) => {
-    if (error.code === 401) {
+    if (error.code === HttpStatusCode.UNAUTHORIZED) {
       await queryClient.invalidateQueries(['user'], { exact: true });
     }
 

@@ -11,6 +11,7 @@ import { Certificate } from 'types/Joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';
 import { CertificateFactory } from 'utils/test/factories/joanie';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/errors/handle');
 jest.mock('utils/context', () => ({
@@ -73,7 +74,7 @@ describe('useDownloadCertificate', () => {
 
     result.current.download(certificate.id);
     await waitFor(() => expect(result.current.loading).toBe(true));
-    deferred.resolve(200);
+    deferred.resolve(HttpStatusCode.OK);
 
     await waitFor(() => {
       expect(fetchMock.called(DOWNLOAD_URL)).toBe(true);
@@ -94,7 +95,7 @@ describe('useDownloadCertificate', () => {
   it('handles an error if certificate download request fails', async () => {
     const certificate: Certificate = CertificateFactory().one();
     const DOWNLOAD_URL = `https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`;
-    fetchMock.get(DOWNLOAD_URL, 401);
+    fetchMock.get(DOWNLOAD_URL, HttpStatusCode.UNAUTHORIZED);
 
     const { result } = renderHook(() => useDownloadCertificate(), {
       wrapper: Wrapper,

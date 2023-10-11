@@ -11,6 +11,7 @@ import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate/index';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { CertificateFactory } from 'utils/test/factories/joanie';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -65,7 +66,10 @@ describe('<DashboardCertificate/>', () => {
   it('downloads the certificate', async () => {
     const certificate: Certificate = CertificateFactory().one();
 
-    fetchMock.get(`https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`, 200);
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`,
+      HttpStatusCode.OK,
+    );
 
     render(
       <DashboardItemCertificate certificate={certificate} productType={ProductType.CREDENTIAL} />,

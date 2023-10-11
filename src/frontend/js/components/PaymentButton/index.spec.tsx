@@ -17,6 +17,7 @@ import { OrderState } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import PaymentButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -508,7 +509,7 @@ describe('PaymentButton', () => {
         payment_info: paymentInfo,
       })
       .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, orderSubmitted)
-      .post(`https://joanie.test/api/v1.0/orders/${order.id}/abort/`, 200);
+      .post(`https://joanie.test/api/v1.0/orders/${order.id}/abort/`, HttpStatusCode.OK);
 
     render(
       <Wrapper client={createTestQueryClient({ user: true })}>

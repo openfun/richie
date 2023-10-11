@@ -9,6 +9,7 @@ import * as mockWindow from 'utils/indirection/window';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import context from 'utils/context';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import Search from '.';
 
 let mockMatches = false;
@@ -49,7 +50,7 @@ describe('<Search />', () => {
   it('shows a spinner while the results are loading', async () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
       meta: {
-        total_count: 200,
+        total_count: HttpStatusCode.OK,
       },
       objects: [],
     });
@@ -131,7 +132,7 @@ describe('<Search />', () => {
   });
 
   it('shows an error message when it fails to get the results', async () => {
-    fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', 500);
+    fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', HttpStatusCode.INTERNAL_SERVER_ERROR);
 
     render(
       <QueryClientProvider client={createTestQueryClient()}>

@@ -14,6 +14,7 @@ import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
 import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/hooks/useCourseEnrollment/index';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -52,7 +53,7 @@ describe('useCourseEnrollment', () => {
 
     fetchMock.get(
       `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
-      401,
+      HttpStatusCode.UNAUTHORIZED,
     );
 
     const { result } = renderHook(() => useCourseEnrollment(courseRun.resource_link), {

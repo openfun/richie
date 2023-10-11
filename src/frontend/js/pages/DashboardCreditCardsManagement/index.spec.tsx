@@ -22,6 +22,7 @@ import { confirm } from 'utils/indirection/window';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectBannerError } from 'utils/test/expectBanner';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -405,8 +406,8 @@ describe('<DashboardCreditCardsManagement/>', () => {
   it('shows an error banner in case of API error', async () => {
     // Mock the API route to return a 500 error.
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', {
-      status: 500,
-      body: 'Bad request',
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
+      body: 'Internal Server Error',
     });
 
     await act(async () => {

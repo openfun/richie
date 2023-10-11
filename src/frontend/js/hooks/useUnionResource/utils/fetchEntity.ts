@@ -2,7 +2,7 @@ import { QueryClient } from '@tanstack/query-core';
 import { PaginatedResourceQuery, PaginatedResponse } from 'types/Joanie';
 import { Maybe } from 'types/utils';
 import { REACT_QUERY_SETTINGS } from 'settings';
-import { isHttpError } from 'utils/errors/HttpError';
+import { HttpStatusCode, isHttpError } from 'utils/errors/HttpError';
 
 export type FetchDataFunction<Data, FetchDataFilter> = (
   filters: FetchDataFilter,
@@ -75,7 +75,7 @@ export const fetchEntity = async <
     return res;
   } catch (err) {
     if (isHttpError(err)) {
-      if (err.code === 401) {
+      if (err.code === HttpStatusCode.UNAUTHORIZED) {
         queryClient.invalidateQueries(['user'], { exact: true });
       }
       throw err;

@@ -1,10 +1,11 @@
 import fetchMock from 'fetch-mock';
 import { ResourcesQuery } from 'hooks/useResources';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { buildApiUrl, getResponseBody } from './joanie';
 
 describe('api/joanie', () => {
   it('getResponse should handle empty response body', async () => {
-    fetchMock.mock('http://example.com', 400);
+    fetchMock.mock('http://example.com', HttpStatusCode.BAD_REQUEST);
     const res = await fetch('http://example.com');
     expect(res.ok).toBe(false);
     const responseBody = await getResponseBody(res);
