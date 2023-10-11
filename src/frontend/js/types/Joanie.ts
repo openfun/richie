@@ -174,6 +174,8 @@ export enum OrderState {
   VALIDATED = 'validated',
 }
 
+export const ACTIVE_ORDER_STATES = [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED];
+
 export interface Order {
   id: string;
   course?: CourseLight['code'] | CourseLight;
