@@ -18,7 +18,7 @@ import {
   ProductFactory,
 } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
-import { CourseRun, Enrollment, Order, OrderState } from 'types/Joanie';
+import { CourseRun, Enrollment, Order, OrderState, ACTIVE_ORDER_STATES } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { Deferred } from 'utils/test/deferred';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
@@ -240,7 +240,7 @@ describe('CourseProductItem', () => {
     const orderQueryParameters = {
       product: order.product,
       course: order.course,
-      state: [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED],
+      state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
       `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
@@ -300,7 +300,7 @@ describe('CourseProductItem', () => {
     const orderQueryParameters = {
       product: order.product,
       course: order.course,
-      state: [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED],
+      state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
       `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
@@ -369,7 +369,7 @@ describe('CourseProductItem', () => {
     const orderQueryParameters = {
       product: order.product,
       course: order.course,
-      state: [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED],
+      state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
       `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
@@ -427,7 +427,7 @@ describe('CourseProductItem', () => {
     const orderQueryParameters = {
       product: order.product,
       course: order.course,
-      state: [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED],
+      state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
       `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
@@ -473,7 +473,7 @@ describe('CourseProductItem', () => {
     const orderQueryParameters = {
       product: product.id,
       course: '00000',
-      state: [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED],
+      state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
       `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
@@ -525,7 +525,7 @@ describe('CourseProductItem', () => {
     const orderQueryParameters = {
       product: order.product,
       course: order.course,
-      state: [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED],
+      state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
       `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
@@ -583,7 +583,7 @@ describe('CourseProductItem', () => {
     const orderQueryParameters = {
       product: order.product,
       course: order.course,
-      state: [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED],
+      state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
       `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
