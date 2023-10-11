@@ -30,6 +30,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Prevent LTIConsumer component to rerender on user session update
 - Fix Order interface against changed field 'target_enrollments' and 
   'enrollment'
 - Fix dashboard mobile layout.

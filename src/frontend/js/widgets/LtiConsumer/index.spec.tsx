@@ -1,9 +1,12 @@
 import { type PropsWithChildren } from 'react';
-import { act, render, waitFor } from '@testing-library/react';
+import { act, render, renderHook, waitFor } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { QueryClient, QueryClientProvider, QueryObserverOptions } from '@tanstack/react-query';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
+} from 'utils/test/factories/richie';
 import { Deferred } from 'utils/test/deferred';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY } from 'settings';
@@ -11,6 +14,7 @@ import { handle } from 'utils/errors/handle';
 import { resolveAll } from 'utils/resolveAll';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { noop } from 'utils';
+import { useSession } from 'contexts/SessionContext';
 import {
   LtiConsumerContentParameters,
   LtiConsumerContext,
@@ -339,22 +343,13 @@ describe('widgets/LtiConsumer', () => {
     ).toBeDefined();
   });
 
-  it('sets stale time to 5 minutes', async () => {
-    const client = createTestQueryClient({ user: null });
-    const ltiContextDeferred = new Deferred();
+  it('does not refetch context on user update', async () => {
+    const user = UserFactory({ username: 'johndoe', email: undefined }).one();
+    const client = createTestQueryClient({ user });
+    fetchMock.get('https://endpoint.test/logout', 200);
     fetchMock.get(
-      '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
-      ltiContextDeferred.promise,
-    );
-
-    render(
-      <Wrapper client={client}>
-        <LtiConsumer id={1337} />
-      </Wrapper>,
-    );
-
-    await act(async () =>
-      ltiContextDeferred.resolve({
+      '/api/v1.0/plugins/lti-consumer/1337/context/?lis_person_name_given=johndoe&lis_person_sourcedid=johndoe&user_id=johndoe',
+      {
         url: 'http://localhost:8060/lti/videos/c761d6e9-5371-4650-b27a-fa4c8865fd34',
         content_parameters: {
           lti_message_type: 'Marsha Video',
@@ -372,17 +367,37 @@ describe('widgets/LtiConsumer', () => {
           oauth_signature: 'frVp4JuvT1mVXlxktiAUjQ7/1cw=',
         },
         is_automatic_resizing: true,
-      }),
+      },
     );
 
-    const cacheQueries = client.getQueryCache().getAll();
-
-    expect(
-      cacheQueries.find(
-        (query) =>
-          query.queryKey.includes('lti-consumer-plugin-1337') &&
-          (query.options as QueryObserverOptions).staleTime === 300_000,
+    const { result } = renderHook(useSession, {
+      wrapper: ({ children }: PropsWithChildren) => (
+        <Wrapper client={client}>
+          <LtiConsumer id={1337} />
+          {children}
+        </Wrapper>
       ),
-    ).toBeDefined();
+    });
+
+    expect(result.current.user?.username).toBe('johndoe');
+    expect(fetchMock.calls()).toHaveLength(1);
+    expect(fetchMock.lastUrl()).toBe(
+      '/api/v1.0/plugins/lti-consumer/1337/context/?lis_person_name_given=johndoe&lis_person_sourcedid=johndoe&user_id=johndoe',
+    );
+
+    // User logout
+    await act(async () => {
+      result.current.destroy();
+    });
+
+    expect(fetchMock.calls()).toHaveLength(2);
+    expect(fetchMock.lastUrl()).toBe('https://endpoint.test/logout');
+
+    await waitFor(() => {
+      expect(result.current.user).toBeNull();
+    });
+
+    // Once LTIConsumer component has been rerenred, it should not have been refetched context
+    expect(fetchMock.calls()).toHaveLength(2);
   });
 });
