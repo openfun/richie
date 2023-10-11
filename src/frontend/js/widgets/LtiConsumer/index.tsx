@@ -2,10 +2,10 @@ import { useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { iframeResize } from 'iframe-resizer';
 import queryString from 'query-string';
+import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'contexts/SessionContext';
-import { REACT_QUERY_SETTINGS, RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY } from 'settings';
+import { RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY } from 'settings';
 import { handle } from 'utils/errors/handle';
-import { useSessionQuery } from 'utils/react-query/useSessionQuery';
 import { LtiConsumerContext, LtiConsumerProps } from './types/LtiConsumer';
 
 const LtiConsumer = ({ id }: LtiConsumerProps) => {
@@ -18,7 +18,7 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
     return response.json();
   };
 
-  const [{ data: context }] = useSessionQuery<LtiConsumerContext>(
+  const { data: context } = useQuery<LtiConsumerContext>(
     [`lti-consumer-plugin-${id}`],
     () => {
       // We have to provide a unique user_id to generate the lti context. When user is authenticated, we use its
@@ -48,8 +48,7 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
     {
       // Do not fetch LTI context until session state has been retrieved.
       enabled: user !== undefined,
-      // LTI Context lifetime is 5 minutes except in editor mode
-      staleTime: window.CMS?.config.auth ? 0 : REACT_QUERY_SETTINGS.staleTimes.session,
+      staleTime: 0,
       onError: handle,
     },
   );
