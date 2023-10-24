@@ -8,7 +8,7 @@ export const mockPaginatedResponse: <Data>(
   return {
     count: totalCount,
     next: haveNextPage ? 'next' : null,
-    prev: null,
+    previous: null,
     results,
   };
 };

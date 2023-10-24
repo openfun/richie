@@ -8,7 +8,7 @@ import { Course as RichieCourse } from 'types/Course';
 export interface PaginatedResponse<T> {
   count: number;
   next: string | null;
-  prev: string | null;
+  previous: string | null;
   results: Array<T>;
 }
 
