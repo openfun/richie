@@ -23,7 +23,7 @@ export const DashboardCreateAddress = ({ onSettled }: { onSettled?: Function }) 
   const { FormView, handleSubmit } = useDashboardAddressForm();
   const {
     methods: { create },
-    states: { error, isLoading },
+    states: { error, isPending },
   } = useAddressesManagement();
 
   const onSubmit = (data: AddressFormValues) => {
@@ -43,8 +43,8 @@ export const DashboardCreateAddress = ({ onSettled }: { onSettled?: Function }) 
         </Button>
       }
     >
-      {isLoading && <Spinner />}
-      {!isLoading && (
+      {isPending && <Spinner />}
+      {!isPending && (
         <div>
           {error && <Banner message={error} type={BannerType.ERROR} rounded />}
           {FormView}

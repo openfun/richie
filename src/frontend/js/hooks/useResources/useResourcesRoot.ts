@@ -221,7 +221,7 @@ export const useResourcesRoot = <
       creating: writeHandlers.create?.isPending,
       deleting: writeHandlers.delete?.isPending,
       updating: writeHandlers.update?.isPending,
-      isLoading: [...Object.values(writeHandlers), readHandler].some((value) => value?.isPending),
+      isPending: [...Object.values(writeHandlers), readHandler].some((value) => value?.isPending),
       isFetched: readHandler.isFetched,
       error,
     },

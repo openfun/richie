@@ -66,7 +66,7 @@ describe('hooks/useCourses', () => {
     expect(result.current.states.creating).toBeUndefined();
     expect(result.current.states.deleting).toBeUndefined();
     expect(result.current.states.updating).toBeUndefined();
-    expect(result.current.states.isLoading).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.states.error).toBeUndefined();
 
     const courses = CourseListItemFactory().many(3);
@@ -81,7 +81,7 @@ describe('hooks/useCourses', () => {
     expect(result.current.states.creating).toBeUndefined();
     expect(result.current.states.deleting).toBeUndefined();
     expect(result.current.states.updating).toBeUndefined();
-    expect(result.current.states.isLoading).toBe(false);
+    expect(result.current.states.isPending).toBe(false);
     expect(result.current.states.error).toBeUndefined();
   });
 });

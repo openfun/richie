@@ -109,12 +109,12 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<{}>) => {
   const context = useMemo(
     () => ({
       user,
-      isLoadingUser,
+      isPending,
       destroy,
       login,
       register,
     }),
-    [user, isLoadingUser, destroy, login, register],
+    [user, isPending, destroy, login, register],
   );
 
   useEffect(() => {

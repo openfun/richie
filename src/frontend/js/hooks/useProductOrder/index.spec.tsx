@@ -91,7 +91,7 @@ describe('useProductOrder', () => {
       expect(result.current.states.creating).toBe(false);
       expect(result.current.states.deleting).toBeUndefined();
       expect(result.current.states.updating).toBeUndefined();
-      expect(result.current.states.isLoading).toBe(true);
+      expect(result.current.states.isPending).toBe(true);
       expect(result.current.states.error).toBe(undefined);
 
       await act(async () => {
@@ -106,7 +106,7 @@ describe('useProductOrder', () => {
       expect(result.current.states.creating).toBe(false);
       expect(result.current.states.deleting).toBeUndefined();
       expect(result.current.states.updating).toBeUndefined();
-      expect(result.current.states.isLoading).toBe(false);
+      expect(result.current.states.isPending).toBe(false);
       expect(result.current.states.error).toBe(undefined);
     },
   );

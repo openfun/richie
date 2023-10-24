@@ -67,7 +67,7 @@ export const DashboardEditCreditCard = ({ creditCard, onSettled = noop }: Props)
 
   const {
     methods: { update, safeDelete },
-    states: { isLoading, error },
+    states: { isPending, error },
   } = useCreditCardsManagement();
 
   const defaultValues: FormValues = {
@@ -108,7 +108,7 @@ export const DashboardEditCreditCard = ({ creditCard, onSettled = noop }: Props)
   };
 
   const renderContent = () => {
-    if (isLoading) {
+    if (isPending) {
       return <Spinner />;
     }
     if (error) {
