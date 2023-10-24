@@ -485,7 +485,7 @@ describe('useResource (non-omniscient)', () => {
     expect(result.current.meta).toStrictEqual({
       pagination: {
         next: 'next',
-        prev: 'prev',
+        previous: 'prev',
         count: todos.length,
       },
     });

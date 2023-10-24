@@ -181,7 +181,7 @@ describe('<DashboardCourses/>', () => {
       {
         results: orders.slice(0, perPage),
         next: `https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=${perPage}&product__type=credential`,
-        prev: null,
+        previous: null,
         count: orders.length,
       },
     );
@@ -190,7 +190,7 @@ describe('<DashboardCourses/>', () => {
       {
         results: orders.slice(perPage, perPage * 2),
         next: `https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=${perPage}&product__type=credential`,
-        prev: null,
+        previous: null,
         count: orders.length,
       },
     );
@@ -199,7 +199,7 @@ describe('<DashboardCourses/>', () => {
       {
         results: orders.slice(perPage * 2, perPage * 3),
         next: null,
-        prev: null,
+        previous: null,
         count: orders.length,
       },
     );
@@ -215,7 +215,7 @@ describe('<DashboardCourses/>', () => {
       {
         results: enrollments.slice(0, perPage),
         next: `https://joanie.endpoint/api/v1.0/enrollments/?page=2&page_size=${perPage}&was_created_by_order=false`,
-        prev: null,
+        previous: null,
         count: enrollments.length,
       },
     );
@@ -224,7 +224,7 @@ describe('<DashboardCourses/>', () => {
       {
         results: enrollments.slice(perPage, perPage * 2),
         next: `https://joanie.endpoint/api/v1.0/enrollments/?page=3&page_size=${perPage}&was_created_by_order=false`,
-        prev: null,
+        previous: null,
         count: enrollments.length,
       },
     );
@@ -233,7 +233,7 @@ describe('<DashboardCourses/>', () => {
       {
         results: enrollments.slice(perPage * 2, perPage * 3),
         next: null,
-        prev: null,
+        previous: null,
         count: enrollments.length,
       },
     );

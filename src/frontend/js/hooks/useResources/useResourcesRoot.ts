@@ -178,7 +178,7 @@ export const useResourcesRoot = <
           pagination: {
             count: readHandler.data.count,
             next: readHandler.data.next,
-            prev: readHandler.data.previous,
+            previous: readHandler.data.previous,
           },
         },
       };
