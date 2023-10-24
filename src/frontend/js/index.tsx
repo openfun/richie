@@ -53,8 +53,8 @@ async function render() {
       if (!Intl.PluralRules) {
         await import('intl-pluralrules');
       }
-      // TODO: remove type assertion when typescript libs include RelativeTimeFormat
-      if (!(Intl as any).RelativeTimeFormat) {
+
+      if (!Intl.RelativeTimeFormat) {
         await import('@formatjs/intl-relativetimeformat');
 
         // When countryCode is identical to languageCode, intlrelativeformat uses
