@@ -98,7 +98,7 @@ services:
     image: jwilder/dockerize
 
   node:
-    image: node:16.15
+    image: node:18
     working_dir: /app/src/frontend
     user: ${DOCKER_USER:-1000}
     volumes:

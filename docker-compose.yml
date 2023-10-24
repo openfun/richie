@@ -63,7 +63,7 @@ services:
       - app
 
   storybook:
-    image: node:16.15
+    image: node:18.18
     ports:
       - "8076:6006"
     working_dir: /app/src/frontend
@@ -75,7 +75,7 @@ services:
       - .:/app
 
   frontend:
-    image: node:16.15
+    image: node:18.18
     working_dir: /app/src/frontend
     user: "${DOCKER_USER:-1000}"
     volumes:
