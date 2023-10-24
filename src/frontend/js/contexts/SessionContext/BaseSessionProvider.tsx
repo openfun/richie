@@ -67,13 +67,13 @@ const BaseSessionProvider = ({ children }: PropsWithChildren<any>) => {
   const context = useMemo(
     () => ({
       user,
-      isLoadingUser,
+      isPending,
       destroy,
       invalidate,
       login,
       register,
     }),
-    [user, isLoadingUser, destroy, login, register],
+    [user, isPending, destroy, login, register],
   );
 
   useEffect(() => {

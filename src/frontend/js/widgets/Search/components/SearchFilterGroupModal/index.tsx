@@ -175,7 +175,7 @@ const ModalContent = ({ filter, modalIsOpen, setModalIsOpen }: ModalContentProps
         </div>
       );
     }
-    if (['idle', 'loading'].includes(status)) {
+    if (['idle', 'pending'].includes(status)) {
       return (
         <Spinner>
           <FormattedMessage {...messages.loadingResults} />

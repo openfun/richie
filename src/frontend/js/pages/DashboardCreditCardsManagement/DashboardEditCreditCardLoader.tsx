@@ -14,7 +14,7 @@ export const DashboardEditCreditCardLoader = () => {
   const params = useParams<{ creditCardId: string }>();
   const navigate = useDashboardNavigate();
   const {
-    states: { error, isLoading },
+    states: { error, isPending },
     ...creditCard
   } = useCreditCard(params.creditCardId);
 
@@ -22,7 +22,7 @@ export const DashboardEditCreditCardLoader = () => {
     creditCardTitle: creditCard.item?.title ?? '',
   });
 
-  if (isLoading) {
+  if (isPending) {
     return <Spinner />;
   }
   if (error) {

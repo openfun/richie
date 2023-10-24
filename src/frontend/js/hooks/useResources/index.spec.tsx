@@ -106,13 +106,13 @@ describe('useResources (omniscient)', () => {
       wrapper: Wrapper,
     });
 
-    await waitFor(() => expect(result.current.states.isLoading).toBe(true));
+    await waitFor(() => expect(result.current.states.isPending).toBe(true));
     expect(result.current.states.fetching).toBe(true);
     expect(result.current.items).toEqual([]);
 
     responseDeferred.resolve(todos);
 
-    await waitFor(() => expect(result.current.states.isLoading).toBe(false));
+    await waitFor(() => expect(result.current.states.isPending).toBe(false));
     expect(result.current.states.fetching).toBe(false);
     expect(JSON.stringify(result.current.items)).toBe(JSON.stringify(todos));
   });
@@ -131,13 +131,13 @@ describe('useResources (omniscient)', () => {
     });
 
     // Loads without filters the first time.
-    expect(result.current.states.isLoading).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.states.fetching).toBe(true);
     expect(result.current.items).toEqual([]);
 
     responseDeferred.resolve(todos);
 
-    await waitFor(() => expect(result.current.states.isLoading).toBe(false));
+    await waitFor(() => expect(result.current.states.isPending).toBe(false));
     expect(result.current.states.fetching).toBe(false);
     expect(JSON.stringify(result.current.items)).toBe(JSON.stringify(todos));
 
@@ -168,7 +168,7 @@ describe('useResources (omniscient)', () => {
     });
 
     // The get method is not deferred so everything is loaded synchronously.
-    await waitFor(() => expect(result.current.states.isLoading).toBe(false));
+    await waitFor(() => expect(result.current.states.isPending).toBe(false));
     expect(result.current.states.fetching).toBe(false);
     expect(JSON.stringify(result.current.items)).toBe(JSON.stringify(todos));
     expect(fetchMock.called('https://example.com/api/todos')).toBe(true);
@@ -176,15 +176,15 @@ describe('useResources (omniscient)', () => {
     // Trigger a mutation.
     result.current.methods.update({ ...todo, name: 'My super new task' });
 
-    // As the mutation is deferred, the state is still loading.
-    await waitFor(() => expect(result.current.states.isLoading).toBe(true));
+    // As the mutation is deferred, the state is still pending.
+    await waitFor(() => expect(result.current.states.isPending).toBe(true));
     expect(result.current.states.updating).toBe(true);
 
     // Update the get mock to return the mutated todos.
     fetchMock.get('https://example.com/api/todos', mutatedTodos, { overwriteRoutes: true });
     responseDeferred.resolve(true);
 
-    await waitFor(() => expect(result.current.states.isLoading).toBe(false));
+    await waitFor(() => expect(result.current.states.isPending).toBe(false));
     expect(result.current.states.updating).toBe(false);
     // The items are updated. Confirming that the mutation was triggered a new get request.
     expect(JSON.stringify(result.current.items)).toBe(JSON.stringify(mutatedTodos));
@@ -200,13 +200,13 @@ describe('useResources (omniscient)', () => {
       wrapper: Wrapper,
     });
 
-    expect(result.current.states.isLoading).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.states.fetching).toBe(true);
     expect(result.current.item).toBe(undefined);
 
     responseDeferred.resolve(todos);
 
-    await waitFor(() => expect(result.current.states.isLoading).toBe(false));
+    await waitFor(() => expect(result.current.states.isPending).toBe(false));
     expect(result.current.states.fetching).toBe(false);
     expect(JSON.stringify(result.current.item)).toBe(JSON.stringify(expectedTodo));
   });
@@ -223,7 +223,7 @@ describe('useResources (omniscient)', () => {
       },
     );
 
-    expect(result.current.states.isLoading).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.item).toBe(undefined);
     expect(fetchMock.called('https://example.com/api/todos')).toBe(false);
 
@@ -233,7 +233,7 @@ describe('useResources (omniscient)', () => {
       expect(JSON.stringify(result.current.item)).toBe(JSON.stringify(expectedTodo)),
     );
     expect(fetchMock.lastUrl()).toBe('https://example.com/api/todos');
-    expect(result.current.states.isLoading).toBe(false);
+    expect(result.current.states.isPending).toBe(false);
     expect(result.current.states.fetching).toBe(false);
   });
 
@@ -246,7 +246,7 @@ describe('useResources (omniscient)', () => {
       wrapper: Wrapper,
     });
 
-    expect(result.current.states.isLoading).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.states.fetching).toBe(true);
     expect(result.current.item).toBe(undefined);
     expect(result.current.states.error).toBe(undefined);
@@ -269,7 +269,7 @@ describe('useResources (omniscient)', () => {
       },
     );
 
-    await waitFor(() => expect(result.current.states.isLoading).toBe(true));
+    await waitFor(() => expect(result.current.states.isPending).toBe(true));
     expect(result.current.item).toBe(undefined);
     expect(fetchMock.called('https://example.com/api/todos')).toBe(false);
 
@@ -277,7 +277,7 @@ describe('useResources (omniscient)', () => {
 
     await waitFor(() => expect(result.current.item).toEqual(expectedTodo));
     expect(fetchMock.lastUrl()).toBe('https://example.com/api/todos');
-    expect(result.current.states.isLoading).toBe(false);
+    expect(result.current.states.isPending).toBe(false);
     expect(result.current.states.fetching).toBe(false);
 
     rerender(undefined);
@@ -337,7 +337,7 @@ describe('useResource (omniscient) with session', () => {
       },
     });
 
-    await waitFor(() => expect(result.current.states.isLoading).toBe(false));
+    await waitFor(() => expect(result.current.states.isPending).toBe(false));
     await waitFor(() => expect(result.current.items.length).toBe(5));
 
     const button = screen.getByRole('button', { name: 'Logout' });
@@ -345,8 +345,8 @@ describe('useResource (omniscient) with session', () => {
       fireEvent.click(button);
     });
 
-    // isLoading true means that the query is disabled, because no user is in session.
-    await waitFor(() => expect(result.current.states.isLoading).toBe(true));
+    // isPending true means that the query is disabled, because no user is in session.
+    await waitFor(() => expect(result.current.states.isPending).toBe(true));
     // Expect data to be cleared.
     await waitFor(() => expect(result.current.items.length).toBe(0));
   });
@@ -386,19 +386,19 @@ describe('useResource (non-omniscient)', () => {
       wrapper: Wrapper,
     });
 
-    await waitFor(() => expect(result.current.states.isLoading).toBe(false));
+    await waitFor(() => expect(result.current.states.isPending).toBe(false));
     expect(fetchMock.called('https://example.com/api/todos')).toBe(true);
     expect(fetchMock.called('https://example.com/api/todos?name=e')).toBe(false);
     expect(fetchMock.called('https://example.com/api/todos?name=ef')).toBe(false);
 
     rerender({ name: 'e' });
-    await waitFor(() => expect(result.current.states.isLoading).toBe(false));
+    await waitFor(() => expect(result.current.states.isPending).toBe(false));
     expect(fetchMock.called('https://example.com/api/todos')).toBe(true);
     expect(fetchMock.called('https://example.com/api/todos?name=e')).toBe(true);
     expect(fetchMock.called('https://example.com/api/todos?name=ef')).toBe(false);
 
     rerender({ name: 'ef' });
-    await waitFor(() => expect(result.current.states.isLoading).toBe(false));
+    await waitFor(() => expect(result.current.states.isPending).toBe(false));
     expect(fetchMock.called('https://example.com/api/todos')).toBe(true);
     expect(fetchMock.called('https://example.com/api/todos?name=e')).toBe(true);
     expect(fetchMock.called('https://example.com/api/todos?name=ef')).toBe(true);
@@ -412,7 +412,7 @@ describe('useResource (non-omniscient)', () => {
       wrapper: Wrapper,
     });
 
-    expect(result.current.states.isLoading).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.states.fetching).toBe(true);
     expect(result.current.states.error).toBe(undefined);
     expect(result.current.items).toEqual([]);
@@ -422,7 +422,7 @@ describe('useResource (non-omniscient)', () => {
       body: 'Bad request',
     });
 
-    await waitFor(() => expect(result.current.states.isLoading).toBe(false));
+    await waitFor(() => expect(result.current.states.isPending).toBe(false));
     expect(result.current.states.fetching).toBe(false);
     expect(result.current.states.error).toEqual(
       'An error occurred while fetching resources. Please retry later.',
@@ -443,7 +443,7 @@ describe('useResource (non-omniscient)', () => {
     });
 
     expect(result.current.states.fetching).toBe(true);
-    expect(result.current.states.isLoading).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.item).toBeUndefined();
 
     responseDeferred.resolve(todo);
@@ -454,7 +454,7 @@ describe('useResource (non-omniscient)', () => {
     expect(fetchMock.called(`https://example.com/api/todos/${todo.id}?name=${todo.name}`)).toBe(
       true,
     );
-    expect(result.current.states.isLoading).toBe(false);
+    expect(result.current.states.isPending).toBe(false);
     expect(result.current.item).toStrictEqual(todo);
   });
 
@@ -468,7 +468,7 @@ describe('useResource (non-omniscient)', () => {
     });
 
     expect(result.current.states.fetching).toBe(true);
-    expect(result.current.states.isLoading).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.items).toEqual([]);
 
     responseDeferred.resolve({

@@ -44,7 +44,7 @@ export const DashboardAddressesManagement = ({
   const intl = useIntl();
   const {
     methods: { promote, remove },
-    states: { error, isLoading },
+    states: { error, isPending },
     ...addresses
   } = useAddressesManagement();
 
@@ -63,8 +63,8 @@ export const DashboardAddressesManagement = ({
   return (
     <DashboardCard header={<FormattedMessage {...messages.header} />}>
       <div className="dashboard-addresses">
-        {isLoading && <Spinner />}
-        {!isLoading && (
+        {isPending && <Spinner />}
+        {!isPending && (
           <>
             {error && <Banner message={error} type={BannerType.ERROR} rounded />}
             {!error && addressesList.length === 0 && (

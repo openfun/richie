@@ -32,7 +32,7 @@ interface Props {
 export const DashboardCreditCardsManagement = ({ onClickEdit }: Props) => {
   const intl = useIntl();
   const {
-    states: { error, isLoading },
+    states: { error, isPending },
     methods: { setError, update, safeDelete },
     ...creditCards
   } = useCreditCardsManagement();
@@ -68,8 +68,8 @@ export const DashboardCreditCardsManagement = ({ onClickEdit }: Props) => {
   return (
     <DashboardCard header={<FormattedMessage {...messages.header} />}>
       <div className="dashboard-credit-cards">
-        {isLoading && <Spinner />}
-        {!isLoading && (
+        {isPending && <Spinner />}
+        {!isPending && (
           <>
             {error && <Banner message={error} type={BannerType.ERROR} rounded />}
             {!error && creditCardsList.length === 0 && (

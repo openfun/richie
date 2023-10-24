@@ -56,7 +56,7 @@ describe('useCreditCards', () => {
     expect(result.current.states.creating).toBe(false);
     expect(result.current.states.deleting).toBe(false);
     expect(result.current.states.updating).toBe(false);
-    expect(result.current.states.isLoading).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.states.error).toBe(undefined);
 
     await act(async () => {
@@ -70,7 +70,7 @@ describe('useCreditCards', () => {
     expect(result.current.states.creating).toBe(false);
     expect(result.current.states.deleting).toBe(false);
     expect(result.current.states.updating).toBe(false);
-    expect(result.current.states.isLoading).toBe(false);
+    expect(result.current.states.isPending).toBe(false);
     expect(result.current.states.error).toBe(undefined);
   });
 
@@ -91,7 +91,7 @@ describe('useCreditCards', () => {
     expect(result.current.states.creating).toBe(false);
     expect(result.current.states.deleting).toBe(false);
     expect(result.current.states.updating).toBe(false);
-    expect(result.current.states.isLoading).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.states.error).toBe(undefined);
 
     await act(async () => {
@@ -106,7 +106,7 @@ describe('useCreditCards', () => {
     expect(result.current.states.creating).toBe(false);
     expect(result.current.states.deleting).toBe(false);
     expect(result.current.states.updating).toBe(false);
-    expect(result.current.states.isLoading).toBe(false);
+    expect(result.current.states.isPending).toBe(false);
     expect(result.current.states.error).toBe(undefined);
   });
 });

@@ -14,7 +14,7 @@ export const DashboardEditAddressLoader = () => {
   const params = useParams<{ addressId: string }>();
   const navigate = useDashboardNavigate();
   const {
-    states: { error, isLoading },
+    states: { error, isPending },
     ...address
   } = useAddress(params.addressId);
   useBreadcrumbsPlaceholders({
@@ -23,7 +23,7 @@ export const DashboardEditAddressLoader = () => {
 
   return (
     <>
-      {isLoading && <Spinner />}
+      {isPending && <Spinner />}
       {error && <Banner message={error} type={BannerType.ERROR} />}
       {address.item && (
         <DashboardEditAddress

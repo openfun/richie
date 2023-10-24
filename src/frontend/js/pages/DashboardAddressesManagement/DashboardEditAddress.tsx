@@ -35,7 +35,7 @@ export const DashboardEditAddress = ({ address, onSettled = noop }: DashboardEdi
   const { FormView, handleSubmit } = useDashboardAddressForm(address);
   const {
     methods: { update, remove },
-    states: { error, isLoading },
+    states: { error, isPending },
   } = useAddressesManagement();
 
   const onSubmit = (data: AddressFormValues) => {
@@ -72,8 +72,8 @@ export const DashboardEditAddress = ({ address, onSettled = noop }: DashboardEdi
         </>
       }
     >
-      {isLoading && <Spinner />}
-      {!isLoading && (
+      {isPending && <Spinner />}
+      {!isPending && (
         <div>
           {error && <Banner message={error} type={BannerType.ERROR} rounded />}
           {FormView}
