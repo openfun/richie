@@ -41,7 +41,7 @@ export interface UseResourcesCallbackProps<
   TApiResource extends ApiResourceInterface<TData> = ApiResourceInterface<TData>,
 > extends UseResourcesProps<TData, TResourceQuery, TApiResource> {
   filters?: TResourceQuery;
-  queryOptions?: QueryOptions<TData>;
+  queryOptions?: Omit<QueryOptions<TData>, 'queryFn' | 'queryKey'>;
 }
 
 export const useResourcesCustom = <

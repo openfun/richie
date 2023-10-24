@@ -97,7 +97,8 @@ describe('useCourseWish', () => {
     result.current.methods.create(course.code);
     await waitFor(() => expect(result.current.states.fetching).toBe(false));
 
-    expect(fetchMock.called(urlWishlist, { method: 'POST' }));
+    expect(fetchMock.called(urlWishlist, { method: 'POST' })).toBe(true);
+    expect(fetchMock.called(urlWishlist, { method: 'GET' })).toBe(true);
     expect(result.current.states.error).toBe(undefined);
     await waitFor(() =>
       expect(JSON.stringify(result.current.item)).toBe(JSON.stringify({ status: true })),
@@ -128,7 +129,8 @@ describe('useCourseWish', () => {
     result.current.methods.delete(course.code!);
     await waitFor(() => expect(result.current.states.fetching).toBe(false));
 
-    expect(fetchMock.called(url, { method: 'DELETE' }));
+    expect(fetchMock.called(url, { method: 'DELETE' })).toBe(true);
+    expect(fetchMock.called(url, { method: 'GET' })).toBe(true);
     expect(result.current.states.error).toBe(undefined);
     expect(JSON.stringify(result.current.item)).toBe(JSON.stringify({ status: false }));
   });

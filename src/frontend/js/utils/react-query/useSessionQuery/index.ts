@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import type {
   QueryFunction,
   QueryKey,
@@ -40,16 +40,6 @@ export function useSessionQuery<
   const { user } = useSession();
   const sessionQueryKey = useSessionQueryKey(queryKey);
 
-  const handleError = async (error: HttpError) => {
-    if (error.code === HttpStatusCode.UNAUTHORIZED) {
-      queryClient.invalidateQueries(['user'], { exact: true });
-    }
-
-    if (options?.onError) {
-      return options.onError(error);
-    }
-  };
-
   const enabled = useMemo(() => {
     return options?.enabled !== undefined ? options.enabled : !!user;
   }, [user, options?.enabled]);
@@ -61,16 +51,19 @@ export function useSessionQuery<
     return REACT_QUERY_SETTINGS.staleTimes.sessionItems;
   }, [options?.staleTime]);
 
-  const queryHandler = useQuery<TQueryFnData, HttpError, TData, TSessionQueryKey>(
-    sessionQueryKey,
+  const queryHandler = useQuery<TQueryFnData, HttpError, TData, TSessionQueryKey>({
+    ...options,
+    queryKey: sessionQueryKey,
     queryFn,
-    {
-      ...options,
-      enabled,
-      staleTime,
-      onError: handleError,
-    },
-  );
+    enabled,
+    staleTime,
+  });
+
+  useEffect(() => {
+    if (queryHandler.error?.code === HttpStatusCode.UNAUTHORIZED) {
+      queryClient.invalidateQueries({ queryKey: ['user'], exact: true });
+    }
+  }, [queryHandler.error]);
 
   return [queryHandler, sessionQueryKey];
 }

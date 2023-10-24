@@ -1,5 +1,5 @@
 import type { DehydratedState, MutationKey, QueryKey, QueryState } from '@tanstack/react-query';
-import type { MutationState } from '@tanstack/query-core/build/lib/mutation';
+import type { MutationState } from '@tanstack/query-core';
 import { PersistedClient } from '@tanstack/react-query-persist-client';
 
 export const QueryStateFactory = (key: QueryKey, state: Partial<QueryState>) => ({

@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl';
 const useLocalizedQueryKey = (queryKey: QueryKey): readonly unknown[] => {
   const { locale } = useIntl();
 
-  return typeof queryKey === 'string' ? [queryKey, locale] : [...queryKey, locale];
+  return [...queryKey, locale];
 };
 
 export default useLocalizedQueryKey;

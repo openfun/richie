@@ -76,7 +76,7 @@ export const fetchEntity = async <
   } catch (err) {
     if (isHttpError(err)) {
       if (err.code === HttpStatusCode.UNAUTHORIZED) {
-        queryClient.invalidateQueries(['user'], { exact: true });
+        queryClient.invalidateQueries({ queryKey: ['user'], exact: true });
       }
       throw err;
     }

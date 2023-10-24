@@ -61,10 +61,13 @@ describe('<Dashboard />', () => {
       'https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=50&was_created_by_order=false',
       { count: 0, results: [] },
     );
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50', {
-      count: 0,
-      results: [],
-    });
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50&product__type=credential',
+      {
+        count: 0,
+        results: [],
+      },
+    );
   });
 
   afterEach(() => {

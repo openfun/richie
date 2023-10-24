@@ -1,8 +1,13 @@
 import fetchMock from 'fetch-mock';
-import { HttpStatusCode } from 'utils/errors/HttpError';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 
+import { handle as mockHandle } from 'utils/errors/handle';
 import { RequestStatus } from '../../types/api';
 import { fetchList } from '.';
+
+jest.mock('utils/errors/handle', () => ({
+  handle: jest.fn(),
+}));
 
 describe('widgets/Search/utils/getResourceList', () => {
   const course43 = {
@@ -54,10 +59,7 @@ describe('widgets/Search/utils/getResourceList', () => {
     });
 
     it('rejects with a FetchListResponse containing an error when it fails to make the request', async () => {
-      fetchMock.mock(
-        '/api/v1.0/courses/?limit=2&offset=43',
-        Promise.reject(new Error('Failed to perform the request')),
-      );
+      fetchMock.mock('/api/v1.0/courses/?limit=2&offset=43', 500);
 
       const response = (await fetchList('courses', {
         limit: '2',
@@ -66,6 +68,10 @@ describe('widgets/Search/utils/getResourceList', () => {
 
       expect(response.status).toEqual(RequestStatus.FAILURE);
       expect(response.error).toBeInstanceOf(Error);
+      expect(mockHandle).toHaveBeenNthCalledWith(
+        1,
+        new HttpError(500, 'Failed to get list from courses search.'),
+      );
     });
 
     it('rejects with a FetchListResponse containing an error when the API returns an error code', async () => {

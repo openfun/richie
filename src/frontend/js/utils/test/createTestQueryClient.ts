@@ -18,22 +18,22 @@ export interface CreateTestQueryClientParams extends QueryClientOptions {
  *
  * @param params
  */
-export const createTestQueryClient = (params?: CreateTestQueryClientParams) => {
+export const createTestQueryClient = (params: CreateTestQueryClientParams = {}) => {
   let userToUse: Maybe<Nullable<User>>;
-  if (params?.user === true) {
+  if (params.user === true) {
     userToUse = UserFactory().one();
-  } else if (params?.user) {
-    userToUse = params.user as User;
-  } else if (params?.user === null) {
+  } else if (params.user) {
+    userToUse = params.user;
+  } else if (params.user === null) {
     userToUse = null;
   }
 
   const queries: DehydratedState['queries'] = [];
-  if (userToUse || userToUse === null) {
+  if (userToUse !== undefined) {
     queries.push(QueryStateFactory(['user'], { data: userToUse }));
   }
 
-  params?.queriesCallback?.(queries);
+  params.queriesCallback?.(queries);
 
   const { clientState } = PersistedClientFactory({
     queries,

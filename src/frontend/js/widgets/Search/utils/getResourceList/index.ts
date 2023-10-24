@@ -2,6 +2,8 @@ import queryString from 'query-string';
 
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APIListRequestParams } from 'types/api';
+import { HttpError } from 'utils/errors/HttpError';
+import { handle } from 'utils/errors/handle';
 import { APICourseSearchResponse, RequestStatus } from '../../types/api';
 
 export interface GetListSagaSpecifics {
@@ -23,16 +25,18 @@ export async function fetchList(
         'Content-Type': 'application/json',
       },
     });
-
     if (!response.ok) {
       // Push remote errors to the error channel for consistency
-      throw new Error(`Failed to get list from ${kind} search : ${response.status}.`);
+      throw new HttpError(response.status, `Failed to get list from ${kind} search.`);
     }
 
     const content = await response.json();
 
     return { status: RequestStatus.SUCCESS, content };
   } catch (error) {
+    if (error instanceof HttpError && error.code >= 500) {
+      handle(error);
+    }
     return { status: RequestStatus.FAILURE, error };
   }
 }

@@ -16,7 +16,7 @@ export const REACT_QUERY_SETTINGS = {
     throttleTime: 500,
   },
   // Cache is garbage collected after this delay
-  cacheTime: 24 * 60 * 60 * 1000, // 24h in ms
+  gcTime: 24 * 60 * 60 * 1000, // 24h in ms
   // Data are considered as stale after this delay
   staleTimes: {
     default: 0, // Stale immediately

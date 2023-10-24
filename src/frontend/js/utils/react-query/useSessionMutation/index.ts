@@ -1,8 +1,4 @@
-import type {
-  MutationFunction,
-  UseMutationOptions,
-  UseMutationResult,
-} from '@tanstack/react-query';
+import type { UseMutationOptions, UseMutationResult } from '@tanstack/react-query';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 
@@ -14,8 +10,7 @@ import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
  * @param options
  */
 export function useSessionMutation<TData = unknown, TVariables = void, TContext = unknown>(
-  mutationFn: MutationFunction<TData, TVariables>,
-  options?: Omit<UseMutationOptions<TData, HttpError, TVariables, TContext>, 'mutationFn'>,
+  options?: UseMutationOptions<TData, HttpError, TVariables, TContext>,
 ): UseMutationResult<TData, HttpError, TVariables, TContext> {
   const queryClient = useQueryClient();
 
@@ -25,7 +20,7 @@ export function useSessionMutation<TData = unknown, TVariables = void, TContext 
     context: TContext | undefined,
   ) => {
     if (error.code === HttpStatusCode.UNAUTHORIZED) {
-      await queryClient.invalidateQueries(['user'], { exact: true });
+      await queryClient.invalidateQueries({ queryKey: ['user'], exact: true });
     }
 
     if (options?.onError) {
@@ -33,7 +28,7 @@ export function useSessionMutation<TData = unknown, TVariables = void, TContext 
     }
   };
 
-  return useMutation<TData, HttpError, TVariables, TContext>(mutationFn, {
+  return useMutation<TData, HttpError, TVariables, TContext>({
     ...options,
     onError: handleError,
   });

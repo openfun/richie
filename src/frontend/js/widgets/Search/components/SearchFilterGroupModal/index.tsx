@@ -91,7 +91,8 @@ const ModalContent = ({ filter, modalIsOpen, setModalIsOpen }: ModalContentProps
     const { pageParam, queryKey } = args;
     const [filterName, fetchCourseSearchParams, fetchQuery] = queryKey;
     const searchResponse = await fetchList(filterName, {
-      ...(pageParam || API_LIST_DEFAULT_PARAMS),
+      offset: String(pageParam.offset),
+      ...pageParam,
       ...(fetchQuery ? { query: fetchQuery } : {}),
     });
 
@@ -116,23 +117,26 @@ const ModalContent = ({ filter, modalIsOpen, setModalIsOpen }: ModalContentProps
     };
   };
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfiniteQuery(
-    [filter.name, courseSearchParams, query.length > 2 ? query : ''],
-    fetchResults,
-    {
-      enabled: modalIsOpen,
-      getNextPageParam: (lastPage) => {
-        if (!lastPage) {
-          return undefined;
-        }
-        const newOffset = lastPage.meta.offset + lastPage.meta.count;
-        if (newOffset >= lastPage.meta.total_count) {
-          return undefined;
-        }
-        return { limit: API_LIST_DEFAULT_PARAMS.limit, offset: newOffset };
-      },
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfiniteQuery({
+    enabled: modalIsOpen,
+    initialPageParam: {
+      ...API_LIST_DEFAULT_PARAMS,
+      offset: Number(API_LIST_DEFAULT_PARAMS.offset),
     },
-  );
+    queryFn: fetchResults,
+    queryKey: [filter.name, courseSearchParams, query.length > 2 ? query : ''],
+    getNextPageParam: (lastPage) => {
+      if (!lastPage) {
+        return undefined;
+      }
+
+      const newOffset = lastPage.meta.offset + lastPage.meta.count;
+      if (newOffset >= lastPage.meta.total_count) {
+        return undefined;
+      }
+      return { limit: API_LIST_DEFAULT_PARAMS.limit, offset: newOffset };
+    },
+  });
 
   const searchInputRef = useRef<Nullable<HTMLInputElement>>(null);
   useEffect(() => {

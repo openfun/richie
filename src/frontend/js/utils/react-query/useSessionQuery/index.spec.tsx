@@ -7,7 +7,8 @@ import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { checkStatus } from 'api/joanie';
 import { useSession } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { HttpStatusCode } from 'utils/errors/HttpError';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
+import { handle as mockHandle } from 'utils/errors/handle';
 import { useSessionQuery } from '.';
 
 jest.mock('utils/context', () => ({
@@ -18,6 +19,10 @@ jest.mock('utils/context', () => ({
       backend: 'openedx-hawthorn',
     },
   }).one(),
+}));
+
+jest.mock('utils/errors/handle', () => ({
+  handle: jest.fn(),
 }));
 
 describe('useSessionQuery', () => {
@@ -35,13 +40,10 @@ describe('useSessionQuery', () => {
   it('should invalidate user queries if it fails with a 401 response status', async () => {
     fetchMock.get('http://api.endpoint/orders/', HttpStatusCode.UNAUTHORIZED);
     fetchMock.get('https://endpoint.test/api/user/v1/me', HttpStatusCode.UNAUTHORIZED);
-    const handleError = jest.fn();
 
     const useHooks = () => {
       const session = useSession();
-      useSessionQuery(['orders'], () => fetch('http://api.endpoint/orders/').then(checkStatus), {
-        onError: handleError,
-      });
+      useSessionQuery(['orders'], () => fetch('http://api.endpoint/orders/').then(checkStatus));
 
       return session;
     };
@@ -64,7 +66,32 @@ describe('useSessionQuery', () => {
 
     // - The second request should be the query to get the user
     expect(fetchMock.calls()[1][0]).toEqual('https://endpoint.test/api/user/v1/me');
-    // - Finally the provided onError should have been executed
-    expect(handleError).toHaveBeenCalledTimes(1);
+  });
+
+  it('should handle error if the request fails due to a server error', async () => {
+    fetchMock.get('http://api.endpoint/orders/', HttpStatusCode.INTERNAL_SERVER_ERROR);
+
+    const useHooks = () => {
+      const session = useSession();
+      useSessionQuery(['orders'], () => fetch('http://api.endpoint/orders/').then(checkStatus));
+
+      return session;
+    };
+
+    const { result } = renderHook(() => useHooks(), {
+      wrapper,
+    });
+
+    // - At the first render, query state should be retrieved from the sessionStorage
+    expect(fetchMock.calls().length).toEqual(1);
+    expect(result.current.user).toStrictEqual({ username: 'John Doe' });
+
+    // Then user orders should have been fetched
+    expect(fetchMock.lastCall()![0]).toEqual('http://api.endpoint/orders/');
+
+    // - As the order query failed with a 500 error, the error should have been handled
+    await waitFor(() => {
+      expect(mockHandle).toHaveBeenNthCalledWith(1, new HttpError(500, 'Internal Server Error'));
+    });
   });
 });

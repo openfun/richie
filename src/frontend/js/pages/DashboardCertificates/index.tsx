@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { keepPreviousData } from '@tanstack/query-core';
 import { Pagination, usePagination } from 'components/Pagination';
 import { useCertificates } from 'hooks/useCertificates';
 import { Spinner } from 'components/Spinner';
@@ -27,7 +28,7 @@ export const DashboardCertificates = () => {
       page: pagination.currentPage,
       page_size: pagination.itemsPerPage,
     },
-    { keepPreviousData: true },
+    { placeholderData: keepPreviousData },
   );
   useEffect(() => {
     if (certificates.meta?.pagination?.count) {
