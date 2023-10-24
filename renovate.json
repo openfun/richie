@@ -12,8 +12,7 @@
       ],
       "matchPackageNames": [
         "bootstrap",
-        "node-fetch",
-        "typescript"
+        "node-fetch"
       ]
     },
     {
