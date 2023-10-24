@@ -5,7 +5,7 @@ import queryString from 'query-string';
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'contexts/SessionContext';
 import { RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY } from 'settings';
-import { handle } from 'utils/errors/handle';
+import { HttpError } from 'utils/errors/HttpError';
 import { LtiConsumerContext, LtiConsumerProps } from './types/LtiConsumer';
 
 const LtiConsumer = ({ id }: LtiConsumerProps) => {
@@ -13,14 +13,14 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
 
   const checkResponseStatus = (response: Response) => {
     if (!response.ok) {
-      throw new Error(`Failed to retrieve LTI consumer context at placeholder ${id}`);
+      throw new HttpError(response.status, response.statusText, undefined, response.json());
     }
     return response.json();
   };
 
-  const { data: context } = useQuery<LtiConsumerContext>(
-    [`lti-consumer-plugin-${id}`],
-    () => {
+  const { data: context } = useQuery<LtiConsumerContext>({
+    queryKey: [`lti-consumer-plugin-${id}`],
+    queryFn: () => {
       // We have to provide a unique user_id to generate the lti context. When user is authenticated, we use its
       // username as user_id. In the case the user is anonymous, we generate an uuid then store it into the session
       // storage. Furthermore, we provide to LTI context some "lis_person" information (id, username and email) if they
@@ -45,13 +45,10 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
         })}`,
       ).then(checkResponseStatus);
     },
-    {
-      // Do not fetch LTI context until session state has been retrieved.
-      enabled: user !== undefined,
-      staleTime: 0,
-      onError: handle,
-    },
-  );
+    // Do not fetch LTI context until session state has been retrieved.
+    enabled: user !== undefined,
+    staleTime: 0,
+  });
   const formRef = useRef<HTMLFormElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 

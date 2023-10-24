@@ -39,12 +39,11 @@ describe('useSessionMutation', () => {
 
     const useHooks = () => {
       const session = useSession();
-      const mutation = useSessionMutation<unknown, void, unknown>(
-        () => fetch('http://api.endpoint/orders/create', { method: 'POST' }).then(checkStatus),
-        {
-          onError: handleError,
-        },
-      );
+      const mutation = useSessionMutation<unknown, void, unknown>({
+        mutationFn: () =>
+          fetch('http://api.endpoint/orders/create', { method: 'POST' }).then(checkStatus),
+        onError: handleError,
+      });
 
       return { session, mutation };
     };

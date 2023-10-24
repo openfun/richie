@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-
 import { useCourseSearchParams } from 'hooks/useCourseSearchParams';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { getMPTTChildrenPathMatcher } from 'utils/mptt';
@@ -61,11 +60,6 @@ export const SearchFilterValueParent = ({ filter, value }: SearchFilterValuePare
     },
     {
       enabled: showChildren,
-      onSettled: (data) => {
-        if (data?.status === RequestStatus.FAILURE) {
-          handle(new Error(`Failed to get children filters for ${filter.name}/${value.key}`));
-        }
-      },
     },
   );
 
@@ -73,6 +67,12 @@ export const SearchFilterValueParent = ({ filter, value }: SearchFilterValuePare
     childrenResponse?.status === RequestStatus.SUCCESS
       ? childrenResponse.content.filters[filter.name].values
       : [];
+
+  useEffect(() => {
+    if (childrenResponse?.status === RequestStatus.FAILURE) {
+      handle(new Error(`Failed to get children filters for ${filter.name}/${value.key}`));
+    }
+  }, [childrenResponse]);
 
   // We also need to know if the current filter is active itself and let the user toggle it directly
   const [isActive, toggle] = useFilterValue(filter, value);

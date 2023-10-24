@@ -53,7 +53,7 @@ export function checkStatus(
     return Promise.resolve(options.fallbackValue);
   }
 
-  throw new HttpError(response.status, response.statusText, undefined, getResponseBody(response));
+  throw new HttpError(response.status, response.statusText);
 }
 
 /*

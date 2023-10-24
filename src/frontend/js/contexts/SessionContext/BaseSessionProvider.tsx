@@ -25,14 +25,12 @@ const BaseSessionProvider = ({ children }: PropsWithChildren<any>) => {
    * - `null` when the user is anonymous or the request failed;
    * - a user object when the user is logged in.
    */
-  const { data: user, isLoading: isLoadingUser } = useQuery<Nullable<User>>(
-    ['user'],
-    AuthenticationApi!.me,
-    {
-      refetchOnWindowFocus: true,
-      staleTime: REACT_QUERY_SETTINGS.staleTimes.session,
-    },
-  );
+  const { data: user, isPending } = useQuery<Nullable<User>>({
+    queryKey: ['user'],
+    queryFn: AuthenticationApi!.me,
+    refetchOnWindowFocus: true,
+    staleTime: REACT_QUERY_SETTINGS.staleTimes.session,
+  });
   const previousUserState = usePrevious(user);
 
   const queryClient = useQueryClient();

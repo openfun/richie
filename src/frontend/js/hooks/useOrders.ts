@@ -54,8 +54,8 @@ const useOrdersBase =
   (props: UseResourcesProps<Order, OrderResourcesQuery, API['user']['orders']>) =>
   (filters?: OrderResourcesQuery, queryOptions?: QueryOptions<Order>) => {
     const custom = useResourcesCustom({ ...props, filters, queryOptions });
-    const abortHandler = useSessionMutation(useJoanieApi().user.orders.abort);
-    const submitHandler = useSessionMutation(useJoanieApi().user.orders.submit);
+    const abortHandler = useSessionMutation({ mutationFn: useJoanieApi().user.orders.abort });
+    const submitHandler = useSessionMutation({ mutationFn: useJoanieApi().user.orders.submit });
     return {
       ...custom,
       methods: {

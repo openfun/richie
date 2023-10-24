@@ -1,10 +1,10 @@
 import { QueryClient, QueryClientConfig } from '@tanstack/react-query';
 import { persistQueryClient } from '@tanstack/react-query-persist-client';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
-import { handle } from 'utils/errors/handle';
+import { QueryCache } from '@tanstack/query-core';
 import { REACT_QUERY_SETTINGS } from 'settings';
-import { noop } from 'utils';
-import context from 'utils/context';
+import { handle } from 'utils/errors/handle';
+import { HttpError } from 'utils/errors/HttpError';
 
 export interface QueryClientOptions {
   logger?: boolean;
@@ -12,33 +12,24 @@ export interface QueryClientOptions {
 }
 
 const createQueryClient = (options?: QueryClientOptions) => {
-  const environment = context?.environment;
-
   const configuration: QueryClientConfig = {
+    queryCache: new QueryCache({
+      onError: (error) => {
+        // Only trigger error handler for server errors
+        if (error instanceof HttpError && error.code >= 500) {
+          handle(error);
+        }
+      },
+    }),
     defaultOptions: {
       queries: {
-        cacheTime: REACT_QUERY_SETTINGS.cacheTime,
+        gcTime: REACT_QUERY_SETTINGS.gcTime,
         refetchOnWindowFocus: false,
         retry: false,
         staleTime: REACT_QUERY_SETTINGS.staleTimes.default,
       },
     },
-    logger: {
-      log: noop,
-      warn: noop,
-      error: noop,
-    },
   };
-
-  if (options?.logger) {
-    // Link react-query logger to our error handler
-    configuration.logger = {
-      // eslint-disable-next-line no-console
-      log: environment === 'development' ? console.log : noop,
-      warn: environment === 'development' ? console.warn : noop,
-      error: handle,
-    };
-  }
 
   const queryClient = new QueryClient(configuration);
 

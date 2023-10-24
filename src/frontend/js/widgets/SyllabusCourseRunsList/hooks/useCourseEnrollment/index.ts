@@ -21,7 +21,7 @@ const useCourseEnrollment = (resourceLink: string) => {
   const queryClient = useQueryClient();
   const EnrollmentAPI = EnrollmentApiInterface(resourceLink);
 
-  const [{ data: enrollment, isError, isLoading }, queryKeys] = useSessionQuery(
+  const [{ data: enrollment, isError, isLoading }, queryKey] = useSessionQuery(
     ['enrollment', resourceLink],
     async () => {
       return EnrollmentAPI.get(resourceLink, user!);
@@ -29,7 +29,7 @@ const useCourseEnrollment = (resourceLink: string) => {
   );
 
   const [{ data: isActive, refetch: refetchIsActive }] = useSessionQuery(
-    [...queryKeys, 'is_active'],
+    [...queryKey, 'is_active'],
     async () => EnrollmentAPI.isEnrolled(enrollment),
     {
       // Enrollment is null if it has been fetched
@@ -37,18 +37,16 @@ const useCourseEnrollment = (resourceLink: string) => {
     },
   );
 
-  const { mutateAsync } = useSessionMutation(
-    (activeEnrollment: boolean = true) =>
+  const { mutateAsync } = useSessionMutation({
+    mutationFn: (activeEnrollment: boolean = true) =>
       EnrollmentAPI.set(resourceLink, user!, enrollment, activeEnrollment),
-    {
-      mutationKey: queryKeys,
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(queryKeys, { exact: true });
-        // After enrolls the user, then send enrolled event to the web analytics handler.
-        WebAnalyticsAPIHandler()?.sendEnrolledEvent(resourceLink);
-      },
+    mutationKey: queryKey,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey, exact: true });
+      // After enrolls the user, then send enrolled event to the web analytics handler.
+      WebAnalyticsAPIHandler()?.sendEnrolledEvent(resourceLink);
     },
-  );
+  });
 
   useEffect(() => {
     refetchIsActive();

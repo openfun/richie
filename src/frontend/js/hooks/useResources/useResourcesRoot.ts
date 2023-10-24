@@ -92,13 +92,12 @@ export const useResourcesRoot = <
   const api = apiInterface();
 
   const queryFn: () => Promise<any> = useCallback(
-    () => api.get(filters),
+    () =>
+      api.get(filters).catch(() => {
+        setError(intl.formatMessage(actualMessages.errorGet));
+      }),
     [api, JSON.stringify(filters)],
   );
-  queryOptions = {
-    onError: () => setError(intl.formatMessage(actualMessages.errorGet)),
-    ...queryOptions,
-  };
 
   if (session !== usePrevious(session)) {
     throw new Error('session must never change value.');
@@ -108,7 +107,7 @@ export const useResourcesRoot = <
   if (session) {
     [readHandler, ACTUAL_QUERY_KEY] = useSessionQuery(QUERY_KEY, queryFn, queryOptions as any);
   } else {
-    readHandler = useQuery(QUERY_KEY, queryFn, queryOptions);
+    readHandler = useQuery({ queryKey: QUERY_KEY, queryFn, ...queryOptions });
   }
 
   const invalidate = async () => {
@@ -119,7 +118,9 @@ export const useResourcesRoot = <
   };
 
   const prefetch = async () => {
-    await queryClient.prefetchQuery(ACTUAL_QUERY_KEY, queryFn, {
+    await queryClient.prefetchQuery({
+      queryFn,
+      queryKey: ACTUAL_QUERY_KEY,
       staleTime: session
         ? REACT_QUERY_SETTINGS.staleTimes.sessionItems
         : REACT_QUERY_SETTINGS.staleTimes.default,
@@ -136,19 +137,22 @@ export const useResourcesRoot = <
 
   const writeHandlers = {
     create: api.create
-      ? mutation(api.create, {
+      ? mutation({
+          mutationFn: api.create,
           onSuccess,
           onError: () => setError(intl.formatMessage(actualMessages.errorCreate)),
         })
       : undefined,
     update: api.update
-      ? mutation(api.update, {
+      ? mutation({
+          mutationFn: api.update,
           onSuccess,
           onError: () => setError(intl.formatMessage(actualMessages.errorUpdate)),
         })
       : undefined,
     delete: api.delete
-      ? mutation(api.delete, {
+      ? mutation({
+          mutationFn: api.delete,
           onSuccess,
           onError: () => setError(intl.formatMessage(actualMessages.errorDelete)),
         })
@@ -214,10 +218,10 @@ export const useResourcesRoot = <
     },
     states: {
       fetching: readHandler.fetchStatus === 'fetching',
-      creating: writeHandlers.create?.isLoading,
-      deleting: writeHandlers.delete?.isLoading,
-      updating: writeHandlers.update?.isLoading,
-      isLoading: [...Object.values(writeHandlers), readHandler].some((value) => value?.isLoading),
+      creating: writeHandlers.create?.isPending,
+      deleting: writeHandlers.delete?.isPending,
+      updating: writeHandlers.update?.isPending,
+      isLoading: [...Object.values(writeHandlers), readHandler].some((value) => value?.isPending),
       isFetched: readHandler.isFetched,
       error,
     },

@@ -15,6 +15,7 @@ import { resolveAll } from 'utils/resolveAll';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { noop } from 'utils';
 import { useSession } from 'contexts/SessionContext';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 import {
   LtiConsumerContentParameters,
   LtiConsumerContext,
@@ -199,10 +200,9 @@ describe('widgets/LtiConsumer', () => {
       id: 1337,
     } as LtiConsumerProps;
 
-    const ltiContextDeferred = new Deferred();
     fetchMock.get(
       '/api/v1.0/plugins/lti-consumer/1337/context/?user_id=a-random-uuid',
-      ltiContextDeferred.promise,
+      HttpStatusCode.INTERNAL_SERVER_ERROR,
     );
 
     const { container } = render(
@@ -211,12 +211,8 @@ describe('widgets/LtiConsumer', () => {
       </Wrapper>,
     );
 
-    await act(async () => ltiContextDeferred.resolve(500));
-
     await waitFor(() =>
-      expect(mockHandle).toHaveBeenCalledWith(
-        Error('Failed to retrieve LTI consumer context at placeholder 1337'),
-      ),
+      expect(mockHandle).toHaveBeenCalledWith(new HttpError(500, 'Internal Server Error')),
     );
 
     // Nothing has been rendered

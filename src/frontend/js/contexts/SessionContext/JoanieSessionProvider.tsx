@@ -26,7 +26,7 @@ import { Session } from './SessionContext';
  * @return {Function} Session.register - redirect to the register page
  * @return {Function} Session.destroy - set Session to undefined then make a request to logout user to the authentication service
  */
-const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
+const JoanieSessionProvider = ({ children }: React.PropsWithChildren<{}>) => {
   /**
    * `user` is:
    * - `undefined` when we have not made the `whoami` request yet;
@@ -36,21 +36,14 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
   const [refetchInterval, setRefetchInterval] = useState<false | number>(false);
   const {
     data: user,
+    isPending,
     isStale,
-    isLoading: isLoadingUser,
-  } = useQuery<Nullable<User>>(['user'], AuthenticationApi!.me, {
+  } = useQuery<Nullable<User>>({
+    queryKey: ['user'],
+    queryFn: AuthenticationApi!.me,
     refetchOnWindowFocus: true,
     refetchInterval,
     staleTime: REACT_QUERY_SETTINGS.staleTimes.session,
-    onError: () => {
-      sessionStorage.removeItem(RICHIE_USER_TOKEN);
-    },
-    onSuccess: (data) => {
-      sessionStorage.removeItem(RICHIE_USER_TOKEN);
-      if (data) {
-        sessionStorage.setItem(RICHIE_USER_TOKEN, data.access_token!);
-      }
-    },
   });
   const previousUserState = usePrevious(user);
 
@@ -92,10 +85,14 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
   }, [invalidate]);
 
   useEffect(() => {
-    if (user && !isStale) {
-      addresses.methods.prefetch();
-      creditCards.methods.prefetch();
-      orders.methods.prefetch();
+    sessionStorage.removeItem(RICHIE_USER_TOKEN);
+    if (user) {
+      sessionStorage.setItem(RICHIE_USER_TOKEN, user.access_token!);
+      if (!isStale) {
+        addresses.methods.prefetch();
+        creditCards.methods.prefetch();
+        orders.methods.prefetch();
+      }
     }
 
     if (!isTestEnv) {
@@ -133,8 +130,8 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<any>) => {
   return <Session.Provider value={context}>{children}</Session.Provider>;
 };
 
-export default ({ children, ...props }: React.PropsWithChildren<any>) => (
+export default ({ children }: React.PropsWithChildren<{}>) => (
   <JoanieApiProvider>
-    <JoanieSessionProvider {...props}>{children}</JoanieSessionProvider>
+    <JoanieSessionProvider>{children}</JoanieSessionProvider>
   </JoanieApiProvider>
 );

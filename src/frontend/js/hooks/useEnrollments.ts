@@ -39,7 +39,7 @@ const props: UseResourcesProps<Enrollment, EnrollmentsQuery, API['user']['enroll
   onMutationSuccess: async (queryClient) => {
     // When enrollment creation/update succeeded, we have to invalidate orders queries
     // to refetch fresh data containing updated enrollments.
-    await queryClient.invalidateQueries(['user', 'orders']);
+    await queryClient.invalidateQueries({ queryKey: ['user', 'orders'] });
   },
 };
 /**

@@ -10,6 +10,7 @@ import {
 import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import JoanieSessionProvider from './JoanieSessionProvider';
 import { useSession } from '.';
 
@@ -67,6 +68,19 @@ describe('JoanieSessionProvider', () => {
     await waitFor(async () =>
       expect(sessionStorage.getItem(RICHIE_USER_TOKEN)).toEqual(user.access_token),
     );
+  });
+
+  it('removes user access token within session storage on error', async () => {
+    sessionStorage.setItem(RICHIE_USER_TOKEN, 'richie');
+    fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', HttpStatusCode.FORBIDDEN);
+
+    await act(async () => {
+      render(<Wrapper />);
+    });
+    await waitFor(async () => {
+      expect(fetchMock.lastUrl()).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
+    });
+    await waitFor(async () => expect(sessionStorage.getItem(RICHIE_USER_TOKEN)).toBeNull());
   });
 
   it('prefetches addresses, credit-cards and order when user is authenticated', async () => {
