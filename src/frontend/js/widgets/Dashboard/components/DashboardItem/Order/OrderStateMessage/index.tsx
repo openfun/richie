@@ -65,8 +65,8 @@ const OrderStateMessage = ({ order }: OrderStateMessageProps) => {
   };
 
   useEffect(() => {
-    if (!(order.state in orderStatusMessages)) {
-      handle(new Error(`Unknow order state ${order.state}`));
+    if (!Object.values(OrderState).includes(order.state)) {
+      handle(new Error(`Unknown order state ${order.state}`));
     }
   }, [order.state]);
 
