@@ -1,4 +1,4 @@
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { useMemo } from 'react';
 import { Button } from '@openfun/cunningham-react';
 import { Button as RichieButton } from 'components/Button';
@@ -69,6 +69,11 @@ const messages = {
     description: 'Text displayed when course runs list is loading',
     id: 'components.DashboardItemCourseEnrollingRun.courseRunsLoading',
   },
+  contractUnsigned: {
+    id: 'components.DashboardItemCourseEnrollingRun.contractUnsigned',
+    description: 'Message displayed as disabled button title when a contract needs to be signed.',
+    defaultMessage: 'You have to sign the training contract before enrolling to your course.',
+  },
 };
 
 interface Props {
@@ -76,6 +81,7 @@ interface Props {
   activeEnrollment?: Enrollment;
   order?: Order;
   writable?: boolean;
+  hideEnrollButtons?: boolean;
   icon?: boolean;
   notEnrolledUrl?: string;
 }
@@ -87,6 +93,7 @@ export const DashboardItemCourseEnrolling = ({
   order,
   icon = false,
   notEnrolledUrl = '#',
+  hideEnrollButtons,
 }: Props) => {
   if (writable && !order) {
     throw new Error('Order is required when writable is true');
@@ -98,7 +105,11 @@ export const DashboardItemCourseEnrolling = ({
           {activeEnrollment ? (
             <Enrolled icon={icon} enrollment={activeEnrollment} />
           ) : (
-            <NotEnrolled icon={icon} notEnrolledUrl={notEnrolledUrl} />
+            <NotEnrolled
+              icon={icon}
+              notEnrolledUrl={notEnrolledUrl}
+              hideEnrollButtons={hideEnrollButtons}
+            />
           )}
         </div>
       )}
@@ -113,15 +124,17 @@ export const DashboardItemCourseEnrolling = ({
   );
 };
 
+interface DashboardItemCourseEnrollingRunsProps {
+  course: AbstractCourse;
+  enrollments: Enrollment[];
+  order?: Order;
+}
+
 const DashboardItemCourseEnrollingRuns = ({
   course,
   enrollments,
   order,
-}: {
-  course: AbstractCourse;
-  enrollments: Enrollment[];
-  order?: Order;
-}) => {
+}: DashboardItemCourseEnrollingRunsProps) => {
   const { enroll, isLoading, error } = useEnroll(enrollments, order);
 
   // Hide runs with finished enrollment.
@@ -153,6 +166,7 @@ const DashboardItemCourseEnrollingRuns = ({
           courseRun={data.courseRun}
           selected={data.selected}
           enroll={() => enroll(data.courseRun)}
+          order={order}
         />
       ))}
       {isLoading && (
@@ -171,20 +185,27 @@ const DashboardItemCourseEnrollingRuns = ({
   );
 };
 
+interface DashboardItemCourseEnrollingRunProps {
+  courseRun: CourseRun;
+  selected: boolean;
+  enroll: () => void;
+  order?: Order;
+}
+
 const DashboardItemCourseEnrollingRun = ({
   courseRun,
   selected,
   enroll,
-}: {
-  courseRun: CourseRun;
-  selected: boolean;
-  enroll: () => void;
-}) => {
+  order,
+}: DashboardItemCourseEnrollingRunProps) => {
+  const intl = useIntl();
   const formatDate = useDateFormat();
+  const haveToSignContract = !!(order?.contract && !order.contract.signed_on);
   const isOpenedForEnrollment = useMemo(
     () => courseRun.state.priority < Priority.FUTURE_NOT_YET_OPEN,
     [courseRun],
   );
+
   return (
     <div
       className="dashboard-item__course-enrolling__run"
@@ -216,7 +237,13 @@ const DashboardItemCourseEnrollingRun = ({
             <Icon name={IconTypeEnum.CHECK} size="small" />
           </div>
         ) : (
-          <Button disabled={!isOpenedForEnrollment} color="secondary" onClick={enroll}>
+          <Button
+            className="dashboard-item__button"
+            disabled={!isOpenedForEnrollment || haveToSignContract}
+            color="secondary"
+            onClick={enroll}
+            title={haveToSignContract ? intl.formatMessage(messages.contractUnsigned) : ''}
+          >
             <FormattedMessage {...messages.enrollRun} />
           </Button>
         )}
@@ -225,20 +252,31 @@ const DashboardItemCourseEnrollingRun = ({
   );
 };
 
-const NotEnrolled = ({ icon, notEnrolledUrl }: { icon: boolean; notEnrolledUrl: string }) => {
+const NotEnrolled = ({
+  icon,
+  notEnrolledUrl,
+  hideEnrollButtons,
+}: {
+  icon: boolean;
+  notEnrolledUrl: string;
+  hideEnrollButtons?: boolean;
+}) => {
   return (
     <>
       <div className="dashboard-item__block__status">
         {icon && <Icon name={IconTypeEnum.SCHOOL} />}
         <FormattedMessage {...messages.notEnrolled} />
       </div>
-      <RouterButton
-        color="outline-primary"
-        href={notEnrolledUrl}
-        data-testid="dashboard-item-enrollment__button"
-      >
-        <FormattedMessage {...messages.enrollCourse} />
-      </RouterButton>
+      {!hideEnrollButtons && (
+        <RouterButton
+          color="outline-primary"
+          href={notEnrolledUrl}
+          data-testid="dashboard-item-enrollment__button"
+          className="dashboard-item__button"
+        >
+          <FormattedMessage {...messages.enrollCourse} />
+        </RouterButton>
+      )}
     </>
   );
 };

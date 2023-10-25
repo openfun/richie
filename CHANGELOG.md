@@ -13,6 +13,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add a footer on enrollment's item in the learner dashboard. It give the
   possibility to purchase linked product or download linked certificate.
 - Add download contracts pages on the teacher dashboard.
+- Add a contract information and actions in learner dashboard order's 
+  listing and details.
+- In the learner dashboard, enroll actions are disabled when an unsigned
+  contract is linked to the order.
 
 ### Changed
 
