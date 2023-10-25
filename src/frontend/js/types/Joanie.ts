@@ -24,11 +24,19 @@ export interface Organization {
   logo: JoanieFile;
 }
 
+export interface ContractDefinition {
+  id: string;
+  description: string;
+  language: string;
+  title: string;
+}
+
 export interface Contract {
   id: string;
-  learner_name: string;
-  product_title: string;
-  sign_date: string;
+  created_on: string;
+  signed_on: string;
+  definition: ContractDefinition;
+  order: Order;
 }
 
 export interface CourseListItem extends Resource {
@@ -98,6 +106,7 @@ export interface Product {
   remaining_order_count?: number | null;
   state: CourseState;
   instructions: Nullable<string>;
+  contract_definition?: ContractDefinition;
 }
 
 export interface CourseProduct extends Product {

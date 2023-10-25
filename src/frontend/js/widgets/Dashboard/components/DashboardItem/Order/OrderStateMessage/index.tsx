@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-
+import { useEffect } from 'react';
 import { Order, OrderState } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { handle } from 'utils/errors/handle';
@@ -71,7 +70,7 @@ const OrderStateMessage = ({ order }: OrderStateMessageProps) => {
   }, [order.state]);
 
   if (order.state === OrderState.VALIDATED) {
-    if (contract && !contract.sign_date) {
+    if (contract && !contract.signed_on) {
       return <FormattedMessage {...messages.statusWaitingSignature} />;
     }
 

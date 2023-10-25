@@ -77,11 +77,11 @@ const TeacherDashboardContracts = ({
   useEffect(() => onPageChange(pagination.page), [pagination.page]);
 
   const rows = useMemo(() => {
-    return contracts.map(({ id, learner_name, product_title, sign_date }) => ({
+    return contracts.map(({ id, signed_on, order }) => ({
       id,
-      learnerName: learner_name,
-      productTitle: product_title,
-      signDate: intl.formatDate(sign_date),
+      learnerName: order.owner,
+      productTitle: order.product,
+      signDate: intl.formatDate(signed_on),
     }));
   }, [contracts]);
 

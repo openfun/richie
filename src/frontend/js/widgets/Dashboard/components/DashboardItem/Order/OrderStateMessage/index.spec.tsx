@@ -66,7 +66,7 @@ describe('<DashboardItemOrder/>', () => {
   it('should display message for validated order that need learner signature', () => {
     const order = OrderFactory({
       state: OrderState.VALIDATED,
-      contract: ContractFactory({ sign_date: undefined }).one(),
+      contract: ContractFactory({ signed_on: undefined }).one(),
     }).one();
     render(
       <Wrapper>
@@ -79,7 +79,7 @@ describe('<DashboardItemOrder/>', () => {
   it("should display message for validated order that don't have a generated certificate", () => {
     const order = OrderFactory({
       state: OrderState.VALIDATED,
-      contract: ContractFactory({ sign_date: new Date().toISOString() }).one(),
+      contract: ContractFactory({ signed_on: new Date().toISOString() }).one(),
       certificate: undefined,
     }).one();
     render(
@@ -97,7 +97,7 @@ describe('<DashboardItemOrder/>', () => {
   it('should display message for validated order that have a generated certificate', () => {
     const order = OrderFactory({
       state: OrderState.VALIDATED,
-      contract: ContractFactory({ sign_date: new Date().toISOString() }).one(),
+      contract: ContractFactory({ signed_on: new Date().toISOString() }).one(),
       certificate: 'FAKE_CERTIFICATE_ID',
     }).one();
     render(
