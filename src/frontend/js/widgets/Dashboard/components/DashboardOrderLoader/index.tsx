@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useOmniscientOrder } from 'hooks/useOrders';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
@@ -13,6 +13,11 @@ const messages = defineMessages({
     description: 'Message displayed while loading an order',
     id: 'components.DashboardOrderLoader.loading',
   },
+  signatureNeeded: {
+    defaultMessage: 'You need to sign your contract before enrolling to course runs',
+    description: 'Banner displayed when the contract is not signed',
+    id: 'components.DashboardOrderLoader.signatureNeeded',
+  },
 });
 
 export const DashboardOrderLoader = () => {
@@ -21,6 +26,8 @@ export const DashboardOrderLoader = () => {
   const course = order.item?.course as CourseLight;
   const courseProduct = useCourseProduct(course?.code, { productId: order.item?.product });
   const fetching = order.states.fetching || courseProduct.states.fetching;
+  const needsSignature = order.item?.contract && !order.item?.contract.signed_on;
+  const intl = useIntl();
 
   return (
     <>
@@ -31,12 +38,17 @@ export const DashboardOrderLoader = () => {
           </span>
         </Spinner>
       )}
-      {(order.states.error || courseProduct.states.error) && (
-        <Banner
-          message={(order.states.error ?? courseProduct.states.error)!}
-          type={BannerType.ERROR}
-        />
-      )}
+      <div className="dashboard-order-loader__banners">
+        {(order.states.error || courseProduct.states.error) && (
+          <Banner
+            message={(order.states.error ?? courseProduct.states.error)!}
+            type={BannerType.ERROR}
+          />
+        )}
+        {needsSignature && (
+          <Banner message={intl.formatMessage(messages.signatureNeeded)} type={BannerType.ERROR} />
+        )}
+      </div>
       {order.item && (
         <DashboardItemOrder
           writable={true}
