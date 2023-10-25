@@ -28,6 +28,7 @@ import {
   JoanieFile,
   Contract,
   OrderEnrollment,
+  ContractDefinition,
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
@@ -71,12 +72,22 @@ export const TargetCourseFactory = factory((): TargetCourse => {
   };
 });
 
+export const ContractDefinitionFactory = factory((): ContractDefinition => {
+  return {
+    id: faker.string.uuid(),
+    description: faker.lorem.paragraph(),
+    language: faker.location.countryCode(),
+    title: faker.lorem.sentence(),
+  };
+});
+
 export const ContractFactory = factory((): Contract => {
   return {
     id: faker.string.uuid(),
-    learner_name: faker.person.fullName(),
-    product_title: faker.lorem.words(10),
-    sign_date: faker.date.past().toISOString(),
+    signed_on: faker.date.past().toISOString(),
+    created_on: faker.date.past().toISOString(),
+    definition: ContractDefinitionFactory().one(),
+    order: OrderFactory().one(),
   };
 });
 
@@ -123,6 +134,7 @@ export const CredentialProductFactory = factory((): Product => {
     price_currency: faker.finance.currencyCode(),
     call_to_action: faker.lorem.words(3),
     certificate_definition: CertificationDefinitionFactory().one(),
+    contract_definition: ContractDefinitionFactory().one(),
     target_courses: TargetCourseFactory().many(5),
     remaining_order_count: faker.number.int({ min: 1, max: 100 }),
     state: CourseStateFactory().one(),
