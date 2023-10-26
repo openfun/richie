@@ -20,7 +20,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Update cunnigham to 2.0.0
+- Update courses and organizations default permissions
+- Update cunningham to 2.0.0
 - Update frontend components OrderStateMessage with new computed state 
   'waiting signature'
 - Update SaleTunnel to add certificate product course run information.
