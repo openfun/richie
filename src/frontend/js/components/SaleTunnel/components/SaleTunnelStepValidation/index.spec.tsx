@@ -44,7 +44,7 @@ describe('SaleTunnelStepValidation', () => {
     });
 
     screen.getByRole('heading', { level: 2, name: product.title });
-    screen.getByText(`${formatter.format(product.price).replaceAll(' ', ' ')} including VAT`);
+    screen.getByText(`${formatter.format(product.price).replaceAll(/\s/g, ' ')} including VAT`);
 
     expect(screen.getByTestId('product-certificate')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 3, name: product.certificate_definition.title }));
