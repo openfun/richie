@@ -142,7 +142,7 @@ export const getRoutes = () => {
         create: `${baseUrl}/enrollments/`,
         update: `${baseUrl}/enrollments/:id/`,
       },
-      wishlist: {
+      wish: {
         get: `${baseUrl}/courses/:course_code/wish/`,
         create: `${baseUrl}/courses/:course_code/wish/`,
         delete: `${baseUrl}/courses/:course_code/wish/`,
@@ -296,19 +296,19 @@ const API = (): Joanie.API => {
         get: async (filters) => {
           const { id = '', ...parsedFilters } = filters || {};
           let url: string;
-          if (id) url = ROUTES.user.wishlist.get.replace(':course_code', id);
-          else url = ROUTES.user.wishlist.get.replace(':course_code/', '');
+          if (id) url = ROUTES.user.wish.get.replace(':course_code', id);
+          else url = ROUTES.user.wish.get.replace(':course_code/', '');
           return fetchWithJWT(buildApiUrl(url, parsedFilters), {
             method: 'GET',
           }).then(checkStatus);
         },
         create: async (id) => {
-          return fetchWithJWT(ROUTES.user.wishlist.create.replace(':course_code', id), {
+          return fetchWithJWT(ROUTES.user.wish.create.replace(':course_code', id), {
             method: 'POST',
           }).then(checkStatus);
         },
         delete: async (id) => {
-          return fetchWithJWT(ROUTES.user.wishlist.delete.replace(':course_code', id), {
+          return fetchWithJWT(ROUTES.user.wish.delete.replace(':course_code', id), {
             method: 'DELETE',
           }).then(checkStatus);
         },
