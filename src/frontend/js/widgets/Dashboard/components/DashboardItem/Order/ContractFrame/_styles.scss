@@ -1,0 +1,62 @@
+iframe#lex-persona {
+  // The width of the iframe mimics the width of the modal.
+  max-width: 1024px;
+  width: 75vw;
+  height: calc(100vh - 4rem);
+  left: 50% !important;
+  transform: translate(-50%, 0);
+  top: 0 !important;
+  margin: 3rem auto;
+  background-color: white;
+
+  @include media-breakpoint-down(sm) {
+    margin: 1rem auto;
+    width: calc(100% - 2rem);
+  }
+}
+
+.ContractFrame {
+  &__modal-body {
+    padding: 0 3rem 1.5rem 3rem;
+  }
+
+  &__loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 0;
+    gap: 4rem;
+  }
+
+  &__caption {
+    color: r-theme-val(contract-frame, title-color);
+    font-size: 1.5rem;
+  }
+
+  &__finished {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      margin-top: 2.5rem;
+    }
+  }
+
+  &__content {
+    color: r-theme-val(contract-frame, content-color);
+    font-size: 0.875rem;
+    line-height: 1.3em;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    max-width: 300px;
+  }
+
+  &__dummy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+}

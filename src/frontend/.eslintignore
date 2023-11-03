@@ -1,2 +1,4 @@
 # Don't lint node_modules
 node_modules
+# LexPersona iframe script
+iframe-manager.js

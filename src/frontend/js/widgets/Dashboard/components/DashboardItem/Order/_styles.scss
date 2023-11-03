@@ -1,0 +1,12 @@
+.dashboard-item-order {
+  .dashboard__contract-item {
+    .dashboard-item__block__head__title {
+      display: flex;
+      align-items: center;
+
+      .c__loader {
+        margin-right: 1rem;
+      }
+    }
+  }
+}

@@ -35,6 +35,13 @@ export const PAYMENT_SETTINGS = {
   pollLimit: 30,
 };
 
+export const CONTRACT_SETTINGS = {
+  // Interval in ms to poll the related order when a signature has succeeded.
+  pollInterval: 1000,
+  // Number of retries
+  pollLimit: 30,
+};
+
 const DEFAULT_PER_PAGE = 50;
 export const PER_PAGE = {
   teacherContractList: 25,

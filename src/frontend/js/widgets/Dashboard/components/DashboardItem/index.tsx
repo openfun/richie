@@ -3,8 +3,8 @@ import { JoanieFile } from 'types/Joanie';
 import { PropsWithTestId } from 'types/utils';
 
 type Props = PropsWithTestId<{
-  title: string | ReactNode;
-  code: string;
+  title: ReactNode;
+  code?: string;
   imageUrl?: string;
   imageFile?: JoanieFile;
   footer?: ReactNode;

@@ -1,3 +1,5 @@
 js/translations/*
 i18n/**/*
 public-path.js
+# LexPersona iframe script
+iframe-manager.js

@@ -1,6 +1,6 @@
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Button } from '@openfun/cunningham-react';
-import { Contract, CourseLight, CredentialOrder, Product } from 'types/Joanie';
+import { useState } from 'react';
+import { CourseLight, CredentialOrder, Product } from 'types/Joanie';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { useCertificate } from 'hooks/useCertificates';
@@ -11,6 +11,12 @@ import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourseProduct } from 'hooks/useCourseProducts';
+import { ContractFrame } from 'widgets/Dashboard/components/DashboardItem/Order/ContractFrame';
+import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
+import {
+  DashboardItemOrderContract,
+  DashboardItemOrderContractFooter,
+} from 'widgets/Dashboard/components/DashboardItem/Order/Contract';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
 import { DashboardItem } from '../index';
@@ -27,27 +33,6 @@ const messages = {
     description: 'Accessible label displayed while certificate is being fetched on the dashboard.',
     defaultMessage: 'Loading certificate...',
   },
-  contractUnsigned: {
-    id: 'components.DashboardItemOrder.contractUnsigned',
-    description: "Message displayed when the order's contract needs to be signed.",
-    defaultMessage: 'You have to sign this contract to access your training.',
-  },
-  contractSigned: {
-    id: 'components.DashboardItemOrder.contractSigned',
-    description:
-      "Message displayed when the order's contract has been signed and can be downloaded.",
-    defaultMessage: "You've accepted the training contract.",
-  },
-  contractSignActionLabel: {
-    id: 'components.DashboardItemOrder.contractSignActionLabel',
-    description: 'Label of "sign contract" action.',
-    defaultMessage: 'Sign',
-  },
-  contractDownloadActionLabel: {
-    id: 'components.DashboardItemOrder.contractDownloadActionLabel',
-    description: 'Label of "download contract" action.',
-    defaultMessage: 'Download',
-  },
 };
 
 interface DashboardItemOrderProps {
@@ -61,58 +46,6 @@ interface DashboardItemOrderCertificateProps {
   order: CredentialOrder;
   product: Product;
 }
-
-interface DashboardItemOrderContractProps {
-  order: CredentialOrder;
-  product?: Product;
-}
-
-interface DashboardItemOrderContractFooterProps {
-  contract?: Contract;
-  mode?: 'default' | 'compact';
-}
-
-const DashboardItemOrderContractFooter = ({ contract }: DashboardItemOrderContractFooterProps) => {
-  const signContract = () => {
-    // TODO: sign contract action
-  };
-  const downloadContract = () => {
-    // TODO: download contract action
-  };
-
-  return (
-    <div className="dashboard-item-order__footer">
-      <div className="dashboard-item__block__status">
-        <FormattedMessage
-          {...(contract?.signed_on ? messages.contractSigned : messages.contractUnsigned)}
-        />
-      </div>
-      {contract?.signed_on ? (
-        <Button className="dashboard-item__button" color="secondary" onClick={downloadContract}>
-          <FormattedMessage {...messages.contractDownloadActionLabel} />
-        </Button>
-      ) : (
-        <Button className="dashboard-item__button" onClick={signContract}>
-          <FormattedMessage {...messages.contractSignActionLabel} />
-        </Button>
-      )}
-    </div>
-  );
-};
-
-const DashboardItemOrderContract = ({ order, product }: DashboardItemOrderContractProps) => {
-  if (!order.contract || !product?.contract_definition) {
-    return null;
-  }
-
-  return (
-    <DashboardItem
-      title={product?.contract_definition.title}
-      code=""
-      footer={<DashboardItemOrderContractFooter contract={order.contract} />}
-    />
-  );
-};
 
 const DashboardItemOrderCertificate = ({ order, product }: DashboardItemOrderCertificateProps) => {
   if (!order.certificate) {
@@ -150,15 +83,22 @@ export const DashboardItemOrder = ({
 
   const intl = useIntl();
   const query = useCourseProduct(course.code, { productId: order.product });
+  const [contractFrameOpened, setContractFrameOpened] = useState(false);
+  const [contractLoading, setContractLoading] = useState(false);
   const product = query?.item?.product;
-  const needsSignature = order.contract && !order.contract.signed_on;
-
+  const needsSignature = orderNeedsSignature(order, product);
   const getRoutePath = getDashboardRoutePath(useIntl());
 
   return (
     <div className="dashboard-item-order">
-      {writable && !order.contract?.signed_on && (
-        <DashboardItemOrderContract order={order} product={product} />
+      {writable && needsSignature && (
+        <DashboardItemOrderContract
+          order={order}
+          product={product}
+          onSign={() => setContractFrameOpened(true)}
+          loading={contractLoading}
+          writable={writable}
+        />
       )}
       <DashboardItem
         data-testid={`dashboard-item-order-${order.id}`}
@@ -184,7 +124,11 @@ export const DashboardItemOrder = ({
               )}
             </div>
             {!writable && needsSignature && (
-              <DashboardItemOrderContractFooter contract={order.contract} />
+              <DashboardItemOrderContractFooter
+                contract={order.contract}
+                writable={writable}
+                order={order}
+              />
             )}
           </>
         }
@@ -217,8 +161,24 @@ export const DashboardItemOrder = ({
           <DashboardItemOrderCertificate order={order} product={product} />
         </div>
       )}
-      {writable && order.contract?.signed_on && (
-        <DashboardItemOrderContract order={order} product={product} />
+      {writable && (
+        <>
+          {product?.certificate_definition && order.contract?.signed_on && (
+            <DashboardItemOrderContract order={order} product={product} writable={writable} />
+          )}
+          <ContractFrame
+            order={order}
+            product={product}
+            isOpen={contractFrameOpened}
+            onDone={() => {
+              // Set the contract in loading mode waiting for order re-fetch that will remove it.
+              setContractLoading(true);
+            }}
+            onClose={() => {
+              setContractFrameOpened(false);
+            }}
+          />
+        </>
       )}
     </div>
   );

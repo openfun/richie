@@ -556,6 +556,10 @@ $r-theme: (
     background-color: r-color('white'),
     overlay-background-color: r-color('smoke'),
   ),
+  contract-frame: (
+    content-color: r-color(purplish-grey),
+    title-color: r-color('charcoal'),
+  ),
 ) !default;
 
 // On a Richie child project you can easily change a specific value using:
