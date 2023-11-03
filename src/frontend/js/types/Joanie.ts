@@ -196,7 +196,7 @@ export const ACTIVE_ORDER_STATES = [OrderState.PENDING, OrderState.VALIDATED, Or
 
 export interface Order {
   id: string;
-  course?: CourseLight['code'] | CourseLight;
+  course?: CourseLight;
   created_on: string;
   target_enrollments: Enrollment[];
   enrollment?: EnrollmentLight;

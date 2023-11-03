@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { faker } from '@faker-js/faker';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { OrderFactory } from 'utils/test/factories/joanie';
+import { CourseLightFactory, OrderFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -52,14 +52,14 @@ describe('useProductOrder', () => {
       const order = OrderFactory({
         state: currentState,
         created_on: new Date().toISOString(),
-        course: '00000',
+        course: CourseLightFactory({ code: '00000' }).one(),
       }).one();
       const ordersByState = ACTIVE_ORDER_STATES.filter((state) => state !== currentState).map(
         (state) =>
           OrderFactory({
             state,
             created_on: faker.date.past({ years: 1 }).toISOString(),
-            course: '00000',
+            course: CourseLightFactory({ code: '00000' }).one(),
             product: order.product,
           }).one(),
       );
