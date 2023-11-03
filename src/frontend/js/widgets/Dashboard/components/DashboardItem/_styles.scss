@@ -191,7 +191,8 @@
 }
 
 .dashboard-item-order {
-  > .dashboard-item {
+  > .dashboard-item,
+  .dashboard__contract-item {
     padding-top: rem-calc(16px);
     &:first-child {
       padding-top: 0;

@@ -29,8 +29,10 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
             }
         */
         username: 'admin',
+        // access_token:
+        //   'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJhZG1pbiIsImp0aSI6IjIxZGM5ZmI5MTZjYzRmNjViNTQ3OThmNjJmZWM0NTU0IiwiZnVsbF9uYW1lIjoiSm9obiBEb2UiLCJleHAiOjEwNjUyMjU2ODA4LCJpYXQiOjE2NTIyNTY4MDgsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJsYW5ndWFnZSI6ImVuIn0.2bjiuPOdU3X2RkKIJ7_a9S8UnVoSfZrSlktsp7jXFzY',
         access_token:
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJhZG1pbiIsImp0aSI6IjIxZGM5ZmI5MTZjYzRmNjViNTQ3OThmNjJmZWM0NTU0IiwiZnVsbF9uYW1lIjoiSm9obiBEb2UiLCJleHAiOjEwNjUyMjU2ODA4LCJpYXQiOjE2NTIyNTY4MDgsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJsYW5ndWFnZSI6ImVuIn0.2bjiuPOdU3X2RkKIJ7_a9S8UnVoSfZrSlktsp7jXFzY',
+          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwidXNlcm5hbWUiOiJhZG1pbiIsImp0aSI6IjIxZGM5ZmI5MTZjYzRmNjViNTQ3OThmNjJmZWM0NTU0IiwiZnVsbF9uYW1lIjoiSm9obiBEb2UiLCJleHAiOjEwNjUyMjU2ODA4LCJpYXQiOjE2NTIyNTY4MDgsImVtYWlsIjoibmF0aGFuLnZhc3NlQGdtYWlsLmNvbSIsImxhbmd1YWdlIjoiZW4ifQ.AykDoZxql-XOwxt83svGn6wtKLVz1HEEVyi12DQiQ60',
       }),
       login: () => location.reload(),
       register: () => location.reload(),

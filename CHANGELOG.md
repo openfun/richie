@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   listing and details.
 - In the learner dashboard, enroll actions are disabled when an unsigned
   contract is linked to the order.
+- Add the ability to sign an order's contract.
 
 ### Changed
 
