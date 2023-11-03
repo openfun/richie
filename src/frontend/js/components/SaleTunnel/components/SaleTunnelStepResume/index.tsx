@@ -1,5 +1,6 @@
 import { Button } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { SuccessIcon } from 'components/SuccessIcon';
 
 const messages = defineMessages({
   congratulations: {
@@ -31,17 +32,7 @@ interface SaleTunnelStepResumeProps {
 export const SaleTunnelStepResume = ({ next }: SaleTunnelStepResumeProps) => (
   <section className="SaleTunnelStepResume">
     <header className="SaleTunnelStepResume__header">
-      <svg
-        className="SaleTunnelStepResume__success-icon"
-        role="img"
-        viewBox="0 0 32 32"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle className="circle back" cx="16" cy="16" r="14" />
-        <circle className="circle" cx="16" cy="16" r="14" />
-        <polyline className="line back" points="7.5 15.5 14 22.5 24 10.5" />
-        <polyline className="line" points="7.5 15.5 14 22.5 24 10.5" />
-      </svg>
+      <SuccessIcon />
       <h3 className="SaleTunnelStepResume__title">
         <FormattedMessage {...messages.congratulations} />
       </h3>
