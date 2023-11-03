@@ -12,6 +12,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import queryString from 'query-string';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
+  CourseLightFactory,
   CourseProductRelationFactory,
   EnrollmentFactory,
   OrderFactory,
@@ -232,14 +233,15 @@ describe('CourseProductItem', () => {
     const { product } = relation;
     const order = OrderFactory({
       product: product.id,
-      course: '00000',
+      course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
     }).one();
 
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
       product: order.product,
-      course: order.course,
+      // TODO (rlecellier): remove this when order.course is mandatory
+      course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -289,7 +291,7 @@ describe('CourseProductItem', () => {
     const relation = CourseProductRelationFactory().one();
     const order: Order = OrderFactory({
       product: relation.product.id,
-      course: '00000',
+      course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: relation.product.target_courses,
     }).one();
 
@@ -299,7 +301,8 @@ describe('CourseProductItem', () => {
     );
     const orderQueryParameters = {
       product: order.product,
-      course: order.course,
+      // TODO (rlecellier): remove this when order.course is mandatory
+      course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -360,7 +363,7 @@ describe('CourseProductItem', () => {
     }).one();
     const order: Order = OrderFactory({
       product: product.id,
-      course: '00000',
+      course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       target_enrollments: [enrollment],
     }).one();
@@ -368,7 +371,8 @@ describe('CourseProductItem', () => {
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
       product: order.product,
-      course: order.course,
+      // TODO (rlecellier): remove this when order.course is mandatory
+      course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -419,14 +423,15 @@ describe('CourseProductItem', () => {
     const { product } = relation;
     const order = OrderFactory({
       product: product.id,
-      course: '00000',
+      course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
       product: order.product,
-      course: order.course,
+      // TODO (rlecellier): remove this when order.course is mandatory
+      course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -517,14 +522,15 @@ describe('CourseProductItem', () => {
     const { product } = relation;
     const order = OrderFactory({
       product: product.id,
-      course: '00000',
+      course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       state: OrderState.SUBMITTED,
     }).one();
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
       product: order.product,
-      course: order.course,
+      // TODO (rlecellier): remove this when order.course is mandatory
+      course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -572,7 +578,7 @@ describe('CourseProductItem', () => {
     const relation = CourseProductRelationFactory().one();
     const order: Order = OrderFactory({
       product: relation.product.id,
-      course: '00000',
+      course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: relation.product.target_courses,
       state: OrderState.SUBMITTED,
     }).one();
@@ -582,7 +588,8 @@ describe('CourseProductItem', () => {
     );
     const orderQueryParameters = {
       product: order.product,
-      course: order.course,
+      // TODO (rlecellier): remove this when order.course is mandatory
+      course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
