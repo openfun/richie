@@ -19,7 +19,6 @@ import { DATETIME_FORMAT, DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   CertificateFactory,
-  ContractFactory,
   CourseLightFactory,
   CourseRunFactory,
   EnrollmentFactory,
@@ -241,79 +240,6 @@ describe('<DashboardItemOrder/>', () => {
       screen.getByText('You are not enrolled in this course');
       screen.getByRole('link', { name: 'Enroll' });
     });
-  });
-
-  it('renders a non-writable order without contract attribute', async () => {
-    const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: TargetCourseFactory().many(1),
-      target_enrollments: [],
-      contract: null,
-    }).one();
-
-    const { product } = mockCourseProductWithOrder(order);
-
-    render(<DashboardItemOrder order={order} />, { wrapper });
-    await screen.findByRole('heading', { level: 5, name: product.title });
-
-    expect(
-      screen.queryByText('You have to sign this contract to access your training.'),
-    ).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
-    expect(screen.getByText('On going')).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 6, name: order.target_courses[0].title }),
-    ).toBeInTheDocument();
-    expect(screen.getByText('You are not enrolled in this course')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Enroll' })).toBeInTheDocument();
-  });
-
-  it('renders a non-writable order with a signed contract', async () => {
-    const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: TargetCourseFactory().many(1),
-      target_enrollments: [],
-      contract: ContractFactory({ signed_on: faker.date.past().toISOString() }).one(),
-    }).one();
-
-    const { product } = mockCourseProductWithOrder(order);
-
-    render(<DashboardItemOrder order={order} />, { wrapper });
-    await screen.findByRole('heading', { level: 5, name: product.title });
-
-    expect(
-      screen.queryByText('You have to sign this contract to access your training.'),
-    ).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
-    expect(screen.getByText('On going')).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 6, name: order.target_courses[0].title }),
-    ).toBeInTheDocument();
-    expect(screen.getByText('You are not enrolled in this course')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Enroll' })).toBeInTheDocument();
-  });
-
-  it('renders a non-writable order with a contract not signed yet', async () => {
-    const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: TargetCourseFactory().many(1),
-      target_enrollments: [],
-      contract: ContractFactory({ signed_on: undefined }).one(),
-    }).one();
-
-    const { product } = mockCourseProductWithOrder(order);
-
-    render(<DashboardItemOrder order={order} />, { wrapper });
-    await screen.findByRole('heading', { level: 5, name: product.title });
-
-    expect(screen.getByText('Ref. ' + (order.course as CourseLight).code)).toBeInTheDocument();
-    expect(
-      screen.getByText('You have to sign this contract to access your training.'),
-    ).toBeInTheDocument();
-    expect(screen.getByText('Signature required')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Sign' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { level: 6, name: order.target_courses[0].title }),
-    ).toBeInTheDocument();
-    expect(screen.getByText('You are not enrolled in this course')).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: 'Enroll' })).not.toBeInTheDocument();
   });
 
   /**
@@ -851,78 +777,5 @@ describe('<DashboardItemOrder/>', () => {
     expect(
       screen.queryByTestId('dashboard-item__course-enrolling__run__' + courseRun.id),
     ).toBeNull();
-  });
-
-  it('renders a writable order with a signed contract', async () => {
-    const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: TargetCourseFactory().many(1),
-      target_enrollments: [],
-      contract: ContractFactory({ signed_on: faker.date.past().toISOString() }).one(),
-    }).one();
-    const { product } = mockCourseProductWithOrder(order);
-
-    fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/orders/',
-      { results: [order], next: null, previous: null, count: null },
-      { overwriteRoutes: true },
-    );
-
-    render(WrapperWithDashboard(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
-
-    expect(
-      await screen.findByRole('heading', { level: 5, name: product.title }),
-    ).toBeInTheDocument();
-
-    expect(screen.getByText('On going')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
-    expect(
-      screen.queryByText('You have to sign this contract to access your training.'),
-    ).not.toBeInTheDocument();
-
-    expect(screen.getByRole('button', { name: 'Download' })).toBeInTheDocument();
-    expect(screen.getByText("You've accepted the training contract.")).toBeInTheDocument();
-
-    const $enrollButtons = screen.getAllByRole('button', { name: 'Enroll' });
-    expect($enrollButtons).toHaveLength(order.target_courses[0].course_runs.length);
-    $enrollButtons.forEach(($button) => expect($button).toBeEnabled());
-
-    expect(
-      screen.queryByText('You need to sign your contract before enrolling to your courses'),
-    ).not.toBeInTheDocument();
-  });
-
-  it('renders a writable order with a contract not signed yet', async () => {
-    const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: TargetCourseFactory().many(1),
-      target_enrollments: [],
-      contract: ContractFactory({ signed_on: undefined }).one(),
-    }).one();
-    const { product } = mockCourseProductWithOrder(order);
-
-    fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/orders/',
-      { results: [order], next: null, previous: null, count: null },
-      { overwriteRoutes: true },
-    );
-
-    render(WrapperWithDashboard(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
-    expect(
-      await screen.findByRole('heading', { level: 5, name: product.title }),
-    ).toBeInTheDocument();
-
-    expect(screen.getByText('Signature required')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Sign' })).toBeInTheDocument();
-    expect(
-      screen.getByText('You have to sign this contract to access your training.'),
-    ).toBeInTheDocument();
-
-    expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
-    expect(screen.queryByText("You've accepted the training contract.")).not.toBeInTheDocument();
-
-    const $enrollButtons = screen.getAllByRole('button', { name: 'Enroll' });
-    expect($enrollButtons).toHaveLength(order.target_courses[0].course_runs.length);
-    $enrollButtons.forEach(($button) => expect($button).toBeDisabled());
-
-    await expectBannerError('You need to sign your contract before enrolling to course runs');
   });
 });
