@@ -1,4 +1,4 @@
-import { findByText, waitFor } from '@testing-library/react';
+import { getByText, waitFor } from '@testing-library/react';
 import { BannerType } from 'components/Banner';
 
 export const expectBannerError = async (message: string, rootElement: ParentNode = document) => {
@@ -16,6 +16,6 @@ export const expectBanner = async (
   await waitFor(async () => {
     const banner = rootElement.querySelector('.banner--' + type) as HTMLElement;
     expect(banner).not.toBeNull();
-    await findByText(banner!, message);
+    getByText(banner!, message);
   });
 };
