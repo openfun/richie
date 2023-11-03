@@ -18,6 +18,49 @@ parameters:
     type: boolean
     default: false
 
+commands:
+  skip_unchanged:
+    parameters:
+      except_branches:
+        default: master
+        description: Comma-separated list of git branches where we should never skip tests.
+        type: string
+      git_base_branch:
+        default: origin/master
+        description: The branch to compare against when looking for changing.
+        type: string
+      paths:
+        description: The paths to look for changes in.
+        type: string
+    description: Skip if no changes to "<< parameters.paths >>"
+    steps:
+      - run:
+          name: Skip job when not modifying this folder
+          command: |
+            echo "Skip debugging"
+            echo "--------------"
+            GIT_BASE_BRANCH=<<parameters.git_base_branch>>
+            PATHS=<<parameters.paths>>
+            EXCEPT_BRANCHES=<<parameters.except_branches>>
+            echo "GIT_BASE_BRANCH=$GIT_BASE_BRANCH"
+            echo "PATHS=$PATHS"
+            echo "EXCEPT_BRANCHES=$EXCEPT_BRANCHES"
+
+            BRANCH_NAME="$(git rev-parse --abbrev-ref HEAD)"
+            echo "BRANCH_NAME=$BRANCH_NAME"
+
+            IFS=' ' read -ra paths_arr \<<< "$PATHS"
+            echo "paths_arr=" "${paths_arr[@]}"
+
+            CHANGED_FILES="$(git diff "$GIT_BASE_BRANCH"..."$(git symbolic-ref --short -q HEAD)" --name-only --diff-filter=ACMRT "${paths_arr[@]}")";
+            echo "CHANGED_FILES=$CHANGED_FILES"
+
+            if [[ "$EXCEPT_BRANCHES" == *"${BRANCH_NAME}"* ]] || [ -n "${CHANGED_FILES}" ];
+            then
+                exit 0;
+            fi
+            circleci step halt;
+
 aliases:
   - &checkout_fun
     checkout:
@@ -189,6 +232,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - skip_unchanged:
+          paths: ~/fun/src/richie
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -211,6 +256,8 @@ jobs:
     working_directory: ~/fun/src/richie
     steps:
       - *checkout_fun
+      - skip_unchanged:
+          paths: ~/fun/src/richie
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -237,6 +284,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - skip_unchanged:
+          paths: ~/fun/src/richie
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -267,6 +316,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - skip_unchanged:
+          paths: ~/fun/src/richie
       - attach_workspace:
           at: ~/fun
       - run:
@@ -329,6 +380,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - skip_unchanged:
+          paths: ~/fun/src/richie
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -422,6 +475,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - skip_unchanged:
+          paths: ~/fun/src/richie
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -509,6 +564,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - skip_unchanged:
+          paths: ~/fun/src/richie
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -590,6 +647,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - skip_unchanged:
+          paths: ~/fun/src/richie
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -631,6 +690,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - skip_unchanged:
+          paths: ~/fun/src/richie
       # Ensure we restore frontend production builds in Richie's static
       # directory
       - attach_workspace:
@@ -660,6 +721,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - skip_unchanged:
+          paths: ~/fun/src/richie
       # Restore built python packages
       - attach_workspace:
           at: ~/fun
@@ -683,6 +746,8 @@ jobs:
     working_directory: ~/fun/src/frontend
     steps:
       - *checkout_fun
+      - skip_unchanged:
+          paths: ~/fun/src/frontend
       - *restore_node_modules
       # If the yarn.lock file is not up-to-date with the package.json file,
       # using the --frozen-lockfile should fail.
@@ -716,6 +781,8 @@ jobs:
     working_directory: ~/fun/src/frontend
     steps:
       - *checkout_fun
+      - skip_unchanged:
+          paths: ~/fun/src/frontend
       - *restore_node_modules
       - run:
           name: Build front-end application in production mode
@@ -745,6 +812,8 @@ jobs:
     working_directory: ~/fun-site-factory/frontend
     steps:
       - *checkout_fun
+      - skip_unchanged:
+          paths: ~/fun-site-factory/frontend
       - *restore_node_modules
       - run:
           name: Initialize a frontend project that uses richie-education module
@@ -855,6 +924,8 @@ jobs:
     working_directory: ~/fun/src/frontend
     steps:
       - *checkout_fun
+      - skip_unchanged:
+          paths: ~/fun/src/frontend
       - *restore_node_modules
       - run:
           name: Lint code with eslint
@@ -874,6 +945,8 @@ jobs:
     working_directory: ~/fun/src/frontend
     steps:
       - *checkout_fun
+      - skip_unchanged:
+          paths: ~/fun/src/frontend
       - *restore_node_modules
       - run:
           name: Run tests
@@ -888,6 +961,8 @@ jobs:
     working_directory: ~/wrk
     steps:
       - *checkout_fun
+      - skip_unchanged:
+          paths: ~/wrk
       - run:
           name: Check SCSS library
           command: |
@@ -911,6 +986,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - *checkout_fun
+      - skip_unchanged:
+          paths: ~/fun/src/frontend
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
