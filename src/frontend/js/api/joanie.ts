@@ -132,6 +132,7 @@ export const getRoutes = () => {
         invoice: {
           download: `${baseUrl}/orders/:id/invoice/`,
         },
+        submit_for_signature: `${baseUrl}/orders/:id/submit_for_signature/`,
       },
       certificates: {
         download: `${baseUrl}/certificates/:id/download/`,
@@ -158,6 +159,7 @@ export const getRoutes = () => {
       },
       contracts: {
         get: `${baseUrl}/contracts/:id/`,
+        download: `${baseUrl}/contracts/:id/download/`,
       },
     },
     courses: {
@@ -269,6 +271,10 @@ const API = (): Joanie.API => {
             return fetchWithJWT(url).then(checkStatus);
           },
         },
+        submit_for_signature: async (id) =>
+          fetchWithJWT(ROUTES.user.orders.submit_for_signature.replace(':id', id), {
+            method: 'POST',
+          }).then(checkStatus),
       },
       enrollments: {
         create: async (payload) =>
@@ -333,6 +339,11 @@ const API = (): Joanie.API => {
           }
 
           return fetchWithJWT(url, { method: 'GET' }).then(checkStatus);
+        },
+        download(id: string): Promise<any> {
+          return fetchWithJWT(ROUTES.user.contracts.download.replace(':id', id), {
+            method: 'GET',
+          }).then(checkStatus);
         },
       },
     },

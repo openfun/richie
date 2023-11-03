@@ -387,6 +387,10 @@ export interface ContractFilters extends PaginatedResourceQuery {
   course_id?: CourseListItem['id'];
 }
 
+export interface OrderSubmitForSignatureResponse {
+  invitation_link: string;
+}
+
 export interface ApiResourceInterface<
   TData extends Resource,
   TResourceQuery extends ResourcesQuery = ResourcesQuery,
@@ -424,6 +428,7 @@ interface APIUser {
       download(payload: { order_id: Order['id']; invoice_reference: string }): Promise<File>;
     };
     submit(payload: OrderSubmitPayload): Promise<OrderPaymentInfo>;
+    submit_for_signature(id: string): Promise<OrderSubmitForSignatureResponse>;
   };
   certificates: {
     download(id: string): Promise<File>;
@@ -460,6 +465,7 @@ interface APIUser {
     ): ContractFilters extends { id: string }
       ? Promise<Nullable<Contract>>
       : Promise<PaginatedResponse<Contract[]>>;
+    download(id: string): Promise<File>;
   };
 }
 
