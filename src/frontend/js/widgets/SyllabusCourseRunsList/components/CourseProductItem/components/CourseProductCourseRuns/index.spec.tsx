@@ -9,7 +9,7 @@ import {
   CourseLightFactory,
   CourseRunFactory,
   EnrollmentFactory,
-  OrderFactory,
+  CredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import type { CourseLight, CourseRun, Enrollment, OrderLite } from 'types/Joanie';
@@ -133,7 +133,7 @@ describe('CourseProductCourseRuns', () => {
     );
 
     it('renders a warning message when no course runs are provided', () => {
-      const order: OrderLite = OrderFactory().one();
+      const order: OrderLite = CredentialOrderFactory().one();
 
       render(
         <Wrapper productId={order.product} code="00000">
@@ -147,7 +147,7 @@ describe('CourseProductCourseRuns', () => {
     it('renders a list of course runs with a call to action to enroll', async () => {
       const course: CourseLight = CourseLightFactory().one();
       const courseRuns: CourseRun[] = CourseRunFactory().many(2);
-      const order: OrderLite = OrderFactory().one();
+      const order: OrderLite = CredentialOrderFactory().one();
 
       render(
         <Wrapper productId={order.product} code={course.code}>
@@ -258,7 +258,7 @@ describe('CourseProductCourseRuns', () => {
     it('enroll with errors', async () => {
       const course: CourseLight = CourseLightFactory().one();
       const courseRuns: CourseRun[] = CourseRunFactory().many(2);
-      const order: OrderLite = OrderFactory().one();
+      const order: OrderLite = CredentialOrderFactory().one();
       fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, HttpStatusCode.OK);
 
       render(
@@ -371,7 +371,7 @@ describe('CourseProductCourseRuns', () => {
           text: CourseStateTextEnum.STARTING_ON,
         },
       }).one();
-      const order = OrderFactory().one();
+      const order = CredentialOrderFactory().one();
 
       render(
         <Wrapper productId={order.product} code="00000">
