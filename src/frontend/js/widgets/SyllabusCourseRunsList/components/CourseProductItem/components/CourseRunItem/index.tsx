@@ -25,7 +25,7 @@ other {Languages:}
 
 interface Props {
   targetCourse: Joanie.TargetCourse;
-  order?: Joanie.Order;
+  order?: Joanie.CredentialOrder;
 }
 
 const CourseRunItem = ({ targetCourse, order }: Props) => {
