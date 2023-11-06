@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Priority } from 'types';
 import { confirm } from 'utils/indirection/window';
 import { resolveAll } from 'utils/resolveAll';
-import { CourseRun, Enrollment, Order } from 'types/Joanie';
+import { CourseRun, Enrollment, CredentialOrder } from 'types/Joanie';
 import { useEnrollments } from 'hooks/useEnrollments';
 
 const messages = {
@@ -22,7 +22,7 @@ const messages = {
   },
 };
 
-export const useEnroll = (enrollments: Enrollment[], order?: Order) => {
+export const useEnroll = (enrollments: Enrollment[], order?: CredentialOrder) => {
   const enrollmentResources = useEnrollments();
   const [isLoading, setLoading] = useState(false);
   const intl = useIntl();
