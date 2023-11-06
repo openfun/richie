@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Enrollment, ProductType } from 'types/Joanie';
-import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
+import { Enrolled } from '../DashboardItemCourseEnrolling';
 import { DashboardItem } from '..';
 import ProductCertificateFooter from './ProductCertificateFooter';
 
@@ -16,12 +16,11 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
 
   const footerList = useMemo(() => {
     const partialFooterList = [
-      <DashboardItemCourseEnrolling
-        key={`${enrollment.id}`}
-        course={course}
-        activeEnrollment={enrollment}
-        icon={true}
-      />,
+      <div data-testid={'dashboard-item__course-enrolling__' + course.code}>
+        <div className="dashboard-item__course-enrolling__infos">
+          <Enrolled icon={true} enrollment={enrollment} />
+        </div>
+      </div>,
     ];
     enrollment.products.forEach((product) => {
       if (product.type === ProductType.CERTIFICATE) {
