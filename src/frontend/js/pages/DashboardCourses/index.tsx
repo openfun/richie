@@ -4,7 +4,7 @@ import { Button } from '@openfun/cunningham-react';
 import {
   useOrdersEnrollments,
   isEnrollement,
-  isOrder,
+  isCredentialOrder,
 } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { Spinner } from 'components/Spinner';
 import { DashboardItemEnrollment } from 'widgets/Dashboard/components/DashboardItem/Enrollment/DashboardItemEnrollment';
@@ -62,7 +62,7 @@ export const DashboardCourses = () => {
                 data-testid="order-enrollment-list-item"
               >
                 {isEnrollement(datum) && <DashboardItemEnrollment enrollment={datum} />}
-                {isOrder(datum) && <DashboardItemOrder order={datum} />}
+                {isCredentialOrder(datum) && <DashboardItemOrder order={datum} />}
               </div>
             ))}
           </div>

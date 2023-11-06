@@ -12,12 +12,12 @@ import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import {
   CourseProductRelationFactory,
   EnrollmentFactory,
-  OrderFactory,
+  CredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
-import { CourseLight, CourseProductRelation, Enrollment, Order } from 'types/Joanie';
+import { CourseLight, CourseProductRelation, Enrollment, CredentialOrder } from 'types/Joanie';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
@@ -91,7 +91,7 @@ describe('<DashboardCourses/>', () => {
     );
   };
 
-  const mockOrders = (orders: Order[], client?: QueryClient) => {
+  const mockOrders = (orders: CredentialOrder[], client?: QueryClient) => {
     const relations: Record<string, CourseProductRelation> = {};
     orders.forEach((order) => {
       const productId = order.product;
@@ -122,7 +122,7 @@ describe('<DashboardCourses/>', () => {
   };
 
   const expectList = (
-    entities: (Order | Enrollment)[],
+    entities: (CredentialOrder | Enrollment)[],
     relations: Record<string, CourseProductRelation>,
   ) => {
     const itemElements = document.querySelectorAll<HTMLElement>('.dashboard__courses__list__item');
@@ -165,7 +165,7 @@ describe('<DashboardCourses/>', () => {
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
   });
 
-  const merge = (orders: Order[], enrollments: Enrollment[]) => {
+  const merge = (orders: CredentialOrder[], enrollments: Enrollment[]) => {
     return [...orders, ...enrollments].sort((a, b) => {
       const aDate = new Date(a.created_on);
       const bDate = new Date(b.created_on);
@@ -175,7 +175,10 @@ describe('<DashboardCourses/>', () => {
 
   it('should render the list of entities', async () => {
     const client = createTestQueryClient({ user: true });
-    const { orders, relations } = mockOrders(OrderFactory().many(perPage * 2 + 1), client);
+    const { orders, relations } = mockOrders(
+      CredentialOrderFactory().many(perPage * 2 + 1),
+      client,
+    );
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}&product__type=credential`,
       {
