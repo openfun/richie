@@ -1,9 +1,8 @@
-import { Children, useMemo } from 'react';
+import { Children, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import c from 'classnames';
+import { ProductType, OrderState, CourseLight, Product, CredentialOrder } from 'types/Joanie';
 import { useCourseProduct } from 'hooks/useCourseProducts';
-import type * as Joanie from 'types/Joanie';
-import { OrderState } from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
@@ -12,6 +11,7 @@ import { Maybe } from 'types/utils';
 import useDateFormat from 'hooks/useDateFormat';
 import { ProductHelper } from 'utils/ProductHelper';
 import useProductOrder from 'hooks/useProductOrder';
+import { handle } from 'utils/errors/handle';
 import CertificateItem from './components/CourseProductCertificateItem';
 import CourseRunItem from './components/CourseRunItem';
 
@@ -45,18 +45,18 @@ const messages = defineMessages({
   },
 });
 
-export interface Props {
+export interface CourseProductItemProps {
   compact?: boolean;
-  courseCode: Joanie.CourseLight['code'];
-  productId: Joanie.Product['id'];
+  courseCode: CourseLight['code'];
+  productId: Product['id'];
 }
 
 type HeaderProps = {
   compact: boolean;
   hasPurchased: boolean;
   isPendingState: boolean;
-  order: Maybe<Joanie.Order>;
-  product: Joanie.Product;
+  order: Maybe<CredentialOrder>;
+  product: Product;
 };
 const Header = ({ product, order, hasPurchased, isPendingState, compact }: HeaderProps) => {
   const intl = useIntl();
@@ -120,7 +120,7 @@ const Header = ({ product, order, hasPurchased, isPendingState, compact }: Heade
     </header>
   );
 };
-const Content = ({ product, order }: { product: Joanie.Product; order?: Joanie.Order }) => {
+const Content = ({ product, order }: { product: Product; order?: CredentialOrder }) => {
   const targetCourses = useMemo(() => {
     if (order) {
       return order.target_courses;
@@ -147,19 +147,40 @@ const Content = ({ product, order }: { product: Joanie.Product; order?: Joanie.O
   );
 };
 
-const CourseProductItem = ({ productId, courseCode, compact = false }: Props) => {
+const CourseProductItem = ({ productId, courseCode, compact = false }: CourseProductItemProps) => {
   const { item: courseProductRelation, states: productQueryStates } = useCourseProduct(courseCode, {
     productId,
   });
   const product = courseProductRelation?.product;
-  const { item: order, states: orderQueryStates } = useProductOrder({ productId, courseCode });
+  const { item: productOrder, states: orderQueryStates } = useProductOrder({
+    productId,
+    courseCode,
+  });
 
+  // FIXME(rlecellier): useCourseProduct need's a filter on product.type that only return
+  // CredentialOrder
+  const order = productOrder as CredentialOrder;
   const isPendingState = !order || order.state === OrderState.PENDING;
   const hasPurchased = (order && order.state === OrderState.VALIDATED) ?? false;
 
   const hasError = Boolean(productQueryStates.error);
   const isFetching = productQueryStates.fetching || orderQueryStates.fetching;
   const canShowContent = !compact || hasPurchased;
+
+  useEffect(() => {
+    if (product && product.type !== ProductType.CREDENTIAL) {
+      handle(
+        new Error(
+          `Cannot render product "${product.type}" (${product.id}) through CourseProductItem on course ${courseCode}`,
+        ),
+      );
+    }
+  }, [product]);
+
+  if (product && product.type !== ProductType.CREDENTIAL) {
+    // CourseProductItem only handle CREDENTIAL products
+    return null;
+  }
 
   return (
     <CourseProductProvider courseCode={courseCode} productId={productId}>
