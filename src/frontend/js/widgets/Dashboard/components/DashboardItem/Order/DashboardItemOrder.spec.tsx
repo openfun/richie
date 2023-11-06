@@ -23,17 +23,16 @@ import {
   CourseLightFactory,
   CourseRunFactory,
   EnrollmentFactory,
-  OrderFactory,
+  CredentialOrderFactory,
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
-import { Certificate, CourseLight, CourseRun, Order, OrderState } from 'types/Joanie';
+import { Certificate, CourseLight, CourseRun, CredentialOrder, OrderState } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { resolveAll } from 'utils/resolveAll';
 import { confirm } from 'utils/indirection/window';
 import { Priority } from 'types';
 import { sleep } from 'utils/sleep';
-import { noop } from 'utils';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { Deferred } from 'utils/test/deferred';
@@ -98,17 +97,8 @@ describe('<DashboardItemOrder/>', () => {
    * Global
    */
 
-  it('crashes if no course is provided', async () => {
-    const order: Order = { ...OrderFactory().one(), course: undefined };
-    // Hide console.error ( https://stackoverflow.com/questions/66328549/testing-an-error-thrown-by-a-react-component-using-testing-library-and-jest )
-    jest.spyOn(console, 'error').mockImplementation(noop);
-    expect(() => render(<DashboardItemOrder order={order} />)).toThrow(
-      'Order must provide course object attribute',
-    );
-  });
-
   it('renders a pending order', async () => {
-    const order: Order = OrderFactory({ state: OrderState.PENDING }).one();
+    const order: CredentialOrder = CredentialOrderFactory({ state: OrderState.PENDING }).one();
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
@@ -121,7 +111,9 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders an order with certificate', async () => {
-    const order: Order = OrderFactory({ certificate: faker.string.uuid() }).one();
+    const order: CredentialOrder = CredentialOrderFactory({
+      certificate: faker.string.uuid(),
+    }).one();
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
@@ -151,7 +143,9 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('does not render an order with certificate', async () => {
-    const order: Order = OrderFactory({ certificate: faker.string.uuid() }).one();
+    const order: CredentialOrder = CredentialOrderFactory({
+      certificate: faker.string.uuid(),
+    }).one();
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
@@ -169,7 +163,7 @@ describe('<DashboardItemOrder/>', () => {
    */
 
   it('renders a non-writable order without target courses without certificate', async () => {
-    const order: Order = OrderFactory().one();
+    const order: CredentialOrder = CredentialOrderFactory().one();
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
@@ -182,7 +176,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a non-writable order with target courses', async () => {
-    const order: Order = OrderFactory().one();
+    const order: CredentialOrder = CredentialOrderFactory().one();
     const { product } = mockCourseProductWithOrder(order);
 
     render(<DashboardItemOrder order={order} />, { wrapper });
@@ -196,7 +190,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a non-writable order with enrolled target course ', async () => {
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory().many(1),
     }).one();
 
@@ -230,7 +224,7 @@ describe('<DashboardItemOrder/>', () => {
     });
   });
   it('renders a non-writable order with not enrolled target course', async () => {
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory().many(1),
       target_enrollments: [],
     }).one();
@@ -250,7 +244,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a non-writable order without contract attribute', async () => {
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory().many(1),
       target_enrollments: [],
       contract: null,
@@ -274,7 +268,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a non-writable order with a signed contract', async () => {
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory().many(1),
       target_enrollments: [],
       contract: ContractFactory({ signed_on: faker.date.past().toISOString() }).one(),
@@ -298,7 +292,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a non-writable order with a contract not signed yet', async () => {
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory().many(1),
       target_enrollments: [],
       contract: ContractFactory({ signed_on: undefined }).one(),
@@ -327,7 +321,7 @@ describe('<DashboardItemOrder/>', () => {
    */
 
   it('renders a writable order with no target courses', async () => {
-    const order: Order = OrderFactory().one();
+    const order: CredentialOrder = CredentialOrderFactory().one();
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
@@ -342,7 +336,9 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a writable order with enrolled target course', async () => {
-    const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
+    const order: CredentialOrder = CredentialOrderFactory({
+      target_courses: TargetCourseFactory().many(1),
+    }).one();
     // Make target course enrolled.
     order.target_enrollments = [
       {
@@ -389,7 +385,7 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with not enrolled target course and enrolls it', async () => {
     // Initial order without enrollment.
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory().many(1),
       target_enrollments: [],
     }).one();
@@ -467,7 +463,7 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with not enrolled target course and try to enroll it, but the API returns an error and it is shown', async () => {
     // Initial order without enrollment.
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory().many(1),
       target_enrollments: [],
     }).one();
@@ -517,7 +513,9 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with enrolled target course and changes the enrollment', async () => {
     // Initial order with first course run enrolled.
-    const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
+    const order: CredentialOrder = CredentialOrderFactory({
+      target_courses: TargetCourseFactory().many(1),
+    }).one();
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
     order.target_enrollments = EnrollmentFactory({ course_run: initialEnrolledCourseRun }).many(1);
 
@@ -614,7 +612,9 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with enrolled target course and refuse the confirm message when enrolling', async () => {
     // Initial order without enrollment.
-    const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
+    const order: CredentialOrder = CredentialOrderFactory({
+      target_courses: TargetCourseFactory().many(1),
+    }).one();
 
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
     order.target_enrollments = [
@@ -687,7 +687,9 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with non-enrolled (is_active=false) target course and changes the enrollment', async () => {
     // Initial order with first course run enrolled.
-    const order: Order = OrderFactory({ target_courses: TargetCourseFactory().many(1) }).one();
+    const order: CredentialOrder = CredentialOrderFactory({
+      target_courses: TargetCourseFactory().many(1),
+    }).one();
 
     const courseRun = order.target_courses[0].course_runs[0];
     const enrollment = {
@@ -770,7 +772,7 @@ describe('<DashboardItemOrder/>', () => {
     expect(queryByRole(runElement, 'button', { name: 'Enroll' })).toBeNull();
   });
   it('renders a writable order with not yet-opened course runs', async () => {
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory({
         course_runs: CourseRunFactory({
           enrollment_start: faker.date.past({ years: 0.5 }).toISOString(),
@@ -810,7 +812,7 @@ describe('<DashboardItemOrder/>', () => {
         priority: Priority.FUTURE_CLOSED,
       },
     }).one();
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory({ course_runs: [courseRun] }).many(1),
     }).one();
 
@@ -842,7 +844,7 @@ describe('<DashboardItemOrder/>', () => {
       },
     }).one();
 
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory({ course_runs: [courseRun] }).many(1),
       target_enrollments: [],
     }).one();
@@ -864,7 +866,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a writable order with a signed contract', async () => {
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory().many(1),
       target_enrollments: [],
       contract: ContractFactory({ signed_on: faker.date.past().toISOString() }).one(),
@@ -902,7 +904,7 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a writable order with a contract not signed yet', async () => {
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory().many(1),
       target_enrollments: [],
       contract: ContractFactory({ signed_on: undefined }).one(),

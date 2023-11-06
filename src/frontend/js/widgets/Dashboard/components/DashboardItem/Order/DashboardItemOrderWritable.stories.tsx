@@ -1,12 +1,16 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { Order, OrderState, Product, TargetCourse } from 'types/Joanie';
+import { CredentialOrder, OrderState, Product, TargetCourse } from 'types/Joanie';
 import { QueryStateFactory } from 'utils/test/factories/reactQuery';
-import { OrderFactory, ProductFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
+import {
+  CredentialOrderFactory,
+  ProductFactory,
+  TargetCourseFactory,
+} from 'utils/test/factories/joanie';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { enrollment } from '../stories.mock';
 import { DashboardItemOrder } from './DashboardItemOrder';
 
-const order: Order = { ...OrderFactory().one(), target_courses: [] };
+const order: CredentialOrder = CredentialOrderFactory({ target_courses: [] }).one();
 const product: Product = ProductFactory().one();
 const targetsCourses: TargetCourse[] = TargetCourseFactory().many(3);
 

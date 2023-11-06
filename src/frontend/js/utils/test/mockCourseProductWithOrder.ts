@@ -1,5 +1,5 @@
 import fetchMock from 'fetch-mock';
-import { CourseLight, Order } from 'types/Joanie';
+import { CredentialOrder } from 'types/Joanie';
 import {
   ContractDefinitionFactory,
   CourseFactory,
@@ -7,8 +7,8 @@ import {
   ProductFactory,
 } from 'utils/test/factories/joanie';
 
-export const mockCourseProductWithOrder = (order: Order) => {
-  const courseCode = (order.course as CourseLight).code;
+export const mockCourseProductWithOrder = (order: CredentialOrder) => {
+  const courseCode = order.course.code;
   const productId = order.product;
   const relation = CourseProductRelationFactory({
     product: ProductFactory({

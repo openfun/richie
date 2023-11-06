@@ -1,6 +1,6 @@
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
-import { Contract, CourseLight, Order, Product } from 'types/Joanie';
+import { Contract, CourseLight, CredentialOrder, Product } from 'types/Joanie';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { useCertificate } from 'hooks/useCertificates';
@@ -51,19 +51,19 @@ const messages = {
 };
 
 interface DashboardItemOrderProps {
-  order: Order;
+  order: CredentialOrder;
   showDetailsButton?: boolean;
   showCertificate?: boolean;
   writable?: boolean;
 }
 
 interface DashboardItemOrderCertificateProps {
-  order: Order;
+  order: CredentialOrder;
   product: Product;
 }
 
 interface DashboardItemOrderContractProps {
-  order: Order;
+  order: CredentialOrder;
   product?: Product;
 }
 
@@ -147,9 +147,7 @@ export const DashboardItemOrder = ({
   writable = false,
 }: DashboardItemOrderProps) => {
   const course = order.course as CourseLight;
-  if (!course) {
-    throw new Error('Order must provide course object attribute.');
-  }
+
   const intl = useIntl();
   const query = useCourseProduct(course.code, { productId: order.product });
   const product = query?.item?.product;
