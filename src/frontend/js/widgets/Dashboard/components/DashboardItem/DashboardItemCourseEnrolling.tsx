@@ -4,7 +4,13 @@ import { Button } from '@openfun/cunningham-react';
 import { Button as RichieButton } from 'components/Button';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { Priority } from 'types';
-import { AbstractCourse, CourseRun, Enrollment, Order } from 'types/Joanie';
+import {
+  CourseRun,
+  Enrollment,
+  CredentialOrder,
+  AbstractCourse,
+  CertificateOrder,
+} from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import useDateFormat, { DATETIME_FORMAT } from 'hooks/useDateFormat';
@@ -76,11 +82,11 @@ const messages = {
   },
 };
 
-interface Props {
+interface DashboardItemCourseEnrollingProps {
   course: AbstractCourse;
   activeEnrollment?: Enrollment;
-  order?: Order;
-  writable?: boolean;
+  order?: CredentialOrder;
+  writable: boolean;
   hideEnrollButtons?: boolean;
   icon?: boolean;
   notEnrolledUrl?: string;
@@ -94,7 +100,7 @@ export const DashboardItemCourseEnrolling = ({
   icon = false,
   notEnrolledUrl = '#',
   hideEnrollButtons,
-}: Props) => {
+}: DashboardItemCourseEnrollingProps) => {
   if (writable && !order) {
     throw new Error('Order is required when writable is true');
   }
@@ -127,7 +133,7 @@ export const DashboardItemCourseEnrolling = ({
 interface DashboardItemCourseEnrollingRunsProps {
   course: AbstractCourse;
   enrollments: Enrollment[];
-  order?: Order;
+  order?: CredentialOrder;
 }
 
 const DashboardItemCourseEnrollingRuns = ({
@@ -189,7 +195,7 @@ interface DashboardItemCourseEnrollingRunProps {
   courseRun: CourseRun;
   selected: boolean;
   enroll: () => void;
-  order?: Order;
+  order?: CredentialOrder | CertificateOrder;
 }
 
 const DashboardItemCourseEnrollingRun = ({
