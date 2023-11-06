@@ -1,10 +1,12 @@
 import { useParams } from 'react-router-dom';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { useMemo } from 'react';
 import { useOmniscientOrder } from 'hooks/useOrders';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
-import { CourseLight } from 'types/Joanie';
 import { useCourseProduct } from 'hooks/useCourseProducts';
+import { isCredentialOrder } from 'pages/DashboardCourses/useOrdersEnrollments';
+import { handle } from 'utils/errors/handle';
 import { DashboardItemOrder } from '../DashboardItem/Order/DashboardItemOrder';
 
 const messages = defineMessages({
@@ -18,20 +20,39 @@ const messages = defineMessages({
     description: 'Banner displayed when the contract is not signed',
     id: 'components.DashboardOrderLoader.signatureNeeded',
   },
+  wrongLinkedProductError: {
+    defaultMessage: 'This page is not available for this order.',
+    description: "Error message displayed when order's linked product type is not handle.",
+    id: 'components.DashboardOrderLoader.wrongLinkedProductError',
+  },
 });
 
 export const DashboardOrderLoader = () => {
   const params = useParams<{ orderId: string }>();
-  const order = useOmniscientOrder(params.orderId);
-  const course = order.item?.course as CourseLight;
-  const courseProduct = useCourseProduct(course?.code, { productId: order.item?.product });
-  const fetching = order.states.fetching || courseProduct.states.fetching;
-  const needsSignature = order.item?.contract && !order.item?.contract.signed_on;
+  const {
+    item: order,
+    states: { fetching: fetchingOrder, error: errorOrder },
+  } = useOmniscientOrder(params.orderId);
+  const {
+    states: { fetching: fetchingCourseProduct, error: errorCourseProduct },
+  } = useCourseProduct(order?.course?.code, { productId: order?.product });
   const intl = useIntl();
+
+  const credentialOrder = order && isCredentialOrder(order) ? order : undefined;
+  const wrongLinkedProductError = useMemo(() => {
+    if (order && !credentialOrder) {
+      handle(new Error("Order's details page only accept order linked to CREDENTIAL product."));
+      return intl.formatMessage(messages.wrongLinkedProductError);
+    }
+  }, [credentialOrder]);
+  const error = errorOrder || errorCourseProduct || wrongLinkedProductError;
+
+  const fetching = fetchingOrder || fetchingCourseProduct;
+  const needsSignature = order?.contract && !order?.contract.signed_on;
 
   return (
     <>
-      {fetching && !order.item && (
+      {fetching && !order && (
         <Spinner aria-labelledby="loading-courses-data">
           <span id="loading-courses-data">
             <FormattedMessage {...messages.loading} />
@@ -39,20 +60,15 @@ export const DashboardOrderLoader = () => {
         </Spinner>
       )}
       <div className="dashboard-order-loader__banners">
-        {(order.states.error || courseProduct.states.error) && (
-          <Banner
-            message={(order.states.error ?? courseProduct.states.error)!}
-            type={BannerType.ERROR}
-          />
-        )}
+        {error && <Banner message={error} type={BannerType.ERROR} />}
         {needsSignature && (
           <Banner message={intl.formatMessage(messages.signatureNeeded)} type={BannerType.ERROR} />
         )}
       </div>
-      {order.item && (
+      {credentialOrder && (
         <DashboardItemOrder
           writable={true}
-          order={order.item}
+          order={credentialOrder}
           showDetailsButton={false}
           showCertificate={true}
         />
