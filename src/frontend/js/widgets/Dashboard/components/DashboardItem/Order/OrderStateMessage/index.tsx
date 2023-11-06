@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl';
 import { useEffect } from 'react';
-import { Order, OrderState } from 'types/Joanie';
+import { CertificateOrder, CredentialOrder, OrderState } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { handle } from 'utils/errors/handle';
 
@@ -51,7 +51,7 @@ export const messages = {
 };
 
 interface OrderStateMessageProps {
-  order: Order;
+  order: CredentialOrder | CertificateOrder;
 }
 
 const OrderStateMessage = ({ order }: OrderStateMessageProps) => {
