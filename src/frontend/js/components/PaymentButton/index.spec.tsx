@@ -7,8 +7,8 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import {
   AddressFactory,
   CreditCardFactory,
-  OrderWithOneClickPaymentFactory,
-  OrderWithPaymentFactory,
+  CredentialOrderWithOneClickPaymentFactory,
+  CredentialOrderWithPaymentFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
 import { PAYMENT_SETTINGS } from 'settings';
@@ -178,8 +178,8 @@ describe('PaymentButton', () => {
     const product: Joanie.Product = ProductFactory().one();
     const billingAddress: Joanie.Address = AddressFactory().one();
     const handleSuccess = jest.fn();
-    const { payment_info: paymentInfo, ...order }: Joanie.OrderWithPaymentInfo =
-      OrderWithPaymentFactory().one();
+    const { payment_info: paymentInfo, ...order }: Joanie.CredentialOrderWithPaymentInfo =
+      CredentialOrderWithPaymentFactory().one();
     fetchMock
       .get(
         `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
@@ -277,8 +277,8 @@ describe('PaymentButton', () => {
     const product: Joanie.Product = ProductFactory().one();
     const billingAddress: Joanie.Address = AddressFactory().one();
     const creditCard: Joanie.CreditCard = CreditCardFactory().one();
-    const { payment_info: paymentInfo, ...order }: Joanie.OrderWithPaymentInfo =
-      OrderWithOneClickPaymentFactory().one();
+    const { payment_info: paymentInfo, ...order }: Joanie.CredentialOrderWithPaymentInfo =
+      CredentialOrderWithOneClickPaymentFactory().one();
     const handleSuccess = jest.fn();
 
     fetchMock
@@ -378,8 +378,8 @@ describe('PaymentButton', () => {
     const product: Joanie.Product = ProductFactory().one();
     const billingAddress: Joanie.Address = AddressFactory().one();
     const creditCard: Joanie.CreditCard = CreditCardFactory().one();
-    const { payment_info: paymentInfo, ...order }: Joanie.OrderWithPaymentInfo =
-      OrderWithOneClickPaymentFactory().one();
+    const { payment_info: paymentInfo, ...order }: Joanie.CredentialOrderWithPaymentInfo =
+      CredentialOrderWithOneClickPaymentFactory().one();
     const handleSuccess = jest.fn();
     const initialOrder = {
       ...order,
@@ -491,8 +491,8 @@ describe('PaymentButton', () => {
     const product: Joanie.Product = ProductFactory().one();
     const billingAddress: Joanie.Address = AddressFactory().one();
     const creditCard: Joanie.CreditCard = CreditCardFactory().one();
-    const { payment_info: paymentInfo, ...order }: Joanie.OrderWithPaymentInfo =
-      OrderWithOneClickPaymentFactory().one();
+    const { payment_info: paymentInfo, ...order }: Joanie.CredentialOrderWithPaymentInfo =
+      CredentialOrderWithOneClickPaymentFactory().one();
     const orderSubmitted = {
       ...order,
       state: OrderState.SUBMITTED,
@@ -595,8 +595,8 @@ describe('PaymentButton', () => {
   it('should render an error message when payment failed', async () => {
     const product: Joanie.Product = ProductFactory().one();
     const billingAddress: Joanie.Address = AddressFactory().one();
-    const { payment_info: paymentInfo, ...order }: Joanie.OrderWithPaymentInfo =
-      OrderWithPaymentFactory().one();
+    const { payment_info: paymentInfo, ...order }: Joanie.CredentialOrderWithPaymentInfo =
+      CredentialOrderWithPaymentFactory().one();
     const handleSuccess = jest.fn();
 
     fetchMock

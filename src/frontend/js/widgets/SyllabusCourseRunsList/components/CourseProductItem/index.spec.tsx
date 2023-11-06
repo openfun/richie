@@ -15,11 +15,17 @@ import {
   CourseLightFactory,
   CourseProductRelationFactory,
   EnrollmentFactory,
-  OrderFactory,
+  CredentialOrderFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
-import { CourseRun, Enrollment, Order, OrderState, ACTIVE_ORDER_STATES } from 'types/Joanie';
+import {
+  CourseRun,
+  Enrollment,
+  CredentialOrder,
+  OrderState,
+  ACTIVE_ORDER_STATES,
+} from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { Deferred } from 'utils/test/deferred';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
@@ -43,7 +49,13 @@ jest.mock('./components/CourseProductCourseRuns', () => ({
   CourseRunList: ({ courseRuns }: { courseRuns: CourseRun[] }) => (
     <div data-testid={`CourseRunList-${courseRuns.map(({ id }) => id).join('-')}`} />
   ),
-  EnrollableCourseRunList: ({ courseRuns, order }: { courseRuns: CourseRun[]; order: Order }) => (
+  EnrollableCourseRunList: ({
+    courseRuns,
+    order,
+  }: {
+    courseRuns: CourseRun[];
+    order: CredentialOrder;
+  }) => (
     <div
       data-testid={`EnrollableCourseRunList-${courseRuns.map(({ id }) => id).join('-')}-${
         order.id
@@ -231,7 +243,7 @@ describe('CourseProductItem', () => {
   it('adapts information when user purchased the product', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
-    const order = OrderFactory({
+    const order = CredentialOrderFactory({
       product: product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
@@ -289,7 +301,7 @@ describe('CourseProductItem', () => {
 
   it('adapts information when user purchased the product even if compact is set', async () => {
     const relation = CourseProductRelationFactory().one();
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       product: relation.product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: relation.product.target_courses,
@@ -361,7 +373,7 @@ describe('CourseProductItem', () => {
     const enrollment: Enrollment = EnrollmentFactory({
       course_run: product.target_courses[0]!.course_runs[0]! as CourseRun,
     }).one();
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       product: product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
@@ -421,7 +433,7 @@ describe('CourseProductItem', () => {
   it('renders sale tunnel button if user already has a pending order', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
-    const order = OrderFactory({
+    const order = CredentialOrderFactory({
       product: product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
@@ -520,7 +532,7 @@ describe('CourseProductItem', () => {
   it('does not render sale tunnel button if user already has a submitted order', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
-    const order = OrderFactory({
+    const order = CredentialOrderFactory({
       product: product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
@@ -576,7 +588,7 @@ describe('CourseProductItem', () => {
 
   it('adapts layout when user has a pending order and compact prop is set', async () => {
     const relation = CourseProductRelationFactory().one();
-    const order: Order = OrderFactory({
+    const order: CredentialOrder = CredentialOrderFactory({
       product: relation.product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: relation.product.target_courses,
