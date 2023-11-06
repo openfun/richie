@@ -1,5 +1,5 @@
 import type { CourseState } from 'types';
-import type { Nullable } from 'types/utils';
+import type { Maybe, Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 import { Course as RichieCourse } from 'types/Course';
@@ -36,7 +36,7 @@ export interface Contract {
   created_on: string;
   signed_on: string;
   definition: ContractDefinition;
-  order: Order;
+  order: NestedCertificateOrder | NestedCredentialOrder;
 }
 
 export interface CourseListItem extends Resource {
@@ -77,7 +77,7 @@ export interface Certificate {
   id: string;
   issued_on: string;
   certificate_definition: CertificateDefinition;
-  order: Order;
+  order: NestedCertificateOrder | NestedCredentialOrder;
 }
 
 // - Organization
@@ -196,10 +196,8 @@ export const ACTIVE_ORDER_STATES = [OrderState.PENDING, OrderState.VALIDATED, Or
 
 export interface Order {
   id: string;
-  course?: CourseLight;
   created_on: string;
   target_enrollments: Enrollment[];
-  enrollment?: EnrollmentLight;
   main_proforma_invoice: string;
   certificate?: string;
   contract?: Contract;
@@ -209,6 +207,27 @@ export interface Order {
   state: OrderState;
   product: Product['id'];
   target_courses: TargetCourse[];
+  course: Maybe<CourseLight>;
+  enrollment: Maybe<EnrollmentLight>;
+}
+
+export interface CredentialOrder extends Order {
+  course: CourseLight;
+  enrollment: undefined;
+}
+
+export interface CredentialOrderWithPaymentInfo extends CredentialOrder {
+  payment_info: Payment | PaymentOneClick;
+}
+
+export interface CertificateOrder extends Order {
+  course: undefined;
+  enrollment: EnrollmentLight;
+  target_courses: [];
+}
+
+export interface CertificateOrderWithPaymentInfo extends CertificateOrder {
+  payment_info: Payment | PaymentOneClick;
 }
 
 export type OrderLite = Pick<
@@ -222,6 +241,21 @@ export type OrderLite = Pick<
   | 'main_proforma_invoice'
   | 'certificate'
 >;
+
+export interface AbstractNestedOrder {
+  id: string;
+  organization: Organization;
+  product_title: string;
+  owner_name: string;
+}
+export interface NestedCertificateOrder extends AbstractNestedOrder {
+  course: undefined;
+  enrollment: EnrollmentLight;
+}
+export interface NestedCredentialOrder extends AbstractNestedOrder {
+  course: CourseLight;
+  enrollment: undefined;
+}
 
 export type OrderEnrollment = Pick<Order, 'id' | 'state' | 'product' | 'certificate'>;
 
@@ -279,10 +313,6 @@ export interface Payment {
 
 export interface PaymentOneClick extends Payment {
   is_paid: boolean;
-}
-
-export interface OrderWithPaymentInfo extends Order {
-  payment_info: Payment | PaymentOneClick;
 }
 
 export interface OrderPaymentInfo {
@@ -384,12 +414,12 @@ interface APIUser {
   };
   orders: {
     abort(payload: OrderAbortPayload): Promise<void>;
-    create(payload: OrderCreationPayload): Promise<Order>;
+    create(payload: OrderCreationPayload): Promise<CredentialOrder | CertificateOrder>;
     get<Filters extends OrderResourcesQuery = OrderResourcesQuery>(
       filters?: Filters,
     ): Filters extends { id: string }
-      ? Promise<Nullable<Order>>
-      : Promise<PaginatedResponse<Order>>;
+      ? Promise<Nullable<CredentialOrder | CertificateOrder>>
+      : Promise<PaginatedResponse<CredentialOrder | CertificateOrder>>;
     invoice: {
       download(payload: { order_id: Order['id']; invoice_reference: string }): Promise<File>;
     };
