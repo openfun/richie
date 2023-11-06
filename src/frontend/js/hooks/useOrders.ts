@@ -1,8 +1,10 @@
 import { defineMessages } from 'react-intl';
 import {
   API,
+  CertificateOrder,
   CourseLight,
-  Order,
+  CredentialOrder,
+  Enrollment,
   OrderState,
   PaginatedResourceQuery,
   Product,
@@ -15,6 +17,7 @@ import { QueryOptions, useResource, useResourcesCustom, UseResourcesProps } from
 export type OrderResourcesQuery = PaginatedResourceQuery & {
   course?: CourseLight['code'];
   product?: Product['id'];
+  enrollmentId?: Enrollment['id'];
   state?: OrderState[];
   product__type?: ProductType[];
 };
@@ -32,17 +35,20 @@ const messages = defineMessages({
   },
 });
 
-function omniscientFiltering(data: Order[], filter: OrderResourcesQuery): Order[] {
+function omniscientFiltering(
+  data: (CredentialOrder | CertificateOrder)[],
+  filter: OrderResourcesQuery,
+): (CredentialOrder | CertificateOrder)[] {
   if (!filter) return data;
 
   return data.filter(
     (order) =>
       // If filter.id is defined filter by order.id
       (!filter.id || order.id === filter.id) &&
-      // If filter.course is defined filter by order.course
-      (!filter.course ||
-        (typeof order.course === 'string' && order.course === filter.course) ||
-        (typeof order.course === 'object' && order.course?.code === filter.course)) &&
+      // If filter.course is defined filter by order.course.code
+      (!filter.course || order.course?.code === filter.course) &&
+      // If filter.enrollmentId is defined filter by order.enrollment?.id
+      (!filter.enrollmentId || order.enrollment?.id === filter.enrollmentId) &&
       // If filter.product is defined filter by order.product
       (!filter.product || order.product === filter.product) &&
       // If filter.state is defined filter by order.state
@@ -51,8 +57,17 @@ function omniscientFiltering(data: Order[], filter: OrderResourcesQuery): Order[
 }
 
 const useOrdersBase =
-  (props: UseResourcesProps<Order, OrderResourcesQuery, API['user']['orders']>) =>
-  (filters?: OrderResourcesQuery, queryOptions?: QueryOptions<Order>) => {
+  (
+    props: UseResourcesProps<
+      CredentialOrder | CertificateOrder,
+      OrderResourcesQuery,
+      API['user']['orders']
+    >,
+  ) =>
+  (
+    filters?: OrderResourcesQuery,
+    queryOptions?: QueryOptions<CredentialOrder | CertificateOrder>,
+  ) => {
     const custom = useResourcesCustom({ ...props, filters, queryOptions });
     const abortHandler = useSessionMutation({ mutationFn: useJoanieApi().user.orders.abort });
     const submitHandler = useSessionMutation({ mutationFn: useJoanieApi().user.orders.submit });
@@ -66,7 +81,11 @@ const useOrdersBase =
     };
   };
 
-const props: UseResourcesProps<Order, OrderResourcesQuery, API['user']['orders']> = {
+const props: UseResourcesProps<
+  CredentialOrder | CertificateOrder,
+  OrderResourcesQuery,
+  API['user']['orders']
+> = {
   queryKey: ['orders'],
   apiInterface: () => useJoanieApi().user.orders,
   messages,
