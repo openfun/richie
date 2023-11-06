@@ -79,8 +79,8 @@ const TeacherDashboardContracts = ({
   const rows = useMemo(() => {
     return contracts.map(({ id, signed_on, order }) => ({
       id,
-      learnerName: order.owner,
-      productTitle: order.product,
+      learnerName: order.owner_name,
+      productTitle: order.product_title,
       signDate: intl.formatDate(signed_on),
     }));
   }, [contracts]);

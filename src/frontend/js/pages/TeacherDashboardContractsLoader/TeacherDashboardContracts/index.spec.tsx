@@ -140,8 +140,8 @@ describe('pages/TeacherDashboardContracts', () => {
     );
     nbApiCalls += 1;
     expect(await screen.findByTestId('contracts-loaded')).toBeInTheDocument();
-    expect(screen.getByText(contract.order.owner)).toBeInTheDocument();
-    expect(screen.getByText(contract.order.product)).toBeInTheDocument();
+    expect(screen.getByText(contract.order.owner_name)).toBeInTheDocument();
+    expect(screen.getByText(contract.order.product_title)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Download/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Open/ })).toBeInTheDocument();
   });
