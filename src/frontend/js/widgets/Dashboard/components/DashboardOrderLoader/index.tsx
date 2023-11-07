@@ -7,6 +7,7 @@ import Banner, { BannerType } from 'components/Banner';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { isCredentialOrder } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { handle } from 'utils/errors/handle';
+import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 import { DashboardItemOrder } from '../DashboardItem/Order/DashboardItemOrder';
 
 const messages = defineMessages({
@@ -34,6 +35,7 @@ export const DashboardOrderLoader = () => {
     states: { fetching: fetchingOrder, error: errorOrder },
   } = useOmniscientOrder(params.orderId);
   const {
+    item: courseProduct,
     states: { fetching: fetchingCourseProduct, error: errorCourseProduct },
   } = useCourseProduct(order?.course?.code, { productId: order?.product });
   const intl = useIntl();
@@ -48,7 +50,7 @@ export const DashboardOrderLoader = () => {
   const error = errorOrder || errorCourseProduct || wrongLinkedProductError;
 
   const fetching = fetchingOrder || fetchingCourseProduct;
-  const needsSignature = order?.contract && !order?.contract.signed_on;
+  const needsSignature = orderNeedsSignature(order, courseProduct?.product);
 
   return (
     <>

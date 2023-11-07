@@ -110,7 +110,7 @@ export const DashboardItemOrder = ({
             <div className="dashboard-item-order__footer">
               <div className="dashboard-item__block__status">
                 <Icon name={IconTypeEnum.SCHOOL} />
-                <OrderStateMessage order={order} />
+                <OrderStateMessage order={order} product={product} />
               </div>
               {showDetailsButton && (
                 <RouterButton
@@ -142,6 +142,7 @@ export const DashboardItemOrder = ({
                   writable={writable}
                   course={targetCourse}
                   order={order}
+                  product={product}
                   activeEnrollment={CoursesHelper.findActiveCourseEnrollmentInOrder(
                     targetCourse,
                     order,

@@ -10,6 +10,7 @@ import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { CourseLight } from 'types/Joanie';
 import {
+  ContractDefinitionFactory,
   ContractFactory,
   CredentialOrderFactory,
   TargetCourseFactory,
@@ -204,9 +205,10 @@ describe('<DashboardItemOrder/> Contract', () => {
       const order = CredentialOrderFactory({
         target_courses: TargetCourseFactory().many(1),
         target_enrollments: [],
-        contract: ContractFactory({ signed_on: undefined }).one(),
+        contract: null,
       }).one();
       const { product } = mockCourseProductWithOrder(order);
+      product.contract_definition = ContractDefinitionFactory().one();
 
       fetchMock.get(
         'https://joanie.endpoint/api/v1.0/orders/',

@@ -9,12 +9,14 @@ import {
   Enrollment,
   CredentialOrder,
   AbstractCourse,
+  Product,
   CertificateOrder,
 } from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import useDateFormat, { DATETIME_FORMAT } from 'hooks/useDateFormat';
 import { Icon, IconTypeEnum } from 'components/Icon';
+import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 import { RouterButton } from '../RouterButton';
 import { useEnroll } from '../../hooks/useEnroll';
 
@@ -86,6 +88,7 @@ interface DashboardItemCourseEnrollingProps {
   course: AbstractCourse;
   activeEnrollment?: Enrollment;
   order?: CredentialOrder;
+  product?: Product;
   writable: boolean;
   hideEnrollButtons?: boolean;
   icon?: boolean;
@@ -97,6 +100,7 @@ export const DashboardItemCourseEnrolling = ({
   activeEnrollment,
   writable,
   order,
+  product,
   icon = false,
   notEnrolledUrl = '#',
   hideEnrollButtons,
@@ -124,6 +128,7 @@ export const DashboardItemCourseEnrolling = ({
           course={course}
           enrollments={CoursesHelper.findCourseEnrollmentsInOrder(course, order)}
           order={order}
+          product={product}
         />
       )}
     </div>
@@ -134,12 +139,14 @@ interface DashboardItemCourseEnrollingRunsProps {
   course: AbstractCourse;
   enrollments: Enrollment[];
   order?: CredentialOrder;
+  product?: Product;
 }
 
 const DashboardItemCourseEnrollingRuns = ({
   course,
   enrollments,
   order,
+  product,
 }: DashboardItemCourseEnrollingRunsProps) => {
   const { enroll, isLoading, error } = useEnroll(enrollments, order);
 
@@ -173,6 +180,7 @@ const DashboardItemCourseEnrollingRuns = ({
           selected={data.selected}
           enroll={() => enroll(data.courseRun)}
           order={order}
+          product={product}
         />
       ))}
       {isLoading && (
@@ -196,6 +204,7 @@ interface DashboardItemCourseEnrollingRunProps {
   selected: boolean;
   enroll: () => void;
   order?: CredentialOrder | CertificateOrder;
+  product?: Product;
 }
 
 const DashboardItemCourseEnrollingRun = ({
@@ -203,10 +212,11 @@ const DashboardItemCourseEnrollingRun = ({
   selected,
   enroll,
   order,
+  product,
 }: DashboardItemCourseEnrollingRunProps) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
-  const haveToSignContract = !!(order?.contract && !order.contract.signed_on);
+  const haveToSignContract = order ? orderNeedsSignature(order, product) : false;
   const isOpenedForEnrollment = useMemo(
     () => courseRun.state.priority < Priority.FUTURE_NOT_YET_OPEN,
     [courseRun],
