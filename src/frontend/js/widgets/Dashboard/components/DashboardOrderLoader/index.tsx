@@ -17,7 +17,7 @@ const messages = defineMessages({
     id: 'components.DashboardOrderLoader.loading',
   },
   signatureNeeded: {
-    defaultMessage: 'You need to sign your contract before enrolling to course runs',
+    defaultMessage: 'You need to sign your contract before enrolling in a course run',
     description: 'Banner displayed when the contract is not signed',
     id: 'components.DashboardOrderLoader.signatureNeeded',
   },
