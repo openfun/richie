@@ -39,6 +39,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix typo on the DashboardOrderLoader component.
 - Prevent LTIConsumer component to rerender on user session update
 - Fix Order interface against changed field 'target_enrollments' and 
   'enrollment'

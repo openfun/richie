@@ -234,7 +234,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       expect($enrollButtons).toHaveLength(order.target_courses[0].course_runs.length);
       $enrollButtons.forEach(($button) => expect($button).toBeDisabled());
 
-      await expectBannerError('You need to sign your contract before enrolling to course runs');
+      await expectBannerError('You need to sign your contract before enrolling in a course run');
     });
 
     it('renders a writable order with a signed contract', async () => {
@@ -751,7 +751,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       // We have the success message.
       await screen.findByRole('heading', { name: 'Congratulations!' });
       screen.getByText(
-        'You will receive an email containing your contract signed. You can now enroll to your course runs!',
+        'You will receive an email containing your signed contract. You can now enroll in your course runs!',
       );
       const nextButton = screen.getByRole('button', { name: 'Next' });
 
