@@ -1,8 +1,9 @@
 import { FormattedMessage } from 'react-intl';
 import { useEffect } from 'react';
-import { CertificateOrder, CredentialOrder, OrderState } from 'types/Joanie';
+import { CertificateOrder, CredentialOrder, OrderState, Product } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { handle } from 'utils/errors/handle';
+import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 
 export const messages = {
   statusDraft: {
@@ -52,10 +53,11 @@ export const messages = {
 
 interface OrderStateMessageProps {
   order: CredentialOrder | CertificateOrder;
+  product?: Product;
 }
 
-const OrderStateMessage = ({ order }: OrderStateMessageProps) => {
-  const { contract, certificate } = order;
+const OrderStateMessage = ({ order, product }: OrderStateMessageProps) => {
+  const { certificate } = order;
   const orderStatusMessages = {
     [OrderState.DRAFT]: messages.statusDraft,
     [OrderState.SUBMITTED]: messages.statusSubmitted,
@@ -70,7 +72,7 @@ const OrderStateMessage = ({ order }: OrderStateMessageProps) => {
   }, [order.state]);
 
   if (order.state === OrderState.VALIDATED) {
-    if (contract && !contract.signed_on) {
+    if (orderNeedsSignature(order, product)) {
       return <FormattedMessage {...messages.statusWaitingSignature} />;
     }
 

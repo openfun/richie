@@ -1,7 +1,12 @@
 import React, { PropsWithChildren } from 'react';
 import { render, screen } from '@testing-library/react';
 import { IntlProvider, createIntl } from 'react-intl';
-import { ContractFactory, CredentialOrderFactory } from 'utils/test/factories/joanie';
+import {
+  ContractDefinitionFactory,
+  ContractFactory,
+  CredentialOrderFactory,
+  ProductFactory,
+} from 'utils/test/factories/joanie';
 import { OrderState } from 'types/Joanie';
 import OrderStateMessage, { messages } from '.';
 
@@ -66,11 +71,16 @@ describe('<DashboardItemOrder/>', () => {
   it('should display message for validated order that need learner signature', () => {
     const order = CredentialOrderFactory({
       state: OrderState.VALIDATED,
-      contract: ContractFactory({ signed_on: undefined }).one(),
+      contract: null,
     }).one();
+
+    const product = ProductFactory({
+      contract_definition: ContractDefinitionFactory().one(),
+    }).one();
+
     render(
       <Wrapper>
-        <OrderStateMessage order={order} />
+        <OrderStateMessage order={order} product={product} />
       </Wrapper>,
     );
     expect(screen.getByText('Signature required')).toBeInTheDocument();
