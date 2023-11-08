@@ -174,6 +174,15 @@ export interface Enrollment {
   products: Product[];
 }
 
+export interface EnrollmentLight {
+  id: string;
+  is_active: boolean;
+  state: EnrollmentState;
+  course_run: CourseRun;
+  was_created_by_order: boolean;
+  created_on: string;
+}
+
 // Order
 export enum OrderState {
   DRAFT = 'draft',
@@ -190,7 +199,7 @@ export interface Order {
   course?: CourseLight['code'] | CourseLight;
   created_on: string;
   target_enrollments: Enrollment[];
-  enrollment?: string;
+  enrollment?: EnrollmentLight;
   main_proforma_invoice: string;
   certificate?: string;
   contract?: Contract;
