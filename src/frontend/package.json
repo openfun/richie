@@ -145,5 +145,8 @@
   },
   "msw": {
     "workerDirectory": "../richie/static/richie/js"
+  },
+  "volta": {
+    "node": "18.18.2"
   }
 }
