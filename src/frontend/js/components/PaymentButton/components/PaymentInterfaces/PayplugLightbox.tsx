@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { handle } from 'utils/errors/handle';
-import { PaymentErrorMessageId } from 'components/PaymentButton';
+import { OneClickPaymentInfo, PaymentErrorMessageId } from 'components/PaymentButton';
+import { Payment } from 'types/Joanie';
 import type { PaymentInterfaceProps } from '.';
 
 /**
@@ -9,8 +10,13 @@ import type { PaymentInterfaceProps } from '.';
  *
  * https://docs.payplug.com/api/lightbox.html#lightbox
  */
-const PayplugLightbox = ({ url, onSuccess, onError }: PaymentInterfaceProps) => {
+const PayplugLightbox = ({ onSuccess, onError, ...props }: PaymentInterfaceProps) => {
   const ref = useRef<ReturnType<typeof setTimeout>>();
+
+  /** type guard to check if the payment is a payment one click */
+  const isOneClickPayment = (p: Payment): p is OneClickPaymentInfo =>
+    (p as OneClickPaymentInfo)?.is_paid === true;
+
   const listenPayplugIframeMessage = (event: MessageEvent) => {
     if (typeof event.data === 'string') {
       switch (event.data) {
@@ -41,11 +47,16 @@ const PayplugLightbox = ({ url, onSuccess, onError }: PaymentInterfaceProps) => 
   };
 
   const openLightbox = useCallback(() => {
-    window.Payplug.showPayment(url);
+    window.Payplug.showPayment(props.url);
     window.addEventListener('message', listenPayplugIframeMessage);
-  }, [url]);
+  }, [props.url]);
 
   useEffect(() => {
+    if (isOneClickPayment(props)) {
+      onSuccess();
+      return;
+    }
+
     if (!window.Payplug) {
       const script = document.createElement('script');
       script.src = 'https://api.payplug.com/js/1/form.latest.js';

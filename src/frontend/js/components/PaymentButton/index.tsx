@@ -75,7 +75,7 @@ interface PaymentButtonProps {
 }
 
 type PaymentInfo = Joanie.Payment & { order_id: string };
-type OneClickPaymentInfo = Joanie.PaymentOneClick & { order_id: string };
+export type OneClickPaymentInfo = Joanie.PaymentOneClick & { order_id: string };
 
 enum ComponentStates {
   IDLE = 'idle',
@@ -114,10 +114,6 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
     const orderToCheck = await API.user.orders.get({ id });
     return orderToCheck?.state === OrderState.VALIDATED;
   };
-
-  /** type guard to check if the payment is a payment one click */
-  const isOneClickPayment = (p: typeof payment): p is OneClickPaymentInfo =>
-    (p as OneClickPaymentInfo)?.is_paid === true;
 
   const createPayment = async (orderId: string) => {
     WebAnalyticsAPIHandler()?.sendCourseProductEvent(CourseProductEvent.PAYMENT_CREATION, key);
@@ -223,10 +219,6 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   };
 
   useEffect(() => {
-    if (isOneClickPayment(payment) && state === ComponentStates.LOADING) {
-      handleSuccess();
-    }
-
     return () => {
       if (timeoutRef.current !== undefined) {
         clearTimeout(timeoutRef.current);
@@ -287,7 +279,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
           />
         )}
       </Button>
-      {state === ComponentStates.LOADING && payment && !isOneClickPayment(payment) && (
+      {state === ComponentStates.LOADING && payment && (
         <PaymentInterface {...payment} onError={handleError} onSuccess={handleSuccess} />
       )}
       <p className="payment-button__error" id="sale-tunnel-payment-error" tabIndex={-1}>
