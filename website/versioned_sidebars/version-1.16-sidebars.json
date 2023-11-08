@@ -1,15 +1,7 @@
 {
-  "version-1.16/docs": {
-    "Getting started": [
-      "version-1.16/discover",
-      "version-1.16/docker-development",
-      "version-1.16/native-installation"
-    ],
-    "Recipes": ["version-1.16/django-react-interop", "version-1.16/building-the-frontend"],
-    "Contributing": [
-      "version-1.16/contributing-guide",
-      "version-1.16/accessibility-testing",
-      "version-1.16/css-guidelines"
-    ]
+  "docs": {
+    "Getting started": ["discover", "docker-development", "native-installation"],
+    "Recipes": ["building-the-frontend"],
+    "Contributing": ["contributing-guide", "accessibility-testing", "css-guidelines"]
   }
 }

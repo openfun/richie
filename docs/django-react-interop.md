@@ -16,15 +16,19 @@ Additionally, components including internationalized data or strings need to kno
 
 They use the BCP47/RFC5646 format.
 
+```html
     <html lang="en-US">
+```
 
 ### Example
 
 Here is how we would call a `<FeaturedCourses />` component from a template, a plugin or a snippet:
 
+```html
     <div
       class="richie-react richie-react--featured-courses"
     ></div>
+```
 
 When our JS is loaded, it will recognize this as an element it must take over, and render the FeaturedCourses component in this element.
 
@@ -40,10 +44,12 @@ We can add a `data-props` attribute on the element with the `richie-react` class
 
 Here is how we would pass a `categories={[ "sociology", "anthropology" ]}` prop to our `<FeaturedCourses />` component:
 
+```html
     <div
       class="richie-react richie-react--featured-courses"
       data-props='{"categories": ["sociology", "anthropology"]}'
     ></div>
+```
 
 When the component is rendered, it will be passed a `categories` prop with the relevant categories.
 
@@ -102,11 +108,12 @@ It is used to pass app-wide contextual information pertaining to the current ins
 
 Here is the expected shape for this object:
 
+```js
     {
         assets: {
             // SVG sprite used throughout Richie
             icons: "/path/to/icons/sprite.svg"
         }
     }
-
+```
 Note that it might be expanded in further versions of Richie.

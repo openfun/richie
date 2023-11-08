@@ -1,22 +1,14 @@
 {
-  "version-2.10.0/docs": {
-    "Getting started": [
-      "version-2.10.0/discover",
-      "version-2.10.0/docker-development",
-      "version-2.10.0/native-installation"
-    ],
+  "docs": {
+    "Getting started": ["discover", "docker-development", "native-installation"],
     "Recipes": [
-      "version-2.10.0/django-react-interop",
-      "version-2.10.0/building-the-frontend",
-      "version-2.10.0/internationalization",
-      "version-2.10.0/frontend-overrides",
-      "version-2.10.0/lms-connection",
-      "version-2.10.0/web-analytics"
+      "django-react-interop",
+      "building-the-frontend",
+      "internationalization",
+      "frontend-overrides",
+      "lms-connection",
+      "web-analytics"
     ],
-    "Contributing": [
-      "version-2.10.0/contributing-guide",
-      "version-2.10.0/accessibility-testing",
-      "version-2.10.0/css-guidelines"
-    ]
+    "Contributing": ["contributing-guide", "accessibility-testing", "css-guidelines"]
   }
 }

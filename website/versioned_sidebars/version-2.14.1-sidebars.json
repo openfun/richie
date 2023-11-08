@@ -1,21 +1,21 @@
 {
-  "version-2.14.1/docs": {
-    "Getting started": ["version-2.14.1/discover", "version-2.14.1/cookiecutter"],
+  "docs": {
+    "Getting started": ["cookiecutter"],
     "Recipes": [
-      "version-2.14.1/django-react-interop",
-      "version-2.14.1/building-the-frontend",
-      "version-2.14.1/internationalization",
-      "version-2.14.1/frontend-overrides",
-      "version-2.14.1/lms-connection",
-      "version-2.14.1/web-analytics"
+      "django-react-interop",
+      "building-the-frontend",
+      "internationalization",
+      "frontend-overrides",
+      "lms-connection",
+      "web-analytics"
     ],
     "Contributing": [
-      "version-2.14.1/installation",
-      "version-2.14.1/docker-development",
-      "version-2.14.1/native-installation",
-      "version-2.14.1/contributing-guide",
-      "version-2.14.1/accessibility-testing",
-      "version-2.14.1/css-guidelines"
+      "installation",
+      "docker-development",
+      "native-installation",
+      "contributing-guide",
+      "accessibility-testing",
+      "css-guidelines"
     ]
   }
 }

@@ -1,21 +1,13 @@
 {
-  "version-2.3.2/docs": {
-    "Getting started": [
-      "version-2.3.2/discover",
-      "version-2.3.2/docker-development",
-      "version-2.3.2/native-installation"
-    ],
+  "docs": {
+    "Getting started": ["discover", "docker-development", "native-installation"],
     "Recipes": [
-      "version-2.3.2/django-react-interop",
-      "version-2.3.2/building-the-frontend",
-      "version-2.3.2/internationalization",
-      "version-2.3.2/frontend-overrides",
-      "version-2.3.2/lms-connection"
+      "django-react-interop",
+      "building-the-frontend",
+      "internationalization",
+      "frontend-overrides",
+      "lms-connection"
     ],
-    "Contributing": [
-      "version-2.3.2/contributing-guide",
-      "version-2.3.2/accessibility-testing",
-      "version-2.3.2/css-guidelines"
-    ]
+    "Contributing": ["contributing-guide", "accessibility-testing", "css-guidelines"]
   }
 }

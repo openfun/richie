@@ -35,7 +35,7 @@ It takes a JSON object containing the course run details:
             for the given secret key and SHA256 digest algorithm (see [synchronizing-course-runs]
             for an example).
     + Body
-
+            ```json
             {
                 "resource_link": "https://lms.example.com/courses/course-v1:001+001+001/info",
                 "start": "2021-02-01T00:00:00Z",
@@ -44,11 +44,13 @@ It takes a JSON object containing the course run details:
                 "enrollment_end": "2021-01-31T23:59:59Z",
                 "languages": ["en", "fr"]
             }
+            ```
 
 + Response 200 (application/json)
 
     + Body
-
+            ```json
             {
                 "success": True
             }
+            ```

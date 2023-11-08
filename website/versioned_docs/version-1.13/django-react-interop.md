@@ -88,11 +88,13 @@ It is used to pass app-wide contextual information pertaining to the current ins
 
 Here is the expected shape for this object:
 
-    {
-        assets: {
-            // SVG sprite used throughout Richie
-            icons: "/path/to/icons/sprite.svg"
-        }
+```js
+{
+    assets: {
+        // SVG sprite used throughout Richie
+        icons: "/path/to/icons/sprite.svg"
     }
+}
+```
 
 Note that it might be expanded in further versions of Richie.
