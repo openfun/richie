@@ -50,6 +50,7 @@ export const SyllabusSimpleCourseRunsList = ({
               })}
             >
               {run.snapshot ? (
+                // eslint-disable-next-line jsx-a11y/control-has-associated-label
                 <a href={run.snapshot}>
                   <CourseRunItem item={run} />
                 </a>

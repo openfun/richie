@@ -33,6 +33,7 @@ const CourseRunItemWithEnrollment = ({ item }: Props) => {
   return (
     <>
       {enrollmentIsActive ? (
+        // eslint-disable-next-line jsx-a11y/control-has-associated-label
         <a href={item.resource_link} title={intl.formatMessage(messages.goToCourse)}>
           <CourseRunItem item={item} />
         </a>
