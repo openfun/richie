@@ -290,108 +290,6 @@ describe.each([
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     });
 
-    it('should render only a spinner if payment is a one click when user clicks on payment button', async () => {
-      const product: Joanie.Product = ProductFactory().one();
-      const billingAddress: Joanie.Address = AddressFactory().one();
-      const creditCard: Joanie.CreditCard = CreditCardFactory().one();
-      const { payment_info: paymentInfo, ...order } = OrderWithOneClickPaymentFactory().one();
-      const handleSuccess = jest.fn();
-
-      fetchMock
-        .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
-          [],
-        )
-        .post('https://joanie.test/api/v1.0/orders/', order)
-        .patch(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`, {
-          payment_info: paymentInfo,
-        })
-        .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, {
-          ...order,
-          state: OrderState.SUBMITTED,
-        });
-
-      render(
-        <Wrapper client={createTestQueryClient({ user: null })}>
-          <PaymentButton
-            billingAddress={billingAddress}
-            creditCard={creditCard.id}
-            product={product}
-            onSuccess={handleSuccess}
-          />
-        </Wrapper>,
-      );
-
-      const $button = screen.getByRole('button', {
-        name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
-      }) as HTMLButtonElement;
-
-      // - Payment button should not be disabled.
-      expect($button.disabled).toBe(false);
-
-      // - User clicks on pay button
-      await act(async () => {
-        fireEvent.click($button);
-      });
-
-      // - Route to create order should have been called + submit
-      // - Furthermore, as payment succeeded immediately, order should have been refetched
-      expect(fetchMock.calls()).toHaveLength(3);
-      expect(fetchMock.calls()[0][0]).toBe('https://joanie.test/api/v1.0/orders/');
-
-      expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
-        course: '00000',
-        product: product.id,
-      });
-
-      expect(fetchMock.calls()[1][0]).toBe(
-        `https://joanie.test/api/v1.0/orders/${order.id}/submit/`,
-      );
-
-      expect(JSON.parse(fetchMock.calls()[1][1]!.body as string)).toEqual({
-        billing_address: billingAddress,
-        credit_card_id: creditCard.id,
-      });
-
-      expect(fetchMock.calls()[2][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
-
-      // - Spinner should be displayed
-      screen.getByText('Payment in progress');
-
-      // - Payment interface should not be displayed
-      expect(screen.queryByText('Payment interface component')).toBeNull();
-
-      // - Order should be polled until its state is validated
-      fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/${order.id}/`,
-        {
-          ...order,
-          state: OrderState.VALIDATED,
-        },
-        {
-          overwriteRoutes: true,
-        },
-      );
-
-      // - Advance timer to one tick
-      await act(async () => {
-        jest.runOnlyPendingTimers();
-      });
-
-      // - Order should have been refetched
-      expect(fetchMock.calls()).toHaveLength(4);
-      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
-
-      // - As order state is validated, the onSuccess callback should be triggered.
-      expect(handleSuccess).toHaveBeenCalledTimes(1);
-      //
-      // - And poller should be stopped
-      await act(async () => {
-        jest.runOnlyPendingTimers();
-      });
-      expect(fetchMock.calls()).toHaveLength(4);
-    });
-
     it('should render a payment button and not call the order creation route', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -451,6 +349,13 @@ describe.each([
         fireEvent.click($button);
       });
 
+      // - In real world condition the success callback is immediately called for one click payments.
+      // - but here we need to click manually.
+      const $success = screen.getByTestId('payment-success');
+      await act(async () => {
+        fireEvent.click($success);
+      });
+
       // - Route to submit an existing order
       // - Furthermore, as payment succeeded immediately, order should have been refetched
       nbApiCalls += 1; // order submit
@@ -469,9 +374,6 @@ describe.each([
 
       // - Spinner should be displayed
       screen.getByText('Payment in progress');
-
-      // - Payment interface should not be displayed
-      expect(screen.queryByText('Payment interface component')).toBeNull();
 
       // - Order should be polled until its state is validated
       fetchMock.get(
@@ -558,6 +460,13 @@ describe.each([
         fireEvent.click($button);
       });
 
+      // - In real world condition the success callback is immediately called for one click payments.
+      // - but here we need to click manually.
+      const $success = screen.getByTestId('payment-success');
+      await act(async () => {
+        fireEvent.click($success);
+      });
+
       // - Route to create order should have been called
       // - Furthermore, as payment succeeded immediately, order should have been refetched
       const onClickApiCalls = fetchMock.calls().splice(nbApiCalls);
@@ -575,9 +484,6 @@ describe.each([
 
       // - Spinner should be displayed
       screen.getByText('Payment in progress');
-
-      // - Payment interface should not be displayed
-      expect(screen.queryByText('Payment interface component')).toBeNull();
 
       fetchMock.resetHistory();
       // - Wait until order has been polled 29 times.
