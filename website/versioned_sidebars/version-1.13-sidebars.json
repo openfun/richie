@@ -1,11 +1,7 @@
 {
-  "version-1.13/docs": {
-    "Getting started": [
-      "version-1.13/discover",
-      "version-1.13/docker-development",
-      "version-1.13/native-installation"
-    ],
-    "Recipes": ["version-1.13/django-react-interop", "version-1.13/building-the-frontend"],
-    "Contributing": ["version-1.13/contributing-guide", "version-1.13/css-guidelines"]
+  "docs": {
+    "Getting started": ["discover", "docker-development", "native-installation"],
+    "Recipes": ["django-react-interop", "building-the-frontend"],
+    "Contributing": ["contributing-guide", "css-guidelines"]
   }
 }
