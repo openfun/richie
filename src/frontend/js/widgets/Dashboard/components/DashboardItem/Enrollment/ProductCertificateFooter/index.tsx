@@ -37,7 +37,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
     return null;
   }
   const activeOrder = getActiveEnrollmentOrder(enrollment.orders || [], product.id);
-  const { item: certificate } = useCertificate(activeOrder?.certificate);
+  const { item: certificate } = useCertificate(activeOrder?.certificate_id);
 
   // The course run is no longer available
   // and no product certificate had been bought therefore there isn't any certifcate to download.
@@ -59,10 +59,10 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
           )}
         </div>
         {activeOrder ? (
-          activeOrder.certificate && (
+          activeOrder.certificate_id && (
             <DownloadCertificateButton
               className="dashboard-item__button"
-              certificateId={activeOrder.certificate}
+              certificateId={activeOrder.certificate_id}
             />
           )
         ) : (

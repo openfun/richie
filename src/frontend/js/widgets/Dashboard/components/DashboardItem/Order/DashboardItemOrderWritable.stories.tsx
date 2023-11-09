@@ -27,7 +27,7 @@ export default {
   render: (args) =>
     StorybookHelper.wrapInApp(<DashboardItemOrder {...args} />, {
       queriesCallback: (queries) => {
-        queries.push(QueryStateFactory(['product', order.product], { data: product }));
+        queries.push(QueryStateFactory(['product', order.product_id], { data: product }));
       },
     }),
 } as Meta<typeof DashboardItemOrder>;

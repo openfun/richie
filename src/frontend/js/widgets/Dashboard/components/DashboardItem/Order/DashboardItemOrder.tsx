@@ -48,7 +48,7 @@ interface DashboardItemOrderCertificateProps {
 }
 
 const DashboardItemOrderCertificate = ({ order, product }: DashboardItemOrderCertificateProps) => {
-  if (!order.certificate) {
+  if (!order.certificate_id) {
     return (
       <DashboardItemCertificate
         certificateDefinition={product.certificate_definition}
@@ -56,7 +56,7 @@ const DashboardItemOrderCertificate = ({ order, product }: DashboardItemOrderCer
       />
     );
   }
-  const certificate = useCertificate(order.certificate);
+  const certificate = useCertificate(order.certificate_id);
   return (
     <>
       {certificate.states.fetching && (
@@ -82,7 +82,7 @@ export const DashboardItemOrder = ({
   const course = order.course as CourseLight;
 
   const intl = useIntl();
-  const query = useCourseProduct(course.code, { productId: order.product });
+  const query = useCourseProduct(course.code, { productId: order.product_id });
   const [contractFrameOpened, setContractFrameOpened] = useState(false);
   const [contractLoading, setContractLoading] = useState(false);
   const product = query?.item?.product;

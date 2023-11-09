@@ -33,7 +33,7 @@ describe('PaymentInterface', () => {
   });
 
   it('should return null and handle an error if payment provider is not implemented', () => {
-    const payment: Joanie.Payment = PaymentFactory({ provider: 'unknown-provider' }).one();
+    const payment: Joanie.Payment = PaymentFactory({ provider_name: 'unknown-provider' }).one();
 
     const { container } = render(
       <PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />,
@@ -47,7 +47,9 @@ describe('PaymentInterface', () => {
   });
 
   it('should render the payplug lightbox when provider is Payplug', async () => {
-    const payment: Joanie.Payment = PaymentFactory({ provider: PaymentProviders.PAYPLUG }).one();
+    const payment: Joanie.Payment = PaymentFactory({
+      provider_name: PaymentProviders.PAYPLUG,
+    }).one();
     render(<PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />);
 
     await screen.findByText('Payplug lightbox');
@@ -55,7 +57,7 @@ describe('PaymentInterface', () => {
   });
 
   it('should render the dummy payment component when provider is Dummy', async () => {
-    const payment: Joanie.Payment = PaymentFactory({ provider: PaymentProviders.DUMMY }).one();
+    const payment: Joanie.Payment = PaymentFactory({ provider_name: PaymentProviders.DUMMY }).one();
     render(<PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />);
 
     await screen.findByText('Dummy payment component');

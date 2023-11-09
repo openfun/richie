@@ -85,6 +85,8 @@ const messages = {
 };
 
 interface DashboardItemCourseEnrollingProps {
+  // how does it work ?!!
+  // course should be a code from api serializer
   course: AbstractCourse;
   activeEnrollment?: Enrollment;
   order?: CredentialOrder;

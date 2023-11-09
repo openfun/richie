@@ -98,7 +98,7 @@ const JoanieEnrollmentApiInterface = (): APILms['enrollment'] => {
         if (!enrollment) {
           joanieAPI.user.enrollments
             .create({
-              course_run: courseRunId,
+              course_run_id: courseRunId,
               is_active: true,
               was_created_by_order: false,
             })
@@ -111,7 +111,7 @@ const JoanieEnrollmentApiInterface = (): APILms['enrollment'] => {
         } else {
           joanieAPI.user.enrollments
             .update({
-              course_run: courseRunId,
+              course_run_id: courseRunId,
               id: enrollment.id,
               is_active: isActive,
               was_created_by_order: false,

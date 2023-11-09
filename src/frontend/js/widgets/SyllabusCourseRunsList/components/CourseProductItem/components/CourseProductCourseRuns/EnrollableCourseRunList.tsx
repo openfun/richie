@@ -108,14 +108,14 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
       if (relatedEnrollment) {
         await enrollment.methods.update({
           is_active: true,
-          course_run: selectedCourseRun.id,
+          course_run_id: selectedCourseRun.id,
           id: relatedEnrollment.id,
           was_created_by_order: true,
         });
       } else {
         await enrollment.methods.create({
           is_active: true,
-          course_run: selectedCourseRun.id,
+          course_run_id: selectedCourseRun.id,
           was_created_by_order: true,
         });
       }

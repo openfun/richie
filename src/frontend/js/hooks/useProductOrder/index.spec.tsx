@@ -60,19 +60,19 @@ describe('useProductOrder', () => {
             state,
             created_on: faker.date.past({ years: 1 }).toISOString(),
             course: CourseLightFactory({ code: '00000' }).one(),
-            product: order.product,
+            product_id: order.product_id,
           }).one(),
       );
       ordersByState.push(order);
 
       const responseDeferred = new Deferred();
       fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/orders/?course=00000&product=${order.product}&state=pending&state=validated&state=submitted`,
+        `https://joanie.endpoint/api/v1.0/orders/?course=00000&product=${order.product_id}&state=pending&state=validated&state=submitted`,
         responseDeferred.promise,
       );
 
       const { result } = renderHook(
-        () => useProductOrder({ productId: order.product, courseCode: '00000' }),
+        () => useProductOrder({ productId: order.product_id, courseCode: '00000' }),
         {
           wrapper: Wrapper,
         },
@@ -86,7 +86,7 @@ describe('useProductOrder', () => {
       const calledUrls = fetchMock.calls().map((call) => call[0]);
       expect(calledUrls).toHaveLength(nbApiCalls);
       expect(calledUrls).toContain(
-        `https://joanie.endpoint/api/v1.0/orders/?course=00000&product=${order.product}&state=pending&state=validated&state=submitted`,
+        `https://joanie.endpoint/api/v1.0/orders/?course=00000&product=${order.product_id}&state=pending&state=validated&state=submitted`,
       );
       expect(result.current.states.creating).toBe(false);
       expect(result.current.states.deleting).toBeUndefined();

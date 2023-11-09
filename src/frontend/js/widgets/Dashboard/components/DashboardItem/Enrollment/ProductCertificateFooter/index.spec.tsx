@@ -135,9 +135,9 @@ describe('<ProductCertificateFooter/>', () => {
 
   it('should display download button for a course run with certificate.', async () => {
     const order = OrderEnrollmentFactory({
-      certificate: 'FAKE_CERTIFICATE_ID',
+      certificate_id: 'FAKE_CERTIFICATE_ID',
       state: OrderState.VALIDATED,
-      product: product.id,
+      product_id: product.id,
     }).one();
     const enrollment = EnrollmentFactory({
       orders: [order],
@@ -145,7 +145,7 @@ describe('<ProductCertificateFooter/>', () => {
     }).one();
     fetchMock.get(
       'https://joanie.endpoint.test/api/v1.0/certificates/FAKE_CERTIFICATE_ID/',
-      CertificateFactory({ id: order.certificate }).one(),
+      CertificateFactory({ id: order.certificate_id }).one(),
     );
     render(<Wrapper product={product} enrollment={enrollment} />);
     expect(await screen.findByRole('button', { name: 'Download' })).toBeInTheDocument();
@@ -156,7 +156,7 @@ describe('<ProductCertificateFooter/>', () => {
     'should not display button (download or purchase) for a course run with order but without certificate (product type: "%s").',
     async ([productType]) => {
       product.type = productType as ProductType;
-      const order = OrderEnrollmentFactory({ certificate: undefined }).one();
+      const order = OrderEnrollmentFactory({ certificate_id: undefined }).one();
       const enrollment = EnrollmentFactory({
         orders: [order],
         course_run: CourseRunFactory({ course }).one(),

@@ -13,16 +13,18 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
   if (!course) {
     throw new Error("Enrollment's course_run must provide course attribute");
   }
-
   const footerList = useMemo(() => {
     const partialFooterList = [
-      <div data-testid={'dashboard-item__course-enrolling__' + course.code}>
+      <div
+        key={`${enrollment.id}_enrolled_footer`}
+        data-testid={'dashboard-item__course-enrolling__' + course.code}
+      >
         <div className="dashboard-item__course-enrolling__infos">
           <Enrolled icon={true} enrollment={enrollment} />
         </div>
       </div>,
     ];
-    enrollment.products.forEach((product) => {
+    enrollment.product_relations.forEach((product) => {
       if (product.type === ProductType.CERTIFICATE) {
         partialFooterList.push(
           <ProductCertificateFooter

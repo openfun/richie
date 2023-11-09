@@ -30,7 +30,7 @@ export const Default: Story = {
   args: {
     targetCourse: TargetCourseFactory().one(),
     order: CredentialOrderFactory({
-      certificate: "Demo User's certificate for cours Demo Course",
+      certificate_id: "Demo User's certificate for cours Demo Course",
     }).one(),
   },
 };
