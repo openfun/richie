@@ -52,7 +52,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
   /**
    * Prevent form to be submitted and clear `editedAddress` state.
    */
-  const handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCancel = (event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
     event.preventDefault();
     handleReset();
     return false;
