@@ -90,7 +90,7 @@ describe('<DashboardItemOrder/>', () => {
     const order = CredentialOrderFactory({
       state: OrderState.VALIDATED,
       contract: ContractFactory({ signed_on: new Date().toISOString() }).one(),
-      certificate: undefined,
+      certificate_id: undefined,
     }).one();
     render(
       <Wrapper>
@@ -108,7 +108,7 @@ describe('<DashboardItemOrder/>', () => {
     const order = CredentialOrderFactory({
       state: OrderState.VALIDATED,
       contract: ContractFactory({ signed_on: new Date().toISOString() }).one(),
-      certificate: 'FAKE_CERTIFICATE_ID',
+      certificate_id: 'FAKE_CERTIFICATE_ID',
     }).one();
     render(
       <Wrapper>

@@ -50,7 +50,7 @@ function omniscientFiltering(
       // If filter.enrollmentId is defined filter by order.enrollment?.id
       (!filter.enrollmentId || order.enrollment?.id === filter.enrollmentId) &&
       // If filter.product is defined filter by order.product
-      (!filter.product || order.product === filter.product) &&
+      (!filter.product || order.product_id === filter.product) &&
       // If filter.state is defined filter by order.state
       (!filter.state || filter.state.includes(order.state)),
   );

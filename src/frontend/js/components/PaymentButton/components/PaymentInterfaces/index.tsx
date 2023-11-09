@@ -17,13 +17,13 @@ export interface PaymentInterfaceProps extends Joanie.Payment {
  */
 const PaymentInterface = (props: PaymentInterfaceProps) => {
   const isNotImplementedProvider = !Object.values<string>(Joanie.PaymentProviders).includes(
-    props.provider,
+    props.provider_name,
   );
 
   useEffect(() => {
     if (isNotImplementedProvider) {
       props.onError(PaymentErrorMessageId.ERROR_DEFAULT);
-      const error = new Error(`Payment provider ${props.provider} not implemented`);
+      const error = new Error(`Payment provider ${props.provider_name} not implemented`);
       handle(error);
     }
   }, [props]);
@@ -32,8 +32,10 @@ const PaymentInterface = (props: PaymentInterfaceProps) => {
 
   return (
     <Suspense fallback={null}>
-      {props.provider === Joanie.PaymentProviders.PAYPLUG && <LazyPayplugLightbox {...props} />}
-      {props.provider === Joanie.PaymentProviders.DUMMY && <LazyDummy {...props} />}
+      {props.provider_name === Joanie.PaymentProviders.PAYPLUG && (
+        <LazyPayplugLightbox {...props} />
+      )}
+      {props.provider_name === Joanie.PaymentProviders.DUMMY && <LazyDummy {...props} />}
     </Suspense>
   );
 };

@@ -22,7 +22,6 @@ import {
   Product,
   ProductType,
   TargetCourse,
-  CourseProductRelationCourse,
   JoanieFile,
   Contract,
   OrderEnrollment,
@@ -56,7 +55,7 @@ export const EnrollmentFactory = factory((): Enrollment => {
     id: faker.string.uuid(),
     course_run: CourseRunWithCourseFactory().one(),
     is_active: true,
-    products: ProductFactory().many(1),
+    product_relations: ProductFactory().many(1),
     state: EnrollmentState.SET,
     was_created_by_order: false,
     created_on: faker.date.past({ years: 1 }).toISOString(),
@@ -214,14 +213,14 @@ export const CourseFactory = factory((): CourseListItem => {
     organizations: OrganizationFactory().many(1),
     selling_organizations: OrganizationFactory().many(3),
     title: FactoryHelper.sequence((counter) => `Course ${counter}`),
-    products: CertificateCourseProductFactory().many(3),
-    course_runs: CourseRunFactory().many(3),
+    product_ids: [faker.string.uuid()],
+    course_run_ids: [faker.string.uuid()],
     state: CourseStateFactory().one(),
     cover: JoanieFileFactory().one(),
   };
 });
 
-export const CourseProductRelationCourseFactory = factory((): CourseProductRelationCourse => {
+export const CourseLightFactory = factory((): CourseLight => {
   return {
     id: faker.string.uuid(),
     code: faker.string.alphanumeric(5),
@@ -247,34 +246,18 @@ export const CourseListItemFactory = factory((): CourseListItem => {
     created_on: faker.date.past().toISOString(),
     organizations: OrganizationFactory().many(1),
     selling_organizations: OrganizationFactory().many(1),
-    products: ProductFactory().many(2),
+    product_ids: [faker.string.uuid()],
     title: FactoryHelper.sequence((counter) => `Course list item ${counter}`),
-    course_runs: [],
+    course_run_ids: [],
     state: CourseStateFactory().one(),
     cover: JoanieFileFactory().one(),
-  };
-});
-
-export const CourseLightFactory = factory((): CourseLight => {
-  return {
-    id: faker.string.uuid(),
-    code: faker.string.alphanumeric(5),
-    organizations: OrganizationLightFactory().many(1),
-    title: FactoryHelper.sequence((counter) => `Course light ${counter}`),
-    // do not use a ProductFactory here.
-    // ProductFactory will call CourseLightFactory and create a infinit loop.
-    // if we need a factory of course with a product, it should be a
-    // different one than CourseLightFactory.
-    products: [],
-    course_runs: [],
-    orders: [],
   };
 });
 
 export const OrderEnrollmentFactory = factory((): OrderEnrollment => {
   return {
     id: faker.string.uuid(),
-    product: faker.string.uuid(),
+    product_id: faker.string.uuid(),
     state: OrderState.VALIDATED,
   };
 });
@@ -284,9 +267,9 @@ export const OrderLiteFactory = factory((): OrderLite => {
     created_on: faker.date.past().toISOString(),
     target_enrollments: [],
     id: faker.string.uuid(),
-    main_proforma_invoice: faker.string.uuid(),
+    main_invoice_reference: faker.string.uuid(),
     total: faker.number.int(),
-    product: faker.string.uuid(),
+    product_id: faker.string.uuid(),
     state: OrderState.VALIDATED,
   };
 });
@@ -320,13 +303,14 @@ const AbstractOrderFactory = factory((): Order => {
     owner: faker.internet.userName(),
     total: faker.number.int(),
     total_currency: faker.finance.currencyCode(),
-    main_proforma_invoice: faker.string.uuid(),
+    main_invoice_reference: faker.string.uuid(),
     state: OrderState.VALIDATED,
-    product: faker.string.uuid(),
+    product_id: faker.string.uuid(),
     target_courses: TargetCourseFactory().many(5),
     target_enrollments: [],
     enrollment: undefined,
     course: undefined,
+    organization_id: faker.string.uuid(),
   };
 });
 
@@ -414,7 +398,7 @@ export const CreditCardFactory = factory((): CreditCard => {
 export const PaymentFactory = factory((): Payment => {
   return {
     payment_id: faker.finance.routingNumber(),
-    provider: PaymentProviders.DUMMY,
+    provider_name: PaymentProviders.DUMMY,
     url: faker.internet.url(),
   };
 });

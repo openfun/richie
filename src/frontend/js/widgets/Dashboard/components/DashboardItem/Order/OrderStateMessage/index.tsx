@@ -57,7 +57,7 @@ interface OrderStateMessageProps {
 }
 
 const OrderStateMessage = ({ order, product }: OrderStateMessageProps) => {
-  const { certificate } = order;
+  const { certificate_id: certificateId } = order;
   const orderStatusMessages = {
     [OrderState.DRAFT]: messages.statusDraft,
     [OrderState.SUBMITTED]: messages.statusSubmitted,
@@ -76,7 +76,7 @@ const OrderStateMessage = ({ order, product }: OrderStateMessageProps) => {
       return <FormattedMessage {...messages.statusWaitingSignature} />;
     }
 
-    if (certificate) {
+    if (certificateId) {
       return <FormattedMessage {...messages.statusCompleted} />;
     } else {
       return <FormattedMessage {...messages.statusOnGoing} />;

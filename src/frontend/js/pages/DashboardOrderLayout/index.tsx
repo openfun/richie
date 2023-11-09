@@ -17,7 +17,7 @@ export const DashboardOrderLayout = () => {
   const params = useParams<{ orderId: string }>();
   const order = useOmniscientOrder(params.orderId);
   const course = order.item?.course as CourseLight;
-  const courseProduct = useCourseProduct(course?.code, { productId: order.item?.product });
+  const courseProduct = useCourseProduct(course?.code, { productId: order.item?.product_id });
   const product = courseProduct?.item?.product;
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);

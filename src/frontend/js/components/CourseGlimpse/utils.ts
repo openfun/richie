@@ -97,7 +97,7 @@ const getCourseGlimpsePropsFromJoanieCourse = (
     },
     nb_seller_organizations: course.organizations.length,
     state: course.state,
-    nb_course_runs: course.course_runs.length,
+    nb_course_runs: course.course_run_ids.length,
   };
 };
 

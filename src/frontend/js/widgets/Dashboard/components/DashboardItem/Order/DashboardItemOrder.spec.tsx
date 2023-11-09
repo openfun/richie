@@ -117,21 +117,21 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders an order with certificate', async () => {
     const order: CredentialOrder = CredentialOrderFactory({
-      certificate: faker.string.uuid(),
+      certificate_id: faker.string.uuid(),
     }).one();
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
     const certificate: Certificate = {
       ...CertificateFactory({
-        id: order.certificate,
+        id: order.certificate_id,
         order: { ...order, course: CourseLightFactory().one() },
       }).one(),
     };
 
     const deferred = new Deferred();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/certificates/${order.certificate}/`,
+      `https://joanie.endpoint/api/v1.0/certificates/${order.certificate_id}/`,
       deferred.promise,
     );
 
@@ -149,7 +149,7 @@ describe('<DashboardItemOrder/>', () => {
 
   it('does not render an order with certificate', async () => {
     const order: CredentialOrder = CredentialOrderFactory({
-      certificate: faker.string.uuid(),
+      certificate_id: faker.string.uuid(),
     }).one();
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);

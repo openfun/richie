@@ -244,14 +244,14 @@ describe('CourseProductItem', () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
     const order = CredentialOrderFactory({
-      product: product.id,
+      product_id: product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
     }).one();
 
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
-      product: order.product,
+      product: order.product_id,
       // TODO (rlecellier): remove this when order.course is mandatory
       course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
@@ -302,7 +302,7 @@ describe('CourseProductItem', () => {
   it('adapts information when user purchased the product even if compact is set', async () => {
     const relation = CourseProductRelationFactory().one();
     const order: CredentialOrder = CredentialOrderFactory({
-      product: relation.product.id,
+      product_id: relation.product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: relation.product.target_courses,
     }).one();
@@ -312,7 +312,7 @@ describe('CourseProductItem', () => {
       relation,
     );
     const orderQueryParameters = {
-      product: order.product,
+      product: order.product_id,
       // TODO (rlecellier): remove this when order.course is mandatory
       course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
@@ -374,7 +374,7 @@ describe('CourseProductItem', () => {
       course_run: product.target_courses[0]!.course_runs[0]! as CourseRun,
     }).one();
     const order: CredentialOrder = CredentialOrderFactory({
-      product: product.id,
+      product_id: product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       target_enrollments: [enrollment],
@@ -382,7 +382,7 @@ describe('CourseProductItem', () => {
 
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
-      product: order.product,
+      product: order.product_id,
       // TODO (rlecellier): remove this when order.course is mandatory
       course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
@@ -434,14 +434,14 @@ describe('CourseProductItem', () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
     const order = CredentialOrderFactory({
-      product: product.id,
+      product_id: product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
-      product: order.product,
+      product: order.product_id,
       // TODO (rlecellier): remove this when order.course is mandatory
       course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
@@ -533,14 +533,14 @@ describe('CourseProductItem', () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
     const order = CredentialOrderFactory({
-      product: product.id,
+      product_id: product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       state: OrderState.SUBMITTED,
     }).one();
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
-      product: order.product,
+      product: order.product_id,
       // TODO (rlecellier): remove this when order.course is mandatory
       course: order.course?.code,
       state: ACTIVE_ORDER_STATES,
@@ -589,7 +589,7 @@ describe('CourseProductItem', () => {
   it('adapts layout when user has a pending order and compact prop is set', async () => {
     const relation = CourseProductRelationFactory().one();
     const order: CredentialOrder = CredentialOrderFactory({
-      product: relation.product.id,
+      product_id: relation.product.id,
       course: CourseLightFactory({ code: '00000' }).one(),
       target_courses: relation.product.target_courses,
       state: OrderState.SUBMITTED,
@@ -599,7 +599,7 @@ describe('CourseProductItem', () => {
       relation,
     );
     const orderQueryParameters = {
-      product: order.product,
+      product: order.product_id,
       // TODO (rlecellier): remove this when order.course is mandatory
       course: order.course?.code,
       state: ACTIVE_ORDER_STATES,

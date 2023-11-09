@@ -43,11 +43,11 @@ export interface CourseListItem extends Resource {
   id: string;
   title: string;
   code: string;
-  course_runs: CourseRun[];
+  course_run_ids: string[];
   organizations: Organization[];
   selling_organizations: Organization[];
   cover: JoanieFile;
-  products: Product[];
+  product_ids: string[];
   state: CourseState;
   created_on: string;
 }
@@ -115,7 +115,7 @@ export interface CourseProduct extends Product {
 
 export interface CourseProductRelation {
   id: string;
-  course: CourseProductRelationCourse;
+  course: CourseLight;
   organizations: Organization[];
   product: Product;
   created_on: string;
@@ -145,16 +145,11 @@ export interface AbstractCourse {
   cover?: JoanieFile;
 }
 
-export type CourseProductRelationCourse = Pick<AbstractCourse, 'id' | 'code' | 'title' | 'cover'>;
+export type CourseLight = Pick<AbstractCourse, 'id' | 'code' | 'title' | 'cover'>;
 
 export interface TargetCourse extends AbstractCourse {
   is_graded: boolean;
   position: number;
-}
-
-export interface CourseLight extends AbstractCourse {
-  products: CourseProduct[];
-  orders?: OrderLite[];
 }
 
 // Enrollment
@@ -171,7 +166,8 @@ export interface Enrollment {
   was_created_by_order: boolean;
   created_on: string;
   orders: OrderEnrollment[];
-  products: Product[];
+  product_relations: Product[];
+  certificate_id?: string;
 }
 
 export interface EnrollmentLight {
@@ -198,17 +194,19 @@ export interface Order {
   id: string;
   created_on: string;
   target_enrollments: Enrollment[];
-  main_proforma_invoice: string;
-  certificate?: string;
+  main_invoice_reference: string;
+  certificate_id?: Certificate['id'];
   contract?: Contract;
   owner: string;
   total: number;
   total_currency: string;
   state: OrderState;
-  product: Product['id'];
+  product_id: Product['id'];
   target_courses: TargetCourse[];
   course: Maybe<CourseLight>;
   enrollment: Maybe<EnrollmentLight>;
+  organization_id: Organization['id'];
+  order_group_id?: OrderGroup['id'];
 }
 
 export interface CredentialOrder extends Order {
@@ -237,9 +235,9 @@ export type OrderLite = Pick<
   | 'state'
   | 'total'
   | 'target_enrollments'
-  | 'product'
-  | 'main_proforma_invoice'
-  | 'certificate'
+  | 'product_id'
+  | 'main_invoice_reference'
+  | 'certificate_id'
 >;
 
 export interface AbstractNestedOrder {
@@ -257,7 +255,14 @@ export interface NestedCredentialOrder extends AbstractNestedOrder {
   enrollment: undefined;
 }
 
-export type OrderEnrollment = Pick<Order, 'id' | 'state' | 'product' | 'certificate'>;
+export type OrderEnrollment = Pick<Order, 'id' | 'state' | 'product_id' | 'certificate_id'>;
+
+export interface OrderGroup {
+  id: string;
+  is_active: boolean;
+  nb_seats: number;
+  nb_available_seats: number;
+}
 
 export enum CreditCardBrand {
   MASTERCARD = 'Mastercard',
@@ -307,7 +312,7 @@ export enum PaymentProviders {
 
 export interface Payment {
   payment_id: string;
-  provider: string;
+  provider_name: string;
   url: string;
 }
 
@@ -325,12 +330,12 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
 }
 
 interface OrderProductCertificateCreationPayload {
-  product: Product['id'];
-  enrollment: Enrollment['id'];
+  product_id: Product['id'];
+  enrollment_id: Enrollment['id'];
 }
 interface OrderCredentialCreationPayload {
-  product: Product['id'];
-  course: CourseLight['code'];
+  product_id: Product['id'];
+  course_code: CourseLight['code'];
 }
 
 export type OrderCreationPayload =
@@ -358,7 +363,7 @@ export interface EnrollmentsQuery extends PaginatedResourceQuery {
 }
 
 interface EnrollmentCreationPayload {
-  course_run: CourseRun['id'];
+  course_run_id: CourseRun['id'];
   is_active: boolean;
   order?: Order['id'];
   was_created_by_order: boolean;

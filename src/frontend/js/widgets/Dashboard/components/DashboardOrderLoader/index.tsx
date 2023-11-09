@@ -37,7 +37,7 @@ export const DashboardOrderLoader = () => {
   const {
     item: courseProduct,
     states: { fetching: fetchingCourseProduct, error: errorCourseProduct },
-  } = useCourseProduct(order?.course?.code, { productId: order?.product });
+  } = useCourseProduct(order?.course?.code, { productId: order?.product_id });
   const intl = useIntl();
 
   const credentialOrder = order && isCredentialOrder(order) ? order : undefined;

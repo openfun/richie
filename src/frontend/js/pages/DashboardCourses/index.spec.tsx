@@ -94,7 +94,7 @@ describe('<DashboardCourses/>', () => {
   const mockOrders = (orders: CredentialOrder[], client?: QueryClient) => {
     const relations: Record<string, CourseProductRelation> = {};
     orders.forEach((order) => {
-      const productId = order.product;
+      const productId = order.product_id;
       const courseCode = (order.course as CourseLight).code;
       const relation = CourseProductRelationFactory().one();
 

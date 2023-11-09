@@ -136,7 +136,7 @@ describe('CourseProductCourseRuns', () => {
       const order: OrderLite = CredentialOrderFactory().one();
 
       render(
-        <Wrapper productId={order.product} code="00000">
+        <Wrapper productId={order.product_id} code="00000">
           <EnrollableCourseRunList courseRuns={[]} order={order} />
         </Wrapper>,
       );
@@ -150,7 +150,7 @@ describe('CourseProductCourseRuns', () => {
       const order: OrderLite = CredentialOrderFactory().one();
 
       render(
-        <Wrapper productId={order.product} code={course.code}>
+        <Wrapper productId={order.product_id} code={course.code}>
           <EnrollableCourseRunList courseRuns={courseRuns} order={order} />
         </Wrapper>,
       );
@@ -250,7 +250,7 @@ describe('CourseProductCourseRuns', () => {
       expect(calls[0][0]).toBe('https://joanie.test/api/v1.0/enrollments/');
       expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
         is_active: true,
-        course_run: courseRuns[0].id,
+        course_run_id: courseRuns[0].id,
         was_created_by_order: true,
       });
     });
@@ -262,7 +262,7 @@ describe('CourseProductCourseRuns', () => {
       fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, HttpStatusCode.OK);
 
       render(
-        <Wrapper productId={order.product} code={course.code}>
+        <Wrapper productId={order.product_id} code={course.code}>
           <EnrollableCourseRunList courseRuns={courseRuns} order={order} />
         </Wrapper>,
       );
@@ -374,7 +374,7 @@ describe('CourseProductCourseRuns', () => {
       const order = CredentialOrderFactory().one();
 
       render(
-        <Wrapper productId={order.product} code="00000">
+        <Wrapper productId={order.product_id} code="00000">
           <EnrollableCourseRunList courseRuns={[courseRun]} order={order} />
         </Wrapper>,
       );

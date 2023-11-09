@@ -37,7 +37,7 @@ const CertificateItem = ({ certificateDefinition, order }: Props) => {
   const { download, loading } = useDownloadCertificate();
 
   const onDownloadClick = async () => {
-    await download(order!.certificate!);
+    await download(order!.certificate_id!);
   };
 
   return (
@@ -48,7 +48,7 @@ const CertificateItem = ({ certificateDefinition, order }: Props) => {
       <div>
         <strong className="product-widget__item-title h5">{certificateDefinition.title}</strong>
         <p className="product-widget__item-description">
-          {order?.certificate ? (
+          {order?.certificate_id ? (
             <>
               <FormattedMessage {...messages.congratulations} />
               <Button disabled={loading} onClick={onDownloadClick}>

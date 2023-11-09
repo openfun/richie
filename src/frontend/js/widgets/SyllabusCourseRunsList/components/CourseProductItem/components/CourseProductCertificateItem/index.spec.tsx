@@ -73,7 +73,7 @@ describe('CourseProductCertificateItem', () => {
 
   it('displays a download button when order contains a certificate', async () => {
     const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory().one();
-    const order: OrderLite = OrderLiteFactory({ certificate: faker.string.uuid() }).one();
+    const order: OrderLite = OrderLiteFactory({ certificate_id: faker.string.uuid() }).one();
 
     render(
       <Wrapper>
@@ -90,7 +90,7 @@ describe('CourseProductCertificateItem', () => {
 
     // When user clicks on "Download" button, the certificate should be downloaded
     fetchMock.get(
-      `https://joanie.test/api/v1.0/certificates/${order.certificate}/download/`,
+      `https://joanie.test/api/v1.0/certificates/${order.certificate_id}/download/`,
       HttpStatusCode.OK,
     );
 

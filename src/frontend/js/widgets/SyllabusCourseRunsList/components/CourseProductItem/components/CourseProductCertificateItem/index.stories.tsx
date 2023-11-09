@@ -15,7 +15,9 @@ export default {
   },
   args: {
     certificateDefinition: CertificationDefinitionFactory().one(),
-    order: OrderLiteFactory({ certificate: "Demo User's certificate for cours Demo Course" }).one(),
+    order: OrderLiteFactory({
+      certificate_id: "Demo User's certificate for cours Demo Course",
+    }).one(),
   },
   render: (args) => {
     return StorybookHelper.wrapInApp(

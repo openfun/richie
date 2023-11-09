@@ -48,7 +48,7 @@ export const useEnroll = (enrollments: Enrollment[], order?: CredentialOrder) =>
       await new Promise((resolve) => {
         enrollmentResources.methods.update(
           {
-            course_run: enrollment.course_run.id,
+            course_run_id: enrollment.course_run.id,
             is_active: false,
             id: enrollment!.id,
             was_created_by_order: enrollment.was_created_by_order,
@@ -72,7 +72,7 @@ export const useEnroll = (enrollments: Enrollment[], order?: CredentialOrder) =>
         {
           id: relatedEnrollment.id,
           is_active: true,
-          course_run: courseRun.id,
+          course_run_id: courseRun.id,
           was_created_by_order: !!order,
         },
         { onSettled },
@@ -81,7 +81,7 @@ export const useEnroll = (enrollments: Enrollment[], order?: CredentialOrder) =>
       await enrollmentResources.methods.create(
         {
           is_active: true,
-          course_run: courseRun.id,
+          course_run_id: courseRun.id,
           was_created_by_order: !!order,
         },
         { onSettled },

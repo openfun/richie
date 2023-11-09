@@ -21,16 +21,8 @@ export const enrollment: Enrollment = {
       id: '1cc49d2b-fc08-46d2-9fb8-594d90494cd3',
       code: '09391',
       title: 'Learn disruptive technologies',
-      products: [],
-      course_runs: [],
-      organizations: [
-        {
-          code: '111',
-          title: '111',
-        },
-      ],
     },
     languages: ['en'],
   },
-  products: [],
+  product_relations: [],
 };

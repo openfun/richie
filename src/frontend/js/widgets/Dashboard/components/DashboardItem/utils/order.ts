@@ -2,7 +2,7 @@ import { OrderEnrollment, ACTIVE_ORDER_STATES, Order, Product } from 'types/Joan
 
 export const getActiveEnrollmentOrder = (orders: OrderEnrollment[], productId: string) => {
   const filter = (order: OrderEnrollment) =>
-    ACTIVE_ORDER_STATES.includes(order.state) && order.product === productId;
+    ACTIVE_ORDER_STATES.includes(order.state) && order.product_id === productId;
   return orders.find(filter);
 };
 

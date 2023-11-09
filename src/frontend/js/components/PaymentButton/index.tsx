@@ -174,8 +174,8 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
     } else {
       orderManager.methods.create(
         {
-          course: courseCode,
-          product: product.id,
+          course_code: courseCode,
+          product_id: product.id,
         },
         {
           onSuccess: (newOrder) => {

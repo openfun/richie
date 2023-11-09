@@ -37,7 +37,7 @@ export default {
       />,
       {
         queriesCallback: (queries) => {
-          queries.push(QueryStateFactory(['product', order.product], { data: product }));
+          queries.push(QueryStateFactory(['product', order.product_id], { data: product }));
         },
       },
     ),
