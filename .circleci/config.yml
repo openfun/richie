@@ -908,7 +908,7 @@ jobs:
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
-    working_directory: ~/fun
+    working_directory: ~/fun/src/frontend
     steps:
       - *checkout_fun
       - run:
@@ -916,7 +916,17 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
       - run:
           name: Publish package
-          command: npm publish src/frontend/
+          command: |
+            # If no tag is defined, this is a merge ofn master branch
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              # The current version is used because npm must use semantic versionning
+              # We will create a version with the current version and the short commit sha1
+              CURRENT_VERSION=$(npm pkg get version | xargs echo)
+              npm version $CURRENT_VERSION-${CIRCLE_SHA1:0:9}
+              npm publish --tag next
+            else
+              npm publish
+            fi
 
   # ---- Documentation website jobs ----
 
@@ -1143,7 +1153,7 @@ workflows:
             - test-front-package
           filters:
             branches:
-              ignore: /.*/
+              only: master
             tags:
               only: /^v.*/
 
