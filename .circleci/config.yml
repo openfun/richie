@@ -908,7 +908,7 @@ jobs:
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
-    working_directory: ~/fun
+    working_directory: ~/fun/src/frontend
     steps:
       - *checkout_fun
       - run:
@@ -916,7 +916,18 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
       - run:
           name: Publish package
-          command: npm publish src/frontend/
+          command: |
+            # If no tag is defined, this is a merge ofn master branch
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              python -m pip install --upgrade setuptools_scm
+              NEXT_VERSION=$(python -m setuptools_scm)
+              npm version $NEXT_VERSION
+              cd ~/fun
+              npm publish src/frontend/ --tag next
+            else
+              cd ~/fun
+              npm publish src/frontend/
+            fi
 
   # ---- Documentation website jobs ----
 
@@ -1143,7 +1154,7 @@ workflows:
             - test-front-package
           filters:
             branches:
-              ignore: /.*/
+              only: master
             tags:
               only: /^v.*/
 
