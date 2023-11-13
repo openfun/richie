@@ -43,7 +43,7 @@ describe('useCourseProduct', () => {
       courseCode: undefined,
       enrollmentId: '88888888-df59-4856-a5a8-1b732bc9b565',
       productId: 'dce9acb4-df59-4856-a5a8-1b732bc9b565',
-      key: '88888888-df59-4856-a5a8-1b732bc9b565+dce9acb4_df59-4856-a5a8-1b732bc9b565',
+      key: '88888888-df59-4856-a5a8-1b732bc9b565_dce9acb4-df59-4856-a5a8-1b732bc9b565',
     });
   });
 

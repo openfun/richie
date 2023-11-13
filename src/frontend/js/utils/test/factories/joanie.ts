@@ -161,6 +161,7 @@ export const CredentialProductFactory = factory((): Product => {
 export const CertificateProductFactory = factory((): Product => {
   return {
     ...CredentialProductFactory().one(),
+    type: ProductType.CERTIFICATE,
     target_courses: [],
     instructions: faker.lorem.paragraphs(5),
   };

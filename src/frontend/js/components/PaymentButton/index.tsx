@@ -6,13 +6,14 @@ import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useOmniscientOrders } from 'hooks/useOrders';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
-import { OrderState } from 'types/Joanie';
+import { OrderState, OrderCreationPayload, ProductType } from 'types/Joanie';
 import type { Nullable } from 'types/utils';
 import { HttpError } from 'utils/errors/HttpError';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { useCourseProduct } from 'contexts/ProductRelationContext';
 import useProductOrder from 'hooks/useProductOrder';
+import { handle } from 'utils/errors/handle';
 import PaymentInterface from './components/PaymentInterfaces';
 
 const messages = defineMessages({
@@ -92,12 +93,12 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   const intl = useIntl();
   const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const { courseCode, key } = useCourseProduct();
-  const { item: order } = useProductOrder({ courseCode, productId: product.id });
+  const { enrollmentId, courseCode, key } = useCourseProduct();
+  const { item: order } = useProductOrder({ courseCode, enrollmentId, productId: product.id });
   const orderManager = useOmniscientOrders();
 
   const isReadyToPay = useMemo(() => {
-    return courseCode && product.id && billingAddress;
+    return (courseCode || enrollmentId) && product.id && billingAddress;
   }, [product, courseCode, billingAddress]);
 
   const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
@@ -172,20 +173,37 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
     if (order) {
       createPayment(order.id);
     } else {
-      orderManager.methods.create(
-        {
+      let paymentPayload: OrderCreationPayload;
+      if (product.type === ProductType.CREDENTIAL) {
+        if (!courseCode) {
+          handle(new Error('courseCode is mandatory to purchase a ProductType.CREDENTIAL'));
+          handleError();
+          return;
+        }
+
+        paymentPayload = {
           course_code: courseCode,
           product_id: product.id,
+        };
+      } else {
+        if (!enrollmentId) {
+          handle(new Error('enrollmentId is mandatory to purchase a ProductType.CERTIFICATE'));
+          handleError();
+          return;
+        }
+        paymentPayload = {
+          enrollment_id: enrollmentId,
+          product_id: product.id,
+        };
+      }
+      orderManager.methods.create(paymentPayload, {
+        onSuccess: (newOrder) => {
+          createPayment(newOrder.id);
         },
-        {
-          onSuccess: (newOrder) => {
-            createPayment(newOrder.id);
-          },
-          onError: async () => {
-            setState(ComponentStates.ERROR);
-          },
+        onError: async () => {
+          setState(ComponentStates.ERROR);
         },
-      );
+      });
     }
   };
 

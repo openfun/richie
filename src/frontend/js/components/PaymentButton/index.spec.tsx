@@ -3,6 +3,8 @@ import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import queryString from 'query-string';
+import { faker } from '@faker-js/faker';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   AddressFactory,
@@ -16,7 +18,7 @@ import {
 } from 'utils/test/factories/joanie';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
-import { OrderState, ProductType } from 'types/Joanie';
+import { OrderState, Product, ProductType } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ProductRelationProvider } from 'contexts/ProductRelationContext';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
@@ -38,6 +40,12 @@ jest.mock('utils/context', () => ({
 
 jest.mock('./components/PaymentInterfaces');
 
+interface WrapperProps extends PropsWithChildren {
+  product: Product;
+  enrollmentId?: string;
+  client?: QueryClient;
+}
+
 describe.each([
   {
     productType: ProductType.CREDENTIAL,
@@ -57,14 +65,34 @@ describe.each([
     let nbApiCalls: number;
 
     const Wrapper = ({
+      product,
+      enrollmentId,
       client = createTestQueryClient({ user: true }),
       children,
-    }: PropsWithChildren<{ client?: QueryClient }>) => {
+    }: WrapperProps) => {
+      let productProviderProps;
+      if (product.type === ProductType.CREDENTIAL) {
+        productProviderProps = {
+          productId: product.id,
+          courseCode: '00000',
+          enrollmentId: undefined,
+        };
+      } else {
+        if (!enrollmentId) {
+          throw new Error('CourseProductProvider for a CERTIFICATE order must have a enrollmentId');
+        }
+        productProviderProps = {
+          productId: product.id,
+          courseCode: undefined,
+          enrollmentId,
+        };
+      }
+
       return (
         <IntlProvider locale="en">
           <QueryClientProvider client={client}>
             <JoanieSessionProvider>
-              <ProductRelationProvider productId="" courseCode="00000">
+              <ProductRelationProvider {...productProviderProps}>
                 {children}
               </ProductRelationProvider>
             </JoanieSessionProvider>
@@ -96,12 +124,24 @@ describe.each([
 
     it('should render a payment button', async () => {
       const product: Joanie.Product = ProductFactory().one();
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course: '00000',
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollmentId: faker.string.uuid(),
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
         [],
       );
       render(
-        <Wrapper>
+        <Wrapper product={product} enrollmentId={fetchOrderQueryParams.enrollmentId}>
           <PaymentButton product={product} onSuccess={jest.fn()} />
         </Wrapper>,
       );
@@ -127,18 +167,30 @@ describe.each([
 
     it('should render a payment button with a specific label when a credit card is provided', () => {
       /*
-      If a credit card is provided, it seems that the payment should be a one click,
-      so the payment button label should mention this information.
-    */
+        If a credit card is provided, it seems that the payment should be a one click,
+        so the payment button label should mention this information.
+      */
       const product: Joanie.Product = ProductFactory().one();
       const creditCard: Joanie.CreditCard = CreditCardFactory().one();
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course: '00000',
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollmentId: faker.string.uuid(),
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
         [],
       );
       const { rerender } = render(
-        <Wrapper>
+        <Wrapper product={product} enrollmentId={fetchOrderQueryParams.enrollmentId}>
           <PaymentButton product={product} creditCard={creditCard.id} onSuccess={jest.fn()} />
         </Wrapper>,
       );
@@ -157,7 +209,7 @@ describe.each([
       const billingAddress: Joanie.Address = AddressFactory().one();
 
       rerender(
-        <Wrapper>
+        <Wrapper product={product} enrollmentId={fetchOrderQueryParams.enrollmentId}>
           <PaymentButton
             billingAddress={billingAddress}
             product={product}
@@ -174,13 +226,24 @@ describe.each([
     it('should render an enabled payment button if a billing address is provided', () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
-
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course: '00000',
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollmentId: faker.string.uuid(),
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
         [],
       );
       render(
-        <Wrapper>
+        <Wrapper product={product} enrollmentId={fetchOrderQueryParams.enrollmentId}>
           <PaymentButton billingAddress={billingAddress} product={product} onSuccess={jest.fn()} />
         </Wrapper>,
       );
@@ -197,13 +260,27 @@ describe.each([
     });
 
     it('should create an order then display the payment interface when user clicks on payment button', async () => {
-      const product: Joanie.Product = ProductFactory().one();
+      const product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
       const handleSuccess = jest.fn();
-      const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
+      const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory({
+        product: product.id,
+      }).one();
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course: '00000',
+              product: order.product,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollmentId: order.enrollment?.id,
+              product: order.product,
+              state: ['pending', 'validated', 'submitted'],
+            };
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
           [],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -215,7 +292,11 @@ describe.each([
         });
 
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
+        <Wrapper
+          product={product}
+          enrollmentId={fetchOrderQueryParams.enrollmentId}
+          client={createTestQueryClient({ user: true })}
+        >
           <PaymentButton
             billingAddress={billingAddress}
             product={product}
@@ -301,7 +382,9 @@ describe.each([
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
       const creditCard: Joanie.CreditCard = CreditCardFactory().one();
-      const { payment_info: paymentInfo, ...order } = OrderWithOneClickPaymentFactory().one();
+      const { payment_info: paymentInfo, ...order } = OrderWithOneClickPaymentFactory({
+        product: product.id,
+      }).one();
       const handleSuccess = jest.fn();
       const initialOrder = {
         ...order,
@@ -312,9 +395,21 @@ describe.each([
         state: OrderState.SUBMITTED,
       };
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course: '00000',
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollmentId: order.enrollment?.id,
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
           [initialOrder],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -324,7 +419,11 @@ describe.each([
         .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, orderSubmitted);
 
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
+        <Wrapper
+          product={product}
+          enrollmentId={fetchOrderQueryParams.enrollmentId}
+          client={createTestQueryClient({ user: true })}
+        >
           <PaymentButton
             billingAddress={billingAddress}
             creditCard={creditCard.id}
@@ -351,7 +450,7 @@ describe.each([
 
       // - User clicks on pay button
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
         [orderSubmitted],
         { overwriteRoutes: true },
       );
@@ -420,16 +519,30 @@ describe.each([
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
       const creditCard: Joanie.CreditCard = CreditCardFactory().one();
-      const { payment_info: paymentInfo, ...order } = OrderWithOneClickPaymentFactory().one();
+      const { payment_info: paymentInfo, ...order } = OrderWithOneClickPaymentFactory({
+        product: product.id,
+      }).one();
       const orderSubmitted = {
         ...order,
         state: OrderState.SUBMITTED,
       };
       const handleSuccess = jest.fn();
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course: '00000',
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollmentId: order.enrollment?.id,
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
           [orderSubmitted],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -440,7 +553,11 @@ describe.each([
         .post(`https://joanie.test/api/v1.0/orders/${order.id}/abort/`, HttpStatusCode.OK);
 
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
+        <Wrapper
+          product={product}
+          enrollmentId={fetchOrderQueryParams.enrollmentId}
+          client={createTestQueryClient({ user: true })}
+        >
           <PaymentButton
             billingAddress={billingAddress}
             creditCard={creditCard.id}
@@ -455,7 +572,7 @@ describe.each([
       nbApiCalls += 1; // fetcher order for userProductOrder
       const apiCalls = fetchMock.calls().map((call) => call[0]);
       expect(apiCalls).toContain(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
       );
 
       const $button = screen.getByRole('button', {
@@ -535,9 +652,22 @@ describe.each([
       const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
       const handleSuccess = jest.fn();
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course: '00000',
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollmentId: faker.string.uuid(),
+              product: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
           [],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -550,7 +680,11 @@ describe.each([
         });
 
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
+        <Wrapper
+          product={product}
+          enrollmentId={fetchOrderQueryParams.enrollmentId}
+          client={createTestQueryClient({ user: true })}
+        >
           <PaymentButton
             billingAddress={billingAddress}
             product={product}
@@ -559,7 +693,9 @@ describe.each([
         </Wrapper>,
       );
       nbApiCalls += 1; // useProductOrder get order with filters
-      expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+      waitFor(() => {
+        expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+      });
 
       const $button = screen.getByRole('button', {
         name: `Pay ${new Intl.NumberFormat('en', {
@@ -581,7 +717,9 @@ describe.each([
       nbApiCalls += 1; // refetch omniscient orders
       nbApiCalls += 1; // refetch useProductOrder
       nbApiCalls += 1; // order submit
-      expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+      waitFor(() => {
+        expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+      });
 
       expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
       expect(JSON.parse(fetchMock.lastOptions()!.body!.toString())).toEqual({
