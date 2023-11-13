@@ -78,9 +78,14 @@ function update_sources() {
             template=".circleci/src/workflows/site_no_change.yml.tpl"
         fi
 
-        # Look for custom image name in site's setup.cfg file and default to the site name
-        image=$(grep "^name = " "${site_path}/src/backend/setup.cfg" | cut -c 8- || \
-            echo "${site}")
+        # Look for custom image name in site's setup.cfg or pyproject.toml file and default to the site name
+        image="$site"
+        if [[ -f "${site_path}/src/backend/setup.cfg" ]]; then
+            image=$(grep "^name = " "${site_path}/src/backend/setup.cfg" | cut -c 8-)
+        fi
+        if [[ -f "${site_path}/src/backend/pyproject" ]]; then
+            image=$(grep "^name = " "${site_path}/src/backend/pyproject.toml" | cut -c 8- | xargs echo)
+        fi
 
         changelog_ignored_branch="main"
         if \
