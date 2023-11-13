@@ -47,11 +47,11 @@ describe('<DashboardOrderLayout />', () => {
   });
 
   it('renders sidebar', async () => {
-    const order: CredentialOrder = {
-      ...CredentialOrderFactory().one(),
+    const order: CredentialOrder = CredentialOrderFactory({
       target_courses: [TargetCourseFactory().one()],
       target_enrollments: [],
-    };
+    }).one();
+
     const { product } = mockCourseProductWithOrder(order);
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',

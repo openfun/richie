@@ -89,11 +89,10 @@ describe('<DashboardItemEnrollment/>', () => {
   });
 
   it('renders an inactive enrollment', () => {
-    const enrollment: Enrollment = {
-      ...EnrollmentFactory().one(),
+    const enrollment: Enrollment = EnrollmentFactory({
       is_active: false,
       course_run: CourseRunWithCourseFactory().one(),
-    };
+    }).one();
 
     render(<Wrapper enrollment={enrollment} />);
     screen.getByText(enrollment.course_run.course!.title);

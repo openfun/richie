@@ -341,10 +341,7 @@ describe('<DashboardItemOrder/>', () => {
     }).one();
     // Make target course enrolled.
     order.target_enrollments = [
-      {
-        ...EnrollmentFactory().one(),
-        course_run: order.target_courses[0].course_runs[0],
-      },
+      EnrollmentFactory({ course_run: order.target_courses[0].course_runs[0] }).one(),
     ];
 
     const { product } = mockCourseProductWithOrder(order);
@@ -617,12 +614,7 @@ describe('<DashboardItemOrder/>', () => {
     }).one();
 
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
-    order.target_enrollments = [
-      {
-        ...EnrollmentFactory().one(),
-        course_run: initialEnrolledCourseRun,
-      },
-    ];
+    order.target_enrollments = [EnrollmentFactory({ course_run: initialEnrolledCourseRun }).one()];
 
     const { product } = mockCourseProductWithOrder(order);
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', []);
@@ -692,11 +684,7 @@ describe('<DashboardItemOrder/>', () => {
     }).one();
 
     const courseRun = order.target_courses[0].course_runs[0];
-    const enrollment = {
-      ...EnrollmentFactory().one(),
-      course_run: courseRun,
-      is_active: false,
-    };
+    const enrollment = EnrollmentFactory({ course_run: courseRun, is_active: false }).one();
     order.target_enrollments = [enrollment];
 
     // When the existing enrollment will be set as is_active: true.
