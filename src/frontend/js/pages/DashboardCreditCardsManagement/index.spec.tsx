@@ -69,11 +69,11 @@ describe('<DashboardCreditCardsManagement/>', () => {
 
   it('renders the correct label for expired date', async () => {
     const date = faker.date.past();
-    const creditCard: CreditCard = {
-      ...CreditCardFactory().one(),
+    const creditCard: CreditCard = CreditCardFactory({
       expiration_month: date.getMonth() + 1,
       expiration_year: date.getFullYear(),
-    };
+    }).one();
+
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
     await act(async () => {
       render(
@@ -106,11 +106,11 @@ describe('<DashboardCreditCardsManagement/>', () => {
     refDate.setMonth(refDate.getMonth() + 1);
     refDate.setDate(1);
     const futureLessThan3Months = faker.date.future({ years: 2.99 / 12, refDate });
-    const creditCard: CreditCard = {
-      ...CreditCardFactory().one(),
+    const creditCard: CreditCard = CreditCardFactory({
       expiration_month: futureLessThan3Months.getMonth() + 1,
       expiration_year: futureLessThan3Months.getFullYear(),
-    };
+    }).one();
+
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
     await act(async () => {
       render(
@@ -142,11 +142,11 @@ describe('<DashboardCreditCardsManagement/>', () => {
     const refDate = new Date();
     refDate.setMonth(refDate.getMonth() + 4);
     const date = faker.date.future({ refDate });
-    const creditCard: CreditCard = {
-      ...CreditCardFactory().one(),
+    const creditCard: CreditCard = CreditCardFactory({
       expiration_month: date.getMonth() + 1,
       expiration_year: date.getFullYear(),
-    };
+    }).one();
+
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
     await act(async () => {
       render(

@@ -17,11 +17,12 @@ describe('CreditCardHelper', () => {
     const date = faker.date.future({ refDate });
 
     expect(
-      CreditCardHelper.getExpirationState({
-        ...CreditCardFactory().one(),
-        expiration_month: date.getMonth() + 1,
-        expiration_year: date.getFullYear(),
-      }),
+      CreditCardHelper.getExpirationState(
+        CreditCardFactory({
+          expiration_month: date.getMonth() + 1,
+          expiration_year: date.getFullYear(),
+        }).one(),
+      ),
     ).toBe(CreditCardExpirationStatus.FINE);
   });
 
@@ -35,22 +36,24 @@ describe('CreditCardHelper', () => {
     });
 
     expect(
-      CreditCardHelper.getExpirationState({
-        ...CreditCardFactory().one(),
-        expiration_month: futureLessThan3Months.getMonth() + 1,
-        expiration_year: futureLessThan3Months.getFullYear(),
-      }),
+      CreditCardHelper.getExpirationState(
+        CreditCardFactory({
+          expiration_month: futureLessThan3Months.getMonth() + 1,
+          expiration_year: futureLessThan3Months.getFullYear(),
+        }).one(),
+      ),
     ).toBe(CreditCardExpirationStatus.SOON);
   });
 
   it('is expired', () => {
     const date = faker.date.past();
     expect(
-      CreditCardHelper.getExpirationState({
-        ...CreditCardFactory().one(),
-        expiration_month: date.getMonth() + 1,
-        expiration_year: date.getFullYear(),
-      }),
+      CreditCardHelper.getExpirationState(
+        CreditCardFactory({
+          expiration_month: date.getMonth() + 1,
+          expiration_year: date.getFullYear(),
+        }).one(),
+      ),
     ).toBe(CreditCardExpirationStatus.EXPIRED);
   });
 });
