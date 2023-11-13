@@ -1,0 +1,26 @@
+;;
+;; Third-party packages configuration
+;;
+[project]
+name = {{cookiecutter.site}}
+
+[tool.flake8]
+max-line-length = 99
+exclude = [
+    ".git",
+    ".venv",
+    "build",
+    "venv",
+    "__pycache__",
+    "node_modules",
+    "*/migrations/*",
+]
+
+[tool.isort]
+profile = "black"
+known_django = "django"
+include_trailing_comma = true
+line_length = 88
+multi_line_output = 3
+sections = ["FUTURE","STDLIB","DJANGO","THIRDPARTY","RICHIE","FIRSTPARTY","LOCALFOLDER"]
+skip_glob = "src/frontend/node_modules/**/*,venv"

@@ -36,7 +36,7 @@ FROM base as back-builder
 WORKDIR /builder
 
 # Copy required python dependencies
-COPY setup.py setup.cfg MANIFEST.in /builder/
+COPY setup.py pyproject.toml MANIFEST.in /builder/
 COPY ./src/richie /builder/src/richie/
 
 # Copy distributed application's statics
