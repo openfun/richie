@@ -116,14 +116,14 @@ jobs:
   # Check that all versions (backend, frontend, website and cookiecutter) are up-to-date
   check-versions:
     docker:
-      - image: cimg/base:2022.04
+      - image: cimg/python:3.10
     working_directory: ~/fun
     steps:
       - checkout
       - run:
           name: Check that all versions are the same
           command: |
-            BACKEND_VERSION=$(cat setup.cfg | grep "version" | cut -d" " -f3)
+            BACKEND_VERSION=$(python setup.py --version)
             echo "richie version: ${BACKEND_VERSION}"
             # In the frontend
             cat src/frontend/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
@@ -137,9 +137,9 @@ jobs:
             # In the e2e tests
             cat tests_e2e/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
             # In the website
-            cat website/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$" || cat setup.cfg | grep "beta"
+            cat website/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
             # In the website versions
-            cat website/versions.json | grep "\"${BACKEND_VERSION}\",$" || cat setup.cfg | grep "beta"
+            cat website/versions.json | grep "\"${BACKEND_VERSION}\",$"
 
   # ---- Docker jobs ----
   # Build the Docker image ready for production
@@ -1138,7 +1138,7 @@ workflows:
             - package-back
           filters:
             branches:
-              ignore: /.*/
+              only: master
             tags:
               only: /^v.*/
 

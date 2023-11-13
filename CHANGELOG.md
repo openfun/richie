@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Switch from setup.cfg to pyproject.toml 
+
 ## [2.25.0-beta.1]
 
 ### Fixed

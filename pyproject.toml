@@ -1,0 +1,132 @@
+#
+# Richie package
+#
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "richie"
+version = "2.25.0-beta.1"
+description = "A CMS to build learning portals for open education"
+readme = "README.md"
+authors = [{ "name" = "Open FUN (France Université Numérique)", "email" = "fun.dev@fun-mooc.fr" }]
+license = { file = "LICENSE" }
+keywords = ["Django", "Django-CMS", "Open edX"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Django",
+    "Framework :: Django :: 2.2",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7"
+]
+dependencies = [
+    "arrow",
+    "Django<4",
+    "djangocms-file",
+    "djangocms-googlemap",
+    "djangocms-link",
+    "djangocms-picture",
+    "djangocms-text-ckeditor",
+    "djangocms-video",
+    "djangorestframework",
+    "django-autocomplete-light==3.9.7",
+    "django-cms>=3.11.0,<4.0.0",
+    "django-parler>=2.3",
+    "django-redis>=4.11.0",
+    "django-treebeard",
+    "dj-pagination",
+    "easy_thumbnails[svg]>=2.8",
+    "elasticsearch>=6.0.0,<7.0.0",
+    "exrex==0.11.0",
+    "oauthlib==3.2.2",
+    "requests==2.31.0",
+]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/openfun/richie/issues/new"
+"Changelog" = "https://github.com/openfun/richie/blob/master/CHANGELOG.md"
+"Homepage" = "https://github.com/openfun/richie"
+"Repository" = "https://github.com/openfun/richie"
+"Documentation" = "https://richie.education/"
+"Demonstration website" = "https://demo.richie.education/"
+
+[tool.setuptools]
+packages = { find = { where = ["src"], exclude = ["tests"] } }
+zip-safe = true
+
+[tool.distutils.bdist_wheel]
+universal = true
+
+[project.optional-dependencies]
+dev = [
+    "bandit==1.7.6",
+    "black==23.12.1",
+    "pyRdfa3==3.6.2",
+    "cssselect==1.2.0",
+    "factory-boy==3.3.0",
+    "flake8==7.0.0",
+    "flake8-pyproject==1.2.3",
+    "htmlmin==0.1.12",
+    "ipdb==0.13.13",
+    "ipython==8.20.0",
+    "isort==5.13.2",
+    "lxml==5.1.0",
+    "msgpack==1.0.7",
+    "mysqlclient==2.2.1",
+    "pylint==3.0.3",
+    "pylint-django==2.5.5",
+    "pytest==7.4.4",
+    "pytest-cov==4.1.0",
+    "pytest-django==4.7.0",
+    "responses==0.24.1",
+]
+ci = [
+    "twine==4.0.2",
+]
+sandbox = [
+    "django-configurations==2.5",
+    "dockerflow==2024.1.0",
+    "factory-boy==3.3.0",
+    "gunicorn==21.2.0",
+    "psycopg2-binary==2.9.9",
+    "sentry-sdk==1.39.2",
+]
+
+[tool.flake8]
+max-line-length = 99
+exclude = [
+    ".git",
+    ".venv",
+    "build",
+    "venv",
+    "__pycache__",
+    "node_modules",
+    "*/migrations/*",
+]
+
+[tool.isort]
+profile = "black"
+known_django = "django"
+known_richie = "richie"
+include_trailing_comma = true
+line_length = 88
+multi_line_output = 3
+sections = ["FUTURE","STDLIB","DJANGO","THIRDPARTY","RICHIE","FIRSTPARTY","LOCALFOLDER"]
+skip_glob = "src/frontend/node_modules/**/*,venv"
+
+[tool.pytest.ini_options]
+addopts = "-v --cov-report term-missing"
+python_files = [
+    "test_*.py",
+    "tests.py"
+]
+testpaths = [
+    "tests",
+]
+filterwarnings = [
+    "ignore:::(?!(tests|richie))",
+]
