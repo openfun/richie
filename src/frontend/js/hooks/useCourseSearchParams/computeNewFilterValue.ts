@@ -46,9 +46,9 @@ export const computeNewFilterValue = (
         existingValue === update.payload
           ? [existingValue]
           : isMPTTParentOf(existingValue, update.payload) ||
-            isMPTTChildOf(existingValue, update.payload)
-          ? [update.payload]
-          : [existingValue, update.payload],
+              isMPTTChildOf(existingValue, update.payload)
+            ? [update.payload]
+            : [existingValue, update.payload],
       // REMOVE:
       // - Return nothing if we had to drop the existing value we had
       // - Keep the existing value if it's not the one we needed to drop
