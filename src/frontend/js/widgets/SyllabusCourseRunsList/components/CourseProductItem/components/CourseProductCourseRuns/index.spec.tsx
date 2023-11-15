@@ -17,7 +17,7 @@ import { Deferred } from 'utils/test/deferred';
 import { CourseStateTextEnum, Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { IntlHelper } from 'utils/IntlHelper';
-import { CourseProductProvider } from 'contexts/CourseProductContext';
+import { ProductRelationProvider } from 'contexts/ProductRelationContext';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { CourseRunList, EnrollableCourseRunList, EnrolledCourseRun } from '.';
 
@@ -124,11 +124,11 @@ describe('CourseProductCourseRuns', () => {
       children,
     }: PropsWithChildren<{ productId: string; code: string }>) => (
       <IntlProvider locale="en">
-        <CourseProductProvider productId={productId} courseCode={code}>
+        <ProductRelationProvider productId={productId} courseCode={code}>
           <QueryClientProvider client={createTestQueryClient()}>
             <JoanieApiProvider>{children}</JoanieApiProvider>
           </QueryClientProvider>
-        </CourseProductProvider>
+        </ProductRelationProvider>
       </IntlProvider>
     );
 
@@ -438,11 +438,11 @@ describe('CourseProductCourseRuns', () => {
   describe('EnrolledCourseRun', () => {
     const Wrapper = ({ children }: PropsWithChildren<{}>) => (
       <IntlProvider locale="en">
-        <CourseProductProvider productId="abc" courseCode="00000">
+        <ProductRelationProvider productId="abc" courseCode="00000">
           <QueryClientProvider client={createTestQueryClient()}>
             <JoanieApiProvider>{children}</JoanieApiProvider>
           </QueryClientProvider>
-        </CourseProductProvider>
+        </ProductRelationProvider>
       </IntlProvider>
     );
 

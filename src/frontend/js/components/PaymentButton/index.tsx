@@ -11,7 +11,7 @@ import type { Nullable } from 'types/utils';
 import { HttpError } from 'utils/errors/HttpError';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
-import { useCourseProduct } from 'contexts/CourseProductContext';
+import { useCourseProduct } from 'contexts/ProductRelationContext';
 import useProductOrder from 'hooks/useProductOrder';
 import PaymentInterface from './components/PaymentInterfaces';
 

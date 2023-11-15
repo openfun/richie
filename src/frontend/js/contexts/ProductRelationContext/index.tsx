@@ -10,7 +10,7 @@ const Context = createContext<
   }>
 >(undefined);
 
-export interface CourseProductProviderProps {
+export interface ProductRelationProviderProps {
   courseCode: Joanie.CourseLight['code'];
   productId: Joanie.Product['id'];
 }
@@ -19,11 +19,11 @@ export interface CourseProductProviderProps {
  * A React Provider which aims to wrap components related to a specific course. In this
  * way we are able to pass down course's code to children.
  */
-export const CourseProductProvider = ({
+export const ProductRelationProvider = ({
   courseCode,
   productId,
   children,
-}: PropsWithChildren<CourseProductProviderProps>) => {
+}: PropsWithChildren<ProductRelationProviderProps>) => {
   const value = useMemo(
     () => ({ productId, courseCode, key: `${courseCode}+${productId}` }),
     [productId, courseCode],
@@ -32,13 +32,13 @@ export const CourseProductProvider = ({
 };
 
 /**
- * A hook to use within `CourseProductProvider`. It returns the course code and product id context.
+ * A hook to use within `ProductRelationProvider`. It returns the course code and product id context.
  */
 export const useCourseProduct = () => {
   const context = useContext(Context);
   if (context === undefined) {
     throw new Error(
-      'useCourseProduct must be used within a component wrapped by a <CourseProductProvider />.',
+      'useCourseProduct must be used within a component wrapped by a <ProductRelationProvider />.',
     );
   }
   return context;

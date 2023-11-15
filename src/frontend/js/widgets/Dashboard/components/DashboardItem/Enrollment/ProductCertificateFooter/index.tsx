@@ -2,7 +2,7 @@ import { FormattedMessage } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { Enrollment, Product, ProductType } from 'types/Joanie';
-import { CourseProductProvider } from 'contexts/CourseProductContext';
+import { ProductRelationProvider } from 'contexts/ProductRelationContext';
 import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import { useCertificate } from 'hooks/useCertificates';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
@@ -45,7 +45,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
     return null;
   }
   return (
-    <CourseProductProvider courseCode={enrollment.course_run.course.code} productId={product.id}>
+    <ProductRelationProvider courseCode={enrollment.course_run.course.code} productId={product.id}>
       <div className="dashboard-item__course-enrolling__infos">
         <div className="dashboard-item__block__status">
           <Icon name={IconTypeEnum.CERTIFICATE} />
@@ -73,7 +73,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
           />
         )}
       </div>
-    </CourseProductProvider>
+    </ProductRelationProvider>
   );
 };
 

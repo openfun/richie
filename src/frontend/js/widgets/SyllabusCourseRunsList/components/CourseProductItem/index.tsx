@@ -5,7 +5,7 @@ import { ProductType, OrderState, CourseLight, Product, CredentialOrder } from '
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { CourseProductProvider } from 'contexts/CourseProductContext';
+import { ProductRelationProvider } from 'contexts/ProductRelationContext';
 import PurchaseButton from 'components/PurchaseButton';
 import { Maybe } from 'types/utils';
 import useDateFormat from 'hooks/useDateFormat';
@@ -183,7 +183,7 @@ const CourseProductItem = ({ productId, courseCode, compact = false }: CoursePro
   }
 
   return (
-    <CourseProductProvider courseCode={courseCode} productId={productId}>
+    <ProductRelationProvider courseCode={courseCode} productId={productId}>
       <section
         className={c('product-widget', {
           'product-widget--has-error': hasError,
@@ -222,7 +222,7 @@ const CourseProductItem = ({ productId, courseCode, compact = false }: CoursePro
           </>
         )}
       </section>
-    </CourseProductProvider>
+    </ProductRelationProvider>
   );
 };
 

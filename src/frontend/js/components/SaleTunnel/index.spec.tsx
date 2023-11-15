@@ -6,7 +6,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { ProductFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
-import { CourseProductProvider } from 'contexts/CourseProductContext';
+import { ProductRelationProvider } from 'contexts/ProductRelationContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import SaleTunnel from '.';
 
@@ -49,13 +49,13 @@ describe('SaleTunnel', () => {
   });
 
   const Wrapper = ({ children }: React.PropsWithChildren<{}>) => (
-    <CourseProductProvider courseCode="00000" productId="00000">
+    <ProductRelationProvider courseCode="00000" productId="00000">
       <IntlProvider locale="en">
         <QueryClientProvider client={createTestQueryClient({ user: true })}>
           <SessionProvider>{children}</SessionProvider>
         </QueryClientProvider>
       </IntlProvider>
-    </CourseProductProvider>
+    </ProductRelationProvider>
   );
 
   it('does not render when isOpen property is false', async () => {

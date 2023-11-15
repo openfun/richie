@@ -6,7 +6,7 @@ import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
-import { useCourseProduct } from 'contexts/CourseProductContext';
+import { useCourseProduct } from 'contexts/ProductRelationContext';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
 import { StepBreadcrumb } from './components/StepBreadcrumb';
 import { SaleTunnelStepValidation } from './components/SaleTunnelStepValidation';

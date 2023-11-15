@@ -18,7 +18,7 @@ import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
 import { OrderState, ProductType } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { CourseProductProvider } from 'contexts/CourseProductContext';
+import { ProductRelationProvider } from 'contexts/ProductRelationContext';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import PaymentButton from '.';
@@ -64,9 +64,9 @@ describe.each([
         <IntlProvider locale="en">
           <QueryClientProvider client={client}>
             <JoanieSessionProvider>
-              <CourseProductProvider productId="" courseCode="00000">
+              <ProductRelationProvider productId="" courseCode="00000">
                 {children}
-              </CourseProductProvider>
+              </ProductRelationProvider>
             </JoanieSessionProvider>
           </QueryClientProvider>
         </IntlProvider>
