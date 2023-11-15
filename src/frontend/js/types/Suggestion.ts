@@ -39,8 +39,8 @@ export function isCourseSuggestion(suggestion: Suggestion<string>): suggestion i
 export type Suggestion<Kind extends string> = Kind extends 'default'
   ? DefaultSuggestion
   : Kind extends 'courses'
-  ? CourseSuggestion
-  : GenericSuggestion;
+    ? CourseSuggestion
+    : GenericSuggestion;
 
 /**
  * The base shape of a resource suggestion section. Contains a bunch of suggestions and a title.
