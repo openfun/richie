@@ -11,6 +11,7 @@
         "npm"
       ],
       "matchPackageNames": [
+        "node",
         "bootstrap",
         "node-fetch"
       ]
