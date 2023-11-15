@@ -55,11 +55,6 @@ describe.each([
   'PaymentButton for $productType product',
   ({ ProductFactory, OrderWithOneClickPaymentFactory, OrderWithPaymentFactory }) => {
     let nbApiCalls: number;
-    const formatPrice = (price: number, currency: string) =>
-      new Intl.NumberFormat('en', {
-        currency,
-        style: 'currency',
-      }).format(price);
 
     const Wrapper = ({
       client = createTestQueryClient({ user: true }),
@@ -112,7 +107,10 @@ describe.each([
       );
 
       const $button = screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        name: `Pay ${new Intl.NumberFormat('en', {
+          currency: product.price_currency,
+          style: 'currency',
+        }).format(product.price)}`,
       }) as HTMLButtonElement;
 
       // a billing address is missing, but the button stays enabled
@@ -146,7 +144,10 @@ describe.each([
       );
 
       const $button = screen.getByRole('button', {
-        name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
+        name: `Pay in one click ${new Intl.NumberFormat('en', {
+          currency: product.price_currency,
+          style: 'currency',
+        }).format(product.price)}`,
       }) as HTMLButtonElement;
 
       // a billing address is missing, but the button stays enabled
@@ -185,7 +186,10 @@ describe.each([
       );
 
       const $button = screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        name: `Pay ${new Intl.NumberFormat('en', {
+          currency: product.price_currency,
+          style: 'currency',
+        }).format(product.price)}`,
       }) as HTMLButtonElement;
 
       // the button should be active
@@ -223,7 +227,10 @@ describe.each([
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
       const $button = screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        name: `Pay ${new Intl.NumberFormat('en', {
+          currency: product.price_currency,
+          style: 'currency',
+        }).format(product.price)}`,
       }) as HTMLButtonElement;
 
       // - Payment button should not be disabled.
@@ -333,7 +340,10 @@ describe.each([
       nbApiCalls += 1; // useProductOrder get order with filters
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
       const $button = screen.getByRole('button', {
-        name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
+        name: `Pay in one click ${new Intl.NumberFormat('en', {
+          currency: product.price_currency,
+          style: 'currency',
+        }).format(product.price)}`,
       }) as HTMLButtonElement;
 
       // - Payment button should not be disabled.
@@ -449,7 +459,10 @@ describe.each([
       );
 
       const $button = screen.getByRole('button', {
-        name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
+        name: `Pay in one click ${new Intl.NumberFormat('en', {
+          currency: product.price_currency,
+          style: 'currency',
+        }).format(product.price)}`,
       }) as HTMLButtonElement;
 
       // - Payment button should not be disabled.
@@ -549,7 +562,10 @@ describe.each([
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
       const $button = screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        name: `Pay ${new Intl.NumberFormat('en', {
+          currency: product.price_currency,
+          style: 'currency',
+        }).format(product.price)}`,
       }) as HTMLButtonElement;
 
       // - As all information are provided, payment button should not be disabled.
@@ -592,7 +608,10 @@ describe.each([
       // - Payment button should have been restore to its idle state
       expect($button.disabled).toBe(false);
       screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        name: `Pay ${new Intl.NumberFormat('en', {
+          currency: product.price_currency,
+          style: 'currency',
+        }).format(product.price)}`,
       });
     });
   },
