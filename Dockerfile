@@ -50,7 +50,8 @@ COPY --from=front-builder \
 # Upgrade pip to its latest release to speed up dependencies installation
 RUN pip install --upgrade pip
 
-RUN mkdir /install && \
+RUN --mount=type=bind,source=.git,target=/builder/.git \
+    mkdir /install && \
     pip install --prefix=/install .[sandbox]
 
 # ---- Core application image ----
@@ -110,6 +111,9 @@ COPY . /app/
 # dependencies
 RUN pip uninstall -y richie
 RUN pip install -e .[dev]
+
+# Clean remaining .git files
+RUN rm -rf .git*
 
 # Restore the un-privileged user running the application
 ARG DOCKER_USER
