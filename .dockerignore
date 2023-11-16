@@ -5,6 +5,7 @@ __pycache__
 **/*.pyc
 venv
 .venv
+dist
 
 # System-specific files
 .DS_Store
@@ -22,8 +23,9 @@ docs
 # Development/test cache & configurations
 .cache
 .circleci
-.git
 .vscode
+# don't remove the line after, we need .git to build the sandbox image.
+!.git
 
 # Assets
 data

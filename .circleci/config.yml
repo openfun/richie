@@ -36,6 +36,7 @@ aliases:
       command: |
         sudo apt-get update
         sudo apt-get install -y libcairo2-dev
+
 jobs:
   # Git jobs
   # Check that the git history is clean and complies with our expectations
@@ -112,34 +113,6 @@ jobs:
       - run:
           name: Run renovate-config-validator command
           command: renovate-config-validator
-
-  # Check that all versions (backend, frontend, website and cookiecutter) are up-to-date
-  check-versions:
-    docker:
-      - image: cimg/python:3.10
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - run:
-          name: Check that all versions are the same
-          command: |
-            BACKEND_VERSION=$(python setup.py --version)
-            echo "richie version: ${BACKEND_VERSION}"
-            # In the frontend
-            cat src/frontend/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
-            # In the cookiecutter site template backend
-            cat cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template/{{cookiecutter.site}}/requirements/base.txt | grep "richie==${BACKEND_VERSION}$"
-            # In the cookiecutter site template frontend
-            cat cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template/{{cookiecutter.site}}/src/frontend/package.json | grep "\"richie-education\": \"${BACKEND_VERSION}\"$"
-            # In the cookiecutter documentation
-            cat docs/cookiecutter.md | grep "cookiecutter gh:openfun/richie --directory cookiecutter  --checkout v${BACKEND_VERSION}"
-            cat docs/cookiecutter.md | grep "fundocker/cookiecutter gh:openfun/richie --directory cookiecutter --checkout v${BACKEND_VERSION}"
-            # In the e2e tests
-            cat tests_e2e/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
-            # In the website
-            cat website/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
-            # In the website versions
-            cat website/versions.json | grep "\"${BACKEND_VERSION}\",$"
 
   # ---- Docker jobs ----
   # Build the Docker image ready for production
@@ -622,6 +595,51 @@ jobs:
                 ~/.local/bin/pytest
 
   # ---- Packaging jobs ----
+  check-versions:
+    docker:
+      - image: cimg/python:3.10-node
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: check configured version
+          command: |
+            BRANCH_REGEX="release/v(.*)"
+            if [[ $CIRCLE_BRANCH =~ $BRANCH_REGEX ]]
+            then
+              VERSION="${BASH_REMATCH[1]}"
+              python -m pip install --upgrade setuptools_scm
+              BACKEND_VERSION=$(python -m setuptools_scm --strip-dev)
+              STABLE_VERSION_REGEX="^[0-9]*\.[0-9]*\.[0-9]*$"
+              if [[ $VERSION =~ $STABLE_VERSION_REGEX ]]; then
+                echo "Release of a stable version, front and back version must match. BACKEND_VERSION is set with VERSION variable"
+                BACKEND_VERSION=$VERSION
+              fi
+              echo "richie version: ${VERSION}"
+              echo "backend version: ${BACKEND_VERSION}"
+              # In the frontend
+              grep "\"version\": \"${VERSION}\",$" src/frontend/package.json
+              # In the cookiecutter site template backend
+              cat cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template/{{cookiecutter.site}}/requirements/base.txt | grep "richie==${BACKEND_VERSION}$"
+              # In the cookiecutter site template frontend
+              cat cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template/{{cookiecutter.site}}/src/frontend/package.json | grep "\"richie-education\": \"${VERSION}\"$"
+              # In the cookiecutter documentation
+              cat docs/cookiecutter.md | grep "cookiecutter gh:openfun/richie --directory cookiecutter  --checkout v${VERSION}"
+              cat docs/cookiecutter.md | grep "fundocker/cookiecutter gh:openfun/richie --directory cookiecutter --checkout v${VERSION}"
+              # In the e2e tests
+              cat tests_e2e/package.json | grep "\"version\": \"${VERSION}\",$"
+              # In the website
+              cat website/package.json | grep "\"version\": \"${VERSION}\",$"
+              # In the website versions
+              cat website/versions.json | grep "\"${VERSION}\",$"
+            else
+              echo "branch name does not match pattern ${BRANCH_REGEX}"
+              exit 1
+            fi
+
   package-back:
     docker:
       - image: cimg/python:3.10
@@ -637,7 +655,9 @@ jobs:
           at: ~/fun
       - run:
           name: Build python package
-          command: python setup.py sdist bdist_wheel
+          command: |
+            python -m pip install --upgrade build
+            python -m build
       # Persist build packages to the workspace
       - persist_to_workspace:
           root: ~/fun
@@ -904,7 +924,7 @@ jobs:
   # environment variables in CircleCI UI (with your PyPI credentials)
   npm:
     docker:
-      - image: cimg/node:18.19
+      - image: cimg/python:3.10-node
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -917,7 +937,7 @@ jobs:
       - run:
           name: Publish package
           command: |
-            # If no tag is defined, this is a merge ofn master branch
+            # If no tag is defined, this is a merge on master branch
             if [[ -n "$CIRCLE_TAG" ]]; then
               python -m pip install --upgrade setuptools_scm
               NEXT_VERSION=$(python -m setuptools_scm)
@@ -1038,12 +1058,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-      # Check on each PR if the last richie version is present everywhere it should be.
-      # If not the build will fail before publishing a new release.
-      - check-versions:
-          filters:
-            tags:
-              only: /.*/
 
       # Docker jobs
       #
@@ -1113,6 +1127,11 @@ workflows:
             branches:
               only: master
 
+      - check-versions:
+          filters:
+            branches:
+              only: /release\/v.*/
+
       # Packaging: python
       #
       # Build the python package
@@ -1134,7 +1153,6 @@ workflows:
       # succeed and it has been tagged with a tag starting with the letter v
       - pypi:
           requires:
-            - check-versions
             - package-back
           filters:
             branches:
@@ -1148,7 +1166,6 @@ workflows:
       # succeed and it has been tagged with a tag starting with the letter v
       - npm:
           requires:
-            - check-versions
             - lint-front
             - test-front
             - test-front-package
@@ -1170,7 +1187,6 @@ workflows:
       # documentation in the release commit on master before they go out.
       - deploy-website:
           requires:
-            - check-versions
             - lint-website
           filters:
             branches:
