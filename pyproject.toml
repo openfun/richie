@@ -2,12 +2,12 @@
 # Richie package
 #
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=60", "setuptools-scm>=8.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "richie"
-version = "2.25.0-beta.1"
+dynamic = ["version"]
 description = "A CMS to build learning portals for open education"
 readme = "README.md"
 authors = [{ "name" = "Open FUN (France Université Numérique)", "email" = "fun.dev@fun-mooc.fr" }]
@@ -42,6 +42,7 @@ dependencies = [
     "easy_thumbnails[svg]>=2.8",
     "elasticsearch>=6.0.0,<7.0.0",
     "exrex==0.11.0",
+    "importlib-metadata",
     "oauthlib==3.2.2",
     "requests==2.31.0",
 ]
@@ -128,3 +129,5 @@ testpaths = [
 filterwarnings = [
     "ignore:::(?!(tests|richie))",
 ]
+
+[tool.setuptools_scm]
