@@ -40,13 +40,22 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<{}>) => {
     isStale,
   } = useQuery<Nullable<User>>({
     queryKey: ['user'],
-    queryFn: AuthenticationApi!.me,
+    queryFn: async () => {
+      const userRes = await AuthenticationApi!.me();
+      /**
+       * It is on purpose that this side effect is done synchronously and not in a useEffect.
+       * If we had wrapped it inside a useEffect it would cause race conditions where useSession
+       * queries would turn enabled == true before the side effect is done and then try to use
+       * the sessionStorage RICHIE_USER_TOKEN before it is set in fetchWithJWT. Thus causing 401 errors.
+       */
+      sessionStorage.setItem(RICHIE_USER_TOKEN, userRes?.access_token!);
+      return userRes;
+    },
     refetchOnWindowFocus: true,
     refetchInterval,
     staleTime: REACT_QUERY_SETTINGS.staleTimes.session,
   });
   const previousUserState = usePrevious(user);
-
   const queryClient = useQueryClient();
   const addresses = useAddresses();
   const creditCards = useCreditCards();
@@ -85,14 +94,14 @@ const JoanieSessionProvider = ({ children }: React.PropsWithChildren<{}>) => {
   }, [invalidate]);
 
   useEffect(() => {
-    sessionStorage.removeItem(RICHIE_USER_TOKEN);
     if (user) {
-      sessionStorage.setItem(RICHIE_USER_TOKEN, user.access_token!);
       if (!isStale) {
         addresses.methods.prefetch();
         creditCards.methods.prefetch();
         orders.methods.prefetch();
       }
+    } else {
+      sessionStorage.removeItem(RICHIE_USER_TOKEN);
     }
 
     if (!isTestEnv) {
