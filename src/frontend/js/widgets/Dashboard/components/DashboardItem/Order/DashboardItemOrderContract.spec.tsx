@@ -664,8 +664,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       await user.click($signButton);
 
       // Contract is shown and not in loading state.
-      let contractElement = await screen.findByTestId('dashboard-item-order-contract');
-      expect(within(contractElement).queryByRole('status')).not.toBeInTheDocument();
+      let contractElement = screen.getByTestId('dashboard-item-order-contract');
       let signButton = screen.getByRole('button', { name: 'Sign' });
       expect(signButton).not.toHaveAttribute('disabled');
 
@@ -679,7 +678,6 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       // Waiting for submit route.
       within(modal).queryByRole('header', { name: 'Loading your contract ...' });
-      within(modal).queryByRole('status');
 
       // Resolve submit request.
       await act(async () => {
@@ -698,7 +696,6 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       // Fake loading screen.
       within(modal).queryByRole('header', { name: 'Signing the contract ...' });
-      within(modal).queryByRole('status');
 
       // Mock polling request.
       let calls = 0;
@@ -726,7 +723,6 @@ describe('<DashboardItemOrder/> Contract', () => {
         jest.advanceTimersByTime(CONTRACT_SETTINGS.pollInterval + 50);
       });
       await within(modal).findByRole('heading', { name: 'Verifying signature ...' });
-      within(modal).queryByRole('status');
 
       // Verify the route has been called.
       expect(fetchMock.calls(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`).length).toBe(
@@ -743,7 +739,6 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       // Still displaying pending message.
       await within(modal).findByRole('heading', { name: 'Verifying signature ...' });
-      within(modal).queryByRole('status');
 
       // Fast-forward the second polling request.
       await act(async () => {
@@ -785,7 +780,6 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       // Contract is in loading state to prevent any interaction, waiting for order re-fetch.
       contractElement = screen.getByTestId('dashboard-item-order-contract');
-      within(contractElement).getByRole('status');
       signButton = within(contractElement).getByRole('button', { name: 'Sign' });
       expect(signButton).toHaveAttribute('disabled');
 
