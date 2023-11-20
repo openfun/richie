@@ -4,10 +4,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { CredentialOrder, Order, Product } from 'types/Joanie';
+import { CredentialOrder, NestedCredentialOrder, Order } from 'types/Joanie';
 import { Maybe } from 'types/utils';
 import { CONTRACT_SETTINGS } from 'settings';
-import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 import Banner, { BannerType } from 'components/Banner';
 import { SuccessIcon } from 'components/SuccessIcon';
 
@@ -65,8 +64,7 @@ const messages = defineMessages({
 });
 
 interface Props {
-  order: CredentialOrder;
-  product: Product;
+  order: CredentialOrder | NestedCredentialOrder;
   isOpen: boolean;
   onDone: () => void;
   onClose: () => void;
@@ -108,7 +106,7 @@ export const ContractFrame = (props: Props) => {
   );
 };
 
-export const ContractFrameContent = ({ order, onClose, onDone, product }: Props) => {
+export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
   const api = useJoanieApi();
   const intl = useIntl();
   const [step, setStep] = useState(ContractSteps.LOADING_CONTRACT);
@@ -160,7 +158,7 @@ export const ContractFrameContent = ({ order, onClose, onDone, product }: Props)
       } else {
         try {
           const orderToCheck = (await api.user.orders.get({ id: order.id })) as Order;
-          const isSigned = !orderNeedsSignature(orderToCheck, product);
+          const isSigned = orderToCheck.contract && orderToCheck.contract.signed_on;
           if (isSigned) {
             timeoutRef.current = undefined;
             stepFinished();
