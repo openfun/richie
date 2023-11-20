@@ -1,5 +1,4 @@
 import { FormattedMessage, useIntl } from 'react-intl';
-import { useState } from 'react';
 import { CourseLight, CredentialOrder, Product } from 'types/Joanie';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CoursesHelper } from 'utils/CoursesHelper';
@@ -11,7 +10,6 @@ import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourseProduct } from 'hooks/useCourseProducts';
-import { ContractFrame } from 'components/ContractFrame';
 import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 import {
   DashboardItemOrderContract,
@@ -82,10 +80,11 @@ export const DashboardItemOrder = ({
   const course = order.course as CourseLight;
 
   const intl = useIntl();
-  const query = useCourseProduct(course.code, { productId: order.product_id });
-  const [contractFrameOpened, setContractFrameOpened] = useState(false);
-  const [contractLoading, setContractLoading] = useState(false);
-  const product = query?.item?.product;
+  const {
+    item: courseProductRelation,
+    states: { isFetched: isCourseProductRelationFetched },
+  } = useCourseProduct(course.code, { productId: order.product_id });
+  const { product } = courseProductRelation || {};
   const needsSignature = orderNeedsSignature(order, product);
   const getRoutePath = getDashboardRoutePath(useIntl());
 
@@ -93,10 +92,9 @@ export const DashboardItemOrder = ({
     <div className="dashboard-item-order">
       {writable && needsSignature && (
         <DashboardItemOrderContract
+          key={`DashboardItemOrderContract_${order.id}`}
           order={order}
           product={product}
-          onSign={() => setContractFrameOpened(true)}
-          loading={contractLoading}
           writable={writable}
         />
       )}
@@ -162,23 +160,13 @@ export const DashboardItemOrder = ({
           <DashboardItemOrderCertificate order={order} product={product} />
         </div>
       )}
-      {writable && (
-        <>
-          {product?.certificate_definition && order.contract?.signed_on && (
-            <DashboardItemOrderContract order={order} product={product} writable={writable} />
-          )}
-          <ContractFrame
-            order={order}
-            isOpen={contractFrameOpened}
-            onDone={() => {
-              // Set the contract in loading mode waiting for order re-fetch that will remove it.
-              setContractLoading(true);
-            }}
-            onClose={() => {
-              setContractFrameOpened(false);
-            }}
-          />
-        </>
+      {writable && isCourseProductRelationFetched && order.contract?.signed_on && (
+        <DashboardItemOrderContract
+          key={`DashboardItemOrderContract_${order.id}`}
+          order={order}
+          product={product}
+          writable={writable}
+        />
       )}
     </div>
   );
