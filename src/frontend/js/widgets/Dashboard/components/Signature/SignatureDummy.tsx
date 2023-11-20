@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Loader } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { SignatureProps } from 'widgets/Dashboard/components/DashboardItem/Order/ContractFrame';
+import { SignatureProps } from 'components/ContractFrame';
 import { DummyContractPlaceholder } from 'widgets/Dashboard/components/Signature/DummyContractPlaceholder';
 
 const messages = defineMessages({

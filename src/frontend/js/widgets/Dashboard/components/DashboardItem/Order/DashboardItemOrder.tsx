@@ -11,7 +11,7 @@ import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourseProduct } from 'hooks/useCourseProducts';
-import { ContractFrame } from 'widgets/Dashboard/components/DashboardItem/Order/ContractFrame';
+import { ContractFrame } from 'components/ContractFrame';
 import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 import {
   DashboardItemOrderContract,
