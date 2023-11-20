@@ -1,0 +1,71 @@
+import { useEffect } from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { Pagination, usePagination } from 'components/Pagination';
+import { Spinner } from 'components/Spinner';
+import Banner, { BannerType } from 'components/Banner';
+import { DashboardItemContract } from 'widgets/Dashboard/components/DashboardItem/Contract';
+import { useContracts } from 'hooks/useContacts';
+
+const messages = defineMessages({
+  loading: {
+    defaultMessage: 'Loading contracts...',
+    description: 'Message displayed while loading contracts',
+    id: 'components.DashboardContracts.loading',
+  },
+  empty: {
+    defaultMessage: 'You have no contract yet.',
+    description: 'Message displayed when there are no contracts',
+    id: 'components.DashboardContracts.empty',
+  },
+});
+
+export const DashboardContracts = () => {
+  const intl = useIntl();
+  const pagination = usePagination({});
+  const {
+    items: contracts,
+    meta,
+    states: { error, fetching },
+  } = useContracts({
+    page: pagination.currentPage,
+    page_size: pagination.itemsPerPage,
+  });
+  const { pagination: contractPagination } = meta || {};
+  const { count } = contractPagination || {};
+  useEffect(() => {
+    if (count) {
+      pagination.setItemsCount(count);
+    }
+  }, [count]);
+
+  return (
+    <div className="dashboard-contracts">
+      {error && <Banner message={error} type={BannerType.ERROR} />}
+      {contracts.length === 0 && fetching ? (
+        <Spinner aria-labelledby="loading-contract-data">
+          <span id="loading-contract-data">
+            <FormattedMessage {...messages.loading} />
+          </span>
+        </Spinner>
+      ) : (
+        <div>
+          {contracts.length === 0 ? (
+            <Banner message={intl.formatMessage(messages.empty)} type={BannerType.INFO} />
+          ) : (
+            <>
+              <div
+                className="dashboard-contracts__list"
+                data-testid={fetching && 'dashboard__list--loading'}
+              >
+                {contracts.map((contract) => (
+                  <DashboardItemContract key={contract.id} contract={contract} />
+                ))}
+              </div>
+              <Pagination {...pagination} />
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};

@@ -251,6 +251,12 @@ export interface NestedCertificateOrder extends AbstractNestedOrder {
   course: undefined;
   enrollment: EnrollmentLight;
 }
+export const isNestedCredentialOrder = (
+  obj: NestedCertificateOrder | NestedCredentialOrder,
+): obj is NestedCredentialOrder => {
+  return !obj.enrollment && !!obj.course;
+};
+
 export interface NestedCredentialOrder extends AbstractNestedOrder {
   course: CourseLight;
   enrollment: undefined;
