@@ -22,7 +22,13 @@ export const DashboardItemOrderContractFooter = ({
       <div className="dashboard-item__block__status">
         <ContractStatus contract={contract} />
       </div>
-      <SignContractButton order={order} writable={writable} className="dashboard-item__button" />
+
+      <SignContractButton
+        order={order}
+        contract={contract}
+        writable={writable}
+        className="dashboard-item__button"
+      />
     </div>
   );
 };

@@ -60,7 +60,13 @@ describe('<SignContractButton/>', () => {
     const ApiOrdersWrapper = () => {
       const { items: orders } = useOmniscientOrders();
       return (
-        orders[0] && <SignContractButton order={orders[0] as CredentialOrder} writable={true} />
+        orders[0] && (
+          <SignContractButton
+            order={orders[0] as CredentialOrder}
+            contract={orders[0].contract}
+            writable={true}
+          />
+        )
       );
     };
     const order = CredentialOrderFactory({
