@@ -40,6 +40,8 @@ export const CONTRACT_SETTINGS = {
   pollInterval: 1000,
   // Number of retries
   pollLimit: 30,
+  // Simulated sign request delay
+  dummySignatureSignTimeout: 2000,
 };
 
 const DEFAULT_PER_PAGE = 50;

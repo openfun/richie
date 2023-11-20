@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { SignatureProps } from 'widgets/Dashboard/components/DashboardItem/Order/ContractFrame';
-import 'widgets/Dashboard/components/DashboardItem/Order/ContractFrame/iframe-manager.js';
+import { SignatureProps } from 'components/ContractFrame';
+import 'components/ContractFrame/iframe-manager.js';
 import { handle } from 'utils/errors/handle';
 
 declare let iframeManager: any;
