@@ -100,7 +100,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       await screen.findByRole('heading', { level: 5, name: product.title });
 
       expect(
-        screen.queryByText('You have to sign this contract to access your training.'),
+        screen.queryByText('You have to sign this training contract to access your training.'),
       ).not.toBeInTheDocument();
       expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
       expect(screen.getByText('On going')).toBeInTheDocument();
@@ -132,7 +132,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       await screen.findByRole('heading', { level: 5, name: product.title });
 
       expect(
-        screen.queryByText('You have to sign this contract to access your training.'),
+        screen.queryByText('You have to sign this training contract to access your training.'),
       ).not.toBeInTheDocument();
       expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
       expect(screen.getByText('On going')).toBeInTheDocument();
@@ -258,7 +258,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       expect(screen.getByText('On going')).toBeInTheDocument();
       expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
       expect(
-        screen.queryByText('You have to sign this contract to access your training.'),
+        screen.queryByText('You have to sign this training contract to access your training.'),
       ).not.toBeInTheDocument();
 
       expect(screen.getByRole('button', { name: 'Download' })).toBeInTheDocument();

@@ -2,11 +2,12 @@ import { Button } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useState } from 'react';
 import { ContractFrame } from 'components/ContractFrame';
-import { CredentialOrder } from 'types/Joanie';
+import { Contract, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import DownloadContractButton from 'components/DownloadContractButton';
+import { Maybe } from 'types/utils';
 
 const messages = defineMessages({
   contractSignActionLabel: {
@@ -28,7 +29,8 @@ const messages = defineMessages({
 });
 
 interface SignContractButtonProps {
-  order: CredentialOrder;
+  order: CredentialOrder | NestedCredentialOrder;
+  contract: Maybe<Contract>;
   writable: boolean;
   className?: string;
 }
@@ -53,7 +55,7 @@ const SignContractButtonLink = ({ orderId, className }: SignContractButtonLinkPr
   );
 };
 
-const SignContractButton = ({ order, writable, className }: SignContractButtonProps) => {
+const SignContractButton = ({ order, contract, writable, className }: SignContractButtonProps) => {
   const [contractFrameOpened, setContractFrameOpened] = useState(false);
   const [contractLoading, setContractLoading] = useState(false);
 
@@ -63,8 +65,8 @@ const SignContractButton = ({ order, writable, className }: SignContractButtonPr
 
   return (
     <>
-      {order.contract?.student_signed_on ? (
-        <DownloadContractButton contract={order.contract} className="dashboard-item__button" />
+      {contract && contract.student_signed_on ? (
+        <DownloadContractButton contract={contract} className="dashboard-item__button" />
       ) : (
         <Button
           size="small"
