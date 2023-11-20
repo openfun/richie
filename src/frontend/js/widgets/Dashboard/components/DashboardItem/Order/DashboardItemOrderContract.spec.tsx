@@ -931,7 +931,7 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       expect(alert).toHaveBeenCalledTimes(1);
       expect(alert).toHaveBeenCalledWith(
-        'An error happened while downloading the contract. Please try again later.',
+        'An error happened while downloading the training contract. Please try again later.',
       );
     });
   });
