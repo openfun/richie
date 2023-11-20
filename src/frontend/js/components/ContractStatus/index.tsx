@@ -4,12 +4,12 @@ import { Contract } from 'types/Joanie';
 
 const messages = defineMessages({
   signedOn: {
-    defaultMessage: "You've accepted the training contract. Signed on {date}",
+    defaultMessage: 'You signed this training contract. Signed on {date}',
     description: 'Label for the date of sign of a contract',
     id: 'components.ContractStatus.signedOn',
   },
   waitingSignature: {
-    defaultMessage: 'You have to sign this contract to access your training.',
+    defaultMessage: 'You have to sign this training contract to access your training.',
     description: 'Label displayed when a contract need to be signed',
     id: 'components.ContractStatus.waitingSignature',
   },

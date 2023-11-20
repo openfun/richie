@@ -169,7 +169,6 @@ export const DashboardItemOrder = ({
           )}
           <ContractFrame
             order={order}
-            product={product}
             isOpen={contractFrameOpened}
             onDone={() => {
               // Set the contract in loading mode waiting for order re-fetch that will remove it.
