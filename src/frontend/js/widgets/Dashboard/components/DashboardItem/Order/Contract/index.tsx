@@ -8,14 +8,9 @@ import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { alert } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
+import ContractStatus from 'components/ContractStatus';
 
 const messages = defineMessages({
-  contractSigned: {
-    id: 'components.DashboardItemOrder.contractSigned',
-    description:
-      "Message displayed when the order's contract has been signed and can be downloaded.",
-    defaultMessage: "You've accepted the training contract.",
-  },
   contractSignActionLabel: {
     id: 'components.DashboardItemOrder.contractSignActionLabel',
     description: 'Label of "sign contract" action.',
@@ -25,11 +20,6 @@ const messages = defineMessages({
     id: 'components.DashboardItemOrder.contractDownloadActionLabel',
     description: 'Label of "download contract" action.',
     defaultMessage: 'Download',
-  },
-  contractUnsigned: {
-    id: 'components.DashboardItemOrder.contractUnsigned',
-    description: "Message displayed when the order's contract needs to be signed.",
-    defaultMessage: 'You have to sign this contract to access your training.',
   },
   contractDownloadError: {
     id: 'components.DashboardItemOrder.contractDownloadError',
@@ -46,7 +36,7 @@ export const DashboardItemOrderContractFooter = ({
   writable,
 }: {
   order: CredentialOrder;
-  contract?: Contract;
+  contract: Contract;
   mode?: 'default' | 'compact';
   onSign?: () => void;
   loading?: boolean;
@@ -98,9 +88,7 @@ export const DashboardItemOrderContractFooter = ({
       data-testid="dashboard-item-order-contract__footer"
     >
       <div className="dashboard-item__block__status">
-        <FormattedMessage
-          {...(contract?.signed_on ? messages.contractSigned : messages.contractUnsigned)}
-        />
+        <ContractStatus contract={contract} />
       </div>
       {contract?.signed_on ? (
         <Button className="dashboard-item__button" color="secondary" onClick={downloadContract}>

@@ -266,7 +266,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       ).not.toBeInTheDocument();
 
       expect(screen.getByRole('button', { name: 'Download' })).toBeInTheDocument();
-      expect(screen.getByText("You've accepted the training contract.")).toBeInTheDocument();
+      expect(screen.getByText(/You've accepted the training contract./)).toBeInTheDocument();
 
       const $enrollButtons = screen.getAllByRole('button', { name: 'Enroll' });
       expect($enrollButtons).toHaveLength(order.target_courses[0].course_runs.length);
