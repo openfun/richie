@@ -8,7 +8,7 @@ import { History, HistoryContext } from 'hooks/useHistory';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
-import { getRoutes } from 'api/joanie';
+import { getRoutesLegacy } from 'api/joanie';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { CourseListItemFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
 import { useCourseProductUnion } from '.';
@@ -74,7 +74,7 @@ describe('useCourseProductUnion', () => {
   });
 
   it('should call courses and coursesProductRelation endpoints', async () => {
-    const ROUTES = getRoutes();
+    const ROUTES = getRoutesLegacy();
     const coursesUrl = ROUTES.courses.get.replace(':id/', '');
     const courseProductRelationsUrl = ROUTES.courseProductRelations.get.replace(':id/', '');
     fetchMock.get(
@@ -100,7 +100,7 @@ describe('useCourseProductUnion', () => {
 
   it('should call organization courses and organization coursesProductRelation endpoints', async () => {
     const organizationId = 'DUMMY_ORGANIZATION_ID';
-    const ROUTES = getRoutes();
+    const ROUTES = getRoutesLegacy();
     const organizationCoursesUrl = ROUTES.organizations.courses.get
       .replace(':organization_id', organizationId)
       .replace(':id/', '');
