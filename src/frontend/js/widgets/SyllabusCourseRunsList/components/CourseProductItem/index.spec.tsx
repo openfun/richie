@@ -251,9 +251,8 @@ describe('CourseProductItem', () => {
 
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
-      product: order.product_id,
-      // TODO (rlecellier): remove this when order.course is mandatory
-      course: order.course?.code,
+      product_id: order.product_id,
+      course_code: order.course.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -312,9 +311,8 @@ describe('CourseProductItem', () => {
       relation,
     );
     const orderQueryParameters = {
-      product: order.product_id,
-      // TODO (rlecellier): remove this when order.course is mandatory
-      course: order.course?.code,
+      product_id: order.product_id,
+      course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -382,9 +380,8 @@ describe('CourseProductItem', () => {
 
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
-      product: order.product_id,
-      // TODO (rlecellier): remove this when order.course is mandatory
-      course: order.course?.code,
+      product_id: order.product_id,
+      course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -441,9 +438,8 @@ describe('CourseProductItem', () => {
     }).one();
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
-      product: order.product_id,
-      // TODO (rlecellier): remove this when order.course is mandatory
-      course: order.course?.code,
+      product_id: order.product_id,
+      course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -488,8 +484,8 @@ describe('CourseProductItem', () => {
     const { product } = relation;
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
-      product: product.id,
-      course: '00000',
+      product_id: product.id,
+      course_code: '00000',
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -540,9 +536,8 @@ describe('CourseProductItem', () => {
     }).one();
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
-      product: order.product_id,
-      // TODO (rlecellier): remove this when order.course is mandatory
-      course: order.course?.code,
+      product_id: order.product_id,
+      course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
@@ -599,9 +594,8 @@ describe('CourseProductItem', () => {
       relation,
     );
     const orderQueryParameters = {
-      product: order.product_id,
-      // TODO (rlecellier): remove this when order.course is mandatory
-      course: order.course?.code,
+      product_id: order.product_id,
+      course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(

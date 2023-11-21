@@ -15,11 +15,13 @@ import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import { QueryOptions, useResource, useResourcesCustom, UseResourcesProps } from './useResources';
 
 export type OrderResourcesQuery = PaginatedResourceQuery & {
-  course?: CourseLight['code'];
-  product?: Product['id'];
-  enrollmentId?: Enrollment['id'];
+  course_code?: CourseLight['code'];
+  product_id?: Product['id'];
+  enrollment_id?: Enrollment['id'];
   state?: OrderState[];
-  product__type?: ProductType[];
+  state_exclude?: OrderState[];
+  product_type?: ProductType[];
+  product_type_exclude?: ProductType[];
 };
 
 const messages = defineMessages({
@@ -45,14 +47,16 @@ function omniscientFiltering(
     (order) =>
       // If filter.id is defined filter by order.id
       (!filter.id || order.id === filter.id) &&
-      // If filter.course is defined filter by order.course.code
-      (!filter.course || order.course?.code === filter.course) &&
-      // If filter.enrollmentId is defined filter by order.enrollment?.id
-      (!filter.enrollmentId || order.enrollment?.id === filter.enrollmentId) &&
-      // If filter.product is defined filter by order.product
-      (!filter.product || order.product_id === filter.product) &&
+      // If filter.course_code is defined filter by order.course.code
+      (!filter.course_code || order.course?.code === filter.course_code) &&
+      // If filter.enrollment_id is defined filter by order.enrollment?.id
+      (!filter.enrollment_id || order.enrollment?.id === filter.enrollment_id) &&
+      // If filter.product_id is defined filter by order.product
+      (!filter.product_id || order.product_id === filter.product_id) &&
       // If filter.state is defined filter by order.state
-      (!filter.state || filter.state.includes(order.state)),
+      (!filter.state || filter.state.includes(order.state)) &&
+      // If filter.state_exclude is defined filter by order.state
+      (!filter.state_exclude || !filter.state_exclude.includes(order.state)),
   );
 }
 

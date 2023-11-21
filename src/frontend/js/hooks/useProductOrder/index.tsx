@@ -8,8 +8,8 @@ interface UseProductOrderProps {
 }
 const useProductOrder = ({ courseCode, productId }: UseProductOrderProps) => {
   const ordersQuery = useOrders({
-    product: productId,
-    course: courseCode,
+    product_id: productId,
+    course_code: courseCode,
     state: ACTIVE_ORDER_STATES,
   });
 
