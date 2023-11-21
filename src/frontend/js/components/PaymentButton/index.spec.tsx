@@ -102,7 +102,7 @@ describe.each([
     it('should render a payment button', async () => {
       const product: Joanie.Product = ProductFactory().one();
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
         [],
       );
       render(
@@ -136,7 +136,7 @@ describe.each([
       const creditCard: Joanie.CreditCard = CreditCardFactory().one();
 
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
         [],
       );
       const { rerender } = render(
@@ -175,7 +175,7 @@ describe.each([
       const billingAddress: Joanie.Address = AddressFactory().one();
 
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
         [],
       );
       render(
@@ -199,7 +199,7 @@ describe.each([
       const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
           [],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -307,7 +307,7 @@ describe.each([
 
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
           [initialOrder],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -341,7 +341,7 @@ describe.each([
 
       // - User clicks on pay button
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
         [orderSubmitted],
         { overwriteRoutes: true },
       );
@@ -419,7 +419,7 @@ describe.each([
 
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
           [orderSubmitted],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -445,7 +445,7 @@ describe.each([
       nbApiCalls += 1; // fetcher order for userProductOrder
       const apiCalls = fetchMock.calls().map((call) => call[0]);
       expect(apiCalls).toContain(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
       );
 
       const $button = screen.getByRole('button', {
@@ -524,7 +524,7 @@ describe.each([
 
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
           [],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)

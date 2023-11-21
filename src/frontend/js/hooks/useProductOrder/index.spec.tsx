@@ -67,7 +67,7 @@ describe('useProductOrder', () => {
 
       const responseDeferred = new Deferred();
       fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/orders/?course=00000&product=${order.product_id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.endpoint/api/v1.0/orders/?course_code=00000&product_id=${order.product_id}&state=pending&state=validated&state=submitted`,
         responseDeferred.promise,
       );
 
@@ -86,7 +86,7 @@ describe('useProductOrder', () => {
       const calledUrls = fetchMock.calls().map((call) => call[0]);
       expect(calledUrls).toHaveLength(nbApiCalls);
       expect(calledUrls).toContain(
-        `https://joanie.endpoint/api/v1.0/orders/?course=00000&product=${order.product_id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.endpoint/api/v1.0/orders/?course_code=00000&product_id=${order.product_id}&state=pending&state=validated&state=submitted`,
       );
       expect(result.current.states.creating).toBe(false);
       expect(result.current.states.deleting).toBeUndefined();

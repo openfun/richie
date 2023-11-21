@@ -24,7 +24,7 @@ export default {
     fetchMock.get('http://localhost:8071/api/v1.0/orders/', []);
     fetchMock.get('http://localhost:8071/api/v1.0/addresses/', []);
     fetchMock.get(
-      'http://localhost:8071/api/v1.0/products/AAA/?course=BBB',
+      'http://localhost:8071/api/v1.0/products/AAA/?course_code=BBB',
       ProductFactory().one(),
     );
     return StorybookHelper.wrapInApp(

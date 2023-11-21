@@ -141,7 +141,7 @@ describe('<DashboardCourses/>', () => {
   it('renders an empty placeholder', async () => {
     const ordersDeferred = new Deferred();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}&product__type=credential`,
+      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}&product_type=credential`,
       ordersDeferred.promise,
     );
     const enrollmentsDeferred = new Deferred();
@@ -180,25 +180,25 @@ describe('<DashboardCourses/>', () => {
       client,
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}&product__type=credential`,
+      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}&product_type=credential`,
       {
         results: orders.slice(0, perPage),
-        next: `https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=${perPage}&product__type=credential`,
+        next: `https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=${perPage}&product_type=credential`,
         previous: null,
         count: orders.length,
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=${perPage}&product__type=credential`,
+      `https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=${perPage}&product_type=credential`,
       {
         results: orders.slice(perPage, perPage * 2),
-        next: `https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=${perPage}&product__type=credential`,
+        next: `https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=${perPage}&product_type=credential`,
         previous: null,
         count: orders.length,
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=${perPage}&product__type=credential`,
+      `https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=${perPage}&product_type=credential`,
       {
         results: orders.slice(perPage * 2, perPage * 3),
         next: null,
@@ -270,7 +270,7 @@ describe('<DashboardCourses/>', () => {
     jest.spyOn(console, 'error').mockImplementation(noop);
     const ordersDeferred = new Deferred();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}&product__type=credential`,
+      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}&product_type=credential`,
       ordersDeferred.promise,
     );
     fetchMock.get(

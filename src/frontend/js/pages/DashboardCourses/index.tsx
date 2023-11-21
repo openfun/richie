@@ -33,7 +33,7 @@ const messages = defineMessages({
 
 export const DashboardCourses = () => {
   const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments({
-    orderFilters: { product__type: [ProductType.CREDENTIAL] },
+    orderFilters: { product_type: [ProductType.CREDENTIAL] },
   });
 
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
