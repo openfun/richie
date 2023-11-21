@@ -169,7 +169,7 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       expect(screen.getByText('Ref. ' + (order.course as CourseLight).code)).toBeInTheDocument();
       expect(
-        screen.getByText('You have to sign this contract to access your training.'),
+        screen.getByText('You have to sign this training contract to access your training.'),
       ).toBeInTheDocument();
       expect(screen.getByText('Signature required')).toBeInTheDocument();
       expect(screen.getByRole('link', { name: 'Sign' })).toBeInTheDocument();
@@ -226,11 +226,11 @@ describe('<DashboardItemOrder/> Contract', () => {
       expect(screen.getByText('Signature required')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Sign' })).toBeInTheDocument();
       expect(
-        screen.getByText('You have to sign this contract to access your training.'),
+        screen.getByText('You have to sign this training contract to access your training.'),
       ).toBeInTheDocument();
 
       expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
-      expect(screen.queryByText("You've accepted the training contract.")).not.toBeInTheDocument();
+      expect(screen.queryByText(/You signed this training contract./)).not.toBeInTheDocument();
 
       const $enrollButtons = screen.getAllByRole('button', { name: 'Enroll' });
       expect($enrollButtons).toHaveLength(order.target_courses[0].course_runs.length);
@@ -266,7 +266,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       ).not.toBeInTheDocument();
 
       expect(screen.getByRole('button', { name: 'Download' })).toBeInTheDocument();
-      expect(screen.getByText("You've accepted the training contract.")).toBeInTheDocument();
+      expect(screen.getByText(/You signed this training contract./)).toBeInTheDocument();
 
       const $enrollButtons = screen.getAllByRole('button', { name: 'Enroll' });
       expect($enrollButtons).toHaveLength(order.target_courses[0].course_runs.length);
