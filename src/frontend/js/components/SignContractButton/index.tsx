@@ -21,7 +21,8 @@ const messages = defineMessages({
   contractDownloadError: {
     id: 'components.SignContractButton.contractDownloadError',
     description: "Message displayed when the order's contract download fails.",
-    defaultMessage: 'An error happened while downloading the contract. Please try again later.',
+    defaultMessage:
+      'An error happened while downloading the training contract. Please try again later.',
   },
 });
 
@@ -64,7 +65,7 @@ const SignContractButton = ({ order, writable, className }: SignContractButtonPr
       <Button
         className={className}
         onClick={() => setContractFrameOpened(true)}
-        disabled={contractLoading}
+        disabled={contractLoading || contractFrameOpened}
       >
         <FormattedMessage {...messages.contractSignActionLabel} />
       </Button>
@@ -76,9 +77,7 @@ const SignContractButton = ({ order, writable, className }: SignContractButtonPr
           // Set the contract in loading mode waiting for order re-fetch that will remove it.
           setContractLoading(true);
         }}
-        onClose={() => {
-          setContractFrameOpened(false);
-        }}
+        onClose={() => setContractFrameOpened(false)}
       />
     </>
   );
