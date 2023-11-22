@@ -3,6 +3,7 @@ import { Button, Loader } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { SignatureProps } from 'components/ContractFrame';
 import { DummyContractPlaceholder } from 'widgets/Dashboard/components/Signature/DummyContractPlaceholder';
+import { CONTRACT_SETTINGS } from 'settings';
 
 const messages = defineMessages({
   button: {
@@ -29,7 +30,7 @@ export const SignatureDummy = ({ onDone }: SignatureProps) => {
     setStep(SignatureDummySteps.SIGNING_LOADING);
     setTimeout(() => {
       onDone();
-    }, 2000);
+    }, CONTRACT_SETTINGS.dummySignatureSignTimeout);
   };
 
   return (

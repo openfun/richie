@@ -29,6 +29,7 @@ export const useResourcesOmniscient = <
     [messages, props.messages],
   );
   const filter = useCallback(() => {
+    // console.log('useResourcesOmniscient::doFilter', props.queryKey);
     // The following condition is important, let's illustrate it with the following situation:
     // - enabled: false ( happens when waiting for filters values, like `id` for useResource )
     // - react-query already has items in cache because they are already loaded from somewhere in the
@@ -69,6 +70,22 @@ export const useResourcesOmniscient = <
   }, [useResources.items, JSON.stringify(filters), actualMessages]);
 
   useEffect(() => {
+    // console.log('=====');
+    // console.log(
+    //   'useResourcesOmniscient::useEffect::useResources.states.fetching',
+    //   props.queryKey,
+    //   useResources.states.fetching,
+    // );
+    // console.log(
+    //   'useResourcesOmniscient::useEffect::useResources.items',
+    //   props.queryKey,
+    //   useResources.items,
+    // );
+    // console.log(
+    //   'useResourcesOmniscient::useEffect::JSON.stringify(filters)',
+    //   props.queryKey,
+    //   JSON.stringify(filters),
+    // );
     if (useResources.states.fetching) {
       return;
     }
