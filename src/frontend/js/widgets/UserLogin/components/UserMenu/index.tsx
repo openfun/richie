@@ -4,13 +4,14 @@ import useMatchMedia from 'hooks/useMatchMedia';
 import { DesktopUserMenu } from './DesktopUserMenu';
 import { MobileUserMenu } from './MobileUserMenu';
 
+export interface UserMenuItem {
+  key: string;
+  label: string;
+  action: string | (() => void);
+}
 export interface UserMenuProps {
   user: User & {
-    urls: {
-      key: string;
-      label: string;
-      action: string | (() => void);
-    }[];
+    urls: UserMenuItem[];
   };
 }
 

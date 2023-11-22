@@ -24,6 +24,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Teacher dashboard access is restricted to user which has access to a course 
+  or an organization.
 - Frontend Order type have been split into two: CredentialOrder and 
   CertificateOrder.
 - Update PurchaseButton messages to aid with translation.

@@ -1,12 +1,14 @@
 /* eslint-disable no-nested-ternary */
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { useSession } from 'contexts/SessionContext';
 import { CommonDataProps } from 'types/commonDataProps';
-import { UserMenu } from './components/UserMenu';
+import { abilityActions } from 'utils/AbilitiesHelper';
+import { useJoanieUserAbilities } from 'hooks/useJoanieUserAbilities';
+import { UserMenu, UserMenuItem } from './components/UserMenu';
 
 const messages: { [key: string]: MessageDescriptor } = defineMessages({
   logIn: {
@@ -73,6 +75,34 @@ const UserLogin = ({ profileUrls = {} }: UserLoginProps) => {
    */
   const { user, destroy, login, register } = useSession();
   const intl = useIntl();
+  const joanieUserAbilities = useJoanieUserAbilities();
+
+  const unauthorizedUrlFilter = (urlItem: UserMenuItem) => {
+    if (urlItem.key === 'dashboard_teacher') {
+      return !!joanieUserAbilities?.can(abilityActions.ACCESS_TEACHER_DASHBOARD);
+    }
+    return true;
+  };
+
+  const userMenuItems = useMemo(() => {
+    if (user) {
+      return [
+        ...Object.entries(profileUrls)
+          .map(([key, { label, action }]) => ({
+            key,
+            label,
+            action: typeof action === 'string' ? bindUserDataToUrl(action, user) : action,
+          }))
+          .filter(unauthorizedUrlFilter),
+        {
+          key: 'logout',
+          label: intl.formatMessage(messages.logOut),
+          action: destroy,
+        },
+      ];
+    }
+    return [];
+  }, [user, joanieUserAbilities]);
 
   return (
     <div className="user-login">
@@ -95,18 +125,7 @@ const UserLogin = ({ profileUrls = {} }: UserLoginProps) => {
           // If user's fullname is empty, we use its username as a fallback
           user={{
             ...user,
-            urls: [
-              ...Object.entries(profileUrls).map(([key, { label, action }]) => ({
-                key,
-                label,
-                action: typeof action === 'string' ? bindUserDataToUrl(action, user) : action,
-              })),
-              {
-                key: 'logout',
-                label: intl.formatMessage(messages.logOut),
-                action: destroy,
-              },
-            ],
+            urls: userMenuItems,
           }}
         />
       )}
