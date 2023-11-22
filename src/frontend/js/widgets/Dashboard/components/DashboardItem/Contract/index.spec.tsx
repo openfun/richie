@@ -56,7 +56,7 @@ describe('<DashboardContract/>', () => {
     expect(screen.getByText(contract.order.product_title)).toBeInTheDocument();
     expect(
       screen.getByText(
-        "You've accepted the training contract. Signed on " +
+        'You signed this training contract. Signed on ' +
           new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(contract.signed_on)),
       ),
     ).toBeInTheDocument();
