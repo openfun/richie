@@ -14,7 +14,8 @@ const messages = defineMessages({
   contractDownloadError: {
     id: 'components.DownloadContractButton.contractDownloadError',
     description: "Message displayed when the order's contract download fails.",
-    defaultMessage: 'An error happened while downloading the contract. Please try again later.',
+    defaultMessage:
+      'An error happened while downloading the training contract. Please try again later.',
   },
 });
 
