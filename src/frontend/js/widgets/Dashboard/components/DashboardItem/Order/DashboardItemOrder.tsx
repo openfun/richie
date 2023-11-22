@@ -82,7 +82,8 @@ export const DashboardItemOrder = ({
   const intl = useIntl();
   const {
     item: courseProductRelation,
-    states: { isFetched: isProductFetched },
+    // here
+    states: { isFetched: isCourseProductRelationFetched },
   } = useCourseProduct(course.code, { productId: order.product_id });
   const { product } = courseProductRelation || {};
   const needsSignature = orderNeedsSignature(order, product);
@@ -116,7 +117,7 @@ export const DashboardItemOrder = ({
                 </RouterButton>
               )}
             </div>
-            {!writable && order.contract && needsSignature && (
+            {!writable && needsSignature && (
               <DashboardItemOrderContractFooter
                 contract={order.contract}
                 writable={writable}
@@ -155,7 +156,7 @@ export const DashboardItemOrder = ({
           <DashboardItemOrderCertificate order={order} product={product} />
         </div>
       )}
-      {writable && isProductFetched && order.contract?.signed_on && (
+      {writable && isCourseProductRelationFetched && order.contract?.signed_on && (
         <DashboardItemOrderContract order={order} product={product} writable={writable} />
       )}
     </div>
