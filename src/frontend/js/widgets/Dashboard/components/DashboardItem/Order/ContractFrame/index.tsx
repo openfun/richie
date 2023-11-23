@@ -63,11 +63,16 @@ const messages = defineMessages({
   },
 });
 
-interface Props {
+interface ContractFrameProps {
   order: CredentialOrder | NestedCredentialOrder;
   isOpen: boolean;
   onDone: () => void;
   onClose: () => void;
+}
+
+interface ContractFrameContentProps extends ContractFrameProps {
+  step: ContractSteps;
+  setStep: (step: ContractSteps) => void;
 }
 
 const DUMMY_REGEX = /https:\/\/dummysignaturebackend.fr/;
@@ -92,28 +97,46 @@ export interface SignatureProps {
   invitationLink: string;
 }
 
-export const ContractFrame = (props: Props) => {
+export const ContractFrame = (props: ContractFrameProps) => {
+  const [step, setStep] = useState(ContractSteps.LOADING_CONTRACT);
+  const queryClient = useQueryClient();
+
+  const handleOnClose = () => {
+    if (step === ContractSteps.FINISHED) {
+      queryClient.invalidateQueries({ queryKey: ['user', 'orders'] }).then(() => {
+        props.onClose();
+      });
+    } else {
+      props.onClose();
+    }
+  };
+
   return (
     <Modal
       isOpen={props.isOpen}
       shouldCloseOnOverlayClick={false}
       shouldCloseOnEsc={false}
-      onRequestClose={props.onClose}
+      onRequestClose={() => handleOnClose()}
       testId={'contract-frame__' + props.order.id}
     >
-      <ContractFrameContent {...props} />
+      <ContractFrameContent {...props} onClose={handleOnClose} setStep={setStep} step={step} />
     </Modal>
   );
 };
 
-export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
+export const ContractFrameContent = ({
+  order,
+  onClose,
+  onDone,
+  step,
+  setStep,
+}: ContractFrameContentProps) => {
   const api = useJoanieApi();
   const intl = useIntl();
-  const [step, setStep] = useState(ContractSteps.LOADING_CONTRACT);
   const [signatureType, setSignatureType] = useState<SignatureType>();
   const [invitationLink, setInvitationLink] = useState<Maybe<string>>();
   const [error, setError] = useState<Maybe<string>>();
-  const queryClient = useQueryClient();
+
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   const setErrored = (e: string) => {
@@ -177,7 +200,6 @@ export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
 
   const stepFinished = () => {
     setStep(ContractSteps.FINISHED);
-    queryClient.invalidateQueries({ queryKey: ['user', 'orders'] });
     onDone();
   };
 
@@ -238,7 +260,7 @@ export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
           <p className="ContractFrame__content">
             <FormattedMessage {...messages.finishedDescription} />
           </p>
-          <Button onClick={() => onClose()}>
+          <Button onClick={onClose}>
             <FormattedMessage {...messages.finishedButton} />
           </Button>
         </div>
