@@ -138,9 +138,24 @@
 
   &__footer {
     padding: 0 0.875rem 1rem 0.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
     .purchase-button__cta {
       width: 100%;
+    }
+
+    &__message {
+      text-align: center;
+    }
+
+    &__order-group {
+      text-align: center;
+
+      p {
+        margin-top: 0.25rem;
+      }
     }
   }
 

@@ -42,6 +42,8 @@ const messages = defineMessages({
 interface PurchaseButtonProps {
   product: Joanie.Product;
   course: Joanie.CourseLight;
+  // If the product is a credential, the orderGroup can be required.
+  orderGroup?: Joanie.OrderGroup;
   enrollment?: Joanie.Enrollment;
   disabled?: boolean;
   className?: string;
@@ -51,6 +53,7 @@ const PurchaseButton = ({
   product,
   course,
   enrollment,
+  orderGroup,
   disabled = false,
   className,
 }: PurchaseButtonProps) => {
@@ -128,6 +131,7 @@ const PurchaseButton = ({
         isOpen={isSaleTunnelOpen}
         product={product}
         enrollment={enrollment}
+        orderGroup={orderGroup}
         course={course}
         onClose={() => setIsSaleTunnelOpen(false)}
       />

@@ -6,18 +6,26 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   AddressFactory,
-  CreditCardFactory,
-  CredentialOrderWithOneClickPaymentFactory,
-  CredentialOrderWithPaymentFactory,
   CertificateOrderWithOneClickPaymentFactory,
   CertificateOrderWithPaymentFactory,
   CertificateProductFactory,
+  CredentialOrderWithOneClickPaymentFactory,
+  CredentialOrderWithPaymentFactory,
   CredentialProductFactory,
+  CreditCardFactory,
+  OrderGroupFactory,
   CourseLightFactory,
 } from 'utils/test/factories/joanie';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
-import { OrderState, ProductType, Order, Product } from 'types/Joanie';
+import {
+  OrderCredentialCreationPayload,
+  OrderState,
+  ProductType,
+  Order,
+  Product,
+  OrderGroup,
+} from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { HttpStatusCode } from 'utils/errors/HttpError';
@@ -56,7 +64,7 @@ describe.each([
   },
 ])(
   'PaymentButton for $productType product',
-  ({ ProductFactory, OrderWithOneClickPaymentFactory, OrderWithPaymentFactory }) => {
+  ({ productType, ProductFactory, OrderWithOneClickPaymentFactory, OrderWithPaymentFactory }) => {
     let nbApiCalls: number;
     const formatPrice = (price: number, currency: string) =>
       new Intl.NumberFormat('en', {
@@ -68,7 +76,8 @@ describe.each([
       client = createTestQueryClient({ user: true }),
       children,
       product,
-    }: PropsWithChildren<{ client?: QueryClient; product: Product }>) => {
+      orderGroup,
+    }: PropsWithChildren<{ client?: QueryClient; product: Product; orderGroup?: OrderGroup }>) => {
       const [order, setOrder] = useState<Maybe<Order>>();
 
       const context: SaleTunnelContextType = useMemo(
@@ -78,8 +87,9 @@ describe.each([
           setOrder,
           course: CourseLightFactory({ code: '00000' }).one(),
           key: `00000+${product.id}`,
+          orderGroup,
         }),
-        [product, order, setOrder],
+        [product, order, setOrder, orderGroup],
       );
 
       return (
@@ -749,5 +759,61 @@ describe.each([
       // - Payment interface should be displayed.
       screen.getByText('Payment interface component');
     });
+
+    if (productType === ProductType.CREDENTIAL) {
+      it('should create an order with an order group', async () => {
+        const product: Joanie.Product = ProductFactory().one();
+        const orderGroup = OrderGroupFactory().one();
+        const billingAddress: Joanie.Address = AddressFactory().one();
+        const handleSuccess = jest.fn();
+
+        let createOrderPayload: Maybe<OrderCredentialCreationPayload>;
+        const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
+        fetchMock
+          .get(
+            `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+            [],
+          )
+          .post('https://joanie.test/api/v1.0/orders/', (url, { body }) => {
+            createOrderPayload = JSON.parse(body as any);
+            return order;
+          })
+          .patch(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`, {
+            paymentInfo,
+          })
+          .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, {
+            ...order,
+          });
+
+        render(
+          <Wrapper
+            client={createTestQueryClient({ user: true })}
+            product={product}
+            orderGroup={orderGroup}
+          >
+            <PaymentButton billingAddress={billingAddress} onSuccess={handleSuccess} />
+          </Wrapper>,
+        );
+
+        const $button = screen.getByRole('button', {
+          name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        }) as HTMLButtonElement;
+
+        const $terms = screen.getByLabelText('By checking this box, you accept the');
+        await act(async () => {
+          fireEvent.click($terms);
+        });
+
+        // - Payment button should not be disabled.
+        expect($button.disabled).toBe(false);
+
+        // - User clicks on pay button
+        await act(async () => {
+          fireEvent.click($button);
+        });
+
+        await waitFor(() => expect(createOrderPayload?.order_group_id).toEqual(orderGroup.id));
+      });
+    }
   },
 );

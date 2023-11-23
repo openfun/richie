@@ -18,6 +18,8 @@ import {
   EnrollmentFactory,
   CredentialOrderFactory,
   ProductFactory,
+  OrderGroupFullFactory,
+  OrderGroupFactory,
 } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import {
@@ -760,5 +762,123 @@ describe('CourseProductItem', () => {
 
     // - As product fetching has failed, an error message should be displayed
     await screen.findByText('An error occurred while fetching product. Please retry later.');
+  });
+
+  it('renders a warning message that tells that no seats are left', async () => {
+    const relation = CourseProductRelationFactory({
+      order_groups: [OrderGroupFullFactory().one()],
+    }).one();
+    const { product } = relation;
+    const order = CredentialOrderFactory({
+      product_id: product.id,
+      course: CourseLightFactory({ code: '00000' }).one(),
+      target_courses: product.target_courses,
+      state: OrderState.PENDING,
+    }).one();
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    const orderQueryParameters = {
+      product_id: order.product_id,
+      course_code: order.course?.code,
+      state: ACTIVE_ORDER_STATES,
+    };
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      [order],
+    );
+
+    render(
+      <Wrapper withSession>
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
+      </Wrapper>,
+    );
+
+    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
+    await waitForElementToBeRemoved(loadingMessage);
+
+    expect(screen.queryByRole('button', { name: product.call_to_action })).not.toBeInTheDocument();
+    screen.getByText('Sorry, no seats available for now');
+  });
+
+  it('renders one payment button when one of two order groups is full', async () => {
+    const relation = CourseProductRelationFactory({
+      order_groups: [OrderGroupFullFactory().one(), OrderGroupFactory().one()],
+    }).one();
+    const { product } = relation;
+    const order = CredentialOrderFactory({
+      product_id: product.id,
+      course: CourseLightFactory({ code: '00000' }).one(),
+      target_courses: product.target_courses,
+      state: OrderState.PENDING,
+    }).one();
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    const orderQueryParameters = {
+      product_id: order.product_id,
+      course_code: order.course?.code,
+      state: ACTIVE_ORDER_STATES,
+    };
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      [order],
+    );
+
+    render(
+      <Wrapper withSession>
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
+      </Wrapper>,
+    );
+
+    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
+    await waitForElementToBeRemoved(loadingMessage);
+
+    expect(screen.queryByText('Sorry, no seats available for now')).not.toBeInTheDocument();
+    screen.getByRole('button', { name: product.call_to_action });
+    screen.getByText(relation.order_groups[1].nb_available_seats + ' remaining seats');
+  });
+
+  it('renders mutliple payment button when there are multiple order groups', async () => {
+    const relation = CourseProductRelationFactory({
+      order_groups: [OrderGroupFactory().one(), OrderGroupFactory({ nb_available_seats: 1 }).one()],
+    }).one();
+    const { product } = relation;
+    const order = CredentialOrderFactory({
+      product_id: product.id,
+      course: CourseLightFactory({ code: '00000' }).one(),
+      target_courses: product.target_courses,
+      state: OrderState.PENDING,
+    }).one();
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    const orderQueryParameters = {
+      product_id: order.product_id,
+      course_code: order.course?.code,
+      state: ACTIVE_ORDER_STATES,
+    };
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      [order],
+    );
+
+    render(
+      <Wrapper withSession>
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
+      </Wrapper>,
+    );
+
+    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
+    await waitForElementToBeRemoved(loadingMessage);
+
+    expect(screen.queryByText('Sorry, no seats available for now')).not.toBeInTheDocument();
+    expect(screen.getAllByTestId('PurchaseButton__cta')).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: product.call_to_action })).toHaveLength(2);
+    screen.getByText(relation.order_groups[0].nb_available_seats + ' remaining seats');
+    screen.getByText('Last remaining seat!');
   });
 });
