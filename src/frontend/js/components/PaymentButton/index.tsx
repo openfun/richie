@@ -98,7 +98,7 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
   const intl = useIntl();
   const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const { course, key, enrollment, product, setOrder } = useSaleTunnelContext();
+  const { course, key, enrollment, product, setOrder, orderGroup } = useSaleTunnelContext();
   const { item: order } = useProductOrder({ courseCode: course.code, productId: product.id });
   const orderManager = useOmniscientOrders();
   const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
@@ -201,6 +201,7 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
           : {
               product_id: product.id,
               course_code: course.code,
+              ...(orderGroup ? { order_group_id: orderGroup.id } : {}),
             };
 
       orderManager.methods.create(payload, {

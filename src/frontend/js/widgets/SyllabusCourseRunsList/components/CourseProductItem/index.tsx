@@ -44,6 +44,22 @@ const messages = defineMessages({
     description: 'Course run languages',
     id: 'components.CourseProductItem.availableIn',
   },
+  noSeatsAvailable: {
+    defaultMessage: 'Sorry, no seats available for now',
+    description: 'Message displayed when no seats are available for the product',
+    id: 'components.CourseProductItem.noSeatsAvailable',
+  },
+  nbSeatsAvailable: {
+    defaultMessage: `{
+nb,
+plural,
+=0 {No remaining seat}
+one {Last remaining seat!}
+other {# remaining seats}
+}`,
+    description: 'Message displayed when seats are available for the product',
+    id: 'components.CourseProductItem.nbSeatsAvailable',
+  },
 });
 
 export interface CourseProductItemProps {
@@ -188,6 +204,45 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
     return null;
   }
 
+  const orderGroups = courseProductRelation
+    ? ProductHelper.getActiveOrderGroups(courseProductRelation)
+    : [];
+  const orderGroupsAvailable = orderGroups.filter(
+    (orderGroup) => orderGroup.nb_available_seats > 0,
+  );
+
+  const renderPurchasePart = () => {
+    if (!courseProductRelation) {
+      return null;
+    }
+    if (orderGroups.length === 0) {
+      return <PurchaseButton course={course} product={product} disabled={!isPendingState} />;
+    }
+    if (orderGroupsAvailable.length === 0) {
+      return (
+        <p className="product-widget__footer__message">
+          <FormattedMessage {...messages.noSeatsAvailable} />
+        </p>
+      );
+    }
+    return orderGroupsAvailable.map((orderGroup) => (
+      <div className="product-widget__footer__order-group" key={orderGroup.id}>
+        <PurchaseButton
+          course={course}
+          product={product}
+          disabled={!isPendingState}
+          orderGroup={orderGroup}
+        />
+        <p>
+          <FormattedMessage
+            {...messages.nbSeatsAvailable}
+            values={{ nb: orderGroup.nb_available_seats }}
+          />
+        </p>
+      </div>
+    ));
+  };
+
   return (
     <section
       className={c('product-widget', {
@@ -221,9 +276,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
             compact={compact}
           />
           {canShowContent && <Content product={product} order={order} />}
-          <footer className="product-widget__footer">
-            <PurchaseButton product={product} disabled={!isPendingState} course={course} />
-          </footer>
+          <footer className="product-widget__footer">{renderPurchasePart()}</footer>
         </>
       )}
     </section>

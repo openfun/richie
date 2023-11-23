@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
-import { CourseLight, Order, Product } from 'types/Joanie';
+import { CourseLight, Order, Product, OrderGroup } from 'types/Joanie';
 import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
@@ -46,11 +46,19 @@ type Props = {
   product: Product;
   course: CourseLight;
   enrollment?: Joanie.Enrollment;
+  orderGroup?: OrderGroup;
   isOpen: boolean;
   onClose: () => void;
 };
 
-const SaleTunnel = ({ product, course, isOpen = false, onClose, enrollment }: Props) => {
+const SaleTunnel = ({
+  product,
+  course,
+  orderGroup,
+  isOpen = false,
+  onClose,
+  enrollment,
+}: Props) => {
   const intl = useIntl();
   const {
     methods: { refetch: refetchOmniscientOrders },
@@ -118,8 +126,9 @@ const SaleTunnel = ({ product, course, isOpen = false, onClose, enrollment }: Pr
       key,
       course,
       enrollment,
+      orderGroup,
     }),
-    [product, order, setOrder, key, course, enrollment],
+    [product, order, setOrder, key, course, enrollment, orderGroup],
   );
 
   /**

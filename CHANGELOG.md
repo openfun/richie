@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add the ability to sign an order's contract.
 - Add terms checkbox and specific "sign" button in the Sale Tunnel.
 - The CourseRunProductItem disables enrollment if there is a needed signature.
+- Handle OrderGroup on product purchase
 
 ### Changed
 

@@ -119,6 +119,7 @@ export interface CourseProductRelation {
   organizations: Organization[];
   product: Product;
   created_on: string;
+  order_groups: OrderGroup[];
 }
 export function isCourseProductRelation(
   entity: CourseListItem | CourseProductRelation | RichieCourse,
@@ -329,12 +330,15 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
   is_main?: boolean;
 }
 
-interface OrderProductCertificateCreationPayload {
+interface OrderProductCreationPayload {
   product_id: Product['id'];
+  order_group_id?: OrderGroup['id'];
+}
+
+interface OrderProductCertificateCreationPayload extends OrderProductCreationPayload {
   enrollment_id: Enrollment['id'];
 }
-interface OrderCredentialCreationPayload {
-  product_id: Product['id'];
+export interface OrderCredentialCreationPayload extends OrderProductCreationPayload {
   course_code: CourseLight['code'];
 }
 
