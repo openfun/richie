@@ -36,7 +36,7 @@ export const RegisteredCreditCard = ({ selected, handleSelect, ...creditCard }: 
 
   return (
     <label className="registered-credit-card">
-      <p className="form-field">
+      <div className="form-field">
         <Checkbox
           aria-label={intl.formatMessage(messages.inputAriaLabel, {
             title: creditCard.title,
@@ -49,7 +49,7 @@ export const RegisteredCreditCard = ({ selected, handleSelect, ...creditCard }: 
           type="checkbox"
           id={inputId}
         />
-      </p>
+      </div>
       <div id={`credit-card-${creditCard.id}-infos`} className="registered-credit-card__infos">
         <strong className="h6 registered-credit-card__name">
           {creditCard.title || creditCard.brand}
