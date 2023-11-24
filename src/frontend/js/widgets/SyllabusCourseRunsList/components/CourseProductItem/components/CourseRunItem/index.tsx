@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { defineMessages } from 'react-intl';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
-import { OrderState } from 'types/Joanie';
+import { OrderState, Product } from 'types/Joanie';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import {
   CourseRunList,
@@ -26,9 +26,10 @@ other {Languages:}
 interface Props {
   targetCourse: Joanie.TargetCourse;
   order?: Joanie.CredentialOrder;
+  product: Product;
 }
 
-const CourseRunItem = ({ targetCourse, order }: Props) => {
+const CourseRunItem = ({ targetCourse, order, product }: Props) => {
   const isEnrollable = order?.state === OrderState.VALIDATED;
   const courseRunEnrollment = isEnrollable
     ? CoursesHelper.findActiveCourseEnrollmentInOrder(targetCourse, order)
@@ -92,6 +93,7 @@ const CourseRunItem = ({ targetCourse, order }: Props) => {
         <EnrollableCourseRunList
           courseRuns={targetCourse.course_runs.filter(isOpenedCourseRun)}
           order={order}
+          product={product}
         />
       )}
       {isEnrollable && isEnrolled && <EnrolledCourseRun enrollment={courseRunEnrollment} />}

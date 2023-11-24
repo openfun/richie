@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { screen, getByText, render } from '@testing-library/react';
-import { CredentialOrderFactory } from 'utils/test/factories/joanie';
+import { CredentialOrderFactory, ProductFactory } from 'utils/test/factories/joanie';
 import type { CourseRun, CredentialOrder } from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
 import CourseRunItem from '.';
@@ -16,9 +16,12 @@ describe('CourseRunItem', () => {
     const order: CredentialOrder = CredentialOrderFactory({
       state: faker.helpers.arrayElement([OrderState.CANCELED, OrderState.PENDING]),
     }).one();
+    const product = ProductFactory().one();
+    product.contract_definition = undefined;
+
     const targetCourse = order.target_courses[0];
 
-    render(<CourseRunItem targetCourse={targetCourse} order={order} />);
+    render(<CourseRunItem targetCourse={targetCourse} order={order} product={product} />);
 
     // - It should render CourseRunList component
     const $item = screen.getByTestId(`course-item-${targetCourse.code}`);

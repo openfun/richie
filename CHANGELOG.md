@@ -18,6 +18,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - In the learner dashboard, enroll actions are disabled when an unsigned
   contract is linked to the order.
 - Add the ability to sign an order's contract.
+- Add terms checkbox and specific "sign" button in the Sale Tunnel.
+- The CourseRunProductItem disables enrollment if there is a needed signature.
 
 ### Changed
 
