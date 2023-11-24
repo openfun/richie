@@ -13,6 +13,8 @@ import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { useCourseProduct } from 'contexts/CourseProductContext';
 import useProductOrder from 'hooks/useProductOrder';
+import { useTerms } from 'components/PaymentButton/hooks/useTerms';
+import { useSaleTunnelContext } from 'components/SaleTunnel/context';
 import PaymentInterface from './components/PaymentInterfaces';
 
 const messages = defineMessages({
@@ -42,6 +44,11 @@ const messages = defineMessages({
     description: "Error message shown when the user didn't select a billing address.",
     id: 'components.PaymentButton.errorAddress',
   },
+  errorTerms: {
+    defaultMessage: 'You must accept the terms.',
+    description: "Error message shown when the user didn't check the terms checkbox.",
+    id: 'components.PaymentButton.errorTerms',
+  },
   pay: {
     defaultMessage: 'Pay {price}',
     description: 'CTA label to proceed to the payment of the product',
@@ -65,6 +72,7 @@ export enum PaymentErrorMessageId {
   ERROR_ADDRESS = 'errorAddress',
   ERROR_DEFAULT = 'errorDefault',
   ERROR_FULL_PRODUCT = 'errorFullProduct',
+  ERROR_TERMS = 'errorTerms',
 }
 
 interface PaymentButtonProps {
@@ -95,14 +103,26 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
   const { courseCode, key } = useCourseProduct();
   const { item: order } = useProductOrder({ courseCode, productId: product.id });
   const orderManager = useOmniscientOrders();
-
-  const isReadyToPay = useMemo(() => {
-    return courseCode && product.id && billingAddress;
-  }, [product, courseCode, billingAddress]);
+  const context = useSaleTunnelContext();
 
   const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<PaymentErrorMessageId>(PaymentErrorMessageId.ERROR_DEFAULT);
+
+  const { validateTerms, termsAccepted, renderTermsCheckbox } = useTerms({
+    product,
+    error,
+    onError: (e) => {
+      setError(e);
+      setState(ComponentStates.ERROR);
+    },
+  });
+
+  const isReadyToPay = useMemo(() => {
+    return (
+      courseCode && product.id && billingAddress && (termsAccepted || !product.contract_definition)
+    );
+  }, [product, courseCode, billingAddress, termsAccepted]);
 
   /**
    * Use Joanie API to retrieve an order and check if it's state is validated
@@ -122,6 +142,8 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
       setError(PaymentErrorMessageId.ERROR_ADDRESS);
       setState(ComponentStates.ERROR);
     }
+
+    validateTerms();
 
     if (isReadyToPay) {
       setState(ComponentStates.LOADING);
@@ -163,6 +185,8 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
       setState(ComponentStates.ERROR);
     }
 
+    validateTerms();
+
     if (!isReadyToPay) {
       return;
     }
@@ -179,6 +203,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
         },
         {
           onSuccess: (newOrder) => {
+            context.setOrder(newOrder);
             createPayment(newOrder.id);
           },
           onError: async () => {
@@ -254,6 +279,7 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
 
   return (
     <div className="payment-button" data-testid={order && 'payment-button-order-loaded'}>
+      {product.contract_definition && renderTermsCheckbox()}
       <Button
         disabled={state === ComponentStates.LOADING}
         onClick={createOrder}

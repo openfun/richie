@@ -9,4 +9,18 @@
     color: r-color('firebrick6');
     margin-top: 0.5rem;
   }
+
+  &__terms {
+    button {
+      color: $link-color;
+      text-decoration: underline;
+      background-color: transparent;
+      border: none;
+      padding: 0;
+
+      &:hover {
+        color: $link-hover-color;
+      }
+    }
+  }
 }
