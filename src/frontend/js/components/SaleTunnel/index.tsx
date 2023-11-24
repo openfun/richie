@@ -1,13 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
-import { CourseRun, Product } from 'types/Joanie';
+import { CourseRun, Order, Product } from 'types/Joanie';
 import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { useCourseProduct } from 'contexts/CourseProductContext';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
+import { Maybe } from 'types/utils';
+import { SaleTunnelContext, SaleTunnelContextType } from './context';
 import { StepBreadcrumb } from './components/StepBreadcrumb';
 import { SaleTunnelStepValidation } from './components/SaleTunnelStepValidation';
 import { SaleTunnelStepPayment } from './components/SaleTunnelStepPayment';
@@ -57,6 +59,8 @@ const SaleTunnel = ({ product, courseRun, isOpen = false, onClose }: Props) => {
   } = useOrders(undefined, { enabled: false });
   const { key } = useCourseProduct();
 
+  const [order, setOrder] = useState<Maybe<Order>>();
+
   const manifest: Manifest<TunnelSteps, 'resume'> = {
     start: 'validation',
     steps: {
@@ -105,6 +109,15 @@ const SaleTunnel = ({ product, courseRun, isOpen = false, onClose }: Props) => {
     reset();
   };
 
+  const context: SaleTunnelContextType = useMemo(
+    () => ({
+      product,
+      order,
+      setOrder,
+    }),
+    [product, order, setOrder],
+  );
+
   /**
    * correctly handle keyboard/screen reader users navigation on step change.
    * Without this, since elements are removed from the DOM from step to step,
@@ -135,14 +148,16 @@ const SaleTunnel = ({ product, courseRun, isOpen = false, onClose }: Props) => {
       shouldCloseOnEsc={false}
       testId="SaleTunnel__modal"
     >
-      <div className="SaleTunnel__modal-body">
-        <StepBreadcrumb manifest={manifest} step={step} />
-        {step === 'validation' && (
-          <SaleTunnelStepValidation product={product} courseRun={courseRun} next={next} />
-        )}
-        {step === 'payment' && <SaleTunnelStepPayment product={product} next={next} />}
-        {step === 'resume' && <SaleTunnelStepResume next={next} />}
-      </div>
+      <SaleTunnelContext.Provider value={context}>
+        <div className="SaleTunnel__modal-body">
+          <StepBreadcrumb manifest={manifest} step={step} />
+          {step === 'validation' && (
+            <SaleTunnelStepValidation product={product} courseRun={courseRun} next={next} />
+          )}
+          {step === 'payment' && <SaleTunnelStepPayment product={product} next={next} />}
+          {step === 'resume' && <SaleTunnelStepResume next={next} />}
+        </div>
+      </SaleTunnelContext.Provider>
     </Modal>
   );
 };

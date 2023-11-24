@@ -1,6 +1,6 @@
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useMemo, useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
@@ -16,11 +16,14 @@ import {
 } from 'utils/test/factories/joanie';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
-import { OrderState, ProductType } from 'types/Joanie';
+import { OrderState, ProductType, Order, Product } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseProductProvider } from 'contexts/CourseProductContext';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { Maybe } from 'types/utils';
+import { noop } from 'utils';
+import { SaleTunnelContextType, SaleTunnelContext } from 'components/SaleTunnel/context';
 import PaymentButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -64,13 +67,25 @@ describe.each([
     const Wrapper = ({
       client = createTestQueryClient({ user: true }),
       children,
-    }: PropsWithChildren<{ client?: QueryClient }>) => {
+      product,
+    }: PropsWithChildren<{ client?: QueryClient; product: Product }>) => {
+      const [order, setOrder] = useState<Maybe<Order>>();
+
+      const context: SaleTunnelContextType = useMemo(
+        () => ({
+          product,
+          order,
+          setOrder,
+        }),
+        [product, order, setOrder],
+      );
+
       return (
         <IntlProvider locale="en">
           <QueryClientProvider client={client}>
             <JoanieSessionProvider>
               <CourseProductProvider productId="" courseCode="00000">
-                {children}
+                <SaleTunnelContext.Provider value={context}>{children}</SaleTunnelContext.Provider>
               </CourseProductProvider>
             </JoanieSessionProvider>
           </QueryClientProvider>
@@ -106,10 +121,15 @@ describe.each([
         [],
       );
       render(
-        <Wrapper>
+        <Wrapper product={product}>
           <PaymentButton product={product} onSuccess={jest.fn()} />
         </Wrapper>,
       );
+
+      const $terms = screen.getByLabelText('By checking this box, you accept the');
+      await act(async () => {
+        fireEvent.click($terms);
+      });
 
       const $button = screen.getByRole('button', {
         name: `Pay ${formatPrice(product.price, product.price_currency)}`,
@@ -140,7 +160,7 @@ describe.each([
         [],
       );
       const { rerender } = render(
-        <Wrapper>
+        <Wrapper product={product}>
           <PaymentButton product={product} creditCard={creditCard.id} onSuccess={jest.fn()} />
         </Wrapper>,
       );
@@ -156,7 +176,7 @@ describe.each([
       const billingAddress: Joanie.Address = AddressFactory().one();
 
       rerender(
-        <Wrapper>
+        <Wrapper product={product}>
           <PaymentButton
             billingAddress={billingAddress}
             product={product}
@@ -179,7 +199,7 @@ describe.each([
         [],
       );
       render(
-        <Wrapper>
+        <Wrapper product={product}>
           <PaymentButton billingAddress={billingAddress} product={product} onSuccess={jest.fn()} />
         </Wrapper>,
       );
@@ -211,7 +231,7 @@ describe.each([
         });
 
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
+        <Wrapper client={createTestQueryClient({ user: true })} product={product}>
           <PaymentButton
             billingAddress={billingAddress}
             product={product}
@@ -221,6 +241,11 @@ describe.each([
       );
       nbApiCalls += 1; // fetch order for useProductOrder
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+
+      const $terms = screen.getByLabelText('By checking this box, you accept the');
+      await act(async () => {
+        fireEvent.click($terms);
+      });
 
       const $button = screen.getByRole('button', {
         name: `Pay ${formatPrice(product.price, product.price_currency)}`,
@@ -240,7 +265,7 @@ describe.each([
       nbApiCalls += 1; // refetch useProductOrder
       nbApiCalls += 1; // order submit
 
-      expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+      await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
       expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
 
       // - Spinner should be displayed
@@ -317,7 +342,7 @@ describe.each([
         .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, orderSubmitted);
 
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
+        <Wrapper client={createTestQueryClient({ user: true })} product={product}>
           <PaymentButton
             billingAddress={billingAddress}
             creditCard={creditCard.id}
@@ -328,6 +353,11 @@ describe.each([
       );
       await waitFor(() => {
         expect(screen.getByTestId('payment-button-order-loaded')).toBeInTheDocument();
+      });
+
+      const $terms = screen.getByLabelText('By checking this box, you accept the');
+      await act(async () => {
+        fireEvent.click($terms);
       });
 
       nbApiCalls += 1; // useProductOrder get order with filters
@@ -430,7 +460,7 @@ describe.each([
         .post(`https://joanie.test/api/v1.0/orders/${order.id}/abort/`, HttpStatusCode.OK);
 
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
+        <Wrapper client={createTestQueryClient({ user: true })} product={product}>
           <PaymentButton
             billingAddress={billingAddress}
             creditCard={creditCard.id}
@@ -447,6 +477,11 @@ describe.each([
       expect(apiCalls).toContain(
         `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
       );
+
+      const $terms = screen.getByLabelText('By checking this box, you accept the');
+      await act(async () => {
+        fireEvent.click($terms);
+      });
 
       const $button = screen.getByRole('button', {
         name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
@@ -537,7 +572,7 @@ describe.each([
         });
 
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
+        <Wrapper client={createTestQueryClient({ user: true })} product={product}>
           <PaymentButton
             billingAddress={billingAddress}
             product={product}
@@ -547,6 +582,11 @@ describe.each([
       );
       nbApiCalls += 1; // useProductOrder get order with filters
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+
+      const $terms = screen.getByLabelText('By checking this box, you accept the');
+      await act(async () => {
+        fireEvent.click($terms);
+      });
 
       const $button = screen.getByRole('button', {
         name: `Pay ${formatPrice(product.price, product.price_currency)}`,
@@ -594,6 +634,131 @@ describe.each([
       screen.getByRole('button', {
         name: `Pay ${formatPrice(product.price, product.price_currency)}`,
       });
+    });
+
+    it('should show an error if product has a contract definition and the terms are not accepted', async () => {
+      const product: Joanie.Product = ProductFactory().one();
+      const billingAddress: Joanie.Address = AddressFactory().one();
+
+      fetchMock.get(
+        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        [],
+      );
+
+      render(
+        <Wrapper client={createTestQueryClient({ user: true })} product={product}>
+          <PaymentButton billingAddress={billingAddress} product={product} onSuccess={noop} />
+        </Wrapper>,
+      );
+
+      const $button = screen.getByRole('button', {
+        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+      }) as HTMLButtonElement;
+
+      // - As all information are provided, payment button should not be disabled.
+      expect($button.disabled).toBe(false);
+
+      expect(screen.queryByText('You must accept the terms')).not.toBeInTheDocument();
+
+      // - User clicks on pay button
+      await act(async () => {
+        fireEvent.click($button);
+      });
+
+      expect(screen.getByText('You must accept the terms.')).toBeInTheDocument();
+    });
+
+    it('should be able to preview the contract if product has a contract definition', async () => {
+      // eslint-disable-next-line compat/compat
+      URL.createObjectURL = jest.fn((blob) => blob) as any;
+      window.open = jest.fn();
+
+      const product: Joanie.Product = ProductFactory().one();
+      const billingAddress: Joanie.Address = AddressFactory().one();
+
+      const PREVIEW_URL = `https://joanie.test/api/v1.0/contract_definitions/${
+        product.contract_definition!.id
+      }/preview_template/`;
+
+      fetchMock
+        .get(
+          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          [],
+        )
+        .get(PREVIEW_URL, 'preview content');
+
+      render(
+        <Wrapper client={createTestQueryClient({ user: true })} product={product}>
+          <PaymentButton billingAddress={billingAddress} product={product} onSuccess={noop} />
+        </Wrapper>,
+      );
+
+      const $terms = screen.getByRole('button', { name: 'General Terms of Sale' });
+
+      // eslint-disable-next-line compat/compat
+      expect(URL.createObjectURL).toHaveBeenCalledTimes(0);
+      expect(window.open).toHaveBeenCalledTimes(0);
+      expect(fetchMock.called(PREVIEW_URL)).toBe(false);
+
+      // console.log($terms);
+      await act(async () => {
+        fireEvent.click($terms);
+      });
+
+      expect(fetchMock.called(PREVIEW_URL)).toBe(true);
+      // eslint-disable-next-line compat/compat
+      expect(URL.createObjectURL).toHaveBeenCalledTimes(1);
+      // eslint-disable-next-line compat/compat
+      expect(URL.createObjectURL).toHaveBeenCalledWith('preview content');
+      expect(window.open).toHaveBeenCalledTimes(1);
+      expect(window.open).toHaveBeenCalledWith('preview content');
+    });
+
+    it('should not show terms checkbox if the product does not have a contract definition', async () => {
+      const product: Joanie.Product = ProductFactory().one();
+      product.contract_definition = undefined;
+      const billingAddress: Joanie.Address = AddressFactory().one();
+
+      const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
+
+      fetchMock
+        .get(
+          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          [],
+        )
+        .post('https://joanie.test/api/v1.0/orders/', order)
+        .patch(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`, {
+          paymentInfo,
+        });
+
+      render(
+        <Wrapper client={createTestQueryClient({ user: true })} product={product}>
+          <PaymentButton billingAddress={billingAddress} product={product} onSuccess={noop} />
+        </Wrapper>,
+      );
+
+      const $button = screen.getByRole('button', {
+        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+      }) as HTMLButtonElement;
+
+      // - As all information are provided, payment button should not be disabled.
+      expect($button.disabled).toBe(false);
+
+      // - The terms checbkox is not rendered.
+      expect(
+        screen.queryByLabelText('By checking this box, you accept the General Terms of Sale'),
+      ).not.toBeInTheDocument();
+
+      // - User clicks on pay button
+      await act(async () => {
+        fireEvent.click($button);
+      });
+
+      // - No errors.
+      expect(screen.queryByText('You must accept the terms.')).not.toBeInTheDocument();
+
+      // - Payment interface should be displayed.
+      screen.getByText('Payment interface component');
     });
   },
 );
