@@ -11,6 +11,8 @@ import useDateFormat from 'hooks/useDateFormat';
 import { IntlHelper } from 'utils/IntlHelper';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import EnrollmentDate from 'components/EnrollmentDate';
+import { Product } from 'types/Joanie';
+import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 import { messages as sharedMessages } from '../CourseRunItem';
 import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
 
@@ -50,13 +52,15 @@ const messages = defineMessages({
 
 interface Props {
   courseRuns: Joanie.CourseRun[];
-  order: Joanie.OrderLite;
+  order: Joanie.Order;
+  product: Product;
 }
 
-const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
+const EnrollableCourseRunList = ({ courseRuns, order, product }: Props) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
   const formRef = useRef<HTMLFormElement>(null);
+  const needsSignature = order ? orderNeedsSignature(order, product) : false;
 
   const [selectedCourseRun, setSelectedCourseRun] = useState<Maybe<Joanie.CourseRun>>();
   const [submitted, setSubmitted] = useState(false);
@@ -143,6 +147,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
                   type="radio"
                   id={`${order.id}|${courseRun.id}`}
                   name={order.id}
+                  disabled={needsSignature}
                   aria-label={intl.formatMessage(messages.ariaSelectCourseRun, {
                     start: formatDate(courseRun.start),
                     end: formatDate(courseRun.end),
@@ -218,7 +223,7 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
                 <FormattedMessage {...messages.selectCourseRun} />
               ))}
           </span>
-          <Button size="small" className="course-runs-item__cta">
+          <Button size="small" className="course-runs-item__cta" disabled={needsSignature}>
             {loading ? (
               <Spinner theme="light" aria-labelledby="enrolling">
                 <span id="enrolling">

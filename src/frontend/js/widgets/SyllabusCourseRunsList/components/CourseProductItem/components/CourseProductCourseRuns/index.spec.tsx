@@ -10,9 +10,10 @@ import {
   CourseRunFactory,
   EnrollmentFactory,
   CredentialOrderFactory,
+  ProductFactory,
 } from 'utils/test/factories/joanie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
-import type { CourseLight, CourseRun, Enrollment, OrderLite } from 'types/Joanie';
+import type { CourseLight, CourseRun, Enrollment } from 'types/Joanie';
 import { Deferred } from 'utils/test/deferred';
 import { CourseStateTextEnum, Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -133,11 +134,12 @@ describe('CourseProductCourseRuns', () => {
     );
 
     it('renders a warning message when no course runs are provided', () => {
-      const order: OrderLite = CredentialOrderFactory().one();
+      const order = CredentialOrderFactory().one();
+      const product = ProductFactory().one();
 
       render(
         <Wrapper productId={order.product_id} code="00000">
-          <EnrollableCourseRunList courseRuns={[]} order={order} />
+          <EnrollableCourseRunList courseRuns={[]} order={order} product={product} />
         </Wrapper>,
       );
 
@@ -147,11 +149,14 @@ describe('CourseProductCourseRuns', () => {
     it('renders a list of course runs with a call to action to enroll', async () => {
       const course: CourseLight = CourseLightFactory().one();
       const courseRuns: CourseRun[] = CourseRunFactory().many(2);
-      const order: OrderLite = CredentialOrderFactory().one();
+      const order = CredentialOrderFactory().one();
+      const product = ProductFactory({
+        contract_definition: undefined,
+      }).one();
 
       render(
         <Wrapper productId={order.product_id} code={course.code}>
-          <EnrollableCourseRunList courseRuns={courseRuns} order={order} />
+          <EnrollableCourseRunList courseRuns={courseRuns} order={order} product={product} />
         </Wrapper>,
       );
 
@@ -258,12 +263,14 @@ describe('CourseProductCourseRuns', () => {
     it('enroll with errors', async () => {
       const course: CourseLight = CourseLightFactory().one();
       const courseRuns: CourseRun[] = CourseRunFactory().many(2);
-      const order: OrderLite = CredentialOrderFactory().one();
+      const order = CredentialOrderFactory().one();
+      const product = ProductFactory().one();
+      product.contract_definition = undefined;
       fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, HttpStatusCode.OK);
 
       render(
         <Wrapper productId={order.product_id} code={course.code}>
-          <EnrollableCourseRunList courseRuns={courseRuns} order={order} />
+          <EnrollableCourseRunList courseRuns={courseRuns} order={order} product={product} />
         </Wrapper>,
       );
 
@@ -371,11 +378,13 @@ describe('CourseProductCourseRuns', () => {
           text: CourseStateTextEnum.STARTING_ON,
         },
       }).one();
+      const product = ProductFactory().one();
+      product.contract_definition = undefined;
       const order = CredentialOrderFactory().one();
 
       render(
         <Wrapper productId={order.product_id} code="00000">
-          <EnrollableCourseRunList courseRuns={[courseRun]} order={order} />
+          <EnrollableCourseRunList courseRuns={[courseRun]} order={order} product={product} />
         </Wrapper>,
       );
 
@@ -432,6 +441,71 @@ describe('CourseProductCourseRuns', () => {
       );
       expect(document.activeElement).toEqual(error);
       expect($button.disabled).toBe(false);
+    });
+
+    it('does not allow to enroll if a contract needs to be signed', async () => {
+      const courseRun: CourseRun = CourseRunFactory({
+        enrollment_start: faker.date.past({ years: 0.25 }).toISOString(),
+        enrollment_end: faker.date.future({ years: 0.5 }).toISOString(),
+        start: faker.date.future({ years: 0.75 }).toISOString(),
+        end: faker.date.future({ years: 1.0 }).toISOString(),
+        state: {
+          priority: faker.helpers.arrayElement([
+            Priority.FUTURE_NOT_YET_OPEN,
+            Priority.FUTURE_CLOSED,
+            Priority.ONGOING_CLOSED,
+            Priority.ARCHIVED_CLOSED,
+            Priority.TO_BE_SCHEDULED,
+          ]),
+          datetime: faker.date.future({ years: 0.25 }).toISOString(),
+          call_to_action: undefined,
+          text: CourseStateTextEnum.STARTING_ON,
+        },
+      }).one();
+      const product = ProductFactory().one();
+      const order = CredentialOrderFactory().one();
+
+      render(
+        <Wrapper productId={order.product_id} code="00000">
+          <EnrollableCourseRunList courseRuns={[courseRun]} order={order} product={product} />
+        </Wrapper>,
+      );
+
+      // the list should contain only the course run items, without the call to action button
+      expect(screen.getAllByRole('listitem')).toHaveLength(1);
+
+      // For each course run, it should render course, enrollment dates and a checkbox input
+      // to select the course run
+      // - Course run start date should be displayed
+      const $startDate = screen.getByTestId(`course-run-${courseRun.id}-start-date`);
+      expect($startDate.textContent).toEqual(dateFormatter.format(new Date(courseRun.start)));
+
+      // - Course run end date should be displayed
+      const $endDate = screen.getByTestId(`course-run-${courseRun.id}-end-date`);
+      expect($endDate.textContent).toEqual(dateFormatter.format(new Date(courseRun.end)));
+
+      // - Course run enrollment dates should be displayed
+      const $enrollmentDates = screen.getByTestId(`course-run-${courseRun.id}-enrollment-dates`);
+      expect($enrollmentDates.textContent).toEqual(
+        `Enrollment until ${dateFormatter.format(new Date(courseRun.enrollment_end))}`,
+      );
+
+      // - A radio input
+      const $radio: HTMLInputElement = screen.getByRole('radio', {
+        name: `Select course run from ${dateFormatter.format(
+          new Date(courseRun.start),
+        )} to ${dateFormatter.format(new Date(courseRun.end))}.`,
+      });
+
+      // The radio should be disabled as a contract needs to be signed.
+      expect($radio).toBeDisabled();
+
+      // A call to action should be displayed when no course run is selected
+      const $button: HTMLButtonElement = screen.getByRole('button', {
+        name: 'Enroll',
+      });
+      // it should be enabled already to allow early user feedback
+      expect($button.disabled).toBe(true);
     });
   });
 

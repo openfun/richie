@@ -10,6 +10,7 @@ import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import queryString from 'query-string';
+import { findByText } from '@storybook/testing-library';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   CourseLightFactory,
@@ -30,6 +31,7 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { Deferred } from 'utils/test/deferred';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import CourseProductItem from '.';
 
 jest.mock('utils/context', () => ({
@@ -576,6 +578,66 @@ describe('CourseProductItem', () => {
 
     // - Render <CertificateItem />
     screen.getByTestId('CertificateItem');
+
+    // - Does not Render PurchaseButton cta
+    expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
+  });
+
+  it('renders a button and a banner if the contract needs to be signed', async () => {
+    const relation = CourseProductRelationFactory().one();
+    const { product } = relation;
+    const order = CredentialOrderFactory({
+      product_id: product.id,
+      target_courses: product.target_courses,
+      course: CourseLightFactory({ code: '00000' }).one(),
+      state: OrderState.SUBMITTED,
+    }).one();
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    const orderQueryParameters = {
+      product_id: order.product_id,
+      course_code: order.course.code,
+      state: ACTIVE_ORDER_STATES,
+    };
+
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      [order],
+    );
+
+    render(
+      <Wrapper withSession>
+        <CourseProductItem productId={product.id} courseCode="00000" />
+      </Wrapper>,
+    );
+
+    // Wait for product information to be fetched
+    await expectSpinner('Loading product information...');
+    await expectNoSpinner('Loading product information...');
+    await screen.findByRole('heading', { level: 3, name: product.title });
+
+    // - A banner should be displayed.
+    screen.getByText('You need to sign your training contract before enrolling to course runs');
+
+    screen.getByRole('link', { name: 'Sign your training contract' });
+
+    // - In place of product price, a label "Pending" should be displayed
+    const $enrolledInfo = await screen.findByText('Pending');
+    expect($enrolledInfo.tagName).toBe('STRONG');
+
+    // - As order is pending, the user should not be able to enroll to course runs.
+    await Promise.all(
+      order.target_courses.map(async (course) => {
+        const $item = await screen.findByTestId(`course-item-${course.code}`);
+        // the course title shouldn't be a heading to prevent misdirection for screen reader users,
+        // but we want to it to visually look like a h5
+        const $courseTitle = await findByText($item, course.title);
+        expect($courseTitle.tagName).toBe('STRONG');
+        expect($courseTitle.classList.contains('h5')).toBe(true);
+        await screen.findByTestId(
+          `CourseRunList-${course.course_runs.map(({ id }) => id).join('-')}`,
+        );
+      }),
+    );
 
     // - Does not Render PurchaseButton cta
     expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
