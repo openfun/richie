@@ -82,13 +82,12 @@ const SaleTunnel = ({ product, courseRun, isOpen = false, onClose }: Props) => {
         next: null,
         onEnter: () => {
           WebAnalyticsAPIHandler()?.sendCourseProductEvent(CourseProductEvent.PAYMENT_SUCCEED, key);
-        },
-        onExit: () => {
           // Once the user has completed the purchase, we need to refetch the orders
           // to update the ordersQuery cache
           invalidateOrders();
           refetchOmniscientOrders();
-
+        },
+        onExit: () => {
           handleModalClose();
         },
       },
