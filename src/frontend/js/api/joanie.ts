@@ -177,6 +177,9 @@ export const getRoutes = () => {
     courseProductRelations: {
       get: `${baseUrl}/course-product-relations/:id/`,
     },
+    contractDefinitions: {
+      previewTemplate: `${baseUrl}/contract_definitions/:id/preview_template/`,
+    },
   };
 };
 
@@ -400,6 +403,15 @@ const API = (): Joanie.API => {
                 ...parsedFilters,
               })
             : buildApiUrl(ROUTES.courseProductRelations.get, parsedFilters),
+        ).then(checkStatus);
+      },
+    },
+    contractDefinitions: {
+      previewTemplate(id: string): Promise<File> {
+        return fetchWithJWT(
+          buildApiUrl(ROUTES.contractDefinitions.previewTemplate, {
+            id,
+          }),
         ).then(checkStatus);
       },
     },

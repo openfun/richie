@@ -499,6 +499,9 @@ export interface API {
       ? Promise<Nullable<CourseProductRelation>>
       : Promise<PaginatedResponse<CourseProductRelation>>;
   };
+  contractDefinitions: {
+    previewTemplate(id: string): Promise<File>;
+  };
 }
 
 export interface Backend {
