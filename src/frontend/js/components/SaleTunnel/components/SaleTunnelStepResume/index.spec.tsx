@@ -1,5 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
+import { CredentialOrderFactory, ProductFactory } from 'utils/test/factories/joanie';
+import { SaleTunnelContext } from 'components/SaleTunnel/context';
+import { noop } from 'utils';
 import { SaleTunnelStepResume } from '.';
 
 describe('SaleTunnelStepResume', () => {
@@ -7,12 +10,21 @@ describe('SaleTunnelStepResume', () => {
     jest.resetAllMocks();
   });
 
-  it('shows a success message and a CTA to start the course', () => {
+  it('shows a success message and a CTA to start the course for a product without contract definition', () => {
     const mockNext = jest.fn();
+    const product = ProductFactory().one();
+    product.contract_definition = undefined;
 
     render(
       <IntlProvider locale="en">
-        <SaleTunnelStepResume next={mockNext} />
+        <SaleTunnelContext.Provider
+          value={{
+            product,
+            setOrder: noop,
+          }}
+        >
+          <SaleTunnelStepResume next={mockNext} />
+        </SaleTunnelContext.Provider>
       </IntlProvider>,
     );
 
@@ -25,5 +37,38 @@ describe('SaleTunnelStepResume', () => {
     const button = screen.getByRole('button', { name: 'Start this course now!' });
     fireEvent.click(button);
     expect(mockNext).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows a success message and a CTA to sign the order for a product with a contract definition', () => {
+    const mockNext = jest.fn();
+    const product = ProductFactory().one();
+    const order = CredentialOrderFactory().one();
+
+    render(
+      <IntlProvider locale="en">
+        <SaleTunnelContext.Provider
+          value={{
+            product,
+            order,
+            setOrder: noop,
+          }}
+        >
+          <SaleTunnelStepResume next={mockNext} />
+        </SaleTunnelContext.Provider>
+      </IntlProvider>,
+    );
+
+    const successLogo = screen.getByRole('img');
+    expect(successLogo).toBeInstanceOf(SVGElement);
+
+    screen.getByRole('heading', { level: 3, name: 'Congratulations!' });
+    screen.getByText(
+      /In order to enroll to course runs you first need to sign the training contract/,
+    );
+
+    // Click on the button trigger the next function
+    const button = screen.getByRole('link', { name: 'Sign the training contract' });
+    fireEvent.click(button);
+    expect(mockNext).toHaveBeenCalledTimes(0);
   });
 });
