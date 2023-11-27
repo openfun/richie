@@ -45,7 +45,7 @@ aliases:
           BACKEND_VERSION=$(python -m setuptools_scm)
           echo "richie version: ${BACKEND_VERSION}"
           # In the frontend
-          cat src/frontend/package.json | grep "\"version\": \"${BACKEND_VERSION}\",$"
+          grep "\"version\": \"${BACKEND_VERSION}\",$" src/frontend/package.json
           # In the cookiecutter site template backend
           cat cookiecutter/{{cookiecutter.organization}}-richie-site-factory/template/{{cookiecutter.site}}/requirements/base.txt | grep "richie==${BACKEND_VERSION}$"
           # In the cookiecutter site template frontend

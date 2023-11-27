@@ -25,7 +25,7 @@ docs
 .circleci
 .vscode
 # don't remove the line after, we need .git to build the sandbox image.
-#.git
+!.git
 
 # Assets
 data
