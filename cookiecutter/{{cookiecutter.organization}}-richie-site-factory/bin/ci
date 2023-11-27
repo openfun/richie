@@ -83,7 +83,7 @@ function update_sources() {
         if [[ -f "${site_path}/src/backend/setup.cfg" ]]; then
             image=$(grep "^name = " "${site_path}/src/backend/setup.cfg" | cut -c 8-)
         fi
-        if [[ -f "${site_path}/src/backend/pyproject" ]]; then
+        if [[ -f "${site_path}/src/backend/pyproject.toml" ]]; then
             image=$(grep "^name = " "${site_path}/src/backend/pyproject.toml" | cut -c 8- | xargs echo)
         fi
 

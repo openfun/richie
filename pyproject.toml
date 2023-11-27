@@ -16,12 +16,12 @@ keywords = ["Django", "Django-CMS", "Open edX"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Framework :: Django",
-    "Framework :: Django :: 1.11",
+    "Framework :: Django :: 2.2",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6"
+    "Programming Language :: Python :: 3.7"
 ]
 dependencies = [
     "arrow",
@@ -52,6 +52,8 @@ dependencies = [
 "Changelog" = "https://github.com/openfun/richie/blob/master/CHANGELOG.md"
 "Homepage" = "https://github.com/openfun/richie"
 "Repository" = "https://github.com/openfun/richie"
+"Documentation" = "https://richie.education/"
+"Demonstration website" = "https://demo.richie.education/"
 
 [tool.setuptools]
 packages = { find = { where = ["src"], exclude = ["tests"] } }
