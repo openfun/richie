@@ -2,13 +2,13 @@ import React, { useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { createPortal } from 'react-dom';
 import { CourseRun, Priority } from 'types';
-import { Course } from 'types/Course';
 import { computeStates } from 'utils/CourseRuns';
 import { SyllabusAsideList } from 'widgets/SyllabusCourseRunsList/components/SyllabusAsideList';
 import { SyllabusCourseRun } from 'widgets/SyllabusCourseRunsList/components/SyllabusCourseRun';
 import { DjangoCMSPluginsInit } from 'components/DjangoCMSTemplate';
 import { isJoanieEnabled } from 'api/joanie';
 import context from 'utils/context';
+import { CourseLight } from 'types/Joanie';
 import CourseWishButton from './components/CourseWishButton';
 
 const OPENED_COURSES_ELEMENT_ID = 'courseDetailsRunsOpen';
@@ -40,7 +40,7 @@ const SyllabusCourseRunsList = ({
   maxArchivedCourseRuns,
 }: {
   courseRuns: CourseRun[];
-  course: Course;
+  course: CourseLight;
   maxArchivedCourseRuns: number;
 }) => {
   useEffect(() => {

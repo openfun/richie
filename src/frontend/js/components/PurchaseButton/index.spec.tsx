@@ -7,9 +7,8 @@ import {
   CourseStateFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
-import { CourseRunFactory, ProductFactory } from 'utils/test/factories/joanie';
+import { CourseLightFactory, CourseRunFactory, ProductFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
-import { CourseProductProvider } from 'contexts/CourseProductContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ProductType } from 'types/Joanie';
 import { Priority } from 'types';
@@ -36,13 +35,11 @@ describe('PurchaseButton', () => {
   });
 
   const Wrapper = ({ client, children }: React.PropsWithChildren<{ client: QueryClient }>) => (
-    <CourseProductProvider courseCode="00000" productId="00000">
-      <IntlProvider locale="en">
-        <QueryClientProvider client={client}>
-          <SessionProvider>{children}</SessionProvider>
-        </QueryClientProvider>
-      </IntlProvider>
-    </CourseProductProvider>
+    <IntlProvider locale="en">
+      <QueryClientProvider client={client}>
+        <SessionProvider>{children}</SessionProvider>
+      </QueryClientProvider>
+    </IntlProvider>
   );
 
   it('shows a login button if user is not authenticated', async () => {
@@ -51,7 +48,11 @@ describe('PurchaseButton', () => {
     act(() => {
       render(
         <Wrapper client={createTestQueryClient({ user: null })}>
-          <PurchaseButton product={product} disabled={false} />
+          <PurchaseButton
+            product={product}
+            disabled={false}
+            course={CourseLightFactory({ code: '00000' }).one()}
+          />
         </Wrapper>,
       );
     });
@@ -71,7 +72,11 @@ describe('PurchaseButton', () => {
     act(() => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton product={product} disabled={false} />
+          <PurchaseButton
+            product={product}
+            disabled={false}
+            course={CourseLightFactory({ code: '00000' }).one()}
+          />
         </Wrapper>,
       );
     });
@@ -102,7 +107,11 @@ describe('PurchaseButton', () => {
     act(() => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton product={product} disabled={false} />
+          <PurchaseButton
+            product={product}
+            disabled={false}
+            course={CourseLightFactory({ code: '00000' }).one()}
+          />
         </Wrapper>,
       );
     });
@@ -137,7 +146,11 @@ describe('PurchaseButton', () => {
     act(() => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton product={product} disabled={false} />
+          <PurchaseButton
+            product={product}
+            disabled={false}
+            course={CourseLightFactory({ code: '00000' }).one()}
+          />
         </Wrapper>,
       );
     });
@@ -170,7 +183,11 @@ describe('PurchaseButton', () => {
     act(() => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton product={product} disabled={false} />
+          <PurchaseButton
+            product={product}
+            disabled={false}
+            course={CourseLightFactory({ code: '00000' }).one()}
+          />
         </Wrapper>,
       );
     });
@@ -202,7 +219,11 @@ describe('PurchaseButton', () => {
       act(() => {
         render(
           <Wrapper client={createTestQueryClient({ user: true })}>
-            <PurchaseButton product={product} disabled={false} />
+            <PurchaseButton
+              product={product}
+              disabled={false}
+              course={CourseLightFactory({ code: '00000' }).one()}
+            />
           </Wrapper>,
         );
       });
@@ -250,7 +271,12 @@ describe('PurchaseButton', () => {
       act(() => {
         render(
           <Wrapper client={createTestQueryClient({ user: true })}>
-            <PurchaseButton product={product} disabled={false} courseRun={courseRun} />
+            <PurchaseButton
+              product={product}
+              disabled={false}
+              courseRun={courseRun}
+              course={CourseLightFactory({ code: '00000' }).one()}
+            />
           </Wrapper>,
         );
       });
@@ -307,7 +333,12 @@ describe('PurchaseButton', () => {
       act(() => {
         render(
           <Wrapper client={createTestQueryClient({ user: true })}>
-            <PurchaseButton product={product} disabled={false} courseRun={courseRun} />
+            <PurchaseButton
+              product={product}
+              disabled={false}
+              courseRun={courseRun}
+              course={CourseLightFactory({ code: '00000' }).one()}
+            />
           </Wrapper>,
         );
       });
@@ -338,7 +369,11 @@ describe('PurchaseButton', () => {
     act(() => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton product={product} disabled={false} />
+          <PurchaseButton
+            product={product}
+            disabled={false}
+            course={CourseLightFactory({ code: '00000' }).one()}
+          />
         </Wrapper>,
       );
     });
@@ -363,7 +398,11 @@ describe('PurchaseButton', () => {
     act(() => {
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton product={product} disabled={true} />
+          <PurchaseButton
+            product={product}
+            disabled={true}
+            course={CourseLightFactory({ code: '00000' }).one()}
+          />
         </Wrapper>,
       );
     });

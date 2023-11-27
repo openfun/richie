@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
-import { CourseRun, Order, Product } from 'types/Joanie';
+import { CourseLight, CourseRun, Order, Product } from 'types/Joanie';
 import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
-import { useCourseProduct } from 'contexts/CourseProductContext';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
 import { Maybe } from 'types/utils';
 import { SaleTunnelContext, SaleTunnelContextType } from './context';
@@ -44,12 +43,13 @@ const focusCurrentStep = (container: HTMLElement) => {
 
 type Props = {
   product: Product;
+  course: CourseLight;
   courseRun?: CourseRun;
   isOpen: boolean;
   onClose: () => void;
 };
 
-const SaleTunnel = ({ product, courseRun, isOpen = false, onClose }: Props) => {
+const SaleTunnel = ({ product, courseRun, course, isOpen = false, onClose }: Props) => {
   const intl = useIntl();
   const {
     methods: { refetch: refetchOmniscientOrders },
@@ -57,7 +57,7 @@ const SaleTunnel = ({ product, courseRun, isOpen = false, onClose }: Props) => {
   const {
     methods: { invalidate: invalidateOrders },
   } = useOrders(undefined, { enabled: false });
-  const { key } = useCourseProduct();
+  const key = `${course.code}+${product.id}`;
 
   const [order, setOrder] = useState<Maybe<Order>>();
 
@@ -114,8 +114,11 @@ const SaleTunnel = ({ product, courseRun, isOpen = false, onClose }: Props) => {
       product,
       order,
       setOrder,
+      key,
+      course,
+      courseRun,
     }),
-    [product, order, setOrder],
+    [product, order, setOrder, key, course, courseRun],
   );
 
   /**
@@ -151,10 +154,8 @@ const SaleTunnel = ({ product, courseRun, isOpen = false, onClose }: Props) => {
       <SaleTunnelContext.Provider value={context}>
         <div className="SaleTunnel__modal-body">
           <StepBreadcrumb manifest={manifest} step={step} />
-          {step === 'validation' && (
-            <SaleTunnelStepValidation product={product} courseRun={courseRun} next={next} />
-          )}
-          {step === 'payment' && <SaleTunnelStepPayment product={product} next={next} />}
+          {step === 'validation' && <SaleTunnelStepValidation next={next} />}
+          {step === 'payment' && <SaleTunnelStepPayment next={next} />}
           {step === 'resume' && <SaleTunnelStepResume next={next} />}
         </div>
       </SaleTunnelContext.Provider>

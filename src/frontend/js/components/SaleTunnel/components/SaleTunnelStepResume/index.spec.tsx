@@ -1,6 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import { CredentialOrderFactory, ProductFactory } from 'utils/test/factories/joanie';
+import {
+  CourseLightFactory,
+  CredentialOrderFactory,
+  ProductFactory,
+} from 'utils/test/factories/joanie';
 import { SaleTunnelContext } from 'components/SaleTunnel/context';
 import { noop } from 'utils';
 import { SaleTunnelStepResume } from '.';
@@ -21,6 +25,8 @@ describe('SaleTunnelStepResume', () => {
           value={{
             product,
             setOrder: noop,
+            course: CourseLightFactory({ code: '00000' }).one(),
+            key: `00000+${product.id}`,
           }}
         >
           <SaleTunnelStepResume next={mockNext} />
@@ -51,6 +57,8 @@ describe('SaleTunnelStepResume', () => {
             product,
             order,
             setOrder: noop,
+            course: CourseLightFactory({ code: '00000' }).one(),
+            key: `00000+${product.id}`,
           }}
         >
           <SaleTunnelStepResume next={mockNext} />

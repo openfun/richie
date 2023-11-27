@@ -3,17 +3,24 @@ import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { CunninghamProvider } from '@openfun/cunningham-react';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useMemo, useState } from 'react';
 import userEvent from '@testing-library/user-event';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
-import { ProductFactory, AddressFactory, CreditCardFactory } from 'utils/test/factories/joanie';
+import {
+  ProductFactory,
+  AddressFactory,
+  CreditCardFactory,
+  CourseLightFactory,
+} from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
-import { Address, CreditCard } from 'types/Joanie';
+import { Address, CreditCard, Order, Product } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
+import { SaleTunnelContext, SaleTunnelContextType } from 'components/SaleTunnel/context';
+import { Maybe } from 'types/utils';
 import { SaleTunnelStepPayment } from '.';
 
 jest.mock('components/PaymentButton', () => ({
@@ -30,15 +37,35 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('SaleTunnelStepPayment', () => {
-  const Wrapper = ({ children, user }: PropsWithChildren<{ user?: User }>) => (
-    <QueryClientProvider client={createTestQueryClient({ user: user || true })}>
-      <IntlProvider locale="en">
-        <SessionProvider>
-          <CunninghamProvider>{children}</CunninghamProvider>
-        </SessionProvider>
-      </IntlProvider>
-    </QueryClientProvider>
-  );
+  const Wrapper = ({
+    children,
+    user,
+    product,
+  }: PropsWithChildren<{ user?: User; product: Product }>) => {
+    const [order, setOrder] = useState<Maybe<Order>>();
+    const context: SaleTunnelContextType = useMemo(
+      () => ({
+        product,
+        order,
+        setOrder,
+        course: CourseLightFactory({ code: '00000' }).one(),
+        key: `00000+${product.id}`,
+      }),
+      [product, order, setOrder],
+    );
+
+    return (
+      <QueryClientProvider client={createTestQueryClient({ user: user || true })}>
+        <IntlProvider locale="en">
+          <SessionProvider>
+            <CunninghamProvider>
+              <SaleTunnelContext.Provider value={context}>{children}</SaleTunnelContext.Provider>
+            </CunninghamProvider>
+          </SessionProvider>
+        </IntlProvider>
+      </QueryClientProvider>
+    );
+  };
   const mockNext = jest.fn();
 
   beforeEach(() => {
@@ -57,8 +84,8 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <Wrapper>
-          <SaleTunnelStepPayment product={product} next={mockNext} />
+        <Wrapper product={product}>
+          <SaleTunnelStepPayment next={mockNext} />
         </Wrapper>,
       );
     });
@@ -79,8 +106,8 @@ describe('SaleTunnelStepPayment', () => {
     const user: User = UserFactory({ fullname: undefined }).one();
     await act(async () => {
       render(
-        <Wrapper user={user}>
-          <SaleTunnelStepPayment product={product} next={mockNext} />
+        <Wrapper user={user} product={product}>
+          <SaleTunnelStepPayment next={mockNext} />
         </Wrapper>,
       );
     });
@@ -93,10 +120,10 @@ describe('SaleTunnelStepPayment', () => {
   it('should display a button to create an address if user has no address ', async () => {
     const product = ProductFactory().one();
 
-    await act(() => {
+    await act(async () => {
       render(
-        <Wrapper>
-          <SaleTunnelStepPayment product={product} next={mockNext} />
+        <Wrapper product={product}>
+          <SaleTunnelStepPayment next={mockNext} />
         </Wrapper>,
       );
     });
@@ -130,8 +157,8 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <Wrapper>
-          <SaleTunnelStepPayment product={product} next={mockNext} />
+        <Wrapper product={product}>
+          <SaleTunnelStepPayment next={mockNext} />
         </Wrapper>,
       );
     });
@@ -199,8 +226,8 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <Wrapper>
-          <SaleTunnelStepPayment product={product} next={mockNext} />
+        <Wrapper product={product}>
+          <SaleTunnelStepPayment next={mockNext} />
         </Wrapper>,
       );
     });
@@ -224,8 +251,8 @@ describe('SaleTunnelStepPayment', () => {
 
     await act(async () => {
       render(
-        <Wrapper>
-          <SaleTunnelStepPayment product={product} next={mockNext} />
+        <Wrapper product={product}>
+          <SaleTunnelStepPayment next={mockNext} />
         </Wrapper>,
       );
     });
@@ -276,8 +303,8 @@ describe('SaleTunnelStepPayment', () => {
     const product = ProductFactory().one();
 
     render(
-      <Wrapper>
-        <SaleTunnelStepPayment product={product} next={mockNext} />
+      <Wrapper product={product}>
+        <SaleTunnelStepPayment next={mockNext} />
       </Wrapper>,
     );
 

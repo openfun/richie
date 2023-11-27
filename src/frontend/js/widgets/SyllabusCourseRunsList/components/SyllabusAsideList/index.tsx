@@ -1,9 +1,9 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import React from 'react';
 import { CourseRun, Priority } from 'types';
-import { Course } from 'types/Course';
 import { SyllabusSimpleCourseRunsList } from 'widgets/SyllabusCourseRunsList/components/SyllabusSimpleCourseRunsList';
 import { SyllabusCourseRun } from 'widgets/SyllabusCourseRunsList/components/SyllabusCourseRun';
+import { CourseLight } from 'types/Joanie';
 
 const messages = defineMessages({
   otherCourseRuns: {
@@ -57,7 +57,7 @@ export const SyllabusAsideList = ({
   maxArchivedCourseRuns,
 }: {
   courseRuns: CourseRun[];
-  course: Course;
+  course: CourseLight;
   maxArchivedCourseRuns: number;
 }) => {
   const intl = useIntl();

@@ -115,7 +115,10 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper>
-        <CourseProductItem courseCode="00000" productId={product.id} />
+        <CourseProductItem
+          course={CourseLightFactory({ code: '00000' }).one()}
+          productId={product.id}
+        />
       </Wrapper>,
     );
 
@@ -173,7 +176,10 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper>
-        <CourseProductItem productId={product.id} courseCode="00000" />
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
       </Wrapper>,
     );
 
@@ -194,7 +200,11 @@ describe('CourseProductItem', () => {
 
     const { container } = render(
       <Wrapper>
-        <CourseProductItem courseCode="00000" productId={relation.product.id} compact />
+        <CourseProductItem
+          course={CourseLightFactory({ code: '00000' }).one()}
+          productId={relation.product.id}
+          compact
+        />
       </Wrapper>,
     );
 
@@ -264,7 +274,10 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper withSession>
-        <CourseProductItem productId={product.id} courseCode="00000" />
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
       </Wrapper>,
     );
 
@@ -324,7 +337,11 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper withSession>
-        <CourseProductItem productId={relation.product.id} courseCode="00000" compact />
+        <CourseProductItem
+          productId={relation.product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+          compact
+        />
       </Wrapper>,
     );
 
@@ -393,7 +410,10 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper withSession>
-        <CourseProductItem productId={product.id} courseCode="00000" />
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
       </Wrapper>,
     );
 
@@ -451,7 +471,10 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper withSession>
-        <CourseProductItem productId={product.id} courseCode="00000" />
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
       </Wrapper>,
     );
 
@@ -497,7 +520,10 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper withSession>
-        <CourseProductItem productId={product.id} courseCode="00000" />
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
       </Wrapper>,
     );
 
@@ -549,7 +575,10 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper withSession>
-        <CourseProductItem productId={product.id} courseCode="00000" />
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
       </Wrapper>,
     );
 
@@ -606,7 +635,10 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper withSession>
-        <CourseProductItem productId={product.id} courseCode="00000" />
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
       </Wrapper>,
     );
 
@@ -667,7 +699,11 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper withSession>
-        <CourseProductItem productId={relation.product.id} courseCode="00000" compact={true} />
+        <CourseProductItem
+          productId={relation.product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+          compact={true}
+        />
       </Wrapper>,
     );
 
@@ -711,7 +747,10 @@ describe('CourseProductItem', () => {
 
     render(
       <Wrapper>
-        <CourseProductItem productId={product.id} courseCode="00000" />
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
       </Wrapper>,
     );
 

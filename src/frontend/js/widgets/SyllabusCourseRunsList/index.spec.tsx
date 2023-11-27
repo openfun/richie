@@ -16,7 +16,6 @@ import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
 import { faker } from '@faker-js/faker';
 import {
-  CourseLightFactory,
   CourseRunFactoryFromPriority,
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
@@ -26,7 +25,7 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseRun, Priority } from 'types';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CourseProductRelation } from 'types/Joanie';
-import { CourseProductRelationFactory } from 'utils/test/factories/joanie';
+import { CourseLightFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { StringHelper } from 'utils/StringHelper';
 import { computeStates } from 'utils/CourseRuns';

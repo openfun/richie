@@ -11,7 +11,6 @@ import type { Nullable } from 'types/utils';
 import { HttpError } from 'utils/errors/HttpError';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
-import { useCourseProduct } from 'contexts/CourseProductContext';
 import useProductOrder from 'hooks/useProductOrder';
 import { useTerms } from 'components/PaymentButton/hooks/useTerms';
 import { useSaleTunnelContext } from 'components/SaleTunnel/context';
@@ -76,7 +75,6 @@ export enum PaymentErrorMessageId {
 }
 
 interface PaymentButtonProps {
-  product: Joanie.Product;
   billingAddress?: Joanie.Address;
   creditCard?: Nullable<Joanie.CreditCard['id']>;
   onSuccess: () => void;
@@ -96,15 +94,14 @@ enum ComponentStates {
  * First it creates the payment from Joanie then displays the payment interface
  * or the error message.
  */
-const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: PaymentButtonProps) => {
+const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonProps) => {
   const intl = useIntl();
   const API = useJoanieApi();
+  const { setOrder, product } = useSaleTunnelContext();
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const { courseCode, key } = useCourseProduct();
-  const { item: order } = useProductOrder({ courseCode, productId: product.id });
+  const { course, key } = useSaleTunnelContext();
+  const { item: order } = useProductOrder({ courseCode: course.code, productId: product.id });
   const orderManager = useOmniscientOrders();
-  const context = useSaleTunnelContext();
-
   const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<PaymentErrorMessageId>(PaymentErrorMessageId.ERROR_DEFAULT);
@@ -120,9 +117,9 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
 
   const isReadyToPay = useMemo(() => {
     return (
-      courseCode && product.id && billingAddress && (termsAccepted || !product.contract_definition)
+      course.code && product.id && billingAddress && (termsAccepted || !product.contract_definition)
     );
-  }, [product, courseCode, billingAddress, termsAccepted]);
+  }, [product, course.code, billingAddress, termsAccepted]);
 
   /**
    * Use Joanie API to retrieve an order and check if it's state is validated
@@ -198,12 +195,12 @@ const PaymentButton = ({ product, billingAddress, creditCard, onSuccess }: Payme
     } else {
       orderManager.methods.create(
         {
-          course_code: courseCode,
+          course_code: course.code,
           product_id: product.id,
         },
         {
           onSuccess: (newOrder) => {
-            context.setOrder(newOrder);
+            setOrder(newOrder);
             createPayment(newOrder.id);
           },
           onError: async () => {

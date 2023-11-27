@@ -1,10 +1,13 @@
 import { createContext, useContext } from 'react';
-import { Order, Product } from 'types/Joanie';
+import { CourseLight, CourseRun, Order, Product } from 'types/Joanie';
 
 export interface SaleTunnelContextType {
   product: Product;
   order?: Order;
+  courseRun?: CourseRun;
   setOrder: (order: Order) => void;
+  key: string;
+  course: CourseLight;
 }
 export const SaleTunnelContext = createContext<SaleTunnelContextType>({} as any);
 

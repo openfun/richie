@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
 import { Spinner } from 'components/Spinner';
 import { useSession } from 'contexts/SessionContext';
-import { Course } from 'types/Course';
+import { CourseLight } from 'types/Joanie';
 import { useCourseWish } from './hooks/useCourseWish';
 
 const messages = defineMessages({
@@ -37,7 +37,7 @@ enum ComponentStates {
 }
 
 export interface Props {
-  course: Course;
+  course: CourseLight;
 }
 
 const CourseWishButton = ({ course }: Props) => {

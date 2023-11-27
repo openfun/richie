@@ -1,12 +1,12 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { CourseRun, CourseRunDisplayMode } from 'types';
 import useDateFormat from 'hooks/useDateFormat';
-import { Course } from 'types/Course';
 import { extractResourceId, isJoanieResourceLinkProduct } from 'api/lms/joanie';
 import { findLmsBackend } from 'api/configuration';
 import { StringHelper } from 'utils/StringHelper';
 import { IntlHelper } from 'utils/IntlHelper';
 import { DjangoCMSPluginCourseRun, DjangoCMSTemplate } from 'components/DjangoCMSTemplate';
+import { CourseLight } from 'types/Joanie';
 import CourseRunEnrollment from '../CourseRunEnrollment';
 import CourseProductItem from '../CourseProductItem';
 
@@ -96,7 +96,7 @@ export const SyllabusCourseRun = ({
   course,
 }: {
   courseRun: CourseRun;
-  course: Course;
+  course: CourseLight;
 }) => {
   return (
     <DjangoCMSTemplate plugin={DjangoCMSPluginCourseRun(courseRun)}>
@@ -104,7 +104,7 @@ export const SyllabusCourseRun = ({
         {isJoanieResourceLinkProduct(courseRun.resource_link) ? (
           <CourseProductItem
             productId={extractResourceId(courseRun.resource_link, 'product')!}
-            courseCode={course.code!}
+            course={course}
             compact={courseRun.display_mode === CourseRunDisplayMode.COMPACT}
           />
         ) : (
