@@ -48,7 +48,7 @@
     "@formatjs/cli": "6.2.4",
     "@formatjs/intl-relativetimeformat": "11.2.10",
     "@hookform/resolvers": "3.3.2",
-    "@openfun/cunningham-react": "2.1.0",
+    "@openfun/cunningham-react": "2.3.0",
     "@openfun/cunningham-tokens": "2.0.0",
     "@sentry/browser": "7.81.1",
     "@sentry/types": "7.81.1",
