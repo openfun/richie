@@ -7,15 +7,13 @@ import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
-import {
-  CourseLightFactory,
-  RichieContextFactory as mockRichieContextFactory,
-} from 'utils/test/factories/richie';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { SessionProvider } from 'contexts/SessionContext';
 import { location } from 'utils/indirection/window';
-import { Course } from 'types/Course';
+import { CourseLightFactory } from 'utils/test/factories/joanie';
+import { CourseLight } from 'types/Joanie';
 import CourseWishButton from '.';
 
 jest.mock('utils/indirection/window', () => ({
@@ -38,7 +36,7 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
-const renderButton = (course: Course) =>
+const renderButton = (course: CourseLight) =>
   render(
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: null })}>

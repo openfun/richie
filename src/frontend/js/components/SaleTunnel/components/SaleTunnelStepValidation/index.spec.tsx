@@ -1,19 +1,60 @@
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { userEvent } from '@storybook/testing-library';
+import { PropsWithChildren, useMemo, useState } from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { Priority } from 'types';
-import { CourseRun, ProductType } from 'types/Joanie';
+import { CourseRun, Order, Product, ProductType } from 'types/Joanie';
 import {
   CertificateProductFactory,
+  CourseLightFactory,
   CourseRunFactory,
   CredentialProductFactory,
 } from 'utils/test/factories/joanie';
+import { User } from 'types/User';
+import { Maybe } from 'types/utils';
+import { SaleTunnelContext, SaleTunnelContextType } from 'components/SaleTunnel/context';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { SessionProvider } from 'contexts/SessionContext';
 import { SaleTunnelStepValidation } from '.';
 
 describe('SaleTunnelStepValidation', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
+
+  const Wrapper = ({
+    children,
+    user,
+    product,
+    courseRun,
+  }: PropsWithChildren<{ user?: User; product: Product; courseRun?: CourseRun }>) => {
+    const [order, setOrder] = useState<Maybe<Order>>();
+    const context: SaleTunnelContextType = useMemo(
+      () => ({
+        product,
+        order,
+        setOrder,
+        course: CourseLightFactory({ code: '00000' }).one(),
+        key: `00000+${product.id}`,
+        courseRun,
+      }),
+      [product, order, setOrder, courseRun],
+    );
+
+    return (
+      <QueryClientProvider client={createTestQueryClient({ user: user || true })}>
+        <IntlProvider locale="en">
+          <SessionProvider>
+            <CunninghamProvider>
+              <SaleTunnelContext.Provider value={context}>{children}</SaleTunnelContext.Provider>
+            </CunninghamProvider>
+          </SessionProvider>
+        </IntlProvider>
+      </QueryClientProvider>
+    );
+  };
 
   it.each([
     { productType: ProductType.CERTIFICATE, instructions: true },
@@ -33,9 +74,9 @@ describe('SaleTunnelStepValidation', () => {
 
     const mockNext = jest.fn();
     render(
-      <IntlProvider locale="en">
-        <SaleTunnelStepValidation next={mockNext} product={product} />
-      </IntlProvider>,
+      <Wrapper product={product}>
+        <SaleTunnelStepValidation next={mockNext} />
+      </Wrapper>,
     );
 
     const formatter = new Intl.NumberFormat('en', {
@@ -62,9 +103,9 @@ describe('SaleTunnelStepValidation', () => {
   it('shows product credential target course runs informations', async () => {
     const product = CredentialProductFactory().one();
     render(
-      <IntlProvider locale="en">
-        <SaleTunnelStepValidation next={jest.fn()} product={product} />
-      </IntlProvider>,
+      <Wrapper product={product}>
+        <SaleTunnelStepValidation next={jest.fn()} />
+      </Wrapper>,
     );
 
     const targetCourses = screen.getAllByTestId('product-target-course');
@@ -101,9 +142,9 @@ describe('SaleTunnelStepValidation', () => {
     const product = CertificateProductFactory().one();
     const courseRun = CourseRunFactory().one();
     render(
-      <IntlProvider locale="en">
-        <SaleTunnelStepValidation next={jest.fn()} product={product} courseRun={courseRun} />
-      </IntlProvider>,
+      <Wrapper product={product} courseRun={courseRun}>
+        <SaleTunnelStepValidation next={jest.fn()} />
+      </Wrapper>,
     );
     expect(
       screen.getByRole('heading', {

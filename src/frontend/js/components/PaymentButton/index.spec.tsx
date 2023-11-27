@@ -13,12 +13,12 @@ import {
   CertificateOrderWithPaymentFactory,
   CertificateProductFactory,
   CredentialProductFactory,
+  CourseLightFactory,
 } from 'utils/test/factories/joanie';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
 import { OrderState, ProductType, Order, Product } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { CourseProductProvider } from 'contexts/CourseProductContext';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { Maybe } from 'types/utils';
@@ -76,6 +76,8 @@ describe.each([
           product,
           order,
           setOrder,
+          course: CourseLightFactory({ code: '00000' }).one(),
+          key: `00000+${product.id}`,
         }),
         [product, order, setOrder],
       );
@@ -84,9 +86,7 @@ describe.each([
         <IntlProvider locale="en">
           <QueryClientProvider client={client}>
             <JoanieSessionProvider>
-              <CourseProductProvider productId="" courseCode="00000">
-                <SaleTunnelContext.Provider value={context}>{children}</SaleTunnelContext.Provider>
-              </CourseProductProvider>
+              <SaleTunnelContext.Provider value={context}>{children}</SaleTunnelContext.Provider>
             </JoanieSessionProvider>
           </QueryClientProvider>
         </IntlProvider>
@@ -122,7 +122,7 @@ describe.each([
       );
       render(
         <Wrapper product={product}>
-          <PaymentButton product={product} onSuccess={jest.fn()} />
+          <PaymentButton onSuccess={jest.fn()} />
         </Wrapper>,
       );
 
@@ -161,7 +161,7 @@ describe.each([
       );
       const { rerender } = render(
         <Wrapper product={product}>
-          <PaymentButton product={product} creditCard={creditCard.id} onSuccess={jest.fn()} />
+          <PaymentButton creditCard={creditCard.id} onSuccess={jest.fn()} />
         </Wrapper>,
       );
 
@@ -179,7 +179,6 @@ describe.each([
         <Wrapper product={product}>
           <PaymentButton
             billingAddress={billingAddress}
-            product={product}
             creditCard={creditCard.id}
             onSuccess={jest.fn()}
           />
@@ -200,7 +199,7 @@ describe.each([
       );
       render(
         <Wrapper product={product}>
-          <PaymentButton billingAddress={billingAddress} product={product} onSuccess={jest.fn()} />
+          <PaymentButton billingAddress={billingAddress} onSuccess={jest.fn()} />
         </Wrapper>,
       );
 
@@ -232,11 +231,7 @@ describe.each([
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })} product={product}>
-          <PaymentButton
-            billingAddress={billingAddress}
-            product={product}
-            onSuccess={handleSuccess}
-          />
+          <PaymentButton billingAddress={billingAddress} onSuccess={handleSuccess} />
         </Wrapper>,
       );
       nbApiCalls += 1; // fetch order for useProductOrder
@@ -346,7 +341,6 @@ describe.each([
           <PaymentButton
             billingAddress={billingAddress}
             creditCard={creditCard.id}
-            product={product}
             onSuccess={handleSuccess}
           />
         </Wrapper>,
@@ -464,7 +458,6 @@ describe.each([
           <PaymentButton
             billingAddress={billingAddress}
             creditCard={creditCard.id}
-            product={product}
             onSuccess={handleSuccess}
           />
         </Wrapper>,
@@ -573,11 +566,7 @@ describe.each([
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })} product={product}>
-          <PaymentButton
-            billingAddress={billingAddress}
-            product={product}
-            onSuccess={handleSuccess}
-          />
+          <PaymentButton billingAddress={billingAddress} onSuccess={handleSuccess} />
         </Wrapper>,
       );
       nbApiCalls += 1; // useProductOrder get order with filters
@@ -647,7 +636,7 @@ describe.each([
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })} product={product}>
-          <PaymentButton billingAddress={billingAddress} product={product} onSuccess={noop} />
+          <PaymentButton billingAddress={billingAddress} onSuccess={noop} />
         </Wrapper>,
       );
 
@@ -689,7 +678,7 @@ describe.each([
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })} product={product}>
-          <PaymentButton billingAddress={billingAddress} product={product} onSuccess={noop} />
+          <PaymentButton billingAddress={billingAddress} onSuccess={noop} />
         </Wrapper>,
       );
 
@@ -733,7 +722,7 @@ describe.each([
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })} product={product}>
-          <PaymentButton billingAddress={billingAddress} product={product} onSuccess={noop} />
+          <PaymentButton billingAddress={billingAddress} onSuccess={noop} />
         </Wrapper>,
       );
 

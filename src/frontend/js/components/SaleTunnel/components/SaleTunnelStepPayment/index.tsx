@@ -9,6 +9,7 @@ import { useCreditCards } from 'hooks/useCreditCards';
 import type * as Joanie from 'types/Joanie';
 import type { Maybe, Nullable } from 'types/utils';
 import { Icon, IconTypeEnum } from 'components/Icon';
+import { useSaleTunnelContext } from 'components/SaleTunnel/context';
 import { RegisteredCreditCard } from '../RegisteredCreditCard';
 
 const messages = defineMessages({
@@ -55,11 +56,11 @@ const messages = defineMessages({
 });
 
 interface SaleTunnelStepPaymentProps {
-  product: Joanie.Product;
   next: () => void;
 }
 
-export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentProps) => {
+export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
+  const { product } = useSaleTunnelContext();
   /**
    * Sort addresses ascending by title according to the locale
    *
@@ -275,7 +276,6 @@ export const SaleTunnelStepPayment = ({ product, next }: SaleTunnelStepPaymentPr
       ) : null}
       <footer className="SaleTunnelStepPayment__footer">
         <PaymentButton
-          product={product}
           creditCard={selectedCreditCard}
           billingAddress={selectedAddress}
           onSuccess={next}

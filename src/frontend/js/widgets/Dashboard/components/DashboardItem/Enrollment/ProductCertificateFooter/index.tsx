@@ -2,7 +2,6 @@ import { FormattedMessage } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { Enrollment, Product, ProductType } from 'types/Joanie';
-import { CourseProductProvider } from 'contexts/CourseProductContext';
 import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import { useCertificate } from 'hooks/useCertificates';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
@@ -45,35 +44,34 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
     return null;
   }
   return (
-    <CourseProductProvider courseCode={enrollment.course_run.course.code} productId={product.id}>
-      <div className="dashboard-item__course-enrolling__infos">
-        <div className="dashboard-item__block__status">
-          <Icon name={IconTypeEnum.CERTIFICATE} />
-          {activeOrder ? (
-            <>
-              {product.certificate_definition.title + '. '}
-              <CertificateStatus certificate={certificate} productType={product.type} />
-            </>
-          ) : (
-            <FormattedMessage {...messages.buyProductCertificateLabel} />
-          )}
-        </div>
+    <div className="dashboard-item__course-enrolling__infos">
+      <div className="dashboard-item__block__status">
+        <Icon name={IconTypeEnum.CERTIFICATE} />
         {activeOrder ? (
-          activeOrder.certificate_id && (
-            <DownloadCertificateButton
-              className="dashboard-item__button"
-              certificateId={activeOrder.certificate_id}
-            />
-          )
+          <>
+            {product.certificate_definition.title + '. '}
+            <CertificateStatus certificate={certificate} productType={product.type} />
+          </>
         ) : (
-          <PurchaseButton
-            className="dashboard-item__button"
-            product={product}
-            courseRun={enrollment.course_run}
-          />
+          <FormattedMessage {...messages.buyProductCertificateLabel} />
         )}
       </div>
-    </CourseProductProvider>
+      {activeOrder ? (
+        activeOrder.certificate_id && (
+          <DownloadCertificateButton
+            className="dashboard-item__button"
+            certificateId={activeOrder.certificate_id}
+          />
+        )
+      ) : (
+        <PurchaseButton
+          className="dashboard-item__button"
+          product={product}
+          courseRun={enrollment.course_run}
+          course={enrollment.course_run.course}
+        />
+      )}
+    </div>
   );
 };
 

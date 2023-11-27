@@ -18,7 +18,6 @@ import { Deferred } from 'utils/test/deferred';
 import { CourseStateTextEnum, Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { IntlHelper } from 'utils/IntlHelper';
-import { CourseProductProvider } from 'contexts/CourseProductContext';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { CourseRunList, EnrollableCourseRunList, EnrolledCourseRun } from '.';
 
@@ -119,17 +118,11 @@ describe('CourseProductCourseRuns', () => {
   });
 
   describe('EnrollableCourseRunList', () => {
-    const Wrapper = ({
-      productId,
-      code,
-      children,
-    }: PropsWithChildren<{ productId: string; code: string }>) => (
+    const Wrapper = ({ children }: PropsWithChildren) => (
       <IntlProvider locale="en">
-        <CourseProductProvider productId={productId} courseCode={code}>
-          <QueryClientProvider client={createTestQueryClient()}>
-            <JoanieApiProvider>{children}</JoanieApiProvider>
-          </QueryClientProvider>
-        </CourseProductProvider>
+        <QueryClientProvider client={createTestQueryClient()}>
+          <JoanieApiProvider>{children}</JoanieApiProvider>
+        </QueryClientProvider>
       </IntlProvider>
     );
 
@@ -138,7 +131,7 @@ describe('CourseProductCourseRuns', () => {
       const product = ProductFactory().one();
 
       render(
-        <Wrapper productId={order.product_id} code="00000">
+        <Wrapper>
           <EnrollableCourseRunList courseRuns={[]} order={order} product={product} />
         </Wrapper>,
       );
@@ -147,7 +140,6 @@ describe('CourseProductCourseRuns', () => {
     });
 
     it('renders a list of course runs with a call to action to enroll', async () => {
-      const course: CourseLight = CourseLightFactory().one();
       const courseRuns: CourseRun[] = CourseRunFactory().many(2);
       const order = CredentialOrderFactory().one();
       const product = ProductFactory({
@@ -155,7 +147,7 @@ describe('CourseProductCourseRuns', () => {
       }).one();
 
       render(
-        <Wrapper productId={order.product_id} code={course.code}>
+        <Wrapper>
           <EnrollableCourseRunList courseRuns={courseRuns} order={order} product={product} />
         </Wrapper>,
       );
@@ -269,7 +261,7 @@ describe('CourseProductCourseRuns', () => {
       fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, HttpStatusCode.OK);
 
       render(
-        <Wrapper productId={order.product_id} code={course.code}>
+        <Wrapper>
           <EnrollableCourseRunList courseRuns={courseRuns} order={order} product={product} />
         </Wrapper>,
       );
@@ -383,7 +375,7 @@ describe('CourseProductCourseRuns', () => {
       const order = CredentialOrderFactory().one();
 
       render(
-        <Wrapper productId={order.product_id} code="00000">
+        <Wrapper>
           <EnrollableCourseRunList courseRuns={[courseRun]} order={order} product={product} />
         </Wrapper>,
       );
@@ -466,7 +458,7 @@ describe('CourseProductCourseRuns', () => {
       const order = CredentialOrderFactory().one();
 
       render(
-        <Wrapper productId={order.product_id} code="00000">
+        <Wrapper>
           <EnrollableCourseRunList courseRuns={[courseRun]} order={order} product={product} />
         </Wrapper>,
       );
@@ -512,11 +504,9 @@ describe('CourseProductCourseRuns', () => {
   describe('EnrolledCourseRun', () => {
     const Wrapper = ({ children }: PropsWithChildren<{}>) => (
       <IntlProvider locale="en">
-        <CourseProductProvider productId="abc" courseCode="00000">
-          <QueryClientProvider client={createTestQueryClient()}>
-            <JoanieApiProvider>{children}</JoanieApiProvider>
-          </QueryClientProvider>
-        </CourseProductProvider>
+        <QueryClientProvider client={createTestQueryClient()}>
+          <JoanieApiProvider>{children}</JoanieApiProvider>
+        </QueryClientProvider>
       </IntlProvider>
     );
 

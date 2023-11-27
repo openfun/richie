@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { StorybookHelper } from 'utils/StorybookHelper';
-import { AddressFactory, ProductFactory } from 'utils/test/factories/joanie';
+import { AddressFactory, CourseLightFactory, ProductFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { UserFactory } from 'utils/test/factories/richie';
 import CourseProductItem from '.';
@@ -40,6 +40,6 @@ type Story = StoryObj<typeof CourseProductItem>;
 export const Default: Story = {
   args: {
     productId: 'AAA',
-    courseCode: 'BBB',
+    course: CourseLightFactory({ code: 'BBB' }).one(),
   },
 };

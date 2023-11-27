@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
-import type * as Joanie from 'types/Joanie';
+import { useSaleTunnelContext } from 'components/SaleTunnel/context';
 import TargetCourseDetail from './TargetCourseDetail';
 import CourseRunsList from './CourseRunsList';
 
@@ -19,15 +19,11 @@ const messages = defineMessages({
 
 interface SaleTunnelStepValidationProps {
   next: () => void;
-  product: Joanie.Product;
-  courseRun?: Joanie.CourseRun;
 }
 
-export const SaleTunnelStepValidation = ({
-  product,
-  courseRun,
-  next,
-}: SaleTunnelStepValidationProps) => {
+export const SaleTunnelStepValidation = ({ next }: SaleTunnelStepValidationProps) => {
+  const { product, courseRun } = useSaleTunnelContext();
+
   return (
     <section className="SaleTunnelStepValidation">
       <header className="SaleTunnelStepValidation__header">

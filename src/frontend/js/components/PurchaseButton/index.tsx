@@ -41,6 +41,7 @@ const messages = defineMessages({
 
 interface PurchaseButtonProps {
   product: Joanie.Product;
+  course: Joanie.CourseLight;
   courseRun?: Joanie.CourseRun;
   disabled?: boolean;
   className?: string;
@@ -48,6 +49,7 @@ interface PurchaseButtonProps {
 
 const PurchaseButton = ({
   product,
+  course,
   courseRun,
   disabled = false,
   className,
@@ -126,6 +128,7 @@ const PurchaseButton = ({
         isOpen={isSaleTunnelOpen}
         product={product}
         courseRun={courseRun}
+        course={course}
         onClose={() => setIsSaleTunnelOpen(false)}
       />
     </>
