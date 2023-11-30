@@ -70,7 +70,7 @@ const JoanieEnrollmentApiInterface = (): APILms['enrollment'] => {
       return new Promise((resolve, reject) => {
         const courseRunId = extractResourceId(url, 'course_run');
         joanieAPI.user.enrollments
-          .get<{ id?: string; course_run: string }>({ course_run: courseRunId as string })
+          .get({ course_run_id: courseRunId as string })
           .then((res) => {
             if (res.count > 0) {
               resolve(res.results[0]);
