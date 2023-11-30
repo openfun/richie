@@ -5,12 +5,12 @@ import { PropsWithChildren, useMemo, useState } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import { Priority } from 'types';
-import { CourseRun, Order, Product, ProductType } from 'types/Joanie';
+import { CourseRun, Enrollment, Order, Product, ProductType } from 'types/Joanie';
 import {
   CertificateProductFactory,
   CourseLightFactory,
-  CourseRunFactory,
   CredentialProductFactory,
+  EnrollmentFactory,
 } from 'utils/test/factories/joanie';
 import { User } from 'types/User';
 import { Maybe } from 'types/utils';
@@ -28,8 +28,8 @@ describe('SaleTunnelStepValidation', () => {
     children,
     user,
     product,
-    courseRun,
-  }: PropsWithChildren<{ user?: User; product: Product; courseRun?: CourseRun }>) => {
+    enrollment,
+  }: PropsWithChildren<{ user?: User; product: Product; enrollment?: Enrollment }>) => {
     const [order, setOrder] = useState<Maybe<Order>>();
     const context: SaleTunnelContextType = useMemo(
       () => ({
@@ -38,9 +38,9 @@ describe('SaleTunnelStepValidation', () => {
         setOrder,
         course: CourseLightFactory({ code: '00000' }).one(),
         key: `00000+${product.id}`,
-        courseRun,
+        enrollment,
       }),
-      [product, order, setOrder, courseRun],
+      [product, order, setOrder, enrollment],
     );
 
     return (
@@ -140,16 +140,17 @@ describe('SaleTunnelStepValidation', () => {
 
   it('shows product certificate linked course run informations', () => {
     const product = CertificateProductFactory().one();
-    const courseRun = CourseRunFactory().one();
+    const enrollment = EnrollmentFactory().one();
+
     render(
-      <Wrapper product={product} courseRun={courseRun}>
+      <Wrapper product={product} enrollment={enrollment}>
         <SaleTunnelStepValidation next={jest.fn()} />
       </Wrapper>,
     );
     expect(
       screen.getByRole('heading', {
         level: 3,
-        name: courseRun.course.title,
+        name: enrollment.course_run.course.title,
       }),
     ).toBeInTheDocument();
     expect(screen.getByTestId('course-run-list-item')).toBeInTheDocument();
