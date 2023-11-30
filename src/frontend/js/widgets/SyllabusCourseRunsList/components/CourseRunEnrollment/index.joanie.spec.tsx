@@ -58,7 +58,7 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
 
     const enrollmentDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`,
+      `${endpoint}/api/v1.0/enrollments/?course_run_id=${courseRun.id}`,
       enrollmentDeferred.promise,
     );
 
@@ -125,7 +125,7 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
 
     const enrollmentDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`,
+      `${endpoint}/api/v1.0/enrollments/?course_run_id=${courseRun.id}`,
       enrollmentDeferred.promise,
     );
 
@@ -180,7 +180,7 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
 
     const enrollmentDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`,
+      `${endpoint}/api/v1.0/enrollments/?course_run_id=${courseRun.id}`,
       enrollmentDeferred.promise,
     );
 
@@ -219,7 +219,7 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
 
     const enrollmentDeferred = new Deferred();
     fetchMock.get(
-      `${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`,
+      `${endpoint}/api/v1.0/enrollments/?course_run_id=${courseRun.id}`,
       enrollmentDeferred.promise,
     );
 
