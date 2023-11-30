@@ -24,7 +24,7 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
         </div>
       </div>,
     ];
-    enrollment.product_relations.forEach((product) => {
+    enrollment.product_relations.forEach(({ product }) => {
       if (product.type === ProductType.CERTIFICATE) {
         partialFooterList.push(
           <ProductCertificateFooter

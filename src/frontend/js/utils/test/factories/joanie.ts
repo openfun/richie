@@ -55,7 +55,7 @@ export const EnrollmentFactory = factory((): Enrollment => {
     id: faker.string.uuid(),
     course_run: CourseRunWithCourseFactory().one(),
     is_active: true,
-    product_relations: ProductFactory().many(1),
+    product_relations: CourseProductRelationFactory().many(1),
     state: EnrollmentState.SET,
     was_created_by_order: false,
     created_on: faker.date.past({ years: 1 }).toISOString(),

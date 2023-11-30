@@ -43,6 +43,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
   if (!activeOrder && !isOpenedCourseRunCertificate(enrollment.course_run.state)) {
     return null;
   }
+
   return (
     <div className="dashboard-item__course-enrolling__infos">
       <div className="dashboard-item__block__status">
@@ -67,8 +68,8 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
         <PurchaseButton
           className="dashboard-item__button"
           product={product}
-          courseRun={enrollment.course_run}
           course={enrollment.course_run.course}
+          enrollment={enrollment}
         />
       )}
     </div>

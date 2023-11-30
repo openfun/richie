@@ -166,7 +166,7 @@ export interface Enrollment {
   was_created_by_order: boolean;
   created_on: string;
   orders: OrderEnrollment[];
-  product_relations: Product[];
+  product_relations: CourseProductRelation[];
   certificate_id?: string;
 }
 
