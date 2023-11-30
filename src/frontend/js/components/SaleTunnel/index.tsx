@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
-import { CourseLight, CourseRun, Order, Product } from 'types/Joanie';
+import { CourseLight, Order, Product } from 'types/Joanie';
 import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
 import { Maybe } from 'types/utils';
+import * as Joanie from 'types/Joanie';
 import { SaleTunnelContext, SaleTunnelContextType } from './context';
 import { StepBreadcrumb } from './components/StepBreadcrumb';
 import { SaleTunnelStepValidation } from './components/SaleTunnelStepValidation';
@@ -44,12 +45,12 @@ const focusCurrentStep = (container: HTMLElement) => {
 type Props = {
   product: Product;
   course: CourseLight;
-  courseRun?: CourseRun;
+  enrollment?: Joanie.Enrollment;
   isOpen: boolean;
   onClose: () => void;
 };
 
-const SaleTunnel = ({ product, courseRun, course, isOpen = false, onClose }: Props) => {
+const SaleTunnel = ({ product, course, isOpen = false, onClose, enrollment }: Props) => {
   const intl = useIntl();
   const {
     methods: { refetch: refetchOmniscientOrders },
@@ -116,9 +117,9 @@ const SaleTunnel = ({ product, courseRun, course, isOpen = false, onClose }: Pro
       setOrder,
       key,
       course,
-      courseRun,
+      enrollment,
     }),
-    [product, order, setOrder, key, course, courseRun],
+    [product, order, setOrder, key, course, enrollment],
   );
 
   /**

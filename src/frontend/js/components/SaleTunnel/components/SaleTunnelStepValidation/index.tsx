@@ -22,7 +22,7 @@ interface SaleTunnelStepValidationProps {
 }
 
 export const SaleTunnelStepValidation = ({ next }: SaleTunnelStepValidationProps) => {
-  const { product, courseRun } = useSaleTunnelContext();
+  const { product, enrollment } = useSaleTunnelContext();
 
   return (
     <section className="SaleTunnelStepValidation">
@@ -39,9 +39,9 @@ export const SaleTunnelStepValidation = ({ next }: SaleTunnelStepValidationProps
         </strong>
       </header>
       <ol className="SaleTunnelStepValidation__product-detail-list">
-        {courseRun ? (
+        {enrollment?.course_run ? (
           <li
-            key={`SaleTunnelStepValidation__product-detail-row--${courseRun.course.code}`}
+            key={`SaleTunnelStepValidation__product-detail-row--${enrollment.course_run.course.code}`}
             className="SaleTunnelStepValidation__product-detail-row product-detail-row product-detail-row--course"
             data-testid="product-course"
           >
@@ -50,8 +50,8 @@ export const SaleTunnelStepValidation = ({ next }: SaleTunnelStepValidationProps
                 <use href="#icon-check" />
               </svg>
             </span>
-            <h3 className="product-detail-row__summary h4">{courseRun.course.title}</h3>
-            <CourseRunsList courseRuns={[courseRun]} />
+            <h3 className="product-detail-row__summary h4">{enrollment.course_run.course.title}</h3>
+            <CourseRunsList courseRuns={[enrollment.course_run]} />
           </li>
         ) : (
           product.target_courses.map((targetCourse) => (

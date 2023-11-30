@@ -42,7 +42,7 @@ const messages = defineMessages({
 interface PurchaseButtonProps {
   product: Joanie.Product;
   course: Joanie.CourseLight;
-  courseRun?: Joanie.CourseRun;
+  enrollment?: Joanie.Enrollment;
   disabled?: boolean;
   className?: string;
 }
@@ -50,7 +50,7 @@ interface PurchaseButtonProps {
 const PurchaseButton = ({
   product,
   course,
-  courseRun,
+  enrollment,
   disabled = false,
   className,
 }: PurchaseButtonProps) => {
@@ -60,12 +60,12 @@ const PurchaseButton = ({
 
   const hasAtLeastOneCourseRun = useMemo(() => {
     if (product.type === Joanie.ProductType.CERTIFICATE) {
-      if (!courseRun) {
+      if (!enrollment?.course_run) {
         throw new Error(
           'Unable to instanciate PurchaseButton with a product CERTIFICATE without the according CourseRun.',
         );
       }
-      return isOpenedCourseRunCertificate(courseRun.state);
+      return isOpenedCourseRunCertificate(enrollment.course_run.state);
     }
     return (
       product.target_courses.length > 0 &&
@@ -127,7 +127,7 @@ const PurchaseButton = ({
       <SaleTunnel
         isOpen={isSaleTunnelOpen}
         product={product}
-        courseRun={courseRun}
+        enrollment={enrollment}
         course={course}
         onClose={() => setIsSaleTunnelOpen(false)}
       />

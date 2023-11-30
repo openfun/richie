@@ -1,10 +1,10 @@
 import { createContext, useContext } from 'react';
-import { CourseLight, CourseRun, Order, Product } from 'types/Joanie';
+import { CourseLight, Order, Product, Enrollment } from 'types/Joanie';
 
 export interface SaleTunnelContextType {
   product: Product;
   order?: Order;
-  courseRun?: CourseRun;
+  enrollment?: Enrollment;
   setOrder: (order: Order) => void;
   key: string;
   course: CourseLight;
