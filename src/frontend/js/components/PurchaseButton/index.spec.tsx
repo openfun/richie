@@ -7,7 +7,7 @@ import {
   CourseStateFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
-import { CourseLightFactory, CourseRunFactory, ProductFactory } from 'utils/test/factories/joanie';
+import { CourseLightFactory, EnrollmentFactory, ProductFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ProductType } from 'types/Joanie';
@@ -260,9 +260,8 @@ describe('PurchaseButton', () => {
     'renders a disabled CTA for product certificate if the linked course run is not open',
     async ({ courseRunStateData }) => {
       const product = ProductFactory({ type: ProductType.CERTIFICATE }).one();
-      const courseRun = CourseRunFactory({
-        state: CourseStateFactory(courseRunStateData).one(),
-      }).one();
+      const enrollment = EnrollmentFactory().one();
+      enrollment.course_run.state = CourseStateFactory(courseRunStateData).one();
       fetchMock
         .get('https://joanie.test/api/v1.0/addresses/', [])
         .get('https://joanie.test/api/v1.0/credit-cards/', [])
@@ -274,7 +273,7 @@ describe('PurchaseButton', () => {
             <PurchaseButton
               product={product}
               disabled={false}
-              courseRun={courseRun}
+              enrollment={enrollment}
               course={CourseLightFactory({ code: '00000' }).one()}
             />
           </Wrapper>,
@@ -321,9 +320,8 @@ describe('PurchaseButton', () => {
     'do not renders a disabled CTA for product certificate if the linked course run is open',
     async ({ courseRunStateData }) => {
       const product = ProductFactory({ type: ProductType.CERTIFICATE }).one();
-      const courseRun = CourseRunFactory({
-        state: CourseStateFactory(courseRunStateData).one(),
-      }).one();
+      const enrollment = EnrollmentFactory().one();
+      enrollment.course_run.state = CourseStateFactory(courseRunStateData).one();
 
       fetchMock
         .get('https://joanie.test/api/v1.0/addresses/', [])
@@ -336,7 +334,7 @@ describe('PurchaseButton', () => {
             <PurchaseButton
               product={product}
               disabled={false}
-              courseRun={courseRun}
+              enrollment={enrollment}
               course={CourseLightFactory({ code: '00000' }).one()}
             />
           </Wrapper>,

@@ -6,7 +6,7 @@ import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useOmniscientOrders } from 'hooks/useOrders';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
-import { OrderState } from 'types/Joanie';
+import { OrderCreationPayload, OrderState, ProductType } from 'types/Joanie';
 import type { Nullable } from 'types/utils';
 import { HttpError } from 'utils/errors/HttpError';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
@@ -97,9 +97,8 @@ enum ComponentStates {
 const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonProps) => {
   const intl = useIntl();
   const API = useJoanieApi();
-  const { setOrder, product } = useSaleTunnelContext();
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const { course, key } = useSaleTunnelContext();
+  const { course, key, enrollment, product, setOrder } = useSaleTunnelContext();
   const { item: order } = useProductOrder({ courseCode: course.code, productId: product.id });
   const orderManager = useOmniscientOrders();
   const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
@@ -193,21 +192,26 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
     if (order) {
       createPayment(order.id);
     } else {
-      orderManager.methods.create(
-        {
-          course_code: course.code,
-          product_id: product.id,
+      const payload: OrderCreationPayload =
+        product.type === ProductType.CERTIFICATE
+          ? {
+              product_id: product.id,
+              enrollment_id: enrollment!.id,
+            }
+          : {
+              product_id: product.id,
+              course_code: course.code,
+            };
+
+      orderManager.methods.create(payload, {
+        onSuccess: (newOrder) => {
+          setOrder(newOrder);
+          createPayment(newOrder.id);
         },
-        {
-          onSuccess: (newOrder) => {
-            setOrder(newOrder);
-            createPayment(newOrder.id);
-          },
-          onError: async () => {
-            setState(ComponentStates.ERROR);
-          },
+        onError: async () => {
+          setState(ComponentStates.ERROR);
         },
-      );
+      });
     }
   };
 
