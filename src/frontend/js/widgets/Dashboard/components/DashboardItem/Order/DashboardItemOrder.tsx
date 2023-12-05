@@ -82,7 +82,6 @@ export const DashboardItemOrder = ({
   const intl = useIntl();
   const {
     item: courseProductRelation,
-    // here
     states: { isFetched: isCourseProductRelationFetched },
   } = useCourseProduct(course.code, { productId: order.product_id });
   const { product } = courseProductRelation || {};
