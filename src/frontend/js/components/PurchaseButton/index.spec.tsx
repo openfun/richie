@@ -7,7 +7,12 @@ import {
   CourseStateFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
-import { CourseLightFactory, EnrollmentFactory, ProductFactory } from 'utils/test/factories/joanie';
+import {
+  CertificateProductFactory,
+  CourseLightFactory,
+  EnrollmentFactory,
+  ProductFactory,
+} from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ProductType } from 'types/Joanie';
@@ -201,15 +206,15 @@ describe('PurchaseButton', () => {
   });
 
   it.each([
-    { label: 'Product credential', productData: { type: ProductType.CREDENTIAL } },
+    { label: 'Product credential', productData: {} },
     {
       label: 'Product credential without remaining orders',
-      productData: { remaining_order_count: 0, type: ProductType.CREDENTIAL },
+      productData: { remaining_order_count: 0 },
     },
   ])(
     'renders a disabled CTA if one target course has no course runs. Case "$label"',
     async ({ productData }) => {
-      const product = ProductFactory(productData).one();
+      const product = ProductFactory({ ...productData, type: ProductType.CREDENTIAL }).one();
       product.target_courses[0].course_runs = [];
       fetchMock
         .get('https://joanie.test/api/v1.0/addresses/', [])
@@ -259,7 +264,7 @@ describe('PurchaseButton', () => {
   ])(
     'renders a disabled CTA for product certificate if the linked course run is not open',
     async ({ courseRunStateData }) => {
-      const product = ProductFactory({ type: ProductType.CERTIFICATE }).one();
+      const product = CertificateProductFactory().one();
       const enrollment = EnrollmentFactory().one();
       enrollment.course_run.state = CourseStateFactory(courseRunStateData).one();
       fetchMock
@@ -270,12 +275,7 @@ describe('PurchaseButton', () => {
       act(() => {
         render(
           <Wrapper client={createTestQueryClient({ user: true })}>
-            <PurchaseButton
-              product={product}
-              disabled={false}
-              enrollment={enrollment}
-              course={CourseLightFactory({ code: '00000' }).one()}
-            />
+            <PurchaseButton product={product} disabled={false} enrollment={enrollment} />
           </Wrapper>,
         );
       });
@@ -319,7 +319,7 @@ describe('PurchaseButton', () => {
   ])(
     'do not renders a disabled CTA for product certificate if the linked course run is open',
     async ({ courseRunStateData }) => {
-      const product = ProductFactory({ type: ProductType.CERTIFICATE }).one();
+      const product = CertificateProductFactory().one();
       const enrollment = EnrollmentFactory().one();
       enrollment.course_run.state = CourseStateFactory(courseRunStateData).one();
 
@@ -331,12 +331,7 @@ describe('PurchaseButton', () => {
       act(() => {
         render(
           <Wrapper client={createTestQueryClient({ user: true })}>
-            <PurchaseButton
-              product={product}
-              disabled={false}
-              enrollment={enrollment}
-              course={CourseLightFactory({ code: '00000' }).one()}
-            />
+            <PurchaseButton product={product} disabled={false} enrollment={enrollment} />
           </Wrapper>,
         );
       });

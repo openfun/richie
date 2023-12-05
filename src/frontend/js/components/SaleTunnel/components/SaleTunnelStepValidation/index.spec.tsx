@@ -5,7 +5,14 @@ import { PropsWithChildren, useMemo, useState } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import { Priority } from 'types';
-import { CourseRun, Enrollment, Order, Product, ProductType } from 'types/Joanie';
+import {
+  CourseRun,
+  Enrollment,
+  Order,
+  Product,
+  ProductType,
+  isCertificateProduct,
+} from 'types/Joanie';
 import {
   CertificateProductFactory,
   CourseLightFactory,
@@ -31,17 +38,24 @@ describe('SaleTunnelStepValidation', () => {
     enrollment,
   }: PropsWithChildren<{ user?: User; product: Product; enrollment?: Enrollment }>) => {
     const [order, setOrder] = useState<Maybe<Order>>();
-    const context: SaleTunnelContextType = useMemo(
-      () => ({
+    const context: SaleTunnelContextType = useMemo(() => {
+      if (isCertificateProduct(product)) {
+        return {
+          product,
+          order,
+          setOrder,
+          key: `${enrollment!.id}+${product.id}`,
+          enrollment: enrollment!,
+        };
+      }
+      return {
         product,
         order,
         setOrder,
         course: CourseLightFactory({ code: '00000' }).one(),
         key: `00000+${product.id}`,
-        enrollment,
-      }),
-      [product, order, setOrder, enrollment],
-    );
+      };
+    }, [product, order, setOrder, enrollment]);
 
     return (
       <QueryClientProvider client={createTestQueryClient({ user: user || true })}>
@@ -63,18 +77,16 @@ describe('SaleTunnelStepValidation', () => {
     { productType: ProductType.CREDENTIAL, instructions: false },
   ])('shows generic informations for product %s', async ({ productType, instructions }) => {
     const productInstructions = instructions ? '<h2>Product instructions</h2>' : null;
-    let product = CredentialProductFactory({
-      instructions: productInstructions,
-    }).one();
-    if (productType === ProductType.CERTIFICATE) {
-      product = CertificateProductFactory({
-        instructions: productInstructions,
-      }).one();
-    }
+    const product =
+      productType === ProductType.CERTIFICATE
+        ? CertificateProductFactory({ instructions: productInstructions }).one()
+        : CredentialProductFactory({ instructions: productInstructions }).one();
+    const enrollment =
+      productType === ProductType.CERTIFICATE ? EnrollmentFactory().one() : undefined;
 
     const mockNext = jest.fn();
     render(
-      <Wrapper product={product}>
+      <Wrapper product={product} enrollment={enrollment}>
         <SaleTunnelStepValidation next={mockNext} />
       </Wrapper>,
     );

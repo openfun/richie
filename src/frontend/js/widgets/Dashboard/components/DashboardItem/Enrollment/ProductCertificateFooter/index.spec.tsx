@@ -2,7 +2,7 @@ import { IntlProvider } from 'react-intl';
 import { render, screen } from '@testing-library/react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
-import { CourseLight, OrderState, Product, ProductType } from 'types/Joanie';
+import { CertificateProduct, CourseLight, OrderState, ProductType } from 'types/Joanie';
 import {
   CourseStateFactory,
   UserFactory,
@@ -14,7 +14,7 @@ import {
   CourseRunFactory,
   OrderEnrollmentFactory,
   EnrollmentFactory,
-  ProductFactory,
+  CertificateProductFactory,
 } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -39,7 +39,7 @@ describe('<ProductCertificateFooter/>', () => {
       </QueryClientProvider>
     </IntlProvider>
   );
-  let product: Product;
+  let product: CertificateProduct;
   let course: CourseLight;
 
   beforeAll(() => {
@@ -54,7 +54,7 @@ describe('<ProductCertificateFooter/>', () => {
     fetchMock.get('https://joanie.endpoint.test/api/v1.0/credit-cards/', []);
     fetchMock.get('https://joanie.endpoint.test/api/v1.0/orders/', []);
 
-    product = ProductFactory({ type: ProductType.CERTIFICATE }).one();
+    product = CertificateProductFactory({ type: ProductType.CERTIFICATE }).one();
     course = CourseLightFactory().one();
   });
 
@@ -152,18 +152,17 @@ describe('<ProductCertificateFooter/>', () => {
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
 
-  it.each<ProductType>([ProductType.CERTIFICATE, ProductType.CREDENTIAL])(
-    'should not display button (download or purchase) for a course run with order but without certificate (product type: "%s").',
-    async ([productType]) => {
-      product.type = productType as ProductType;
-      const order = OrderEnrollmentFactory({ certificate_id: undefined }).one();
-      const enrollment = EnrollmentFactory({
-        orders: [order],
-        course_run: CourseRunFactory({ course }).one(),
-      }).one();
-      render(<Wrapper product={product} enrollment={enrollment} />);
-      expect(await screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
-      expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
-    },
-  );
+  it('should not display button (download or purchase) for a course run with order but without certificate.', async () => {
+    const order = OrderEnrollmentFactory({
+      certificate_id: undefined,
+      product_id: product.id,
+    }).one();
+    const enrollment = EnrollmentFactory({
+      orders: [order],
+      course_run: CourseRunFactory({ course }).one(),
+    }).one();
+    render(<Wrapper product={product} enrollment={enrollment} />);
+    expect(await screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
+    expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
+  });
 });

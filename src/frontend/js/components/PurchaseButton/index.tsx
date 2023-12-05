@@ -39,14 +39,23 @@ const messages = defineMessages({
   },
 });
 
-interface PurchaseButtonProps {
-  product: Joanie.Product;
-  course: Joanie.CourseLight;
-  // If the product is a credential, the orderGroup can be required.
+interface PurchaseButtonPropsBase {
+  product: Joanie.CredentialProduct | Joanie.CertificateProduct;
   orderGroup?: Joanie.OrderGroup;
-  enrollment?: Joanie.Enrollment;
   disabled?: boolean;
   className?: string;
+}
+
+interface CredentialPurchaseButtonProps extends PurchaseButtonPropsBase {
+  product: Joanie.CredentialProduct;
+  course: Joanie.CourseLight;
+  enrollment?: undefined;
+}
+
+interface CertificatePurchaseButtonProps extends PurchaseButtonPropsBase {
+  product: Joanie.CertificateProduct;
+  course?: undefined;
+  enrollment: Joanie.Enrollment;
 }
 
 const PurchaseButton = ({
@@ -56,7 +65,7 @@ const PurchaseButton = ({
   orderGroup,
   disabled = false,
   className,
-}: PurchaseButtonProps) => {
+}: CredentialPurchaseButtonProps | CertificatePurchaseButtonProps) => {
   const intl = useIntl();
   const { user, login } = useSession();
   const [isSaleTunnelOpen, setIsSaleTunnelOpen] = useState(false);
@@ -129,11 +138,11 @@ const PurchaseButton = ({
       )}
       <SaleTunnel
         isOpen={isSaleTunnelOpen}
+        onClose={() => setIsSaleTunnelOpen(false)}
         product={product}
         enrollment={enrollment}
         orderGroup={orderGroup}
         course={course}
-        onClose={() => setIsSaleTunnelOpen(false)}
       />
     </>
   );

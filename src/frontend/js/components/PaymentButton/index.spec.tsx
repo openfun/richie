@@ -3,6 +3,8 @@ import fetchMock from 'fetch-mock';
 import { PropsWithChildren, useMemo, useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { faker } from '@faker-js/faker';
+import queryString from 'query-string';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   AddressFactory,
@@ -15,6 +17,7 @@ import {
   CreditCardFactory,
   OrderGroupFactory,
   CourseLightFactory,
+  EnrollmentFactory,
 } from 'utils/test/factories/joanie';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
@@ -23,15 +26,21 @@ import {
   OrderState,
   ProductType,
   Order,
-  Product,
   OrderGroup,
+  CertificateProduct,
+  CredentialProduct,
 } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { Maybe } from 'types/utils';
 import { noop } from 'utils';
-import { SaleTunnelContextType, SaleTunnelContext } from 'components/SaleTunnel/context';
+import {
+  SaleTunnelContextType,
+  SaleTunnelContext,
+  SaleTunnelCredentialContext,
+  SaleTunnelCertificateContext,
+} from 'components/SaleTunnel/context';
 import PaymentButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -66,6 +75,9 @@ describe.each([
   'PaymentButton for $productType product',
   ({ productType, ProductFactory, OrderWithOneClickPaymentFactory, OrderWithPaymentFactory }) => {
     let nbApiCalls: number;
+    const TEST_COURSE_CODE = '00000';
+    const TEST_ENROLLMENT_ID = faker.string.uuid();
+
     const formatPrice = (price: number, currency: string) =>
       new Intl.NumberFormat('en', {
         currency,
@@ -77,20 +89,34 @@ describe.each([
       children,
       product,
       orderGroup,
-    }: PropsWithChildren<{ client?: QueryClient; product: Product; orderGroup?: OrderGroup }>) => {
+    }: PropsWithChildren<{
+      client?: QueryClient;
+      product: CredentialProduct | CertificateProduct;
+      orderGroup?: OrderGroup;
+    }>) => {
       const [order, setOrder] = useState<Maybe<Order>>();
 
-      const context: SaleTunnelContextType = useMemo(
-        () => ({
-          product,
-          order,
-          setOrder,
-          course: CourseLightFactory({ code: '00000' }).one(),
-          key: `00000+${product.id}`,
-          orderGroup,
-        }),
-        [product, order, setOrder, orderGroup],
-      );
+      const context: SaleTunnelContextType = useMemo(() => {
+        if (product.type === ProductType.CREDENTIAL) {
+          return {
+            product,
+            order,
+            setOrder,
+            key: `${TEST_COURSE_CODE}+${product.id}`,
+            course: CourseLightFactory({ code: TEST_COURSE_CODE }).one(),
+            orderGroup,
+          } as SaleTunnelCredentialContext;
+        } else {
+          return {
+            product,
+            order,
+            setOrder,
+            key: `${TEST_ENROLLMENT_ID}+${product.id}`,
+            enrollment: EnrollmentFactory({ id: TEST_ENROLLMENT_ID }).one(),
+            orderGroup,
+          } as SaleTunnelCertificateContext;
+        }
+      }, [product, order, setOrder, orderGroup]);
 
       return (
         <IntlProvider locale="en">
@@ -126,10 +152,24 @@ describe.each([
 
     it('should render a payment button', async () => {
       const product: Joanie.Product = ProductFactory().one();
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
         [],
       );
+
       render(
         <Wrapper product={product}>
           <PaymentButton onSuccess={jest.fn()} />
@@ -165,10 +205,24 @@ describe.each([
       const product: Joanie.Product = ProductFactory().one();
       const creditCard: Joanie.CreditCard = CreditCardFactory().one();
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
         [],
       );
+
       const { rerender } = render(
         <Wrapper product={product}>
           <PaymentButton creditCard={creditCard.id} onSuccess={jest.fn()} />
@@ -203,10 +257,24 @@ describe.each([
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
         [],
       );
+
       render(
         <Wrapper product={product}>
           <PaymentButton billingAddress={billingAddress} onSuccess={jest.fn()} />
@@ -226,9 +294,23 @@ describe.each([
       const billingAddress: Joanie.Address = AddressFactory().one();
       const handleSuccess = jest.fn();
       const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
+
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
           [],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -335,9 +417,22 @@ describe.each([
         state: OrderState.SUBMITTED,
       };
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
           [initialOrder],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -375,7 +470,7 @@ describe.each([
 
       // - User clicks on pay button
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
         [orderSubmitted],
         { overwriteRoutes: true },
       );
@@ -451,9 +546,22 @@ describe.each([
       };
       const handleSuccess = jest.fn();
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
           [orderSubmitted],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -478,7 +586,7 @@ describe.each([
       nbApiCalls += 1; // fetcher order for userProductOrder
       const apiCalls = fetchMock.calls().map((call) => call[0]);
       expect(apiCalls).toContain(
-        `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
       );
 
       const $terms = screen.getByLabelText('By checking this box, you accept the');
@@ -559,10 +667,22 @@ describe.each([
       const billingAddress: Joanie.Address = AddressFactory().one();
       const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
       const handleSuccess = jest.fn();
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
 
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course_code=00000&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
           [],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)
@@ -639,8 +759,21 @@ describe.each([
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
         [],
       );
 
@@ -679,9 +812,22 @@ describe.each([
         product.contract_definition!.id
       }/preview_template/`;
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
           [],
         )
         .get(PREVIEW_URL, 'preview content');
@@ -720,9 +866,22 @@ describe.each([
 
       const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
 
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
       fetchMock
         .get(
-          `https://joanie.test/api/v1.0/orders/?course=00000&product=${product.id}&state=pending&state=validated&state=submitted`,
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
           [],
         )
         .post('https://joanie.test/api/v1.0/orders/', order)

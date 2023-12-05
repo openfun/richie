@@ -109,6 +109,19 @@ export interface Product {
   contract_definition?: ContractDefinition;
 }
 
+export interface CredentialProduct extends Product {
+  type: ProductType.CREDENTIAL;
+}
+
+export interface CertificateProduct extends Product {
+  type: ProductType.CERTIFICATE;
+}
+export const isCertificateProduct = (
+  entity: Product | CertificateProduct | CredentialProduct,
+): entity is CertificateProduct => {
+  return entity.type === ProductType.CERTIFICATE;
+};
+
 export interface CourseProduct extends Product {
   order: Nullable<OrderLite>;
 }
@@ -330,21 +343,19 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
   is_main?: boolean;
 }
 
-interface OrderProductCreationPayload {
+interface AbstractOrderProductCreationPayload {
   product_id: Product['id'];
   order_group_id?: OrderGroup['id'];
 }
 
-interface OrderProductCertificateCreationPayload extends OrderProductCreationPayload {
+interface OrderCertificateCreationPayload extends AbstractOrderProductCreationPayload {
   enrollment_id: Enrollment['id'];
 }
-export interface OrderCredentialCreationPayload extends OrderProductCreationPayload {
+export interface OrderCredentialCreationPayload extends AbstractOrderProductCreationPayload {
   course_code: CourseLight['code'];
 }
 
-export type OrderCreationPayload =
-  | OrderProductCertificateCreationPayload
-  | OrderCredentialCreationPayload;
+export type OrderCreationPayload = OrderCertificateCreationPayload | OrderCredentialCreationPayload;
 
 interface OrderAbortPayload {
   id: Order['id'];

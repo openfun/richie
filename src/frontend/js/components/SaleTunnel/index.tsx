@@ -1,14 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
-import { CourseLight, Order, Product, OrderGroup } from 'types/Joanie';
+import {
+  CourseLight,
+  Order,
+  OrderGroup,
+  CertificateProduct,
+  CredentialProduct,
+  Enrollment,
+  ProductType,
+} from 'types/Joanie';
 import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { IconTypeEnum } from 'components/Icon';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
 import { Maybe } from 'types/utils';
-import * as Joanie from 'types/Joanie';
 import { SaleTunnelContext, SaleTunnelContextType } from './context';
 import { StepBreadcrumb } from './components/StepBreadcrumb';
 import { SaleTunnelStepValidation } from './components/SaleTunnelStepValidation';
@@ -42,23 +49,23 @@ const focusCurrentStep = (container: HTMLElement) => {
   }
 };
 
-type Props = {
-  product: Product;
-  course: CourseLight;
-  enrollment?: Joanie.Enrollment;
-  orderGroup?: OrderGroup;
+interface SaleTunnelProps {
   isOpen: boolean;
   onClose: () => void;
-};
+  course?: CourseLight;
+  enrollment?: Enrollment;
+  product: CredentialProduct | CertificateProduct;
+  orderGroup?: OrderGroup;
+}
 
 const SaleTunnel = ({
   product,
   course,
-  orderGroup,
   isOpen = false,
   onClose,
   enrollment,
-}: Props) => {
+  orderGroup,
+}: SaleTunnelProps) => {
   const intl = useIntl();
   const {
     methods: { refetch: refetchOmniscientOrders },
@@ -66,7 +73,9 @@ const SaleTunnel = ({
   const {
     methods: { invalidate: invalidateOrders },
   } = useOrders(undefined, { enabled: false });
-  const key = `${course.code}+${product.id}`;
+  const key = `${product.type === ProductType.CREDENTIAL ? course!.code : enrollment!.id}+${
+    product.id
+  }`;
 
   const [order, setOrder] = useState<Maybe<Order>>();
 
@@ -118,7 +127,29 @@ const SaleTunnel = ({
     reset();
   };
 
-  const context: SaleTunnelContextType = useMemo(
+  const context: SaleTunnelContextType = useMemo(() => {
+    if (product.type === ProductType.CREDENTIAL) {
+      return {
+        product: product as CredentialProduct,
+        order,
+        setOrder,
+        key,
+        course: course!,
+        enrollment: undefined,
+      };
+    } else {
+      return {
+        product: product as CertificateProduct,
+        order,
+        setOrder,
+        key,
+        course: undefined,
+        enrollment: enrollment!,
+      };
+    }
+  }, [product, order, setOrder]);
+
+  useMemo(
     () => ({
       product,
       order,
