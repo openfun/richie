@@ -70,22 +70,6 @@ export const useResourcesOmniscient = <
   }, [useResources.items, JSON.stringify(filters), actualMessages]);
 
   useEffect(() => {
-    // console.log('=====');
-    // console.log(
-    //   'useResourcesOmniscient::useEffect::useResources.states.fetching',
-    //   props.queryKey,
-    //   useResources.states.fetching,
-    // );
-    // console.log(
-    //   'useResourcesOmniscient::useEffect::useResources.items',
-    //   props.queryKey,
-    //   useResources.items,
-    // );
-    // console.log(
-    //   'useResourcesOmniscient::useEffect::JSON.stringify(filters)',
-    //   props.queryKey,
-    //   JSON.stringify(filters),
-    // );
     if (useResources.states.fetching) {
       return;
     }
