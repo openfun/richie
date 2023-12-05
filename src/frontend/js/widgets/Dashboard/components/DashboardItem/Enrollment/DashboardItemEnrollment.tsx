@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Enrollment, ProductType } from 'types/Joanie';
+import { Enrollment, isCertificateProduct } from 'types/Joanie';
 import { Enrolled } from '../DashboardItemCourseEnrolling';
 import { DashboardItem } from '..';
 import ProductCertificateFooter from './ProductCertificateFooter';
@@ -25,7 +25,7 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
       </div>,
     ];
     enrollment.product_relations.forEach(({ product }) => {
-      if (product.type === ProductType.CERTIFICATE) {
+      if (isCertificateProduct(product)) {
         partialFooterList.push(
           <ProductCertificateFooter
             key={[enrollment.id, product.id].join('_')}

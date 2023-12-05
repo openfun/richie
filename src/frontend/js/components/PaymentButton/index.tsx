@@ -99,7 +99,11 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
   const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
   const { course, key, enrollment, product, setOrder, orderGroup } = useSaleTunnelContext();
-  const { item: order } = useProductOrder({ courseCode: course.code, productId: product.id });
+  const { item: order } = useProductOrder({
+    courseCode: course?.code,
+    enrollmentId: enrollment?.id,
+    productId: product.id,
+  });
   const orderManager = useOmniscientOrders();
   const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
@@ -116,9 +120,12 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
 
   const isReadyToPay = useMemo(() => {
     return (
-      course.code && product.id && billingAddress && (termsAccepted || !product.contract_definition)
+      (course || enrollment) &&
+      product &&
+      billingAddress &&
+      (termsAccepted || !product.contract_definition)
     );
-  }, [product, course.code, billingAddress, termsAccepted]);
+  }, [product, course, enrollment, billingAddress, termsAccepted]);
 
   /**
    * Use Joanie API to retrieve an order and check if it's state is validated
@@ -200,7 +207,7 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
             }
           : {
               product_id: product.id,
-              course_code: course.code,
+              course_code: course!.code,
               ...(orderGroup ? { order_group_id: orderGroup.id } : {}),
             };
 

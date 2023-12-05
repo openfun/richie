@@ -1,11 +1,17 @@
 import { Children, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import c from 'classnames';
-import { ProductType, OrderState, CourseLight, Product, CredentialOrder } from 'types/Joanie';
+import {
+  ProductType,
+  OrderState,
+  CourseLight,
+  Product,
+  CredentialOrder,
+  CredentialProduct,
+} from 'types/Joanie';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import PurchaseButton from 'components/PurchaseButton';
 import { Maybe } from 'types/utils';
 import useDateFormat from 'hooks/useDateFormat';
 import { ProductHelper } from 'utils/ProductHelper';
@@ -15,6 +21,7 @@ import { handle } from 'utils/errors/handle';
 import { ProductSignatureHeader } from 'widgets/SyllabusCourseRunsList/components/CourseProductItem/components/ProductSignatureHeader';
 import CertificateItem from './components/CourseProductCertificateItem';
 import CourseRunItem from './components/CourseRunItem';
+import CourseProductItemFooter from './CourseProductItemFooter';
 
 const messages = defineMessages({
   purchased: {
@@ -43,22 +50,6 @@ const messages = defineMessages({
     defaultMessage: 'Available in {languages}',
     description: 'Course run languages',
     id: 'components.CourseProductItem.availableIn',
-  },
-  noSeatsAvailable: {
-    defaultMessage: 'Sorry, no seats available for now',
-    description: 'Message displayed when no seats are available for the product',
-    id: 'components.CourseProductItem.noSeatsAvailable',
-  },
-  nbSeatsAvailable: {
-    defaultMessage: `{
-nb,
-plural,
-=0 {No remaining seat}
-one {Last remaining seat!}
-other {# remaining seats}
-}`,
-    description: 'Message displayed when seats are available for the product',
-    id: 'components.CourseProductItem.nbSeatsAvailable',
   },
 });
 
@@ -167,6 +158,8 @@ const Content = ({ product, order }: { product: Product; order?: CredentialOrder
 };
 
 const CourseProductItem = ({ productId, course, compact = false }: CourseProductItemProps) => {
+  // FIXME(rlecellier): useCourseProduct need's a filter on product.type that only return
+  // CredentialOrder
   const { item: courseProductRelation, states: productQueryStates } = useCourseProduct(
     course.code,
     {
@@ -179,8 +172,6 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
     courseCode: course.code,
   });
 
-  // FIXME(rlecellier): useCourseProduct need's a filter on product.type that only return
-  // CredentialOrder
   const order = productOrder as CredentialOrder;
   const isPendingState = !order || order.state === OrderState.PENDING;
   const hasPurchased = (order && order.state === OrderState.VALIDATED) ?? false;
@@ -210,38 +201,6 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
   const orderGroupsAvailable = orderGroups.filter(
     (orderGroup) => orderGroup.nb_available_seats > 0,
   );
-
-  const renderPurchasePart = () => {
-    if (!courseProductRelation) {
-      return null;
-    }
-    if (orderGroups.length === 0) {
-      return <PurchaseButton course={course} product={product} disabled={!isPendingState} />;
-    }
-    if (orderGroupsAvailable.length === 0) {
-      return (
-        <p className="product-widget__footer__message">
-          <FormattedMessage {...messages.noSeatsAvailable} />
-        </p>
-      );
-    }
-    return orderGroupsAvailable.map((orderGroup) => (
-      <div className="product-widget__footer__order-group" key={orderGroup.id}>
-        <PurchaseButton
-          course={course}
-          product={product}
-          disabled={!isPendingState}
-          orderGroup={orderGroup}
-        />
-        <p>
-          <FormattedMessage
-            {...messages.nbSeatsAvailable}
-            values={{ nb: orderGroup.nb_available_seats }}
-          />
-        </p>
-      </div>
-    ));
-  };
 
   return (
     <section
@@ -276,7 +235,15 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
             compact={compact}
           />
           {canShowContent && <Content product={product} order={order} />}
-          <footer className="product-widget__footer">{renderPurchasePart()}</footer>
+          <footer className="product-widget__footer">
+            <CourseProductItemFooter
+              course={course}
+              product={product as CredentialProduct}
+              orderGroups={orderGroups}
+              orderGroupsAvailable={orderGroupsAvailable}
+              isPendingState={isPendingState}
+            />
+          </footer>
         </>
       )}
     </section>

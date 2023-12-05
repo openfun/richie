@@ -1,7 +1,7 @@
 import { FormattedMessage } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { Enrollment, Product, ProductType } from 'types/Joanie';
+import { CertificateProduct, Enrollment, ProductType } from 'types/Joanie';
 import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import { useCertificate } from 'hooks/useCertificates';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
@@ -27,7 +27,7 @@ const messages = {
 };
 
 export interface ProductCertificateFooterProps {
-  product: Product;
+  product: CertificateProduct;
   enrollment: Enrollment;
 }
 
@@ -68,7 +68,6 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
         <PurchaseButton
           className="dashboard-item__button"
           product={product}
-          course={enrollment.course_run.course}
           enrollment={enrollment}
         />
       )}

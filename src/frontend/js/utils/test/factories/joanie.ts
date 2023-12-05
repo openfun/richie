@@ -19,7 +19,6 @@ import {
   OrganizationLight,
   Payment,
   PaymentProviders,
-  Product,
   ProductType,
   TargetCourse,
   JoanieFile,
@@ -35,6 +34,8 @@ import {
   CredentialOrderWithPaymentInfo,
   EnrollmentLight,
   OrderGroup,
+  CertificateProduct,
+  CredentialProduct,
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
@@ -141,7 +142,7 @@ export const CertificateFactory = factory((): Certificate => {
   };
 });
 
-export const CredentialProductFactory = factory((): Product => {
+export const CredentialProductFactory = factory((): CredentialProduct => {
   return {
     id: faker.string.uuid(),
     created_on: faker.date.past().toISOString(),
@@ -159,9 +160,10 @@ export const CredentialProductFactory = factory((): Product => {
   };
 });
 
-export const CertificateProductFactory = factory((): Product => {
+export const CertificateProductFactory = factory((): CertificateProduct => {
   return {
     ...CredentialProductFactory().one(),
+    type: ProductType.CERTIFICATE,
     target_courses: [],
     instructions: faker.lorem.paragraphs(5),
   };

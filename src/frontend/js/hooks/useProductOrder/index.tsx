@@ -3,13 +3,15 @@ import { useOrders } from 'hooks/useOrders';
 import { ACTIVE_ORDER_STATES } from 'types/Joanie';
 
 interface UseProductOrderProps {
-  courseCode: string;
+  courseCode?: string;
+  enrollmentId?: string;
   productId: string;
 }
-const useProductOrder = ({ courseCode, productId }: UseProductOrderProps) => {
+const useProductOrder = ({ courseCode, enrollmentId, productId }: UseProductOrderProps) => {
   const ordersQuery = useOrders({
-    product_id: productId,
     course_code: courseCode,
+    enrollment_id: enrollmentId,
+    product_id: productId,
     state: ACTIVE_ORDER_STATES,
   });
 
