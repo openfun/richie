@@ -45,7 +45,6 @@ export const SaleTunnelStepValidation = ({ next }: SaleTunnelStepValidationProps
             className="SaleTunnelStepValidation__product-detail-row product-detail-row product-detail-row--course"
             data-testid="product-course"
           >
-            <div>TRUC</div>
             <span className="product-detail-row__icon">
               <svg aria-hidden="true">
                 <use href="#icon-check" />
