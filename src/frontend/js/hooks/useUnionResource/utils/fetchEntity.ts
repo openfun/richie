@@ -53,7 +53,8 @@ export const fetchEntity = async <
   // Here we need to mimic the behavior of staleTime, which does not seems to be implemented when using `getQueryData`.
   if (
     state &&
-    state.dataUpdatedAt >= new Date().getTime() - REACT_QUERY_SETTINGS.staleTimes.sessionItems
+    state.dataUpdatedAt >= new Date().getTime() - REACT_QUERY_SETTINGS.staleTimes.sessionItems &&
+    !state.isInvalidated
   ) {
     data = state.data;
   }

@@ -55,7 +55,7 @@ export const useOrdersEnrollments = ({
     { was_created_by_order: boolean } & PaginatedResourceQuery
   >({
     queryAConfig: {
-      queryKey: ['user', 'order'],
+      queryKey: ['user', 'orders'],
       fn: api.user.orders.get,
       filters: orderFilters,
     },
