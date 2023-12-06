@@ -20,6 +20,8 @@ import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessa
 import { expectBannerError } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
 import { alert } from 'utils/indirection/window';
+import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
+import { CONTRACT_SETTINGS } from 'settings';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -633,6 +635,11 @@ describe('<DashboardItemOrder/> Contract', () => {
         { results: [order], next: null, previous: null, count: null },
         { overwriteRoutes: true },
       );
+      fetchMock.get(
+        'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50&product_type=credential',
+        { results: [order], next: null, previous: null, count: null },
+        { overwriteRoutes: true },
+      );
 
       const submitDeferred = new Deferred();
       fetchMock.post(
@@ -644,19 +651,26 @@ describe('<DashboardItemOrder/> Contract', () => {
       // RTL too. See https://github.com/testing-library/user-event/issues/833.
       const user = userEvent.setup({ delay: null });
 
-      render(Wrapper(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
+      render(Wrapper(LearnerDashboardPaths.COURSES));
+
+      await expectNoSpinner('Loading orders and enrollments...');
+
       expect(
         await screen.findByRole('heading', { level: 5, name: product.title }),
       ).toBeInTheDocument();
 
-      // The modal is not shown.
-      expect(screen.queryByTestId('dashboard-contract-frame')).not.toBeInTheDocument();
+      // Make sure the sign button is shown.
+      const $signButton = screen.getByRole('link', { name: 'Sign' });
+      await user.click($signButton);
 
       // Contract is shown and not in loading state.
-      let contractElement = screen.getByTestId('dashboard-item-order-contract');
+      let contractElement = await screen.findByTestId('dashboard-item-order-contract');
       expect(within(contractElement).queryByRole('status')).not.toBeInTheDocument();
       let signButton = screen.getByRole('button', { name: 'Sign' });
       expect(signButton).not.toHaveAttribute('disabled');
+
+      // The modal is not shown.
+      expect(screen.queryByTestId('dashboard-contract-frame')).not.toBeInTheDocument();
 
       await user.click(signButton);
 
@@ -704,7 +718,12 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       // Polling starts and succeeds after the second call.
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        // We prefer advanceTimersByTime over runOnlyPendingTimers, because the latter would trigger internal
+        // react-query garbage collection, which is not what we want as we want to make sure the cache is well
+        // handled by fetchEntity ( useUnionResources ) by verifying that isInvalidated is true. ( Otherwise we would
+        // have got a undefined getQueryState(...) result. That's why we test that the "Sign" button from the
+        // courses view is well removed.
+        jest.advanceTimersByTime(CONTRACT_SETTINGS.pollInterval + 50);
       });
       await within(modal).findByRole('heading', { name: 'Verifying signature ...' });
       within(modal).queryByRole('status');
@@ -728,7 +747,12 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       // Fast-forward the second polling request.
       await act(async () => {
-        jest.runOnlyPendingTimers();
+        // We prefer advanceTimersByTime over runOnlyPendingTimers, because the latter would trigger internal
+        // react-query garbage collection, which is not what we want as we want to make sure the cache is well
+        // handled by fetchEntity ( useUnionResources ) by verifying that isInvalidated is true. ( Otherwise we would
+        // have got a undefined getQueryState(...) result. That's why we test that the "Sign" button from the
+        // courses view is well removed.
+        jest.advanceTimersByTime(CONTRACT_SETTINGS.pollInterval + 50);
       });
 
       // We update the orders mock in order to return a signed contract before resolving the polling.
@@ -766,16 +790,15 @@ describe('<DashboardItemOrder/> Contract', () => {
       expect(signButton).toHaveAttribute('disabled');
 
       // Resolve the refresh order request.
+      const signedOrder = {
+        ...order,
+        contract: {
+          ...order.contract,
+          signed_on: new Date().toISOString(),
+        },
+      };
       signedOrderDeferred.resolve({
-        results: [
-          {
-            ...order,
-            contract: {
-              ...order.contract,
-              signed_on: new Date().toISOString(),
-            },
-          },
-        ],
+        results: [signedOrder],
         next: null,
         previous: null,
         count: null,
@@ -785,6 +808,26 @@ describe('<DashboardItemOrder/> Contract', () => {
       await waitFor(() =>
         expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument(),
       );
+
+      // Go back to the list view to make sure the sign button is not shown anymore.
+      fetchMock.get(
+        'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50&product_type=credential',
+        { results: [signedOrder], next: null, previous: null, count: null },
+        { overwriteRoutes: true },
+      );
+
+      const $backButton = screen.getByRole('link', { name: 'Back' });
+      await user.click($backButton);
+
+      await expectSpinner('Loading orders and enrollments...');
+      await expectNoSpinner('Loading orders and enrollments...');
+
+      expect(
+        await screen.findByRole('heading', { level: 5, name: product.title }),
+      ).toBeInTheDocument();
+
+      // Make sure the sign button is not shown.
+      expect(screen.queryByRole('link', { name: 'Sign' })).not.toBeInTheDocument();
     });
 
     it('downloads the contract', async () => {

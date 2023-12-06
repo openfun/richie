@@ -53,6 +53,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix cookiecutter circleci gitlint configuration
 - Opened Course Run show empty date as '...'
 - Fix dashboard enrollment listing when they're linked to a product certificate.
+- Fix order cache issues
 
 ### Removed
 
