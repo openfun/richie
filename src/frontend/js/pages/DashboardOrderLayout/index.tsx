@@ -34,7 +34,10 @@ export const DashboardOrderLayout = () => {
   );
 
   return (
-    <DashboardLayout sidebar={<LearnerDashboardSidebar menuLinks={links} title={product?.title} />}>
+    <DashboardLayout
+      className="dashboard-order-layout"
+      sidebar={<LearnerDashboardSidebar menuLinks={links} title={product?.title} />}
+    >
       <DashboardOrderLayoutContent product={product} />
     </DashboardLayout>
   );

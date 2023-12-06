@@ -1,9 +1,8 @@
-$dashboard-breadcrumb-height: rem-calc(32.4px);
+$dashboard-breadcrumb-height: rem-calc(32px);
 $dashboard-breadcrumb-filters-spacing: rem-calc(30px);
 $dashboard-filters-height: rem-calc(48px);
 $dashboard-header-spacing: rem-calc(16px);
-$sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-filters-height +
-  $dashboard-header-spacing + $dashboard-breadcrumb-filters-spacing;
+$sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-header-spacing;
 
 .dashboard {
   @include make-container();

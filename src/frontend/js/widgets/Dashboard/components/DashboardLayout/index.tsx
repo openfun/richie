@@ -1,22 +1,29 @@
 import { PropsWithChildren, ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
+import c from 'classnames';
 import { LearnerDashboardSidebar } from 'widgets/Dashboard/components/LearnerDashboardSidebar';
 import { DashboardBreadcrumbs } from 'widgets/Dashboard/components/DashboardBreadcrumbs';
 
 interface DashboardLayoutProps extends PropsWithChildren<any> {
   sidebar?: ReactNode;
   filters?: ReactNode;
+  className?: string;
 }
 
-export const DashboardLayout = ({ children, sidebar, filters }: DashboardLayoutProps) => {
+export const DashboardLayout = ({
+  children,
+  sidebar,
+  filters,
+  className,
+}: DashboardLayoutProps) => {
   const location = useLocation();
   return (
-    <div className="dashboard">
+    <div className={c('dashboard', className)}>
       <div className="dashboard__sidebar">{sidebar || <LearnerDashboardSidebar />}</div>
       <main className="dashboard__main">
         <header>
           <DashboardBreadcrumbs />
-          <div className="dashboard__filters">{filters}</div>
+          {!!filters && <div className="dashboard__filters">{filters}</div>}
         </header>
         <div className="dashboard__content" data-testid={`location-display-${location.pathname}`}>
           {children}
