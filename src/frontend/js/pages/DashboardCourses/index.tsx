@@ -2,16 +2,16 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { useRef } from 'react';
 import { Button } from '@openfun/cunningham-react';
 import {
-  useOrdersEnrollments,
-  isEnrollment,
   isCredentialOrder,
+  isEnrollment,
+  useOrdersEnrollments,
 } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { Spinner } from 'components/Spinner';
 import { DashboardItemEnrollment } from 'widgets/Dashboard/components/DashboardItem/Enrollment/DashboardItemEnrollment';
 import { DashboardItemOrder } from 'widgets/Dashboard/components/DashboardItem/Order/DashboardItemOrder';
 import Banner, { BannerType } from 'components/Banner';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
-import { ProductType } from 'types/Joanie';
+import { OrderState, ProductType } from 'types/Joanie';
 
 const messages = defineMessages({
   loading: {
@@ -33,7 +33,7 @@ const messages = defineMessages({
 
 export const DashboardCourses = () => {
   const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments({
-    orderFilters: { product_type: [ProductType.CREDENTIAL] },
+    orderFilters: { product_type: [ProductType.CREDENTIAL], state_exclude: [OrderState.CANCELED] },
   });
 
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
