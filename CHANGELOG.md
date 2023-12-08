@@ -13,6 +13,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add Additional Information section for a category and
     use them in a course page
 - Added new page extension `MainMenuEntry`
+- Add lazy load video player using `RICHIE_VIDEO_LAZY_LOAD` setting
 
 ### Fixed
 

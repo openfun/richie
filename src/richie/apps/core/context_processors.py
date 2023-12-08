@@ -100,6 +100,10 @@ def site_metas(request: HttpRequest):
             settings.RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT
         )
 
+    context["RICHIE_VIDEO_LAZY_LOAD"] = getattr(
+        settings, "RICHIE_VIDEO_LAZY_LOAD", False
+    )
+
     return context
 
 
