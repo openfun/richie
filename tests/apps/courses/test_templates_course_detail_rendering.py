@@ -597,6 +597,25 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         self.assertEqual(iframe.get("title"), video_sample.label)
         self.assertEqual(iframe.get("src"), video_sample.url)
 
+    @override_settings(RICHIE_VIDEO_PLUGIN_LAZY_LOADING=True)
+    def test_templates_course_detail_teaser_video_cover_empty_lazy(self):
+        """
+        With video in `course_teaser` placeholder and no image in `course_cover` placeholder,
+        video component should be present on the `course_teaser` placeholder.
+        When the `RICHIE_VIDEO_PLUGIN_LAZY_LOADING` is activated, the video iframe should be
+        hidden.
+        """
+        video_sample = random.choice(VIDEO_SAMPLE_LINKS)
+        course = CourseFactory(fill_teaser=video_sample, should_publish=True)
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        html = lxml.html.fromstring(response.content)
+        iframe = html.cssselect(".subheader__teaser .aspect-ratio iframe")[0]
+        self.assertIn("allowfullscreen", iframe.keys())
+        self.assertEqual(iframe.get("title"), video_sample.label)
+        self.assertEqual(iframe.get("data-src"), video_sample.url + "?&autoplay=1")
+
     def test_templates_course_detail_teaser_empty_cover_image(self):
         """
         Without video in `course_teaser` placeholder and with image in `course_cover` placeholder,
@@ -635,6 +654,30 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         self.assertIn("allowfullscreen", iframe.keys())
         self.assertEqual(iframe.get("title"), video_sample.label)
         self.assertEqual(iframe.get("src"), video_sample.url)
+
+    @override_settings(RICHIE_VIDEO_PLUGIN_LAZY_LOADING=True)
+    def test_templates_course_detail_teaser_video_cover_image_lazy(self):
+        """
+        With video in `course_teaser` placeholder and with image in `course_cover` placeholder,
+        video component should be present on the `course_teaser` placeholder.
+        When the `RICHIE_VIDEO_PLUGIN_LAZY_LOADING` is activated, the video iframe should be
+        hidden.
+        """
+        video_sample = random.choice(VIDEO_SAMPLE_LINKS)
+        course = CourseFactory(
+            fill_teaser=video_sample,
+            fill_cover=pick_image("cover")(video_sample.image),
+            should_publish=True,
+        )
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        html = lxml.html.fromstring(response.content)
+        iframe = html.cssselect(".subheader__teaser .aspect-ratio iframe")[0]
+        self.assertIn("allowfullscreen", iframe.keys())
+        self.assertEqual(iframe.get("title"), video_sample.label)
+        self.assertEqual(iframe.get("data-src"), video_sample.url + "?&autoplay=1")
 
 
 # pylint: disable=too-many-public-methods
