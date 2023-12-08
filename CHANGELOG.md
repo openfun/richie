@@ -11,6 +11,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Topbar dropdown menu layout and accessibility interactions
+- Add `RICHIE_VIDEO_PLUGIN_LAZY_LOADING` setting that allows to lazy load
+  iframe video player
 - Add two new section grid distributions to better accomodate for 
   course cards
 - Added a new `above_header` block to the base template to allow for better

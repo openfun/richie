@@ -1,18 +1,71 @@
-{% load i18n cms_tags %}
+{% load i18n cms_tags extra_tags thumbnail static %}
 {% comment %}
 This is a copy of original template from plugin just to clean <iframe> from
 obsolete attribute "frameborder" and invalid "allowfullscreen" attribute value.
+
+For performance reasons instead of loading the video iframe directly, 
+it changes the default template with an hidden iframe that is only visible
+when the user clicks on the image with a big play icon '▶', the image comes 
+from the video poster or the course cover.
+Only after the user clicks on the play icon '▶', the browser loads the external
+video player iframe.
+Additionaly, it tries to autoplay the external video player, this feature depends
+on the browser and external video platform implementations.
 {% endcomment %}
 
 {% if instance.embed_link %}
     {# show iframe if embed_link is provided #}
     <div class="aspect-ratio">
-        <iframe
-            title="{% if instance.label %}{{ instance.label }}{% else %}{% trans "Video" %}{% endif %}"
-            src="{{ instance.embed_link_with_parameters }}"
-            {{ instance.attributes_str }}
-            allowfullscreen
-        ></iframe>
+        {% if RICHIE_VIDEO_PLUGIN_LAZY_LOADING %}
+            <a class="video-player-image" onclick="this.style.display='none'; this.nextSibling.style.display='block'; this.nextSibling.src=this.nextSibling.getAttribute('data-src');" href="javascript:void(0)">
+                {% if instance.poster %}
+                    <img
+                        src='{% thumbnail instance.poster.url 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.poster.subject_location %}'
+                        srcset='
+                        {% thumbnail instance.poster 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.poster.subject_location %} 300w
+                        {% if instance.poster.width >= 600 %},{% thumbnail instance.poster 600x340 replace_alpha='#FFFFFF' crop upscale subject_location=instance.poster.subject_location %} 600w{% endif %}
+                        {% if instance.poster.width >= 900 %},{% thumbnail instance.poster 900x510 replace_alpha='#FFFFFF' crop upscale subject_location=instance.poster.subject_location %} 900w{% endif %}
+                        '
+                        sizes='(max-width:62em) 100vw, 660px'
+                        alt='{% trans "Click to play the teaser for " %} {{ request.current_page.get_title }}'
+                    />
+                {% else %}
+                    {% placeholder_as_plugins "course_cover" as cover_plugins %}
+                    {% blockplugin cover_plugins.0 %}
+                        <img
+                            src='{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}'
+                            srcset='
+                            {% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
+                            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                            {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+                            '
+                            sizes='(max-width:62em) 100vw, 660px'
+                            alt='{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'course cover image' %}{% endif %}'
+                        />
+                    {% endblockplugin %}
+                {% endif %}
+                <span>
+                    <svg aria-hidden="true">
+                        <use href="#icon-video-play" />
+                    </svg>
+                </span>
+            </a>
+            <iframe
+                title="{% if instance.label %}{{ instance.label }}{% else %}{% trans "Video" %}{% endif %}"
+                data-src="{{ instance.embed_link_with_parameters}}{% if '?' not in instance.embed_link_with_parameters %}?{% endif %}&autoplay=1"
+                {{ instance.attributes_str }}
+                allowfullscreen
+                allow="autoplay"
+                style="display: none;"
+            ></iframe>
+        {% else %}
+            <iframe
+                title="{% if instance.label %}{{ instance.label }}{% else %}{% trans "Video" %}{% endif %}"
+                src="{{ instance.embed_link_with_parameters }}"
+                {{ instance.attributes_str }}
+                allowfullscreen
+            ></iframe>
+        {% endif %}
     </div>
     {% with disabled=instance.embed_link %}
         {% for plugin in instance.child_plugin_instances %}
@@ -32,9 +85,9 @@ obsolete attribute "frameborder" and invalid "allowfullscreen" attribute value.
 
 {% comment %}
     # Available variables:
-    {{ instance.template }}
+    {{ instance.template }}
     {{ instance.label }}
     {{ instance.embed_link }}
     {{ instance.poster }}
-    {{ instance.attributes_str }}
+    {{ instance.attributes_str }}
 {% endcomment %}

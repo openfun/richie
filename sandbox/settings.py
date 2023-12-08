@@ -606,6 +606,13 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     # Define which node level can be processed to search for pageindex extension
     RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL = 0
 
+    # Whether you want to show the video iframe directly or prefer to lazy load it
+    RICHIE_VIDEO_PLUGIN_LAZY_LOADING = values.Value(
+        False,
+        environ_name="RICHIE_VIDEO_PLUGIN_LAZY_LOADING",
+        environ_prefix=None,
+    )
+
     @classmethod
     def _get_environment(cls):
         """Environment in which the application is launched."""
