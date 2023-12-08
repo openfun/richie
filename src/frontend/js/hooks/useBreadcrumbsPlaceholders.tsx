@@ -9,5 +9,5 @@ export const useBreadcrumbsPlaceholders = (data: DashboardBreadcrumbsPlaceholder
   const context = useContext(DashboardBreadcrumbsContext);
   useEffect(() => {
     context.pushBreadcrumbsPlaceholders(data);
-  }, [data]);
+  }, [JSON.stringify(data)]);
 };
