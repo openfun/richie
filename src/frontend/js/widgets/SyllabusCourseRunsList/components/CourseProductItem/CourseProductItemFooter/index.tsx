@@ -37,7 +37,14 @@ const CourseProductItemFooter = ({
   isPendingState,
 }: CourseProductItemFooterProps) => {
   if (orderGroups.length === 0) {
-    return <PurchaseButton course={course} product={product} disabled={!isPendingState} />;
+    return (
+      <PurchaseButton
+        course={course}
+        product={product}
+        disabled={!isPendingState}
+        buttonProps={{ fullWidth: true }}
+      />
+    );
   }
   if (orderGroupsAvailable.length === 0) {
     return (
@@ -53,6 +60,7 @@ const CourseProductItemFooter = ({
         product={product}
         disabled={!isPendingState}
         orderGroup={orderGroup}
+        buttonProps={{ fullWidth: true }}
       />
       <p>
         <FormattedMessage

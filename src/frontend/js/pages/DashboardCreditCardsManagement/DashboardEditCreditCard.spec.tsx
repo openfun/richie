@@ -73,7 +73,7 @@ describe('<DahsboardEditCreditCard/>', () => {
     });
 
     expectBreadcrumbsToEqualParts([
-      'Back',
+      'chevron_leftBack',
       'My preferences',
       'Edit credit card "' + creditCard.title + '"',
     ]);

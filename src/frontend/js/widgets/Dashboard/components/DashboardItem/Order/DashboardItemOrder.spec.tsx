@@ -413,7 +413,7 @@ describe('<DashboardItemOrder/>', () => {
     // Wait for the order to be rendered.
     await screen.findByRole('heading', { level: 5, name: product.title });
 
-    await expectBreadcrumbsToEqualParts(['Back', 'My courses', product.title]);
+    await expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My courses', product.title]);
 
     const courseRun = order.target_courses[0].course_runs[0];
     const runElement = await screen.findByTestId(

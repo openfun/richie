@@ -1,7 +1,7 @@
 import c from 'classnames';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useMemo, useState } from 'react';
-import { Button } from '@openfun/cunningham-react';
+import { Button, ButtonProps } from '@openfun/cunningham-react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
 import SaleTunnel from 'components/SaleTunnel';
@@ -44,6 +44,7 @@ interface PurchaseButtonPropsBase {
   orderGroup?: Joanie.OrderGroup;
   disabled?: boolean;
   className?: string;
+  buttonProps?: ButtonProps;
 }
 
 interface CredentialPurchaseButtonProps extends PurchaseButtonPropsBase {
@@ -65,6 +66,7 @@ const PurchaseButton = ({
   orderGroup,
   disabled = false,
   className,
+  buttonProps,
 }: CredentialPurchaseButtonProps | CertificatePurchaseButtonProps) => {
   const intl = useIntl();
   const { user, login } = useSession();
@@ -107,6 +109,7 @@ const PurchaseButton = ({
       {!disabled && (
         <>
           <Button
+            size="small"
             data-testid="PurchaseButton__cta"
             className={c('purchase-button__cta', className)}
             onClick={() => hasAtLeastOneCourseRun && setIsSaleTunnelOpen(true)}
@@ -117,6 +120,7 @@ const PurchaseButton = ({
               product: product.title,
             })}
             disabled={!isPurchasable}
+            {...buttonProps}
           >
             {product.call_to_action}
           </Button>

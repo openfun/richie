@@ -19,6 +19,7 @@
   li {
     margin-right: 1rem;
     padding-right: 0.5rem;
+    display: flex;
   }
 
   li:not(:last-child) {

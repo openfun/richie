@@ -95,7 +95,7 @@ describe('<Dashboard />', () => {
     const user = UserFactory().one();
 
     render(<DashboardWithUser user={user} />);
-    expectBreadcrumbsToEqualParts(['Back', 'My courses']);
+    expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My courses']);
   });
 
   it('changes route when using the sidebar', async () => {
@@ -120,7 +120,7 @@ describe('<Dashboard />', () => {
     });
     render(<DashboardWithUser user={user} />);
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.COURSES);
-    expectBreadcrumbsToEqualParts(['Back', 'My courses']);
+    expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My courses']);
 
     // Go to "My Preferences" route.
     const link = screen.getByRole('link', { name: 'My preferences' });
@@ -128,7 +128,7 @@ describe('<Dashboard />', () => {
       fireEvent.click(link);
     });
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.PREFERENCES);
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
+    expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My preferences']);
 
     // Go to the address edit route.
     const button = await screen.findByRole('button', { name: 'Edit' });
@@ -139,18 +139,18 @@ describe('<Dashboard />', () => {
       LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(':addressId', address.id),
     );
     expectBreadcrumbsToEqualParts([
-      'Back',
+      'chevron_leftBack',
       'My preferences',
       'Edit address "' + address.title + '"',
     ]);
 
     // Click on back button goes back to "My Preferences".
-    const backButton = await screen.findByRole('link', { name: 'Back' });
+    const backButton = await screen.findByRole('link', { name: /Back/ });
     await act(async () => {
       fireEvent.click(backButton);
     });
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.PREFERENCES);
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences']);
+    expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My preferences']);
 
     // Click again on back button to get redirect to website's root.
     expect(location.replace).not.toHaveBeenCalled();

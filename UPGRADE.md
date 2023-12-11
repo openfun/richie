@@ -28,6 +28,7 @@ $ make migrate
 - scss themes variable for Modal 'close button' have been removed. It is now a cunningham button and can be
   customised using cunningham-tokens.
 - cunningham have been upgraded to 2.0.0, you can follow it's upgrade guide here: https://openfun.github.io/cunningham/?path=/docs/migrating-from-v1-to-v2--docs
+- Delete richie Button component now that we use cunningham Button component.
 
 ## 2.23.0 to 2.24.x
 

@@ -64,14 +64,14 @@ export const DashboardItemOrderContractFooter = ({
   const renderSignButton = () => {
     if (writable) {
       return (
-        <Button className="dashboard-item__button" onClick={onSign} disabled={loading}>
+        <Button className="dashboard-item__button" size="small" onClick={onSign} disabled={loading}>
           <FormattedMessage {...messages.contractSignActionLabel} />
         </Button>
       );
     }
     return (
       <RouterButton
-        color="outline-primary"
+        size="small"
         href={getRoutePath(LearnerDashboardPaths.ORDER, {
           orderId: order.id,
         })}

@@ -816,7 +816,7 @@ describe('<DashboardItemOrder/> Contract', () => {
         { overwriteRoutes: true },
       );
 
-      const $backButton = screen.getByRole('link', { name: 'Back' });
+      const $backButton = screen.getByRole('link', { name: /Back/ });
       await user.click($backButton);
 
       await expectSpinner('Loading orders and enrollments...');

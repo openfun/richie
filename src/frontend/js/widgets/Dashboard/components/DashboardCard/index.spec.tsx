@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Button } from 'components/Button';
+import { Button } from '@openfun/cunningham-react';
 import { DashboardCard } from '.';
 
 describe('<DashboardCard/>', () => {
