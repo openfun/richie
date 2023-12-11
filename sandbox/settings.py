@@ -244,7 +244,6 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         lms.get("BACKEND", "") == "richie.apps.courses.lms.joanie.JoanieBackend"
         for lms in RICHIE_LMS_BACKENDS
     ):
-        # if {**FEATURES}.get("REACT_DASHBOARD", False):
         profile_dashboard_urls = {
             "dashboard": {
                 "label": _("Dashboard"),

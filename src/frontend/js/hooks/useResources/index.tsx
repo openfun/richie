@@ -75,7 +75,7 @@ export const useResource =
   ) =>
   (id?: string, filters?: Omit<TResourceQuery, 'id'>, queryOptions?: QueryOptions<TData>) => {
     const resources = useResources<TData>(props);
-    const res = resources({ id, ...filters }, { ...queryOptions, enabled: !!id });
+    const res = resources({ id, ...filters }, { enabled: !!id, ...queryOptions });
     const { items, ...subRes } = res;
     return { ...subRes, item: items[0] };
   };

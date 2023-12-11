@@ -3,6 +3,7 @@ import type { Maybe, Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 import { Course as RichieCourse } from 'types/Course';
+import { JoanieUserProfile } from './User';
 
 // - Generic
 export interface PaginatedResponse<T> {
@@ -423,6 +424,9 @@ export interface ApiResourceInterface<
 }
 
 interface APIUser {
+  me: {
+    get(): Promise<JoanieUserProfile>;
+  };
   addresses: {
     create(payload: AddressCreationPayload): Promise<Address>;
     delete(id: Address['id']): Promise<void>;

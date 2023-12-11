@@ -66,6 +66,7 @@
       min-width: 10rem;
       padding: 0.5rem 1.5rem;
       text-align: left;
+      white-space: nowrap;
 
       &:hover {
         color: r-theme-val(selector, hover-color);
