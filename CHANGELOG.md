@@ -41,6 +41,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   to match new API endpoint to retrieve course products
 - Use cunningham Button component.
 - Use cunningham form components (input, select, radio, checkbox).
+- Delete richie Button component now that we use cunningham Button component.
 
 ### Fixed
 

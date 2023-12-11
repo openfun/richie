@@ -1,5 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useMemo } from 'react';
+import { Button } from '@openfun/cunningham-react';
 import { useEnrollments } from 'hooks/useEnrollments';
 import type * as Joanie from 'types/Joanie';
 import useDateFormat from 'hooks/useDateFormat';
@@ -88,12 +89,13 @@ const EnrolledCourseRun = ({ enrollment }: Props) => {
         )}
         <div className="course-runs-item">
           {isStarded && (
-            <a
+            <Button
+              size="small"
               href={enrollment.course_run.resource_link}
-              className="course-runs-item__cta button--primary button--pill button--tiny"
+              className="course-runs-item__cta"
             >
               <FormattedMessage {...messages.goToCourse} />
-            </a>
+            </Button>
           )}
 
           {!isStarded && (

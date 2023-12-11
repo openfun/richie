@@ -2,7 +2,6 @@ import { useContext, useMemo } from 'react';
 import { useMatches } from 'react-router-dom';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 import { IntlHelper } from 'utils/IntlHelper';
-import { Icon, IconTypeEnum } from 'components/Icon';
 import { DashboardBreadcrumbsContext } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
 import { RouterButton } from '../RouterButton';
 
@@ -58,15 +57,19 @@ export const DashboardBreadcrumbs = () => {
   return (
     <ul className="dashboard-breadcrumbs" data-testid="dashboard-breadcrumbs">
       <li>
-        <RouterButton href={backPath} size="tiny">
-          <Icon name={IconTypeEnum.CHEVRON_LEFT_OUTLINE} className="button__icon" />
+        <RouterButton
+          href={backPath}
+          size="nano"
+          color="tertiary"
+          icon={<span className="material-icons">chevron_left</span>}
+        >
           <FormattedMessage {...messages.back} />
         </RouterButton>
       </li>
 
       {breadcrumbs.map((breadcrumb) => (
         <li key={breadcrumb.pathname}>
-          <RouterButton href={breadcrumb.pathname} size="tiny">
+          <RouterButton href={breadcrumb.pathname} size="nano" color="tertiary">
             {breadcrumb.name}
           </RouterButton>
         </li>

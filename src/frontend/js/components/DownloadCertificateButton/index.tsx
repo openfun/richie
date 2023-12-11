@@ -35,7 +35,13 @@ const DownloadCertificateButton = ({
   };
 
   return (
-    <Button className={className} color="secondary" disabled={loading} onClick={onDownloadClick}>
+    <Button
+      className={className}
+      size="small"
+      color="secondary"
+      disabled={loading}
+      onClick={onDownloadClick}
+    >
       {loading ? (
         <Spinner theme="primary" aria-labelledby="generating-certificate">
           <span id="generating-certificate">

@@ -1,6 +1,6 @@
 import { MouseEvent, useRef } from 'react';
 import { useHref, useNavigate } from 'react-router-dom';
-import { Button, ButtonProps } from 'components/Button';
+import { Button, ButtonProps } from '@openfun/cunningham-react';
 import { location } from 'utils/indirection/window';
 import isTestEnv from 'utils/test/isTestEnv';
 

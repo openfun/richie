@@ -26,6 +26,7 @@ export const ProductSignatureHeader = ({ order }: { order?: Order }) => {
       <Button
         fullWidth={true}
         className="mb-s"
+        size="small"
         href={
           getDashboardBasename(intl.locale) +
           LearnerDashboardPaths.ORDER.replace(':orderId', order!.id)

@@ -1,7 +1,6 @@
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useMemo } from 'react';
 import { Button } from '@openfun/cunningham-react';
-import { Button as RichieButton } from 'components/Button';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { Priority } from 'types';
 import {
@@ -256,9 +255,9 @@ const DashboardItemCourseEnrollingRun = ({
           </div>
         ) : (
           <Button
-            className="dashboard-item__button"
             disabled={!isOpenedForEnrollment || haveToSignContract}
             color="secondary"
+            size="small"
             onClick={enroll}
             title={haveToSignContract ? intl.formatMessage(messages.contractUnsigned) : ''}
           >
@@ -287,7 +286,8 @@ const NotEnrolled = ({
       </div>
       {!hideEnrollButtons && (
         <RouterButton
-          color="outline-primary"
+          color="secondary"
+          size="small"
           href={notEnrolledUrl}
           data-testid="dashboard-item-enrollment__button"
           className="dashboard-item__button"
@@ -320,15 +320,15 @@ export const Enrolled = ({
         <EnrolledStatus enrollment={enrollment} />
       </div>
       {SHOW_ACCESS_COURSE_PRIORITIES.includes(enrollment.course_run.state.priority) && (
-        // FIXME: cunningham button should allow usage of href.
-        <RichieButton
-          className="dashboard-item__button"
-          color="outline-primary"
+        <Button
+          color="secondary"
+          size="small"
           href={enrollment.course_run.resource_link}
           data-testid="dashboard-item-enrollment__button"
+          className="dashboard-item__button"
         >
           <FormattedMessage {...messages.accessCourse} />
-        </RichieButton>
+        </Button>
       )}
     </>
   );

@@ -90,7 +90,7 @@ describe('<DashboardCreateAddress/>', () => {
 
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
+    expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My preferences', 'Create address']);
 
     // Submit the empty form to trigger validation errors.
     await user.click(screen.getByRole('button', { name: 'Create' }));
@@ -133,7 +133,7 @@ describe('<DashboardCreateAddress/>', () => {
         'https://joanie.endpoint/api/v1.0/addresses/',
       );
     });
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
+    expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My preferences', 'Create address']);
 
     // Fill the form with random data.
     const address = AddressFactory().one();
@@ -185,7 +185,7 @@ describe('<DashboardCreateAddress/>', () => {
       );
     });
 
-    expectBreadcrumbsToEqualParts(['Back', 'My preferences', 'Create address']);
+    expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My preferences', 'Create address']);
 
     // Fill the form with random data.
     const address = AddressFactory().one();
