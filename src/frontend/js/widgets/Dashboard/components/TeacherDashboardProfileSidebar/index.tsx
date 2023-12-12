@@ -8,6 +8,7 @@ import {
 } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useSession } from 'contexts/SessionContext';
 import { useOrganizations } from 'hooks/useOrganizations';
+import { UserHelper } from 'utils/UserHelper';
 import OrganizationLinks from './components/OrganizationLinks';
 
 const messages = defineMessages({
@@ -37,7 +38,7 @@ export const TeacherDashboardProfileSidebar = () => {
   return (
     <DashboardSidebar
       menuLinks={links}
-      header={user?.username || ''}
+      header={user ? UserHelper.getName(user) : ''}
       subHeader={intl.formatMessage(messages.subHeader)}
     >
       {organizations.length > 0 && <OrganizationLinks organizations={organizations} />}

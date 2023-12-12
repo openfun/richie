@@ -160,10 +160,17 @@ describe('<Dashboard />', () => {
     expect(location.replace).toHaveBeenCalledWith('https://localhost');
   });
 
-  it('should render username in sidebar', () => {
-    const user: User = UserFactory().one();
+  it('should render username in sidebar if full_name is not defined', () => {
+    const user: User = UserFactory({ full_name: undefined }).one();
     render(<DashboardWithUser user={user} />);
     const sidebar = screen.getByTestId('dashboard__sidebar');
     getByText(sidebar, user.username, { exact: false });
+  });
+
+  it('should render full_name in sidebar', () => {
+    const user: User = UserFactory().one();
+    render(<DashboardWithUser user={user} />);
+    const sidebar = screen.getByTestId('dashboard__sidebar');
+    getByText(sidebar, user.full_name!, { exact: false });
   });
 });

@@ -1,12 +1,13 @@
 import { FC } from 'react';
 import { Icon, IconTypeEnum } from 'components/Icon';
+import { UserHelper } from 'utils/UserHelper';
 import { UserMenuProps } from '.';
 
 export const MobileUserMenu: FC<UserMenuProps> = ({ user }) => (
   <div className="user-menu user-menu--mobile">
     <h6 className="user-menu__username">
       <Icon name={IconTypeEnum.LOGIN} />
-      {user.username}
+      {UserHelper.getName(user)}
     </h6>
     <ul className="user-menu__list">
       {user.urls.map(({ key, label, action }) => (

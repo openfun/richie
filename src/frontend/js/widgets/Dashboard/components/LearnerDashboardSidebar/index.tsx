@@ -10,6 +10,7 @@ import {
   DashboardSidebarProps,
 } from 'widgets/Dashboard/components/DashboardSidebar';
 import { useSession } from 'contexts/SessionContext';
+import { UserHelper } from 'utils/UserHelper';
 
 const messages = defineMessages({
   header: {
@@ -46,7 +47,7 @@ export const LearnerDashboardSidebar = (props: Partial<DashboardSidebarProps>) =
   return (
     <DashboardSidebar
       menuLinks={links}
-      header={intl.formatMessage(messages.header, { name: user?.username })}
+      header={intl.formatMessage(messages.header, { name: user ? UserHelper.getName(user) : '' })}
       subHeader={intl.formatMessage(messages.subHeader)}
       {...props}
     />

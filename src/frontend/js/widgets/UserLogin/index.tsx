@@ -122,7 +122,6 @@ const UserLogin = ({ profileUrls = {} }: UserLoginProps) => {
         </Fragment>
       ) : (
         <UserMenu
-          // If user's fullname is empty, we use its username as a fallback
           user={{
             ...user,
             urls: userMenuItems,

@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useSelect } from 'downshift';
 import { location } from 'utils/indirection/window';
+import { UserHelper } from 'utils/UserHelper';
 import { UserMenuProps } from '.';
 
 const messages = defineMessages({
@@ -41,7 +42,7 @@ export const DesktopUserMenu: FC<UserMenuProps> = ({ user }) => {
         <FormattedMessage {...messages.menuPurpose} />
       </label>
       <button {...getToggleButtonProps()} className="selector__button">
-        {user.username}
+        {UserHelper.getName(user)}
         <svg role="img" className="selector__button__icon" aria-hidden="true">
           <use xlinkHref="#icon-chevron-down" />
         </svg>
