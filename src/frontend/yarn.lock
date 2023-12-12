@@ -1837,10 +1837,10 @@
   resolved "https://registry.yarnpkg.com/@fontsource-variable/roboto-flex/-/roboto-flex-5.0.8.tgz#d6685dbcdb9ba939717f995dfeb77cd22f7d82a3"
   integrity sha512-zSnE0htmk1tlKqVNfMGWJfxgLxLYQH9eYNvXFzWJ3GuDMXVBEiKuaYytkrItaP/svX3t5y8qsIXC+cpflsfvWQ==
 
-"@fontsource/material-icons@5.0.7":
-  version "5.0.7"
-  resolved "https://registry.yarnpkg.com/@fontsource/material-icons/-/material-icons-5.0.7.tgz#9d3d5654871e32ef509c168e90ee9dc008eecfbe"
-  integrity sha512-QNEk24i1KhV1MoZqpLHfD+T90N2U8lzYxyeHbr6qAWTJG7KgOMib4TA+RonS9vtBT4sw59L9e9Wd1vebXxOhOQ==
+"@fontsource/material-icons@5.0.11":
+  version "5.0.11"
+  resolved "https://registry.yarnpkg.com/@fontsource/material-icons/-/material-icons-5.0.11.tgz#01b7cc91c2897d043acf4e5dc45ea190c098d72d"
+  integrity sha512-6JVVgGSrcDmst31WXaLG1MVNL6Sn0JLHwrGGLcg8u2KtXW+lTAJnscKEgj1pMpK73ks9Q193Mw2Oh9aebDj26g==
 
 "@formatjs/cli@6.2.4":
   version "6.2.4"
@@ -2485,13 +2485,13 @@
   resolved "https://registry.yarnpkg.com/@open-draft/until/-/until-2.1.0.tgz#0acf32f470af2ceaf47f095cdecd40d68666efda"
   integrity sha512-U69T3ItWHvLwGg5eJ0n3I62nWuE6ilHlmz7zM0npLBRvPRd7e6NYmg54vvRtP5mZG7kZqZCFVdsTWo7BPtBujg==
 
-"@openfun/cunningham-react@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@openfun/cunningham-react/-/cunningham-react-2.3.0.tgz#33951f119c83a53f34a0d6b08370d2e3f31b4bcb"
-  integrity sha512-QsVRqWNJDuwtza39a6Eh9lKOQmR4zeFgtJaqIY5ky5ZvsA+hhMfWnUZ4RPu5IVg+OIm6kAubP1PHDwdHiu0apw==
+"@openfun/cunningham-react@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@openfun/cunningham-react/-/cunningham-react-2.4.0.tgz#c539157782aa4b5d7228313d0b3c04a7393ebf28"
+  integrity sha512-5MxMCwPNim7z7aoHlUwEAcuC1lS+x5ub+zQIUWfeku5zV3kkUOAl2vRrxFa48gje3RYxHUlANytr3Q8pUsmkiQ==
   dependencies:
     "@fontsource-variable/roboto-flex" "5.0.8"
-    "@fontsource/material-icons" "5.0.7"
+    "@fontsource/material-icons" "5.0.11"
     "@internationalized/date" "3.5.0"
     "@openfun/cunningham-tokens" "*"
     "@react-aria/calendar" "3.5.3"
@@ -2517,16 +2517,16 @@
     figlet "1.5.2"
     ts-node "10.9.1"
 
-"@openfun/cunningham-tokens@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@openfun/cunningham-tokens/-/cunningham-tokens-2.0.0.tgz#b61990e333c0b13e31dd6580100b7460eca8a635"
-  integrity sha512-qEDSMdsu9iPWbmLZCQZePObc7UnZ3UnR6zoUXlZQ24RGY4SiJS6j9DHxRNUQLfWvXmn3i4VrpRDOMKjUaL6wWQ==
+"@openfun/cunningham-tokens@2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@openfun/cunningham-tokens/-/cunningham-tokens-2.1.0.tgz#42b9d02f10445b3806de441eab1dc1199df7e137"
+  integrity sha512-TiwAufOkKDy7xvAyoEGoK4ypKd4QGAtJ8M85N52jI4itSJegeJE6SnPdxhCGhHmwymRfU7uJl+0xt6+731dHtA==
   dependencies:
     chalk "4.1.2"
-    commander "11.0.0"
+    commander "11.1.0"
     deepmerge "4.3.1"
-    figlet "1.6.0"
-    ts-node "10.9.1"
+    figlet "1.7.0"
+    ts-node "10.9.2"
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
@@ -6812,10 +6812,10 @@ commander@10.0.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-10.0.0.tgz#71797971162cd3cf65f0b9d24eb28f8d303acdf1"
   integrity sha512-zS5PnTI22FIRM6ylNW8G4Ap0IEOyk62fhLSD0+uHRT9McRCLGpkVNvao4bjimpK/GShynyQkFFxHhwMcETmduA==
 
-commander@11.0.0:
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-11.0.0.tgz#43e19c25dbedc8256203538e8d7e9346877a6f67"
-  integrity sha512-9HMlXtt/BNoYr8ooyjjNRdIilOTkVJXB+GhxMTtOKwk0R4j4lS4NpjuqmRxroBfnfTSHQIHQB7wryHhXarNjmQ==
+commander@11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-11.1.0.tgz#62fdce76006a68e5c1ab3314dc92e800eb83d906"
+  integrity sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==
 
 commander@^10.0.1:
   version "10.0.1"
@@ -8424,10 +8424,10 @@ figlet@1.5.2:
   resolved "https://registry.yarnpkg.com/figlet/-/figlet-1.5.2.tgz#dda34ff233c9a48e36fcff6741aeb5bafe49b634"
   integrity sha512-WOn21V8AhyE1QqVfPIVxe3tupJacq1xGkPTB4iagT6o+P2cAgEOOwIxMftr4+ZCTI6d551ij9j61DFr0nsP2uQ==
 
-figlet@1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/figlet/-/figlet-1.6.0.tgz#812050fa9f01043b4d44ddeb11f20fb268fa4b93"
-  integrity sha512-31EQGhCEITv6+hi2ORRPyn3bulaV9Fl4xOdR169cBzH/n1UqcxsiSB/noo6SJdD7Kfb1Ljit+IgR1USvF/XbdA==
+figlet@1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/figlet/-/figlet-1.7.0.tgz#46903a04603fd19c3e380358418bb2703587a72e"
+  integrity sha512-gO8l3wvqo0V7wEFLXPbkX83b7MVjRrk1oRLfYlZXol8nEpb/ON9pcKLI4qpBv5YtOTfrINtqb7b40iYY2FTWFg==
 
 figures@^3.0.0:
   version "3.2.0"
@@ -13196,6 +13196,25 @@ ts-node@10.9.1:
   version "10.9.1"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.9.1.tgz#e73de9102958af9e1f0b168a6ff320e25adcff4b"
   integrity sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==
+  dependencies:
+    "@cspotcode/source-map-support" "^0.8.0"
+    "@tsconfig/node10" "^1.0.7"
+    "@tsconfig/node12" "^1.0.7"
+    "@tsconfig/node14" "^1.0.0"
+    "@tsconfig/node16" "^1.0.2"
+    acorn "^8.4.1"
+    acorn-walk "^8.1.1"
+    arg "^4.1.0"
+    create-require "^1.1.0"
+    diff "^4.0.1"
+    make-error "^1.1.1"
+    v8-compile-cache-lib "^3.0.1"
+    yn "3.1.1"
+
+ts-node@10.9.2:
+  version "10.9.2"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.9.2.tgz#70f021c9e185bccdca820e26dc413805c101c71f"
+  integrity sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==
   dependencies:
     "@cspotcode/source-map-support" "^0.8.0"
     "@tsconfig/node10" "^1.0.7"
