@@ -18,13 +18,13 @@
     }
 
     &__link {
-      flex: 0 0 32%;
-      display: flex;
-      border: thin solid r-theme-val(organization-thumb, border-color);
-      border-radius: rem-calc(8px);
-      overflow: hidden;
-      justify-content: center;
       align-items: center;
+      border-radius: rem-calc(8px);
+      border: thin solid r-theme-val(organization-thumb, border-color);
+      display: flex;
+      flex: 0 0 32%;
+      justify-content: center;
+      overflow: hidden;
       padding: rem-calc(2px);
       &:hover,
       &:focus,
@@ -33,9 +33,13 @@
         box-shadow: 0 0 rem-calc(3px) r-theme-val(organization-thumb, border-color);
       }
       &__img {
-        object-fit: cover;
+        object-fit: contain;
         object-position: center center;
-        aspect-ratio: 2/1;
+        aspect-ratio: 1/1;
+      }
+
+      @include media-breakpoint-down(lg) {
+        max-width: rem-calc(64px);
       }
     }
   }

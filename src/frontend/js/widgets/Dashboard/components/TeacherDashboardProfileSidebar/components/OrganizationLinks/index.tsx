@@ -44,6 +44,7 @@ const OrganizationLinks = ({ organizations }: OrganizationLinksProps) => {
               className="dashboard-sidebar__organization-section__link__img"
               alt={organization.title}
               src={organization.logo.src}
+              srcSet={organization.logo.srcset}
             />
           </Link>
         ))}
