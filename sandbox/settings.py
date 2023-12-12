@@ -200,6 +200,39 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     # Feature flags
     FEATURES = values.DictValue(environ_name="FEATURES", environ_prefix=None)
 
+    # Joanie
+    """
+    NB: Richie picks all Joanie's settings from the JOANIE_BACKEND namespace in the
+    settings, hence the nesting of all Joanie's values inside that prop.
+
+    If BASE_URL is defined, this setting is bound into RICHIE_LMS_BACKENDS to use Joanie
+    as a LMS BACKEND.
+    """
+    JOANIE_BACKEND = {
+        "BASE_URL": values.Value(environ_name="JOANIE_BASE_URL", environ_prefix=None),
+        "BACKEND": values.Value(
+            "richie.apps.courses.lms.joanie.JoanieBackend",
+            environ_name="JOANIE_BACKEND",
+            environ_prefix=None,
+        ),
+        "JS_BACKEND": values.Value(
+            "joanie", environ_name="JOANIE_JS_BACKEND", environ_prefix=None
+        ),
+        "COURSE_REGEX": values.Value(
+            r"^.*/api/v1.0(?P<resource_uri>(?:/(?:courses|course-runs|products)/[^/]+)+)/?$",
+            environ_name="JOANIE_COURSE_REGEX",
+            environ_prefix=None,
+        ),
+        "JS_COURSE_REGEX": values.Value(
+            r"^.*/api/v1.0((?:/(?:courses|course-runs|products)/[^/]+)+)/?$",
+            environ_name="JOANIE_JS_COURSE_REGEX",
+            environ_prefix=None,
+        ),
+        # Course runs synchronization
+        "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": [],
+        "DEFAULT_COURSE_RUN_SYNC_MODE": "sync_to_public",
+    }
+
     # LMS
     RICHIE_LMS_BACKENDS = [
         {
@@ -240,9 +273,9 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             "href": _("{base_url:s}/dashboard/"),
         },
     }
-    if {**FEATURES}.get("REACT_DASHBOARD", False) and any(
-        lms.get("BACKEND", "") == "richie.apps.courses.lms.joanie.JoanieBackend"
-        for lms in RICHIE_LMS_BACKENDS
+    if (
+        FEATURES.get("REACT_DASHBOARD", False)  # pylint: disable=no-member
+        and JOANIE_BACKEND.get("BASE_URL") is not None
     ):
         profile_dashboard_urls = {
             "dashboard": {
@@ -316,39 +349,6 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             "is_automatic_resizing": True,
             "inline_ratio": 0.5625,
         }
-    }
-
-    # Joanie
-    """
-    NB: Richie picks all Joanie's settings from the JOANIE_BACKEND namespace in the
-    settings, hence the nesting of all Joanie's values inside that prop.
-
-    If BASE_URL is defined, this setting is bound into RICHIE_LMS_BACKENDS to use Joanie
-    as a LMS BACKEND.
-    """
-    JOANIE_BACKEND = {
-        "BASE_URL": values.Value(environ_name="JOANIE_BASE_URL", environ_prefix=None),
-        "BACKEND": values.Value(
-            "richie.apps.courses.lms.joanie.JoanieBackend",
-            environ_name="JOANIE_BACKEND",
-            environ_prefix=None,
-        ),
-        "JS_BACKEND": values.Value(
-            "joanie", environ_name="JOANIE_JS_BACKEND", environ_prefix=None
-        ),
-        "COURSE_REGEX": values.Value(
-            r"^.*/api/v1.0(?P<resource_uri>(?:/(?:courses|course-runs|products)/[^/]+)+)/?$",
-            environ_name="JOANIE_COURSE_REGEX",
-            environ_prefix=None,
-        ),
-        "JS_COURSE_REGEX": values.Value(
-            r"^.*/api/v1.0((?:/(?:courses|course-runs|products)/[^/]+)+)/?$",
-            environ_name="JOANIE_JS_COURSE_REGEX",
-            environ_prefix=None,
-        ),
-        # Course runs synchronization
-        "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": [],
-        "DEFAULT_COURSE_RUN_SYNC_MODE": "sync_to_public",
     }
 
     # Internationalization
