@@ -154,7 +154,7 @@ export const EnrollmentFactory = factory<Enrollment>(() => {
 
 export const UserFactory = factory<User>(() => ({
   access_token: faker.lorem.word(12),
-  fullname: faker.person.fullName(),
+  full_name: faker.person.fullName(),
   email: faker.internet.email(),
   username: faker.internet.userName(),
 }));
