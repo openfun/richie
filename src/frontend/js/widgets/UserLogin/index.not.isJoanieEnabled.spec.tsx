@@ -53,7 +53,7 @@ describe('<UserLogin />', () => {
   );
 
   it('gets and renders the user name and a dropdown containing a logout link', async () => {
-    const user: User = UserFactory().one();
+    const user: User = UserFactory({ full_name: undefined }).one();
 
     render(
       <Wrapper user={user}>
@@ -111,7 +111,7 @@ describe('<UserLogin />', () => {
 
     await userEvent.click(button);
 
-    screen.getByText(user.username);
+    screen.getByText(user.full_name!);
     const settingsLink = screen.getByRole('link', { name: 'Settings' });
     const accountLink = screen.getByRole('link', { name: 'Account' });
     expect(settingsLink.getAttribute('href')).toEqual('https://auth.local.test/settings');

@@ -81,7 +81,7 @@ describe('<UserLogin />', () => {
 
     await userEvent.click(button);
 
-    screen.getByText(user.username);
+    screen.getByText(user.full_name!);
     screen.getByText('Log out');
     expect(screen.queryByText('Loading login status...')).toBeNull();
   });
@@ -136,7 +136,7 @@ describe('<UserLogin />', () => {
 
     await userEvent.click(button);
 
-    screen.getByText(user.username);
+    screen.getByText(user.full_name!);
     const settingsLink = screen.getByRole('link', { name: 'Settings' });
     const accountLink = screen.getByRole('link', { name: 'Account' });
     expect(settingsLink.getAttribute('href')).toEqual('https://auth.local.test/settings');
@@ -172,7 +172,7 @@ describe('<UserLogin />', () => {
 
     await userEvent.click(button);
 
-    screen.getByText(user.username);
+    screen.getByText(user.full_name!);
     const settingsLink = screen.getByRole('link', { name: 'Settings' });
     const accountLink = screen.getByRole('link', { name: 'Account' });
     expect(settingsLink.getAttribute('href')).toEqual('https://auth.local.test/settings');

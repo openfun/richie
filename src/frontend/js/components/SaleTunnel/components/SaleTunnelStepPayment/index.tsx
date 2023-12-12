@@ -10,6 +10,7 @@ import type * as Joanie from 'types/Joanie';
 import type { Maybe, Nullable } from 'types/utils';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { useSaleTunnelContext } from 'components/SaleTunnel/context';
+import { UserHelper } from 'utils/UserHelper';
 import { RegisteredCreditCard } from '../RegisteredCreditCard';
 
 const messages = defineMessages({
@@ -189,7 +190,7 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
         </header>
         <div className="SaleTunnelStepPayment__block--buyer">
           <strong className="h6 SaleTunnelStepPayment__block--buyer__name">
-            {user.full_name || user.username}
+            {UserHelper.getName(user)}
           </strong>
           {user.email ? (
             <p className="SaleTunnelStepPayment__block--buyer__email">{user.email}</p>
