@@ -189,7 +189,7 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
         </header>
         <div className="SaleTunnelStepPayment__block--buyer">
           <strong className="h6 SaleTunnelStepPayment__block--buyer__name">
-            {user.fullname || user.username}
+            {user.full_name || user.username}
           </strong>
           {user.email ? (
             <p className="SaleTunnelStepPayment__block--buyer__email">{user.email}</p>

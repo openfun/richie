@@ -103,7 +103,7 @@ describe('SaleTunnelStepPayment', () => {
 
   it('should display authenticated user information', async () => {
     const product = ProductFactory().one();
-    const user: User = UserFactory({ fullname: undefined }).one();
+    const user: User = UserFactory({ full_name: undefined }).one();
     await act(async () => {
       render(
         <Wrapper user={user} product={product}>
