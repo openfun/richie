@@ -69,7 +69,7 @@ export const TeacherDashboardOrganizationSidebar = () => {
       menuLinks={links}
       header={organization.title}
       subHeader={intl.formatMessage(messages.subHeader)}
-      avatarPosition={DashboardAvatarPositionEnum.THREE_QUARTER}
+      avatarPosition={DashboardAvatarPositionEnum.CENTER}
       avatar={
         <DashboardAvatar
           title={organization.title}
