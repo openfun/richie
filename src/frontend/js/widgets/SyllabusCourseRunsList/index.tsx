@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { createPortal } from 'react-dom';
+import { Button } from '@openfun/cunningham-react';
 import { CourseRun, Priority } from 'types';
 import { computeStates } from 'utils/CourseRuns';
 import { SyllabusAsideList } from 'widgets/SyllabusCourseRunsList/components/SyllabusAsideList';
@@ -93,13 +94,9 @@ const SyllabusCourseRunsList = ({
               values={{ count: openedRuns.length }}
             />
           </p>
-          <a
-            className="button button--primary"
-            href={'#' + OPENED_COURSES_ELEMENT_ID}
-            onClick={choose}
-          >
+          <Button href={'#' + OPENED_COURSES_ELEMENT_ID} onClick={choose} fullWidth={true}>
             <FormattedMessage {...messages.multipleOpenedCourseRunsButton} />
-          </a>
+          </Button>
         </div>
       )}
       {createPortal(
