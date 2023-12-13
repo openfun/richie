@@ -121,7 +121,9 @@ export const ContractDefinitionFactory = factory((): ContractDefinition => {
 export const ContractFactory = factory((): Contract => {
   return {
     id: faker.string.uuid(),
-    signed_on: faker.date.past().toISOString(),
+    student_signed_on: faker.date.past().toISOString(),
+    organization_signed_on: null,
+    organization_signatory: null,
     created_on: faker.date.past().toISOString(),
     definition: ContractDefinitionFactory().one(),
     order: NestedCredentialOrderFactory().one(),
