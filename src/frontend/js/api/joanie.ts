@@ -158,10 +158,10 @@ export const getRoutes = () => {
     organizations: {
       get: `${baseUrl}/organizations/:id/`,
       courseProductRelations: {
-        get: `${baseUrl}/organizations/:id/course-product-relations/:course_product_relation_id/`,
+        get: `${baseUrl}/organizations/:organization_id/course-product-relations/:id/`,
       },
       courses: {
-        get: `${baseUrl}/organizations/:id/courses/:course_id/`,
+        get: `${baseUrl}/organizations/:organization_id/courses/:id/`,
       },
     },
     courses: {
@@ -190,18 +190,36 @@ export const getRoutes = () => {
  */
 export const isJoanieEnabled = !!context.joanie_backend;
 
+const filterEmptyEntry = ([, value]: [PropertyKey, any]) => {
+  if (value == null) return false; // Value is null/undefined
+  if (value?.length !== undefined && value.length === 0) return false; // Value is an empty array/string
+  return true;
+};
 export const buildApiUrl = <ApiFilters extends ResourcesQuery = ResourcesQuery>(
-  url: string,
+  raw_url: string,
   filters?: ApiFilters,
 ) => {
-  const { id = '', ...queryParameters } = filters || {};
-  if (id) url = url.replace(':id', id);
-  else url = url.replace(':id/', '');
+  // eslint-disable-next-line compat/compat
+  const url = new URL(raw_url);
 
-  if (!ObjectHelper.isEmpty(queryParameters)) {
-    url += '?' + queryString.stringify(queryParameters);
+  if (filters) {
+    Object.entries(filters)
+      .filter(filterEmptyEntry)
+      .forEach(([key, value]) => {
+        if (url.pathname.search(`:${key}`) > 0) {
+          url.pathname = url.pathname.replace(`:${key}`, value);
+        } else if (Array.isArray(value)) {
+          value.forEach((v) => url.searchParams.append(key, v));
+        } else {
+          url.searchParams.append(key, value);
+        }
+      });
   }
-  return url;
+
+  // Clean up url pathname
+  url.pathname = url.pathname.replaceAll(/:[a-z_]+\//g, '').replaceAll('//', '/');
+
+  return url.toString();
 };
 
 const API = (): Joanie.API => {
@@ -359,14 +377,10 @@ const API = (): Joanie.API => {
     },
     courses: {
       get: (filters?: Joanie.CourseQueryFilters) => {
-        const { organization_id: organizationId, ...parsedFilters } = filters || {};
         return fetchWithJWT(
-          organizationId
-            ? buildApiUrl(ROUTES.organizations.courses.get, {
-                id: organizationId,
-                ...parsedFilters,
-              })
-            : buildApiUrl(ROUTES.courses.get, parsedFilters),
+          filters?.organization_id
+            ? buildApiUrl(ROUTES.organizations.courses.get, filters)
+            : buildApiUrl(ROUTES.courses.get, filters),
         ).then(checkStatus);
       },
       products: {
@@ -392,25 +406,19 @@ const API = (): Joanie.API => {
     },
     courseRuns: {
       get: (filters: Joanie.CourseRunFilters) => {
-        const { course_id: courseId, ...parsedFilters } = filters || {};
         return fetchWithJWT(
-          courseId
-            ? buildApiUrl(ROUTES.courses.courseRuns.get, { id: courseId, ...parsedFilters })
-            : buildApiUrl(ROUTES.courseRuns.get, parsedFilters),
+          filters.course_id
+            ? buildApiUrl(ROUTES.courses.courseRuns.get, filters)
+            : buildApiUrl(ROUTES.courseRuns.get, filters),
         ).then(checkStatus);
       },
     },
     courseProductRelations: {
       get: (filters?: Joanie.CourseProductRelationQueryFilters) => {
-        const { organization_id: organizationId, ...parsedFilters } = filters || {};
         return fetchWithJWT(
-          organizationId
-            ? buildApiUrl(ROUTES.organizations.courseProductRelations.get, {
-                id: organizationId,
-                course_product_relation_id: parsedFilters.id,
-                ...parsedFilters,
-              })
-            : buildApiUrl(ROUTES.courseProductRelations.get, parsedFilters),
+          filters?.organization_id
+            ? buildApiUrl(ROUTES.organizations.courseProductRelations.get, filters)
+            : buildApiUrl(ROUTES.courseProductRelations.get, filters),
         ).then(checkStatus);
       },
     },

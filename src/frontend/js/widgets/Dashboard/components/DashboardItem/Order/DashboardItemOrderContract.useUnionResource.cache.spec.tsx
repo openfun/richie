@@ -93,8 +93,9 @@ describe('<DashboardItemOrder/> Contract', () => {
         previous: null,
         count: null,
       });
+
       fetchMock.get(
-        'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50&product_type=credential&state_exclude=canceled',
+        'https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=50',
         { results: [order], next: null, previous: null, count: null },
       );
 
@@ -269,7 +270,7 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       // Go back to the list view to make sure the sign button is not shown anymore.
       fetchMock.get(
-        'https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=50&product_type=credential&state_exclude=canceled',
+        'https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=50',
         { results: [signedOrder], next: null, previous: null, count: null },
         { overwriteRoutes: true },
       );

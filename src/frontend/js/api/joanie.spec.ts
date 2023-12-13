@@ -12,21 +12,47 @@ describe('api/joanie', () => {
     expect(responseBody).toBe('');
     fetchMock.restore();
   });
+
   it('buildApiUrl should build api url', () => {
     interface TestApiFilters extends ResourcesQuery {
+      addresses: string[];
+      age?: number;
       firstname: string;
+      gender: string;
+      is_active: boolean;
       lastname: string;
-      gender: string[];
+      links: string[];
+      profile: string | null;
     }
     const apiFilters: TestApiFilters = {
       id: 'DUMMY_TEST_API_ID',
+      addresses: ['1', '2'],
+      age: undefined,
       firstname: 'John',
+      gender: '',
+      is_active: false,
       lastname: 'Do',
-      gender: ['male', 'robot'],
+      links: [],
+      profile: null,
     };
-    const url = buildApiUrl('test/:id/', apiFilters);
+    const url = buildApiUrl('http://example.com/test/:id/', apiFilters);
     expect(url).toEqual(
-      'test/DUMMY_TEST_API_ID/?firstname=John&gender=male&gender=robot&lastname=Do',
+      'http://example.com/test/DUMMY_TEST_API_ID/?addresses=1&addresses=2&firstname=John&is_active=false&lastname=Do',
     );
+  });
+
+  it('buildApiUrl should build api url with nested resource', () => {
+    // If an url string parameter is not provided, it should be cleaned up
+    let url = buildApiUrl('http://example.com/resource/:id/nested/:nested_id/', {
+      id: '1',
+    });
+    expect(url).toEqual('http://example.com/resource/1/nested/');
+
+    // Now if we provide the nested_id, it should be added to the url
+    url = buildApiUrl('http://example.com/resource_1/:id/resource_2/:nested_id/', {
+      id: '1',
+      nested_id: '2',
+    });
+    expect(url).toEqual('http://example.com/resource_1/1/resource_2/2/');
   });
 });

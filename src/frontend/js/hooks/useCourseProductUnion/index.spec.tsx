@@ -101,9 +101,12 @@ describe('useCourseProductUnion', () => {
   it('should call organization courses and organization coursesProductRelation endpoints', async () => {
     const organizationId = 'DUMMY_ORGANIZATION_ID';
     const ROUTES = getRoutes();
-    const organizationCoursesUrl = ROUTES.organizations.courses.get.replace(':id', organizationId);
-    const organizationCourseProductRelationsUrl =
-      ROUTES.organizations.courseProductRelations.get.replace(':id', organizationId);
+    const organizationCoursesUrl = ROUTES.organizations.courses.get
+      .replace(':organization_id', organizationId)
+      .replace(':id/', '');
+    const organizationCourseProductRelationsUrl = ROUTES.organizations.courseProductRelations.get
+      .replace(':organization_id', organizationId)
+      .replace(':id/', '');
     fetchMock.get(
       `${organizationCoursesUrl}?has_listed_course_runs=true&page=1&page_size=${PER_PAGE}`,
       mockPaginatedResponse(courseList.slice(0, PER_PAGE), 0, false),
