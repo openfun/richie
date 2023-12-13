@@ -150,18 +150,18 @@ export const getRoutes = () => {
         create: `${baseUrl}/courses/:course_code/wish/`,
         delete: `${baseUrl}/courses/:course_code/wish/`,
       },
-      organizations: {
-        get: `${baseUrl}/organizations/:id/`,
-        courseProductRelations: {
-          get: `${baseUrl}/organizations/:id/course-product-relations/`,
-        },
-        courses: {
-          get: `${baseUrl}/organizations/:id/courses/`,
-        },
-      },
       contracts: {
         get: `${baseUrl}/contracts/:id/`,
         download: `${baseUrl}/contracts/:id/download/`,
+      },
+    },
+    organizations: {
+      get: `${baseUrl}/organizations/:id/`,
+      courseProductRelations: {
+        get: `${baseUrl}/organizations/:id/course-product-relations/:course_product_relation_id/`,
+      },
+      courses: {
+        get: `${baseUrl}/organizations/:id/courses/:course_id/`,
       },
     },
     courses: {
@@ -329,13 +329,6 @@ const API = (): Joanie.API => {
           }).then(checkStatus);
         },
       },
-      organizations: {
-        get: async (filters) => {
-          return fetchWithJWT(buildApiUrl(ROUTES.user.organizations.get, filters), {
-            method: 'GET',
-          }).then(checkStatus);
-        },
-      },
       contracts: {
         get: async (filters) => {
           let url;
@@ -357,12 +350,19 @@ const API = (): Joanie.API => {
         },
       },
     },
+    organizations: {
+      get: async (filters) => {
+        return fetchWithJWT(buildApiUrl(ROUTES.organizations.get, filters), {
+          method: 'GET',
+        }).then(checkStatus);
+      },
+    },
     courses: {
       get: (filters?: Joanie.CourseQueryFilters) => {
         const { organization_id: organizationId, ...parsedFilters } = filters || {};
         return fetchWithJWT(
           organizationId
-            ? buildApiUrl(ROUTES.user.organizations.courses.get, {
+            ? buildApiUrl(ROUTES.organizations.courses.get, {
                 id: organizationId,
                 ...parsedFilters,
               })
@@ -405,8 +405,9 @@ const API = (): Joanie.API => {
         const { organization_id: organizationId, ...parsedFilters } = filters || {};
         return fetchWithJWT(
           organizationId
-            ? buildApiUrl(ROUTES.user.organizations.courseProductRelations.get, {
+            ? buildApiUrl(ROUTES.organizations.courseProductRelations.get, {
                 id: organizationId,
+                course_product_relation_id: parsedFilters.id,
                 ...parsedFilters,
               })
             : buildApiUrl(ROUTES.courseProductRelations.get, parsedFilters),
