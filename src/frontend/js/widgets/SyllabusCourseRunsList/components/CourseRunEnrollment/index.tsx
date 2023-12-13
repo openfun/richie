@@ -11,6 +11,7 @@ import { handle } from 'utils/errors/handle';
 import { HttpError } from 'utils/errors/HttpError';
 import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/hooks/useCourseEnrollment';
 import { CourseRunUnenrollButton } from 'widgets/SyllabusCourseRunsList/components/CourseRunEnrollment/CourseRunUnenrollmentButton';
+import useDateRelative from 'hooks/useDateRelative';
 
 const messages = defineMessages({
   enroll: {
@@ -68,6 +69,11 @@ const messages = defineMessages({
     defaultMessage: 'Log in to enroll',
     description: 'Helper text in the enroll button for non logged in users',
     id: 'components.CourseRunEnrollment.loginToEnroll',
+  },
+  courseRunStartIn: {
+    defaultMessage: 'The course starts {relativeStartDate}',
+    description: 'Message displayed when user is enrolled but the course run is not started',
+    id: 'components.CourseRunEnrollment.courseRunStartIn',
   },
 });
 
@@ -178,6 +184,9 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
   const { enrollmentIsActive, setEnrollment, canUnenroll, states } = useCourseEnrollment(
     props.courseRun.resource_link,
   );
+  const startDate = new Date(props.courseRun.start);
+  const isStarted = new Date() > startDate;
+  const relativeStartDate = useDateRelative(startDate);
 
   const [
     {
@@ -291,30 +300,35 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
         </React.Fragment>
       );
     case step === Step.ENROLLED:
-      return courseRun.starts_in_message ? (
+      return isStarted ? (
+        <div>
+          <Button
+            href={courseRun.resource_link}
+            className="course-run-enrollment__cta"
+            fullWidth={true}
+          >
+            <FormattedMessage {...messages.goToCourse} />
+          </Button>
+          <div className="course-run-enrollment__helptext">
+            <FormattedMessage {...messages.enrolled} />
+            {canUnenroll && <CourseRunUnenrollButton onUnenroll={() => setEnroll(false)} />}
+          </div>
+        </div>
+      ) : (
         <div>
           {courseRun.dashboard_link ? (
-            <a href={courseRun.dashboard_link} className="course-run-enrollment__cta">
+            <Button href={courseRun.dashboard_link} className="course-run-enrollment__cta">
               <FormattedMessage {...messages.enrolled} />
-            </a>
+            </Button>
           ) : (
             <p className="course-run-enrollment__helptext">
               <FormattedMessage {...messages.enrolled} />
             </p>
           )}
           {canUnenroll && <CourseRunUnenrollButton onUnenroll={() => setEnroll(false)} />}
-          <p className="course-run-enrollment__helptext">{courseRun.starts_in_message}</p>
-        </div>
-      ) : (
-        <div>
-          {/* FIXME: cunningham needs to implement a ButtonLink component */}
-          <a href={courseRun.resource_link} className="course-run-enrollment__cta">
-            <FormattedMessage {...messages.goToCourse} />
-          </a>
-          <div className="course-run-enrollment__helptext">
-            <FormattedMessage {...messages.enrolled} />
-            {canUnenroll && <CourseRunUnenrollButton onUnenroll={() => setEnroll(false)} />}
-          </div>
+          <p className="course-run-enrollment__helptext">
+            <FormattedMessage {...messages.courseRunStartIn} values={{ relativeStartDate }} />
+          </p>
         </div>
       );
   }

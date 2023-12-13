@@ -10,9 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Add download and sign contracts page on the learner dashboard.
-- Display user full_name instead of username if it exists
-- Add a footer on enrollment's item in the learner dashboard. It gives the
+- Add a footer on enrollment's item in the learner dashboard. It give the
   possibility to purchase linked product or download linked certificate.
 - Add download contracts pages on the teacher dashboard.
 - Add a contract information and actions in learner dashboard order's 
@@ -44,6 +42,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Use cunningham Button component.
 - Use cunningham form components (input, select, radio, checkbox).
 - Delete richie Button component now that we use cunningham Button component.
+- Delete courseRun.starts_in_message, we compute it on frontend side.
 
 ### Fixed
 

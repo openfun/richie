@@ -55,7 +55,6 @@ export const CourseRunFactory = factory<CourseRun>(() => {
     enrollment_end: faker.date.past().toISOString(),
     languages: [faker.location.countryCode('alpha-2')],
     state: CourseStateFactory().one(),
-    starts_in_message: null,
     dashboard_link: null,
     title: faker.lorem.sentence(3),
     display_mode: CourseRunDisplayMode.DETAILED,
