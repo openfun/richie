@@ -2,10 +2,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { generatePath, useParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
-import {
-  DashboardAvatarPositionEnum,
-  DashboardSidebar,
-} from 'widgets/Dashboard/components/DashboardSidebar';
+import { DashboardSidebar } from 'widgets/Dashboard/components/DashboardSidebar';
 import {
   getDashboardRouteLabel,
   getDashboardRoutePath,
@@ -69,7 +66,6 @@ export const TeacherDashboardOrganizationSidebar = () => {
       menuLinks={links}
       header={organization.title}
       subHeader={intl.formatMessage(messages.subHeader)}
-      avatarPosition={DashboardAvatarPositionEnum.CENTER}
       avatar={
         <DashboardAvatar
           title={organization.title}
