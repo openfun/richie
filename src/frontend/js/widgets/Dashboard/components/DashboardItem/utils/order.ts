@@ -7,5 +7,5 @@ export const getActiveEnrollmentOrder = (orders: OrderEnrollment[], productId: s
 };
 
 export const orderNeedsSignature = (order: Order, product?: Product) => {
-  return product?.contract_definition && !(order.contract && order.contract.signed_on);
+  return product?.contract_definition && !(order.contract && order.contract.student_signed_on);
 };

@@ -19,7 +19,7 @@ export interface ContractStatusProps {
   contract?: Contract;
 }
 const ContractStatus = ({ contract }: ContractStatusProps) => {
-  const { signed_on: signedOn } = contract || {};
+  const { student_signed_on: signedOn } = contract || {};
   const formatDate = useDateFormat();
 
   return signedOn ? (

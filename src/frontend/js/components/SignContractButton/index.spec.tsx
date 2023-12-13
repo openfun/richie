@@ -68,7 +68,7 @@ describe('<SignContractButton/>', () => {
       <Wrapper>
         <SignContractButton
           order={CredentialOrderFactory({
-            contract: ContractFactory({ signed_on: faker.date.past().toISOString() }).one(),
+            contract: ContractFactory({ student_signed_on: faker.date.past().toISOString() }).one(),
           }).one()}
           writable={true}
         />

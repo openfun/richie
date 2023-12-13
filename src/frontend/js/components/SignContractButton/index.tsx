@@ -63,7 +63,7 @@ const SignContractButton = ({ order, writable, className }: SignContractButtonPr
 
   return (
     <>
-      {order.contract?.signed_on ? (
+      {order.contract?.student_signed_on ? (
         <DownloadContractButton contract={order.contract} className="dashboard-item__button" />
       ) : (
         <Button

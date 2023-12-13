@@ -158,7 +158,7 @@ export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
       } else {
         try {
           const orderToCheck = (await api.user.orders.get({ id: order.id })) as Order;
-          const isSigned = Boolean(orderToCheck?.contract?.signed_on);
+          const isSigned = Boolean(orderToCheck?.contract?.student_signed_on);
           if (isSigned) {
             timeoutRef.current = undefined;
             stepFinished();
