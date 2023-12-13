@@ -2,7 +2,6 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import fetchMock from 'fetch-mock';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
-
 import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
 import {
@@ -234,7 +233,9 @@ describe('<CourseRunEnrollment />', () => {
     const courseRun: CourseRun = CourseRunFactory().one();
     courseRun.state.priority = 0;
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
-    courseRun.starts_in_message = 'The course will start in 3 days';
+    const start = new Date();
+    start.setDate(new Date().getDate() + 3);
+    courseRun.start = start.toISOString();
     courseRun.dashboard_link = 'https://edx.local.dev:8073/dashboard';
 
     const enrollmentsDeferred = new Deferred();
@@ -268,7 +269,7 @@ describe('<CourseRunEnrollment />', () => {
         'https://edx.local.dev:8073/dashboard',
       ),
     );
-    screen.getByText('The course will start in 3 days');
+    screen.getByText('The course starts in 3 days');
   });
 
   it('shows a helpful message if the course run is closed', async () => {
