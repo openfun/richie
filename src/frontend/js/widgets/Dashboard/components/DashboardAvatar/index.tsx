@@ -1,5 +1,6 @@
 import c from 'classnames';
 import { JoanieFile } from 'types/Joanie';
+import { StringHelper } from 'utils/StringHelper';
 import { Nullable } from 'types/utils';
 
 export enum DashboardAvatarVariantEnum {
@@ -18,7 +19,6 @@ export const DashboardAvatar = ({
   image,
   variant = DashboardAvatarVariantEnum.DEFAULT,
 }: DashboardAvatarProps) => {
-  const letter = title.charAt(0).toUpperCase();
   return (
     <div
       data-testid="dashboard-avatar"
@@ -26,7 +26,16 @@ export const DashboardAvatar = ({
         'dashboard__avatar--square': variant === DashboardAvatarVariantEnum.SQUARE,
       })}
     >
-      {image ? <img src={image.src} srcSet={image.srcset} alt={title} /> : letter}
+      {image ? (
+        <img
+          className="dashboard__avatar__image"
+          src={image.src}
+          srcSet={image.srcset}
+          alt={title}
+        />
+      ) : (
+        <span className="dashboard__avatar__letter">{StringHelper.abbreviate(title, 3)}</span>
+      )}
     </div>
   );
 };
