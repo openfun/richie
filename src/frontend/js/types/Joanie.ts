@@ -404,6 +404,7 @@ export interface CourseRunFilters extends ResourcesQuery {
 }
 
 export interface CourseQueryFilters extends ResourcesQuery {
+  id?: CourseListItem['id'];
   organization_id?: Organization['id'];
   has_listed_course_runs?: Boolean;
 }
@@ -411,6 +412,7 @@ export interface CourseProductQueryFilters extends ResourcesQuery {
   productId?: Product['id'];
 }
 export interface CourseProductRelationQueryFilters extends ResourcesQuery {
+  id?: CourseProductRelation['id'];
   organization_id?: Organization['id'];
 }
 export interface ContractFilters extends PaginatedResourceQuery {

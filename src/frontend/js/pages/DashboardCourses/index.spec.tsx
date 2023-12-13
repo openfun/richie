@@ -141,12 +141,12 @@ describe('<DashboardCourses/>', () => {
   it('renders an empty placeholder', async () => {
     const ordersDeferred = new Deferred();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}&product_type=credential&state_exclude=canceled`,
+      `https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=${perPage}`,
       ordersDeferred.promise,
     );
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${perPage}&was_created_by_order=false`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=${perPage}`,
       enrollmentsDeferred.promise,
     );
 
@@ -180,25 +180,25 @@ describe('<DashboardCourses/>', () => {
       client,
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}&product_type=credential&state_exclude=canceled`,
+      `https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=${perPage}`,
       {
         results: orders.slice(0, perPage),
-        next: `https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=${perPage}&product_type=credentia&state_exclude=canceledl`,
+        next: `https://joanie.endpoint/api/v1.0/orders/?product_type=credentia&state_exclude=canceled&page=2&page_size=${perPage}`,
         previous: null,
         count: orders.length,
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=2&page_size=${perPage}&product_type=credential&state_exclude=canceled`,
+      `https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=2&page_size=${perPage}`,
       {
         results: orders.slice(perPage, perPage * 2),
-        next: `https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=${perPage}&product_type=credential&state_exclude=canceled`,
+        next: `https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=3&page_size=${perPage}`,
         previous: null,
         count: orders.length,
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=3&page_size=${perPage}&product_type=credential&state_exclude=canceled`,
+      `https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=3&page_size=${perPage}`,
       {
         results: orders.slice(perPage * 2, perPage * 3),
         next: null,
@@ -214,25 +214,25 @@ describe('<DashboardCourses/>', () => {
     });
 
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${perPage}&was_created_by_order=false`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=${perPage}`,
       {
         results: enrollments.slice(0, perPage),
-        next: `https://joanie.endpoint/api/v1.0/enrollments/?page=2&page_size=${perPage}&was_created_by_order=false`,
+        next: `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=2&page_size=${perPage}`,
         previous: null,
         count: enrollments.length,
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=2&page_size=${perPage}&was_created_by_order=false`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=2&page_size=${perPage}`,
       {
         results: enrollments.slice(perPage, perPage * 2),
-        next: `https://joanie.endpoint/api/v1.0/enrollments/?page=3&page_size=${perPage}&was_created_by_order=false`,
+        next: `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=3&page_size=${perPage}`,
         previous: null,
         count: enrollments.length,
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=3&page_size=${perPage}&was_created_by_order=false`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=3&page_size=${perPage}`,
       {
         results: enrollments.slice(perPage * 2, perPage * 3),
         next: null,
@@ -270,11 +270,11 @@ describe('<DashboardCourses/>', () => {
     jest.spyOn(console, 'error').mockImplementation(noop);
     const ordersDeferred = new Deferred();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?page=1&page_size=${perPage}&product_type=credential&state_exclude=canceled`,
+      `https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=${perPage}`,
       ordersDeferred.promise,
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?page=1&page_size=${perPage}&was_created_by_order=false`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=${perPage}`,
       { results: [], next: null, previous: null, count: 0 },
     );
 
