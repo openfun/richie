@@ -74,7 +74,7 @@ export const TeacherDashboardOrganizationSidebar = () => {
         <DashboardAvatar
           title={organization.title}
           variant={DashboardAvatarVariantEnum.SQUARE}
-          imageUrl={organization.logo.src}
+          image={organization.logo}
         />
       }
     />
