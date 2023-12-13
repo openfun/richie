@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -50,17 +50,15 @@ describe('PurchaseButton', () => {
   it('shows a login button if user is not authenticated', async () => {
     const product = ProductFactory().one();
 
-    act(() => {
-      render(
-        <Wrapper client={createTestQueryClient({ user: null })}>
-          <PurchaseButton
-            product={product}
-            disabled={false}
-            course={CourseLightFactory({ code: '00000' }).one()}
-          />
-        </Wrapper>,
-      );
-    });
+    render(
+      <Wrapper client={createTestQueryClient({ user: null })}>
+        <PurchaseButton
+          product={product}
+          disabled={false}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
+      </Wrapper>,
+    );
 
     expect(
       await screen.findByRole('button', { name: `Login to purchase "${product.title}"` }),
@@ -74,29 +72,25 @@ describe('PurchaseButton', () => {
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
 
-    act(() => {
-      render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton
-            product={product}
-            disabled={false}
-            course={CourseLightFactory({ code: '00000' }).one()}
-          />
-        </Wrapper>,
-      );
-    });
+    render(
+      <Wrapper client={createTestQueryClient({ user: true })}>
+        <PurchaseButton
+          product={product}
+          disabled={false}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
+      </Wrapper>,
+    );
 
     fetchMock.resetHistory();
 
     // Only CTA is displayed
-    const button = screen.getByRole('button', { name: product.call_to_action });
+    const button = await screen.findByRole('button', { name: product.call_to_action });
 
     // - SaleTunnel should not be opened
     expect(screen.queryByTestId('SaleTunnel__modal')).toBeNull();
 
-    // act is needed here because we've no way, in SaleTunnel, to check useOrder !fetching state from the DOM
-    // Then user can enter into the sale tunnel and follow its 3 steps
-    await act(async () => userEvent.click(button));
+    await userEvent.click(button);
 
     // - SaleTunnel should have been opened
     expect(screen.getByTestId('SaleTunnel__modal')).toBeInTheDocument();
@@ -109,17 +103,15 @@ describe('PurchaseButton', () => {
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
 
-    act(() => {
-      render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton
-            product={product}
-            disabled={false}
-            course={CourseLightFactory({ code: '00000' }).one()}
-          />
-        </Wrapper>,
-      );
-    });
+    render(
+      <Wrapper client={createTestQueryClient({ user: true })}>
+        <PurchaseButton
+          product={product}
+          disabled={false}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
+      </Wrapper>,
+    );
 
     fetchMock.resetHistory();
 
@@ -131,9 +123,7 @@ describe('PurchaseButton', () => {
     // - SaleTunnel should not be opened
     expect(screen.queryByTestId('SaleTunnel__modal')).not.toBeInTheDocument();
 
-    // act is needed here because we've no way, in SaleTunnel, to check useOrder !fetching state from the DOM
-    // Then user can enter into the sale tunnel and follow its 3 steps
-    await act(async () => userEvent.click(button));
+    await userEvent.click(button);
 
     // - SaleTunnel should have been opened
     expect(await screen.findByTestId('SaleTunnel__modal')).toBeInTheDocument();
@@ -148,17 +138,15 @@ describe('PurchaseButton', () => {
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
 
-    act(() => {
-      render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton
-            product={product}
-            disabled={false}
-            course={CourseLightFactory({ code: '00000' }).one()}
-          />
-        </Wrapper>,
-      );
-    });
+    render(
+      <Wrapper client={createTestQueryClient({ user: true })}>
+        <PurchaseButton
+          product={product}
+          disabled={false}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
+      </Wrapper>,
+    );
 
     fetchMock.resetHistory();
 
@@ -170,9 +158,7 @@ describe('PurchaseButton', () => {
     // - SaleTunnel should not be opened
     expect(screen.queryByTestId('SaleTunnel__modal')).not.toBeInTheDocument();
 
-    // act is needed here because we've no way, in SaleTunnel, to check useOrder !fetching state from the DOM
-    // Then user can enter into the sale tunnel and follow its 3 steps
-    await act(async () => userEvent.click(button));
+    await userEvent.click(button);
 
     // - SaleTunnel should have been opened
     expect(await screen.findByTestId('SaleTunnel__modal')).toBeInTheDocument();
@@ -185,20 +171,20 @@ describe('PurchaseButton', () => {
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
 
-    act(() => {
-      render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton
-            product={product}
-            disabled={false}
-            course={CourseLightFactory({ code: '00000' }).one()}
-          />
-        </Wrapper>,
-      );
-    });
+    render(
+      <Wrapper client={createTestQueryClient({ user: true })}>
+        <PurchaseButton
+          product={product}
+          disabled={false}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
+      </Wrapper>,
+    );
 
     // CTA is displayed but disabled
-    const button: HTMLButtonElement = screen.getByRole('button', { name: product.call_to_action });
+    const button: HTMLButtonElement = await screen.findByRole('button', {
+      name: product.call_to_action,
+    });
     expect(button).toBeDisabled();
 
     // Further, a message is displayed to explain why the CTA is disabled
@@ -221,20 +207,18 @@ describe('PurchaseButton', () => {
         .get('https://joanie.test/api/v1.0/credit-cards/', [])
         .get('https://joanie.test/api/v1.0/orders/', []);
 
-      act(() => {
-        render(
-          <Wrapper client={createTestQueryClient({ user: true })}>
-            <PurchaseButton
-              product={product}
-              disabled={false}
-              course={CourseLightFactory({ code: '00000' }).one()}
-            />
-          </Wrapper>,
-        );
-      });
+      render(
+        <Wrapper client={createTestQueryClient({ user: true })}>
+          <PurchaseButton
+            product={product}
+            disabled={false}
+            course={CourseLightFactory({ code: '00000' }).one()}
+          />
+        </Wrapper>,
+      );
 
       // CTA is displayed but disabled
-      const button: HTMLButtonElement = screen.getByRole('button', {
+      const button: HTMLButtonElement = await screen.findByRole('button', {
         name: product.call_to_action,
       });
       expect(button).toBeDisabled();
@@ -272,13 +256,11 @@ describe('PurchaseButton', () => {
         .get('https://joanie.test/api/v1.0/credit-cards/', [])
         .get('https://joanie.test/api/v1.0/orders/', []);
 
-      act(() => {
-        render(
-          <Wrapper client={createTestQueryClient({ user: true })}>
-            <PurchaseButton product={product} disabled={false} enrollment={enrollment} />
-          </Wrapper>,
-        );
-      });
+      render(
+        <Wrapper client={createTestQueryClient({ user: true })}>
+          <PurchaseButton product={product} disabled={false} enrollment={enrollment} />
+        </Wrapper>,
+      );
 
       // CTA is displayed but disabled
       const button: HTMLButtonElement = await screen.findByRole('button', {
@@ -328,13 +310,11 @@ describe('PurchaseButton', () => {
         .get('https://joanie.test/api/v1.0/credit-cards/', [])
         .get('https://joanie.test/api/v1.0/orders/', []);
 
-      act(() => {
-        render(
-          <Wrapper client={createTestQueryClient({ user: true })}>
-            <PurchaseButton product={product} disabled={false} enrollment={enrollment} />
-          </Wrapper>,
-        );
-      });
+      render(
+        <Wrapper client={createTestQueryClient({ user: true })}>
+          <PurchaseButton product={product} disabled={false} enrollment={enrollment} />
+        </Wrapper>,
+      );
 
       // CTA should not be disabled
       const button: HTMLButtonElement = await screen.findByRole('button', {
@@ -359,20 +339,20 @@ describe('PurchaseButton', () => {
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
 
-    act(() => {
-      render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton
-            product={product}
-            disabled={false}
-            course={CourseLightFactory({ code: '00000' }).one()}
-          />
-        </Wrapper>,
-      );
-    });
+    render(
+      <Wrapper client={createTestQueryClient({ user: true })}>
+        <PurchaseButton
+          product={product}
+          disabled={false}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
+      </Wrapper>,
+    );
 
     // CTA is displayed but disabled
-    const button: HTMLButtonElement = screen.getByRole('button', { name: product.call_to_action });
+    const button: HTMLButtonElement = await screen.findByRole('button', {
+      name: product.call_to_action,
+    });
     expect(button).toBeDisabled();
 
     // Further, a message is displayed to explain why the CTA is disabled
@@ -388,17 +368,15 @@ describe('PurchaseButton', () => {
       .get('https://joanie.test/api/v1.0/credit-cards/', [])
       .get('https://joanie.test/api/v1.0/orders/', []);
 
-    act(() => {
-      render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton
-            product={product}
-            disabled={true}
-            course={CourseLightFactory({ code: '00000' }).one()}
-          />
-        </Wrapper>,
-      );
-    });
+    render(
+      <Wrapper client={createTestQueryClient({ user: true })}>
+        <PurchaseButton
+          product={product}
+          disabled={true}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />
+      </Wrapper>,
+    );
 
     // CTA is not displayed
     expect(screen.queryByRole('button', { name: product.call_to_action })).not.toBeInTheDocument();
