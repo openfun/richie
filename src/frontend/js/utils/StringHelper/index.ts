@@ -11,4 +11,12 @@ export class StringHelper {
     }
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
+
+  static abbreviate(str: string, maxLength?: number): string {
+    return str
+      .split(' ', maxLength)
+      .map((word) => word[0])
+      .join('')
+      .toUpperCase();
+  }
 }
