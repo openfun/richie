@@ -22,7 +22,7 @@ export interface Organization {
   id: string;
   code: string;
   title: string;
-  logo: JoanieFile;
+  logo: Nullable<JoanieFile>;
 }
 
 export interface ContractDefinition {
@@ -49,7 +49,7 @@ export interface CourseListItem extends Resource {
   course_run_ids: string[];
   organizations: Organization[];
   selling_organizations: Organization[];
-  cover: JoanieFile;
+  cover: Nullable<JoanieFile>;
   product_ids: string[];
   state: CourseState;
   created_on: string;
@@ -159,10 +159,11 @@ export interface AbstractCourse {
   organizations: OrganizationLight[];
   title: string;
   course_runs: CourseRun[];
-  cover?: JoanieFile;
 }
 
-export type CourseLight = Pick<AbstractCourse, 'id' | 'code' | 'title' | 'cover'>;
+export type CourseLight = Pick<AbstractCourse, 'id' | 'code' | 'title'> & {
+  cover: Nullable<JoanieFile>;
+};
 
 export interface TargetCourse extends AbstractCourse {
   is_graded: boolean;

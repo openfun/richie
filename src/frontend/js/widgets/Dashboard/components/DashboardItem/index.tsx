@@ -1,12 +1,12 @@
 import { PropsWithChildren, ReactNode } from 'react';
 import { JoanieFile } from 'types/Joanie';
-import { PropsWithTestId } from 'types/utils';
+import { Nullable, PropsWithTestId } from 'types/utils';
 
 type Props = PropsWithTestId<{
   title: ReactNode;
   code?: string;
   imageUrl?: string;
-  imageFile?: JoanieFile;
+  imageFile?: Nullable<JoanieFile>;
   footer?: ReactNode;
 }>;
 
