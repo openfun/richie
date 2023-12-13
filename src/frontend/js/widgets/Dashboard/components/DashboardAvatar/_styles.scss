@@ -11,8 +11,19 @@ $avatar-size: 100px;
     justify-content: center;
     align-items: center;
     color: r-theme-val(dashboard-avatar, base-color);
-    font-size: 3rem;
-    font-weight: bold;
+    padding: rem-calc(3px);
+
+    &__letter {
+      font-size: 2.5rem;
+      font-family: $r-font-family-montserrat;
+      font-weight: $font-weight-boldest;
+      line-height: 1;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-transform: uppercase;
+    }
 
     &--square {
       border-radius: rem-calc(8px);
@@ -20,7 +31,7 @@ $avatar-size: 100px;
       border: 1px solid r-theme-val(dashboard-avatar, background-color);
       color: r-theme-val(dashboard-avatar, background-color);
 
-      img {
+      .dashboard__avatar__image {
         border-radius: rem-calc(6px);
       }
     }
