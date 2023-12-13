@@ -26,9 +26,6 @@
       &__avatar {
         position: absolute;
         top: calc($avatar-size / -2);
-        &--three_quarter {
-          top: calc($avatar-size / 3 * -2);
-        }
       }
 
       h3 {
