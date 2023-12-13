@@ -1,4 +1,6 @@
 import c from 'classnames';
+import { JoanieFile } from 'types/Joanie';
+import { Nullable } from 'types/utils';
 
 export enum DashboardAvatarVariantEnum {
   DEFAULT = 'default',
@@ -7,13 +9,13 @@ export enum DashboardAvatarVariantEnum {
 
 interface DashboardAvatarProps {
   title: string;
-  imageUrl?: string;
+  image?: Nullable<JoanieFile>;
   variant?: DashboardAvatarVariantEnum;
 }
 
 export const DashboardAvatar = ({
   title,
-  imageUrl,
+  image,
   variant = DashboardAvatarVariantEnum.DEFAULT,
 }: DashboardAvatarProps) => {
   const letter = title.charAt(0).toUpperCase();
@@ -24,7 +26,7 @@ export const DashboardAvatar = ({
         'dashboard__avatar--square': variant === DashboardAvatarVariantEnum.SQUARE,
       })}
     >
-      {imageUrl ? <img src={imageUrl} alt={title} /> : letter}
+      {image ? <img src={image.src} srcSet={image.srcset} alt={title} /> : letter}
     </div>
   );
 };

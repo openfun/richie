@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { JoanieFileFactory } from 'utils/test/factories/joanie';
 import { DashboardAvatar, DashboardAvatarVariantEnum } from '.';
 
 describe('<DashboardAvatar/>', () => {
@@ -13,8 +14,14 @@ describe('<DashboardAvatar/>', () => {
   });
 
   it('should display an image if given', () => {
-    render(<DashboardAvatar title="Bob" imageUrl="http://my.awesome.image" />);
-    expect(screen.getByAltText('Bob')).toHaveAttribute('src', 'http://my.awesome.image');
+    const image = JoanieFileFactory({
+      src: 'http://my.awesome.image',
+      srcset: '200w http://my.awesome.image/200',
+    }).one();
+    render(<DashboardAvatar title="Bob" image={image} />);
+    const img = screen.getByAltText('Bob');
+    expect(img).toHaveAttribute('src', 'http://my.awesome.image');
+    expect(img).toHaveAttribute('srcset', '200w http://my.awesome.image/200');
   });
 
   it('should contain the variant class for SQUARE', () => {
