@@ -488,11 +488,6 @@ interface APIUser {
     create(id: string): Promise<CourseWish>;
     delete(id: string): Promise<void>;
   };
-  organizations: {
-    get<Filters extends ResourcesQuery = ResourcesQuery>(
-      filters?: Filters,
-    ): Filters extends { id: string } ? Promise<Nullable<Organization>> : Promise<Organization[]>;
-  };
   contracts: {
     get(
       filters?: ContractFilters,
@@ -514,6 +509,11 @@ export interface API {
     products: {
       get(filters?: CourseProductQueryFilters): Promise<Nullable<CourseProductRelation>>;
     };
+  };
+  organizations: {
+    get<Filters extends ResourcesQuery = ResourcesQuery>(
+      filters?: Filters,
+    ): Filters extends { id: string } ? Promise<Nullable<Organization>> : Promise<Organization[]>;
   };
   courseRuns: {
     get(

@@ -23,7 +23,7 @@ const messages = defineMessages({
  */
 const props: UseResourcesProps<Organization> = {
   queryKey: ['organizations'],
-  apiInterface: () => useJoanieApi().user.organizations,
+  apiInterface: () => useJoanieApi().organizations,
   session: true,
   messages,
 };
