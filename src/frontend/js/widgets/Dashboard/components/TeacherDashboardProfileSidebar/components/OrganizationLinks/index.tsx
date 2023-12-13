@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Organization } from 'types/Joanie';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
+import { StringHelper } from 'utils/StringHelper';
 
 export const messages = defineMessages({
   organizationsTitle: {
@@ -40,12 +41,21 @@ const OrganizationLinks = ({ organizations }: OrganizationLinksProps) => {
               organizationTitle: organization.title,
             })}
           >
-            <img
-              className="dashboard-sidebar__organization-section__link__img"
-              alt={organization.title}
-              src={organization.logo.src}
-              srcSet={organization.logo.srcset}
-            />
+            {organization.logo ? (
+              <img
+                className="dashboard-sidebar__organization-section__link__img"
+                alt={organization.title}
+                src={organization.logo.src}
+                srcSet={organization.logo.srcset}
+              />
+            ) : (
+              <span
+                className="dashboard-sidebar__organization-section__link__abbr"
+                aria-label={organization.title}
+              >
+                {StringHelper.abbreviate(organization.title, 3)}
+              </span>
+            )}
           </Link>
         ))}
       </div>
