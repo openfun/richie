@@ -59,7 +59,7 @@ describe('<DownloadContractButton/>', () => {
 
     const order = CredentialOrderFactory({
       target_enrollments: [],
-      contract: ContractFactory({ signed_on: faker.date.past().toISOString() }).one(),
+      contract: ContractFactory({ student_signed_on: faker.date.past().toISOString() }).one(),
     }).one();
 
     const DOWNLOAD_URL = `https://joanie.endpoint/api/v1.0/contracts/${
@@ -103,7 +103,7 @@ describe('<DownloadContractButton/>', () => {
     const order = CredentialOrderFactory({
       // target_courses: TargetCourseFactory().many(1),
       target_enrollments: [],
-      contract: ContractFactory({ signed_on: faker.date.past().toISOString() }).one(),
+      contract: ContractFactory({ student_signed_on: faker.date.past().toISOString() }).one(),
     }).one();
 
     const DOWNLOAD_URL = `https://joanie.endpoint/api/v1.0/contracts/${

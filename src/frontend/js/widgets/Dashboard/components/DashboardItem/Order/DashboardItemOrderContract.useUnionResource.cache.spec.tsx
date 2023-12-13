@@ -73,7 +73,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       const order = CredentialOrderFactory({
         target_courses: TargetCourseFactory().many(1),
         target_enrollments: [],
-        contract: ContractFactory({ signed_on: undefined }).one(),
+        contract: ContractFactory({ student_signed_on: undefined }).one(),
       }).one();
 
       // learner dashboard course page do one call to course product relation per order
@@ -224,7 +224,7 @@ describe('<DashboardItemOrder/> Contract', () => {
           ...order,
           contract: {
             ...order.contract,
-            signed_on: new Date().toISOString(),
+            student_signed_on: new Date().toISOString(),
           },
         });
       });
@@ -252,7 +252,7 @@ describe('<DashboardItemOrder/> Contract', () => {
         ...order,
         contract: {
           ...order.contract,
-          signed_on: new Date().toISOString(),
+          student_signed_on: new Date().toISOString(),
         },
       };
       signedOrderDeferred.resolve({

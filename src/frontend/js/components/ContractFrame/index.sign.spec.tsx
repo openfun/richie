@@ -80,7 +80,7 @@ describe('<DashboardItemOrder/> Contract', () => {
 
   it('fails signature submitting and displays an error', async () => {
     const order = CredentialOrderFactory({
-      contract: ContractFactory({ signed_on: undefined }).one(),
+      contract: ContractFactory({ student_signed_on: undefined }).one(),
     }).one();
 
     const submitDeferred = new Deferred();
@@ -121,7 +121,7 @@ describe('<DashboardItemOrder/> Contract', () => {
 
   it('succeed signature submitting but fails during polling', async () => {
     const order = CredentialOrderFactory({
-      contract: ContractFactory({ signed_on: undefined }).one(),
+      contract: ContractFactory({ student_signed_on: undefined }).one(),
     }).one();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
@@ -233,7 +233,7 @@ describe('<DashboardItemOrder/> Contract', () => {
 
   it('succeed signature submitting but exceeds polling max attempts', async () => {
     const order = CredentialOrderFactory({
-      contract: ContractFactory({ signed_on: undefined }).one(),
+      contract: ContractFactory({ student_signed_on: undefined }).one(),
     }).one();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
@@ -345,7 +345,7 @@ describe('<DashboardItemOrder/> Contract', () => {
 
   it('successfully sign a contract', async () => {
     const order = CredentialOrderFactory({
-      contract: ContractFactory({ signed_on: undefined }).one(),
+      contract: ContractFactory({ student_signed_on: undefined }).one(),
     }).one();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
@@ -446,7 +446,7 @@ describe('<DashboardItemOrder/> Contract', () => {
         ...order,
         contract: {
           ...order.contract,
-          signed_on: new Date().toISOString(),
+          student_signed_on: new Date().toISOString(),
         },
       });
     });

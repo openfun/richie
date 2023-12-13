@@ -64,7 +64,7 @@ describe('<SignContractButton/>', () => {
       );
     };
     const order = CredentialOrderFactory({
-      contract: ContractFactory({ signed_on: undefined }).one(),
+      contract: ContractFactory({ student_signed_on: undefined }).one(),
     }).one();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/',
@@ -98,7 +98,7 @@ describe('<SignContractButton/>', () => {
       ...order,
       contract: {
         ...order.contract,
-        signed_on: new Date().toISOString(),
+        student_signed_on: new Date().toISOString(),
       },
     };
     fetchMock.get(

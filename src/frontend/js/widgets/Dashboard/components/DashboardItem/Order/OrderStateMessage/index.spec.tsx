@@ -89,7 +89,7 @@ describe('<DashboardItemOrder/>', () => {
   it("should display message for validated order that don't have a generated certificate", () => {
     const order = CredentialOrderFactory({
       state: OrderState.VALIDATED,
-      contract: ContractFactory({ signed_on: new Date().toISOString() }).one(),
+      contract: ContractFactory({ student_signed_on: new Date().toISOString() }).one(),
       certificate_id: undefined,
     }).one();
     render(
@@ -107,7 +107,7 @@ describe('<DashboardItemOrder/>', () => {
   it('should display message for validated order that have a generated certificate', () => {
     const order = CredentialOrderFactory({
       state: OrderState.VALIDATED,
-      contract: ContractFactory({ signed_on: new Date().toISOString() }).one(),
+      contract: ContractFactory({ student_signed_on: new Date().toISOString() }).one(),
       certificate_id: 'FAKE_CERTIFICATE_ID',
     }).one();
     render(

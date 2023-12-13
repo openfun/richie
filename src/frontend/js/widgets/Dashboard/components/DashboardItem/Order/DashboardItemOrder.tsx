@@ -160,7 +160,7 @@ export const DashboardItemOrder = ({
           <DashboardItemOrderCertificate order={order} product={product} />
         </div>
       )}
-      {writable && isCourseProductRelationFetched && order.contract?.signed_on && (
+      {writable && isCourseProductRelationFetched && order.contract?.student_signed_on && (
         <DashboardItemOrderContract
           key={`DashboardItemOrderContract_${order.id}`}
           order={order}
