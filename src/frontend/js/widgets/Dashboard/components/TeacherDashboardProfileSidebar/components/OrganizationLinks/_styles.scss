@@ -23,19 +23,32 @@
       border: thin solid r-theme-val(organization-thumb, border-color);
       display: flex;
       flex: 0 0 32%;
-      justify-content: center;
       overflow: hidden;
+      justify-content: center;
       padding: rem-calc(2px);
+      aspect-ratio: 1 / 1;
+
       &:hover,
       &:focus,
       &:active {
         border-color: r-theme-val(organization-thumb, border-color-hover);
         box-shadow: 0 0 rem-calc(3px) r-theme-val(organization-thumb, border-color);
+        text-decoration: none;
       }
+
       &__img {
         object-fit: contain;
         object-position: center center;
         aspect-ratio: 1/1;
+        border-radius: rem-calc(6px);
+      }
+
+      &__abbr {
+        font-size: 1.5rem;
+        font-family: $r-font-family-montserrat;
+        font-weight: $font-weight-boldest;
+        text-transform: uppercase;
+        display: inline-block;
       }
 
       @include media-breakpoint-down(lg) {
