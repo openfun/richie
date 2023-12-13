@@ -35,7 +35,9 @@ export interface ContractDefinition {
 export interface Contract {
   id: string;
   created_on: string;
-  signed_on: string;
+  student_signed_on: Nullable<string>;
+  organization_signed_on: Nullable<string>;
+  organization_signatory: Nullable<JoanieUserProfile>;
   definition: ContractDefinition;
   order: NestedCertificateOrder | NestedCredentialOrder;
 }
