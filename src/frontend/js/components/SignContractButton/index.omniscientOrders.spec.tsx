@@ -56,7 +56,7 @@ describe('<SignContractButton/>', () => {
     fetchMock.restore();
   });
 
-  it('should switch sign button to download on contract sign', async () => {
+  it('should hide sign button on learner training contract sign', async () => {
     const ApiOrdersWrapper = () => {
       const { items: orders } = useOmniscientOrders();
       return (
@@ -135,7 +135,7 @@ describe('<SignContractButton/>', () => {
     await user.click($closeButton);
     expect(screen.queryByTestId('dashboard-contract-frame')).not.toBeInTheDocument();
 
-    expect(await screen.findByRole('button', { name: 'Download' })).toBeInTheDocument();
+    expect(await screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
   });
 });

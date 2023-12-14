@@ -239,7 +239,10 @@ describe('<DashboardItemOrder/> Contract', () => {
       const order = CredentialOrderFactory({
         target_courses: TargetCourseFactory().many(1),
         target_enrollments: [],
-        contract: ContractFactory({ student_signed_on: faker.date.past().toISOString() }).one(),
+        contract: ContractFactory({
+          student_signed_on: faker.date.past().toISOString(),
+          organization_signed_on: faker.date.past().toISOString(),
+        }).one(),
       }).one();
       const { product } = mockCourseProductWithOrder(order);
 
@@ -277,7 +280,10 @@ describe('<DashboardItemOrder/> Contract', () => {
       const order = CredentialOrderFactory({
         target_courses: TargetCourseFactory().many(1),
         target_enrollments: [],
-        contract: ContractFactory({ student_signed_on: faker.date.past().toISOString() }).one(),
+        contract: ContractFactory({
+          student_signed_on: faker.date.past().toISOString(),
+          organization_signed_on: faker.date.past().toISOString(),
+        }).one(),
       }).one();
       mockCourseProductWithOrder(order);
 

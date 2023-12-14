@@ -2,12 +2,13 @@ import { Button } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useState } from 'react';
 import { ContractFrame } from 'components/ContractFrame';
-import { Contract, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
+import { Contract, ContractState, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import DownloadContractButton from 'components/DownloadContractButton';
 import { Maybe } from 'types/utils';
+import { ContractHelper } from 'utils/ContractHelper';
 
 const messages = defineMessages({
   contractSignActionLabel: {
@@ -58,16 +59,18 @@ const SignContractButtonLink = ({ orderId, className }: SignContractButtonLinkPr
 const SignContractButton = ({ order, contract, writable, className }: SignContractButtonProps) => {
   const [contractFrameOpened, setContractFrameOpened] = useState(false);
   const [contractLoading, setContractLoading] = useState(false);
+  const contractState = ContractHelper.getState(contract);
 
-  if (!writable) {
+  if (!writable && contractState === ContractState.UNSIGNED) {
     return <SignContractButtonLink orderId={order.id} className={className} />;
   }
 
   return (
     <>
-      {contract && contract.student_signed_on ? (
-        <DownloadContractButton contract={contract} className="dashboard-item__button" />
-      ) : (
+      {contractState === ContractState.SIGNED && (
+        <DownloadContractButton contract={contract!} className="dashboard-item__button" />
+      )}
+      {contractState === ContractState.UNSIGNED && (
         <Button
           size="small"
           className={className}

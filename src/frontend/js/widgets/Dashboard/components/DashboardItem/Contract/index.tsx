@@ -1,7 +1,6 @@
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { Contract, ContractDefinition, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
 import ContractStatus from 'components/ContractStatus';
-import DownloadContractButton from 'components/DownloadContractButton';
 import SignContractButton from 'components/SignContractButton';
 import { DashboardItem, DashboardItemProps } from '..';
 
@@ -35,20 +34,16 @@ export const DashboardItemContract = ({
             <span>{contract_definition.title}</span>
           </div>
           <div className="dashboard-contract__footer">
-            <span>
+            <span className="dashboard-contract__footer__status">
               <ContractStatus contract={contract} />
             </span>
             <div>
-              {contract && contract.student_signed_on ? (
-                <DownloadContractButton contract={contract} />
-              ) : (
-                <SignContractButton
-                  order={order}
-                  contract={contract}
-                  writable={writable}
-                  className="dashboard-item__button"
-                />
-              )}
+              <SignContractButton
+                order={order}
+                contract={contract}
+                writable={writable}
+                className="dashboard-item__button"
+              />
             </div>
           </div>
         </>
