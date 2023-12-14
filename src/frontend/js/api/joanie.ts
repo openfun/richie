@@ -167,10 +167,10 @@ export const getRoutes = () => {
     courses: {
       get: `${baseUrl}/courses/:id/`,
       courseRuns: {
-        get: `${baseUrl}/courses/:id/course-runs/`,
+        get: `${baseUrl}/courses/:course_id/course-runs/`,
       },
       products: {
-        get: `${baseUrl}/courses/:id/products/:product_id/`,
+        get: `${baseUrl}/courses/:course_id/products/:id/`,
       },
     },
     courseRuns: {
@@ -389,18 +389,13 @@ const API = (): Joanie.API => {
             throw new Error(
               'A course code and a product id are required to fetch a course product',
             );
-          } else if (!filters.id) {
+          } else if (!filters.course_id) {
             throw new Error('A course code is required to fetch a course product');
-          } else if (!filters.productId) {
+          } else if (!filters.id) {
             throw new Error('A product id is required to fetch a course product');
           }
 
-          const { id: courseId, productId, ...queryFilters } = filters;
-          const url = ROUTES.courses.products.get
-            .replace(':id', courseId)
-            .replace(':product_id', productId);
-
-          return fetchWithJWT(buildApiUrl(url, queryFilters)).then(checkStatus);
+          return fetchWithJWT(buildApiUrl(ROUTES.courses.products.get, filters)).then(checkStatus);
         },
       },
     },

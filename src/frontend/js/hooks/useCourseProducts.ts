@@ -1,5 +1,5 @@
 import { defineMessages } from 'react-intl';
-import { API, CourseProductQueryFilters, CourseProductRelation } from 'types/Joanie';
+import { API, CourseProductQueryFilters, CourseProductRelation, Product } from 'types/Joanie';
 import { QueryOptions, useResourcesCustom, UseResourcesProps } from 'hooks/useResources';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 
@@ -30,14 +30,14 @@ const props: UseResourcesProps<
 };
 
 export const useCourseProduct = (
-  id: CourseProductQueryFilters['id'],
-  filters: Omit<CourseProductQueryFilters, 'id'>,
+  filters: Omit<CourseProductQueryFilters, 'id'> & { product_id: Product['id'] },
   queryOptions?: QueryOptions<CourseProductRelation>,
 ) => {
-  const enabled = !!id && !!filters.productId;
+  const { product_id: productId, ...queryfilters } = filters;
+  const enabled = !!productId && !!queryfilters.course_id;
   const resources = useResourcesCustom<CourseProductRelation, CourseProductQueryFilters>({
     ...props,
-    filters: { id, ...filters },
+    filters: { id: productId, ...queryfilters },
     queryOptions: { ...queryOptions, enabled },
   });
   const { items, ...subRes } = resources;

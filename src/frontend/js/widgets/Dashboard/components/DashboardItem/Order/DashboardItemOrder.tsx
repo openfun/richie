@@ -83,7 +83,7 @@ export const DashboardItemOrder = ({
   const {
     item: courseProductRelation,
     states: { isFetched: isCourseProductRelationFetched },
-  } = useCourseProduct(course.code, { productId: order.product_id });
+  } = useCourseProduct({ product_id: order.product_id, course_id: course.code });
   const { product } = courseProductRelation || {};
   const needsSignature = orderNeedsSignature(order, product);
   const getRoutePath = getDashboardRoutePath(useIntl());
