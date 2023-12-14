@@ -53,7 +53,7 @@ export const TeacherDashboardCourseSidebar = () => {
   const {
     item: singleCourse,
     states: { fetching: courseFetching },
-  } = useCourse(courseId!);
+  } = useCourse(courseId, { organization_id: organizationId });
   const {
     item: courseProductRelation,
     states: { fetching: courseProductRelationFetching },

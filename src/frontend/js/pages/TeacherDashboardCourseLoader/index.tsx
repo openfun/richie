@@ -33,15 +33,16 @@ const messages = defineMessages({
 
 export const TeacherDashboardCourseLoader = () => {
   const intl = useIntl();
-  const { courseId } = useParams<{
+  const { courseId, organizationId } = useParams<{
     courseId?: string;
+    organizationId?: string;
     courseCodeAndProductId?: string;
   }>();
 
   const {
     item: course,
     states: { fetching: fetchingCourse },
-  } = useCourse(courseId);
+  } = useCourse(courseId, { organization_id: organizationId });
   const {
     items: courseRuns,
     states: { fetching: fetchingCourseRuns },
