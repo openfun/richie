@@ -412,7 +412,7 @@ export interface CourseProductQueryFilters extends ResourcesQuery {
   id?: Product['id'];
   course_id?: CourseListItem['id'];
 }
-export interface CourseProductRelationQueryFilters extends ResourcesQuery {
+export interface CourseProductRelationQueryFilters extends PaginatedResourceQuery {
   id?: CourseProductRelation['id'];
   organization_id?: Organization['id'];
 }

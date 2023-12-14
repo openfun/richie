@@ -57,7 +57,7 @@ export const TeacherDashboardCourseSidebar = () => {
   const {
     item: courseProductRelation,
     states: { fetching: courseProductRelationFetching },
-  } = useCourseProductRelation(courseProductRelationId);
+  } = useCourseProductRelation(courseProductRelationId, { organization_id: organizationId });
   const fetching = useMemo(
     () => courseFetching || courseProductRelationFetching,
     [courseFetching, courseProductRelationFetching],
