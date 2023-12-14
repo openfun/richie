@@ -409,7 +409,8 @@ export interface CourseQueryFilters extends ResourcesQuery {
   has_listed_course_runs?: Boolean;
 }
 export interface CourseProductQueryFilters extends ResourcesQuery {
-  productId?: Product['id'];
+  id?: Product['id'];
+  course_id?: CourseListItem['id'];
 }
 export interface CourseProductRelationQueryFilters extends ResourcesQuery {
   id?: CourseProductRelation['id'];

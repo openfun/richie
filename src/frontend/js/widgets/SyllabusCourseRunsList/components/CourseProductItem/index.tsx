@@ -160,12 +160,10 @@ const Content = ({ product, order }: { product: Product; order?: CredentialOrder
 const CourseProductItem = ({ productId, course, compact = false }: CourseProductItemProps) => {
   // FIXME(rlecellier): useCourseProduct need's a filter on product.type that only return
   // CredentialOrder
-  const { item: courseProductRelation, states: productQueryStates } = useCourseProduct(
-    course.code,
-    {
-      productId,
-    },
-  );
+  const { item: courseProductRelation, states: productQueryStates } = useCourseProduct({
+    product_id: productId,
+    course_id: course.code,
+  });
   const product = courseProductRelation?.product;
   const { item: productOrder, states: orderQueryStates } = useProductOrder({
     productId,
