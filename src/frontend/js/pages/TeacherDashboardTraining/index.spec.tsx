@@ -11,7 +11,7 @@ import {
   UserFactory,
 } from 'utils/test/factories/richie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { CourseProductRelationFactory } from 'utils/test/factories/joanie';
+import { CourseProductRelationFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { DashboardBreadcrumbsProvider } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
@@ -39,6 +39,10 @@ describe('components/TeacherDashboardTrainingLoader', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     nbApiCalls = 3;
+  });
+
+  afterEach(() => {
+    fetchMock.restore();
   });
 
   it('should render TeacherDashboardTrainingLoader page', async () => {
@@ -84,6 +88,72 @@ describe('components/TeacherDashboardTrainingLoader', () => {
     expect(calledUrls).toHaveLength(nbApiCalls);
     expect(calledUrls).toContain(
       `https://joanie.endpoint/api/v1.0/course-product-relations/${courseProductRelation.id}/`,
+    );
+
+    // main titles
+    expect(
+      screen.getByRole('heading', {
+        name: 'Training area',
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getAllByRole('heading', { name: capitalize(courseProductRelation.product.title) }),
+    ).toHaveLength(2);
+
+    const nbCourseRun = courseProductRelation.product.target_courses.reduce(
+      (acc, course) => acc + course.course_runs.length,
+      0,
+    );
+    expect(screen.getAllByRole('link', { name: 'go to course area' })).toHaveLength(nbCourseRun);
+  });
+
+  it('should fetch course product relation with organization id if there is one in the path', async () => {
+    const organization = OrganizationFactory().one();
+    const courseProductRelation = CourseProductRelationFactory({
+      organizations: [organization],
+    }).one();
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/${courseProductRelation.id}/`,
+      courseProductRelation,
+    );
+
+    const user = UserFactory().one();
+    render(
+      <IntlProvider locale="en">
+        <QueryClientProvider client={createTestQueryClient({ user })}>
+          <JoanieSessionProvider>
+            <DashboardBreadcrumbsProvider>
+              <CunninghamProvider>
+                <RouterProvider
+                  router={createMemoryRouter(
+                    [
+                      {
+                        path: '/:organizationId/:courseProductRelationId',
+                        element: <TeacherDashboardTrainingLoader />,
+                      },
+                    ],
+                    {
+                      initialEntries: [`/${organization.id}/${courseProductRelation.id}`],
+                    },
+                  )}
+                />
+              </CunninghamProvider>
+            </DashboardBreadcrumbsProvider>
+          </JoanieSessionProvider>
+        </QueryClientProvider>
+      </IntlProvider>,
+    );
+    // page placeholder
+    await expectNoSpinner('Loading training...');
+    // sidebar placeholder
+    await expectNoSpinner('Loading course...');
+
+    nbApiCalls += 1; // course-product-relations api call
+    const calledUrls = fetchMock.calls().map((call) => call[0]);
+    expect(calledUrls).toHaveLength(nbApiCalls);
+    expect(calledUrls).toContain(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/${courseProductRelation.id}/`,
     );
 
     // main titles

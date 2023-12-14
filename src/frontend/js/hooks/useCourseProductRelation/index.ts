@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { API, CourseProductRelation } from 'types/Joanie';
-import { ResourcesQuery, useResource, useResources, UseResourcesProps } from 'hooks/useResources';
+import { API, CourseProductRelation, CourseProductRelationQueryFilters } from 'types/Joanie';
+import { useResource, useResources, UseResourcesProps } from 'hooks/useResources';
 
 const messages = defineMessages({
   errorGet: {
@@ -23,7 +23,7 @@ const messages = defineMessages({
  */
 const props: UseResourcesProps<
   CourseProductRelation,
-  ResourcesQuery,
+  CourseProductRelationQueryFilters,
   API['courseProductRelations']
 > = {
   queryKey: ['courseProductRelations'],
@@ -34,8 +34,11 @@ const props: UseResourcesProps<
 
 export const useCourseProductRelations = useResources<
   CourseProductRelation,
-  ResourcesQuery,
+  CourseProductRelationQueryFilters,
   API['courseProductRelations']
 >(props);
 
-export const useCourseProductRelation = useResource<CourseProductRelation>(props);
+export const useCourseProductRelation = useResource<
+  CourseProductRelation,
+  CourseProductRelationQueryFilters
+>(props);

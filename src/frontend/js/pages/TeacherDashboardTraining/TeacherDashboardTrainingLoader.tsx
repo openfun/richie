@@ -22,14 +22,15 @@ const messages = defineMessages({
 });
 
 export const TeacherDashboardTrainingLoader = () => {
-  const { courseProductRelationId } = useParams<{
+  const { courseProductRelationId, organizationId } = useParams<{
     courseProductRelationId: string;
+    organizationId?: string;
   }>();
 
   const {
     item: courseProductRelation,
     states: { fetching },
-  } = useCourseProductRelation(courseProductRelationId);
+  } = useCourseProductRelation(courseProductRelationId, { organization_id: organizationId });
   useBreadcrumbsPlaceholders({
     courseTitle: courseProductRelation?.product.title ?? '',
   });
