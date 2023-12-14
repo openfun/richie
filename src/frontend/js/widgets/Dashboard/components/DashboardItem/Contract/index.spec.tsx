@@ -70,10 +70,11 @@ describe.each([
   it.each([
     { label: 'writable', writable: true },
     { label: 'none-writable', writable: false },
-  ])('render a $label signed contract', async ({ writable }) => {
+  ])("render a $label learner's signed contract", async ({ writable }) => {
     const signedDate = faker.date.past().toISOString();
     const contract: Contract = ContractFactory({
       student_signed_on: signedDate,
+      organization_signed_on: null,
       order: OrderSerializer().one(),
     }).one();
     render(
@@ -98,14 +99,51 @@ describe.each([
       ),
     ).toBeInTheDocument();
 
-    expect(screen.queryByRole('button', { name: 'Download' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Sign' })).not.toBeInTheDocument();
+  });
+
+  it.each([
+    { label: 'writable', writable: true },
+    { label: 'none-writable', writable: false },
+  ])("render a $label organization's signed contract", async ({ writable }) => {
+    const signedDate = faker.date.past().toISOString();
+    const contract: Contract = ContractFactory({
+      student_signed_on: signedDate,
+      organization_signed_on: faker.date.past().toISOString(),
+      order: OrderSerializer().one(),
+    }).one();
+    render(
+      <DashboardItemContract
+        title={contract.order.product_title}
+        order={contract.order as NestedCredentialOrder}
+        contract_definition={contract.definition}
+        contract={contract}
+        writable={writable}
+      />,
+      {
+        wrapper: Wrapper,
+      },
+    );
+
+    expect(await screen.findByText(contract.definition.title)).toBeInTheDocument();
+    expect(screen.getByText(contract.order.product_title)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'You signed this training contract. Signed on ' +
+          new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(signedDate)),
+      ),
+    ).toBeInTheDocument();
+
+    screen.debug();
+    expect(screen.queryByRole('button', { name: 'Download' })).toBeInTheDocument();
   });
 
   it('render a writable unsigned signed contract', async () => {
     const contract: Contract = ContractFactory({
       student_signed_on: null,
+      organization_signed_on: null,
       order: OrderSerializer().one(),
     }).one();
     render(
@@ -135,6 +173,7 @@ describe.each([
   it('render a none-writable unsigned signed contract', async () => {
     const contract: Contract = ContractFactory({
       student_signed_on: null,
+      organization_signed_on: null,
       order: OrderSerializer().one(),
     }).one();
     render(
