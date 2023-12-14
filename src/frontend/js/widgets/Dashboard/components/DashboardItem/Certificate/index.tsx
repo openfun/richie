@@ -1,8 +1,8 @@
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { Certificate, CertificateDefinition, CourseLight, ProductType } from 'types/Joanie';
 import { DashboardItem } from 'widgets/Dashboard/components/DashboardItem/index';
-import { Maybe } from 'types/utils';
 import DownloadCertificateButton from 'components/DownloadCertificateButton';
+import { Maybe } from 'types/utils';
 import CertificateStatus from '../CertificateStatus';
 
 interface DashboardItemCertificateProps {
@@ -28,7 +28,14 @@ export const DashboardItemCertificate = ({
     throw new Error('certificate or certificateDefinition is required');
   }
 
-  const course = certificate?.order.course as Maybe<CourseLight>;
+  let course: Maybe<CourseLight>;
+  if (certificate) {
+    if (certificate.order?.course) {
+      course = certificate.order.course;
+    } else {
+      course = certificate.order.enrollment.course_run.course;
+    }
+  }
 
   return (
     <DashboardItem
