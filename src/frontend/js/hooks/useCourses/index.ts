@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { API, CourseListItem, PaginatedResourceQuery } from 'types/Joanie';
+import { API, CourseListItem, CourseQueryFilters } from 'types/Joanie';
 import { useResource, useResources, UseResourcesProps } from 'hooks/useResources';
 
 const messages = defineMessages({
@@ -20,12 +20,12 @@ const messages = defineMessages({
  * Joanie Api hook to retrieve course
  * owned by the authenticated user.
  */
-const props: UseResourcesProps<CourseListItem, PaginatedResourceQuery, API['courses']> = {
+const props: UseResourcesProps<CourseListItem, CourseQueryFilters, API['courses']> = {
   queryKey: ['courses'],
   apiInterface: () => useJoanieApi().courses,
   session: true,
   messages,
 };
 
-export const useCourses = useResources(props);
-export const useCourse = useResource<CourseListItem>(props);
+export const useCourses = useResources<CourseListItem, CourseQueryFilters>(props);
+export const useCourse = useResource<CourseListItem, CourseQueryFilters>(props);
