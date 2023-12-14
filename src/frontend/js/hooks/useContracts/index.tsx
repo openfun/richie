@@ -23,7 +23,7 @@ const props: UseResourcesProps<Contract, ContractFilters, API['user']['contracts
   messages,
 };
 /**
- * Joanie Api hook to retrieve/update an contract owned by the authenticated user.
+ * Joanie Api hook to retrieve/update a contract owned by the authenticated user.
  */
 export const useContract = useResource(props);
 export const useContracts = useResources(props);

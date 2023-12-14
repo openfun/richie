@@ -2,7 +2,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { Button, DataGrid, SortModel, usePagination } from '@openfun/cunningham-react';
 import { useEffect, useMemo, useState } from 'react';
-import { useContracts } from 'hooks/useContacts';
+import { useContracts } from 'hooks/useContracts';
 import Banner, { BannerType } from 'components/Banner';
 import { PER_PAGE } from 'settings';
 import { ContractFilters } from 'types/Joanie';

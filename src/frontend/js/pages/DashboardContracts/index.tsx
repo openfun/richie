@@ -4,7 +4,7 @@ import { Pagination, usePagination } from 'components/Pagination';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { DashboardItemContract } from 'widgets/Dashboard/components/DashboardItem/Contract';
-import { useContracts } from 'hooks/useContacts';
+import { useContracts } from 'hooks/useContracts';
 import { NestedCredentialOrder } from 'types/Joanie';
 
 const messages = defineMessages({
