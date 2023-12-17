@@ -37,9 +37,9 @@ export const PAYMENT_SETTINGS = {
 
 export const CONTRACT_SETTINGS = {
   // Interval in ms to poll the related order when a signature has succeeded.
-  pollInterval: 1000,
+  pollInterval: 1500,
   // Number of retries
-  pollLimit: 30,
+  pollLimit: 45,
   // Simulated sign request delay
   dummySignatureSignTimeout: 2000,
 };
