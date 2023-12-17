@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a Badge React component
 - Add a footer on enrollment's item in the learner dashboard. It give the
   possibility to purchase linked product or download linked certificate.
 - Add download contracts pages on the teacher dashboard.
