@@ -55,4 +55,20 @@ describe('api/joanie', () => {
     });
     expect(url).toEqual('http://example.com/resource_1/1/resource_2/2/');
   });
+
+  it('buildApiUrl should build api url with extra query parameters', () => {
+    const filters = {
+      queryParameters: { id: [1, 2, 3] },
+      organization_id: 'org_1',
+      state: 'half_signed',
+    };
+    const url = buildApiUrl(
+      'http://example.com/organizations/:organization_id/contracts/:id/',
+      filters,
+    );
+
+    expect(url).toBe(
+      'http://example.com/organizations/org_1/contracts/?id=1&id=2&id=3&state=half_signed',
+    );
+  });
 });

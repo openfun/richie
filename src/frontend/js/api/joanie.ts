@@ -16,6 +16,7 @@ import { HttpError } from 'utils/errors/HttpError';
 import { JOANIE_API_VERSION } from 'settings';
 import { ResourcesQuery } from 'hooks/useResources';
 import { ObjectHelper } from 'utils/ObjectHelper';
+import { Maybe } from 'types/utils';
 
 interface CheckStatusOptions {
   fallbackValue: any;
@@ -195,20 +196,35 @@ const filterEmptyEntry = ([, value]: [PropertyKey, any]) => {
   if (value?.length !== undefined && value.length === 0) return false; // Value is an empty array/string
   return true;
 };
-export const buildApiUrl = <ApiFilters extends ResourcesQuery = ResourcesQuery>(
+
+interface ApiFilters extends Record<PropertyKey, any> {
+  queryParameters?: Record<string, any>;
+}
+
+export const buildApiUrl = <Filters extends ApiFilters = ApiFilters>(
   raw_url: string,
-  filters?: ApiFilters,
+  { queryParameters = {}, ...urlParams }: Maybe<Filters> = {} as Filters,
 ) => {
   // eslint-disable-next-line compat/compat
   const url = new URL(raw_url);
 
-  if (filters) {
-    Object.entries(filters)
+  if (!ObjectHelper.isEmpty(urlParams)) {
+    Object.entries(urlParams)
       .filter(filterEmptyEntry)
       .forEach(([key, value]) => {
         if (url.pathname.search(`:${key}`) > 0) {
           url.pathname = url.pathname.replace(`:${key}`, value);
-        } else if (Array.isArray(value)) {
+        } else {
+          queryParameters[key] = value;
+        }
+      });
+  }
+
+  if (!ObjectHelper.isEmpty(queryParameters)) {
+    Object.entries(queryParameters)
+      .filter(filterEmptyEntry)
+      .forEach(([key, value]) => {
+        if (Array.isArray(value)) {
           value.forEach((v) => url.searchParams.append(key, v));
         } else {
           url.searchParams.append(key, value);
