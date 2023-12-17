@@ -14,6 +14,7 @@ import { CourseProductEvent } from 'types/web-analytics';
 import useProductOrder from 'hooks/useProductOrder';
 import { useTerms } from 'components/PaymentButton/hooks/useTerms';
 import { useSaleTunnelContext } from 'components/SaleTunnel/context';
+import { ObjectHelper } from 'utils/ObjectHelper';
 import PaymentInterface from './components/PaymentInterfaces';
 
 const messages = defineMessages({
@@ -153,10 +154,12 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
       let paymentInfos = payment;
 
       if (!paymentInfos) {
+        const billingAddressPayload = ObjectHelper.omit(billingAddress!, 'id', 'is_main');
+
         orderManager.methods.submit(
           {
             id: orderId,
-            billing_address: billingAddress!,
+            billing_address: billingAddressPayload,
             ...(creditCard && { credit_card_id: creditCard }),
           },
           {
