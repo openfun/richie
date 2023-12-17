@@ -425,10 +425,22 @@ export enum ContractState {
 export interface ContractFilters extends PaginatedResourceQuery {
   organization_id?: Organization['id'];
   course_id?: CourseListItem['id'];
+  product_id?: Product['id'];
+  contract_ids?: Contract['id'][];
+  signature_state?: ContractState;
 }
 
-export interface OrderSubmitForSignatureResponse {
+export interface OrganizationContractSignatureLinksFilters {
+  contracts_ids?: string[];
+  organization_id: Organization['id'];
+}
+
+export interface ContractInvitationLinkResponse {
   invitation_link: string;
+}
+
+export interface OrganizationContractInvitationLinkResponse extends ContractInvitationLinkResponse {
+  contract_ids: Contract['id'][];
 }
 
 export interface ApiResourceInterface<
@@ -471,7 +483,7 @@ interface APIUser {
       download(payload: { order_id: Order['id']; invoice_reference: string }): Promise<File>;
     };
     submit(payload: OrderSubmitPayload): Promise<OrderPaymentInfo>;
-    submit_for_signature(id: string): Promise<OrderSubmitForSignatureResponse>;
+    submit_for_signature(id: string): Promise<ContractInvitationLinkResponse>;
   };
   certificates: {
     download(id: string): Promise<File>;
@@ -502,7 +514,7 @@ interface APIUser {
       filters?: ContractFilters,
     ): ContractFilters extends { id: string }
       ? Promise<Nullable<Contract>>
-      : Promise<PaginatedResponse<Contract[]>>;
+      : Promise<PaginatedResponse<Contract>>;
     download(id: string): Promise<File>;
   };
 }
@@ -523,6 +535,11 @@ export interface API {
     get<Filters extends ResourcesQuery = ResourcesQuery>(
       filters?: Filters,
     ): Filters extends { id: string } ? Promise<Nullable<Organization>> : Promise<Organization[]>;
+    contracts: {
+      getSignatureLinks(
+        filters?: OrganizationContractSignatureLinksFilters,
+      ): Promise<OrganizationContractInvitationLinkResponse>;
+    };
   };
   courseRuns: {
     get(
