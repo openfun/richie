@@ -1,6 +1,7 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 import useDateFormat from 'hooks/useDateFormat';
-import { Contract } from 'types/Joanie';
+import { Contract, ContractState } from 'types/Joanie';
+import { ContractHelper } from 'utils/ContractHelper';
 
 const messages = defineMessages({
   signedOn: {
@@ -19,13 +20,18 @@ export interface ContractStatusProps {
   contract?: Contract;
 }
 const ContractStatus = ({ contract }: ContractStatusProps) => {
-  const { student_signed_on: signedOn } = contract || {};
+  const state = ContractHelper.getState(contract);
   const formatDate = useDateFormat();
 
-  return signedOn ? (
-    <FormattedMessage {...messages.signedOn} values={{ date: formatDate(signedOn) }} />
-  ) : (
-    <FormattedMessage {...messages.waitingSignature} />
+  if (!state || state === ContractState.UNSIGNED) {
+    return <FormattedMessage {...messages.waitingSignature} />;
+  }
+
+  return (
+    <FormattedMessage
+      {...messages.signedOn}
+      values={{ date: formatDate(contract!.student_signed_on!) }}
+    />
   );
 };
 

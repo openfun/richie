@@ -416,6 +416,12 @@ export interface CourseProductRelationQueryFilters extends PaginatedResourceQuer
   id?: CourseProductRelation['id'];
   organization_id?: Organization['id'];
 }
+
+export enum ContractState {
+  UNSIGNED = 'unsigned',
+  LEARNER_SIGNED = 'half_signed',
+  SIGNED = 'signed',
+}
 export interface ContractFilters extends PaginatedResourceQuery {
   organization_id?: Organization['id'];
   course_id?: CourseListItem['id'];
