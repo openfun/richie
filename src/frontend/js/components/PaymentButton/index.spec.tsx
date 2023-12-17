@@ -41,6 +41,7 @@ import {
   SaleTunnelCredentialContext,
   SaleTunnelCertificateContext,
 } from 'components/SaleTunnel/context';
+import { ObjectHelper } from 'utils/ObjectHelper';
 import PaymentButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -496,7 +497,7 @@ describe.each([
         .find((call) => call[0] === `https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
       expect(submitCall).not.toBeUndefined();
       expect(JSON.parse(submitCall![1]!.body as string)).toEqual({
-        billing_address: billingAddress,
+        billing_address: ObjectHelper.omit(billingAddress, 'id', 'is_main'),
         credit_card_id: creditCard.id,
       });
       expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
@@ -622,7 +623,7 @@ describe.each([
 
       expect(onClickApiCalls[0][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
       expect(JSON.parse(onClickApiCalls[0][1]!.body as string)).toEqual({
-        billing_address: billingAddress,
+        billing_address: ObjectHelper.omit(billingAddress, 'id', 'is_main'),
         credit_card_id: creditCard.id,
       });
 
@@ -728,7 +729,7 @@ describe.each([
 
       expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
       expect(JSON.parse(fetchMock.lastOptions()!.body!.toString())).toEqual({
-        billing_address: billingAddress,
+        billing_address: ObjectHelper.omit(billingAddress, 'id', 'is_main'),
       });
 
       // - Spinner should be displayed and payment button should be disabled
