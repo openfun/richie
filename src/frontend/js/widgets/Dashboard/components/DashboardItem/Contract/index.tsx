@@ -1,41 +1,47 @@
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { Contract, isNestedCredentialOrder } from 'types/Joanie';
+import { Contract, ContractDefinition, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
 import ContractStatus from 'components/ContractStatus';
 import { DashboardItem } from 'widgets/Dashboard/components/DashboardItem/index';
 import DownloadContractButton from 'components/DownloadContractButton';
 import SignContractButton from 'components/SignContractButton';
 
 interface DashboardItemContractProps {
-  contract: Contract;
+  title: string;
+  order: CredentialOrder | NestedCredentialOrder;
+  contract_definition: ContractDefinition;
+  contract?: Contract;
+  writable: boolean;
 }
-export const DashboardItemContract = ({ contract }: DashboardItemContractProps) => {
-  if (!isNestedCredentialOrder(contract.order)) {
-    return null;
-  }
-
+export const DashboardItemContract = ({
+  title,
+  order,
+  contract,
+  contract_definition,
+  writable,
+}: DashboardItemContractProps) => {
   return (
     <DashboardItem
-      title={contract.order.product_title}
-      code={`Ref. ${contract.order.course.code}`}
-      imageFile={contract.order.course.cover}
+      title={title}
+      code={`Ref. ${order.course.code}`}
+      imageFile={order.course.cover}
       footer={
         <>
           <div className="dashboard-contract__body">
             <Icon name={IconTypeEnum.UNIVERSITY} />
-            <span>{contract.definition.title}</span>
+            <span>{contract_definition.title}</span>
           </div>
           <div className="dashboard-contract__footer">
             <span>
               <ContractStatus contract={contract} />
             </span>
             <div>
-              {contract.student_signed_on ? (
+              {contract && contract.student_signed_on ? (
                 <DownloadContractButton contract={contract} />
               ) : (
                 <SignContractButton
-                  order={contract.order}
+                  order={order}
                   contract={contract}
-                  writable={true}
+                  writable={writable}
                   className="dashboard-item__button"
                 />
               )}
