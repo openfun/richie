@@ -32,8 +32,13 @@ export interface ContractDefinition {
   title: string;
 }
 
+type ContractAbilities = {
+  sign: boolean;
+};
+
 export interface Contract {
   id: string;
+  abilities?: ContractAbilities;
   created_on: string;
   student_signed_on: Nullable<string>;
   organization_signed_on: Nullable<string>;
