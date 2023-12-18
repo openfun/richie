@@ -11,13 +11,11 @@ import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessa
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
-import {
-  DashboardItemOrderContract,
-  DashboardItemOrderContractFooter,
-} from 'widgets/Dashboard/components/DashboardItem/Order/Contract';
+
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
 import { DashboardItem } from '../index';
+import { DashboardItemContract } from '../Contract';
 import OrderStateMessage from './OrderStateMessage';
 
 const messages = {
@@ -91,11 +89,14 @@ export const DashboardItemOrder = ({
   return (
     <div className="dashboard-item-order">
       {writable && needsSignature && (
-        <DashboardItemOrderContract
+        <DashboardItemContract
           key={`DashboardItemOrderContract_${order.id}`}
+          title={product.title}
           order={order}
-          product={product}
+          contract_definition={product.contract_definition!}
+          contract={order.contract}
           writable={writable}
+          mode="compact"
         />
       )}
       <DashboardItem
@@ -122,10 +123,14 @@ export const DashboardItemOrder = ({
               )}
             </div>
             {!writable && needsSignature && (
-              <DashboardItemOrderContractFooter
+              <DashboardItemContract
+                key={`DashboardItemOrderContract_${order.id}`}
+                title={product.title}
+                order={order}
+                contract_definition={product.contract_definition!}
                 contract={order.contract}
                 writable={writable}
-                order={order}
+                mode="compact"
               />
             )}
           </>
@@ -161,11 +166,14 @@ export const DashboardItemOrder = ({
         </div>
       )}
       {writable && isCourseProductRelationFetched && order.contract?.student_signed_on && (
-        <DashboardItemOrderContract
+        <DashboardItemContract
           key={`DashboardItemOrderContract_${order.id}`}
+          title={product.title}
           order={order}
-          product={product}
+          contract_definition={product.contract_definition!}
+          contract={order.contract}
           writable={writable}
+          mode="compact"
         />
       )}
     </div>

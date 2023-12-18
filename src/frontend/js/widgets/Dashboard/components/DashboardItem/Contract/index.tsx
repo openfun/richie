@@ -1,9 +1,9 @@
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { Contract, ContractDefinition, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
 import ContractStatus from 'components/ContractStatus';
-import { DashboardItem } from 'widgets/Dashboard/components/DashboardItem/index';
 import DownloadContractButton from 'components/DownloadContractButton';
 import SignContractButton from 'components/SignContractButton';
+import { DashboardItem, DashboardItemProps } from '..';
 
 interface DashboardItemContractProps {
   title: string;
@@ -11,6 +11,7 @@ interface DashboardItemContractProps {
   contract_definition: ContractDefinition;
   contract?: Contract;
   writable: boolean;
+  mode?: DashboardItemProps['mode'];
 }
 export const DashboardItemContract = ({
   title,
@@ -18,9 +19,12 @@ export const DashboardItemContract = ({
   contract,
   contract_definition,
   writable,
+  mode,
 }: DashboardItemContractProps) => {
   return (
     <DashboardItem
+      data-testid={`dashboard-item-contract-${order.id}`}
+      mode={mode}
       title={title}
       code={`Ref. ${order.course.code}`}
       imageFile={order.course.cover}

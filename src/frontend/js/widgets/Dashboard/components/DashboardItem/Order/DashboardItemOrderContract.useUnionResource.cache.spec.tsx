@@ -122,7 +122,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       await user.click(screen.getByRole('link', { name: 'Sign' }));
 
       // Contract is shown and not in loading state.
-      const contractElement = await screen.findByTestId('dashboard-item-order-contract');
+      const contractElement = await screen.findByTestId(`dashboard-item-contract-${order.id}`);
       expect(within(contractElement).queryByRole('status')).not.toBeInTheDocument();
       const signButton = screen.getByRole('button', { name: 'Sign' });
       expect(signButton).not.toHaveAttribute('disabled');
@@ -242,7 +242,7 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       // Contract sign button must prevent any interaction, waiting for order re-fetch.
       const orderDetailsSignButton = within(
-        screen.getByTestId('dashboard-item-order-contract'),
+        screen.getByTestId(`dashboard-item-contract-${order.id}`),
       ).getByRole('button', {
         name: 'Sign',
       });
