@@ -1,29 +1,47 @@
 import { Maybe, Nullable } from 'types/utils';
+import contractAbilities from 'utils/AbilitiesHelper/contractAbilities';
 import joanieUserProfileAbilities from './joanieUserProfileAbilities';
-import { Entity, Actions, JoanieUserProfileActions, isJoanieUserProfileEntity } from './types';
+import {
+  Entity,
+  Actions,
+  JoanieUserProfileActions,
+  isJoanieUserProfileEntity,
+  isContractEntity,
+  ContractActions,
+} from './types';
 
-// further actions can be add here
+// further actions can be added here
 // like: { ...JoanieUserProfileActions, ...CourseActions };
-export const abilityActions = { ...JoanieUserProfileActions };
+export const abilityActions = { ...JoanieUserProfileActions, ...ContractActions };
 
 /**
  * Check if an action is available on an entity
  * Joanie's backend give us an "abilities" entry for several models like user, course and organization
  * these "api abilities" are used to define our "frontend abilities"
  *
- * @param entity - The entity on which we want to check action's availability.
+ * @param entities - The entities on which we want to check action's availability.
  * @param action - The action to check.
  */
-const can = (entity: Maybe<Nullable<Entity>>, action: Actions) => {
-  if (!entity) {
+const can = (entities: Maybe<Nullable<Entity | Entity[]>>, action: Actions) => {
+  if (!entities) {
     return false;
   }
 
-  if (isJoanieUserProfileEntity(entity)) {
-    return !!joanieUserProfileAbilities[action](entity);
-  }
+  if (!Array.isArray(entities)) entities = [entities];
 
-  // further abilities can be add here
+  return entities.every((entity) => {
+    if (isJoanieUserProfileEntity(entity)) {
+      return joanieUserProfileAbilities[action as JoanieUserProfileActions](entity);
+    }
+
+    if (isContractEntity(entity)) {
+      return contractAbilities[action as ContractActions](entity);
+    }
+
+    return false;
+  });
+
+  // further abilities can be added here
   // example:
   // if (isCourseEntity(entity)) {
   //   return courseAbilities[action](entity);
@@ -33,17 +51,17 @@ const can = (entity: Maybe<Nullable<Entity>>, action: Actions) => {
 /**
  * Check if an action is NOT available on an entity
  *
- * @param entity - The entity on which we want to check action's availability.
+ * @param entities - The entities on which we want to check action's availability.
  * @param action - The action to check.
  */
-const cannot = (entity: Maybe<Nullable<Entity>>, action: Actions) => {
-  return !can(entity, action);
+const cannot = (entities: Maybe<Nullable<Entity | Entity[]>>, action: Actions) => {
+  return !can(entities, action);
 };
 
-const buildEntityInterface = (entity: Maybe<Nullable<Entity>>) => {
+const buildEntityInterface = (entities: Maybe<Nullable<Entity | Entity[]>>) => {
   return {
-    can: (action: Actions) => can(entity, action),
-    cannot: (action: Actions) => cannot(entity, action),
+    can: (action: Actions) => can(entities, action),
+    cannot: (action: Actions) => cannot(entities, action),
   };
 };
 
