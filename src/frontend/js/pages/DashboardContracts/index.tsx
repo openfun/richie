@@ -5,6 +5,7 @@ import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { DashboardItemContract } from 'widgets/Dashboard/components/DashboardItem/Contract';
 import { useContracts } from 'hooks/useContacts';
+import { NestedCredentialOrder } from 'types/Joanie';
 
 const messages = defineMessages({
   loading: {
@@ -55,7 +56,14 @@ export const DashboardContracts = () => {
             <>
               <div className="dashboard-contracts__list">
                 {contracts.map((contract) => (
-                  <DashboardItemContract key={contract.id} contract={contract} />
+                  <DashboardItemContract
+                    key={`DashboardItemContract_${contract.id}`}
+                    title={contract.order.product_title}
+                    order={contract.order as NestedCredentialOrder}
+                    contract_definition={contract.definition}
+                    contract={contract}
+                    writable={true}
+                  />
                 ))}
               </div>
               <Pagination {...pagination} />
