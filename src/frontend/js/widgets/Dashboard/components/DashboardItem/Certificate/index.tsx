@@ -1,19 +1,24 @@
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { Certificate, CertificateDefinition, CourseLight, ProductType } from 'types/Joanie';
-import { DashboardItem } from 'widgets/Dashboard/components/DashboardItem/index';
-import DownloadCertificateButton from 'components/DownloadCertificateButton';
+import {
+  DashboardItem,
+  DashboardItemProps,
+} from 'widgets/Dashboard/components/DashboardItem/index';
 import { Maybe } from 'types/utils';
+import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import CertificateStatus from '../CertificateStatus';
 
 interface DashboardItemCertificateProps {
   certificate?: Certificate;
   certificateDefinition?: CertificateDefinition;
   productType?: ProductType;
+  mode?: DashboardItemProps['mode'];
 }
 export const DashboardItemCertificate = ({
   certificate,
   certificateDefinition,
   productType,
+  mode,
 }: DashboardItemCertificateProps) => {
   if (certificate) {
     if (certificateDefinition) {
@@ -39,6 +44,7 @@ export const DashboardItemCertificate = ({
 
   return (
     <DashboardItem
+      mode={mode}
       title={course?.title ?? ''}
       code={'Ref. ' + (course?.code ?? '')}
       imageUrl="https://d29emq8to944i.cloudfront.net/cba69447-b9f7-b4d7-c0d5-4d98b5280a4e/thumbnails/1659356729_1080.jpg"
