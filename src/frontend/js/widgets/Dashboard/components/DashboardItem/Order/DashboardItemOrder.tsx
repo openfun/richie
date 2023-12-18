@@ -49,6 +49,7 @@ const DashboardItemOrderCertificate = ({ order, product }: DashboardItemOrderCer
       <DashboardItemCertificate
         certificateDefinition={product.certificate_definition}
         productType={product.type}
+        mode="compact"
       />
     );
   }
@@ -63,7 +64,11 @@ const DashboardItemOrderCertificate = ({ order, product }: DashboardItemOrderCer
         </Spinner>
       )}
       {certificate.item && (
-        <DashboardItemCertificate certificate={certificate.item} productType={product.type} />
+        <DashboardItemCertificate
+          certificate={certificate.item}
+          productType={product.type}
+          mode="compact"
+        />
       )}
     </>
   );
@@ -161,9 +166,7 @@ export const DashboardItemOrder = ({
         />
       </DashboardItem>
       {showCertificate && !!product?.certificate_definition && (
-        <div className="dashboard-item dashboard-item-order__certificate__container">
-          <DashboardItemOrderCertificate order={order} product={product} />
-        </div>
+        <DashboardItemOrderCertificate order={order} product={product} />
       )}
       {writable && isCourseProductRelationFetched && order.contract?.student_signed_on && (
         <DashboardItemContract
