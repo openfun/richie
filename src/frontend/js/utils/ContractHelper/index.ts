@@ -42,13 +42,8 @@ export enum ContractStatePoV {
 }
 
 export class ContractHelper {
-  static getState(contract: null | undefined): null;
-  static getState(contract: Contract): ContractState;
-  static getState(contract: Maybe<Contract>): Nullable<ContractState>;
-  static getState(contract: Maybe<Nullable<Contract>>): Nullable<ContractState> {
-    if (!contract) return null;
-
-    if (contract.student_signed_on && contract.organization_signed_on) {
+  static getState(contract: Maybe<Nullable<Contract>>): ContractState {
+    if (contract?.student_signed_on && contract?.organization_signed_on) {
       return ContractState.SIGNED;
     }
 
