@@ -19,7 +19,7 @@ import { SessionProvider } from 'contexts/SessionContext';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { CourseLight, CourseProductRelation, Enrollment, CredentialOrder } from 'types/Joanie';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
-import { expectBannerError, expectNoBannerInfo } from 'utils/test/expectBanner';
+import { expectBannerError, expectBannerInfo, expectNoBannerInfo } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
 import { isOrder } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { noop } from 'utils';
@@ -160,7 +160,7 @@ describe('<DashboardCourses/>', () => {
     enrollmentsDeferred.resolve({ results: [], next: null, previous: null, count: 0 });
 
     await expectNoSpinner('Loading orders and enrollments...');
-    await screen.findByText('You have no enrollments nor orders yet.');
+    expectBannerInfo('You have no enrollments nor orders yet.');
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
   });
 
