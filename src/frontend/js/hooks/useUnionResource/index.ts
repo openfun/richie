@@ -147,7 +147,7 @@ const useUnionResource = <
     next,
     count: totalCount,
     data: stack.slice(0, cursorToUse),
-    hasMore: typeof totalCount === 'undefined' || cursorToUse < totalCount,
+    hasMore: totalCount ? cursorToUse < totalCount : false,
     error,
     isLoading: isSyncing,
   };

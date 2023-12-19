@@ -151,6 +151,7 @@ describe('useUnionResource', () => {
       PaginatedResourceQuery
     >(queryAConfig, queryBConfig);
     expect(result.current.isLoading).toBe(true);
+    expect(result.current.hasMore).toBe(false);
 
     await act(() => {
       dataADeferred.resolve(mockPaginatedResponse([], 0, false));
