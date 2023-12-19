@@ -1,4 +1,4 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useRef } from 'react';
 import { Button } from '@openfun/cunningham-react';
 import {
@@ -32,6 +32,7 @@ const messages = defineMessages({
 });
 
 export const DashboardCourses = () => {
+  const intl = useIntl();
   const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments({
     orderFilters: { product_type: [ProductType.CREDENTIAL], state_exclude: [OrderState.CANCELED] },
   });
@@ -51,7 +52,7 @@ export const DashboardCourses = () => {
         <>
           {count === 0 && (
             <p className="dashboard__courses__empty">
-              <FormattedMessage {...messages.emptyList} />
+              <Banner message={intl.formatMessage(messages.emptyList)} />
             </p>
           )}
           <div className="dashboard__courses__list">
