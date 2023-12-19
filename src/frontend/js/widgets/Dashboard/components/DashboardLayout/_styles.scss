@@ -53,7 +53,6 @@ $sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-header-spacing;
 
   &__main {
     flex-grow: 1;
-    overflow: hidden;
 
     @include media-breakpoint-down(lg) {
       padding: rem-calc(16px) 0 0 0;

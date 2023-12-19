@@ -1,11 +1,8 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { useRef } from 'react';
 import { Button } from '@openfun/cunningham-react';
 import { CourseGlimpseList, getCourseGlimpseListProps } from 'components/CourseGlimpseList';
 import { Spinner } from 'components/Spinner';
-import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
-import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
 import context from 'utils/context';
 import { useCourseProductUnion } from 'hooks/useCourseProductUnion';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
@@ -55,9 +52,7 @@ const TeacherDashboardCourseList = ({
   return (
     <div className="dashboard-course-list">
       {titleTranslated && (
-        <Link to={getDashboardRoutePath(intl)(TeacherDashboardPaths.TEACHER_COURSES)}>
-          <h2 className="dashboard-course-list__title">{titleTranslated}</h2>
-        </Link>
+        <h2 className="dashboard-course-list__title dashboard__page_title">{titleTranslated}</h2>
       )}
       {isLoading && (
         <Spinner aria-labelledby="loading-courses-data">
