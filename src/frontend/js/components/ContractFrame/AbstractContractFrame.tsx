@@ -1,14 +1,18 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Button, Loader } from '@openfun/cunningham-react';
-import { useQueryClient } from '@tanstack/react-query';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Modal } from 'components/Modal';
-import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { CredentialOrder, NestedCredentialOrder, Order } from 'types/Joanie';
 import { Maybe } from 'types/utils';
 import { CONTRACT_SETTINGS } from 'settings';
 import Banner, { BannerType } from 'components/Banner';
 import { SuccessIcon } from 'components/SuccessIcon';
+
+/*
+  /!\ This component should not be used directly, only its implementations should be.
+  Take a look at:
+    - ./OrganizationContractFrame.tsx
+    - ./LearnerContractFrame.tsx
+*/
 
 const LazySignatureDummy = lazy(
   () => import('widgets/Dashboard/components/Signature/SignatureDummy'),
@@ -17,9 +21,10 @@ const LazySignatureLexPersona = lazy(
   () => import('widgets/Dashboard/components/Signature/SignatureLexPersona'),
 );
 
-const messages = defineMessages({
+export const messages = defineMessages({
   errorSubmitForSignature: {
-    defaultMessage: 'An error happened while creating the contract. Please retry later.',
+    defaultMessage:
+      'An error happened while initializing the signature process. Please retry later.',
     description: 'Message displayed inside the contract signin modal while an error occurred.',
     id: 'components.DashboardItem.Order.ContractFrame.errorSubmitForSignature',
   },
@@ -30,7 +35,7 @@ const messages = defineMessages({
     id: 'components.DashboardItem.Order.ContractFrame.errorMaxPolling',
   },
   errorPolling: {
-    defaultMessage: 'An error happened while fetching the order. Please come back later.',
+    defaultMessage: 'An error happened while verifying signature. Please come back later.',
     description:
       'Message displayed inside the contract signin modal if the order polling failed a request.',
     id: 'components.DashboardItem.Order.ContractFrame.errorPolling',
@@ -52,7 +57,7 @@ const messages = defineMessages({
   },
   finishedDescription: {
     defaultMessage:
-      'You will receive an email containing your signed contract. You can now enroll in your course runs!',
+      'You will receive an email once your contract will be fully signed. You can now enroll in your course runs!',
     description: 'Message displayed inside the contract signin modal when the contract is signed.',
     id: 'components.DashboardItem.Order.ContractFrame.finishedDescription',
   },
@@ -62,13 +67,6 @@ const messages = defineMessages({
     id: 'components.DashboardItem.Order.ContractFrame.finishedButton',
   },
 });
-
-interface Props {
-  order: CredentialOrder | NestedCredentialOrder;
-  isOpen: boolean;
-  onDone: () => void;
-  onClose: () => void;
-}
 
 const DUMMY_REGEX = /https:\/\/dummysignaturebackend.fr/;
 
@@ -86,34 +84,49 @@ enum ContractSteps {
   NONE,
 }
 
+export interface AbstractProps {
+  isOpen: boolean;
+  onDone?: () => void;
+  onClose?: () => void;
+}
+
+export interface Props extends AbstractProps {
+  getInvitationLink: () => Promise<string>;
+  checkSignature: () => Promise<{ isSigned: boolean }>;
+}
+
+type FrameContentProps = Omit<Props, 'isOpen'>;
+
 export interface SignatureProps {
   onDone: () => void;
   onError: (error: string) => void;
   invitationLink: string;
 }
 
-export const ContractFrame = (props: Props) => {
+const AbstractContractFrame = ({ isOpen, ...props }: Props) => {
   return (
     <Modal
-      isOpen={props.isOpen}
+      isOpen={isOpen}
       shouldCloseOnOverlayClick={false}
       shouldCloseOnEsc={false}
       onRequestClose={props.onClose}
-      testId={'contract-frame__' + props.order.id}
     >
       <ContractFrameContent {...props} />
     </Modal>
   );
 };
 
-export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
-  const api = useJoanieApi();
+const ContractFrameContent = ({
+  getInvitationLink,
+  checkSignature,
+  onClose,
+  onDone,
+}: FrameContentProps) => {
   const intl = useIntl();
   const [step, setStep] = useState(ContractSteps.LOADING_CONTRACT);
   const [signatureType, setSignatureType] = useState<SignatureType>();
   const [invitationLink, setInvitationLink] = useState<Maybe<string>>();
   const [error, setError] = useState<Maybe<string>>();
-  const queryClient = useQueryClient();
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   const setErrored = (e: string) => {
@@ -121,18 +134,34 @@ export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
     setError(e);
   };
 
-  const initialize = async () => {
+  const onSigned = () => {
+    startStepPoll();
+  };
+
+  const onSignatureError = (e: string) => {
+    setErrored(e);
+  };
+
+  /*
+    1. Start the signature process.
+       Retrieve the signature link then go to the signature step.
+  */
+  const start = async () => {
     try {
-      const response = await api.user.orders.submit_for_signature(order.id);
-      await stepSign(response.invitation_link);
+      const link = await getInvitationLink();
+      startStepSign(link);
     } catch (e) {
       setErrored(intl.formatMessage(messages.errorSubmitForSignature));
     }
   };
 
-  const stepSign = async (invitationLink_: string) => {
-    setInvitationLink(invitationLink_);
-    if (invitationLink_.match(DUMMY_REGEX)) {
+  /*
+    2. Instantiate the right signature interface according to the invitation link.
+       Then go to signing step.
+  */
+  const startStepSign = async (signatureLink: string) => {
+    setInvitationLink(signatureLink);
+    if (signatureLink.match(DUMMY_REGEX)) {
       // Nothing to do, in dummy mode submitting for signature automatically signs the contract.
       setSignatureType(SignatureType.DUMMY);
     } else {
@@ -142,29 +171,28 @@ export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
     setStep(ContractSteps.SIGNING);
   };
 
-  const onSigned = () => {
-    stepPoll();
-  };
-
-  // Polling the order from the backend waiting for it to have processed the inbound lex persona
-  // webhook.
-  const stepPoll = async () => {
+  /*
+    3. Once the signature is done, start the polling step.
+       Poll the backend until it has been notified by signature provided.
+       Then, when it's done, finish the signature process.
+  */
+  const startStepPoll = async () => {
     setStep(ContractSteps.POLLING);
     let round = 0;
-    const checkOrderSignature = async () => {
+
+    const poll = async () => {
       if (round >= CONTRACT_SETTINGS.pollLimit) {
         timeoutRef.current = undefined;
         setErrored(intl.formatMessage(messages.errorMaxPolling));
       } else {
         try {
-          const orderToCheck = (await api.user.orders.get({ id: order.id })) as Order;
-          const isSigned = Boolean(orderToCheck?.contract?.student_signed_on);
+          const { isSigned } = await checkSignature();
           if (isSigned) {
             timeoutRef.current = undefined;
-            stepFinished();
+            finish();
           } else {
             round++;
-            timeoutRef.current = setTimeout(checkOrderSignature, CONTRACT_SETTINGS.pollInterval);
+            timeoutRef.current = setTimeout(poll, CONTRACT_SETTINGS.pollInterval);
           }
         } catch (e) {
           setErrored(intl.formatMessage(messages.errorPolling));
@@ -172,18 +200,18 @@ export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
       }
     };
 
-    checkOrderSignature();
+    poll();
   };
 
-  const stepFinished = () => {
+  /*
+    4. Finish the signature process.
+       And exec the onDone callback if there is.
+  */
+  const finish = () => {
     setStep(ContractSteps.FINISHED);
-    queryClient.invalidateQueries({ queryKey: ['user', 'orders'] });
-    onDone();
+    onDone?.();
   };
 
-  const onSignatureError = (e: string) => {
-    setErrored(e);
-  };
   const renderLoadingContract = () => {
     return (
       <div className="ContractFrame__loading-container">
@@ -196,7 +224,7 @@ export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
   };
 
   useEffect(() => {
-    initialize();
+    start();
   }, []);
 
   return (
@@ -238,7 +266,7 @@ export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
           <p className="ContractFrame__content">
             <FormattedMessage {...messages.finishedDescription} />
           </p>
-          <Button onClick={() => onClose()}>
+          <Button onClick={onClose}>
             <FormattedMessage {...messages.finishedButton} />
           </Button>
         </div>
@@ -246,3 +274,5 @@ export const ContractFrameContent = ({ order, onClose, onDone }: Props) => {
     </div>
   );
 };
+
+export default AbstractContractFrame;

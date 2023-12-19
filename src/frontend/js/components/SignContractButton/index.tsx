@@ -1,7 +1,7 @@
 import { Button } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useState } from 'react';
-import { ContractFrame } from 'components/ContractFrame';
+import { LearnerContractFrame } from 'components/ContractFrame';
 import { Contract, ContractState, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
@@ -81,7 +81,7 @@ const SignContractButton = ({ order, contract, writable, className }: SignContra
         </Button>
       )}
 
-      <ContractFrame
+      <LearnerContractFrame
         order={order}
         isOpen={contractFrameOpened}
         onDone={() => {
