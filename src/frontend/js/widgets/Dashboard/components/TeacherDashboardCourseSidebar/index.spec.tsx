@@ -79,11 +79,10 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
 
     renderTeacherDashboardCourseSidebar({ courseId: course.id });
     await expectNoSpinner('Loading course...');
-    expect(
-      screen.getByRole('link', {
-        name: intl.formatMessage(messages.syllabusLinkLabel),
-      }),
-    ).toBeInTheDocument();
+    const link = screen.getByRole('link', {
+      name: intl.formatMessage(messages.syllabusLinkLabel),
+    });
+    expect(link).toHaveAttribute('href', `/redirects/courses/${course.code}`);
   });
 
   it('should display menu items', async () => {

@@ -1,19 +1,19 @@
-import { FormattedMessage, IntlShape, defineMessages } from 'react-intl';
+import { defineMessages, FormattedMessage, IntlShape } from 'react-intl';
 import { capitalize } from 'lodash-es';
-import { Link } from 'react-router-dom';
-import { IconTypeEnum } from 'components/Icon';
+import { Button } from '@openfun/cunningham-react';
+import { Icon, IconTypeEnum } from 'components/Icon';
 import { CourseStateTextEnum, Priority } from 'types';
 import { CourseRun } from 'types/Joanie';
 import CourseRunListCell from './CourseRunListCell';
 
 export const messages = defineMessages({
   dataCourseRunPeriod: {
-    defaultMessage: 'from {from} to {to}',
+    defaultMessage: 'From {from} to {to}',
     description: 'Message displayed in course run datagrid for course run period',
     id: 'components.CourseRunList.dataCourseRunPeriod',
   },
   dataCourseRunLink: {
-    defaultMessage: 'go to course area',
+    defaultMessage: 'Go to course area',
     description: 'Message displayed in course run datagrid for course run link',
     id: 'components.CourseRunList.dataCourseRunLink',
   },
@@ -67,13 +67,14 @@ export const buildCourseRunData = (intl: IntlShape, courseRuns: CourseRun[]) => 
     ),
     action: (
       <CourseRunListCell variant={CourseRunListCell.ALIGN_RIGHT}>
-        <Link
-          to={courseRun.resource_link}
-          // FIXME: cunningham should provider us a ButtonLink of some kind
-          className="c__button c__button--secondary c__button--small "
+        <Button
+          href={courseRun.resource_link}
+          color="secondary"
+          size="small"
+          icon={<Icon name={IconTypeEnum.LOGOUT_SQUARE} size="small" />}
         >
           <FormattedMessage {...messages.dataCourseRunLink} />
-        </Link>
+        </Button>
       </CourseRunListCell>
     ),
   }));
