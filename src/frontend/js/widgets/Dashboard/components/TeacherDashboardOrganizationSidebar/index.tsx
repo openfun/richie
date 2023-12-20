@@ -1,14 +1,19 @@
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { generatePath, useParams } from 'react-router-dom';
 import { useMemo } from 'react';
-import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
-import { DashboardSidebar } from 'widgets/Dashboard/components/DashboardSidebar';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { createSearchParams, generatePath, useParams } from 'react-router-dom';
+import Badge from 'components/Badge';
+import { Spinner } from 'components/Spinner';
+import useContractAbilities from 'hooks/useContractAbilities';
+import { useContracts } from 'hooks/useContracts';
+import { useOrganization } from 'hooks/useOrganizations';
+import { ContractState } from 'types/Joanie';
+import { ContractActions } from 'utils/AbilitiesHelper/types';
+import { DashboardSidebar, MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';
 import {
   getDashboardRouteLabel,
   getDashboardRoutePath,
 } from 'widgets/Dashboard/utils/dashboardRoutes';
-import { useOrganization } from 'hooks/useOrganizations';
-import { Spinner } from 'components/Spinner';
+import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
 import { DashboardAvatar, DashboardAvatarVariantEnum } from '../DashboardAvatar';
 
 const messages = defineMessages({
@@ -34,21 +39,48 @@ export const TeacherDashboardOrganizationSidebar = () => {
     states: { fetching },
   } = useOrganization(organizationId);
 
+  const { items: contracts, meta } = useContracts({
+    organization_id: organizationId,
+    signature_state: ContractState.LEARNER_SIGNED,
+  });
+  const contractAbilities = useContractAbilities(contracts);
+
+  const pendingContractCount = meta?.pagination?.count ?? 0;
+  const canSignContracts = contractAbilities.can(ContractActions.SIGN);
+
+  const getMenuLinkFromPath = (basePath: TeacherDashboardPaths) => {
+    const path = generatePath(getRoutePath(basePath, { organizationId: ':organizationId' }), {
+      organizationId,
+    });
+
+    const menuLink: MenuLink = {
+      to: path,
+      label: getRouteLabel(basePath),
+    };
+
+    // For the contracts link, we want to display the number of contracts if needed and set
+    // the correct filter depending on the user's abilities
+    if (basePath === TeacherDashboardPaths.ORGANIZATION_CONTRACTS) {
+      if (canSignContracts && pendingContractCount > 0) {
+        const searchParams = createSearchParams({ signature_state: ContractState.LEARNER_SIGNED });
+        menuLink.badge = <Badge color="primary">{pendingContractCount}</Badge>;
+        menuLink.to = `${path}?${searchParams.toString()}`;
+      } else {
+        const searchParams = createSearchParams({ signature_state: ContractState.SIGNED });
+        menuLink.to = `${path}?${searchParams.toString()}`;
+      }
+    }
+
+    return menuLink;
+  };
+
   const links = useMemo(
     () =>
       [
         TeacherDashboardPaths.ORGANIZATION_COURSES,
         TeacherDashboardPaths.ORGANIZATION_CONTRACTS,
-      ].map((path) => ({
-        to: generatePath(
-          getRoutePath(path, {
-            organizationId: ':organizationId',
-          }),
-          { organizationId },
-        ),
-        label: getRouteLabel(path),
-      })),
-    [],
+      ].map(getMenuLinkFromPath),
+    [pendingContractCount, canSignContracts],
   );
 
   if (fetching) {
