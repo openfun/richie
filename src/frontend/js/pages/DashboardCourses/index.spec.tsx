@@ -19,7 +19,7 @@ import { SessionProvider } from 'contexts/SessionContext';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { CourseLight, CourseProductRelation, Enrollment, CredentialOrder } from 'types/Joanie';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
-import { expectBannerError } from 'utils/test/expectBanner';
+import { expectBannerError, expectNoBannerInfo } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
 import { isOrder } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { noop } from 'utils';
@@ -154,7 +154,7 @@ describe('<DashboardCourses/>', () => {
 
     await expectSpinner('Loading orders and enrollments...');
     expect(await screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
-    expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
+    await expectNoBannerInfo('You have no enrollments nor orders yet');
 
     ordersDeferred.resolve({ results: [], next: null, previous: null, count: 0 });
     enrollmentsDeferred.resolve({ results: [], next: null, previous: null, count: 0 });
@@ -246,7 +246,7 @@ describe('<DashboardCourses/>', () => {
 
     // Slice 1.
     await expectNoSpinner('Loading orders and enrollments...');
-    expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
+    await expectNoBannerInfo('You have no enrollments nor orders yet');
     let loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
     await waitFor(() => expectList(entities.slice(0, perPage), relations), { interval: 200 });
@@ -284,7 +284,7 @@ describe('<DashboardCourses/>', () => {
     });
 
     await expectNoSpinner('Loading orders and enrollments...');
-    expect(screen.queryByText('You have no enrollments nor orders yet.')).not.toBeInTheDocument();
+    await expectNoBannerInfo('You have no enrollments nor orders yet');
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
     await expectBannerError(
       'An error occurred while fetching orders and enrollments. Please retry later.',
