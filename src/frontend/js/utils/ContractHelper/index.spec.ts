@@ -19,7 +19,8 @@ const signedContractFactory = ContractFactory({
 describe('ContractHelper', () => {
   describe('getState', () => {
     it.each([
-      [undefined, null],
+      [null, ContractState.UNSIGNED],
+      [undefined, ContractState.UNSIGNED],
       [unsignedContractFactory.one(), ContractState.UNSIGNED],
       [halfSignedContractFactory.one(), ContractState.LEARNER_SIGNED],
       [signedContractFactory.one(), ContractState.SIGNED],
