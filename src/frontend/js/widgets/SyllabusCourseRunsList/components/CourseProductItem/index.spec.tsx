@@ -123,7 +123,7 @@ describe('CourseProductItem', () => {
     await expectNoSpinner('Loading product information...');
   });
 
-  it('renders product information', async () => {
+  it('renders product information for anonymous user', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
@@ -200,7 +200,7 @@ describe('CourseProductItem', () => {
     expect(screen.queryByTestId('CertificateItem')).toBeNull();
   });
 
-  it('adapts its layout if compact is set', async () => {
+  it('renders product informations in compact mode', async () => {
     const relation = CourseProductRelationFactory().one();
     fetchMock.get(
       `https://joanie.test/api/v1.0/courses/00000/products/${relation.product.id}/`,
@@ -256,7 +256,7 @@ describe('CourseProductItem', () => {
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
 
-  it('adapts information when user purchased the product', async () => {
+  it('renders product informations for a purchased product', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
     const order = CredentialOrderFactory({
@@ -315,7 +315,7 @@ describe('CourseProductItem', () => {
     expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
   });
 
-  it('adapts information when user purchased the product even if compact is set', async () => {
+  it('renders product informations for a purchased product in compact mode', async () => {
     const relation = CourseProductRelationFactory().one();
     const order: CredentialOrder = CredentialOrderFactory({
       product_id: relation.product.id,
