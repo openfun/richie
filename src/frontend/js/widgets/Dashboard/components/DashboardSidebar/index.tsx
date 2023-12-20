@@ -1,11 +1,18 @@
 import { matchPath, NavLink, useLocation } from 'react-router-dom';
 import { PropsWithChildren, ReactNode, useMemo } from 'react';
+import classNames from 'classnames';
 import { useSession } from 'contexts/SessionContext';
 import { DashboardAvatar } from 'widgets/Dashboard/components/DashboardAvatar';
 import NavigationSelect from './components/NavigationSelect';
 
+export interface MenuLink {
+  to: string;
+  label: string;
+  badge?: ReactNode;
+}
+
 export interface DashboardSidebarProps extends PropsWithChildren {
-  menuLinks: Record<string, string>[];
+  menuLinks: MenuLink[];
   header: string;
   subHeader: string;
   title?: string;
@@ -48,11 +55,14 @@ export const DashboardSidebar = ({
           {menuLinks.map((link) => (
             <li
               key={link.to}
-              className={selectedLink && selectedLink === link.to ? 'active' : undefined}
+              className={classNames('dashboard-sidebar__container__nav__item', {
+                active: selectedLink === link.to,
+              })}
             >
               <NavLink to={link.to} end>
                 {link.label}
               </NavLink>
+              {link.badge}
             </li>
           ))}
         </ul>

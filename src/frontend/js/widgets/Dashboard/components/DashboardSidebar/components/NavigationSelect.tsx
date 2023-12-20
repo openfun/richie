@@ -2,6 +2,7 @@ import { Select, SelectHandle } from '@openfun/cunningham-react';
 import { useMemo, useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { matchPath, useLocation, useNavigate } from 'react-router-dom';
+import { MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';
 
 const messages = defineMessages({
   settingsLinkLabel: {
@@ -21,7 +22,7 @@ type CunninghamSelectOnChange = (event: {
 }) => void;
 
 interface NavigationSelectProps {
-  menuLinks: Record<string, string>[];
+  menuLinks: MenuLink[];
 }
 
 const NavigationSelect = ({ menuLinks }: NavigationSelectProps) => {
