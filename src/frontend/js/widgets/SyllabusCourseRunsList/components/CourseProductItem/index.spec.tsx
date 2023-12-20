@@ -614,6 +614,66 @@ describe('CourseProductItem', () => {
     expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
   });
 
+  it.each([
+    {
+      orderState: OrderState.PENDING,
+    },
+    {
+      orderState: OrderState.SUBMITTED,
+    },
+    {
+      orderState: OrderState.DRAFT,
+    },
+  ])(
+    "should not render sign button and banner for order's state $orderState",
+    async ({ orderState }) => {
+      const relation = CourseProductRelationFactory().one();
+      const { product } = relation;
+      const order = CredentialOrderFactory({
+        product_id: product.id,
+        target_courses: product.target_courses,
+        course: CourseLightFactory({ code: '00000' }).one(),
+        state: orderState,
+      }).one();
+      fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+      const orderQueryParameters = {
+        product_id: order.product_id,
+        course_code: order.course.code,
+        state: ACTIVE_ORDER_STATES,
+      };
+
+      fetchMock.get(
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+        [order],
+      );
+
+      render(
+        <Wrapper withSession>
+          <CourseProductItem
+            productId={product.id}
+            course={CourseLightFactory({ code: '00000' }).one()}
+          />
+        </Wrapper>,
+      );
+
+      // Wait for product information to be fetched
+      expect(
+        await screen.findByRole('heading', { level: 3, name: product.title }),
+      ).toBeInTheDocument();
+
+      // - A banner should be displayed.
+      expect(
+        screen.queryByText(
+          'You need to sign your training contract before enrolling to course runs',
+        ),
+      ).not.toBeInTheDocument();
+
+      expect(
+        screen.queryByRole('link', { name: 'Sign your training contract' }),
+      ).not.toBeInTheDocument();
+    },
+  );
+
   it('renders a button and a banner if the contract needs to be signed', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
@@ -621,7 +681,7 @@ describe('CourseProductItem', () => {
       product_id: product.id,
       target_courses: product.target_courses,
       course: CourseLightFactory({ code: '00000' }).one(),
-      state: OrderState.SUBMITTED,
+      state: OrderState.VALIDATED,
     }).one();
     fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
     const orderQueryParameters = {
@@ -651,30 +711,7 @@ describe('CourseProductItem', () => {
 
     // - A banner should be displayed.
     screen.getByText('You need to sign your training contract before enrolling to course runs');
-
     screen.getByRole('link', { name: 'Sign your training contract' });
-
-    // - In place of product price, a label "Pending" should be displayed
-    const $enrolledInfo = await screen.findByText('Pending');
-    expect($enrolledInfo.tagName).toBe('STRONG');
-
-    // - As order is pending, the user should not be able to enroll to course runs.
-    await Promise.all(
-      order.target_courses.map(async (course) => {
-        const $item = await screen.findByTestId(`course-item-${course.code}`);
-        // the course title shouldn't be a heading to prevent misdirection for screen reader users,
-        // but we want to it to visually look like a h5
-        const $courseTitle = await findByText($item, course.title);
-        expect($courseTitle.tagName).toBe('STRONG');
-        expect($courseTitle.classList.contains('h5')).toBe(true);
-        await screen.findByTestId(
-          `CourseRunList-${course.course_runs.map(({ id }) => id).join('-')}`,
-        );
-      }),
-    );
-
-    // - Does not Render PurchaseButton cta
-    expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
   });
 
   it('adapts layout when user has a pending order and compact prop is set', async () => {
