@@ -1,16 +1,9 @@
-import {
-  getByText,
-  render,
-  screen,
-  waitFor,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
+import { getByText, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import queryString from 'query-string';
-import { findByText } from '@storybook/testing-library';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   CourseLightFactory,
@@ -106,7 +99,7 @@ describe('CourseProductItem', () => {
     </IntlProvider>
   );
 
-  it('renders product information', async () => {
+  it('should display a loader until product is loaded', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
     const productDeferred = new Deferred();
@@ -125,9 +118,24 @@ describe('CourseProductItem', () => {
     );
 
     // - A loader should be displayed while product information are fetching
-    screen.getByRole('status', { name: 'Loading product information...' });
-
+    await expectSpinner('Loading product information...');
     productDeferred.resolve(relation);
+    await expectNoSpinner('Loading product information...');
+  });
+
+  it('renders product information', async () => {
+    const relation = CourseProductRelationFactory().one();
+    const { product } = relation;
+    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+
+    render(
+      <Wrapper>
+        <CourseProductItem
+          course={CourseLightFactory({ code: '00000' }).one()}
+          productId={product.id}
+        />
+      </Wrapper>,
+    );
 
     await screen.findByRole('heading', { level: 3, name: product.title });
     // the price shouldn't be a heading to prevent misdirection for screen reader users,
@@ -194,10 +202,9 @@ describe('CourseProductItem', () => {
 
   it('adapts its layout if compact is set', async () => {
     const relation = CourseProductRelationFactory().one();
-    const productDeferred = new Deferred();
     fetchMock.get(
       `https://joanie.test/api/v1.0/courses/00000/products/${relation.product.id}/`,
-      productDeferred.promise,
+      relation,
     );
 
     const { container } = render(
@@ -209,11 +216,6 @@ describe('CourseProductItem', () => {
         />
       </Wrapper>,
     );
-
-    // - A loader should be displayed while product information are fetching
-    screen.getByRole('status', { name: 'Loading product information...' });
-
-    productDeferred.resolve(relation);
 
     // In the header, we should display the product title, the product price
     // and product date range and languages
@@ -284,8 +286,6 @@ describe('CourseProductItem', () => {
     );
 
     // Wait for product information to be fetched
-    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
-    await waitForElementToBeRemoved(loadingMessage);
     await screen.findByRole('heading', { level: 3, name: product.title });
 
     // - In place of product price, a label should be displayed
@@ -348,8 +348,6 @@ describe('CourseProductItem', () => {
     );
 
     // Wait for product information to be fetched
-    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
-    await waitForElementToBeRemoved(loadingMessage);
     await screen.findByRole('heading', { level: 3, name: relation.product.title });
 
     // - In place of product price, a label should be displayed
@@ -420,8 +418,6 @@ describe('CourseProductItem', () => {
     );
 
     // Wait for product information to be fetched
-    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
-    await waitForElementToBeRemoved(loadingMessage);
     await screen.findByRole('heading', { level: 3, name: product.title });
 
     // - In place of product price, a label should be displayed
@@ -481,7 +477,6 @@ describe('CourseProductItem', () => {
     );
 
     // Wait for product information to be fetched
-    await screen.findByRole('status', { name: 'Loading product information...' });
     await screen.findByRole('heading', { level: 3, name: product.title });
 
     const $price = screen.getByText(
@@ -530,7 +525,6 @@ describe('CourseProductItem', () => {
     );
 
     // Wait for product information to be fetched
-    await screen.findByRole('status', { name: 'Loading product information...' });
     await screen.findByRole('heading', { level: 3, name: product.title });
 
     const $price = screen.getByText(
@@ -585,8 +579,6 @@ describe('CourseProductItem', () => {
     );
 
     // Wait for product information to be fetched
-    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
-    await waitForElementToBeRemoved(loadingMessage);
     await screen.findByRole('heading', { level: 3, name: product.title });
 
     // - In place of product price, a label "Pending" should be displayed
@@ -705,8 +697,6 @@ describe('CourseProductItem', () => {
     );
 
     // Wait for product information to be fetched
-    await expectSpinner('Loading product information...');
-    await expectNoSpinner('Loading product information...');
     await screen.findByRole('heading', { level: 3, name: product.title });
 
     // - A banner should be displayed.
@@ -747,8 +737,6 @@ describe('CourseProductItem', () => {
     );
 
     // Wait for product information to be fetched
-    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
-    await waitForElementToBeRemoved(loadingMessage);
     await screen.findByRole('heading', { level: 3, name: relation.product.title });
 
     // - In place of product price, a label should be displayed
@@ -793,10 +781,6 @@ describe('CourseProductItem', () => {
       </Wrapper>,
     );
 
-    // Wait for product information to be fetched
-    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
-    await waitForElementToBeRemoved(loadingMessage);
-
     // - As product fetching has failed, an error message should be displayed
     await screen.findByText('An error occurred while fetching product. Please retry later.');
   });
@@ -832,8 +816,8 @@ describe('CourseProductItem', () => {
       </Wrapper>,
     );
 
-    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
-    await waitForElementToBeRemoved(loadingMessage);
+    // wait for component to be fully loaded
+    await screen.findByRole('heading', { level: 3, name: product.title });
 
     expect(screen.queryByRole('button', { name: product.call_to_action })).not.toBeInTheDocument();
     screen.getByText('Sorry, no seats available for now');
@@ -870,8 +854,8 @@ describe('CourseProductItem', () => {
       </Wrapper>,
     );
 
-    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
-    await waitForElementToBeRemoved(loadingMessage);
+    // wait for component to be fully loaded
+    await screen.findByRole('heading', { level: 3, name: product.title });
 
     expect(screen.queryByText('Sorry, no seats available for now')).not.toBeInTheDocument();
     screen.getByRole('button', { name: product.call_to_action });
@@ -909,8 +893,8 @@ describe('CourseProductItem', () => {
       </Wrapper>,
     );
 
-    const loadingMessage = screen.getByRole('status', { name: 'Loading product information...' });
-    await waitForElementToBeRemoved(loadingMessage);
+    // wait for component to be fully loaded
+    await screen.findByRole('heading', { level: 3, name: product.title });
 
     expect(screen.queryByText('Sorry, no seats available for now')).not.toBeInTheDocument();
     expect(screen.getAllByTestId('PurchaseButton__cta')).toHaveLength(2);
