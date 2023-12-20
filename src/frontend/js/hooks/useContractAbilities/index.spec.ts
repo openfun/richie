@@ -5,6 +5,7 @@ import { ContractActions } from 'utils/AbilitiesHelper/types';
 
 describe('useContractAbilities', () => {
   it.each([
+    [[], false],
     [ContractFactory({ abilities: { [ContractActions.SIGN]: true } }).one(), true],
     [ContractFactory({ abilities: { [ContractActions.SIGN]: false } }).one(), false],
     [ContractFactory({ abilities: { [ContractActions.SIGN]: true } }).many(2), true],

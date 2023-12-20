@@ -23,11 +23,10 @@ export const abilityActions = { ...JoanieUserProfileActions, ...ContractActions 
  * @param action - The action to check.
  */
 const can = (entities: Maybe<Nullable<Entity | Entity[]>>, action: Actions) => {
-  if (!entities) {
-    return false;
-  }
+  if (!entities) return false;
 
   if (!Array.isArray(entities)) entities = [entities];
+  else if (entities.length === 0) return false;
 
   return entities.every((entity) => {
     if (isJoanieUserProfileEntity(entity)) {
