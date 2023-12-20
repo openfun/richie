@@ -105,7 +105,7 @@ describe('components/TeacherDashboardTrainingLoader', () => {
       (acc, course) => acc + course.course_runs.length,
       0,
     );
-    expect(screen.getAllByRole('link', { name: 'go to course area' })).toHaveLength(nbCourseRun);
+    expect(screen.getAllByRole('link', { name: 'Go to course area' })).toHaveLength(nbCourseRun);
   });
 
   it('should fetch course product relation with organization id if there is one in the path', async () => {
@@ -171,6 +171,6 @@ describe('components/TeacherDashboardTrainingLoader', () => {
       (acc, course) => acc + course.course_runs.length,
       0,
     );
-    expect(screen.getAllByRole('link', { name: 'go to course area' })).toHaveLength(nbCourseRun);
+    expect(screen.getAllByRole('link', { name: 'Go to course area' })).toHaveLength(nbCourseRun);
   });
 });

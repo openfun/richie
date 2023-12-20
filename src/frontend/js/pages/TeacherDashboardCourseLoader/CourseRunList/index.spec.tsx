@@ -21,6 +21,6 @@ describe('pages/TeacherDashboardCourseLoader/CourseRunList', () => {
     const [courseRunOne, courseRunTwo] = courseRuns;
     expect(screen.getByTitle(capitalize(courseRunOne.title))).toBeInTheDocument();
     expect(screen.getByTitle(capitalize(courseRunTwo.title))).toBeInTheDocument();
-    expect(screen.getAllByRole('link', { name: 'go to course area' }).length).toEqual(2);
+    expect(screen.getAllByRole('link', { name: 'Go to course area' }).length).toEqual(2);
   });
 });

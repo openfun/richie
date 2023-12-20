@@ -5,7 +5,7 @@
   border-radius: $border-radius;
   box-shadow: r-theme-val(dashboard-sidebar, base-shadow);
   color: r-theme-val(dashboard-sidebar, base-color);
-  padding-bottom: rem-calc(27px);
+  padding-bottom: r-theme-val(dashboard-sidebar, menu-link-inline-padding);
 
   @include media-breakpoint-down(lg) {
     width: auto;
@@ -17,7 +17,8 @@
 
   &__container {
     &__header {
-      padding: rem-calc(64px) rem-calc(16px) rem-calc(50px) rem-calc(16px);
+      $padding-inline: rem-calc(r-theme-val(dashboard-sidebar, menu-link-inline-padding));
+      padding: rem-calc(64px) $padding-inline rem-calc(32px) $padding-inline;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -41,8 +42,8 @@
     }
 
     &__title {
-      $titlePadding: rem-calc(r-theme-val(dashboard-sidebar, menu-link-left-padding) + 3px);
-      padding: 0 $titlePadding 1rem $titlePadding;
+      $padding-inline: rem-calc(r-theme-val(dashboard-sidebar, menu-link-inline-padding) + 3px);
+      padding: 0 $padding-inline 1rem $padding-inline;
       margin: 0;
     }
 
@@ -80,14 +81,14 @@
         &:hover {
           border-left: 3px solid r-theme-val(dashboard-sidebar, base-color);
           a {
-            padding-left: rem-calc(r-theme-val(dashboard-sidebar, menu-link-left-padding) - 3px);
+            padding-left: rem-calc(r-theme-val(dashboard-sidebar, menu-link-inline-padding) - 3px);
           }
         }
 
         &.active {
           border-left: 3px solid r-theme-val(dashboard-sidebar, active-color);
           a {
-            padding-left: rem-calc(r-theme-val(dashboard-sidebar, menu-link-left-padding) - 3px);
+            padding-left: rem-calc(r-theme-val(dashboard-sidebar, menu-link-inline-padding) - 3px);
             font-weight: 600;
             color: r-theme-val(dashboard-sidebar, active-color);
           }
@@ -98,7 +99,7 @@
           flex: 1;
           align-items: center;
           height: rem-calc(24px);
-          padding-left: r-theme-val(dashboard-sidebar, menu-link-left-padding);
+          padding-left: r-theme-val(dashboard-sidebar, menu-link-inline-padding);
           color: r-theme-val(dashboard-sidebar, base-color);
         }
       }

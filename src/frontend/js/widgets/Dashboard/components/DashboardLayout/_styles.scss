@@ -4,6 +4,10 @@ $dashboard-filters-height: rem-calc(48px);
 $dashboard-header-spacing: rem-calc(16px);
 $sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-header-spacing;
 
+.richie-react--dashboard {
+  min-height: 100%;
+}
+
 .dashboard {
   @include make-container();
   @include make-container-max-widths();
@@ -53,7 +57,6 @@ $sidebar-spacing-top: $dashboard-breadcrumb-height + $dashboard-header-spacing;
 
   &__main {
     flex-grow: 1;
-    overflow: hidden;
 
     @include media-breakpoint-down(lg) {
       padding: rem-calc(16px) 0 0 0;

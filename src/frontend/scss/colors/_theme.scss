@@ -247,9 +247,6 @@ $r-theme: (
     text-hover-color: r-color('grey59'),
     base-border: r-color('azure2'),
   ),
-  dashboard-course-list: (
-    title-color: r-color('indianred3'),
-  ),
   dashboard-credit-cards: (
     empty-color: r-color(slate-grey),
   ),
@@ -277,7 +274,7 @@ $r-theme: (
     sub-title-color: r-color('slate-grey'),
     active-color: r-color('indianred3'),
     base-border: r-color('light-grey'),
-    menu-link-left-padding: 25px,
+    menu-link-inline-padding: 16px,
   ),
   dashboard-list: (
     background-color-loading: r-color('smoke'),
@@ -322,7 +319,7 @@ $r-theme: (
     hover-title-color: r-color('firebrick6'),
   ),
   dashboard-sidebar-organization-link-title: (
-    base-color: r-color('firebrick6'),
+    base-color: r-color('battleship-grey'),
   ),
   pagination: (
     item-color: r-color('slate-grey'),

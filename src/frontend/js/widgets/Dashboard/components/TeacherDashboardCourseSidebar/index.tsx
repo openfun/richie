@@ -97,12 +97,14 @@ export const TeacherDashboardCourseSidebar = () => {
           </span>
         </Spinner>
       ) : (
-        <a className="syllabus-link" href={`/${intl.locale.split('-')[0]}/courses/${course.code}`}>
-          <Icon name={IconTypeEnum.LOGOUT_SQUARE} />
-          <span>
-            <FormattedMessage {...messages.syllabusLinkLabel} />
-          </span>
-        </a>
+        course && (
+          <a className="syllabus-link" href={`/redirects/courses/${course.code}`}>
+            <Icon name={IconTypeEnum.LOGOUT_SQUARE} size="small" />
+            <span>
+              <FormattedMessage {...messages.syllabusLinkLabel} />
+            </span>
+          </a>
+        )
       )}
     </DashboardSidebar>
   );
