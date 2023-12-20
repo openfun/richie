@@ -1,4 +1,4 @@
-import { OrderEnrollment, ACTIVE_ORDER_STATES, Order, Product } from 'types/Joanie';
+import { OrderEnrollment, ACTIVE_ORDER_STATES, Order, Product, OrderState } from 'types/Joanie';
 
 export const getActiveEnrollmentOrder = (orders: OrderEnrollment[], productId: string) => {
   const filter = (order: OrderEnrollment) =>
@@ -7,5 +7,9 @@ export const getActiveEnrollmentOrder = (orders: OrderEnrollment[], productId: s
 };
 
 export const orderNeedsSignature = (order: Order, product?: Product) => {
-  return product?.contract_definition && !(order.contract && order.contract.student_signed_on);
+  return (
+    order?.state === OrderState.VALIDATED &&
+    product?.contract_definition &&
+    !(order.contract && order.contract.student_signed_on)
+  );
 };
