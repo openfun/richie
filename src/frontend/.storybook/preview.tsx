@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { IntlProvider } from 'react-intl';
-import './__mocks__/utils/context';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { useAsyncEffect } from 'hooks/useAsyncEffect';
+import './__mocks__/utils/context';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -34,7 +35,9 @@ export const decorators = [
   (Story) => (
     <IntlProvider locale="en">
       <IconsWrapper>
-        <Story />
+        <CunninghamProvider>
+          <Story />
+        </CunninghamProvider>
       </IconsWrapper>
     </IntlProvider>
   ),

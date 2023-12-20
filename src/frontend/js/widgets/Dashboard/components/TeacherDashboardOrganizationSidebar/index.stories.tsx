@@ -1,7 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import fetchMock from 'fetch-mock';
-import { CunninghamProvider } from '@openfun/cunningham-react';
 import { UserFactory } from 'utils/test/factories/richie';
 import { TeacherDashboardOrganizationSidebar } from 'widgets/Dashboard/components/TeacherDashboardOrganizationSidebar';
 import { StorybookHelper } from 'utils/StorybookHelper';
@@ -34,12 +33,7 @@ export default {
       },
     );
 
-    return StorybookHelper.wrapInApp(
-      <CunninghamProvider>
-        <RouterProvider router={router} />
-      </CunninghamProvider>,
-      { user },
-    );
+    return StorybookHelper.wrapInApp(<RouterProvider router={router} />, { user });
   },
 } as Meta<typeof TeacherDashboardOrganizationSidebar>;
 
