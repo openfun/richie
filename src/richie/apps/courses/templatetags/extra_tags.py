@@ -7,12 +7,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.template.defaultfilters import stringfilter
 from django.template.loader import render_to_string
-from django.utils import timezone, translation
-from django.utils.translation import get_language
-from django.utils.translation import gettext as _
-from django.utils.translation import to_locale
+from django.utils import translation
 
-import arrow
 from classytags.arguments import Argument, MultiValueArgument
 from classytags.core import Options, Tag
 from classytags.utils import flatten_context
@@ -256,44 +252,6 @@ def sort_runs_by_language_and_start_date(course_runs):
             course_runs,
             key=lambda run: (current_language not in run.languages, run.start),
         )
-    )
-
-
-@register.simple_tag(takes_context=True)
-def course_enrollment_widget_props(context):
-    """
-    Return a json dumps which contains all course_run's properties required by
-    CourseEnrollment React widget
-    """
-    course_run = context["run"]
-
-    profile_urls = json.loads(
-        context.get("AUTHENTICATION", {}).get("profile_urls", "{}")
-    )
-    dashboard_link = profile_urls.get("dashboard", {}).get("action")
-
-    starts_in_message = None
-    if course_run.start > timezone.now():
-        course_start = arrow.get(course_run.start)
-        humanized_course_start = course_start.humanize(
-            arrow.now(), locale=to_locale(get_language())
-        )
-        # Translators: delay indicates when the course will start as a duration.
-        # In english the string will be "The course will start in 3 days"
-        starts_in_message = _("The course will start {delay:s}").format(
-            delay=humanized_course_start
-        )
-
-    return json.dumps(
-        {
-            "courseRun": {
-                "id": course_run.id,
-                "resource_link": course_run.resource_link,
-                "priority": course_run.state["priority"],
-                "starts_in_message": starts_in_message,
-                "dashboard_link": dashboard_link,
-            }
-        }
     )
 
 
