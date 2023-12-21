@@ -51,9 +51,9 @@ export const DashboardCourses = () => {
       ) : (
         <>
           {count === 0 && (
-            <p className="dashboard__courses__empty">
+            <div className="dashboard__courses__empty">
               <Banner message={intl.formatMessage(messages.emptyList)} />
-            </p>
+            </div>
           )}
           <div className="dashboard__courses__list">
             {data.map((datum) => (

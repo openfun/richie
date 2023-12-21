@@ -8,7 +8,7 @@ describe('Badge', () => {
     screen.getByText('999');
   });
 
-  it('should possible to set color', () => {
+  it('should be possible to set color', () => {
     render(<Badge color="primary">999</Badge>);
 
     const badge = screen.getByText('999');

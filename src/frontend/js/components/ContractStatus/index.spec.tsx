@@ -59,7 +59,7 @@ describe('<ContractStatus />', () => {
         { exact: false },
       ),
     ).toBeInTheDocument();
-    screen.debug();
+
     expect(
       screen.queryByText(
         'You cannot download your training contract until it had been signed by the organization.',

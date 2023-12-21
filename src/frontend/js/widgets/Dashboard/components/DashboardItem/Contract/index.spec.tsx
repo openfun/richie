@@ -136,7 +136,6 @@ describe.each([
       ),
     ).toBeInTheDocument();
 
-    screen.debug();
     expect(screen.queryByRole('button', { name: 'Download' })).toBeInTheDocument();
   });
 
