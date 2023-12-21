@@ -12,11 +12,11 @@ import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 
+import OrderStatus from 'widgets/Dashboard/components/OrderStatus';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
 import { DashboardItem } from '../index';
 import { DashboardItemContract } from '../Contract';
-import OrderStateMessage from './OrderStateMessage';
 
 const messages = {
   accessCourse: {
@@ -114,7 +114,7 @@ export const DashboardItemOrder = ({
             <div className="dashboard-item-order__footer">
               <div className="dashboard-item__block__status">
                 <Icon name={IconTypeEnum.SCHOOL} />
-                <OrderStateMessage order={order} product={product} />
+                <OrderStatus order={order} product={product} />
               </div>
               {showDetailsButton && (
                 <RouterButton

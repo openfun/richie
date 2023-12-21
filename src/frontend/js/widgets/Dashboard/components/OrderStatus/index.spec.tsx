@@ -8,7 +8,7 @@ import {
   ProductFactory,
 } from 'utils/test/factories/joanie';
 import { OrderState } from 'types/Joanie';
-import OrderStateMessage, { messages } from '.';
+import OrderStatus, { messages } from '.';
 
 const intl = createIntl({ locale: 'en' });
 
@@ -40,7 +40,7 @@ describe('<DashboardItemOrder/>', () => {
       const order = CredentialOrderFactory({ state }).one();
       render(
         <Wrapper>
-          <OrderStateMessage order={order} />
+          <OrderStatus order={order} />
         </Wrapper>,
       );
       expect(screen.getByText(expectedMessage)).toBeInTheDocument();
@@ -61,7 +61,7 @@ describe('<DashboardItemOrder/>', () => {
       }).one();
       render(
         <Wrapper>
-          <OrderStateMessage order={orderWithContract} />
+          <OrderStatus order={orderWithContract} />
         </Wrapper>,
       );
       expect(screen.getByText(expectedMessage)).toBeInTheDocument();
@@ -80,7 +80,7 @@ describe('<DashboardItemOrder/>', () => {
 
     render(
       <Wrapper>
-        <OrderStateMessage order={order} product={product} />
+        <OrderStatus order={order} product={product} />
       </Wrapper>,
     );
     expect(screen.getByText('Signature required')).toBeInTheDocument();
@@ -94,7 +94,7 @@ describe('<DashboardItemOrder/>', () => {
     }).one();
     render(
       <Wrapper>
-        <OrderStateMessage order={order} />
+        <OrderStatus order={order} />
       </Wrapper>,
     );
     expect(
@@ -112,7 +112,7 @@ describe('<DashboardItemOrder/>', () => {
     }).one();
     render(
       <Wrapper>
-        <OrderStateMessage order={order} />
+        <OrderStatus order={order} />
       </Wrapper>,
     );
     expect(
