@@ -1,144 +1,155 @@
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Button, DataGrid, SortModel, usePagination } from '@openfun/cunningham-react';
+import { DataGrid, usePagination } from '@openfun/cunningham-react';
 import { useEffect, useMemo, useState } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { ContractHelper, ContractStatePoV } from 'utils/ContractHelper';
 import { useContracts } from 'hooks/useContracts';
 import Banner, { BannerType } from 'components/Banner';
 import { PER_PAGE } from 'settings';
-import { ContractFilters } from 'types/Joanie';
+import { ContractFilters, ContractState } from 'types/Joanie';
+import ContractFiltersBar from 'pages/TeacherDashboardContractsLoader/ContractFilters';
+import useContractAbilities from 'hooks/useContractAbilities';
+import { ContractActions } from 'utils/AbilitiesHelper/types';
+import SignOrganizationContractButton from 'pages/TeacherDashboardContractsLoader/SignOrganizationContractButton';
 
 const messages = defineMessages({
-  errorNoCourseProductRelation: {
-    defaultMessage: "This product doesn't exist",
-    description: 'Message displayed when requested course product relation is not found',
-    id: 'pages.TeacherDashboardContracts.errorNoCourseProductRelation',
+  columnProductTitle: {
+    defaultMessage: 'Training',
+    description: 'Label for productTitle column',
+    id: 'pages.TeacherDashboardOrganizationContractsLoader.columnProductTitle',
+  },
+  columnLearnerName: {
+    defaultMessage: 'Learner',
+    description: 'Label for learnerName column',
+    id: 'pages.TeacherDashboardOrganizationContractsLoader.columnLearnerName',
+  },
+  columnState: {
+    defaultMessage: 'State',
+    description: 'Label for state column',
+    id: 'pages.TeacherDashboardOrganizationContractsLoader.columnState',
   },
 });
 
-export interface TeacherDashboardContractsProps {
-  courseId?: string;
+type TeacherDashboardContractsParams = {
   organizationId?: string;
-  page?: string;
-}
+  courseId?: string;
+  productId?: string;
+};
 
-const TeacherDashboardContracts = ({
-  courseId,
-  organizationId,
-  page,
-}: TeacherDashboardContractsProps) => {
+const TeacherDashboardContracts = () => {
   const intl = useIntl();
-  const [contractFilters, setContractFilters] = useState<ContractFilters>({
-    course_id: courseId,
-    organization_id: organizationId,
-    page: page ? parseInt(page, 10) : 1,
-    page_size: PER_PAGE.teacherContractList,
-  });
-  useEffect(() => {
-    setContractFilters((currentFilters: ContractFilters) => ({
-      ...currentFilters,
-      organization_id: organizationId,
-    }));
-  }, [organizationId]);
-
-  const {
-    items: contracts,
-    meta,
-    states: { fetching, isFetched },
-  } = useContracts(contractFilters);
-
-  const [sortModel, setSortModel] = useState<SortModel>([
-    {
-      field: 'learnerName',
-      sort: 'desc',
-    },
-    {
-      field: 'productTitle',
-      sort: 'desc',
-    },
-    {
-      field: 'signDate',
-      sort: 'desc',
-    },
-  ]);
-
+  const { courseId, organizationId, productId } = useParams<TeacherDashboardContractsParams>();
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get('page') ?? '1';
   const pagination = usePagination({
     defaultPage: page ? parseInt(page, 10) : 1,
     pageSize: PER_PAGE.teacherContractList,
   });
-  useEffect(() => {
-    if (isFetched) {
-      pagination.setPagesCount(Math.ceil(meta!.pagination!.count / PER_PAGE.teacherContractList));
-    }
-  }, [contracts, isFetched]);
+  const initialFilters = useMemo(
+    () => ({
+      organization_id: organizationId,
+      signature_state:
+        (searchParams.get('signature_state') as ContractState) || ContractState.SIGNED,
+    }),
+    [],
+  );
+  const [filters, setFilters] = useState<ContractFilters>(initialFilters);
 
-  const onPageChange = (newPage: number) => {
-    setContractFilters((currentFilters: ContractFilters) => ({ ...currentFilters, page: newPage }));
-  };
-  useEffect(() => onPageChange(pagination.page), [pagination.page]);
+  const halfSignedContractsQuery = useContracts(
+    {
+      signature_state: ContractState.LEARNER_SIGNED,
+      organization_id: filters.organization_id,
+      course_id: courseId,
+      product_id: productId,
+    },
+    { enabled: !!filters.organization_id },
+  );
+  const contractAbilities = useContractAbilities(halfSignedContractsQuery.items);
+  const contractToSignCount = halfSignedContractsQuery.meta?.pagination?.count ?? 0;
+
+  const {
+    items: contracts,
+    meta,
+    states: { fetching, isFetched, error },
+  } = useContracts(
+    {
+      ...filters,
+      course_id: courseId,
+      product_id: productId,
+      page: pagination.page,
+      page_size: PER_PAGE.teacherContractList,
+    },
+    { enabled: !!filters.organization_id },
+  );
 
   const rows = useMemo(() => {
-    return contracts.map(({ id, student_signed_on: studentSignedOn, order }) => ({
-      id,
-      learnerName: order.owner_name,
-      productTitle: order.product_title,
-      signDate: studentSignedOn ? intl.formatDate(studentSignedOn) : studentSignedOn,
+    return contracts.map((contract) => ({
+      id: contract.id,
+      learnerName: contract.order.owner_name,
+      productTitle: contract.order.product_title,
+      state: ContractHelper.getHumanReadableState(contract, ContractStatePoV.ORGANIZATION, intl),
     }));
   }, [contracts]);
 
-  return contracts ? (
-    <div className="teacher-contract-page" data-testid={isFetched ? 'contracts-loaded' : undefined}>
+  const handleFiltersChange = (newFilters: Partial<ContractFilters>) => {
+    // Reset pagination
+    pagination.setPage(1);
+    setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
+  };
+
+  useEffect(() => {
+    if (isFetched && meta?.pagination?.count) {
+      pagination.setPagesCount(Math.ceil(meta!.pagination!.count / PER_PAGE.teacherContractList));
+    }
+  }, [meta, isFetched]);
+
+  if (error) {
+    return <Banner message={error} type={BannerType.ERROR} rounded />;
+  }
+
+  return (
+    <div className="teacher-contract-page">
+      <div className="dashboard__page__actions">
+        <div className="dashboard__page__actions-row dashboard__page__actions-row--space-between">
+          <div>
+            {filters.organization_id && contractAbilities.can(ContractActions.SIGN) && (
+              <SignOrganizationContractButton
+                organizationId={filters.organization_id}
+                contractToSignCount={contractToSignCount}
+              />
+            )}
+          </div>
+        </div>
+        <ContractFiltersBar
+          defaultValues={initialFilters}
+          onFiltersChange={handleFiltersChange}
+          hideFilterOrganization={!!organizationId}
+        />
+      </div>
       <DataGrid
         columns={[
           {
+            field: 'productTitle',
+            headerName: intl.formatMessage(messages.columnProductTitle),
+            enableSorting: false,
+          },
+          {
             field: 'learnerName',
-            headerName: 'Learner',
+            headerName: intl.formatMessage(messages.columnLearnerName),
+            enableSorting: false,
           },
           {
-            id: 'productTitle',
-            headerName: 'Product',
-            renderCell: ({ row: { productTitle } }) => (
-              <div className="product-title-column">{productTitle}</div>
-            ),
-          },
-          {
-            field: 'signDate',
-            headerName: 'Date',
-          },
-          {
-            id: 'actions',
-            renderCell: () => (
-              <div className="actions-column">
-                <Button
-                  color="tertiary"
-                  size="small"
-                  icon={<span className="material-icons">visibility</span>}
-                >
-                  Open
-                </Button>
-                <Button
-                  color="tertiary"
-                  size="small"
-                  icon={<span className="material-icons">download</span>}
-                >
-                  Download
-                </Button>
-              </div>
-            ),
+            field: 'state',
+            headerName: intl.formatMessage(messages.columnState),
+            enableSorting: false,
           },
         ]}
         rows={rows}
         pagination={pagination}
-        sortModel={sortModel}
-        onSortModelChange={setSortModel}
         isLoading={fetching}
       />
     </div>
-  ) : (
-    <Banner
-      message={intl.formatMessage(messages.errorNoCourseProductRelation)}
-      type={BannerType.ERROR}
-      rounded
-    />
   );
 };
 

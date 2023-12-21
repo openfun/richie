@@ -1,5 +1,5 @@
-import { matchPath, NavLink, useLocation } from 'react-router-dom';
-import { PropsWithChildren, ReactNode, useMemo } from 'react';
+import { matchPath, NavLink, resolvePath, useLocation } from 'react-router-dom';
+import { PropsWithChildren, ReactNode, useCallback } from 'react';
 import classNames from 'classnames';
 import { useSession } from 'contexts/SessionContext';
 import { DashboardAvatar } from 'widgets/Dashboard/components/DashboardAvatar';
@@ -30,10 +30,12 @@ export const DashboardSidebar = ({
   const { user } = useSession();
   const location = useLocation();
   const classes = ['dashboard-sidebar'];
-
-  const selectedLink = useMemo(
-    () => menuLinks.find((link) => matchPath({ path: link.to, end: true }, location.pathname))?.to,
-    [location, menuLinks],
+  const isActive = useCallback(
+    (to: string) => {
+      const path = resolvePath(to).pathname;
+      return !!matchPath({ path, end: true }, location.pathname);
+    },
+    [location],
   );
 
   return (
@@ -56,7 +58,7 @@ export const DashboardSidebar = ({
             <li
               key={link.to}
               className={classNames('dashboard-sidebar__container__nav__item', {
-                active: selectedLink === link.to,
+                active: isActive(link.to),
               })}
             >
               <NavLink to={link.to} end>
