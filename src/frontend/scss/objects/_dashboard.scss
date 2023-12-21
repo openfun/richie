@@ -52,4 +52,32 @@
   &__text_icon_left {
     margin-left: rem-calc(8px);
   }
+
+  &__page__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    &-row {
+      display: flex;
+      gap: 1rem;
+
+      &--start {
+        justify-content: flex-start;
+      }
+      &--center {
+        justify-content: center;
+      }
+      &--end {
+        justify-content: flex-end;
+      }
+      &--space-between {
+        justify-content: space-between;
+      }
+      &--space-around {
+        justify-content: space-around;
+      }
+    }
+  }
 }

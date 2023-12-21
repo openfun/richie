@@ -1,15 +1,18 @@
-import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import { PropsWithChildren } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import fetchMock from 'fetch-mock';
-import queryString from 'query-string';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import { getAllByRole } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { PER_PAGE } from 'settings';
-import { ContractFactory } from 'utils/test/factories/joanie';
+import { ContractFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { expectNoSpinner } from 'utils/test/expectSpinner';
+import { expectBannerError } from 'utils/test/expectBanner';
+import { HttpError } from 'utils/errors/HttpError';
 import TeacherDashboardContracts from '.';
 
 jest.mock('utils/context', () => ({
@@ -20,12 +23,29 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
-const Wrapper = ({ children }: PropsWithChildren) => {
+jest.mock('components/ContractFrame', () => ({
+  __esModule: true,
+  OrganizationContractFrame: ({
+    isOpen,
+    organizationId,
+  }: {
+    isOpen: boolean;
+    organizationId: string;
+  }) => isOpen && <p>ContractFrame opened for {organizationId}</p>,
+}));
+
+const Wrapper = ({ path, initialEntry }: { path: string; initialEntry: string }) => {
   return (
     <IntlProvider locale="en">
       <QueryClientProvider client={createTestQueryClient({ user: true })}>
         <JoanieSessionProvider>
-          <CunninghamProvider>{children}</CunninghamProvider>
+          <CunninghamProvider>
+            <MemoryRouter initialEntries={[initialEntry]}>
+              <Routes>
+                <Route path={path} element={<TeacherDashboardContracts />} />
+              </Routes>
+            </MemoryRouter>
+          </CunninghamProvider>
         </JoanieSessionProvider>
       </QueryClientProvider>
     </IntlProvider>
@@ -33,13 +53,17 @@ const Wrapper = ({ children }: PropsWithChildren) => {
 };
 
 describe('pages/TeacherDashboardContracts', () => {
-  let nbApiCalls: number;
+  beforeAll(() => {
+    const modalExclude = document.createElement('div');
+    modalExclude.setAttribute('id', 'modal-exclude');
+    document.body.appendChild(modalExclude);
+  });
+
   beforeEach(() => {
     // Joanie providers calls
     fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
     fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
     fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
-    nbApiCalls = 3;
   });
 
   afterEach(() => {
@@ -47,102 +71,260 @@ describe('pages/TeacherDashboardContracts', () => {
     jest.resetAllMocks();
   });
 
-  it.each([
-    {
-      testLabel: 'all filters',
-      filters: {
-        courseId: 'FAKE_COURSE_ID',
-        organizationId: 'FAKE_ORGANIZATION_ID',
-        page: '1',
-      },
-    },
-    {
-      testLabel: 'no courseId',
-      filters: {
-        organizationId: 'FAKE_ORGANIZATION_ID',
-        page: '1',
-      },
-    },
-    {
-      testLabel: 'no organizationId',
-      filters: {
-        courseId: 'FAKE_COURSE_ID',
-        page: '1',
-      },
-    },
-    {
-      testLabel: 'no page',
-      filters: {
-        courseId: 'FAKE_COURSE_ID',
-        organizationId: 'FAKE_ORGANIZATION_ID',
-      },
-    },
-    {
-      testLabel: 'page 10',
-      filters: {
-        page: '10',
-      },
-    },
-  ])('should request contract with the right filters: $testLabel', async ({ filters }) => {
-    const contractFilters = {
-      course_id: filters.courseId,
-      organization_id: filters.organizationId,
-      page: filters.page || 1,
-      page_size: PER_PAGE.teacherContractList,
-    };
+  it('should render a list of contracts for a course product relation', async () => {
+    const contracts = ContractFactory({
+      student_signed_on: Date.toString(),
+      organization_signed_on: Date.toString(),
+    }).many(3);
+    const organization = OrganizationFactory().one();
 
-    const contractUrl = `https://joanie.test/api/v1.0/contracts/?${queryString.stringify(
-      contractFilters,
-    )}`;
-
-    fetchMock.get(contractUrl, {
-      count: 250,
-      results: ContractFactory().many(PER_PAGE.teacherContractList),
-      next: null,
-      previous: null,
-    });
-    render(
-      <Wrapper>
-        <TeacherDashboardContracts {...filters} />
-      </Wrapper>,
+    fetchMock.get(`https://joanie.test/api/v1.0/organizations/`, [organization]);
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?signature_state=signed&course_id=1&product_id=2&page=1&page_size=25`,
+      { results: contracts, count: 0, previous: null, next: null },
     );
-    nbApiCalls += 1;
-    expect(await screen.findByTestId('contracts-loaded')).toBeInTheDocument();
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?signature_state=half_signed&course_id=1&product_id=2`,
+      { results: [], count: 0, previous: null, next: null },
+    );
 
-    const apiCallUrls = fetchMock.calls().map((call) => call[0]);
-    expect(apiCallUrls).toContain(contractUrl);
-    expect(apiCallUrls.length).toEqual(nbApiCalls);
+    render(
+      <Wrapper
+        path="/courses/:courseId/products/:productId/contracts"
+        initialEntry="/courses/1/products/2/contracts"
+      />,
+    );
+
+    await expectNoSpinner();
+
+    // Organization filter should have been rendered
+    const organizationFilter: HTMLInputElement = screen.getByRole('combobox', {
+      name: 'Organization',
+    });
+    expect(organizationFilter).toHaveAttribute('value', organization.title);
+
+    // Signature state filter should have been rendered
+    const signatureStateFilter: HTMLInputElement = screen.getByRole('combobox', {
+      name: 'Signature state',
+      hidden: true,
+    });
+    const value = (signatureStateFilter.querySelector('input[type="hidden"]') as HTMLInputElement)
+      ?.value;
+    expect(value).toBe('signed');
+
+    await expectNoSpinner();
+
+    // Table listing all signed contracts should have been rendered
+    screen.getByRole('table');
+
+    // Table header should have been rendered with 3 columns
+    const columnHeaders = screen.getAllByRole('columnheader');
+    expect(columnHeaders.length).toBe(3);
+    expect(columnHeaders[0]).toHaveTextContent('Training');
+    expect(columnHeaders[1]).toHaveTextContent('Learner');
+    expect(columnHeaders[2]).toHaveTextContent('State');
+
+    // Table body should have been rendered with 3 rows (one per contract)
+    contracts.forEach((contract) => {
+      const row = screen.getByTestId(contract.id);
+      const cells = getAllByRole(row, 'cell');
+      expect(cells.length).toBe(3);
+      expect(cells[0]).toHaveTextContent(contract.order.product_title);
+      expect(cells[1]).toHaveTextContent(contract.order.owner_name);
+      expect(cells[2]).toHaveTextContent('Signed');
+    });
   });
 
-  it('should display contract row', async () => {
-    const contractFilters = {
-      courseId: 'FAKE_COURSE_ID',
-      organizationId: 'FAKE_ORGANIZATION_ID',
-    };
-    const apiFilters = {
-      course_id: contractFilters.courseId,
-      organization_id: contractFilters.organizationId,
-      page: 1,
-      page_size: PER_PAGE.teacherContractList,
-    };
+  it('should render a list of contracts for an organization', async () => {
+    const contracts = ContractFactory({
+      student_signed_on: Date.toString(),
+      organization_signed_on: Date.toString(),
+    }).many(3);
 
-    const contract = ContractFactory().one();
-    fetchMock.get(`https://joanie.test/api/v1.0/contracts/?${queryString.stringify(apiFilters)}`, {
-      count: 1,
-      results: [contract],
-      next: null,
-      previous: null,
-    });
-    render(
-      <Wrapper>
-        <TeacherDashboardContracts {...contractFilters} />
-      </Wrapper>,
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
+      { results: contracts, count: 0, previous: null, next: null },
     );
-    nbApiCalls += 1;
-    expect(await screen.findByTestId('contracts-loaded')).toBeInTheDocument();
-    expect(screen.getByText(contract.order.owner_name)).toBeInTheDocument();
-    expect(screen.getByText(contract.order.product_title)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Download/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Open/ })).toBeInTheDocument();
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
+      { results: [], count: 0, previous: null, next: null },
+    );
+
+    render(
+      <Wrapper
+        path="/organizations/:organizationId/contracts"
+        initialEntry="/organizations/1/contracts"
+      />,
+    );
+
+    await expectNoSpinner();
+
+    // Organization filter should not have been rendered
+    const organizationFilter = screen.queryByRole('combobox', {
+      name: 'Organization',
+    });
+    expect(organizationFilter).not.toBeInTheDocument();
+
+    // Signature state filter should have been rendered
+    const signatureStateFilter: HTMLInputElement = screen.getByRole('combobox', {
+      name: 'Signature state',
+      hidden: true,
+    });
+    const value = (signatureStateFilter.querySelector('input[type="hidden"]') as HTMLInputElement)
+      ?.value;
+    expect(value).toBe('signed');
+
+    await expectNoSpinner();
+
+    // Table listing all signed contracts should have been rendered
+    screen.getByRole('table');
+
+    // Table header should have been rendered with 3 columns
+    const columnHeaders = screen.getAllByRole('columnheader');
+    expect(columnHeaders.length).toBe(3);
+
+    // Table body should have been rendered with 3 rows (one per contract)
+    contracts.forEach((contract) => {
+      const row = screen.getByTestId(contract.id);
+      const cells = getAllByRole(row, 'cell');
+      expect(cells.length).toBe(3);
+      expect(cells[0]).toHaveTextContent(contract.order.product_title);
+      expect(cells[1]).toHaveTextContent(contract.order.owner_name);
+      expect(cells[2]).toHaveTextContent('Signed');
+    });
+  });
+
+  it('should render an empty table if there are no contracts', async () => {
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
+      { results: [], count: 0, previous: null, next: null },
+    );
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
+      { results: [], count: 0, previous: null, next: null },
+    );
+
+    render(
+      <Wrapper
+        path="/organizations/:organizationId/contracts"
+        initialEntry="/organizations/1/contracts"
+      />,
+    );
+
+    await expectNoSpinner();
+
+    // Organization filter should not have been rendered
+    const organizationFilter = screen.queryByRole('combobox', {
+      name: 'Organization',
+    });
+    expect(organizationFilter).not.toBeInTheDocument();
+
+    // Signature state filter should have been rendered
+    const signatureStateFilter: HTMLInputElement = screen.getByRole('combobox', {
+      name: 'Signature state',
+      hidden: true,
+    });
+    const value = (signatureStateFilter.querySelector('input[type="hidden"]') as HTMLInputElement)
+      ?.value;
+    expect(value).toBe('signed');
+
+    await expectNoSpinner();
+
+    // A message should have been rendered to inform the user that there are no contracts
+    screen.getByRole('img', { name: /illustration of an empty table/i });
+    screen.getByText(/this table is empty/i);
+  });
+
+  it('should render a button to bulk sign contracts if user has abilities and there are contracts to sign', async () => {
+    const contracts = ContractFactory({
+      student_signed_on: Date.toString(),
+      abilities: { sign: true },
+    }).many(3);
+
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed&page=1&page_size=25`,
+      { results: contracts, count: 3, previous: null, next: null },
+    );
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
+      { results: contracts, count: 3, previous: null, next: null },
+    );
+
+    render(
+      <Wrapper
+        path="/organizations/:organizationId/contracts"
+        initialEntry="/organizations/1/contracts?signature_state=half_signed"
+      />,
+    );
+
+    await expectNoSpinner();
+
+    // Organization filter should not have been rendered
+    const organizationFilter = screen.queryByRole('combobox', {
+      name: 'Organization',
+    });
+    expect(organizationFilter).not.toBeInTheDocument();
+
+    // Signature state filter should have been rendered
+    const signatureStateFilter: HTMLInputElement = screen.getByRole('combobox', {
+      name: 'Signature state',
+      hidden: true,
+    });
+    const value = (signatureStateFilter.querySelector('input[type="hidden"]') as HTMLInputElement)
+      ?.value;
+    expect(value).toBe('half_signed');
+
+    // Table listing all signed contracts should have been rendered
+    screen.getByRole('table');
+
+    // Table header should have been rendered with 3 columns
+    const columnHeaders = screen.getAllByRole('columnheader');
+    expect(columnHeaders.length).toBe(3);
+
+    // Table body should have been rendered with 3 rows (one per contract)
+    contracts.forEach((contract) => {
+      const row = screen.getByTestId(contract.id);
+      const cells = getAllByRole(row, 'cell');
+      expect(cells.length).toBe(3);
+      expect(cells[2]).toHaveTextContent('Pending for signature');
+    });
+
+    // OrganizationContractFrame should not be opened yet
+    expect(screen.queryByText('ContractFrame opened for 1')).not.toBeInTheDocument();
+
+    // Bulk sign button should have been rendered
+    const bulkSignButton = screen.getByRole('button', {
+      name: 'Sign all pending contracts (3)',
+    });
+    const user = userEvent.setup();
+    await user.click(bulkSignButton);
+
+    // And now OrganizationContractFrame should be opened
+    screen.getByText('ContractFrame opened for 1');
+  });
+
+  it('should render an error banner if an error occured during contracts fetching', async () => {
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
+      () => {
+        throw new HttpError(404, 'Not found');
+      },
+    );
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
+      () => {
+        throw new HttpError(404, 'Not found');
+      },
+    );
+
+    render(
+      <Wrapper
+        path="/organizations/:organizationId/contracts"
+        initialEntry="/organizations/1/contracts"
+      />,
+    );
+
+    await expectNoSpinner();
+    await expectBannerError('An error occurred while fetching contracts. Please retry later.');
   });
 });
