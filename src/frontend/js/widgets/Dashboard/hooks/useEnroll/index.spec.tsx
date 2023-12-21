@@ -24,7 +24,7 @@ jest.mock('utils/context', () => ({
 
 /**
  * We are just testing edge case of this hook here, the majority of it testing in realistic
- * conditions in DashboardItemOrder.spec.tsx.
+ * conditions in OrderDetails tests
  */
 describe('useEnroll ( edge case )', () => {
   const wrapper = ({ children }: PropsWithChildren) => {

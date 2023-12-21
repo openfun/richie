@@ -9,7 +9,7 @@ import { Enrolled } from './DashboardItemCourseEnrolling';
 
 /**
  * Most of the component of this file are tested from DashboardItemEnrollment.spec.tsx and
- * DashboardItemOrder.spec.tsx. But here are some tests that are more straightforward.
+ * OrderDetails.spec.tsx. But here are some tests that are more straightforward.
  */
 describe('<Enrolled/>', () => {
   const wrapper = ({ children }: PropsWithChildren) => {

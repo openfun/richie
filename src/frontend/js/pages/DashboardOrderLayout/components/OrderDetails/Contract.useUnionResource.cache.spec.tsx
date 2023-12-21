@@ -34,7 +34,7 @@ jest.mock('hooks/useIntersectionObserver', () => ({
   },
 }));
 
-describe('<DashboardItemOrder/> Contract', () => {
+describe('<OrderDetails/> testing contract', () => {
   const Wrapper = (route: string) => {
     return (
       <QueryClientProvider client={createTestQueryClient({ user: true })}>

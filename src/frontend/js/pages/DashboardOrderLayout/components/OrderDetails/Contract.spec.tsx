@@ -42,7 +42,7 @@ jest.mock('settings', () => ({
   CONTRACT_SETTINGS: { dummySignatureSignTimeout: 0 },
 }));
 
-describe('<DashboardItemOrder/> Contract', () => {
+describe('<OrderDetails/> Contract', () => {
   const Wrapper = (route: string) => {
     return (
       <QueryClientProvider client={createTestQueryClient({ user: true })}>

@@ -3,20 +3,21 @@ import { CredentialOrder, OrderState, Product, TargetCourse } from 'types/Joanie
 import { QueryStateFactory } from 'utils/test/factories/reactQuery';
 import {
   CredentialOrderFactory,
+  EnrollmentFactory,
   ProductFactory,
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
 import { StorybookHelper } from 'utils/StorybookHelper';
-import { enrollment } from '../stories.mock';
-import { DashboardItemOrder } from './DashboardItemOrder';
+import { OrderDetails } from '.';
 
 const order: CredentialOrder = CredentialOrderFactory({ target_courses: [] }).one();
 const product: Product = ProductFactory().one();
 const targetsCourses: TargetCourse[] = TargetCourseFactory().many(3);
+const enrollment = EnrollmentFactory().one();
 
 export default {
   title: 'Widgets/Dashboard/Order/Writable',
-  component: DashboardItemOrder,
+  component: OrderDetails,
   parameters: {
     docs: {
       source: {
@@ -25,14 +26,14 @@ export default {
     },
   },
   render: (args) =>
-    StorybookHelper.wrapInApp(<DashboardItemOrder {...args} />, {
+    StorybookHelper.wrapInApp(<OrderDetails {...args} />, {
       queriesCallback: (queries) => {
         queries.push(QueryStateFactory(['product', order.product_id], { data: product }));
       },
     }),
-} as Meta<typeof DashboardItemOrder>;
+} as Meta<typeof OrderDetails>;
 
-type Story = StoryObj<typeof DashboardItemOrder>;
+type Story = StoryObj<typeof OrderDetails>;
 
 export const StateOther: Story = {
   args: {

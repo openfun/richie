@@ -13,37 +13,37 @@ import { useCourseProduct } from 'hooks/useCourseProducts';
 import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 
 import OrderStatus from 'widgets/Dashboard/components/OrderStatus';
-import { DashboardSubItemsList } from '../DashboardSubItemsList';
-import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
-import { DashboardItem } from '../index';
-import { DashboardItemContract } from '../Contract';
+import { DashboardItemContract } from 'widgets/Dashboard/components/DashboardItem/Contract';
+import { DashboardItem } from 'widgets/Dashboard/components/DashboardItem';
+import { DashboardSubItemsList } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItemsList';
+import { DashboardItemCourseEnrolling } from 'widgets/Dashboard/components/DashboardItem/DashboardItemCourseEnrolling';
 
 const messages = {
   accessCourse: {
-    id: 'components.DashboardItemOrder.gotoCourse',
+    id: 'components.OrderDetails.gotoCourse',
     description: 'Button that redirects to the order details',
     defaultMessage: 'View details',
   },
   loadingCertificate: {
-    id: 'components.DashboardItemOrder.loadingCertificate',
+    id: 'components.OrderDetails.loadingCertificate',
     description: 'Accessible label displayed while certificate is being fetched on the dashboard.',
     defaultMessage: 'Loading certificate...',
   },
 };
 
-interface DashboardItemOrderProps {
+export interface OrderDetailsProps {
   order: CredentialOrder;
   showDetailsButton?: boolean;
   showCertificate?: boolean;
   writable?: boolean;
 }
 
-interface DashboardItemOrderCertificateProps {
+interface OrderDetailsCertificateProps {
   order: CredentialOrder;
   product: Product;
 }
 
-const DashboardItemOrderCertificate = ({ order, product }: DashboardItemOrderCertificateProps) => {
+const OrderDetailsCertificate = ({ order, product }: OrderDetailsCertificateProps) => {
   if (!order.certificate_id) {
     return (
       <DashboardItemCertificate
@@ -74,12 +74,12 @@ const DashboardItemOrderCertificate = ({ order, product }: DashboardItemOrderCer
   );
 };
 
-export const DashboardItemOrder = ({
+export const OrderDetails = ({
   order,
   showDetailsButton = true,
   showCertificate,
   writable = false,
-}: DashboardItemOrderProps) => {
+}: OrderDetailsProps) => {
   const course = order.course as CourseLight;
 
   const intl = useIntl();
@@ -95,7 +95,7 @@ export const DashboardItemOrder = ({
     <div className="dashboard-item-order">
       {writable && needsSignature && (
         <DashboardItemContract
-          key={`DashboardItemOrderContract_${order.id}`}
+          key={`OrderDetailsContract_${order.id}`}
           title={product.title}
           order={order}
           contract_definition={product.contract_definition!}
@@ -129,7 +129,7 @@ export const DashboardItemOrder = ({
             </div>
             {!writable && needsSignature && (
               <DashboardItemContract
-                key={`DashboardItemOrderContract_${order.id}`}
+                key={`OrderDetailsContract_${order.id}`}
                 title={product.title}
                 order={order}
                 contract_definition={product.contract_definition!}
@@ -166,11 +166,11 @@ export const DashboardItemOrder = ({
         />
       </DashboardItem>
       {showCertificate && !!product?.certificate_definition && (
-        <DashboardItemOrderCertificate order={order} product={product} />
+        <OrderDetailsCertificate order={order} product={product} />
       )}
       {writable && isCourseProductRelationFetched && order.contract?.student_signed_on && (
         <DashboardItemContract
-          key={`DashboardItemOrderContract_${order.id}`}
+          key={`OrderDetailsContract_${order.id}`}
           title={product.title}
           order={order}
           contract_definition={product.contract_definition!}

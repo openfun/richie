@@ -3,21 +3,22 @@ import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { CredentialOrder, OrderState, Product, TargetCourse } from 'types/Joanie';
 import {
   CredentialOrderFactory,
+  EnrollmentFactory,
   ProductFactory,
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
 import { QueryStateFactory } from 'utils/test/factories/reactQuery';
 import { StorybookHelper } from 'utils/StorybookHelper';
-import { enrollment } from '../stories.mock';
-import { DashboardItemOrder } from './DashboardItemOrder';
+import { OrderDetails } from '.';
 
 const order: CredentialOrder = CredentialOrderFactory({ target_courses: [] }).one();
 const product: Product = ProductFactory().one();
 const targetsCourses: TargetCourse[] = TargetCourseFactory().many(3);
+const enrollment = EnrollmentFactory().one();
 
 export default {
   title: 'Widgets/Dashboard/Order/Readonly',
-  component: DashboardItemOrder,
+  component: OrderDetails,
   parameters: {
     docs: {
       source: {
@@ -31,7 +32,7 @@ export default {
         router={createMemoryRouter([
           {
             index: true,
-            element: <DashboardItemOrder {...args} />,
+            element: <OrderDetails {...args} />,
           },
         ])}
       />,
@@ -41,9 +42,9 @@ export default {
         },
       },
     ),
-} as Meta<typeof DashboardItemOrder>;
+} as Meta<typeof OrderDetails>;
 
-type Story = StoryObj<typeof DashboardItemOrder>;
+type Story = StoryObj<typeof OrderDetails>;
 
 export const StateOther: Story = {
   args: {

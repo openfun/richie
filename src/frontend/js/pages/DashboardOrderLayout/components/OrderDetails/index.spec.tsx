@@ -38,9 +38,9 @@ import { Deferred } from 'utils/test/deferred';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
 import { HttpStatusCode } from 'utils/errors/HttpError';
-import { LearnerDashboardPaths } from '../../../utils/learnerRouteMessages';
-import { DashboardTest } from '../../DashboardTest';
-import { DashboardItemOrder } from './DashboardItemOrder';
+import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
+import { OrderDetails } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -54,7 +54,7 @@ jest.mock('utils/indirection/window', () => ({
   confirm: jest.fn(() => true),
 }));
 
-describe('<DashboardItemOrder/>', () => {
+describe('<OrderDetails/>', () => {
   const wrapper = ({ children }: PropsWithChildren) => {
     const router = createMemoryRouter([{ index: true, element: children }]);
     return (
@@ -68,6 +68,7 @@ describe('<DashboardItemOrder/>', () => {
     );
   };
   const WrapperWithDashboard = (route: string) => {
+    // FIXME: remove routing logic from this test
     return (
       <QueryClientProvider client={createTestQueryClient({ user: true })}>
         <IntlProvider locale="en">
@@ -107,7 +108,7 @@ describe('<DashboardItemOrder/>', () => {
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} />, { wrapper });
+    render(<OrderDetails order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + (order.course as CourseLight).code);
@@ -135,7 +136,7 @@ describe('<DashboardItemOrder/>', () => {
       deferred.promise,
     );
 
-    render(<DashboardItemOrder order={order} showCertificate={true} />, { wrapper });
+    render(<OrderDetails order={order} showCertificate={true} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + (order.course as CourseLight).code);
@@ -154,7 +155,7 @@ describe('<DashboardItemOrder/>', () => {
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} />, { wrapper });
+    render(<OrderDetails order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + (order.course as CourseLight).code);
@@ -172,7 +173,7 @@ describe('<DashboardItemOrder/>', () => {
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} />, { wrapper });
+    render(<OrderDetails order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + (order.course as CourseLight).code);
@@ -184,7 +185,7 @@ describe('<DashboardItemOrder/>', () => {
     const order: CredentialOrder = CredentialOrderFactory().one();
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} />, { wrapper });
+    render(<OrderDetails order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + (order.course as CourseLight).code);
@@ -208,7 +209,7 @@ describe('<DashboardItemOrder/>', () => {
 
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} />, { wrapper });
+    render(<OrderDetails order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + (order.course as CourseLight).code);
@@ -236,7 +237,7 @@ describe('<DashboardItemOrder/>', () => {
 
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} />, { wrapper });
+    render(<OrderDetails order={order} />, { wrapper });
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     screen.getByText('Ref. ' + (order.course as CourseLight).code);
@@ -257,7 +258,7 @@ describe('<DashboardItemOrder/>', () => {
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+    render(<OrderDetails order={order} writable={true} showDetailsButton={false} />, {
       wrapper,
     });
 
@@ -278,7 +279,7 @@ describe('<DashboardItemOrder/>', () => {
 
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+    render(<OrderDetails order={order} writable={true} showDetailsButton={false} />, {
       wrapper,
     });
 
@@ -705,7 +706,7 @@ describe('<DashboardItemOrder/>', () => {
     }).one();
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+    render(<OrderDetails order={order} writable={true} showDetailsButton={false} />, {
       wrapper,
     });
 
@@ -741,7 +742,7 @@ describe('<DashboardItemOrder/>', () => {
 
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+    render(<OrderDetails order={order} writable={true} showDetailsButton={false} />, {
       wrapper,
     });
 
@@ -771,7 +772,7 @@ describe('<DashboardItemOrder/>', () => {
 
     const { product } = mockCourseProductWithOrder(order);
 
-    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+    render(<OrderDetails order={order} writable={true} showDetailsButton={false} />, {
       wrapper,
     });
 
