@@ -61,6 +61,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Removed
 
+- Remove `course_enrollment_widget_props` extra tags
 - Remove `CourseProductItem` as a widget
 
 ## [2.24.1] - 2023-08-30
