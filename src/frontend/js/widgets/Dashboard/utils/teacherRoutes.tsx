@@ -1,9 +1,9 @@
 import { useIntl } from 'react-intl';
 import { Navigate, RouteObject } from 'react-router-dom';
 import {
-  TeacherDashboardCourseContractsLoader,
-  TeacherDashboardOrganizationContractsLoader,
-} from 'pages/TeacherDashboardContractsLoader';
+  TeacherDashboardCourseContractsLayout,
+  TeacherDashboardOrganizationContractsLayout,
+} from 'pages/TeacherDashboardContractsLayout';
 import { TeacherDashboardOrganizationCourseLoader } from 'pages/TeacherDashboardOrganizationCourseLoader';
 import { TeacherDashboardCoursesLoader } from 'pages/TeacherDashboardCoursesLoader';
 import NavigateWithParams from 'widgets/Dashboard/components/NavigateWithParams';
@@ -73,7 +73,7 @@ export function getTeacherDashboardRoutes() {
                     courseId: ':courseId',
                     courseProductRelationId: ':courseProductRelationId',
                   }),
-                  element: <TeacherDashboardCourseContractsLoader />,
+                  element: <TeacherDashboardCourseContractsLayout />,
                   handle: {
                     crumbLabel:
                       TEACHER_DASHBOARD_ROUTE_LABELS[
@@ -87,7 +87,7 @@ export function getTeacherDashboardRoutes() {
               path: getRoutePath(TeacherDashboardPaths.COURSE_CONTRACTS, {
                 courseId: ':courseId',
               }),
-              element: <TeacherDashboardCourseContractsLoader />,
+              element: <TeacherDashboardCourseContractsLayout />,
               handle: {
                 crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_CONTRACTS],
               },
@@ -140,7 +140,7 @@ export function getTeacherDashboardRoutes() {
                 courseId: ':courseId',
                 courseProductRelationId: ':courseProductRelationId',
               }),
-              element: <TeacherDashboardCourseContractsLoader />,
+              element: <TeacherDashboardCourseContractsLayout />,
               handle: {
                 crumbLabel:
                   TEACHER_DASHBOARD_ROUTE_LABELS[
@@ -168,7 +168,7 @@ export function getTeacherDashboardRoutes() {
                     courseId: ':courseId',
                     courseProductRelationId: ':courseProductRelationId',
                   }),
-                  element: <TeacherDashboardCourseContractsLoader />,
+                  element: <TeacherDashboardCourseContractsLayout />,
                   handle: {
                     crumbLabel:
                       TEACHER_DASHBOARD_ROUTE_LABELS[
@@ -184,7 +184,7 @@ export function getTeacherDashboardRoutes() {
           path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_CONTRACTS, {
             organizationId: ':organizationId',
           }),
-          element: <TeacherDashboardOrganizationContractsLoader />,
+          element: <TeacherDashboardOrganizationContractsLayout />,
           handle: {
             crumbLabel:
               TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION_CONTRACTS],

@@ -8,11 +8,11 @@ const messages = defineMessages({
   pageTitle: {
     defaultMessage: 'Contracts',
     description: 'Use for the page title of the organization contracts area',
-    id: 'pages.TeacherDashboardOrganizationContractsLoader.pageTitle',
+    id: 'pages.TeacherDashboardOrganizationContractsLayout.pageTitle',
   },
 });
 
-export const TeacherDashboardOrganizationContractsLoader = () => {
+export const TeacherDashboardOrganizationContractsLayout = () => {
   return (
     <DashboardLayout sidebar={<TeacherDashboardOrganizationSidebar />}>
       <div className="dashboard__page_title_container">

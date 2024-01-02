@@ -10,12 +10,12 @@ export const messages = defineMessages({
   organizationFilterLabel: {
     defaultMessage: 'Organization',
     description: 'Use as organization filter label',
-    id: 'pages.TeacherDashboardContractsLoader.ContractFilters.organizationFilterLabel',
+    id: 'pages.TeacherDashboardContractsLayout.ContractFilters.organizationFilterLabel',
   },
   contractSignatureStateLabel: {
     defaultMessage: 'Signature state',
     description: 'Contract signature state filter label',
-    id: 'pages.TeacherDashboardContractsLoader.ContractFilters.contractSignatureStateFilterLabel',
+    id: 'pages.TeacherDashboardContractsLayout.ContractFilters.contractSignatureStateFilterLabel',
   },
 });
 

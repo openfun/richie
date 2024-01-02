@@ -9,7 +9,7 @@ const messages = defineMessages({
   signAllPendingContracts: {
     defaultMessage: 'Sign all pending contracts ({ count })',
     description: 'Button to sign all pending contracts',
-    id: 'pages.TeacherDashboardOrganizationContractsLoader.signAllPendingContracts',
+    id: 'pages.TeacherDashboardOrganizationContractsLayout.signAllPendingContracts',
   },
 });
 
