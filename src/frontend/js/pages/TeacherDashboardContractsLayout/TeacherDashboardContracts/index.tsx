@@ -8,26 +8,26 @@ import { useContracts } from 'hooks/useContracts';
 import Banner, { BannerType } from 'components/Banner';
 import { PER_PAGE } from 'settings';
 import { ContractFilters, ContractState } from 'types/Joanie';
-import ContractFiltersBar from 'pages/TeacherDashboardContractsLoader/ContractFilters';
+import ContractFiltersBar from 'pages/TeacherDashboardContractsLayout/ContractFilters';
 import useContractAbilities from 'hooks/useContractAbilities';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
-import SignOrganizationContractButton from 'pages/TeacherDashboardContractsLoader/SignOrganizationContractButton';
+import SignOrganizationContractButton from 'pages/TeacherDashboardContractsLayout/SignOrganizationContractButton';
 
 const messages = defineMessages({
   columnProductTitle: {
     defaultMessage: 'Training',
     description: 'Label for productTitle column',
-    id: 'pages.TeacherDashboardOrganizationContractsLoader.columnProductTitle',
+    id: 'pages.TeacherDashboardOrganizationContractsLayout.columnProductTitle',
   },
   columnLearnerName: {
     defaultMessage: 'Learner',
     description: 'Label for learnerName column',
-    id: 'pages.TeacherDashboardOrganizationContractsLoader.columnLearnerName',
+    id: 'pages.TeacherDashboardOrganizationContractsLayout.columnLearnerName',
   },
   columnState: {
     defaultMessage: 'State',
     description: 'Label for state column',
-    id: 'pages.TeacherDashboardOrganizationContractsLoader.columnState',
+    id: 'pages.TeacherDashboardOrganizationContractsLayout.columnState',
   },
 });
 
@@ -154,5 +154,5 @@ const TeacherDashboardContracts = () => {
 };
 
 export default TeacherDashboardContracts;
-export { TeacherDashboardCourseContractsLoader } from '../TeacherDashboardCourseContractsLoader';
-export { TeacherDashboardOrganizationContractsLoader } from '../TeacherDashboardOrganizationContractsLoader';
+export { TeacherDashboardCourseContractsLayout } from '../TeacherDashboardCourseContractsLayout';
+export { TeacherDashboardOrganizationContractsLayout } from '../TeacherDashboardOrganizationContractsLayout';
