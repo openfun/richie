@@ -8,10 +8,10 @@ import { useContracts } from 'hooks/useContracts';
 import Banner, { BannerType } from 'components/Banner';
 import { PER_PAGE } from 'settings';
 import { ContractFilters, ContractState } from 'types/Joanie';
-import ContractFiltersBar from 'pages/TeacherDashboardContractsLayout/ContractFilters';
 import useContractAbilities from 'hooks/useContractAbilities';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
-import SignOrganizationContractButton from 'pages/TeacherDashboardContractsLayout/SignOrganizationContractButton';
+import ContractFiltersBar from '../components/ContractFilters';
+import SignOrganizationContractButton from '../components/SignOrganizationContractButton';
 
 const messages = defineMessages({
   columnProductTitle: {
