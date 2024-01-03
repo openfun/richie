@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.24.1 to 2.25-beta.0
+
 - `CourseProductItem` has been moved into `SyllabusCourseRunsList/components` folder. If you have
   overridden this component, you have to update your overrides.json file accordingly.
 - `JOANIE_BACKEND` must be updated. `COURSE_REGEX` and `JS_COURSE_REGEX` must be updated to match
@@ -28,9 +30,17 @@ $ make migrate
 - scss themes variable for Modal 'close button' have been removed. It is now a cunningham button and can be
   customised using cunningham-tokens.
 - cunningham have been upgraded to 2.0.0, you can follow it's upgrade guide here: https://openfun.github.io/cunningham/?path=/docs/migrating-from-v1-to-v2--docs
+- With the migration to Cunningham Button, we have to reset some bootstrap styles, so we have to add a new
+  `scss/trumps/_bootstrap.scss` file. You have to import it in your `_main.scss` file.
+  ```scss
+  // ...
+  
+  // Import bootstrap reset
+  @import 'richie-education/scss/trumps/bootstrap';
+  ```
 - Delete richie Button component now that we use cunningham Button component.
 
-## 2.23.0 to 2.24.x
+## 2.23.0 to 2.24.1
 
 - `*_detail.html` django templates have been updated to use new course-glimpse-list structure. If
   have overridden those templates, you must update them. (https://github.com/openfun/richie/pull/2069/commits/e36fa58a579c3b58384baf896fcf4b7579a46342)

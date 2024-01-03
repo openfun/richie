@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.25.0-beta.0]
+
 ### Added
 
 - Organization bulk contract signature
@@ -1965,20 +1967,21 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.24.1...master
-[2.24.1]: https://github.com/openfun/richie/compare/v2.24.0...2.24.1
-[2.24.0]: https://github.com/openfun/richie/compare/v2.23.0...2.24.0
-[2.23.0]: https://github.com/openfun/richie/compare/v2.22.0...2.23.0
-[2.22.0]: https://github.com/openfun/richie/compare/v2.21.1...2.22.0
-[2.21.1]: https://github.com/openfun/richie/compare/v2.21.0...2.21.1
-[2.21.0]: https://github.com/openfun/richie/compare/v2.20.1...2.21.0
-[2.20.1]: https://github.com/openfun/richie/compare/v2.20.0...2.20.1
-[2.20.0]: https://github.com/openfun/richie/compare/v2.19.0...2.20.0
-[2.19.0]: https://github.com/openfun/richie/compare/v2.18.0...2.19.0
-[2.18.0]: https://github.com/openfun/richie/compare/v2.17.0...2.18.0
-[2.17.0]: https://github.com/openfun/richie/compare/v2.16.0...2.17.0
-[2.16.0]: https://github.com/openfun/richie/compare/v2.15.1...2.16.0
-[2.15.1]: https://github.com/openfun/richie/compare/v2.15.0...2.15.1
+[unreleased]: https://github.com/openfun/richie/compare/v2.25.0-beta.0...master
+[2.25.0-beta.0]: https://github.com/openfun/richie/compare/v2.24.1...v2.25.0-beta.0
+[2.24.1]: https://github.com/openfun/richie/compare/v2.24.0...v2.24.1
+[2.24.0]: https://github.com/openfun/richie/compare/v2.23.0...v2.24.0
+[2.23.0]: https://github.com/openfun/richie/compare/v2.22.0...v2.23.0
+[2.22.0]: https://github.com/openfun/richie/compare/v2.21.1...v2.22.0
+[2.21.1]: https://github.com/openfun/richie/compare/v2.21.0...v2.21.1
+[2.21.0]: https://github.com/openfun/richie/compare/v2.20.1...v2.21.0
+[2.20.1]: https://github.com/openfun/richie/compare/v2.20.0...v2.20.1
+[2.20.0]: https://github.com/openfun/richie/compare/v2.19.0...v2.20.0
+[2.19.0]: https://github.com/openfun/richie/compare/v2.18.0...v2.19.0
+[2.18.0]: https://github.com/openfun/richie/compare/v2.17.0...v2.18.0
+[2.17.0]: https://github.com/openfun/richie/compare/v2.16.0...v2.17.0
+[2.16.0]: https://github.com/openfun/richie/compare/v2.15.1...v2.16.0
+[2.15.1]: https://github.com/openfun/richie/compare/v2.15.0...v2.15.1
 [2.15.0]: https://github.com/openfun/richie/compare/v2.14.1...v2.15.0
 [2.14.1]: https://github.com/openfun/richie/compare/v2.14.0...v2.14.1
 [2.14.0]: https://github.com/openfun/richie/compare/v2.13.0...v2.14.0

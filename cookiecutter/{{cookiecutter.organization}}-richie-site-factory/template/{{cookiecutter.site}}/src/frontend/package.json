@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Richie {{cookiecutter.site}} site on {{cookiecutter.domain}}",
   "scripts": {
+    "build-sass": "sass scss/_main.scss ../backend/base/static/richie/css/main.css --load-path=node_modules",
+    "build-sass-production": "sass scss/_main.scss ../backend/base/static/richie/css/main.css --style=compressed --load-path=node_modules",
+    "build-theme": "cunningham -g scss -o scss/vendors && cunningham -g css -o scss/vendors/css",
     "build-ts": "webpack --config node_modules/richie-education/webpack.config.js --output-path ../backend/base/static/richie/js/build --env richie-dependent-build --env richie-settings=overrides.json",
     "build-ts-production": "webpack --mode=production --config node_modules/richie-education/webpack.config.js --output-path ../backend/base/static/richie/js/build --env richie-dependent-build --env richie-settings=overrides.json",
     "compile-translations": "node_modules/richie-education/i18n/compile-translations.js ./i18n/overrides/*.json ./i18n/locales/*.json",
@@ -10,29 +13,32 @@
     "lint": "eslint -c node_modules/richie-education/.eslintrc.json 'js/**/*.ts?(x)' --rule 'import/no-extraneous-dependencies: [error, {packageDir: ['.', './node_modules/richie-education']}]' --no-error-on-unmatched-pattern",
     "prettier": "prettier '**/*.+(css|scss)'",
     "prettier-write": "prettier --write '**/*.+(css|scss)'",
-    "build-sass": "sass scss/_main.scss ../backend/base/static/richie/css/main.css --load-path=node_modules",
-    "build-sass-production": "sass scss/_main.scss ../backend/base/static/richie/css/main.css --style=compressed --load-path=node_modules",
-    "watch-ts": "yarn build-ts --watch",
-    "watch-sass": "nodemon -e scss -x 'yarn build-sass'"
+    "watch-sass": "nodemon -e scss -x 'yarn build-sass'",
+    "watch-ts": "yarn build-ts --watch"
   },
   "keywords": [
     "MOOC",
     "CMS"
   ],
   "dependencies": {
-    "richie-education": "2.24.1"
+    "richie-education": "2.25.0-beta.0"
   },
   "devDependencies": {
-    "@formatjs/cli": "6.1.3",
+    "@formatjs/cli": "6.2.4",
+    "@openfun/cunningham-tokens": "2.1.0",
     "babel-loader": "9.1.3",
-    "eslint": "8.47.0",
-    "eslint-import-resolver-webpack": "0.13.5",
-    "nodemon": "3.0.1",
-    "prettier": "3.0.2",
-    "sass": "1.65.1",
-    "source-map-loader": "4.0.1",
-    "webpack": "5.88.2",
+    "eslint": "8.56.0",
+    "eslint-import-resolver-webpack": "0.13.8",
+    "nodemon": "3.0.2",
+    "prettier": "3.1.1",
+    "sass": "1.69.7",
+    "source-map-loader": "4.0.2",
+    "webpack": "5.89.0",
     "webpack-cli": "5.1.4"
+  },
+  "resolutions": {
+    "@types/react": "18.2.18",
+    "@types/react-dom": "18.2.7"
   },
   "volta": {
     "node": "18.19.0"
