@@ -10,11 +10,10 @@ import { PER_PAGE } from 'settings';
 import { ContractFilters } from 'types/Joanie';
 
 import ContractFiltersBar from '../components/ContractFilters';
-import SignOrganizationContractButton from '../components/SignOrganizationContractButton';
-import useTeacherContractsToSign from '../hooks/useTeacherContractsToSign';
 import useTeacherContractFilters, {
   TeacherDashboardContractsParams,
 } from '../hooks/useTeacherContractFilters';
+import ContractActionsBar from '../components/ContractActionsBar';
 
 const messages = defineMessages({
   columnProductTitle: {
@@ -44,12 +43,6 @@ const TeacherDashboardContracts = () => {
   });
   const { organizationId } = useParams<TeacherDashboardContractsParams>();
   const { initialFilters, filters, setFilters } = useTeacherContractFilters();
-  const { canSignContracts, contractToSignCount } = useTeacherContractsToSign({
-    organizationId: filters.organization_id,
-    courseId: filters.course_id,
-    productId: filters.product_id,
-  });
-
   const {
     items: contracts,
     meta,
@@ -91,16 +84,11 @@ const TeacherDashboardContracts = () => {
   return (
     <div className="teacher-contract-page">
       <div className="dashboard__page__actions">
-        {canSignContracts && (
-          <div className="dashboard__page__actions-row dashboard__page__actions-row--space-between">
-            <div>
-              <SignOrganizationContractButton
-                organizationId={filters.organization_id!}
-                contractToSignCount={contractToSignCount}
-              />
-            </div>
-          </div>
-        )}
+        <ContractActionsBar
+          organizationId={filters.organization_id!}
+          courseId={filters.course_id}
+          productId={filters.product_id}
+        />
         <ContractFiltersBar
           defaultValues={initialFilters}
           onFiltersChange={handleFiltersChange}
