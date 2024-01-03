@@ -1,14 +1,14 @@
-// {{cookiecutter.site}} palette overwrites
+///
+/// Color palette and schemes
+///
 
-// This file is to override the default Richie palette colors.
-// Default Richie file: https://github.com/openfun/richie/blob/master/src/frontend/scss/colors/_palette.scss
+// Named colors
+// Do not add any color here, add or override color in cunningham.cjs instead.
+// ---------
 
-// The example below only overrides the `firebrick6` color value from `#F72C30` to `#FF0000`,
-// other palette colors are still those by default.
+@use '../../vendors/cunningham-tokens' as tokens;
 
-// $palette: recursive-map-merge(
-//   $palette,
-//   (
-//     'firebrick6': #FF0000,
-//   )
-// );
+$palette: recursive-map-merge(
+    $palette,
+    map-get(tokens.$themes, 'default', 'theme', 'colors')
+);
