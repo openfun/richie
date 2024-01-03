@@ -63,7 +63,7 @@ services:
       - app
 
   storybook:
-    image: node:18.18
+    image: node:18.19
     ports:
       - "8076:6006"
     working_dir: /app/src/frontend
@@ -75,14 +75,14 @@ services:
       - .:/app
 
   frontend:
-    image: node:18.18
+    image: node:18.19
     working_dir: /app/src/frontend
     user: "${DOCKER_USER:-1000}"
     volumes:
       - .:/app
 
   crowdin:
-    image: crowdin/cli:3.13.0
+    image: crowdin/cli:3.16.0
     volumes:
       - ".:/app"
     env_file:
