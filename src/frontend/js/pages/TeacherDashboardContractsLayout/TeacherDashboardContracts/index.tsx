@@ -12,6 +12,7 @@ import ContractFiltersBar from 'pages/TeacherDashboardContractsLayout/ContractFi
 import useContractAbilities from 'hooks/useContractAbilities';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
 import SignOrganizationContractButton from 'pages/TeacherDashboardContractsLayout/SignOrganizationContractButton';
+import BulkDownloadContractButton from '../BulkDownloadContractButton';
 
 const messages = defineMessages({
   columnProductTitle: {
@@ -118,6 +119,11 @@ const TeacherDashboardContracts = () => {
                 organizationId={filters.organization_id}
                 contractToSignCount={contractToSignCount}
               />
+            )}
+          </div>
+          <div>
+            {filters.organization_id && (
+              <BulkDownloadContractButton organizationId={filters.organization_id} />
             )}
           </div>
         </div>

@@ -154,6 +154,10 @@ export const getRoutes = () => {
       contracts: {
         get: `${baseUrl}/contracts/:id/`,
         download: `${baseUrl}/contracts/:id/download/`,
+        zip_archive: {
+          create: `${baseUrl}/contracts/zip-archive/`,
+          get: `${baseUrl}/contracts/zip-archive/:id/`,
+        },
       },
     },
     organizations: {
@@ -381,6 +385,19 @@ const API = (): Joanie.API => {
           return fetchWithJWT(ROUTES.user.contracts.download.replace(':id', id), {
             method: 'GET',
           }).then(checkStatus);
+        },
+        zip_archive: {
+          create: async (payload) => {
+            return fetchWithJWT(ROUTES.user.contracts.zip_archive.create, {
+              method: 'POST',
+              body: JSON.stringify(payload),
+            }).then(checkStatus);
+          },
+          get: async (id) => {
+            return fetchWithJWT(ROUTES.user.contracts.zip_archive.get.replace(':id', id), {
+              method: 'GET',
+            }).then(checkStatus);
+          },
         },
       },
     },

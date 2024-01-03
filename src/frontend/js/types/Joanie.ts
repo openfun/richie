@@ -521,6 +521,11 @@ interface APIUser {
       ? Promise<Nullable<Contract>>
       : Promise<PaginatedResponse<Contract>>;
     download(id: string): Promise<File>;
+    zip_archive: {
+      // TODO type properly
+      create: (payload: any) => Promise<any>;
+      get: (id: string) => Promise<any>;
+    };
   };
 }
 
