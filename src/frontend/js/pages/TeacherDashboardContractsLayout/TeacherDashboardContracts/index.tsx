@@ -111,16 +111,16 @@ const TeacherDashboardContracts = () => {
   return (
     <div className="teacher-contract-page">
       <div className="dashboard__page__actions">
-        <div className="dashboard__page__actions-row dashboard__page__actions-row--space-between">
-          <div>
-            {filters.organization_id && contractAbilities.can(ContractActions.SIGN) && (
+        {filters.organization_id && contractAbilities.can(ContractActions.SIGN) && (
+          <div className="dashboard__page__actions-row dashboard__page__actions-row--space-between">
+            <div>
               <SignOrganizationContractButton
                 organizationId={filters.organization_id}
                 contractToSignCount={contractToSignCount}
               />
-            )}
+            </div>
           </div>
-        </div>
+        )}
         <ContractFiltersBar
           defaultValues={initialFilters}
           onFiltersChange={handleFiltersChange}
