@@ -1,17 +1,20 @@
 import { defineMessages, useIntl } from 'react-intl';
 
 import { DataGrid, usePagination } from '@openfun/cunningham-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { ContractHelper, ContractStatePoV } from 'utils/ContractHelper';
 import { useContracts } from 'hooks/useContracts';
 import Banner, { BannerType } from 'components/Banner';
 import { PER_PAGE } from 'settings';
-import { ContractFilters, ContractState } from 'types/Joanie';
-import useContractAbilities from 'hooks/useContractAbilities';
-import { ContractActions } from 'utils/AbilitiesHelper/types';
+import { ContractFilters } from 'types/Joanie';
+
 import ContractFiltersBar from '../components/ContractFilters';
 import SignOrganizationContractButton from '../components/SignOrganizationContractButton';
+import useTeacherContractsToSign from '../hooks/useTeacherContractsToSign';
+import useTeacherContractFilters, {
+  TeacherDashboardContractsParams,
+} from '../hooks/useTeacherContractFilters';
 
 const messages = defineMessages({
   columnProductTitle: {
@@ -31,42 +34,21 @@ const messages = defineMessages({
   },
 });
 
-type TeacherDashboardContractsParams = {
-  organizationId?: string;
-  courseId?: string;
-  productId?: string;
-};
-
 const TeacherDashboardContracts = () => {
   const intl = useIntl();
-  const { courseId, organizationId, productId } = useParams<TeacherDashboardContractsParams>();
   const [searchParams] = useSearchParams();
   const page = searchParams.get('page') ?? '1';
   const pagination = usePagination({
     defaultPage: page ? parseInt(page, 10) : 1,
     pageSize: PER_PAGE.teacherContractList,
   });
-  const initialFilters = useMemo(
-    () => ({
-      organization_id: organizationId,
-      signature_state:
-        (searchParams.get('signature_state') as ContractState) || ContractState.SIGNED,
-    }),
-    [],
-  );
-  const [filters, setFilters] = useState<ContractFilters>(initialFilters);
-
-  const halfSignedContractsQuery = useContracts(
-    {
-      signature_state: ContractState.LEARNER_SIGNED,
-      organization_id: filters.organization_id,
-      course_id: courseId,
-      product_id: productId,
-    },
-    { enabled: !!filters.organization_id },
-  );
-  const contractAbilities = useContractAbilities(halfSignedContractsQuery.items);
-  const contractToSignCount = halfSignedContractsQuery.meta?.pagination?.count ?? 0;
+  const { organizationId } = useParams<TeacherDashboardContractsParams>();
+  const { initialFilters, filters, setFilters } = useTeacherContractFilters();
+  const { canSignContracts, contractToSignCount } = useTeacherContractsToSign({
+    organizationId: filters.organization_id,
+    courseId: filters.course_id,
+    productId: filters.product_id,
+  });
 
   const {
     items: contracts,
@@ -75,8 +57,6 @@ const TeacherDashboardContracts = () => {
   } = useContracts(
     {
       ...filters,
-      course_id: courseId,
-      product_id: productId,
       page: pagination.page,
       page_size: PER_PAGE.teacherContractList,
     },
@@ -111,11 +91,11 @@ const TeacherDashboardContracts = () => {
   return (
     <div className="teacher-contract-page">
       <div className="dashboard__page__actions">
-        {filters.organization_id && contractAbilities.can(ContractActions.SIGN) && (
+        {canSignContracts && (
           <div className="dashboard__page__actions-row dashboard__page__actions-row--space-between">
             <div>
               <SignOrganizationContractButton
-                organizationId={filters.organization_id}
+                organizationId={filters.organization_id!}
                 contractToSignCount={contractToSignCount}
               />
             </div>
@@ -154,5 +134,3 @@ const TeacherDashboardContracts = () => {
 };
 
 export default TeacherDashboardContracts;
-export { TeacherDashboardCourseContractsLayout } from '../TeacherDashboardCourseContractsLayout';
-export { TeacherDashboardOrganizationContractsLayout } from '../TeacherDashboardOrganizationContractsLayout';
