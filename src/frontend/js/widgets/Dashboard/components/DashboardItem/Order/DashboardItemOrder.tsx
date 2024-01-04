@@ -1,4 +1,4 @@
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 import { CourseLight, CredentialOrder, Product } from 'types/Joanie';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CoursesHelper } from 'utils/CoursesHelper';
@@ -18,7 +18,7 @@ import { DashboardItem } from '../index';
 import { DashboardItemContract } from '../Contract';
 import OrderStateMessage from './OrderStateMessage';
 
-const messages = {
+const messages = defineMessages({
   accessCourse: {
     id: 'components.DashboardItemOrder.gotoCourse',
     description: 'Button that redirects to the order details',
@@ -29,7 +29,7 @@ const messages = {
     description: 'Accessible label displayed while certificate is being fetched on the dashboard.',
     defaultMessage: 'Loading certificate...',
   },
-};
+});
 
 interface DashboardItemOrderProps {
   order: CredentialOrder;
