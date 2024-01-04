@@ -32,6 +32,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add contracts bulk download button in teacher dashboard contract list page.
 - Change menu link order on the learner dashboard sidebar.
 - Organization bulk contract signature
 - Add a Badge React component

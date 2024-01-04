@@ -46,6 +46,13 @@ export const CONTRACT_SETTINGS = {
   dummySignatureSignTimeout: 2000,
 };
 
+export const CONTRACT_DOWNLOAD_SETTINGS = {
+  // Interval in ms to poll the related contract's archive.
+  pollInterval: 1000,
+  contractArchiveLocalStorageKey: 'RICHIE_CONTRACT_ARCHIVE',
+  contractArchiveLocalVaklidityDurationMs: 10 * 60 * 60 * 1000, // 10min
+};
+
 const DEFAULT_PER_PAGE = 50;
 export const PER_PAGE = {
   teacherContractList: 25,
