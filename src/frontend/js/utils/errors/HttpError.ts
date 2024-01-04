@@ -25,6 +25,7 @@ export function isHttpError(error: any): error is HttpError {
 
 export enum HttpStatusCode {
   OK = 200,
+  NO_CONTENT = 204,
   UNAUTHORIZED = 401,
   BAD_REQUEST = 400,
   FORBIDDEN = 403,
