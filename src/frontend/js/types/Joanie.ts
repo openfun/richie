@@ -520,6 +520,11 @@ interface APIUser {
       ? Promise<Nullable<Contract>>
       : Promise<PaginatedResponse<Contract>>;
     download(id: string): Promise<File>;
+    zip_archive: {
+      check: (id: string) => Promise<Response>;
+      create: ({ organization_id }: { organization_id: string }) => Promise<{ url: string }>;
+      get: (id: string) => Promise<File>;
+    };
   };
 }
 

@@ -12,7 +12,7 @@ import queryString from 'query-string';
 import type * as Joanie from 'types/Joanie';
 import { AuthenticationApi } from 'api/authentication';
 import context from 'utils/context';
-import { HttpError } from 'utils/errors/HttpError';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 import { JOANIE_API_VERSION } from 'settings';
 import { ResourcesQuery } from 'hooks/useResources';
 import { ObjectHelper } from 'utils/ObjectHelper';
@@ -20,14 +20,15 @@ import { Maybe } from 'types/utils';
 
 interface CheckStatusOptions {
   fallbackValue: any;
-  ignoredErrorStatus: number[];
+  ignoredErrorStatus: (number | HttpStatusCode)[];
 }
 
 export function getResponseBody(response: Response) {
   if (response.headers.get('Content-Type') === 'application/json') {
     return response.json();
   }
-  if (response.headers.get('Content-Type') === 'application/pdf') {
+  const fileType = ['application/pdf', 'application/zip'];
+  if (fileType.includes(response.headers.get('Content-Type') || '')) {
     return response.blob();
   }
   return response.text();
@@ -154,6 +155,10 @@ export const getRoutes = () => {
       contracts: {
         get: `${baseUrl}/contracts/:id/`,
         download: `${baseUrl}/contracts/:id/download/`,
+        zip_archive: {
+          create: `${baseUrl}/contracts/zip-archive/`,
+          get: `${baseUrl}/contracts/zip-archive/:id/`,
+        },
       },
     },
     organizations: {
@@ -378,6 +383,24 @@ const API = (): Joanie.API => {
           return fetchWithJWT(ROUTES.user.contracts.download.replace(':id', id), {
             method: 'GET',
           }).then(checkStatus);
+        },
+        zip_archive: {
+          check: async (id) => {
+            return fetchWithJWT(ROUTES.user.contracts.zip_archive.get.replace(':id', id), {
+              method: 'OPTIONS',
+            });
+          },
+          create: async (payload) => {
+            return fetchWithJWT(ROUTES.user.contracts.zip_archive.create, {
+              method: 'POST',
+              body: JSON.stringify(payload),
+            }).then(checkStatus);
+          },
+          get: async (id) => {
+            return fetchWithJWT(ROUTES.user.contracts.zip_archive.get.replace(':id', id), {
+              method: 'GET',
+            }).then(checkStatus);
+          },
         },
       },
     },
