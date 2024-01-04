@@ -67,6 +67,10 @@
     "description": "Label of the \"last_name\" input",
     "message": "Nom du destinataire"
   },
+  "components.AddressesManagement.optionalFieldText": {
+    "description": "text Displayed below form elements that are optional",
+    "message": "(optionnel)"
+  },
   "components.AddressesManagement.postcodeInput": {
     "description": "Label of the \"postcode\" input",
     "message": "Code postal"
@@ -103,25 +107,25 @@
     "description": "Label of the update button",
     "message": "Mettre à jour cette adresse"
   },
-  "components.AddressesManagement.validationSchema.mixedInvalid": {
-    "description": "Error message displayed when a field value is invalid.",
-    "message": "Ce champ n'est pas valide."
+  "components.ContractStatus.learnerSignedOn": {
+    "description": "Label for the date of sign of a training contract by the learner",
+    "message": "Vous avez signé cette convention de formation. Signée le {date}"
   },
-  "components.AddressesManagement.validationSchema.mixedOneOf": {
-    "description": "Error message displayed when a field value must be one of a list.",
-    "message": "Vous devez sélectionner une valeur."
+  "components.ContractStatus.organizationSignedOn": {
+    "description": "Label for the date of sign of a training contract by the organization",
+    "message": "L'établissement a signé cette convention de formation. Signée le {date}"
   },
-  "components.AddressesManagement.validationSchema.mixedRequired": {
-    "description": "Error message displayed when a field is required.",
-    "message": "Ce champ est obligatoire."
+  "components.ContractStatus.waitingOrganization": {
+    "description": "Label displayed when a training contract need to be signed by the organization",
+    "message": "Vous ne pouvez pas télécharger votre convention de formation tant qu'elle n'a pas été signée par l'établissement."
   },
-  "components.AddressesManagement.validationSchema.stringMax": {
-    "description": "Error message displayed when a field value is too long.",
-    "message": "La longueur maximale est de {max} {max, plural, one {caractère} other {caractères}}."
+  "components.ContractStatus.waitingSignature": {
+    "description": "Label displayed when a training contract need to be signed by the learner",
+    "message": "Vous devez signer cette convention de formation pour accéder à votre formation."
   },
-  "components.AddressesManagement.validationSchema.stringMin": {
-    "description": "Error message displayed when a field value is too short.",
-    "message": "La longueur minimale est de {min} {min, plural, one {caractère} other {caractères}}."
+  "components.CountrySelectField.label": {
+    "description": "label of the country select",
+    "message": "Pays"
   },
   "components.CourseAddToWishlist.labelAdd": {
     "description": "Label to proceed to add a course to user wishlist.",
@@ -155,6 +159,10 @@
     "description": "Organization logo alternative text for screen reader users",
     "message": "Établissement"
   },
+  "components.CourseGlimpse.organizationsTitle": {
+    "description": "Organizations title for multiple organizations",
+    "message": "Produit par {nbOrganizations} partenaires"
+  },
   "components.CourseGlimpseFooter.dateIconAlt": {
     "description": "Course date logo alternative text for screen reader users",
     "message": "Date du cours"
@@ -187,6 +195,10 @@
     "description": "Course run languages",
     "message": "Disponible en {languages}"
   },
+  "components.CourseProductItem.contractSignActionLabel": {
+    "description": "Label of \"sign contract\" action on the syllabus.",
+    "message": "Signer votre convention de formation"
+  },
   "components.CourseProductItem.fromTo": {
     "description": "Course run date range",
     "message": "Du {from} au {to}"
@@ -194,6 +206,14 @@
   "components.CourseProductItem.loadingInitial": {
     "description": "Accessible text for the initial loading spinner displayed when product is fetching",
     "message": "Chargement des informations produit..."
+  },
+  "components.CourseProductItem.nbSeatsAvailable": {
+    "description": "Message displayed when seats are available for the product",
+    "message": "{ nb, plural, =0 {Aucune place restante} one {Dernière place restante!} other {# places restantes} }"
+  },
+  "components.CourseProductItem.noSeatsAvailable": {
+    "description": "Message displayed when no seats are available for the product",
+    "message": "Désolé, aucune place disponible pour le moment"
   },
   "components.CourseProductItem.pending": {
     "description": "Message displayed when authenticated user has purchased the product but order is still pending",
@@ -203,6 +223,10 @@
     "description": "Message displayed when authenticated user owned the product",
     "message": "Acheté"
   },
+  "components.CourseProductItem.signatureNeeded": {
+    "description": "Banner displayed when the contract is not signed on the syllabus",
+    "message": "Vous devez signer votre convention de formation afin de pouvoir vous inscrire aux sessions de cours"
+  },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
     "message": "Fin"
@@ -210,6 +234,10 @@
   "components.CourseProductsList.start": {
     "description": "Start label displayed in the header of course run dates section",
     "message": "Début"
+  },
+  "components.CourseRunEnrollment.courseRunStartIn": {
+    "description": "Message displayed when user is enrolled but the course run is not started",
+    "message": "Le cours commence dans {relativeStartDate}"
   },
   "components.CourseRunEnrollment.enroll": {
     "description": "CTA for users who can enroll in the course run or could enroll if they logged in.",
@@ -273,11 +301,11 @@
   },
   "components.CourseRunList.dataCourseRunLink": {
     "description": "Message displayed in course run datagrid for course run link",
-    "message": "accéder à l'espace cours"
+    "message": "Accéder à l'espace cours"
   },
   "components.CourseRunList.dataCourseRunPeriod": {
     "description": "Message displayed in course run datagrid for course run period",
-    "message": "du {from} au {to}"
+    "message": "Du {from} au {to}"
   },
   "components.CourseRunList.noCourseRunAvailable": {
     "description": "Text displayed when no course run are opened for the course",
@@ -294,6 +322,14 @@
   "components.Dashboard.DashboardRoutes.certificates.path": {
     "description": "The path to display the certificates view.",
     "message": "/certificats"
+  },
+  "components.Dashboard.DashboardRoutes.contracts.label": {
+    "description": "Label of the training contracts view used in navigation components.",
+    "message": "Mes conventions de formation"
+  },
+  "components.Dashboard.DashboardRoutes.contracts.path": {
+    "description": "The path to display the training contracts view.",
+    "message": "/conventions-de-formation"
   },
   "components.Dashboard.DashboardRoutes.course.path": {
     "description": "The path to display a course detail view.",
@@ -359,6 +395,22 @@
     "description": "The path to display the preferences view.",
     "message": "/preferences"
   },
+  "components.Dashboard.Signature.SignatureDummy.button": {
+    "description": "Button displayed below the dummy contract.",
+    "message": "Signer"
+  },
+  "components.Dashboard.Signature.SignatureDummy.signing": {
+    "description": "Message displayed after signing the dummy contract.",
+    "message": "Signature de la convention de formation ..."
+  },
+  "components.Dashboard.Signature.SignatureLexPersona.error": {
+    "description": "Message displayed inside the contract signin modal when Lex Persona iframe returned an error.",
+    "message": "Une erreur s'est produite lors de la signature de la convention de formation. Veuillez réessayer plus tard."
+  },
+  "components.Dashboard.Signature.SignatureLexPersona.errorStatus": {
+    "description": "Message displayed inside the contract signin modal when Lex Persona iframe returned a non null status.",
+    "message": "Une erreur s'est produite lors de la signature de la convention de formation avec le statut suivant : {status}. Veuillez actualiser afin de réessayer."
+  },
   "components.DashboardAddressBox.delete": {
     "description": "Delete address button on the dashboard addresses list",
     "message": "Supprimer"
@@ -395,25 +447,21 @@
     "description": "The dashboard's breadcrumb back button's label",
     "message": "Retour"
   },
-  "components.DashboardCertificate.details": {
-    "description": "Label for the details button of a certificate",
-    "message": "Détails"
-  },
-  "components.DashboardCertificate.download": {
-    "description": "Label for the download button of a certificate",
-    "message": "Télécharger"
-  },
-  "components.DashboardCertificate.generatingCertificate": {
-    "description": "Accessible label displayed while certificate is being generated on the dashboard.",
-    "message": "Certificat en cours de génération..."
-  },
   "components.DashboardCertificate.issuedOn": {
     "description": "Label for the date of issue of a certificate",
     "message": "Émis le {date}"
   },
-  "components.DashboardCertificate.noCertificate": {
-    "description": "Label displayed when no certificate is available",
-    "message": "Lorsque vous aurez réussi tous les cours, vous pourrez télécharger votre certificat ici."
+  "components.DashboardCertificate.noCertificateCertificate": {
+    "description": "Label displayed when no certificate certificate is available",
+    "message": "Lorsque vous aurez réussi tous les examens, vous pourrez télécharger votre certificat ici."
+  },
+  "components.DashboardCertificate.noCertificateCredential": {
+    "description": "Label displayed when no certificate credential is available",
+    "message": "Lorsque vous aurez réussi tous les examens, vous pourrez télécharger votre certificat ici."
+  },
+  "components.DashboardCertificate.noCertificateUnknown": {
+    "description": "Label displayed when we dont have the product type and no certificate is available",
+    "message": "Lorsque vous aurez réussi tous les examens, vous pourrez télécharger votre certificat ici."
   },
   "components.DashboardCertificates.empty": {
     "description": "Message displayed when there are no certificates",
@@ -422,6 +470,14 @@
   "components.DashboardCertificates.loading": {
     "description": "Message displayed while loading certificates",
     "message": "Chargement des certificats..."
+  },
+  "components.DashboardContracts.empty": {
+    "description": "Message displayed when there are no training contracts",
+    "message": "Vous n'avez pas encore de conventions de formation."
+  },
+  "components.DashboardContracts.loading": {
+    "description": "Message displayed while loading training contracts",
+    "message": "Chargement des conventions de formation..."
   },
   "components.DashboardCourses.emptyList": {
     "description": "Empty placeholder of the dashboard's list of orders and enrollments",
@@ -523,21 +579,165 @@
     "description": "Label of the title input on the credit card edit page",
     "message": "Nom de la carte de crédit"
   },
+  "components.DashboardItem.Order.ContractFrame.errorMaxPolling": {
+    "description": "Message displayed inside the contract signin modal if the order polling has reached its maximum attempts.",
+    "message": "La signature prend plus de temps que prévu ... veuillez revenir plus tard."
+  },
+  "components.DashboardItem.Order.ContractFrame.errorPolling": {
+    "description": "Message displayed inside the contract signin modal if the order polling failed a request.",
+    "message": "Une erreur s'est produite lors de la vérification de la signature. Veuillez revenir plus tard."
+  },
+  "components.DashboardItem.Order.ContractFrame.errorSubmitForSignature": {
+    "description": "Message displayed inside the contract signin modal while an error occurred.",
+    "message": "Une erreur s'est produite lors de l'initialisation du processus de signature. Veuillez réessayer plus tard."
+  },
+  "components.DashboardItem.Order.ContractFrame.finishedButton": {
+    "description": "Button displayed inside the contract signin modal when the contract is signed.",
+    "message": "Suivant"
+  },
+  "components.DashboardItem.Order.ContractFrame.finishedCaption": {
+    "description": "Title displayed inside the contract signin modal when the contract is signed.",
+    "message": "Félicitations !"
+  },
+  "components.DashboardItem.Order.ContractFrame.finishedDescription": {
+    "description": "Message displayed inside the contract signin modal when the contract is signed.",
+    "message": "Vous recevrez un email une fois que votre contrat sera entièrement signé. Vous pouvez dès à présent vous inscrire aux sessions de cours !"
+  },
+  "components.DashboardItem.Order.ContractFrame.loadingContract": {
+    "description": "Message displayed inside the contract signin modal when loading the contract.",
+    "message": "Chargement de votre convention de formation..."
+  },
+  "components.DashboardItem.Order.ContractFrame.polling": {
+    "description": "Message displayed inside the contract signin modal when polling the order.",
+    "message": "Vérification de la signature ..."
+  },
+  "components.DashboardItem.Order.OrderStateMessage.statusCanceled": {
+    "description": "Status shown on the dashboard order item when order is canceled",
+    "message": "Annulée"
+  },
+  "components.DashboardItem.Order.OrderStateMessage.statusCompleted": {
+    "description": "Status shown on the dashboard order item when order is validated with certificate",
+    "message": "Terminée"
+  },
+  "components.DashboardItem.Order.OrderStateMessage.statusDraft": {
+    "description": "Status shown on the dashboard order item when order is draft.",
+    "message": "Brouillon"
+  },
+  "components.DashboardItem.Order.OrderStateMessage.statusOnGoing": {
+    "description": "Status shown on the dashboard order item when order is validated with no certificate",
+    "message": "En cours"
+  },
+  "components.DashboardItem.Order.OrderStateMessage.statusOther": {
+    "description": "Status shown on the dashboard order item when order status is unknown",
+    "message": "{state}"
+  },
+  "components.DashboardItem.Order.OrderStateMessage.statusPending": {
+    "description": "Status shown on the dashboard order item when order is pending.",
+    "message": "En attente"
+  },
+  "components.DashboardItem.Order.OrderStateMessage.statusSubmitted": {
+    "description": "Status shown on the dashboard order item when order is submitted.",
+    "message": "En attente de paiement"
+  },
+  "components.DashboardItem.Order.OrderStateMessage.statusWaitingSignature": {
+    "description": "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
+    "message": "Signature requise"
+  },
+  "components.DashboardItemCourseEnrollingRun.contractUnsigned": {
+    "description": "Message displayed as disabled button title when a contract needs to be signed.",
+    "message": "Vous devez signer votre convention de formation afin de pouvoir vous inscrire aux sessions du cours."
+  },
+  "components.DashboardItemCourseEnrollingRun.courseRunsLoading": {
+    "description": "Text displayed when course runs list is loading",
+    "message": "Chargement des sessions de cours..."
+  },
+  "components.DashboardItemCourseEnrollingRun.enrollmentNotYetOpened": {
+    "description": "Disclaimer that informs the user that enrollment is not yet opened",
+    "message": "Les inscriptions ouvriront le {enrollment_start}"
+  },
+  "components.DashboardItemCourseEnrollingRun.noCourseRunAvailable": {
+    "description": "Text displayed when no course runs are opened for the course",
+    "message": "Aucune session disponible pour ce cours."
+  },
+  "components.DashboardItemEnrollment.changeEnrollCourseConfirmation": {
+    "description": "The confirmation message shown to the user when he wants to change its enrolled course run",
+    "message": "Êtes-vous sûr de vouloir vous inscrire à une autre session ? Vous serez désinscrit de l'autre session !"
+  },
+  "components.DashboardItemEnrollment.enrollCourse": {
+    "description": "Button shown on a read-only not-enrolled target course that redirects to the details view",
+    "message": "S'inscrire"
+  },
+  "components.DashboardItemEnrollment.enrollRun": {
+    "description": "Button to enroll in a course run",
+    "message": "S'inscrire"
+  },
+  "components.DashboardItemEnrollment.enrolled": {
+    "description": "Text shown when user is enrolled in a course run",
+    "message": "Inscrit"
+  },
+  "components.DashboardItemEnrollment.enrolledRunPeriod": {
+    "description": "Text to display the period of a course run",
+    "message": "Vous êtes inscrit à la session du {startDate} au {endDate}"
+  },
+  "components.DashboardItemEnrollment.firstEnrollCourseConfirmation": {
+    "description": "The confirmation message shown to the user when he wants to enroll for the first time ( no existing enrollments )",
+    "message": "Êtes-vous sûr de vouloir vous inscrire à cette session ?"
+  },
+  "components.DashboardItemEnrollment.gotoCourse": {
+    "description": "Button to access course when the user is enrolled",
+    "message": "Accéder au cours"
+  },
+  "components.DashboardItemEnrollment.notEnrolled": {
+    "description": "Text shown on a read-only not-enrolled target course",
+    "message": "Vous n'êtes pas inscrit à ce cours"
+  },
+  "components.DashboardItemEnrollment.runPeriod": {
+    "description": "Text to display the period of a course run",
+    "message": "Du {startDate} au {endDate}"
+  },
+  "components.DashboardItemEnrollment.statusNotActive": {
+    "description": "Text shown when a course run is not active",
+    "message": "Non inscrit"
+  },
+  "components.DashboardItemOrder.gotoCourse": {
+    "description": "Button that redirects to the order details",
+    "message": "Voir le détail"
+  },
+  "components.DashboardItemOrder.loadingCertificate": {
+    "description": "Accessible label displayed while certificate is being fetched on the dashboard.",
+    "message": "Chargement du certificat..."
+  },
   "components.DashboardOrderLoader.loading": {
     "description": "Message displayed while loading an order",
     "message": "Chargement de la commande..."
   },
-  "components.DashboardSidebar.responsiveNavLabel": {
-    "description": "a11y related label for select input used to navigate on responsive",
-    "message": "Naviguer vers"
+  "components.DashboardOrderLoader.signatureNeeded": {
+    "description": "Banner displayed when the contract is not signed",
+    "message": "Vous devez signer votre convention de formation afin de pouvoir vous inscrire à une session de cours"
   },
-  "components.DashboardSidebar.settingsLinkLabel": {
-    "description": "label of the settings link",
-    "message": "Paramètres"
+  "components.DashboardOrderLoader.wrongLinkedProductError": {
+    "description": "Error message displayed when order's linked product type is not handle.",
+    "message": "Cette page n'est pas disponible pour cette commande."
   },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
     "message": "Accéder aux préférences de votre profil"
+  },
+  "components.DownloadCertificateButton.download": {
+    "description": "Label for the download button of a certificate",
+    "message": "Télécharger"
+  },
+  "components.DownloadCertificateButton.generatingCertificate": {
+    "description": "Accessible label displayed while certificate is being generated.",
+    "message": "Le certificat est en cours de génération..."
+  },
+  "components.DownloadContractButton.contractDownloadActionLabel": {
+    "description": "Label of \"download contract\" action.",
+    "message": "Télécharger"
+  },
+  "components.DownloadContractButton.contractDownloadError": {
+    "description": "Message displayed when the order's contract download fails.",
+    "message": "Une erreur est survenue lors du téléchargement de la convention de formation. Veuillez réessayer plus tard."
   },
   "components.EnrollableCourseRunList.ariaSelectCourseRun": {
     "description": "Accessible label used by screen reader when user checked a course run radio input.",
@@ -591,6 +791,26 @@
     "description": "Text label for the enrollment dates when enrollment is opened",
     "message": "Inscription jusqu'au {date}"
   },
+  "components.Form.utils.errors.mixedInvalid": {
+    "description": "Error message displayed when a field value is invalid.",
+    "message": "Ce champ est invalide."
+  },
+  "components.Form.utils.errors.mixedOneOf": {
+    "description": "Error message displayed when a field value must be one of a list.",
+    "message": "Vous devez sélectionner une valeur."
+  },
+  "components.Form.utils.errors.mixedRequired": {
+    "description": "Error message displayed when a field is required.",
+    "message": "Ce champ est obligatoire."
+  },
+  "components.Form.utils.errors.stringMax": {
+    "description": "Error message displayed when a field value is too long.",
+    "message": "La longueur maximale est de {max} {max, plural, one {caractère} other {caractères}}."
+  },
+  "components.Form.utils.errors.stringMin": {
+    "description": "Error message displayed when a field value is too short.",
+    "message": "La longueur minimale est de {min} {min, plural, one {caractère} other {caractères}}."
+  },
   "components.LanguageSelector.currentlySelected": {
     "description": "Accessible hint to mark the currently selected language in the language selector",
     "message": "(actuellement sélectionné)"
@@ -610,6 +830,14 @@
   "components.Modal.closeDialog": {
     "description": "Text for the button to close the modal",
     "message": "Fermer la fenêtre de dialogue"
+  },
+  "components.NavigationSelect.responsiveNavLabel": {
+    "description": "a11y related label for select input used to navigate on responsive",
+    "message": "Accéder à"
+  },
+  "components.NavigationSelect.settingsLinkLabel": {
+    "description": "label of the settings link",
+    "message": "Paramètres"
   },
   "components.PaginateCourseSearch.currentlyReadingLastPageN": {
     "description": "Accessibility helper in pagination, shown next to the current page number when it is the last page.",
@@ -659,6 +887,10 @@
     "description": "Error message shown when payment creation request failed because there is no remaining available seat for the product.",
     "message": "Il n'y a pas plus de places disponibles pour ce produit."
   },
+  "components.PaymentButton.errorTerms": {
+    "description": "Error message shown when the user didn't check the terms checkbox.",
+    "message": "Vous devez accepter les conditions."
+  },
   "components.PaymentButton.pay": {
     "description": "CTA label to proceed to the payment of the product",
     "message": "Payer {price}"
@@ -670,6 +902,22 @@
   "components.PaymentButton.paymentInProgress": {
     "description": "Label for screen reader when a payment is in progress.",
     "message": "Paiement en cours"
+  },
+  "components.PaymentButton.termsMessage": {
+    "description": "Message next to the checkbox in order to accept the terms",
+    "message": "En cochant cette case, vous acceptez les"
+  },
+  "components.ProductCertificateFooter.buyProductCertificateLabel": {
+    "description": "Label on the enrollement row that propose to buy a product of type certificate",
+    "message": "Un examen qui délivre un certificat peut être acheté pour ce cours."
+  },
+  "components.ProductCertificateFooter.downloadProductCertificateLabel": {
+    "description": "Label on the enrollement row that propose to download a certificate",
+    "message": "Un certificat est disponible en téléchargement."
+  },
+  "components.ProductCertificateFooter.pendingProductCertificateLabel": {
+    "description": "Label on the enrollement when a product of type certificate have been bought",
+    "message": "Terminez ce cours pour obtenir votre certificat."
   },
   "components.RegisteredCreditCard.expirationDate": {
     "description": "Credit card expiration date label",
@@ -691,9 +939,13 @@
     "description": "Label displayed inside the product's CTA when user is not logged in",
     "message": "Connectez-vous pour acheter {product}"
   },
-  "components.SaleTunnel.noCourseRunToPurchase": {
+  "components.SaleTunnel.noCourseRunToPurchaseCertificate": {
     "description": "Label displayed below the product's CTA when there is no courseRun",
-    "message": "Au moins un cours n'a aucune session, ce produit n'est pas disponible à la vente actuellement"
+    "message": "Cette session n'est pas active. Ce produit n'est pas actuellement disponible à la vente."
+  },
+  "components.SaleTunnel.noCourseRunToPurchaseCredential": {
+    "description": "Label displayed below the product's CTA when there is no courseRun",
+    "message": "Au moins un cours n'a aucune session ouverte, ce produit n'est pas disponible à la vente actuellement."
   },
   "components.SaleTunnel.noRemainingOrder": {
     "description": "Label displayed below the product's CTA when there is no remaining available seat for the product",
@@ -718,6 +970,14 @@
   "components.SaleTunnelStepPayment.resumeTile": {
     "description": "Label for the resume tile",
     "message": "Vous êtes sur le point d'acheter"
+  },
+  "components.SaleTunnelStepPayment.termsMessageLink": {
+    "description": "Clickable link included in the terms message",
+    "message": "Conditions générales de vente"
+  },
+  "components.SaleTunnelStepPayment.termsMessageLinkTitle": {
+    "description": "Title of clickable link included in the terms message",
+    "message": "Ouvrir un aperçu des Conditions Générales de Vente"
   },
   "components.SaleTunnelStepPayment.userBillingAddressAddLabel": {
     "description": "Label for the billing address add button",
@@ -751,9 +1011,17 @@
     "description": "Label to the call to action to close sale tunnel",
     "message": "Commencer ce cours dès maintenant !"
   },
+  "components.SaleTunnelStepResume.ctaSignature": {
+    "description": "Label to the call to action to close sale tunnel if there is a pending signature",
+    "message": "Signer la convention de formation"
+  },
   "components.SaleTunnelStepResume.successDetailMessage": {
     "description": "Text to remind that order's invoice will be send by email soon",
     "message": "Vous allez recevoir votre facture par mail dans quelques instants."
+  },
+  "components.SaleTunnelStepResume.successDetailSignatureMessage": {
+    "description": "Text to remind that order needs to be signed",
+    "message": "Pour vous inscrire aux sessions de cours, vous devez d'abord signer la convention de formation."
   },
   "components.SaleTunnelStepResume.successMessage": {
     "description": "Message to confirm that order has been created",
@@ -865,7 +1133,19 @@
   },
   "components.SearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
-    "message": "Recherche des cours, des organisations, des catégories"
+    "message": "Recherche des cours, des établissements, des catégories"
+  },
+  "components.SignContractButton.contractDownloadActionLabel": {
+    "description": "Label of \"download contract\" action.",
+    "message": "Télécharger"
+  },
+  "components.SignContractButton.contractDownloadError": {
+    "description": "Message displayed when the order's contract download fails.",
+    "message": "Une erreur est survenue lors du téléchargement de la convention de formation. Veuillez réessayer plus tard."
+  },
+  "components.SignContractButton.contractSignActionLabel": {
+    "description": "Label of \"sign contract\" action.",
+    "message": "Signer"
   },
   "components.StepBreadcrumb.stepCount": {
     "description": "Info about current step, not visible, only announced by screen readers",
@@ -947,53 +1227,17 @@
     "description": "Button displayed on the syllabus when not all course runs are displayed",
     "message": "Voir plus"
   },
-  "components.TeacherCourseDashboardLoader.errorNoCourse": {
-    "description": "Message displayed when requested course is not found",
-    "message": "Ce cours n'existe pas"
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.contracts.label": {
+    "description": "Label of the course contracts view.",
+    "message": "Conventions de formation"
   },
-  "components.TeacherCourseDashboardLoader.loading": {
-    "description": "Message displayed while loading a course",
-    "message": "Chargement du cours..."
-  },
-  "components.TeacherCourseDashboardLoader.pageTitle": {
-    "description": "Use for the page title of the course area",
-    "message": "Espace de cours"
-  },
-  "components.TeacherCourseDashboardSidebar.header": {
-    "description": "Title of the course dashboard sidebar",
-    "message": "{courseTitle}"
-  },
-  "components.TeacherCourseDashboardSidebar.loading": {
-    "description": "Message displayed while loading a course",
-    "message": "Chargement du cours..."
-  },
-  "components.TeacherCourseDashboardSidebar.subHeader": {
-    "description": "Sub title of the course dashboard sidebar",
-    "message": "Vous êtes sur le tableau de bord du cours"
-  },
-  "components.TeacherCourseDashboardSidebar.syllabusLinkLabel": {
-    "description": "Syllabus link label",
-    "message": "Accéder au syllabus"
-  },
-  "components.TeacherCoursesDashboardLoader.title.archived": {
-    "description": "Archived courses title",
-    "message": "Archivé"
-  },
-  "components.TeacherCoursesDashboardLoader.title.filteredCourses": {
-    "description": "Filtered courses title",
-    "message": "Vos cours"
-  },
-  "components.TeacherCoursesDashboardLoader.title.incoming": {
-    "description": "Incoming courses title",
-    "message": "À venir"
-  },
-  "components.TeacherCoursesDashboardLoader.title.ongoing": {
-    "description": "Ongoing courses title",
-    "message": "En cours"
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.contracts.path": {
+    "description": "The path to display a course contracts view.",
+    "message": "/teacher/cours/{courseId}/conventions-de-formation"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.generalInformation.path": {
     "description": "The path to display the course general information view.",
-    "message": "/enseignant/cours/{courseId}/informations"
+    "message": "/teacher/cours/{courseId}/informations"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.label": {
     "description": "Label of the course root view.",
@@ -1001,7 +1245,15 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.path": {
     "description": "The path to display the course view.",
-    "message": "/enseignant/cours/{courseId}"
+    "message": "/teacher/cours/{courseId}"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.product.contracts.label": {
+    "description": "Label of the product contracts view.",
+    "message": "Conventions de formation"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.product.contracts.path": {
+    "description": "The path to display a product contracts view.",
+    "message": "/teacher/cours/{courseId}/produits/{courseProductRelationId}/conventions-de-formation"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.product.label": {
     "description": "Label of the product view.",
@@ -1009,11 +1261,27 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.product.path": {
     "description": "The path to display the product view.",
-    "message": "/enseignant/cours/{courseId}/produit/{courseProductRelationId}"
+    "message": "/teacher/cours/{courseId}/produits/{courseProductRelationId}"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.generalInformation.label": {
     "description": "Label of the course general information view.",
     "message": "Informations générales"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.contracts.label": {
+    "description": "Label of the organization contracts view.",
+    "message": "Conventions de formation"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.contracts.path": {
+    "description": "The path to display the organization contracts view.",
+    "message": "/teacher/etablissements/{organizationId}/conventions-de-formation"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.contracts.label": {
+    "description": "Label of the organization course's contracts view.",
+    "message": "Conventions de formation"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.contracts.path": {
+    "description": "The path to display the organization course's contracts view.",
+    "message": "/teacher/etablissements/{organizationId}/cours/{courseId}/conventions-de-formation"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformation.label": {
     "description": "Label of the organization course general information view.",
@@ -1021,7 +1289,15 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformation.path": {
     "description": "The path to display the organization course general information view.",
-    "message": "/enseignant/organisations/{organizationId}/cours/{courseId}/informations"
+    "message": "/teacher/etablissements/{organizationId}/cours/{courseId}/informations"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.contracts.label": {
+    "description": "Label of the organization product's contracts view.",
+    "message": "Conventions de formation"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.contracts.path": {
+    "description": "The path to display the organization product's contracts view.",
+    "message": "/teacher/etablissements/{organizationId}/cours/{courseId}/produits/{courseProductRelationId}/conventions-de-formation"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.label": {
     "description": "Label of the organization product view.",
@@ -1029,7 +1305,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.path": {
     "description": "The path to display the organization product view.",
-    "message": "/enseignant/organisations/{organizationId}/cours/{courseId}/produits/{courseProductRelationId}"
+    "message": "/teacher/etablissements/{organizationId}/cours/{courseId}/produits/{courseProductRelationId}"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.label": {
     "description": "Label of the organization courses view.",
@@ -1037,7 +1313,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.path": {
     "description": "The path to display the organization courses view.",
-    "message": "/enseignant/organisations/{organizationId}/cours"
+    "message": "/teacher/etablissements/{organizationId}/cours"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.label": {
     "description": "Label of the organization view.",
@@ -1045,7 +1321,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.path": {
     "description": "The path to display the organization view.",
-    "message": "/enseignant/organisations/{organizationId}"
+    "message": "/teacher/etablissements/{organizationId}"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.label": {
     "description": "Label of the teacher courses liste view.",
@@ -1053,7 +1329,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.path": {
     "description": "The path to display the teacher courses liste view.",
-    "message": "/enseignant/cours"
+    "message": "/teacher/cours"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.root.label": {
     "description": "Label of the teacher dashboard root view.",
@@ -1061,7 +1337,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.root.path": {
     "description": "The path to display the teacher dashboard root view.",
-    "message": "/enseignant"
+    "message": "/teacher"
   },
   "components.TeacherDashboardCourseList.emptyList": {
     "description": "Empty placeholder of the dashboard's list of trainings",
@@ -1075,43 +1351,87 @@
     "description": "Message displayed while loading trainings on the teacher's dashboard'",
     "message": "Chargement des cours..."
   },
-  "components.TeacherOrganizationCourseDashboardLoader.loading": {
-    "description": "Message displayed while loading an organization",
-    "message": "Chargement de l'organisation..."
+  "components.TeacherDashboardCourseLoader.errorNoCourse": {
+    "description": "Message displayed when requested course is not found",
+    "message": "Ce cours n'existe pas"
   },
-  "components.TeacherOrganizationCourseDashboardLoader.title": {
+  "components.TeacherDashboardCourseLoader.loading": {
+    "description": "Message displayed while loading a course",
+    "message": "Chargement du cours..."
+  },
+  "components.TeacherDashboardCourseLoader.pageTitle": {
+    "description": "Use for the page title of the course area",
+    "message": "Espace de cours"
+  },
+  "components.TeacherDashboardCourseSidebar.header": {
+    "description": "Title of the course dashboard sidebar",
+    "message": "{courseTitle}"
+  },
+  "components.TeacherDashboardCourseSidebar.loading": {
+    "description": "Message displayed while loading a course",
+    "message": "Chargement du cours..."
+  },
+  "components.TeacherDashboardCourseSidebar.subHeader": {
+    "description": "Sub title of the course dashboard sidebar",
+    "message": "Vous êtes sur le tableau de bord du cours"
+  },
+  "components.TeacherDashboardCourseSidebar.syllabusLinkLabel": {
+    "description": "Syllabus link label",
+    "message": "Accéder au syllabus"
+  },
+  "components.TeacherDashboardCoursesLoader.title.archived": {
+    "description": "Archived courses title",
+    "message": "Archivé"
+  },
+  "components.TeacherDashboardCoursesLoader.title.filteredCourses": {
+    "description": "Filtered courses title",
+    "message": "Vos cours"
+  },
+  "components.TeacherDashboardCoursesLoader.title.incoming": {
+    "description": "Incoming courses title",
+    "message": "À venir"
+  },
+  "components.TeacherDashboardCoursesLoader.title.ongoing": {
+    "description": "Ongoing courses title",
+    "message": "En cours"
+  },
+  "components.TeacherDashboardOrganizationCourseLoader.loading": {
+    "description": "Message displayed while loading an organization",
+    "message": "Chargement de l'établissement..."
+  },
+  "components.TeacherDashboardOrganizationCourseLoader.title": {
     "description": "Message displayed as title of organization courses page",
     "message": "Cours de {organizationTitle}"
   },
-  "components.TeacherOrganizationDashboardSidebar.loading": {
+  "components.TeacherDashboardOrganizationSidebar.loading": {
     "description": "Message displayed while loading an organization",
-    "message": "Chargement de l'organisation..."
+    "message": "Chargement de l'établissement..."
   },
-  "components.TeacherOrganizationDashboardSidebar.subHeader": {
+  "components.TeacherDashboardOrganizationSidebar.subHeader": {
     "description": "Sub title of the organization dashboard sidebar",
-    "message": "Vous êtes sur le tableau de bord de l'organisation"
+    "message": "Vous êtes sur le tableau de bord de l'établissement"
   },
-  "components.TeacherProfileDashboardSidebar.OrganizationLinks.organizationLinkTitle": {
+  "components.TeacherDashboardProfileSidebar.OrganizationLinks.organizationLinkTitle": {
     "description": "Organization link title",
-    "message": "Lien vers l'organisation \"{organizationTitle}\""
+    "message": "Lien vers l'établissement \"{organizationTitle}\""
   },
-  "components.TeacherProfileDashboardSidebar.OrganizationLinks.organizationsTitle": {
+  "components.TeacherDashboardProfileSidebar.OrganizationLinks.organizationsTitle": {
     "description": "Title of the organizations section",
-    "message": "Mes universités"
+    "message": "Mes établissements"
   },
-  "components.TeacherProfileDashboardSidebar.subHeader": {
+  "components.TeacherDashboardProfileSidebar.subHeader": {
     "description": "Sub title of the dashboard sidebar",
     "message": "Vous êtes sur votre tableau de bord enseignant"
   },
-  "components.TeacherTrainingDashboard.errorNoCourseProductRelation": {
+  "components.TeacherDashboardTraining.errorNoCourseProductRelation": {
     "description": "Message displayed when requested course product relation is not found",
     "message": "Ce produit n’existe pas"
   },
-  "components.TeacherTrainingDashboardLoader.loading": {
+  "components.TeacherDashboardTrainingLoader.loading": {
     "description": "Message displayed while loading a course",
     "message": "Chargement de la formation..."
   },
-  "components.TeacherTrainingDashboardLoader.pageTitle": {
+  "components.TeacherDashboardTrainingLoader.pageTitle": {
     "description": "Use for the page title of the training area",
     "message": "Espace de formation"
   },
@@ -1130,6 +1450,14 @@
   "components.UserLogin.spinnerText": {
     "description": "Accessibility text for the spinner in the login area.",
     "message": "Vérification de l'état de connexion..."
+  },
+  "components.form.messages.formOptionalFieldsText": {
+    "description": "Text at the top of forms indicating what are optional fields",
+    "message": "Tous les champs sont obligatoires sauf s'ils sont marqués comme optionnel"
+  },
+  "components.form.messages.optionalFieldText": {
+    "description": "text display under form elements that are optional",
+    "message": "(optionnel)"
   },
   "components.useStaticFilters.courses": {
     "description": "localized human_name label for coursesConfig filter name",
@@ -1179,6 +1507,14 @@
     "description": "Error message shown to the user when no certificate matches.",
     "message": "Certificat introuvable"
   },
+  "hooks.useContracts.errorNotFound": {
+    "description": "Error message shown to the user when no contract matches.",
+    "message": "Convention de formation introuvable"
+  },
+  "hooks.useContracts.errorSelect": {
+    "description": "Error message shown to the user when contracts fetch request fails.",
+    "message": "Une erreur s'est produite lors de la récupération des conventions de formation. Veuillez réessayer plus tard."
+  },
   "hooks.useCourseProductRelations.errorGet": {
     "description": "Error message shown to the user when course product relation fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération des formations. Veuillez réessayer plus tard."
@@ -1190,6 +1526,14 @@
   "hooks.useCourseProductUnion.errorGet": {
     "description": "Error message shown to the user when trainings fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération des formations. Veuillez réessayer plus tard."
+  },
+  "hooks.useCourseProducts.errorGet": {
+    "description": "Error message shown to the user when product fetch request fails.",
+    "message": "Une erreur s'est produite lors de la récupération du produit. Veuillez réessayer plus tard."
+  },
+  "hooks.useCourseProducts.errorNotFound": {
+    "description": "Error message shown to the user when no product matches.",
+    "message": "Produit introuvable."
   },
   "hooks.useCourseRuns.errorGet": {
     "description": "Error message shown to the user when course runs fetch request fails.",
@@ -1259,6 +1603,14 @@
     "description": "Error message shown to the user when enrollment update request fails.",
     "message": "Une erreur s'est produite lors de la modification de votre inscription. Veuillez réessayer plus tard."
   },
+  "hooks.useJoanieUserProfile.errorGet": {
+    "description": "Error message shown to the user when user fetch request fails.",
+    "message": "Une erreur s'est produite lors de la récupération des informations utilisateur. Veuillez réessayer plus tard."
+  },
+  "hooks.useJoanieUserProfile.errorNotFound": {
+    "description": "Error message shown to the user when it isn't logged.",
+    "message": "Vous n'êtes pas connecté."
+  },
   "hooks.useOrders.errorGet": {
     "description": "Error message shown to the user when orders fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération de vos commandes. Veuillez réessayer plus tard."
@@ -1273,19 +1625,11 @@
   },
   "hooks.useOrganizations.errorNotFound": {
     "description": "Error message shown to the user when no organizations matches.",
-    "message": "Impossible de trouver l'organisation"
+    "message": "Impossible de trouver l'établissement"
   },
   "hooks.useOrganizations.errorSelect": {
     "description": "Error message shown to the user when organizations fetch request fails.",
-    "message": "Une erreur s'est produite lors de la récupération des organisations. Veuillez réessayer plus tard."
-  },
-  "hooks.useProduct.errorGet": {
-    "description": "Error message shown to the user when product fetch request fails.",
-    "message": "Une erreur s'est produite lors de la récupération du produit. Veuillez réessayer plus tard."
-  },
-  "hooks.useProduct.errorNotFound": {
-    "description": "Error message shown to the user when no product matches.",
-    "message": "Produit introuvable."
+    "message": "Une erreur s'est produite lors de la récupération des établissements. Veuillez réessayer plus tard."
   },
   "hooks.useResources.errorCreate": {
     "description": "Error message shown to the user when resource creation request fails.",
@@ -1326,6 +1670,62 @@
   "hooks.useWishlist.errorNotFound": {
     "description": "Error message shown to the user when no wishlist matches.",
     "message": "Liste de souhaits introuvable."
+  },
+  "pages.TeacherDashboardContractsLayout.ContractFilters.contractSignatureStateFilterLabel": {
+    "description": "Contract signature state filter label",
+    "message": "État de la signature"
+  },
+  "pages.TeacherDashboardContractsLayout.ContractFilters.organizationFilterLabel": {
+    "description": "Use as organization filter label",
+    "message": "Établissement"
+  },
+  "pages.TeacherDashboardCourseContractsLayout.pageTitle": {
+    "description": "Use for the page title of the course's contracts page",
+    "message": "Conventions de formation"
+  },
+  "pages.TeacherDashboardOrganizationContractsLayout.columnLearnerName": {
+    "description": "Label for learnerName column",
+    "message": "Apprenant"
+  },
+  "pages.TeacherDashboardOrganizationContractsLayout.columnProductTitle": {
+    "description": "Label for productTitle column",
+    "message": "Formation"
+  },
+  "pages.TeacherDashboardOrganizationContractsLayout.columnState": {
+    "description": "Label for state column",
+    "message": "État"
+  },
+  "pages.TeacherDashboardOrganizationContractsLayout.pageTitle": {
+    "description": "Use for the page title of the organization contracts area",
+    "message": "Conventions de formation"
+  },
+  "pages.TeacherDashboardOrganizationContractsLayout.signAllPendingContracts": {
+    "description": "Button to sign all pending contracts",
+    "message": "Signer toutes les conventions en attente ({ count })"
+  },
+  "utils.ContractHelper.learnerHalfSigned": {
+    "description": "Label for unsigned contract status in learner point of view",
+    "message": "En attente de la signature de l'établissement"
+  },
+  "utils.ContractHelper.learnerSigned": {
+    "description": "Label for signed contract status in learner point of view",
+    "message": "Signée"
+  },
+  "utils.ContractHelper.learnerUnsigned": {
+    "description": "Label for unsigned contract status in learner point of view",
+    "message": "En attente de signature"
+  },
+  "utils.ContractHelper.organizationHalfSigned": {
+    "description": "Label for half signed contract status in organization point of view",
+    "message": "En attente de signature"
+  },
+  "utils.ContractHelper.organizationSigned": {
+    "description": "Label for signed contract status in organization point of view",
+    "message": "Signée"
+  },
+  "utils.ContractHelper.organizationUnsigned": {
+    "description": "Label for unsigned contract status in organization point of view",
+    "message": "En attente de la signature de l'apprenant"
   },
   "utils.joinAnd.and": {
     "description": "The and word",
