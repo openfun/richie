@@ -1,4 +1,4 @@
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CertificateProduct, Enrollment, ProductType } from 'types/Joanie';
@@ -8,7 +8,7 @@ import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
 import CertificateStatus from '../../CertificateStatus';
 import { getActiveEnrollmentOrder } from '../../utils/order';
 
-const messages = {
+const messages = defineMessages({
   buyProductCertificateLabel: {
     id: 'components.ProductCertificateFooter.buyProductCertificateLabel',
     description: 'Label on the enrollement row that propose to buy a product of type certificate',
@@ -24,7 +24,7 @@ const messages = {
     description: 'Label on the enrollement when a product of type certificate have been bought',
     defaultMessage: 'Finish this course to obtain your certificate.',
   },
-};
+});
 
 export interface ProductCertificateFooterProps {
   product: CertificateProduct;

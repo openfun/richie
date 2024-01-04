@@ -1,11 +1,11 @@
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { useEffect } from 'react';
 import { CertificateOrder, CredentialOrder, OrderState, Product } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { handle } from 'utils/errors/handle';
 import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 
-export const messages = {
+export const messages = defineMessages({
   statusDraft: {
     id: 'components.DashboardItem.Order.OrderStateMessage.statusDraft',
     description: 'Status shown on the dashboard order item when order is draft.',
@@ -49,7 +49,7 @@ export const messages = {
     description: 'Status shown on the dashboard order item when order status is unknown',
     defaultMessage: '{state}',
   },
-};
+});
 
 interface OrderStateMessageProps {
   order: CredentialOrder | CertificateOrder;

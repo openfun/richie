@@ -1,4 +1,4 @@
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useMemo } from 'react';
 import { Button } from '@openfun/cunningham-react';
 import { CoursesHelper } from 'utils/CoursesHelper';
@@ -19,7 +19,7 @@ import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/
 import { RouterButton } from '../RouterButton';
 import { useEnroll } from '../../hooks/useEnroll';
 
-const messages = {
+const messages = defineMessages({
   notEnrolled: {
     id: 'components.DashboardItemEnrollment.notEnrolled',
     description: 'Text shown on a read-only not-enrolled target course',
@@ -81,7 +81,7 @@ const messages = {
     description: 'Message displayed as disabled button title when a contract needs to be signed.',
     defaultMessage: 'You have to sign the training contract before enrolling to your course.',
   },
-};
+});
 
 interface DashboardItemCourseEnrollingProps {
   // how does it work ?!!
