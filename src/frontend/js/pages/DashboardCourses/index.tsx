@@ -8,10 +8,10 @@ import {
 } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { Spinner } from 'components/Spinner';
 import { DashboardItemEnrollment } from 'widgets/Dashboard/components/DashboardItem/Enrollment/DashboardItemEnrollment';
-import { DashboardItemOrder } from 'widgets/Dashboard/components/DashboardItem/Order/DashboardItemOrder';
 import Banner, { BannerType } from 'components/Banner';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
 import { OrderState, ProductType } from 'types/Joanie';
+import OrderListItem from './components/OrderListItem';
 
 const messages = defineMessages({
   loading: {
@@ -63,7 +63,7 @@ export const DashboardCourses = () => {
                 data-testid="order-enrollment-list-item"
               >
                 {isEnrollment(datum) && <DashboardItemEnrollment enrollment={datum} />}
-                {isCredentialOrder(datum) && <DashboardItemOrder order={datum} />}
+                {isCredentialOrder(datum) && <OrderListItem order={datum} />}
               </div>
             ))}
           </div>

@@ -8,7 +8,7 @@ import { useCourseProduct } from 'hooks/useCourseProducts';
 import { isCredentialOrder } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { handle } from 'utils/errors/handle';
 import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
-import { DashboardItemOrder } from '../DashboardItem/Order/DashboardItemOrder';
+import { OrderDetails } from 'pages/DashboardOrderLayout/components/OrderDetails';
 
 const messages = defineMessages({
   loading: {
@@ -68,7 +68,7 @@ export const DashboardOrderLoader = () => {
         )}
       </div>
       {credentialOrder && (
-        <DashboardItemOrder
+        <OrderDetails
           writable={true}
           order={credentialOrder}
           showDetailsButton={false}
