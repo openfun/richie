@@ -6,6 +6,8 @@
   box-shadow: r-theme-val(dashboard-sidebar, base-shadow);
   color: r-theme-val(dashboard-sidebar, base-color);
   padding-bottom: r-theme-val(dashboard-sidebar, menu-link-inline-padding);
+  position: relative;
+  z-index: 2;
 
   @include media-breakpoint-down(lg) {
     width: auto;
