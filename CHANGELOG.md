@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.25.0-beta.1]
+
 ### Fixed
 
 - Fix `getCourseGlimpseProps` method to handle localized course urls
@@ -1971,7 +1973,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.25.0-beta.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.25.0-beta.1...master
+[2.25.0-beta.1]: https://github.com/openfun/richie/compare/v2.25.0-beta.0...v2.25.0-beta.1
 [2.25.0-beta.0]: https://github.com/openfun/richie/compare/v2.24.1...v2.25.0-beta.0
 [2.24.1]: https://github.com/openfun/richie/compare/v2.24.0...v2.24.1
 [2.24.0]: https://github.com/openfun/richie/compare/v2.23.0...v2.24.0
