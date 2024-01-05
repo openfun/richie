@@ -1,4 +1,4 @@
-import { createIntl } from 'react-intl';
+import { IntlShape } from 'react-intl';
 import { Course as RichieCourse, isRichieCourse } from 'types/Course';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
@@ -11,10 +11,9 @@ import { CourseGlimpseCourse } from '.';
 
 const getCourseGlimpsePropsFromCourseProductRelation = (
   courseProductRelation: CourseProductRelation,
-  locale: string = 'en',
+  intl: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {
-  const intl = createIntl({ locale });
   const getRoutePath = getDashboardRoutePath(intl);
   const courseRouteParams = {
     courseId: courseProductRelation.course.id,
@@ -67,10 +66,9 @@ const getCourseGlimpsePropsFromRichieCourse = (course: RichieCourse): CourseGlim
 
 const getCourseGlimpsePropsFromJoanieCourse = (
   course: JoanieCourse,
-  locale: string = 'en',
+  intl: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {
-  const intl = createIntl({ locale });
   const getRoutePath = getDashboardRoutePath(intl);
   const courseRouteParams = {
     courseId: course.id,
@@ -103,16 +101,16 @@ const getCourseGlimpsePropsFromJoanieCourse = (
 
 export const getCourseGlimpseProps = (
   course: RichieCourse | (JoanieCourse | CourseProductRelation),
-  locale?: string,
+  intl?: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {
   if (isCourseProductRelation(course)) {
-    return getCourseGlimpsePropsFromCourseProductRelation(course, locale, organizationId);
+    return getCourseGlimpsePropsFromCourseProductRelation(course, intl!, organizationId);
   }
 
   if (isRichieCourse(course)) {
     return getCourseGlimpsePropsFromRichieCourse(course);
   }
 
-  return getCourseGlimpsePropsFromJoanieCourse(course, locale, organizationId);
+  return getCourseGlimpsePropsFromJoanieCourse(course, intl!, organizationId);
 };

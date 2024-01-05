@@ -36,7 +36,6 @@ const TeacherDashboardCourseList = ({
 }: TeacherDashboardCourseListProps) => {
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   const intl = useIntl();
-  const routerLocal = intl.locale.split('-')[0];
   const {
     data: courseAndProductList,
     isLoading,
@@ -65,7 +64,7 @@ const TeacherDashboardCourseList = ({
         (courseAndProductList.length > 0 ? (
           <>
             <CourseGlimpseList
-              courses={getCourseGlimpseListProps(courseAndProductList, routerLocal, organizationId)}
+              courses={getCourseGlimpseListProps(courseAndProductList, intl, organizationId)}
               context={context}
               className="dashboard__course-glimpse-list"
             />
