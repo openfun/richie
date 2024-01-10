@@ -167,7 +167,8 @@ class CourseSearchForm(SearchForm):
                     ...
                 ]
         """
-        queries = []
+        # Always filter out courses that are not flagged for listing
+        queries = [{"key": "is_listed", "fragment": [{"term": {"is_listed": True}}]}]
 
         # Add the query fragments of each filter definition to the list of queries
         for filter_definition in FILTERS.values():
@@ -258,8 +259,6 @@ class CourseSearchForm(SearchForm):
             "function_score": {
                 "query": {
                     "bool": {
-                        # Always filter out courses that are not flagged for listing
-                        "filter": {"term": {"is_listed": True}},
                         "must":
                         # queries => map(pluck("fragment")) => flatten()
                         [
