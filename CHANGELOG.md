@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix search facets count metadata issue (ignore not listed courses)
 - Fix `getCourseGlimpseProps` method to handle localized course urls
 
 ## [2.25.0-beta.0]

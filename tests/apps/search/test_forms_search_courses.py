@@ -249,18 +249,24 @@ class CourseSearchFormTestCase(TestCase):
 
     def test_forms_courses_build_es_query_search_by_match_text(self, *_):
         """
-        Happy path: build a query that filters courses by matching text
+        Happy path: build a query that filters courses by matching text. A filter to
+        include only listed courses should be added to both query and aggregations.
         """
         form = CourseSearchForm(
             data=QueryDict(query_string="limit=2&offset=20&query=some%20phrase%20terms")
         )
         self.assertTrue(form.is_valid())
+        es_query = form.build_es_query()
+        query = es_query[2]
+        aggs = es_query[3]
+
+        # Query should include only listed courses
         self.assertEqual(
-            form.build_es_query()[2]["function_score"]["query"],
+            query["function_score"]["query"],
             {
                 "bool": {
-                    "filter": {"term": {"is_listed": True}},
                     "must": [
+                        {"term": {"is_listed": True}},
                         {
                             "bool": {
                                 "should": [
@@ -299,8 +305,14 @@ class CourseSearchFormTestCase(TestCase):
                                     },
                                 ]
                             }
-                        }
+                        },
                     ],
                 }
             },
         )
+
+        # All aggregations should include only listed courses
+        for agg in list(aggs["all_courses"]["aggregations"].values()):
+            self.assertTrue(
+                {"term": {"is_listed": True}} in agg["filter"]["bool"]["must"]
+            )
