@@ -19,6 +19,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Change menu link order on the learner dashboard sidebar.
 - Organization bulk contract signature
 - Add a Badge React component
 - Add a footer on enrollment's item in the learner dashboard. It give the
