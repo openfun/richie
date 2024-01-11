@@ -36,9 +36,9 @@ export const LearnerDashboardSidebar = (props: Partial<DashboardSidebarProps>) =
     () =>
       [
         LearnerDashboardPaths.COURSES,
-        LearnerDashboardPaths.PREFERENCES,
         LearnerDashboardPaths.CERTIFICATES,
         LearnerDashboardPaths.CONTRACTS,
+        LearnerDashboardPaths.PREFERENCES,
       ].map((path) => ({
         to: getRoutePath(path),
         label: getRouteLabel(path),
