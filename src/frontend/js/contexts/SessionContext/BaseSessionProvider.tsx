@@ -60,8 +60,8 @@ const BaseSessionProvider = ({ children }: PropsWithChildren<any>) => {
   }, [queryClient]);
 
   const destroy = useCallback(async () => {
-    AuthenticationApi!.logout();
     invalidate();
+    await AuthenticationApi!.logout();
   }, [invalidate]);
 
   const context = useMemo(
