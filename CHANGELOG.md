@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Await logout authentication request logout trigger
 - Fix search facets count metadata issue (ignore not listed courses)
 - Fix `getCourseGlimpseProps` method to handle localized course urls
 
