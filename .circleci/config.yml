@@ -17,7 +17,6 @@ parameters:
   nightly-round:
     type: boolean
     default: false
-
 aliases:
   - &checkout_fun
     checkout:
@@ -36,6 +35,46 @@ aliases:
       command: |
         sudo apt-get update
         sudo apt-get install -y libcairo2-dev
+commands:
+  skip_unchanged:
+    parameters:
+      except_branches:
+        default: master
+        description: Comma-separated list of git branches where we should never skip tests.
+        type: string
+      git_base_branch:
+        default: origin/master
+        description: The branch to compare against when looking for changing.
+        type: string
+      paths:
+        description: The paths to look for changes in.
+        type: string
+    description: Skip if no changes to "<< parameters.paths >>"
+    steps:
+      - *checkout_fun
+      - run:
+          name: Check if job should be skipped
+          # Skip job when there is no diff in the paths
+          # except when the branch is the base one or the job is run on a tag
+          command: |
+            GIT_BASE_BRANCH=<<parameters.git_base_branch>>
+            PATHS=<<parameters.paths>>
+            EXCEPT_BRANCHES=<<parameters.except_branches>>
+            echo "GIT_BASE_BRANCH=$GIT_BASE_BRANCH"
+            echo "PATHS=$PATHS"
+            echo "EXCEPT_BRANCHES=$EXCEPT_BRANCHES"
+
+            IFS=' ' read -ra paths_arr \<<< "$PATHS"
+            echo "paths_arr=" "${paths_arr[@]}"
+
+            CHANGED_FILES="$(git diff "$GIT_BASE_BRANCH"..."$CIRCLE_BRANCH" --name-only --diff-filter=ACMRT "${paths_arr[@]}")";
+            echo "CHANGED_FILES=$CHANGED_FILES"
+
+            if [[ -n "${CIRCLE_TAG}" ]] || [[ "$EXCEPT_BRANCHES" == *"${CIRCLE_BRANCH}"* ]] || [ -n "${CHANGED_FILES}" ];
+            then
+                exit 0;
+            fi
+            circleci step halt;
 jobs:
   # Git jobs
   # Check that the git history is clean and complies with our expectations
@@ -188,7 +227,6 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
-      - checkout
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -210,7 +248,6 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun/src/richie
     steps:
-      - *checkout_fun
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -236,7 +273,6 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
-      - checkout
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -328,7 +364,6 @@ jobs:
           REDIS_MASTER_HOST: redis-primary
     working_directory: ~/fun
     steps:
-      - checkout
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -421,7 +456,6 @@ jobs:
           REDIS_MASTER_HOST: redis-primary
     working_directory: ~/fun
     steps:
-      - checkout
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -508,7 +542,6 @@ jobs:
           REDIS_MASTER_HOST: redis-primary
     working_directory: ~/fun
     steps:
-      - checkout
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -589,7 +622,6 @@ jobs:
           REDIS_MASTER_HOST: redis-primary
     working_directory: ~/fun
     steps:
-      - checkout
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -682,7 +714,6 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
-      - *checkout_fun
       - *restore_node_modules
       # If the yarn.lock file is not up-to-date with the package.json file,
       # using the --frozen-lockfile should fail.
@@ -715,7 +746,6 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
-      - *checkout_fun
       - *restore_node_modules
       - run:
           name: Build front-end application in production mode
@@ -742,9 +772,8 @@ jobs:
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
-    working_directory: ~/fun-site-factory/frontend
+    working_directory: ~/fun/frontend
     steps:
-      - *checkout_fun
       - *restore_node_modules
       - run:
           name: Initialize a frontend project that uses richie-education module
@@ -854,7 +883,6 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
-      - *checkout_fun
       - *restore_node_modules
       - run:
           name: Lint code with eslint
@@ -873,7 +901,6 @@ jobs:
     resource_class: large
     working_directory: ~/fun/src/frontend
     steps:
-      - *checkout_fun
       - *restore_node_modules
       - run:
           name: Run tests
@@ -885,9 +912,8 @@ jobs:
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
-    working_directory: ~/wrk
+    working_directory: ~/fun
     steps:
-      - *checkout_fun
       - run:
           name: Check SCSS library
           command: |
@@ -910,7 +936,6 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
-      - *checkout_fun
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
@@ -968,34 +993,52 @@ workflows:
       #
       # Build, lint and test the front-end apps
       - build-front:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/frontend
           filters:
             tags:
               only: /.*/
       - build-front-production:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/frontend
           requires:
             - build-front
           filters:
             tags:
               only: /.*/
       - build-dependent-front:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/frontend
           requires:
             - build-front
           filters:
             tags:
               only: /.*/
       - lint-front:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/frontend
           requires:
             - build-front
           filters:
             tags:
               only: /.*/
       - test-front:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/frontend
           requires:
             - lint-front
           filters:
             tags:
               only: /.*/
       - test-front-package:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/frontend
           requires:
             - lint-front
           filters:
@@ -1047,16 +1090,25 @@ workflows:
       # Build, lint and test production and development Docker images
       # (debian-based)
       - build-back:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/richie
           filters:
             tags:
               only: /.*/
       - lint-back:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/richie
           requires:
             - build-back
           filters:
             tags:
               only: /.*/
       - test-back-mysql-5:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/richie
           requires:
             - build-back
             - build-front-production
@@ -1064,6 +1116,9 @@ workflows:
             tags:
               only: /.*/
       - test-back-mysql-8:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/richie
           requires:
             - build-back
             - build-front-production
@@ -1071,6 +1126,9 @@ workflows:
             tags:
               only: /.*/
       - test-back-postgresql:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/richie
           requires:
             - build-back
             - build-front-production
@@ -1078,6 +1136,9 @@ workflows:
             tags:
               only: /.*/
       - test-back-postgresql-es6:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/richie
           requires:
             - build-back
             - build-front-production
@@ -1089,6 +1150,9 @@ workflows:
       #
       # Extract strings and upload them to our translation management SaaS
       - build-back-i18n:
+          pre-steps:
+            - skip_unchanged:
+                paths: ~/fun/src/richie
           requires:
             - build-back
           filters:
