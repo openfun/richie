@@ -13,6 +13,19 @@ const messages = defineMessages({
 });
 
 export const TeacherDashboardCourseContractsLayout = () => {
+  const {
+    items: contracts,
+    meta,
+    states: { fetching, isFetched, error },
+  } = useContracts(
+    {
+      ...filters,
+      page: pagination.page,
+      page_size: PER_PAGE.teacherContractList,
+    },
+    { enabled: !!filters.organization_id },
+  );
+
   return (
     <DashboardLayout sidebar={<TeacherDashboardCourseSidebar />}>
       <div className="dashboard__page_title_container">

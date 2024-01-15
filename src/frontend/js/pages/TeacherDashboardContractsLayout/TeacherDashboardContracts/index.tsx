@@ -1,19 +1,23 @@
 import { defineMessages, useIntl } from 'react-intl';
 
 import { DataGrid, usePagination } from '@openfun/cunningham-react';
-import { useEffect, useMemo } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { ContractHelper, ContractStatePoV } from 'utils/ContractHelper';
-import { useContracts } from 'hooks/useContracts';
-import Banner, { BannerType } from 'components/Banner';
-import { PER_PAGE } from 'settings';
-import { ContractFilters } from 'types/Joanie';
+import { Contract, ContractFilters } from 'types/Joanie';
 
 import ContractFiltersBar from '../components/ContractFilters';
-import useTeacherContractFilters, {
-  TeacherDashboardContractsParams,
-} from '../hooks/useTeacherContractFilters';
+import { TeacherDashboardContractsParams } from '../hooks/useTeacherContractFilters';
 import ContractActionsBar from '../components/ContractActionsBar';
+
+interface TeacherDashboardContractsProps {
+  contracts: Contract[];
+  pagination: ReturnType<typeof usePagination>;
+  isLoading: boolean;
+  initialFilters: ContractFilters;
+  filters: ContractFilters;
+  handleFiltersChange: (filters: ContractFilters) => void;
+}
 
 const messages = defineMessages({
   columnProductTitle: {
@@ -33,29 +37,16 @@ const messages = defineMessages({
   },
 });
 
-const TeacherDashboardContracts = () => {
+const TeacherDashboardContracts = ({
+  contracts,
+  pagination,
+  isLoading,
+  initialFilters,
+  filters,
+  handleFiltersChange,
+}: TeacherDashboardContractsProps) => {
   const intl = useIntl();
-  const [searchParams] = useSearchParams();
-  const page = searchParams.get('page') ?? '1';
-  const pagination = usePagination({
-    defaultPage: page ? parseInt(page, 10) : 1,
-    pageSize: PER_PAGE.teacherContractList,
-  });
   const { organizationId } = useParams<TeacherDashboardContractsParams>();
-  const { initialFilters, filters, setFilters } = useTeacherContractFilters();
-  const {
-    items: contracts,
-    meta,
-    states: { fetching, isFetched, error },
-  } = useContracts(
-    {
-      ...filters,
-      page: pagination.page,
-      page_size: PER_PAGE.teacherContractList,
-    },
-    { enabled: !!filters.organization_id },
-  );
-
   const rows = useMemo(() => {
     return contracts.map((contract) => ({
       id: contract.id,
@@ -64,22 +55,6 @@ const TeacherDashboardContracts = () => {
       state: ContractHelper.getHumanReadableState(contract, ContractStatePoV.ORGANIZATION, intl),
     }));
   }, [contracts]);
-
-  const handleFiltersChange = (newFilters: Partial<ContractFilters>) => {
-    // Reset pagination
-    pagination.setPage(1);
-    setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
-  };
-
-  useEffect(() => {
-    if (isFetched && meta?.pagination?.count) {
-      pagination.setPagesCount(Math.ceil(meta!.pagination!.count / PER_PAGE.teacherContractList));
-    }
-  }, [meta, isFetched]);
-
-  if (error) {
-    return <Banner message={error} type={BannerType.ERROR} rounded />;
-  }
 
   return (
     <div className="teacher-contract-page">
@@ -115,7 +90,7 @@ const TeacherDashboardContracts = () => {
         ]}
         rows={rows}
         pagination={pagination}
-        isLoading={fetching}
+        isLoading={isLoading}
       />
     </div>
   );
