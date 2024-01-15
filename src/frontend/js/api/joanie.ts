@@ -370,12 +370,9 @@ const API = (): Joanie.API => {
       contracts: {
         get: async ({ contract_ids, ...filters } = {}) => {
           const endpointFilters = { ...filters, queryParameters: { id: contract_ids } };
-          return fetchWithJWT(
-            filters?.organization_id
-              ? buildApiUrl(ROUTES.organizations.contracts.get, endpointFilters)
-              : buildApiUrl(ROUTES.user.contracts.get, filters),
-            { method: 'GET' },
-          ).then(checkStatus);
+          return fetchWithJWT(buildApiUrl(ROUTES.user.contracts.get, endpointFilters), {
+            method: 'GET',
+          }).then(checkStatus);
         },
         download(id: string): Promise<any> {
           return fetchWithJWT(ROUTES.user.contracts.download.replace(':id', id), {
@@ -391,6 +388,12 @@ const API = (): Joanie.API => {
         }).then(checkStatus);
       },
       contracts: {
+        get: async ({ contract_ids, ...filters } = {}) => {
+          const endpointFilters = { ...filters, queryParameters: { id: contract_ids } };
+          return fetchWithJWT(buildApiUrl(ROUTES.organizations.contracts.get, endpointFilters), {
+            method: 'GET',
+          }).then(checkStatus);
+        },
         getSignatureLinks: async (filters) => {
           return fetchWithJWT(
             buildApiUrl(ROUTES.organizations.contracts.getSignatureLinks, filters),

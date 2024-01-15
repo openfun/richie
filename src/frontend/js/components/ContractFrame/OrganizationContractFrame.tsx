@@ -33,7 +33,7 @@ const OrganizationContractFrame = ({ organizationId, contractIds, onDone, ...pro
    * Check if all contracts to signed has been signed.
    */
   const checkContractsSignature = async () => {
-    const { results: contractsToCheck } = await api.user.contracts.get({
+    const { results: contractsToCheck } = await api.organizations.contracts.get({
       organization_id: organizationId,
       contract_ids: contractIdsToCheck,
     });

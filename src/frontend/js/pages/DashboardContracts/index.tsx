@@ -4,7 +4,7 @@ import { Pagination, usePagination } from 'components/Pagination';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { DashboardItemContract } from 'widgets/Dashboard/components/DashboardItem/Contract';
-import { useContracts } from 'hooks/useContracts';
+import { useUserContracts } from 'hooks/useContracts';
 import { NestedCredentialOrder } from 'types/Joanie';
 
 const messages = defineMessages({
@@ -27,7 +27,7 @@ export const DashboardContracts = () => {
     items: contracts,
     meta,
     states: { error, fetching },
-  } = useContracts({
+  } = useUserContracts({
     page: pagination.currentPage,
     page_size: pagination.itemsPerPage,
   });

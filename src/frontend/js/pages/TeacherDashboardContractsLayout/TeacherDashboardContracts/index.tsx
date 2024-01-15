@@ -4,7 +4,7 @@ import { DataGrid, usePagination } from '@openfun/cunningham-react';
 import { useEffect, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { ContractHelper, ContractStatePoV } from 'utils/ContractHelper';
-import { useContracts } from 'hooks/useContracts';
+import { useOrganizationContracts } from 'hooks/useContracts';
 import Banner, { BannerType } from 'components/Banner';
 import { PER_PAGE } from 'settings';
 import { ContractFilters } from 'types/Joanie';
@@ -47,14 +47,11 @@ const TeacherDashboardContracts = () => {
     items: contracts,
     meta,
     states: { fetching, isFetched, error },
-  } = useContracts(
-    {
-      ...filters,
-      page: pagination.page,
-      page_size: PER_PAGE.teacherContractList,
-    },
-    { enabled: !!filters.organization_id },
-  );
+  } = useOrganizationContracts({
+    ...filters,
+    page: pagination.page,
+    page_size: PER_PAGE.teacherContractList,
+  });
 
   const rows = useMemo(() => {
     return contracts.map((contract) => ({

@@ -1,5 +1,5 @@
 import useContractAbilities from 'hooks/useContractAbilities';
-import { useContracts } from 'hooks/useContracts';
+import { useOrganizationContracts } from 'hooks/useContracts';
 import { ContractState, CourseListItem, Organization, Product } from 'types/Joanie';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
 
@@ -14,15 +14,12 @@ const useTeacherContractsToSign = ({
   productId,
   organizationId,
 }: UseTeacherContractsToSignProps) => {
-  const { items: contractsToSign, meta: contractsToSignMeta } = useContracts(
-    {
-      signature_state: ContractState.LEARNER_SIGNED,
-      organization_id: organizationId,
-      course_id: courseId,
-      product_id: productId,
-    },
-    { enabled: !!organizationId },
-  );
+  const { items: contractsToSign, meta: contractsToSignMeta } = useOrganizationContracts({
+    signature_state: ContractState.LEARNER_SIGNED,
+    organization_id: organizationId,
+    course_id: courseId,
+    product_id: productId,
+  });
   const contractAbilities = useContractAbilities(contractsToSign);
   const contractsToSignCount = contractsToSignMeta?.pagination?.count ?? 0;
 

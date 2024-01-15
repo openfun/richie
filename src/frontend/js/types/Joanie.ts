@@ -541,6 +541,11 @@ export interface API {
       filters?: Filters,
     ): Filters extends { id: string } ? Promise<Nullable<Organization>> : Promise<Organization[]>;
     contracts: {
+      get(
+        filters?: ContractFilters,
+      ): ContractFilters extends { id: string }
+        ? Promise<Nullable<Contract>>
+        : Promise<PaginatedResponse<Contract>>;
       getSignatureLinks(
         filters?: OrganizationContractSignatureLinksFilters,
       ): Promise<OrganizationContractInvitationLinkResponse>;
