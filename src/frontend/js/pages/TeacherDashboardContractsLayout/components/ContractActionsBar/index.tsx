@@ -1,5 +1,5 @@
 import { CourseListItem, Organization, Product } from 'types/Joanie';
-import useTeacherContractsToSign from 'pages/TeacherDashboardContractsLayout/hooks/useTeacherContractsToSign';
+import useOrganizationContractsToSign from 'pages/TeacherDashboardContractsLayout/hooks/useTeacherContractsToSign';
 import SignOrganizationContractButton from '../SignOrganizationContractButton';
 
 interface ContractActionsProps {
@@ -9,7 +9,7 @@ interface ContractActionsProps {
 }
 
 const ContractActionsBar = ({ courseId, productId, organizationId }: ContractActionsProps) => {
-  const { canSignContracts, contractsToSignCount } = useTeacherContractsToSign({
+  const { canSignContracts, contractsToSignCount } = useOrganizationContractsToSign({
     organizationId,
     courseId,
     productId,

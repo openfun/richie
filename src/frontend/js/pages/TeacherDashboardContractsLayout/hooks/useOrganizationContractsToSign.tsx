@@ -1,20 +1,20 @@
 import useContractAbilities from 'hooks/useContractAbilities';
-import { useContracts } from 'hooks/useContracts';
+import { useOrganizationContracts } from 'hooks/useContracts';
 import { ContractState, CourseListItem, Organization, Product } from 'types/Joanie';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
 
-interface UseTeacherContractsToSignProps {
+interface UseOrganizationContractsToSignProps {
   courseId?: CourseListItem['id'];
   productId?: Product['id'];
   organizationId?: Organization['id'];
 }
 
-const useTeacherContractsToSign = ({
+const useOrganizationContractsToSign = ({
   courseId,
   productId,
   organizationId,
-}: UseTeacherContractsToSignProps) => {
-  const { items: contractsToSign, meta: contractsToSignMeta } = useContracts(
+}: UseOrganizationContractsToSignProps) => {
+  const { items: contractsToSign, meta: contractsToSignMeta } = useOrganizationContracts(
     {
       signature_state: ContractState.LEARNER_SIGNED,
       organization_id: organizationId,
@@ -32,4 +32,4 @@ const useTeacherContractsToSign = ({
   };
 };
 
-export default useTeacherContractsToSign;
+export default useOrganizationContractsToSign;

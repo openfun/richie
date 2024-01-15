@@ -4,7 +4,7 @@ import { createSearchParams, generatePath, useParams } from 'react-router-dom';
 import Badge from 'components/Badge';
 import { Spinner } from 'components/Spinner';
 import useContractAbilities from 'hooks/useContractAbilities';
-import { useContracts } from 'hooks/useContracts';
+import { useOrganizationContracts } from 'hooks/useContracts';
 import { useOrganization } from 'hooks/useOrganizations';
 import { ContractState } from 'types/Joanie';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
@@ -39,7 +39,7 @@ export const TeacherDashboardOrganizationSidebar = () => {
     states: { fetching },
   } = useOrganization(organizationId);
 
-  const { items: contracts, meta } = useContracts({
+  const { items: contracts, meta } = useOrganizationContracts({
     organization_id: organizationId,
     signature_state: ContractState.LEARNER_SIGNED,
   });
