@@ -14,6 +14,7 @@ import {
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ContractFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { PER_PAGE } from 'settings';
 import { TeacherDashboardOrganizationSidebar } from '.';
 
 jest.mock('utils/context', () => ({
@@ -61,7 +62,7 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/organizations/' +
         organization.id +
-        '/contracts/?signature_state=half_signed',
+        `/contracts/?signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
       { results: [], count: 0, previous: null, next: null },
     );
 
@@ -96,7 +97,7 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/organizations/' +
         organization.id +
-        '/contracts/?signature_state=half_signed',
+        `/contracts/?signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
       {
         results: ContractFactory({ abilities: { sign: true } }).many(contractToSignCount),
         count: contractToSignCount,
@@ -128,7 +129,7 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/organizations/' +
         organization.id +
-        '/contracts/?signature_state=half_signed',
+        `/contracts/?signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
       {
         results: ContractFactory({ abilities: { sign: false } }).many(contractToSignCount),
         count: contractToSignCount,

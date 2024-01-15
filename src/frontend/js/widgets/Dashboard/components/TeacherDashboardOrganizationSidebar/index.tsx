@@ -1,19 +1,19 @@
 import { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { createSearchParams, generatePath, useParams } from 'react-router-dom';
+import { createSearchParams, useParams } from 'react-router-dom';
 import Badge from 'components/Badge';
 import { Spinner } from 'components/Spinner';
-import useContractAbilities from 'hooks/useContractAbilities';
-import { useContracts } from 'hooks/useContracts';
 import { useOrganization } from 'hooks/useOrganizations';
 import { ContractState } from 'types/Joanie';
-import { ContractActions } from 'utils/AbilitiesHelper/types';
 import { DashboardSidebar, MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';
 import {
   getDashboardRouteLabel,
   getDashboardRoutePath,
 } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
+import useTeacherPendingContractsCount from 'hooks/useTeacherPendingContractsCount';
+import useContractAbilities from 'hooks/useContractAbilities';
+import { ContractActions } from 'utils/AbilitiesHelper/types';
 import { DashboardAvatar, DashboardAvatarVariantEnum } from '../DashboardAvatar';
 
 const messages = defineMessages({
@@ -33,25 +33,24 @@ export const TeacherDashboardOrganizationSidebar = () => {
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
-  const { organizationId } = useParams<{ organizationId: string }>();
+  const { organizationId, productId: courseProductRelationId } = useParams<{
+    organizationId: string;
+    productId?: string;
+  }>();
   const {
     item: organization,
     states: { fetching },
   } = useOrganization(organizationId);
 
-  const { items: contracts, meta } = useContracts({
-    organization_id: organizationId,
-    signature_state: ContractState.LEARNER_SIGNED,
+  const { contracts: pendingContracts, pendingContractCount } = useTeacherPendingContractsCount({
+    organizationId,
+    courseProductRelationId,
   });
-  const contractAbilities = useContractAbilities(contracts);
-
-  const pendingContractCount = meta?.pagination?.count ?? 0;
+  const contractAbilities = useContractAbilities(pendingContracts);
   const canSignContracts = contractAbilities.can(ContractActions.SIGN);
 
   const getMenuLinkFromPath = (basePath: TeacherDashboardPaths) => {
-    const path = generatePath(getRoutePath(basePath, { organizationId: ':organizationId' }), {
-      organizationId,
-    });
+    const path = getRoutePath(basePath, { organizationId });
 
     const menuLink: MenuLink = {
       to: path,
