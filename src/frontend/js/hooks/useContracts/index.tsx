@@ -22,8 +22,35 @@ const props: UseResourcesProps<Contract, ContractFilters, API['user']['contracts
   session: true,
   messages,
 };
+
 /**
  * Joanie Api hook to retrieve/update a contract owned by the authenticated user.
  */
 export const useContract = useResource(props);
 export const useContracts = useResources(props);
+
+/**
+ * Joanie Api hook to retrieve/update a contracts related to a course.
+ */
+const courseProps: UseResourcesProps<Contract, ContractFilters, API['courses']['contracts']> = {
+  ...props,
+  queryKey: ['course_contracts'],
+  apiInterface: () => useJoanieApi().courses.contracts,
+};
+export const useCourseContract = useResource(courseProps);
+export const useCourseContracts = useResources(courseProps);
+
+/**
+ * Joanie Api hook to retrieve/update a contracts related to a course.
+ */
+const organizationProps: UseResourcesProps<
+  Contract,
+  ContractFilters,
+  API['organizations']['contracts']
+> = {
+  ...props,
+  queryKey: ['organization_contracts'],
+  apiInterface: () => useJoanieApi().organizations.contracts,
+};
+export const useOrganizationContract = useResource(organizationProps);
+export const useOrganizationContracts = useResources(organizationProps);
