@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { useResource, useResources, UseResourcesProps } from 'hooks/useResources';
+import { QueryOptions, useResource, useResources, UseResourcesProps } from 'hooks/useResources';
 import { API, Contract, ContractFilters } from 'types/Joanie';
 
 const messages = defineMessages({
@@ -22,8 +22,47 @@ const props: UseResourcesProps<Contract, ContractFilters, API['user']['contracts
   session: true,
   messages,
 };
+
 /**
  * Joanie Api hook to retrieve/update a contract owned by the authenticated user.
  */
-export const useContract = useResource(props);
-export const useContracts = useResources(props);
+export const useUserContract = useResource(props);
+export const useUserContracts = useResources(props);
+
+/**
+ * Joanie Api hook to retrieve/update a contracts related to a course.
+ */
+const organizationProps: UseResourcesProps<
+  Contract,
+  ContractFilters,
+  API['organizations']['contracts']
+> = {
+  ...props,
+  queryKey: ['organization_contracts'],
+  apiInterface: () => useJoanieApi().organizations.contracts,
+};
+
+export const useOrganizationContract = (
+  id: string,
+  filters: ContractFilters,
+  queryOptions?: QueryOptions<Contract>,
+) => {
+  return useResource(organizationProps)(id, filters, {
+    ...queryOptions,
+    enabled:
+      !!id &&
+      !!filters?.organization_id &&
+      (queryOptions?.enabled === undefined || queryOptions.enabled),
+  });
+};
+
+export const useOrganizationContracts = (
+  filters: ContractFilters,
+  queryOptions?: QueryOptions<Contract>,
+) => {
+  return useResources(organizationProps)(filters, {
+    ...queryOptions,
+    enabled:
+      !!filters?.organization_id && (queryOptions?.enabled === undefined || queryOptions.enabled),
+  });
+};
