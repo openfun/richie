@@ -23,8 +23,8 @@ export const REACT_QUERY_SETTINGS = {
     // session lifetime should be synchronized with the access token lifetime of your authentication
     // service. For example if you are using djangorestframework-simplejwt default value
     // is 5 minutes.
-    session: 5 * 60 * 1000, // 5 minutes in ms
-    sessionItems: 20 * 60 * 1000, // 20 minutes, items related to the session should not be refreshed as the frequency than session information.
+    session: 0, // 5 minutes in ms
+    sessionItems: 0, // 20 minutes, items related to the session should not be refreshed as the frequency than session information.
   },
 };
 

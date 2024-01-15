@@ -71,7 +71,7 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
               "username": "admin",
             }
         */
-        return getUserInfo('admin') || null;
+        return getUserInfo('organization_owner') || null;
       },
       login: () => location.reload(),
       register: () => location.reload(),
