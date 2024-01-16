@@ -608,7 +608,7 @@ jobs:
           name: check configured version
           command: |
             regex="release/v(.*)"
-            if [[ $CIRCLE_BRANCH =~ $regex]]
+            if [[ $CIRCLE_BRANCH =~ $regex ]]
             then
               VERSION="${BASH_REMATCH[1]}"
               python -m pip install --upgrade setuptools_scm
