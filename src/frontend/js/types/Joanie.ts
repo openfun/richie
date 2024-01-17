@@ -429,8 +429,7 @@ export enum ContractState {
 }
 export interface ContractResourceQuery extends PaginatedResourceQuery {
   organization_id?: Organization['id'];
-  course_id?: CourseListItem['id'];
-  product_id?: Product['id'];
+  course_product_relation_id?: CourseProductRelation['id'];
   contract_ids?: Contract['id'][];
   signature_state?: ContractState;
 }

@@ -83,8 +83,7 @@ const TeacherDashboardContracts = () => {
       <div className="dashboard__page__actions">
         <ContractActionsBar
           organizationId={filters.organization_id!}
-          courseId={filters.course_id}
-          productId={filters.product_id}
+          courseProductRelationId={filters.course_product_relation_id}
         />
         <ContractFiltersBar
           defaultValues={initialFilters}

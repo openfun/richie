@@ -4,12 +4,11 @@ import { ContractResourceQuery, ContractState } from 'types/Joanie';
 
 export type TeacherDashboardContractsParams = {
   organizationId?: string;
-  courseId?: string;
-  productId?: string;
+  courseProductRelationId?: string;
 };
 
 const useTeacherContractFilters = () => {
-  const { courseId, organizationId, productId } = useParams<TeacherDashboardContractsParams>();
+  const { organizationId, courseProductRelationId } = useParams<TeacherDashboardContractsParams>();
   const [searchParams] = useSearchParams();
 
   const initialFilters = useMemo(
@@ -17,8 +16,7 @@ const useTeacherContractFilters = () => {
       signature_state:
         (searchParams.get('signature_state') as ContractState) || ContractState.SIGNED,
       organization_id: organizationId,
-      course_id: courseId,
-      product_id: productId,
+      course_product_relation_id: courseProductRelationId,
     }),
     [],
   );

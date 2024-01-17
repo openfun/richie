@@ -33,9 +33,9 @@ export const TeacherDashboardOrganizationSidebar = () => {
   const intl = useIntl();
   const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
-  const { organizationId, productId: courseProductRelationId } = useParams<{
+  const { organizationId, courseProductRelationId } = useParams<{
     organizationId: string;
-    productId?: string;
+    courseProductRelationId?: string;
   }>();
   const {
     item: organization,

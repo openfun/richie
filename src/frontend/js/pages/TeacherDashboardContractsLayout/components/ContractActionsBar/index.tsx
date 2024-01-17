@@ -1,18 +1,16 @@
-import { CourseListItem, Organization, Product } from 'types/Joanie';
+import { Organization, CourseProductRelation } from 'types/Joanie';
 import useTeacherContractsToSign from 'pages/TeacherDashboardContractsLayout/hooks/useTeacherContractsToSign';
 import SignOrganizationContractButton from '../SignOrganizationContractButton';
 
 interface ContractActionsProps {
-  courseId?: CourseListItem['id'];
-  productId?: Product['id'];
   organizationId: Organization['id'];
+  courseProductRelationId?: CourseProductRelation['id'];
 }
 
-const ContractActionsBar = ({ courseId, productId, organizationId }: ContractActionsProps) => {
+const ContractActionsBar = ({ organizationId, courseProductRelationId }: ContractActionsProps) => {
   const { canSignContracts, contractsToSignCount } = useTeacherContractsToSign({
     organizationId,
-    courseId,
-    productId,
+    courseProductRelationId,
   });
   return (
     canSignContracts && (
