@@ -427,7 +427,7 @@ export enum ContractState {
   LEARNER_SIGNED = 'half_signed',
   SIGNED = 'signed',
 }
-export interface ContractFilters extends PaginatedResourceQuery {
+export interface ContractResourceQuery extends PaginatedResourceQuery {
   organization_id?: Organization['id'];
   course_id?: CourseListItem['id'];
   product_id?: Product['id'];
@@ -516,8 +516,8 @@ interface APIUser {
   };
   contracts: {
     get(
-      filters?: ContractFilters,
-    ): ContractFilters extends { id: string }
+      filters?: ContractResourceQuery,
+    ): ContractResourceQuery extends { id: string }
       ? Promise<Nullable<Contract>>
       : Promise<PaginatedResponse<Contract>>;
     download(id: string): Promise<File>;
@@ -542,8 +542,8 @@ export interface API {
     ): Filters extends { id: string } ? Promise<Nullable<Organization>> : Promise<Organization[]>;
     contracts: {
       get(
-        filters?: ContractFilters,
-      ): ContractFilters extends { id: string }
+        filters?: ContractResourceQuery,
+      ): ContractResourceQuery extends { id: string }
         ? Promise<Nullable<Contract>>
         : Promise<PaginatedResponse<Contract>>;
       getSignatureLinks(
