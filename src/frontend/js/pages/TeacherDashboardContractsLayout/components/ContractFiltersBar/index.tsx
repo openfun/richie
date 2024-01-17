@@ -24,7 +24,7 @@ export interface ContractListFilters {
   signature_state?: ContractState;
 }
 
-interface ContractFiltersProps {
+interface ContractFiltersBarProps {
   onFiltersChange: (filters: Partial<ContractListFilters>) => void;
   defaultValues?: ContractListFilters;
   hideFilterOrganization?: boolean;
@@ -36,12 +36,12 @@ interface FilterProps {
   onChange: (value: Partial<ContractListFilters>) => void;
 }
 
-const ContractFilters = ({
+const ContractFiltersBar = ({
   defaultValues,
   onFiltersChange,
   hideFilterOrganization = false,
   hideFilterSignatureState = false,
-}: ContractFiltersProps) => {
+}: ContractFiltersBarProps) => {
   return (
     <div className="dashboard__page__actions-row dashboard__page__actions-row--end">
       {!hideFilterOrganization && (
@@ -122,4 +122,4 @@ const SignatureStateFilter = ({ defaultValue, onChange }: FilterProps) => {
   );
 };
 
-export default ContractFilters;
+export default ContractFiltersBar;

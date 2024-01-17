@@ -12,7 +12,7 @@ import { ContractState } from 'types/Joanie';
 import { OrganizationFactory } from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { noop } from 'utils';
-import ContractFilters from '.';
+import ContractFiltersBar from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -22,7 +22,7 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
-describe('ContractFilters', () => {
+describe('<ContractFiltersBar/>', () => {
   const Wrapper = ({ children }: PropsWithChildren) => {
     return (
       <IntlProvider locale="en">
@@ -58,7 +58,7 @@ describe('ContractFilters', () => {
 
     render(
       <Wrapper>
-        <ContractFilters onFiltersChange={filterChange} defaultValues={defaultValues} />
+        <ContractFiltersBar onFiltersChange={filterChange} defaultValues={defaultValues} />
       </Wrapper>,
     );
 
@@ -105,7 +105,7 @@ describe('ContractFilters', () => {
 
     render(
       <Wrapper>
-        <ContractFilters
+        <ContractFiltersBar
           onFiltersChange={noop}
           defaultValues={defaultValues}
           hideFilterSignatureState={true}
@@ -136,7 +136,7 @@ describe('ContractFilters', () => {
 
     render(
       <Wrapper>
-        <ContractFilters
+        <ContractFiltersBar
           onFiltersChange={noop}
           defaultValues={defaultValues}
           hideFilterOrganization={true}
@@ -165,7 +165,7 @@ describe('ContractFilters', () => {
 
     render(
       <Wrapper>
-        <ContractFilters onFiltersChange={handleChange} />
+        <ContractFiltersBar onFiltersChange={handleChange} />
       </Wrapper>,
     );
 
