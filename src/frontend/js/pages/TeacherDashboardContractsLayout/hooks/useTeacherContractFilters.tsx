@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { ContractFilters, ContractState } from 'types/Joanie';
+import { ContractResourceQuery, ContractState } from 'types/Joanie';
 
 export type TeacherDashboardContractsParams = {
   organizationId?: string;
@@ -22,7 +22,7 @@ const useTeacherContractFilters = () => {
     }),
     [],
   );
-  const [filters, setFilters] = useState<ContractFilters>(initialFilters);
+  const [filters, setFilters] = useState<ContractResourceQuery>(initialFilters);
 
   return { initialFilters, filters, setFilters };
 };

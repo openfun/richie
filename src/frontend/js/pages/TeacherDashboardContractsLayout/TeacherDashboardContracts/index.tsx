@@ -7,7 +7,7 @@ import { ContractHelper, ContractStatePoV } from 'utils/ContractHelper';
 import { useOrganizationContracts } from 'hooks/useContracts';
 import Banner, { BannerType } from 'components/Banner';
 import { PER_PAGE } from 'settings';
-import { ContractFilters } from 'types/Joanie';
+import { ContractResourceQuery } from 'types/Joanie';
 
 import ContractFiltersBar from '../components/ContractFilters';
 import useTeacherContractFilters, {
@@ -62,7 +62,7 @@ const TeacherDashboardContracts = () => {
     }));
   }, [contracts]);
 
-  const handleFiltersChange = (newFilters: Partial<ContractFilters>) => {
+  const handleFiltersChange = (newFilters: Partial<ContractResourceQuery>) => {
     // Reset pagination
     pagination.setPage(1);
     setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));

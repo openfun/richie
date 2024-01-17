@@ -1,7 +1,7 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { QueryOptions, useResource, useResources, UseResourcesProps } from 'hooks/useResources';
-import { API, Contract, ContractFilters } from 'types/Joanie';
+import { API, Contract, ContractResourceQuery } from 'types/Joanie';
 
 const messages = defineMessages({
   errorGet: {
@@ -16,7 +16,7 @@ const messages = defineMessages({
   },
 });
 
-const props: UseResourcesProps<Contract, ContractFilters, API['user']['contracts']> = {
+const props: UseResourcesProps<Contract, ContractResourceQuery, API['user']['contracts']> = {
   queryKey: ['contracts'],
   apiInterface: () => useJoanieApi().user.contracts,
   session: true,
@@ -34,7 +34,7 @@ export const useUserContracts = useResources(props);
  */
 const organizationProps: UseResourcesProps<
   Contract,
-  ContractFilters,
+  ContractResourceQuery,
   API['organizations']['contracts']
 > = {
   ...props,
@@ -44,7 +44,7 @@ const organizationProps: UseResourcesProps<
 
 export const useOrganizationContract = (
   id: string,
-  filters: ContractFilters,
+  filters: ContractResourceQuery,
   queryOptions?: QueryOptions<Contract>,
 ) => {
   return useResource(organizationProps)(id, filters, {
@@ -57,7 +57,7 @@ export const useOrganizationContract = (
 };
 
 export const useOrganizationContracts = (
-  filters: ContractFilters,
+  filters: ContractResourceQuery,
   queryOptions?: QueryOptions<Contract>,
 ) => {
   return useResources(organizationProps)(filters, {
