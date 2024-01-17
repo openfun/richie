@@ -4,6 +4,7 @@ import { SuccessIcon } from 'components/SuccessIcon';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { getDashboardBasename } from 'widgets/Dashboard/hooks/useDashboardRouter/getDashboardBasename';
 import { useSaleTunnelContext } from 'components/SaleTunnel/context';
+import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 
 const messages = defineMessages({
   congratulations: {
@@ -71,7 +72,7 @@ export const SaleTunnelStepResume = ({ next }: SaleTunnelStepResumeProps) => {
           <Button
             href={
               getDashboardBasename(intl.locale) +
-              LearnerDashboardPaths.ORDER.replace(':orderId', order!.id)
+              getDashboardRoutePath(intl)(LearnerDashboardPaths.ORDER, { orderId: order!.id })
             }
           >
             <FormattedMessage {...messages.ctaSignature} />
