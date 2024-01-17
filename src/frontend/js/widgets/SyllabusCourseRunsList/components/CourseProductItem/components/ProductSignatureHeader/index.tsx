@@ -4,6 +4,7 @@ import Banner, { BannerType } from 'components/Banner';
 import { getDashboardBasename } from 'widgets/Dashboard/hooks/useDashboardRouter/getDashboardBasename';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { Order } from 'types/Joanie';
+import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 
 const messages = defineMessages({
   signatureNeeded: {
@@ -29,7 +30,7 @@ export const ProductSignatureHeader = ({ order }: { order?: Order }) => {
         size="small"
         href={
           getDashboardBasename(intl.locale) +
-          LearnerDashboardPaths.ORDER.replace(':orderId', order!.id)
+          getDashboardRoutePath(intl)(LearnerDashboardPaths.ORDER, { orderId: order!.id })
         }
       >
         <FormattedMessage {...messages.contractSignActionLabel} />

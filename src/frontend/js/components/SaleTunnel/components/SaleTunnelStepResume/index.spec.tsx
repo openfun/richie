@@ -76,6 +76,7 @@ describe('SaleTunnelStepResume', () => {
 
     // Click on the button trigger the next function
     const button = screen.getByRole('link', { name: 'Sign the training contract' });
+    expect(button).toHaveAttribute('href', `/en/dashboard/courses/orders/${order.id}`);
     fireEvent.click(button);
     expect(mockNext).toHaveBeenCalledTimes(0);
   });
