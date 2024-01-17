@@ -9,7 +9,7 @@ import Banner, { BannerType } from 'components/Banner';
 import { PER_PAGE } from 'settings';
 import { ContractResourceQuery } from 'types/Joanie';
 
-import ContractFiltersBar from '../components/ContractFilters';
+import ContractFiltersBar from '../components/ContractFiltersBar';
 import useTeacherContractFilters, {
   TeacherDashboardContractsParams,
 } from '../hooks/useTeacherContractFilters';
