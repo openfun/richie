@@ -78,19 +78,22 @@ describe('pages/TeacherDashboardContracts', () => {
     }).many(3);
     const organization = OrganizationFactory().one();
 
+    // OrganizationContractFilter request all organizations forwho the user have access
     fetchMock.get(`https://joanie.test/api/v1.0/organizations/`, [organization]);
+    // TeacherDashboardContracts request a paginated list of contracts to display
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?signature_state=signed&course_id=1&product_id=2&page=1&page_size=25`,
+      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?signature_state=signed&course_product_relation_id=2&page=1&page_size=25`,
       { results: contracts, count: 0, previous: null, next: null },
     );
+    // useTeacherContractsToSign request all contract to sign, without pagination
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?signature_state=half_signed&course_id=1&product_id=2`,
+      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?signature_state=half_signed&course_product_relation_id=2`,
       { results: [], count: 0, previous: null, next: null },
     );
 
     render(
       <Wrapper
-        path="/courses/:courseId/products/:productId/contracts"
+        path="/courses/:courseId/products/:courseProductRelationId/contracts"
         initialEntry="/courses/1/products/2/contracts"
       />,
     );
