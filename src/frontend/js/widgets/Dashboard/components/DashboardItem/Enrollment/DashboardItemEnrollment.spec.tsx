@@ -8,7 +8,7 @@ import {
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
 import { CourseRunWithCourseFactory, EnrollmentFactory } from 'utils/test/factories/joanie';
-import { DATETIME_FORMAT } from 'hooks/useDateFormat';
+import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
@@ -47,17 +47,19 @@ describe('<DashboardItemEnrollment/>', () => {
     render(<Wrapper enrollment={enrollment} />);
     screen.getByText(enrollment.course_run.course!.title);
     screen.getByText('Ref. ' + enrollment.course_run.course!.code);
-    const link = screen.getByRole('link', { name: 'Access course' });
+    const link = screen.getByRole('link', { name: 'Access to course' });
     expect(link).toBeEnabled();
     expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
 
     screen.getByText(
       'You are enrolled for the session from ' +
-        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
+        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
           new Date(enrollment.course_run.start),
         ) +
         ' to ' +
-        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(enrollment.course_run.end)),
+        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+          new Date(enrollment.course_run.end),
+        ),
     );
   });
 
@@ -75,16 +77,18 @@ describe('<DashboardItemEnrollment/>', () => {
     render(<Wrapper enrollment={enrollment} />);
     screen.getByText(enrollment.course_run.course!.title);
     screen.getByText('Ref. ' + enrollment.course_run.course!.code);
-    const link = screen.getByRole('link', { name: 'Access course' });
+    const link = screen.getByRole('link', { name: 'Access to course' });
     expect(link).toBeEnabled();
     expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
     screen.getByText(
       'You are enrolled for the session from ' +
-        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
+        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
           new Date(enrollment.course_run.start),
         ) +
         ' to ' +
-        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(enrollment.course_run.end)),
+        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+          new Date(enrollment.course_run.end),
+        ),
     );
   });
 

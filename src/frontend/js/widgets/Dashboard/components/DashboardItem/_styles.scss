@@ -171,6 +171,14 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.5rem 1rem;
+    font-size: rem-calc(13px);
+
+    &_title {
+      align-items: flex-start;
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0;
+    }
 
     &:not(:last-child) {
       border-bottom: $onepixel solid r-theme-val(dashboard-item, base-border);
@@ -180,12 +188,10 @@
       color: r-theme-val(product-item, feedback-color);
     }
 
-    &__enrolled {
-      display: flex;
-      gap: 0.5rem;
-      padding: 0.7rem 1.3rem;
+    &__icon-enrolled {
       color: r-theme-val(dashboard-item-course-enrolling-run, enrolled-color);
-      font-family: $r-font-family-montserrat;
+      height: 1rem;
+      width: 1rem;
     }
   }
 }
