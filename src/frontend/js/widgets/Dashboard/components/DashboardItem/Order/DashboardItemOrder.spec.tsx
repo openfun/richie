@@ -225,7 +225,7 @@ describe('<DashboardItemOrder/>', () => {
             new Date(order.target_enrollments[0].course_run.end),
           ),
       );
-      screen.getByRole('link', { name: 'Access course' });
+      screen.getByRole('link', { name: 'Access to course' });
     });
   });
   it('renders a non-writable order with not enrolled target course', async () => {
@@ -293,19 +293,27 @@ describe('<DashboardItemOrder/>', () => {
           container,
           'dashboard-item__course-enrolling__run__' + courseRun.id,
         );
-        getByText(
-          runElement,
-          'From ' +
-            new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(courseRun.start)) +
-            ' to ' +
-            new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(courseRun.end)),
-        );
+        getByText(runElement, courseRun.title);
         // Expect the first courseRun to be enrolled but not the others.
         if (i === 0) {
-          getByText(runElement, 'Enrolled');
           expect(queryByRole(runElement, 'button', { name: 'Enroll' })).toBeNull();
+          getByText(
+            runElement,
+            'You are enrolled for the session from ' +
+              new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(courseRun.start)) +
+              ' to ' +
+              new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(courseRun.end)),
+          );
+          const button = getByRole(runElement, 'link', { name: 'Access to course' });
+          expect(button).toHaveAttribute('href', courseRun.resource_link);
         } else {
-          expect(queryByText(runElement, 'Enrolled')).toBeNull();
+          getByText(
+            runElement,
+            'From ' +
+              new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(courseRun.start)) +
+              ' to ' +
+              new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(courseRun.end)),
+          );
           getByRole(runElement, 'button', { name: 'Enroll' });
         }
       });
@@ -384,7 +392,7 @@ describe('<DashboardItemOrder/>', () => {
       runElement = await screen.findByTestId(
         'dashboard-item__course-enrolling__run__' + courseRun.id,
       );
-      getByText(runElement, 'Enrolled');
+      getByRole(runElement, 'link', { name: 'Access to course' });
     });
 
     expect(queryByRole(runElement, 'button', { name: 'Enroll' })).toBeNull();
@@ -533,7 +541,7 @@ describe('<DashboardItemOrder/>', () => {
       runElement = await screen.findByTestId(
         'dashboard-item__course-enrolling__run__' + newEnrolledCourseRun.id,
       );
-      getByText(runElement, 'Enrolled');
+      getByRole(runElement, 'link', { name: 'Access to course' });
     });
 
     expect(queryByRole(runElement, 'button', { name: 'Enroll' })).toBeNull();
@@ -568,14 +576,14 @@ describe('<DashboardItemOrder/>', () => {
     let runElement = await screen.findByTestId(
       'dashboard-item__course-enrolling__run__' + courseRun.id,
     );
-    getByText(runElement, 'Enrolled');
+    getByRole(runElement, 'link', { name: 'Access to course' });
 
     // Make sure the new courseRun is not enrolled.
     const newRunElement = await screen.findByTestId(
       'dashboard-item__course-enrolling__run__' + newEnrolledCourseRun.id,
     );
     const enrollButton = getByRole(newRunElement, 'button', { name: 'Enroll' });
-    expect(queryByText(newRunElement, 'Enrolled')).toBeNull();
+    expect(queryByRole(runElement, 'button', { name: 'Access to course' })).toBeNull();
 
     expect(
       fetchMock.called('https://joanie.endpoint/api/v1.0/enrollments/', { method: 'post' }),
@@ -600,7 +608,7 @@ describe('<DashboardItemOrder/>', () => {
     runElement = await screen.findByTestId(
       'dashboard-item__course-enrolling__run__' + courseRun.id,
     );
-    getByText(runElement, 'Enrolled');
+    getByRole(runElement, 'link', { name: 'Access to course' });
 
     // Expect the enrollment to not be created and orders not invalided.
     expect(
@@ -686,7 +694,7 @@ describe('<DashboardItemOrder/>', () => {
       runElement = await screen.findByTestId(
         'dashboard-item__course-enrolling__run__' + courseRun.id,
       );
-      getByText(runElement, 'Enrolled');
+      getByRole(runElement, 'link', { name: 'Access to course' });
     });
 
     expect(queryByRole(runElement, 'button', { name: 'Enroll' })).toBeNull();
@@ -751,7 +759,7 @@ describe('<DashboardItemOrder/>', () => {
 
     // The course run should be shown as enrolled even if is it past.
     const runElement = screen.getByTestId('dashboard-item__course-enrolling__run__' + courseRun.id);
-    getByText(runElement, 'Enrolled');
+    getByRole(runElement, 'link', { name: 'Access to course' });
     expect(queryByRole(runElement, 'button', { name: 'Enroll' })).toBeNull();
   });
 

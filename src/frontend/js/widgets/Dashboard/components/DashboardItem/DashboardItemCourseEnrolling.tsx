@@ -39,7 +39,7 @@ const messages = defineMessages({
   accessCourse: {
     id: 'components.DashboardItemEnrollment.gotoCourse',
     description: 'Button to access course when the user is enrolled',
-    defaultMessage: 'Access course',
+    defaultMessage: 'Access to course',
   },
   runPeriod: {
     id: 'components.DashboardItemEnrollment.runPeriod',
@@ -230,8 +230,17 @@ const DashboardItemCourseEnrollingRun = ({
     >
       <div>
         <div>
+          <p className="dashboard-item__course-enrolling__run_title">
+            {selected && (
+              <Icon
+                className="dashboard-item__course-enrolling__run__icon-enrolled"
+                name={IconTypeEnum.CHECK}
+              />
+            )}
+            <strong>{courseRun.title}</strong>
+          </p>
           <FormattedMessage
-            {...messages.runPeriod}
+            {...(selected ? messages.enrolledRunPeriod : messages.runPeriod)}
             values={{
               startDate: formatDate(courseRun.start, DEFAULT_DATE_FORMAT),
               endDate: formatDate(courseRun.end, DEFAULT_DATE_FORMAT),
@@ -249,14 +258,19 @@ const DashboardItemCourseEnrollingRun = ({
       </div>
       <div>
         {selected ? (
-          <div className="dashboard-item__course-enrolling__run__enrolled">
-            <FormattedMessage {...messages.enrolled} />
-            <Icon name={IconTypeEnum.CHECK} size="small" />
-          </div>
+          <Button
+            color="secondary"
+            size="small"
+            href={courseRun.resource_link}
+            data-testid="dashboard-item-enrollment__button"
+            className="dashboard-item__button"
+          >
+            <FormattedMessage {...messages.accessCourse} />
+          </Button>
         ) : (
           <Button
             disabled={!isOpenedForEnrollment || haveToSignContract}
-            color="secondary"
+            color="tertiary"
             size="small"
             onClick={enroll}
             title={haveToSignContract ? intl.formatMessage(messages.contractUnsigned) : ''}

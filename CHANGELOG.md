@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [2.25.0-beta.1]
 
+### Added
+
+- Add Course run link into Order detail view
+
 ### Fixed
 
 - Fix malformed CourseProductItem Order dashboard links
