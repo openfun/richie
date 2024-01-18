@@ -938,7 +938,8 @@ jobs:
           name: Publish package
           command: |
             # If no tag is defined, this is a merge on master branch
-            if [[ -n "$CIRCLE_TAG" ]]; then
+            # see https://stackoverflow.com/a/13864829
+            if [[ -z "${CIRCLE_TAG+x}" ]]; then
               python -m pip install --upgrade setuptools_scm
               NEXT_VERSION=$(python -m setuptools_scm)
               npm version $NEXT_VERSION
