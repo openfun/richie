@@ -13,7 +13,7 @@ import {
 } from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
-import useDateFormat, { DATETIME_FORMAT } from 'hooks/useDateFormat';
+import useDateFormat, { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 import { RouterButton } from '../RouterButton';
@@ -233,8 +233,8 @@ const DashboardItemCourseEnrollingRun = ({
           <FormattedMessage
             {...messages.runPeriod}
             values={{
-              startDate: formatDate(courseRun.start, DATETIME_FORMAT),
-              endDate: formatDate(courseRun.end, DATETIME_FORMAT),
+              startDate: formatDate(courseRun.start, DEFAULT_DATE_FORMAT),
+              endDate: formatDate(courseRun.end, DEFAULT_DATE_FORMAT),
             }}
           />
         </div>
@@ -345,8 +345,8 @@ const EnrolledStatus = ({ enrollment }: { enrollment: Enrollment }) => {
     <FormattedMessage
       {...messages.enrolledRunPeriod}
       values={{
-        startDate: formatDate(enrollment.course_run.start, DATETIME_FORMAT),
-        endDate: formatDate(enrollment.course_run.end, DATETIME_FORMAT),
+        startDate: formatDate(enrollment.course_run.start, DEFAULT_DATE_FORMAT),
+        endDate: formatDate(enrollment.course_run.end, DEFAULT_DATE_FORMAT),
       }}
     />
   );

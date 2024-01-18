@@ -15,7 +15,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { PropsWithChildren } from 'react';
 import fetchMock from 'fetch-mock';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
-import { DATETIME_FORMAT, DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
+import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   CertificateFactory,
@@ -217,11 +217,11 @@ describe('<DashboardItemOrder/>', () => {
       await screen.findByRole('heading', { level: 6, name: course.title });
       screen.getByText(
         'You are enrolled for the session from ' +
-          new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
+          new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
             new Date(order.target_enrollments[0].course_run.start),
           ) +
           ' to ' +
-          new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
+          new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
             new Date(order.target_enrollments[0].course_run.end),
           ),
       );
@@ -296,9 +296,9 @@ describe('<DashboardItemOrder/>', () => {
         getByText(
           runElement,
           'From ' +
-            new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(courseRun.start)) +
+            new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(courseRun.start)) +
             ' to ' +
-            new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(courseRun.end)),
+            new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(courseRun.end)),
         );
         // Expect the first courseRun to be enrolled but not the others.
         if (i === 0) {
