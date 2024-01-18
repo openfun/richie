@@ -928,7 +928,7 @@ jobs:
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
-    working_directory: ~/fun/src/frontend
+    working_directory: ~/fun
     steps:
       - *checkout_fun
       - run:
@@ -942,11 +942,11 @@ jobs:
             if [[ -z "${CIRCLE_TAG+x}" ]]; then
               python -m pip install --upgrade setuptools_scm
               NEXT_VERSION=$(python -m setuptools_scm)
+              cd src/frontend/
               npm version $NEXT_VERSION
               cd ~/fun
               npm publish src/frontend/ --tag next
             else
-              cd ~/fun
               npm publish src/frontend/
             fi
 
