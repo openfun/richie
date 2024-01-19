@@ -1,0 +1,47 @@
+// change measurement units to rem
+.notification-alert {
+  &__wrapper {
+    display: flex;
+    padding: 1rem;
+    border-radius: r-theme-val(notification-plugin, border-radius);
+    width: 100%;
+    margin-block-end: 1rem;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    margin-inline-end: 0.4rem;
+
+    & svg {
+      fill: none !important;
+      stroke: r-theme-val(notification-plugin, icon-stroke-color);
+      height: r-theme-val(notification-plugin, icon-height);
+      width: r-theme-val(notification-plugin, icon-width);
+      flex-shrink: 0;
+    }
+  }
+
+  &__content {
+    h2 {
+      margin-block-start: 0.6rem;
+      font-size: 0.9rem;
+    }
+
+    p {
+      margin-block-end: 0.6rem;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.info {
+  background-color: r-theme-val(notification-plugin, info-background-color);
+  color: r-theme-val(notification-plugin, text-color);
+}
+
+.warning {
+  background-color: r-theme-val(notification-plugin, warn-background-color);
+  color: r-theme-val(notification-plugin, text-color);
+}

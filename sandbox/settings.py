@@ -420,6 +420,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "richie.plugins.simple_picture",
         "richie.plugins.simple_text_ckeditor",
         "richie.plugins.lti_consumer",
+        "richie.plugins.notification",
         "richie",
         # Third party apps
         "dj_pagination",

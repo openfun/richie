@@ -557,6 +557,15 @@ $r-theme: (
     content-color: r-color(purplish-grey),
     title-color: r-color('charcoal'),
   ),
+  notification-plugin: (
+    info-background-color: r-color('info-300'),
+    text-color: r-color('black'),
+    warn-background-color: r-color('warning-400'),
+    border-radius: 10px,
+    icon-stroke-color: r-color('black'),
+    icon-width: 24px,
+    icon-height: 24px,
+  ),
 ) !default;
 
 // On a Richie child project you can easily change a specific value using:

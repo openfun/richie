@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Notification plugin for Course Detail pages
+
 ### Changed
 
 - Switch from setup.cfg to pyproject.toml 

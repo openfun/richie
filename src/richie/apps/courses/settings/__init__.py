@@ -245,6 +245,10 @@ CMS_PLACEHOLDER_CONF = {
         "name": _("Assessment and Certification"),
         "plugins": ["CKEditorPlugin"],
     },
+    "courses/cms/course_detail.html course_notifications": {
+        "name": _("Notifications"),
+        "plugins": ["NotificationPlugin"],
+    },
     # Organization detail
     "courses/cms/organization_detail.html banner": {
         "name": _("Banner"),

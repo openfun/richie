@@ -61,6 +61,14 @@
                     {% endif %}
                     {% endblock title %}
 
+                    {% block notifications %}
+                        {% if current_page.publisher_is_draft %}
+                        <h2 class="course-detail__title">{% trans 'Notifications' %}</h2>
+                        {% endif %}
+                        {% placeholder "course_notifications" %}
+                    {% endblock notifications %}
+
+
                     {% block categories %}
                     {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_icons" or not current_page|is_empty_placeholder:"course_categories" %}
                     <div class="category-badge-list subheader__badges">
@@ -226,6 +234,7 @@
                 {% endif %}
                 {% endblock snapshot %}
 
+                
                 {% block cover %}
                     {% placeholder_as_plugins "course_cover" as cover_plugins %}
                     <meta property="image" content="{% thumbnail cover_plugins.0.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=cover_plugins.0.picture.subject_location %}" />
