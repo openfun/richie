@@ -151,6 +151,11 @@ describe('<AbstractContractFrame />', () => {
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: 'Verifying signature ...' })).toBeInTheDocument();
     });
+    expect(
+      screen.getByText(
+        'We are waiting for the signature to be validated from our signature platform. It can take up to few minutes. Do not close this page.',
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByRole('status')).toBeInTheDocument();
 
     checkSignatureDeferred.resolve({ isSigned: true });
@@ -207,6 +212,11 @@ describe('<AbstractContractFrame />', () => {
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: 'Verifying signature ...' })).toBeInTheDocument();
     });
+    expect(
+      screen.getByText(
+        'We are waiting for the signature to be validated from our signature platform. It can take up to few minutes. Do not close this page.',
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByRole('status')).toBeInTheDocument();
 
     checkSignatureDeferred.reject(new HttpError(500, 'Interval server error'));
@@ -263,6 +273,11 @@ describe('<AbstractContractFrame />', () => {
     await waitFor(() => {
       expect(screen.getByRole('heading', { name: 'Verifying signature ...' })).toBeInTheDocument();
     });
+    expect(
+      screen.getByText(
+        'We are waiting for the signature to be validated from our signature platform. It can take up to few minutes. Do not close this page.',
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByRole('status')).toBeInTheDocument();
 
     checkSignatureDeferred.resolve({ isSigned: false });

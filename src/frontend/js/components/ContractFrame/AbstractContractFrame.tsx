@@ -50,6 +50,12 @@ export const messages = defineMessages({
     description: 'Message displayed inside the contract signin modal when polling the order.',
     id: 'components.DashboardItem.Order.ContractFrame.polling',
   },
+  pollingDescription: {
+    defaultMessage:
+      'We are waiting for the signature to be validated from our signature platform. It can take up to few minutes. Do not close this page.',
+    description: 'Message displayed inside the contract signin modal when polling the order.',
+    id: 'components.DashboardItem.Order.ContractFrame.pollingDescription',
+  },
   finishedCaption: {
     defaultMessage: 'Congratulations!',
     description: 'Title displayed inside the contract signin modal when the contract is signed.',
@@ -251,9 +257,14 @@ const ContractFrameContent = ({
       )}
       {step === ContractSteps.POLLING && (
         <div className="ContractFrame__loading-container">
-          <h3 className="ContractFrame__caption">
-            <FormattedMessage {...messages.polling} />
-          </h3>
+          <div>
+            <h3 className="ContractFrame__caption">
+              <FormattedMessage {...messages.polling} />
+            </h3>
+            <p className="ContractFrame__content">
+              <FormattedMessage {...messages.pollingDescription} />
+            </p>
+          </div>
           <Loader />
         </div>
       )}
