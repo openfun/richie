@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -111,7 +111,9 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
 
     // It should display contract link with badge next to it displaying the number of contracts to sign
     const contractLink = screen.getByRole('link', { name: 'Contracts' });
-    expect(contractLink!.nextSibling).toHaveTextContent(contractToSignCount.toString());
+    await waitFor(() => {
+      expect(contractLink!.nextSibling).toHaveTextContent(contractToSignCount.toString());
+    });
     expect(contractLink).toHaveAttribute(
       'href',
       '/teacher/organizations/' + organization.id + '/contracts?signature_state=half_signed',

@@ -6,6 +6,7 @@ type BadgeProps = PropsWithChildren<{
 }>;
 const Badge = ({ children, color }: BadgeProps) => (
   <div
+    data-testid="badge"
     className={classNames('category-badge', {
       [`category-badge--${color}`]: Boolean(color),
     })}

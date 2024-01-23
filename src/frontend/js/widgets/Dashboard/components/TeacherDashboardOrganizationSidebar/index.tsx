@@ -1,20 +1,15 @@
-import { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { createSearchParams, useParams } from 'react-router-dom';
-import Badge from 'components/Badge';
+import { useParams } from 'react-router-dom';
 import { Spinner } from 'components/Spinner';
 import { useOrganization } from 'hooks/useOrganizations';
-import { ContractState } from 'types/Joanie';
 import { DashboardSidebar, MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';
 import {
   getDashboardRouteLabel,
   getDashboardRoutePath,
 } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
-import useTeacherPendingContractsCount from 'hooks/useTeacherPendingContractsCount';
-import useContractAbilities from 'hooks/useContractAbilities';
-import { ContractActions } from 'utils/AbilitiesHelper/types';
 import { DashboardAvatar, DashboardAvatarVariantEnum } from '../DashboardAvatar';
+import ContractNavLink from '../DashboardSidebar/components/ContractNavLink';
 
 const messages = defineMessages({
   subHeader: {
@@ -42,13 +37,6 @@ export const TeacherDashboardOrganizationSidebar = () => {
     states: { fetching },
   } = useOrganization(organizationId);
 
-  const { contracts: pendingContracts, pendingContractCount } = useTeacherPendingContractsCount({
-    organizationId,
-    courseProductRelationId,
-  });
-  const contractAbilities = useContractAbilities(pendingContracts);
-  const canSignContracts = contractAbilities.can(ContractActions.SIGN);
-
   const getMenuLinkFromPath = (basePath: TeacherDashboardPaths) => {
     const path = getRoutePath(basePath, { organizationId });
 
@@ -57,30 +45,23 @@ export const TeacherDashboardOrganizationSidebar = () => {
       label: getRouteLabel(basePath),
     };
 
-    // For the contracts link, we want to display the number of contracts if needed and set
-    // the correct filter depending on the user's abilities
     if (basePath === TeacherDashboardPaths.ORGANIZATION_CONTRACTS) {
-      if (canSignContracts && pendingContractCount > 0) {
-        const searchParams = createSearchParams({ signature_state: ContractState.LEARNER_SIGNED });
-        menuLink.badge = <Badge color="primary">{pendingContractCount}</Badge>;
-        menuLink.to = `${path}?${searchParams.toString()}`;
-      } else {
-        const searchParams = createSearchParams({ signature_state: ContractState.SIGNED });
-        menuLink.to = `${path}?${searchParams.toString()}`;
-      }
+      menuLink.component = (
+        <ContractNavLink
+          link={menuLink}
+          organizationId={organizationId}
+          courseProductRelationId={courseProductRelationId}
+        />
+      );
     }
 
     return menuLink;
   };
 
-  const links = useMemo(
-    () =>
-      [
-        TeacherDashboardPaths.ORGANIZATION_COURSES,
-        TeacherDashboardPaths.ORGANIZATION_CONTRACTS,
-      ].map(getMenuLinkFromPath),
-    [pendingContractCount, canSignContracts],
-  );
+  const links = [
+    TeacherDashboardPaths.ORGANIZATION_COURSES,
+    TeacherDashboardPaths.ORGANIZATION_CONTRACTS,
+  ].map(getMenuLinkFromPath);
 
   if (fetching) {
     return (
