@@ -4,7 +4,7 @@ import { User } from 'types/User';
 import { APILms } from 'types/api';
 import { Enrollment, OpenEdXEnrollment } from 'types';
 import { location } from 'utils/indirection/window';
-import { RICHIE_USER_TOKEN } from 'settings';
+import { CURRENT_JOANIE_DEV_DEMO_USER, RICHIE_USER_TOKEN } from 'settings';
 import { base64Decode } from 'utils/base64Parser';
 
 type JWTPayload = {
@@ -71,7 +71,7 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
               "username": "admin",
             }
         */
-        return getUserInfo('admin') || null;
+        return getUserInfo(CURRENT_JOANIE_DEV_DEMO_USER) || null;
       },
       login: () => location.reload(),
       register: () => location.reload(),

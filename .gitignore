@@ -101,3 +101,6 @@ docker/files/etc/nginx/ssl/*
 
 # Storybook
 storybook-static
+
+# Frontend dev settings
+src/frontend/js/settings.dev.ts
