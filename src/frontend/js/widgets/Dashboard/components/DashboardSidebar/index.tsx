@@ -1,14 +1,13 @@
-import { matchPath, NavLink, resolvePath, useLocation } from 'react-router-dom';
-import { PropsWithChildren, ReactNode, useCallback } from 'react';
-import classNames from 'classnames';
+import { Fragment, PropsWithChildren, ReactNode } from 'react';
 import { useSession } from 'contexts/SessionContext';
 import { DashboardAvatar } from 'widgets/Dashboard/components/DashboardAvatar';
 import NavigationSelect from './components/NavigationSelect';
+import MenuNavLink from './components/MenuNavLink';
 
 export interface MenuLink {
   to: string;
   label: string;
-  badge?: ReactNode;
+  component?: ReactNode;
 }
 
 export interface DashboardSidebarProps extends PropsWithChildren {
@@ -28,15 +27,7 @@ export const DashboardSidebar = ({
   avatar,
 }: DashboardSidebarProps) => {
   const { user } = useSession();
-  const location = useLocation();
   const classes = ['dashboard-sidebar'];
-  const isActive = useCallback(
-    (to: string) => {
-      const path = resolvePath(to).pathname;
-      return !!matchPath({ path, end: true }, location.pathname);
-    },
-    [location],
-  );
 
   return (
     <aside className={classes.join(' ')} data-testid="dashboard__sidebar">
@@ -54,19 +45,13 @@ export const DashboardSidebar = ({
         </div>
 
         <ul className="dashboard-sidebar__container__nav">
-          {menuLinks.map((link) => (
-            <li
-              key={link.to}
-              className={classNames('dashboard-sidebar__container__nav__item', {
-                active: isActive(link.to),
-              })}
-            >
-              <NavLink to={link.to} end>
-                {link.label}
-              </NavLink>
-              {link.badge}
-            </li>
-          ))}
+          {menuLinks.map((link) =>
+            link.component ? (
+              <Fragment key={link.to}>{link.component}</Fragment>
+            ) : (
+              <MenuNavLink link={link} key={link.to} />
+            ),
+          )}
         </ul>
       </div>
       {children}

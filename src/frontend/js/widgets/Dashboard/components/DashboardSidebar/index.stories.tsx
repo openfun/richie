@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { UserFactory } from 'utils/test/factories/richie';
 import { StorybookHelper } from 'utils/StorybookHelper';
-import Badge from 'components/Badge';
+import MenuNavLink from './components/MenuNavLink';
 import { DashboardSidebar } from '.';
 
 export default {
@@ -19,7 +19,12 @@ export default {
               {
                 to: '/test/again',
                 label: 'An other menu link',
-                badge: <Badge color="primary">999</Badge>,
+                component: (
+                  <MenuNavLink
+                    link={{ to: '/test/again', label: 'An other menu link' }}
+                    badgeCount={999}
+                  />
+                ),
               },
             ]}
             header="Dashboard story header"
