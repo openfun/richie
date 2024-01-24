@@ -1,4 +1,4 @@
-import defaultDevSettings from './settings.dev.dist';
+import * as defaultDevSettings from './settings.dev.dist';
 
 export const API_LIST_DEFAULT_PARAMS = {
   limit: '21',
