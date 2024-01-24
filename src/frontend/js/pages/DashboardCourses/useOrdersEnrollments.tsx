@@ -68,5 +68,6 @@ export const useOrdersEnrollments = ({
     },
     perPage,
     errorGetMessage: messages.errorGet,
+    refetchOnInvalidation: false,
   });
 };
