@@ -1,4 +1,5 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
+import { useState } from 'react';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CertificateProduct, Enrollment, ProductType } from 'types/Joanie';
@@ -35,7 +36,9 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
   if (product.type !== ProductType.CERTIFICATE) {
     return null;
   }
-  const activeOrder = getActiveEnrollmentOrder(enrollment.orders || [], product.id);
+  const [activeOrder, setActiveOrder] = useState(
+    getActiveEnrollmentOrder(enrollment.orders || [], product.id),
+  );
   const { item: certificate } = useCertificate(activeOrder?.certificate_id);
 
   // The course run is no longer available
@@ -69,6 +72,14 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
           className="dashboard-item__button"
           product={product}
           enrollment={enrollment}
+          onFinish={(order) => {
+            /**
+             * As we do not refetch enrollments in DashboardCourses after SaleTunnel cache invalidation ( to avoid
+             * scroll reset - and SaleTunnel modal unmounting too early caused by list reset ) we need to manually
+             * update the active order in the enrollment in order to hide the buy button and display the download button.
+             */
+            setActiveOrder(order);
+          }}
         />
       )}
     </div>

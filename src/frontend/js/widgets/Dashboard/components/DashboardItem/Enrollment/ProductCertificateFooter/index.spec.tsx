@@ -1,7 +1,8 @@
 import { IntlProvider } from 'react-intl';
-import { render, screen } from '@testing-library/react';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
+import userEvent from '@testing-library/user-event';
 import { CertificateProduct, CourseLight, OrderState, ProductType } from 'types/Joanie';
 import {
   CourseStateFactory,
@@ -19,6 +20,12 @@ import {
 import { Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
+import { SessionProvider } from 'contexts/SessionContext';
+import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
+import { expectNoSpinner } from 'utils/test/expectSpinner';
+import { PER_PAGE } from 'settings';
+import { SaleTunnelProps } from 'components/SaleTunnel';
 import ProductCertificateFooter, { ProductCertificateFooterProps } from '.';
 
 jest.mock('utils/context', () => ({
@@ -27,6 +34,24 @@ jest.mock('utils/context', () => ({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
     joanie_backend: { endpoint: 'https://joanie.endpoint.test' },
   }).one(),
+}));
+jest.mock('components/SaleTunnel', () => ({
+  __esModule: true,
+  default: ({ isOpen, onFinish }: SaleTunnelProps) => {
+    const React = require('react');
+    const Factories = require('utils/test/factories/joanie');
+    // Automatically call onFinish() callback after 100ms when the SaleTunnel is opened to simulate a payment.
+    React.useEffect(() => {
+      if (!isOpen) {
+        return;
+      }
+      setTimeout(() => {
+        const order = Factories.CertificateOrderWithOneClickPaymentFactory().one();
+        onFinish?.(order);
+      }, 100);
+    }, [isOpen]);
+    return <div data-testid="SaleTunnelMock" />;
+  },
 }));
 
 describe('<ProductCertificateFooter/>', () => {
@@ -164,5 +189,67 @@ describe('<ProductCertificateFooter/>', () => {
     render(<Wrapper product={product} enrollment={enrollment} />);
     expect(await screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
+  });
+
+  // From https://github.com/openfun/richie/issues/2237
+  it('should hide purchase button after payment', async () => {
+    const TestWrapper = ({ client }: { client?: QueryClient }) => {
+      const user = UserFactory().one();
+      return (
+        <QueryClientProvider client={client ?? createTestQueryClient({ user })}>
+          <IntlProvider locale="en">
+            {/* <HistoryContext.Provider value={makeHistoryOf({})}> */}
+            <SessionProvider>
+              <DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />
+            </SessionProvider>
+            {/* </HistoryContext.Provider> */}
+          </IntlProvider>
+        </QueryClientProvider>
+      );
+    };
+
+    const client = createTestQueryClient({ user: true });
+    fetchMock.get(
+      `https://joanie.endpoint.test/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=${PER_PAGE.useOrdersEnrollments}`,
+      {
+        results: [],
+        next: null,
+        previous: null,
+        count: 0,
+      },
+    );
+
+    const enrollment = EnrollmentFactory({
+      course_run: CourseRunFactory({
+        state: CourseStateFactory({ priority: Priority.ONGOING_OPEN }).one(),
+        course,
+      }).one(),
+    }).one();
+    enrollment.product_relations[0].product = CertificateProductFactory().one();
+
+    fetchMock.get(
+      `https://joanie.endpoint.test/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=${PER_PAGE.useOrdersEnrollments}`,
+      {
+        results: [enrollment],
+        next: null,
+        previous: null,
+        count: 1,
+      },
+    );
+
+    render(<TestWrapper client={client} />);
+    const user = userEvent.setup();
+    await expectNoSpinner('Loading orders and enrollments...');
+    await screen.findByRole('heading', {
+      name: enrollment.course_run.course.title,
+      level: 5,
+    });
+
+    // Click on the purchase button, memo: the SaleTunnel is mocked at the top of this file.
+    const purchaseButton = screen.getByTestId('PurchaseButton__cta');
+    await user.click(purchaseButton);
+
+    // Then the onFinish() callback of the SaleTunnel is automatically called via the mock.
+    await waitForElementToBeRemoved(screen.queryByTestId('PurchaseButton__cta'));
   });
 });
