@@ -4,6 +4,7 @@ import { MessageDescriptor, defineMessages, useIntl } from 'react-intl';
 import { Maybe } from 'yup';
 import { PaginatedResourceQuery, PaginatedResponse } from 'types/Joanie';
 import { PER_PAGE } from 'settings';
+import { useQueryKeyInvalidateListener } from 'hooks/useQueryKeyInvalidateListener';
 import { syncIntegrityCount } from './utils/syncIntegrityCount';
 import { FetchEntityData } from './utils/fetchEntities';
 import { QueryConfig } from './utils/fetchEntity';
@@ -39,6 +40,7 @@ interface UseUnionResourceProps<DataA, DataB, FiltersA, FiltersB>
   queryAConfig: QueryConfig<DataA, FiltersA>;
   queryBConfig: QueryConfig<DataB, FiltersB>;
   errorGetMessage?: MessageDescriptor;
+  refetchOnInvalidation?: boolean;
 }
 
 /**
@@ -58,6 +60,7 @@ const useUnionResource = <
   queryBConfig,
   perPage = PER_PAGE.useUnionResources,
   errorGetMessage = messages.errorGet,
+  refetchOnInvalidation = true,
 }: UseUnionResourceProps<DataA, DataB, FiltersA, FiltersB>): UseUnionResourceReturns<
   DataA,
   DataB
@@ -69,7 +72,7 @@ const useUnionResource = <
   const [totalCount, setTotalCount] = useState<number | undefined>();
   const [error, setError] = useState<Maybe<string>>();
 
-  // cursor is the total amount of entities what we whant to display.
+  // cursor is the total amount of entities what we want to display.
   const [cursor, setCursor] = useState(perPage);
 
   // integrityCount is the number of fetched entities A and B that are correctly ordered.
@@ -86,6 +89,20 @@ const useUnionResource = <
   const eofQueryKey = [...queryAConfig.queryKey, ...queryBConfig.queryKey, 'eof'];
   const eofRef = useRef<Record<string, number>>(queryClient.getQueryData(eofQueryKey) ?? {});
   log('eof', eofRef.current);
+
+  const reset = () => {
+    setStack([]);
+    setPage(0);
+    setTotalCount(undefined);
+    setError(undefined);
+    setCursor(perPage);
+    setIntegrityCount(0);
+  };
+
+  if (refetchOnInvalidation) {
+    useQueryKeyInvalidateListener(queryAConfig.queryKey, reset);
+    useQueryKeyInvalidateListener(queryBConfig.queryKey, reset);
+  }
 
   useEffect(() => {
     async function fetchNewPage() {
@@ -132,7 +149,7 @@ const useUnionResource = <
       setIsSyncing(true);
       fetchNewPage();
     }
-  }, [cursor]);
+  }, [cursor, stack.length]); // stack.length is added in the dependency array to force a new fetch on reset.
 
   const cursorToUse = Math.min(cursor, integrityCount);
   const next = () => {

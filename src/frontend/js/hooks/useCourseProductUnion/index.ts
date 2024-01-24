@@ -51,5 +51,6 @@ export const useCourseProductUnion = ({
     },
     perPage,
     errorGetMessage: messages.errorGet,
+    refetchOnInvalidation: false,
   });
 };

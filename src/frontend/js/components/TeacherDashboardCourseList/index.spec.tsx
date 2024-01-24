@@ -102,7 +102,7 @@ describe('components/TeacherDashboardCourseList', () => {
     );
 
     expect(
-      screen.getByRole('heading', { name: /One lesson about: How to cook birds/ }),
+      await screen.findByRole('heading', { name: /One lesson about: How to cook birds/ }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { name: /One lesson about: Let's dance, the online lesson/ }),
