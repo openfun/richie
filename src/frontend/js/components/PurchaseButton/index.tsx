@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { Button, ButtonProps } from '@openfun/cunningham-react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
-import SaleTunnel from 'components/SaleTunnel';
+import SaleTunnel, { SaleTunnelProps } from 'components/SaleTunnel';
 import { isOpenedCourseRunCertificate, isOpenedCourseRunCredential } from 'utils/CourseRuns';
 
 const messages = defineMessages({
@@ -45,6 +45,7 @@ interface PurchaseButtonPropsBase {
   disabled?: boolean;
   className?: string;
   buttonProps?: ButtonProps;
+  onFinish?: SaleTunnelProps['onFinish'];
 }
 
 interface CredentialPurchaseButtonProps extends PurchaseButtonPropsBase {
@@ -67,6 +68,7 @@ const PurchaseButton = ({
   disabled = false,
   className,
   buttonProps,
+  onFinish,
 }: CredentialPurchaseButtonProps | CertificatePurchaseButtonProps) => {
   const intl = useIntl();
   const { user, login } = useSession();
@@ -147,6 +149,7 @@ const PurchaseButton = ({
         enrollment={enrollment}
         orderGroup={orderGroup}
         course={course}
+        onFinish={onFinish}
       />
     </>
   );
