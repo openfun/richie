@@ -94,11 +94,11 @@ describe('OrganizationContractFrame', () => {
       user: true,
       queriesCallback: (queries) => {
         // Push contract and orders queries
-        queries.push(QueryStateFactory(['user', 'contracts'], { data: [] }));
+        queries.push(QueryStateFactory(['user', 'organization_contracts'], { data: [] }));
       },
     });
 
-    let contractsQueryState = client.getQueryState(['user', 'contracts']);
+    let contractsQueryState = client.getQueryState(['user', 'organization_contracts']);
     expect(contractsQueryState?.isInvalidated).toBe(false);
 
     await act(async () => {
@@ -126,7 +126,7 @@ describe('OrganizationContractFrame', () => {
 
     // onDone should be tweaked to invalidate the user orders and contracts queries
     // and passed down to AbstractContractFrame
-    contractsQueryState = client.getQueryState(['user', 'contracts']);
+    contractsQueryState = client.getQueryState(['user', 'organization_contracts']);
     expect(contractsQueryState?.isInvalidated).toBe(true);
     expect(handleDone).toHaveBeenCalledTimes(1);
 
@@ -158,11 +158,11 @@ describe('OrganizationContractFrame', () => {
       user: true,
       queriesCallback: (queries) => {
         // Push contract and orders queries
-        queries.push(QueryStateFactory(['user', 'contracts'], { data: [] }));
+        queries.push(QueryStateFactory(['user', 'organization_contracts'], { data: [] }));
       },
     });
 
-    let contractsQueryState = client.getQueryState(['user', 'contracts']);
+    let contractsQueryState = client.getQueryState(['user', 'organization_contracts']);
     expect(contractsQueryState?.isInvalidated).toBe(false);
 
     await act(async () => {
@@ -191,7 +191,7 @@ describe('OrganizationContractFrame', () => {
 
     // onDone should be tweaked to invalidate the user orders and contracts queries
     // and passed down to AbstractContractFrame
-    contractsQueryState = client.getQueryState(['user', 'contracts']);
+    contractsQueryState = client.getQueryState(['user', 'organization_contracts']);
     expect(contractsQueryState?.isInvalidated).toBe(true);
     expect(handleDone).toHaveBeenCalledTimes(1);
 

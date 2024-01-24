@@ -45,7 +45,7 @@ const OrganizationContractFrame = ({ organizationId, contractIds, onDone, ...pro
   };
 
   const onDoneWithInvalidation = () => {
-    queryClient.invalidateQueries({ queryKey: ['user', 'contracts'] });
+    queryClient.invalidateQueries({ queryKey: ['user', 'organization_contracts'] });
     onDone?.();
   };
 
