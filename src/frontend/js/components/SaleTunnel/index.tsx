@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import { useQueryClient } from '@tanstack/react-query';
 import { Modal } from 'components/Modal';
 import {
   CourseLight,
@@ -76,6 +77,7 @@ const SaleTunnel = ({
   const key = `${product.type === ProductType.CREDENTIAL ? course!.code : enrollment!.id}+${
     product.id
   }`;
+  const queryClient = useQueryClient();
 
   const [order, setOrder] = useState<Maybe<Order>>();
 
@@ -108,6 +110,7 @@ const SaleTunnel = ({
           // to update the ordersQuery cache
           invalidateOrders();
           refetchOmniscientOrders();
+          queryClient.invalidateQueries({ queryKey: ['user', 'enrollments'] });
         },
         onExit: () => {
           handleModalClose();
