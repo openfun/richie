@@ -50,13 +50,14 @@ const focusCurrentStep = (container: HTMLElement) => {
   }
 };
 
-interface SaleTunnelProps {
+export interface SaleTunnelProps {
   isOpen: boolean;
   onClose: () => void;
   course?: CourseLight;
   enrollment?: Enrollment;
   product: CredentialProduct | CertificateProduct;
   orderGroup?: OrderGroup;
+  onFinish?: (order: Order) => void;
 }
 
 const SaleTunnel = ({
@@ -66,6 +67,7 @@ const SaleTunnel = ({
   onClose,
   enrollment,
   orderGroup,
+  onFinish,
 }: SaleTunnelProps) => {
   const intl = useIntl();
   const {
@@ -111,6 +113,7 @@ const SaleTunnel = ({
           invalidateOrders();
           refetchOmniscientOrders();
           queryClient.invalidateQueries({ queryKey: ['user', 'enrollments'] });
+          onFinish?.(order!);
         },
         onExit: () => {
           handleModalClose();
