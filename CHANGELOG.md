@@ -18,11 +18,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add signature polling description
 - Add Course run link into Order detail view
 
 ### Fixed
 
-- Add signature polling description
 - Fix malformed CourseProductItem Order dashboard links
 - Await logout authentication request logout trigger
 - Fix search facets count metadata issue (ignore not listed courses)
