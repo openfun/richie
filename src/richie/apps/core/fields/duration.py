@@ -2,6 +2,7 @@
 A custom field that defines a duration as a number of pre-defined time units
 (e.g 1 hour, 5 hours or 3 days)
 """
+
 from django import forms
 from django.core import checks, exceptions
 from django.db import models

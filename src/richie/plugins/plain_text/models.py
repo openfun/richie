@@ -1,6 +1,7 @@
 """
 Simple text plugin models
 """
+
 from django.db import models
 from django.utils.encoding import force_str
 from django.utils.html import strip_tags

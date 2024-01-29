@@ -1,6 +1,7 @@
 """
 API endpoints to access organizations through ElasticSearch
 """
+
 from django.conf import settings
 from django.utils.translation import get_language_from_request
 

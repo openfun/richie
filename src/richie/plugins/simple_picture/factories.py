@@ -1,6 +1,7 @@
 """
 PlainText CMS plugin factories
 """
+
 import factory
 from djangocms_picture.models import Picture
 

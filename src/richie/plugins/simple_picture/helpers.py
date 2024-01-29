@@ -1,4 +1,5 @@
 """SimplePicture plugin for DjangoCMS."""
+
 from .defaults import SIMPLEPICTURE_PRESETS
 
 

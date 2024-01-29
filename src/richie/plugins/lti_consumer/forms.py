@@ -1,4 +1,5 @@
 """LTI Consumer plugin forms."""
+
 import re
 
 from django import forms

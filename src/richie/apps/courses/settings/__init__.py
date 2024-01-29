@@ -16,6 +16,7 @@ Otherwise, you can just use the usual Django pattern in your settings.py file:
     from richie.apps.courses.settings import *
     ```
 """
+
 from django.utils.translation import gettext_lazy as _
 
 

@@ -1,6 +1,7 @@
 """
 Unit tests for the BlogPost model
 """
+
 import random
 
 from django.test import TestCase

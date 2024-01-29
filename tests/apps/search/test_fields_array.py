@@ -1,6 +1,7 @@
 """
 Tests for the ArrayField custom django form field
 """
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.test import TestCase

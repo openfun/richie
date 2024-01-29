@@ -1,4 +1,5 @@
 """Declare API endpoints for LTI Consumer Plugin"""
+
 from django.core.cache import caches
 from django.core.cache.backends.base import InvalidCacheBackendError
 from django.http import JsonResponse

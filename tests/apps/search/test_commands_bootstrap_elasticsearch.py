@@ -1,6 +1,7 @@
 """
 Tests for the regenerate_index command
 """
+
 import logging
 from unittest import mock
 

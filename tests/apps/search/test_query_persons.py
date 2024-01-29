@@ -1,4 +1,5 @@
 """Tests for actual searches for persons."""
+
 import json
 from unittest import mock
 

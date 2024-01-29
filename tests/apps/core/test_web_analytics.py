@@ -1,6 +1,7 @@
 """
 Test suite for the Web Analytics
 """
+
 from django.conf import settings
 from django.core.cache import cache
 from django.test import RequestFactory

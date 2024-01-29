@@ -1,6 +1,7 @@
 """
 Tests for the course viewset
 """
+
 from unittest import mock
 
 from django.db import connection

@@ -1,6 +1,7 @@
 """
 LTIConsumer CMS plugin factories
 """
+
 from django.conf import settings
 
 import factory

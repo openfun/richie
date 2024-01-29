@@ -1,6 +1,7 @@
 """
 LTI consumer plugin models
 """
+
 from urllib.parse import unquote
 
 from django.conf import settings

@@ -1,6 +1,7 @@
 """
 Model tests
 """
+
 from django.test import TestCase
 
 from richie.plugins.simple_text_ckeditor.models import SimpleText

@@ -1,6 +1,7 @@
 """
 create_demo_site management command tests
 """
+
 import random
 from logging import Logger
 from unittest import mock

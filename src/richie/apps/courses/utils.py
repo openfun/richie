@@ -1,6 +1,7 @@
 """
 Utils that can be useful throughout Richie's courses app
 """
+
 import hashlib
 import hmac
 

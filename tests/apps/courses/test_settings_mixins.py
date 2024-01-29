@@ -1,4 +1,5 @@
 """Unit test suite for Richie's default configuration mixin."""
+
 from django.test import TestCase
 
 from configurations import Configuration

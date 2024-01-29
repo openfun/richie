@@ -1,6 +1,7 @@
 """
 Plugin tests
 """
+
 import random
 from unittest import mock
 

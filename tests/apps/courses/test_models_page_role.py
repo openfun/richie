@@ -1,6 +1,7 @@
 """
 Unit tests for the PageRole model
 """
+
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase

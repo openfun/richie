@@ -1,6 +1,7 @@
 """
 Unit tests for the `order_by` template filter.
 """
+
 import random
 
 from django.contrib.auth import get_user_model

@@ -1,6 +1,7 @@
 """
 Large banner CMS plugin factories
 """
+
 import factory
 
 from .defaults import LARGEBANNER_TEMPLATES

@@ -1,6 +1,7 @@
 """
 Tests for the organization indexer
 """
+
 from unittest import mock
 
 from django.test import TestCase

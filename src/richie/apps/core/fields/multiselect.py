@@ -1,4 +1,5 @@
 """A multi select field where the array of values is stored as a comma separated string."""
+
 from django.core import checks, exceptions, validators
 from django.db import models
 from django.forms import MultipleChoiceField, widgets

@@ -1,4 +1,5 @@
 """Helpers for the demo app of the Richie project."""
+
 from richie.apps.courses.factories import CategoryFactory
 
 

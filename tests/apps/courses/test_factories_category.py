@@ -1,6 +1,7 @@
 """
 Unit tests for the Category factory
 """
+
 import os
 
 from django.test import TestCase

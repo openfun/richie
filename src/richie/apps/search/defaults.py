@@ -1,6 +1,7 @@
 """
 Import custom settings and set up defaults for values the Search app needs
 """
+
 from django.conf import settings
 from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _

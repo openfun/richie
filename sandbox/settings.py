@@ -1,6 +1,7 @@
 """
 Django settings for richie project.
 """
+
 import json
 import os
 

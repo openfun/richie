@@ -1,4 +1,5 @@
 """Richie template tags to manipulate categories."""
+
 from django import template
 from django.utils import translation
 

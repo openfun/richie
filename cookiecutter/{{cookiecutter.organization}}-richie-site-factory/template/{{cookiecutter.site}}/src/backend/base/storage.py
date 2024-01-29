@@ -1,4 +1,5 @@
 """Customizing Django storage backends to enable blue/green deployments."""
+
 import re
 from collections import OrderedDict
 

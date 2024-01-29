@@ -1,6 +1,7 @@
 """
 Unit tests for the Organization model
 """
+
 import os
 
 from django.test import TestCase

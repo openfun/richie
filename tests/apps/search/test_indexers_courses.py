@@ -1,6 +1,7 @@
 """
 Tests for the course indexer
 """
+
 from datetime import datetime
 from unittest import mock
 

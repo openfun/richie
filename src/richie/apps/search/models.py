@@ -1,4 +1,5 @@
 """Declare and configure the models for richie's search application."""
+
 from django.db import models
 
 

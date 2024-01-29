@@ -1,6 +1,7 @@
 """
 NestedItem CMS plugin factories
 """
+
 import factory
 
 from .defaults import NESTEDITEM_VARIANTS

@@ -1,6 +1,7 @@
 """
 End-to-end tests for the organization detail view
 """
+
 import re
 from unittest import mock
 

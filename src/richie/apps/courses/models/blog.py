@@ -1,6 +1,7 @@
 """
 Declare and configure the models for the blog part
 """
+
 from django.db import models
 from django.utils import translation
 from django.utils.translation import gettext_lazy as _

@@ -1,6 +1,7 @@
 """
 API endpoints for the courses app.
 """
+
 from django.conf import settings
 from django.db.models import Q
 

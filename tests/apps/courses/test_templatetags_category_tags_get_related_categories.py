@@ -1,4 +1,5 @@
 """Test suite for the GetRelatedCategories template tag."""
+
 from django.test import RequestFactory
 
 from cms.api import add_plugin

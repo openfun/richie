@@ -1,6 +1,7 @@
 """
 Validate and clean request parameters for our endpoints using Django forms
 """
+
 from functools import reduce
 
 from django import forms
@@ -86,9 +87,12 @@ class CourseSearchForm(SearchForm):
         # QueryDict/MultiValueDict breaks lists: we need to fix it
         data_fixed = (
             {
-                k: data.getlist(k)
-                # Form fields are marked to expect lists as input or not as explained above
-                if (k in FILTER_FIELDS and FILTER_FIELDS[k][1] is True) else v[0]
+                k: (
+                    data.getlist(k)
+                    # Form fields are marked to expect lists as input or not as explained above
+                    if (k in FILTER_FIELDS and FILTER_FIELDS[k][1] is True)
+                    else v[0]
+                )
                 for k, v in data.lists()
             }
             if data

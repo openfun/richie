@@ -1,6 +1,7 @@
 """
 Test suite defining the admin pages for the Course model
 """
+
 import json
 import random
 from datetime import datetime

@@ -1,6 +1,7 @@
 """
 PlainText CMS plugin factories
 """
+
 import factory
 
 from .models import PlainText

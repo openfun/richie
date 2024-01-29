@@ -2,6 +2,7 @@
 Build an interoperability layer that allows Richie to work with ElasticSearch 6
 just like it does with ElasticSearch 7.
 """
+
 # pragma pylint: disable=W0221
 from django.utils.functional import cached_property
 

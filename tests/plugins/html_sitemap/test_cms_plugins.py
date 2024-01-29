@@ -1,4 +1,5 @@
 """Testing DjangoCMS plugin declaration for Richie's simple picture plugin."""
+
 from django.test.client import RequestFactory
 
 from cms.api import add_plugin

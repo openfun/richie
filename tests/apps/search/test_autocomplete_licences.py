@@ -1,6 +1,7 @@
 """
 Tests for the licences autocomplete endpoint.
 """
+
 import json
 from unittest import mock
 

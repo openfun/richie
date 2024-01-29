@@ -1,6 +1,7 @@
 """
 Unit tests for the Program model
 """
+
 from django.test import TestCase
 
 from cms.api import create_page

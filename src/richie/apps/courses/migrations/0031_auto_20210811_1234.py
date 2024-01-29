@@ -12,9 +12,11 @@ def normalize_course_code(apps, schema_editor):
 
     for course in Course.objects.only("id", "code").iterator():
         Course.objects.filter(id=course.id).update(
-            code=slugify(course.code, allow_unicode=True).upper()
-            if course.code
-            else None
+            code=(
+                slugify(course.code, allow_unicode=True).upper()
+                if course.code
+                else None
+            )
         )
 
 

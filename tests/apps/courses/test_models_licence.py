@@ -1,6 +1,7 @@
 """
 Unit tests for the Course model
 """
+
 from django.db import IntegrityError
 from django.test import TestCase
 

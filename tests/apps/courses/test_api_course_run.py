@@ -1,6 +1,7 @@
 """
 Tests for CourseRun API endpoints in the courses app.
 """
+
 import arrow
 from cms.test_utils.testcases import CMSTestCase
 

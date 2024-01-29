@@ -1,4 +1,5 @@
 """Define SearchConfig as the default app configuration."""
+
 from django.conf import settings
 
 from .elasticsearch import (

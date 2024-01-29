@@ -1,6 +1,7 @@
 """
 Tests for the organization viewset
 """
+
 from unittest import mock
 
 from django.test import TestCase

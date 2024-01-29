@@ -2,6 +2,7 @@
 A custom field that defines efforts as a number of pre-defined time units per reference time unit
 (e.g 2 hours/day, 5 hours/week or 3 days/months).
 """
+
 from django import forms
 from django.core import checks, exceptions
 from django.db import models

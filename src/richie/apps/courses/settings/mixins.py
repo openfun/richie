@@ -1,4 +1,5 @@
 """Django Configuration mixins for the Richie courses app."""
+
 from configurations.utils import uppercase_attributes
 
 from .. import settings

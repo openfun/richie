@@ -1,4 +1,5 @@
 """Test suite for the LMS select function."""
+
 from django.test import TestCase
 from django.test.utils import override_settings
 

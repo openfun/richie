@@ -1,4 +1,5 @@
 """Section plugin default template test suite."""
+
 from cms.api import add_plugin
 from cms.models import Placeholder
 

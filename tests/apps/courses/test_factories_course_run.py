@@ -1,6 +1,7 @@
 """
 Unit tests for the CourseRun factory
 """
+
 from datetime import timedelta
 from unittest import mock
 

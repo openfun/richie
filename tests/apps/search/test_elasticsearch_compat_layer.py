@@ -1,4 +1,5 @@
 """Tests for the ElasticSearch compatibility layer."""
+
 from unittest import mock
 
 from django.conf import settings

@@ -1,6 +1,7 @@
 """
 Unit tests for the template tags of the full static tags.
 """
+
 from django.template import Context, Template
 from django.test import TestCase
 from django.test.client import RequestFactory

@@ -1,4 +1,5 @@
 """Create_demo_site management command."""
+
 import logging
 
 from django.contrib.sites.models import Site

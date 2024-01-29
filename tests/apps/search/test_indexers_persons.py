@@ -1,6 +1,7 @@
 """
 Tests for the person indexer
 """
+
 from unittest import mock
 
 from django.test import TestCase

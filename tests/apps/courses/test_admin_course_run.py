@@ -1,6 +1,7 @@
 """
 Test suite defining the admin pages for the CourseRun model
 """
+
 import random
 from datetime import datetime
 

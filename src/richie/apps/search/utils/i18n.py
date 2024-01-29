@@ -1,6 +1,7 @@
 """
 i18n utilities for our search app
 """
+
 from django.conf import settings
 
 

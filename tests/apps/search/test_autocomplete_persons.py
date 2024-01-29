@@ -1,6 +1,7 @@
 """
 Tests for person autocomplete
 """
+
 import json
 from unittest import mock
 

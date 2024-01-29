@@ -1,6 +1,7 @@
 """
 Tests for the category indexer
 """
+
 from unittest import mock
 
 from django.test import TestCase

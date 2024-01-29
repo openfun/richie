@@ -1,4 +1,5 @@
 """Testing DjangoCMS plugin declaration for Richie's simple picture plugin."""
+
 from unittest import mock
 
 from django.test import TestCase

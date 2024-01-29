@@ -1,6 +1,7 @@
 """
 Tests for the index_manager utilities
 """
+
 from datetime import datetime
 from unittest import mock
 

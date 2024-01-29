@@ -1,4 +1,5 @@
 """Test suite for the GetPlaceholderPlugins template tag."""
+
 from django.contrib.auth.models import AnonymousUser
 from django.db import transaction
 from django.template.exceptions import TemplateSyntaxError

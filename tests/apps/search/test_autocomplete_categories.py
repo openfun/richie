@@ -1,6 +1,7 @@
 """
 Tests for category autocomplete
 """
+
 import json
 from unittest import mock
 

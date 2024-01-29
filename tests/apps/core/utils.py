@@ -1,4 +1,5 @@
 """Test utils for the courses application"""
+
 import random
 from functools import reduce
 

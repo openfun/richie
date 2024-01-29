@@ -1,6 +1,7 @@
 """
 ElasticSearch course document management utilities
 """
+
 from collections import defaultdict
 from datetime import datetime
 from functools import reduce
@@ -629,20 +630,24 @@ class CoursesIndexer:
             "categories_names": reduce(
                 lambda acc, title: {
                     **acc,
-                    title.language: acc[title.language] + [title.title]
-                    if acc.get(title.language)
-                    else [title.title],
+                    title.language: (
+                        acc[title.language] + [title.title]
+                        if acc.get(title.language)
+                        else [title.title]
+                    ),
                 },
                 [title for page in category_pages for title in page.published_titles],
                 {},
             ),
             "code": course.code,
-            "complete": {
-                language: slice_string_for_completion(title)
-                for language, title in titles.items()
-            }
-            if course.is_listed
-            else None,
+            "complete": (
+                {
+                    language: slice_string_for_completion(title)
+                    for language, title in titles.items()
+                }
+                if course.is_listed
+                else None
+            ),
             "course_runs": course_runs,
             "cover_image": cover_images,
             "description": {
@@ -660,12 +665,16 @@ class CoursesIndexer:
             "licences": list(licences),
             # Pick the highlighted organization from the organizations QuerySet to benefit from
             # the prefetch of related title sets
-            "organization_highlighted": {
-                title.language: title.menu_title if title.menu_title else title.title
-                for title in organization_highlighted.extended_object.published_titles
-            }
-            if organization_highlighted
-            else None,
+            "organization_highlighted": (
+                {
+                    title.language: (
+                        title.menu_title if title.menu_title else title.title
+                    )
+                    for title in organization_highlighted.extended_object.published_titles
+                }
+                if organization_highlighted
+                else None
+            ),
             "organization_highlighted_cover_image": organization_highlighted_cover_image,
             "organizations": [
                 organization.get_es_id() for organization in organizations
@@ -674,9 +683,11 @@ class CoursesIndexer:
             "organizations_names": reduce(
                 lambda acc, title: {
                     **acc,
-                    title.language: acc[title.language] + [title.title]
-                    if acc.get(title.language)
-                    else [title.title],
+                    title.language: (
+                        acc[title.language] + [title.title]
+                        if acc.get(title.language)
+                        else [title.title]
+                    ),
                 },
                 [
                     title
@@ -689,9 +700,11 @@ class CoursesIndexer:
             "persons_names": reduce(
                 lambda acc, title: {
                     **acc,
-                    title.language: acc[title.language] + [title.title]
-                    if acc.get(title.language)
-                    else [title.title],
+                    title.language: (
+                        acc[title.language] + [title.title]
+                        if acc.get(title.language)
+                        else [title.title]
+                    ),
                 },
                 [
                     title
@@ -700,9 +713,11 @@ class CoursesIndexer:
                 ],
                 {},
             ),
-            "pace": None
-            if course.is_self_paced
-            else get_course_pace(course.effort, course.duration),
+            "pace": (
+                None
+                if course.is_self_paced
+                else get_course_pace(course.effort, course.duration)
+            ),
             "title": titles,
         }
 
@@ -757,16 +772,18 @@ class CoursesIndexer:
             "categories": source["categories"],
             "code": source["code"],
             "course_runs": source["course_runs"],
-            "organization_highlighted": get_best_field_language(
-                source["organization_highlighted"], language
-            )
-            if source.get("organization_highlighted", None)
-            else None,
-            "organization_highlighted_cover_image": get_best_field_language(
-                source["organization_highlighted_cover_image"], language
-            )
-            if source.get("organization_highlighted_cover_image", None)
-            else None,
+            "organization_highlighted": (
+                get_best_field_language(source["organization_highlighted"], language)
+                if source.get("organization_highlighted", None)
+                else None
+            ),
+            "organization_highlighted_cover_image": (
+                get_best_field_language(
+                    source["organization_highlighted_cover_image"], language
+                )
+                if source.get("organization_highlighted_cover_image", None)
+                else None
+            ),
             "organizations": source["organizations"],
             "state": CourseState(**state),
         }

@@ -1,4 +1,5 @@
 """HTML Sitemap plugin for DjangoCMS."""
+
 from functools import reduce
 
 from django.contrib.sites.models import Site

@@ -1,6 +1,7 @@
 """
 Declare and configure the models for the courses application
 """
+
 from django.contrib.auth.models import Group
 from django.db import models
 from django.utils.translation import gettext_lazy as _

@@ -1,6 +1,7 @@
 """
 Test suite for all helpers in the `core` application
 """
+
 import random
 from unittest import mock
 

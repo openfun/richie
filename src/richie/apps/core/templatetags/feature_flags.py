@@ -1,4 +1,5 @@
 """Custom template tags related to FEATURES settings."""
+
 from django import template
 from django.conf import settings
 

@@ -1,6 +1,7 @@
 """
 Backend to connect Open edX richie with an LMS
 """
+
 import logging
 import re
 

@@ -1,4 +1,5 @@
 """Integration tests for actual search results and their ordering."""
+
 # pylint: disable=too-many-lines
 import random
 from unittest import mock

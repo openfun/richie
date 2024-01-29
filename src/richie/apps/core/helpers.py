@@ -1,6 +1,7 @@
 """
 Helpers that can be useful throughout the whole project
 """
+
 from functools import reduce
 from operator import or_
 

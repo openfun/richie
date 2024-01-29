@@ -1,6 +1,7 @@
 """
 Declare and configure the model for the person application
 """
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 

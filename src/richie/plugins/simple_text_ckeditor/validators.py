@@ -1,4 +1,5 @@
 """Custom validators for the simple text editor plugin."""
+
 from html import unescape
 from unicodedata import normalize
 

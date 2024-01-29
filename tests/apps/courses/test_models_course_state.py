@@ -1,6 +1,7 @@
 """
 Unit tests for the Course model
 """
+
 from datetime import timedelta
 
 from django.test import TestCase

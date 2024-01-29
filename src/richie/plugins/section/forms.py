@@ -1,6 +1,7 @@
 """
 Section plugin forms
 """
+
 from django import forms
 
 from djangocms_attributes_field.widgets import AttributesWidget
