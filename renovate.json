@@ -20,7 +20,8 @@
       "enabled": false,
       "groupName": "ignored python dependencies",
       "matchManagers": [
-        "setup-cfg"
+        "setup-cfg",
+        "pep621"
       ],
       "matchPackageNames": [
         "Django",
