@@ -47,29 +47,21 @@ const BaseSessionProvider = ({ children }: PropsWithChildren<any>) => {
     AuthenticationApi!.register();
   }, [queryClient]);
 
-  const invalidate = useCallback(() => {
-    /*
-      Invalidate all queries except 'user' as we can set it to null manually
-      after logout to avoid extra requests
-    */
+  const destroy = useCallback(async () => {
+    await AuthenticationApi!.logout();
+    sessionStorage.removeItem(REACT_QUERY_SETTINGS.cacheStorage.key);
     queryClient.removeQueries({
       predicate: (query: any) =>
         query.options.queryKey.includes('user') && query.options.queryKey.length > 1,
     });
     queryClient.setQueryData(['user'], null);
-  }, [queryClient]);
-
-  const destroy = useCallback(async () => {
-    invalidate();
-    await AuthenticationApi!.logout();
-  }, [invalidate]);
+  }, []);
 
   const context = useMemo(
     () => ({
       user,
       isPending,
       destroy,
-      invalidate,
       login,
       register,
     }),

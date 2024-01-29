@@ -36,7 +36,15 @@ describe('Dummy API', () => {
 
   describe('user', () => {
     it('simulates that authenticated user is admin', async () => {
-      const response = await BaseAPI.user.me();
+      // Not logged-in.
+      let response = await BaseAPI.user.me();
+      expect(response).toBeNull();
+
+      // Log-in.
+      await BaseAPI.user.login();
+
+      // Is logged-in.
+      response = await BaseAPI.user.me();
       expect(response?.username).toBe('admin');
       expect(response?.access_token).toBeDefined();
     });
