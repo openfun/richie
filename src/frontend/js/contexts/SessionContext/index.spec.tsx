@@ -169,10 +169,8 @@ describe('SessionProvider', () => {
         jest.runOnlyPendingTimers();
       });
 
-      expect(result.current.user).toBeNull();
-      expect(sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key)).toMatch(
-        /"data":null,.*"queryKey":\["user"]/,
-      );
+      await waitFor(() => expect(result.current.user).toBeNull());
+      expect(sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key)).toBeNull();
     });
 
     it('does not make request if there is a valid session in cache', async () => {

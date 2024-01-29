@@ -38,6 +38,8 @@ const JOANIE_DEV_DEMO_USER_JWT_TOKENS = {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMzOTI4MjE0LCJpYXQiOjE3MDIzOTIyMTQsImp0aSI6ImNkZjAyMGM4ODdjOTQxYzU5ZmExN2FkZGExNjNjMDIzIiwiZW1haWwiOiJqZWFuLWJhcHRpc3RlLnBlbnJhdGgrc3R1ZGVudF91c2VyQGZ1bi1tb29jLmZyIiwibGFuZ3VhZ2UiOiJmci1mciIsInVzZXJuYW1lIjoic3R1ZGVudF91c2VyIiwiZnVsbF9uYW1lIjoiXHUwMGM5dHVkaWFudCJ9.JMdnC2VXwq2VbNPrIYxj8PEq0oJJ4LZZT_ywWyE1lBM',
 };
 
+export const RICHIE_DUMMY_IS_LOGGED_IN = 'RICHIE_DUMMY_IS_LOGGED_IN';
+
 function getUserInfo(username: keyof typeof JOANIE_DEV_DEMO_USER_JWT_TOKENS): Maybe<User> {
   const accessToken = JOANIE_DEV_DEMO_USER_JWT_TOKENS[username];
   const JWTPayload: JWTPayload = JSON.parse(base64Decode(accessToken.split('.')[1]));
@@ -71,11 +73,19 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
               "username": "admin",
             }
         */
+        if (!localStorage.getItem(RICHIE_DUMMY_IS_LOGGED_IN)) {
+          return null;
+        }
         return getUserInfo(CURRENT_JOANIE_DEV_DEMO_USER) || null;
       },
-      login: () => location.reload(),
+      login: () => {
+        localStorage.setItem(RICHIE_DUMMY_IS_LOGGED_IN, 'true');
+        location.reload();
+      },
       register: () => location.reload(),
-      logout: async () => undefined,
+      logout: async () => {
+        localStorage.removeItem(RICHIE_DUMMY_IS_LOGGED_IN);
+      },
       accessToken: () => sessionStorage.getItem(RICHIE_USER_TOKEN),
     },
     enrollment: {

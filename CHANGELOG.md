@@ -23,6 +23,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix impossible logout issue 
+- Add signature polling description
 - Fix malformed CourseProductItem Order dashboard links
 - Await logout authentication request logout trigger
 - Fix search facets count metadata issue (ignore not listed courses)
