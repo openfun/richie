@@ -46,7 +46,6 @@ describe('widgets/Search/components/CourseGlimpse', () => {
         srcset: 'some srcset',
       },
     },
-    nb_seller_organizations: 1,
     state: {
       call_to_action: 'enroll now',
       datetime: '2019-03-14T10:35:47.823Z',
