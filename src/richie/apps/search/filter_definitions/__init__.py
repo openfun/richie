@@ -1,4 +1,5 @@
 """Make all filter definitions available from richie.apps.search.filter_definitions."""
+
 from django.utils.module_loading import import_string
 
 # pylint: disable=unused-import

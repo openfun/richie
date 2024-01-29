@@ -1,6 +1,7 @@
 """
 Tests for CourseRun API endpoints in the courses app with EDX LMS.
 """
+
 # pylint: disable=too-many-lines
 from unittest import mock
 

@@ -1,6 +1,7 @@
 """
 Factory tests
 """
+
 from django.test import TestCase
 
 from richie.plugins.plain_text.factories import PlainTextFactory

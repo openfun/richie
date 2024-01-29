@@ -1,4 +1,5 @@
 """HTML sitemap plugin models."""
+
 from django.db import models
 from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _

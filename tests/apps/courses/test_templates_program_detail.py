@@ -1,6 +1,7 @@
 """
 End-to-end tests for the program detail view
 """
+
 import re
 
 from cms.api import add_plugin

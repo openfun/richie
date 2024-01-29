@@ -1,4 +1,5 @@
 """Tests for environment ElasticSearch support."""
+
 import json
 import random
 from http.cookies import SimpleCookie

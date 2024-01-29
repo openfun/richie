@@ -1,6 +1,7 @@
 """
 CMS Wizard to add a course page
 """
+
 from django import forms
 from django.conf import settings
 from django.core import validators

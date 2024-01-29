@@ -1,6 +1,7 @@
 """
 Test suite for Richie's main module
 """
+
 from unittest import mock
 
 from django.conf import settings

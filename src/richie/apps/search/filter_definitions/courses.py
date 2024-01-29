@@ -1,4 +1,5 @@
 """Define FilterDefinition classes for the courses index."""
+
 import re
 from operator import itemgetter
 

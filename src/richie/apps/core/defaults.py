@@ -1,4 +1,5 @@
 """Default settings for the core app of Richie."""
+
 from django.conf import global_settings, settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.functional import lazy

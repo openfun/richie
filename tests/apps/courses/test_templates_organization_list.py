@@ -1,6 +1,7 @@
 """
 End-to-end tests for the organization list view
 """
+
 from datetime import timedelta
 from unittest import mock
 

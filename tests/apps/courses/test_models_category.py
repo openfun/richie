@@ -1,6 +1,7 @@
 """
 Unit tests for the Category model
 """
+
 # pylint: disable=too-many-lines
 from django.test import TestCase
 from django.test.utils import override_settings

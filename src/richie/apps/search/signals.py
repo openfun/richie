@@ -1,4 +1,5 @@
 """Update Elasticsearch indices each time a page is modified."""
+
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction

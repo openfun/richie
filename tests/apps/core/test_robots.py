@@ -1,6 +1,7 @@
 """
 Test robots.txt template
 """
+
 from django.test import TestCase
 
 

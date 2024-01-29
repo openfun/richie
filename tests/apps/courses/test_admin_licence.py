@@ -1,6 +1,7 @@
 """
 Test suite defining the admin pages for the Licence model
 """
+
 from django.urls import reverse
 from django.utils import translation
 

@@ -1,6 +1,7 @@
 """
 Model tests
 """
+
 import random
 from unittest import mock
 

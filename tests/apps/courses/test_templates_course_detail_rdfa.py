@@ -1,6 +1,7 @@
 """
 End-to-end tests for the course detail view
 """
+
 import io
 import re
 from datetime import datetime

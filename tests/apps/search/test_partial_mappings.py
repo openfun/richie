@@ -1,6 +1,7 @@
 """
 Test for our partial mappings
 """
+
 from django.test import TestCase
 
 from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT

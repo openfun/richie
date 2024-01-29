@@ -1,6 +1,7 @@
 """
 Handle ElasticSearch setup that needs to be done at bootstrap time.
 """
+
 import logging
 
 from django.core.management.base import BaseCommand

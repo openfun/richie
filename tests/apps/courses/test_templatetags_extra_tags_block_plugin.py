@@ -1,6 +1,7 @@
 """
 Unit tests for the BlockPlugin template tag.
 """
+
 from django.contrib.auth.models import AnonymousUser
 from django.db import transaction
 from django.test import RequestFactory

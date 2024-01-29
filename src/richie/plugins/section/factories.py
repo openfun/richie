@@ -1,6 +1,7 @@
 """
 Section CMS plugin factories
 """
+
 import factory
 
 from .defaults import SECTION_TEMPLATES

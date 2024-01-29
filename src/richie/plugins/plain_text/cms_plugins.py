@@ -1,6 +1,7 @@
 """
 Plain text CMS plugin
 """
+
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
 from django.utils.translation import gettext_lazy as _

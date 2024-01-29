@@ -1,6 +1,7 @@
 """
 Test suite covering the admin form for the CourseRun model
 """
+
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
 from django.utils import translation

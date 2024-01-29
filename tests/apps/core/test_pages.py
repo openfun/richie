@@ -1,6 +1,7 @@
 """
 Test suite for all utils in the `core` application
 """
+
 from django.test import override_settings
 
 from cms.api import Page

@@ -1,6 +1,7 @@
 """
 Unit tests for the Course model
 """
+
 import random
 from datetime import datetime, timedelta
 from unittest import mock

@@ -1,6 +1,7 @@
 """
 Helpers to enable reuse for needs that are shared between viewsets.
 """
+
 from django.utils.translation import get_language_from_request
 
 from rest_framework.decorators import action

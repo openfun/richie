@@ -1,6 +1,7 @@
 """
 Test suite for the wizard creating a new Course page
 """
+
 import random
 from unittest import mock
 

@@ -1,6 +1,7 @@
 """
 Unit tests for the Course model
 """
+
 # pylint: disable=too-many-lines
 import functools
 import random

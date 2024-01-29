@@ -1,4 +1,5 @@
 """Unit tests for the Organizations by Category plugin and its model."""
+
 import re
 
 from django import forms

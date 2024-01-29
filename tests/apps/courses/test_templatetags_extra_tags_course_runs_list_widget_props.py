@@ -1,6 +1,7 @@
 """
 Unit tests for the `course_runs_list_widget_props` template filter.
 """
+
 import json
 
 from django.contrib.auth.models import AnonymousUser
@@ -57,22 +58,30 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             "id": course_run.id,
                             "title": course_run.title,
                             "resource_link": course_run.resource_link,
-                            "start": course_run.start.isoformat().replace("+00:00", "Z")
-                            if course_run.start
-                            else None,
-                            "end": course_run.end.isoformat().replace("+00:00", "Z")
-                            if course_run.end
-                            else None,
-                            "enrollment_start": course_run.enrollment_start.isoformat().replace(
-                                "+00:00", "Z"
-                            )
-                            if course_run.enrollment_start
-                            else None,
-                            "enrollment_end": course_run.enrollment_end.isoformat().replace(
-                                "+00:00", "Z"
-                            )
-                            if course_run.enrollment_end
-                            else None,
+                            "start": (
+                                course_run.start.isoformat().replace("+00:00", "Z")
+                                if course_run.start
+                                else None
+                            ),
+                            "end": (
+                                course_run.end.isoformat().replace("+00:00", "Z")
+                                if course_run.end
+                                else None
+                            ),
+                            "enrollment_start": (
+                                course_run.enrollment_start.isoformat().replace(
+                                    "+00:00", "Z"
+                                )
+                                if course_run.enrollment_start
+                                else None
+                            ),
+                            "enrollment_end": (
+                                course_run.enrollment_end.isoformat().replace(
+                                    "+00:00", "Z"
+                                )
+                                if course_run.enrollment_end
+                                else None
+                            ),
                             "languages": sorted(course_run.languages),
                             "catalog_visibility": course_run.catalog_visibility,
                             "display_mode": "detailed",
@@ -112,22 +121,30 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             "id": course_run.id,
                             "title": course_run.title,
                             "resource_link": course_run.resource_link,
-                            "start": course_run.start.isoformat().replace("+00:00", "Z")
-                            if course_run.start
-                            else None,
-                            "end": course_run.end.isoformat().replace("+00:00", "Z")
-                            if course_run.end
-                            else None,
-                            "enrollment_start": course_run.enrollment_start.isoformat().replace(
-                                "+00:00", "Z"
-                            )
-                            if course_run.enrollment_start
-                            else None,
-                            "enrollment_end": course_run.enrollment_end.isoformat().replace(
-                                "+00:00", "Z"
-                            )
-                            if course_run.enrollment_end
-                            else None,
+                            "start": (
+                                course_run.start.isoformat().replace("+00:00", "Z")
+                                if course_run.start
+                                else None
+                            ),
+                            "end": (
+                                course_run.end.isoformat().replace("+00:00", "Z")
+                                if course_run.end
+                                else None
+                            ),
+                            "enrollment_start": (
+                                course_run.enrollment_start.isoformat().replace(
+                                    "+00:00", "Z"
+                                )
+                                if course_run.enrollment_start
+                                else None
+                            ),
+                            "enrollment_end": (
+                                course_run.enrollment_end.isoformat().replace(
+                                    "+00:00", "Z"
+                                )
+                                if course_run.enrollment_end
+                                else None
+                            ),
                             "languages": sorted(course_run.languages),
                             "catalog_visibility": course_run.catalog_visibility,
                             "display_mode": "detailed",
@@ -184,22 +201,30 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             "id": course_run.id,
                             "title": course_run.title,
                             "resource_link": course_run.resource_link,
-                            "start": course_run.start.isoformat().replace("+00:00", "Z")
-                            if course_run.start
-                            else None,
-                            "end": course_run.end.isoformat().replace("+00:00", "Z")
-                            if course_run.end
-                            else None,
-                            "enrollment_start": course_run.enrollment_start.isoformat().replace(
-                                "+00:00", "Z"
-                            )
-                            if course_run.enrollment_start
-                            else None,
-                            "enrollment_end": course_run.enrollment_end.isoformat().replace(
-                                "+00:00", "Z"
-                            )
-                            if course_run.enrollment_end
-                            else None,
+                            "start": (
+                                course_run.start.isoformat().replace("+00:00", "Z")
+                                if course_run.start
+                                else None
+                            ),
+                            "end": (
+                                course_run.end.isoformat().replace("+00:00", "Z")
+                                if course_run.end
+                                else None
+                            ),
+                            "enrollment_start": (
+                                course_run.enrollment_start.isoformat().replace(
+                                    "+00:00", "Z"
+                                )
+                                if course_run.enrollment_start
+                                else None
+                            ),
+                            "enrollment_end": (
+                                course_run.enrollment_end.isoformat().replace(
+                                    "+00:00", "Z"
+                                )
+                                if course_run.enrollment_end
+                                else None
+                            ),
                             "languages": sorted(course_run.languages),
                             "catalog_visibility": course_run.catalog_visibility,
                             "display_mode": "detailed",

@@ -1,6 +1,7 @@
 """
 Factory tests
 """
+
 from django.test import TestCase, override_settings
 
 from richie.plugins.lti_consumer.factories import LTIConsumerFactory

@@ -1,4 +1,5 @@
 """Parameters that define how the demo site will be built."""
+
 from django.conf import settings
 
 from .utils import pick_image

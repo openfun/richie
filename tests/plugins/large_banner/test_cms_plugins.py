@@ -1,6 +1,7 @@
 """
 Large banner plugin tests
 """
+
 import re
 
 from django.db import IntegrityError

@@ -1,4 +1,5 @@
 """Create_demo_site management command."""
+
 import logging
 import random
 from collections import defaultdict
@@ -182,9 +183,9 @@ def create_demo_site():
                 page_languages=["en", "fr"],
                 page_parent=pages_created["organizations"],
                 fill_banner=pick_image("banner"),
-                fill_categories=[random.choice(partnerships)]  # nosec
-                if (i % 2 == 0)
-                else [],
+                fill_categories=(
+                    [random.choice(partnerships)] if (i % 2 == 0) else []  # nosec
+                ),
                 fill_description=True,
                 fill_logo=pick_image("logo"),
                 should_publish=True,

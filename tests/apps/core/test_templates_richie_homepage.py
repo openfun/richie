@@ -1,6 +1,7 @@
 """
 Test suite for the Open Graph of the homepage
 """
+
 import re
 
 from django.test.utils import override_settings

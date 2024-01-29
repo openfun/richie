@@ -3,6 +3,7 @@ Define base FilterDefinition classes on which to build actual FilterDefinition c
 They encapsulate common behavior around managing filters in ElasticSearch queries and
 API requests (to validate input) and responses (to produce easy-to-consume filters).
 """
+
 from functools import reduce
 from operator import itemgetter
 
@@ -132,9 +133,11 @@ class BaseFilterDefinition:
         """
         return {
             self.name: {
-                "base_path": self.base_page.node.path
-                if getattr(self, "base_page", None)
-                else None,
+                "base_path": (
+                    self.base_page.node.path
+                    if getattr(self, "base_page", None)
+                    else None
+                ),
                 "human_name": self.human_name,
                 "is_autocompletable": self.is_autocompletable,
                 "is_drilldown": self.is_drilldown,

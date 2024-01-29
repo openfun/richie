@@ -2,6 +2,7 @@
 Common utilities related to our indexers. For use in our indexers and related settings,
 or as helpers for users of the project.
 """
+
 from django.utils.module_loading import import_string
 
 from ...courses.defaults import DAY, HOUR, MINUTE, MONTH, WEEK

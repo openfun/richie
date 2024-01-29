@@ -1,6 +1,7 @@
 """
 Tests for the course search form.
 """
+
 from unittest import mock
 
 from django.http.request import QueryDict

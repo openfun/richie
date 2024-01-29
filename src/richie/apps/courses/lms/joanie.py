@@ -1,6 +1,7 @@
 """
 Backend to connect Richie with Joanie
 """
+
 import re
 
 from .base import BaseLMSBackend

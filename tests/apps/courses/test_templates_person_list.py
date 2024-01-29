@@ -1,6 +1,7 @@
 """
 End-to-end tests for the person list view
 """
+
 from datetime import timedelta
 from unittest import mock
 

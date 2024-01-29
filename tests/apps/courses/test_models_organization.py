@@ -1,6 +1,7 @@
 """
 Unit tests for the Organization model
 """
+
 import random
 from unittest import mock
 

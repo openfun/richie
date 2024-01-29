@@ -1,4 +1,5 @@
 """Default settings for Richie's simple picture plugin."""
+
 from django.conf import settings
 
 SIMPLEPICTURE_PRESETS = {

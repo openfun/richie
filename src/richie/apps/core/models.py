@@ -1,4 +1,5 @@
 """Define a custom manager for page extensions"""
+
 from django.apps import apps
 from django.db import models
 from django.utils import translation

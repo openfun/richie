@@ -1,6 +1,7 @@
 """
 Helpers that can be useful throughout Richie's courses app
 """
+
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from django.utils.text import slugify

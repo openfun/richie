@@ -1,6 +1,7 @@
 """
 End-to-end tests for the blogpost detail view
 """
+
 import re
 from datetime import datetime
 from unittest import mock

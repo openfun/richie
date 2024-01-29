@@ -1,4 +1,5 @@
 """Testing DjangoCMS plugin declaration for Richie's LTI consumer plugin."""
+
 import random
 
 from django.contrib.auth.models import AnonymousUser

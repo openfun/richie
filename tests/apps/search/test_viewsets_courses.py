@@ -1,6 +1,7 @@
 """
 Tests for the course viewset
 """
+
 from unittest import mock
 
 from django.test.utils import override_settings

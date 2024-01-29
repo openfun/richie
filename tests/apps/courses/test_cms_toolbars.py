@@ -1,6 +1,7 @@
 """
 Test suite of the toolbar extension for organization pages
 """
+
 from random import choice
 
 from django.contrib.auth.models import AnonymousUser, Permission

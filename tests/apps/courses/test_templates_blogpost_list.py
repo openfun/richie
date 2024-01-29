@@ -1,6 +1,7 @@
 """
 End-to-end tests for the blogpost list view
 """
+
 from datetime import timedelta
 from unittest import mock
 

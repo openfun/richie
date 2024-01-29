@@ -1,4 +1,5 @@
 """Utils for the demo app of the Richie project."""
+
 import os
 import random
 

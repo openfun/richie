@@ -1,6 +1,7 @@
 """
 Test for our internationalization utilities
 """
+
 from django.test import TestCase
 from django.test.utils import override_settings
 

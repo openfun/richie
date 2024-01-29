@@ -1,6 +1,7 @@
 """
 End-to-end tests for the category detail view
 """
+
 import re
 from unittest import mock
 

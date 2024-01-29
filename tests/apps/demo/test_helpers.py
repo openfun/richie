@@ -1,6 +1,7 @@
 """
 Test suite for all helpers in the `courses` application
 """
+
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.helpers import create_i18n_page

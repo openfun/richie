@@ -1,4 +1,5 @@
 """Views for richie's search application."""
+
 from django.contrib import messages
 from django.core import management
 from django.http import HttpResponse

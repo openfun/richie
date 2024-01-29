@@ -1,6 +1,7 @@
 """
 Tests for environment ElasticSearch support
 """
+
 from django.core.cache import caches
 from django.test import TestCase
 

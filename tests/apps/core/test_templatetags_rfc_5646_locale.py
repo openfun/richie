@@ -1,6 +1,7 @@
 """
 Unit tests for the template tags of the search app.
 """
+
 from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase
 from django.test.utils import override_settings

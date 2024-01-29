@@ -1,4 +1,5 @@
 """Test suite for Richie's EffortField Django models field."""
+
 from unittest import mock
 
 from django.db import models

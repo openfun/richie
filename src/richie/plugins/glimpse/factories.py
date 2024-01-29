@@ -1,6 +1,7 @@
 """
 Glimpse CMS plugin factories
 """
+
 import factory
 
 from .defaults import GLIMPSE_VARIANTS

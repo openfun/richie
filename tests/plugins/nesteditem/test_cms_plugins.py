@@ -1,6 +1,7 @@
 """
 NestedItem plugin tests
 """
+
 from django.db import IntegrityError, transaction
 
 from cms.api import add_plugin

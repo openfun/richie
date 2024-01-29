@@ -1,4 +1,5 @@
 """Serializers for Richie's courses app."""
+
 from django.utils.functional import lazy
 
 from rest_framework import serializers

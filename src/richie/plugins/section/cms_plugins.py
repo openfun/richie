@@ -1,6 +1,7 @@
 """
 Section CMS plugin
 """
+
 from django.utils.translation import gettext_lazy as _
 
 from cms.plugin_base import CMSPluginBase

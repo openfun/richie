@@ -1,6 +1,7 @@
 """
 ElasticSearch licence document management utilities
 """
+
 from django.conf import settings
 
 from ...courses.models import Licence

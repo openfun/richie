@@ -1,4 +1,5 @@
 """Custom template tags for the search application of Richie."""
+
 from django import template
 from django.core.exceptions import ImproperlyConfigured
 

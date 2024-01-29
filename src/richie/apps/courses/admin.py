@@ -1,6 +1,7 @@
 """
 Courses application admin
 """
+
 from itertools import chain
 from operator import itemgetter
 

@@ -1,4 +1,5 @@
 """Signals to update the Elasticsearch indices when page modifications are published."""
+
 from django.apps import AppConfig
 
 

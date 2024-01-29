@@ -1,6 +1,7 @@
 """
 Tests for the indexer helpers.
 """
+
 from django.test import TestCase
 
 from richie.apps.courses.defaults import DAY, HOUR, MINUTE, MONTH, WEEK

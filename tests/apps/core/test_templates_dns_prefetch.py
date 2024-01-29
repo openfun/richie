@@ -1,6 +1,7 @@
 """
 Test for the dns prefetch
 """
+
 from django.test.utils import override_settings
 
 from cms.test_utils.testcases import CMSTestCase

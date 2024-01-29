@@ -1,4 +1,5 @@
 """Tests for limits and related properties in facet counts in course searches."""
+
 # pylint: disable=too-many-lines
 from unittest import mock
 

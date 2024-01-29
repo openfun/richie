@@ -1,4 +1,5 @@
 """Custom template tags for the courses application of Richie."""
+
 import json
 
 from django import template

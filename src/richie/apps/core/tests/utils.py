@@ -1,6 +1,7 @@
 """
 Useful stuff for testing
 """
+
 from cms.test_utils.testcases import CMSTestCase
 
 

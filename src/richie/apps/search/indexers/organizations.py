@@ -1,6 +1,7 @@
 """
 ElasticSearch organization document management utilities
 """
+
 from collections import defaultdict
 
 from django.conf import settings

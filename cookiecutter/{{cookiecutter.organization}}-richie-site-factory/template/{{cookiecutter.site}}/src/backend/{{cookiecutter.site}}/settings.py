@@ -1,6 +1,7 @@
 """
 Django settings for the richie {{cookiecutter.site}} project.
 """
+
 import json
 import os
 

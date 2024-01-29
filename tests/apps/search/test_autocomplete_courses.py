@@ -1,6 +1,7 @@
 """
 Tests for course autocomplete
 """
+
 import json
 from unittest import mock
 

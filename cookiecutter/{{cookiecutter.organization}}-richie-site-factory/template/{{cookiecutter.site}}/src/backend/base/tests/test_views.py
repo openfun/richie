@@ -1,4 +1,5 @@
 """Test demo views."""
+
 from django.test import TestCase
 
 from lxml import etree  # nosec

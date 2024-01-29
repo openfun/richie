@@ -1,6 +1,7 @@
 """
 Test suite defining the admin pages for the Course model
 """
+
 from django.urls import reverse
 
 from cms.test_utils.testcases import CMSTestCase

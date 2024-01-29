@@ -1,4 +1,5 @@
 """Testing factories for Richie's simple picture plugin."""
+
 from django.test import TestCase
 
 from richie.plugins.simple_picture.factories import PictureFactory

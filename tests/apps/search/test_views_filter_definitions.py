@@ -1,4 +1,5 @@
 """Test suite for the filter_definition view of richie's search app."""
+
 import json
 from unittest import mock
 

@@ -1,6 +1,7 @@
 """
 API endpoints to access courses through ElasticSearch
 """
+
 from django.conf import settings
 
 from elasticsearch.exceptions import NotFoundError

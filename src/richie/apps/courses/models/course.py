@@ -1,6 +1,7 @@
 """
 Declare and configure the models for the courses application
 """
+
 # pylint: disable=too-many-lines
 from collections.abc import Mapping
 from datetime import MAXYEAR, datetime

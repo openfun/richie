@@ -1,6 +1,7 @@
 """
 Simple text plugin forms
 """
+
 from html import unescape
 from unicodedata import normalize
 

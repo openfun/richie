@@ -1,6 +1,7 @@
 """
 Base backend to connect richie with an LMS
 """
+
 from django.conf import settings
 
 from ..models.course import CourseRunSyncMode

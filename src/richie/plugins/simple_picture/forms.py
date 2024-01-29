@@ -1,4 +1,5 @@
 """SimplePicture plugin forms."""
+
 from django import forms
 
 from djangocms_picture.models import Picture

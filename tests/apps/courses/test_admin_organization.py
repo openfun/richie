@@ -1,6 +1,7 @@
 """
 Test suite for Organization admin
 """
+
 from django.urls import reverse
 
 from cms.api import create_page

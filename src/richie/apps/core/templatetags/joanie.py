@@ -1,4 +1,5 @@
 """Custom template tags related to Joanie."""
+
 from django import template
 
 from richie.apps.courses.lms import LMSHandler

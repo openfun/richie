@@ -1,4 +1,5 @@
 """Tests for actual searches for organizations."""
+
 import json
 from unittest import mock
 

@@ -1,6 +1,7 @@
 """
 Test suite for the wizard creating a new Program page
 """
+
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 

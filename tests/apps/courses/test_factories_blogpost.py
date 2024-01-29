@@ -1,6 +1,7 @@
 """
 Unit tests for the BlogPost factory
 """
+
 import os
 
 from django.test import TestCase

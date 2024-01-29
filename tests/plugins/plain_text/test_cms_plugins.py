@@ -1,4 +1,5 @@
 """Testing DjangoCMS plugin declaration for Richie's plain text plugin."""
+
 import random
 
 from django.test import TestCase

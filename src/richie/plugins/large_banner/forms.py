@@ -1,6 +1,7 @@
 """
 Large banner plugin forms
 """
+
 from django import forms
 
 from djangocms_text_ckeditor.widgets import TextEditorWidget

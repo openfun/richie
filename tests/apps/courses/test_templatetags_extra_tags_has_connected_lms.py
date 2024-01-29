@@ -1,6 +1,7 @@
 """
 Unit tests for the `has_connected_lms` template filter.
 """
+
 from django.test.utils import override_settings
 
 from cms.test_utils.testcases import CMSTestCase

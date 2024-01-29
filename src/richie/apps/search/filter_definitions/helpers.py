@@ -1,4 +1,5 @@
 """Common helpers for different kinds of filter definitions."""
+
 from ..defaults import FACET_COUNTS_DEFAULT_LIMIT, FACET_COUNTS_MAX_LIMIT
 
 

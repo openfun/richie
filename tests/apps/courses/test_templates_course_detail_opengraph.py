@@ -1,6 +1,7 @@
 """
 Test suite for the Open Graph for course pages
 """
+
 import re
 from unittest import mock
 

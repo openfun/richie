@@ -1,6 +1,7 @@
 """
 Custom widgets for the course application
 """
+
 from django.contrib.admin.widgets import AdminSplitDateTime
 from django.utils import timezone
 

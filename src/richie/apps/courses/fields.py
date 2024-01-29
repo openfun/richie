@@ -1,6 +1,7 @@
 """
 Custom fields for the course application
 """
+
 from datetime import datetime, time
 
 from django.forms import SplitDateTimeField

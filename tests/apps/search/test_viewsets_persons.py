@@ -1,6 +1,7 @@
 """
 Tests for the person viewset
 """
+
 from unittest import mock
 
 from django.test import TestCase

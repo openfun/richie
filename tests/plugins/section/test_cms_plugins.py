@@ -1,6 +1,7 @@
 """
 Section plugin tests
 """
+
 from django.db import transaction
 
 from cms.api import add_plugin

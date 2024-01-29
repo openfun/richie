@@ -1,6 +1,7 @@
 """
 End-to-end tests for the person detail view
 """
+
 import re
 from unittest import mock
 

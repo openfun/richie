@@ -1,6 +1,7 @@
 """
 Tests for the licence indexer
 """
+
 from django.test import TestCase
 
 from parler.utils.context import switch_language

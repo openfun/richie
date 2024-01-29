@@ -1,6 +1,7 @@
 """
 Tests for organization autocomplete
 """
+
 import json
 from unittest import mock
 

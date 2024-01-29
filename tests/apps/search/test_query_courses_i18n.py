@@ -1,6 +1,7 @@
 """
 Tests related to internationalization of course searches.
 """
+
 from django.test import TestCase
 
 from richie.apps.courses.factories import (

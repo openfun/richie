@@ -1,4 +1,5 @@
 """LMS handler to select and return the right LMS backend for each url."""
+
 import re
 
 from django.conf import settings

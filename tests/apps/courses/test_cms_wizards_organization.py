@@ -1,6 +1,7 @@
 """
 Test suite for the wizard creating a new Organization page
 """
+
 import random
 from unittest import mock
 

@@ -1,6 +1,7 @@
 """
 Test suite for all helpers in the `core` application
 """
+
 from unittest import mock
 
 from django.test import TestCase

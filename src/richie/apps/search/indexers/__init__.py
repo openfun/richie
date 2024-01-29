@@ -1,4 +1,5 @@
 """Elasticsearch indices for Richie's search app."""
+
 from django.conf import settings
 
 from ..utils.indexers import IndicesList

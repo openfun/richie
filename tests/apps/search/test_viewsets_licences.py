@@ -1,6 +1,7 @@
 """
 Tests for the licence viewset
 """
+
 from unittest import mock
 
 from django.test import TestCase

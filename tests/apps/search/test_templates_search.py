@@ -1,4 +1,5 @@
 """End-to-end tests for the search page."""
+
 import re
 
 from django.test.utils import override_settings
