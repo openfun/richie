@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix enrollment cache not invalided after buying certificate product.
+- Fix a typo on ContractStatus component
 
 ## [2.25.0-beta.1]
 
