@@ -105,7 +105,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     const refDate = new Date();
     refDate.setMonth(refDate.getMonth() + 1);
     refDate.setDate(1);
-    const futureLessThan3Months = faker.date.future({ years: 2.99 / 12, refDate });
+    const futureLessThan3Months = faker.date.future({ years: 2.5 / 12, refDate });
     const creditCard: CreditCard = CreditCardFactory({
       expiration_month: futureLessThan3Months.getMonth() + 1,
       expiration_year: futureLessThan3Months.getFullYear(),
