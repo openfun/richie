@@ -27,19 +27,16 @@ describe('CreditCardHelper', () => {
   });
 
   it('is soon expired', () => {
-    const refDate = new Date();
-    refDate.setMonth(refDate.getMonth() + 1);
-    refDate.setDate(1);
-    const futureLessThan3Months = faker.date.future({
+    const expirationDate = faker.date.future({
+      refDate: new Date(),
       years: 2.99 / 12,
-      refDate,
     });
 
     expect(
       CreditCardHelper.getExpirationState(
         CreditCardFactory({
-          expiration_month: futureLessThan3Months.getMonth() + 1,
-          expiration_year: futureLessThan3Months.getFullYear(),
+          expiration_month: expirationDate.getMonth() + 1,
+          expiration_year: expirationDate.getFullYear(),
         }).one(),
       ),
     ).toBe(CreditCardExpirationStatus.SOON);
