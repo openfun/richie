@@ -28,7 +28,7 @@ describe('<ContractStatus />', () => {
 
     expect(screen.queryByText(/You signed this training contract/)).not.toBeInTheDocument();
     expect(
-      screen.queryByText(/The organization have signed this training contract./),
+      screen.queryByText(/The organization has signed this training contract./),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByText(
@@ -70,7 +70,7 @@ describe('<ContractStatus />', () => {
       screen.queryByText('You have to sign this training contract to access your training.'),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByText(/The organization have signed this training contract./),
+      screen.queryByText(/The organization has signed this training contract./),
     ).not.toBeInTheDocument();
   });
 
@@ -96,10 +96,10 @@ describe('<ContractStatus />', () => {
         })}`,
       ),
     ).toBeInTheDocument();
-    // The organization have signed this training contract. Signed on {date}
+    // The organization has signed this training contract. Signed on {date}
     expect(
       screen.queryByText(
-        `The organization have signed this training contract. Signed on ${intl.formatDate(
+        `The organization has signed this training contract. Signed on ${intl.formatDate(
           organizationSignedOn,
           {
             ...DEFAULT_DATE_FORMAT,

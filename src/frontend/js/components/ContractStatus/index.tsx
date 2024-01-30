@@ -10,7 +10,7 @@ const messages = defineMessages({
     id: 'components.ContractStatus.learnerSignedOn',
   },
   organizationSignedOn: {
-    defaultMessage: 'The organization have signed this training contract. Signed on {date}',
+    defaultMessage: 'The organization has signed this training contract. Signed on {date}',
     description: 'Label for the date of sign of a training contract by the organization',
     id: 'components.ContractStatus.organizationSignedOn',
   },
