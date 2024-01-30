@@ -11,6 +11,11 @@ import CourseRunEnrollment from '../CourseRunEnrollment';
 import CourseProductItem from '../CourseProductItem';
 
 const messages = defineMessages({
+  enroll: {
+    id: 'components.SyllabusCourseRun.enroll',
+    description: 'CTA for users to enroll in the course run for external LMS backend.',
+    defaultMessage: 'Enroll now',
+  },
   enrollment: {
     id: 'components.SyllabusCourseRun.enrollment',
     description: 'Title of the enrollment dates section of an opened course run block',
@@ -84,7 +89,7 @@ const OpenedCourseRun = ({ courseRun }: { courseRun: CourseRun }) => {
         <CourseRunEnrollment courseRun={courseRun} />
       ) : (
         <a className="course-run-enrollment__cta" href={courseRun.resource_link}>
-          {StringHelper.capitalizeFirst(courseRun.state.call_to_action)}
+          <FormattedMessage {...messages.enroll} />
         </a>
       )}
     </>

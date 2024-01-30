@@ -27,7 +27,6 @@ import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CourseProductRelation } from 'types/Joanie';
 import { CourseLightFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
-import { StringHelper } from 'utils/StringHelper';
 import { computeStates } from 'utils/CourseRuns';
 import { User } from 'types/User';
 import { Nullable } from 'types/utils';
@@ -138,7 +137,7 @@ describe('<SyllabusCourseRunsList/>', () => {
 
     expect(languagesContainer.nextSibling).toBeNull();
     getByRole(runContainer, 'link', {
-      name: StringHelper.capitalizeFirst(courseRun.state.call_to_action)!,
+      name: 'Enroll now',
     });
   };
 

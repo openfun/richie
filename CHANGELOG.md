@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   courseProductRelationId instead of courseId and productId.
 - Switch from setup.cfg to pyproject.toml 
 
+### Fixed
+
+- Fix frontend translation of Enroll now for external LMS backend
+
 ## [2.25.0-beta.1]
 
 ### Added
