@@ -53,6 +53,16 @@ const TeacherDashboardCourseList = ({
       {titleTranslated && (
         <h2 className="dashboard-course-list__title dashboard__page_title">{titleTranslated}</h2>
       )}
+      {courseAndProductList.length > 0 ? (
+        <CourseGlimpseList
+          courses={getCourseGlimpseListProps(courseAndProductList, intl, organizationId)}
+          context={context}
+          className="dashboard__course-glimpse-list"
+        />
+      ) : (
+        <FormattedMessage {...messages.emptyList} />
+      )}
+
       {isLoading && (
         <Spinner aria-labelledby="loading-courses-data">
           <span id="loading-courses-data">
@@ -60,28 +70,17 @@ const TeacherDashboardCourseList = ({
           </span>
         </Spinner>
       )}
-      {!isLoading &&
-        (courseAndProductList.length > 0 ? (
-          <>
-            <CourseGlimpseList
-              courses={getCourseGlimpseListProps(courseAndProductList, intl, organizationId)}
-              context={context}
-              className="dashboard__course-glimpse-list"
-            />
-            {hasMore && (
-              <Button
-                onClick={() => next()}
-                disabled={isLoading}
-                ref={loadMoreButtonRef}
-                color="tertiary"
-              >
-                <FormattedMessage {...messages.loadMore} />
-              </Button>
-            )}
-          </>
-        ) : (
-          <FormattedMessage {...messages.emptyList} />
-        ))}
+
+      {hasMore && (
+        <Button
+          onClick={() => next()}
+          disabled={isLoading}
+          ref={loadMoreButtonRef}
+          color="tertiary"
+        >
+          <FormattedMessage {...messages.loadMore} />
+        </Button>
+      )}
     </div>
   );
 };

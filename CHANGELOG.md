@@ -29,6 +29,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix on teacher dashboard courses list. During infinit scroll loading the 
+  window scroll was reset at the top of the page.
 - Fix impossible logout issue 
 - Add signature polling description
 - Fix malformed CourseProductItem Order dashboard links
