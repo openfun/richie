@@ -12,7 +12,7 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ContractFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError } from 'utils/test/expectBanner';
-import { HttpError } from 'utils/errors/HttpError';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import TeacherDashboardContracts from '.';
 
 jest.mock('utils/context', () => ({
@@ -82,12 +82,12 @@ describe('pages/TeacherDashboardContracts', () => {
     fetchMock.get(`https://joanie.test/api/v1.0/organizations/`, [organization]);
     // TeacherDashboardContracts request a paginated list of contracts to display
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?signature_state=signed&course_product_relation_id=2&page=1&page_size=25`,
+      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?course_product_relation_id=2&signature_state=signed&page=1&page_size=25`,
       { results: contracts, count: 0, previous: null, next: null },
     );
     // useTeacherContractsToSign request all contract to sign, without pagination
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?signature_state=half_signed&course_product_relation_id=2`,
+      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?course_product_relation_id=2&signature_state=half_signed`,
       { results: [], count: 0, previous: null, next: null },
     );
 
@@ -245,6 +245,10 @@ describe('pages/TeacherDashboardContracts', () => {
     }).many(3);
 
     fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
+      { results: [], count: 0, previous: null, next: null },
+    );
+    fetchMock.get(
       `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed&page=1&page_size=25`,
       { results: contracts, count: 3, previous: null, next: null },
     );
@@ -309,15 +313,11 @@ describe('pages/TeacherDashboardContracts', () => {
   it('should render an error banner if an error occured during contracts fetching', async () => {
     fetchMock.get(
       `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
-      () => {
-        throw new HttpError(404, 'Not found');
-      },
+      HttpStatusCode.NOT_FOUND,
     );
     fetchMock.get(
       `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
-      () => {
-        throw new HttpError(404, 'Not found');
-      },
+      HttpStatusCode.NOT_FOUND,
     );
 
     render(
