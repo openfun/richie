@@ -87,10 +87,7 @@ describe('TeacherDashboardContractsLayout/ContractActionsBar', () => {
 
     render(
       <Wrapper>
-        <ContractActionsBar
-          courseProductRelationId={faker.string.uuid()}
-          organizationId={faker.string.uuid()}
-        />
+        <ContractActionsBar organizationId={faker.string.uuid()} />
       </Wrapper>,
     );
 
@@ -99,26 +96,47 @@ describe('TeacherDashboardContractsLayout/ContractActionsBar', () => {
     expect(screen.getByRole('button', { name: /Request contracts archive/ })).toBeInTheDocument();
   });
 
-  it("shouldn't only display sign button", () => {
-    mockHasContractToDownload = false;
-    mockCanSignContracts = true;
-    mockContractsToSignCount = 1;
+  it.each([
+    {
+      label: "doesn't have contract to download",
+      hasContractToDownload: false,
+      courseProductRelationId: undefined,
+    },
+    {
+      label: 'has contract to download and courseProductRelationId',
+      hasContractToDownload: true,
+      courseProductRelationId: faker.string.uuid(),
+    },
+    {
+      label: "doesn't have contract to download  and courseProductRelationId",
+      hasContractToDownload: false,
+      courseProductRelationId: faker.string.uuid(),
+    },
+  ])(
+    "shouldn't only display sign button when $label",
+    ({ hasContractToDownload, courseProductRelationId }) => {
+      mockHasContractToDownload = hasContractToDownload;
+      mockCanSignContracts = true;
+      mockContractsToSignCount = 1;
 
-    render(
-      <Wrapper>
-        <ContractActionsBar
-          courseProductRelationId={faker.string.uuid()}
-          organizationId={faker.string.uuid()}
-        />
-      </Wrapper>,
-    );
+      render(
+        <Wrapper>
+          <ContractActionsBar
+            courseProductRelationId={courseProductRelationId}
+            organizationId={faker.string.uuid()}
+          />
+        </Wrapper>,
+      );
 
-    expect(screen.getByTestId('teacher-contracts-list-actionsBar')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Sign all pending contracts/ })).toBeInTheDocument();
-    expect(
-      screen.queryByRole('button', { name: /Request contracts archive/ }),
-    ).not.toBeInTheDocument();
-  });
+      expect(screen.getByTestId('teacher-contracts-list-actionsBar')).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /Sign all pending contracts/ }),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: /Request contracts archive/ }),
+      ).not.toBeInTheDocument();
+    },
+  );
 
   it("shouldn't only display download button", () => {
     mockHasContractToDownload = true;
@@ -127,10 +145,7 @@ describe('TeacherDashboardContractsLayout/ContractActionsBar', () => {
 
     render(
       <Wrapper>
-        <ContractActionsBar
-          courseProductRelationId={faker.string.uuid()}
-          organizationId={faker.string.uuid()}
-        />
+        <ContractActionsBar organizationId={faker.string.uuid()} />
       </Wrapper>,
     );
 
@@ -141,15 +156,25 @@ describe('TeacherDashboardContractsLayout/ContractActionsBar', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('should return nothing when no actions are available', () => {
-    mockHasContractToDownload = false;
+  it.each([
+    {
+      label: 'only download is available but we have a courseProductRelationId',
+      hasContractToDownload: true,
+      courseProductRelationId: faker.string.uuid(),
+    },
+    {
+      label: 'no actions are available',
+      hasContractToDownload: false,
+    },
+  ])('should return nothing when $label', ({ hasContractToDownload, courseProductRelationId }) => {
+    mockHasContractToDownload = hasContractToDownload;
     mockCanSignContracts = false;
     mockContractsToSignCount = 0;
 
     render(
       <Wrapper>
         <ContractActionsBar
-          courseProductRelationId={faker.string.uuid()}
+          courseProductRelationId={courseProductRelationId}
           organizationId={faker.string.uuid()}
         />
       </Wrapper>,
