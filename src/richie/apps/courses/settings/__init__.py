@@ -271,6 +271,10 @@ CMS_PLACEHOLDER_CONF = {
         "plugins": ["PlainTextPlugin"],
         "limits": {"PlainTextPlugin": 1},
     },
+    "courses/cms/organization_detail.html related_organizations": {
+        "name": _("Organizations"),
+        "plugins": ["OrganizationPlugin"],
+    },
     # Category detail
     "courses/cms/category_detail.html banner": {
         "name": _("Banner"),
