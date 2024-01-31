@@ -15,7 +15,7 @@ const ContractActionsBar = ({ organizationId, courseProductRelationId }: Contrac
     organizationId,
     courseProductRelationId,
   });
-  const hasContractToDownload = useHasContractToDownload(organizationId);
+  const hasContractToDownload = useHasContractToDownload(organizationId, courseProductRelationId);
 
   const nbAvailableActions = [canSignContracts, hasContractToDownload].filter((val) => val).length;
   return (
