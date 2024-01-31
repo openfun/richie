@@ -3,6 +3,7 @@ import fetchMock from 'fetch-mock';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 
+import { faker } from '@faker-js/faker';
 import { Deferred } from 'utils/test/deferred';
 import {
   CourseRunFactory,
@@ -96,10 +97,11 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
   it('shows an error message when enrollment get request failed', async () => {
     const user = UserFactory().one();
     const courseRun = CourseRunFactory().one();
-    courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
+    const joanieEnrollmentId = faker.string.uuid();
+    courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${joanieEnrollmentId}`;
 
     fetchMock.get(
-      `${endpoint}/api/v1.0/enrollments/?course_run=${courseRun.id}`,
+      `${endpoint}/api/v1.0/enrollments/?course_run_id=${joanieEnrollmentId}`,
       HttpStatusCode.INTERNAL_SERVER_ERROR,
     );
 
