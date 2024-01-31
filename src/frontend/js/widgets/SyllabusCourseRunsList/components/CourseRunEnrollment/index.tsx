@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import c from 'classnames';
 import { Button } from '@openfun/cunningham-react';
@@ -12,6 +12,7 @@ import { HttpError } from 'utils/errors/HttpError';
 import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/hooks/useCourseEnrollment';
 import { CourseRunUnenrollButton } from 'widgets/SyllabusCourseRunsList/components/CourseRunEnrollment/CourseRunUnenrollmentButton';
 import useDateRelative from 'hooks/useDateRelative';
+import { isEnrollment as isJoanieEnrollment } from 'types/Joanie';
 
 const messages = defineMessages({
   enroll: {
@@ -181,9 +182,8 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
 
 const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
   const { user, login } = useSession();
-  const { enrollmentIsActive, setEnrollment, canUnenroll, states } = useCourseEnrollment(
-    props.courseRun.resource_link,
-  );
+  const { enrollment, enrollmentIsActive, setEnrollment, canUnenroll, states } =
+    useCourseEnrollment(props.courseRun.resource_link);
   const startDate = new Date(props.courseRun.start);
   const isStarted = new Date() > startDate;
   const relativeStartDate = useDateRelative(startDate);
@@ -225,6 +225,16 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
     },
     [courseRun, currentUser, dispatch, enrollmentIsActive],
   );
+
+  const LmsCourseLink = useMemo(() => {
+    if (states.isLoading) {
+      return null;
+    }
+    if (isJoanieEnrollment(enrollment)) {
+      return enrollment.course_run.resource_link;
+    }
+    return courseRun.resource_link;
+  }, [courseRun, enrollment]);
 
   useEffect(() => {
     dispatch({
@@ -303,7 +313,8 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
       return isStarted ? (
         <div>
           <Button
-            href={courseRun.resource_link}
+            href={LmsCourseLink === null ? '#' : LmsCourseLink}
+            disabled={LmsCourseLink === null}
             className="course-run-enrollment__cta"
             fullWidth={true}
           >
