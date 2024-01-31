@@ -5,6 +5,7 @@ import { IntlProvider } from 'react-intl';
 
 import { faker } from '@faker-js/faker';
 import { Deferred } from 'utils/test/deferred';
+import { EnrollmentFactory as JoanieEnrollment } from 'utils/test/factories/joanie';
 import {
   CourseRunFactory,
   RichieContextFactory as mockRichieContextFactory,
@@ -13,6 +14,7 @@ import {
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { Priority } from 'types';
 import CourseRunEnrollment from './index';
 
 jest.mock('utils/errors/handle');
@@ -118,6 +120,45 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
     });
 
     await screen.findByText('Enrollment fetching failed');
+  });
+
+  it('shows a link to the course if the user is already enrolled', async () => {
+    // Joanie session requests
+    let nbApiCalls = 3;
+    const user = UserFactory().one();
+    const joanieEnrollment = JoanieEnrollment({ is_active: true }).one();
+    const courseRun = CourseRunFactory().one();
+    courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${joanieEnrollment.course_run.id}/`;
+    courseRun.state.priority = Priority.ONGOING_OPEN;
+
+    fetchMock.get(
+      `${endpoint}/api/v1.0/enrollments/?course_run_id=${joanieEnrollment.course_run.id}`,
+      {
+        count: 1,
+        next: null,
+        previous: null,
+        results: [joanieEnrollment],
+      },
+    );
+    nbApiCalls += 1;
+
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createTestQueryClient({ user })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment courseRun={courseRun} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
+
+    const $goToCourseButton = await screen.findByRole('link', { name: 'Go to course' });
+    expect($goToCourseButton).toBeInTheDocument();
+    expect($goToCourseButton).toHaveAttribute('href', joanieEnrollment.course_run.resource_link);
+    expect(screen.getByText('You are enrolled in this course run')).toBeInTheDocument();
+    expect(fetchMock.calls()).toHaveLength(nbApiCalls);
   });
 
   it('shows an "Unenroll" text and allows the user to unenroll', async () => {

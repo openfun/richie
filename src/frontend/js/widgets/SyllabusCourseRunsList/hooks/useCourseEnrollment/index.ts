@@ -21,22 +21,18 @@ const useCourseEnrollment = (resourceLink: string) => {
   const queryClient = useQueryClient();
   const EnrollmentAPI = EnrollmentApiInterface(resourceLink);
 
-  const [{ data: enrollment, isError, isLoading }, queryKey] = useSessionQuery(
+  const [{ data: enrollment, isError, isLoading: isEnrollmentLoading }, queryKey] = useSessionQuery(
     ['enrollment', resourceLink],
     async () => {
       return EnrollmentAPI.get(resourceLink, user!);
     },
   );
 
-  const [{ data: isActive, refetch: refetchIsActive }] = useSessionQuery(
-    [...queryKey, 'is_active'],
-    async () => EnrollmentAPI.isEnrolled(enrollment),
-    {
+  const [{ data: isActive, refetch: refetchIsActive, isLoading: isActiveLoading }] =
+    useSessionQuery([...queryKey, 'is_active'], async () => EnrollmentAPI.isEnrolled(enrollment), {
       // Enrollment is null if it has been fetched
-      enabled: !!user && enrollment !== undefined && !isLoading,
-    },
-  );
-
+      enabled: !!user && enrollment !== undefined && !isEnrollmentLoading,
+    });
   const { mutateAsync } = useSessionMutation({
     mutationFn: (activeEnrollment: boolean = true) =>
       EnrollmentAPI.set(resourceLink, user!, enrollment, activeEnrollment),
@@ -61,6 +57,7 @@ const useCourseEnrollment = (resourceLink: string) => {
       errors: {
         get: isError,
       },
+      isLoading: isEnrollmentLoading || isActiveLoading,
     },
   };
 };

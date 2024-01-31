@@ -1,4 +1,4 @@
-import type { CourseState } from 'types';
+import type { CourseState, OpenEdXEnrollment } from 'types';
 import type { Maybe, Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
@@ -190,8 +190,23 @@ export interface Enrollment {
   created_on: string;
   orders: OrderEnrollment[];
   product_relations: CourseProductRelation[];
-  certificate_id?: string;
+  certificate_id: Nullable<string>;
 }
+export const isEnrollment = (obj: unknown | Enrollment | OpenEdXEnrollment): obj is Enrollment => {
+  if (!obj || typeof obj !== 'object') {
+    return false;
+  }
+  return (
+    'is_active' in obj &&
+    'state' in obj &&
+    'course_run' in obj &&
+    'was_created_by_order' in obj &&
+    'created_on' in obj &&
+    'orders' in obj &&
+    'product_relations' in obj &&
+    'certificate_id' in obj
+  );
+};
 
 export interface EnrollmentLight {
   id: string;

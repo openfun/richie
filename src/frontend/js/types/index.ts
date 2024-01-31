@@ -69,4 +69,5 @@ export interface OpenEdXEnrollment {
  * Use an unknown type to make sure we do not depend on any LMS-specific fields
  * on enrollment objects, just use HTTP response codes.
  */
+// TODO(rlecellier): rename into UnknownEnrollment
 export type Enrollment = unknown;

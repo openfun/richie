@@ -81,6 +81,7 @@ export const EnrollmentFactory = factory((): Enrollment => {
     was_created_by_order: false,
     created_on: faker.date.past({ years: 1 }).toISOString(),
     orders: [],
+    certificate_id: null,
   };
 });
 

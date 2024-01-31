@@ -26,4 +26,5 @@ export const enrollment: Enrollment = {
     languages: ['en'],
   },
   product_relations: [],
+  certificate_id: null,
 };
