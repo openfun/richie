@@ -7,6 +7,7 @@ from unittest import mock
 
 from django.test.utils import override_settings
 
+import lxml.html
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
@@ -620,3 +621,80 @@ class OrganizationCMSTestCase(CMSTestCase):
             response,
             '<meta name="description"',
         )
+
+    def test_templates_organization_detail_empty_related_organizations(self):
+        """
+        A published organization page should not display the related organizations
+        section if this placeholder is empty. In edit mode, the section should be
+        displayed with an empty text.
+        """
+        organization = OrganizationFactory(should_publish=True)
+
+        # In public mode, the related organizations section should not be present if
+        # the placeholder is empty
+        response = self.client.get(organization.extended_object.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        html = lxml.html.fromstring(response.content)
+        section = html.cssselect(".organization-detail__organizations")
+        self.assertEqual(section, [])
+
+        # - In edit mode, the related organizations section should be present
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+        response = self.client.get(organization.extended_object.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        html = lxml.html.fromstring(response.content)
+
+        # The related organizations section should be present
+        section = html.cssselect(".organization-detail__organizations")[0]
+        self.assertIsNotNone(section)
+        empty_text = section.cssselect(".organization-detail__empty")[0]
+        self.assertEqual(
+            empty_text.text_content().strip(),
+            "Are there organizations affiliated to this organization?",
+        )
+
+    def test_templates_organization_detail_with_related_organizations(self):
+        """
+        A published organization page should display a related organizations section if
+        the placeholder `related_organizations` is fulfilled.
+        """
+        organization = OrganizationFactory()
+        page = organization.extended_object
+        published_related_orga = OrganizationFactory(should_publish=True)
+        unpublished_related_org = OrganizationFactory()
+
+        # Add two related organizations
+        for related_org in [published_related_orga, unpublished_related_org]:
+            placeholder = page.placeholders.get(slot="related_organizations")
+            add_plugin(
+                language="en",
+                placeholder=placeholder,
+                plugin_type="OrganizationPlugin",
+                page=related_org.extended_object,
+            )
+        # Then publish the organization page
+        page.publish("en")
+
+        # - In public mode, only published related organizations should be displayed
+        response = self.client.get(page.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        html = lxml.html.fromstring(response.content)
+        section = html.cssselect(".organization-detail__organizations")[0]
+        organization_glimpse = section.cssselect(".section__items--organizations > *")
+        self.assertEqual(len(organization_glimpse), 1)
+
+        self.assertEqual(
+            organization_glimpse[0].cssselect("h3")[0].text_content().strip(),
+            published_related_orga.extended_object.get_title(),
+        )
+
+        # - In edit mode, all related organizations should be displayed
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+        response = self.client.get(organization.extended_object.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        html = lxml.html.fromstring(response.content)
+        section = html.cssselect(".organization-detail__organizations")[0]
+        organization_glimpse = section.cssselect(".section__items--organizations > *")
+        self.assertEqual(len(organization_glimpse), 2)

@@ -111,6 +111,27 @@
             </div>
         </div>
 
+    {% block related_organizations %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"related_organizations" %}
+        <div class="organization-detail__organizations organization-detail__block">
+            <section class="section organization-detail__row">
+                <h2 class="organization-detail__title">
+                    {% blocktrans context "organization_detail__title" %}Related organizations{% endblocktrans %}
+                </h2>
+                <div class="section__items section__items--organizations">
+                    {% with header_level=3 %}
+                        {% placeholder "related_organizations" or %}
+                        <p class="organization-detail__empty">
+                            {% trans "Are there organizations affiliated to this organization?" %}
+                        </p>
+                        {% endplaceholder %}
+                    {% endwith %}
+                </div>
+            </section>
+        </div>
+        {% endif %}
+    {% endblock related_organizations %}
+
     {% with courses=organization.get_courses %}
         {% if courses %}
             {% autopaginate courses GLIMPSE_PAGINATION_COURSES %}

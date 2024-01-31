@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- `related_organizations` placeholder on organization detail page
+
 ### Changed
 
 - Upgrade to node 20
