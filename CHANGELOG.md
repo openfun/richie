@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix Organization glimpse card variant logo size
 - Fix joanie's course run link to LMS course in the syllabus page.
 - Fix enrollment cache not invalided after buying certificate product.
 - Fix a typo on ContractStatus component
