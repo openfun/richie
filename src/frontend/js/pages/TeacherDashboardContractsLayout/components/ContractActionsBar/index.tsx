@@ -19,6 +19,7 @@ const ContractActionsBar = ({ organizationId, courseProductRelationId }: Contrac
 
   const canDownloadContracts = hasContractToDownload && !courseProductRelationId;
   const nbAvailableActions = [canSignContracts, canDownloadContracts].filter((val) => val).length;
+  const courseProductRelationIds = courseProductRelationId ? [courseProductRelationId] : undefined;
   return (
     nbAvailableActions > 0 && (
       <div
@@ -31,6 +32,7 @@ const ContractActionsBar = ({ organizationId, courseProductRelationId }: Contrac
         {canSignContracts && (
           <div>
             <SignOrganizationContractButton
+              courseProductRelationIds={courseProductRelationIds}
               organizationId={organizationId}
               contractToSignCount={contractsToSignCount}
             />

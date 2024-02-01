@@ -35,6 +35,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add bulk signature on teacher dashbaord organization's course list page.
 - Add signature polling description
 - Add Course run link into Order detail view
 

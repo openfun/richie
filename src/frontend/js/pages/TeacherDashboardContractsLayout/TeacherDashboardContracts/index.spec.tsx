@@ -76,18 +76,19 @@ describe('pages/TeacherDashboardContracts', () => {
       student_signed_on: Date.toString(),
       organization_signed_on: Date.toString(),
     }).many(3);
-    const organization = OrganizationFactory().one();
+    const organizations = OrganizationFactory().many(2);
+    const defaultOrganization = organizations[0];
 
     // OrganizationContractFilter request all organizations forwho the user have access
-    fetchMock.get(`https://joanie.test/api/v1.0/organizations/`, [organization]);
+    fetchMock.get(`https://joanie.test/api/v1.0/organizations/`, organizations);
     // TeacherDashboardContracts request a paginated list of contracts to display
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?course_product_relation_id=2&signature_state=signed&page=1&page_size=25`,
+      `https://joanie.test/api/v1.0/organizations/${defaultOrganization.id}/contracts/?course_product_relation_id=2&signature_state=signed&page=1&page_size=25`,
       { results: contracts, count: 0, previous: null, next: null },
     );
     // useTeacherContractsToSign request all contract to sign, without pagination
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/${organization.id}/contracts/?course_product_relation_id=2&signature_state=half_signed`,
+      `https://joanie.test/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=half_signed&course_product_relation_id=2`,
       { results: [], count: 0, previous: null, next: null },
     );
 
@@ -101,10 +102,10 @@ describe('pages/TeacherDashboardContracts', () => {
     await expectNoSpinner();
 
     // Organization filter should have been rendered
-    const organizationFilter: HTMLInputElement = screen.getByRole('combobox', {
+    const organizationFilter: HTMLInputElement = await screen.findByRole('combobox', {
       name: 'Organization',
     });
-    expect(organizationFilter).toHaveAttribute('value', organization.title);
+    expect(organizationFilter).toHaveAttribute('value', defaultOrganization.title);
 
     // Signature state filter should have been rendered
     const signatureStateFilter: HTMLInputElement = screen.getByRole('combobox', {
