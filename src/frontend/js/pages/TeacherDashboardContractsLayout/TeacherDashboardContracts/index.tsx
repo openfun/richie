@@ -9,6 +9,7 @@ import Banner, { BannerType } from 'components/Banner';
 import { PER_PAGE } from 'settings';
 import { ContractResourceQuery } from 'types/Joanie';
 
+import { useOrganizations } from 'hooks/useOrganizations';
 import ContractFiltersBar from '../components/ContractFiltersBar';
 import useTeacherContractFilters, {
   TeacherDashboardContractsParams,
@@ -42,6 +43,14 @@ const TeacherDashboardContracts = () => {
     pageSize: PER_PAGE.teacherContractList,
   });
   const { organizationId } = useParams<TeacherDashboardContractsParams>();
+  // organization list is used to show/hide organization filter.
+  // when organizationId is in route's params this filter is always hidden.
+  // therefore we don't need to enable this query.
+  const {
+    items: organizationList,
+    states: { isFetched: isOrganizationListFetched },
+  } = useOrganizations(undefined, { enabled: !!organizationId });
+  const hasMultipleOrganizations = isOrganizationListFetched && organizationList.length > 1;
   const { initialFilters, filters, setFilters } = useTeacherContractFilters();
   const {
     items: contracts,
@@ -88,7 +97,7 @@ const TeacherDashboardContracts = () => {
         <ContractFiltersBar
           defaultValues={initialFilters}
           onFiltersChange={handleFiltersChange}
-          hideFilterOrganization={!!organizationId}
+          hideFilterOrganization={!!(organizationId || !hasMultipleOrganizations)}
         />
       </div>
       <DataGrid

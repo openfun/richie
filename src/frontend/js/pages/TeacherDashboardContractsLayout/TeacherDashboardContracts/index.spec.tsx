@@ -330,4 +330,34 @@ describe('pages/TeacherDashboardContracts', () => {
     await expectNoSpinner();
     await expectBannerError('An error occurred while fetching contracts. Please retry later.');
   });
+
+  it('should hide organization filter when user only have one organization', async () => {
+    const defaultOrganization = OrganizationFactory().one();
+    fetchMock.get('https://joanie.test/api/v1.0/organizations/', [defaultOrganization]);
+
+    const contracts = ContractFactory({
+      student_signed_on: Date.toString(),
+      abilities: { sign: true },
+    }).many(3);
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=signed&page=1&page_size=25`,
+      { results: [], count: 0, previous: null, next: null },
+    );
+    fetchMock.get(
+      `https://joanie.test/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=half_signed`,
+      { results: contracts, count: 3, previous: null, next: null },
+    );
+    render(<Wrapper path="/" initialEntry="" />);
+    await expectNoSpinner();
+
+    // Signature state filter should have been rendered
+    screen.getByRole('combobox', {
+      name: 'Signature state',
+      hidden: true,
+    });
+
+    // Organization filter should not have been rendered
+    const organizationFilter = screen.queryByRole('combobox', { name: 'Organization' });
+    expect(organizationFilter).not.toBeInTheDocument();
+  });
 });
