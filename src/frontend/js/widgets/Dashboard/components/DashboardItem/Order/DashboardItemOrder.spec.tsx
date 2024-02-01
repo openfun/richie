@@ -15,6 +15,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { PropsWithChildren } from 'react';
 import fetchMock from 'fetch-mock';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { userEvent } from '@storybook/testing-library';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import {
   CourseStateFactory,
@@ -164,6 +165,25 @@ describe('<DashboardItemOrder/>', () => {
     await screen.findByText('Completed');
     await screen.findByRole('link', { name: 'View details' });
     await expectNoSpinner('Loading certificate ...');
+  });
+
+  it('renders an order with a valid "Go to syllabus" link', async () => {
+    const order: CredentialOrder = CredentialOrderFactory().one();
+    order.target_courses = [];
+    const { product } = mockCourseProductWithOrder(order);
+
+    render(<DashboardItemOrder order={order} />, { wrapper });
+
+    await screen.findByRole('heading', { level: 5, name: product.title });
+    const moreButton = screen.getByRole('combobox', {
+      name: 'See additional options',
+    });
+
+    const user = userEvent.setup();
+    await user.click(moreButton);
+
+    const link = screen.getByRole('link', { name: 'Go to syllabus' });
+    expect(link.getAttribute('href')).toBe('/redirects/courses/' + order.course.code);
   });
 
   /**
