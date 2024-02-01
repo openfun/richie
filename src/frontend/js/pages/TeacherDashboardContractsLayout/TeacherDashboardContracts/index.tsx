@@ -42,14 +42,14 @@ const TeacherDashboardContracts = () => {
     defaultPage: page ? parseInt(page, 10) : 1,
     pageSize: PER_PAGE.teacherContractList,
   });
-  const { organizationId } = useParams<TeacherDashboardContractsParams>();
+  const { organizationId: routeOrganizationId } = useParams<TeacherDashboardContractsParams>();
   // organization list is used to show/hide organization filter.
   // when organizationId is in route's params this filter is always hidden.
   // therefore we don't need to enable this query.
   const {
     items: organizationList,
     states: { isFetched: isOrganizationListFetched },
-  } = useOrganizations(undefined, { enabled: !!organizationId });
+  } = useOrganizations(undefined, { enabled: !!routeOrganizationId });
   const hasMultipleOrganizations = isOrganizationListFetched && organizationList.length > 1;
   const { initialFilters, filters, setFilters } = useTeacherContractFilters();
   const {
@@ -97,7 +97,7 @@ const TeacherDashboardContracts = () => {
         <ContractFiltersBar
           defaultValues={initialFilters}
           onFiltersChange={handleFiltersChange}
-          hideFilterOrganization={!!(organizationId || !hasMultipleOrganizations)}
+          hideFilterOrganization={!!(routeOrganizationId || !hasMultipleOrganizations)}
         />
       </div>
       <DataGrid
