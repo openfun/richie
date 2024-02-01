@@ -4,14 +4,21 @@ import { useJoanieApi } from 'contexts/JoanieApiContext';
 import AbstractContractFrame, {
   AbstractProps,
 } from 'components/ContractFrame/AbstractContractFrame';
-import { Contract } from 'types/Joanie';
+import { Contract, CourseProductRelation } from 'types/Joanie';
 
 interface Props extends AbstractProps {
   contractIds?: Contract['id'][];
   organizationId: string;
+  courseProductRelationIds?: CourseProductRelation['id'][];
 }
 
-const OrganizationContractFrame = ({ organizationId, contractIds, onDone, ...props }: Props) => {
+const OrganizationContractFrame = ({
+  organizationId,
+  courseProductRelationIds = [],
+  contractIds,
+  onDone,
+  ...props
+}: Props) => {
   const api = useJoanieApi();
   const queryClient = useQueryClient();
   const [contractIdsToCheck, setContractIdsToCheck] = useState(contractIds);
@@ -22,6 +29,7 @@ const OrganizationContractFrame = ({ organizationId, contractIds, onDone, ...pro
      be signed. We need to keep track of these ids to check if all contracts have been signed.
      */
     const response = await api.organizations.contracts.getSignatureLinks({
+      course_product_relation_ids: courseProductRelationIds,
       organization_id: organizationId,
       contracts_ids: contractIds,
     });

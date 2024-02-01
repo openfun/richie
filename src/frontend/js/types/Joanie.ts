@@ -452,6 +452,7 @@ export interface ContractResourceQuery extends PaginatedResourceQuery {
 export interface OrganizationContractSignatureLinksFilters {
   contracts_ids?: string[];
   organization_id: Organization['id'];
+  course_product_relation_ids?: CourseProductRelation['id'][];
 }
 
 export interface ContractInvitationLinkResponse {
