@@ -18,7 +18,7 @@
 FROM python:3.10-buster as base
 
 # ---- Front-end builder image ----
-FROM node:18.19 as front-builder
+FROM node:20.11 as front-builder
 
 # Copy frontend app sources
 COPY ./src/frontend /builder/src/frontend

@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Upgrade to node 20
 - Contract list in the teacher dashbaord are now filtered by 
   courseProductRelationId instead of courseId and productId.
 - Switch from setup.cfg to pyproject.toml 

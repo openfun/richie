@@ -10,7 +10,7 @@ ARG DOCKER_USER=10000
 FROM python:3.10-buster as base
 
 # ---- front-end builder image ----
-FROM node:18.19 as front-builder
+FROM node:20.11 as front-builder
 
 ARG SITE
 
