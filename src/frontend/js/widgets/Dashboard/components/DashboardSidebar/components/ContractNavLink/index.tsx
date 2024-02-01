@@ -5,6 +5,7 @@ import { ContractState, CourseProductRelation, Organization } from 'types/Joanie
 import useTeacherPendingContractsCount from 'hooks/useTeacherPendingContractsCount';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
 import useContractAbilities from 'hooks/useContractAbilities';
+import useDefaultOrganizationId from 'pages/TeacherDashboardContractsLayout/hooks/useDefaultOrganizationId';
 import MenuNavLink from '../MenuNavLink';
 
 interface ContractNavLinkProps {
@@ -18,8 +19,9 @@ const ContractNavLink = ({
   organizationId,
   courseProductRelationId,
 }: ContractNavLinkProps) => {
+  const defaultOrganizationId = useDefaultOrganizationId();
   const { contracts: pendingContracts, pendingContractCount } = useTeacherPendingContractsCount({
-    organizationId,
+    organizationId: organizationId || defaultOrganizationId,
     courseProductRelationId,
   });
   const contractAbilities = useContractAbilities(pendingContracts);
