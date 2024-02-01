@@ -78,7 +78,7 @@ describe('utils/search/getSuggestionsSection', () => {
     expect(mockHandle).toHaveBeenCalledWith(
       new Error(
         'Failed to decode JSON in getSuggestionSection FetchError: invalid json response body at ' +
-          '/api/v1.0/courses/autocomplete/?query=some%20search reason: Unexpected token o in JSON at position 1',
+          '/api/v1.0/courses/autocomplete/?query=some%20search reason: Unexpected token \'o\', "not json" is not valid JSON',
       ),
     );
   });
