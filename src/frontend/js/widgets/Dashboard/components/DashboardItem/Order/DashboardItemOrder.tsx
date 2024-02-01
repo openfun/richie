@@ -29,6 +29,11 @@ const messages = defineMessages({
     description: 'Accessible label displayed while certificate is being fetched on the dashboard.',
     defaultMessage: 'Loading certificate...',
   },
+  syllabusLinkLabel: {
+    id: 'components.DashboardItemOrder.syllabusLinkLabel',
+    description: 'Syllabus link label on order details',
+    defaultMessage: 'Go to syllabus',
+  },
 });
 
 interface DashboardItemOrderProps {
@@ -109,6 +114,13 @@ export const DashboardItemOrder = ({
         title={product?.title ?? ''}
         code={'Ref. ' + course.code}
         imageUrl={course.cover?.src}
+        more={
+          <li>
+            <a className="selector__list__link" href={`/redirects/courses/${course.code}`}>
+              <FormattedMessage {...messages.syllabusLinkLabel} />
+            </a>
+          </li>
+        }
         footer={
           <>
             <div className="dashboard-item-order__footer">

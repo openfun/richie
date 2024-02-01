@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a "more" button to DashboardItem and Orders containing a link to 
+  go to syllabus
 - `related_organizations` placeholder on organization detail page
 
 ### Changed
