@@ -40,6 +40,16 @@
       &__code {
         order: 1;
       }
+
+      &__more {
+        position: absolute;
+        right: 1rem;
+        top: 0.5rem;
+
+        .selector__list {
+          right: -1rem;
+        }
+      }
     }
 
     &__status {

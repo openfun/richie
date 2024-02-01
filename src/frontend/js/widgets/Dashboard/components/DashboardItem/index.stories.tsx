@@ -22,3 +22,21 @@ export const Default: Story = {};
 export const WithImage: Story = {
   args: { imageUrl: DEMO_IMAGE_URL },
 };
+export const WithMore: Story = {
+  args: {
+    imageUrl: DEMO_IMAGE_URL,
+    more: (
+      <>
+        <li>
+          <div className="selector__list__link">Copy</div>
+        </li>
+        <li>
+          <div className="selector__list__link">Duplicate</div>
+        </li>
+        <li>
+          <div className="selector__list__link">Delete</div>
+        </li>
+      </>
+    ),
+  },
+};
