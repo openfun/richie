@@ -6,6 +6,7 @@ import {
   CourseProductRelation,
   CourseQueryFilters,
   CourseProductRelationQueryFilters,
+  ProductType,
 } from 'types/Joanie';
 import useUnionResource, { ResourceUnionPaginationProps } from 'hooks/useUnionResource';
 
@@ -26,11 +27,13 @@ const messages = defineMessages({
 
 interface UseCourseProductUnionProps extends ResourceUnionPaginationProps {
   organizationId?: string;
+  productType?: ProductType;
 }
 
 export const useCourseProductUnion = ({
   perPage = 50,
   organizationId,
+  productType,
 }: UseCourseProductUnionProps = {}) => {
   const api = useJoanieApi();
   return useUnionResource<
@@ -47,7 +50,7 @@ export const useCourseProductUnion = ({
     queryBConfig: {
       queryKey: ['user', 'course_product_relations'],
       fn: api.courseProductRelations.get,
-      filters: { organization_id: organizationId },
+      filters: { organization_id: organizationId, product_type: productType },
     },
     perPage,
     errorGetMessage: messages.errorGet,

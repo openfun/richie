@@ -435,6 +435,7 @@ export interface CourseProductQueryFilters extends ResourcesQuery {
 export interface CourseProductRelationQueryFilters extends PaginatedResourceQuery {
   id?: CourseProductRelation['id'];
   organization_id?: Organization['id'];
+  product_type?: ProductType;
 }
 
 export enum ContractState {

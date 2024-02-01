@@ -22,6 +22,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Certificate products are not listed anymore in teacher dashboard
 - Fix several SaleTunnel cache issues
 - Fix course access link in learner dashboard. This link must not be 
   display when the course isn't open.

@@ -68,7 +68,7 @@ describe('components/TeacherDashboardCourseList', () => {
       title: "Full training: Let's dance, the online lesson",
     }).one();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
       mockPaginatedResponse([productCooking, productDancing], 15, false),
     );
 
@@ -98,7 +98,7 @@ describe('components/TeacherDashboardCourseList', () => {
       `https://joanie.endpoint/api/v1.0/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
     );
     expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
     );
 
     expect(
@@ -124,7 +124,7 @@ describe('components/TeacherDashboardCourseList', () => {
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
       mockPaginatedResponse([], 0, false),
       {
         overwriteRoutes: true,
@@ -154,7 +154,7 @@ describe('components/TeacherDashboardCourseList', () => {
       `https://joanie.endpoint/api/v1.0/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
     );
     expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
     );
 
     expect(await screen.findByText('You have no courses yet.')).toBeInTheDocument();

@@ -57,7 +57,7 @@ describe('components/TeacherDashboardCoursesLoader', () => {
       mockPaginatedResponse(CourseListItemFactory().many(15), 15, false),
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseProductRelationFactory().many(15), 15, false),
     );
 
@@ -87,7 +87,7 @@ describe('components/TeacherDashboardCoursesLoader', () => {
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
     expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
     );
 
     // section titles
