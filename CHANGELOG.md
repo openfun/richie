@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Notification plugin for Course Detail pages
+
 ### Changed
 
 - Contract list in the teacher dashbaord are now filtered by 
