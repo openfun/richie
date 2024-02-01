@@ -6,6 +6,7 @@ import { Spinner } from 'components/Spinner';
 import context from 'utils/context';
 import { useCourseProductUnion } from 'hooks/useCourseProductUnion';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
+import { ProductType } from 'types/Joanie';
 
 const messages = defineMessages({
   loading: {
@@ -41,7 +42,7 @@ const TeacherDashboardCourseList = ({
     isLoading,
     next,
     hasMore,
-  } = useCourseProductUnion({ perPage: 25, organizationId });
+  } = useCourseProductUnion({ perPage: 25, organizationId, productType: ProductType.CREDENTIAL });
   useIntersectionObserver({
     target: loadMoreButtonRef,
     onIntersect: next,
