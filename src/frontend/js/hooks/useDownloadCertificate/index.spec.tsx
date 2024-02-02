@@ -2,7 +2,7 @@ import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
-import { fireEvent, renderHook, waitFor } from '@testing-library/react';
+import { act, fireEvent, renderHook, waitFor } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { useDownloadCertificate } from 'hooks/useDownloadCertificate/index';
@@ -72,9 +72,19 @@ describe('useDownloadCertificate', () => {
     expect(URL.revokeObjectURL).toHaveBeenCalledTimes(0);
     expect(result.current.loading).toBe(false);
 
-    result.current.download(certificate.id);
-    await waitFor(() => expect(result.current.loading).toBe(true));
-    deferred.resolve(HttpStatusCode.OK);
+    act(() => {
+      result.current.download(certificate.id);
+    });
+    expect(result.current.loading).toBe(true);
+
+    deferred.resolve({
+      status: HttpStatusCode.OK,
+      body: new Blob(['test']),
+      headers: {
+        'Content-Disposition': 'attachment; filename="test.pdf";',
+        'Content-Type': 'application/pdf',
+      },
+    });
 
     await waitFor(() => {
       expect(fetchMock.called(DOWNLOAD_URL)).toBe(true);
@@ -109,7 +119,9 @@ describe('useDownloadCertificate', () => {
     // eslint-disable-next-line compat/compat
     expect(URL.revokeObjectURL).toHaveBeenCalledTimes(0);
 
-    await result.current.download(certificate.id);
+    act(() => {
+      result.current.download(certificate.id);
+    });
 
     await waitFor(() => {
       expect(fetchMock.called(DOWNLOAD_URL)).toBe(true);

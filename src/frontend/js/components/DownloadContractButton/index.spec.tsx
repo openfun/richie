@@ -10,6 +10,7 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { alert } from 'utils/indirection/window';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import DownloadContractButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -65,7 +66,16 @@ describe('<DownloadContractButton/>', () => {
     const DOWNLOAD_URL = `https://joanie.endpoint/api/v1.0/contracts/${
       order.contract!.id
     }/download/`;
-    fetchMock.get(DOWNLOAD_URL, 'contract content');
+
+    fetchMock.get(DOWNLOAD_URL, () => ({
+      status: HttpStatusCode.OK,
+      body: new Blob(['contract content']),
+      headers: {
+        'Content-Disposition': 'attachment; filename="test.pdf";',
+        'Content-Type': 'application/pdf',
+      },
+    }));
+    const expectedFile = new File(['contract content'], 'test.pdf');
 
     render(
       <Wrapper>
@@ -88,9 +98,9 @@ describe('<DownloadContractButton/>', () => {
     // eslint-disable-next-line compat/compat
     expect(URL.createObjectURL).toHaveBeenCalledTimes(1);
     // eslint-disable-next-line compat/compat
-    expect(URL.createObjectURL).toHaveBeenCalledWith('contract content');
+    expect(URL.createObjectURL).toHaveBeenCalledWith(expectedFile);
     expect(window.open).toHaveBeenCalledTimes(1);
-    expect(window.open).toHaveBeenCalledWith('contract content');
+    expect(window.open).toHaveBeenCalledWith(expectedFile);
   });
 
   it('fails downloading the contract and shows an error', async () => {
@@ -109,7 +119,10 @@ describe('<DownloadContractButton/>', () => {
     const DOWNLOAD_URL = `https://joanie.endpoint/api/v1.0/contracts/${
       order.contract!.id
     }/download/`;
-    fetchMock.get(DOWNLOAD_URL, 500);
+    fetchMock.get(DOWNLOAD_URL, {
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
+      body: 'Bad request',
+    });
 
     render(
       <Wrapper>

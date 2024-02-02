@@ -48,9 +48,13 @@ describe.each([
   beforeAll(() => {
     // eslint-disable-next-line compat/compat
     URL.createObjectURL = jest.fn();
+    // eslint-disable-next-line compat/compat
+    URL.revokeObjectURL = jest.fn();
+    HTMLAnchorElement.prototype.click = jest.fn();
   });
 
   beforeEach(() => {
+    // SessionProvider queries
     fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
     fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
     fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
@@ -88,10 +92,14 @@ describe.each([
       order: OrderFactory().one(),
     }).one();
 
-    fetchMock.get(
-      `https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`,
-      HttpStatusCode.OK,
-    );
+    fetchMock.get(`https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`, () => ({
+      status: HttpStatusCode.OK,
+      body: new Blob(['test']),
+      headers: {
+        'Content-Disposition': 'attachment; filename="test.pdf";',
+        'Content-Type': 'application/pdf',
+      },
+    }));
 
     render(
       <DashboardItemCertificate certificate={certificate} productType={ProductType.CREDENTIAL} />,

@@ -91,7 +91,14 @@ describe('CourseProductCertificateItem', () => {
     // When user clicks on "Download" button, the certificate should be downloaded
     fetchMock.get(
       `https://joanie.test/api/v1.0/certificates/${order.certificate_id}/download/`,
-      HttpStatusCode.OK,
+      () => ({
+        status: HttpStatusCode.OK,
+        body: new Blob(['test']),
+        headers: {
+          'Content-Disposition': 'attachment; filename="test.pdf";',
+          'Content-Type': 'application/pdf',
+        },
+      }),
     );
 
     fireEvent.click($button);
