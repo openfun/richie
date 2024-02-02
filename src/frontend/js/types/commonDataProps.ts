@@ -31,6 +31,9 @@ export interface RichieContext {
   release: string;
   sentry_dsn: Nullable<string>;
   web_analytics_providers?: Nullable<string[]>;
+  site_urls: {
+    terms_and_conditions: Nullable<string>;
+  };
 }
 
 export interface CommonDataProps {

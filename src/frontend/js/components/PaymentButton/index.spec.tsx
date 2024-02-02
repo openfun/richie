@@ -54,6 +54,9 @@ jest.mock('utils/context', () => ({
     joanie_backend: {
       endpoint: 'https://joanie.test',
     },
+    site_urls: {
+      terms_and_conditions: '/en/about/terms-and-conditions/',
+    },
   }).one(),
 }));
 
@@ -177,7 +180,9 @@ describe.each([
         </Wrapper>,
       );
 
-      const $terms = screen.getByLabelText('By checking this box, you accept the');
+      const $terms = screen.getByLabelText(
+        'By checking this box, you accept the General Terms of Sale',
+      );
       await act(async () => {
         fireEvent.click($terms);
       });
@@ -330,7 +335,9 @@ describe.each([
       nbApiCalls += 1; // fetch order for useProductOrder
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
-      const $terms = screen.getByLabelText('By checking this box, you accept the');
+      const $terms = screen.getByLabelText(
+        'By checking this box, you accept the General Terms of Sale',
+      );
       await act(async () => {
         fireEvent.click($terms);
       });
@@ -455,7 +462,9 @@ describe.each([
         expect(screen.getByTestId('payment-button-order-loaded')).toBeInTheDocument();
       });
 
-      const $terms = screen.getByLabelText('By checking this box, you accept the');
+      const $terms = screen.getByLabelText(
+        'By checking this box, you accept the General Terms of Sale',
+      );
       await act(async () => {
         fireEvent.click($terms);
       });
@@ -590,7 +599,9 @@ describe.each([
         `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
       );
 
-      const $terms = screen.getByLabelText('By checking this box, you accept the');
+      const $terms = screen.getByLabelText(
+        'By checking this box, you accept the General Terms of Sale',
+      );
       await act(async () => {
         fireEvent.click($terms);
       });
@@ -703,7 +714,9 @@ describe.each([
       nbApiCalls += 1; // useProductOrder get order with filters
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
-      const $terms = screen.getByLabelText('By checking this box, you accept the');
+      const $terms = screen.getByLabelText(
+        'By checking this box, you accept the General Terms of Sale',
+      );
       await act(async () => {
         fireEvent.click($terms);
       });
@@ -802,16 +815,8 @@ describe.each([
     });
 
     it('should be able to preview the contract if product has a contract definition', async () => {
-      // eslint-disable-next-line compat/compat
-      URL.createObjectURL = jest.fn((blob) => blob) as any;
-      window.open = jest.fn();
-
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
-
-      const PREVIEW_URL = `https://joanie.test/api/v1.0/contract_definitions/${
-        product.contract_definition!.id
-      }/preview_template/`;
 
       const fetchOrderQueryParams =
         product.type === ProductType.CREDENTIAL
@@ -826,12 +831,10 @@ describe.each([
               state: ['pending', 'validated', 'submitted'],
             };
 
-      fetchMock
-        .get(
-          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
-          [],
-        )
-        .get(PREVIEW_URL, 'preview content');
+      fetchMock.get(
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
+        [],
+      );
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })} product={product}>
@@ -839,25 +842,8 @@ describe.each([
         </Wrapper>,
       );
 
-      const $terms = screen.getByRole('button', { name: 'General Terms of Sale' });
-
-      // eslint-disable-next-line compat/compat
-      expect(URL.createObjectURL).toHaveBeenCalledTimes(0);
-      expect(window.open).toHaveBeenCalledTimes(0);
-      expect(fetchMock.called(PREVIEW_URL)).toBe(false);
-
-      // console.log($terms);
-      await act(async () => {
-        fireEvent.click($terms);
-      });
-
-      expect(fetchMock.called(PREVIEW_URL)).toBe(true);
-      // eslint-disable-next-line compat/compat
-      expect(URL.createObjectURL).toHaveBeenCalledTimes(1);
-      // eslint-disable-next-line compat/compat
-      expect(URL.createObjectURL).toHaveBeenCalledWith('preview content');
-      expect(window.open).toHaveBeenCalledTimes(1);
-      expect(window.open).toHaveBeenCalledWith('preview content');
+      const $terms = screen.getByRole('link', { name: 'General Terms of Sale' });
+      expect($terms).toHaveAttribute('href', '/en/about/terms-and-conditions/');
     });
 
     it('should not show terms checkbox if the product does not have a contract definition', async () => {
@@ -959,7 +945,9 @@ describe.each([
           name: `Pay ${formatPrice(product.price, product.price_currency)}`,
         }) as HTMLButtonElement;
 
-        const $terms = screen.getByLabelText('By checking this box, you accept the');
+        const $terms = screen.getByLabelText(
+          'By checking this box, you accept the General Terms of Sale',
+        );
         await act(async () => {
           fireEvent.click($terms);
         });
