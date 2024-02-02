@@ -1,11 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { PropsWithChildren } from 'react';
-import { EnrollmentFactory } from 'utils/test/factories/joanie';
+import { CredentialOrderFactory, EnrollmentFactory } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
-import { Enrollment } from 'types/Joanie';
-import { DATETIME_FORMAT } from 'hooks/useDateFormat';
-import { Enrolled } from './DashboardItemCourseEnrolling';
+import { CourseRun, Enrollment } from 'types/Joanie';
+import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
+import { CourseRunFactoryFromPriority } from 'utils/test/factories/richie';
+import { noop } from 'utils';
+import { computeState } from 'utils/CourseRuns';
+import { DashboardItemCourseEnrollingRun, Enrolled } from './DashboardItemCourseEnrolling';
 
 /**
  * Most of the component of this file are tested from DashboardItemEnrollment.spec.tsx and
@@ -16,49 +19,109 @@ describe('<Enrolled/>', () => {
     return <IntlProvider locale="en">{children}</IntlProvider>;
   };
 
-  const runTest = async (priority: Priority, expectButton: boolean) => {
-    const enrollment: Enrollment = EnrollmentFactory().one();
-    enrollment.course_run.state.priority = priority;
-    render(<Enrolled enrollment={enrollment} />, { wrapper });
-    await screen.findByText(
-      'You are enrolled for the session from ' +
-        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(
-          new Date(enrollment.course_run.start),
-        ) +
-        ' to ' +
-        new Intl.DateTimeFormat('en', DATETIME_FORMAT).format(new Date(enrollment.course_run.end)),
-    );
-    if (expectButton) {
-      const link = screen.getByRole('link', { name: 'Access course' });
-      expect(link).toBeEnabled();
-      expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
-    } else {
-      expect(screen.queryByRole('link', { name: 'Access course' })).toBeNull();
-    }
-  };
+  it.each([
+    {
+      buttonTestLabel: 'and access course button',
+      priority: Priority.ONGOING_OPEN,
+      expectButton: true,
+    },
+    {
+      buttonTestLabel: 'and no access course button',
+      priority: Priority.FUTURE_OPEN,
+      expectButton: false,
+    },
+    {
+      buttonTestLabel: 'and access course button',
+      priority: Priority.ARCHIVED_OPEN,
+      expectButton: true,
+    },
+    {
+      buttonTestLabel: 'and no access course button',
+      priority: Priority.FUTURE_NOT_YET_OPEN,
+      expectButton: false,
+    },
+    {
+      buttonTestLabel: 'and no access course button',
+      priority: Priority.FUTURE_CLOSED,
+      expectButton: false,
+    },
+    {
+      buttonTestLabel: 'and access course button',
+      priority: Priority.ONGOING_CLOSED,
+      expectButton: true,
+    },
+    {
+      buttonTestLabel: 'and access course button',
+      priority: Priority.ARCHIVED_CLOSED,
+      expectButton: true,
+    },
+    {
+      buttonTestLabel: 'and no access course button',
+      priority: Priority.TO_BE_SCHEDULED,
+      expectButton: false,
+    },
+  ])(
+    'handles enrollments with priority=$priority $buttonTestLabel',
+    async ({ priority, expectButton }) => {
+      const enrollment: Enrollment = EnrollmentFactory().one();
+      enrollment.course_run.state.priority = priority;
+      render(<Enrolled enrollment={enrollment} />, { wrapper });
+      await screen.findByText(
+        'You are enrolled for the session from ' +
+          new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+            new Date(enrollment.course_run.start),
+          ) +
+          ' to ' +
+          new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+            new Date(enrollment.course_run.end),
+          ),
+      );
+      if (expectButton) {
+        const link = screen.getByRole('link', { name: 'Access to course' });
+        expect(link).toBeEnabled();
+        expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
+      } else {
+        expect(screen.queryByRole('link', { name: 'Access to course' })).toBeNull();
+      }
+    },
+  );
+});
 
-  it('handles enrollments with priority=ONGOING_OPEN', () => {
-    runTest(Priority.ONGOING_OPEN, true);
-  });
-  it('handles enrollments with priority=FUTURE_OPEN', () => {
-    runTest(Priority.FUTURE_OPEN, false);
-  });
-  it('handles enrollments with priority=ARCHIVED_OPEN', () => {
-    runTest(Priority.ARCHIVED_OPEN, true);
-  });
-  it('handles enrollments with priority=FUTURE_NOT_YET_OPEN', () => {
-    runTest(Priority.FUTURE_NOT_YET_OPEN, false);
-  });
-  it('handles enrollments with priority=FUTURE_CLOSED', () => {
-    runTest(Priority.FUTURE_CLOSED, false);
-  });
-  it('handles enrollments with priority=ONGOING_CLOSED', () => {
-    runTest(Priority.ONGOING_CLOSED, true);
-  });
-  it('handles enrollments with priority=ARCHIVED_CLOSED', () => {
-    runTest(Priority.ARCHIVED_CLOSED, true);
-  });
-  it('handles enrollments with priority=TO_BE_SCHEDULED', () => {
-    runTest(Priority.TO_BE_SCHEDULED, false);
-  });
+describe('<DashboardItemCourseEnrollingRun/>', () => {
+  it.each([
+    [Priority.ONGOING_OPEN, false],
+    [Priority.FUTURE_OPEN, false],
+    [Priority.ARCHIVED_OPEN, false],
+    [Priority.FUTURE_NOT_YET_OPEN, true],
+    [Priority.FUTURE_CLOSED, false],
+    [Priority.ONGOING_CLOSED, false],
+    [Priority.ARCHIVED_CLOSED, false],
+    [Priority.TO_BE_SCHEDULED, false],
+  ])(
+    `handles correctly enrollment_start date displaying with priority=%s`,
+    async (priority, expectEnrollmentNotYetOpened) => {
+      const order = CredentialOrderFactory().one();
+      const courseRun = CourseRunFactoryFromPriority(priority)().one();
+      courseRun.state = computeState(courseRun);
+      const joanieCourseRun = courseRun as unknown as CourseRun;
+      joanieCourseRun.course = order.course;
+
+      render(
+        <IntlProvider locale="en">
+          <DashboardItemCourseEnrollingRun
+            order={order}
+            courseRun={joanieCourseRun}
+            selected={false}
+            enroll={noop}
+          />
+        </IntlProvider>,
+      );
+
+      if (expectEnrollmentNotYetOpened) {
+        screen.getByText(/Enrollment will open on/);
+      } else {
+        expect(screen.queryByText(/Enrollment will open on/)).not.toBeInTheDocument();
+      }
+    },
+  );
 });

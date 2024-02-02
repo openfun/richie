@@ -1,15 +1,15 @@
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useMemo } from 'react';
 import { Button } from '@openfun/cunningham-react';
 import { CoursesHelper } from 'utils/CoursesHelper';
 import { Priority } from 'types';
 import {
-  CourseRun,
-  Enrollment,
-  CredentialOrder,
   AbstractCourse,
-  Product,
   CertificateOrder,
+  CourseRun,
+  CredentialOrder,
+  Enrollment,
+  Product,
 } from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
@@ -208,7 +208,7 @@ interface DashboardItemCourseEnrollingRunProps {
   product?: Product;
 }
 
-const DashboardItemCourseEnrollingRun = ({
+export const DashboardItemCourseEnrollingRun = ({
   courseRun,
   selected,
   enroll,
@@ -247,7 +247,7 @@ const DashboardItemCourseEnrollingRun = ({
             }}
           />
         </div>
-        {!isOpenedForEnrollment && (
+        {courseRun.state.priority === Priority.FUTURE_NOT_YET_OPEN && (
           <div className="dashboard-item__course-enrolling__run__not-opened">
             <FormattedMessage
               {...messages.enrollmentNotYetOpened}
