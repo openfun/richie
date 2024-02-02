@@ -1,4 +1,5 @@
 import { useJoanieApi } from 'contexts/JoanieApiContext';
+import { browserDownloadFromBlob } from 'utils/download';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { handle } from 'utils/errors/handle';
 
@@ -15,25 +16,6 @@ const extractArchiveId = (url: string): string => {
   }
 
   return match[0];
-};
-
-// TODO: should be factorized with useDownloadCertificate
-// and maybe DownloadContractButton
-const buildArchiveFromBlob = (fileName: string, blob: Blob) => {
-  // eslint-disable-next-line compat/compat
-  const url = URL.createObjectURL(blob);
-  const $link = document.createElement('a');
-  $link.href = url;
-  $link.download = fileName;
-
-  const revokeObject = () => {
-    // eslint-disable-next-line compat/compat
-    URL.revokeObjectURL(url);
-    window.removeEventListener('blur', revokeObject);
-  };
-
-  window.addEventListener('blur', revokeObject);
-  $link.click();
 };
 
 const useContractArchive = () => {
@@ -57,17 +39,16 @@ const useContractArchive = () => {
         return false;
       },
       get: async (archiveId: string): Promise<true | void> => {
-        try {
-          const response = api.user.contracts.zip_archive.get(archiveId);
-          buildArchiveFromBlob('contracts.zip', await response);
-          return true;
-        } catch (error) {
-          handle(error);
-        }
-
         // FIXME: two thing could happen here with HttpStatusCode.NOT_FOUND response:
         // * nothing found because the zip is generating.
         // * nothing found because the zip doesn't and will never exist.
+        const success = await browserDownloadFromBlob(() =>
+          api.user.contracts.zip_archive.get(archiveId),
+        );
+
+        if (success) {
+          return true;
+        }
       },
       create: async (organizationId: string): Promise<string> => {
         const response = await api.user.contracts.zip_archive.create({

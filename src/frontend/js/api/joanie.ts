@@ -23,13 +23,21 @@ interface CheckStatusOptions {
   ignoredErrorStatus: (number | HttpStatusCode)[];
 }
 
+export async function getFileFromResponse(response: Response): Promise<File> {
+  const filenameRegex = /filename="(.*)";/;
+  const dispositionHeader = response.headers.get('Content-Disposition');
+  const matches = dispositionHeader?.match(filenameRegex);
+
+  return new File([await response.blob()], matches ? matches[1] : '');
+}
+
 export function getResponseBody(response: Response) {
   if (response.headers.get('Content-Type') === 'application/json') {
     return response.json();
   }
   const fileType = ['application/pdf', 'application/zip'];
   if (fileType.includes(response.headers.get('Content-Type') || '')) {
-    return response.blob();
+    return new Promise((resolve) => resolve(response));
   }
   return response.text();
 }
@@ -321,7 +329,7 @@ const API = (): Joanie.API => {
             let url = ROUTES.user.orders.invoice.download.replace(':id', order_id);
             url += `?${queryString.stringify({ reference: invoice_reference })}`;
 
-            return fetchWithJWT(url).then(checkStatus);
+            return fetchWithJWT(url).then(checkStatus).then(getFileFromResponse);
           },
         },
         submit_for_signature: async (id) =>
@@ -346,7 +354,9 @@ const API = (): Joanie.API => {
       },
       certificates: {
         download: async (id: string): Promise<File> =>
-          fetchWithJWT(ROUTES.user.certificates.download.replace(':id', id)).then(checkStatus),
+          fetchWithJWT(ROUTES.user.certificates.download.replace(':id', id))
+            .then(checkStatus)
+            .then(getFileFromResponse),
         get: async (filters) => {
           return fetchWithJWT(buildApiUrl(ROUTES.user.certificates.get, filters)).then(checkStatus);
         },
@@ -382,7 +392,9 @@ const API = (): Joanie.API => {
         download(id: string): Promise<any> {
           return fetchWithJWT(ROUTES.user.contracts.download.replace(':id', id), {
             method: 'GET',
-          }).then(checkStatus);
+          })
+            .then(checkStatus)
+            .then(getFileFromResponse);
         },
         zip_archive: {
           check: async (id) => {
@@ -399,7 +411,9 @@ const API = (): Joanie.API => {
           get: async (id) => {
             return fetchWithJWT(ROUTES.user.contracts.zip_archive.get.replace(':id', id), {
               method: 'GET',
-            }).then(checkStatus);
+            })
+              .then(checkStatus)
+              .then(getFileFromResponse);
           },
         },
       },

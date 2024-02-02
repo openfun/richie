@@ -1,9 +1,9 @@
 import { Button } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { handle } from 'utils/errors/handle';
 import { Contract } from 'types/Joanie';
 import { alert } from 'utils/indirection/window';
+import { browserDownloadFromBlob } from 'utils/download';
 
 const messages = defineMessages({
   contractDownloadActionLabel: {
@@ -29,16 +29,11 @@ const DownloadContractButton = ({ contract, className }: DownloadContractButtonP
   const intl = useIntl();
 
   const downloadContract = async () => {
-    try {
-      const blob = await api.user.contracts.download(contract!.id);
-      // eslint-disable-next-line compat/compat
-      const file = window.URL.createObjectURL(blob);
-      window.open(file);
-
-      // eslint-disable-next-line compat/compat
-      URL.revokeObjectURL(file);
-    } catch (e) {
-      handle(e);
+    const success = await browserDownloadFromBlob(
+      () => api.user.contracts.download(contract!.id),
+      true,
+    );
+    if (!success) {
       alert(intl.formatMessage(messages.contractDownloadError));
     }
   };

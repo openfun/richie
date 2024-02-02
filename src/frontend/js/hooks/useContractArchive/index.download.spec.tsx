@@ -71,7 +71,14 @@ describe('useContractArchive', () => {
     expect(URL.revokeObjectURL).toHaveBeenCalledTimes(0);
 
     result.current.methods.get(archiveId);
-    deferred.resolve(HttpStatusCode.OK);
+    deferred.resolve({
+      status: HttpStatusCode.OK,
+      body: new Blob(['test']),
+      headers: {
+        'Content-Disposition': 'attachment; filename="test.pdf";',
+        'Content-Type': 'application/pdf',
+      },
+    });
 
     await waitFor(() => {
       expect(fetchMock.called(DOWNLOAD_URL)).toBe(true);
