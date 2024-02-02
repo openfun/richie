@@ -100,6 +100,7 @@ class PagesTests(CMSTestCase):
         ⚠️ an impact on frontend and update frontend accordingly.
         """
         page = PageFactory(should_publish=True, template="richie/single_column.html")
+
         response = self.client.get(page.get_public_url())
         self.assertContains(
             response, r"\u0022environment\u0022: \u0022test_pages\u0022"
@@ -129,4 +130,72 @@ class PagesTests(CMSTestCase):
         self.assertContains(
             response,
             r"\u0022features\u0022: {\u0022FEATURE_FLAG\u0022: true}",  # noqa pylint: disable=line-too-long
+        )
+
+        self.assertContains(
+            response,
+            r"\u0022site_urls\u0022: {\u0022terms_and_conditions\u0022: null",
+        )
+
+    def test_page_includes_frontend_context_site_urls(self):
+        """
+        The frontend context should contains site urls to pass down to react application
+        Indeed, terms and conditions page should be returned if it exists and
+        is published in the request language.
+        """
+
+        page = PageFactory(should_publish=True, template="richie/single_column.html")
+
+        response = self.client.get(page.get_public_url())
+
+        # - No page exists yet, so terms and conditions should be null
+        self.assertContains(
+            response,
+            r"\u0022site_urls\u0022: {\u0022terms_and_conditions\u0022: null",
+        )
+
+        # - Create a terms and conditions page
+        terms_page = create_i18n_page(
+            {"fr": "Conditions générales de vente", "en": "Terms and conditions"},
+            template="richie/single_column.html",
+            reverse_id="annex__terms_and_conditions",
+        )
+
+        response = self.client.get(page.get_public_url())
+
+        # - The page exists but is not published, so terms and conditions should be null
+        self.assertContains(
+            response,
+            r"\u0022site_urls\u0022: {\u0022terms_and_conditions\u0022: null",
+        )
+
+        # - Publish the page in English
+        terms_page.publish("en")
+
+        # - Request english page should return terms and conditions english page
+        response = self.client.get(page.get_public_url())
+        self.assertContains(
+            response,
+            r"\u0022site_urls\u0022: {\u0022terms_and_conditions\u0022: "
+            r"\u0022/en/terms\u002Dand\u002Dconditions/\u0022",
+        )
+
+        # - Request french page should return terms and conditions page in English as the
+        #   french version is not published
+        response = self.client.get(page.get_public_url("fr"))
+        self.assertContains(
+            response,
+            r"\u0022site_urls\u0022: {\u0022terms_and_conditions\u0022: "
+            r"\u0022/fr/terms\u002Dand\u002Dconditions/\u0022",
+        )
+
+        # - Publish the page in French
+        terms_page.publish("fr")
+
+        # - Now request french page should return terms and conditions page in French
+        response = self.client.get(page.get_public_url("fr"))
+        self.assertContains(
+            response,
+            r"\u0022site_urls\u0022: {\u0022terms_and_conditions\u0022: "
+            r"\u0022/fr/conditions\u002Dgenerales\u002Dde\u002Dvente/\u0022",
         )

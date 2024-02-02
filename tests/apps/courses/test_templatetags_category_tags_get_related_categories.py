@@ -81,7 +81,7 @@ class GetRelatedCategoriesTemplateTagsTestCase(CMSTestCase):
         # 1. Test categories present on the draft page
 
         # - Linked with one of the pages
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             output = self.render_template_obj(
                 template, {"current_page": page_main, "pages": [page1]}, request
             )
@@ -89,7 +89,7 @@ class GetRelatedCategoriesTemplateTagsTestCase(CMSTestCase):
         self.assertEqual(output, "".join([str(c.id) for c in expected]))
 
         # - Linked with either of the 2 pages
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             output = self.render_template_obj(
                 template, {"current_page": page_main, "pages": [page1, page2]}, request
             )
@@ -102,7 +102,7 @@ class GetRelatedCategoriesTemplateTagsTestCase(CMSTestCase):
         self.assertEqual(output, "".join([str(c.id) for c in expected]))
 
         # - Linked with a page in a different publication status
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             output = self.render_template_obj(
                 template,
                 {"current_page": page_main, "pages": [page1.get_public_object()]},
@@ -115,7 +115,7 @@ class GetRelatedCategoriesTemplateTagsTestCase(CMSTestCase):
         current_page = page_main.get_public_object()
 
         # - Linked with one of the pages
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             output = self.render_template_obj(
                 template,
                 {"current_page": current_page, "pages": [page1.get_public_object()]},
@@ -126,7 +126,7 @@ class GetRelatedCategoriesTemplateTagsTestCase(CMSTestCase):
         )
 
         # - Linked with either of the 2 pages
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             output = self.render_template_obj(
                 template,
                 {
@@ -142,7 +142,7 @@ class GetRelatedCategoriesTemplateTagsTestCase(CMSTestCase):
         self.assertEqual(output, "".join([str(c.id) for c in expected]))
 
         # - Linked with a page in a different publication status
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             output = self.render_template_obj(
                 template,
                 {"current_page": current_page, "pages": [page1]},
