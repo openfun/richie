@@ -13,6 +13,8 @@ from django.http.request import HttpRequest
 from django.middleware.csrf import get_token
 from django.utils.translation import get_language_from_request
 
+from cms.models import Page
+
 from richie.apps.core.templatetags.joanie import is_joanie_enabled
 from richie.apps.courses.models import Organization
 
@@ -232,6 +234,19 @@ class FrontendContextProcessor:
 
         return None
 
+    def get_site_urls(self, request: HttpRequest):
+        """Get the site urls context that must be passed down to react application."""
+
+        def get_page_url(reverse_id):
+            try:
+                page = Page.objects.get(publisher_is_draft=False, reverse_id=reverse_id)
+            except Page.DoesNotExist:
+                return None
+
+            return page.get_public_url()
+
+        return {"terms_and_conditions": get_page_url("annex__terms_and_conditions")}
+
     def context_processor(self, request: HttpRequest) -> dict:
         """Get the frontend context processor."""
         context = {
@@ -240,6 +255,7 @@ class FrontendContextProcessor:
             "release": getattr(settings, "RELEASE", ""),
             "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
             "features": getattr(settings, "FEATURES", {}),
+            "site_urls": self.get_site_urls(request),
             **WebAnalyticsContextProcessor().frontend_context_processor(request),
         }
 

@@ -41,7 +41,7 @@ class BlockPluginTemplateTagsTestCase(CMSTestCase):
             "{% endblockplugin %}"
         )
 
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             output = self.render_template_obj(
                 template, {"plugin": plugin}, request
             ).replace("\n", "")
@@ -70,7 +70,7 @@ class BlockPluginTemplateTagsTestCase(CMSTestCase):
             "{% endblockplugin %}"
         )
 
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             output = self.render_template_obj(
                 template, {"plugin": plugin}, request
             ).replace("\n", "")
