@@ -1130,6 +1130,7 @@ through `context_processor`
 
 ### Added
 
+- Bind terms and conditions url into frontend context and use it in sale tunnel
 - Add checkmark icon to course skills bullet lists.
 
 ### Changed

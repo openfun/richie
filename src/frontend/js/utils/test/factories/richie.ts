@@ -181,6 +181,9 @@ export const RichieContextFactory = factory<CommonDataProps['context']>(() => ({
   release: faker.system.semver(),
   sentry_dsn: null,
   web_analytics_providers: null,
+  site_urls: {
+    terms_and_conditions: null,
+  },
 }));
 
 export const CourseLightFactory = factory<Course>(() => {

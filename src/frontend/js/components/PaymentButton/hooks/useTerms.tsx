@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { PaymentErrorMessageId } from 'components/PaymentButton/index';
 import { Product } from 'types/Joanie';
-import { useJoanieApi } from 'contexts/JoanieApiContext';
+import context from 'utils/context';
 
 const messages = defineMessages({
   termsMessage: {
@@ -33,7 +33,6 @@ export const useTerms = ({
   error?: PaymentErrorMessageId;
 }) => {
   const intl = useIntl();
-  const api = useJoanieApi();
   const [termsAccepted, setTermsAccepted] = useState(false);
   const validateTerms = () => {
     if (!product.contract_definition) {
@@ -42,18 +41,6 @@ export const useTerms = ({
     if (!termsAccepted) {
       onError(PaymentErrorMessageId.ERROR_TERMS);
     }
-  };
-
-  const openContract = async (e: React.MouseEvent) => {
-    if (!product.contract_definition) {
-      return;
-    }
-    e.stopPropagation();
-    e.preventDefault();
-    const blob = await api.contractDefinitions.previewTemplate(product.contract_definition.id);
-    // eslint-disable-next-line compat/compat
-    const file = window.URL.createObjectURL(blob);
-    window.open(file);
   };
 
   return {
@@ -66,12 +53,14 @@ export const useTerms = ({
             label={
               <>
                 {intl.formatMessage(messages.termsMessage)}{' '}
-                <button
-                  onClick={openContract}
+                <a
+                  href={context.site_urls.terms_and_conditions ?? '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   title={intl.formatMessage(messages.termsMessageLinkTitle)}
                 >
                   {intl.formatMessage(messages.termsMessageLink)}
-                </button>
+                </a>
               </>
             }
             onChange={(e) => setTermsAccepted(e.target.checked)}
