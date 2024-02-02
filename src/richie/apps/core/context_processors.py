@@ -42,15 +42,9 @@ def site_metas(request: HttpRequest):
             "domain": site_current.domain,
             "web_url": f"{protocol:s}://{site_current.domain:s}",
         },
-        "FRONTEND_CONTEXT": {
-            "context": {
-                "csrftoken": get_token(request),
-                "environment": getattr(settings, "ENVIRONMENT", ""),
-                "release": getattr(settings, "RELEASE", ""),
-                "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
-                **WebAnalyticsContextProcessor().frontend_context_processor(request),
-            }
-        },
+        "FRONTEND_CONTEXT": json.dumps(
+            FrontendContextProcessor().context_processor(request)
+        ),
         **WebAnalyticsContextProcessor().context_processor(request),
     }
 
@@ -99,32 +93,6 @@ def site_metas(request: HttpRequest):
                 }
             ),
         }
-
-        context["FRONTEND_CONTEXT"]["context"]["authentication"] = {
-            "endpoint": authentication_delegation["BASE_URL"],
-            "backend": authentication_delegation["BACKEND"],
-        }
-
-    if is_joanie_enabled():
-        context["FRONTEND_CONTEXT"]["context"]["joanie_backend"] = {
-            "endpoint": settings.JOANIE_BACKEND["BASE_URL"],
-        }
-
-    if getattr(settings, "RICHIE_LMS_BACKENDS", None):
-        context["FRONTEND_CONTEXT"]["context"]["lms_backends"] = [
-            {
-                "endpoint": lms["BASE_URL"],
-                "backend": lms["JS_BACKEND"],
-                "course_regexp": lms["JS_COURSE_REGEX"],
-            }
-            for lms in getattr(settings, "RICHIE_LMS_BACKENDS", [])
-        ]
-
-    context["FRONTEND_CONTEXT"]["context"]["features"] = getattr(
-        settings, "FEATURES", {}
-    )
-
-    context["FRONTEND_CONTEXT"] = json.dumps(context["FRONTEND_CONTEXT"])
 
     if getattr(settings, "RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT", None):
         context["RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT"] = (
@@ -222,3 +190,66 @@ class WebAnalyticsContextProcessor:
 
         dimensions["page_title"] = [page.get_title() if page else ""]
         return dimensions
+
+
+class FrontendContextProcessor:
+    """
+    Context processor to add all information required by react application.
+    """
+
+    def get_authentication_context(self):
+        """Get the authentication context if there is."""
+        if authentication_delegation := getattr(
+            settings, "RICHIE_AUTHENTICATION_DELEGATION", None
+        ):
+            return {
+                "endpoint": authentication_delegation["BASE_URL"],
+                "backend": authentication_delegation["BACKEND"],
+            }
+
+        return None
+
+    def get_joanie_context(self):
+        """Get the joanie context if it is enabled."""
+        if is_joanie_enabled():
+            return {
+                "endpoint": settings.JOANIE_BACKEND["BASE_URL"],
+            }
+
+        return None
+
+    def get_lms_context(self):
+        """Get lms backends context if there are."""
+        if getattr(settings, "RICHIE_LMS_BACKENDS", None):
+            return [
+                {
+                    "endpoint": lms["BASE_URL"],
+                    "backend": lms["JS_BACKEND"],
+                    "course_regexp": lms["JS_COURSE_REGEX"],
+                }
+                for lms in getattr(settings, "RICHIE_LMS_BACKENDS", [])
+            ]
+
+        return None
+
+    def context_processor(self, request: HttpRequest) -> dict:
+        """Get the frontend context processor."""
+        context = {
+            "csrftoken": get_token(request),
+            "environment": getattr(settings, "ENVIRONMENT", ""),
+            "release": getattr(settings, "RELEASE", ""),
+            "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
+            "features": getattr(settings, "FEATURES", {}),
+            **WebAnalyticsContextProcessor().frontend_context_processor(request),
+        }
+
+        if authentication_context := self.get_authentication_context():
+            context["authentication"] = authentication_context
+
+        if joanie_context := self.get_joanie_context():
+            context["joanie_backend"] = joanie_context
+
+        if lms_context := self.get_lms_context():
+            context["lms_backends"] = lms_context
+
+        return {"context": context}
