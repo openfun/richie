@@ -15,16 +15,29 @@ export class CreditCardHelper {
     if (!creditCard.expiration_month || !creditCard.expiration_year) {
       return false;
     }
-    const expirationDate = new Date(creditCard.expiration_year, creditCard.expiration_month - 1, 1);
-    const limitDate = new Date();
-    limitDate.setMonth(limitDate.getMonth() + 3);
-    return limitDate.getTime() > expirationDate.getTime();
+    const expirationDate = new Date(
+      creditCard.expiration_year,
+      creditCard.expiration_month,
+      0,
+      23,
+      59,
+      59,
+    );
+    const limitDate = new Date(new Date().getFullYear(), new Date().getMonth() + 4, 0, 23, 59, 59);
+    return limitDate.getTime() >= expirationDate.getTime();
   }
 
   static isExpired(creditCard: CreditCard): boolean {
-    const expirationDate = new Date(creditCard.expiration_year, creditCard.expiration_month - 1, 1);
+    const expirationDate = new Date(
+      creditCard.expiration_year,
+      creditCard.expiration_month,
+      0,
+      23,
+      59,
+      59,
+    );
     const now = new Date();
-    return expirationDate.getTime() < now.getTime();
+    return expirationDate.getTime() <= now.getTime();
   }
 
   static getExpirationState(creditCard: CreditCard): CreditCardExpirationStatus {
