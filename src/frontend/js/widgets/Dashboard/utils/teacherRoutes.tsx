@@ -14,6 +14,7 @@ import {
 } from 'widgets/Dashboard/utils/teacherRouteMessages';
 import { TeacherDashboardCourseLoader } from 'pages/TeacherDashboardCourseLoader';
 import { TeacherDashboardTrainingLoader } from 'pages/TeacherDashboardTraining';
+import { TeacherDashboardCourseLearnersLayout } from 'pages/TeacherDashboardCourseLearnersLayout';
 
 export function getTeacherDashboardRoutes() {
   const intl = useIntl();
@@ -78,6 +79,19 @@ export function getTeacherDashboardRoutes() {
                     crumbLabel:
                       TEACHER_DASHBOARD_ROUTE_LABELS[
                         TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS
+                      ],
+                  },
+                },
+                {
+                  path: getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT_LEARNER_LIST, {
+                    courseId: ':courseId',
+                    courseProductRelationId: ':courseProductRelationId',
+                  }),
+                  element: <TeacherDashboardCourseLearnersLayout />,
+                  handle: {
+                    crumbLabel:
+                      TEACHER_DASHBOARD_ROUTE_LABELS[
+                        TeacherDashboardPaths.COURSE_PRODUCT_LEARNER_LIST
                       ],
                   },
                 },
@@ -173,6 +187,23 @@ export function getTeacherDashboardRoutes() {
                     crumbLabel:
                       TEACHER_DASHBOARD_ROUTE_LABELS[
                         TeacherDashboardPaths.ORGANIZATION_PRODUCT_CONTRACTS
+                      ],
+                  },
+                },
+                {
+                  path: getRoutePath(
+                    TeacherDashboardPaths.ORGANIZATION_COURSE_PRODUCT_LEARNER_LIST,
+                    {
+                      organizationId: ':organizationId',
+                      courseId: ':courseId',
+                      courseProductRelationId: ':courseProductRelationId',
+                    },
+                  ),
+                  element: <TeacherDashboardCourseLearnersLayout />,
+                  handle: {
+                    crumbLabel:
+                      TEACHER_DASHBOARD_ROUTE_LABELS[
+                        TeacherDashboardPaths.ORGANIZATION_COURSE_PRODUCT_LEARNER_LIST
                       ],
                   },
                 },

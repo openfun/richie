@@ -12,10 +12,12 @@ export enum TeacherDashboardPaths {
   ORGANIZATION_PRODUCT = '/teacher/organizations/{organizationId}/courses/{courseId}/products/{courseProductRelationId}',
   ORGANIZATION_COURSE_CONTRACTS = '/teacher/organizations/{organizationId}/courses/{courseId}/contracts',
   ORGANIZATION_PRODUCT_CONTRACTS = '/teacher/organizations/{organizationId}/courses/{courseId}/products/{courseProductRelationId}/contracts',
+  ORGANIZATION_COURSE_PRODUCT_LEARNER_LIST = '/teacher/organizations/{organizationId}/courses/{courseId}/products/{courseProductRelationId}/learners',
   ORGANIZATION_COURSE_GENERAL_INFORMATION = '/teacher/organizations/{organizationId}/courses/{courseId}/information',
   COURSE = '/teacher/courses/{courseId}',
   COURSE_GENERAL_INFORMATION = '/teacher/courses/{courseId}/information',
   COURSE_PRODUCT = '/teacher/courses/{courseId}/products/{courseProductRelationId}',
+  COURSE_PRODUCT_LEARNER_LIST = '/teacher/courses/{courseId}/products/{courseProductRelationId}/learners',
   COURSE_CONTRACTS = '/teacher/courses/{courseId}/contracts',
   COURSE_PRODUCT_CONTRACTS = '/teacher/courses/{courseId}/products/{courseProductRelationId}/contracts',
 }
@@ -69,6 +71,12 @@ export const TEACHER_DASHBOARD_ROUTE_PATHS = defineMessages<TeacherDashboardPath
     defaultMessage:
       '/teacher/organizations/{organizationId}/courses/{courseId}/products/{courseProductRelationId}',
   },
+  [TeacherDashboardPaths.ORGANIZATION_COURSE_PRODUCT_LEARNER_LIST]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.learnerList.path',
+    description: "The path to display the organization product's learner list view.",
+    defaultMessage:
+      '/teacher/organizations/{organizationId}/courses/{courseId}/products/{courseProductRelationId}/learners',
+  },
   [TeacherDashboardPaths.COURSE]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.path',
     description: 'The path to display the course view.',
@@ -83,6 +91,11 @@ export const TEACHER_DASHBOARD_ROUTE_PATHS = defineMessages<TeacherDashboardPath
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.path',
     description: 'The path to display the product view.',
     defaultMessage: '/teacher/courses/{courseId}/products/{courseProductRelationId}',
+  },
+  [TeacherDashboardPaths.COURSE_PRODUCT_LEARNER_LIST]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.learnerList.path',
+    description: "The path to display the product's learner list view.",
+    defaultMessage: '/teacher/courses/{courseId}/products/{courseProductRelationId}/learners',
   },
   [TeacherDashboardPaths.COURSE_CONTRACTS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.contracts.path',
@@ -143,6 +156,11 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
     description: 'Label of the organization product view.',
     defaultMessage: 'General information',
   },
+  [TeacherDashboardPaths.ORGANIZATION_COURSE_PRODUCT_LEARNER_LIST]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.learnerList.label',
+    description: "Label to display the organization product's learner list view.",
+    defaultMessage: 'Learners',
+  },
   [TeacherDashboardPaths.COURSE]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.label',
     description: 'Label of the course root view.',
@@ -157,6 +175,11 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.label',
     description: 'Label of the product view.',
     defaultMessage: 'General information',
+  },
+  [TeacherDashboardPaths.COURSE_PRODUCT_LEARNER_LIST]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.learnerList.label',
+    description: "Label to display the product's learner list view.",
+    defaultMessage: 'Learners',
   },
   [TeacherDashboardPaths.COURSE_CONTRACTS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.contracts.label',

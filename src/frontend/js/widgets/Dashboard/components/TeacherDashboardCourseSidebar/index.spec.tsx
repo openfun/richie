@@ -129,6 +129,7 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
       expectedRoutes: [
         TeacherDashboardPaths.COURSE_PRODUCT,
         TeacherDashboardPaths.COURSE_CONTRACTS,
+        TeacherDashboardPaths.COURSE_PRODUCT_LEARNER_LIST,
       ],
     },
     {
@@ -146,6 +147,7 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
       expectedRoutes: [
         TeacherDashboardPaths.ORGANIZATION_PRODUCT,
         TeacherDashboardPaths.ORGANIZATION_PRODUCT_CONTRACTS,
+        TeacherDashboardPaths.ORGANIZATION_COURSE_PRODUCT_LEARNER_LIST,
       ],
     },
   ])(
