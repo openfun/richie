@@ -13,7 +13,7 @@ import { useCourseProduct } from 'hooks/useCourseProducts';
 import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
-import { DashboardItemCourseEnrolling } from '../DashboardItemCourseEnrolling';
+import { DashboardItemCourseEnrolling } from '../CourseEnrolling';
 import { DashboardItem } from '../index';
 import { DashboardItemContract } from '../Contract';
 import OrderStateMessage from './OrderStateMessage';

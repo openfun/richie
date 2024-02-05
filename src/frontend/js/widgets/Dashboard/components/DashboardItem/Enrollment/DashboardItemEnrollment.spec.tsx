@@ -51,16 +51,13 @@ describe('<DashboardItemEnrollment/>', () => {
     expect(link).toBeEnabled();
     expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
 
-    screen.getByText(
-      'You are enrolled for the session from ' +
-        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
-          new Date(enrollment.course_run.start),
-        ) +
-        ' to ' +
-        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
-          new Date(enrollment.course_run.end),
-        ),
+    const fromDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+      new Date(enrollment.course_run.start),
     );
+    const toDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+      new Date(enrollment.course_run.end),
+    );
+    screen.getByText(`You are enrolled for this session. It's open from ${fromDate} to ${toDate}`);
   });
 
   it('renders a closed enrollment', () => {
@@ -80,16 +77,7 @@ describe('<DashboardItemEnrollment/>', () => {
     const link = screen.getByRole('link', { name: 'Access to course' });
     expect(link).toBeEnabled();
     expect(link).toHaveAttribute('href', enrollment.course_run.resource_link);
-    screen.getByText(
-      'You are enrolled for the session from ' +
-        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
-          new Date(enrollment.course_run.start),
-        ) +
-        ' to ' +
-        new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
-          new Date(enrollment.course_run.end),
-        ),
-    );
+    expect(screen.getByText(/You are enrolled for this session./)).toBeInTheDocument();
   });
 
   it('renders an inactive enrollment', () => {

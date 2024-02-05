@@ -16,7 +16,10 @@ import { PropsWithChildren } from 'react';
 import fetchMock from 'fetch-mock';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import {
+  CourseStateFactory,
+  RichieContextFactory as mockRichieContextFactory,
+} from 'utils/test/factories/richie';
 import {
   CertificateFactory,
   CourseLightFactory,
@@ -213,18 +216,19 @@ describe('<DashboardItemOrder/>', () => {
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + (order.course as CourseLight).code);
     await screen.findByText('On going');
+    const fromDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+      new Date(order.target_enrollments[0].course_run.start),
+    );
+    const toDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+      new Date(order.target_enrollments[0].course_run.end),
+    );
     await resolveAll(order.target_courses, async (course) => {
       await screen.findByRole('heading', { level: 6, name: course.title });
-      screen.getByText(
-        'You are enrolled for the session from ' +
-          new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
-            new Date(order.target_enrollments[0].course_run.start),
-          ) +
-          ' to ' +
-          new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
-            new Date(order.target_enrollments[0].course_run.end),
-          ),
-      );
+      expect(
+        screen.getByText(
+          `You are enrolled for this session. It's open from ${fromDate} to ${toDate}`,
+        ),
+      ).toBeInTheDocument();
       screen.getByRole('link', { name: 'Access to course' });
     });
   });
@@ -269,7 +273,15 @@ describe('<DashboardItemOrder/>', () => {
 
   it('renders a writable order with enrolled target course', async () => {
     const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: TargetCourseFactory().many(1),
+      target_courses: [
+        TargetCourseFactory({
+          course_runs: [
+            CourseRunFactory({
+              state: CourseStateFactory({ priority: Priority.ONGOING_OPEN }).one(),
+            }).one(),
+          ],
+        }).one(),
+      ],
     }).one();
     // Make target course enrolled.
     order.target_enrollments = [
@@ -297,13 +309,17 @@ describe('<DashboardItemOrder/>', () => {
         // Expect the first courseRun to be enrolled but not the others.
         if (i === 0) {
           expect(queryByRole(runElement, 'button', { name: 'Enroll' })).toBeNull();
-          getByText(
-            runElement,
-            'You are enrolled for the session from ' +
-              new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(courseRun.start)) +
-              ' to ' +
-              new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(courseRun.end)),
+          const fromDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+            new Date(courseRun.start),
           );
+          const toDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+            new Date(courseRun.end),
+          );
+          expect(
+            screen.getByText(
+              `You are enrolled for this session. It's open from ${fromDate} to ${toDate}`,
+            ),
+          ).toBeInTheDocument();
           const button = getByRole(runElement, 'link', { name: 'Access to course' });
           expect(button).toHaveAttribute('href', courseRun.resource_link);
         } else {
@@ -323,7 +339,15 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with not enrolled target course and enrolls it', async () => {
     // Initial order without enrollment.
     const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: TargetCourseFactory().many(1),
+      target_courses: [
+        TargetCourseFactory({
+          course_runs: [
+            CourseRunFactory({
+              state: CourseStateFactory({ priority: Priority.ONGOING_OPEN }).one(),
+            }).one(),
+          ],
+        }).one(),
+      ],
       target_enrollments: [],
     }).one();
     const { product } = mockCourseProductWithOrder(order);
@@ -451,7 +475,16 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with enrolled target course and changes the enrollment', async () => {
     // Initial order with first course run enrolled.
     const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: TargetCourseFactory().many(1),
+      target_courses: [
+        TargetCourseFactory({
+          course_runs: [
+            CourseRunFactory().one(),
+            CourseRunFactory({
+              state: CourseStateFactory({ priority: Priority.ONGOING_OPEN }).one(),
+            }).one(),
+          ],
+        }).one(),
+      ],
     }).one();
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
     order.target_enrollments = EnrollmentFactory({ course_run: initialEnrolledCourseRun }).many(1);
@@ -550,7 +583,16 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with enrolled target course and refuse the confirm message when enrolling', async () => {
     // Initial order without enrollment.
     const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: TargetCourseFactory().many(1),
+      target_courses: [
+        TargetCourseFactory({
+          course_runs: [
+            CourseRunFactory({
+              state: CourseStateFactory({ priority: Priority.ONGOING_OPEN }).one(),
+            }).one(),
+            CourseRunFactory().one(),
+          ],
+        }).one(),
+      ],
     }).one();
 
     const initialEnrolledCourseRun = order.target_courses[0].course_runs[0];
@@ -620,11 +662,20 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with non-enrolled (is_active=false) target course and changes the enrollment', async () => {
     // Initial order with first course run enrolled.
     const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: TargetCourseFactory().many(1),
+      target_courses: TargetCourseFactory({
+        course_runs: [
+          CourseRunFactory({
+            state: CourseStateFactory({ priority: Priority.ONGOING_OPEN }).one(),
+          }).one(),
+        ],
+      }).many(1),
     }).one();
 
     const courseRun = order.target_courses[0].course_runs[0];
-    const enrollment = EnrollmentFactory({ course_run: courseRun, is_active: false }).one();
+    const enrollment = EnrollmentFactory({
+      course_run: courseRun,
+      is_active: false,
+    }).one();
     order.target_enrollments = [enrollment];
 
     // When the existing enrollment will be set as is_active: true.
@@ -725,6 +776,7 @@ describe('<DashboardItemOrder/>', () => {
         new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
           new Date(order.target_courses[0].course_runs[0].enrollment_start),
         ),
+      { exact: false },
     );
 
     // Enroll button should be disabled.
@@ -759,7 +811,7 @@ describe('<DashboardItemOrder/>', () => {
 
     // The course run should be shown as enrolled even if is it past.
     const runElement = screen.getByTestId('dashboard-item__course-enrolling__run__' + courseRun.id);
-    getByRole(runElement, 'link', { name: 'Access to course' });
+    expect(screen.queryByRole('link', { name: 'Access to course' })).not.toBeInTheDocument();
     expect(queryByRole(runElement, 'button', { name: 'Enroll' })).toBeNull();
   });
 

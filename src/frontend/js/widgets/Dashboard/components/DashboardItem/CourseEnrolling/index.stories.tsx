@@ -4,8 +4,8 @@ import { faker } from '@faker-js/faker';
 import { TargetCourseFactory } from 'utils/test/factories/joanie';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { Priority } from 'types';
-import { enrollment } from './stories.mock';
-import { DashboardItemCourseEnrolling } from './DashboardItemCourseEnrolling';
+import { enrollment } from '../stories.mock';
+import { DashboardItemCourseEnrolling } from '.';
 
 export default {
   component: DashboardItemCourseEnrolling,

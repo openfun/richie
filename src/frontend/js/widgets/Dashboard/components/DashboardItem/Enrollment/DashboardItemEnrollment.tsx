@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Enrollment, isCertificateProduct } from 'types/Joanie';
-import { Enrolled } from '../DashboardItemCourseEnrolling';
+import { Enrolled } from '../CourseEnrolling';
 import { DashboardItem } from '..';
 import ProductCertificateFooter from './ProductCertificateFooter';
 

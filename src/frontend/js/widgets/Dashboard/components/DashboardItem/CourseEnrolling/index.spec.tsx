@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
+import { IntlProvider, createIntl } from 'react-intl';
 import { PropsWithChildren } from 'react';
 import { CredentialOrderFactory, EnrollmentFactory } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
@@ -8,7 +8,8 @@ import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { CourseRunFactoryFromPriority } from 'utils/test/factories/richie';
 import { noop } from 'utils';
 import { computeState } from 'utils/CourseRuns';
-import { DashboardItemCourseEnrollingRun, Enrolled } from './DashboardItemCourseEnrolling';
+import { formatRelativeDate } from 'utils/relativeDate';
+import { DashboardItemCourseEnrollingRun, Enrolled } from '.';
 
 /**
  * Most of the component of this file are tested from DashboardItemEnrollment.spec.tsx and
@@ -23,59 +24,89 @@ describe('<Enrolled/>', () => {
     {
       buttonTestLabel: 'and access course button',
       priority: Priority.ONGOING_OPEN,
+      priorityLabel: 'ONGOING_OPEN',
       expectButton: true,
+      expectLabelTemplate:
+        "You are enrolled for this session. It's open from %fromDate% to %toDate%",
     },
     {
       buttonTestLabel: 'and no access course button',
       priority: Priority.FUTURE_OPEN,
+      priorityLabel: 'FUTURE_OPEN',
       expectButton: false,
+      expectLabelTemplate:
+        'You are enrolled for this session. It starts %fromRelativeDate%, the %fromDate%.',
     },
     {
       buttonTestLabel: 'and access course button',
       priority: Priority.ARCHIVED_OPEN,
+      priorityLabel: 'ARCHIVED_OPEN',
       expectButton: true,
+      expectLabelTemplate: `You are enrolled for this session.`,
     },
     {
       buttonTestLabel: 'and no access course button',
       priority: Priority.FUTURE_NOT_YET_OPEN,
+      priorityLabel: 'FUTURE_NOT_YET_OPEN',
       expectButton: false,
+      expectLabelTemplate:
+        'You are enrolled for this session. It starts %fromRelativeDate%, the %fromDate%.',
     },
     {
       buttonTestLabel: 'and no access course button',
       priority: Priority.FUTURE_CLOSED,
+      priorityLabel: 'FUTURE_CLOSED',
       expectButton: false,
+      expectLabelTemplate:
+        'You are enrolled for this session. It starts %fromRelativeDate%, the %fromDate%.',
     },
     {
       buttonTestLabel: 'and access course button',
       priority: Priority.ONGOING_CLOSED,
+      priorityLabel: 'ONGOING_CLOSED',
       expectButton: true,
+      expectLabelTemplate: `You are enrolled for this session. It's open from %fromDate% to %toDate%`,
     },
     {
       buttonTestLabel: 'and access course button',
       priority: Priority.ARCHIVED_CLOSED,
+      priorityLabel: 'ARCHIVED_CLOSED',
       expectButton: true,
+      expectLabelTemplate: `You are enrolled for this session.`,
     },
     {
       buttonTestLabel: 'and no access course button',
       priority: Priority.TO_BE_SCHEDULED,
+      priorityLabel: 'TO_BE_SCHEDULED',
       expectButton: false,
+      expectLabelTemplate:
+        'You are enrolled for this session. It starts %fromRelativeDate%, the %fromDate%.',
     },
   ])(
-    'handles enrollments with priority=$priority $buttonTestLabel',
-    async ({ priority, expectButton }) => {
+    'handles enrollments with priority=$priorityLabel $buttonTestLabel',
+    async ({ priority, expectButton, expectLabelTemplate }) => {
       const enrollment: Enrollment = EnrollmentFactory().one();
       enrollment.course_run.state.priority = priority;
       render(<Enrolled enrollment={enrollment} />, { wrapper });
-      await screen.findByText(
-        'You are enrolled for the session from ' +
-          new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
-            new Date(enrollment.course_run.start),
-          ) +
-          ' to ' +
-          new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
-            new Date(enrollment.course_run.end),
-          ),
+      const intl = createIntl({ locale: 'en' });
+
+      const fromDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+        new Date(enrollment.course_run.start),
       );
+      const fromRelativeDate = formatRelativeDate(
+        new Date(enrollment.course_run.start),
+        new Date(),
+        intl.locale,
+      );
+      const toDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+        new Date(enrollment.course_run.end),
+      );
+
+      const expectLabel = expectLabelTemplate
+        .replace('%fromRelativeDate%', fromRelativeDate)
+        .replace('%fromDate%', fromDate)
+        .replace('%toDate%', toDate);
+      expect(await screen.findByText(expectLabel)).toBeInTheDocument();
       if (expectButton) {
         const link = screen.getByRole('link', { name: 'Access to course' });
         expect(link).toBeEnabled();
