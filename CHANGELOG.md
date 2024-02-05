@@ -22,6 +22,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix course access link in learner dashboard. This link must not be 
+  display when the course isn't open.
 - Fix CreditCardHelper
 - Remove enrollment start on some course run
 - Fix Organization glimpse card variant logo size

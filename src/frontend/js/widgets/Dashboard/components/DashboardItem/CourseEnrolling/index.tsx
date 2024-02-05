@@ -13,11 +13,12 @@ import {
 } from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
-import useDateFormat, { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { Icon, IconTypeEnum } from 'components/Icon';
+import useDateFormat from 'hooks/useDateFormat';
 import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
-import { RouterButton } from '../RouterButton';
-import { useEnroll } from '../../hooks/useEnroll';
+import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
+import { useEnroll } from 'widgets/Dashboard/hooks/useEnroll';
+import useCourseRunPeriodMessage from './hooks/useCourseRunPeriodMessage';
 
 const messages = defineMessages({
   notEnrolled: {
@@ -40,16 +41,6 @@ const messages = defineMessages({
     id: 'components.DashboardItemEnrollment.gotoCourse',
     description: 'Button to access course when the user is enrolled',
     defaultMessage: 'Access to course',
-  },
-  runPeriod: {
-    id: 'components.DashboardItemEnrollment.runPeriod',
-    description: 'Text to display the period of a course run',
-    defaultMessage: 'From {startDate} to {endDate}',
-  },
-  enrolledRunPeriod: {
-    id: 'components.DashboardItemEnrollment.enrolledRunPeriod',
-    description: 'Text to display the period of a course run',
-    defaultMessage: 'You are enrolled for the session from {startDate} to {endDate}',
   },
   enrolled: {
     id: 'components.DashboardItemEnrollment.enrolled',
@@ -152,7 +143,7 @@ const DashboardItemCourseEnrollingRuns = ({
   const { enroll, isLoading, error } = useEnroll(enrollments, order);
 
   // Hide runs with finished enrollment.
-  const datas = useMemo(() => {
+  const courseRunOpenForEnrollmentList = useMemo(() => {
     const activeEnrollment = CoursesHelper.findActiveEnrollment(course, enrollments);
     return course.course_runs
       .map((courseRun) => ({
@@ -160,6 +151,9 @@ const DashboardItemCourseEnrollingRuns = ({
         selected: activeEnrollment?.course_run.id === courseRun.id,
       }))
       .filter(
+        // FIXME(rlecellier): question!
+        // does that mean the we hide the enrollment when user cannot enroll?
+        // even if he's already enrolled ?
         (data) => data.selected || data.courseRun.state.priority <= Priority.FUTURE_NOT_YET_OPEN,
       );
   }, [course, enrollments]);
@@ -168,13 +162,13 @@ const DashboardItemCourseEnrollingRuns = ({
   return (
     <div className="dashboard-item__course-enrolling__runs">
       {error && <Banner message={error} type={BannerType.ERROR} />}
-      {datas.length === 0 && (
+      {courseRunOpenForEnrollmentList.length === 0 && (
         <div className="dashboard-item__course-enrolling__no-runs">
           <Icon name={IconTypeEnum.WARNING} size="small" />
           <FormattedMessage {...messages.noCourseRunAvailable} />
         </div>
       )}
-      {datas.map((data) => (
+      {courseRunOpenForEnrollmentList.map((data) => (
         <DashboardItemCourseEnrollingRun
           key={data.courseRun.id}
           courseRun={data.courseRun}
@@ -217,6 +211,7 @@ export const DashboardItemCourseEnrollingRun = ({
 }: DashboardItemCourseEnrollingRunProps) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
+  const courseRunPeriodMessage = useCourseRunPeriodMessage(courseRun, selected);
   const haveToSignContract = order ? orderNeedsSignature(order, product) : false;
   const isOpenedForEnrollment = useMemo(
     () => courseRun.state.priority < Priority.FUTURE_NOT_YET_OPEN,
@@ -239,16 +234,11 @@ export const DashboardItemCourseEnrollingRun = ({
             )}
             <strong>{courseRun.title}</strong>
           </p>
-          <FormattedMessage
-            {...(selected ? messages.enrolledRunPeriod : messages.runPeriod)}
-            values={{
-              startDate: formatDate(courseRun.start, DEFAULT_DATE_FORMAT),
-              endDate: formatDate(courseRun.end, DEFAULT_DATE_FORMAT),
-            }}
-          />
+          {courseRunPeriodMessage}
         </div>
         {courseRun.state.priority === Priority.FUTURE_NOT_YET_OPEN && (
           <div className="dashboard-item__course-enrolling__run__not-opened">
+            -{' '}
             <FormattedMessage
               {...messages.enrollmentNotYetOpened}
               values={{ enrollment_start: formatDate(courseRun.enrollment_start) }}
@@ -256,18 +246,22 @@ export const DashboardItemCourseEnrollingRun = ({
           </div>
         )}
       </div>
-      <div>
-        {selected ? (
-          <Button
-            color="secondary"
-            size="small"
-            href={courseRun.resource_link}
-            data-testid="dashboard-item-enrollment__button"
-            className="dashboard-item__button"
-          >
-            <FormattedMessage {...messages.accessCourse} />
-          </Button>
-        ) : (
+      {selected ? (
+        SHOW_ACCESS_COURSE_PRIORITIES.includes(courseRun.state.priority) && (
+          <div>
+            <Button
+              color="secondary"
+              size="small"
+              href={courseRun.resource_link}
+              data-testid="dashboard-item-enrollment__button"
+              className="dashboard-item__button"
+            >
+              <FormattedMessage {...messages.accessCourse} />
+            </Button>
+          </div>
+        )
+      ) : (
+        <div>
           <Button
             disabled={!isOpenedForEnrollment || haveToSignContract}
             color="tertiary"
@@ -277,8 +271,8 @@ export const DashboardItemCourseEnrollingRun = ({
           >
             <FormattedMessage {...messages.enrollRun} />
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -313,7 +307,7 @@ const NotEnrolled = ({
   );
 };
 
-const SHOW_ACCESS_COURSE_PRIORITIES = [
+export const SHOW_ACCESS_COURSE_PRIORITIES = [
   Priority.ONGOING_OPEN,
   Priority.ARCHIVED_OPEN,
   Priority.ONGOING_CLOSED,
@@ -327,11 +321,16 @@ export const Enrolled = ({
   icon?: boolean;
   enrollment: Enrollment;
 }) => {
+  const courseRunPeriodMessage = useCourseRunPeriodMessage(enrollment.course_run, true);
   return (
     <>
       <div className="dashboard-item__block__status">
         {icon && <Icon name={IconTypeEnum.SCHOOL} />}
-        <EnrolledStatus enrollment={enrollment} />
+        {enrollment.is_active ? (
+          courseRunPeriodMessage
+        ) : (
+          <FormattedMessage {...messages.statusNotActive} />
+        )}
       </div>
       {SHOW_ACCESS_COURSE_PRIORITIES.includes(enrollment.course_run.state.priority) && (
         <Button
@@ -345,23 +344,5 @@ export const Enrolled = ({
         </Button>
       )}
     </>
-  );
-};
-
-const EnrolledStatus = ({ enrollment }: { enrollment: Enrollment }) => {
-  const formatDate = useDateFormat();
-
-  if (!enrollment.is_active) {
-    return <FormattedMessage {...messages.statusNotActive} />;
-  }
-
-  return (
-    <FormattedMessage
-      {...messages.enrolledRunPeriod}
-      values={{
-        startDate: formatDate(enrollment.course_run.start, DEFAULT_DATE_FORMAT),
-        endDate: formatDate(enrollment.course_run.end, DEFAULT_DATE_FORMAT),
-      }}
-    />
   );
 };
