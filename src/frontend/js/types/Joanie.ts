@@ -18,6 +18,13 @@ export interface PaginatedParameters {
   offset: number;
 }
 
+export interface UserLight {
+  id: string;
+  username: string;
+  full_name: string;
+  email: string;
+}
+
 export interface Organization {
   id: string;
   code: string;
@@ -46,6 +53,8 @@ export interface Contract {
   definition: ContractDefinition;
   order: NestedCertificateOrder | NestedCredentialOrder;
 }
+
+export type ContractLight = Pick<Contract, 'id' | 'organization_signed_on' | 'student_signed_on'>;
 
 export interface CourseListItem extends Resource {
   id: string;
@@ -132,6 +141,12 @@ export const isCertificateProduct = (
 
 export interface CourseProduct extends Product {
   order: Nullable<OrderLite>;
+}
+
+export interface DefinitionResourcesProduct {
+  id: Product['id'];
+  certificate_definition_id: Nullable<CertificateDefinition['id']>;
+  contract_definition_id: Nullable<ContractDefinition['id']>;
 }
 
 export interface CourseProductRelation {
@@ -300,6 +315,27 @@ export interface NestedCredentialOrder extends AbstractNestedOrder {
 }
 
 export type OrderEnrollment = Pick<Order, 'id' | 'state' | 'product_id' | 'certificate_id'>;
+
+export interface NestedCourseOrder {
+  id: Order['id'];
+  created_on: Order['created_on'];
+  owner: UserLight;
+  course_id: Order['id'];
+  product_id: Order['id'];
+  state: Order['state'];
+  enrollment_id: Enrollment['id'];
+  organization: Organization;
+  certificate_id?: Order['certificate_id'];
+  product: DefinitionResourcesProduct;
+  contract: ContractLight;
+}
+
+export interface CourseOrderResourceQuery extends PaginatedResourceQuery {
+  course_id?: CourseListItem['id'];
+  course_product_relation_id?: CourseProductRelation['id'];
+  organization_id?: Organization['id'];
+  product_id?: Product['id'];
+}
 
 export interface OrderGroup {
   id: string;
@@ -556,6 +592,13 @@ export interface API {
       : Promise<PaginatedResponse<CourseListItem>>;
     products: {
       get(filters?: CourseProductQueryFilters): Promise<Nullable<CourseProductRelation>>;
+    };
+    orders: {
+      get(
+        filters?: CourseOrderResourceQuery,
+      ): CourseOrderResourceQuery extends { id: string }
+        ? Promise<Nullable<NestedCourseOrder>>
+        : Promise<PaginatedResponse<NestedCourseOrder>>;
     };
   };
   organizations: {

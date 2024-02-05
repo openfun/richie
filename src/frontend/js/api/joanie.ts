@@ -190,6 +190,9 @@ export const getRoutes = () => {
       products: {
         get: `${baseUrl}/courses/:course_id/products/:id/`,
       },
+      orders: {
+        get: `${baseUrl}/courses/:course_id/orders/:id/`,
+      },
     },
     courseRuns: {
       get: `${baseUrl}/course-runs/:id/`,
@@ -462,6 +465,16 @@ const API = (): Joanie.API => {
           }
 
           return fetchWithJWT(buildApiUrl(ROUTES.courses.products.get, filters)).then(checkStatus);
+        },
+      },
+      orders: {
+        get: async (filters?: Joanie.CourseOrderResourceQuery) => {
+          if (!filters || !filters.course_id) {
+            throw new Error('A course_id is required to fetch a course order');
+          }
+          return fetchWithJWT(buildApiUrl(ROUTES.courses.orders.get, filters), {
+            method: 'GET',
+          }).then(checkStatus);
         },
       },
     },

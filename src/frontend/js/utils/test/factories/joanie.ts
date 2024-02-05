@@ -36,12 +36,24 @@ import {
   OrderGroup,
   CertificateProduct,
   CredentialProduct,
+  NestedCourseOrder,
+  UserLight,
+  ContractLight,
+  DefinitionResourcesProduct,
 } from 'types/Joanie';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { JoanieUserApiAbilityActions, JoanieUserProfile } from 'types/User';
 import { factory } from './factories';
 
+export const UserLightFactory = factory((): UserLight => {
+  return {
+    id: faker.string.uuid(),
+    username: faker.internet.userName(),
+    full_name: faker.person.fullName(),
+    email: faker.internet.email(),
+  };
+});
 export const JoanieUserProfileFactory = factory((): JoanieUserProfile => {
   return {
     id: faker.string.uuid(),
@@ -131,6 +143,14 @@ export const ContractFactory = factory((): Contract => {
   };
 });
 
+export const ContractLightFactory = factory((): ContractLight => {
+  return {
+    id: faker.string.uuid(),
+    student_signed_on: faker.date.past().toISOString(),
+    organization_signed_on: null,
+  };
+});
+
 export const OrganizationFactory = factory((): Organization => {
   return {
     id: faker.string.uuid(),
@@ -203,6 +223,14 @@ export const CertificateCourseProductFactory = factory((): CourseProduct => {
 // factories.js need a feature that return a random factory from a list.
 export const ProductFactory = CredentialProductFactory;
 
+export const DefinitionResourcesProductFactory = factory((): DefinitionResourcesProduct => {
+  return {
+    id: faker.string.uuid(),
+    certificate_definition_id: null,
+    contract_definition_id: null,
+  };
+});
+
 export const CourseRunFactory = factory((): CourseRun => {
   return {
     course: CourseLightFactory().one(),
@@ -270,6 +298,22 @@ export const OrderGroupFullFactory = factory((): OrderGroup => {
     is_active: true,
     nb_seats: faker.number.int({ min: 5, max: 100 }),
     nb_available_seats: 0,
+  };
+});
+
+export const NestedCourseOrderFactory = factory((): NestedCourseOrder => {
+  return {
+    id: faker.string.uuid(),
+    created_on: faker.date.past().toISOString(),
+    owner: UserLightFactory().one(),
+    course_id: faker.string.uuid(),
+    product_id: faker.string.uuid(),
+    state: OrderState.VALIDATED,
+    enrollment_id: faker.string.uuid(),
+    organization: OrganizationFactory().one(),
+    certificate_id: faker.string.uuid(),
+    product: DefinitionResourcesProductFactory().one(),
+    contract: ContractLightFactory().one(),
   };
 });
 
