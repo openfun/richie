@@ -27,9 +27,10 @@ describe('CreditCardHelper', () => {
   });
 
   it('is soon expired', () => {
-    const expirationDate = faker.date.future({
-      refDate: new Date(),
-      years: 2.99 / 12,
+    const now = new Date();
+    const expirationDate = faker.date.between({
+      from: now,
+      to: new Date(now.getFullYear(), now.getMonth() + 4, 0, 23, 59, 59),
     });
 
     expect(
@@ -43,7 +44,10 @@ describe('CreditCardHelper', () => {
   });
 
   it('is expired', () => {
-    const date = faker.date.past();
+    const now = new Date();
+    const date = faker.date.past({
+      refDate: new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59),
+    });
     expect(
       CreditCardHelper.getExpirationState(
         CreditCardFactory({
