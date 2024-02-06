@@ -30,6 +30,8 @@
       &__avatar {
         position: absolute;
         top: calc($avatar-size / -2);
+        // avatar's parent font-size define the avatar size.
+        font-size: rem-calc(40px);
       }
 
       h3 {
