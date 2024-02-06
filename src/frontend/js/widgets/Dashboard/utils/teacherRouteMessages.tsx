@@ -141,7 +141,7 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
   [TeacherDashboardPaths.ORGANIZATION_PRODUCT]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.label',
     description: 'Label of the organization product view.',
-    defaultMessage: 'Training',
+    defaultMessage: 'General information',
   },
   [TeacherDashboardPaths.COURSE]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.label',
@@ -156,7 +156,7 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
   [TeacherDashboardPaths.COURSE_PRODUCT]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.label',
     description: 'Label of the product view.',
-    defaultMessage: 'Training',
+    defaultMessage: 'General information',
   },
   [TeacherDashboardPaths.COURSE_CONTRACTS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.contracts.label',
