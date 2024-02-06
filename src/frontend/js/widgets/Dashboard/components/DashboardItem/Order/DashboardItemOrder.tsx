@@ -114,7 +114,10 @@ export const DashboardItemOrder = ({
             <div className="dashboard-item-order__footer">
               <div className="dashboard-item__block__status">
                 <Icon name={IconTypeEnum.SCHOOL} />
-                <OrderStateMessage order={order} product={product} />
+                <OrderStateMessage
+                  order={order}
+                  contractDefinition={product?.contract_definition}
+                />
               </div>
               {showDetailsButton && (
                 <RouterButton
