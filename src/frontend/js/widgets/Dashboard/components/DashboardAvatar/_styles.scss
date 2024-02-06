@@ -1,12 +1,13 @@
-$avatar-size: 100px;
+// when parent em-value is 40px, $avatar-size is 100px
+$avatar-size: 2.5em;
 
 .dashboard {
   &__avatar {
     box-shadow: r-theme-val(dashboard-sidebar, base-shadow);
     background-color: r-theme-val(dashboard-avatar, background-color);
     border-radius: 100%;
-    width: $avatar-size;
     height: $avatar-size;
+    width: $avatar-size;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,7 +15,7 @@ $avatar-size: 100px;
     padding: rem-calc(3px);
 
     &__letter {
-      font-size: 2.5rem;
+      font-size: 1em;
       font-family: $r-font-family-montserrat;
       font-weight: $font-weight-boldest;
       line-height: 1;

@@ -1,0 +1,8 @@
+.dashboard-list-avatar {
+  &__container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    font-size: rem-calc(12px);
+  }
+}

@@ -8,7 +8,7 @@ export enum DashboardAvatarVariantEnum {
   SQUARE = 'square',
 }
 
-interface DashboardAvatarProps {
+export interface DashboardAvatarProps {
   title: string;
   image?: Nullable<JoanieFile>;
   variant?: DashboardAvatarVariantEnum;
