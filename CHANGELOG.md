@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Rename trainings root menu entry label
 - Upgrade to node 20
 - Contract list in the teacher dashbaord are now filtered by 
   courseProductRelationId instead of courseId and productId.
