@@ -5,7 +5,6 @@ import {
   ContractDefinitionFactory,
   ContractFactory,
   CredentialOrderFactory,
-  ProductFactory,
 } from 'utils/test/factories/joanie';
 import { OrderState } from 'types/Joanie';
 import OrderStateMessage, { messages } from '.';
@@ -74,13 +73,11 @@ describe('<DashboardItemOrder/>', () => {
       contract: null,
     }).one();
 
-    const product = ProductFactory({
-      contract_definition: ContractDefinitionFactory().one(),
-    }).one();
+    const contractDefinition = ContractDefinitionFactory().one();
 
     render(
       <Wrapper>
-        <OrderStateMessage order={order} product={product} />
+        <OrderStateMessage order={order} contractDefinition={contractDefinition} />
       </Wrapper>,
     );
     expect(screen.getByText('Signature required')).toBeInTheDocument();

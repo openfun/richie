@@ -1,6 +1,6 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useEffect } from 'react';
-import { CertificateOrder, CredentialOrder, OrderState, Product } from 'types/Joanie';
+import { CertificateOrder, CredentialOrder, OrderState, ContractDefinition } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { handle } from 'utils/errors/handle';
 import { OrderHelper } from 'utils/OrderHelper';
@@ -53,10 +53,10 @@ export const messages = defineMessages({
 
 interface OrderStateMessageProps {
   order: CredentialOrder | CertificateOrder;
-  product?: Product;
+  contractDefinition?: ContractDefinition;
 }
 
-const OrderStateMessage = ({ order, product }: OrderStateMessageProps) => {
+const OrderStateMessage = ({ order, contractDefinition }: OrderStateMessageProps) => {
   const { certificate_id: certificateId } = order;
   const orderStatusMessages = {
     [OrderState.DRAFT]: messages.statusDraft,
@@ -72,7 +72,7 @@ const OrderStateMessage = ({ order, product }: OrderStateMessageProps) => {
   }, [order.state]);
 
   if (order.state === OrderState.VALIDATED) {
-    if (OrderHelper.orderNeedsSignature(order, product?.contract_definition)) {
+    if (OrderHelper.orderNeedsSignature(order, contractDefinition)) {
       return <FormattedMessage {...messages.statusWaitingSignature} />;
     }
 
