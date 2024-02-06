@@ -38,9 +38,11 @@ const JOANIE_DEV_DEMO_USER_JWT_TOKENS = {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMzOTI4MjE0LCJpYXQiOjE3MDIzOTIyMTQsImp0aSI6ImNkZjAyMGM4ODdjOTQxYzU5ZmExN2FkZGExNjNjMDIzIiwiZW1haWwiOiJqZWFuLWJhcHRpc3RlLnBlbnJhdGgrc3R1ZGVudF91c2VyQGZ1bi1tb29jLmZyIiwibGFuZ3VhZ2UiOiJmci1mciIsInVzZXJuYW1lIjoic3R1ZGVudF91c2VyIiwiZnVsbF9uYW1lIjoiXHUwMGM5dHVkaWFudCJ9.JMdnC2VXwq2VbNPrIYxj8PEq0oJJ4LZZT_ywWyE1lBM',
 };
 
+export type DevDemoUser = keyof typeof JOANIE_DEV_DEMO_USER_JWT_TOKENS;
+
 export const RICHIE_DUMMY_IS_LOGGED_IN = 'RICHIE_DUMMY_IS_LOGGED_IN';
 
-function getUserInfo(username: keyof typeof JOANIE_DEV_DEMO_USER_JWT_TOKENS): Maybe<User> {
+function getUserInfo(username: DevDemoUser): Maybe<User> {
   const accessToken = JOANIE_DEV_DEMO_USER_JWT_TOKENS[username];
   const JWTPayload: JWTPayload = JSON.parse(base64Decode(accessToken.split('.')[1]));
 
