@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { CertificateOrder, CredentialOrder, OrderState, Product } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { handle } from 'utils/errors/handle';
-import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
+import { OrderHelper } from 'utils/OrderHelper';
 
 export const messages = defineMessages({
   statusDraft: {
@@ -72,7 +72,7 @@ const OrderStateMessage = ({ order, product }: OrderStateMessageProps) => {
   }, [order.state]);
 
   if (order.state === OrderState.VALIDATED) {
-    if (orderNeedsSignature(order, product)) {
+    if (OrderHelper.orderNeedsSignature(order, product)) {
       return <FormattedMessage {...messages.statusWaitingSignature} />;
     }
 

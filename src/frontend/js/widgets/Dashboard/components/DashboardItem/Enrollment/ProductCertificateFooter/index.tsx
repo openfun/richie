@@ -6,8 +6,8 @@ import { CertificateProduct, Enrollment, ProductType } from 'types/Joanie';
 import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import { useCertificate } from 'hooks/useCertificates';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
+import { OrderHelper } from 'utils/OrderHelper';
 import CertificateStatus from '../../CertificateStatus';
-import { getActiveEnrollmentOrder } from '../../utils/order';
 
 const messages = defineMessages({
   buyProductCertificateLabel: {
@@ -37,7 +37,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
     return null;
   }
   const [activeOrder, setActiveOrder] = useState(
-    getActiveEnrollmentOrder(enrollment.orders || [], product.id),
+    OrderHelper.getActiveEnrollmentOrder(enrollment.orders || [], product.id),
   );
   const { item: certificate } = useCertificate(activeOrder?.certificate_id);
 

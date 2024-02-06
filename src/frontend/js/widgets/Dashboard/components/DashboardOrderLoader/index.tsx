@@ -7,7 +7,7 @@ import Banner, { BannerType } from 'components/Banner';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { isCredentialOrder } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { handle } from 'utils/errors/handle';
-import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
+import { OrderHelper } from 'utils/OrderHelper';
 import { DashboardItemOrder } from '../DashboardItem/Order/DashboardItemOrder';
 
 const messages = defineMessages({
@@ -50,7 +50,7 @@ export const DashboardOrderLoader = () => {
   const error = errorOrder || errorCourseProduct || wrongLinkedProductError;
 
   const fetching = fetchingOrder || fetchingCourseProduct;
-  const needsSignature = orderNeedsSignature(order, courseProduct?.product);
+  const needsSignature = OrderHelper.orderNeedsSignature(order, courseProduct?.product);
 
   return (
     <>

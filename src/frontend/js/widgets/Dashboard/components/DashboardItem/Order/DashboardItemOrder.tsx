@@ -10,7 +10,7 @@ import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourseProduct } from 'hooks/useCourseProducts';
-import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
+import { OrderHelper } from 'utils/OrderHelper';
 
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../CourseEnrolling';
@@ -88,7 +88,7 @@ export const DashboardItemOrder = ({
     states: { isFetched: isCourseProductRelationFetched },
   } = useCourseProduct({ product_id: order.product_id, course_id: course.code });
   const { product } = courseProductRelation || {};
-  const needsSignature = orderNeedsSignature(order, product);
+  const needsSignature = OrderHelper.orderNeedsSignature(order, product);
   const getRoutePath = getDashboardRoutePath(useIntl());
 
   return (

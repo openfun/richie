@@ -16,7 +16,7 @@ import { Maybe } from 'types/utils';
 import useDateFormat from 'hooks/useDateFormat';
 import { ProductHelper } from 'utils/ProductHelper';
 import useProductOrder from 'hooks/useProductOrder';
-import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
+import { OrderHelper } from 'utils/OrderHelper';
 import { handle } from 'utils/errors/handle';
 import { ProductSignatureHeader } from 'widgets/SyllabusCourseRunsList/components/CourseProductItem/components/ProductSignatureHeader';
 import CertificateItem from './components/CourseProductCertificateItem';
@@ -129,7 +129,7 @@ const Header = ({ product, order, hasPurchased, canPurchase, compact }: HeaderPr
   );
 };
 const Content = ({ product, order }: { product: Product; order?: CredentialOrder }) => {
-  const needsSignature = order ? orderNeedsSignature(order, product) : false;
+  const needsSignature = order ? OrderHelper.orderNeedsSignature(order, product) : false;
   const targetCourses = useMemo(() => {
     if (order) {
       return order.target_courses;
