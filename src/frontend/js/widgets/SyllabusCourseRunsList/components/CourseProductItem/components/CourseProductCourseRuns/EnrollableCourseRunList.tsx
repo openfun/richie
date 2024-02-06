@@ -60,7 +60,9 @@ const EnrollableCourseRunList = ({ courseRuns, order, product }: Props) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
   const formRef = useRef<HTMLFormElement>(null);
-  const needsSignature = order ? OrderHelper.orderNeedsSignature(order, product) : false;
+  const needsSignature = order
+    ? OrderHelper.orderNeedsSignature(order, product.contract_definition)
+    : false;
 
   const [selectedCourseRun, setSelectedCourseRun] = useState<Maybe<Joanie.CourseRun>>();
   const [submitted, setSubmitted] = useState(false);

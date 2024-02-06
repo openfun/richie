@@ -88,7 +88,7 @@ export const DashboardItemOrder = ({
     states: { isFetched: isCourseProductRelationFetched },
   } = useCourseProduct({ product_id: order.product_id, course_id: course.code });
   const { product } = courseProductRelation || {};
-  const needsSignature = OrderHelper.orderNeedsSignature(order, product);
+  const needsSignature = OrderHelper.orderNeedsSignature(order, product?.contract_definition);
   const getRoutePath = getDashboardRoutePath(useIntl());
 
   return (
@@ -98,7 +98,7 @@ export const DashboardItemOrder = ({
           key={`DashboardItemOrderContract_${order.id}`}
           title={product.title}
           order={order}
-          contract_definition={product.contract_definition!}
+          contract_definition={product?.contract_definition!}
           contract={order.contract}
           writable={writable}
           mode="compact"
@@ -132,7 +132,7 @@ export const DashboardItemOrder = ({
                 key={`DashboardItemOrderContract_${order.id}`}
                 title={product.title}
                 order={order}
-                contract_definition={product.contract_definition!}
+                contract_definition={product?.contract_definition!}
                 contract={order.contract}
                 writable={writable}
                 mode="compact"
@@ -173,7 +173,7 @@ export const DashboardItemOrder = ({
           key={`DashboardItemOrderContract_${order.id}`}
           title={product.title}
           order={order}
-          contract_definition={product.contract_definition!}
+          contract_definition={product?.contract_definition!}
           contract={order.contract}
           writable={writable}
           mode="compact"
