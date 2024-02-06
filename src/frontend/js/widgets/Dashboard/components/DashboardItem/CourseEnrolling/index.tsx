@@ -213,7 +213,9 @@ export const DashboardItemCourseEnrollingRun = ({
   const intl = useIntl();
   const formatDate = useDateFormat();
   const courseRunPeriodMessage = useCourseRunPeriodMessage(courseRun, selected);
-  const haveToSignContract = order ? OrderHelper.orderNeedsSignature(order, product) : false;
+  const haveToSignContract = order
+    ? OrderHelper.orderNeedsSignature(order, product?.contract_definition)
+    : false;
   const isOpenedForEnrollment = useMemo(
     () => courseRun.state.priority < Priority.FUTURE_NOT_YET_OPEN,
     [courseRun],

@@ -1,4 +1,10 @@
-import { OrderEnrollment, ACTIVE_ORDER_STATES, Order, Product, OrderState } from 'types/Joanie';
+import {
+  OrderEnrollment,
+  ACTIVE_ORDER_STATES,
+  Order,
+  OrderState,
+  ContractDefinition,
+} from 'types/Joanie';
 
 /**
  * Helper class for orders
@@ -16,10 +22,10 @@ export class OrderHelper {
   /**
    * tell us if a order need to be sign by it's owner (the learner user).
    */
-  static orderNeedsSignature(order: Order, product?: Product) {
+  static orderNeedsSignature(order: Order, contractDefinition?: ContractDefinition) {
     return (
       order?.state === OrderState.VALIDATED &&
-      product?.contract_definition &&
+      contractDefinition &&
       !(order.contract && order.contract.student_signed_on)
     );
   }

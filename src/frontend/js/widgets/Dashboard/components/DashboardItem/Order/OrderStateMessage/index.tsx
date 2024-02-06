@@ -72,7 +72,7 @@ const OrderStateMessage = ({ order, product }: OrderStateMessageProps) => {
   }, [order.state]);
 
   if (order.state === OrderState.VALIDATED) {
-    if (OrderHelper.orderNeedsSignature(order, product)) {
+    if (OrderHelper.orderNeedsSignature(order, product?.contract_definition)) {
       return <FormattedMessage {...messages.statusWaitingSignature} />;
     }
 

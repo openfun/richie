@@ -50,7 +50,10 @@ export const DashboardOrderLoader = () => {
   const error = errorOrder || errorCourseProduct || wrongLinkedProductError;
 
   const fetching = fetchingOrder || fetchingCourseProduct;
-  const needsSignature = OrderHelper.orderNeedsSignature(order, courseProduct?.product);
+  const needsSignature = OrderHelper.orderNeedsSignature(
+    order,
+    courseProduct?.product.contract_definition,
+  );
 
   return (
     <>

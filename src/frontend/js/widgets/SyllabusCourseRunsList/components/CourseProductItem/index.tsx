@@ -129,7 +129,9 @@ const Header = ({ product, order, hasPurchased, canPurchase, compact }: HeaderPr
   );
 };
 const Content = ({ product, order }: { product: Product; order?: CredentialOrder }) => {
-  const needsSignature = order ? OrderHelper.orderNeedsSignature(order, product) : false;
+  const needsSignature = order
+    ? OrderHelper.orderNeedsSignature(order, product.contract_definition)
+    : false;
   const targetCourses = useMemo(() => {
     if (order) {
       return order.target_courses;
