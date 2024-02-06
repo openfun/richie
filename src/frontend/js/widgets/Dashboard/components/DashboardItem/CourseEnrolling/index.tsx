@@ -14,10 +14,11 @@ import {
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { Icon, IconTypeEnum } from 'components/Icon';
+
 import useDateFormat from 'hooks/useDateFormat';
-import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { useEnroll } from 'widgets/Dashboard/hooks/useEnroll';
+import { OrderHelper } from 'utils/OrderHelper';
 import useCourseRunPeriodMessage from './hooks/useCourseRunPeriodMessage';
 
 const messages = defineMessages({
@@ -212,7 +213,7 @@ export const DashboardItemCourseEnrollingRun = ({
   const intl = useIntl();
   const formatDate = useDateFormat();
   const courseRunPeriodMessage = useCourseRunPeriodMessage(courseRun, selected);
-  const haveToSignContract = order ? orderNeedsSignature(order, product) : false;
+  const haveToSignContract = order ? OrderHelper.orderNeedsSignature(order, product) : false;
   const isOpenedForEnrollment = useMemo(
     () => courseRun.state.priority < Priority.FUTURE_NOT_YET_OPEN,
     [courseRun],

@@ -12,7 +12,7 @@ import { IntlHelper } from 'utils/IntlHelper';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import EnrollmentDate from 'components/EnrollmentDate';
 import { Product } from 'types/Joanie';
-import { orderNeedsSignature } from 'widgets/Dashboard/components/DashboardItem/utils/order';
+import { OrderHelper } from 'utils/OrderHelper';
 import { messages as sharedMessages } from '../CourseRunItem';
 import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
 
@@ -60,7 +60,7 @@ const EnrollableCourseRunList = ({ courseRuns, order, product }: Props) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
   const formRef = useRef<HTMLFormElement>(null);
-  const needsSignature = order ? orderNeedsSignature(order, product) : false;
+  const needsSignature = order ? OrderHelper.orderNeedsSignature(order, product) : false;
 
   const [selectedCourseRun, setSelectedCourseRun] = useState<Maybe<Joanie.CourseRun>>();
   const [submitted, setSubmitted] = useState(false);
