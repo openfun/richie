@@ -1,5 +1,3 @@
-import * as defaultDevSettings from './settings.dev.dist';
-
 export const API_LIST_DEFAULT_PARAMS = {
   limit: '21',
   offset: '0',
@@ -61,15 +59,5 @@ export const PER_PAGE = {
   useOrdersEnrollments: DEFAULT_PER_PAGE,
 };
 
-let devSettings;
-try {
-  devSettings = require('settings.dev.ts');
-} catch {
-  devSettings = defaultDevSettings;
-}
-
 export const MOCK_SERVICE_WORKER_ENABLED = false;
-
-export const DEBUG_UNION_RESOURCES_HOOK = process.env.NODE_ENV !== 'production' && false;
-
-export const { CURRENT_JOANIE_DEV_DEMO_USER } = devSettings;
+export const DEBUG_UNION_RESOURCES_HOOK = false;
