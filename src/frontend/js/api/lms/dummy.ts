@@ -42,7 +42,7 @@ export type DevDemoUser = keyof typeof JOANIE_DEV_DEMO_USER_JWT_TOKENS;
 
 export const RICHIE_DUMMY_IS_LOGGED_IN = 'RICHIE_DUMMY_IS_LOGGED_IN';
 
-function getUserInfo(username: DevDemoUser): Maybe<User> {
+function getUserInfo(username: DevDemoUser): User {
   const accessToken = JOANIE_DEV_DEMO_USER_JWT_TOKENS[username];
   const JWTPayload: JWTPayload = JSON.parse(base64Decode(accessToken.split('.')[1]));
 
@@ -78,7 +78,7 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
         if (!localStorage.getItem(RICHIE_DUMMY_IS_LOGGED_IN)) {
           return null;
         }
-        return getUserInfo(CURRENT_JOANIE_DEV_DEMO_USER) || null;
+        return CURRENT_JOANIE_DEV_DEMO_USER ? getUserInfo(CURRENT_JOANIE_DEV_DEMO_USER) : null;
       },
       login: () => {
         localStorage.setItem(RICHIE_DUMMY_IS_LOGGED_IN, 'true');
