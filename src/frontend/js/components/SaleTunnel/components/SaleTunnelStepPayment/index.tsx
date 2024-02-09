@@ -123,7 +123,7 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
    * Retrieve address through its `id` provided by the event target value
    * then update `selectedAddress` state
    *
-   * @param {React.ChangeEvent<HTMLSelectElement>} event
+   * @param {string} newValue
    */
   const handleSelectAddress = (newValue: string) => {
     const targetedAddress = addresses.items.find((a) => a.id === newValue);
@@ -220,6 +220,7 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
                 <Select
                   className="form-field--minimal"
                   name="invoice_address"
+                  clearable={false}
                   label={intl.formatMessage(messages.userBillingAddressSelectLabel)}
                   onChange={(e) => handleSelectAddress((e.target.value || '') as string)}
                   defaultValue={selectedAddress!.id || ''}
