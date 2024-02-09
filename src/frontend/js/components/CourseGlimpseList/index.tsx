@@ -61,7 +61,7 @@ export const CourseGlimpseList = ({
               }}
             />
           </div>
-          <div className="course-glimpse-list__count" aria-hidden="true">
+          <div className="course-glimpse-list__count list__count-description" aria-hidden="true">
             <FormattedMessage
               {...messages.courseCount}
               values={{
