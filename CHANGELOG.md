@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Require to accept terms when purchasing product of any kind
 - Rename trainings root menu entry label
 - Upgrade to node 20
 - Contract list in the teacher dashbaord are now filtered by 

@@ -900,7 +900,7 @@ describe.each([
       });
     });
 
-    it('should show an error if product has a contract definition and the terms are not accepted', async () => {
+    it('should show an error if user does not accept the terms', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
 
@@ -945,7 +945,7 @@ describe.each([
       expect(screen.getByText('You must accept the terms.')).toBeInTheDocument();
     });
 
-    it('should be able to preview the contract if product has a contract definition', async () => {
+    it('should show a link to the platform terms and conditions', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
 
@@ -975,66 +975,6 @@ describe.each([
 
       const $terms = screen.getByRole('link', { name: 'General Terms of Sale' });
       expect($terms).toHaveAttribute('href', '/en/about/terms-and-conditions/');
-    });
-
-    it('should not show terms checkbox if the product does not have a contract definition', async () => {
-      const product: Joanie.Product = ProductFactory().one();
-      product.contract_definition = undefined;
-      const billingAddress: Joanie.Address = AddressFactory().one();
-
-      const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
-
-      const fetchOrderQueryParams =
-        product.type === ProductType.CREDENTIAL
-          ? {
-              course_code: TEST_COURSE_CODE,
-              product_id: product.id,
-              state: ['pending', 'validated', 'submitted'],
-            }
-          : {
-              enrollment_id: TEST_ENROLLMENT_ID,
-              product_id: product.id,
-              state: ['pending', 'validated', 'submitted'],
-            };
-
-      fetchMock
-        .get(
-          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
-          [],
-        )
-        .post('https://joanie.test/api/v1.0/orders/', order)
-        .patch(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`, {
-          paymentInfo,
-        });
-
-      render(
-        <Wrapper client={createTestQueryClient({ user: true })} product={product}>
-          <PaymentButton billingAddress={billingAddress} onSuccess={noop} />
-        </Wrapper>,
-      );
-
-      const $button = screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
-      }) as HTMLButtonElement;
-
-      // - As all information are provided, payment button should not be disabled.
-      expect($button.disabled).toBe(false);
-
-      // - The terms checbkox is not rendered.
-      expect(
-        screen.queryByLabelText('By checking this box, you accept the General Terms of Sale'),
-      ).not.toBeInTheDocument();
-
-      // - User clicks on pay button
-      await act(async () => {
-        fireEvent.click($button);
-      });
-
-      // - No errors.
-      expect(screen.queryByText('You must accept the terms.')).not.toBeInTheDocument();
-
-      // - Payment interface should be displayed.
-      screen.getByText('Payment interface component');
     });
 
     if (productType === ProductType.CREDENTIAL) {
