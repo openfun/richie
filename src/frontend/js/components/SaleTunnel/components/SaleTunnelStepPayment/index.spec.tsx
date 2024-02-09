@@ -5,6 +5,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import { PropsWithChildren, useMemo, useState } from 'react';
 import userEvent from '@testing-library/user-event';
+import { queryByRole } from '@testing-library/dom';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
@@ -209,6 +210,9 @@ describe('SaleTunnelStepPayment', () => {
         selector: 'address',
       },
     );
+
+    // The select field should not be clearable
+    expect(queryByRole(dropdown, 'button', { name: 'Clear selection' })).toBeNull();
 
     // A button to add an address should be displayed
     const $button = screen.getByText('Add an address', { selector: 'button' });
