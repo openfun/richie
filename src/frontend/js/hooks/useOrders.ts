@@ -73,7 +73,12 @@ const useOrdersBase =
     queryOptions?: QueryOptions<CredentialOrder | CertificateOrder>,
   ) => {
     const custom = useResourcesCustom({ ...props, filters, queryOptions });
-    const abortHandler = useSessionMutation({ mutationFn: useJoanieApi().user.orders.abort });
+    const abortHandler = useSessionMutation({
+      mutationFn: useJoanieApi().user.orders.abort,
+      onSuccess: () => {
+        custom.methods.invalidate();
+      },
+    });
     const submitHandler = useSessionMutation({ mutationFn: useJoanieApi().user.orders.submit });
     return {
       ...custom,

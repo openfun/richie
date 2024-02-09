@@ -171,6 +171,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
   });
 
   const order = productOrder as CredentialOrder;
+  // TODO: Rename this, how having no order is a pending state? It's hard to understand imo.
   const isPendingState = !order || order.state === OrderState.PENDING;
   const hasPurchased = (order && order.state === OrderState.VALIDATED) ?? false;
 

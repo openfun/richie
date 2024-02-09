@@ -3,7 +3,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
 import { Spinner } from 'components/Spinner';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { useOmniscientOrders } from 'hooks/useOrders';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
 import { OrderCreationPayload, OrderState, ProductType } from 'types/Joanie';
@@ -11,10 +10,10 @@ import type { Nullable } from 'types/utils';
 import { HttpError } from 'utils/errors/HttpError';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
-import useProductOrder from 'hooks/useProductOrder';
 import { useTerms } from 'components/PaymentButton/hooks/useTerms';
 import { useSaleTunnelContext } from 'components/SaleTunnel/context';
 import { ObjectHelper } from 'utils/ObjectHelper';
+import { useOrders } from 'hooks/useOrders';
 import PaymentInterface from './components/PaymentInterfaces';
 
 const messages = defineMessages({
@@ -99,13 +98,8 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
   const intl = useIntl();
   const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const { course, key, enrollment, product, setOrder, orderGroup } = useSaleTunnelContext();
-  const { item: order } = useProductOrder({
-    courseCode: course?.code,
-    enrollmentId: enrollment?.id,
-    productId: product.id,
-  });
-  const orderManager = useOmniscientOrders();
+  const { course, key, enrollment, product, order, orderGroup } = useSaleTunnelContext();
+  const { methods: orderMethods } = useOrders(undefined, { enabled: false });
   const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<PaymentErrorMessageId>(PaymentErrorMessageId.ERROR_DEFAULT);
@@ -156,7 +150,7 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
       if (!paymentInfos) {
         const billingAddressPayload = ObjectHelper.omit(billingAddress!, 'id', 'is_main');
 
-        orderManager.methods.submit(
+        orderMethods.submit(
           {
             id: orderId,
             billing_address: billingAddressPayload,
@@ -214,9 +208,8 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
               ...(orderGroup ? { order_group_id: orderGroup.id } : {}),
             };
 
-      orderManager.methods.create(payload, {
+      orderMethods.create(payload, {
         onSuccess: (newOrder) => {
-          setOrder(newOrder);
           createPayment(newOrder.id);
         },
         onError: async () => {
@@ -232,7 +225,7 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
     const checkOrderValidity = async () => {
       if (round >= PAYMENT_SETTINGS.pollLimit) {
         timeoutRef.current = undefined;
-        orderManager.methods.abort({ id: payment!.order_id, payment_id: payment!.payment_id });
+        orderMethods.abort({ id: payment!.order_id, payment_id: payment!.payment_id });
         setState(ComponentStates.ERROR);
       } else {
         const isValidated = await isOrderValidated(payment!.order_id);
@@ -260,7 +253,7 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
       if (timeoutRef.current !== undefined) {
         clearTimeout(timeoutRef.current);
         if (payment) {
-          orderManager.methods.abort({
+          orderMethods.abort({
             id: payment.order_id,
             payment_id: payment.payment_id,
           });
@@ -271,7 +264,7 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
 
   useEffect(() => {
     if (error === PaymentErrorMessageId.ERROR_ABORTING) {
-      orderManager.methods
+      orderMethods
         .abort({
           id: payment!.order_id,
           payment_id: payment!.payment_id,

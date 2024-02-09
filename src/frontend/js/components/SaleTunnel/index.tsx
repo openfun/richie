@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useQueryClient } from '@tanstack/react-query';
 import { Modal } from 'components/Modal';
@@ -16,7 +16,7 @@ import { IconTypeEnum } from 'components/Icon';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { Manifest, useStepManager } from 'hooks/useStepManager';
-import { Maybe } from 'types/utils';
+import useProductOrder from 'hooks/useProductOrder';
 import { SaleTunnelContext, SaleTunnelContextType } from './context';
 import { StepBreadcrumb } from './components/StepBreadcrumb';
 import { SaleTunnelStepValidation } from './components/SaleTunnelStepValidation';
@@ -80,8 +80,11 @@ const SaleTunnel = ({
     product.id
   }`;
   const queryClient = useQueryClient();
-
-  const [order, setOrder] = useState<Maybe<Order>>();
+  const { item: order } = useProductOrder({
+    courseCode: course?.code,
+    enrollmentId: enrollment?.id,
+    productId: product.id,
+  });
 
   const manifest: Manifest<TunnelSteps, 'resume'> = {
     start: 'validation',
@@ -138,7 +141,6 @@ const SaleTunnel = ({
       return {
         product: product as CredentialProduct,
         order,
-        setOrder,
         key,
         course: course!,
         enrollment: undefined,
@@ -147,25 +149,23 @@ const SaleTunnel = ({
       return {
         product: product as CertificateProduct,
         order,
-        setOrder,
         key,
         course: undefined,
         enrollment: enrollment!,
       };
     }
-  }, [product, order, setOrder]);
+  }, [product, order]);
 
   useMemo(
     () => ({
       product,
       order,
-      setOrder,
       key,
       course,
       enrollment,
       orderGroup,
     }),
-    [product, order, setOrder, key, course, enrollment, orderGroup],
+    [product, order, key, course, enrollment, orderGroup],
   );
 
   /**
