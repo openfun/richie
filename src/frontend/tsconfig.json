@@ -14,18 +14,18 @@
       "es2017",
       "es2020.intl",
       "es2021.string",
-      "esnext.intl",
+      "esnext.intl"
     ],
     "module": "esnext",
     "moduleResolution": "node",
     "paths": {
-      "intl-pluralrules": ["types/libs/intl-pluralrules"],
+      "intl-pluralrules": ["types/libs/intl-pluralrules"]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "sourceMap": true,
-    "target": "es6",
+    "target": "es6"
   },
-  "include": ["./**/*"],
+  "include": ["./**/*"]
 }
