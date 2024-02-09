@@ -114,12 +114,7 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
   });
 
   const isReadyToPay = useMemo(() => {
-    return (
-      (course || enrollment) &&
-      product &&
-      billingAddress &&
-      (termsAccepted || !product.contract_definition)
-    );
+    return (course || enrollment) && product && billingAddress && termsAccepted;
   }, [product, course, enrollment, billingAddress, termsAccepted]);
 
   /**
@@ -201,10 +196,12 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
           ? {
               product_id: product.id,
               enrollment_id: enrollment!.id,
+              has_consent_to_terms: termsAccepted,
             }
           : {
               product_id: product.id,
               course_code: course!.code,
+              has_consent_to_terms: termsAccepted,
               ...(orderGroup ? { order_group_id: orderGroup.id } : {}),
             };
 
@@ -284,7 +281,7 @@ const PaymentButton = ({ billingAddress, creditCard, onSuccess }: PaymentButtonP
 
   return (
     <div className="payment-button" data-testid={order && 'payment-button-order-loaded'}>
-      {product.contract_definition && renderTermsCheckbox()}
+      {renderTermsCheckbox()}
       <Button
         disabled={state === ComponentStates.LOADING}
         onClick={createOrder}
