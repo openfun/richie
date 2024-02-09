@@ -59,7 +59,7 @@ describe('widgets/Search/components/CourseGlimpseList', () => {
     expect(srOnlyCount).toHaveAttribute('aria-live', 'polite');
     expect(srOnlyCount).toHaveAttribute('aria-atomic', 'true');
     // the message shown in the UI
-    expect(container.querySelector('.course-glimpse-list__count')).toHaveAttribute(
+    expect(container.querySelector('.list__count-description')).toHaveAttribute(
       'aria-hidden',
       'true',
     );

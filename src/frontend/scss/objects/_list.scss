@@ -1,0 +1,8 @@
+.list {
+  &__count-description {
+    flex-basis: 100%; // Should not wrap as mozaic list elements
+    color: r-theme-val(course-glimpse-list, count-color);
+    text-align: right;
+    align-self: self-end;
+  }
+}
