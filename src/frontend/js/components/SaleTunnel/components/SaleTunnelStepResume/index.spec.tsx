@@ -6,7 +6,6 @@ import {
   ProductFactory,
 } from 'utils/test/factories/joanie';
 import { SaleTunnelContext } from 'components/SaleTunnel/context';
-import { noop } from 'utils';
 import { SaleTunnelStepResume } from '.';
 
 describe('SaleTunnelStepResume', () => {
@@ -24,7 +23,6 @@ describe('SaleTunnelStepResume', () => {
         <SaleTunnelContext.Provider
           value={{
             product,
-            setOrder: noop,
             course: CourseLightFactory({ code: '00000' }).one(),
             key: `00000+${product.id}`,
           }}
@@ -56,7 +54,6 @@ describe('SaleTunnelStepResume', () => {
           value={{
             product,
             order,
-            setOrder: noop,
             course: CourseLightFactory({ code: '00000' }).one(),
             key: `00000+${product.id}`,
           }}

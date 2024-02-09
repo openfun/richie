@@ -1,6 +1,6 @@
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { PropsWithChildren, useMemo, useState } from 'react';
+import { PropsWithChildren, useMemo } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { faker } from '@faker-js/faker';
@@ -25,7 +25,6 @@ import {
   OrderCredentialCreationPayload,
   OrderState,
   ProductType,
-  Order,
   OrderGroup,
   CertificateProduct,
   CredentialProduct,
@@ -42,6 +41,7 @@ import {
   SaleTunnelCertificateContext,
 } from 'components/SaleTunnel/context';
 import { ObjectHelper } from 'utils/ObjectHelper';
+import useProductOrder from 'hooks/useProductOrder';
 import PaymentButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -61,6 +61,12 @@ jest.mock('utils/context', () => ({
 }));
 
 jest.mock('./components/PaymentInterfaces');
+
+type WrapperProps = PropsWithChildren<{
+  client?: QueryClient;
+  product: CredentialProduct | CertificateProduct;
+  orderGroup?: OrderGroup;
+}>;
 
 describe.each([
   {
@@ -88,24 +94,22 @@ describe.each([
         style: 'currency',
       }).format(price);
 
-    const Wrapper = ({
-      client = createTestQueryClient({ user: true }),
-      children,
+    const SaleTunnelWrapper = ({
       product,
       orderGroup,
-    }: PropsWithChildren<{
-      client?: QueryClient;
-      product: CredentialProduct | CertificateProduct;
-      orderGroup?: OrderGroup;
-    }>) => {
-      const [order, setOrder] = useState<Maybe<Order>>();
+      children,
+    }: Exclude<WrapperProps, 'client'>) => {
+      const { item: order } = useProductOrder({
+        courseCode: product.type === ProductType.CREDENTIAL ? TEST_COURSE_CODE : undefined,
+        enrollmentId: product.type === ProductType.CERTIFICATE ? TEST_ENROLLMENT_ID : undefined,
+        productId: product.id,
+      });
 
       const context: SaleTunnelContextType = useMemo(() => {
         if (product.type === ProductType.CREDENTIAL) {
           return {
             product,
             order,
-            setOrder,
             key: `${TEST_COURSE_CODE}+${product.id}`,
             course: CourseLightFactory({ code: TEST_COURSE_CODE }).one(),
             orderGroup,
@@ -114,19 +118,25 @@ describe.each([
           return {
             product,
             order,
-            setOrder,
             key: `${TEST_ENROLLMENT_ID}+${product.id}`,
             enrollment: EnrollmentFactory({ id: TEST_ENROLLMENT_ID }).one(),
             orderGroup,
           } as SaleTunnelCertificateContext;
         }
-      }, [product, order, setOrder, orderGroup]);
+      }, [product, order, orderGroup]);
 
+      return <SaleTunnelContext.Provider value={context}>{children}</SaleTunnelContext.Provider>;
+    };
+
+    const Wrapper = ({
+      client = createTestQueryClient({ user: true }),
+      ...props
+    }: WrapperProps) => {
       return (
         <IntlProvider locale="en">
           <QueryClientProvider client={client}>
             <JoanieSessionProvider>
-              <SaleTunnelContext.Provider value={context}>{children}</SaleTunnelContext.Provider>
+              <SaleTunnelWrapper {...props} />
             </JoanieSessionProvider>
           </QueryClientProvider>
         </IntlProvider>
@@ -332,7 +342,7 @@ describe.each([
           <PaymentButton billingAddress={billingAddress} onSuccess={handleSuccess} />
         </Wrapper>,
       );
-      nbApiCalls += 1; // fetch order for useProductOrder
+      nbApiCalls += 1; // useProductOrder call.
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
       const $terms = screen.getByLabelText(
@@ -356,8 +366,7 @@ describe.each([
 
       // - Route to create order should have been called
       nbApiCalls += 1; // order post create (invalidate queries)
-      nbApiCalls += 1; // refetch omniscient orders
-      nbApiCalls += 1; // refetch useProductOrder
+      nbApiCalls += 1; // useProductOrder call (invalidate from create)
       nbApiCalls += 1; // order submit
 
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
@@ -408,6 +417,126 @@ describe.each([
         jest.runOnlyPendingTimers();
       });
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+    });
+
+    it('should create an order only the first time the payment interface is shown, and not after aborting', async () => {
+      const product: Joanie.Product = ProductFactory().one();
+      const billingAddress: Joanie.Address = AddressFactory().one();
+      const handleSuccess = jest.fn();
+      const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
+
+      const fetchOrderQueryParams =
+        product.type === ProductType.CREDENTIAL
+          ? {
+              course_code: TEST_COURSE_CODE,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            }
+          : {
+              enrollment_id: TEST_ENROLLMENT_ID,
+              product_id: product.id,
+              state: ['pending', 'validated', 'submitted'],
+            };
+
+      fetchMock
+        .get(
+          `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
+          [],
+        )
+        .post('https://joanie.test/api/v1.0/orders/', order)
+        .patch(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`, {
+          paymentInfo,
+        })
+        .get(`https://joanie.test/api/v1.0/orders/${order.id}/`, {
+          ...order,
+        })
+        .post(`https://joanie.test/api/v1.0/orders/${order.id}/abort/`, HttpStatusCode.OK);
+
+      render(
+        <Wrapper client={createTestQueryClient({ user: true })} product={product}>
+          <PaymentButton billingAddress={billingAddress} onSuccess={handleSuccess} />
+        </Wrapper>,
+      );
+      nbApiCalls += 1; // useProductOrder call.
+      expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+
+      const $terms = screen.getByLabelText(
+        'By checking this box, you accept the General Terms of Sale',
+      );
+      await act(async () => {
+        fireEvent.click($terms);
+      });
+
+      const $button = screen.getByRole('button', {
+        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+      }) as HTMLButtonElement;
+
+      // - Payment button should not be disabled.
+      expect($button.disabled).toBe(false);
+
+      // - User clicks on pay button
+      await act(async () => {
+        fireEvent.click($button);
+      });
+
+      // - Route to create order should have been called
+      nbApiCalls += 1; // order post create (invalidate queries)
+      nbApiCalls += 1; // useProductOrder call (invalidate from create)
+      nbApiCalls += 1; // order submit
+
+      await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
+      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
+
+      // - Spinner should be displayed
+      screen.getByText('Payment in progress');
+
+      // - Payment interface should be displayed
+      screen.getByText('Payment interface component');
+
+      // - Simulate the payment aborting.
+      fetchMock.get(
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
+        [
+          {
+            ...order,
+            state: OrderState.PENDING,
+          },
+        ],
+        { overwriteRoutes: true },
+      );
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('payment-abort'));
+      });
+
+      nbApiCalls += 1; // abort order.
+      nbApiCalls += 1; // useProductOrder call (invalidate from create)
+      await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
+      expect(fetchMock.calls()[fetchMock.calls().length - 2][0]).toBe(
+        `https://joanie.test/api/v1.0/orders/${order.id}/abort/`,
+      );
+      expect(fetchMock.calls()[fetchMock.calls().length - 1][0]).toBe(
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
+      );
+
+      screen.getByText('You have aborted the payment.');
+
+      // screen.logTestingPlaygroundURL();
+
+      // - User clicks on pay button again.
+      await act(async () => {
+        fireEvent.click($button);
+      });
+
+      // - Spinner should be displayed
+      screen.getByText('Payment in progress');
+
+      // - Payment interface should be displayed
+      screen.getByText('Payment interface component');
+
+      // - Now we make sure the order is not created again and just submitted.
+      nbApiCalls += 1; // submits order.
+      await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
+      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
     });
 
     it('should render a payment button and not call the order creation route', async () => {
@@ -655,8 +784,9 @@ describe.each([
 
       await waitFor(
         async () => {
-          expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit);
-          expect(fetchMock.lastUrl()).toBe(
+          // +1 is for useProductOrder call invalidation.
+          expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit + 1);
+          expect(fetchMock.calls()[fetchMock.calls().length - 2][0]).toBe(
             `https://joanie.test/api/v1.0/orders/${order.id}/abort/`,
           );
         },
@@ -665,7 +795,9 @@ describe.each([
         },
       );
 
-      expect(JSON.parse(fetchMock.lastOptions()!.body!.toString())).toEqual({
+      expect(
+        JSON.parse(fetchMock.calls()[fetchMock.calls().length - 2][1]!.body!.toString()),
+      ).toEqual({
         payment_id: paymentInfo.payment_id,
       });
 
@@ -735,7 +867,6 @@ describe.each([
 
       // - Route to create order should have been called
       nbApiCalls += 1; // order post create (invalidate queries)
-      nbApiCalls += 1; // refetch omniscient orders
       nbApiCalls += 1; // refetch useProductOrder
       nbApiCalls += 1; // order submit
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);

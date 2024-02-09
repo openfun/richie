@@ -12,7 +12,6 @@ interface SaleTunnelContextBase {
   product: CredentialProduct | CertificateProduct;
   orderGroup?: OrderGroup;
   order?: Order;
-  setOrder: (order: Order) => void;
   key: string;
   enrollment?: Enrollment;
   course?: CourseLight;

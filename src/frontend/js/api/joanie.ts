@@ -306,7 +306,7 @@ const API = (): Joanie.API => {
       },
       orders: {
         abort: async ({ id, payment_id }) => {
-          fetchWithJWT(ROUTES.user.orders.abort.replace(':id', id), {
+          return fetchWithJWT(ROUTES.user.orders.abort.replace(':id', id), {
             method: 'POST',
             body: payment_id ? JSON.stringify({ payment_id }) : undefined,
           }).then(checkStatus);
