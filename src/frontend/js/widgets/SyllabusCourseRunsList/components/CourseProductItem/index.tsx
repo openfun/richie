@@ -62,11 +62,11 @@ export interface CourseProductItemProps {
 type HeaderProps = {
   compact: boolean;
   hasPurchased: boolean;
-  isPendingState: boolean;
+  canPurchase: boolean;
   order: Maybe<CredentialOrder>;
   product: Product;
 };
-const Header = ({ product, order, hasPurchased, isPendingState, compact }: HeaderProps) => {
+const Header = ({ product, order, hasPurchased, canPurchase, compact }: HeaderProps) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
 
@@ -92,7 +92,7 @@ const Header = ({ product, order, hasPurchased, isPendingState, compact }: Heade
         <strong className="product-widget__price h6">
           {order?.state === OrderState.VALIDATED && <FormattedMessage {...messages.purchased} />}
           {order?.state === OrderState.SUBMITTED && <FormattedMessage {...messages.pending} />}
-          {isPendingState && (
+          {canPurchase && (
             <FormattedNumber
               currency={product.price_currency}
               value={product.price}
@@ -171,8 +171,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
   });
 
   const order = productOrder as CredentialOrder;
-  // TODO: Rename this, how having no order is a pending state? It's hard to understand imo.
-  const isPendingState = !order || order.state === OrderState.PENDING;
+  const canPurchase = !order || order.state === OrderState.PENDING;
   const hasPurchased = (order && order.state === OrderState.VALIDATED) ?? false;
 
   const hasError = Boolean(productQueryStates.error);
@@ -229,7 +228,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
           <Header
             product={product}
             order={order}
-            isPendingState={isPendingState}
+            canPurchase={canPurchase}
             hasPurchased={hasPurchased}
             compact={compact}
           />
@@ -240,7 +239,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
               product={product as CredentialProduct}
               orderGroups={orderGroups}
               orderGroupsAvailable={orderGroupsAvailable}
-              isPendingState={isPendingState}
+              canPurchase={canPurchase}
             />
           </footer>
         </>

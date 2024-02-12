@@ -24,7 +24,7 @@ other {# remaining seats}
 interface CourseProductItemFooterProps {
   course: CourseLight;
   product: CredentialProduct;
-  isPendingState: boolean;
+  canPurchase: boolean;
   orderGroups: OrderGroup[];
   orderGroupsAvailable: OrderGroup[];
 }
@@ -34,14 +34,14 @@ const CourseProductItemFooter = ({
   product,
   orderGroups,
   orderGroupsAvailable,
-  isPendingState,
+  canPurchase,
 }: CourseProductItemFooterProps) => {
   if (orderGroups.length === 0) {
     return (
       <PurchaseButton
         course={course}
         product={product}
-        disabled={!isPendingState}
+        disabled={!canPurchase}
         buttonProps={{ fullWidth: true }}
       />
     );
@@ -58,7 +58,7 @@ const CourseProductItemFooter = ({
       <PurchaseButton
         course={course}
         product={product}
-        disabled={!isPendingState}
+        disabled={!canPurchase}
         orderGroup={orderGroup}
         buttonProps={{ fullWidth: true }}
       />
