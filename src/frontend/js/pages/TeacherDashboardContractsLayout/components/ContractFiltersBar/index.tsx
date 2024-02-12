@@ -1,10 +1,8 @@
 import { Select, SelectProps } from '@openfun/cunningham-react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useEffect } from 'react';
-import { useOrganizations } from 'hooks/useOrganizations';
 import { ContractState } from 'types/Joanie';
 import { ContractHelper, ContractStatePoV } from 'utils/ContractHelper';
-import { Spinner } from 'components/Spinner';
+import FilterOrganization from 'widgets/Dashboard/components/FilterOrganization';
 
 export const messages = defineMessages({
   organizationFilterLabel: {
@@ -31,11 +29,6 @@ interface ContractFiltersBarProps {
   hideFilterSignatureState?: boolean;
 }
 
-interface FilterProps {
-  defaultValue?: SelectProps['defaultValue'];
-  onChange: (value: Partial<ContractListFilters>) => void;
-}
-
 const ContractFiltersBar = ({
   defaultValues,
   onFiltersChange,
@@ -45,7 +38,7 @@ const ContractFiltersBar = ({
   return (
     <div className="dashboard__page__actions-row dashboard__page__actions-row--end">
       {!hideFilterOrganization && (
-        <OrganizationContractFilter
+        <FilterOrganization
           defaultValue={defaultValues?.organization_id}
           onChange={onFiltersChange}
         />
@@ -60,45 +53,12 @@ const ContractFiltersBar = ({
   );
 };
 
-const OrganizationContractFilter = ({ defaultValue, onChange }: FilterProps) => {
-  const intl = useIntl();
-  const {
-    items: organizations,
-    states: { isFetched },
-  } = useOrganizations();
+interface ContractFilterProps {
+  defaultValue?: SelectProps['defaultValue'];
+  onChange: (value: Partial<ContractListFilters>) => void;
+}
 
-  const organizationOptions = organizations.map((organization) => ({
-    label: organization.title,
-    value: organization.id,
-  }));
-
-  const handleChange: SelectProps['onChange'] = (e) => {
-    const value = e.target.value as string;
-    onChange({ organization_id: value });
-  };
-
-  useEffect(() => {
-    if (isFetched && defaultValue === undefined) {
-      onChange({ organization_id: organizationOptions[0]?.value });
-    }
-  }, [defaultValue, isFetched]);
-
-  if (!isFetched) return <Spinner />;
-
-  return (
-    <Select
-      label={intl.formatMessage(messages.organizationFilterLabel)}
-      options={organizationOptions}
-      defaultValue={defaultValue || organizationOptions[0].value}
-      onChange={handleChange}
-      disabled={!isFetched}
-      clearable={false}
-      searchable={true}
-    />
-  );
-};
-
-const SignatureStateFilter = ({ defaultValue, onChange }: FilterProps) => {
+const SignatureStateFilter = ({ defaultValue, onChange }: ContractFilterProps) => {
   const intl = useIntl();
   const contractStateOptions = Object.values(ContractState)
     .filter((value) => value !== ContractState.UNSIGNED)
