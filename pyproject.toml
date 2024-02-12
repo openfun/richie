@@ -86,7 +86,7 @@ dev = [
     "responses==0.24.1",
 ]
 ci = [
-    "twine==4.0.2",
+    "twine==5.0.0",
 ]
 sandbox = [
     "django-configurations==2.5",
