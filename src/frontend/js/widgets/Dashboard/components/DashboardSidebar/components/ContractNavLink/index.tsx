@@ -5,7 +5,7 @@ import { ContractState, CourseProductRelation, Organization } from 'types/Joanie
 import useTeacherPendingContractsCount from 'hooks/useTeacherPendingContractsCount';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
 import useContractAbilities from 'hooks/useContractAbilities';
-import useDefaultOrganizationId from 'pages/TeacherDashboardContractsLayout/hooks/useDefaultOrganizationId';
+import useDefaultOrganizationId from 'hooks/useDefaultOrganizationId';
 import MenuNavLink from '../MenuNavLink';
 
 interface ContractNavLinkProps {

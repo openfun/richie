@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import useDefaultOrganizationId from 'hooks/useDefaultOrganizationId';
 import { ContractResourceQuery, ContractState } from 'types/Joanie';
-import useDefaultOrganizationId from '../useDefaultOrganizationId';
 
 export type TeacherDashboardContractsParams = {
   organizationId?: string;
