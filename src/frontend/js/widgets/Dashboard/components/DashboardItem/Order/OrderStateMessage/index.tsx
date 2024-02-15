@@ -1,6 +1,12 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useEffect } from 'react';
-import { CertificateOrder, CredentialOrder, OrderState, ContractDefinition } from 'types/Joanie';
+import {
+  CertificateOrder,
+  CredentialOrder,
+  OrderState,
+  ContractDefinition,
+  NestedCourseOrder,
+} from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { handle } from 'utils/errors/handle';
 import { OrderHelper } from 'utils/OrderHelper';
@@ -52,7 +58,7 @@ export const messages = defineMessages({
 });
 
 interface OrderStateMessageProps {
-  order: CredentialOrder | CertificateOrder;
+  order: CredentialOrder | CertificateOrder | NestedCourseOrder;
   contractDefinition?: ContractDefinition;
 }
 

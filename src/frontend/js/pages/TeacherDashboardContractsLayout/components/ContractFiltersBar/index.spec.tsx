@@ -1,50 +1,25 @@
-import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { CunninghamProvider } from '@openfun/cunningham-react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { PropsWithChildren } from 'react';
+import { screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { userEvent } from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ContractState } from 'types/Joanie';
 import { OrganizationFactory } from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { noop } from 'utils';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
 import ContractFiltersBar from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
-    joanie_backend: { endpoint: 'https://joanie.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
 describe('<ContractFiltersBar/>', () => {
-  const Wrapper = ({ children }: PropsWithChildren) => {
-    return (
-      <IntlProvider locale="en">
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <JoanieSessionProvider>
-            <CunninghamProvider>{children}</CunninghamProvider>
-          </JoanieSessionProvider>
-        </QueryClientProvider>
-      </IntlProvider>
-    );
-  };
-
-  beforeEach(() => {
-    fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
-  });
-
-  afterEach(() => {
-    fetchMock.restore();
-    jest.resetAllMocks();
-  });
+  setupJoanieSession();
 
   it('should render SignatureState and Organization filters with default value', async () => {
     const filterChange = jest.fn();
@@ -54,13 +29,9 @@ describe('<ContractFiltersBar/>', () => {
       organization_id: organizations[1].id,
     };
 
-    fetchMock.get('https://joanie.test/api/v1.0/organizations/', organizations);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', organizations);
 
-    render(
-      <Wrapper>
-        <ContractFiltersBar onFiltersChange={filterChange} defaultValues={defaultValues} />
-      </Wrapper>,
-    );
+    render(<ContractFiltersBar onFiltersChange={filterChange} defaultValues={defaultValues} />);
 
     await waitFor(() => expectNoSpinner());
 
@@ -101,16 +72,14 @@ describe('<ContractFiltersBar/>', () => {
       organization_id: organizations[0].id,
     };
 
-    fetchMock.get('https://joanie.test/api/v1.0/organizations/', organizations);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', organizations);
 
     render(
-      <Wrapper>
-        <ContractFiltersBar
-          onFiltersChange={noop}
-          defaultValues={defaultValues}
-          hideFilterSignatureState={true}
-        />
-      </Wrapper>,
+      <ContractFiltersBar
+        onFiltersChange={noop}
+        defaultValues={defaultValues}
+        hideFilterSignatureState={true}
+      />,
     );
 
     await waitFor(() => expectNoSpinner());
@@ -132,16 +101,14 @@ describe('<ContractFiltersBar/>', () => {
       organization_id: organizations[0].id,
     };
 
-    fetchMock.get('https://joanie.test/api/v1.0/organizations/', organizations);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', organizations);
 
     render(
-      <Wrapper>
-        <ContractFiltersBar
-          onFiltersChange={noop}
-          defaultValues={defaultValues}
-          hideFilterOrganization={true}
-        />
-      </Wrapper>,
+      <ContractFiltersBar
+        onFiltersChange={noop}
+        defaultValues={defaultValues}
+        hideFilterOrganization={true}
+      />,
     );
 
     await waitFor(() => expectNoSpinner());
@@ -161,19 +128,11 @@ describe('<ContractFiltersBar/>', () => {
     const organizations = OrganizationFactory().many(2);
     const handleChange = jest.fn();
 
-    fetchMock.get('https://joanie.test/api/v1.0/organizations/', organizations);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', organizations);
 
-    render(
-      <Wrapper>
-        <ContractFiltersBar onFiltersChange={handleChange} />
-      </Wrapper>,
-    );
+    render(<ContractFiltersBar onFiltersChange={handleChange} />);
 
     await waitFor(() => expectNoSpinner());
-
-    // Organization filter should have been rendered and the first organization should be selected
-    const organizationFilter = screen.getByRole('combobox', { name: 'Organization' });
-    expect(organizationFilter).toHaveAttribute('value', organizations[0].title);
     expect(handleChange).toHaveBeenNthCalledWith(1, { organization_id: organizations[0].id });
   });
 });

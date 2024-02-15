@@ -1,25 +1,21 @@
-import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { CunninghamProvider } from '@openfun/cunningham-react';
 import fetchMock from 'fetch-mock';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { getAllByRole } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ContractFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
 import TeacherDashboardContracts from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
-    joanie_backend: { endpoint: 'https://joanie.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
@@ -34,36 +30,8 @@ jest.mock('components/ContractFrame', () => ({
   }) => isOpen && <p>ContractFrame opened for {organizationId}</p>,
 }));
 
-const Wrapper = ({ path, initialEntry }: { path: string; initialEntry: string }) => {
-  return (
-    <IntlProvider locale="en">
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <JoanieSessionProvider>
-          <CunninghamProvider>
-            <MemoryRouter initialEntries={[initialEntry]}>
-              <Routes>
-                <Route path={path} element={<TeacherDashboardContracts />} />
-              </Routes>
-            </MemoryRouter>
-          </CunninghamProvider>
-        </JoanieSessionProvider>
-      </QueryClientProvider>
-    </IntlProvider>
-  );
-};
-
 describe('pages/TeacherDashboardContracts', () => {
-  beforeEach(() => {
-    // Joanie providers calls
-    fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
-  });
-
-  afterEach(() => {
-    fetchMock.restore();
-    jest.resetAllMocks();
-  });
+  setupJoanieSession();
 
   it('should render a list of contracts for a course product relation', async () => {
     const contracts = ContractFactory({
@@ -74,24 +42,24 @@ describe('pages/TeacherDashboardContracts', () => {
     const defaultOrganization = organizations[0];
 
     // OrganizationContractFilter request all organizations forwho the user have access
-    fetchMock.get(`https://joanie.test/api/v1.0/organizations/`, organizations);
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, organizations);
     // TeacherDashboardContracts request a paginated list of contracts to display
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/${defaultOrganization.id}/contracts/?course_product_relation_id=2&signature_state=signed&page=1&page_size=25`,
+      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?course_product_relation_id=2&signature_state=signed&page=1&page_size=25`,
       { results: contracts, count: 0, previous: null, next: null },
     );
     // useTeacherContractsToSign request all contract to sign, without pagination
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=half_signed&course_product_relation_id=2`,
+      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=half_signed&course_product_relation_id=2`,
       { results: [], count: 0, previous: null, next: null },
     );
 
-    render(
-      <Wrapper
-        path="/courses/:courseId/products/:courseProductRelationId/contracts"
-        initialEntry="/courses/1/products/2/contracts"
-      />,
-    );
+    render(<TeacherDashboardContracts />, {
+      routerOptions: {
+        path: '/courses/:courseId/products/:courseProductRelationId/contracts',
+        initialEntries: ['/courses/1/products/2/contracts'],
+      },
+    });
 
     await expectNoSpinner();
 
@@ -139,21 +107,24 @@ describe('pages/TeacherDashboardContracts', () => {
       organization_signed_on: Date.toString(),
     }).many(3);
 
+    // OrganizationContractFilter request all organizations forwho the user have access
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
+      `https://joanie.endpoint/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
       { results: contracts, count: 0, previous: null, next: null },
     );
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
+      `https://joanie.endpoint/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
       { results: [], count: 0, previous: null, next: null },
     );
 
-    render(
-      <Wrapper
-        path="/organizations/:organizationId/contracts"
-        initialEntry="/organizations/1/contracts"
-      />,
-    );
+    render(<TeacherDashboardContracts />, {
+      routerOptions: {
+        path: '/organizations/:organizationId/contracts',
+        initialEntries: ['/organizations/1/contracts'],
+      },
+    });
 
     await expectNoSpinner();
 
@@ -193,21 +164,23 @@ describe('pages/TeacherDashboardContracts', () => {
   });
 
   it('should render an empty table if there are no contracts', async () => {
+    // OrganizationContractFilter request all organizations forwho the user have access
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
+      `https://joanie.endpoint/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
       { results: [], count: 0, previous: null, next: null },
     );
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
+      `https://joanie.endpoint/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
       { results: [], count: 0, previous: null, next: null },
     );
 
-    render(
-      <Wrapper
-        path="/organizations/:organizationId/contracts"
-        initialEntry="/organizations/1/contracts"
-      />,
-    );
+    render(<TeacherDashboardContracts />, {
+      routerOptions: {
+        path: '/organizations/:organizationId/contracts',
+        initialEntries: ['/organizations/1/contracts'],
+      },
+    });
 
     await expectNoSpinner();
 
@@ -239,25 +212,27 @@ describe('pages/TeacherDashboardContracts', () => {
       abilities: { sign: true },
     }).many(3);
 
+    // OrganizationContractFilter request all organizations forwho the user have access
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
+      `https://joanie.endpoint/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
       { results: [], count: 0, previous: null, next: null },
     );
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed&page=1&page_size=25`,
+      `https://joanie.endpoint/api/v1.0/organizations/1/contracts/?signature_state=half_signed&page=1&page_size=25`,
       { results: contracts, count: 3, previous: null, next: null },
     );
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
+      `https://joanie.endpoint/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
       { results: contracts, count: 3, previous: null, next: null },
     );
 
-    render(
-      <Wrapper
-        path="/organizations/:organizationId/contracts"
-        initialEntry="/organizations/1/contracts?signature_state=half_signed"
-      />,
-    );
+    render(<TeacherDashboardContracts />, {
+      routerOptions: {
+        path: '/organizations/:organizationId/contracts',
+        initialEntries: ['/organizations/1/contracts?signature_state=half_signed'],
+      },
+    });
 
     await expectNoSpinner();
 
@@ -306,21 +281,24 @@ describe('pages/TeacherDashboardContracts', () => {
   });
 
   it('should render an error banner if an error occured during contracts fetching', async () => {
+    // OrganizationContractFilter request all organizations forwho the user have access
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
+      `https://joanie.endpoint/api/v1.0/organizations/1/contracts/?signature_state=signed&page=1&page_size=25`,
       HttpStatusCode.NOT_FOUND,
     );
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
+      `https://joanie.endpoint/api/v1.0/organizations/1/contracts/?signature_state=half_signed`,
       HttpStatusCode.NOT_FOUND,
     );
 
-    render(
-      <Wrapper
-        path="/organizations/:organizationId/contracts"
-        initialEntry="/organizations/1/contracts"
-      />,
-    );
+    render(<TeacherDashboardContracts />, {
+      routerOptions: {
+        path: '/organizations/:organizationId/contracts',
+        initialEntries: ['/organizations/1/contracts'],
+      },
+    });
 
     await expectNoSpinner();
     await expectBannerError('An error occurred while fetching contracts. Please retry later.');
@@ -328,21 +306,28 @@ describe('pages/TeacherDashboardContracts', () => {
 
   it('should hide organization filter when user only have one organization', async () => {
     const defaultOrganization = OrganizationFactory().one();
-    fetchMock.get('https://joanie.test/api/v1.0/organizations/', [defaultOrganization]);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', [defaultOrganization]);
 
     const contracts = ContractFactory({
       student_signed_on: Date.toString(),
       abilities: { sign: true },
     }).many(3);
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=signed&page=1&page_size=25`,
+      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=signed&page=1&page_size=25`,
       { results: [], count: 0, previous: null, next: null },
     );
     fetchMock.get(
-      `https://joanie.test/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=half_signed`,
+      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=half_signed`,
       { results: contracts, count: 3, previous: null, next: null },
     );
-    render(<Wrapper path="/" initialEntry="" />);
+
+    render(<TeacherDashboardContracts />, {
+      routerOptions: {
+        path: '/',
+        initialEntries: ['/'],
+      },
+    });
+
     await expectNoSpinner();
 
     // Signature state filter should have been rendered

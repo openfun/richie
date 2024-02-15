@@ -4,6 +4,7 @@ import {
   Order,
   OrderState,
   ContractDefinition,
+  NestedCourseOrder,
 } from 'types/Joanie';
 
 /**
@@ -22,7 +23,10 @@ export class OrderHelper {
   /**
    * tell us if a order need to be sign by it's owner (the learner user).
    */
-  static orderNeedsSignature(order: Order, contractDefinition?: ContractDefinition) {
+  static orderNeedsSignature(
+    order: Order | NestedCourseOrder,
+    contractDefinition?: ContractDefinition,
+  ) {
     return (
       order?.state === OrderState.VALIDATED &&
       contractDefinition &&

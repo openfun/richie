@@ -40,6 +40,8 @@ export interface UseResourcesCallbackProps<
   TResourceQuery extends ResourcesQuery = ResourcesQuery,
   TApiResource extends ApiResourceInterface<TData> = ApiResourceInterface<TData>,
 > extends UseResourcesProps<TData, TResourceQuery, TApiResource> {
+  // TODO(rlecellier): we've cases where fitlers should be required.
+  // like in useCourseOrder where the course_id filter must be set.
   filters?: TResourceQuery;
   queryOptions?: Omit<QueryOptions<TData>, 'queryFn' | 'queryKey'>;
 }

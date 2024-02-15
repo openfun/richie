@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 
-import { Organization } from 'types/Joanie';
+import { API, Organization, OrganizationResourceQuery } from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useResource, useResources, UseResourcesProps } from '../useResources';
 
@@ -21,11 +21,11 @@ const messages = defineMessages({
  * Joanie Api hook to retrieve organizations
  * owned by the authenticated user.
  */
-const props: UseResourcesProps<Organization> = {
+const props: UseResourcesProps<Organization, OrganizationResourceQuery, API['organizations']> = {
   queryKey: ['organizations'],
   apiInterface: () => useJoanieApi().organizations,
   session: true,
   messages,
 };
-export const useOrganizations = useResources<Organization>(props);
-export const useOrganization = useResource<Organization>(props);
+export const useOrganizations = useResources<Organization, OrganizationResourceQuery>(props);
+export const useOrganization = useResource<Organization, OrganizationResourceQuery>(props);

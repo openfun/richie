@@ -1,30 +1,21 @@
-import { QueryClientProvider } from '@tanstack/react-query';
-import { PropsWithChildren } from 'react';
-import { IntlProvider } from 'react-intl';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { renderHook, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { OrganizationFactory } from 'utils/test/factories/joanie';
 import { Organization } from 'types/Joanie';
+import { JoanieAppWrapper, setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import useDefaultOrganizationId from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://demo.test' },
-    joanie_backend: { endpoint: 'https://joanie.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
-interface WrapperProps {
-  routePath: string;
-  initialEntry: string;
-}
-
 describe('useDefaultOrganizationId', () => {
+  setupJoanieSession();
   const organizations: {
     routeOrganization: Organization;
     queryOrganization: Organization;
@@ -34,33 +25,6 @@ describe('useDefaultOrganizationId', () => {
     queryOrganization: OrganizationFactory().one(),
     userOrganizationList: OrganizationFactory().many(2),
   };
-
-  const Wrapper = ({ children, routePath, initialEntry }: PropsWithChildren<WrapperProps>) => {
-    return (
-      <IntlProvider locale="en">
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <JoanieSessionProvider>
-            <MemoryRouter initialEntries={[initialEntry]}>
-              <Routes>
-                <Route path={routePath} element={children} />
-              </Routes>
-            </MemoryRouter>
-          </JoanieSessionProvider>
-        </QueryClientProvider>
-      </IntlProvider>
-    );
-  };
-
-  beforeEach(() => {
-    // Joanie provider's calls
-    fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
-  });
-
-  afterEach(() => {
-    fetchMock.restore();
-  });
 
   it.each([
     {
@@ -112,16 +76,16 @@ describe('useDefaultOrganizationId', () => {
       }
 
       fetchMock.get(
-        'https://joanie.test/api/v1.0/organizations/',
+        'https://joanie.endpoint/api/v1.0/organizations/',
         [...userOrganizationList, routeOrganization, queryOrganization].filter(
           (organization) => organization !== undefined,
         ),
       );
       const { result } = renderHook(useDefaultOrganizationId, {
         wrapper: ({ children }) => (
-          <Wrapper routePath={routePath} initialEntry={initialEntry}>
+          <JoanieAppWrapper routerOptions={{ path: routePath, initialEntries: [initialEntry] }}>
             {children}
-          </Wrapper>
+          </JoanieAppWrapper>
         ),
       });
 
