@@ -32,6 +32,10 @@ export interface Organization {
   logo: Nullable<JoanieFile>;
 }
 
+export interface OrganizationResourceQuery extends ResourcesQuery {
+  course_product_relation_id?: CourseProductRelation['id'];
+}
+
 export interface ContractDefinition {
   id: string;
   description: string;

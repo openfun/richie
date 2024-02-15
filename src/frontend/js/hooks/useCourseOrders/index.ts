@@ -6,13 +6,13 @@ import { API, CourseOrderResourceQuery, NestedCourseOrder } from 'types/Joanie';
 const messages = defineMessages({
   errorGet: {
     id: 'hooks.useCourseOrders.errorSelect',
-    description: 'Error message shown to the user when course orders fetch request fails.',
-    defaultMessage: 'An error occurred while fetching courses orders. Please retry later.',
+    description: 'Error message shown to the user when orders fetch request fails.',
+    defaultMessage: 'An error occurred while fetching orders. Please retry later.',
   },
   errorNotFound: {
     id: 'hooks.useCourseOrders.errorNotFound',
-    description: 'Error message shown to the user when no course order matches.',
-    defaultMessage: 'Cannot find the course orders',
+    description: 'Error message shown to the user when no orders matches.',
+    defaultMessage: 'Cannot find orders',
   },
 });
 
@@ -27,8 +27,6 @@ const props: UseResourcesProps<
   messages,
 };
 
-/**
- * Joanie Api hook to retrieve/update a contract owned by the authenticated user.
- */
 export const useCourseOrder = useResource(props);
+
 export const useCourseOrders = useResources(props);

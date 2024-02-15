@@ -1,8 +1,9 @@
 import { defineMessages, useIntl } from 'react-intl';
 import { Select, SelectProps } from '@openfun/cunningham-react';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useOrganizations } from 'hooks/useOrganizations';
 import { Spinner } from 'components/Spinner';
+import { Organization } from 'types/Joanie';
 
 export const messages = defineMessages({
   organizationFilterLabel: {
@@ -10,20 +11,35 @@ export const messages = defineMessages({
     description: 'Use as organization filter label',
     id: 'components.ListFilterOrganization.organizationFilterLabel',
   },
+  allOrganizationOption: {
+    defaultMessage: 'All organizations',
+    description: 'Use as organization filter option label for "all organizations"',
+    id: 'components.ListFilterOrganization.allOrganizationOption',
+  },
 });
 
 interface FilterOrganizationProps {
   defaultValue?: string;
+  organizationList?: Organization[];
   onChange: ({ organization_id }: { organization_id?: string }) => void;
+  clearable?: boolean;
 }
 
-const FilterOrganization = ({ defaultValue, onChange }: FilterOrganizationProps) => {
+const FilterOrganization = ({
+  defaultValue,
+  organizationList,
+  onChange,
+  clearable = false,
+}: FilterOrganizationProps) => {
   const intl = useIntl();
   const {
-    items: organizations,
+    items: fetchedOrganizationList,
     states: { isFetched },
-  } = useOrganizations();
-
+  } = useOrganizations(undefined, { enabled: !organizationList });
+  const isReady = useMemo(() => {
+    return organizationList || isFetched;
+  }, [organizationList, isFetched]);
+  const organizations = organizationList || fetchedOrganizationList;
   const organizationOptions = organizations.map((organization) => ({
     label: organization.title,
     value: organization.id,
@@ -35,21 +51,22 @@ const FilterOrganization = ({ defaultValue, onChange }: FilterOrganizationProps)
   };
 
   useEffect(() => {
-    if (isFetched && defaultValue === undefined) {
+    if (!clearable && isReady && defaultValue === undefined) {
       onChange({ organization_id: organizationOptions[0]?.value });
     }
   }, [defaultValue, isFetched]);
 
-  if (!isFetched) return <Spinner />;
+  if (!isReady) {
+    return <Spinner />;
+  }
 
   return (
     <Select
       label={intl.formatMessage(messages.organizationFilterLabel)}
       options={organizationOptions}
-      defaultValue={defaultValue || organizationOptions[0].value}
+      defaultValue={defaultValue}
       onChange={handleChange}
-      disabled={!isFetched}
-      clearable={false}
+      clearable={clearable}
       searchable={true}
     />
   );
