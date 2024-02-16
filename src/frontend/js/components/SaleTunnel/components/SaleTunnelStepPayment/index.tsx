@@ -11,6 +11,7 @@ import type { Maybe, Nullable } from 'types/utils';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { useSaleTunnelContext } from 'components/SaleTunnel/context';
 import { UserHelper } from 'utils/UserHelper';
+import { AddressView } from 'components/Address';
 import { RegisteredCreditCard } from '../RegisteredCreditCard';
 
 const messages = defineMessages({
@@ -229,13 +230,9 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
                     value: id,
                   }))}
                 />
-                <address className="SaleTunnelStepPayment__block--buyer__address-selection__address">
-                  {selectedAddress!.first_name}&nbsp;{selectedAddress!.last_name}
-                  <br />
-                  {selectedAddress!.address}
-                  <br />
-                  {selectedAddress!.postcode} {selectedAddress!.city}, {selectedAddress!.country}
-                </address>
+                <div className="SaleTunnelStepPayment__block--buyer__address-selection__address">
+                  <AddressView address={selectedAddress!} />
+                </div>
               </Fragment>
             ) : (
               <Fragment>
