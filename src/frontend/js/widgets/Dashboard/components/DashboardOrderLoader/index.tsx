@@ -17,9 +17,14 @@ const messages = defineMessages({
     id: 'components.DashboardOrderLoader.loading',
   },
   signatureNeeded: {
-    defaultMessage: 'You need to sign your contract before enrolling in a course run',
+    defaultMessage: 'You need to {signLink} before enrolling in a course run',
     description: 'Banner displayed when the contract is not signed',
     id: 'components.DashboardOrderLoader.signatureNeeded',
+  },
+  signLink: {
+    defaultMessage: 'sign your contract',
+    description: 'Link to sign the contract',
+    id: 'components.DashboardOrderLoader.signLink',
   },
   wrongLinkedProductError: {
     defaultMessage: 'This page is not available for this order.',
@@ -48,7 +53,6 @@ export const DashboardOrderLoader = () => {
     }
   }, [credentialOrder]);
   const error = errorOrder || errorCourseProduct || wrongLinkedProductError;
-
   const fetching = fetchingOrder || fetchingCourseProduct;
   const needsSignature = OrderHelper.orderNeedsSignature(
     order,
@@ -66,8 +70,19 @@ export const DashboardOrderLoader = () => {
       )}
       <div className="dashboard-order-loader__banners">
         {error && <Banner message={error} type={BannerType.ERROR} />}
-        {needsSignature && (
-          <Banner message={intl.formatMessage(messages.signatureNeeded)} type={BannerType.ERROR} />
+        {order && needsSignature && (
+          <Banner
+            message={
+              intl.formatMessage(messages.signatureNeeded, {
+                signLink: (
+                  <a href={'#dashboard-item-contract-' + order.id}>
+                    <FormattedMessage {...messages.signLink} />
+                  </a>
+                ),
+              }) as any
+            }
+            type={BannerType.ERROR}
+          />
         )}
       </div>
       {credentialOrder && (

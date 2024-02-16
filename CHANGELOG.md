@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add Organization block to order details.
 - Add teacher dashboard page to list training's learners. This listing 
   can be accessed under a training or an organization's training.
 - Add a "more" button to DashboardItem and Orders containing a link to 

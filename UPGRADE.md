@@ -16,6 +16,17 @@ $ make migrate
 
 ## Unreleased
 
+- Add new `dashboard-splitted-card` theme scheme
+```
+  dashboard-splitted-card: (
+    color: r-color('charcoal'),
+    base-shadow: 0 0 6px r-color('light-grey'),
+    background-color: r-color('white'),
+    dot-color: r-color('firebrick6'),
+    separator-color: r-color('grey87')
+  ),
+```
+
 ## 2.24.1 to 2.25-beta.0
 
 - `CourseProductItem` has been moved into `SyllabusCourseRunsList/components` folder. If you have

@@ -276,6 +276,13 @@ $r-theme: (
     base-border: r-color('light-grey'),
     menu-link-inline-padding: 16px,
   ),
+  dashboard-splitted-card: (
+    color: r-color('charcoal'),
+    base-shadow: 0 0 6px r-color('light-grey'),
+    background-color: r-color('white'),
+    dot-color: r-color('firebrick6'),
+    separator-color: r-color('grey87'),
+  ),
   dashboard-list: (
     background-color-loading: r-color('smoke'),
   ),
