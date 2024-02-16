@@ -157,6 +157,10 @@ export const OrganizationFactory = factory((): Organization => {
     code: faker.string.alphanumeric(5),
     title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
     logo: JoanieFileFactory().one(),
+    contact_email: faker.internet.email(),
+    dpo_email: faker.internet.email(),
+    contact_phone: faker.phone.number(),
+    address: AddressFactory().one(),
   };
 });
 
@@ -400,6 +404,7 @@ const AbstractOrderFactory = factory((): Order => {
     enrollment: undefined,
     course: undefined,
     organization_id: faker.string.uuid(),
+    organization: OrganizationFactory().one(),
   };
 });
 

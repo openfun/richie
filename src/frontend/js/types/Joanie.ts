@@ -30,6 +30,10 @@ export interface Organization {
   code: string;
   title: string;
   logo: Nullable<JoanieFile>;
+  contact_email: Nullable<string>;
+  contact_phone: Nullable<string>;
+  dpo_email: Nullable<string>;
+  address?: Address;
 }
 
 export interface OrganizationResourceQuery extends ResourcesQuery {
@@ -263,6 +267,7 @@ export interface Order {
   course: Maybe<CourseLight>;
   enrollment: Maybe<EnrollmentLight>;
   organization_id: Organization['id'];
+  organization: Organization;
   order_group_id?: OrderGroup['id'];
 }
 
