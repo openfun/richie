@@ -8,6 +8,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { faker } from '@faker-js/faker';
@@ -857,5 +858,28 @@ describe('<DashboardItemOrder/>', () => {
     expect(
       screen.queryByTestId('dashboard-item__course-enrolling__run__' + courseRun.id),
     ).toBeNull();
+  });
+
+  it('renders a writable order with organization details', async () => {
+    const order: CredentialOrder = CredentialOrderFactory().one();
+    const { product } = mockCourseProductWithOrder(order);
+
+    render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />, {
+      wrapper,
+    });
+
+    await screen.findByRole('heading', { level: 5, name: product.title });
+
+    const block = screen.getByTestId('organization-block');
+    within(block).getByText(order.organization!.title);
+    within(block).getByRole('link', { name: order.organization!.contact_email! });
+    within(block).getByRole('link', { name: order.organization!.dpo_email! });
+    within(block).getByRole('link', { name: order.organization!.contact_phone! });
+    within(block).getByText(new RegExp(order.organization?.address?.first_name!));
+    within(block).getByText(new RegExp(order.organization?.address?.last_name!));
+    within(block).getByText(new RegExp(order.organization?.address?.address!));
+    within(block).getByText(new RegExp(order.organization?.address?.city!));
+    within(block).getByText(new RegExp(order.organization?.address?.postcode!));
+    within(block).getByText(new RegExp(order.organization?.address?.country!));
   });
 });

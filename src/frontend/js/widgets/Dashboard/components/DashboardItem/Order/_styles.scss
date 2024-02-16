@@ -41,3 +41,132 @@
     }
   }
 }
+
+.dashboard-splitted-card {
+  background-color: r-theme-val(dashboard-splitted-card, background-color);
+  border-radius: 0.25rem;
+  box-shadow: r-theme-val(dashboard-splitted-card, base-shadow);
+  padding: 2rem;
+  display: flex;
+  color: r-theme-val(dashboard-splitted-card, color);
+
+  @include media-breakpoint-down(sm) {
+    flex-direction: column;
+  }
+
+  &__separator {
+    margin: 0 2rem;
+    border-right: 1px r-theme-val(dashboard-splitted-card, separator-color) solid;
+
+    @include media-breakpoint-down(sm) {
+      margin: 2rem 0;
+      border-right: none;
+      border-bottom: 1px r-theme-val(dashboard-splitted-card, separator-color) solid;
+    }
+  }
+
+  &__column {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    @include media-breakpoint-down(sm) {
+      width: auto;
+    }
+
+    &:last-child {
+      justify-content: center;
+    }
+  }
+
+  &__item {
+    &__title {
+      font-weight: 800;
+      font-size: 1rem;
+      font-family: $r-font-family-montserrat;
+      margin-bottom: 0.5rem;
+
+      span {
+        position: relative;
+      }
+
+      &--dot {
+        span::after {
+          content: '';
+          margin-left: 0.25rem;
+          background-color: r-theme-val(dashboard-splitted-card, dot-color);
+          width: 8px;
+          height: 8px;
+          display: block;
+          border-radius: 100%;
+          position: absolute;
+          right: -12px;
+          top: -4px;
+        }
+      }
+    }
+
+    &__description {
+      font-size: 0.875rem;
+    }
+
+    &__actions {
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+.dashboard-item-order__organization {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  flex-grow: 1;
+
+  &__name {
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  &__logo {
+    min-height: 64px;
+    max-height: 128px;
+    width: 100%;
+    flex-grow: 1;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
+.dashboard-splitted-card__item__address {
+  address {
+    margin: 0;
+  }
+}
+
+.organization-block__contact__item {
+  font-weight: bold;
+
+  a {
+    margin-left: 0.25rem;
+  }
+}
+
+.order-organization {
+  &__caption {
+    order: 3;
+  }
+
+  &__separator {
+    order: 2;
+  }
+
+  &__misc {
+    order: 1;
+  }
+}
