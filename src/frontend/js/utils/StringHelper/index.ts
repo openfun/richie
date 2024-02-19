@@ -1,4 +1,5 @@
 import { Maybe, Nullable } from 'types/utils';
+import { tokens } from 'utils/cunningham-tokens';
 
 export class StringHelper {
   static isString(input: any): boolean {
@@ -18,5 +19,23 @@ export class StringHelper {
       .map((word) => word[0])
       .join('')
       .toUpperCase();
+  }
+
+  static toColor(
+    string: string,
+    saturation = tokens.themes.default.components.dashboardListAvatar.saturation,
+    lightness = tokens.themes.default.components.dashboardListAvatar.lightness,
+  ): string {
+    let hash = 0;
+    for (let i = 0; i < string.length; i++) {
+      // eslint-disable-next-line no-bitwise
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+      // eslint-disable-next-line no-bitwise
+      hash &= hash;
+    }
+
+    const hue = hash % 360;
+
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
   }
 }
