@@ -12,11 +12,13 @@ export interface DashboardAvatarProps {
   title: string;
   image?: Nullable<JoanieFile>;
   variant?: DashboardAvatarVariantEnum;
+  backgroundColor?: string;
 }
 
 export const DashboardAvatar = ({
   title,
   image,
+  backgroundColor,
   variant = DashboardAvatarVariantEnum.DEFAULT,
 }: DashboardAvatarProps) => {
   return (
@@ -25,6 +27,7 @@ export const DashboardAvatar = ({
       className={c('dashboard__avatar', {
         'dashboard__avatar--square': variant === DashboardAvatarVariantEnum.SQUARE,
       })}
+      style={{ backgroundColor }}
     >
       {image ? (
         <img

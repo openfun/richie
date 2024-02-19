@@ -68,6 +68,10 @@ module.exports = {
         button: {
           'font-family': 'Montserrat',
         },
+        dashboardListAvatar: {
+          saturation: 30,
+          lightness: 55,
+        },
       },
     },
   },

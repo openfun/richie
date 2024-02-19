@@ -10,6 +10,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add background colors to default user's avatar when they're used 
+  in a list. Theses colors are generated from user's fullname and 
+  configurable with cunningham tokens.
 - Add dedicated messages for order's status when they're visualized on
   the teacher dashbaord.
 - Add Organization block to order details.
