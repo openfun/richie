@@ -1,23 +1,15 @@
 import fetchMock from 'fetch-mock';
-import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
-import { IntlProvider, createIntl } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { PropsWithChildren } from 'react';
-import { CunninghamProvider } from '@openfun/cunningham-react';
-import {
-  RichieContextFactory as mockRichieContextFactory,
-  UserFactory,
-} from 'utils/test/factories/richie';
+import { screen } from '@testing-library/react';
+import { createIntl } from 'react-intl';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   TEACHER_DASHBOARD_ROUTE_LABELS,
   TeacherDashboardPaths,
 } from 'widgets/Dashboard/utils/teacherRouteMessages';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { OrganizationFactory } from 'utils/test/factories/joanie';
 import { messages as organizationLinksMessages } from 'widgets/Dashboard/components/TeacherDashboardProfileSidebar/components/OrganizationLinks';
-
+import { render } from 'utils/test/render';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { TeacherDashboardProfileSidebar } from '.';
 
 jest.mock('utils/context', () => ({
@@ -37,39 +29,17 @@ jest.mock('utils/indirection/window', () => ({
 const intl = createIntl({ locale: 'en' });
 
 describe('<TeacherDashboardProfileSidebar/>', () => {
-  const Wrapper = ({ children }: PropsWithChildren) => (
-    <IntlProvider locale="en">
-      <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
-        <JoanieSessionProvider>
-          <MemoryRouter>
-            <CunninghamProvider>{children}</CunninghamProvider>
-          </MemoryRouter>
-        </JoanieSessionProvider>
-      </QueryClientProvider>
-    </IntlProvider>
-  );
+  const joanieSessionData = setupJoanieSession();
+
   let nbApiRequest: number;
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', []);
-
-    // JoanieSessionProvider inital requests
-    nbApiRequest = 3;
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
-  });
-  afterEach(() => {
-    jest.clearAllMocks();
-    fetchMock.restore();
+    nbApiRequest = joanieSessionData.nbSessionApiRequest;
   });
 
   it('should display menu items', async () => {
     nbApiRequest += 1; // call to organizations
-    render(
-      <Wrapper>
-        <TeacherDashboardProfileSidebar />
-      </Wrapper>,
-    );
+    render(<TeacherDashboardProfileSidebar />);
 
     expect(
       screen.getByRole('link', {
@@ -90,11 +60,7 @@ describe('<TeacherDashboardProfileSidebar/>', () => {
       overwriteRoutes: true,
     });
     nbApiRequest += 1; // call to organizations
-    render(
-      <Wrapper>
-        <TeacherDashboardProfileSidebar />
-      </Wrapper>,
-    );
+    render(<TeacherDashboardProfileSidebar />);
     expect(await screen.findByTestId('organization-links')).toBeInTheDocument();
     expect(fetchMock.calls()).toHaveLength(nbApiRequest);
 

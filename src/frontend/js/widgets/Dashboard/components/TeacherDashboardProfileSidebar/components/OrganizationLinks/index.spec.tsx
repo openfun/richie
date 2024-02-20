@@ -1,20 +1,16 @@
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import { IntlProvider } from 'react-intl';
+import { screen } from '@testing-library/react';
 import { OrganizationFactory } from 'utils/test/factories/joanie';
+import { render } from 'utils/test/render';
+import { PresentationalAppWrapper } from 'utils/test/wrappers/PresentationalAppWrapper';
 import OrganizationLinks from '.';
 
 describe('OrganizationLinks', () => {
   it('should render successfully organization with logo', () => {
     const organization = OrganizationFactory({ title: 'Organization 1' }).one();
 
-    render(
-      <IntlProvider locale="en">
-        <MemoryRouter>
-          <OrganizationLinks organizations={[organization]} />
-        </MemoryRouter>
-      </IntlProvider>,
-    );
+    render(<OrganizationLinks organizations={[organization]} />, {
+      wrapper: PresentationalAppWrapper,
+    });
 
     // A link to the organization should be rendered
     const link = screen.getByRole('link', { name: 'Organization 1' });
@@ -34,13 +30,9 @@ describe('OrganizationLinks', () => {
   it('should render successfully organization with abbr', () => {
     const organization = OrganizationFactory({ title: 'Organization 1', logo: null }).one();
 
-    render(
-      <IntlProvider locale="en">
-        <MemoryRouter>
-          <OrganizationLinks organizations={[organization]} />
-        </MemoryRouter>
-      </IntlProvider>,
-    );
+    render(<OrganizationLinks organizations={[organization]} />, {
+      wrapper: PresentationalAppWrapper,
+    });
 
     // A link to the organization should be rendered
     const link = screen.getByRole('link', { name: 'Organization 1' });
