@@ -1,5 +1,6 @@
 // Extend jest matchers with jest-dom's
 import '@testing-library/jest-dom';
+import fetchMock from 'fetch-mock';
 import { Request, Response } from 'node-fetch';
 import { FactoryConfig } from 'utils/test/factories/factories';
 
@@ -33,4 +34,6 @@ beforeAll(() => {
 
 afterEach(() => {
   FactoryConfig.resetUniqueStore();
+  fetchMock.restore();
+  jest.clearAllMocks();
 });
