@@ -29,12 +29,6 @@ describe('TeacherDashboardContractsLayout/SignOrganizationContractButton', () =>
     );
   };
 
-  beforeAll(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   afterEach(() => {
     fetchMock.restore();
   });

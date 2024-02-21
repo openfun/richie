@@ -53,11 +53,6 @@ describe('widgets/Search/components/SearchFilterGroup', () => {
   };
 
   beforeEach(jest.resetAllMocks);
-  beforeEach(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
 
   it('renders the name of the filter with the values as SearchFilters', () => {
     render(

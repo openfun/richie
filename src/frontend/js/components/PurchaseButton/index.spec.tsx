@@ -28,13 +28,6 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('PurchaseButton', () => {
-  beforeAll(() => {
-    // As dialog is rendered through a Portal, we have to add the DOM element in which the dialog will be rendered.
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   afterEach(() => {
     fetchMock.restore();
   });

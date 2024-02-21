@@ -40,12 +40,6 @@ describe('<SignContractButton/>', () => {
     );
   };
 
-  beforeAll(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   beforeEach(() => {
     // JoanieSession api omniscient calls
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);

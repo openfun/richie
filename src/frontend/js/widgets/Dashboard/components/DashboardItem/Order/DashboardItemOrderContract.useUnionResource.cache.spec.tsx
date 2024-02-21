@@ -47,12 +47,6 @@ describe('<DashboardItemOrder/> Contract', () => {
     );
   };
 
-  beforeAll(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   beforeEach(() => {
     jest.useFakeTimers();
     jest.clearAllTimers();

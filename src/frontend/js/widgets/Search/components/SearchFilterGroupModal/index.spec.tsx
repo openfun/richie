@@ -63,11 +63,6 @@ describe('<SearchFilterGroupModal />', () => {
 
   beforeEach(() => fetchMock.restore());
   beforeEach(jest.resetAllMocks);
-  beforeEach(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
 
   it('renders a button with a modal to search values for a given filter', async () => {
     {

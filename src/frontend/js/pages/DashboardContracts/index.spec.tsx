@@ -53,13 +53,6 @@ describe('<DashboardContract/>', () => {
     </QueryClientProvider>
   );
 
-  beforeAll(() => {
-    // As dialog is rendered through a Portal, we have to add the DOM element in which the dialog will be rendered.
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);

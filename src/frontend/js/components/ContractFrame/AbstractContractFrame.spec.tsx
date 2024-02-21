@@ -42,12 +42,6 @@ describe('<AbstractContractFrame />', () => {
     );
   };
 
-  beforeAll(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   beforeEach(() => {
     // SessionProvider api calls
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
