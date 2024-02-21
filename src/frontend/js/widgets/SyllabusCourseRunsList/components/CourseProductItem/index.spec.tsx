@@ -71,13 +71,6 @@ describe('CourseProductItem', () => {
       style: 'currency',
     }).format(price);
 
-  beforeAll(() => {
-    // As dialog is rendered through a Portal, we have to add the DOM element in which the dialog will be rendered.
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   beforeEach(() => {
     // JoanieSessionProvider requests
     fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);

@@ -50,10 +50,6 @@ describe.each([
   beforeAll(() => {
     // eslint-disable-next-line compat/compat
     URL.createObjectURL = jest.fn();
-
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
   });
 
   beforeEach(() => {

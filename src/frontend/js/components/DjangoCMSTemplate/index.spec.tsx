@@ -27,7 +27,7 @@ describe('DjangoCMSTemplate', () => {
 
     expect(initMock).not.toHaveBeenCalled();
     render(<Wrapper />);
-    const expected = `<div><template class="cms-plugin cms-plugin-start plugin"></template>Hello world<template class="cms-plugin cms-plugin-end plugin"></template></div>`;
+    const expected = `<div id=\"modal-exclude\"></div><div><template class="cms-plugin cms-plugin-start plugin"></template>Hello world<template class="cms-plugin cms-plugin-end plugin"></template></div>`;
     expect(document.body.innerHTML).toEqual(expected);
     await waitFor(() => expect(initMock).toHaveBeenCalled());
   });
@@ -40,7 +40,7 @@ describe('DjangoCMSTemplate', () => {
     };
 
     render(<Wrapper />);
-    const expected = `<div>Hello world</div>`;
+    const expected = `<div id=\"modal-exclude\"></div><div>Hello world</div>`;
     expect(document.body.innerHTML).toEqual(expected);
   });
 });

@@ -58,12 +58,6 @@ describe('TeacherDashboardContractsLayout/ContractActionsBar', () => {
     );
   };
 
-  beforeAll(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   beforeEach(() => {
     // useTeacherContractsToSign mocked values
     mockCanSignContracts = true;

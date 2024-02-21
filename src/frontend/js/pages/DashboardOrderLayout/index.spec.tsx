@@ -33,12 +33,6 @@ describe('<DashboardOrderLayout />', () => {
     );
   };
 
-  beforeAll(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   beforeEach(() => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);

@@ -39,12 +39,6 @@ interface FromContractTestData {
 }
 
 describe('<SignContractButton/>', () => {
-  beforeAll(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   describe.each<FromOrderTestData | FromContractTestData>([
     {
       testCase: TestCase.FROM_ORDER_WITH_CONTRACT,

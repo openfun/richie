@@ -3,12 +3,6 @@ import { IntlProvider } from 'react-intl';
 import { Modal } from '.';
 
 describe('<Modal />', () => {
-  beforeEach(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   it('merges custom classNames of type string with the default classes', () => {
     render(
       <IntlProvider locale="en">

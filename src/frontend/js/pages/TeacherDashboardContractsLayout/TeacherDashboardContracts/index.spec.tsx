@@ -53,12 +53,6 @@ const Wrapper = ({ path, initialEntry }: { path: string; initialEntry: string })
 };
 
 describe('pages/TeacherDashboardContracts', () => {
-  beforeAll(() => {
-    const modalExclude = document.createElement('div');
-    modalExclude.setAttribute('id', 'modal-exclude');
-    document.body.appendChild(modalExclude);
-  });
-
   beforeEach(() => {
     // Joanie providers calls
     fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
