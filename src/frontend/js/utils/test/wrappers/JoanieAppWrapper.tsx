@@ -2,6 +2,7 @@ import { CunninghamProvider } from '@openfun/cunningham-react';
 import { PropsWithChildren } from 'react';
 import fetchMock from 'fetch-mock';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
+import { DashboardBreadcrumbsProvider } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
 import { IntlWrapper } from './IntlWrapper';
 import { ReactQueryWrapper } from './ReactQueryWrapper';
 import { RouterWrapper } from './RouterWrapper';
@@ -26,14 +27,18 @@ export const JoanieSessionWrapper = ({ children }: PropsWithChildren) => {
 
 export const JoanieAppWrapper = ({
   children,
-  options,
-}: PropsWithChildren<{ options?: AppWrapperProps }>) => {
+  intlOptions,
+  queryOptions,
+  routerOptions,
+}: PropsWithChildren<AppWrapperProps>) => {
   return (
-    <IntlWrapper {...(options?.intlOptions || { locale: 'en' })}>
+    <IntlWrapper {...(intlOptions || { locale: 'en' })}>
       <CunninghamProvider>
-        <ReactQueryWrapper {...(options?.queryOptions || {})}>
+        <ReactQueryWrapper {...(queryOptions || {})}>
           <JoanieSessionWrapper>
-            <RouterWrapper {...options?.routerOptions}>{children}</RouterWrapper>
+            <DashboardBreadcrumbsProvider>
+              <RouterWrapper {...routerOptions}>{children}</RouterWrapper>
+            </DashboardBreadcrumbsProvider>
           </JoanieSessionWrapper>
         </ReactQueryWrapper>
       </CunninghamProvider>
