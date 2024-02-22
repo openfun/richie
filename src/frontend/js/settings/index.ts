@@ -5,7 +5,7 @@ import * as testSettings from './settings.test';
 let settingsOverride = {};
 if (process.env.NODE_ENV === 'development') {
   try {
-    settingsOverride = require('./settings.local.ts');
+    settingsOverride = require('./settings.dev.ts');
   } catch {
     // no local settings found, do nothing
   }
@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 try {
-  settingsOverride = require('./settings.local.ts');
+  settingsOverride = require('./settings.dev.ts');
 } catch {
   // no local settings found, do nothing
 }
