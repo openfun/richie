@@ -1,4 +1,4 @@
-import { defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import TeacherDashboardCourseList from 'components/TeacherDashboardCourseList';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
@@ -28,11 +28,15 @@ const messages = defineMessages({
 });
 
 export const TeacherDashboardCoursesLoader = () => {
-  const intl = useIntl();
   return (
     <DashboardLayout sidebar={<TeacherDashboardProfileSidebar />}>
+      <div className="dashboard__page_title_container">
+        <h1 className="dashboard__page_title">
+          <FormattedMessage {...messages.courses} />
+        </h1>
+      </div>
       <div className="teacher-courses-page">
-        <TeacherDashboardCourseList titleTranslated={intl.formatMessage(messages.courses)} />
+        <TeacherDashboardCourseList />
       </div>
     </DashboardLayout>
   );

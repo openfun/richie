@@ -21,7 +21,6 @@ const messages = defineMessages({
 });
 
 export const TeacherDashboardOrganizationCourseLoader = () => {
-  const intl = useIntl();
   const { organizationId } = useParams<{ organizationId: string }>();
   const {
     item: organization,
@@ -40,12 +39,17 @@ export const TeacherDashboardOrganizationCourseLoader = () => {
         </Spinner>
       )}
       {!fetching && (
-        <TeacherDashboardCourseList
-          titleTranslated={intl.formatMessage(messages.title, {
-            organizationTitle: organization.title,
-          })}
-          organizationId={organization.id}
-        />
+        <>
+          <div className="dashboard__page_title_container">
+            <h1 className="dashboard__page_title">
+              <FormattedMessage
+                {...messages.title}
+                values={{ organizationTitle: organization.title }}
+              />
+            </h1>
+          </div>
+          <TeacherDashboardCourseList organizationId={organization.id} />
+        </>
       )}
     </DashboardLayout>
   );
