@@ -13,12 +13,6 @@ if (process.env.NODE_ENV === 'development') {
   settingsOverride = testSettings;
 }
 
-try {
-  settingsOverride = require('./settings.dev.ts');
-} catch {
-  // no local settings found, do nothing
-}
-
 const settings = mergeWith({}, prodSettings, settingsOverride);
 
 export const {
