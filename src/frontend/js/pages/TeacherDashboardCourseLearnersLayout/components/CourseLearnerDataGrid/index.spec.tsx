@@ -55,7 +55,7 @@ describe('pages/CourseLearnerDataGrid', () => {
       expect(cells[2]).toHaveTextContent(
         intl.formatDate(new Date(courseOrder.created_on), DEFAULT_DATE_FORMAT),
       );
-      expect(cells[3]).toHaveTextContent('Completed');
+      expect(cells[3]).toHaveTextContent('Certified');
       expect(within(cells[4]).getByText('Contact')).toBeInTheDocument();
     });
   });

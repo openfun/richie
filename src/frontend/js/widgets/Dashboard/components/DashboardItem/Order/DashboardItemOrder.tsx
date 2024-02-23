@@ -20,7 +20,7 @@ import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../CourseEnrolling';
 import { DashboardItem } from '../index';
 import { DashboardItemContract } from '../Contract';
-import OrderStateMessage from './OrderStateMessage';
+import OrderStateLearnerMessage from './OrderStateLearnerMessage';
 
 const messages = defineMessages({
   accessCourse: {
@@ -159,7 +159,7 @@ export const DashboardItemOrder = ({
             <div className="dashboard-item-order__footer">
               <div className="dashboard-item__block__status">
                 <Icon name={IconTypeEnum.SCHOOL} />
-                <OrderStateMessage
+                <OrderStateLearnerMessage
                   order={order}
                   contractDefinition={product?.contract_definition}
                 />

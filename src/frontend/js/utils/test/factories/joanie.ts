@@ -146,7 +146,7 @@ export const ContractFactory = factory((): Contract => {
 export const ContractLightFactory = factory((): ContractLight => {
   return {
     id: faker.string.uuid(),
-    student_signed_on: faker.date.past().toISOString(),
+    student_signed_on: null,
     organization_signed_on: null,
   };
 });

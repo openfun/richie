@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add dedicated messages for order's status when they're visualized on
+  the teacher dashbaord.
 - Add Organization block to order details.
 - Add teacher dashboard page to list training's learners. This listing 
   can be accessed under a training or an organization's training.
