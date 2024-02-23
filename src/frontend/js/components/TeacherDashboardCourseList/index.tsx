@@ -27,7 +27,7 @@ const messages = defineMessages({
 });
 
 interface TeacherDashboardCourseListProps {
-  titleTranslated: string;
+  titleTranslated?: string;
   organizationId?: string;
 }
 
