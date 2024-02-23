@@ -1,4 +1,4 @@
-import { FormattedMessage, defineMessages } from 'react-intl';
+import { FormattedMessage, MessageDescriptor } from 'react-intl';
 import { useEffect } from 'react';
 import {
   CertificateOrder,
@@ -9,96 +9,46 @@ import {
 } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 import { handle } from 'utils/errors/handle';
-import { OrderHelper } from 'utils/OrderHelper';
+import { OrderHelper, OrderStatus } from 'utils/OrderHelper';
 
-export const messages = defineMessages({
-  statusDraft: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusDraft',
-    description: 'Status shown on the dashboard order item when order is draft.',
-    defaultMessage: 'Draft',
-  },
-  statusSubmitted: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusSubmitted',
-    description: 'Status shown on the dashboard order item when order is submitted.',
-    defaultMessage: 'Submitted',
-  },
-  statusPending: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusPending',
-    description: 'Status shown on the dashboard order item when order is pending.',
-    defaultMessage: 'Pending',
-  },
-  statusOnGoing: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusOnGoing',
-    description:
-      'Status shown on the dashboard order item when order is validated with no certificate',
-    defaultMessage: 'On going',
-  },
-  statusCompleted: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusCompleted',
-    description:
-      'Status shown on the dashboard order item when order is validated with certificate',
-    defaultMessage: 'Completed',
-  },
-  statusWaitingSignature: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusWaitingSignature',
-    description:
-      "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
-    defaultMessage: 'Signature required',
-  },
-  statusCanceled: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusCanceled',
-    description: 'Status shown on the dashboard order item when order is canceled',
-    defaultMessage: 'Canceled',
-  },
-  statusOther: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusOther',
-    description: 'Status shown on the dashboard order item when order status is unknown',
-    defaultMessage: '{state}',
-  },
-});
-
-interface OrderStateMessageProps {
+export interface OrderStateMessageBaseProps {
   order: CredentialOrder | CertificateOrder | NestedCourseOrder;
   contractDefinition?: ContractDefinition;
 }
 
-const OrderStateMessage = ({ order, contractDefinition }: OrderStateMessageProps) => {
-  const { certificate_id: certificateId } = order;
-  const orderStatusMessages = {
-    [OrderState.DRAFT]: messages.statusDraft,
-    [OrderState.SUBMITTED]: messages.statusSubmitted,
-    [OrderState.PENDING]: messages.statusPending,
-    [OrderState.CANCELED]: messages.statusCanceled,
-  };
+interface OrderStateMessageProps extends OrderStateMessageBaseProps {
+  messages: Record<string, MessageDescriptor>;
+}
 
+const OrderStateMessage = ({ order, contractDefinition, messages }: OrderStateMessageProps) => {
   useEffect(() => {
     if (!Object.values(OrderState).includes(order.state)) {
       handle(new Error(`Unknown order state ${order.state}`));
     }
   }, [order.state]);
 
-  if (order.state === OrderState.VALIDATED) {
-    if (OrderHelper.orderNeedsSignature(order, contractDefinition)) {
-      return <FormattedMessage {...messages.statusWaitingSignature} />;
-    }
+  const orderStatusMessagesMap = {
+    [OrderStatus.DRAFT]: messages.statusDraft,
+    [OrderStatus.SUBMITTED]: messages.statusSubmitted,
+    [OrderStatus.PENDING]: messages.statusPending,
+    [OrderStatus.CANCELED]: messages.statusCanceled,
+    [OrderStatus.WAITING_SIGNATURE]: messages.statusWaitingSignature,
+    [OrderStatus.WAITING_COUNTER_SIGNATURE]: messages.statusWaitingCounterSignature,
+    [OrderStatus.COMPLETED]: messages.statusCompleted,
+    [OrderStatus.ON_GOING]: messages.statusOnGoing,
+  };
+  const status = OrderHelper.getState(order, contractDefinition);
 
-    if (certificateId) {
-      return <FormattedMessage {...messages.statusCompleted} />;
-    } else {
-      return <FormattedMessage {...messages.statusOnGoing} />;
-    }
+  if (status === null) {
+    return (
+      <FormattedMessage
+        {...messages.statusOther}
+        values={{ state: StringHelper.capitalizeFirst(order.state) }}
+      />
+    );
   }
 
-  if (order.state in orderStatusMessages) {
-    return <FormattedMessage {...orderStatusMessages[order.state]} />;
-  }
-
-  return (
-    <FormattedMessage
-      {...messages.statusOther}
-      values={{ state: StringHelper.capitalizeFirst(order.state) }}
-    />
-  );
+  return <FormattedMessage {...orderStatusMessagesMap[status]} />;
 };
 
 export default OrderStateMessage;

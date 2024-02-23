@@ -7,22 +7,10 @@ import {
   CredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import { OrderState } from 'types/Joanie';
-import OrderStateMessage, { messages } from '.';
+import OrderStateLearnerMessage, { messages } from '.';
 
 const intl = createIntl({ locale: 'en' });
 
-/*
-  @TODO (rlecellier): Rewrite everything with these guidlignes
-  Order lifecycle:
-    * Draft: order has been created
-    * Submitted: order information have been validated
-    * Pending: payment has failed but can be retried
-    * Validated:
-        * Completed (Validated with generated certificate)
-        * On going (Validated without generated certificate)
-        * Signature needed: !order.product.contract.isSign
-    * Canceled: has been canceled
-*/
 describe('<DashboardItemOrder/>', () => {
   const Wrapper = ({ children }: PropsWithChildren) => (
     <IntlProvider locale="en">{children}</IntlProvider>
@@ -39,7 +27,7 @@ describe('<DashboardItemOrder/>', () => {
       const order = CredentialOrderFactory({ state }).one();
       render(
         <Wrapper>
-          <OrderStateMessage order={order} />
+          <OrderStateLearnerMessage order={order} />
         </Wrapper>,
       );
       expect(screen.getByText(expectedMessage)).toBeInTheDocument();
@@ -60,7 +48,7 @@ describe('<DashboardItemOrder/>', () => {
       }).one();
       render(
         <Wrapper>
-          <OrderStateMessage order={orderWithContract} />
+          <OrderStateLearnerMessage order={orderWithContract} />
         </Wrapper>,
       );
       expect(screen.getByText(expectedMessage)).toBeInTheDocument();
@@ -77,7 +65,7 @@ describe('<DashboardItemOrder/>', () => {
 
     render(
       <Wrapper>
-        <OrderStateMessage order={order} contractDefinition={contractDefinition} />
+        <OrderStateLearnerMessage order={order} contractDefinition={contractDefinition} />
       </Wrapper>,
     );
     expect(screen.getByText('Signature required')).toBeInTheDocument();
@@ -91,7 +79,7 @@ describe('<DashboardItemOrder/>', () => {
     }).one();
     render(
       <Wrapper>
-        <OrderStateMessage order={order} />
+        <OrderStateLearnerMessage order={order} />
       </Wrapper>,
     );
     expect(
@@ -104,12 +92,15 @@ describe('<DashboardItemOrder/>', () => {
   it('should display message for validated order that have a generated certificate', () => {
     const order = CredentialOrderFactory({
       state: OrderState.VALIDATED,
-      contract: ContractFactory({ student_signed_on: new Date().toISOString() }).one(),
+      contract: ContractFactory({
+        student_signed_on: new Date().toISOString(),
+        organization_signed_on: new Date().toISOString(),
+      }).one(),
       certificate_id: 'FAKE_CERTIFICATE_ID',
     }).one();
     render(
       <Wrapper>
-        <OrderStateMessage order={order} />
+        <OrderStateLearnerMessage order={order} />
       </Wrapper>,
     );
     expect(

@@ -3,7 +3,7 @@ import { Button, DataGrid, DataGridProps, PaginationProps, Row } from '@openfun/
 import { useMemo } from 'react';
 import { NestedCourseOrder } from 'types/Joanie';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
-import OrderStateMessage from 'widgets/Dashboard/components/DashboardItem/Order/OrderStateMessage';
+import OrderStateTeacherMessage from 'widgets/Dashboard/components/DashboardItem/Order/OrderStateTeacherMessage';
 import DashboardListAvatar from 'widgets/Dashboard/components/DashboardListAvatar';
 
 const messages = defineMessages({
@@ -74,10 +74,8 @@ const CourseLearnerDataGrid = ({
       headerName: intl.formatMessage(messages.columnState),
       enableSorting: false,
       renderCell: (params: { row: Row }) => {
-        // TODO(rlecellier): create NestedOrderCourseStateMessage that's get label dedicated to teatchers.
-        // like signature needed for studdent is awaiting signature for a teacher.
         return (
-          <OrderStateMessage
+          <OrderStateTeacherMessage
             order={params.row.courseOrder}
             contractDefinition={params.row.courseOrder.product.contract_definition_id}
           />
