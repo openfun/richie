@@ -3,7 +3,11 @@ import { screen } from '@testing-library/react';
 import { getAllByRole } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { ContractFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import {
+  ContractFactory,
+  CourseProductRelationFactory,
+  OrganizationFactory,
+} from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { HttpStatusCode } from 'utils/errors/HttpError';
@@ -34,6 +38,7 @@ describe('pages/TeacherDashboardContracts', () => {
   setupJoanieSession();
 
   it('should render a list of contracts for a course product relation', async () => {
+    const courseProductRelation = CourseProductRelationFactory().one();
     const contracts = ContractFactory({
       student_signed_on: Date.toString(),
       organization_signed_on: Date.toString(),
@@ -42,22 +47,27 @@ describe('pages/TeacherDashboardContracts', () => {
     const defaultOrganization = organizations[0];
 
     // OrganizationContractFilter request all organizations forwho the user have access
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, organizations);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/?course_product_relation_id=${courseProductRelation.id}`,
+      organizations,
+    );
     // TeacherDashboardContracts request a paginated list of contracts to display
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?course_product_relation_id=2&signature_state=signed&page=1&page_size=25`,
+      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?course_product_relation_id=${courseProductRelation.id}&signature_state=signed&page=1&page_size=25`,
       { results: contracts, count: 0, previous: null, next: null },
     );
     // useTeacherContractsToSign request all contract to sign, without pagination
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=half_signed&course_product_relation_id=2`,
+      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=half_signed&course_product_relation_id=${courseProductRelation.id}`,
       { results: [], count: 0, previous: null, next: null },
     );
 
     render(<TeacherDashboardContracts />, {
       routerOptions: {
         path: '/courses/:courseId/products/:courseProductRelationId/contracts',
-        initialEntries: ['/courses/1/products/2/contracts'],
+        initialEntries: [
+          `/courses/${courseProductRelation.course.id}/products/${courseProductRelation.id}/contracts`,
+        ],
       },
     });
 

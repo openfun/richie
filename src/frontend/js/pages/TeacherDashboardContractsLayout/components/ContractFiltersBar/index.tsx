@@ -1,7 +1,7 @@
 import { Select, SelectProps } from '@openfun/cunningham-react';
 import { defineMessages, useIntl } from 'react-intl';
 import FiltersBar from 'widgets/Dashboard/components/FiltersBar';
-import { ContractState } from 'types/Joanie';
+import { ContractState, Organization } from 'types/Joanie';
 import { ContractHelper, ContractStatePoV } from 'utils/ContractHelper';
 import FilterOrganization from 'widgets/Dashboard/components/FilterOrganization';
 
@@ -28,11 +28,13 @@ interface ContractFiltersBarProps {
   defaultValues?: ContractListFilters;
   hideFilterOrganization?: boolean;
   hideFilterSignatureState?: boolean;
+  organizationList?: Organization[];
 }
 
 const ContractFiltersBar = ({
   defaultValues,
   onFiltersChange,
+  organizationList,
   hideFilterOrganization = false,
   hideFilterSignatureState = false,
 }: ContractFiltersBarProps) => {
@@ -42,6 +44,7 @@ const ContractFiltersBar = ({
         <FilterOrganization
           defaultValue={defaultValues?.organization_id}
           onChange={onFiltersChange}
+          organizationList={organizationList}
         />
       )}
       {!hideFilterSignatureState && (
