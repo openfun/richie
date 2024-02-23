@@ -42,14 +42,20 @@ const TeacherDashboardContracts = () => {
     defaultPage: page ? parseInt(page, 10) : 1,
     pageSize: PER_PAGE.teacherContractList,
   });
-  const { organizationId: routeOrganizationId } = useParams<TeacherDashboardContractsParams>();
+  const {
+    organizationId: routeOrganizationId,
+    courseProductRelationId: routeCourseProductRelationId,
+  } = useParams<TeacherDashboardContractsParams>();
   // organization list is used to show/hide organization filter.
   // when organizationId is in route's params this filter is always hidden.
   // therefore we don't need to enable this query.
   const {
     items: organizationList,
     states: { isFetched: isOrganizationListFetched },
-  } = useOrganizations(undefined, { enabled: !!routeOrganizationId });
+  } = useOrganizations(
+    { course_product_relation_id: routeCourseProductRelationId },
+    { enabled: !routeOrganizationId },
+  );
   const hasMultipleOrganizations = isOrganizationListFetched && organizationList.length > 1;
   const { initialFilters, filters, setFilters } = useTeacherContractFilters();
   const {
@@ -97,6 +103,7 @@ const TeacherDashboardContracts = () => {
         <ContractFiltersBar
           defaultValues={initialFilters}
           onFiltersChange={handleFiltersChange}
+          organizationList={organizationList}
           hideFilterOrganization={!!(routeOrganizationId || !hasMultipleOrganizations)}
         />
       </div>

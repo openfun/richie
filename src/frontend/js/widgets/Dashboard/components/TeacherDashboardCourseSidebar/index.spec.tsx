@@ -129,7 +129,10 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
           courseProductRelation,
         );
         nbApiRequest += 1;
-        fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', []);
+        fetchMock.get(
+          `https://joanie.endpoint/api/v1.0/organizations/?course_product_relation_id=${courseProductRelation.id}`,
+          [],
+        );
       } else {
         // mock api for course
         nbApiRequest += 1;
