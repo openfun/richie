@@ -90,6 +90,8 @@ const useUnionResource = <
   const eofRef = useRef<Record<string, number>>(queryClient.getQueryData(eofQueryKey) ?? {});
   log('eof', eofRef.current);
 
+  const [unionQueryKey, setUnionQueryKey] = useState<string>();
+
   const reset = () => {
     setStack([]);
     setPage(0);
@@ -103,6 +105,18 @@ const useUnionResource = <
     useQueryKeyInvalidateListener(queryAConfig.queryKey, reset);
     useQueryKeyInvalidateListener(queryBConfig.queryKey, reset);
   }
+
+  useEffect(() => {
+    // filters have changes, new results will be fetch.
+    // let's reset every previous fetches states
+    reset();
+
+    // We need to fetch new results.
+    // reset all states isn't enought. If we've a research without results
+    // then the next reset would do nothing.
+    // to force execution of useEffect::fetchNewPage(), we use a uniq key build with current queries filters.
+    setUnionQueryKey(JSON.stringify(queryAConfig.filters) + JSON.stringify(queryBConfig.filters));
+  }, [JSON.stringify(queryAConfig.filters), JSON.stringify(queryBConfig.filters)]);
 
   useEffect(() => {
     async function fetchNewPage() {
@@ -145,11 +159,18 @@ const useUnionResource = <
 
     // we request more entities than we can display in the right order
     // it's time for new fetching and sorting.
-    if (cursor > integrityCount) {
+    if (!isSyncing && cursor > integrityCount) {
       setIsSyncing(true);
       fetchNewPage();
     }
-  }, [cursor, stack.length]); // stack.length is added in the dependency array to force a new fetch on reset.
+  }, [
+    cursor,
+    // FIXME(rlecellier): when stack.length === 0, invalidate the query will not refetch.
+    // stack.length is added in the dependency array to force a new fetch on reset.
+    stack.length,
+    // unionQueryKey assure that we refetch data when query filters change.
+    unionQueryKey,
+  ]);
 
   const cursorToUse = Math.min(cursor, integrityCount);
   const next = () => {

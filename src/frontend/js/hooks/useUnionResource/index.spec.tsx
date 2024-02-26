@@ -1,19 +1,13 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
-import { PropsWithChildren } from 'react';
+import queryString from 'query-string';
 import { PaginatedResourceQuery } from 'types/Joanie';
-import { History, HistoryContext } from 'hooks/useHistory';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';
-
 import { noop } from 'utils';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { PER_PAGE } from 'settings';
 import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
-import { FetchEntityData } from './utils/fetchEntities';
+import { BaseAppWrapper } from 'utils/test/wrappers/BaseAppWrapper';
 import { QueryConfig, FetchDataFunction } from './utils/fetchEntity';
 import useUnionResource from '.';
 
@@ -36,49 +30,6 @@ interface TestDataB {
   id: string;
   created_on: string;
 }
-
-const renderUseUnionResource = <
-  DataA extends FetchEntityData,
-  DataB extends FetchEntityData,
-  FiltersA extends PaginatedResourceQuery,
-  FiltersB extends PaginatedResourceQuery,
->(
-  queryAConfig: QueryConfig<DataA, FiltersA>,
-  queryBConfig: QueryConfig<DataB, FiltersB>,
-) => {
-  const Wrapper = ({ client, children }: PropsWithChildren<{ client?: QueryClient }>) => {
-    const historyPushState = jest.fn();
-    const historyReplaceState = jest.fn();
-    const makeHistoryOf: (params: any) => History = () => [
-      {
-        state: { name: '', data: {} },
-        title: '',
-        url: `/`,
-      },
-      historyPushState,
-      historyReplaceState,
-    ];
-
-    return (
-      <QueryClientProvider client={client ?? createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <HistoryContext.Provider value={makeHistoryOf({})}>
-            <SessionProvider>{children}</SessionProvider>
-          </HistoryContext.Provider>
-        </IntlProvider>
-      </QueryClientProvider>
-    );
-  };
-
-  return renderHook(
-    () =>
-      useUnionResource<DataA, DataB, FiltersA, FiltersB>({
-        queryAConfig,
-        queryBConfig,
-      }),
-    { wrapper: Wrapper },
-  );
-};
 
 describe('useUnionResource', () => {
   const perPage = PER_PAGE.useUnionResources;
@@ -111,14 +62,14 @@ describe('useUnionResource', () => {
 
       { name: 'TestDataB', id: '14', created_on: '2022-12-03' },
     ];
-    const dummyFetchWrapper = async (url: string) => {
-      const res = await fetch(url);
+    const dummyFetchWrapper = async (url: string, queryParams: { [key: string]: any }) => {
+      const res = await fetch(`${url}?${queryString.stringify(queryParams)}`);
       return res.json();
     };
-    const fetchDataA = ({ page }: { page: number }) =>
-      dummyFetchWrapper(`http://data.a/?page=${page}`);
+    const fetchDataA = ({ page, isFiltered }: { page: number; isFiltered?: boolean }) =>
+      dummyFetchWrapper('http://data.a/', { page, isFiltered });
     const fetchDataB = ({ page }: { page: number }) =>
-      dummyFetchWrapper(`http://data.b/?page=${page}`);
+      dummyFetchWrapper('http://data.b/', { page });
 
     queryAConfig = {
       queryKey: ['resourceA'],
@@ -132,11 +83,6 @@ describe('useUnionResource', () => {
     };
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-    fetchMock.restore();
-  });
-
   it('should handle loading state', async () => {
     const dataADeferred = new Deferred();
     const dataBDeferred = new Deferred();
@@ -144,12 +90,16 @@ describe('useUnionResource', () => {
     const pendingDataBPromise = () => dataBDeferred.promise;
     queryAConfig.fn = pendingDataAPromise as FetchDataFunction<TestDataA, TestDataAFilters>;
     queryBConfig.fn = pendingDataBPromise as FetchDataFunction<TestDataB, PaginatedResourceQuery>;
-    const { result } = renderUseUnionResource<
-      TestDataA,
-      TestDataB,
-      TestDataAFilters,
-      PaginatedResourceQuery
-    >(queryAConfig, queryBConfig);
+
+    const { result } = renderHook(
+      () =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig,
+          queryBConfig,
+        }),
+      { wrapper: BaseAppWrapper },
+    );
+
     expect(result.current.isLoading).toBe(true);
     expect(result.current.hasMore).toBe(false);
 
@@ -164,12 +114,15 @@ describe('useUnionResource', () => {
   it('should render less than 1 page of dataA', async () => {
     fetchMock.get('http://data.a/?page=1', mockPaginatedResponse([dataAList[0]], 1, false));
     fetchMock.get('http://data.b/?page=1', mockPaginatedResponse([], 0, false));
-    const { result } = renderUseUnionResource<
-      TestDataA,
-      TestDataB,
-      TestDataAFilters,
-      PaginatedResourceQuery
-    >(queryAConfig, queryBConfig);
+
+    const { result } = renderHook(
+      () =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig,
+          queryBConfig,
+        }),
+      { wrapper: BaseAppWrapper },
+    );
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.hasMore).toBe(false);
@@ -180,12 +133,15 @@ describe('useUnionResource', () => {
   it('should render less than 1 page of dataB', async () => {
     fetchMock.get('http://data.a/?page=1', mockPaginatedResponse([], 0, false));
     fetchMock.get('http://data.b/?page=1', mockPaginatedResponse([dataBList[0]], 1, false));
-    const { result } = renderUseUnionResource<
-      TestDataA,
-      TestDataB,
-      TestDataAFilters,
-      PaginatedResourceQuery
-    >(queryAConfig, queryBConfig);
+
+    const { result } = renderHook(
+      () =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig,
+          queryBConfig,
+        }),
+      { wrapper: BaseAppWrapper },
+    );
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.hasMore).toBe(false);
@@ -196,12 +152,15 @@ describe('useUnionResource', () => {
   it('should renders less than 1 page of both dataA and dataB', async () => {
     fetchMock.get('http://data.a/?page=1', mockPaginatedResponse([dataAList[0]], 1, false));
     fetchMock.get('http://data.b/?page=1', mockPaginatedResponse([dataBList[0]], 1, false));
-    const { result } = renderUseUnionResource<
-      TestDataA,
-      TestDataB,
-      TestDataAFilters,
-      PaginatedResourceQuery
-    >(queryAConfig, queryBConfig);
+
+    const { result } = renderHook(
+      () =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig,
+          queryBConfig,
+        }),
+      { wrapper: BaseAppWrapper },
+    );
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.hasMore).toBe(false);
@@ -237,12 +196,14 @@ describe('useUnionResource', () => {
       mockPaginatedResponse(dataBList.slice(perPage * 2, perPage * 3), dataAList.length, false),
     );
 
-    const { result } = renderUseUnionResource<
-      TestDataA,
-      TestDataB,
-      TestDataAFilters,
-      PaginatedResourceQuery
-    >(queryAConfig, queryBConfig);
+    const { result } = renderHook(
+      () =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig,
+          queryBConfig,
+        }),
+      { wrapper: BaseAppWrapper },
+    );
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.hasMore).toBe(true);
@@ -297,12 +258,16 @@ describe('useUnionResource', () => {
     const dataADeferred = new Deferred();
     const pendingDataAPromise = () => dataADeferred.promise;
     queryAConfig.fn = pendingDataAPromise as FetchDataFunction<TestDataA, TestDataAFilters>;
-    const { result } = renderUseUnionResource<
-      TestDataA,
-      TestDataB,
-      TestDataAFilters,
-      PaginatedResourceQuery
-    >(queryAConfig, queryBConfig);
+
+    const { result } = renderHook(
+      () =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig,
+          queryBConfig,
+        }),
+      { wrapper: BaseAppWrapper },
+    );
+
     expect(result.current.isLoading).toBe(true);
 
     await act(() => {
@@ -312,5 +277,41 @@ describe('useUnionResource', () => {
     });
     expect(result.current.isLoading).toBe(false);
     expect(result.current.error).toBe('An error occurred while fetching data. Please retry later.');
+  });
+
+  it('should refetch data when filters change', async () => {
+    fetchMock.get('http://data.a/?page=1', mockPaginatedResponse([dataAList[0]], 1, false));
+    fetchMock.get('http://data.b/?page=1', mockPaginatedResponse([], 0, false));
+
+    const { result, rerender } = renderHook(
+      (queries: {
+        queryA?: QueryConfig<TestDataA, TestDataAFilters>;
+        queryB?: QueryConfig<TestDataB, PaginatedResourceQuery>;
+      }) =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig: queries?.queryA || queryAConfig,
+          queryBConfig: queries?.queryB || queryBConfig,
+        }),
+      { wrapper: BaseAppWrapper },
+    );
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    let calledUrls = fetchMock.calls().map((call) => call[0]);
+    expect(calledUrls).toHaveLength(2);
+    expect(calledUrls).toContain('http://data.a/?page=1');
+    expect(calledUrls).toContain('http://data.b/?page=1');
+
+    queryAConfig.filters = { isFiltered: true };
+    fetchMock.get(
+      'http://data.a/?isFiltered=true&page=1',
+      mockPaginatedResponse([dataAList[0]], 1, false),
+    );
+    rerender({ queryA: queryAConfig, queryB: queryBConfig });
+    expect(result.current.isLoading).toBe(true);
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    calledUrls = fetchMock.calls().map((call) => call[0]);
+    expect(calledUrls).toHaveLength(4);
+    expect(calledUrls).toContain('http://data.a/?isFiltered=true&page=1');
   });
 });
