@@ -68,7 +68,10 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('renders the correct label for expired date', async () => {
-    const date = faker.date.past();
+    const now = new Date();
+    const date = faker.date.past({
+      refDate: new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59),
+    });
     const creditCard: CreditCard = CreditCardFactory({
       expiration_month: date.getMonth() + 1,
       expiration_year: date.getFullYear(),
