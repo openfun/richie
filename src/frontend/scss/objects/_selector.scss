@@ -57,6 +57,12 @@
       margin-left: calc(3rem - 12px);
     }
 
+    &__item {
+      &--bordered:not(:last-child) {
+        border-bottom: $onepixel solid r-theme-val(topbar, item-divider-border);
+      }
+    }
+
     &__link {
       @include button-reset-style();
       background: r-theme-val(selector, base-background);
