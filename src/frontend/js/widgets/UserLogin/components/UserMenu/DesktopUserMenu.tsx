@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useSelect } from 'downshift';
+import classNames from 'classnames';
 import { location } from 'utils/indirection/window';
 import { UserHelper } from 'utils/UserHelper';
 import { UserMenuProps } from '.';
@@ -36,6 +37,21 @@ export const DesktopUserMenu: FC<UserMenuProps> = ({ user }) => {
     },
   });
 
+  const teacherDasbhoardUrl = user.urls.find((link) => {
+    return link.key === 'dashboard_teacher';
+  });
+  let menuLinkList;
+  if (teacherDasbhoardUrl) {
+    menuLinkList = [
+      teacherDasbhoardUrl,
+      ...user.urls.filter((link) => {
+        return link.key !== 'dashboard_teacher';
+      }),
+    ];
+  } else {
+    menuLinkList = user.urls;
+  }
+
   return (
     <div className="user-menu user-menu--desktop selector">
       <label {...getLabelProps()} className="offscreen">
@@ -52,8 +68,14 @@ export const DesktopUserMenu: FC<UserMenuProps> = ({ user }) => {
         className={`selector__list ${isOpen ? '' : 'selector__list--is-closed'}`}
       >
         {isOpen &&
-          user.urls.map((link, index) => (
-            <li key={link.key} {...getItemProps({ item: link, index })}>
+          menuLinkList.map((link, index) => (
+            <li
+              key={link.key}
+              {...getItemProps({ item: link, index })}
+              className={classNames({
+                'selector__list__item--bordered': link.key === 'dashboard_teacher',
+              })}
+            >
               {typeof link.action === 'string' ? (
                 <a
                   className={`selector__list__link ${
