@@ -141,6 +141,7 @@ const SaleTunnel = ({
       return {
         product: product as CredentialProduct,
         order,
+        orderGroup,
         key,
         course: course!,
         enrollment: undefined,
@@ -149,6 +150,7 @@ const SaleTunnel = ({
       return {
         product: product as CertificateProduct,
         order,
+        orderGroup,
         key,
         course: undefined,
         enrollment: enrollment!,

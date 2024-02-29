@@ -79,7 +79,12 @@ const useOrdersBase =
         custom.methods.invalidate();
       },
     });
-    const submitHandler = useSessionMutation({ mutationFn: useJoanieApi().user.orders.submit });
+    const submitHandler = useSessionMutation({
+      mutationFn: useJoanieApi().user.orders.submit,
+      onSuccess: () => {
+        custom.methods.invalidate();
+      },
+    });
     return {
       ...custom,
       methods: {

@@ -367,10 +367,13 @@ describe.each([
       // - Route to create order should have been called
       nbApiCalls += 1; // order post create (invalidate queries)
       nbApiCalls += 1; // useProductOrder call (invalidate from create)
-      nbApiCalls += 1; // order submit
+      nbApiCalls += 1; // order submit (invalidate queries)
+      nbApiCalls += 1; // useProductOrder call (invalidate from submit)
 
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
-      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
+      expect(fetchMock.lastUrl()).toBe(
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
+      );
 
       // - Spinner should be displayed
       screen.getByText('Payment in progress');
@@ -482,10 +485,13 @@ describe.each([
       // - Route to create order should have been called
       nbApiCalls += 1; // order post create (invalidate queries)
       nbApiCalls += 1; // useProductOrder call (invalidate from create)
-      nbApiCalls += 1; // order submit
+      nbApiCalls += 1; // order submit (invalidate queries)
+      nbApiCalls += 1; // useProductOrder call (invalidate from submit)
 
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
-      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
+      expect(fetchMock.lastUrl()).toBe(
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
+      );
 
       // - Spinner should be displayed
       screen.getByText('Payment in progress');
@@ -534,9 +540,13 @@ describe.each([
       screen.getByText('Payment interface component');
 
       // - Now we make sure the order is not created again and just submitted.
-      nbApiCalls += 1; // submits order.
+      nbApiCalls += 1; // order submit (invalidate queries)
+      nbApiCalls += 1; // useProductOrder call (invalidate from submit)
+
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
-      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
+      expect(fetchMock.lastUrl()).toBe(
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
+      );
     });
 
     it('should render a payment button and not call the order creation route', async () => {
@@ -627,6 +637,7 @@ describe.each([
       // - Route to submit an existing order
       // - Furthermore, as payment succeeded immediately, order should have been refetched
       nbApiCalls += 1; // order submit
+      nbApiCalls += 1; // useProductOrder call (invalidate from submit)
       nbApiCalls += 1; // order get on id
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
@@ -758,6 +769,7 @@ describe.each([
       // - Furthermore, as payment succeeded immediately, order should have been refetched
       const onClickApiCalls = fetchMock.calls().splice(nbApiCalls);
       nbApiCalls += 1; // order submit
+      nbApiCalls += 1; // refetch order (submit invalidate)
       nbApiCalls += 1; // fetch validated order
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
@@ -766,8 +778,10 @@ describe.each([
         billing_address: ObjectHelper.omit(billingAddress, 'id', 'is_main'),
         credit_card_id: creditCard.id,
       });
-
-      expect(onClickApiCalls[1][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
+      expect(onClickApiCalls[1][0]).toBe(
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
+      );
+      expect(onClickApiCalls[2][0]).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/`);
 
       // - Spinner should be displayed
       screen.getByText('Payment in progress');
@@ -869,12 +883,12 @@ describe.each([
       nbApiCalls += 1; // order post create (invalidate queries)
       nbApiCalls += 1; // refetch useProductOrder
       nbApiCalls += 1; // order submit
+      nbApiCalls += 1; // refetch useProductOrder
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
 
-      expect(fetchMock.lastUrl()).toBe(`https://joanie.test/api/v1.0/orders/${order.id}/submit/`);
-      expect(JSON.parse(fetchMock.lastOptions()!.body!.toString())).toEqual({
-        billing_address: ObjectHelper.omit(billingAddress, 'id', 'is_main'),
-      });
+      expect(fetchMock.lastUrl()).toBe(
+        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
+      );
 
       // - Spinner should be displayed and payment button should be disabled
       screen.getByText('Payment in progress');
