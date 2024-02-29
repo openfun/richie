@@ -158,18 +158,6 @@ const SaleTunnel = ({
     }
   }, [product, order]);
 
-  useMemo(
-    () => ({
-      product,
-      order,
-      key,
-      course,
-      enrollment,
-      orderGroup,
-    }),
-    [product, order, key, course, enrollment, orderGroup],
-  );
-
   /**
    * correctly handle keyboard/screen reader users navigation on step change.
    * Without this, since elements are removed from the DOM from step to step,
