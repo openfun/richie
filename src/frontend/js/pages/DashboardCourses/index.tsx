@@ -1,17 +1,16 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useRef } from 'react';
 import { Button } from '@openfun/cunningham-react';
-import {
-  isCredentialOrder,
-  isEnrollment,
-  useOrdersEnrollments,
-} from 'pages/DashboardCourses/useOrdersEnrollments';
+import classNames from 'classnames';
+import { isCredentialOrder, isEnrollment } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { Spinner } from 'components/Spinner';
 import { DashboardItemEnrollment } from 'widgets/Dashboard/components/DashboardItem/Enrollment/DashboardItemEnrollment';
 import { DashboardItemOrder } from 'widgets/Dashboard/components/DashboardItem/Order/DashboardItemOrder';
 import Banner, { BannerType } from 'components/Banner';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
-import { OrderState, ProductType } from 'types/Joanie';
+import SearchBar from 'widgets/Dashboard/components/SearchBar';
+import SearchResultsCount from 'widgets/Dashboard/components/SearchResultsCount';
+import useLearnerCoursesSearch from 'hooks/useLearnerCoursesSearch';
 
 const messages = defineMessages({
   loading: {
@@ -33,9 +32,8 @@ const messages = defineMessages({
 
 export const DashboardCourses = () => {
   const intl = useIntl();
-  const { next, data, hasMore, error, isLoading, count } = useOrdersEnrollments({
-    orderFilters: { product_type: [ProductType.CREDENTIAL], state_exclude: [OrderState.CANCELED] },
-  });
+  const { data, isLoadingMore, isNewSearchLoading, next, hasMore, submitSearch, count, error } =
+    useLearnerCoursesSearch();
 
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   useIntersectionObserver({
@@ -50,12 +48,18 @@ export const DashboardCourses = () => {
         <Banner message={error} type={BannerType.ERROR} />
       ) : (
         <>
-          {count === 0 && (
+          <SearchBar onSubmit={submitSearch} />
+          <SearchResultsCount nbResults={count} />
+          {data.length === 0 && (
             <div className="dashboard__courses__empty">
               <Banner message={intl.formatMessage(messages.emptyList)} />
             </div>
           )}
-          <div className="dashboard__courses__list">
+          <div
+            className={classNames('dashboard__courses__list', {
+              'dashboard-course-list--fade': isNewSearchLoading,
+            })}
+          >
             {data.map((datum) => (
               <div
                 key={datum.id}
@@ -67,7 +71,7 @@ export const DashboardCourses = () => {
               </div>
             ))}
           </div>
-          {isLoading && (
+          {(isLoadingMore || isNewSearchLoading) && (
             <Spinner aria-labelledby="loading-orders-enrollments">
               <span id="loading-orders-enrollments">
                 <FormattedMessage {...messages.loading} />
@@ -77,7 +81,7 @@ export const DashboardCourses = () => {
           {hasMore && (
             <Button
               onClick={() => next()}
-              disabled={isLoading}
+              disabled={isLoadingMore}
               ref={loadMoreButtonRef}
               color="tertiary"
             >
