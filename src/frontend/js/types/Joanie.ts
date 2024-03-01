@@ -460,6 +460,7 @@ export interface PaginatedResourceQuery extends ResourcesQuery {
 export interface EnrollmentsQuery extends PaginatedResourceQuery {
   course_run_id?: CourseRun['id'];
   was_created_by_order?: boolean;
+  query?: string;
 }
 
 interface EnrollmentCreationPayload {

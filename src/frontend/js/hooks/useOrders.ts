@@ -22,6 +22,7 @@ export type OrderResourcesQuery = PaginatedResourceQuery & {
   state_exclude?: OrderState[];
   product_type?: ProductType[];
   product_type_exclude?: ProductType[];
+  query?: string;
 };
 
 const messages = defineMessages({

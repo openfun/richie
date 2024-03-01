@@ -1,11 +1,6 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import {
-  Enrollment,
-  PaginatedResourceQuery,
-  CredentialOrder,
-  CertificateOrder,
-} from 'types/Joanie';
+import { Enrollment, CredentialOrder, CertificateOrder, EnrollmentsQuery } from 'types/Joanie';
 import useUnionResource, { ResourceUnionPaginationProps } from 'hooks/useUnionResource';
 import { PER_PAGE } from 'settings';
 import { OrderResourcesQuery } from 'hooks/useOrders';
@@ -41,29 +36,32 @@ const messages = defineMessages({
 
 interface UseOrdersEnrollmentsProps extends ResourceUnionPaginationProps {
   orderFilters?: OrderResourcesQuery;
+  query?: string;
 }
 
 export const useOrdersEnrollments = ({
   perPage = PER_PAGE.useOrdersEnrollments,
+  query,
   orderFilters = {},
 }: UseOrdersEnrollmentsProps = {}) => {
   const api = useJoanieApi();
   return useUnionResource<
     CredentialOrder | CertificateOrder,
     Enrollment,
-    PaginatedResourceQuery,
-    { was_created_by_order: boolean } & PaginatedResourceQuery
+    OrderResourcesQuery,
+    EnrollmentsQuery
   >({
     queryAConfig: {
       queryKey: ['user', 'orders'],
       fn: api.user.orders.get,
-      filters: orderFilters,
+      filters: { ...orderFilters, query },
     },
     queryBConfig: {
       queryKey: ['user', 'enrollments'],
       fn: api.user.enrollments.get,
       filters: {
         was_created_by_order: false,
+        query,
       },
     },
     perPage,

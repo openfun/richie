@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add search bar on learner dashboard courses pages.
 - Add a `CertificateHelper` implementing a `getCourse` method
 - Add search bar on teacher dashboard courses pages.
 - Add background colors to default user's avatar when they're used 
