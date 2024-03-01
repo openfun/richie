@@ -1,6 +1,6 @@
 import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
-import { Enrollment } from 'types';
+import { UnknownEnrollment } from 'types';
 
 export interface APIListRequestParams {
   [key: string]: Maybe<string | string[]>;
@@ -23,12 +23,12 @@ export interface APIAuthentication {
 }
 
 export interface APIEnrollment {
-  get(url: string, user: Nullable<User>): Promise<Nullable<Enrollment>>;
-  isEnrolled(enrollment: Maybe<Nullable<Enrollment>>): Promise<Maybe<boolean>>;
+  get(url: string, user: Nullable<User>): Promise<Nullable<UnknownEnrollment>>;
+  isEnrolled(enrollment: Maybe<Nullable<UnknownEnrollment>>): Promise<Maybe<boolean>>;
   set(
     url: string,
     user: User,
-    enrollment?: Maybe<Nullable<Enrollment>>,
+    enrollment?: Maybe<Nullable<UnknownEnrollment>>,
     isActive?: boolean,
   ): Promise<boolean>;
   meta?: {

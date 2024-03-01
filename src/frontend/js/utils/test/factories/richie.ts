@@ -2,14 +2,7 @@ import { faker } from '@faker-js/faker';
 import { User } from 'types/User';
 import { APIBackend } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
-import {
-  CourseRun,
-  CourseRunDisplayMode,
-  CourseState,
-  CourseStateTextEnum,
-  Enrollment,
-  Priority,
-} from 'types';
+import { CourseRun, CourseRunDisplayMode, CourseState, CourseStateTextEnum, Priority } from 'types';
 import { Course } from 'types/Course';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { factory } from './factories';
@@ -141,15 +134,6 @@ export const CourseRunFactoryFromPriority = (priority: Priority) => {
     return courseRun;
   });
 };
-
-export const EnrollmentFactory = factory<Enrollment>(() => {
-  return {
-    id: faker.string.uuid(),
-    created_at: faker.date.past().toISOString(),
-    user: faker.string.uuid(),
-    course_run: faker.string.uuid(),
-  };
-});
 
 export const UserFactory = factory<User>(() => ({
   access_token: faker.lorem.word(12),

@@ -7,7 +7,7 @@ import { APILms, APIOptions } from 'types/api';
 import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
 import { EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
-import { Enrollment, OpenEdXEnrollment } from 'types';
+import { UnknownEnrollment, OpenEdXEnrollment } from 'types';
 import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 
 /**
@@ -88,7 +88,7 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
           throw new HttpError(response.status, response.statusText);
         });
       },
-      isEnrolled: async (enrollment: Maybe<Nullable<Enrollment>>) => {
+      isEnrolled: async (enrollment: Maybe<Nullable<UnknownEnrollment>>) => {
         return new Promise((resolve) => resolve(!!(enrollment as OpenEdXEnrollment)?.is_active));
       },
       set: async (url: string, user: User): Promise<boolean> => {
