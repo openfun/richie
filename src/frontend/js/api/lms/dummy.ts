@@ -2,7 +2,7 @@ import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { APILms } from 'types/api';
-import { Enrollment, OpenEdXEnrollment } from 'types';
+import { UnknownEnrollment, OpenEdXEnrollment } from 'types';
 import { location } from 'utils/indirection/window';
 import { CURRENT_JOANIE_DEV_DEMO_USER, RICHIE_USER_TOKEN } from 'settings';
 import { base64Decode } from 'utils/base64Parser';
@@ -139,7 +139,7 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
           }
           resolve(null);
         }),
-      isEnrolled: async (enrollment: Maybe<Nullable<Enrollment>>) =>
+      isEnrolled: async (enrollment: Maybe<Nullable<UnknownEnrollment>>) =>
         new Promise((resolve) => resolve(!!(enrollment as OpenEdXEnrollment)?.is_active)),
       set: (url: string, user: User): Promise<boolean> =>
         new Promise((resolve) => {
