@@ -130,7 +130,7 @@ jobs:
       - <<: *generate-version-file
       # Activate docker-in-docker
       - setup_remote_docker:
-          version: 20.10.23
+          version: default
 
       # Login to Docker Hub with encrypted credentials stored as secret
       # environment variables (set in CircleCI project settings) if the expected
@@ -810,7 +810,7 @@ jobs:
     steps:
       # Activate docker-in-docker
       - setup_remote_docker:
-          version: 19.03.13
+          version: default
       - checkout
       - run:
          name: Is a release or master branch
