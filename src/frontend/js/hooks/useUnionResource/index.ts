@@ -90,8 +90,10 @@ const useUnionResource = <
   const eofRef = useRef<Record<string, number>>(queryClient.getQueryData(eofQueryKey) ?? {});
   log('eof', eofRef.current);
 
-  const [unionQueryKey, setUnionQueryKey] = useState<string>();
+  const [update, setForceUpdate] = useState<number>();
 
+  // to force execution of useEffect::fetchNewPage(),
+  // reset need to generate a uniq key that is part of it's dependencies.
   const reset = () => {
     setStack([]);
     setPage(0);
@@ -99,23 +101,21 @@ const useUnionResource = <
     setError(undefined);
     setCursor(perPage);
     setIntegrityCount(0);
+    setForceUpdate(new Date().getTime());
   };
 
+  // we manualy observe key invalidation to trigger new search
+  // by generating a new update key
   if (refetchOnInvalidation) {
     useQueryKeyInvalidateListener(queryAConfig.queryKey, reset);
     useQueryKeyInvalidateListener(queryBConfig.queryKey, reset);
   }
 
+  // filters have changes, new results will be fetch.
+  // let's reset every previous fetches states
+  // and re-generate update
   useEffect(() => {
-    // filters have changes, new results will be fetch.
-    // let's reset every previous fetches states
     reset();
-
-    // We need to fetch new results.
-    // reset all states isn't enought. If we've a research without results
-    // then the next reset would do nothing.
-    // to force execution of useEffect::fetchNewPage(), we use a uniq key build with current queries filters.
-    setUnionQueryKey(JSON.stringify(queryAConfig.filters) + JSON.stringify(queryBConfig.filters));
   }, [JSON.stringify(queryAConfig.filters), JSON.stringify(queryBConfig.filters)]);
 
   useEffect(() => {
@@ -165,11 +165,8 @@ const useUnionResource = <
     }
   }, [
     cursor,
-    // FIXME(rlecellier): when stack.length === 0, invalidate the query will not refetch.
-    // stack.length is added in the dependency array to force a new fetch on reset.
-    stack.length,
-    // unionQueryKey assure that we refetch data when query filters change.
-    unionQueryKey,
+    // update assure that we refetch data on reset
+    update,
   ]);
 
   const cursorToUse = Math.min(cursor, integrityCount);
