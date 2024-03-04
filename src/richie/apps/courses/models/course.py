@@ -632,8 +632,7 @@ class Course(EsIdMixin, BasePageExtension):
             "start", "end", "enrollment_start", "enrollment_end"
         ):
             state = course_run.state
-            if state < best_state:
-                best_state = state
+            best_state = min(state, best_state)
             if state["priority"] == CourseState.ONGOING_OPEN:
                 # We found the best state, don't waste more time
                 break
