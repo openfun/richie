@@ -72,7 +72,7 @@ jobs:
   # Check that the CHANGELOG has been updated in the current branch
   check-changelog:
     docker:
-      - image: cimg/base:2022.06
+      - image: cimg/base:current
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -118,7 +118,7 @@ jobs:
   # Build the Docker image ready for production
   build-docker:
     docker:
-      - image: cimg/base:2023.10
+      - image: cimg/base:current
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
