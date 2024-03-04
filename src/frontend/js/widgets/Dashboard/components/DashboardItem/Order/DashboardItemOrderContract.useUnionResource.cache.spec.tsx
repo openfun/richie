@@ -1,13 +1,9 @@
 // FIXME: this test is about useUnionResource behavior.
 // we need to rewrite it in useUnionResource tests suite as small and generic as possible.
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
-import { act, render, screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import {
   ContractFactory,
@@ -19,6 +15,9 @@ import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessa
 import { Deferred } from 'utils/test/deferred';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { CONTRACT_SETTINGS } from 'settings';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -35,31 +34,15 @@ jest.mock('hooks/useIntersectionObserver', () => ({
 }));
 
 describe('<DashboardItemOrder/> Contract', () => {
-  const Wrapper = (route: string) => {
-    return (
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <SessionProvider>
-            <DashboardTest initialRoute={route} />
-          </SessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>
-    );
-  };
+  setupJoanieSession();
 
   beforeEach(() => {
     jest.useFakeTimers();
     jest.clearAllTimers();
-
-    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
-    jest.clearAllMocks();
-    fetchMock.restore();
   });
 
   describe('writable', () => {
@@ -103,9 +86,10 @@ describe('<DashboardItemOrder/> Contract', () => {
       // RTL too. See https://github.com/testing-library/user-event/issues/833.
       const user = userEvent.setup({ delay: null });
 
-      render(Wrapper(LearnerDashboardPaths.COURSES));
+      render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
-      // console.log('apiCalls:2', fetchMock.calls().length);
       await expectNoSpinner('Loading orders and enrollments...');
 
       expect(
