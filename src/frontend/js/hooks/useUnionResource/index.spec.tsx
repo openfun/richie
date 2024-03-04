@@ -8,6 +8,7 @@ import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { PER_PAGE } from 'settings';
 import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 import { BaseAppWrapper } from 'utils/test/wrappers/BaseAppWrapper';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { QueryConfig, FetchDataFunction } from './utils/fetchEntity';
 import useUnionResource from '.';
 
@@ -313,5 +314,54 @@ describe('useUnionResource', () => {
     calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(4);
     expect(calledUrls).toContain('http://data.a/?isFiltered=true&page=1');
+  });
+
+  it.each([
+    {
+      testLabel: 'with some results',
+      testDataAList: [{ name: 'TestDataA', id: '1', created_on: '2022-01-01' }],
+    },
+    {
+      testLabel: 'without results',
+      testDataAList: [],
+    },
+  ])('should refetch data when a query $testLabel is invalidate', async ({ testDataAList }) => {
+    fetchMock.get(
+      'http://data.a/?page=1',
+      mockPaginatedResponse(testDataAList, testDataAList.length, false),
+    );
+    fetchMock.get('http://data.b/?page=1', mockPaginatedResponse([], 0, false));
+
+    const queryClient = createTestQueryClient({ user: true });
+    const { result, rerender } = renderHook(
+      (queries: {
+        queryA?: QueryConfig<TestDataA, TestDataAFilters>;
+        queryB?: QueryConfig<TestDataB, PaginatedResourceQuery>;
+      }) =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig: queries?.queryA || queryAConfig,
+          queryBConfig: queries?.queryB || queryBConfig,
+        }),
+      {
+        wrapper: ({ children }) => (
+          <BaseAppWrapper queryOptions={{ client: queryClient }}>{children}</BaseAppWrapper>
+        ),
+      },
+    );
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    let calledUrls = fetchMock.calls().map((call) => call[0]);
+    expect(calledUrls).toHaveLength(2);
+    expect(calledUrls).toContain('http://data.a/?page=1');
+    expect(calledUrls).toContain('http://data.b/?page=1');
+
+    queryClient.invalidateQueries({ queryKey: queryAConfig.queryKey });
+    rerender({ queryA: { ...queryAConfig }, queryB: queryBConfig });
+    await waitFor(() => {
+      calledUrls = fetchMock.calls().map((call) => call[0]);
+      expect(calledUrls).toHaveLength(3);
+    });
+    expect(calledUrls.filter((url) => url === 'http://data.a/?page=1')).toHaveLength(2);
+    expect(calledUrls.filter((url) => url === 'http://data.b/?page=1')).toHaveLength(1);
   });
 });
