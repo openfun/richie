@@ -1,13 +1,8 @@
-import { act, getByRole, render, screen, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
+import { act, getByRole, screen, waitFor } from '@testing-library/react';
+import { QueryClient } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
-import {
-  UserFactory,
-  RichieContextFactory as mockRichieContextFactory,
-} from 'utils/test/factories/richie';
-import { History, HistoryContext } from 'hooks/useHistory';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import {
   CourseProductRelationFactory,
@@ -15,7 +10,6 @@ import {
   CredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { SessionProvider } from 'contexts/SessionContext';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { CourseLight, CourseProductRelation, Enrollment, CredentialOrder } from 'types/Joanie';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
@@ -25,6 +19,9 @@ import { isOrder } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { noop } from 'utils';
 import { PER_PAGE } from 'settings';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -52,44 +49,8 @@ jest.mock('hooks/useIntersectionObserver', () => ({
 }));
 
 describe('<DashboardCourses/>', () => {
+  setupJoanieSession();
   const perPage = PER_PAGE.useOrdersEnrollments;
-  const historyPushState = jest.fn();
-  const historyReplaceState = jest.fn();
-  const makeHistoryOf: (params: any) => History = () => [
-    {
-      state: { name: '', data: {} },
-      title: '',
-      url: `/`,
-    },
-    historyPushState,
-    historyReplaceState,
-  ];
-
-  beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    fetchMock.restore();
-  });
-
-  const Wrapper = ({ client }: { client?: QueryClient }) => {
-    const user = UserFactory().one();
-    return (
-      <QueryClientProvider client={client ?? createTestQueryClient({ user })}>
-        <IntlProvider locale="en">
-          <HistoryContext.Provider value={makeHistoryOf({})}>
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />
-            </SessionProvider>
-          </HistoryContext.Provider>
-        </IntlProvider>
-      </QueryClientProvider>
-    );
-  };
 
   const mockOrders = (orders: CredentialOrder[], client?: QueryClient) => {
     const relations: Record<string, CourseProductRelation> = {};
@@ -150,7 +111,9 @@ describe('<DashboardCourses/>', () => {
       enrollmentsDeferred.promise,
     );
 
-    render(<Wrapper />);
+    render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
 
     await expectSpinner('Loading orders and enrollments...');
     expect(await screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
@@ -242,7 +205,9 @@ describe('<DashboardCourses/>', () => {
 
     const entities = merge(orders, enrollments);
 
-    render(<Wrapper client={client} />);
+    render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
 
     // Slice 1.
     await expectNoSpinner('Loading orders and enrollments...');
@@ -277,7 +242,10 @@ describe('<DashboardCourses/>', () => {
       { results: [], next: null, previous: null, count: 0 },
     );
 
-    render(<Wrapper />);
+    render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
+
     ordersDeferred.resolve({
       status: HttpStatusCode.INTERNAL_SERVER_ERROR,
       body: 'Internal Server Error',
