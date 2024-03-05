@@ -473,6 +473,7 @@ export interface CourseQueryFilters extends ResourcesQuery {
   id?: CourseListItem['id'];
   organization_id?: Organization['id'];
   has_listed_course_runs?: Boolean;
+  query?: string;
 }
 export interface CourseProductQueryFilters extends ResourcesQuery {
   id?: Product['id'];
@@ -482,6 +483,7 @@ export interface CourseProductRelationQueryFilters extends PaginatedResourceQuer
   id?: CourseProductRelation['id'];
   organization_id?: Organization['id'];
   product_type?: ProductType;
+  query?: string;
 }
 
 export enum ContractState {

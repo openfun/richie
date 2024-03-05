@@ -2,13 +2,17 @@ import { screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CourseListItemFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
+import {
+  CourseListItemFactory,
+  CourseProductRelationFactory,
+  OrganizationFactory,
+} from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { PER_PAGE } from 'settings';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
-import { TeacherDashboardCoursesLoader } from '.';
+import { TeacherDashboardOrganizationCourseLoader } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -30,29 +34,37 @@ jest.mock('hooks/useIntersectionObserver', () => ({
   },
 }));
 
-describe('components/TeacherDashboardCoursesLoader', () => {
+describe('components/TeacherDashboardOrganizationCourseLoader', () => {
   const joanieSessionData = setupJoanieSession();
   const perPage = PER_PAGE.useCourseProductUnion;
   let nbApiCalls: number;
   beforeEach(() => {
     nbApiCalls = joanieSessionData.nbSessionApiRequest;
-
-    // teacher course sidebar calls
-    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', []);
-    nbApiCalls += 1;
   });
 
   it('should render', async () => {
+    const organization = OrganizationFactory().one();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/`,
+      organization,
+    );
+    nbApiCalls += 1;
+
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseListItemFactory().many(15), 15, false),
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseProductRelationFactory().many(15), 15, false),
     );
 
-    render(<TeacherDashboardCoursesLoader />);
+    render(<TeacherDashboardOrganizationCourseLoader />, {
+      routerOptions: {
+        path: '/:organizationId',
+        initialEntries: [`/${organization.id}`],
+      },
+    });
     await expectNoSpinner('Loading courses...');
 
     nbApiCalls += 1; // course api call
@@ -60,13 +72,17 @@ describe('components/TeacherDashboardCoursesLoader', () => {
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
     expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
+    );
+    expect(calledUrls).toContain(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
     );
 
-    // section titles
+    await expectNoSpinner('Loading organization...');
+
     expect(
-      await screen.findByRole('heading', {
-        name: 'Your courses',
+      screen.getByRole('heading', {
+        name: `Courses of ${organization.title}`,
       }),
     ).toBeInTheDocument();
 
@@ -75,25 +91,43 @@ describe('components/TeacherDashboardCoursesLoader', () => {
   });
 
   it('should perform search', async () => {
+    const organization = OrganizationFactory().one();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?signature_state=half_signed&page=1`,
+      [],
+    );
+    nbApiCalls += 1;
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/`,
+      organization,
+    );
+    nbApiCalls += 1;
+
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseListItemFactory().many(15), 15, false),
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseProductRelationFactory().many(15), 15, false),
     );
 
-    render(<TeacherDashboardCoursesLoader />);
+    render(<TeacherDashboardOrganizationCourseLoader />, {
+      routerOptions: {
+        path: '/:organizationId',
+        initialEntries: [`/${organization.id}`],
+      },
+    });
     await expectNoSpinner('Loading courses...');
+    await expectNoSpinner('Loading organization...');
     fetchMock.restore();
 
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/?query=text+query&has_listed_course_runs=true&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/courses/?query=text+query&has_listed_course_runs=true&page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseListItemFactory().many(5), 5, false),
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?query=text+query&product_type=credential&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/?query=text+query&product_type=credential&page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseProductRelationFactory().many(5), 5, false),
     );
     const user = userEvent.setup();
@@ -105,10 +139,10 @@ describe('components/TeacherDashboardCoursesLoader', () => {
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
     expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/courses/?query=text+query&has_listed_course_runs=true&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/courses/?query=text+query&has_listed_course_runs=true&page=1&page_size=${perPage}`,
     );
     expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/?query=text+query&product_type=credential&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/?query=text+query&product_type=credential&page=1&page_size=${perPage}`,
     );
 
     await waitFor(() => {
