@@ -1,10 +1,10 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { useSearchParams } from 'react-router-dom';
 import TeacherDashboardCourseList from 'components/TeacherDashboardCourseList';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { TeacherDashboardProfileSidebar } from 'widgets/Dashboard/components/TeacherDashboardProfileSidebar';
 import SearchBar from 'widgets/Dashboard/components/SearchBar';
 import SearchResultsCount from 'widgets/Dashboard/components/SearchResultsCount';
+import useTeacherCoursesSearch from 'hooks/useTeacherCoursesSearch';
 
 const messages = defineMessages({
   courses: {
@@ -30,12 +30,8 @@ const messages = defineMessages({
 });
 
 export const TeacherDashboardCoursesLoader = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('query') || undefined;
-  const onSubmit = (newQuery: string) => {
-    searchParams.set('query', newQuery);
-    setSearchParams(searchParams);
-  };
+  const { data, isLoadingMore, isNewSearchLoading, next, hasMore, submitSearch, count } =
+    useTeacherCoursesSearch();
 
   return (
     <DashboardLayout sidebar={<TeacherDashboardProfileSidebar />}>
@@ -46,11 +42,17 @@ export const TeacherDashboardCoursesLoader = () => {
           </h1>
         </div>
 
-        <SearchBar query={query} onSubmit={onSubmit} />
-        <SearchResultsCount />
+        <SearchBar onSubmit={submitSearch} />
+        <SearchResultsCount nbResults={count} />
       </div>
       <div className="teacher-courses-page">
-        <TeacherDashboardCourseList />
+        <TeacherDashboardCourseList
+          courseAndProductList={data}
+          loadMore={next}
+          isLoadingMore={isLoadingMore}
+          isLoading={isNewSearchLoading}
+          hasMore={hasMore}
+        />
       </div>
     </DashboardLayout>
   );

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { MessageDescriptor, defineMessages, useIntl } from 'react-intl';
-import { Maybe } from 'yup';
 import { PaginatedResourceQuery, PaginatedResponse } from 'types/Joanie';
 import { PER_PAGE } from 'settings';
 import { useQueryKeyInvalidateListener } from 'hooks/useQueryKeyInvalidateListener';
+import { Maybe } from 'types/utils';
 import { syncIntegrityCount } from './utils/syncIntegrityCount';
 import { FetchEntityData } from './utils/fetchEntities';
 import { QueryConfig } from './utils/fetchEntity';

@@ -1,12 +1,12 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useRef } from 'react';
 import { Button } from '@openfun/cunningham-react';
+import classNames from 'classnames';
 import { CourseGlimpseList, getCourseGlimpseListProps } from 'components/CourseGlimpseList';
 import { Spinner } from 'components/Spinner';
 import context from 'utils/context';
-import { useCourseProductUnion } from 'hooks/useCourseProductUnion';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
-import { ProductType } from 'types/Joanie';
+import { CourseListItem, CourseProductRelation } from 'types/Joanie';
 
 const messages = defineMessages({
   loading: {
@@ -29,28 +29,34 @@ const messages = defineMessages({
 interface TeacherDashboardCourseListProps {
   titleTranslated?: string;
   organizationId?: string;
+  loadMore: () => void;
+  courseAndProductList?: (CourseListItem | CourseProductRelation)[];
+  isLoadingMore?: boolean;
+  hasMore?: boolean;
+  isLoading?: boolean;
 }
 
 const TeacherDashboardCourseList = ({
   titleTranslated,
   organizationId,
+  loadMore,
+  courseAndProductList = [],
+  isLoading = false,
+  isLoadingMore = false,
+  hasMore = false,
 }: TeacherDashboardCourseListProps) => {
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   const intl = useIntl();
-  const {
-    data: courseAndProductList,
-    isLoading,
-    next,
-    hasMore,
-  } = useCourseProductUnion({ perPage: 25, organizationId, productType: ProductType.CREDENTIAL });
   useIntersectionObserver({
     target: loadMoreButtonRef,
-    onIntersect: next,
+    onIntersect: loadMore,
     enabled: hasMore,
   });
 
   return (
-    <div className="dashboard-course-list">
+    <div
+      className={classNames('dashboard-course-list', { 'dashboard-course-list--fade': isLoading })}
+    >
       {titleTranslated && (
         <h2 className="dashboard-course-list__title dashboard__page_title">{titleTranslated}</h2>
       )}
@@ -64,7 +70,7 @@ const TeacherDashboardCourseList = ({
         <FormattedMessage {...messages.emptyList} />
       )}
 
-      {isLoading && (
+      {isLoadingMore && (
         <Spinner aria-labelledby="loading-courses-data">
           <span id="loading-courses-data">
             <FormattedMessage {...messages.loading} />
@@ -74,8 +80,8 @@ const TeacherDashboardCourseList = ({
 
       {hasMore && (
         <Button
-          onClick={() => next()}
-          disabled={isLoading}
+          onClick={() => loadMore()}
+          disabled={isLoadingMore}
           ref={loadMoreButtonRef}
           color="tertiary"
         >

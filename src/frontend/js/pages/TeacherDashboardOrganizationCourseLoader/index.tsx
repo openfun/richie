@@ -1,6 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { Suspense } from 'react';
+import { useParams } from 'react-router-dom';
 import { Spinner } from 'components/Spinner';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { TeacherDashboardOrganizationSidebar } from 'widgets/Dashboard/components/TeacherDashboardOrganizationSidebar';
@@ -9,6 +8,7 @@ import TeacherDashboardCourseList from 'components/TeacherDashboardCourseList';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 import SearchResultsCount from 'widgets/Dashboard/components/SearchResultsCount';
 import SearchBar from 'widgets/Dashboard/components/SearchBar';
+import useTeacherCoursesSearch from 'hooks/useTeacherCoursesSearch';
 
 const messages = defineMessages({
   title: {
@@ -24,8 +24,10 @@ const messages = defineMessages({
 });
 
 export const TeacherDashboardOrganizationCourseLoader = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const { organizationId } = useParams<{ organizationId: string }>();
+  const { data, isLoadingMore, isNewSearchLoading, next, hasMore, submitSearch, count } =
+    useTeacherCoursesSearch();
+
   const {
     item: organization,
     states: { fetching },
@@ -33,12 +35,6 @@ export const TeacherDashboardOrganizationCourseLoader = () => {
   useBreadcrumbsPlaceholders({
     organizationTitle: organization?.title ?? '',
   });
-
-  const query = searchParams.get('query') || undefined;
-  const onSubmit = (newQuery: string) => {
-    searchParams.set('query', newQuery);
-    setSearchParams(searchParams);
-  };
 
   return (
     <DashboardLayout sidebar={<TeacherDashboardOrganizationSidebar />}>
@@ -61,13 +57,17 @@ export const TeacherDashboardOrganizationCourseLoader = () => {
               </h1>
             </div>
 
-            <SearchBar query={query} onSubmit={onSubmit} />
-            <SearchResultsCount />
+            <SearchBar onSubmit={submitSearch} />
+            <SearchResultsCount nbResults={count} />
           </div>
-
-          <Suspense fallback={<div />}>
-            <TeacherDashboardCourseList organizationId={organization.id} />
-          </Suspense>
+          <TeacherDashboardCourseList
+            organizationId={organization.id}
+            courseAndProductList={data}
+            loadMore={next}
+            isLoadingMore={isLoadingMore}
+            isLoading={isNewSearchLoading}
+            hasMore={hasMore}
+          />
         </>
       )}
     </DashboardLayout>

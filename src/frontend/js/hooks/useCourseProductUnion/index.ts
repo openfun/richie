@@ -28,12 +28,14 @@ const messages = defineMessages({
 interface UseCourseProductUnionProps extends ResourceUnionPaginationProps {
   organizationId?: string;
   productType?: ProductType;
+  query?: string;
 }
 
 export const useCourseProductUnion = ({
   perPage = 50,
   organizationId,
   productType,
+  query,
 }: UseCourseProductUnionProps = {}) => {
   const api = useJoanieApi();
   return useUnionResource<
@@ -45,12 +47,12 @@ export const useCourseProductUnion = ({
     queryAConfig: {
       queryKey: ['user', 'courses'],
       fn: api.courses.get,
-      filters: { organization_id: organizationId, has_listed_course_runs: true },
+      filters: { query, organization_id: organizationId, has_listed_course_runs: true },
     },
     queryBConfig: {
       queryKey: ['user', 'course_product_relations'],
       fn: api.courseProductRelations.get,
-      filters: { organization_id: organizationId, product_type: productType },
+      filters: { query, organization_id: organizationId, product_type: productType },
     },
     perPage,
     errorGetMessage: messages.errorGet,
