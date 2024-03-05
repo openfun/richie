@@ -342,7 +342,6 @@ export class CoursesService {
    * GET /api/courses/<course_id|course_code>/contracts/<contract_id>/
    * Return a course's contract if one matches the provided id
    * @param courseId
-   * @param courseId
    * @param courseProductRelationId
    * @param id primary key for the record as UUID
    * @param organizationId
@@ -353,11 +352,10 @@ export class CoursesService {
    * * `half_signed` - Partially signed
    * * `signed` - Signed
    * @returns PaginatedContractList
-   * @throws ApiError
+   *  @throws ApiError
    */
   public coursesContractsList(
     courseId: string,
-    courseId?: string,
     courseProductRelationId?: string,
     id?: Array<string>,
     organizationId?: string,

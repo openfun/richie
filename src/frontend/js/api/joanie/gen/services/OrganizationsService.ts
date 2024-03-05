@@ -340,7 +340,6 @@ export class OrganizationsService {
     courseId?: string,
     courseProductRelationId?: string,
     id?: Array<string>,
-    organizationId?: string,
     page?: number,
     pageSize?: number,
     productId?: string,
