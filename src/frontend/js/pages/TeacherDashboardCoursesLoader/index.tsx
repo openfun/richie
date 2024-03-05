@@ -1,8 +1,10 @@
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-
+import { FormattedMessage, defineMessages } from 'react-intl';
+import { useSearchParams } from 'react-router-dom';
 import TeacherDashboardCourseList from 'components/TeacherDashboardCourseList';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { TeacherDashboardProfileSidebar } from 'widgets/Dashboard/components/TeacherDashboardProfileSidebar';
+import SearchBar from 'widgets/Dashboard/components/SearchBar';
+import SearchResultsCount from 'widgets/Dashboard/components/SearchResultsCount';
 
 const messages = defineMessages({
   courses: {
@@ -28,12 +30,24 @@ const messages = defineMessages({
 });
 
 export const TeacherDashboardCoursesLoader = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('query') || undefined;
+  const onSubmit = (newQuery: string) => {
+    searchParams.set('query', newQuery);
+    setSearchParams(searchParams);
+  };
+
   return (
     <DashboardLayout sidebar={<TeacherDashboardProfileSidebar />}>
-      <div className="dashboard__page_title_container">
-        <h1 className="dashboard__page_title">
-          <FormattedMessage {...messages.courses} />
-        </h1>
+      <div className="dashboard__page_head">
+        <div className="dashboard__page_title_container">
+          <h1 className="dashboard__page_title">
+            <FormattedMessage {...messages.courses} />
+          </h1>
+        </div>
+
+        <SearchBar query={query} onSubmit={onSubmit} />
+        <SearchResultsCount />
       </div>
       <div className="teacher-courses-page">
         <TeacherDashboardCourseList />

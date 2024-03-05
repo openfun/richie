@@ -1,4 +1,14 @@
 .dashboard {
+  &__page_head {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: rem-calc(4px);
+
+    &__search_bar_container {
+      margin-bottom: rem-calc(16px);
+    }
+  }
+
   &__page_title,
   &__title--small,
   &__title--large {
@@ -28,6 +38,9 @@
 
   &__page_title_container {
     margin-bottom: rem-calc(20px);
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   &__title_container--small {

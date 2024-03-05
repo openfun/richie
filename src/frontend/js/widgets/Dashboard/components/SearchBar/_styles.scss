@@ -1,0 +1,12 @@
+.dashboard-search-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: rem-calc(8px);
+  margin-bottom: rem-calc(5px);
+
+  // TODO(rlecellier): cunningham should allow className on container
+  .c__field {
+    flex: 1 1 auto;
+  }
+}
