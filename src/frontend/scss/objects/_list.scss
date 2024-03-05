@@ -4,5 +4,9 @@
     color: r-theme-val(course-glimpse-list, count-color);
     text-align: right;
     align-self: self-end;
+
+    &--no-results {
+      visibility: hidden;
+    }
   }
 }
