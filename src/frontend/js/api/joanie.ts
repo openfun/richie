@@ -28,7 +28,9 @@ export async function getFileFromResponse(response: Response): Promise<File> {
   const dispositionHeader = response.headers.get('Content-Disposition');
   const matches = dispositionHeader?.match(filenameRegex);
 
-  return new File([await response.blob()], matches ? matches[1] : '');
+  return new File([await response.blob()], matches ? matches[1] : '', {
+    type: response.headers.get('Content-Type') || '',
+  });
 }
 
 export function getResponseBody(response: Response) {
