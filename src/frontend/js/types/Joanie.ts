@@ -98,12 +98,20 @@ export interface CertificateDefinition {
   description: string;
 }
 
-export interface Certificate {
+export type Certificate = {
   id: string;
   issued_on: string;
   certificate_definition: CertificateDefinition;
-  order: NestedCertificateOrder | NestedCredentialOrder;
-}
+} & (
+  | {
+      order: NestedCertificateOrder | NestedCredentialOrder;
+      enrollment: null;
+    }
+  | {
+      enrollment: EnrollmentLight;
+      order: null;
+    }
+);
 
 // - Organization
 export interface OrganizationLight {
