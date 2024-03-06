@@ -29,7 +29,7 @@ import {
   EnrollmentFactory,
   CredentialOrderFactory,
   TargetCourseFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { Certificate, CourseLight, CourseRun, CredentialOrder, OrderState } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';

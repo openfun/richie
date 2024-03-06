@@ -10,7 +10,10 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { getRoutesLegacy } from 'api/joanie';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
-import { CourseListItemFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
+import {
+  CourseListItemFactory,
+  CourseProductRelationFactory,
+} from 'utils/test/factories/joanieLegacy';
 import { useCourseProductUnion } from '.';
 
 jest.mock('utils/context', () => ({

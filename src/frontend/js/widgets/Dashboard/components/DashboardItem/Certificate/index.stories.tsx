@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate/index';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { Certificate } from 'types/Joanie';
-import { CertificateFactory } from 'utils/test/factories/joanie';
+import { CertificateFactory } from 'utils/test/factories/joanieLegacy';
 
 export default {
   title: 'Widgets/Dashboard/Certificate',

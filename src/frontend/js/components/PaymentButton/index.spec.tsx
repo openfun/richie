@@ -18,7 +18,7 @@ import {
   OrderGroupFactory,
   CourseLightFactory,
   EnrollmentFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
 import {

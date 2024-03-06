@@ -1,7 +1,7 @@
 import { IntlProvider } from 'react-intl';
 import { render, screen } from '@testing-library/react';
 import { ProductType } from 'types/Joanie';
-import { CertificateFactory } from 'utils/test/factories/joanie';
+import { CertificateFactory } from 'utils/test/factories/joanieLegacy';
 import CertificateStatus, { CertificateStatusProps } from '.';
 
 describe('<CertificateStatus/>', () => {

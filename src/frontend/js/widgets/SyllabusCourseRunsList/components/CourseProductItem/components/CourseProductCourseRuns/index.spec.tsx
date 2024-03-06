@@ -11,7 +11,7 @@ import {
   EnrollmentFactory,
   CredentialOrderFactory,
   ProductFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import type { CourseLight, CourseRun, Enrollment } from 'types/Joanie';
 import { Deferred } from 'utils/test/deferred';

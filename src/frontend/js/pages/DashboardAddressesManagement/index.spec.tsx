@@ -12,7 +12,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { findByText } from '@storybook/testing-library';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { AddressFactory } from 'utils/test/factories/joanie';
+import { AddressFactory } from 'utils/test/factories/joanieLegacy';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';

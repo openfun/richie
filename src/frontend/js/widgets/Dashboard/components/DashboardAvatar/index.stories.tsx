@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { UserFactory } from 'utils/test/factories/richie';
-import { OrganizationFactory } from 'utils/test/factories/joanie';
+import { OrganizationFactory } from 'utils/test/factories/joanieLegacy';
 import { DashboardAvatar, DashboardAvatarVariantEnum } from '.';
 
 export default {

@@ -13,7 +13,7 @@ import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { SessionProvider } from 'contexts/SessionContext';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { CourseLight } from 'types/Joanie';
-import { CourseLightFactory } from 'utils/test/factories/joanie';
+import { CourseLightFactory } from 'utils/test/factories/joanieLegacy';
 import CourseWishButton from '.';
 
 jest.mock('utils/context', () => ({

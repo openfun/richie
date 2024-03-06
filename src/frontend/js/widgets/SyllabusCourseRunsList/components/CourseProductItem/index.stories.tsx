@@ -7,7 +7,7 @@ import {
   CourseProductRelationFactory,
   CredentialOrderFactory,
   CredentialProductFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { UserFactory } from 'utils/test/factories/richie';
 import { CredentialOrder, OrderState } from 'types/Joanie';

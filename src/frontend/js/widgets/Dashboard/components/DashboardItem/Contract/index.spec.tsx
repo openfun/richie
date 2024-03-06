@@ -15,7 +15,7 @@ import {
   ContractFactory,
   CredentialOrderFactory,
   NestedCredentialOrderFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 
 jest.mock('utils/context', () => ({
   __esModule: true,

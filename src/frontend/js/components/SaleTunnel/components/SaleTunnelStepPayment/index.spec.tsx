@@ -15,7 +15,7 @@ import {
   AddressFactory,
   CreditCardFactory,
   CourseLightFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Address, CreditCard, Order, Product } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';

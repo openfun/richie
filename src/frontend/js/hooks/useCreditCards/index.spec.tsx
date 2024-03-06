@@ -4,7 +4,7 @@ import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CreditCardFactory } from 'utils/test/factories/joanie';
+import { CreditCardFactory } from 'utils/test/factories/joanieLegacy';
 import { useCreditCard, useCreditCards } from 'hooks/useCreditCards/index';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';

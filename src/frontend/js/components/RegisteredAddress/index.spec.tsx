@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 import RegisteredAddress from 'components/RegisteredAddress/index';
 import type { Address } from 'types/Joanie';
 import { noop } from 'utils';
-import { AddressFactory } from 'utils/test/factories/joanie';
+import { AddressFactory } from 'utils/test/factories/joanieLegacy';
 
 describe('RegisteredAddress', () => {
   const Wrapper = ({ children }: PropsWithChildren<{}>) => (

@@ -2,7 +2,7 @@ import { createIntl } from 'react-intl';
 import { screen } from '@testing-library/react';
 import { getAllByRole, within } from '@testing-library/dom';
 import { faker } from '@faker-js/faker';
-import { NestedCourseOrderFactory } from 'utils/test/factories/joanie';
+import { NestedCourseOrderFactory } from 'utils/test/factories/joanieLegacy';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { PaginationFactory } from 'utils/test/factories/cunningham';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';

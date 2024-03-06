@@ -4,7 +4,7 @@ import {
   EnrollmentFactory,
   CredentialOrderFactory,
   TargetCourseFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 
 describe('CourseHelper', () => {
   it('should find an active course enrollment in order', () => {

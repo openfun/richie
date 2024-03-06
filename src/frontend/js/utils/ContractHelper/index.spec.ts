@@ -1,5 +1,5 @@
 import { createIntl } from 'react-intl';
-import { ContractFactory } from 'utils/test/factories/joanie';
+import { ContractFactory } from 'utils/test/factories/joanieLegacy';
 import { ContractState } from 'types/Joanie';
 import { ContractHelper, ContractStatePoV } from '.';
 

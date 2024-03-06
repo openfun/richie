@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
-import { OrganizationFactory } from 'utils/test/factories/joanie';
+import { OrganizationFactory } from 'utils/test/factories/joanieLegacy';
 import { render } from 'utils/test/render';
 import { PresentationalAppWrapper } from 'utils/test/wrappers/PresentationalAppWrapper';
 import OrganizationLinks from '.';

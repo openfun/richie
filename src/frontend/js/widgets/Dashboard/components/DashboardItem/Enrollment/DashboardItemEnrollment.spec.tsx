@@ -7,7 +7,7 @@ import {
   CourseStateFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
-import { CourseRunWithCourseFactory, EnrollmentFactory } from 'utils/test/factories/joanie';
+import { CourseRunWithCourseFactory, EnrollmentFactory } from 'utils/test/factories/joanieLegacy';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';

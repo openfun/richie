@@ -9,7 +9,7 @@ import {
   ContractFactory,
   CredentialOrderFactory,
   NestedCredentialOrderFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';

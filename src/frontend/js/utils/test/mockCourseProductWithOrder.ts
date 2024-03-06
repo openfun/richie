@@ -5,7 +5,7 @@ import {
   CourseFactory,
   CourseProductRelationFactory,
   ProductFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 
 export const mockCourseProductWithOrder = (order: CredentialOrder) => {
   const courseCode = order.course.code;

@@ -4,7 +4,10 @@ import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CertificationDefinitionFactory, OrderLiteFactory } from 'utils/test/factories/joanie';
+import {
+  CertificationDefinitionFactory,
+  OrderLiteFactory,
+} from 'utils/test/factories/joanieLegacy';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CertificateDefinition, OrderLite } from 'types/Joanie';
 import { HttpStatusCode } from 'utils/errors/HttpError';
