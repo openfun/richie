@@ -184,6 +184,7 @@ export const CertificateFactory = factory((): Certificate => {
     id: faker.string.uuid(),
     certificate_definition: CertificationDefinitionFactory().one(),
     order: NestedCredentialOrderFactory().one(),
+    enrollment: null,
     issued_on: faker.date.past().toISOString(),
   };
 });

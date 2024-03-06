@@ -12,6 +12,7 @@ import { DashboardItemCertificate } from 'widgets/Dashboard/components/Dashboard
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import {
   CertificateFactory,
+  EnrollmentLightFactory,
   NestedCertificateOrderFactory,
   NestedCredentialOrderFactory,
 } from 'utils/test/factories/joanie';
@@ -27,14 +28,27 @@ jest.mock('utils/context', () => ({
 
 describe.each([
   {
-    label: 'link to a credential order',
-    OrderFactory: NestedCredentialOrderFactory,
+    // Link to a credential order
+    overrideFactory: () => ({
+      order: NestedCredentialOrderFactory().one(),
+      enrollment: null,
+    }),
   },
   {
-    label: 'link to a certificate order',
-    OrderFactory: NestedCertificateOrderFactory,
+    // Link to a certificate order
+    overrideFactory: () => ({
+      order: NestedCertificateOrderFactory().one(),
+      enrollment: null,
+    }),
   },
-])('<DashboardCertificate/> $label', ({ label, OrderFactory }) => {
+  {
+    // Link to an enrollment
+    overrideFactory: () => ({
+      order: null,
+      enrollment: EnrollmentLightFactory().one(),
+    }),
+  },
+])('<DashboardCertificate/> $label', ({ overrideFactory }) => {
   const Wrapper = ({ children }: PropsWithChildren) => {
     return (
       <QueryClientProvider client={createTestQueryClient({ user: true })}>
@@ -66,21 +80,24 @@ describe.each([
   });
 
   it('displays a certificate', async () => {
-    const certificate: Certificate = CertificateFactory({
-      order: OrderFactory().one(),
-    }).one();
+    const certificate: Certificate = CertificateFactory(overrideFactory()).one();
     render(
       <DashboardItemCertificate certificate={certificate} productType={ProductType.CREDENTIAL} />,
       { wrapper: Wrapper },
     );
 
     await waitFor(() => screen.getByText(certificate.certificate_definition.title));
-    const orderCourse =
-      label === 'link to a credential order'
-        ? certificate.order.course!
-        : certificate.order.enrollment!.course_run.course;
 
-    screen.getByText(orderCourse.title);
+    let course;
+    if (certificate.enrollment) {
+      course = certificate.enrollment.course_run.course;
+    } else if (certificate.order!.course) {
+      course = certificate.order!.course;
+    } else {
+      course = certificate.order!.enrollment.course_run.course;
+    }
+
+    screen.getByText(course.title);
     screen.getByText(
       'Issued on ' +
         new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(new Date(certificate.issued_on)),
@@ -88,9 +105,7 @@ describe.each([
   });
 
   it('downloads the certificate', async () => {
-    const certificate: Certificate = CertificateFactory({
-      order: OrderFactory().one(),
-    }).one();
+    const certificate: Certificate = CertificateFactory(overrideFactory()).one();
 
     fetchMock.get(`https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`, () => ({
       status: HttpStatusCode.OK,
