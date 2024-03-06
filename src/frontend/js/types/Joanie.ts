@@ -3,6 +3,7 @@ import type { Maybe, Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 import { Course as RichieCourse } from 'types/Course';
+import { Address as AddressGen } from 'api/joanie/gen';
 import { JoanieUserProfile } from './User';
 
 // - Generic
@@ -33,7 +34,7 @@ export interface Organization {
   contact_email: Nullable<string>;
   contact_phone: Nullable<string>;
   dpo_email: Nullable<string>;
-  address?: Address;
+  address?: AddressGen;
 }
 
 export interface OrganizationResourceQuery extends ResourcesQuery {

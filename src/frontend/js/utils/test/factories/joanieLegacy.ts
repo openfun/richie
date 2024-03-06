@@ -44,6 +44,7 @@ import {
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { JoanieUserApiAbilityActions, JoanieUserProfile } from 'types/User';
+import { AddressFactory as AddressGenFactory } from './joanieGen';
 import { factory } from './factories';
 
 export const UserLightFactory = factory((): UserLight => {
@@ -160,7 +161,7 @@ export const OrganizationFactory = factory((): Organization => {
     contact_email: faker.internet.email(),
     dpo_email: faker.internet.email(),
     contact_phone: faker.phone.number(),
-    address: AddressFactory().one(),
+    address: AddressGenFactory().one(),
   };
 });
 
