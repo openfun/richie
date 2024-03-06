@@ -2,9 +2,9 @@ import { fireEvent, getByRole, getByTestId, getByText, render } from '@testing-l
 import type { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import RegisteredAddress from 'components/RegisteredAddress/index';
-import type { Address } from 'types/Joanie';
 import { noop } from 'utils';
-import { AddressFactory } from 'utils/test/factories/joanieLegacy';
+import { Address } from 'api/joanie/gen';
+import { AddressFactory } from 'utils/test/factories/joanieGen';
 
 describe('RegisteredAddress', () => {
   const Wrapper = ({ children }: PropsWithChildren<{}>) => (

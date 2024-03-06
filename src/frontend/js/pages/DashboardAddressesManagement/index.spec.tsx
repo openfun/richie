@@ -12,16 +12,16 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { findByText } from '@storybook/testing-library';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { AddressFactory } from 'utils/test/factories/joanieLegacy';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
-import * as Joanie from 'types/Joanie';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { resolveAll } from 'utils/resolveAll';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { AddressFactory } from 'utils/test/factories/joanieGen';
+import { Address } from 'api/joanie/gen';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -85,7 +85,7 @@ describe('<DashAddressesManagement/>', () => {
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
     // Each addresses is displayed.
-    await resolveAll(addresses, async (address: Joanie.Address) => {
+    await resolveAll(addresses, async (address: Address) => {
       await screen.findByText(address.title);
     });
   });

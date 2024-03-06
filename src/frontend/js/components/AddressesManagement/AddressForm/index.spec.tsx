@@ -3,9 +3,9 @@ import { IntlProvider } from 'react-intl';
 import countries from 'i18n-iso-countries';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
-import { Address } from 'types/Joanie';
-import { AddressFactory } from 'utils/test/factories/joanieLegacy';
 import { changeSelect, clearSelect } from 'components/Form/test-utils';
+import { Address } from 'api/joanie/gen';
+import { AddressFactory } from 'utils/test/factories/joanieGen';
 import AddressForm from './index';
 
 jest.mock('hooks/useAddresses', () => ({

@@ -5,8 +5,8 @@ import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Spinner } from 'components/Spinner';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
 import { AddressFormValues, useDashboardAddressForm } from 'hooks/useDashboardAddressForm';
-import { Address } from 'types/Joanie';
 import { noop } from 'utils';
+import { Address } from 'api/joanie/gen';
 
 const messages = defineMessages({
   header: {

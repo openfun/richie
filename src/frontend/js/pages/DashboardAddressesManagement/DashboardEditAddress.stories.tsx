@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { StorybookHelper } from 'utils/StorybookHelper';
-import { AddressFactory } from 'utils/test/factories/joanieLegacy';
+import { AddressFactory } from 'utils/test/factories/joanieGen';
 import { DashboardEditAddress } from './DashboardEditAddress';
 
 export default {

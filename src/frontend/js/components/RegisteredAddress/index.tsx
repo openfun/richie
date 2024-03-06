@@ -1,6 +1,6 @@
 import { Button, Radio } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import type { Address } from 'types/Joanie';
+import type { Address } from 'api/joanie/gen';
 
 const messages = defineMessages({
   promoteButtonLabel: {

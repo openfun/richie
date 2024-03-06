@@ -7,7 +7,6 @@ import { faker } from '@faker-js/faker';
 import queryString from 'query-string';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
-  AddressFactory,
   CertificateOrderWithOneClickPaymentFactory,
   CertificateOrderWithPaymentFactory,
   CertificateProductFactory,
@@ -42,6 +41,8 @@ import {
 } from 'components/SaleTunnel/context';
 import { ObjectHelper } from 'utils/ObjectHelper';
 import useProductOrder from 'hooks/useProductOrder';
+import { Address } from 'api/joanie/gen';
+import { AddressFactory } from 'utils/test/factories/joanieGen';
 import PaymentButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -253,7 +254,7 @@ describe.each([
       // this allows the user to get feedback on what's missing to make the payment by clicking on the button
       expect($button.disabled).toBe(false);
 
-      const billingAddress: Joanie.Address = AddressFactory().one();
+      const billingAddress: Address = AddressFactory().one();
 
       rerender(
         <Wrapper product={product}>
@@ -271,7 +272,7 @@ describe.each([
 
     it('should render an enabled payment button if a billing address is provided', () => {
       const product: Joanie.Product = ProductFactory().one();
-      const billingAddress: Joanie.Address = AddressFactory().one();
+      const billingAddress: Address = AddressFactory().one();
 
       const fetchOrderQueryParams =
         product.type === ProductType.CREDENTIAL
@@ -307,7 +308,7 @@ describe.each([
 
     it('should create an order then display the payment interface when user clicks on payment button', async () => {
       const product: Joanie.Product = ProductFactory().one();
-      const billingAddress: Joanie.Address = AddressFactory().one();
+      const billingAddress: Address = AddressFactory().one();
       const handleSuccess = jest.fn();
       const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
 
@@ -424,7 +425,7 @@ describe.each([
 
     it('should create an order only the first time the payment interface is shown, and not after aborting', async () => {
       const product: Joanie.Product = ProductFactory().one();
-      const billingAddress: Joanie.Address = AddressFactory().one();
+      const billingAddress: Address = AddressFactory().one();
       const handleSuccess = jest.fn();
       const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
 
@@ -551,7 +552,7 @@ describe.each([
 
     it('should render a payment button and not call the order creation route', async () => {
       const product: Joanie.Product = ProductFactory().one();
-      const billingAddress: Joanie.Address = AddressFactory().one();
+      const billingAddress: Address = AddressFactory().one();
       const creditCard: Joanie.CreditCard = CreditCardFactory().one();
       const { payment_info: paymentInfo, ...order } = OrderWithOneClickPaymentFactory().one();
       const handleSuccess = jest.fn();
@@ -687,7 +688,7 @@ describe.each([
 
     it('should abort the order if payment does not succeed after a given delay', async () => {
       const product: Joanie.Product = ProductFactory().one();
-      const billingAddress: Joanie.Address = AddressFactory().one();
+      const billingAddress: Address = AddressFactory().one();
       const creditCard: Joanie.CreditCard = CreditCardFactory().one();
       const { payment_info: paymentInfo, ...order } = OrderWithOneClickPaymentFactory().one();
       const orderSubmitted = {
@@ -822,7 +823,7 @@ describe.each([
 
     it('should render an error message when payment failed', async () => {
       const product: Joanie.Product = ProductFactory().one();
-      const billingAddress: Joanie.Address = AddressFactory().one();
+      const billingAddress: Address = AddressFactory().one();
       const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
       const handleSuccess = jest.fn();
       const fetchOrderQueryParams =
@@ -916,7 +917,7 @@ describe.each([
 
     it('should show an error if user does not accept the terms', async () => {
       const product: Joanie.Product = ProductFactory().one();
-      const billingAddress: Joanie.Address = AddressFactory().one();
+      const billingAddress: Address = AddressFactory().one();
 
       const fetchOrderQueryParams =
         product.type === ProductType.CREDENTIAL
@@ -961,7 +962,7 @@ describe.each([
 
     it('should show a link to the platform terms and conditions', async () => {
       const product: Joanie.Product = ProductFactory().one();
-      const billingAddress: Joanie.Address = AddressFactory().one();
+      const billingAddress: Address = AddressFactory().one();
 
       const fetchOrderQueryParams =
         product.type === ProductType.CREDENTIAL
@@ -995,7 +996,7 @@ describe.each([
       it('should create an order with an order group', async () => {
         const product: Joanie.Product = ProductFactory().one();
         const orderGroup = OrderGroupFactory().one();
-        const billingAddress: Joanie.Address = AddressFactory().one();
+        const billingAddress: Address = AddressFactory().one();
         const handleSuccess = jest.fn();
 
         let createOrderPayload: Maybe<OrderCredentialCreationPayload>;
