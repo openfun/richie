@@ -6,7 +6,7 @@ import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { Spinner } from 'components/Spinner';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
-import { Address } from 'types/Joanie';
+import { Address } from 'api/joanie/gen';
 import { DashboardAddressBox } from './DashboardAddressBox';
 
 const messages = defineMessages({
