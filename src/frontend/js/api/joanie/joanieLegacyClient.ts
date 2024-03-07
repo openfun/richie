@@ -283,25 +283,6 @@ const API = (): Joanie.API => {
             method: 'DELETE',
           }).then(checkStatus),
       },
-      addresses: {
-        get: (id?: string) => {
-          return fetchWithJWT(buildApiUrl(ROUTES.user.addresses.get, { id })).then(checkStatus);
-        },
-        create: async (payload) =>
-          fetchWithJWT(ROUTES.user.addresses.create, {
-            method: 'POST',
-            body: JSON.stringify(payload),
-          }).then(checkStatus),
-        update: async ({ id, ...address }) =>
-          fetchWithJWT(ROUTES.user.addresses.update.replace(':id', id), {
-            method: 'PUT',
-            body: JSON.stringify(address),
-          }).then(checkStatus),
-        delete: async (id) =>
-          fetchWithJWT(ROUTES.user.addresses.delete.replace(':id', id), {
-            method: 'DELETE',
-          }).then(checkStatus),
-      },
       orders: {
         abort: async ({ id, payment_id }) => {
           return fetchWithJWT(ROUTES.user.orders.abort.replace(':id', id), {

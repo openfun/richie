@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { CourseStateTextEnum, Priority } from 'types';
 import {
-  Address,
   Certificate,
   CertificateDefinition,
   CourseListItem,
@@ -463,20 +462,6 @@ export const CertificateOrderWithOneClickPaymentFactory = factory(
     };
   },
 );
-
-export const AddressFactory = factory((): Address => {
-  return {
-    address: faker.location.streetAddress(),
-    city: faker.location.city(),
-    country: faker.location.countryCode(),
-    first_name: faker.person.firstName(),
-    last_name: faker.person.lastName(),
-    id: faker.string.uuid(),
-    is_main: false,
-    postcode: faker.location.zipCode(),
-    title: FactoryHelper.sequence((counter) => `Address ${counter}`),
-  };
-});
 
 export const CreditCardFactory = factory((): CreditCard => {
   return {
