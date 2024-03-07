@@ -13,7 +13,7 @@ import {
 import { IntlProvider } from 'react-intl';
 import { faker } from '@faker-js/faker';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CreditCardFactory } from 'utils/test/factories/joanie';
+import { CreditCardFactory } from 'utils/test/factories/joanieLegacy';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';

@@ -1,5 +1,9 @@
 import { createIntl } from 'react-intl';
-import { CourseRunFactory, ProductFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
+import {
+  CourseRunFactory,
+  ProductFactory,
+  TargetCourseFactory,
+} from 'utils/test/factories/joanieLegacy';
 import { ProductHelper } from '.';
 
 describe('ProductHelper', () => {

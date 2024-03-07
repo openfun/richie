@@ -3,7 +3,7 @@ import { IntlProvider } from 'react-intl';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import { capitalize } from 'lodash-es';
 import { MemoryRouter } from 'react-router-dom';
-import { CourseRunFactory } from 'utils/test/factories/joanie';
+import { CourseRunFactory } from 'utils/test/factories/joanieLegacy';
 import CourseRunList from '.';
 
 describe('pages/TeacherDashboardCourseLoader/CourseRunList', () => {

@@ -12,7 +12,7 @@ import {
   CourseLightFactory,
   EnrollmentFactory,
   ProductFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ProductType } from 'types/Joanie';

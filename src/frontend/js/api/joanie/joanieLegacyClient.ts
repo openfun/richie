@@ -206,11 +206,6 @@ export const getRoutes = () => {
   };
 };
 
-/**
- * Flag which determines if joanie is enabled.
- */
-export const isJoanieEnabled = !!context.joanie_backend;
-
 const filterEmptyEntry = ([, value]: [PropertyKey, any]) => {
   if (value == null) return false; // Value is null/undefined
   if (value?.length !== undefined && value.length === 0) return false; // Value is an empty array/string

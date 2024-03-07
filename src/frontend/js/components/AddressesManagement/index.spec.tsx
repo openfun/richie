@@ -10,7 +10,7 @@ import { PropsWithChildren } from 'react';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { AddressFactory } from 'utils/test/factories/joanie';
+import { AddressFactory } from 'utils/test/factories/joanieLegacy';
 import { SessionProvider } from 'contexts/SessionContext';
 import type * as Joanie from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';

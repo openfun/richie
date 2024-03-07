@@ -2,7 +2,7 @@ import { IntlProvider, createIntl } from 'react-intl';
 import { render, screen } from '@testing-library/react';
 import { capitalize } from 'lodash-es';
 import { MemoryRouter } from 'react-router-dom';
-import { CourseRunFactory } from 'utils/test/factories/joanie';
+import { CourseRunFactory } from 'utils/test/factories/joanieLegacy';
 import { buildCourseRunData, messages } from './utils';
 
 describe('pages/TeacherDashboardCourseLoader/CourseRunList/buildCourseRunData', () => {

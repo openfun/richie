@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { JoanieFileFactory } from 'utils/test/factories/joanie';
+import { JoanieFileFactory } from 'utils/test/factories/joanieLegacy';
 import { DashboardAvatar, DashboardAvatarVariantEnum } from '.';
 
 describe('<DashboardAvatar/>', () => {

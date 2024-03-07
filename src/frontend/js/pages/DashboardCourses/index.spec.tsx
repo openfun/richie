@@ -8,7 +8,7 @@ import {
   CourseProductRelationFactory,
   EnrollmentFactory,
   CredentialOrderFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { CourseLight, CourseProductRelation, Enrollment, CredentialOrder } from 'types/Joanie';

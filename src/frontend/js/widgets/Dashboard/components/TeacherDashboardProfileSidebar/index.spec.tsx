@@ -6,7 +6,7 @@ import {
   TEACHER_DASHBOARD_ROUTE_LABELS,
   TeacherDashboardPaths,
 } from 'widgets/Dashboard/utils/teacherRouteMessages';
-import { OrganizationFactory } from 'utils/test/factories/joanie';
+import { OrganizationFactory } from 'utils/test/factories/joanieLegacy';
 import { messages as organizationLinksMessages } from 'widgets/Dashboard/components/TeacherDashboardProfileSidebar/components/OrganizationLinks';
 import { render } from 'utils/test/render';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';

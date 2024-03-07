@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { faker } from '@faker-js/faker';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CourseLightFactory, CredentialOrderFactory } from 'utils/test/factories/joanie';
+import { CourseLightFactory, CredentialOrderFactory } from 'utils/test/factories/joanieLegacy';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';

@@ -1,5 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { CertificationDefinitionFactory, OrderLiteFactory } from 'utils/test/factories/joanie';
+import {
+  CertificationDefinitionFactory,
+  OrderLiteFactory,
+} from 'utils/test/factories/joanieLegacy';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import CertificateItem from '.';

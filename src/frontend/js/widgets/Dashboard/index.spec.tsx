@@ -6,7 +6,7 @@ import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
-import { AddressFactory } from 'utils/test/factories/joanie';
+import { AddressFactory } from 'utils/test/factories/joanieLegacy';
 import { location } from 'utils/indirection/window';
 import { User } from 'types/User';
 import { Nullable } from 'types/utils';

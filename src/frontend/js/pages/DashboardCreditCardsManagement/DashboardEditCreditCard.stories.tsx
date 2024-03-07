@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { StorybookHelper } from 'utils/StorybookHelper';
-import { CreditCardFactory } from 'utils/test/factories/joanie';
+import { CreditCardFactory } from 'utils/test/factories/joanieLegacy';
 import { DashboardEditCreditCard } from './DashboardEditCreditCard';
 
 export default {

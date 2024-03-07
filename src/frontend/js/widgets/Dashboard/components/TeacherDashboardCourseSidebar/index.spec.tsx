@@ -12,7 +12,7 @@ import {
   CourseFactory,
   CourseProductRelationFactory,
   OrganizationFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { render } from 'utils/test/render';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';

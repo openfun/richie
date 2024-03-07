@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
-import { checkStatus } from 'api/joanie';
+import { checkStatusLegacy } from 'api/joanie';
 import { useSession } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
@@ -43,7 +43,9 @@ describe('useSessionQuery', () => {
 
     const useHooks = () => {
       const session = useSession();
-      useSessionQuery(['orders'], () => fetch('http://api.endpoint/orders/').then(checkStatus));
+      useSessionQuery(['orders'], () =>
+        fetch('http://api.endpoint/orders/').then(checkStatusLegacy),
+      );
 
       return session;
     };
@@ -73,7 +75,9 @@ describe('useSessionQuery', () => {
 
     const useHooks = () => {
       const session = useSession();
-      useSessionQuery(['orders'], () => fetch('http://api.endpoint/orders/').then(checkStatus));
+      useSessionQuery(['orders'], () =>
+        fetch('http://api.endpoint/orders/').then(checkStatusLegacy),
+      );
 
       return session;
     };

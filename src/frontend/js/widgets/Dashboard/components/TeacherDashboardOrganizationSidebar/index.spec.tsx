@@ -13,7 +13,7 @@ import {
 } from 'utils/test/factories/richie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { ContractFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { ContractFactory, OrganizationFactory } from 'utils/test/factories/joanieLegacy';
 import { PER_PAGE } from 'settings';
 import { TeacherDashboardOrganizationSidebar } from '.';
 

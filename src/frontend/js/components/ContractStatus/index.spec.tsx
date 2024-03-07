@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { IntlProvider, createIntl } from 'react-intl';
 import { faker } from '@faker-js/faker';
-import { ContractFactory } from 'utils/test/factories/joanie';
+import { ContractFactory } from 'utils/test/factories/joanieLegacy';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import ContractStatus from '.';
 

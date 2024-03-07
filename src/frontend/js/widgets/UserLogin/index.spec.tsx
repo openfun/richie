@@ -15,7 +15,7 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { JoanieUserApiAbilityActions, User } from 'types/User';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { JoanieUserProfileFactory } from 'utils/test/factories/joanie';
+import { JoanieUserProfileFactory } from 'utils/test/factories/joanieLegacy';
 import { Nullable } from 'types/utils';
 import UserLogin from '.';
 

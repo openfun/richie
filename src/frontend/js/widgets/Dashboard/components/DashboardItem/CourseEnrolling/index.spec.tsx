@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { IntlProvider, createIntl } from 'react-intl';
 import { PropsWithChildren } from 'react';
-import { CredentialOrderFactory, EnrollmentFactory } from 'utils/test/factories/joanie';
+import { CredentialOrderFactory, EnrollmentFactory } from 'utils/test/factories/joanieLegacy';
 import { Priority } from 'types';
 import { CourseRun, Enrollment } from 'types/Joanie';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';

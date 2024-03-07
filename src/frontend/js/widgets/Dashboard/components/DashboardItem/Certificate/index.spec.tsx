@@ -14,7 +14,7 @@ import {
   CertificateFactory,
   NestedCertificateOrderFactory,
   NestedCredentialOrderFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({

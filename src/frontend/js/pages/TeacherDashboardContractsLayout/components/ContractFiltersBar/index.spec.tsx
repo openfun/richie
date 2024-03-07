@@ -3,7 +3,7 @@ import fetchMock from 'fetch-mock';
 import { userEvent } from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { ContractState } from 'types/Joanie';
-import { OrganizationFactory } from 'utils/test/factories/joanie';
+import { OrganizationFactory } from 'utils/test/factories/joanieLegacy';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { noop } from 'utils';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';

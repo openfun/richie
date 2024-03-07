@@ -8,7 +8,7 @@ import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
-import { CourseListItemFactory } from 'utils/test/factories/joanie';
+import { CourseListItemFactory } from 'utils/test/factories/joanieLegacy';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';

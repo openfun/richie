@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { ContractFactory } from 'utils/test/factories/joanie';
+import { ContractFactory } from 'utils/test/factories/joanieLegacy';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
 import AbilitiesHelper from '.';
 

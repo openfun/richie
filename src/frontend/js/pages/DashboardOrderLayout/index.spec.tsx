@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { CredentialOrder } from 'types/Joanie';
-import { CredentialOrderFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
+import { CredentialOrderFactory, TargetCourseFactory } from 'utils/test/factories/joanieLegacy';
 import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';

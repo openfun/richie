@@ -16,7 +16,7 @@ import {
   OrderEnrollmentFactory,
   EnrollmentFactory,
   CertificateProductFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { Priority } from 'types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
@@ -35,11 +35,12 @@ jest.mock('utils/context', () => ({
     joanie_backend: { endpoint: 'https://joanie.endpoint.test' },
   }).one(),
 }));
+
 jest.mock('components/SaleTunnel', () => ({
   __esModule: true,
   default: ({ isOpen, onFinish }: SaleTunnelProps) => {
     const React = require('react');
-    const Factories = require('utils/test/factories/joanie');
+    const Factories = require('utils/test/factories/joanieLegacy');
     // Automatically call onFinish() callback after 100ms when the SaleTunnel is opened to simulate a payment.
     React.useEffect(() => {
       if (!isOpen) {

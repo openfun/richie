@@ -10,7 +10,10 @@ import {
   UserFactory,
 } from 'utils/test/factories/richie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { CourseListItemFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
+import {
+  CourseListItemFactory,
+  CourseProductRelationFactory,
+} from 'utils/test/factories/joanieLegacy';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';

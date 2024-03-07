@@ -5,7 +5,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { useSession } from 'contexts/SessionContext';
-import { checkStatus } from 'api/joanie';
+import { checkStatusLegacy } from 'api/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { useSessionMutation } from '.';
@@ -41,7 +41,7 @@ describe('useSessionMutation', () => {
       const session = useSession();
       const mutation = useSessionMutation<unknown, void, unknown>({
         mutationFn: () =>
-          fetch('http://api.endpoint/orders/create', { method: 'POST' }).then(checkStatus),
+          fetch('http://api.endpoint/orders/create', { method: 'POST' }).then(checkStatusLegacy),
         onError: handleError,
       });
 

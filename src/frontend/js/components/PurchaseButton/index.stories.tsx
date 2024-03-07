@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { ProductFactory } from 'utils/test/factories/joanie';
+import { ProductFactory } from 'utils/test/factories/joanieLegacy';
 import PurchaseButton from '.';
 
 export default {

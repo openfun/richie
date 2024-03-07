@@ -3,7 +3,7 @@ import type * as Joanie from 'types/Joanie';
 import { PaymentProviders } from 'types/Joanie';
 import { handle as mockHandle } from 'utils/errors/handle';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { PaymentFactory } from 'utils/test/factories/joanie';
+import { PaymentFactory } from 'utils/test/factories/joanieLegacy';
 import PaymentInterface from '.';
 
 jest.mock('./PayplugLightbox', () => ({

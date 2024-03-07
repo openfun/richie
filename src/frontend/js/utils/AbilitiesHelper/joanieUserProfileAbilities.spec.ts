@@ -1,5 +1,5 @@
 import { JoanieUserApiAbilityActions } from 'types/User';
-import { JoanieUserProfileFactory } from 'utils/test/factories/joanie';
+import { JoanieUserProfileFactory } from 'utils/test/factories/joanieLegacy';
 import { JoanieUserProfileActions } from './types';
 import AbilitiesHelper from '.';
 

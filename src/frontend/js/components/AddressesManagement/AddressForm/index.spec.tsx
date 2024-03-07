@@ -4,7 +4,7 @@ import countries from 'i18n-iso-countries';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { Address } from 'types/Joanie';
-import { AddressFactory } from 'utils/test/factories/joanie';
+import { AddressFactory } from 'utils/test/factories/joanieLegacy';
 import { changeSelect, clearSelect } from 'components/Form/test-utils';
 import AddressForm from './index';
 

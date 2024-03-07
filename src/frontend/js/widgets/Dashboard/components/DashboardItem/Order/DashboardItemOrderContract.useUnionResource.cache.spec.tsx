@@ -9,7 +9,7 @@ import {
   ContractFactory,
   CredentialOrderFactory,
   TargetCourseFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { Deferred } from 'utils/test/deferred';
