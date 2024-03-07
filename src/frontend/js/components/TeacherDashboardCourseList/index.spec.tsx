@@ -67,7 +67,7 @@ describe('components/TeacherDashboardCourseList', () => {
 
     await expectNoSpinner('Loading courses...');
     expect(
-      screen.getByRole('heading', { name: /TeacherDashboardCourseList test title/ }),
+      await screen.findByRole('heading', { name: /TeacherDashboardCourseList test title/ }),
     ).toBeInTheDocument();
 
     const calledUrls = fetchMock.calls().map((call) => call[0]);

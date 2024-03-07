@@ -36,7 +36,7 @@ describe('<CourseLearnersFiltersBar/>', () => {
     );
 
     // Two selects should have rendered
-    const organizationFilter: HTMLInputElement = screen.getByRole('combobox', {
+    const organizationFilter: HTMLInputElement = await screen.findByRole('combobox', {
       name: 'Organization',
     });
 

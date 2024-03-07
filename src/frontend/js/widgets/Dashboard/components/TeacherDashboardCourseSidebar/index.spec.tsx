@@ -54,7 +54,7 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
     });
 
     await expectNoSpinner('Loading course...');
-    const link = screen.getByRole('link', {
+    const link = await screen.findByRole('link', {
       name: intl.formatMessage(messages.syllabusLinkLabel),
     });
     expect(link).toHaveAttribute('href', `/redirects/courses/${course.code}`);

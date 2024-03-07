@@ -6,7 +6,7 @@ import {
   CourseProductRelationFactory,
   OrganizationFactory,
 } from 'utils/test/factories/joanieLegacy';
-import { JoanieAppWrapper, setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import JoanieAppWrapper, { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import useCourseLearnersFilters from '.';
 
 jest.mock('utils/context', () => ({

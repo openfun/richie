@@ -106,7 +106,8 @@ describe('useResources (omniscient)', () => {
       wrapper: Wrapper,
     });
 
-    await waitFor(() => expect(result.current.states.isPending).toBe(true));
+    await waitFor(() => expect(screen.queryByText('loading...')).not.toBeInTheDocument());
+    expect(result.current.states.isPending).toBe(true);
     expect(result.current.states.fetching).toBe(true);
     expect(result.current.items).toEqual([]);
 
@@ -222,8 +223,9 @@ describe('useResources (omniscient)', () => {
         wrapper: Wrapper,
       },
     );
-
-    expect(result.current.states.isPending).toBe(true);
+    await waitFor(() => {
+      expect(result.current.states.isPending).toBe(true);
+    });
     expect(result.current.item).toBe(undefined);
     expect(fetchMock.called('https://example.com/api/todos')).toBe(false);
 
