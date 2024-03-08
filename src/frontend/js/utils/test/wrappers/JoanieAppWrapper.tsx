@@ -19,7 +19,7 @@ export const setupJoanieSession = () => {
   };
 };
 
-export const JoanieAppWrapper = ({
+const JoanieAppWrapper = ({
   children,
   intlOptions,
   queryOptions,
@@ -35,3 +35,5 @@ export const JoanieAppWrapper = ({
     </BaseJoanieAppWrapper>
   );
 };
+
+export default JoanieAppWrapper;

@@ -1,8 +1,8 @@
 import { defineMessages, useIntl } from 'react-intl';
 import { MutateOptions } from '@tanstack/react-query';
 import { useAddresses } from 'hooks/useAddresses';
-import * as Joanie from 'types/Joanie';
 import { confirm } from 'utils/indirection/window';
+import { Address } from 'api/joanie/gen';
 
 const messages = defineMessages({
   errorCannotRemoveMain: {
@@ -40,7 +40,7 @@ export function useAddressesManagement() {
    *
    * @param {Joanie.Address} address
    */
-  const promote = (address: Joanie.Address) => {
+  const promote = (address: Address) => {
     if (address.is_main) {
       addresses.methods.setError(intl.formatMessage(messages.errorCannotPromoteMain));
       return;
@@ -58,7 +58,7 @@ export function useAddressesManagement() {
    * @param {Joanie.Address} address
    * @param {AddressesMutateOptions} options
    */
-  const remove = (address: Joanie.Address, options?: MutateOptions) => {
+  const remove = (address: Address, options?: MutateOptions) => {
     if (address.is_main) {
       addresses.methods.setError(intl.formatMessage(messages.errorCannotRemoveMain));
       return;

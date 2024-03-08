@@ -6,15 +6,15 @@ import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
-import { AddressFactory } from 'utils/test/factories/joanie';
 import { location } from 'utils/indirection/window';
 import { User } from 'types/User';
 import { Nullable } from 'types/utils';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
-import { Address } from 'types/Joanie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { expectUrlMatchLocationDisplayed } from 'utils/test/expectUrlMatchLocationDisplayed';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { Address } from 'api/joanie/gen';
+import { AddressFactory } from 'utils/test/factories/joanieGen';
 import { LearnerDashboardPaths } from './utils/learnerRouteMessages';
 import { DashboardTest } from './components/DashboardTest';
 

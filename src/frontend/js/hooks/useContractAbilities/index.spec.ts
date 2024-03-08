@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import useContractAbilities from 'hooks/useContractAbilities/index';
-import { ContractFactory } from 'utils/test/factories/joanie';
+import { ContractFactory } from 'utils/test/factories/joanieLegacy';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
 
 describe('useContractAbilities', () => {

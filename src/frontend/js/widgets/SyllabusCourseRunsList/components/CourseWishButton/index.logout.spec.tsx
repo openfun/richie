@@ -12,7 +12,7 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { SessionProvider } from 'contexts/SessionContext';
 import { location } from 'utils/indirection/window';
-import { CourseLightFactory } from 'utils/test/factories/joanie';
+import { CourseLightFactory } from 'utils/test/factories/joanieLegacy';
 import { CourseLight } from 'types/Joanie';
 import CourseWishButton from '.';
 

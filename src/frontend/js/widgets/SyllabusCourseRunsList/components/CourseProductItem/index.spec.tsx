@@ -13,7 +13,7 @@ import {
   ProductFactory,
   OrderGroupFullFactory,
   OrderGroupFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import {
   CourseRun,

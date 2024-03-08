@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 
 import { faker } from '@faker-js/faker';
 import { Deferred } from 'utils/test/deferred';
-import { EnrollmentFactory as JoanieEnrollment } from 'utils/test/factories/joanie';
+import { EnrollmentFactory as JoanieEnrollment } from 'utils/test/factories/joanieLegacy';
 import {
   CourseRunFactory,
   RichieContextFactory as mockRichieContextFactory,

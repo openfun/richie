@@ -1,5 +1,6 @@
 import countries from 'i18n-iso-countries';
 import { defineMessages, useIntl } from 'react-intl';
+import { CountryEnum } from 'api/joanie/gen';
 import Select, { SelectProps } from './Select';
 
 export const messages = defineMessages({
@@ -19,7 +20,7 @@ export const CountrySelectField = ({
 
   const countryList = Object.entries(countries.getNames(languageCode)).map(
     ([value, label]: [string, string]) => {
-      return { value, label };
+      return { value: value as CountryEnum, label };
     },
     [],
   );

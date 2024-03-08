@@ -206,11 +206,6 @@ export const getRoutes = () => {
   };
 };
 
-/**
- * Flag which determines if joanie is enabled.
- */
-export const isJoanieEnabled = !!context.joanie_backend;
-
 const filterEmptyEntry = ([, value]: [PropertyKey, any]) => {
   if (value == null) return false; // Value is null/undefined
   if (value?.length !== undefined && value.length === 0) return false; // Value is an empty array/string
@@ -285,25 +280,6 @@ const API = (): Joanie.API => {
         },
         delete: async (id) =>
           fetchWithJWT(ROUTES.user.creditCards.delete.replace(':id', id), {
-            method: 'DELETE',
-          }).then(checkStatus),
-      },
-      addresses: {
-        get: (id?: string) => {
-          return fetchWithJWT(buildApiUrl(ROUTES.user.addresses.get, { id })).then(checkStatus);
-        },
-        create: async (payload) =>
-          fetchWithJWT(ROUTES.user.addresses.create, {
-            method: 'POST',
-            body: JSON.stringify(payload),
-          }).then(checkStatus),
-        update: async ({ id, ...address }) =>
-          fetchWithJWT(ROUTES.user.addresses.update.replace(':id', id), {
-            method: 'PUT',
-            body: JSON.stringify(address),
-          }).then(checkStatus),
-        delete: async (id) =>
-          fetchWithJWT(ROUTES.user.addresses.delete.replace(':id', id), {
             method: 'DELETE',
           }).then(checkStatus),
       },

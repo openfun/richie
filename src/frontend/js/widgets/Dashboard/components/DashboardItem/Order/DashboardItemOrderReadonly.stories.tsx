@@ -5,7 +5,7 @@ import {
   CredentialOrderFactory,
   ProductFactory,
   TargetCourseFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { QueryStateFactory } from 'utils/test/factories/reactQuery';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { enrollment } from '../stories.mock';

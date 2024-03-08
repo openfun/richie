@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { DashboardItemContract } from 'widgets/Dashboard/components/DashboardItem/Contract/index';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { Contract, NestedCredentialOrder } from 'types/Joanie';
-import { ContractFactory, NestedCredentialOrderFactory } from 'utils/test/factories/joanie';
+import { ContractFactory, NestedCredentialOrderFactory } from 'utils/test/factories/joanieLegacy';
 
 export default {
   title: 'Widgets/Dashboard/Contract',

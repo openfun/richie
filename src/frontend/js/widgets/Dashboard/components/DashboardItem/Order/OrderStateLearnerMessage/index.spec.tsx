@@ -5,7 +5,7 @@ import {
   ContractDefinitionFactory,
   ContractFactory,
   CredentialOrderFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { OrderState } from 'types/Joanie';
 import OrderStateLearnerMessage, { messages } from '.';
 

@@ -10,11 +10,11 @@ import { PropsWithChildren } from 'react';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
-import type * as Joanie from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { changeSelect } from 'components/Form/test-utils';
+import { AddressFactory } from 'utils/test/factories/joanieGen';
+import { Address } from 'api/joanie/gen';
 import AddressesManagement from '.';
 
 jest.mock('utils/context', () => ({
@@ -87,7 +87,7 @@ describe('AddressesManagement', () => {
       return expect($addresses).toHaveLength(addresses.length);
     });
 
-    addresses.forEach((address: Joanie.Address) => {
+    addresses.forEach((address: Address) => {
       const $address = screen.getByTestId(`address-${address.id}-title`);
       expect($address.textContent).toEqual(address.title);
     });

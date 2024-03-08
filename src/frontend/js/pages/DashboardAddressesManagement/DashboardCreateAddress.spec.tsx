@@ -6,17 +6,17 @@ import { IntlProvider } from 'react-intl';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { PropsWithChildren } from 'react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
-import { Address } from 'types/Joanie';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { changeSelect } from 'components/Form/test-utils';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { Address } from 'api/joanie/gen';
+import { AddressFactory } from 'utils/test/factories/joanieGen';
 
 jest.mock('utils/context', () => ({
   __esModule: true,

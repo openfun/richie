@@ -7,7 +7,7 @@ import {
   CourseProductRelationFactory,
   NestedCourseOrderFactory,
   OrganizationFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { PER_PAGE } from 'settings';
 import { HttpStatusCode } from 'utils/errors/HttpError';

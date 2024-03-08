@@ -18,7 +18,7 @@ import {
   CourseLightFactory,
   CredentialProductFactory,
   EnrollmentFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { User } from 'types/User';
 import { Maybe } from 'types/utils';
 import { SaleTunnelContext, SaleTunnelContextType } from 'components/SaleTunnel/context';

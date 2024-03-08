@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { CredentialOrderFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
+import { CredentialOrderFactory, TargetCourseFactory } from 'utils/test/factories/joanieLegacy';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { UserFactory } from 'utils/test/factories/richie';

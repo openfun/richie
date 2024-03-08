@@ -56,7 +56,7 @@ describe('SessionProvider', () => {
   });
 
   it('uses BaseSessionProvider if joanie is disabled', async () => {
-    jest.doMock('api/joanie.ts', () => ({
+    jest.doMock('api/joanie/index.ts', () => ({
       isJoanieEnabled: false,
     }));
     jest.doMock('./BaseSessionProvider', () => ({
@@ -75,7 +75,7 @@ describe('SessionProvider', () => {
   });
 
   it('uses JoanieSessionProvider if joanie is enabled', async () => {
-    jest.doMock('api/joanie.ts', () => ({
+    jest.doMock('api/joanie/index.ts', () => ({
       isJoanieEnabled: true,
     }));
     jest.doMock('./BaseSessionProvider', () => ({

@@ -11,7 +11,7 @@ import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { PER_PAGE } from 'settings';
 import { ContractResourceQuery, ContractState } from 'types/Joanie';
-import { ContractFactory } from 'utils/test/factories/joanie';
+import { ContractFactory } from 'utils/test/factories/joanieLegacy';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
 import { MenuLink } from '../..';
 import ContractNavLink from '.';

@@ -3,3 +3,5 @@ i18n/**/*
 public-path.js
 # LexPersona iframe script
 iframe-manager.js
+# generated api client
+js/api/**/gen/**/*.ts

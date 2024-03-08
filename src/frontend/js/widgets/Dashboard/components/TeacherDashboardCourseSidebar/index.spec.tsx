@@ -12,7 +12,7 @@ import {
   CourseFactory,
   CourseProductRelationFactory,
   OrganizationFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { render } from 'utils/test/render';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
@@ -54,7 +54,7 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
     });
 
     await expectNoSpinner('Loading course...');
-    const link = screen.getByRole('link', {
+    const link = await screen.findByRole('link', {
       name: intl.formatMessage(messages.syllabusLinkLabel),
     });
     expect(link).toHaveAttribute('href', `/redirects/courses/${course.code}`);

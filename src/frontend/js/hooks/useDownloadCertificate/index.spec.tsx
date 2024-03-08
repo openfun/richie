@@ -10,7 +10,7 @@ import { handle } from 'utils/errors/handle';
 import { Certificate } from 'types/Joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';
-import { CertificateFactory } from 'utils/test/factories/joanie';
+import { CertificateFactory } from 'utils/test/factories/joanieLegacy';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/errors/handle');

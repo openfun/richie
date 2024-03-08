@@ -1,9 +1,9 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { OrganizationFactory } from 'utils/test/factories/joanie';
+import { OrganizationFactory } from 'utils/test/factories/joanieLegacy';
 import { Organization } from 'types/Joanie';
-import { JoanieAppWrapper, setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import JoanieAppWrapper, { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import useDefaultOrganizationId from '.';
 
 jest.mock('utils/context', () => ({

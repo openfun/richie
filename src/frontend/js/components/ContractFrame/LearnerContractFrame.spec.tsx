@@ -6,7 +6,7 @@ import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { QueryStateFactory } from 'utils/test/factories/reactQuery';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CredentialOrderFactory } from 'utils/test/factories/joanie';
+import { CredentialOrderFactory } from 'utils/test/factories/joanieLegacy';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { Props } from './AbstractContractFrame';

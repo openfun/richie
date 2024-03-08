@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment, useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { DefaultValues, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Checkbox } from '@openfun/cunningham-react';
 import { getLocalizedCunninghamErrorProp } from 'components/Form/utils';
@@ -8,7 +8,7 @@ import { messages } from 'components/AddressesManagement/index';
 import { CountrySelectField } from 'components/Form/CountrySelectField';
 import Input from 'components/Form/Input';
 import { useAddresses } from 'hooks/useAddresses';
-import type { Address } from 'types/Joanie';
+import type { Address } from 'api/joanie/gen';
 import { messages as formMessages } from 'components/Form/messages';
 import validationSchema from './validationSchema';
 
@@ -23,16 +23,7 @@ interface Props {
 }
 
 const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
-  const defaultValues = {
-    title: '',
-    first_name: '',
-    last_name: '',
-    address: '',
-    postcode: '',
-    city: '',
-    country: '-',
-    save: false,
-  } as AddressFormValues;
+  const defaultValues: DefaultValues<AddressFormValues> = {};
 
   const form = useForm<AddressFormValues>({
     defaultValues: address || defaultValues,

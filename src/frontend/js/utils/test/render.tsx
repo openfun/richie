@@ -1,8 +1,9 @@
 import { RenderResult, screen, render as testingLibraryRender } from '@testing-library/react';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, lazy } from 'react';
 import { Nullable } from 'types/utils';
 import { AppWrapperProps } from './wrappers/types';
-import { JoanieAppWrapper } from './wrappers/JoanieAppWrapper';
+
+const JoanieAppWrapper = lazy(() => import('./wrappers/JoanieAppWrapper'));
 
 //  ------- setup -------
 

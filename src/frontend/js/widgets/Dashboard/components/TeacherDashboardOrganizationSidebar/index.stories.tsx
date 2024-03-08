@@ -4,7 +4,7 @@ import fetchMock from 'fetch-mock';
 import { UserFactory } from 'utils/test/factories/richie';
 import { TeacherDashboardOrganizationSidebar } from 'widgets/Dashboard/components/TeacherDashboardOrganizationSidebar';
 import { StorybookHelper } from 'utils/StorybookHelper';
-import { ContractFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { ContractFactory, OrganizationFactory } from 'utils/test/factories/joanieLegacy';
 
 export default {
   component: TeacherDashboardOrganizationSidebar,

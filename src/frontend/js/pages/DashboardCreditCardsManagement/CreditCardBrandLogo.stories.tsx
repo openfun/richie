@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { CreditCardFactory } from 'utils/test/factories/joanie';
+import { CreditCardFactory } from 'utils/test/factories/joanieLegacy';
 import { CreditCard, CreditCardBrand } from 'types/Joanie';
 import { CreditCardBrandLogo } from './CreditCardBrandLogo';
 

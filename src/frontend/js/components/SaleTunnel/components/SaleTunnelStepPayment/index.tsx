@@ -6,12 +6,12 @@ import AddressesManagement, { LOCAL_BILLING_ADDRESS_ID } from 'components/Addres
 import { useSession } from 'contexts/SessionContext';
 import { useAddresses } from 'hooks/useAddresses';
 import { useCreditCards } from 'hooks/useCreditCards';
-import type * as Joanie from 'types/Joanie';
 import type { Maybe, Nullable } from 'types/utils';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { useSaleTunnelContext } from 'components/SaleTunnel/context';
 import { UserHelper } from 'utils/UserHelper';
 import { AddressView } from 'components/Address';
+import { Address } from 'api/joanie/gen';
 import { RegisteredCreditCard } from '../RegisteredCreditCard';
 
 const messages = defineMessages({
@@ -66,11 +66,11 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
   /**
    * Sort addresses ascending by title according to the locale
    *
-   * @param {Joanie.Address} a
-   * @param {Joanie.Address} b
-   * @returns {Joanie.Address[]} Sorted addresses ascending by title
+   * @param {Address} a
+   * @param {Address} b
+   * @returns {Address[]} Sorted addresses ascending by title
    */
-  const sortAddressByTitleAsc = (a: Joanie.Address, b: Joanie.Address) => {
+  const sortAddressByTitleAsc = (a: Address, b: Address) => {
     return a.title.localeCompare(b.title, [intl.locale, intl.defaultLocale]);
   };
 
@@ -85,7 +85,7 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
     creditCards.items.find((c) => c.is_main)?.id,
   );
 
-  const [address, setAddress] = useState<Maybe<Joanie.Address>>(() =>
+  const [address, setAddress] = useState<Maybe<Address>>(() =>
     addresses.items.find((a) => a.is_main),
   );
 
@@ -95,7 +95,7 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
   );
 
   const selectedAddress = useMemo(
-    (): Maybe<Joanie.Address> =>
+    (): Maybe<Address> =>
       address ||
       addresses.items.find((a) => a.is_main) ||
       [...addresses.items].sort(sortAddressByTitleAsc)[0],
@@ -107,7 +107,7 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
    * If the selected address is a local one, we have to add it to the item list.
    * Finally, we sort address ascending by title before return them
    *
-   * @returns {Joanie.Address[]} Sorted addresses ascending by title
+   * @returns {Address[]} Sorted addresses ascending by title
    */
   const addressesItems = useMemo(() => {
     const items = [...addresses.items];

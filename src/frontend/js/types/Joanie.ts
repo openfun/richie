@@ -3,6 +3,7 @@ import type { Maybe, Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 import { Course as RichieCourse } from 'types/Course';
+import { Address as AddressGen } from 'api/joanie/gen';
 import { JoanieUserProfile } from './User';
 
 // - Generic
@@ -33,7 +34,7 @@ export interface Organization {
   contact_email: Nullable<string>;
   contact_phone: Nullable<string>;
   dpo_email: Nullable<string>;
-  address?: Address;
+  address?: AddressGen;
 }
 
 export interface OrganizationResourceQuery extends ResourcesQuery {
@@ -371,19 +372,6 @@ export interface CreditCard {
   title?: string;
 }
 
-// Address
-export interface Address {
-  address: string;
-  city: string;
-  country: string;
-  first_name: string;
-  last_name: string;
-  id: string;
-  is_main: boolean;
-  postcode: string;
-  title: string;
-}
-
 // Wishlist
 export interface CourseWish extends Resource {
   status: boolean;
@@ -414,10 +402,6 @@ export interface OrderPaymentInfo {
 }
 
 // - API
-export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> {
-  is_main?: boolean;
-}
-
 interface AbstractOrderProductCreationPayload {
   product_id: Product['id'];
   order_group_id?: OrderGroup['id'];
@@ -440,7 +424,7 @@ interface OrderAbortPayload {
 
 interface OrderSubmitPayload {
   id: Order['id'];
-  billing_address: Omit<Address, 'id' | 'is_main'>;
+  billing_address: Omit<AddressGen, 'id' | 'is_main'>;
   credit_card_id?: CreditCard['id'];
 }
 
@@ -523,13 +507,6 @@ export interface ApiResourceInterface<
 interface APIUser {
   me: {
     get(): Promise<JoanieUserProfile>;
-  };
-  addresses: {
-    create(payload: AddressCreationPayload): Promise<Address>;
-    delete(id: Address['id']): Promise<void>;
-    get(id: Address['id']): Promise<Address>;
-    get(): Promise<Address[]>;
-    update(payload: Address): Promise<Address>;
   };
   creditCards: {
     create(payload: Omit<CreditCard, 'id'>): Promise<CreditCard>;

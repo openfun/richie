@@ -11,7 +11,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CreditCardFactory } from 'utils/test/factories/joanie';
+import { CreditCardFactory } from 'utils/test/factories/joanieLegacy';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { SessionProvider } from 'contexts/SessionContext';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';

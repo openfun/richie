@@ -6,8 +6,7 @@ import Banner, { BannerType } from 'components/Banner';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import RegisteredAddress from 'components/RegisteredAddress';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
-import type * as Joanie from 'types/Joanie';
-import { Address } from 'types/Joanie';
+import type { Address } from 'api/joanie/gen';
 import { Maybe } from 'types/utils';
 
 // constant used as `address.id` for local address
@@ -108,13 +107,13 @@ export const messages = defineMessages({
 
 interface AddressesManagementProps {
   handleClose: () => void;
-  selectAddress: (address: Joanie.Address) => void;
+  selectAddress: (address: Address) => void;
 }
 
 const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>(
   ({ handleClose, selectAddress }, ref) => {
     const intl = useIntl();
-    const [editedAddress, setEditedAddress] = useState<Maybe<Joanie.Address>>();
+    const [editedAddress, setEditedAddress] = useState<Maybe<Address>>();
     const {
       methods: { setError, create, update, remove, promote },
       states: { error },
@@ -124,11 +123,11 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
     /**
      * Sort addresses ascending by title according to the locale
      *
-     * @param {Joanie.Address} a
-     * @param {Joanie.Address} b
-     * @returns {Joanie.Address[]} Sorted addresses ascending by title
+     * @param {Address} a
+     * @param {Address} b
+     * @returns {Address[]} Sorted addresses ascending by title
      */
-    const sortAddressByTitleAsc = (a: Joanie.Address, b: Joanie.Address) => {
+    const sortAddressByTitleAsc = (a: Address, b: Address) => {
       return a.title.localeCompare(b.title, [intl.locale, intl.defaultLocale]);
     };
 
@@ -136,9 +135,9 @@ const AddressesManagement = forwardRef<HTMLDivElement, AddressesManagementProps>
      * update `selectedAddress` state with the address provided
      * then close the address management form
      *
-     * @param {Joanie.Address} address
+     * @param {Address} address
      */
-    const handleSelect = (address: Joanie.Address) => {
+    const handleSelect = (address: Address) => {
       setError(undefined);
       selectAddress(address);
       handleClose();

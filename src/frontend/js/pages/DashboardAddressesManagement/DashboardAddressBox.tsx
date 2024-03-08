@@ -1,7 +1,7 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
 import { DashboardBox } from 'widgets/Dashboard/components/DashboardBox';
-import { Address } from 'types/Joanie';
+import { Address } from 'api/joanie/gen';
 
 const messages = defineMessages({
   isMain: {

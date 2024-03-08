@@ -12,16 +12,17 @@ import {
 } from 'utils/test/factories/richie';
 import {
   ProductFactory,
-  AddressFactory,
   CreditCardFactory,
   CourseLightFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { SessionProvider } from 'contexts/SessionContext';
-import { Address, CreditCard, Order, Product } from 'types/Joanie';
+import { CreditCard, Order, Product } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
 import { SaleTunnelContext, SaleTunnelContextType } from 'components/SaleTunnel/context';
 import { Maybe } from 'types/utils';
+import { Address } from 'api/joanie/gen';
+import { AddressFactory } from 'utils/test/factories/joanieGen';
 import { SaleTunnelStepPayment } from '.';
 
 jest.mock('components/PaymentButton', () => ({
@@ -184,7 +185,7 @@ describe('SaleTunnelStepPayment', () => {
       // - By default, the main address should be selected
       expect($addressOptionById[address.id]).toHaveAttribute(
         'aria-selected',
-        address.is_main.toString(),
+        (!!address.is_main).toString(),
       );
     });
     const mainAddress = addresses.find((address) => address.is_main)!;

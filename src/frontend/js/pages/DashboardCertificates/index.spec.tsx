@@ -14,7 +14,7 @@ import { History, HistoryContext } from 'hooks/useHistory';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
-import { CertificateFactory } from 'utils/test/factories/joanie';
+import { CertificateFactory } from 'utils/test/factories/joanieLegacy';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 
 jest.mock('utils/context', () => ({

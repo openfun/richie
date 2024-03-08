@@ -14,6 +14,7 @@ import { useTerms } from 'components/PaymentButton/hooks/useTerms';
 import { useSaleTunnelContext } from 'components/SaleTunnel/context';
 import { ObjectHelper } from 'utils/ObjectHelper';
 import { useOrders } from 'hooks/useOrders';
+import { Address } from 'api/joanie/gen';
 import PaymentInterface from './components/PaymentInterfaces';
 
 const messages = defineMessages({
@@ -75,7 +76,7 @@ export enum PaymentErrorMessageId {
 }
 
 interface PaymentButtonProps {
-  billingAddress?: Joanie.Address;
+  billingAddress?: Address;
   creditCard?: Nullable<Joanie.CreditCard['id']>;
   onSuccess: () => void;
 }

@@ -1,20 +1,14 @@
-import { MemoryRouter } from 'react-router-dom';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { IntlProvider } from 'react-intl';
 
 import { CourseListItem } from 'types/Joanie';
-import {
-  RichieContextFactory as mockRichieContextFactory,
-  UserFactory,
-} from 'utils/test/factories/richie';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { CourseListItemFactory } from 'utils/test/factories/joanie';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { CourseListItemFactory } from 'utils/test/factories/joanieLegacy';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { PER_PAGE } from 'settings';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
 import TeacherDashboardCourseList from '.';
 
 jest.mock('utils/context', () => ({
@@ -40,14 +34,9 @@ jest.mock('hooks/useIntersectionObserver', () => ({
 describe('components/TeacherDashboardCourseList', () => {
   const perPage = PER_PAGE.useCourseProductUnion;
   let nbApiCalls: number;
+  const joanieSessionData = setupJoanieSession();
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', [], { overwriteRoutes: true });
-    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [], { overwriteRoutes: true });
-    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [], { overwriteRoutes: true });
-    nbApiCalls = 3;
-  });
-  afterEach(() => {
-    fetchMock.restore();
+    nbApiCalls = joanieSessionData.nbSessionApiRequest;
   });
 
   it('should render', async () => {
@@ -72,24 +61,13 @@ describe('components/TeacherDashboardCourseList', () => {
       mockPaginatedResponse([productCooking, productDancing], 15, false),
     );
 
-    const user = UserFactory().one();
-    render(
-      <IntlProvider locale="en">
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <JoanieSessionProvider>
-            <MemoryRouter>
-              <TeacherDashboardCourseList titleTranslated="TeacherDashboardCourseList test title" />
-            </MemoryRouter>
-          </JoanieSessionProvider>
-        </QueryClientProvider>
-      </IntlProvider>,
-    );
+    render(<TeacherDashboardCourseList titleTranslated="TeacherDashboardCourseList test title" />);
     nbApiCalls += 1; // courses api call
     nbApiCalls += 1; // course-product-relations api call
 
     await expectNoSpinner('Loading courses...');
     expect(
-      screen.getByRole('heading', { name: /TeacherDashboardCourseList test title/ }),
+      await screen.findByRole('heading', { name: /TeacherDashboardCourseList test title/ }),
     ).toBeInTheDocument();
 
     const calledUrls = fetchMock.calls().map((call) => call[0]);
@@ -131,31 +109,21 @@ describe('components/TeacherDashboardCourseList', () => {
       },
     );
 
-    const user = UserFactory().one();
-    render(
-      <IntlProvider locale="en">
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <JoanieSessionProvider>
-            <MemoryRouter>
-              <TeacherDashboardCourseList titleTranslated="TeacherDashboardCourseList test title" />
-            </MemoryRouter>
-          </JoanieSessionProvider>
-        </QueryClientProvider>
-      </IntlProvider>,
-    );
+    render(<TeacherDashboardCourseList titleTranslated="TeacherDashboardCourseList test title" />);
     nbApiCalls += 1; // courses api call
     nbApiCalls += 1; // course-product-relations api call
+    await expectNoSpinner('Loading courses...');
 
     expect(await screen.getByRole('heading', { name: /TeacherDashboardCourseList test title/ }));
 
     const calledUrls = fetchMock.calls().map((call) => call[0]);
-    expect(calledUrls).toHaveLength(nbApiCalls);
     expect(calledUrls).toContain(
       `https://joanie.endpoint/api/v1.0/courses/?has_listed_course_runs=true&page=1&page_size=${perPage}`,
     );
     expect(calledUrls).toContain(
       `https://joanie.endpoint/api/v1.0/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
     );
+    expect(calledUrls).toHaveLength(nbApiCalls);
 
     expect(await screen.findByText('You have no courses yet.')).toBeInTheDocument();
   });

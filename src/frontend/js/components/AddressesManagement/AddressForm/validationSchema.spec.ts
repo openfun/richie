@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { act, renderHook } from '@testing-library/react';
 import { Maybe } from 'types/utils';
+import { CountryEnum } from 'api/joanie/gen';
 import validationSchema from './validationSchema';
 
 describe('validationSchema', () => {
@@ -11,7 +12,7 @@ describe('validationSchema', () => {
     const defaultValues = {
       address: faker.location.streetAddress(),
       city: faker.location.city(),
-      country: faker.location.countryCode(),
+      country: faker.location.countryCode() as CountryEnum,
       first_name: faker.person.firstName(),
       last_name: faker.person.lastName(),
       postcode: faker.location.zipCode(),
@@ -126,7 +127,7 @@ describe('validationSchema', () => {
       result.current.setValue('address', faker.location.streetAddress());
       result.current.setValue('city', faker.location.city());
       // set country value with an invalid country code
-      result.current.setValue('country', 'AA');
+      result.current.setValue('country', 'AA' as CountryEnum);
       result.current.setValue('first_name', faker.person.firstName());
       result.current.setValue('last_name', faker.person.lastName());
       result.current.setValue('postcode', faker.location.zipCode());
@@ -151,7 +152,7 @@ describe('validationSchema', () => {
 
     // - Set country value with a valid country code
     await act(async () => {
-      result.current.setValue('country', 'FR');
+      result.current.setValue('country', 'FR' as CountryEnum);
       result.current.trigger();
     });
 

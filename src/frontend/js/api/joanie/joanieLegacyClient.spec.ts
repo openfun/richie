@@ -1,7 +1,7 @@
 import fetchMock from 'fetch-mock';
 import { ResourcesQuery } from 'hooks/useResources';
 import { HttpStatusCode } from 'utils/errors/HttpError';
-import { buildApiUrl, getResponseBody } from './joanie';
+import { buildApiUrl, getResponseBody } from './joanieLegacyClient';
 
 describe('api/joanie', () => {
   it('getResponse should handle empty response body', async () => {

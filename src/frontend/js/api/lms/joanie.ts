@@ -1,5 +1,5 @@
 import { matchPath, PathMatch } from 'react-router-dom';
-import JoanieApi from 'api/joanie';
+import { JoanieLegacyClient as JoanieApi } from 'api/joanie';
 import { LMSBackend } from 'types/commonDataProps';
 import { APIBackend, APILms } from 'types/api';
 

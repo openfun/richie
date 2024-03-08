@@ -1,8 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { FormProvider, useForm } from 'react-hook-form';
+import { DefaultValues, FormProvider, useForm } from 'react-hook-form';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as Yup from 'yup';
-import countries from 'i18n-iso-countries';
 import { Checkbox } from '@openfun/cunningham-react';
 
 import { getLocalizedCunninghamErrorProp } from 'components/Form/utils';
@@ -10,7 +9,7 @@ import { messages as managementMessages } from 'components/AddressesManagement';
 import { messages as formMessages } from 'components/Form/messages';
 import { CountrySelectField } from 'components/Form/CountrySelectField';
 import Input from 'components/Form/Input';
-import { Address } from 'types/Joanie';
+import { Address, CountryEnum } from 'api/joanie/gen';
 
 const messages = defineMessages({
   isMainInputLabel: {
@@ -25,15 +24,15 @@ const messages = defineMessages({
 const validationSchema = Yup.object().shape({
   address: Yup.string().required(),
   city: Yup.string().required(),
-  country: Yup.string().oneOf(Object.keys(countries.getAlpha2Codes())).required(),
+  country: Yup.mixed<CountryEnum>().oneOf(Object.values(CountryEnum)).defined(),
   first_name: Yup.string().required(),
   last_name: Yup.string().required(),
   postcode: Yup.string().required(),
   title: Yup.string().required().min(2),
-  is_main: Yup.boolean().required(),
+  is_main: Yup.boolean(),
 });
 
-export type AddressFormValues = Omit<Address, 'id'>;
+export type AddressFormValues = Omit<Address, 'id'> & {};
 
 /**
  * Hook to implement a form to edit or create an Address.
@@ -43,16 +42,9 @@ export type AddressFormValues = Omit<Address, 'id'>;
 export const useDashboardAddressForm = (address?: Address) => {
   const intl = useIntl();
 
-  const defaultValues = {
-    title: '',
-    first_name: '',
-    last_name: '',
-    address: '',
-    postcode: '',
-    city: '',
-    country: '-',
+  const defaultValues: DefaultValues<AddressFormValues> = {
     is_main: true,
-  } as AddressFormValues;
+  };
 
   const form = useForm<AddressFormValues>({
     defaultValues: address || defaultValues,

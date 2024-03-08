@@ -11,7 +11,10 @@ import {
   UserFactory,
 } from 'utils/test/factories/richie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { CourseProductRelationFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import {
+  CourseProductRelationFactory,
+  OrganizationFactory,
+} from 'utils/test/factories/joanieLegacy';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { DashboardBreadcrumbsProvider } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';

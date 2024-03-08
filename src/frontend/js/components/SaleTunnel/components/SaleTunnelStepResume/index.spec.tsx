@@ -4,7 +4,7 @@ import {
   CourseLightFactory,
   CredentialOrderFactory,
   ProductFactory,
-} from 'utils/test/factories/joanie';
+} from 'utils/test/factories/joanieLegacy';
 import { SaleTunnelContext } from 'components/SaleTunnel/context';
 import { SaleTunnelStepResume } from '.';
 

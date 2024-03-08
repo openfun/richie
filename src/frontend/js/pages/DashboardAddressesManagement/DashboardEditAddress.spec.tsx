@@ -11,7 +11,6 @@ import {
 } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
@@ -20,6 +19,7 @@ import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqu
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { AddressFactory } from 'utils/test/factories/joanieGen';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -42,9 +42,10 @@ describe('<DashboardEditAddress/>', () => {
 
   it('updates an address', async () => {
     const address = AddressFactory().one();
-    const addressUpdated = AddressFactory().one();
-    // It must keep the same id.
-    addressUpdated.id = address.id;
+    const addressUpdated = AddressFactory({
+      // It must keep the same id.
+      id: address.id,
+    }).one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
     const updateUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
     fetchMock.put(updateUrl, HttpStatusCode.OK);

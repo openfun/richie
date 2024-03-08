@@ -7,7 +7,7 @@ import { PropsWithChildren } from 'react';
 import { PER_PAGE } from 'settings';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { ContractState } from 'types/Joanie';
-import { ContractFactory } from 'utils/test/factories/joanie';
+import { ContractFactory } from 'utils/test/factories/joanieLegacy';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import useHasContractToDownload from '.';

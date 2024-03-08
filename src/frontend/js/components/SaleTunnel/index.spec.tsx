@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CourseLightFactory, ProductFactory } from 'utils/test/factories/joanie';
+import { CourseLightFactory, ProductFactory } from 'utils/test/factories/joanieLegacy';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import SaleTunnel from '.';

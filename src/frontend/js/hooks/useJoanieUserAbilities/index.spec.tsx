@@ -4,7 +4,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { JoanieUserProfileFactory } from 'utils/test/factories/joanie';
+import { JoanieUserProfileFactory } from 'utils/test/factories/joanieLegacy';
 import { JoanieUserApiAbilityActions } from 'types/User';
 import { JoanieUserProfileActions } from 'utils/AbilitiesHelper/types';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';

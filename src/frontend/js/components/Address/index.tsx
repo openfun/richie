@@ -1,4 +1,4 @@
-import { Address } from 'types/Joanie';
+import { Address } from 'api/joanie/gen';
 
 export const AddressView = ({ address }: { address: Address }) => {
   return (

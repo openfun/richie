@@ -1,6 +1,6 @@
-import countries from 'i18n-iso-countries';
 import * as Yup from 'yup';
 import { ErrorKeys } from 'components/Form/ValidationErrors';
+import { CountryEnum } from 'api/joanie/gen';
 
 Yup.setLocale({
   mixed: {
@@ -19,7 +19,7 @@ Yup.setLocale({
 const schema = Yup.object().shape({
   address: Yup.string().required(),
   city: Yup.string().required(),
-  country: Yup.string().oneOf(Object.keys(countries.getAlpha2Codes())).required(),
+  country: Yup.mixed<CountryEnum>().oneOf(Object.values(CountryEnum)).defined(),
   first_name: Yup.string().required(),
   last_name: Yup.string().required(),
   postcode: Yup.string().required(),
