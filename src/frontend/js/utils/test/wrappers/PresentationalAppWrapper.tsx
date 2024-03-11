@@ -9,7 +9,7 @@ export const PresentationalAppWrapper = ({
   routerOptions,
 }: PropsWithChildren<{ intlOptions?: IntlWrapperProps; routerOptions?: RouterWrapperProps }>) => {
   return (
-    <IntlWrapper {...(intlOptions || { locale: 'en' })}>
+    <IntlWrapper {...intlOptions}>
       <CunninghamProvider>
         <RouterWrapper {...routerOptions}>{children}</RouterWrapper>
       </CunninghamProvider>

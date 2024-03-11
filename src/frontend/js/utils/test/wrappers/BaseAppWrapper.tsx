@@ -1,8 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { SessionProvider } from 'contexts/SessionContext';
-import { IntlWrapper } from './IntlWrapper';
-import { ReactQueryWrapper } from './ReactQueryWrapper';
 import { AppWrapperProps } from './types';
+import { ReactQueryAppWrapper } from './ReactQueryAppWrapper';
 
 export const BaseAppWrapper = ({
   children,
@@ -10,10 +9,8 @@ export const BaseAppWrapper = ({
   queryOptions,
 }: PropsWithChildren<AppWrapperProps>) => {
   return (
-    <IntlWrapper {...(intlOptions || { locale: 'en' })}>
-      <ReactQueryWrapper {...(queryOptions || {})}>
-        <SessionProvider>{children}</SessionProvider>
-      </ReactQueryWrapper>
-    </IntlWrapper>
+    <ReactQueryAppWrapper queryOptions={queryOptions} intlOptions={intlOptions}>
+      <SessionProvider>{children}</SessionProvider>
+    </ReactQueryAppWrapper>
   );
 };

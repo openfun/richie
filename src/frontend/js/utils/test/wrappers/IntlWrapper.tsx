@@ -1,7 +1,9 @@
-import { ComponentProps, PropsWithChildren } from 'react';
+import { ComponentProps } from 'react';
 import { IntlProvider, ReactIntlErrorCode } from 'react-intl';
 
-export interface IntlWrapperProps extends PropsWithChildren, ComponentProps<typeof IntlProvider> {}
+export interface IntlWrapperProps extends Omit<ComponentProps<typeof IntlProvider>, 'locale'> {
+  locale?: string;
+}
 
 export const IntlWrapper = ({ children, ...options }: IntlWrapperProps) => (
   <IntlProvider
