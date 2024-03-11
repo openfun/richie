@@ -32,12 +32,14 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
         login: `${APIConf.endpoint}/login`,
         register: `${APIConf.endpoint}/register`,
         logout: `${APIConf.endpoint}/logout`,
+        account: `${APIConf.endpoint}/api/user/v1/accounts/:username`,
       },
       enrollment: {
         get: `${APIConf.endpoint}/api/enrollment/v1/enrollment`,
         isEnrolled: `${APIConf.endpoint}/api/enrollment/v1/enrollment`,
         set: `${APIConf.endpoint}/api/enrollment/v1/enrollment`,
       },
+      setCsrfToken: `${APIConf.endpoint}/api/enrollment/v1/enrollment`,
     },
     options?.routes,
   );
@@ -68,6 +70,44 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
           mode: 'no-cors',
           credentials: 'include',
         });
+      },
+      account: {
+        get: (username: string) => {
+          return fetch(ROUTES.user.account.replace(':username', username), {
+            credentials: 'include',
+          }).then((response) => {
+            if (response.ok) return response.json();
+            if (response.status >= HttpStatusCode.INTERNAL_SERVER_ERROR) {
+              handle(new Error(`[GET - Account] > ${response.status} - ${response.statusText}`));
+            }
+            throw new HttpError(response.status, response.statusText);
+          });
+        },
+        update: async (username: string, data: Record<string, unknown>) => {
+          /*
+            edx_csrf_token cookie is set through a SET_COOKIE header send from a previous request
+            e.g: Getting user enrollment set the cookie
+          */
+          // Ensure CSRF is fresh
+          await fetch(ROUTES.setCsrfToken, { credentials: 'include' });
+          const csrfToken = Cookies.get(EDX_CSRF_TOKEN_COOKIE_NAME) || '';
+
+          return fetch(ROUTES.user.account.replace(':username', username), {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/merge-patch+json',
+              'X-CSRFTOKEN': csrfToken,
+            },
+            body: JSON.stringify(data),
+          }).then((response) => {
+            if (response.ok) return response.json();
+            if (response.status >= HttpStatusCode.INTERNAL_SERVER_ERROR) {
+              handle(new Error(`[PATCH - Account] > ${response.status} - ${response.statusText}`));
+            }
+            throw new HttpError(response.status, response.statusText);
+          });
+        },
       },
     },
     enrollment: {
