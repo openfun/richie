@@ -65,7 +65,11 @@ export const render: RenderFunction = (
       rerenderOptions?: Partial<Omit<AppWrapperProps, 'testingLibraryOptions'>>,
     ) => {
       return renderResult.rerender(
-        Wrapper === null ? element : <Wrapper {...rerenderOptions}>{rerenderElement}</Wrapper>,
+        Wrapper === null ? (
+          rerenderElement
+        ) : (
+          <Wrapper {...rerenderOptions}>{rerenderElement}</Wrapper>
+        ),
       );
     },
   };
