@@ -10,20 +10,10 @@ export interface Step<Keys extends PropertyKey = PropertyKey> {
   onExit?: Function;
 }
 
-interface InStep<Keys extends PropertyKey> extends Step<Keys> {
-  next: Keys;
-}
+type Steps<Keys extends PropertyKey> = Record<Keys, Step<Keys>>;
 
-interface LastStep extends Step {
-  next: null;
-}
-
-type Steps<Keys extends PropertyKey, LastKey extends Keys> = Record<Keys, Step<Keys>> &
-  Record<Exclude<Keys, LastKey>, InStep<Keys>> &
-  Record<LastKey, LastStep>;
-
-export interface Manifest<Keys extends PropertyKey, LastKey extends Keys = Keys> {
-  steps: Steps<Keys, LastKey>;
+export interface Manifest<Keys extends PropertyKey> {
+  steps: Steps<Keys>;
   start?: Keys;
 }
 
@@ -34,9 +24,7 @@ export interface Manifest<Keys extends PropertyKey, LastKey extends Keys = Keys>
  * @param {Manifest} manifest
  * @returns {Manifest.step} step
  */
-function findFirstStep<Keys extends PropertyKey, LastKey extends Keys>(
-  manifest: Manifest<Keys, LastKey>,
-): Keys {
+function findFirstStep<Keys extends PropertyKey>(manifest: Manifest<Keys>): Keys {
   const steps = Object.keys(manifest.steps) as Keys[];
   const nextSteps = Object.values<Step<Keys>>(manifest.steps).map(({ next }) => next);
 
@@ -52,12 +40,10 @@ function findFirstStep<Keys extends PropertyKey, LastKey extends Keys>(
  *
  * Process terminates when step is null
  */
-export const useStepManager = <Keys extends PropertyKey, LastKey extends Keys>(
-  manifest: Manifest<Keys, LastKey>,
-) => {
-  const firstStep = findFirstStep<Keys, LastKey>(manifest);
+export const useStepManager = <Keys extends PropertyKey>(manifest: Manifest<Keys>) => {
+  const firstStep = findFirstStep<Keys>(manifest);
   const [step, setStep] = useState<Nullable<Keys>>(manifest.start || firstStep);
-  const state = useMemo(() => (step ? manifest.steps[step] : null), [step]);
+  const currentStep = useMemo(() => (step ? manifest.steps[step] : null), [step]);
 
   const next = () => {
     if (step !== null) {
@@ -67,12 +53,12 @@ export const useStepManager = <Keys extends PropertyKey, LastKey extends Keys>(
   };
 
   useEffect(() => {
-    if (state?.onEnter) state.onEnter();
+    if (currentStep?.onEnter) currentStep.onEnter();
 
     return () => {
-      if (state?.onExit) state.onExit();
+      if (currentStep?.onExit) currentStep.onExit();
     };
-  }, [state]);
+  }, [currentStep]);
 
   const reset = () => {
     setStep(manifest.start || firstStep);
