@@ -7,8 +7,8 @@ import { Nullable } from 'types/utils';
 import { Icon } from 'components/Icon';
 import { Manifest, Step, useStepManager } from 'hooks/useStepManager';
 
-interface Props<Keys extends PropertyKey, LastKey extends Keys> {
-  manifest: Manifest<Keys, LastKey>;
+interface Props<Keys extends PropertyKey> {
+  manifest: Manifest<Keys>;
   step: Nullable<PropertyKey>;
 }
 
@@ -33,12 +33,9 @@ function getActiveStepIndex(steps: FlattenStep[], step: Nullable<PropertyKey>) {
  * // MARK When IE 11 supports will be dropped, we can use a `Map`
  * to define `manifest.steps` then remove this sort function
  */
-function sortSteps<Keys extends PropertyKey, LastKey extends Keys>(
-  firstStep: Keys,
-  manifest: Manifest<Keys, LastKey>,
-) {
+function sortSteps<Keys extends PropertyKey>(firstStep: Keys, manifest: Manifest<Keys>) {
   const steps: FlattenStep[] = [];
-  let step = firstStep;
+  let step: Nullable<Keys> = firstStep;
 
   while (step !== null) {
     steps.push([step, manifest.steps[step]]);
@@ -57,10 +54,7 @@ const messages = defineMessages({
   },
 });
 
-export const StepBreadcrumb = <Keys extends PropertyKey, LastKey extends Keys>({
-  step,
-  manifest,
-}: Props<Keys, LastKey>) => {
+export const StepBreadcrumb = <Keys extends PropertyKey>({ step, manifest }: Props<Keys>) => {
   const { firstStep } = useStepManager(manifest);
   const orderedSteps = sortSteps(firstStep, manifest);
   const activeIndex = getActiveStepIndex(orderedSteps, step);

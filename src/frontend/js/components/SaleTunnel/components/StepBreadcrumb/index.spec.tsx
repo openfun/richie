@@ -19,9 +19,8 @@ describe('StepBreadcrumb', () => {
   it('renders visually a minimal manifest', () => {
     // If manifest's steps does not have `label` and `icon` property,
     // only a breadcrumb with the step index is displayed.
-    type LastStep = 'step1';
-    type Steps = 'step0' | LastStep;
-    const manifest: Manifest<Steps, LastStep> = {
+    type Steps = 'step0' | 'step1';
+    const manifest: Manifest<Steps> = {
       start: 'step0',
       steps: {
         step0: {
@@ -78,9 +77,8 @@ describe('StepBreadcrumb', () => {
   it('renders visually a complete manifest', () => {
     // If manifest's steps has `label` and `icon` property,
     // this information was shown.
-    type LastStep = 'step1';
-    type Steps = 'step0' | LastStep;
-    const manifest: Manifest<Steps, LastStep> = {
+    type Steps = 'step0' | 'step1';
+    const manifest: Manifest<Steps> = {
       start: 'step0',
       steps: {
         step0: {
@@ -155,9 +153,8 @@ describe('StepBreadcrumb', () => {
   });
 
   it('sorts manifest steps to guarantee the display order of steps', () => {
-    type LastStep = 'step0';
-    type Steps = 'step1' | LastStep;
-    const manifest: Manifest<Steps, LastStep> = {
+    type Steps = 'step1' | 'step0';
+    const manifest: Manifest<Steps> = {
       start: 'step1',
       steps: {
         step0: {
@@ -189,9 +186,8 @@ describe('StepBreadcrumb', () => {
   });
 
   it('displays all active steps on mount if manifest does not start to the first step', () => {
-    type LastStep = 'step1';
-    type Steps = 'step0' | LastStep;
-    const manifest: Manifest<Steps, LastStep> = {
+    type Steps = 'step0' | 'step1';
+    const manifest: Manifest<Steps> = {
       start: 'step1',
       steps: {
         step0: {

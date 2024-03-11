@@ -3,9 +3,8 @@ import { Manifest, useStepManager } from '.';
 
 describe('useStepManager', () => {
   it('reads the manifest', () => {
-    type LastStep = 'step1';
-    type Steps = 'step0' | LastStep;
-    const manifest: Manifest<Steps, LastStep> = {
+    type Steps = 'step0' | 'step1';
+    const manifest: Manifest<Steps> = {
       start: 'step0',
       steps: {
         step0: {
@@ -35,9 +34,8 @@ describe('useStepManager', () => {
   });
 
   it('is able to reset the step process', () => {
-    type LastStep = 'step1';
-    type Steps = 'step0' | LastStep;
-    const manifest: Manifest<Steps, LastStep> = {
+    type Steps = 'step0' | 'step1';
+    const manifest: Manifest<Steps> = {
       start: 'step0',
       steps: {
         step0: {
@@ -63,9 +61,8 @@ describe('useStepManager', () => {
   });
 
   it('is able to find the first step through steps if manifest does not have a start property', () => {
-    type LastStep = 'finally';
-    type Steps = 'first' | 'then' | LastStep;
-    const manifest: Manifest<Steps, LastStep> = {
+    type Steps = 'first' | 'then' | 'finally';
+    const manifest: Manifest<Steps> = {
       steps: {
         then: {
           next: 'finally',
@@ -100,9 +97,8 @@ describe('useStepManager', () => {
   });
 
   it('triggers onEnter and onExit hooks on step transition', () => {
-    type LastStep = 'step1';
-    type Steps = 'step0' | LastStep;
-    const manifest: Manifest<Steps, LastStep> = {
+    type Steps = 'step0' | 'step1';
+    const manifest: Manifest<Steps> = {
       start: 'step0',
       steps: {
         step0: {

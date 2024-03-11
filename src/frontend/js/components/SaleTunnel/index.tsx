@@ -86,7 +86,7 @@ const SaleTunnel = ({
     productId: product.id,
   });
 
-  const manifest: Manifest<TunnelSteps, 'resume'> = {
+  const manifest: Manifest<TunnelSteps> = {
     start: 'validation',
     steps: {
       validation: {
