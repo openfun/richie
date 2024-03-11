@@ -1,9 +1,8 @@
 import { PropsWithChildren } from 'react';
 
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { IntlWrapper } from './IntlWrapper';
-import { ReactQueryWrapper } from './ReactQueryWrapper';
 import { AppWrapperProps } from './types';
+import { ReactQueryAppWrapper } from './ReactQueryAppWrapper';
 
 export const BaseJoanieAppWrapper = ({
   children,
@@ -11,10 +10,8 @@ export const BaseJoanieAppWrapper = ({
   queryOptions,
 }: PropsWithChildren<AppWrapperProps>) => {
   return (
-    <IntlWrapper {...(intlOptions || { locale: 'en' })}>
-      <ReactQueryWrapper {...(queryOptions || {})}>
-        <JoanieSessionProvider>{children}</JoanieSessionProvider>
-      </ReactQueryWrapper>
-    </IntlWrapper>
+    <ReactQueryAppWrapper queryOptions={queryOptions} intlOptions={intlOptions}>
+      <JoanieSessionProvider>{children}</JoanieSessionProvider>
+    </ReactQueryAppWrapper>
   );
 };
