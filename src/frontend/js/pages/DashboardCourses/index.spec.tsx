@@ -123,7 +123,7 @@ describe('<DashboardCourses/>', () => {
     enrollmentsDeferred.resolve({ results: [], next: null, previous: null, count: 0 });
 
     await expectNoSpinner('Loading orders and enrollments...');
-    expectBannerInfo('You have no enrollments nor orders yet.');
+    await expectBannerInfo('You have no enrollments nor orders yet.');
     expect(screen.queryByRole('button', { name: 'Load more' })).not.toBeInTheDocument();
   });
 
