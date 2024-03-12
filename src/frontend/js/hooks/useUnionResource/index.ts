@@ -101,7 +101,7 @@ const useUnionResource = <
     setError(undefined);
     setCursor(perPage);
     setIntegrityCount(0);
-    setForceUpdate(new Date().getTime());
+    setForceUpdate(Date.now());
   };
 
   // we manualy observe key invalidation to trigger new search
