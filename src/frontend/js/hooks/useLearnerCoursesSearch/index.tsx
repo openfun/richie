@@ -6,7 +6,7 @@ import { useOrdersEnrollments } from 'pages/DashboardCourses/useOrdersEnrollment
 
 const useLearnerCoursesSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [count, setCount] = useState<Maybe<number>>(0);
+  const [count, setCount] = useState<Maybe<number>>();
   const [orderAndEnrollmentList, setOrderAndEnrollmentList] = useState<
     (CredentialOrder | Enrollment)[]
   >([]);
@@ -42,11 +42,7 @@ const useLearnerCoursesSearch = () => {
 
     if (isNewSearchLoading || data.length > orderAndEnrollmentList?.length) {
       setOrderAndEnrollmentList(data as (CredentialOrder | Enrollment)[]);
-
-      // research counter should not be displayed when query is empty
-      if (query) {
-        setCount(currentCount);
-      }
+      setCount(currentCount);
     }
   }, [data.length, isLoading, isNewSearchLoading, query]);
 
@@ -64,6 +60,7 @@ const useLearnerCoursesSearch = () => {
   };
 
   return {
+    query,
     submitSearch,
     data: orderAndEnrollmentList,
     isNewSearchLoading,

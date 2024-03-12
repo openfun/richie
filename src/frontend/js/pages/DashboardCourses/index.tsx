@@ -32,8 +32,17 @@ const messages = defineMessages({
 
 export const DashboardCourses = () => {
   const intl = useIntl();
-  const { data, isLoadingMore, isNewSearchLoading, next, hasMore, submitSearch, count, error } =
-    useLearnerCoursesSearch();
+  const {
+    data,
+    query,
+    isLoadingMore,
+    isNewSearchLoading,
+    next,
+    hasMore,
+    submitSearch,
+    count,
+    error,
+  } = useLearnerCoursesSearch();
 
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   useIntersectionObserver({
@@ -48,9 +57,11 @@ export const DashboardCourses = () => {
         <Banner message={error} type={BannerType.ERROR} />
       ) : (
         <>
-          <SearchBar onSubmit={submitSearch} />
-          <SearchResultsCount nbResults={count} />
-          {data.length === 0 && (
+          <SearchBar.Container>
+            <SearchBar onSubmit={submitSearch} />
+            <SearchResultsCount nbResults={count} />
+          </SearchBar.Container>
+          {count === 0 && !query && (
             <div className="dashboard__courses__empty">
               <Banner message={intl.formatMessage(messages.emptyList)} />
             </div>
