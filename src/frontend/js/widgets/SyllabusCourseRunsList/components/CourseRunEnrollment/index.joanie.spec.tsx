@@ -1,7 +1,5 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
 
 import { faker } from '@faker-js/faker';
 import { Deferred } from 'utils/test/deferred';
@@ -9,12 +7,12 @@ import { EnrollmentFactory as JoanieEnrollment } from 'utils/test/factories/joan
 import {
   CourseRunFactory,
   RichieContextFactory as mockRichieContextFactory,
-  UserFactory,
 } from 'utils/test/factories/richie';
-import { SessionProvider } from 'contexts/SessionContext';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { Priority } from 'types';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
+import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import CourseRunEnrollment from './index';
 
 jest.mock('utils/errors/handle');
@@ -40,22 +38,15 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('<CourseRunEnrollment /> with joanie backend ', () => {
+  setupJoanieSession();
   const endpoint = 'https://joanie.endpoint';
 
   beforeEach(() => {
     jest.useFakeTimers();
     sessionStorage.clear();
-    fetchMock
-      .get('https://joanie.endpoint/api/v1.0/addresses/', [])
-      .get('https://joanie.endpoint/api/v1.0/credit-cards/', [])
-      .get('https://joanie.endpoint/api/v1.0/orders/', []);
   });
 
-  afterEach(() => {
-    fetchMock.restore();
-  });
   it('shows an "Enroll" button and allows the user to enroll', async () => {
-    const user = UserFactory().one();
     const courseRun = CourseRunFactory().one();
     courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
 
@@ -65,19 +56,8 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
       enrollmentDeferred.promise,
     );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
-
-    screen.getByRole('status', { name: 'Loading enrollment information...' });
+    render(<CourseRunEnrollment courseRun={courseRun} />);
+    await expectSpinner('Loading enrollment information...');
 
     await act(async () => {
       enrollmentDeferred.resolve({
@@ -85,6 +65,7 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
         results: [],
       });
     });
+    await expectNoSpinner('Loading enrollment information...');
 
     const button = await screen.findByRole('button', { name: 'Enroll now' });
     const enrollActionDeferred = new Deferred();
@@ -93,11 +74,11 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
     await act(async () => {
       enrollActionDeferred.resolve(true);
     });
-    await screen.findByText('Unenroll from this course');
+
+    expect(await screen.findByText('Unenroll from this course')).toBeInTheDocument();
   });
 
   it('shows an error message when enrollment get request failed', async () => {
-    const user = UserFactory().one();
     const courseRun = CourseRunFactory().one();
     const joanieEnrollmentId = faker.string.uuid();
     courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${joanieEnrollmentId}`;
@@ -107,25 +88,14 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
       HttpStatusCode.INTERNAL_SERVER_ERROR,
     );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(<CourseRunEnrollment courseRun={courseRun} />);
 
-    await screen.findByText('Enrollment fetching failed');
+    expect(await screen.findByText('Enrollment fetching failed')).toBeInTheDocument();
   });
 
   it('shows a link to the course if the user is already enrolled', async () => {
     // Joanie session requests
     let nbApiCalls = 3;
-    const user = UserFactory().one();
     const joanieEnrollment = JoanieEnrollment({ is_active: true }).one();
     const courseRun = CourseRunFactory().one();
     courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${joanieEnrollment.course_run.id}/`;
@@ -142,17 +112,7 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
     );
     nbApiCalls += 1;
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(<CourseRunEnrollment courseRun={courseRun} />);
 
     const $goToCourseButton = await screen.findByRole('link', { name: 'Go to course' });
     expect($goToCourseButton).toBeInTheDocument();
@@ -162,7 +122,6 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
   });
 
   it('shows an "Unenroll" text and allows the user to unenroll', async () => {
-    const user = UserFactory().one();
     const courseRun = CourseRunFactory().one();
     courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
 
@@ -172,19 +131,8 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
       enrollmentDeferred.promise,
     );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
-
-    screen.getByRole('status', { name: 'Loading enrollment information...' });
+    render(<CourseRunEnrollment courseRun={courseRun} />);
+    await expectSpinner('Loading enrollment information...');
 
     await act(async () => {
       enrollmentDeferred.resolve({
@@ -213,11 +161,10 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
       enrollActionDeferred.resolve(false);
     });
 
-    await screen.findByRole('button', { name: 'Enroll now' });
+    expect(await screen.findByRole('button', { name: 'Enroll now' })).toBeInTheDocument();
   });
 
   it('shows an error message when the enrollment fails', async () => {
-    const user = UserFactory().one();
     const courseRun = CourseRunFactory().one();
     courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
 
@@ -227,19 +174,9 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
       enrollmentDeferred.promise,
     );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(<CourseRunEnrollment courseRun={courseRun} />);
+    await expectSpinner('Loading enrollment information...');
 
-    screen.getByRole('status', { name: 'Loading enrollment information...' });
     await act(async () => {
       enrollmentDeferred.resolve({
         count: 0,
@@ -249,14 +186,11 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
 
     const button = await screen.findByRole('button', { name: 'Enroll now' });
     fetchMock.post(`${endpoint}/api/v1.0/enrollments/`, HttpStatusCode.INTERNAL_SERVER_ERROR);
-    await act(async () => {
-      fireEvent.click(button);
-    });
-    await screen.findByText('Your enrollment request failed.');
+    fireEvent.click(button);
+    expect(await screen.findByText('Your enrollment request failed.')).toBeInTheDocument();
   });
 
   it('shows an error message when the unenrollment fails', async () => {
-    const user = UserFactory().one();
     const courseRun = CourseRunFactory().one();
     courseRun.resource_link = `https://joanie.endpoint/api/v1.0/course-runs/${courseRun.id}`;
 
@@ -266,19 +200,8 @@ describe('<CourseRunEnrollment /> with joanie backend ', () => {
       enrollmentDeferred.promise,
     );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
-
-    screen.getByRole('status', { name: 'Loading enrollment information...' });
+    render(<CourseRunEnrollment courseRun={courseRun} />);
+    await expectSpinner('Loading enrollment information...');
 
     await act(async () => {
       enrollmentDeferred.resolve({

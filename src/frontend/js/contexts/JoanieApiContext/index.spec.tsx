@@ -8,7 +8,7 @@ jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     joanie_backend: {
-      endpoint: 'https://joanie.test',
+      endpoint: 'https://joanie.endpoint',
     },
   }).one(),
 }));

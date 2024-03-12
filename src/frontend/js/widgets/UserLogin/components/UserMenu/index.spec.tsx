@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { IntlProvider } from 'react-intl';
+import { IntlWrapper } from 'utils/test/wrappers/IntlWrapper';
+import { render } from 'utils/test/render';
 import { UserMenu } from '.';
 
 /* Enforce to use DesktopUserMenu by default */
@@ -44,9 +45,10 @@ describe('<UserMenu />', () => {
 
   it('renders a dropdown with links matching the data passed to the "link" prop', async () => {
     render(
-      <IntlProvider locale="en">
+      <IntlWrapper>
         <UserMenu {...props} />
-      </IntlProvider>,
+      </IntlWrapper>,
+      { wrapper: null },
     );
 
     const button = screen.getByLabelText('Access to your profile settings', {
@@ -69,9 +71,10 @@ describe('<UserMenu />', () => {
     mockMatches = false;
 
     render(
-      <IntlProvider locale="en">
+      <IntlWrapper>
         <UserMenu {...props} />
-      </IntlProvider>,
+      </IntlWrapper>,
+      { wrapper: null },
     );
 
     screen.getByRole('heading', { name: 'John Doe' });

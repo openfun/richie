@@ -1,10 +1,7 @@
-import { QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
-import { IntlProvider } from 'react-intl';
 import { act } from 'react-dom/test-utils';
-import { PropsWithChildren } from 'react';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
@@ -14,8 +11,8 @@ import context from 'utils/context';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
 import { HttpStatusCode } from 'utils/errors/HttpError';
-import { Nullable } from 'types/utils';
-import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
+import { render } from 'utils/test/render';
+import { BaseAppWrapper } from 'utils/test/wrappers/BaseAppWrapper';
 import UserLogin from '.';
 
 jest.mock('utils/errors/handle', () => ({
@@ -41,25 +38,15 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('<UserLogin />', () => {
-  const Wrapper = ({
-    children,
-    user = false,
-  }: PropsWithChildren & { user?: Nullable<User | boolean> }) => (
-    <QueryClientProvider client={createTestQueryClient({ user })}>
-      <IntlProvider locale="en">
-        <BaseSessionProvider>{children}</BaseSessionProvider>
-      </IntlProvider>
-    </QueryClientProvider>
-  );
-
   it('gets and renders the user name and a dropdown containing a logout link', async () => {
     const user: User = UserFactory({ full_name: undefined }).one();
 
-    render(
-      <Wrapper user={user}>
-        <UserLogin context={context} />
-      </Wrapper>,
-    );
+    render(<UserLogin context={context} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: {
+        client: createTestQueryClient({ user }),
+      },
+    });
 
     const button = await screen.findByLabelText(`Access to your profile settings`, {
       selector: 'button',
@@ -76,11 +63,12 @@ describe('<UserLogin />', () => {
     const loginDeferred = new Deferred();
     fetchMock.get('https://auth.test/api/user/v1/me', loginDeferred.promise);
 
-    render(
-      <Wrapper user={null}>
-        <UserLogin context={context} />
-      </Wrapper>,
-    );
+    render(<UserLogin context={context} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: {
+        client: createTestQueryClient({ user: null }),
+      },
+    });
 
     await act(async () => {
       loginDeferred.resolve(HttpStatusCode.UNAUTHORIZED);
@@ -99,11 +87,12 @@ describe('<UserLogin />', () => {
       account: { label: 'Account', action: 'https://auth.local.test/u/(username)' },
     };
 
-    render(
-      <Wrapper user={user}>
-        <UserLogin context={context} profileUrls={profileUrls} />
-      </Wrapper>,
-    );
+    render(<UserLogin context={context} profileUrls={profileUrls} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: {
+        client: createTestQueryClient({ user }),
+      },
+    });
 
     const button = await screen.findByLabelText(`Access to your profile settings`, {
       selector: 'button',

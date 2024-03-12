@@ -1,8 +1,5 @@
-import { getByText, render, screen, waitFor } from '@testing-library/react';
+import { getByText, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import type { PropsWithChildren } from 'react';
-import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
 import queryString from 'query-string';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
@@ -14,7 +11,6 @@ import {
   OrderGroupFullFactory,
   OrderGroupFactory,
 } from 'utils/test/factories/joanie';
-import JoanieApiProvider from 'contexts/JoanieApiContext';
 import {
   CourseRun,
   Enrollment,
@@ -24,16 +20,17 @@ import {
 } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { Deferred } from 'utils/test/deferred';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
 import CourseProductItem from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
-    joanie_backend: { endpoint: 'https://joanie.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
@@ -65,49 +62,29 @@ jest.mock('./components/CourseProductCourseRuns', () => ({
 }));
 
 describe('CourseProductItem', () => {
+  setupJoanieSession();
+
   const priceFormatter = (currency: string, price: number) =>
     new Intl.NumberFormat('en', {
       currency,
       style: 'currency',
     }).format(price);
 
-  beforeEach(() => {
-    // JoanieSessionProvider requests
-    fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
-  });
-
-  afterEach(() => {
-    fetchMock.restore();
-  });
-
-  const Wrapper = ({ withSession, children }: PropsWithChildren<{ withSession?: boolean }>) => (
-    <IntlProvider locale="en">
-      <JoanieApiProvider>
-        <QueryClientProvider client={createTestQueryClient({ user: withSession || null })}>
-          <JoanieSessionProvider>{children}</JoanieSessionProvider>
-        </QueryClientProvider>
-      </JoanieApiProvider>
-    </IntlProvider>
-  );
-
   it('should display a loader until product is loaded', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
     const productDeferred = new Deferred();
     fetchMock.get(
-      `https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`,
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
       productDeferred.promise,
     );
 
     render(
-      <Wrapper>
-        <CourseProductItem
-          course={CourseLightFactory({ code: '00000' }).one()}
-          productId={product.id}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        course={CourseLightFactory({ code: '00000' }).one()}
+        productId={product.id}
+      />,
+      { queryOptions: { client: createTestQueryClient({ user: null }) } },
     );
 
     // - A loader should be displayed while product information are fetching
@@ -119,15 +96,17 @@ describe('CourseProductItem', () => {
   it('renders product information for anonymous user', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
 
     render(
-      <Wrapper>
-        <CourseProductItem
-          course={CourseLightFactory({ code: '00000' }).one()}
-          productId={product.id}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        course={CourseLightFactory({ code: '00000' }).one()}
+        productId={product.id}
+      />,
+      { queryOptions: { client: createTestQueryClient({ user: null }) } },
     );
 
     await screen.findByRole('heading', { level: 3, name: product.title });
@@ -175,15 +154,17 @@ describe('CourseProductItem', () => {
       }).one(),
     }).one();
     const { product } = relation;
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
 
     render(
-      <Wrapper>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
+      { queryOptions: { client: createTestQueryClient({ user: null }) } },
     );
 
     // Wait for product information to be fetched
@@ -196,18 +177,17 @@ describe('CourseProductItem', () => {
   it('renders product informations in compact mode', async () => {
     const relation = CourseProductRelationFactory().one();
     fetchMock.get(
-      `https://joanie.test/api/v1.0/courses/00000/products/${relation.product.id}/`,
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${relation.product.id}/`,
       relation,
     );
 
     const { container } = render(
-      <Wrapper>
-        <CourseProductItem
-          course={CourseLightFactory({ code: '00000' }).one()}
-          productId={relation.product.id}
-          compact
-        />
-      </Wrapper>,
+      <CourseProductItem
+        course={CourseLightFactory({ code: '00000' }).one()}
+        productId={relation.product.id}
+        compact
+      />,
+      { queryOptions: { client: createTestQueryClient({ user: null }) } },
     );
 
     // In the header, we should display the product title, the product price
@@ -258,24 +238,25 @@ describe('CourseProductItem', () => {
       target_courses: product.target_courses,
     }).one();
 
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
     const orderQueryParameters = {
       product_id: order.product_id,
       course_code: order.course.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [order],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
     );
 
     // Wait for product information to be fetched
@@ -317,7 +298,7 @@ describe('CourseProductItem', () => {
     }).one();
 
     fetchMock.get(
-      `https://joanie.test/api/v1.0/courses/00000/products/${relation.product.id}/`,
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${relation.product.id}/`,
       relation,
     );
     const orderQueryParameters = {
@@ -326,18 +307,16 @@ describe('CourseProductItem', () => {
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [order],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={relation.product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-          compact
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={relation.product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+        compact
+      />,
     );
 
     // Wait for product information to be fetched
@@ -390,24 +369,25 @@ describe('CourseProductItem', () => {
       target_enrollments: [enrollment],
     }).one();
 
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
     const orderQueryParameters = {
       product_id: order.product_id,
       course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [order],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
     );
 
     // Wait for product information to be fetched
@@ -449,24 +429,25 @@ describe('CourseProductItem', () => {
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
     const orderQueryParameters = {
       product_id: order.product_id,
       course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [order],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
     );
 
     // Wait for product information to be fetched
@@ -497,24 +478,25 @@ describe('CourseProductItem', () => {
   it('renders sale tunnel button if user already has a canceled order', async () => {
     const relation = CourseProductRelationFactory().one();
     const { product } = relation;
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
     const orderQueryParameters = {
       product_id: product.id,
       course_code: '00000',
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
     );
 
     // Wait for product information to be fetched
@@ -551,24 +533,25 @@ describe('CourseProductItem', () => {
       target_courses: product.target_courses,
       state: OrderState.SUBMITTED,
     }).one();
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
     const orderQueryParameters = {
       product_id: order.product_id,
       course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [order],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
     );
 
     // Wait for product information to be fetched
@@ -620,7 +603,10 @@ describe('CourseProductItem', () => {
         course: CourseLightFactory({ code: '00000' }).one(),
         state: orderState,
       }).one();
-      fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+      fetchMock.get(
+        `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+        relation,
+      );
       const orderQueryParameters = {
         product_id: order.product_id,
         course_code: order.course.code,
@@ -628,17 +614,15 @@ describe('CourseProductItem', () => {
       };
 
       fetchMock.get(
-        `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
         [order],
       );
 
       render(
-        <Wrapper withSession>
-          <CourseProductItem
-            productId={product.id}
-            course={CourseLightFactory({ code: '00000' }).one()}
-          />
-        </Wrapper>,
+        <CourseProductItem
+          productId={product.id}
+          course={CourseLightFactory({ code: '00000' }).one()}
+        />,
       );
 
       // Wait for product information to be fetched
@@ -668,7 +652,10 @@ describe('CourseProductItem', () => {
       course: CourseLightFactory({ code: '00000' }).one(),
       state: OrderState.VALIDATED,
     }).one();
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
     const orderQueryParameters = {
       product_id: order.product_id,
       course_code: order.course.code,
@@ -676,17 +663,15 @@ describe('CourseProductItem', () => {
     };
 
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [order],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
     );
 
     // Wait for product information to be fetched
@@ -706,7 +691,7 @@ describe('CourseProductItem', () => {
       state: OrderState.SUBMITTED,
     }).one();
     fetchMock.get(
-      `https://joanie.test/api/v1.0/courses/00000/products/${relation.product.id}/`,
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${relation.product.id}/`,
       relation,
     );
     const orderQueryParameters = {
@@ -715,18 +700,16 @@ describe('CourseProductItem', () => {
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [order],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={relation.product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-          compact={true}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={relation.product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+        compact={true}
+      />,
     );
 
     // Wait for product information to be fetched
@@ -760,18 +743,17 @@ describe('CourseProductItem', () => {
     const { product } = CourseProductRelationFactory().one();
 
     fetchMock.get(
-      `https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`,
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
       HttpStatusCode.NOT_FOUND,
       {},
     );
 
     render(
-      <Wrapper>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
+      { queryOptions: { client: createTestQueryClient({ user: null }) } },
     );
 
     // - As product fetching has failed, an error message should be displayed
@@ -789,24 +771,25 @@ describe('CourseProductItem', () => {
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
     const orderQueryParameters = {
       product_id: order.product_id,
       course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [order],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
     );
 
     // wait for component to be fully loaded
@@ -827,24 +810,25 @@ describe('CourseProductItem', () => {
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
     const orderQueryParameters = {
       product_id: order.product_id,
       course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [order],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
     );
 
     // wait for component to be fully loaded
@@ -866,24 +850,25 @@ describe('CourseProductItem', () => {
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/00000/products/${product.id}/`, relation);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
     const orderQueryParameters = {
       product_id: order.product_id,
       course_code: order.course?.code,
       state: ACTIVE_ORDER_STATES,
     };
     fetchMock.get(
-      `https://joanie.test/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [order],
     );
 
     render(
-      <Wrapper withSession>
-        <CourseProductItem
-          productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
-        />
-      </Wrapper>,
+      <CourseProductItem
+        productId={product.id}
+        course={CourseLightFactory({ code: '00000' }).one()}
+      />,
     );
 
     // wait for component to be fully loaded

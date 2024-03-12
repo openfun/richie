@@ -1,7 +1,5 @@
 import fetchMock from 'fetch-mock';
-import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { act, render, renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import {
   RichieContextFactory as mockRichieContextFactory,
@@ -11,7 +9,9 @@ import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS, RICHIE_USER_TOKEN } from 'settings';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { HttpStatusCode } from 'utils/errors/HttpError';
-import JoanieSessionProvider from './JoanieSessionProvider';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { useSession } from '.';
 
 jest.mock('utils/errors/handle');
@@ -19,7 +19,7 @@ jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
-    joanie_backend: { endpoint: 'https://joanie.endpoint.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 jest.mock('utils/indirection/window', () => ({
@@ -30,23 +30,10 @@ jest.mock('utils/indirection/window', () => ({
 
 // - Joanie Session Provider test suite
 describe('JoanieSessionProvider', () => {
-  const Wrapper = ({ children }: PropsWithChildren) => (
-    <IntlProvider locale="en">
-      <QueryClientProvider client={createTestQueryClient({ persister: true })}>
-        <JoanieSessionProvider>{children}</JoanieSessionProvider>
-      </QueryClientProvider>
-    </IntlProvider>
-  );
-
+  setupJoanieSession();
   beforeEach(() => {
-    fetchMock.restore();
     jest.useFakeTimers();
     sessionStorage.clear();
-
-    fetchMock
-      .get('https://joanie.endpoint.test/api/v1.0/addresses/', [])
-      .get('https://joanie.endpoint.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.endpoint.test/api/v1.0/orders/', []);
   });
 
   afterEach(() => {
@@ -59,9 +46,13 @@ describe('JoanieSessionProvider', () => {
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', user);
 
-    await act(async () => {
-      render(<Wrapper />);
-    });
+    render(
+      <BaseJoanieAppWrapper
+        queryOptions={{ client: createTestQueryClient({ persister: true }) }}
+      />,
+      { wrapper: null },
+    );
+
     await waitFor(async () => {
       expect(fetchMock.lastUrl()).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
     });
@@ -74,9 +65,12 @@ describe('JoanieSessionProvider', () => {
     sessionStorage.setItem(RICHIE_USER_TOKEN, 'richie');
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', HttpStatusCode.FORBIDDEN);
 
-    await act(async () => {
-      render(<Wrapper />);
-    });
+    render(
+      <BaseJoanieAppWrapper
+        queryOptions={{ client: createTestQueryClient({ persister: true }) }}
+      />,
+      { wrapper: null },
+    );
     await waitFor(async () => {
       expect(fetchMock.lastUrl()).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
     });
@@ -89,9 +83,12 @@ describe('JoanieSessionProvider', () => {
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', deferredUser.promise);
 
-    await act(async () => {
-      render(<Wrapper />);
-    });
+    render(
+      <BaseJoanieAppWrapper
+        queryOptions={{ client: createTestQueryClient({ persister: true }) }}
+      />,
+      { wrapper: null },
+    );
 
     await act(async () => deferredUser.resolve(user));
 
@@ -99,9 +96,9 @@ describe('JoanieSessionProvider', () => {
       const calls = fetchMock.calls();
       expect(calls).toHaveLength(4);
       expect(calls[0][0]).toEqual('https://auth.endpoint.test/api/v1.0/user/me');
-      expect(calls[1][0]).toEqual('https://joanie.endpoint.test/api/v1.0/addresses/');
-      expect(calls[2][0]).toEqual('https://joanie.endpoint.test/api/v1.0/credit-cards/');
-      expect(calls[3][0]).toEqual('https://joanie.endpoint.test/api/v1.0/orders/');
+      expect(calls[1][0]).toEqual('https://joanie.endpoint/api/v1.0/addresses/');
+      expect(calls[2][0]).toEqual('https://joanie.endpoint/api/v1.0/credit-cards/');
+      expect(calls[3][0]).toEqual('https://joanie.endpoint/api/v1.0/orders/');
     });
   });
 
@@ -110,10 +107,12 @@ describe('JoanieSessionProvider', () => {
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', deferredUser.promise);
 
-    await act(async () => {
-      render(<Wrapper />);
-    });
-
+    render(
+      <BaseJoanieAppWrapper
+        queryOptions={{ client: createTestQueryClient({ persister: true }) }}
+      />,
+      { wrapper: null },
+    );
     await act(async () => deferredUser.resolve(null));
 
     await waitFor(async () =>
@@ -130,7 +129,11 @@ describe('JoanieSessionProvider', () => {
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', userDeferred.promise);
     const { result, rerender } = renderHook(useSession, {
-      wrapper: Wrapper,
+      wrapper: ({ children }: PropsWithChildren) => (
+        <BaseJoanieAppWrapper queryOptions={{ client: createTestQueryClient({ persister: true }) }}>
+          {children}
+        </BaseJoanieAppWrapper>
+      ),
     });
 
     await act(async () => {
@@ -162,7 +165,11 @@ describe('JoanieSessionProvider', () => {
 
     fetchMock.get('https://auth.endpoint.test/api/v1.0/user/me', userDeferred.promise);
     const { result, rerender } = renderHook(useSession, {
-      wrapper: Wrapper,
+      wrapper: ({ children }: PropsWithChildren) => (
+        <BaseJoanieAppWrapper queryOptions={{ client: createTestQueryClient({ persister: true }) }}>
+          {children}
+        </BaseJoanieAppWrapper>
+      ),
     });
 
     await act(async () => {

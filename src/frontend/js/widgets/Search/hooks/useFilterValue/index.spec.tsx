@@ -24,8 +24,6 @@ describe('widgets/Search/hooks/useFilterValue', () => {
       <HistoryContext.Provider value={history}>{children}</HistoryContext.Provider>
     );
 
-  beforeEach(jest.resetAllMocks);
-
   it('returns the active [false] status of the filter value and a function to toggle it', () => {
     const props: [FacetedFilterDefinition, FilterValue] = [
       // filter: FacetedFilterDefinition

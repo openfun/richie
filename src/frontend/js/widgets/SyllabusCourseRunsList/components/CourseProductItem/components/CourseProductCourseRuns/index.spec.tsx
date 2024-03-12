@@ -1,9 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import type { PropsWithChildren } from 'react';
 import { IntlProvider, createIntl } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   CourseLightFactory,
@@ -12,20 +11,21 @@ import {
   CredentialOrderFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
-import JoanieApiProvider from 'contexts/JoanieApiContext';
 import type { CourseLight, CourseRun, Enrollment } from 'types/Joanie';
 import { Deferred } from 'utils/test/deferred';
 import { CourseStateTextEnum, Priority } from 'types';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { IntlHelper } from 'utils/IntlHelper';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { render } from 'utils/test/render';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { CourseRunList, EnrollableCourseRunList, EnrolledCourseRun } from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
-    joanie_backend: { endpoint: 'https://joanie.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
@@ -46,11 +46,7 @@ describe('CourseProductCourseRuns', () => {
     );
 
     it('renders a warning message when no course runs are provided', () => {
-      render(
-        <Wrapper>
-          <CourseRunList courseRuns={[]} />
-        </Wrapper>,
-      );
+      render(<CourseRunList courseRuns={[]} />, { wrapper: Wrapper });
 
       expect(screen.getByText('No session available for this course.'));
     });
@@ -58,11 +54,7 @@ describe('CourseProductCourseRuns', () => {
     it('renders a list of course runs', () => {
       const courseRuns: CourseRun[] = CourseRunFactory().many(2);
 
-      const { container } = render(
-        <Wrapper>
-          <CourseRunList courseRuns={courseRuns} />
-        </Wrapper>,
-      );
+      const { container } = render(<CourseRunList courseRuns={courseRuns} />, { wrapper: Wrapper });
 
       // It should render all course runs provided
       expect(screen.getAllByRole('listitem')).toHaveLength(2);
@@ -118,23 +110,16 @@ describe('CourseProductCourseRuns', () => {
   });
 
   describe('EnrollableCourseRunList', () => {
-    const Wrapper = ({ children }: PropsWithChildren) => (
-      <IntlProvider locale="en">
-        <QueryClientProvider client={createTestQueryClient()}>
-          <JoanieApiProvider>{children}</JoanieApiProvider>
-        </QueryClientProvider>
-      </IntlProvider>
-    );
+    setupJoanieSession();
 
     it('renders a warning message when no course runs are provided', () => {
       const order = CredentialOrderFactory().one();
       const product = ProductFactory().one();
 
-      render(
-        <Wrapper>
-          <EnrollableCourseRunList courseRuns={[]} order={order} product={product} />
-        </Wrapper>,
-      );
+      fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
+      render(<EnrollableCourseRunList courseRuns={[]} order={order} product={product} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
       expect(screen.getByText('No session available for this course.'));
     });
@@ -146,11 +131,10 @@ describe('CourseProductCourseRuns', () => {
         contract_definition: undefined,
       }).one();
 
-      render(
-        <Wrapper>
-          <EnrollableCourseRunList courseRuns={courseRuns} order={order} product={product} />
-        </Wrapper>,
-      );
+      fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
+      render(<EnrollableCourseRunList courseRuns={courseRuns} order={order} product={product} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
       // the list should contain only the course run items, without the call to action button
       expect(screen.getAllByRole('listitem')).toHaveLength(2);
@@ -228,7 +212,7 @@ describe('CourseProductCourseRuns', () => {
       // - User clicks to enroll
       fetchMock.resetHistory();
       const enrollmentDeferred = new Deferred();
-      fetchMock.post('https://joanie.test/api/v1.0/enrollments/', enrollmentDeferred.promise);
+      fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', enrollmentDeferred.promise);
 
       await act(async () => {
         fireEvent.click($button);
@@ -241,10 +225,12 @@ describe('CourseProductCourseRuns', () => {
         enrollmentDeferred.resolve(HttpStatusCode.OK);
       });
 
-      const calls = fetchMock.calls();
-      expect(calls).toHaveLength(1);
+      const calledUrls = fetchMock.calls().map((call) => call[0]);
+      let nbApiCalls = 1; // post enrollments
+      nbApiCalls += 1; // refetch enrollments
+      expect(calledUrls).toHaveLength(nbApiCalls);
       // A request to create the enrollment should have been executed
-      expect(calls[0][0]).toBe('https://joanie.test/api/v1.0/enrollments/');
+      expect(calledUrls[0]).toBe('https://joanie.endpoint/api/v1.0/enrollments/');
       expect(JSON.parse(fetchMock.calls()[0][1]!.body as string)).toEqual({
         is_active: true,
         course_run_id: courseRuns[0].id,
@@ -258,13 +244,12 @@ describe('CourseProductCourseRuns', () => {
       const order = CredentialOrderFactory().one();
       const product = ProductFactory().one();
       product.contract_definition = undefined;
-      fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/`, HttpStatusCode.OK);
+      fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.code}/`, HttpStatusCode.OK);
+      fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
 
-      render(
-        <Wrapper>
-          <EnrollableCourseRunList courseRuns={courseRuns} order={order} product={product} />
-        </Wrapper>,
-      );
+      render(<EnrollableCourseRunList courseRuns={courseRuns} order={order} product={product} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
       // the list should contain only the course run items, without the call to action button
       expect(screen.getAllByRole('listitem')).toHaveLength(2);
@@ -333,7 +318,7 @@ describe('CourseProductCourseRuns', () => {
       // - User clicks to enroll
       fetchMock.resetHistory();
       const enrollmentDeferred = new Deferred();
-      fetchMock.post('https://joanie.test/api/v1.0/enrollments/', enrollmentDeferred.promise);
+      fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', enrollmentDeferred.promise);
 
       await act(async () => {
         fireEvent.click($button);
@@ -374,11 +359,10 @@ describe('CourseProductCourseRuns', () => {
       product.contract_definition = undefined;
       const order = CredentialOrderFactory().one();
 
-      render(
-        <Wrapper>
-          <EnrollableCourseRunList courseRuns={[courseRun]} order={order} product={product} />
-        </Wrapper>,
-      );
+      fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
+      render(<EnrollableCourseRunList courseRuns={[courseRun]} order={order} product={product} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
       // the list should contain only the course run items, without the call to action button
       expect(screen.getAllByRole('listitem')).toHaveLength(1);
@@ -413,7 +397,7 @@ describe('CourseProductCourseRuns', () => {
       // it should be enabled already to allow early user feedback
       expect($button.disabled).toBe(false);
 
-      fetchMock.post('https://joanie.test/api/v1.0/enrollments/', []);
+      fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', []);
       await act(async () => {
         // - Select the first course run
         const $radio = screen.getByRole('radio', {
@@ -457,11 +441,10 @@ describe('CourseProductCourseRuns', () => {
       const product = ProductFactory().one();
       const order = CredentialOrderFactory().one();
 
-      render(
-        <Wrapper>
-          <EnrollableCourseRunList courseRuns={[courseRun]} order={order} product={product} />
-        </Wrapper>,
-      );
+      fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
+      render(<EnrollableCourseRunList courseRuns={[courseRun]} order={order} product={product} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
       // the list should contain only the course run items, without the call to action button
       expect(screen.getAllByRole('listitem')).toHaveLength(1);
@@ -502,22 +485,14 @@ describe('CourseProductCourseRuns', () => {
   });
 
   describe('EnrolledCourseRun', () => {
-    const Wrapper = ({ children }: PropsWithChildren<{}>) => (
-      <IntlProvider locale="en">
-        <QueryClientProvider client={createTestQueryClient()}>
-          <JoanieApiProvider>{children}</JoanieApiProvider>
-        </QueryClientProvider>
-      </IntlProvider>
-    );
-
+    setupJoanieSession();
     it('renders enrollment information', () => {
       const enrollment: Enrollment = EnrollmentFactory().one();
 
-      render(
-        <Wrapper>
-          <EnrolledCourseRun enrollment={enrollment} />
-        </Wrapper>,
-      );
+      fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
+      render(<EnrolledCourseRun enrollment={enrollment} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
       // - It should render course dates,
       const $startDate = screen.getByTestId(`enrollment-${enrollment.id}-start-date`);
@@ -560,11 +535,10 @@ describe('CourseProductCourseRuns', () => {
         },
       };
 
-      render(
-        <Wrapper>
-          <EnrolledCourseRun enrollment={newEnrollment} />
-        </Wrapper>,
-      );
+      fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
+      render(<EnrolledCourseRun enrollment={newEnrollment} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
       await screen.getByText('You are enrolled');
       await screen.getByText('The course starts in 2 months');

@@ -1,6 +1,8 @@
-import { createMemoryRouter, RouteObject, RouterProvider } from 'react-router-dom';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { RouteObject } from 'react-router-dom';
+import { act, fireEvent, screen } from '@testing-library/react';
 import { location } from 'utils/indirection/window';
+import { render } from 'utils/test/render';
+import { RouterWrapper } from 'utils/test/wrappers/RouterWrapper';
 import { RouterButton } from '.';
 
 jest.mock('utils/indirection/window', () => ({
@@ -27,7 +29,7 @@ describe('<RouterButton/>', () => {
       },
     ];
 
-    render(<RouterProvider router={createMemoryRouter(routes)} />);
+    render(<RouterWrapper routes={routes} />, { wrapper: null });
     screen.getByText('Root');
 
     const button = screen.getByRole('link', { name: 'Go to other' });
@@ -39,19 +41,15 @@ describe('<RouterButton/>', () => {
     screen.getByText('Other');
   });
   it('natively navigates', async () => {
-    const routes: RouteObject[] = [
+    render(
+      <div>
+        Root
+        <RouterButton href="https://fun-mooc.fr">Go to other</RouterButton>
+      </div>,
       {
-        path: '/',
-        element: (
-          <div>
-            Root
-            <RouterButton href="https://fun-mooc.fr">Go to other</RouterButton>
-          </div>
-        ),
+        wrapper: RouterWrapper,
       },
-    ];
-
-    render(<RouterProvider router={createMemoryRouter(routes)} />);
+    );
     screen.getByText('Root');
 
     const button = screen.getByRole('link', { name: 'Go to other' });

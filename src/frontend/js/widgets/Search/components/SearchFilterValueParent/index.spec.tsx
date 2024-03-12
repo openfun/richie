@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import queryString from 'query-string';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -6,6 +6,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { History, HistoryContext } from 'hooks/useHistory';
 import { APIListRequestParams } from 'types/api';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { render } from 'utils/test/render';
 import { fetchList } from '../../utils/getResourceList';
 import { RequestStatus } from '../../types/api';
 
@@ -30,10 +31,6 @@ describe('<SearchFilterValueParent />', () => {
     historyPushState,
     historyReplaceState,
   ];
-
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
 
   it('renders the parent filter value and a button to show the children', () => {
     const { getByLabelText, queryByLabelText } = render(
@@ -60,6 +57,7 @@ describe('<SearchFilterValueParent />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     getByLabelText((content) => content.startsWith('Literature'));
@@ -122,13 +120,14 @@ describe('<SearchFilterValueParent />', () => {
     );
     const { getByLabelText, queryByLabelText, rerender } = render(
       getElement({ limit: '999', offset: '0', subjects: [] }),
+      { wrapper: null },
     );
 
     // Children filters are not shown
     getByLabelText((content) => content.startsWith('Literature'));
     expect(queryByLabelText('Hide additional filters for Literature')).toEqual(null);
-    queryByLabelText((content) => content.startsWith('Classical Literature'));
-    queryByLabelText((content) => content.startsWith('Modern Literature'));
+    expect(queryByLabelText((content) => content.startsWith('Classical Literature'))).toEqual(null);
+    expect(queryByLabelText((content) => content.startsWith('Modern Literature'))).toEqual(null);
 
     // The params are updated, now include a child filter of Literature
     rerender(getElement({ limit: '999', offset: '0', subjects: ['L-000400050004'] }));
@@ -194,6 +193,7 @@ describe('<SearchFilterValueParent />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     getByLabelText((content) => content.startsWith('Literature'));
@@ -268,6 +268,7 @@ describe('<SearchFilterValueParent />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     // The filter value is displayed with its facet count
@@ -303,6 +304,7 @@ describe('<SearchFilterValueParent />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     // The filter shows its active state
@@ -342,6 +344,7 @@ describe('<SearchFilterValueParent />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     const checkbox = getByLabelText((content) => content.startsWith('Human name'));
@@ -375,6 +378,7 @@ describe('<SearchFilterValueParent />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     fireEvent.click(getByLabelText((content) => content.startsWith('Human name')));
@@ -422,6 +426,7 @@ describe('<SearchFilterValueParent />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     fireEvent.click(getByLabelText((content) => content.startsWith('Human name')));

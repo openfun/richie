@@ -1,7 +1,6 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { faker } from '@faker-js/faker';
 import fetchMock from 'fetch-mock';
-import { act, render, renderHook, screen, waitFor } from '@testing-library/react';
+import { act, renderHook, screen, waitFor } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import {
   RichieContextFactory as mockRichieContextFactory,
@@ -12,7 +11,8 @@ import { REACT_QUERY_SETTINGS } from 'settings';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
 import { HttpStatusCode } from 'utils/errors/HttpError';
-import BaseSessionProvider from './BaseSessionProvider';
+import { render } from 'utils/test/render';
+import { BaseAppWrapper } from 'utils/test/wrappers/BaseAppWrapper';
 import { useSession } from '.';
 
 jest.mock('utils/context', () => ({
@@ -23,7 +23,7 @@ jest.mock('utils/context', () => ({
       backend: 'openedx-hawthorn',
     },
     joanie_backend: {
-      endpoint: 'https://joanie.test',
+      endpoint: 'https://joanie.endpoint',
     },
   }).one(),
 }));
@@ -35,18 +35,9 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('SessionProvider', () => {
-  const wrapper =
-    (client?: QueryClient) =>
-    ({ children }: PropsWithChildren) => (
-      <QueryClientProvider client={client ?? createTestQueryClient({ persister: true })}>
-        <BaseSessionProvider>{children}</BaseSessionProvider>
-      </QueryClientProvider>
-    );
-
   beforeEach(() => {
     jest.useFakeTimers();
     jest.resetModules();
-    fetchMock.restore();
     sessionStorage.clear();
   });
 
@@ -69,7 +60,7 @@ describe('SessionProvider', () => {
     }));
     const { SessionProvider: Provider } = require('.');
 
-    render(<Provider />);
+    render(<Provider />, { wrapper: null });
 
     await screen.findByText('BaseSessionProvider');
   });
@@ -88,7 +79,7 @@ describe('SessionProvider', () => {
     }));
     const { SessionProvider: Provider } = require('.');
 
-    render(<Provider />);
+    render(<Provider />, { wrapper: null });
 
     await screen.findByText('JoanieSessionProvider');
   });
@@ -100,7 +91,11 @@ describe('SessionProvider', () => {
       fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
 
       const { result } = renderHook(() => useSession(), {
-        wrapper: wrapper(),
+        wrapper: ({ children }: PropsWithChildren) => (
+          <BaseAppWrapper queryOptions={{ client: createTestQueryClient({ persister: true }) }}>
+            {children}
+          </BaseAppWrapper>
+        ),
       });
 
       await act(async () => {
@@ -127,7 +122,13 @@ describe('SessionProvider', () => {
       const username = faker.internet.userName();
       const userDeferred = new Deferred();
       fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
-      const { result } = renderHook(useSession, { wrapper: wrapper() });
+      const { result } = renderHook(useSession, {
+        wrapper: ({ children }: PropsWithChildren) => (
+          <BaseAppWrapper queryOptions={{ client: createTestQueryClient({ persister: true }) }}>
+            {children}
+          </BaseAppWrapper>
+        ),
+      });
 
       await act(async () => {
         userDeferred.resolve({ username });
@@ -150,7 +151,13 @@ describe('SessionProvider', () => {
 
       fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
       fetchMock.get('https://endpoint.test/logout', HttpStatusCode.OK);
-      const { result } = renderHook(useSession, { wrapper: wrapper() });
+      const { result } = renderHook(useSession, {
+        wrapper: ({ children }: PropsWithChildren) => (
+          <BaseAppWrapper queryOptions={{ client: createTestQueryClient({ persister: true }) }}>
+            {children}
+          </BaseAppWrapper>
+        ),
+      });
 
       await act(async () => {
         userDeferred.resolve({ username });
@@ -178,7 +185,11 @@ describe('SessionProvider', () => {
       fetchMock.get('https://endpoint.test/api/user/v1/me', HttpStatusCode.OK);
 
       const { result } = renderHook(useSession, {
-        wrapper: wrapper(createTestQueryClient({ user })),
+        wrapper: ({ children }: PropsWithChildren) => (
+          <BaseAppWrapper queryOptions={{ client: createTestQueryClient({ user }) }}>
+            {children}
+          </BaseAppWrapper>
+        ),
       });
 
       expect(result.current.user).toStrictEqual(user);
@@ -190,7 +201,13 @@ describe('SessionProvider', () => {
       const userDeferred = new Deferred();
 
       fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
-      const { result, rerender } = renderHook(useSession, { wrapper: wrapper() });
+      const { result, rerender } = renderHook(useSession, {
+        wrapper: ({ children }: PropsWithChildren) => (
+          <BaseAppWrapper queryOptions={{ client: createTestQueryClient({ persister: true }) }}>
+            {children}
+          </BaseAppWrapper>
+        ),
+      });
 
       await act(async () => {
         userDeferred.resolve(user);
@@ -225,7 +242,11 @@ describe('SessionProvider', () => {
 
       fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
       const { result, rerender } = renderHook(useSession, {
-        wrapper: wrapper(),
+        wrapper: ({ children }: PropsWithChildren) => (
+          <BaseAppWrapper queryOptions={{ client: createTestQueryClient({ persister: true }) }}>
+            {children}
+          </BaseAppWrapper>
+        ),
       });
 
       await act(async () => {

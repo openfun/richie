@@ -1,8 +1,9 @@
 import { faker } from '@faker-js/faker';
-import { screen, getByText, render } from '@testing-library/react';
+import { screen, getByText } from '@testing-library/react';
 import { CredentialOrderFactory, ProductFactory } from 'utils/test/factories/joanie';
 import type { CourseRun, CredentialOrder } from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
+import { render } from 'utils/test/render';
 import CourseRunItem from '.';
 
 jest.mock('../CourseProductCourseRuns', () => ({
@@ -21,7 +22,9 @@ describe('CourseRunItem', () => {
 
     const targetCourse = order.target_courses[0];
 
-    render(<CourseRunItem targetCourse={targetCourse} order={order} product={product} />);
+    render(<CourseRunItem targetCourse={targetCourse} order={order} product={product} />, {
+      wrapper: null,
+    });
 
     // - It should render CourseRunList component
     const $item = screen.getByTestId(`course-item-${targetCourse.code}`);

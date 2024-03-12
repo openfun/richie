@@ -1,18 +1,14 @@
-import { render, screen } from '@testing-library/react';
-import { PropsWithChildren } from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
+import { screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { faker } from '@faker-js/faker';
 import queryString from 'query-string';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { PER_PAGE } from 'settings';
 import { ContractResourceQuery, ContractState } from 'types/Joanie';
 import { ContractFactory } from 'utils/test/factories/joanie';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
 import { MenuLink } from '../..';
 import ContractNavLink from '.';
 
@@ -25,25 +21,11 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('<ContractNavLink />', () => {
-  const Wrapper = ({ children }: PropsWithChildren) => (
-    <QueryClientProvider client={createTestQueryClient({ user: true })}>
-      <IntlProvider locale="en">
-        <JoanieSessionProvider>
-          <MemoryRouter>{children}</MemoryRouter>
-        </JoanieSessionProvider>
-      </IntlProvider>
-    </QueryClientProvider>
-  );
+  setupJoanieSession();
 
   beforeEach(() => {
-    // JoanieSessionProvider queries
-    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
-  });
-
-  afterEach(() => {
-    fetchMock.restore();
+    // useDefaultOrganization hook request organization list
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', []);
   });
 
   it('should render a ContractNavLink with route and label when neither organizationId and courseProductRelationId are given', () => {
@@ -52,11 +34,7 @@ describe('<ContractNavLink />', () => {
       label: 'My contract navigation link',
     };
 
-    render(
-      <Wrapper>
-        <ContractNavLink link={link} />
-      </Wrapper>,
-    );
+    render(<ContractNavLink link={link} />);
 
     expect(screen.getByRole('link', { name: 'My contract navigation link' })).toBeInTheDocument();
     expect(screen.queryByTestId('badge')).not.toBeInTheDocument();
@@ -108,17 +86,16 @@ describe('<ContractNavLink />', () => {
             results: [ContractFactory({ abilities: contractAbilities }).one()],
           },
         );
+
         render(
-          <Wrapper>
-            <ContractNavLink
-              link={{
-                to: '/dummy/url/',
-                label: 'My contract navigation link',
-              }}
-              organizationId={organizationId}
-              courseProductRelationId={courseProductRelationId}
-            />
-          </Wrapper>,
+          <ContractNavLink
+            link={{
+              to: '/dummy/url/',
+              label: 'My contract navigation link',
+            }}
+            organizationId={organizationId}
+            courseProductRelationId={courseProductRelationId}
+          />,
         );
 
         expect(
@@ -216,16 +193,14 @@ describe('<ContractNavLink />', () => {
           },
         );
         render(
-          <Wrapper>
-            <ContractNavLink
-              link={{
-                to: '/dummy/url/',
-                label: 'My contract navigation link',
-              }}
-              organizationId={organizationId}
-              courseProductRelationId={courseProductRelationId}
-            />
-          </Wrapper>,
+          <ContractNavLink
+            link={{
+              to: '/dummy/url/',
+              label: 'My contract navigation link',
+            }}
+            organizationId={organizationId}
+            courseProductRelationId={courseProductRelationId}
+          />,
         );
 
         expect(

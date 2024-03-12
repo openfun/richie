@@ -1,17 +1,12 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
-import { PropsWithChildren } from 'react';
 import { Deferred } from 'utils/test/deferred';
 import {
   CourseLightFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import JoanieApiProvider from 'contexts/JoanieApiContext';
-import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { JoanieAppWrapper, setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { useCourseWish } from '.';
 
 jest.mock('utils/context', () => ({
@@ -22,37 +17,23 @@ jest.mock('utils/context', () => ({
       endpoint: 'https://authentication.test',
     },
     joanie_backend: {
-      endpoint: 'https://joanie.test',
+      endpoint: 'https://joanie.endpoint',
     },
   }).one(),
 }));
 
 describe('useCourseWish', () => {
+  setupJoanieSession();
   const course = CourseLightFactory().one();
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    fetchMock.restore();
-  });
-
-  const Wrapper = ({ children }: PropsWithChildren) => (
-    <IntlProvider locale="en">
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <JoanieApiProvider>
-          <BaseSessionProvider>{children}</BaseSessionProvider>
-        </JoanieApiProvider>
-      </QueryClientProvider>
-    </IntlProvider>
-  );
 
   it('retrieves course wish', async () => {
     const responseDeferred = new Deferred();
 
-    const urlGetWishlistById = `https://joanie.test/api/v1.0/courses/${course.id}/wish/`;
+    const urlGetWishlistById = `https://joanie.endpoint/api/v1.0/courses/${course.id}/wish/`;
     fetchMock.get(urlGetWishlistById, responseDeferred.promise);
 
     const { result } = renderHook(() => useCourseWish(course.id), {
-      wrapper: Wrapper,
+      wrapper: JoanieAppWrapper,
     });
 
     await waitFor(() => expect(result.current.states.fetching).toBe(true));
@@ -72,7 +53,7 @@ describe('useCourseWish', () => {
   });
 
   it('adds a course wish', async () => {
-    const urlWishlist = `https://joanie.test/api/v1.0/courses/${course.code}/wish/`;
+    const urlWishlist = `https://joanie.endpoint/api/v1.0/courses/${course.code}/wish/`;
     fetchMock.get(urlWishlist, {
       status: HttpStatusCode.OK,
       body: {
@@ -80,7 +61,7 @@ describe('useCourseWish', () => {
       },
     });
     const { result } = renderHook(() => useCourseWish(course.code!), {
-      wrapper: Wrapper,
+      wrapper: JoanieAppWrapper,
     });
     fetchMock.restore();
 
@@ -106,7 +87,7 @@ describe('useCourseWish', () => {
   });
 
   it('removes a course to user wishlist', async () => {
-    const url = `https://joanie.test/api/v1.0/courses/${course.code}/wish/`;
+    const url = `https://joanie.endpoint/api/v1.0/courses/${course.code}/wish/`;
     fetchMock.get(url, {
       status: HttpStatusCode.OK,
       body: {
@@ -114,7 +95,7 @@ describe('useCourseWish', () => {
       },
     });
     const { result } = renderHook(() => useCourseWish(course.code!), {
-      wrapper: Wrapper,
+      wrapper: JoanieAppWrapper,
     });
     fetchMock.restore();
 

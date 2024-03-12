@@ -1,13 +1,8 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { PropsWithChildren } from 'react';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { Certificate, ProductType } from 'types/Joanie';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate/index';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import {
@@ -17,12 +12,15 @@ import {
   NestedCredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
-    joanie_backend: { endpoint: 'https://joanie.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
@@ -49,15 +47,7 @@ describe.each([
     }),
   },
 ])('<DashboardCertificate/> $label', ({ overrideFactory }) => {
-  const Wrapper = ({ children }: PropsWithChildren) => {
-    return (
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <SessionProvider>{children}</SessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>
-    );
-  };
+  setupJoanieSession();
 
   beforeAll(() => {
     // eslint-disable-next-line compat/compat
@@ -67,23 +57,11 @@ describe.each([
     HTMLAnchorElement.prototype.click = jest.fn();
   });
 
-  beforeEach(() => {
-    // SessionProvider queries
-    fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    fetchMock.restore();
-  });
-
   it('displays a certificate', async () => {
     const certificate: Certificate = CertificateFactory(overrideFactory()).one();
     render(
       <DashboardItemCertificate certificate={certificate} productType={ProductType.CREDENTIAL} />,
-      { wrapper: Wrapper },
+      { wrapper: BaseJoanieAppWrapper },
     );
 
     await waitFor(() => screen.getByText(certificate.certificate_definition.title));
@@ -107,18 +85,20 @@ describe.each([
   it('downloads the certificate', async () => {
     const certificate: Certificate = CertificateFactory(overrideFactory()).one();
 
-    fetchMock.get(`https://joanie.test/api/v1.0/certificates/${certificate.id}/download/`, () => ({
-      status: HttpStatusCode.OK,
-      body: new Blob(['test']),
-      headers: {
-        'Content-Disposition': 'attachment; filename="test.pdf";',
-        'Content-Type': 'application/pdf',
-      },
-    }));
-
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/certificates/${certificate.id}/download/`,
+      () => ({
+        status: HttpStatusCode.OK,
+        body: new Blob(['test']),
+        headers: {
+          'Content-Disposition': 'attachment; filename="test.pdf";',
+          'Content-Type': 'application/pdf',
+        },
+      }),
+    );
     render(
       <DashboardItemCertificate certificate={certificate} productType={ProductType.CREDENTIAL} />,
-      { wrapper: Wrapper },
+      { wrapper: BaseJoanieAppWrapper },
     );
 
     await waitFor(() => screen.getByText(certificate.certificate_definition.title));

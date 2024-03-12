@@ -2,18 +2,17 @@
  * Test suite for CourseAddToWishlist component
  * for anonymous visitors
  */
-import { render, screen, waitFor } from '@testing-library/react';
-import fetchMock from 'fetch-mock';
-import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import JoanieApiProvider from 'contexts/JoanieApiContext';
-import { SessionProvider } from 'contexts/SessionContext';
 import { location } from 'utils/indirection/window';
 import { CourseLightFactory } from 'utils/test/factories/joanie';
-import { CourseLight } from 'types/Joanie';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
+import { HttpStatusCode } from 'utils/errors/HttpError';
+import { expectNoSpinner } from 'utils/test/expectSpinner';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import CourseWishButton from '.';
 
 jest.mock('utils/indirection/window', () => ({
@@ -31,36 +30,28 @@ jest.mock('utils/context', () => ({
       endpoint: 'https://authentication.test',
     },
     joanie_backend: {
-      endpoint: 'https://joanie.test',
+      endpoint: 'https://joanie.endpoint',
     },
   }).one(),
 }));
 
-const renderButton = (course: CourseLight) =>
-  render(
-    <IntlProvider locale="en">
-      <QueryClientProvider client={createTestQueryClient({ user: null })}>
-        <JoanieApiProvider>
-          <SessionProvider>
-            <CourseWishButton course={course} />
-          </SessionProvider>
-        </JoanieApiProvider>
-      </QueryClientProvider>
-    </IntlProvider>,
-  );
-
 describe('CourseWishButton', () => {
+  setupJoanieSession();
   const course = CourseLightFactory().one();
 
-  afterEach(() => {
-    jest.clearAllMocks();
-    fetchMock.restore();
-  });
-
   it('renders a log me link', async () => {
-    renderButton(course);
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.code}/wish/`, {
+      status: HttpStatusCode.OK,
+      body: {
+        status: false,
+      },
+    });
+
+    render(<CourseWishButton course={course} />, {
+      queryOptions: { client: createTestQueryClient({ user: null }) },
+    });
     // wait for JoanieSession initialization
-    await waitFor(() => expect(screen.queryByText('loading...')).not.toBeInTheDocument());
+    await expectNoSpinner();
 
     const $logMeButton = await screen.findByRole('button', { name: 'Log in to be notified' });
     expect($logMeButton).toBeInTheDocument();

@@ -4,14 +4,11 @@ import {
   getByRole,
   getByText,
   queryByRole,
-  render,
   screen,
   within,
 } from '@testing-library/react';
 import ReactDOM from 'react-dom';
-import { createIntl, IntlProvider } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { PropsWithChildren } from 'react';
+import { createIntl } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
 import { faker } from '@faker-js/faker';
@@ -23,16 +20,14 @@ import {
 import SyllabusCourseRunsList from 'widgets/SyllabusCourseRunsList/index';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseRun, Priority } from 'types';
-import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CourseProductRelation } from 'types/Joanie';
 import { CourseLightFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { StringHelper } from 'utils/StringHelper';
 import { computeStates } from 'utils/CourseRuns';
-import { User } from 'types/User';
-import { Nullable } from 'types/utils';
-import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { IntlHelper } from 'utils/IntlHelper';
+import { render } from 'utils/test/render';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 
 jest.mock('utils/context', () => {
   const mock = mockRichieContextFactory().one();
@@ -40,7 +35,7 @@ jest.mock('utils/context', () => {
     {
       backend: 'joanie',
       course_regexp: '^.*/api/v1.0((?:/(?:courses|course-runs|products)/[^/]+)+)/?$',
-      endpoint: 'https://joanie.test',
+      endpoint: 'https://joanie.endpoint',
     },
     {
       backend: 'openedx-hawthorn',
@@ -49,7 +44,7 @@ jest.mock('utils/context', () => {
     },
   ];
   mock.authentication = { backend: 'fonzie', endpoint: 'https://auth.test' };
-  mock.joanie_backend = { endpoint: 'https://joanie.test' };
+  mock.joanie_backend = { endpoint: 'https://joanie.endpoint' };
   return {
     __esModule: true,
     default: mock,
@@ -59,6 +54,9 @@ jest.mock('utils/context', () => {
 const MAX_ARCHIVED_COURSE_RUNS = 5;
 
 describe('<SyllabusCourseRunsList/>', () => {
+  let nbApiCalls: number;
+  const joanieSessionData = setupJoanieSession();
+
   beforeAll(() => {
     // @ts-ignore
     ReactDOM.createPortal = jest.fn((element) => {
@@ -66,23 +64,14 @@ describe('<SyllabusCourseRunsList/>', () => {
     });
   });
 
+  beforeEach(() => {
+    nbApiCalls = joanieSessionData.nbSessionApiRequest;
+  });
+
   afterEach(() => {
     // @ts-ignore
     ReactDOM.createPortal.mockClear();
-    fetchMock.restore();
   });
-
-  const Wrapper = ({ children, user = null }: PropsWithChildren<{ user?: Nullable<User> }>) => {
-    return (
-      <QueryClientProvider client={createTestQueryClient({ user })}>
-        <IntlProvider locale="en">
-          <JoanieApiProvider>
-            <BaseSessionProvider>{children}</BaseSessionProvider>
-          </JoanieApiProvider>
-        </IntlProvider>
-      </QueryClientProvider>
-    );
-  };
 
   const getHeaderContainer = (): HTMLElement => {
     return document.querySelector('.course-detail__row')!;
@@ -176,7 +165,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -213,7 +202,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -250,7 +239,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -295,7 +284,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -315,7 +304,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   it('has one opened product', async () => {
     const course = CourseLightFactory().one();
     const relation = CourseProductRelationFactory().one();
-    const resourceLink = `https://joanie.test/api/v1.0/courses/${course.code}/products/${relation.product.id}/`;
+    const resourceLink = `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${relation.product.id}/`;
     fetchMock.get(resourceLink, relation);
 
     const courseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
@@ -329,7 +318,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -353,7 +342,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
     getByRole(getPortalContainer(), 'heading', {
@@ -378,7 +367,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
     getByRole(getPortalContainer(), 'heading', {
@@ -415,7 +404,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -467,7 +456,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -494,7 +483,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -540,7 +529,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -600,7 +589,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -651,7 +640,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: Wrapper,
+        queryOptions: { client: createTestQueryClient({ user: null }) },
       },
     );
 
@@ -711,7 +700,7 @@ describe('<SyllabusCourseRunsList/>', () => {
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
       {
-        wrapper: ({ children }) => <Wrapper user={user}>{children}</Wrapper>,
+        queryOptions: { client: createTestQueryClient({ user }) },
       },
     );
 
@@ -730,7 +719,7 @@ describe('<SyllabusCourseRunsList/>', () => {
     const links = screen.getAllByRole('link');
     expect(links.length).toBe(1);
     const calledUrls = fetchMock.calls().map((call) => call[0]);
-    expect(calledUrls).toHaveLength(1);
+    expect(calledUrls).toHaveLength(nbApiCalls + 1);
 
     // Assert user's enrollment state has been checked for the ongoing course run.
     const link = within(portalContainer).getByRole('link');

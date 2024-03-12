@@ -1,12 +1,9 @@
-import { IntlProvider } from 'react-intl';
-import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { screen, waitForElementToBeRemoved } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
 import { CertificateProduct, CourseLight, OrderState, ProductType } from 'types/Joanie';
 import {
   CourseStateFactory,
-  UserFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
 import {
@@ -18,21 +15,21 @@ import {
   CertificateProductFactory,
 } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { PER_PAGE } from 'settings';
 import { SaleTunnelProps } from 'components/SaleTunnel';
-import ProductCertificateFooter, { ProductCertificateFooterProps } from '.';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
+import ProductCertificateFooter from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
-    joanie_backend: { endpoint: 'https://joanie.endpoint.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 jest.mock('components/SaleTunnel', () => ({
@@ -55,30 +52,13 @@ jest.mock('components/SaleTunnel', () => ({
 }));
 
 describe('<ProductCertificateFooter/>', () => {
-  const Wrapper = ({ product, enrollment }: ProductCertificateFooterProps) => (
-    <IntlProvider locale="en">
-      <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
-        <JoanieSessionProvider>
-          <ProductCertificateFooter product={product} enrollment={enrollment} />
-        </JoanieSessionProvider>
-      </QueryClientProvider>
-    </IntlProvider>
-  );
   let product: CertificateProduct;
   let course: CourseLight;
+  setupJoanieSession();
 
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint.test/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.endpoint.test/api/v1.0/credit-cards/', []);
-    fetchMock.get('https://joanie.endpoint.test/api/v1.0/orders/', []);
-
     product = CertificateProductFactory({ type: ProductType.CERTIFICATE }).one();
     course = CourseLightFactory().one();
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    fetchMock.restore();
   });
 
   it.each([
@@ -106,7 +86,7 @@ describe('<ProductCertificateFooter/>', () => {
     'should display purchase button for a open course run without order (state $courseRunStateData.priority).',
     async ({ courseRunStateData }) => {
       render(
-        <Wrapper
+        <ProductCertificateFooter
           product={product}
           enrollment={EnrollmentFactory({
             course_run: CourseRunFactory({
@@ -137,7 +117,7 @@ describe('<ProductCertificateFooter/>', () => {
     "shouldn't display purchase button for a closed course run without order (state $courseRunStateData.priority).",
     async ({ courseRunStateData }) => {
       render(
-        <Wrapper
+        <ProductCertificateFooter
           product={product}
           enrollment={EnrollmentFactory({
             course_run: CourseRunFactory({
@@ -147,6 +127,7 @@ describe('<ProductCertificateFooter/>', () => {
           }).one()}
         />,
       );
+
       expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
     },
   );
@@ -162,10 +143,10 @@ describe('<ProductCertificateFooter/>', () => {
       course_run: CourseRunFactory({ course }).one(),
     }).one();
     fetchMock.get(
-      'https://joanie.endpoint.test/api/v1.0/certificates/FAKE_CERTIFICATE_ID/',
+      'https://joanie.endpoint/api/v1.0/certificates/FAKE_CERTIFICATE_ID/',
       CertificateFactory({ id: order.certificate_id }).one(),
     );
-    render(<Wrapper product={product} enrollment={enrollment} />);
+    render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
     expect(await screen.findByRole('button', { name: 'Download' })).toBeInTheDocument();
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
@@ -179,31 +160,15 @@ describe('<ProductCertificateFooter/>', () => {
       orders: [order],
       course_run: CourseRunFactory({ course }).one(),
     }).one();
-    render(<Wrapper product={product} enrollment={enrollment} />);
+    render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
     expect(await screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
 
   // From https://github.com/openfun/richie/issues/2237
   it('should hide purchase button after payment', async () => {
-    const TestWrapper = ({ client }: { client?: QueryClient }) => {
-      const user = UserFactory().one();
-      return (
-        <QueryClientProvider client={client ?? createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            {/* <HistoryContext.Provider value={makeHistoryOf({})}> */}
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />
-            </SessionProvider>
-            {/* </HistoryContext.Provider> */}
-          </IntlProvider>
-        </QueryClientProvider>
-      );
-    };
-
-    const client = createTestQueryClient({ user: true });
     fetchMock.get(
-      `https://joanie.endpoint.test/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=${PER_PAGE.useOrdersEnrollments}`,
+      `https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=${PER_PAGE.useOrdersEnrollments}`,
       {
         results: [],
         next: null,
@@ -221,7 +186,7 @@ describe('<ProductCertificateFooter/>', () => {
     enrollment.product_relations[0].product = CertificateProductFactory().one();
 
     fetchMock.get(
-      `https://joanie.endpoint.test/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=${PER_PAGE.useOrdersEnrollments}`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=${PER_PAGE.useOrdersEnrollments}`,
       {
         results: [enrollment],
         next: null,
@@ -230,7 +195,10 @@ describe('<ProductCertificateFooter/>', () => {
       },
     );
 
-    render(<TestWrapper client={client} />);
+    render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
+    // <TestWrapper client={client} />);
     const user = userEvent.setup();
     await expectNoSpinner('Loading orders and enrollments...');
     await screen.findByRole('heading', {

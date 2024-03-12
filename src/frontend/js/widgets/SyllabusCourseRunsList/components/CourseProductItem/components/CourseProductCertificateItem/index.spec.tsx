@@ -1,13 +1,13 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { faker } from '@faker-js/faker';
 import fetchMock from 'fetch-mock';
-import { PropsWithChildren } from 'react';
-import { IntlProvider } from 'react-intl';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { CertificationDefinitionFactory, OrderLiteFactory } from 'utils/test/factories/joanie';
-import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CertificateDefinition, OrderLite } from 'types/Joanie';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import CertificateItem from '.';
 
 jest.mock('utils/errors/handle');
@@ -15,16 +15,12 @@ jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
-    joanie_backend: { endpoint: 'https://joanie.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
 describe('CourseProductCertificateItem', () => {
-  const Wrapper = ({ children }: PropsWithChildren<{}>) => (
-    <IntlProvider locale="en">
-      <JoanieApiProvider>{children}</JoanieApiProvider>
-    </IntlProvider>
-  );
+  setupJoanieSession();
 
   beforeAll(() => {
     // eslint-disable-next-line compat/compat
@@ -34,19 +30,12 @@ describe('CourseProductCertificateItem', () => {
     HTMLAnchorElement.prototype.click = jest.fn();
   });
 
-  afterEach(() => {
-    fetchMock.restore();
-    jest.resetAllMocks();
-  });
-
   it('displays certificate information', () => {
     const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory().one();
 
-    render(
-      <Wrapper>
-        <CertificateItem certificateDefinition={certificateDefinition} />
-      </Wrapper>,
-    );
+    render(<CertificateItem certificateDefinition={certificateDefinition} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
 
     // the title is not a heading to prevent screen reader users "heading spam",
     // but we want it to visually look like a heading for sighted users
@@ -60,11 +49,9 @@ describe('CourseProductCertificateItem', () => {
       description: '',
     }).one();
 
-    render(
-      <Wrapper>
-        <CertificateItem certificateDefinition={certificateDefinition} />
-      </Wrapper>,
-    );
+    render(<CertificateItem certificateDefinition={certificateDefinition} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
 
     screen.getByText(
       'You will be able to download your certificate once you will pass all course runs.',
@@ -75,11 +62,9 @@ describe('CourseProductCertificateItem', () => {
     const certificateDefinition: CertificateDefinition = CertificationDefinitionFactory().one();
     const order: OrderLite = OrderLiteFactory({ certificate_id: faker.string.uuid() }).one();
 
-    render(
-      <Wrapper>
-        <CertificateItem certificateDefinition={certificateDefinition} order={order} />
-      </Wrapper>,
-    );
+    render(<CertificateItem certificateDefinition={certificateDefinition} order={order} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
 
     // - The certificate description should not be displayed ...
     expect(screen.queryByText(certificateDefinition.description)).toBeNull();
@@ -90,7 +75,7 @@ describe('CourseProductCertificateItem', () => {
 
     // When user clicks on "Download" button, the certificate should be downloaded
     fetchMock.get(
-      `https://joanie.test/api/v1.0/certificates/${order.certificate_id}/download/`,
+      `https://joanie.endpoint/api/v1.0/certificates/${order.certificate_id}/download/`,
       () => ({
         status: HttpStatusCode.OK,
         body: new Blob(['test']),

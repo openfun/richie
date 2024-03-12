@@ -1,8 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import queryString from 'query-string';
 import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'hooks/useHistory';
+import { render } from 'utils/test/render';
 import { PaginateCourseSearch } from '.';
 
 describe('<PaginateCourseSearch />', () => {
@@ -18,8 +19,6 @@ describe('<PaginateCourseSearch />', () => {
     historyReplaceState,
   ];
 
-  beforeEach(jest.resetAllMocks);
-
   it('shows a pagination for course search (when on page 1)', () => {
     render(
       <IntlProvider locale="en">
@@ -27,6 +26,7 @@ describe('<PaginateCourseSearch />', () => {
           <PaginateCourseSearch courseSearchTotalCount={200} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     screen.getByRole('navigation', { name: 'Pagination' });
@@ -49,6 +49,7 @@ describe('<PaginateCourseSearch />', () => {
           <PaginateCourseSearch courseSearchTotalCount={211} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     screen.getByRole('navigation', { name: 'Pagination' });
@@ -71,6 +72,7 @@ describe('<PaginateCourseSearch />', () => {
           <PaginateCourseSearch courseSearchTotalCount={40} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
     expect(screen.queryByRole('button')).toBeNull();
     const nextPageAnchor = screen.getByRole('link');
@@ -84,6 +86,7 @@ describe('<PaginateCourseSearch />', () => {
           <PaginateCourseSearch courseSearchTotalCount={345} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     screen.getByRole('navigation', { name: 'Pagination' });
@@ -113,6 +116,7 @@ describe('<PaginateCourseSearch />', () => {
           <PaginateCourseSearch courseSearchTotalCount={101} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     screen.getByRole('navigation', { name: 'Pagination' });
@@ -141,6 +145,7 @@ describe('<PaginateCourseSearch />', () => {
           <PaginateCourseSearch courseSearchTotalCount={14} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     expect(screen.queryByRole('pagination', { name: 'Pagination' })).toEqual(null);
@@ -153,6 +158,7 @@ describe('<PaginateCourseSearch />', () => {
           <PaginateCourseSearch courseSearchTotalCount={200} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     screen.getByRole('navigation', { name: 'Pagination' });
@@ -183,6 +189,7 @@ describe('<PaginateCourseSearch />', () => {
           <PaginateCourseSearch courseSearchTotalCount={200} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     screen.getByRole('navigation', { name: 'Pagination' });

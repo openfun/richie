@@ -2,18 +2,15 @@
  * Test suite for CourseAddToWishlist component
  * for logged visitors
  */
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import JoanieApiProvider from 'contexts/JoanieApiContext';
-import { SessionProvider } from 'contexts/SessionContext';
 import { HttpStatusCode } from 'utils/errors/HttpError';
-import { CourseLight } from 'types/Joanie';
 import { CourseLightFactory } from 'utils/test/factories/joanie';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
+import { expectNoSpinner } from 'utils/test/expectSpinner';
 import CourseWishButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -24,63 +21,44 @@ jest.mock('utils/context', () => ({
       endpoint: 'https://authentication.test',
     },
     joanie_backend: {
-      endpoint: 'https://joanie.test',
+      endpoint: 'https://joanie.endpoint',
     },
   }).one(),
 }));
 
-const renderButton = (course: CourseLight) =>
-  render(
-    <IntlProvider locale="en">
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <JoanieApiProvider>
-          <SessionProvider>
-            <CourseWishButton course={course} />
-          </SessionProvider>
-        </JoanieApiProvider>
-      </QueryClientProvider>
-    </IntlProvider>,
-  );
-
 describe('CourseWishButton', () => {
+  const joanieSessionData = setupJoanieSession();
+  let nbApiCalls: number;
   const course = CourseLightFactory().one();
 
   beforeEach(() => {
-    // JoanieSessionProvider inital requests
-    fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    fetchMock.restore();
+    nbApiCalls = joanieSessionData.nbSessionApiRequest;
   });
 
   it('renders a notify me button', async () => {
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, {
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.code}/wish/`, {
       status: HttpStatusCode.OK,
       body: {
         status: false,
       },
     });
-    renderButton(course);
+    render(<CourseWishButton course={course} />);
 
-    // wait for JoanieSession initialization
-    await waitFor(() => expect(screen.queryByText('loading...')).not.toBeInTheDocument());
     // wait for CourseAddToWishlist initialization
-    await waitFor(() => expect(screen.queryByTestId('spinner')).not.toBeInTheDocument());
+    await expectNoSpinner();
 
     const $notifyButton = screen.getByRole('button', { name: 'Notify me' });
     expect($notifyButton).toBeInTheDocument();
 
-    let nbApiCalls = 3; // JoanieSessionProvider initial requests
     nbApiCalls += 1; // useUserWishlistCourses inital fetch
     expect(fetchMock.calls().length).toBe(nbApiCalls);
 
-    fetchMock.post(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, HttpStatusCode.OK);
+    fetchMock.post(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/wish/`,
+      HttpStatusCode.OK,
+    );
     fetchMock.get(
-      `https://joanie.test/api/v1.0/courses/${course.code}/wish/`,
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/wish/`,
       {
         status: HttpStatusCode.OK,
         body: {
@@ -90,7 +68,7 @@ describe('CourseWishButton', () => {
       { overwriteRoutes: true },
     );
 
-    await act(async () => userEvent.click($notifyButton));
+    await userEvent.click($notifyButton);
 
     await screen.findByRole('button', { name: 'Do not notify me anymore' });
     expect(screen.queryByRole('button', { name: 'Notify me' })).not.toBeInTheDocument();
@@ -101,25 +79,22 @@ describe('CourseWishButton', () => {
   });
 
   it('renders a "do not notify me" button', async () => {
-    fetchMock.get(`https://joanie.test/api/v1.0/courses/${course.code}/wish/`, {
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.code}/wish/`, {
       status: HttpStatusCode.OK,
       body: {
         status: true,
       },
     });
-    renderButton(course);
+    render(<CourseWishButton course={course} />);
 
-    // wait for JoanieSession initialization
-    await waitFor(() => expect(screen.queryByText('loading...')).not.toBeInTheDocument());
     // wait for CourseAddToWishlist initialization
-    await waitFor(() => expect(screen.queryByTestId('spinner')).not.toBeInTheDocument());
+    await expectNoSpinner();
 
     const $stopNotifyButton = await screen.findByRole('button', {
       name: 'Do not notify me anymore',
     });
     expect($stopNotifyButton).toBeInTheDocument();
 
-    let nbApiCalls = 3; // JoanieSessionProvider initial requests
     nbApiCalls += 1; // useUserWishlistCourses inital fetch
     expect(fetchMock.calls().length).toBe(nbApiCalls);
 
@@ -127,11 +102,11 @@ describe('CourseWishButton', () => {
     // react-query will refetch data using the GET url.
 
     fetchMock.delete(
-      `https://joanie.test/api/v1.0/courses/${course.code}/wish/`,
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/wish/`,
       HttpStatusCode.OK,
     );
     fetchMock.get(
-      `https://joanie.test/api/v1.0/courses/${course.code}/wish/`,
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/wish/`,
       {
         status: HttpStatusCode.OK,
         body: {
@@ -141,7 +116,7 @@ describe('CourseWishButton', () => {
       { overwriteRoutes: true },
     );
 
-    await act(async () => userEvent.click($stopNotifyButton));
+    await userEvent.click($stopNotifyButton);
 
     expect(await screen.findByRole('button', { name: 'Notify me' })).toBeInTheDocument();
     expect(

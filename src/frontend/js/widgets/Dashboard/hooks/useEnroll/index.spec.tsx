@@ -1,13 +1,10 @@
-import { PropsWithChildren } from 'react';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
 import { act, renderHook, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { Priority } from 'types';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { CourseRunFactory } from 'utils/test/factories/joanie';
-import { SessionProvider } from 'contexts/SessionContext';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { useEnroll } from './index';
 
 jest.mock('utils/indirection/window', () => ({
@@ -27,32 +24,14 @@ jest.mock('utils/context', () => ({
  * conditions in DashboardItemOrder.spec.tsx.
  */
 describe('useEnroll ( edge case )', () => {
-  const wrapper = ({ children }: PropsWithChildren) => {
-    return (
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <SessionProvider>{children}</SessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>
-    );
-  };
-
-  beforeEach(() => {
-    // SessionProvider inital requests
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    fetchMock.restore();
-  });
+  setupJoanieSession();
 
   it('should return early when a course run is not enrollable', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', {});
-    const { result } = renderHook(() => useEnroll([], undefined), { wrapper });
+    const { result } = renderHook(() => useEnroll([], undefined), {
+      wrapper: BaseJoanieAppWrapper,
+    });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     const courseRun = CourseRunFactory().one();
@@ -68,7 +47,7 @@ describe('useEnroll ( edge case )', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', {});
     const { result } = renderHook(() => useEnroll([], undefined), {
-      wrapper,
+      wrapper: BaseJoanieAppWrapper,
     });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 

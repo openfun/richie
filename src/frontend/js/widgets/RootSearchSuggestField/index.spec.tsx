@@ -1,10 +1,11 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 
 import { location } from 'utils/indirection/window';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import context from 'utils/context';
+import { render } from 'utils/test/render';
 import RootSearchSuggestField from '.';
 
 jest.mock('settings', () => ({
@@ -33,11 +34,6 @@ describe('<RootSearchSuggestField />', () => {
     values: [],
   };
 
-  afterEach(() => {
-    fetchMock.restore();
-    jest.resetAllMocks();
-  });
-
   it('renders', () => {
     fetchMock.get('/api/v1.0/filter-definitions/', {
       subjects,
@@ -47,6 +43,7 @@ describe('<RootSearchSuggestField />', () => {
       <IntlProvider locale="en">
         <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The placeholder text is shown in the input
@@ -74,6 +71,7 @@ describe('<RootSearchSuggestField />', () => {
       <IntlProvider locale="en">
         <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = screen.getByPlaceholderText('Search for courses');
@@ -118,6 +116,7 @@ describe('<RootSearchSuggestField />', () => {
       <IntlProvider locale="en">
         <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = screen.getByPlaceholderText('Search for courses');
@@ -158,6 +157,7 @@ describe('<RootSearchSuggestField />', () => {
       <IntlProvider locale="en">
         <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = screen.getByPlaceholderText('Search for courses');
@@ -195,6 +195,7 @@ describe('<RootSearchSuggestField />', () => {
       <IntlProvider locale="en">
         <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = screen.getByPlaceholderText('Search for courses');
@@ -231,6 +232,7 @@ describe('<RootSearchSuggestField />', () => {
       <IntlProvider locale="en">
         <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = screen.getByPlaceholderText('Search for courses');

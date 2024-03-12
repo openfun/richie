@@ -1,11 +1,7 @@
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { faker } from '@faker-js/faker';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { CourseLight } from 'types/Joanie';
 import {
@@ -17,6 +13,9 @@ import {
 import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { expectBannerError } from 'utils/test/expectBanner';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -43,33 +42,14 @@ jest.mock('settings', () => ({
 }));
 
 describe('<DashboardItemOrder/> Contract', () => {
-  const Wrapper = (route: string) => {
-    return (
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <SessionProvider>
-            <DashboardTest initialRoute={route} />
-          </SessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>
-    );
-  };
-
+  setupJoanieSession();
   beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
     fetchMock.get(
       'begin:https://joanie.endpoint/api/v1.0/enrollments/',
       { results: [], next: null, previous: null, count: null },
       { overwriteRoutes: true },
     );
     fetchMock.get('https://joanie.endpoint/api/v1.0/me', []);
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-    jest.clearAllMocks();
-    fetchMock.restore();
   });
 
   describe('non writable', () => {
@@ -89,7 +69,9 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       const { product } = mockCourseProductWithOrder(order);
 
-      render(Wrapper(LearnerDashboardPaths.COURSES));
+      render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
       await screen.findByRole('heading', { level: 5, name: product.title });
 
@@ -121,7 +103,9 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       const { product } = mockCourseProductWithOrder(order);
 
-      render(Wrapper(LearnerDashboardPaths.COURSES));
+      render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
       await screen.findByRole('heading', { level: 5, name: product.title });
 
@@ -153,7 +137,9 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       const { product } = mockCourseProductWithOrder(order);
 
-      render(Wrapper(LearnerDashboardPaths.COURSES));
+      render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
+        wrapper: BaseJoanieAppWrapper,
+      });
 
       await screen.findByRole('heading', { level: 5, name: product.title });
 
@@ -186,7 +172,11 @@ describe('<DashboardItemOrder/> Contract', () => {
         { overwriteRoutes: true },
       );
 
-      render(Wrapper(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
+      render(
+        <DashboardTest initialRoute={LearnerDashboardPaths.ORDER.replace(':orderId', order.id)} />,
+        { wrapper: BaseJoanieAppWrapper },
+      );
+
       expect(
         await screen.findByRole('heading', { level: 5, name: product.title }),
       ).toBeInTheDocument();
@@ -208,7 +198,10 @@ describe('<DashboardItemOrder/> Contract', () => {
         { overwriteRoutes: true },
       );
 
-      render(Wrapper(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
+      render(
+        <DashboardTest initialRoute={LearnerDashboardPaths.ORDER.replace(':orderId', order.id)} />,
+        { wrapper: BaseJoanieAppWrapper },
+      );
       expect(
         await screen.findByRole('heading', { level: 5, name: product.title }),
       ).toBeInTheDocument();
@@ -246,7 +239,10 @@ describe('<DashboardItemOrder/> Contract', () => {
         { overwriteRoutes: true },
       );
 
-      render(Wrapper(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
+      render(
+        <DashboardTest initialRoute={LearnerDashboardPaths.ORDER.replace(':orderId', order.id)} />,
+        { wrapper: BaseJoanieAppWrapper },
+      );
 
       expect(
         await screen.findByRole('heading', { level: 5, name: product.title }),
@@ -292,7 +288,10 @@ describe('<DashboardItemOrder/> Contract', () => {
       }/download/`;
       fetchMock.get(DOWNLOAD_URL, 'contract content');
 
-      render(Wrapper(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
+      render(
+        <DashboardTest initialRoute={LearnerDashboardPaths.ORDER.replace(':orderId', order.id)} />,
+        { wrapper: BaseJoanieAppWrapper },
+      );
       expect(await screen.findByRole('button', { name: 'Download' })).toBeInTheDocument();
     });
   });

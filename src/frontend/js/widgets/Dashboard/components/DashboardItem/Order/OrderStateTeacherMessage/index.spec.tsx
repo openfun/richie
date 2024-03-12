@@ -1,21 +1,19 @@
 import React, { PropsWithChildren } from 'react';
-import { render, screen } from '@testing-library/react';
-import { IntlProvider, createIntl } from 'react-intl';
+import { screen } from '@testing-library/react';
+import { createIntl } from 'react-intl';
 import {
   ContractDefinitionFactory,
   ContractFactory,
   CredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import { OrderState } from 'types/Joanie';
+import { render } from 'utils/test/render';
+import { IntlWrapper } from 'utils/test/wrappers/IntlWrapper';
 import OrderStateTeacherMessage, { messages } from '.';
 
 const intl = createIntl({ locale: 'en' });
 
 describe('<OrderStateTeacherMessage/>', () => {
-  const Wrapper = ({ children }: PropsWithChildren) => (
-    <IntlProvider locale="en">{children}</IntlProvider>
-  );
-
   it.each([
     [OrderState.DRAFT, 'Pending'],
     [OrderState.SUBMITTED, 'Pending'],
@@ -25,11 +23,9 @@ describe('<OrderStateTeacherMessage/>', () => {
     'should display message from order state: %s when order have no contract',
     (state, expectedMessage) => {
       const order = CredentialOrderFactory({ state }).one();
-      render(
-        <Wrapper>
-          <OrderStateTeacherMessage order={order} />
-        </Wrapper>,
-      );
+      render(<OrderStateTeacherMessage order={order} />, {
+        wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+      });
       expect(screen.getByText(expectedMessage)).toBeInTheDocument();
     },
   );
@@ -47,12 +43,13 @@ describe('<OrderStateTeacherMessage/>', () => {
         contract: ContractFactory().one(),
       }).one();
       render(
-        <Wrapper>
-          <OrderStateTeacherMessage
-            order={orderWithContract}
-            contractDefinition={ContractDefinitionFactory().one()}
-          />
-        </Wrapper>,
+        <OrderStateTeacherMessage
+          order={orderWithContract}
+          contractDefinition={ContractDefinitionFactory().one()}
+        />,
+        {
+          wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+        },
       );
       expect(screen.getByText(expectedMessage)).toBeInTheDocument();
     },
@@ -66,11 +63,9 @@ describe('<OrderStateTeacherMessage/>', () => {
 
     const contractDefinition = ContractDefinitionFactory().one();
 
-    render(
-      <Wrapper>
-        <OrderStateTeacherMessage order={order} contractDefinition={contractDefinition} />
-      </Wrapper>,
-    );
+    render(<OrderStateTeacherMessage order={order} contractDefinition={contractDefinition} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
     expect(screen.getByText("Pending for learner's signature")).toBeInTheDocument();
   });
 
@@ -83,11 +78,9 @@ describe('<OrderStateTeacherMessage/>', () => {
     }).one();
     const contractDefinition = ContractDefinitionFactory().one();
 
-    render(
-      <Wrapper>
-        <OrderStateTeacherMessage order={order} contractDefinition={contractDefinition} />
-      </Wrapper>,
-    );
+    render(<OrderStateTeacherMessage order={order} contractDefinition={contractDefinition} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
     expect(screen.getByText('To be signed')).toBeInTheDocument();
   });
 
@@ -96,11 +89,9 @@ describe('<OrderStateTeacherMessage/>', () => {
       state: OrderState.VALIDATED,
       certificate_id: undefined,
     }).one();
-    render(
-      <Wrapper>
-        <OrderStateTeacherMessage order={order} />
-      </Wrapper>,
-    );
+    render(<OrderStateTeacherMessage order={order} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
     expect(
       screen.getByText(intl.formatMessage(messages.statusOnGoing), {
         exact: false,
@@ -113,11 +104,9 @@ describe('<OrderStateTeacherMessage/>', () => {
       state: OrderState.VALIDATED,
       certificate_id: 'FAKE_CERTIFICATE_ID',
     }).one();
-    render(
-      <Wrapper>
-        <OrderStateTeacherMessage order={order} />
-      </Wrapper>,
-    );
+    render(<OrderStateTeacherMessage order={order} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
     expect(
       screen.getByText(intl.formatMessage(messages.statusCompleted), {
         exact: false,

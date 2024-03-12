@@ -1,7 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
-import { PropsWithChildren } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import {
   CourseRunFactory,
@@ -9,7 +6,8 @@ import {
   UserFactory,
 } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
+import { BaseAppWrapper } from 'utils/test/wrappers/BaseAppWrapper';
+import { render } from 'utils/test/render';
 import CourseRunItemWithEnrollment from '.';
 
 jest.mock('utils/context', () => ({
@@ -26,32 +24,21 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('CourseRunItemWithEnrollment', () => {
-  const Wrapper = ({ client, children }: PropsWithChildren<{ client?: QueryClient }>) => {
-    return (
-      <QueryClientProvider client={client ?? createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <BaseSessionProvider>{children}</BaseSessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>
-    );
-  };
-
-  beforeEach(() => {
-    fetchMock.restore();
-  });
-
-  it('should not render enrollment information when user is anonymous', () => {
+  it('should not render enrollment information when user is anonymous', async () => {
     const courseRun = CourseRunFactory({
       title: 'run',
       start: new Date('2023-01-01').toISOString(),
       end: new Date('2023-12-31').toISOString(),
     }).one();
 
-    render(
-      <Wrapper client={createTestQueryClient({ user: null })}>
-        <CourseRunItemWithEnrollment item={courseRun} />
-      </Wrapper>,
-    );
+    render(<CourseRunItemWithEnrollment item={courseRun} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user: null }) },
+    });
+    // session loader
+    await waitFor(() => {
+      expect(screen.queryByText('loading...')).not.toBeInTheDocument();
+    });
 
     // First title letter should have been capitalized
     // Dates should have been formatted as "Month day, year"
@@ -76,11 +63,14 @@ describe('CourseRunItemWithEnrollment', () => {
       },
     );
 
-    render(
-      <Wrapper client={createTestQueryClient({ user })}>
-        <CourseRunItemWithEnrollment item={courseRun} />
-      </Wrapper>,
-    );
+    render(<CourseRunItemWithEnrollment item={courseRun} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user }) },
+    });
+    // session loader
+    await waitFor(() => {
+      expect(screen.queryByText('loading...')).not.toBeInTheDocument();
+    });
 
     // Only dates should have been displayed.
     screen.getByText('Run, from Jan 01, 2023 to Dec 31, 2023');
@@ -107,11 +97,14 @@ describe('CourseRunItemWithEnrollment', () => {
       },
     );
 
-    render(
-      <Wrapper client={createTestQueryClient({ user })}>
-        <CourseRunItemWithEnrollment item={courseRun} />
-      </Wrapper>,
-    );
+    render(<CourseRunItemWithEnrollment item={courseRun} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user }) },
+    });
+    // session loader
+    await waitFor(() => {
+      expect(screen.queryByText('loading...')).not.toBeInTheDocument();
+    });
 
     // Only dates should have been displayed.
     screen.getByText('Run, from Jan 01, 2023 to Dec 31, 2023');

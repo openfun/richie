@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { CourseRunFactory } from 'utils/test/factories/richie';
+import { render } from 'utils/test/render';
 import CourseRunItem from '.';
 
 describe('CourseRunItem', () => {
@@ -15,6 +16,7 @@ describe('CourseRunItem', () => {
       <IntlProvider locale="en">
         <CourseRunItem item={courseRun} />
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // First title letter should have been capitalized
@@ -33,6 +35,7 @@ describe('CourseRunItem', () => {
       <IntlProvider locale="en">
         <CourseRunItem item={courseRun} />
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // Only dates should have been displayed.

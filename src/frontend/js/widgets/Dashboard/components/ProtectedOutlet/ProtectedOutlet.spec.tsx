@@ -1,6 +1,7 @@
-import { screen, render } from '@testing-library/react';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { screen } from '@testing-library/react';
 import { location } from 'utils/indirection/window';
+import { render } from 'utils/test/render';
+import { RouterWrapper } from 'utils/test/wrappers/RouterWrapper';
 import ProtectedOutlet from './ProtectedOutlet';
 
 jest.mock('utils/indirection/window', () => ({
@@ -10,45 +11,28 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('<ProtectedOutlet />', () => {
-  const ProtectedRouter = ({
-    isAllowed,
-    redirectTo,
-    ...routerOptions
-  }: {
-    isAllowed: Boolean;
-    redirectTo?: string;
-    [key: PropertyKey]: any;
-  }) => {
-    const router = createMemoryRouter(
-      [
-        {
-          path: '/',
-          element: <ProtectedOutlet isAllowed={isAllowed} redirectTo={redirectTo} />,
-          children: [
-            {
-              path: '/restricted',
-              element: <div data-testid="route-restricted" />,
-            },
-          ],
-        },
-        {
-          path: '*',
-          element: <div data-testid="route-forbidden" />,
-        },
-      ],
-      { ...routerOptions },
-    );
-
-    return <RouterProvider router={router} />;
-  };
-
-  beforeEach(() => {
-    jest.resetAllMocks();
-  });
-
   it('should display child route if isAllowed is true', () => {
     render(
-      <ProtectedRouter isAllowed={true} redirectTo="/forbidden" initialEntries={['/restricted']} />,
+      <RouterWrapper
+        initialEntries={['/restricted']}
+        routes={[
+          {
+            path: '/',
+            element: <ProtectedOutlet isAllowed={true} redirectTo="/forbidden" />,
+            children: [
+              {
+                path: '/restricted',
+                element: <div data-testid="route-restricted" />,
+              },
+            ],
+          },
+          {
+            path: '*',
+            element: <div data-testid="route-forbidden" />,
+          },
+        ]}
+      />,
+      { wrapper: null },
     );
 
     // The restricted route should be rendered
@@ -59,8 +43,28 @@ describe('<ProtectedOutlet />', () => {
   });
 
   it('should redirect to provided path if isAllowed is false', () => {
-    render(<ProtectedRouter isAllowed={false} redirectTo="/forbidden" initialEntries={['/']} />);
-
+    render(
+      <RouterWrapper
+        initialEntries={['/']}
+        routes={[
+          {
+            path: '/',
+            element: <ProtectedOutlet isAllowed={false} redirectTo="/forbidden" />,
+            children: [
+              {
+                path: '/restricted',
+                element: <div data-testid="route-restricted" />,
+              },
+            ],
+          },
+          {
+            path: '*',
+            element: <div data-testid="route-forbidden" />,
+          },
+        ]}
+      />,
+      { wrapper: null },
+    );
     // The restricted route should not be rendered
     expect(screen.queryByTestId('route-restricted')).toBeNull();
 
@@ -69,7 +73,28 @@ describe('<ProtectedOutlet />', () => {
   });
 
   it('should redirect to "/" if isAllowed is false and no redirect path is provided', () => {
-    render(<ProtectedRouter isAllowed={false} initialEntries={['/']} />);
+    render(
+      <RouterWrapper
+        initialEntries={['/']}
+        routes={[
+          {
+            path: '/',
+            element: <ProtectedOutlet isAllowed={false} />,
+            children: [
+              {
+                path: '/restricted',
+                element: <div data-testid="route-restricted" />,
+              },
+            ],
+          },
+          {
+            path: '*',
+            element: <div data-testid="route-forbidden" />,
+          },
+        ]}
+      />,
+      { wrapper: null },
+    );
 
     // The restricted route should not be rendered
     expect(screen.queryByTestId('route-restricted')).toBeNull();

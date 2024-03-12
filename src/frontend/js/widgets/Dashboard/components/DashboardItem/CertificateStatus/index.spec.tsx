@@ -1,21 +1,19 @@
-import { IntlProvider } from 'react-intl';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { PropsWithChildren } from 'react';
 import { ProductType } from 'types/Joanie';
 import { CertificateFactory } from 'utils/test/factories/joanie';
-import CertificateStatus, { CertificateStatusProps } from '.';
+import { render } from 'utils/test/render';
+import { IntlWrapper } from 'utils/test/wrappers/IntlWrapper';
+import CertificateStatus from '.';
 
 describe('<CertificateStatus/>', () => {
-  const Wrapper = ({ certificate, productType }: CertificateStatusProps) => (
-    <IntlProvider locale="en">
-      <CertificateStatus certificate={certificate} productType={productType} />
-    </IntlProvider>
-  );
-
   it('should display message for issued certificate.', () => {
     const certificate = CertificateFactory({
       issued_on: new Date('01/01/2021').toISOString(),
     }).one();
-    render(<Wrapper certificate={certificate} productType={ProductType.CERTIFICATE} />);
+    render(<CertificateStatus certificate={certificate} productType={ProductType.CERTIFICATE} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
     expect(screen.getByText('Issued on Jan 01, 2021')).toBeInTheDocument();
 
     expect(
@@ -31,7 +29,9 @@ describe('<CertificateStatus/>', () => {
   });
 
   it('should display message for no certificate of product type certificate.', () => {
-    render(<Wrapper productType={ProductType.CERTIFICATE} />);
+    render(<CertificateStatus productType={ProductType.CERTIFICATE} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
 
     expect(
       screen.getByText(
@@ -48,7 +48,9 @@ describe('<CertificateStatus/>', () => {
   });
 
   it('should display message for no certificate of product type credential.', () => {
-    render(<Wrapper productType={ProductType.CREDENTIAL} />);
+    render(<CertificateStatus productType={ProductType.CREDENTIAL} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
     expect(
       screen.getByText(
         'When all your courses have been passed, you will be able to download your certificate here.',
