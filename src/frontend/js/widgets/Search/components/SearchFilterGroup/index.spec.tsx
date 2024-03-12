@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import queryString from 'query-string';
 import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'hooks/useHistory';
+import { render } from 'utils/test/render';
 import { SearchFilterGroup } from '.';
 
 jest.mock('../SearchFilterValueLeaf', () => ({
@@ -52,8 +53,6 @@ describe('widgets/Search/components/SearchFilterGroup', () => {
     ],
   };
 
-  beforeEach(jest.resetAllMocks);
-
   it('renders the name of the filter with the values as SearchFilters', () => {
     render(
       <IntlProvider locale="en">
@@ -61,6 +60,7 @@ describe('widgets/Search/components/SearchFilterGroup', () => {
           <SearchFilterGroup filter={filter} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
     // The filter group title and all filters are shown
     screen.getByRole('group', { name: 'Organizations' });
@@ -76,6 +76,7 @@ describe('widgets/Search/components/SearchFilterGroup', () => {
           <SearchFilterGroup filter={{ ...filter, is_searchable: false }} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     expect(screen.queryByRole('button', { name: 'More options' })).toEqual(null);
@@ -88,6 +89,7 @@ describe('widgets/Search/components/SearchFilterGroup', () => {
           <SearchFilterGroup filter={{ ...filter, has_more_values: false }} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     expect(screen.queryByRole('button', { name: 'More options' })).toEqual(null);

@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { CourseRunFactory } from 'utils/test/factories/richie';
+import { render } from 'utils/test/render';
 import { SyllabusSimpleCourseRunsList } from '.';
 
 jest.mock('widgets/SyllabusCourseRunsList/components/CourseRunItem', () => ({
@@ -16,7 +17,9 @@ describe('SyllabusSimpleCourseRunsList', () => {
   it('should render CourseRunItemWithEnrollment when checkEnrollment is true', () => {
     const courseRun = CourseRunFactory().one();
 
-    render(<SyllabusSimpleCourseRunsList courseRuns={[courseRun]} checkEnrollment />);
+    render(<SyllabusSimpleCourseRunsList courseRuns={[courseRun]} checkEnrollment />, {
+      wrapper: null,
+    });
 
     screen.getByText('CourseRunItemWithEnrollment');
   });
@@ -24,7 +27,7 @@ describe('SyllabusSimpleCourseRunsList', () => {
   it('should not render CourseRunItemWithEnrollment when checkEnrollment is false', () => {
     const courseRun = CourseRunFactory().one();
 
-    render(<SyllabusSimpleCourseRunsList courseRuns={[courseRun]} />);
+    render(<SyllabusSimpleCourseRunsList courseRuns={[courseRun]} />, { wrapper: null });
 
     screen.getByText('CourseRunItem');
   });
@@ -34,7 +37,9 @@ describe('SyllabusSimpleCourseRunsList', () => {
       snapshot: 'https://example.com/snaphosts/1/',
     }).one();
 
-    render(<SyllabusSimpleCourseRunsList courseRuns={[courseRun]} checkEnrollment />);
+    render(<SyllabusSimpleCourseRunsList courseRuns={[courseRun]} checkEnrollment />, {
+      wrapper: null,
+    });
 
     screen.getByText('CourseRunItem');
   });

@@ -1,12 +1,10 @@
 import { PropsWithChildren } from 'react';
-import { IntlProvider } from 'react-intl';
 import { renderHook } from '@testing-library/react';
+import { IntlWrapper } from 'utils/test/wrappers/IntlWrapper';
 import useDashboardRoutes from '.';
 
 describe('useDashboardRouter', () => {
-  const Wrapper = ({ children }: PropsWithChildren<{}>) => (
-    <IntlProvider locale="en">{children}</IntlProvider>
-  );
+  const Wrapper = ({ children }: PropsWithChildren<{}>) => <IntlWrapper>{children}</IntlWrapper>;
 
   it('should render path according to the active language', () => {
     const { result } = renderHook(useDashboardRoutes, { wrapper: Wrapper });

@@ -1,5 +1,5 @@
 import { QueryClientProvider } from '@tanstack/react-query';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import { IntlProvider } from 'react-intl';
@@ -10,6 +10,7 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import context from 'utils/context';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { render } from 'utils/test/render';
 import Search from '.';
 
 let mockMatches = false;
@@ -29,6 +30,10 @@ jest.mock('utils/context', () => ({
   default: mockRichieContextFactory().one(),
 }));
 
+jest.mock('utils/errors/handle', () => ({
+  handle: jest.fn(),
+}));
+
 describe('<Search />', () => {
   const historyPushState = jest.fn();
   const historyReplaceState = jest.fn();
@@ -41,11 +46,6 @@ describe('<Search />', () => {
     historyPushState,
     historyReplaceState,
   ];
-
-  afterEach(() => {
-    fetchMock.restore();
-    jest.resetAllMocks();
-  });
 
   it('shows a spinner while the results are loading', async () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
@@ -63,6 +63,7 @@ describe('<Search />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     expect(screen.getByText('Loading search results...').parentElement).toHaveAttribute(
@@ -118,6 +119,7 @@ describe('<Search />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     // Wait for search results to be loaded
@@ -142,6 +144,7 @@ describe('<Search />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     expect(screen.getByText('Loading search results...').parentElement).toHaveAttribute(
@@ -172,6 +175,7 @@ describe('<Search />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     await waitFor(() => {
@@ -198,6 +202,7 @@ describe('<Search />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     // there is a button to toggle the filters pane, placed right before the filters pane in the DOM
@@ -265,6 +270,7 @@ describe('<Search />', () => {
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
+      { wrapper: null },
     );
 
     // both filters and results zones are regions that are correctly labelled
@@ -301,6 +307,7 @@ describe('<Search />', () => {
             </HistoryContext.Provider>
           </IntlProvider>
         </QueryClientProvider>,
+        { wrapper: null },
       );
     });
 
@@ -333,6 +340,7 @@ describe('<Search />', () => {
             </HistoryContext.Provider>
           </IntlProvider>
         </QueryClientProvider>,
+        { wrapper: null },
       );
     });
 

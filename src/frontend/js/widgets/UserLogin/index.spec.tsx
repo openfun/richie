@@ -1,22 +1,18 @@
-import { QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
-import { IntlProvider } from 'react-intl';
 import { act } from 'react-dom/test-utils';
-import { PropsWithChildren } from 'react';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
 import { Deferred } from 'utils/test/deferred';
 import context from 'utils/context';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { JoanieUserApiAbilityActions, User } from 'types/User';
 import { HttpStatusCode } from 'utils/errors/HttpError';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { JoanieUserProfileFactory } from 'utils/test/factories/joanie';
-import { Nullable } from 'types/utils';
+import { render } from 'utils/test/render';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import UserLogin from '.';
 
 jest.mock('utils/errors/handle', () => ({
@@ -45,16 +41,6 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('<UserLogin />', () => {
-  const Wrapper = ({
-    children,
-    user = false,
-  }: PropsWithChildren & { user?: Nullable<User | boolean> }) => (
-    <QueryClientProvider client={createTestQueryClient({ user })}>
-      <IntlProvider locale="en">
-        <JoanieSessionProvider>{children}</JoanieSessionProvider>
-      </IntlProvider>
-    </QueryClientProvider>
-  );
   beforeEach(() => {
     fetchMock
       .get('https://endpoint.test/api/v1.0/orders/', [])
@@ -69,11 +55,9 @@ describe('<UserLogin />', () => {
     const user: User = UserFactory().one();
 
     fetchMock.get('https://endpoint.test/api/v1.0/users/me/', JoanieUserProfileFactory().one());
-    render(
-      <Wrapper user={user}>
-        <UserLogin context={context} />
-      </Wrapper>,
-    );
+    render(<UserLogin context={context} />, {
+      queryOptions: { client: createTestQueryClient({ user }) },
+    });
 
     const button = await screen.findByLabelText(`Access to your profile settings`, {
       selector: 'button',
@@ -91,11 +75,9 @@ describe('<UserLogin />', () => {
     fetchMock.get('https://auth.test/api/user/v1/me', loginDeferred.promise);
 
     fetchMock.get('https://endpoint.test/api/v1.0/users/me/', JoanieUserProfileFactory().one());
-    render(
-      <Wrapper user={null}>
-        <UserLogin context={context} />
-      </Wrapper>,
-    );
+    render(<UserLogin context={context} />, {
+      queryOptions: { client: createTestQueryClient({ user: null }) },
+    });
 
     await act(async () => {
       loginDeferred.resolve(HttpStatusCode.UNAUTHORIZED);
@@ -124,11 +106,9 @@ describe('<UserLogin />', () => {
         },
       }).one(),
     );
-    render(
-      <Wrapper user={user}>
-        <UserLogin context={context} profileUrls={profileUrls} />
-      </Wrapper>,
-    );
+    render(<UserLogin context={context} profileUrls={profileUrls} />, {
+      queryOptions: { client: createTestQueryClient({ user }) },
+    });
 
     const button = await screen.findByLabelText(`Access to your profile settings`, {
       selector: 'button',
@@ -160,11 +140,9 @@ describe('<UserLogin />', () => {
         },
       }).one(),
     );
-    render(
-      <Wrapper user={user}>
-        <UserLogin context={context} profileUrls={profileUrls} />
-      </Wrapper>,
-    );
+    render(<UserLogin context={context} profileUrls={profileUrls} />, {
+      queryOptions: { client: createTestQueryClient({ user }) },
+    });
 
     const button = await screen.findByLabelText(`Access to your profile settings`, {
       selector: 'button',

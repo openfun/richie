@@ -1,6 +1,8 @@
-import { render, screen } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
+import { screen } from '@testing-library/react';
 import { userEvent } from '@storybook/testing-library';
+import { PropsWithChildren } from 'react';
+import { render } from 'utils/test/render';
+import { IntlWrapper } from 'utils/test/wrappers/IntlWrapper';
 import { DashboardSubItemsList } from './DashboardSubItemsList';
 import { DashboardSubItem } from './DashboardSubItem';
 import { DashboardItem, DEMO_IMAGE_URL } from '.';
@@ -14,6 +16,7 @@ describe('<DashboardItem />', () => {
         imageUrl={DEMO_IMAGE_URL}
         footer="Hi, i'm the footer"
       />,
+      { wrapper: null },
     );
 
     expect(screen.getByText('Become a React pro')).toBeInTheDocument();
@@ -34,6 +37,7 @@ describe('<DashboardItem />', () => {
         footer="Hi, i'm the footer"
         mode="compact"
       />,
+      { wrapper: null },
     );
 
     expect(screen.getByText("Hi, i'm the footer")).toBeInTheDocument();
@@ -54,6 +58,7 @@ describe('<DashboardItem />', () => {
           ]}
         />
       </DashboardItem>,
+      { wrapper: null },
     );
 
     screen.getByText('Sub 1');
@@ -63,27 +68,27 @@ describe('<DashboardItem />', () => {
 
   it('renders a DashboardItem with more dropdown', async () => {
     render(
-      <IntlProvider locale="en">
-        <DashboardItem
-          title="Become a React pro"
-          code="Ref. 123"
-          imageUrl={DEMO_IMAGE_URL}
-          more={
-            <>
-              <li>
-                <div className="selector__list__link">Copy</div>
-              </li>
-              <li>
-                <div className="selector__list__link">Duplicate</div>
-              </li>
-              <li>
-                <div className="selector__list__link">Delete</div>
-              </li>
-            </>
-          }
-        />
-        ,
-      </IntlProvider>,
+      <DashboardItem
+        title="Become a React pro"
+        code="Ref. 123"
+        imageUrl={DEMO_IMAGE_URL}
+        more={
+          <>
+            <li>
+              <div className="selector__list__link">Copy</div>
+            </li>
+            <li>
+              <div className="selector__list__link">Duplicate</div>
+            </li>
+            <li>
+              <div className="selector__list__link">Delete</div>
+            </li>
+          </>
+        }
+      />,
+      {
+        wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+      },
     );
 
     expect(screen.queryByText('Copy')).not.toBeInTheDocument();

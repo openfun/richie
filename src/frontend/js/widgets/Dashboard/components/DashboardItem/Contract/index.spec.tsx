@@ -1,14 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { PropsWithChildren } from 'react';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
-import fetchMock from 'fetch-mock';
+import { screen } from '@testing-library/react';
 import { faker } from '@faker-js/faker';
-import { MemoryRouter } from 'react-router-dom';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { Contract, NestedCredentialOrder } from 'types/Joanie';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardItemContract } from 'widgets/Dashboard/components/DashboardItem/Contract/index';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import {
@@ -16,12 +9,14 @@ import {
   CredentialOrderFactory,
   NestedCredentialOrderFactory,
 } from 'utils/test/factories/joanie';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
-    joanie_backend: { endpoint: 'https://joanie.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
@@ -35,32 +30,11 @@ describe.each([
     OrderSerializer: CredentialOrderFactory,
   },
 ])('<DashboardContract/> $label', ({ OrderSerializer }) => {
-  const Wrapper = ({ children }: PropsWithChildren) => {
-    return (
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <SessionProvider>
-            <MemoryRouter>{children}</MemoryRouter>
-          </SessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>
-    );
-  };
+  setupJoanieSession();
 
   beforeAll(() => {
     // eslint-disable-next-line compat/compat
     URL.createObjectURL = jest.fn();
-  });
-
-  beforeEach(() => {
-    fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-    fetchMock.restore();
   });
 
   it.each([
@@ -81,9 +55,6 @@ describe.each([
         contract={contract}
         writable={writable}
       />,
-      {
-        wrapper: Wrapper,
-      },
     );
 
     expect(await screen.findByText(contract.definition.title)).toBeInTheDocument();
@@ -118,9 +89,6 @@ describe.each([
         contract={contract}
         writable={writable}
       />,
-      {
-        wrapper: Wrapper,
-      },
     );
 
     expect(await screen.findByText(contract.definition.title)).toBeInTheDocument();
@@ -149,9 +117,6 @@ describe.each([
         contract={contract}
         writable={true}
       />,
-      {
-        wrapper: Wrapper,
-      },
     );
 
     expect(await screen.findByText(contract.definition.title)).toBeInTheDocument();
@@ -179,9 +144,6 @@ describe.each([
         contract={contract}
         writable={false}
       />,
-      {
-        wrapper: Wrapper,
-      },
     );
 
     expect(await screen.findByText(contract.definition.title)).toBeInTheDocument();

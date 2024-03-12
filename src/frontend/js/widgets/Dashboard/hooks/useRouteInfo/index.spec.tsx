@@ -1,42 +1,35 @@
 import { PropsWithChildren, useMemo } from 'react';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { renderHook, waitFor } from '@testing-library/react';
+import { RouterWrapper } from 'utils/test/wrappers/RouterWrapper';
 import useRouteInfo from '.';
 
 describe('useRouteInfo', () => {
-  let routerOptions = {
-    initialEntries: ['/posts'],
-  };
-  const Router = ({ children }: PropsWithChildren) => {
-    const router = useMemo(
-      () =>
-        createMemoryRouter(
-          [
-            {
-              path: '/posts',
-              element: <div data-testid="posts">{children}</div>,
-              loader: () => ({ posts: [] }),
-              children: [
-                {
-                  path: ':postId',
-                  element: <div data-testid="route-post">{children}</div>,
-                  handle: { title: 'A post' },
-                },
-              ],
-            },
-          ],
-          routerOptions,
-        ),
-      [children, routerOptions],
-    );
-
-    return <RouterProvider router={router} />;
-  };
-
   it('should return all information about the active route', async () => {
+    let currentUrl = '/posts';
     // First render to match the '/posts' route
     const { result, rerender } = renderHook(useRouteInfo, {
-      wrapper: Router,
+      wrapper: ({ children }: PropsWithChildren) => {
+        const initialEntries = useMemo(() => [currentUrl], [currentUrl]);
+        return (
+          <RouterWrapper
+            initialEntries={initialEntries}
+            routes={[
+              {
+                path: '/posts',
+                element: <div data-testid="posts">{children}</div>,
+                loader: () => ({ posts: [] }),
+                children: [
+                  {
+                    path: ':postId',
+                    element: <div data-testid="route-post">{children}</div>,
+                    handle: { title: 'A post' },
+                  },
+                ],
+              },
+            ]}
+          />
+        );
+      },
     });
 
     await waitFor(() =>
@@ -49,8 +42,7 @@ describe('useRouteInfo', () => {
       }),
     );
 
-    // Rerender to match the '/posts/:postId' route
-    routerOptions = { initialEntries: ['/posts/a-first-post'] };
+    currentUrl = '/posts/a-first-post';
     rerender();
 
     await waitFor(() =>

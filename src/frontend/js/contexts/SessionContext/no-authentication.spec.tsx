@@ -1,8 +1,9 @@
-import { render, renderHook, screen } from '@testing-library/react';
+import { renderHook, screen } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { handle as mockHandle } from 'utils/errors/handle';
 import { noop } from 'utils';
+import { render } from 'utils/test/render';
 import { SessionProvider, useSession } from '.';
 
 jest.mock('utils/errors/handle');
@@ -15,7 +16,7 @@ jest.mock('utils/context', () => ({
 
 describe('SessionProvider with no authentication', () => {
   it('uses any Provider', async () => {
-    render(<SessionProvider>Children</SessionProvider>);
+    render(<SessionProvider>Children</SessionProvider>, { wrapper: null });
     await screen.findByText('Children');
   });
 

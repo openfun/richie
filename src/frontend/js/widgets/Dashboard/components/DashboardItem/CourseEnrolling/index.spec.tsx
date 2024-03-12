@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { IntlProvider, createIntl } from 'react-intl';
+import { screen } from '@testing-library/react';
+import { createIntl } from 'react-intl';
 import { PropsWithChildren } from 'react';
 import { CredentialOrderFactory, EnrollmentFactory } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
@@ -9,6 +9,8 @@ import { CourseRunFactoryFromPriority } from 'utils/test/factories/richie';
 import { noop } from 'utils';
 import { computeState } from 'utils/CourseRuns';
 import { formatRelativeDate } from 'utils/relativeDate';
+import { IntlWrapper } from 'utils/test/wrappers/IntlWrapper';
+import { render } from 'utils/test/render';
 import { DashboardItemCourseEnrollingRun, Enrolled } from '.';
 
 /**
@@ -16,10 +18,6 @@ import { DashboardItemCourseEnrollingRun, Enrolled } from '.';
  * DashboardItemOrder.spec.tsx. But here are some tests that are more straightforward.
  */
 describe('<Enrolled/>', () => {
-  const wrapper = ({ children }: PropsWithChildren) => {
-    return <IntlProvider locale="en">{children}</IntlProvider>;
-  };
-
   it.each([
     {
       buttonTestLabel: 'and access course button',
@@ -87,7 +85,9 @@ describe('<Enrolled/>', () => {
     async ({ priority, expectButton, expectLabelTemplate }) => {
       const enrollment: Enrollment = EnrollmentFactory().one();
       enrollment.course_run.state.priority = priority;
-      render(<Enrolled enrollment={enrollment} />, { wrapper });
+      render(<Enrolled enrollment={enrollment} />, {
+        wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+      });
       const intl = createIntl({ locale: 'en' });
 
       const fromDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
@@ -138,14 +138,15 @@ describe('<DashboardItemCourseEnrollingRun/>', () => {
       joanieCourseRun.course = order.course;
 
       render(
-        <IntlProvider locale="en">
-          <DashboardItemCourseEnrollingRun
-            order={order}
-            courseRun={joanieCourseRun}
-            selected={false}
-            enroll={noop}
-          />
-        </IntlProvider>,
+        <DashboardItemCourseEnrollingRun
+          order={order}
+          courseRun={joanieCourseRun}
+          selected={false}
+          enroll={noop}
+        />,
+        {
+          wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+        },
       );
 
       if (expectEnrollmentNotYetOpened) {

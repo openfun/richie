@@ -1,5 +1,5 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
 import { faker } from '@faker-js/faker';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
@@ -10,11 +10,11 @@ import {
   UserFactory,
   CourseRunFactory,
 } from 'utils/test/factories/richie';
-import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
 import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/hooks/useCourseEnrollment/index';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { BaseAppWrapper } from 'utils/test/wrappers/BaseAppWrapper';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -38,14 +38,8 @@ describe('useCourseEnrollment', () => {
   const wrapper =
     (client: QueryClient) =>
     ({ children }: PropsWithChildren) => (
-      <QueryClientProvider client={client}>
-        <BaseSessionProvider>{children}</BaseSessionProvider>
-      </QueryClientProvider>
+      <BaseAppWrapper queryOptions={{ client }}>{children}</BaseAppWrapper>
     );
-
-  beforeEach(() => {
-    fetchMock.restore();
-  });
 
   it('does not make request when user is not authenticated', async () => {
     const user: User = UserFactory().one();
@@ -60,9 +54,13 @@ describe('useCourseEnrollment', () => {
       wrapper: wrapper(createTestQueryClient({ user: null })),
     });
 
+    await waitFor(() => {
+      expect(result.current).not.toBeNull();
+    });
+
     expect(fetchMock.called()).toBeFalsy();
     expect(result.current.enrollment).toBeUndefined();
-    expect(result.current.enrollmentIsActive).toBeUndefined();
+    expect(result.current.enrollmentIsActive).toBe(false);
   });
 
   it('retrieves enrollment when user is authenticated', async () => {

@@ -1,8 +1,9 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import queryString from 'query-string';
 import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'hooks/useHistory';
+import { render } from 'utils/test/render';
 import { SearchFilterValueLeaf } from '.';
 
 describe('widgets/Search/components/SearchFilterValueLeaf', () => {
@@ -17,8 +18,6 @@ describe('widgets/Search/components/SearchFilterValueLeaf', () => {
     historyPushState,
     historyReplaceState,
   ];
-
-  beforeEach(jest.resetAllMocks);
 
   it('renders the name of the filter value', () => {
     const { getByLabelText } = render(
@@ -43,6 +42,7 @@ describe('widgets/Search/components/SearchFilterValueLeaf', () => {
           />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The filter value is displayed with its facet count
@@ -82,6 +82,7 @@ describe('widgets/Search/components/SearchFilterValueLeaf', () => {
           />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The filter shows its active state
@@ -113,6 +114,7 @@ describe('widgets/Search/components/SearchFilterValueLeaf', () => {
           />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The filter shows its active state
@@ -145,6 +147,7 @@ describe('widgets/Search/components/SearchFilterValueLeaf', () => {
           />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     fireEvent.click(getByLabelText((content) => content.includes('Human name')));
@@ -190,6 +193,7 @@ describe('widgets/Search/components/SearchFilterValueLeaf', () => {
           />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     fireEvent.click(getByLabelText((content) => content.includes('Human name')));

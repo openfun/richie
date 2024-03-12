@@ -1,8 +1,9 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 import queryString from 'query-string';
 import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'hooks/useHistory';
+import { render } from 'utils/test/render';
 import { SearchFiltersPane } from '.';
 
 jest.mock('../SearchFilterGroup', () => ({
@@ -68,6 +69,7 @@ describe('widgets/Search/components/SearchFiltersPane', () => {
           />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The pane's title is shown along with filter groups in the order defined by their position
@@ -87,6 +89,7 @@ describe('widgets/Search/components/SearchFiltersPane', () => {
           <SearchFiltersPane filters={null} />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
     getByText('Filter courses');
   });
@@ -140,6 +143,7 @@ describe('widgets/Search/components/SearchFiltersPane', () => {
           />
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const clearButton = getByText('Clear 2 active filters');

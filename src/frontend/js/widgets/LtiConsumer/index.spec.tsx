@@ -1,14 +1,12 @@
 import { type PropsWithChildren } from 'react';
-import { act, render, renderHook, waitFor } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { QueryClient, QueryClientProvider, QueryObserverOptions } from '@tanstack/react-query';
+import { QueryObserverOptions } from '@tanstack/react-query';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
 import { Deferred } from 'utils/test/deferred';
-import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { RICHIE_LTI_ANONYMOUS_USER_ID_CACHE_KEY } from 'settings';
 import { handle } from 'utils/errors/handle';
 import { resolveAll } from 'utils/resolveAll';
@@ -16,6 +14,8 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { noop } from 'utils';
 import { useSession } from 'contexts/SessionContext';
 import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
+import { render } from 'utils/test/render';
+import { BaseAppWrapper } from 'utils/test/wrappers/BaseAppWrapper';
 import {
   LtiConsumerContentParameters,
   LtiConsumerContext,
@@ -35,8 +35,6 @@ jest.mock('uuid', () => ({
 
 describe('widgets/LtiConsumer', () => {
   afterEach(() => {
-    fetchMock.restore();
-    jest.resetAllMocks();
     sessionStorage.clear();
     delete window.CMS;
   });
@@ -55,13 +53,13 @@ describe('widgets/LtiConsumer', () => {
   });
   HTMLFormElement.prototype.submit = mockSubmit;
 
-  const Wrapper = ({ client, children }: PropsWithChildren<{ client: QueryClient }>) => (
-    <IntlProvider locale="en">
-      <QueryClientProvider client={client}>
-        <BaseSessionProvider>{children}</BaseSessionProvider>
-      </QueryClientProvider>
-    </IntlProvider>
-  );
+  // const Wrapper = ({ client, children }: PropsWithChildren<{ client: QueryClient }>) => (
+  //   <IntlProvider locale="en">
+  //     <QueryClientProvider client={client}>
+  //       <BaseSessionProvider>{children}</BaseSessionProvider>
+  //     </QueryClientProvider>
+  //   </IntlProvider>
+  // );
 
   it('renders an auto-resized iframe with a LTI content', async () => {
     const contentParameters = {
@@ -96,11 +94,10 @@ describe('widgets/LtiConsumer', () => {
       ltiContextDeferred.promise,
     );
 
-    const { container } = render(
-      <Wrapper client={createTestQueryClient({ user: null })}>
-        <LtiConsumer {...ltiConsumerProps} />
-      </Wrapper>,
-    );
+    const { container } = render(<LtiConsumer {...ltiConsumerProps} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user: null }) },
+    });
 
     await act(async () => ltiContextDeferred.resolve(ltiContextResponse));
 
@@ -163,11 +160,10 @@ describe('widgets/LtiConsumer', () => {
       ltiContextDeferred.promise,
     );
 
-    const { container } = render(
-      <Wrapper client={createTestQueryClient({ user: null })}>
-        <LtiConsumer {...ltiConsumerProps} />
-      </Wrapper>,
-    );
+    const { container } = render(<LtiConsumer {...ltiConsumerProps} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user: null }) },
+    });
 
     await act(async () => ltiContextDeferred.resolve(ltiContextResponse));
 
@@ -205,11 +201,10 @@ describe('widgets/LtiConsumer', () => {
       HttpStatusCode.INTERNAL_SERVER_ERROR,
     );
 
-    const { container } = render(
-      <Wrapper client={createTestQueryClient({ user: null })}>
-        <LtiConsumer {...ltiConsumerProps} />
-      </Wrapper>,
-    );
+    const { container } = render(<LtiConsumer {...ltiConsumerProps} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user: null }) },
+    });
 
     await waitFor(() =>
       expect(mockHandle).toHaveBeenCalledWith(new HttpError(500, 'Internal Server Error')),
@@ -233,15 +228,14 @@ describe('widgets/LtiConsumer', () => {
       },
     });
 
-    render(
-      <Wrapper
-        client={createTestQueryClient({
+    render(<LtiConsumer id={1337} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: {
+        client: createTestQueryClient({
           user: { username: 'johndoe', email: 'johndoe@example.com' },
-        })}
-      >
-        <LtiConsumer id={1337} />
-      </Wrapper>,
-    );
+        }),
+      },
+    });
 
     expect(fetchMock.calls()).toHaveLength(1);
     expect(
@@ -265,11 +259,14 @@ describe('widgets/LtiConsumer', () => {
       ltiContextDeferred.promise,
     );
 
-    render(
-      <Wrapper client={createTestQueryClient({ user: null })}>
-        <LtiConsumer id={1337} />
-      </Wrapper>,
-    );
+    render(<LtiConsumer id={1337} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: {
+        client: createTestQueryClient({
+          user: null,
+        }),
+      },
+    });
 
     expect(fetchMock.calls()).toHaveLength(1);
     expect(
@@ -300,11 +297,12 @@ describe('widgets/LtiConsumer', () => {
     );
     const client = createTestQueryClient({ user: null });
 
-    render(
-      <Wrapper client={client}>
-        <LtiConsumer id={1337} />
-      </Wrapper>,
-    );
+    render(<LtiConsumer id={1337} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: {
+        client,
+      },
+    });
 
     await act(async () =>
       ltiContextDeferred.resolve({
@@ -368,10 +366,10 @@ describe('widgets/LtiConsumer', () => {
 
     const { result } = renderHook(useSession, {
       wrapper: ({ children }: PropsWithChildren) => (
-        <Wrapper client={client}>
+        <BaseAppWrapper queryOptions={{ client }}>
           <LtiConsumer id={1337} />
           {children}
-        </Wrapper>
+        </BaseAppWrapper>
       ),
     });
 

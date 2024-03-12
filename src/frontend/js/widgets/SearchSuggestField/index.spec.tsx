@@ -1,4 +1,4 @@
-import { act, fireEvent, render, waitFor } from '@testing-library/react';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { CourseSearchParamsAction, useCourseSearchParams } from 'hooks/useCourseSearchParams';
@@ -7,6 +7,7 @@ import { history, location } from 'utils/indirection/window';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { FilterDefinition } from 'types/filters';
 import context from 'utils/context';
+import { render } from 'utils/test/render';
 import SearchSuggestField from '.';
 
 jest.mock('settings', () => ({
@@ -78,6 +79,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <SearchSuggestField context={context} />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The placeholder text is shown in the input
@@ -94,6 +96,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <SearchSuggestField context={context} />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The existing query is shown in the input
@@ -116,6 +119,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <OtherComponent />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The existing query is shown in the input
@@ -134,6 +138,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <OtherComponent />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The input does not show a value anymore
@@ -170,6 +175,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <SearchSuggestField context={context} />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = getByPlaceholderText('Search for courses, organizations, categories');
@@ -212,6 +218,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <SearchSuggestField context={context} />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = getByPlaceholderText('Search for courses, organizations, categories');
@@ -257,6 +264,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <SearchSuggestField context={context} />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = getByPlaceholderText('Search for courses, organizations, categories');
@@ -349,6 +357,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <SearchSuggestField context={context} />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = getByPlaceholderText('Search for courses, organizations, categories');
@@ -433,6 +442,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <SearchSuggestField context={context} />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = getByPlaceholderText('Search for courses, organizations, categories');
@@ -477,6 +487,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <SearchSuggestField context={context} />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = getByPlaceholderText('Search for courses, organizations, categories');
@@ -566,6 +577,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <SearchSuggestField context={context} />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = getByPlaceholderText('Search for courses, organizations, categories');
@@ -627,6 +639,7 @@ describe('widgets/Search/components/SearchSuggestField', () => {
           <SearchSuggestField context={context} />
         </HistoryProvider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const field = getByPlaceholderText('Search for courses, organizations, categories');

@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import { range } from 'lodash-es';
@@ -9,6 +9,7 @@ import { History, HistoryContext } from 'hooks/useHistory';
 import { Deferred } from 'utils/test/deferred';
 import { resolveAll } from 'utils/resolveAll';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { render } from 'utils/test/render';
 import { SearchFilterGroupModal } from '.';
 
 jest.mock('utils/errors/handle', () => ({ handle: jest.fn() }));
@@ -61,9 +62,6 @@ describe('<SearchFilterGroupModal />', () => {
     historyReplaceState,
   ];
 
-  beforeEach(() => fetchMock.restore());
-  beforeEach(jest.resetAllMocks);
-
   it('renders a button with a modal to search values for a given filter', async () => {
     {
       const universitiesDeferred = new Deferred();
@@ -83,6 +81,7 @@ describe('<SearchFilterGroupModal />', () => {
             </QueryClientProvider>
           </HistoryContext.Provider>
         </IntlProvider>,
+        { wrapper: null },
       );
 
       // The modal is not rendered
@@ -242,6 +241,7 @@ describe('<SearchFilterGroupModal />', () => {
             </QueryClientProvider>
           </HistoryContext.Provider>
         </IntlProvider>,
+        { wrapper: null },
       );
 
       // The modal is rendered
@@ -419,6 +419,7 @@ describe('<SearchFilterGroupModal />', () => {
           </QueryClientProvider>
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The modal is not rendered
@@ -477,6 +478,7 @@ describe('<SearchFilterGroupModal />', () => {
           </QueryClientProvider>
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The modal is not rendered
@@ -559,6 +561,7 @@ describe('<SearchFilterGroupModal />', () => {
           </QueryClientProvider>
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The modal is not rendered
@@ -592,6 +595,7 @@ describe('<SearchFilterGroupModal />', () => {
           </QueryClientProvider>
         </HistoryContext.Provider>
       </IntlProvider>,
+      { wrapper: null },
     );
 
     // The modal is not rendered

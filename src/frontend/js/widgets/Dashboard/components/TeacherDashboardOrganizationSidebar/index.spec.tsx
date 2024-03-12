@@ -1,20 +1,13 @@
 import { faker } from '@faker-js/faker';
-import { CunninghamProvider } from '@openfun/cunningham-react';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { IntlProvider } from 'react-intl';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { StringHelper } from 'utils/StringHelper';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
-import {
-  RichieContextFactory as mockRichieContextFactory,
-  UserFactory,
-} from 'utils/test/factories/richie';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { ContractFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { PER_PAGE } from 'settings';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { render } from 'utils/test/render';
 import { TeacherDashboardOrganizationSidebar } from '.';
 
 jest.mock('utils/context', () => ({
@@ -26,31 +19,7 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('<TeacherDashboardOrganizationSidebar />', () => {
-  beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
-  });
-
-  afterEach(() => {
-    fetchMock.restore();
-  });
-
-  const Wrapper = ({ organizationId }: { organizationId: string }) => (
-    <IntlProvider locale="en">
-      <QueryClientProvider client={createTestQueryClient({ user: UserFactory().one() })}>
-        <JoanieSessionProvider>
-          <CunninghamProvider>
-            <MemoryRouter initialEntries={['/' + organizationId]}>
-              <Routes>
-                <Route path="/:organizationId" element={<TeacherDashboardOrganizationSidebar />} />
-              </Routes>
-            </MemoryRouter>
-          </CunninghamProvider>
-        </JoanieSessionProvider>
-      </QueryClientProvider>
-    </IntlProvider>
-  );
+  setupJoanieSession();
 
   it('should render', async () => {
     const organization = OrganizationFactory({ logo: null }).one();
@@ -66,7 +35,9 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
       { results: [], count: 0, previous: null, next: null },
     );
 
-    render(<Wrapper organizationId={organization.id} />);
+    render(<TeacherDashboardOrganizationSidebar />, {
+      routerOptions: { path: '/:organizationId', initialEntries: [`/${organization.id}`] },
+    });
 
     await expectNoSpinner('Loading organization...');
 
@@ -106,7 +77,9 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
       },
     );
 
-    render(<Wrapper organizationId={organization.id} />);
+    render(<TeacherDashboardOrganizationSidebar />, {
+      routerOptions: { path: '/:organizationId', initialEntries: [`/${organization.id}`] },
+    });
     await expectNoSpinner('Loading organization...');
 
     // It should display contract link with badge next to it displaying the number of contracts to sign
@@ -140,7 +113,9 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
       },
     );
 
-    render(<Wrapper organizationId={organization.id} />);
+    render(<TeacherDashboardOrganizationSidebar />, {
+      routerOptions: { path: '/:organizationId', initialEntries: [`/${organization.id}`] },
+    });
     await expectNoSpinner('Loading organization...');
 
     // It should display contract link with no badge next to it

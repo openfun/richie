@@ -1,7 +1,8 @@
-import { act, render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from 'react-intl';
 import { HistoryProvider } from 'hooks/useHistory';
+import { render } from 'utils/test/render';
 import LanguageSelector from '.';
 
 jest.mock('utils/indirection/window', () => ({
@@ -31,15 +32,14 @@ describe('<LanguageSelector />', () => {
       <IntlProvider locale="en">
         <LanguageSelector currentLanguage="fr" languages={languages} />
       </IntlProvider>,
+      { wrapper: null },
     );
 
     const button = screen.getByLabelText('Select a language:', {
       selector: 'button',
     });
 
-    await act(async () => {
-      await userEvent.click(button);
-    });
+    await userEvent.click(button);
 
     screen.getByRole('listbox', { name: 'Select a language:' });
     screen.getByRole('option', { name: 'Anglais' });
@@ -69,14 +69,14 @@ describe('<LanguageSelector />', () => {
           <LanguageSelector currentLanguage="fr" languages={languages} />
         </IntlProvider>
       </HistoryProvider>,
+      { wrapper: null },
     );
     const button = screen.getByLabelText('Select a language:', {
       selector: 'button',
     });
 
-    await act(async () => {
-      await userEvent.click(button);
-    });
+    await userEvent.click(button);
+
     const link = await screen.findByRole('link', { name: 'Anglais' });
     expect(link).toHaveAttribute('href', '/switch/to/en/?args=0');
     expect(link.title).toEqual('Switch to Anglais');

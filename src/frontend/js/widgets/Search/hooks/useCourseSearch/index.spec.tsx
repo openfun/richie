@@ -1,11 +1,9 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
-import { PropsWithChildren } from 'react';
-import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
 
+import { PropsWithChildren } from 'react';
 import { APIListRequestParams } from 'types/api';
 import { Deferred } from 'utils/test/deferred';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { ReactQueryAppWrapper } from 'utils/test/wrappers/ReactQueryAppWrapper';
 import { fetchList } from '../../utils/getResourceList';
 import { useCourseSearch } from '.';
 
@@ -17,15 +15,9 @@ const mockFetchList = fetchList as jest.MockedFunction<typeof fetchList>;
 
 describe('widgets/Search/hooks/useCourseSearch', () => {
   let locale: string;
-  const wrapper = ({ children }: PropsWithChildren<any>) => (
-    <IntlProvider locale={locale || 'en'}>
-      <QueryClientProvider client={createTestQueryClient()}>{children}</QueryClientProvider>
-    </IntlProvider>
+  const wrapper = ({ children }: PropsWithChildren) => (
+    <ReactQueryAppWrapper intlOptions={{ locale }}>{children}</ReactQueryAppWrapper>
   );
-
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
 
   it('gets the courses with the passed params', async () => {
     const deferred = new Deferred<any>();

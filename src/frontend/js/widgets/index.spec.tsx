@@ -1,9 +1,10 @@
 import type { PropsWithChildren } from 'react';
-import { IntlProvider } from 'react-intl';
-import { findByText, render } from '@testing-library/react';
+import { findByText } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { handle as mockHandle } from 'utils/errors/handle';
 import { noop } from 'utils';
+import { render } from 'utils/test/render';
+import { IntlWrapper } from 'utils/test/wrappers/IntlWrapper';
 import { Root } from '.';
 
 jest.mock('utils/context', () => ({
@@ -55,11 +56,9 @@ describe('<Root />', () => {
     document.body.append(rootSearchSuggestFieldContainer);
 
     // Render the root component, passing the elements in need of frontend rendering
-    render(
-      <IntlProvider locale="en">
-        <Root richieReactSpots={[userLoginContainer, rootSearchSuggestFieldContainer]} />
-      </IntlProvider>,
-    );
+    render(<Root richieReactSpots={[userLoginContainer, rootSearchSuggestFieldContainer]} />, {
+      wrapper: IntlWrapper,
+    });
 
     await findByText(userLoginContainer, 'user login component rendered');
     await findByText(
@@ -79,11 +78,9 @@ describe('<Root />', () => {
     document.body.append(userFeedbackContainer);
 
     // Render the root component, passing our real element and our bogus one
-    render(
-      <IntlProvider locale="en">
-        <Root richieReactSpots={[userFeedbackContainer, userLoginContainer]} />
-      </IntlProvider>,
-    );
+    render(<Root richieReactSpots={[userFeedbackContainer, userLoginContainer]} />, {
+      wrapper: IntlWrapper,
+    });
 
     await findByText(userLoginContainer, 'user login component rendered');
     await findByText(userFeedbackContainer, '');
@@ -106,11 +103,9 @@ describe('<Root />', () => {
     document.body.append(searchFailingComponent);
 
     // Render the root component, passing our real element and our bogus one
-    render(
-      <IntlProvider locale="en">
-        <Root richieReactSpots={[userLoginContainer, searchFailingComponent]} />
-      </IntlProvider>,
-    );
+    render(<Root richieReactSpots={[userLoginContainer, searchFailingComponent]} />, {
+      wrapper: IntlWrapper,
+    });
 
     await findByText(userLoginContainer, 'user login component rendered');
     expect(mockHandle).toHaveBeenCalledWith(new Error('Failed to render Search component.'));

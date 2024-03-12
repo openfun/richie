@@ -1,7 +1,5 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
 import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
 import {
@@ -10,10 +8,12 @@ import {
   UserFactory,
 } from 'utils/test/factories/richie';
 import { handle } from 'utils/errors/handle';
-import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { User } from 'types/User';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { BaseAppWrapper } from 'utils/test/wrappers/BaseAppWrapper';
+import { render } from 'utils/test/render';
+import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import CourseRunEnrollment from './index';
 
 jest.mock('utils/errors/handle');
@@ -43,14 +43,6 @@ describe('<CourseRunEnrollment />', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     sessionStorage.clear();
-    fetchMock
-      .get('https://joanie.endpoint/api/v1.0/addresses/', [])
-      .get('https://joanie.endpoint/api/v1.0/credit-cards/', [])
-      .get('https://joanie.endpoint/api/v1.0/orders/', []);
-  });
-
-  afterEach(() => {
-    fetchMock.restore();
   });
 
   it('shows an "Enroll" button and allows the user to enroll', async () => {
@@ -65,22 +57,16 @@ describe('<CourseRunEnrollment />', () => {
       enrollmentsDeferred.promise,
     );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<CourseRunEnrollment courseRun={courseRun} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user }) },
     });
-    screen.getByRole('status', { name: 'Loading enrollment information...' });
+    await expectSpinner('Loading enrollment information...');
 
     await act(async () => {
       enrollmentsDeferred.resolve({});
     });
+    await expectNoSpinner('Loading enrollment information...');
 
     const button = await screen.findByRole('button', { name: 'Enroll now' });
 
@@ -110,16 +96,9 @@ describe('<CourseRunEnrollment />', () => {
       enrollmentDeferred.promise,
     );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<CourseRunEnrollment courseRun={courseRun} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user }) },
     });
 
     screen.getByRole('status', { name: 'Loading enrollment information...' });
@@ -160,16 +139,9 @@ describe('<CourseRunEnrollment />', () => {
       enrollmentDeferred.promise,
     );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<CourseRunEnrollment courseRun={courseRun} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user }) },
     });
 
     screen.getByRole('status', { name: 'Loading enrollment information...' });
@@ -206,16 +178,9 @@ describe('<CourseRunEnrollment />', () => {
       enrollmentsDeferred.promise,
     );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<CourseRunEnrollment courseRun={courseRun} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user }) },
     });
 
     screen.getByRole('status', { name: 'Loading enrollment information...' });
@@ -244,16 +209,9 @@ describe('<CourseRunEnrollment />', () => {
       enrollmentsDeferred.promise,
     );
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<CourseRunEnrollment courseRun={courseRun} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user }) },
     });
 
     screen.getByRole('status', { name: 'Loading enrollment information...' });
@@ -277,16 +235,9 @@ describe('<CourseRunEnrollment />', () => {
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
     courseRun.state.priority = 4;
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: null })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<CourseRunEnrollment courseRun={courseRun} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user: null }) },
     });
 
     screen.getByText('Enrollment in this course run is closed at the moment');
@@ -298,16 +249,9 @@ describe('<CourseRunEnrollment />', () => {
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
     courseRun.state.priority = 0;
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: null })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <CourseRunEnrollment courseRun={courseRun} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<CourseRunEnrollment courseRun={courseRun} />, {
+      wrapper: BaseAppWrapper,
+      queryOptions: { client: createTestQueryClient({ user: null }) },
     });
 
     screen.getByRole('button', { name: 'Log in to enroll' });

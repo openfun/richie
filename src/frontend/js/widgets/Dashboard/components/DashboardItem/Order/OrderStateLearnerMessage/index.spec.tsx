@@ -1,21 +1,19 @@
 import React, { PropsWithChildren } from 'react';
-import { render, screen } from '@testing-library/react';
-import { IntlProvider, createIntl } from 'react-intl';
+import { screen } from '@testing-library/react';
+import { createIntl } from 'react-intl';
 import {
   ContractDefinitionFactory,
   ContractFactory,
   CredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import { OrderState } from 'types/Joanie';
+import { render } from 'utils/test/render';
+import { IntlWrapper } from 'utils/test/wrappers/IntlWrapper';
 import OrderStateLearnerMessage, { messages } from '.';
 
 const intl = createIntl({ locale: 'en' });
 
 describe('<DashboardItemOrder/>', () => {
-  const Wrapper = ({ children }: PropsWithChildren) => (
-    <IntlProvider locale="en">{children}</IntlProvider>
-  );
-
   it.each([
     [OrderState.DRAFT, 'Draft'],
     [OrderState.SUBMITTED, 'Submitted'],
@@ -25,11 +23,9 @@ describe('<DashboardItemOrder/>', () => {
     'should display message from order state: %s when order have no contract',
     (state, expectedMessage) => {
       const order = CredentialOrderFactory({ state }).one();
-      render(
-        <Wrapper>
-          <OrderStateLearnerMessage order={order} />
-        </Wrapper>,
-      );
+      render(<OrderStateLearnerMessage order={order} />, {
+        wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+      });
       expect(screen.getByText(expectedMessage)).toBeInTheDocument();
     },
   );
@@ -46,11 +42,9 @@ describe('<DashboardItemOrder/>', () => {
         state,
         contract: ContractFactory().one(),
       }).one();
-      render(
-        <Wrapper>
-          <OrderStateLearnerMessage order={orderWithContract} />
-        </Wrapper>,
-      );
+      render(<OrderStateLearnerMessage order={orderWithContract} />, {
+        wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+      });
       expect(screen.getByText(expectedMessage)).toBeInTheDocument();
     },
   );
@@ -63,11 +57,9 @@ describe('<DashboardItemOrder/>', () => {
 
     const contractDefinition = ContractDefinitionFactory().one();
 
-    render(
-      <Wrapper>
-        <OrderStateLearnerMessage order={order} contractDefinition={contractDefinition} />
-      </Wrapper>,
-    );
+    render(<OrderStateLearnerMessage order={order} contractDefinition={contractDefinition} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
     expect(screen.getByText('Signature required')).toBeInTheDocument();
   });
 
@@ -77,11 +69,9 @@ describe('<DashboardItemOrder/>', () => {
       contract: ContractFactory({ student_signed_on: new Date().toISOString() }).one(),
       certificate_id: undefined,
     }).one();
-    render(
-      <Wrapper>
-        <OrderStateLearnerMessage order={order} />
-      </Wrapper>,
-    );
+    render(<OrderStateLearnerMessage order={order} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
     expect(
       screen.getByText(intl.formatMessage(messages.statusOnGoing), {
         exact: false,
@@ -98,11 +88,9 @@ describe('<DashboardItemOrder/>', () => {
       }).one(),
       certificate_id: 'FAKE_CERTIFICATE_ID',
     }).one();
-    render(
-      <Wrapper>
-        <OrderStateLearnerMessage order={order} />
-      </Wrapper>,
-    );
+    render(<OrderStateLearnerMessage order={order} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
     expect(
       screen.getByText(intl.formatMessage(messages.statusCompleted), {
         exact: false,
