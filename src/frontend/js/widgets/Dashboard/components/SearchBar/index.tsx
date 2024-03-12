@@ -1,5 +1,5 @@
 import { Button, Input } from '@openfun/cunningham-react';
-import { MouseEvent, useRef, useState } from 'react';
+import { MouseEvent, PropsWithChildren, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 import { Nullable } from 'types/utils';
@@ -79,6 +79,10 @@ const SearchBar = ({ onSubmit }: SearchBarProps) => {
       />
     </form>
   );
+};
+
+SearchBar.Container = ({ children }: PropsWithChildren) => {
+  return <div className="dashboard-search-bar__container">{children}</div>;
 };
 
 export default SearchBar;

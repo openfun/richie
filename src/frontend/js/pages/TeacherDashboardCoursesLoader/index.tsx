@@ -42,8 +42,10 @@ export const TeacherDashboardCoursesLoader = () => {
           </h1>
         </div>
 
-        <SearchBar onSubmit={submitSearch} />
-        <SearchResultsCount nbResults={count} />
+        <SearchBar.Container>
+          <SearchBar onSubmit={submitSearch} />
+          <SearchResultsCount nbResults={count} />
+        </SearchBar.Container>
       </div>
       <div className="teacher-courses-page">
         <TeacherDashboardCourseList
