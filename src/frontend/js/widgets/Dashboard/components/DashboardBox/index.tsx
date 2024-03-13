@@ -15,3 +15,7 @@ export const DashboardBox = ({ header, footer, ...props }: PropsWithChildren<Pro
     </div>
   );
 };
+
+DashboardBox.List = ({ children }: PropsWithChildren) => {
+  return <div className="dashboard-box__list">{children}</div>;
+};
