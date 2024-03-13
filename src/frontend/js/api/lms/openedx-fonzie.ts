@@ -1,6 +1,9 @@
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { APILms } from 'types/api';
 import { RICHIE_USER_TOKEN } from 'settings';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
+import { handle } from 'utils/errors/handle';
+import { OpenEdxApiProfile } from 'types/openEdx';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 /**
@@ -24,6 +27,8 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
     routes: {
       user: {
         me: `${APIConf.endpoint}/api/v1.0/user/me`,
+        account: `${APIConf.endpoint}/api/user/v1/accounts/:username`,
+        preferences: `${APIConf.endpoint}/api/user/v1/preferences/:username`,
       },
     },
   };
@@ -35,6 +40,53 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
       ...ApiInterface.user,
       accessToken: () => {
         return sessionStorage.getItem(RICHIE_USER_TOKEN);
+      },
+      account: {
+        get: async (username: string) => {
+          const options: RequestInit = {
+            credentials: 'include',
+          };
+          const accountResponse = await fetch(
+            APIOptions.routes.user.account.replace(':username', username),
+            options,
+          );
+          const preferencesResponse = await fetch(
+            APIOptions.routes.user.preferences.replace(':username', username),
+            options,
+          );
+
+          const isResponseOk = accountResponse.ok && preferencesResponse.ok;
+          if (isResponseOk) {
+            const account = await accountResponse.json();
+            const preferences = await preferencesResponse.json();
+            return {
+              ...account,
+              ...preferences,
+            } as unknown as OpenEdxApiProfile;
+          }
+
+          const isAccountResponseError =
+            accountResponse.status >= HttpStatusCode.INTERNAL_SERVER_ERROR;
+          if (isAccountResponseError) {
+            handle(
+              new Error(
+                `[GET - Account] > ${accountResponse.status} - ${accountResponse.statusText}`,
+              ),
+            );
+          }
+          const isPreferencesResponseError =
+            accountResponse.status >= HttpStatusCode.INTERNAL_SERVER_ERROR;
+          if (isPreferencesResponseError) {
+            handle(
+              new Error(
+                `[GET - Account] > ${preferencesResponse.status} - ${preferencesResponse.statusText}`,
+              ),
+            );
+          }
+          const responseError = isAccountResponseError ? accountResponse : preferencesResponse;
+
+          throw new HttpError(responseError.status, responseError.statusText);
+        },
       },
     },
   };
