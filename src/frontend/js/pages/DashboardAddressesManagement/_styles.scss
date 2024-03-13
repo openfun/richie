@@ -1,7 +1,7 @@
 .dashboard-addresses {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: rem-calc(32px);
 
   &__empty {
     text-align: center;
