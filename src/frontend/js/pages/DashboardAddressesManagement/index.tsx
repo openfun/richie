@@ -7,6 +7,7 @@ import { Icon, IconTypeEnum } from 'components/Icon';
 import { Spinner } from 'components/Spinner';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
 import { Address } from 'types/Joanie';
+import { DashboardBox } from 'widgets/Dashboard/components/DashboardBox';
 import { DashboardAddressBox } from './DashboardAddressBox';
 
 const messages = defineMessages({
@@ -72,15 +73,19 @@ export const DashboardAddressesManagement = ({
                 <FormattedMessage {...messages.emptyList} />
               </p>
             )}
-            {addressesList.map((address) => (
-              <DashboardAddressBox
-                key={address.id}
-                address={address}
-                edit={(_address) => onClickEdit?.(_address)}
-                remove={remove}
-                promote={promote}
-              />
-            ))}
+            {addressesList.length && (
+              <DashboardBox.List>
+                {addressesList.map((address) => (
+                  <DashboardAddressBox
+                    key={address.id}
+                    address={address}
+                    edit={(_address) => onClickEdit?.(_address)}
+                    remove={remove}
+                    promote={promote}
+                  />
+                ))}
+              </DashboardBox.List>
+            )}
             <Button color="secondary" fullWidth onClick={() => onClickCreate?.()}>
               <Icon name={IconTypeEnum.PLUS} className="button__icon" />
               <FormattedMessage {...messages.add} />
