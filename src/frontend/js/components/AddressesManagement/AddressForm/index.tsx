@@ -10,6 +10,7 @@ import Input from 'components/Form/Input';
 import { useAddresses } from 'hooks/useAddresses';
 import type { Address } from 'types/Joanie';
 import { messages as formMessages } from 'components/Form/messages';
+import Form from 'components/Form';
 import validationSchema from './validationSchema';
 
 export interface AddressFormValues extends Omit<Address, 'id' | 'is_main'> {
@@ -60,11 +61,11 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
 
   return (
     <FormProvider {...form}>
-      <form className="form" name="address-form" onSubmit={handleSubmit(onSubmit)} noValidate>
+      <Form name="address-form" onSubmit={handleSubmit(onSubmit)} noValidate>
         <p className="form__required-fields-note">
           <FormattedMessage {...formMessages.formOptionalFieldsText} />
         </p>
-        <div className="form-row">
+        <Form.Row>
           <Input
             className="form-field"
             required
@@ -72,8 +73,8 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
             name="title"
             label={intl.formatMessage(messages.titleInputLabel)}
           />
-        </div>
-        <div className="form-row">
+        </Form.Row>
+        <Form.Row>
           <Input
             className="form-field"
             required
@@ -86,16 +87,16 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
             name="last_name"
             label={intl.formatMessage(messages.last_nameInputLabel)}
           />
-        </div>
-        <div className="form-row">
+        </Form.Row>
+        <Form.Row>
           <Input
             required
             fullWidth
             name="address"
             label={intl.formatMessage(messages.addressInputLabel)}
           />
-        </div>
-        <div className="form-row">
+        </Form.Row>
+        <Form.Row>
           <Input
             className="form-field"
             required
@@ -109,17 +110,17 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
             name="city"
             label={intl.formatMessage(messages.cityInputLabel)}
           />
-        </div>
-        <div className="form-row">
+        </Form.Row>
+        <Form.Row>
           <CountrySelectField
             name="country"
             label={intl.formatMessage(messages.countryInputLabel)}
             state={formState.errors.country ? 'error' : 'default'}
           />
-        </div>
+        </Form.Row>
 
         {!address ? (
-          <div className="form-row">
+          <Form.Row>
             <Checkbox
               aria-invalid={!!formState.errors?.save}
               id="save"
@@ -132,7 +133,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
               )}
               {...register('save')}
             />
-          </div>
+          </Form.Row>
         ) : null}
 
         <footer className="form__footer">
@@ -155,7 +156,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
             </Button>
           )}
         </footer>
-      </form>
+      </Form>
     </FormProvider>
   );
 };
