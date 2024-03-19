@@ -11,6 +11,7 @@ import { messages as formMessages } from 'components/Form/messages';
 import { CountrySelectField } from 'components/Form/CountrySelectField';
 import Input from 'components/Form/Input';
 import { Address } from 'types/Joanie';
+import Form from 'components/Form';
 
 const messages = defineMessages({
   isMainInputLabel: {
@@ -64,19 +65,19 @@ export const useDashboardAddressForm = (address?: Address) => {
 
   const FormView = (
     <FormProvider {...form}>
-      <form className="form" noValidate>
+      <Form noValidate>
         <p className="form__required-fields-note">
           <FormattedMessage {...formMessages.formOptionalFieldsText} />
         </p>
-        <div className="form-row">
+        <Form.Row>
           <Input
             required
             fullWidth
             name="title"
             label={intl.formatMessage(managementMessages.titleInputLabel)}
           />
-        </div>
-        <div className="form-row">
+        </Form.Row>
+        <Form.Row>
           <Input
             className="form-field"
             required
@@ -90,17 +91,17 @@ export const useDashboardAddressForm = (address?: Address) => {
             name="last_name"
             label={intl.formatMessage(managementMessages.last_nameInputLabel)}
           />
-        </div>
-        <div className="form-row">
+        </Form.Row>
+        <Form.Row>
           <Input
             required
             fullWidth
             name="address"
             label={intl.formatMessage(managementMessages.addressInputLabel)}
           />
-        </div>
+        </Form.Row>
 
-        <div className="form-row">
+        <Form.Row>
           <Input
             className="form-field"
             required
@@ -114,13 +115,13 @@ export const useDashboardAddressForm = (address?: Address) => {
             name="city"
             label={intl.formatMessage(managementMessages.cityInputLabel)}
           />
-        </div>
-        <div className="form-row">
+        </Form.Row>
+        <Form.Row>
           <CountrySelectField
             name="country"
             label={intl.formatMessage(managementMessages.countryInputLabel)}
           />
-        </div>
+        </Form.Row>
         {!(address && address.is_main) && (
           <Checkbox
             aria-invalid={!!formState.errors?.is_main}
@@ -135,7 +136,7 @@ export const useDashboardAddressForm = (address?: Address) => {
             {...register('is_main')}
           />
         )}
-      </form>
+      </Form>
     </FormProvider>
   );
 
