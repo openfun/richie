@@ -3,78 +3,73 @@
 {% with organization_page=organization.extended_object organization_variant=organization_variant|default:"glimpse" %}
 <div
     class="organization-{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-{{ organization_variant }}--draft{% endif %}"
-    property="{{ organization_property|default:'contributor' }}"
-    typeof="CollegeOrUniversity"
 >
-{% if organization_variant == "row" %}
-    <a href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
-        <meta property="url" content="{{ SITE.web_url }}{{ organization_page.get_absolute_url }}"/>
-        <div class="organization-{{ organization_variant }}__logo">
-            {% get_placeholder_plugins "logo" organization_page as plugins or %}
-                <img src="{% static 'richie/images/empty/organization_logo.png' %}"
-                     class="organization-{{ organization_variant }}__logo--empty"
-                     alt="">
-            {% endget_placeholder_plugins %}
-            {% blockplugin plugins.0 %}
-                <img src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
-                    srcset="
-                        {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 200w
-                        {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-                        {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                        {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
-                    "
-                    sizes="(min-width: 576px) 50vw, (min-width: 1200px) 25vw, 100vw"
-                    alt=""
-                    property="logo"
-                />
-            {% endblockplugin %}
-        </div>
-        <div class="organization-{{ organization_variant }}__content">
-            <h{{ header_level|default:3 }} class="organization-{{ organization_variant }}__title" property="name">{{ organization_page.get_title }}</h{{ header_level|default:3 }}>
-            <div class="organization-{{ organization_variant }}__excerpt" property="description">
-                {% get_placeholder_plugins "excerpt" organization_page as plugins %}
+    <a href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}" property="{{ organization_property|default:'author' }}" typeof="CollegeOrUniversity">
+        <meta property="url" content="{{ SITE.web_url }}{{ organization_page.get_absolute_url }}" />
+        {% if organization_variant == "row" %}
+            <div class="organization-{{ organization_variant }}__logo">
+                {% get_placeholder_plugins "logo" organization_page as plugins or %}
+                    <img src="{% static 'richie/images/empty/organization_logo.png' %}"
+                         class="organization-{{ organization_variant }}__logo--empty"
+                         alt="" />
+                {% endget_placeholder_plugins %}
                 {% blockplugin plugins.0 %}
-                    <p>{{ instance.body }}</p>
+                    <img src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
+                        srcset="
+                            {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 200w
+                            {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                            {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
+                        "
+                        sizes="(min-width: 576px) 50vw, (min-width: 1200px) 25vw, 100vw"
+                        alt=""
+                        property="logo"
+                    />
                 {% endblockplugin %}
-                {% if not plugins %}
-                    {% get_placeholder_plugins "description" organization_page as plugins %}
+            </div>
+            <div class="organization-{{ organization_variant }}__content">
+                <h{{ header_level|default:3 }} class="organization-{{ organization_variant }}__title" property="name">{{ organization_page.get_title }}</h{{ header_level|default:3 }}>
+                <div class="organization-{{ organization_variant }}__excerpt" property="description">
+                    {% get_placeholder_plugins "excerpt" organization_page as plugins %}
                     {% blockplugin plugins.0 %}
-                        <p>{{ instance.body|truncatewords_html:40|striptags }}</p>
+                        <p>{{ instance.body }}</p>
                     {% endblockplugin %}
                     {% if not plugins %}
-                        <p>{% trans "Excerpt" %}</p>
+                        {% get_placeholder_plugins "description" organization_page as plugins %}
+                        {% blockplugin plugins.0 %}
+                            <p>{{ instance.body|truncatewords_html:40|striptags }}</p>
+                        {% endblockplugin %}
+                        {% if not plugins %}
+                            <p>{% trans "Excerpt" %}</p>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                </div>
             </div>
-        </div>
+        {% else %}
+            <div class="organization-{{ organization_variant }}__logo">
+                {% get_placeholder_plugins "logo" organization_page as plugins or %}
+                    <img src="{% static 'richie/images/empty/organization_logo.png' %}"
+                         class="organization-{{ organization_variant }}__logo--empty"
+                         alt="" />
+                {% endget_placeholder_plugins %}
+                {% blockplugin plugins.0 %}
+                    <img src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
+                        srcset="
+                            {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 200w
+                            {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                            {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
+                        "
+                        sizes="(min-width: 576px) 50vw, (min-width: 1200px) 25vw, 100vw"
+                        alt=""
+                        property="logo"
+                    />
+                {% endblockplugin %}
+            </div>
+            <div class="organization-{{ organization_variant }}__content">
+                <h{{ header_level|default:3 }} class="organization-{{ organization_variant }}__title" property="name">{{ organization_page.get_title }}</h{{ header_level|default:3 }}>
+            </div>
+        {% endif %}
     </a>
-{% else %}
-    <a href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
-        <meta property="url" content="{{ SITE.web_url }}{{ organization_page.get_absolute_url }}"/>
-        <div class="organization-{{ organization_variant }}__logo">
-            {% get_placeholder_plugins "logo" organization_page as plugins or %}
-                <img src="{% static 'richie/images/empty/organization_logo.png' %}"
-                     class="organization-{{ organization_variant }}__logo--empty"
-                     alt="">
-            {% endget_placeholder_plugins %}
-            {% blockplugin plugins.0 %}
-                <img src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
-                    srcset="
-                        {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 200w
-                        {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-                        {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                        {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
-                    "
-                    sizes="(min-width: 576px) 50vw, (min-width: 1200px) 25vw, 100vw"
-                    alt=""
-                    property="logo"
-                />
-            {% endblockplugin %}
-        </div>
-        <div class="organization-{{ organization_variant }}__content">
-            <h{{ header_level|default:3 }} class="organization-{{ organization_variant }}__title" property="name">{{ organization_page.get_title }}</h{{ header_level|default:3 }}>
-        </div>
-    </a>
-{% endif %}
 </div>
 {% endwith %}

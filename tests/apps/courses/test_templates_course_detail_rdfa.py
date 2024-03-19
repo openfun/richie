@@ -7,21 +7,25 @@ import re
 from datetime import datetime
 from unittest import mock
 
+from django.template.defaultfilters import striptags
 from django.utils import timezone
 
 import html5lib
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 from pyRdfa import pyRdfa
+from rdflib.namespace import RDF, SDO
 from rdflib.term import Literal, URIRef
 
 from richie.apps.courses.factories import (
+    CategoryFactory,
     CourseFactory,
     CourseRunFactory,
     LicenceFactory,
     OrganizationFactory,
     PersonFactory,
 )
+from richie.plugins.nesteditem.defaults import ACCORDION
 
 # pylint: disable=too-many-lines,too-many-locals,too-many-statements
 
@@ -31,6 +35,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
     End-to-End test suite to validate the RDFa tagging in the course detail view
     """
 
+    # pylint: disable=too-many-branches
     def test_templates_course_detail_rdfa(self):
         """
         Extract RDFa tags from the HTML markup and check that it is complete as expected.
@@ -44,16 +49,21 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         )
 
         # Create persons
-        author1 = PersonFactory(page_title="François", fill_portrait=True)
-        placeholder = author1.extended_object.placeholders.get(slot="bio")
+        contributor1 = PersonFactory(page_title="François", fill_portrait=True)
+        placeholder = contributor1.extended_object.placeholders.get(slot="bio")
         add_plugin(
             language="en",
             placeholder=placeholder,
             plugin_type="PlainTextPlugin",
             body="La bio de François",
         )
-        author2 = PersonFactory(
+        contributor2 = PersonFactory(
             page_title="Jeanne", fill_portrait=True, should_publish=True
+        )
+
+        category1 = CategoryFactory.create(page_title="Accessible", should_publish=True)
+        category2 = CategoryFactory.create(
+            page_title="Earth and universe sciences", should_publish=True
         )
 
         # Create a course with cover image, team and organizations
@@ -64,11 +74,12 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             page_title="Very interesting course",
             fill_cover=True,
             fill_organizations=[main_organization, other_organization],
-            fill_team=[author1, author2],
+            fill_team=[contributor1, contributor2],
             fill_licences=[
                 ("course_license_content", licence_content),
                 ("course_license_participation", licence_participation),
             ],
+            fill_categories=[category1, category2],
         )
 
         # Add an introduction to the course
@@ -82,72 +93,150 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             body="Introduction to interesting course",
         )
 
+        # Add a description to the course
+        placeholder = course.extended_object.placeholders.get(slot="course_description")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body="Description to interesting course",
+        )
+
+        # Add course skills
+        placeholder = course.extended_object.placeholders.get(slot="course_skills")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body="Skill 1, Skill 2",
+        )
+
+        # Add course format
+        placeholder = course.extended_object.placeholders.get(slot="course_format")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body="3 modules of 4 hours",
+        )
+
+        # Add course prerequisites
+        placeholder = course.extended_object.placeholders.get(
+            slot="course_prerequisites"
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body="Skill 0",
+        )
+
+        # Add course assessment
+        placeholder = course.extended_object.placeholders.get(slot="course_assessment")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body="A valuable certificate",
+        )
+
+        # Add a course plan
+        placeholder = course.extended_object.placeholders.get(slot="course_plan")
+        container = add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="NestedItemPlugin",
+            variant=ACCORDION,
+        )
+        for week in range(1, 3):
+            week_container = add_plugin(
+                language="en",
+                placeholder=placeholder,
+                plugin_type="NestedItemPlugin",
+                target=container,
+                content=f"Week {week}",
+                variant=ACCORDION,
+            )
+
+            for chapter in range(1, 3):
+                add_plugin(
+                    language="en",
+                    placeholder=placeholder,
+                    plugin_type="NestedItemPlugin",
+                    target=week_container,
+                    content=f"Chapter {week}-{chapter}",
+                    variant=ACCORDION,
+                )
+
         # Create an ongoing open course run that will be published (created before
         # publishing the page)
         now = datetime(2030, 6, 15, tzinfo=timezone.utc)
         CourseRunFactory(
+            title="Run 0",
             direct_course=course,
             start=datetime(2030, 6, 30, tzinfo=timezone.utc),
             end=datetime(2030, 8, 1, tzinfo=timezone.utc),
             enrollment_start=datetime(2030, 6, 14, tzinfo=timezone.utc),
             enrollment_end=datetime(2030, 6, 16, tzinfo=timezone.utc),
             languages=["en", "fr"],
+            enrollment_count=5000,
         )
         CourseRunFactory(
+            title="Run 1",
             direct_course=course,
             start=datetime(2030, 6, 1, tzinfo=timezone.utc),
             end=datetime(2030, 7, 10, tzinfo=timezone.utc),
             enrollment_start=datetime(2030, 6, 13, tzinfo=timezone.utc),
             enrollment_end=datetime(2030, 6, 20, tzinfo=timezone.utc),
             languages=["de"],
+            enrollment_count=3000,
         )
 
-        author1.extended_object.publish("en")
+        contributor1.extended_object.publish("en")
         course.extended_object.publish("en")
 
         url = course.extended_object.get_absolute_url()
         with mock.patch.object(timezone, "now", return_value=now):
             response = self.client.get(url)
+
         self.assertEqual(response.status_code, 200)
 
         processor = pyRdfa()
-        content = str(response.content)
+        content = str(response.content.decode("utf-8"))
         parser = html5lib.HTMLParser(tree=html5lib.treebuilders.getTreeBuilder("dom"))
         dom = parser.parse(io.StringIO(content))
         graph = processor.graph_from_DOM(dom)
 
         # Retrieve the course top node (body)
-        (subject,) = graph.subjects(
-            URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-            URIRef("https://schema.org/Course"),
-        )
-        self.assertEqual(len(list(graph.triples((subject, None, None)))), 37)
+        (subject,) = graph.subjects(RDF.type, SDO.Course, unique=True)
+
+        self.assertEqual(len(list(graph.triples((subject, None, None)))), 39)
 
         # Opengraph
         self.assertTrue(
             (
-                subject,
+                None,
                 URIRef("http://ogp.me/ns#url"),
                 Literal("http://example.com/en/very-interesting-course/"),
             )
             in graph
         )
         self.assertTrue(
-            (subject, URIRef("http://ogp.me/ns#site_name"), Literal("example.com"))
+            (None, URIRef("http://ogp.me/ns#site_name"), Literal("example.com"))
             in graph
         )
         self.assertTrue(
-            (subject, URIRef("http://ogp.me/ns#type"), Literal("website")) in graph
+            (None, URIRef("http://ogp.me/ns#type"), Literal("website")) in graph
         )
         self.assertTrue(
-            (subject, URIRef("http://ogp.me/ns#locale"), Literal("en")) in graph
+            (None, URIRef("http://ogp.me/ns#locale"), Literal("en")) in graph
         )
         self.assertTrue(
-            (subject, URIRef("http://ogp.me/ns#determiner"), Literal("")) in graph
+            (None, URIRef("http://ogp.me/ns#determiner"), Literal("")) in graph
         )
         self.assertTrue(
             (
-                subject,
+                None,
                 URIRef("http://ogp.me/ns#title"),
                 Literal("Very interesting course"),
             )
@@ -155,14 +244,14 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         )
         self.assertTrue(
             (
-                subject,
+                None,
                 URIRef("http://ogp.me/ns#description"),
                 Literal("Introduction to interesting course"),
             )
             in graph
         )
 
-        (image_value,) = graph.objects(subject, URIRef("http://ogp.me/ns#image"))
+        (image_value,) = graph.objects(None, URIRef("http://ogp.me/ns#image"))
         pattern = (
             r"/media/filer_public_thumbnails/filer_public/.*cover\.jpg__"
             r"1200x630_q85_crop_replace_alpha-%23FFFFFF_subject_location"
@@ -171,204 +260,157 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
 
         # Schema.org
         # - Course
+        self.assertTrue((subject, RDF.type, SDO.Course) in graph)
         self.assertTrue(
-            (
-                subject,
-                URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                URIRef("https://schema.org/Course"),
-            )
+            (subject, SDO.name, Literal("Very interesting course")) in graph
+        )
+        self.assertTrue(
+            (subject, SDO.abstract, Literal("Introduction to interesting course"))
             in graph
         )
         self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/name"),
-                Literal("Very interesting course"),
-            )
+            (subject, SDO.availableLanguage, Literal("English, french and german"))
             in graph
         )
+        self.assertTrue((subject, SDO.courseCode, Literal("ABCDE")) in graph)
+        self.assertTrue((subject, SDO.timeRequired, Literal("PT3H")) in graph)
         self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/description"),
-                Literal("Introduction to interesting course"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (subject, URIRef("https://schema.org/courseCode"), Literal("ABCDE"))
-            in graph
-        )
-        self.assertTrue(
-            (subject, URIRef("https://schema.org/timeRequired"), Literal("PT3H"))
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/stylesheet"),
-                URIRef("/static/richie/css/main.css"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/shortcut"),
-                URIRef("/static/richie/favicon/favicon.ico"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/icon"),
-                URIRef("/static/richie/favicon/favicon.ico"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/icon"),
-                URIRef("/static/richie/favicon/favicon-16x16.png"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/icon"),
-                URIRef("/static/richie/favicon/favicon-32x32.png"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/apple-touch-icon"),
-                URIRef("/static/richie/favicon/apple-touch-icon.png"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/mask-icon"),
-                URIRef("/static/richie/favicon/safari-pinned-tab.svg"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/manifest"),
-                URIRef("/static/richie/favicon/site.webmanifest"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/noreferrer"),
-                URIRef("https://www.facebook.com/example"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/noopener"),
-                URIRef("https://www.facebook.com/example"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/alternate"),
-                URIRef("http://example.com/en/very-interesting-course/"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/alternate"),
-                URIRef("http://example.com/fr/very-interesting-course/"),
-            )
-            in graph
+            (subject, SDO.totalHistoricalEnrollment, Literal("8000")) in graph
         )
 
-        (image_value,) = graph.objects(subject, URIRef("https://schema.org/image"))
+        (image_value,) = graph.objects(subject, SDO.image)
         pattern = (
             r"/media/filer_public_thumbnails/filer_public/.*cover\.jpg__"
             r"300x170_q85_crop_replace_alpha-%23FFFFFF_subject_location"
         )
         self.assertIsNotNone(re.search(pattern, str(image_value)))
 
+        (description_value,) = graph.objects(subject, SDO.description)
+        pattern = r"Description to interesting course"
+        self.assertIsNotNone(re.search(pattern, str(description_value)))
+
+        (prerequisites_value,) = graph.objects(subject, SDO.coursePrerequisites)
+        pattern = r"Skill 0"
+        self.assertIsNotNone(re.search(pattern, str(prerequisites_value)))
+
+        (assessment_value,) = graph.objects(subject, SDO.educationalCredentialAwarded)
+        pattern = r"A valuable certificate"
+        self.assertIsNotNone(re.search(pattern, str(assessment_value)))
+
+        abouts = list(graph.objects(subject, SDO.about))
+        self.assertEqual(len(abouts), 2)
+
+        (format_subject,) = graph.subjects(SDO.name, Literal("Format"))
+        self.assertTrue((subject, SDO.about, format_subject) in graph)
+        self.assertTrue((format_subject, RDF.type, SDO.Thing) in graph)
+        (description_value,) = graph.objects(format_subject, SDO.description)
+        pattern = r"3 modules of 4 hours"
+        self.assertIsNotNone(re.search(pattern, str(description_value)))
+
+        (skills_subject,) = graph.subjects(SDO.name, Literal("What you will learn"))
+        self.assertTrue((subject, SDO.about, skills_subject) in graph)
+        self.assertTrue((skills_subject, RDF.type, SDO.Thing) in graph)
+        (description_value,) = graph.objects(skills_subject, SDO.description)
+        pattern = r"Skill 1, Skill 2"
+        self.assertIsNotNone(re.search(pattern, str(description_value)))
+
+        sections = list(graph.objects(subject, SDO.syllabusSections))
+        self.assertEqual(len(sections), 1)
+
+        syllabus = list(graph.triples((None, RDF.type, SDO.Syllabus)))
+        # SyllabusSections should be composed of 7 Syllabus nested children
+        self.assertEqual(len(syllabus), 7)
+
+        # The root syllabus should have 2 parts
+        week_parts = list(graph.objects(sections[0], SDO.hasPart))
+        self.assertEqual(len(week_parts), 2)
+
+        # There should be a first nesting level of Syllabus
+        for index, name in enumerate(["Week 1", "Week 2"]):
+            # The Syllabus should have a name
+            (part_subject,) = graph.subjects(SDO.name, Literal(name))
+            self.assertTrue(part_subject in week_parts)
+            # The Syllabus should have a position
+            (position,) = graph.objects(part_subject, SDO.position)
+            self.assertEqual(position, Literal(str(index)))
+
+            # The Syllabus parts should have two parts
+            chapter_parts = list(graph.objects(part_subject, SDO.hasPart))
+            self.assertEqual(len(chapter_parts), 2)
+
+            # There should be a second nesting level of Syllabus
+            for index, name in enumerate(
+                [f"Chapter {index+1}-1", f"Chapter {index+1}-2"]
+            ):
+                # The Syllabus should have a name
+                (part_subject,) = graph.subjects(SDO.name, Literal(name))
+                self.assertTrue(part_subject in chapter_parts)
+                # The Syllabus should have a position
+                (position,) = graph.objects(part_subject, SDO.position)
+                self.assertEqual(position, Literal(str(index)))
+
+                # There should be no third nesting level of Syllabus
+                parts = list(graph.objects(part_subject, SDO.hasPart))
+                self.assertEqual(len(parts), 0)
+
+        # - Licenses
+        licences = list(graph.objects(subject, SDO.license))
+        self.assertEqual(len(licences), 1)
+        licence = licences[0]
+
+        self.assertTrue((licence, SDO.name, Literal(licence_content.name)) in graph)
         self.assertTrue(
-            (subject, URIRef("https://schema.org/license"), URIRef(licence_content.url))
+            (licence, SDO.abstract, Literal(striptags(licence_content.content)))
             in graph
         )
-        self.assertTrue(
-            (
-                None,
-                URIRef("https://schema.org/license"),
-                URIRef(licence_participation.url),
-            )
-            not in graph
+        self.assertTrue((licence, SDO.url, Literal(licence_content.url)) in graph)
+        self.assertTrue((None, SDO.url, URIRef(licence_participation.url)) not in graph)
+
+        (thumbnail_value,) = graph.objects(licence, SDO.thumbnailUrl)
+        pattern = (
+            r"/media/filer_public_thumbnails/filer_public/.*/example.jpg__"
+            r"100x50_q85_crop-smart_replace_alpha-%23FFFFFF_subsampling-2.jpg"
         )
+        self.assertIsNotNone(re.search(pattern, str(thumbnail_value)))
+
         # - Main organization (Provider)
+        self.assertTrue((subject, SDO.provider, URIRef("/en/main-org/")) in graph)
         self.assertTrue(
-            (subject, URIRef("https://schema.org/provider"), URIRef("/en/main-org/"))
-            in graph
+            (URIRef("/en/main-org/"), SDO.name, Literal("Main org")) in graph
         )
         self.assertTrue(
             (
                 URIRef("/en/main-org/"),
-                URIRef("https://schema.org/name"),
-                Literal("Main org"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                URIRef("/en/main-org/"),
-                URIRef("https://schema.org/url"),
+                SDO.url,
                 Literal("http://example.com/en/main-org/"),
             )
             in graph
         )
 
-        (logo_value,) = graph.objects(
-            URIRef("/en/main-org/"), URIRef("https://schema.org/logo")
-        )
+        (logo_value,) = graph.objects(URIRef("/en/main-org/"), SDO.logo)
         pattern = (
             r"/media/filer_public_thumbnails/filer_public/.*logo.jpg__"
             r"200x113_q85_replace_alpha-%23FFFFFF_subject_location"
         )
         self.assertIsNotNone(re.search(pattern, str(logo_value)))
 
-        # - Organizations (Contributor)
-        contributor_subjects = list(
-            graph.objects(subject, URIRef("https://schema.org/contributor"))
-        )
-        self.assertEqual(len(contributor_subjects), 2)
+        # - Organizations (Author)
+        author_subjects = list(graph.objects(subject, SDO.author))
+        self.assertEqual(len(author_subjects), 2)
 
         self.assertTrue(
             (
-                contributor_subjects[0],
-                URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                URIRef("https://schema.org/CollegeOrUniversity"),
+                author_subjects[0],
+                RDF.type,
+                SDO.CollegeOrUniversity,
             )
             in graph
         )
         self.assertTrue(
             (
-                contributor_subjects[1],
-                URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                URIRef("https://schema.org/CollegeOrUniversity"),
+                author_subjects[1],
+                RDF.type,
+                SDO.CollegeOrUniversity,
             )
             in graph
         )
@@ -376,7 +418,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         self.assertTrue(
             (
                 URIRef("/en/main-org/"),
-                URIRef("https://schema.org/name"),
+                SDO.name,
                 Literal("Main org"),
             )
             in graph
@@ -385,7 +427,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         self.assertTrue(
             (
                 URIRef("/en/other-org/"),
-                URIRef("https://schema.org/name"),
+                SDO.name,
                 Literal("Other org"),
             )
             in graph
@@ -394,7 +436,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         self.assertTrue(
             (
                 URIRef("/en/main-org/"),
-                URIRef("https://schema.org/url"),
+                SDO.url,
                 Literal("http://example.com/en/main-org/"),
             )
             in graph
@@ -403,7 +445,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         self.assertTrue(
             (
                 URIRef("/en/other-org/"),
-                URIRef("https://schema.org/url"),
+                SDO.url,
                 Literal("http://example.com/en/other-org/"),
             )
             in graph
@@ -413,114 +455,94 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             r"/media/filer_public_thumbnails/filer_public/.*logo.jpg__"
             r"200x113_q85_replace_alpha-%23FFFFFF_subject_location"
         )
-        (logo_value,) = graph.objects(
-            URIRef("/en/main-org/"), URIRef("https://schema.org/logo")
-        )
+        (logo_value,) = graph.objects(URIRef("/en/main-org/"), SDO.logo)
         self.assertIsNotNone(re.search(pattern, str(logo_value)))
 
-        (logo_value,) = graph.objects(
-            URIRef("/en/other-org/"), URIRef("https://schema.org/logo")
-        )
+        (logo_value,) = graph.objects(URIRef("/en/other-org/"), SDO.logo)
         self.assertIsNotNone(re.search(pattern, str(logo_value)))
 
         # - Team (Person)
-        author_subjects = list(
-            graph.objects(subject, URIRef("https://schema.org/author"))
-        )
-        self.assertEqual(len(author_subjects), 2)
+        contributor_subjects = list(graph.objects(subject, SDO.contributor))
+        self.assertEqual(len(contributor_subjects), 2)
 
         self.assertTrue(
             (
-                author_subjects[0],
-                URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                URIRef("https://schema.org/Person"),
+                contributor_subjects[0],
+                RDF.type,
+                SDO.Person,
             )
             in graph
         )
         self.assertTrue(
             (
-                author_subjects[1],
-                URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                URIRef("https://schema.org/Person"),
+                contributor_subjects[1],
+                RDF.type,
+                SDO.Person,
             )
             in graph
         )
 
-        for name in ["Fran\\xc3\\xa7ois", "Jeanne"]:
-            (author_subject,) = graph.subjects(
-                URIRef("https://schema.org/name"), Literal(name)
-            )
-            self.assertTrue(author_subject in author_subjects)
+        for name in ["François", "Jeanne"]:
+            (contributor_subject,) = graph.subjects(SDO.name, Literal(name))
+            self.assertTrue(contributor_subject in contributor_subjects)
 
-        (author_subject,) = graph.subjects(
-            URIRef("https://schema.org/description"),
-            Literal("La bio de Fran\\xc3\\xa7ois"),
+        (contributor_subject,) = graph.subjects(
+            SDO.description,
+            Literal("La bio de François"),
         )
-        self.assertTrue(author_subject in author_subjects)
+        self.assertTrue(contributor_subject in contributor_subjects)
 
         for url in ["http://example.com/en/francois/", "http://example.com/en/jeanne/"]:
-            (author_subject,) = graph.subjects(
-                URIRef("https://schema.org/url"), Literal(url)
-            )
-            self.assertTrue(author_subject in author_subjects)
+            (contributor_subject,) = graph.subjects(SDO.url, Literal(url))
+            self.assertTrue(contributor_subject in contributor_subjects)
 
         pattern = (
             r"/media/filer_public_thumbnails/filer_public/.*portrait.jpg__"
             r"200x200_q85_crop_replace_alpha-%23FFFFFF_subject_location"
         )
-        for author_subject in author_subjects:
-            (portrait_value,) = graph.objects(
-                author_subject, URIRef("https://schema.org/image")
-            )
+        for contributor_subject in contributor_subjects:
+            (portrait_value,) = graph.objects(contributor_subject, SDO.image)
             self.assertIsNotNone(re.search(pattern, str(portrait_value)))
 
         # - Course runs (CourseInstance)
-        course_run_subjects = list(
-            graph.objects(subject, URIRef("https://schema.org/hasCourseInstance"))
-        )
+        course_run_subjects = list(graph.objects(subject, SDO.hasCourseInstance))
         self.assertEqual(len(course_run_subjects), 2)
 
-        self.assertTrue(
-            (
-                course_run_subjects[0],
-                URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                URIRef("https://schema.org/CourseInstance"),
+        for course_run_subject in course_run_subjects:
+            self.assertTrue((course_run_subject, RDF.type, SDO.CourseInstance) in graph)
+            self.assertTrue(
+                (course_run_subject, SDO.courseMode, Literal("online")) in graph
             )
-            in graph
-        )
-        self.assertTrue(
-            (
-                course_run_subjects[0],
-                URIRef("https://schema.org/courseMode"),
-                Literal("online"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                course_run_subjects[1],
-                URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                URIRef("https://schema.org/CourseInstance"),
-            )
-            in graph
-        )
-        self.assertTrue(
-            (
-                course_run_subjects[1],
-                URIRef("https://schema.org/courseMode"),
-                Literal("online"),
-            )
-            in graph
-        )
+
+        for title in ["Run 0", "Run 1"]:
+            (course_run_subject,) = graph.subjects(SDO.name, Literal(title))
+            self.assertTrue(course_run_subject in course_run_subjects)
+
+        for language in ["English and french", "German"]:
+            (course_run_subject,) = graph.subjects(SDO.inLanguage, Literal(language))
+            self.assertTrue(course_run_subject in course_run_subjects)
 
         for start_date in ["2030-06-01", "2030-06-30"]:
-            (subject,) = graph.subjects(
-                URIRef("https://schema.org/startDate"), Literal(start_date)
-            )
-            self.assertTrue(subject in course_run_subjects)
+            (course_run_subject,) = graph.subjects(SDO.startDate, Literal(start_date))
+            self.assertTrue(course_run_subject in course_run_subjects)
 
         for end_date in ["2030-07-10", "2030-08-01"]:
-            (subject,) = graph.subjects(
-                URIRef("https://schema.org/endDate"), Literal(end_date)
-            )
-            self.assertTrue(subject in course_run_subjects)
+            (course_run_subject,) = graph.subjects(SDO.endDate, Literal(end_date))
+            self.assertTrue(course_run_subject in course_run_subjects)
+
+        # Categories (keywords)
+        category_subjects = list(graph.objects(subject, SDO.keywords))
+        self.assertEqual(len(category_subjects), 2)
+
+        self.assertTrue((category_subjects[0], RDF.type, SDO.DefinedTerm) in graph)
+        self.assertTrue((category_subjects[1], RDF.type, SDO.DefinedTerm) in graph)
+
+        for category in [category1, category2]:
+            page_title = category.extended_object.get_title()
+            page_url = category.extended_object.get_absolute_url()
+
+            (category_subject,) = graph.subjects(SDO.name, Literal(page_title))
+            self.assertTrue(category_subject in category_subjects)
+
+            (category_subject,) = graph.subjects(SDO.url, Literal(page_url))
+            self.assertTrue(category_subject in category_subjects)

@@ -337,8 +337,9 @@ class PersonCMSTestCase(CMSTestCase):
         # The published organization should be on the page in its published version
         self.assertIn(
             # pylint: disable=consider-using-f-string
-            '<div class="organization-glimpse" property="contributor" '
-            'typeof="CollegeOrUniversity"><a href="{:s}" title="{:s}">'.format(
+            '<div class="organization-glimpse">'
+            '<a href="{:s}" title="{:s}" '
+            'property="author" typeof="CollegeOrUniversity">'.format(
                 published_organization.extended_object.get_absolute_url(),
                 published_organization.extended_object.get_title(),
             ),
@@ -355,7 +356,8 @@ class PersonCMSTestCase(CMSTestCase):
         # The not published organization should not be on the page
         self.assertIn(
             # pylint: disable=consider-using-f-string
-            '<a href="{:s}" title="{:s}">'.format(
+            '<a href="{:s}" title="{:s}" '
+            'property="author" typeof="CollegeOrUniversity">'.format(
                 not_published_organization.extended_object.get_absolute_url(),
                 not_published_organization.extended_object.get_title(),
             ),

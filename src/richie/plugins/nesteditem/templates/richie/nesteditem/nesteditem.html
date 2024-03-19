@@ -1,6 +1,16 @@
 {% load i18n cms_tags %}{% spaceless %}
 
-<div class="nested-item nested-item--{{ instance.variant }} nested-item--{{ nesting_level }}">
+<div class="nested-item nested-item--{{ instance.variant }} nested-item--{{ nesting_level }}"
+     {% if is_syllabus_property|default_if_none:False is True and is_root|default_if_none:True is True %} property="syllabusSections"{% endif %}
+     {% if is_syllabus_property|default_if_none:False is True and is_root|default_if_none:True is False %} property="hasPart"{% endif %}
+     {% if is_syllabus_property|default_if_none:False is True %} typeof="Syllabus"{% endif %}
+>
+    {% if is_syllabus_property|default_if_none:False is True %}
+        <meta property="name" content="{{ instance.content }}" />
+        {% if position is not None %}
+        <meta property="position" content="{{ position }}" />
+        {% endif %}
+    {% endif %}
     {% if parent_variant == "accordion" and instance.child_plugin_instances %}
         <button class="nested-item__title" data-accordion-button>
             {{ instance.content }}
@@ -15,7 +25,7 @@
         <ul class="nested-item__items">
             {% for plugin in instance.child_plugin_instances %}
                 <li>
-                    {% with nesting_level=nesting_level|add:1 parent_variant=instance.variant %}
+                    {% with nesting_level=nesting_level|add:1 parent_variant=instance.variant is_root=False position=forloop.counter0 %}
                         {% render_plugin plugin %}
                     {% endwith %}
                 </li>
