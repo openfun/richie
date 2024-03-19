@@ -1,12 +1,11 @@
-//
-// Form objects
-//
-
 // Example of a form class structure:
 // .form
 //  .form-row
 //    .c__field ( should be form-field when cunningham is improved)
 .form {
+  $vertical-spacing: rem-calc(10px);
+  $horizontal-spacing: rem-calc(16px);
+
   .c__field {
     width: auto;
     display: flex;
@@ -16,8 +15,8 @@
   &-row {
     display: flex;
     flex-direction: row;
-    gap: rem-calc(16px);
-    margin-bottom: rem-calc(10px);
+    gap: $horizontal-spacing;
+    margin-bottom: $vertical-spacing;
     &:last-child {
       margin-bottom: 0;
     }
