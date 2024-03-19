@@ -140,6 +140,14 @@ class PersonPluginTestCase(CMSTestCase):
         )
         self.assertNotContains(response, "draft bio")
 
+        # RDFa markup should be present
+        self.assertContains(
+            response,
+            '<meta property="name" content="person title" />'
+            f'<meta property="url" content="http://example.com{href}" />',
+            html=True,
+        )
+
         # Same checks in French
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
@@ -164,6 +172,14 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<div class="person-glimpse__bio" property="description">résumé public</div>',
+            html=True,
+        )
+
+        # RDFa markup should be present
+        self.assertContains(
+            response,
+            '<meta property="name" content="titre personne" />'
+            f'<meta property="url" content="http://example.com{href}" />',
             html=True,
         )
 

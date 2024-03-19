@@ -3,11 +3,20 @@
 
 {% with category_page=category.extended_object category_variant=category_variant|default:"glimpse" %}
     {% if has_link or has_link|default_if_none:True %}
-        <a class="category-{{ category_variant }}{% if category_page.publisher_is_draft %} category-{{ category_variant }}--draft{% endif %}" href="{{ category_page.get_absolute_url }}">
+        <a class="category-{{ category_variant }}{% if category_page.publisher_is_draft %} category-{{ category_variant }}--draft{% endif %}" href="{{ category_page.get_absolute_url }}"
+           {% if is_keywords_property|default_if_none:False %} property="keywords" typeof="DefinedTerm"{% endif %}>
     {% else %}
-        <span class="category-{{ category_variant }}{% if category_page.publisher_is_draft %} category-{{ category_variant }}--draft{% endif %}">
+        <span
+          class="category-{{ category_variant }}{% if category_page.publisher_is_draft %} category-{{ category_variant }}--draft{% endif %}"
+          {% if is_keywords_property|default_if_none:False %} property="keywords" typeof="DefinedTerm"{% endif %}
+        >
     {% endif %}
-
+        {% if is_keywords_property|default_if_none:False %}
+            <meta content="{{ category_page.get_title }}" property="name" />
+            {% if has_link or has_link|default_if_none:True %}
+                <meta content="{{ category_page.get_absolute_url }}" property="url" />
+            {% endif %}
+        {% endif %}
         {% if category_variant == "badge" %}
             {% comment %}Small CTA alike, icon + title, commonly horizontal{% endcomment %}
             {% get_placeholder_plugins "icon" category_page as icon_plugins %}

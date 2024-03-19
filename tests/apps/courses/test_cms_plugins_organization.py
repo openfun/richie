@@ -100,9 +100,8 @@ class OrganizationPluginTestCase(CMSTestCase):
         # And CMS page title should be in title attribute of the link
         self.assertIn(
             (
-                '<div class="organization-glimpse" property="contributor" '
-                'typeof="CollegeOrUniversity"><a href="/en/public-title/" '
-                'title="public title">'
+                '<div class="organization-glimpse"><a href="/en/public-title/" '
+                'title="public title" property="author" typeof="CollegeOrUniversity">'
             ),
             htmlmin.minify(
                 response.content.decode("UTF-8"), remove_optional_attribute_quotes=False
@@ -287,9 +286,9 @@ class OrganizationPluginTestCase(CMSTestCase):
         # Organization's name should be present as a link to the cms page
         self.assertIn(
             (
-                '<div class="organization-glimpse" property="contributor" '
-                'typeof="CollegeOrUniversity"><a href="/en/organisation-publique/" '
-                'title="organisation publique">'
+                '<div class="organization-glimpse">'
+                '<a href="/en/organisation-publique/" title="organisation publique" '
+                'property="author" typeof="CollegeOrUniversity">'
             ),
             htmlmin.minify(
                 response.content.decode("UTF-8"), remove_optional_attribute_quotes=False

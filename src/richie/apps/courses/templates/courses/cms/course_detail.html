@@ -65,7 +65,7 @@
                     {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_icons" or not current_page|is_empty_placeholder:"course_categories" %}
                     <div class="category-badge-list subheader__badges">
                         <div class="category-badge-list__container">
-                        {% with category_variant="badge" %}
+                        {% with category_variant="badge" is_keywords_property=True %}
                             {% placeholder "course_icons" %}
                             {% placeholder "course_categories" or %}
                                 {% if current_page.publisher_is_draft and current_page|is_empty_placeholder:"course_icons" %}
@@ -82,7 +82,7 @@
 
                     <div class="subheader__content">
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
-                            <div property="description">{% placeholder "course_introduction" or %}<p>{% trans 'Enter here an introduction to your course.' %}</p>{% endplaceholder %}</div>
+                            <div property="abstract">{% placeholder "course_introduction" or %}<p>{% trans 'Enter here an introduction to your course.' %}</p>{% endplaceholder %}</div>
                         {% endif %}
                         {% block synopsis %}
                         {% if course.duration or course.effort or current_page.publisher_is_draft %}
@@ -119,12 +119,12 @@
                                     <svg role="img" class="characteristics__icon" aria-hidden="true">
                                         <use href="#icon-languages" />
                                     </svg>
-                                    <span class="characteristics__term">{% trans "Languages:" %} {{ course.languages_display|default:"NA" }}</span>
+                                    <span class="characteristics__term" property="availableLanguage" content="{{ course.languages_display|default:'NA' }}">{% trans "Languages:" %} {{ course.languages_display|default:"NA" }}</span>
                                 </li>
                                 {% block enrollment_count %}
                                     {% with enrollment_count=course.course_runs_enrollment_count %}
                                         {% if enrollment_count > 0 and RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT > 0 and enrollment_count >= RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT %}
-                                                <li class="characteristics__item">
+                                                <li class="characteristics__item" property="totalHistoricalEnrollment" content="{{ enrollment_count }}">
                                                     <svg role="img" class="characteristics__icon" aria-hidden="true">
                                                         <use href="#icon-groups" />
                                                     </svg>
@@ -257,10 +257,12 @@
                 <div class="course-detail__block course-detail__primary-group">
                     {% block skills %}
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_skills" %}
-                        <div class="course-detail__row course-detail__skills">
-                            <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}What you will learn{% endblocktrans %}</h2>
-                            <p>{% trans "At the end of this course, you will be able to:" %}</p>
-                            {% placeholder "course_skills" %}
+                        <div class="course-detail__row course-detail__skills" property="about" typeof="Thing">
+                            <h2 class="course-detail__title" property="name">{% blocktrans context "course_detail__title" %}What you will learn{% endblocktrans %}</h2>
+                            <div property="description">
+                                <p>{% trans "At the end of this course, you will be able to:" %}</p>
+                                {% placeholder "course_skills" %}
+                            </div>
                         </div>
                         {% endif %}
                     {% endblock skills %}
@@ -269,7 +271,7 @@
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_description" %}
                         <div class="course-detail__row course-detail__description">
                             <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Description{% endblocktrans %}</h2>
-                            <div{% if current_page|is_empty_placeholder:'course_introduction' %} property="description"{% endif %}>
+                            <div property="description">
                                 {% placeholder "course_description" %}
                             </div>
                         </div>
@@ -278,11 +280,14 @@
 
                     {% block format %}
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_format" %}
-                            <section class="course-detail__row course-detail__format">
-                                <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Format{% endblocktrans %}</h2>
-                                {% placeholder "course_format" or %}
-                                <p>{% trans 'How is the course structured?' %}</p>
-                                {% endplaceholder %}
+                            <section class="course-detail__row course-detail__format" property="about" typeof="Thing">
+                                <h2 class="course-detail__title" property="name">{% blocktrans context "course_detail__title" %}Format{% endblocktrans %}</h2>
+                                <div property="description">
+                                    {% placeholder "course_format" %}
+                                    {% placeholder "course_format" or %}
+                                    <p>{% trans 'How is the course structured?' %}</p>
+                                    {% endplaceholder %}
+                                </div>
                             </section>
                         {% endif %}
                     {% endblock format %}
@@ -304,11 +309,13 @@
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_assessment" %}
                         <section class="course-detail__row course-detail__assessment">
                             <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Assessment and certification{% endblocktrans %}</h2>
-                            {% placeholder "course_assessment" or %}
-                                <p class="course-detail__assessment__placeholder">
-                                    {% trans "How is progress evaluated and/or certified?" %}
-                                </p>
-                            {% endplaceholder %}
+                            <div property="educationalCredentialAwarded">
+                                {% placeholder "course_assessment" or %}
+                                    <p class="course-detail__assessment__placeholder">
+                                        {% trans "How is progress evaluated and/or certified?" %}
+                                    </p>
+                                {% endplaceholder %}
+                            </div>
                         </section>
                         {% endif %}
                     {% endblock assessment %}
@@ -317,13 +324,14 @@
                 {% block plan %}
                     <div class="course-detail__block course-detail__secondary-group">
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_plan" %}
-                        <section class="course-detail__row course-detail__plan">
-                            <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Course plan{% endblocktrans %}</h2>
-
-                            {% placeholder "course_plan" or %}
-                                <p class="course-detail__empty">{% trans 'Enter here the detailed course plan.' %}</p>
-                            {% endplaceholder %}
-                        </section>
+                            {% with is_syllabus_property=True %}
+                                <section class="course-detail__row course-detail__plan">
+                                    <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Course plan{% endblocktrans %}</h2>
+                                    {% placeholder "course_plan" or %}
+                                        <p class="course-detail__empty">{% trans 'Enter here the detailed course plan.' %}</p>
+                                    {% endplaceholder %}
+                                </section>
+                            {% endwith %}
                         {% endif %}
                     </div>
                 {% endblock plan %}
@@ -341,7 +349,8 @@
                              -->
                             {% for run in open_visible_runs %}
                                 <span rel="hasCourseInstance" typeof="CourseInstance">
-                                    <meta property="title" content="Run 0"  />
+                                    <meta property="name" content="{{ run.title }}"  />
+                                    <meta property="inLanguage" content="{{ run.get_languages_display }}"  />
                                     <meta property="courseMode" content="online"  />
                                     <meta property="startDate" content="{{ run.start|date:'Y-m-d' }}"  />
                                     <meta property="endDate" content="{{ run.end|date:'Y-m-d' }}"  />
