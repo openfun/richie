@@ -7,6 +7,7 @@ import { location } from 'utils/indirection/window';
 import { CURRENT_JOANIE_DEV_DEMO_USER, RICHIE_USER_TOKEN } from 'settings';
 import { base64Decode } from 'utils/base64Parser';
 import { Gender, LanguageIsoCode, LevelOfEducation, OpenEdxApiProfile } from 'types/openEdx';
+import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
 
 type JWTPayload = {
   email: string;
@@ -60,6 +61,18 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
     return matches && matches[1] ? matches[1] : null;
   };
 
+  const dummyOpenEdxApiProfile = {
+    username: 'j_do',
+    name: 'John Do',
+    email: 'j.do@whois.net',
+    country: 'fr',
+    level_of_education: LevelOfEducation.MASTER_OR_PROFESSIONNAL_DEGREE,
+    gender: Gender.MALE,
+    year_of_birth: '1971',
+    'pref-lang': LanguageIsoCode.ENGLISH,
+    language_proficiencies: [{ code: LanguageIsoCode.ENGLISH }],
+  } as unknown as OpenEdxApiProfile;
+
   return {
     user: {
       me: async () => {
@@ -93,17 +106,11 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
       account: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         get: (username: string) => {
-          return Promise.resolve({
-            username: 'j_do',
-            name: 'John Do',
-            email: 'j.do@whois.net',
-            country: 'fr',
-            level_of_education: LevelOfEducation.MASTER_OR_PROFESSIONNAL_DEGREE,
-            gender: Gender.MALE,
-            year_of_birth: '1971',
-            'pref-lang': LanguageIsoCode.ENGLISH,
-            language_proficiencies: [{ code: LanguageIsoCode.ENGLISH }],
-          } as unknown as OpenEdxApiProfile);
+          return Promise.resolve(dummyOpenEdxApiProfile);
+        },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        update: (username: string, data: OpenEdxFullNameFormValues) => {
+          return Promise.resolve({ ...dummyOpenEdxApiProfile, ...data });
         },
       },
     },

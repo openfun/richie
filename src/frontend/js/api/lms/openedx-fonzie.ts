@@ -1,9 +1,11 @@
+import Cookies from 'js-cookie';
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { APILms } from 'types/api';
-import { RICHIE_USER_TOKEN } from 'settings';
+import { EDX_CSRF_TOKEN_COOKIE_NAME, RICHIE_USER_TOKEN } from 'settings';
 import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 import { handle } from 'utils/errors/handle';
 import { OpenEdxApiProfile } from 'types/openEdx';
+import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 /**
@@ -30,6 +32,7 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
         account: `${APIConf.endpoint}/api/user/v1/accounts/:username`,
         preferences: `${APIConf.endpoint}/api/user/v1/preferences/:username`,
       },
+      setCsrfToken: `${APIConf.endpoint}/api/enrollment/v1/enrollment`,
     },
   };
 
@@ -86,6 +89,30 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
           const responseError = isAccountResponseError ? accountResponse : preferencesResponse;
 
           throw new HttpError(responseError.status, responseError.statusText);
+        },
+        update: async (username: string, data: OpenEdxFullNameFormValues) => {
+          /*
+            edx_csrf_token cookie is set through a SET_COOKIE header send from a previous request
+            e.g: Getting user enrollment set the cookie
+          */
+          // Ensure CSRF is fresh
+          await fetch(APIOptions.routes.setCsrfToken, { credentials: 'include' });
+          const csrfToken = Cookies.get(EDX_CSRF_TOKEN_COOKIE_NAME) || '';
+          return fetch(APIOptions.routes.user.account.replace(':username', username), {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/merge-patch+json',
+              'X-CSRFTOKEN': csrfToken,
+            },
+            body: JSON.stringify(data),
+          }).then((response) => {
+            if (response.ok) return response.json();
+            if (response.status >= HttpStatusCode.INTERNAL_SERVER_ERROR) {
+              handle(new Error(`[PATCH - Account] > ${response.status} - ${response.statusText}`));
+            }
+            throw new HttpError(response.status, response.statusText);
+          });
         },
       },
     },
