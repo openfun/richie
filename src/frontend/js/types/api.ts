@@ -1,6 +1,7 @@
 import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { UnknownEnrollment } from 'types';
+import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
 import { OpenEdxApiProfile } from './openEdx';
 
 export interface APIListRequestParams {
@@ -24,6 +25,7 @@ export interface APIAuthentication {
   accessToken?: () => Nullable<string>;
   account?: {
     get: (username: string) => Promise<OpenEdxApiProfile>;
+    update: (username: string, values: OpenEdxFullNameFormValues) => Promise<OpenEdxApiProfile>;
   };
 }
 
