@@ -25,6 +25,14 @@
       margin-bottom: 0;
     }
 
+    &-button-container {
+      // Cunningham buttons are 8px smaller than inputs
+      // to align them, we need to add this small margin top.
+      // row's align-item: center doesn't work because when an input
+      // is on error, it can add multiple line underneath
+      margin-top: rem-calc(4px);
+    }
+
     @include media-breakpoint-down(xs) {
       flex-direction: column;
     }

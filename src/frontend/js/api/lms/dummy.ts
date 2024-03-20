@@ -12,6 +12,7 @@ import {
   OpenEdxLevelOfEducation,
   OpenEdxApiProfile,
 } from 'types/openEdx';
+import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
 
 type JWTPayload = {
   email: string;
@@ -65,6 +66,18 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
     return matches && matches[1] ? matches[1] : null;
   };
 
+  const dummyOpenEdxApiProfile = {
+    username: 'j_do',
+    name: 'John Do',
+    email: 'j.do@whois.net',
+    country: 'fr',
+    level_of_education: OpenEdxLevelOfEducation.MASTER_OR_PROFESSIONNAL_DEGREE,
+    gender: OpenEdxGender.MALE,
+    year_of_birth: '1971',
+    'pref-lang': OpenEdxLanguageIsoCode.ENGLISH,
+    language_proficiencies: [{ code: OpenEdxLanguageIsoCode.ENGLISH }],
+  } as unknown as OpenEdxApiProfile;
+
   return {
     user: {
       me: async () => {
@@ -109,6 +122,11 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
             'pref-lang': OpenEdxLanguageIsoCode.ENGLISH,
             language_proficiencies: [{ code: OpenEdxLanguageIsoCode.ENGLISH }],
           } as OpenEdxApiProfile);
+          return Promise.resolve(dummyOpenEdxApiProfile);
+        },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        update: (username: string, data: OpenEdxFullNameFormValues) => {
+          return Promise.resolve({ ...dummyOpenEdxApiProfile, ...data });
         },
       },
     },

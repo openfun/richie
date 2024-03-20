@@ -1,10 +1,12 @@
+import Cookies from 'js-cookie';
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { APILms } from 'types/api';
-import { RICHIE_USER_TOKEN } from 'settings';
+import { RICHIE_USER_TOKEN, EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
 import { isHttpError } from 'utils/errors/HttpError';
 import { handle } from 'utils/errors/handle';
 import { OpenEdxApiProfile } from 'types/openEdx';
 import { checkStatus } from 'api/utils';
+import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 /**
@@ -65,6 +67,26 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
           } catch (e) {
             if (isHttpError(e)) {
               handle(new Error(`[GET - Account] > ${e.code} - ${e.message}`));
+            }
+
+            throw e;
+          }
+        },
+        update: async (username: string, data: OpenEdxFullNameFormValues) => {
+          const csrfToken = Cookies.get(EDX_CSRF_TOKEN_COOKIE_NAME) || '';
+          try {
+            return await fetch(APIOptions.routes.user.account.replace(':username', username), {
+              method: 'PATCH',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/merge-patch+json',
+                'X-CSRFTOKEN': csrfToken,
+              },
+              body: JSON.stringify(data),
+            }).then(checkStatus);
+          } catch (e) {
+            if (isHttpError(e)) {
+              handle(new Error(`[POST - Account] > ${e.code} - ${e.message}`));
             }
 
             throw e;
