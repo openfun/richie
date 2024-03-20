@@ -1,5 +1,5 @@
 bandit==1.7.5
-black==23.7.0
+black==24.3.0
 Faker==13.2.0
 factory-boy==3.2.1
 flake8==6.0.0
