@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { useResource, useResources, UseResourcesProps } from 'hooks/useResources';
+import { useResource, useResources, UseResourcesProps, QueryOptions } from 'hooks/useResources';
 import { API, CourseOrderResourceQuery, NestedCourseOrder } from 'types/Joanie';
 
 const messages = defineMessages({
@@ -27,6 +27,27 @@ const props: UseResourcesProps<
   messages,
 };
 
-export const useCourseOrder = useResource(props);
+export const useCourseOrder = (
+  id: string,
+  filters?: CourseOrderResourceQuery,
+  queryOptions?: QueryOptions<NestedCourseOrder>,
+) => {
+  return useResource(props)(id, filters, {
+    ...queryOptions,
+    enabled:
+      !!id &&
+      !!filters?.organization_id &&
+      (queryOptions?.enabled === undefined || queryOptions.enabled),
+  });
+};
 
-export const useCourseOrders = useResources(props);
+export const useCourseOrders = (
+  filters?: CourseOrderResourceQuery,
+  queryOptions?: QueryOptions<NestedCourseOrder>,
+) => {
+  return useResources(props)(filters, {
+    ...queryOptions,
+    enabled:
+      !!filters?.organization_id && (queryOptions?.enabled === undefined || queryOptions.enabled),
+  });
+};

@@ -32,6 +32,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Learner list in teacher dashboard are always fitered by
+  organization id.
 - Upgrade docker compose to v2.24.5
 - remove dashboard i18n routing
 - Complete `course_detail` RDFa markups

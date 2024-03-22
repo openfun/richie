@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import useDefaultOrganizationId from 'hooks/useDefaultOrganizationId';
 import {
   CourseListItem,
   CourseOrderResourceQuery,
@@ -14,7 +15,7 @@ export type CourseLearnersParams = {
 };
 
 const useCourseLearnersFilters = () => {
-  const { courseId, courseProductRelationId, organizationId } = useParams<CourseLearnersParams>();
+  const { courseId, courseProductRelationId } = useParams<CourseLearnersParams>();
   const [searchParams] = useSearchParams();
   const searchFilters: CourseOrderResourceQuery = useMemo(() => {
     return {
@@ -24,10 +25,13 @@ const useCourseLearnersFilters = () => {
     };
   }, Array.from(searchParams.entries()));
 
+  // default organizationId between (ordered by priority): route, query, first user's organization.
+  const defaultOrganizationId = useDefaultOrganizationId();
+
   const initialFilters = useMemo(() => {
     return {
       ...searchFilters,
-      organization_id: organizationId || searchFilters.organization_id,
+      organization_id: defaultOrganizationId,
       course_product_relation_id: courseProductRelationId,
     };
   }, [defaultOrganizationId]);
