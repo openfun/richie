@@ -9,15 +9,10 @@ import { DashboardLayoutRoute } from 'widgets/Dashboard/components/DashboardLayo
 import {
   LearnerDashboardPaths,
   LEARNER_DASHBOARD_ROUTE_LABELS,
-  LEARNER_DASHBOARD_ROUTE_PATHS,
 } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { getLearnerDashboardRoutes } from 'widgets/Dashboard/utils/learnerRoutes';
 import { getTeacherDashboardRoutes } from 'widgets/Dashboard/utils/teacherRoutes';
-import {
-  TeacherDashboardPaths,
-  TEACHER_DASHBOARD_ROUTE_LABELS,
-  TEACHER_DASHBOARD_ROUTE_PATHS,
-} from './teacherRouteMessages';
+import { TeacherDashboardPaths, TEACHER_DASHBOARD_ROUTE_LABELS } from './teacherRouteMessages';
 
 export interface DashboardRouteHandle {
   crumbLabel?: MessageDescriptor;
@@ -68,10 +63,7 @@ const DASHBOARD_ROUTE_LABELS = {
   ...LEARNER_DASHBOARD_ROUTE_LABELS,
   ...TEACHER_DASHBOARD_ROUTE_LABELS,
 };
-const DASHBOARD_ROUTE_PATHS = {
-  ...LEARNER_DASHBOARD_ROUTE_PATHS,
-  ...TEACHER_DASHBOARD_ROUTE_PATHS,
-};
+
 type DashboardPath = LearnerDashboardPaths | TeacherDashboardPaths;
 
 const getDashboardRouteAttribute =
@@ -86,8 +78,21 @@ const getDashboardRouteAttribute =
   ) => {
     const isLabel = attribute === RouteAttributes.LABEL;
 
-    const message = isLabel ? DASHBOARD_ROUTE_LABELS[path] : DASHBOARD_ROUTE_PATHS[path];
-    return intl.formatMessage(message, ...options);
+    if (isLabel) {
+      return intl.formatMessage(DASHBOARD_ROUTE_LABELS[path], ...options);
+    }
+
+    let outputPath = path as string;
+    options.forEach((option) => {
+      if (!option) {
+        return;
+      }
+      Object.entries(option).forEach(([key, value]) => {
+        outputPath = outputPath.replace(`:${key}`, value as string);
+      });
+    });
+
+    return outputPath;
   };
 
 /** Get the provided dashboard route label in the active locale */

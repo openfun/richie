@@ -41,9 +41,7 @@ export function getLearnerDashboardRoutes() {
           element: <DashboardCourses />,
         },
         {
-          path: getRoutePath(LearnerDashboardPaths.ORDER, {
-            orderId: ':orderId',
-          }),
+          path: getRoutePath(LearnerDashboardPaths.ORDER),
           element: <DashboardOrderLayout />,
           handle: {
             renderLayout: true,
@@ -69,7 +67,7 @@ export function getLearnerDashboardRoutes() {
       element: <DashboardContracts />,
     },
     {
-      path: getRoutePath(LearnerDashboardPaths.COURSE, { code: ':code' }),
+      path: getRoutePath(LearnerDashboardPaths.COURSE),
       element: <RouteInfo title={getRouteLabel(LearnerDashboardPaths.COURSE)} />,
       handle: { crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.COURSE] },
     },
@@ -83,9 +81,7 @@ export function getLearnerDashboardRoutes() {
           element: <DashboardPreferences />,
         },
         {
-          path: getRoutePath(LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION, {
-            addressId: ':addressId',
-          }),
+          path: getRoutePath(LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION),
           element: <DashboardEditAddressLoader />,
           handle: {
             crumbLabel:
@@ -101,9 +97,7 @@ export function getLearnerDashboardRoutes() {
           },
         },
         {
-          path: getRoutePath(LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
-            creditCardId: ':creditCardId',
-          }),
+          path: getRoutePath(LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION),
           element: <DashboardEditCreditCardLoader />,
           handle: {
             crumbLabel:
