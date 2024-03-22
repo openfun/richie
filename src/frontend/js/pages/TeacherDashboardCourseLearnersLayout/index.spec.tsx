@@ -182,7 +182,7 @@ describe('pages/TeacherDashboardCourseLearnersLayout', () => {
     const organizationList = [defaultOrganization, otherOrganization];
     const courseProductRelation = CourseProductRelationFactory().one();
     const courseOrderList = NestedCourseOrderFactory().many(3);
-    // https://joanie.endpoint/api/v1.0/organizations/?course_product_relation_id=d390d6a9-8437-4f92-8897-982e12f97259
+
     // Course sidebar queries
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?course_product_relation_id=${courseProductRelation.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
