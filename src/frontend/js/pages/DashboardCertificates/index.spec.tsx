@@ -13,9 +13,10 @@ import { Deferred } from 'utils/test/deferred';
 import { History, HistoryContext } from 'hooks/useHistory';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { CertificateFactory } from 'utils/test/factories/joanie';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 jest.mock('utils/context', () => ({
   __esModule: true,

@@ -4,11 +4,6 @@ import { createIntl } from 'react-intl';
 import { CourseListItem } from 'types/Joanie';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
-  TEACHER_DASHBOARD_ROUTE_LABELS,
-  TeacherDashboardPaths,
-} from 'widgets/Dashboard/utils/teacherRouteMessages';
-
-import {
   CourseFactory,
   CourseProductRelationFactory,
   OrganizationFactory,
@@ -16,6 +11,10 @@ import {
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { render } from 'utils/test/render';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import {
+  TEACHER_DASHBOARD_ROUTE_LABELS,
+  TeacherDashboardPaths,
+} from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { TeacherDashboardCourseSidebar, messages } from '.';
 
 jest.mock('utils/context', () => ({

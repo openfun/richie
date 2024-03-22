@@ -1,4 +1,4 @@
-import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
+import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 
 interface GetMenuRoutesArgs {
   courseProductRelationId?: string;

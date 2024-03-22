@@ -1,4 +1,3 @@
-import { useIntl } from 'react-intl';
 import { Navigate, RouteObject } from 'react-router-dom';
 import {
   TeacherDashboardCourseContractsLayout,
@@ -7,60 +6,45 @@ import {
 import { TeacherDashboardOrganizationCourseLoader } from 'pages/TeacherDashboardOrganizationCourseLoader';
 import { TeacherDashboardCoursesLoader } from 'pages/TeacherDashboardCoursesLoader';
 import NavigateWithParams from 'widgets/Dashboard/components/NavigateWithParams';
-import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
-import {
-  TeacherDashboardPaths,
-  TEACHER_DASHBOARD_ROUTE_LABELS,
-} from 'widgets/Dashboard/utils/teacherRouteMessages';
 import { TeacherDashboardCourseLoader } from 'pages/TeacherDashboardCourseLoader';
 import { TeacherDashboardTrainingLoader } from 'pages/TeacherDashboardTraining';
 import { TeacherDashboardCourseLearnersLayout } from 'pages/TeacherDashboardCourseLearnersLayout';
+import {
+  TEACHER_DASHBOARD_ROUTE_LABELS,
+  TeacherDashboardPaths,
+} from 'widgets/Dashboard/utils/teacherDashboardPaths';
 
 export function getTeacherDashboardRoutes() {
-  const intl = useIntl();
-  const getRoutePath = getDashboardRoutePath(intl);
   const routes: RouteObject[] = [
     {
       index: true,
-      element: <Navigate to={getRoutePath(TeacherDashboardPaths.TEACHER_COURSES)} replace />,
+      element: <Navigate to={TeacherDashboardPaths.TEACHER_COURSES} replace />,
     },
     {
-      path: getRoutePath(TeacherDashboardPaths.TEACHER_COURSES),
+      path: TeacherDashboardPaths.TEACHER_COURSES,
       children: [
         {
           index: true,
           element: <TeacherDashboardCoursesLoader />,
         },
         {
-          path: getRoutePath(TeacherDashboardPaths.COURSE, {
-            courseId: ':courseId',
-          }),
+          path: TeacherDashboardPaths.COURSE,
           children: [
             {
               index: true,
               element: (
-                <NavigateWithParams
-                  to={getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATION, {
-                    courseId: ':courseId',
-                  })}
-                  replace
-                />
+                <NavigateWithParams to={TeacherDashboardPaths.COURSE_GENERAL_INFORMATION} replace />
               ),
             },
             {
-              path: getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATION, {
-                courseId: ':courseId',
-              }),
+              path: TeacherDashboardPaths.COURSE_GENERAL_INFORMATION,
               element: <TeacherDashboardCourseLoader />,
               handle: {
                 crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
               },
             },
             {
-              path: getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, {
-                courseId: ':courseId',
-                courseProductRelationId: ':courseProductRelationId',
-              }),
+              path: TeacherDashboardPaths.COURSE_PRODUCT,
               children: [
                 {
                   index: true,
@@ -70,10 +54,7 @@ export function getTeacherDashboardRoutes() {
                   },
                 },
                 {
-                  path: getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS, {
-                    courseId: ':courseId',
-                    courseProductRelationId: ':courseProductRelationId',
-                  }),
+                  path: TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS,
                   element: <TeacherDashboardCourseContractsLayout />,
                   handle: {
                     crumbLabel:
@@ -83,10 +64,7 @@ export function getTeacherDashboardRoutes() {
                   },
                 },
                 {
-                  path: getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT_LEARNER_LIST, {
-                    courseId: ':courseId',
-                    courseProductRelationId: ':courseProductRelationId',
-                  }),
+                  path: TeacherDashboardPaths.COURSE_PRODUCT_LEARNER_LIST,
                   element: <TeacherDashboardCourseLearnersLayout />,
                   handle: {
                     crumbLabel:
@@ -98,9 +76,7 @@ export function getTeacherDashboardRoutes() {
               ],
             },
             {
-              path: getRoutePath(TeacherDashboardPaths.COURSE_CONTRACTS, {
-                courseId: ':courseId',
-              }),
+              path: TeacherDashboardPaths.COURSE_CONTRACTS,
               element: <TeacherDashboardCourseContractsLayout />,
               handle: {
                 crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_CONTRACTS],
@@ -111,49 +87,31 @@ export function getTeacherDashboardRoutes() {
       ],
     },
     {
-      path: getRoutePath(TeacherDashboardPaths.ORGANIZATION, {
-        organizationId: ':organizationId',
-      }),
+      path: TeacherDashboardPaths.ORGANIZATION,
       handle: {
         crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION],
       },
       children: [
         {
           index: true,
-          element: (
-            <NavigateWithParams
-              to={getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSES, {
-                organizationId: ':organizationId',
-              })}
-              replace
-            />
-          ),
+          element: <NavigateWithParams to={TeacherDashboardPaths.ORGANIZATION_COURSES} replace />,
         },
         {
-          path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSES, {
-            organizationId: ':organizationId',
-          }),
+          path: TeacherDashboardPaths.ORGANIZATION_COURSES,
           children: [
             {
               index: true,
               element: <TeacherDashboardOrganizationCourseLoader />,
             },
             {
-              path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION, {
-                organizationId: ':organizationId',
-                courseId: ':courseId',
-              }),
+              path: TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION,
               element: <TeacherDashboardCourseLoader />,
               handle: {
                 crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE],
               },
             },
             {
-              path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_CONTRACTS, {
-                organizationId: ':organizationId',
-                courseId: ':courseId',
-                courseProductRelationId: ':courseProductRelationId',
-              }),
+              path: TeacherDashboardPaths.ORGANIZATION_COURSE_CONTRACTS,
               element: <TeacherDashboardCourseContractsLayout />,
               handle: {
                 crumbLabel:
@@ -163,11 +121,7 @@ export function getTeacherDashboardRoutes() {
               },
             },
             {
-              path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT, {
-                organizationId: ':organizationId',
-                courseId: ':courseId',
-                courseProductRelationId: ':courseProductRelationId',
-              }),
+              path: TeacherDashboardPaths.ORGANIZATION_PRODUCT,
               children: [
                 {
                   index: true,
@@ -177,11 +131,7 @@ export function getTeacherDashboardRoutes() {
                   },
                 },
                 {
-                  path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT_CONTRACTS, {
-                    organizationId: ':organizationId',
-                    courseId: ':courseId',
-                    courseProductRelationId: ':courseProductRelationId',
-                  }),
+                  path: TeacherDashboardPaths.ORGANIZATION_PRODUCT_CONTRACTS,
                   element: <TeacherDashboardCourseContractsLayout />,
                   handle: {
                     crumbLabel:
@@ -191,14 +141,7 @@ export function getTeacherDashboardRoutes() {
                   },
                 },
                 {
-                  path: getRoutePath(
-                    TeacherDashboardPaths.ORGANIZATION_COURSE_PRODUCT_LEARNER_LIST,
-                    {
-                      organizationId: ':organizationId',
-                      courseId: ':courseId',
-                      courseProductRelationId: ':courseProductRelationId',
-                    },
-                  ),
+                  path: TeacherDashboardPaths.ORGANIZATION_COURSE_PRODUCT_LEARNER_LIST,
                   element: <TeacherDashboardCourseLearnersLayout />,
                   handle: {
                     crumbLabel:
@@ -212,9 +155,7 @@ export function getTeacherDashboardRoutes() {
           ],
         },
         {
-          path: getRoutePath(TeacherDashboardPaths.ORGANIZATION_CONTRACTS, {
-            organizationId: ':organizationId',
-          }),
+          path: TeacherDashboardPaths.ORGANIZATION_CONTRACTS,
           element: <TeacherDashboardOrganizationContractsLayout />,
           handle: {
             crumbLabel:

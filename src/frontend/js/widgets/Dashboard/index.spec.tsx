@@ -15,7 +15,7 @@ import { render } from 'utils/test/render';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
-import { LearnerDashboardPaths } from './utils/learnerRouteMessages';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { DashboardTest } from './components/DashboardTest';
 
 jest.mock('utils/context', () => ({

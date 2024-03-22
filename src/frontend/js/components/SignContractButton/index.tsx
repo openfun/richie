@@ -1,14 +1,15 @@
 import { Button } from '@openfun/cunningham-react';
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { useState } from 'react';
+import { generatePath } from 'react-router-dom';
 import { LearnerContractFrame } from 'components/ContractFrame';
 import { Contract, ContractState, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
-import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import DownloadContractButton from 'components/DownloadContractButton';
 import { Maybe } from 'types/utils';
 import { ContractHelper } from 'utils/ContractHelper';
+
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 const messages = defineMessages({
   contractSignActionLabel: {
@@ -42,11 +43,10 @@ interface SignContractButtonLinkProps {
 }
 
 const SignContractButtonLink = ({ orderId, className }: SignContractButtonLinkProps) => {
-  const getRoutePath = getDashboardRoutePath(useIntl());
   return (
     <RouterButton
       size="small"
-      href={getRoutePath(LearnerDashboardPaths.ORDER, {
+      href={generatePath(LearnerDashboardPaths.ORDER, {
         orderId,
       })}
       className={className}

@@ -1,7 +1,8 @@
 import { DashboardCreditCardsManagement } from 'pages/DashboardCreditCardsManagement';
 import { DashboardAddressesManagement } from 'pages/DashboardAddressesManagement';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
+
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 /**
  * This component relies on react-router.

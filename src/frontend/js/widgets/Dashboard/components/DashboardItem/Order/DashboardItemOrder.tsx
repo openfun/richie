@@ -1,6 +1,7 @@
 import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
 import classNames from 'classnames';
+import { generatePath } from 'react-router-dom';
 import { CourseLight, CredentialOrder, Product } from 'types/Joanie';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CoursesHelper } from 'utils/CoursesHelper';
@@ -9,13 +10,12 @@ import { Spinner } from 'components/Spinner';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
 import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate';
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
-import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { OrderHelper } from 'utils/OrderHelper';
 import ContractStatus from 'components/ContractStatus';
 import SignContractButton from 'components/SignContractButton';
 import { AddressView } from 'components/Address';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../CourseEnrolling';
 import { DashboardItem } from '../index';
@@ -138,7 +138,6 @@ export const DashboardItemOrder = ({
   });
   const { product } = courseProductRelation || {};
   const needsSignature = OrderHelper.orderNeedsSignature(order, product?.contract_definition);
-  const getRoutePath = getDashboardRoutePath(useIntl());
 
   return (
     <div className="dashboard-item-order">
@@ -168,7 +167,7 @@ export const DashboardItemOrder = ({
                 <RouterButton
                   size="small"
                   className="dashboard-item__button"
-                  href={getRoutePath(LearnerDashboardPaths.ORDER, { orderId: order.id })}
+                  href={generatePath(LearnerDashboardPaths.ORDER, { orderId: order.id })}
                   data-testid="dashboard-item-order__button"
                 >
                   {intl.formatMessage(messages.accessCourse)}
@@ -203,7 +202,7 @@ export const DashboardItemOrder = ({
                     targetCourse,
                     order,
                   )}
-                  notEnrolledUrl={getRoutePath(LearnerDashboardPaths.ORDER, {
+                  notEnrolledUrl={generatePath(LearnerDashboardPaths.ORDER, {
                     orderId: order.id,
                   })}
                   hideEnrollButtons={needsSignature}

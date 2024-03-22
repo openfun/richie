@@ -6,11 +6,12 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { CredentialOrder } from 'types/Joanie';
 import { CredentialOrderFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
 import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { expectUrlMatchLocationDisplayed } from 'utils/test/expectUrlMatchLocationDisplayed';
+
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 jest.mock('utils/context', () => ({
   __esModule: true,

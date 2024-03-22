@@ -10,7 +10,6 @@ import {
   CredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { CourseLight, CourseProductRelation, Enrollment, CredentialOrder } from 'types/Joanie';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError, expectBannerInfo, expectNoBannerInfo } from 'utils/test/expectBanner';
@@ -22,6 +21,8 @@ import { HttpStatusCode } from 'utils/errors/HttpError';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
+
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
