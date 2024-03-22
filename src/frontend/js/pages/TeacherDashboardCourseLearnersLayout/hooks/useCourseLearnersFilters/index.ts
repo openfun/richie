@@ -24,6 +24,8 @@ const useCourseLearnersFilters = () => {
     };
   }, Array.from(searchParams.entries()));
 
+  // TODO(rlecellier): if no organizationId is found, we need to use an array of all available organization for the user.
+  // FIXME(rlecellier): courses/orders/ endpoint do not accept an array as organization_id !
   const initialFilters = useMemo(() => {
     return {
       ...searchFilters,
