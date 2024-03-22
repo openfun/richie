@@ -2,14 +2,14 @@ import fetchMock from 'fetch-mock';
 import { screen } from '@testing-library/react';
 import { createIntl } from 'react-intl';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import {
-  TEACHER_DASHBOARD_ROUTE_LABELS,
-  TeacherDashboardPaths,
-} from 'widgets/Dashboard/utils/teacherRouteMessages';
 import { OrganizationFactory } from 'utils/test/factories/joanie';
 import { messages as organizationLinksMessages } from 'widgets/Dashboard/components/TeacherDashboardProfileSidebar/components/OrganizationLinks';
 import { render } from 'utils/test/render';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import {
+  TEACHER_DASHBOARD_ROUTE_LABELS,
+  TeacherDashboardPaths,
+} from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { TeacherDashboardProfileSidebar } from '.';
 
 jest.mock('utils/context', () => ({

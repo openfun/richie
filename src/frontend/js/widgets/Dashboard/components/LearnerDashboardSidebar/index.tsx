@@ -1,16 +1,15 @@
 import { defineMessages, useIntl } from 'react-intl';
 import { useMemo } from 'react';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
-import {
-  getDashboardRouteLabel,
-  getDashboardRoutePath,
-} from 'widgets/Dashboard/utils/dashboardRoutes';
+import { generatePath } from 'react-router-dom';
+import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes';
 import {
   DashboardSidebar,
   DashboardSidebarProps,
 } from 'widgets/Dashboard/components/DashboardSidebar';
 import { useSession } from 'contexts/SessionContext';
 import { UserHelper } from 'utils/UserHelper';
+
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 const messages = defineMessages({
   header: {
@@ -29,7 +28,6 @@ export const LearnerDashboardSidebar = (props: Partial<DashboardSidebarProps>) =
   const intl = useIntl();
   const { user } = useSession();
 
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
 
   const links = useMemo(
@@ -40,7 +38,7 @@ export const LearnerDashboardSidebar = (props: Partial<DashboardSidebarProps>) =
         LearnerDashboardPaths.CONTRACTS,
         LearnerDashboardPaths.PREFERENCES,
       ].map((path) => ({
-        to: getRoutePath(path),
+        to: generatePath(path),
         label: getRouteLabel(path),
       })),
     [],

@@ -1,17 +1,14 @@
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import { capitalize } from 'lodash-es';
 import { DashboardSidebar, MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';
-import {
-  getDashboardRouteLabel,
-  getDashboardRoutePath,
-} from 'widgets/Dashboard/utils/dashboardRoutes';
+import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourse } from 'hooks/useCourses';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { useCourseProductRelation } from 'hooks/useCourseProductRelation';
-import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
+import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import ContractNavLink from '../DashboardSidebar/components/ContractNavLink';
 import { getMenuRoutes } from './utils';
 
@@ -40,7 +37,6 @@ export const messages = defineMessages({
 
 export const TeacherDashboardCourseSidebar = () => {
   const intl = useIntl();
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
   const {
     organizationId: routeOrganizationId,
@@ -86,12 +82,11 @@ export const TeacherDashboardCourseSidebar = () => {
   );
 
   const getMenuLinkFromPath = (basePath: TeacherDashboardPaths) => {
-    const path = getRoutePath(basePath, {
-      organizationId: routeOrganizationId,
-      courseId: routeCourseId,
-      courseProductRelationId: routeCourseProductRelationId,
+    const path = generatePath(basePath, {
+      organizationId: routeOrganizationId ?? '',
+      courseId: routeCourseId ?? '',
+      courseProductRelationId: routeCourseProductRelationId ?? '',
     });
-
     const menuLink: MenuLink = {
       to: path,
       label: getRouteLabel(basePath),
@@ -114,7 +109,6 @@ export const TeacherDashboardCourseSidebar = () => {
 
     return menuLink;
   };
-
   const menuLinkList = useMemo(
     () =>
       getMenuRoutes({

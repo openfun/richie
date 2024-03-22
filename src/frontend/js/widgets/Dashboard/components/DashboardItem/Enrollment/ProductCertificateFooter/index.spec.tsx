@@ -16,13 +16,13 @@ import {
 } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { PER_PAGE } from 'settings';
 import { SaleTunnelProps } from 'components/SaleTunnel';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import ProductCertificateFooter from '.';
 
 jest.mock('utils/context', () => ({

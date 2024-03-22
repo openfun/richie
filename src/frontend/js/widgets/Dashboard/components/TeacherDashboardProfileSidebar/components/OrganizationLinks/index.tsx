@@ -1,9 +1,9 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
+import { generatePath, Link } from 'react-router-dom';
 import { Organization } from 'types/Joanie';
-import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
-import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
 import { StringHelper } from 'utils/StringHelper';
+
+import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 
 export const messages = defineMessages({
   organizationsTitle: {
@@ -33,7 +33,7 @@ const OrganizationLinks = ({ organizations }: OrganizationLinksProps) => {
         {organizations.map((organization) => (
           <Link
             key={organization.id}
-            to={getDashboardRoutePath(intl)(TeacherDashboardPaths.ORGANIZATION_COURSES, {
+            to={generatePath(TeacherDashboardPaths.ORGANIZATION_COURSES, {
               organizationId: organization.id,
             })}
             className="dashboard-sidebar__organization-section__link"

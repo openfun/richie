@@ -11,11 +11,12 @@ import {
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
 import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
+
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 jest.mock('utils/context', () => ({
   __esModule: true,

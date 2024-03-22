@@ -14,12 +14,13 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 jest.mock('utils/context', () => ({
   __esModule: true,

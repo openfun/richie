@@ -2,9 +2,9 @@ import { useParams } from 'react-router-dom';
 import Banner, { BannerType } from 'components/Banner';
 import { Spinner } from 'components/Spinner';
 import { useAddress } from 'hooks/useAddresses';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { DashboardEditAddress } from './DashboardEditAddress';
 
 /**

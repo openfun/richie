@@ -1,13 +1,10 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 import { Spinner } from 'components/Spinner';
 import { useOrganization } from 'hooks/useOrganizations';
 import { DashboardSidebar, MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';
-import {
-  getDashboardRouteLabel,
-  getDashboardRoutePath,
-} from 'widgets/Dashboard/utils/dashboardRoutes';
-import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
+import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes';
+import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { DashboardAvatar, DashboardAvatarVariantEnum } from '../DashboardAvatar';
 import ContractNavLink from '../DashboardSidebar/components/ContractNavLink';
 
@@ -26,7 +23,6 @@ const messages = defineMessages({
 
 export const TeacherDashboardOrganizationSidebar = () => {
   const intl = useIntl();
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
   const { organizationId, courseProductRelationId } = useParams<{
     organizationId: string;
@@ -38,7 +34,7 @@ export const TeacherDashboardOrganizationSidebar = () => {
   } = useOrganization(organizationId);
 
   const getMenuLinkFromPath = (basePath: TeacherDashboardPaths) => {
-    const path = getRoutePath(basePath, { organizationId });
+    const path = generatePath(basePath, { organizationId } as any);
 
     const menuLink: MenuLink = {
       to: path,

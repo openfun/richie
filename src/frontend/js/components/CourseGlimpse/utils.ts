@@ -1,12 +1,12 @@
 import { IntlShape } from 'react-intl';
+import { generatePath } from 'react-router-dom';
 import { Course as RichieCourse, isRichieCourse } from 'types/Course';
-import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
-import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
 import {
   CourseListItem as JoanieCourse,
   CourseProductRelation,
   isCourseProductRelation,
 } from 'types/Joanie';
+import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { CourseGlimpseCourse } from '.';
 
 const getCourseGlimpsePropsFromCourseProductRelation = (
@@ -14,17 +14,16 @@ const getCourseGlimpsePropsFromCourseProductRelation = (
   intl: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {
-  const getRoutePath = getDashboardRoutePath(intl);
   const courseRouteParams = {
     courseId: courseProductRelation.course.id,
     courseProductRelationId: courseProductRelation.id,
   };
   const courseRoute = organizationId
-    ? getRoutePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT, {
+    ? generatePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT, {
         ...courseRouteParams,
         organizationId,
       })
-    : getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, courseRouteParams);
+    : generatePath(TeacherDashboardPaths.COURSE_PRODUCT, courseRouteParams);
   return {
     id: courseProductRelation.id,
     code: courseProductRelation.course.code,
@@ -67,16 +66,15 @@ const getCourseGlimpsePropsFromJoanieCourse = (
   intl: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {
-  const getRoutePath = getDashboardRoutePath(intl);
   const courseRouteParams = {
     courseId: course.id,
   };
   const courseRoute = organizationId
-    ? getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION, {
+    ? generatePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION, {
         ...courseRouteParams,
         organizationId,
       })
-    : getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATION, courseRouteParams);
+    : generatePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATION, courseRouteParams);
   return {
     id: course.id,
     code: course.code,

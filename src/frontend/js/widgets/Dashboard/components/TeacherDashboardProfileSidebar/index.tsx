@@ -1,14 +1,12 @@
 import { defineMessages, useIntl } from 'react-intl';
 import { useMemo } from 'react';
-import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherRouteMessages';
+import { generatePath } from 'react-router-dom';
 import { DashboardSidebar } from 'widgets/Dashboard/components/DashboardSidebar';
-import {
-  getDashboardRouteLabel,
-  getDashboardRoutePath,
-} from 'widgets/Dashboard/utils/dashboardRoutes';
+import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useSession } from 'contexts/SessionContext';
 import { useOrganizations } from 'hooks/useOrganizations';
 import { UserHelper } from 'utils/UserHelper';
+import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import OrganizationLinks from './components/OrganizationLinks';
 
 const messages = defineMessages({
@@ -22,14 +20,13 @@ const messages = defineMessages({
 export const TeacherDashboardProfileSidebar = () => {
   const intl = useIntl();
   const { user } = useSession();
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
   const { items: organizations } = useOrganizations();
 
   const links = useMemo(
     () =>
       [TeacherDashboardPaths.TEACHER_COURSES].map((path) => ({
-        to: getRoutePath(path),
+        to: generatePath(path),
         label: getRouteLabel(path),
       })),
     [],

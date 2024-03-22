@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
 import { useCreditCard } from 'hooks/useCreditCards';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { DashboardEditCreditCard } from './DashboardEditCreditCard';
 
 /**

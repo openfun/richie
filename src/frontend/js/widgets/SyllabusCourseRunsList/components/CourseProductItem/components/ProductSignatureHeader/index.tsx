@@ -1,10 +1,11 @@
 import { Button } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { generatePath } from 'react-router-dom';
 import Banner, { BannerType } from 'components/Banner';
 import { getDashboardBasename } from 'widgets/Dashboard/hooks/useDashboardRouter/getDashboardBasename';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { Order } from 'types/Joanie';
-import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
+
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 const messages = defineMessages({
   signatureNeeded: {
@@ -30,7 +31,7 @@ export const ProductSignatureHeader = ({ order }: { order?: Order }) => {
         size="small"
         href={
           getDashboardBasename(intl.locale) +
-          getDashboardRoutePath(intl)(LearnerDashboardPaths.ORDER, { orderId: order!.id })
+          generatePath(LearnerDashboardPaths.ORDER, { orderId: order!.id })
         }
       >
         <FormattedMessage {...messages.contractSignActionLabel} />
