@@ -11,7 +11,7 @@ import {
 } from '@testing-library/react';
 import { faker } from '@faker-js/faker';
 import fetchMock from 'fetch-mock';
-import { userEvent } from '@storybook/testing-library';
+import userEvent from '@testing-library/user-event';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import {
   CourseStateFactory,
