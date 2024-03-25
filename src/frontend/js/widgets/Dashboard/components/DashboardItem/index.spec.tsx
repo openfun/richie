@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
-import { userEvent } from '@storybook/testing-library';
 import { PropsWithChildren } from 'react';
+import userEvent from '@testing-library/user-event';
 import { render } from 'utils/test/render';
 import { IntlWrapper } from 'utils/test/wrappers/IntlWrapper';
 import { DashboardSubItemsList } from './DashboardSubItemsList';
