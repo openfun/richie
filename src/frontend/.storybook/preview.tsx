@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import { CunninghamProvider } from '@openfun/cunningham-react';
+import { Preview } from '@storybook/react';
 import { useAsyncEffect } from 'hooks/useAsyncEffect';
 import './__mocks__/utils/context';
 
-export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
-  controls: {
-    matchers: {
-      color: /(background|color)$/i,
-      date: /Date$/,
+export const preview: Preview = {
+  parameters: {
+    actions: { argTypesRegex: '^on[A-Z].*' },
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/,
+      },
     },
-  },
+  }
 };
 
 const IconsWrapper = (props) => {
