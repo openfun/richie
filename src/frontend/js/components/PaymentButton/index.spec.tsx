@@ -159,7 +159,10 @@ describe.each([
     });
 
     afterEach(() => {
-      jest.runOnlyPendingTimers();
+      act(() => {
+        jest.runOnlyPendingTimers();
+      });
+
       jest.useRealTimers();
       cleanup();
     });
@@ -787,9 +790,17 @@ describe.each([
       screen.getByText('Payment in progress');
 
       fetchMock.resetHistory();
+
       // - Wait until order has been polled 29 times.
-      await jest.advanceTimersToNextTimerAsync(PAYMENT_SETTINGS.pollLimit);
-      expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit - 1);
+      await act(async () => {
+        await jest.advanceTimersByTimeAsync(
+          (PAYMENT_SETTINGS.pollLimit - 1) * PAYMENT_SETTINGS.pollInterval,
+        );
+      });
+
+      await waitFor(async () => {
+        expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit - 1);
+      });
 
       // - This round should be the last after which the order should be aborted
       await act(async () => {
