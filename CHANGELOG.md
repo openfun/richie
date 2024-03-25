@@ -33,6 +33,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Contract list in the teacher dashbaord are now filtered by 
   courseProductRelationId instead of courseId and productId.
 - Switch from setup.cfg to pyproject.toml 
+- remove dashboard i18n routing
 
 ### Fixed
 
