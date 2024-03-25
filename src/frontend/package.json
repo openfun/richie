@@ -52,13 +52,13 @@
     "@openfun/cunningham-tokens": "2.1.1",
     "@sentry/browser": "7.106.0",
     "@sentry/types": "7.106.0",
-    "@storybook/addon-actions": "7.6.17",
-    "@storybook/addon-essentials": "7.6.17",
-    "@storybook/addon-interactions": "7.6.17",
-    "@storybook/addon-links": "7.6.17",
-    "@storybook/react": "7.6.17",
-    "@storybook/react-webpack5": "7.6.17",
-    "@storybook/testing-library": "0.2.2",
+    "@storybook/addon-actions": "8.0.4",
+    "@storybook/addon-essentials": "8.0.4",
+    "@storybook/addon-interactions": "8.0.4",
+    "@storybook/addon-links": "8.0.4",
+    "@storybook/react": "8.0.4",
+    "@storybook/react-webpack5": "8.0.4",
+    "@storybook/test": "8.0.4",
     "@tanstack/query-core": "5.25.0",
     "@tanstack/query-sync-storage-persister": "5.25.0",
     "@tanstack/react-query": "5.25.0",
@@ -127,7 +127,7 @@
     "react-router-dom": "6.22.3",
     "sass": "1.71.1",
     "source-map-loader": "5.0.0",
-    "storybook": "7.6.17",
+    "storybook": "8.0.4",
     "tsconfig-paths-webpack-plugin": "4.1.0",
     "typescript": "5.4.2",
     "uuid": "9.0.1",
@@ -148,5 +148,9 @@
   },
   "volta": {
     "node": "20.11.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-mdx-gfm": "8.0.4",
+    "@storybook/addon-webpack5-compiler-babel": "3.0.3"
   }
 }
