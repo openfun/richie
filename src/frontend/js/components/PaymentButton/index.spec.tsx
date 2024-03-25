@@ -789,6 +789,11 @@ describe.each([
       fetchMock.resetHistory();
       // - Wait until order has been polled 29 times.
       await jest.advanceTimersToNextTimerAsync(PAYMENT_SETTINGS.pollLimit);
+      await act(async () => {
+        jest.runOnlyPendingTimers();
+      });
+
+      // FIXME(rlecellier): test fail here
       expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit - 1);
 
       // - This round should be the last after which the order should be aborted
