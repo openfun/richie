@@ -1,7 +1,7 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
-import { PaginatedResourceQuery } from 'types/Joanie';
+import { PaginatedResourceQuery, PaginatedResponse } from 'types/Joanie';
 import { Deferred } from 'utils/test/deferred';
 import { noop } from 'utils';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
@@ -366,4 +366,100 @@ describe('useUnionResource', () => {
     expect(calledUrls.filter((url) => url === 'http://data.a/?page=1')).toHaveLength(2);
     expect(calledUrls.filter((url) => url === 'http://data.b/?page=1')).toHaveLength(1);
   });
+
+  it.only('load more', async () => {
+    fetchMock.get(
+      'http://data.a/?page=1',
+      mockPaginatedResponse([dataAList[0], dataAList[1], dataAList[2]], 6, true),
+    );
+    fetchMock.get(
+      'http://data.a/?page=2',
+      mockPaginatedResponse([dataAList[3], dataAList[4], dataAList[5]], 6, false),
+    );
+    fetchMock.get('http://data.b/?page=1', mockPaginatedResponse([], 0, false));
+
+    const queryClient = createTestQueryClient({ user: true });
+    const { result } = renderHook(
+      (queries: {
+        queryA?: QueryConfig<TestDataA, TestDataAFilters>;
+        queryB?: QueryConfig<TestDataB, PaginatedResourceQuery>;
+      }) =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig: queries?.queryA || queryAConfig,
+          queryBConfig: queries?.queryB || queryBConfig,
+        }),
+      {
+        wrapper: ({ children }) => (
+          <ReactQueryAppWrapper queryOptions={{ client: queryClient }}>
+            {children}
+          </ReactQueryAppWrapper>
+        ),
+      },
+    );
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    // two page of 3 item have been fetch but only 3 item are displayed.
+    act(() => {
+      // display one more page for a total of 6 item displayed
+      result.current.next();
+    });
+    expect(result.current.hasMore).toBe(false);
+
+    let calledUrls = fetchMock.calls().map((call) => call[0]);
+    expect(calledUrls).toHaveLength(3);
+    expect(calledUrls).toContain('http://data.a/?page=1');
+    expect(calledUrls).toContain('http://data.a/?page=2');
+    expect(calledUrls).toContain('http://data.b/?page=1');
+
+    // simulate backend adding items, totalResults move from 6 to 7
+    // it means that we should request one more page.
+    fetchMock.restore();
+    fetchMock.get(
+      'http://data.a/?page=1',
+      mockPaginatedResponse([dataAList[0], dataAList[1], dataAList[2]], 7, true),
+    );
+    fetchMock.get(
+      'http://data.a/?page=2',
+      mockPaginatedResponse([dataAList[3], dataAList[4], dataAList[5]], 7, true),
+    );
+    fetchMock.get('http://data.a/?page=3', mockPaginatedResponse([dataAList[4]], 7, false));
+    fetchMock.get('http://data.b/?page=1', mockPaginatedResponse([], 0, false));
+
+    // simulate cache expire
+    queryClient.invalidateQueries({ queryKey: ['resourceA'] });
+    queryClient.invalidateQueries({ queryKey: ['resourceB'] });
+    await waitFor(() => {
+      expect(
+        queryClient.getQueryState<PaginatedResponse<TestDataA>>(['resourceA']),
+      ).toBeUndefined();
+      expect(
+        queryClient.getQueryState<PaginatedResponse<TestDataB>>(['resourceB']),
+      ).toBeUndefined();
+    });
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    // two page of 3 item have been fetch but only 3 item are displayed.
+    act(() => {
+      // display one more page for a total of 6 item displayed
+      result.current.next();
+    });
+    act(() => {
+      // display one more page for a total of 7 item displayed
+      result.current.next();
+    });
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(result.current.hasMore).toBe(false);
+
+    calledUrls = fetchMock.calls().map((call) => call[0]);
+    expect(calledUrls).toHaveLength(4);
+    expect(calledUrls).toContain('http://data.a/?page=1');
+    expect(calledUrls).toContain('http://data.a/?page=2');
+    expect(calledUrls).toContain('http://data.a/?page=3');
+    expect(calledUrls).toContain('http://data.b/?page=1');
+  });
+
+  // TODO(rlecellier): add a test with two renderHook that share the same queryKeys but different filters.
+  // ex: render 1: queryA with filters total result 6
+  // ex: render 2: queryA without filters total result 12
+  // render 2 should request page 3 and 4
 });
