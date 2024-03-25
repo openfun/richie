@@ -27,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Complete `course_detail` RDFa markups
 - Require to accept terms when purchasing product of any kind
 - Rename trainings root menu entry label
 - Upgrade to node 20

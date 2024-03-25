@@ -133,16 +133,21 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # Only published categories should be present on the page
+        # Only published categories should be present on the page with RDFa markup
         for category in categories[:2]:
             self.assertContains(
                 response,
                 (
                     # pylint: disable=consider-using-f-string
-                    '<a class="category-badge" href="{:s}">'
+                    '<a class="category-badge" href="{:s}"'
+                    'property="keywords" typeof="DefinedTerm">'
+                    '<meta content="{:s}" property="name" />'
+                    '<meta content="{:s}" property="url" />'
                     '<span class="offscreen">Category</span>'
                     '<span class="category-badge__title">{:s}</span></a>'
                 ).format(
+                    category.extended_object.get_absolute_url(),
+                    category.extended_object.get_title(),
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
                 ),
@@ -193,7 +198,12 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
 
         # Only the published course run should be in response content
         self.assertEqual(CourseRun.objects.count(), 3)
-        self.assertContains(response, course_run.title, count=1)
+        self.assertContains(
+            response,
+            f'<meta property="name" content="{course_run.title}" />',
+            count=1,
+            html=True,
+        )
         self.assertNotContains(response, unpublished_course_run.title)
 
         # Only the published program should be in response content
@@ -309,16 +319,22 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             response, organizations[3].extended_object.get_title(), html=True
         )
 
-        # Draft and published categories should be present on the page
+        # Draft and published categories should be present on the page with RDFa markup
+
         for category in categories[:2]:
             self.assertContains(
                 response,
                 (
                     # pylint: disable=consider-using-f-string
-                    '<a class="category-badge" href="{:s}">'
+                    '<a class="category-badge" href="{:s}" '
+                    'property="keywords" typeof="DefinedTerm">'
+                    '<meta content="{:s}" property="name" />'
+                    '<meta content="{:s}" property="url" />'
                     '<span class="offscreen">Category</span>'
                     '<span class="category-badge__title">{:s}</span></a>'
                 ).format(
+                    category.extended_object.get_absolute_url(),
+                    category.extended_object.get_title(),
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
                 ),
@@ -328,10 +344,15 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             response,
             (
                 # pylint: disable=consider-using-f-string
-                '<a class="category-badge category-badge--draft" href="{:s}">'
+                '<a class="category-badge category-badge--draft" href="{:s}"'
+                'property="keywords" typeof="DefinedTerm">'
+                '<meta content="{:s}" property="name" />'
+                '<meta content="{:s}" property="url" />'
                 '<span class="offscreen">Category</span>'
                 '<span class="category-badge__title">{:s}</span></a>'
             ).format(
+                categories[2].extended_object.get_absolute_url(),
+                categories[2].extended_object.get_title(),
                 categories[2].extended_object.get_absolute_url(),
                 categories[2].extended_object.get_title(),
             ),
@@ -342,7 +363,12 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             response, categories[3].extended_object.get_title(), html=True
         )
         # The course run should be in the page
-        self.assertContains(response, course_run.title, count=1)
+        self.assertContains(
+            response,
+            f'<meta property="name" content="{course_run.title}" />',
+            count=1,
+            html=True,
+        )
 
         # Both programs should be in response content
         self.assertContains(response, "course-detail__programs")
@@ -406,7 +432,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         pattern = (
             r'<div class="subheader__content">'
-            r'<div property="description">'
+            r'<div property="abstract">'
             r'<div class="cms-placeholder'
         )
 

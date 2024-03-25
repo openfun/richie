@@ -1,17 +1,24 @@
 {% load thumbnail %}
 
 {% spaceless %}
-<div class="licence-plugin">
+<div class="licence-plugin" {% if is_license_property|default_if_none:True is True %}property="license" typeof="CreativeWork"{% endif %}>
+    {% if is_license_property|default_if_none:True is True %}
+        <meta property="thumbnailUrl" content="{% thumbnail instance.licence.logo 100x50 replace_alpha='#FFFFFF' crop='smart' %}" />
+        <meta property="name" content="{{ instance.licence.name }}" />
+        <meta property="abstract" content="{{ instance.licence.content|striptags }}" />
+        {% if instance.description %}<meta property="abstract" content="{{ instance.description|striptags }}" />{% endif %}
+        {% if instance.licence.url %}<meta property="url" content="{{ instance.licence.url }}" />{% endif %}
+    {% endif %}
     <p class="licence-plugin__logo">
         <img src="{% thumbnail instance.licence.logo 100x50 replace_alpha='#FFFFFF' crop='smart' %}" alt="">
     </p>
     <div class="licence-plugin__wrapper">
         <h{{ header_level|default:2 }} class="licence-plugin__title">
-            {% if instance.licence.url %}<a href="{{ instance.licence.url }}"{% if is_license_property|default_if_none:True is True %} property="license"{% endif %}>{% endif %}
+            {% if instance.licence.url %}<a href="{{ instance.licence.url }}">{% endif %}
             {{ instance.licence.name }}
             {% if instance.licence.url %}</a>{% endif %}
         </h{{ header_level|default:2 }}>
-        <div class="licence-plugin__content"{% if is_license_property|default_if_none:True and not instance.licence.url %} property="license"{% endif %}>
+        <div class="licence-plugin__content">
             {{ instance.licence.content|safe }}
         </div>
         {% if instance.description %}

@@ -1,10 +1,10 @@
 {% load i18n cms_tags extra_tags static thumbnail %}{% spaceless %}
 {% comment %}Obviously, the context template variable "person" is required and must be a Person page extension{% endcomment %}
 {% with person_page=person.extended_object %}
-<div class="person-glimpse" property="{{ person_property|default:'author' }}" typeof="Person">
-    {% comment %}Use tabindex and aria-hidden on the image link as it is entirely redundant with the title link{% endcomment %}
-    <meta property="url" content="{{ SITE.web_url }}{{ person_page.get_absolute_url }}" />
+<div class="person-glimpse" property="{{ person_property|default:'contributor' }}" typeof="Person">
     <meta property="name" content="{{ person_page.get_title }}" />
+    <meta property="url" content="{{ SITE.web_url }}{{ person_page.get_absolute_url }}" />
+    {% comment %}Use tabindex and aria-hidden on the image link as it is entirely redundant with the title link{% endcomment %}
     <a
       class="person-glimpse__media"
       href="{{ person_page.get_absolute_url }}"

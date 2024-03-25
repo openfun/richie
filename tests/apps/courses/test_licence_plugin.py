@@ -101,7 +101,13 @@ class LicencePluginTestCase(CMSPluginTestCase):
         # RDFa markup should be present by default
         self.assertEqual(html.count('property="license"'), 1)
         self.assertEqual(
-            html.count('<a href="https://example.com" property="license">'), 1
+            html.count(
+                '<div class="licence-plugin" property="license" typeof="CreativeWork">'
+            ),
+            1,
+        )
+        self.assertEqual(
+            html.count('<meta property="url" content="https://example.com" />'), 1
         )
 
     @transaction.atomic
@@ -124,11 +130,15 @@ class LicencePluginTestCase(CMSPluginTestCase):
             placeholder, context=context, language="en"
         )
 
-        # RDFa markup should be present but on the content
+        # RDFa markup should be present but not the url property
         self.assertEqual(html.count('property="license"'), 1)
         self.assertEqual(
-            html.count('<div class="licence-plugin__content" property="license">'), 1
+            html.count(
+                '<div class="licence-plugin" property="license" typeof="CreativeWork">'
+            ),
+            1,
         )
+        self.assertEqual(html.count('<meta property="url" '), 0)
 
     @transaction.atomic
     def test_licence_plugin_rdfa_property_deactivated(self):
