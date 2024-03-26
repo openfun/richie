@@ -65,14 +65,11 @@ export const fetchEntity = async <
   try {
     const res = await fn(filters);
     queryClient.setQueryData(QUERY_KEY, res);
-
-    // If we reached the end of the list, we set the eof flag to prevent future requests.
-    if (!res.next) {
-      eofRef.current = { ...eofRef.current, [queryKeyString]: filters.page! };
-      // Eof is cached based, the same way, we cache the fetching data. Otherwise there would
-      // be request to non existing pages after reload.
-      queryClient.setQueryData(eofQueryKey, eofRef.current);
-    }
+    // Eof is cached based, the same way, we cache the fetching data. Otherwise there would
+    // be request to non existing pages after reload.
+    const totalPages = Math.ceil(res.count / perPage);
+    eofRef.current = { ...eofRef.current, [queryKeyString]: totalPages };
+    queryClient.setQueryData(eofQueryKey, eofRef.current);
     return res;
   } catch (err) {
     if (isHttpError(err)) {
