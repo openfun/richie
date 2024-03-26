@@ -94,7 +94,11 @@ const useUnionResource = <
 
   // to force execution of useEffect::fetchNewPage(),
   // reset need to generate a uniq key that is part of it's dependencies.
-  const reset = () => {
+  const reset = (eofKey?: string) => {
+    if (eofKey) {
+      delete eofRef.current[eofKey];
+    }
+
     setStack([]);
     setPage(0);
     setTotalCount(undefined);
@@ -107,8 +111,12 @@ const useUnionResource = <
   // we manualy observe key invalidation to trigger new search
   // by generating a new update key
   if (refetchOnInvalidation) {
-    useQueryKeyInvalidateListener(queryAConfig.queryKey, reset);
-    useQueryKeyInvalidateListener(queryBConfig.queryKey, reset);
+    useQueryKeyInvalidateListener(queryAConfig.queryKey, () => {
+      reset(queryAConfig.queryKey.join('-'));
+    });
+    useQueryKeyInvalidateListener(queryBConfig.queryKey, () => {
+      reset(queryBConfig.queryKey.join('-'));
+    });
   }
 
   // filters have changes, new results will be fetch.
