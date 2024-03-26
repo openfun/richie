@@ -1,6 +1,8 @@
 import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { UnknownEnrollment } from 'types';
+import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
+import { OpenEdxApiProfile } from './openEdx';
 
 export interface APIListRequestParams {
   [key: string]: Maybe<string | string[]>;
@@ -15,11 +17,16 @@ export interface APIResponseListMeta {
   total_count: number;
 }
 export interface APIAuthentication {
-  accessToken?: () => Nullable<string>;
   login: () => void;
   logout: () => Promise<void>;
   me: () => Promise<Nullable<User>>;
   register: () => void;
+  // routes below are only defined for fonzie auth backend
+  accessToken?: () => Nullable<string>;
+  account?: {
+    get: (username: string) => Promise<OpenEdxApiProfile>;
+    update: (username: string, values: OpenEdxFullNameFormValues) => Promise<OpenEdxApiProfile>;
+  };
 }
 
 export interface APIEnrollment {

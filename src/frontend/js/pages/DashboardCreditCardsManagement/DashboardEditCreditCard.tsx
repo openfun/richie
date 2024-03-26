@@ -10,6 +10,7 @@ import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { useCreditCardsManagement } from 'hooks/useCreditCardsManagement';
 import { noop } from 'utils';
+import Form from 'components/Form';
 import { CreditCardBrandLogo } from './CreditCardBrandLogo';
 
 const messages = defineMessages({
@@ -116,11 +117,11 @@ export const DashboardEditCreditCard = ({ creditCard, onSettled = noop }: Props)
     }
     return (
       <FormProvider {...form}>
-        <form className="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-          <div className="form-row">
+        <Form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <Form.Row>
             <Input name="title" label={intl.formatMessage(messages.titleInputLabel)} />
-          </div>
-          <div className="form-row dashboard-edit-credit-card__sensitive">
+          </Form.Row>
+          <Form.Row className="dashboard-edit-credit-card__sensitive">
             <Input
               name="last_numbers"
               disabled={true}
@@ -135,9 +136,9 @@ export const DashboardEditCreditCard = ({ creditCard, onSettled = noop }: Props)
                 label={intl.formatMessage(messages.expirationInputLabel)}
               />
             </div>
-          </div>
+          </Form.Row>
           {!creditCard.is_main && (
-            <div className="form-row">
+            <Form.Row>
               <Checkbox
                 aria-invalid={!!formState.errors?.is_main}
                 id="is_main"
@@ -146,9 +147,9 @@ export const DashboardEditCreditCard = ({ creditCard, onSettled = noop }: Props)
                 {...getLocalizedCunninghamErrorProp(intl, formState.errors.is_main?.message)}
                 {...register('is_main')}
               />
-            </div>
+            </Form.Row>
           )}
-        </form>
+        </Form>
       </FormProvider>
     );
   };

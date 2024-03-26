@@ -2,6 +2,7 @@ import { DashboardCreditCardsManagement } from 'pages/DashboardCreditCardsManage
 import { DashboardAddressesManagement } from 'pages/DashboardAddressesManagement';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
+import DashboardOpenEdxProfile from 'pages/DashboardOpenEdxProfile';
 
 /**
  * This component relies on react-router.
@@ -10,6 +11,7 @@ export const DashboardPreferences = () => {
   const navigate = useDashboardNavigate();
   return (
     <div className="dashboard-preferences">
+      <DashboardOpenEdxProfile />
       <DashboardAddressesManagement
         onClickCreate={() => navigate(LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION)}
         onClickEdit={(address) =>

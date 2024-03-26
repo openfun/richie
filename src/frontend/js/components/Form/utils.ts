@@ -24,9 +24,12 @@ export const getLocalizedCunninghamErrorProp = (
   intl: IntlShape,
   error: Maybe<string | ValidationError>,
   defaultMessage?: string,
-): CunninghamErrorProp | {} => {
+): CunninghamErrorProp => {
   const message = getLocalizedErrorMessage(intl, error);
-  const prop: CunninghamErrorProp = {};
+  const prop: CunninghamErrorProp = {
+    text: undefined,
+    textItems: undefined,
+  };
   if (Array.isArray(message)) {
     prop.textItems = message.map((msg) => msg.toString());
   } else {
