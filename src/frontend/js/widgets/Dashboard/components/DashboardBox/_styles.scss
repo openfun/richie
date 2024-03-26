@@ -30,4 +30,10 @@
       gap: 0.5rem;
     }
   }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: rem-calc(32px);
+  }
 }
