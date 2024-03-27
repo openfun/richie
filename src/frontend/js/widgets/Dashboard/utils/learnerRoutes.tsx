@@ -7,10 +7,7 @@ import { DashboardPreferences } from 'pages/DashboardPreferences';
 import { DashboardEditCreditCardLoader } from 'pages/DashboardCreditCardsManagement/DashboardEditCreditCardLoader';
 import { DashboardCourses } from 'pages/DashboardCourses';
 import { DashboardOrderLoader } from 'widgets/Dashboard/components/DashboardOrderLoader';
-import {
-  getDashboardRouteLabel,
-  getDashboardRoutePath,
-} from 'widgets/Dashboard/utils/dashboardRoutes';
+import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes';
 import {
   LEARNER_DASHBOARD_ROUTE_LABELS,
   LearnerDashboardPaths,
@@ -26,11 +23,10 @@ export interface DashboardRouteHandle {
 
 export function getLearnerDashboardRoutes() {
   const intl = useIntl();
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
   const routes: RouteObject[] = [
     {
-      path: getRoutePath(LearnerDashboardPaths.COURSES),
+      path: LearnerDashboardPaths.COURSES,
       handle: {
         crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.COURSES],
       },
@@ -41,7 +37,7 @@ export function getLearnerDashboardRoutes() {
           element: <DashboardCourses />,
         },
         {
-          path: getRoutePath(LearnerDashboardPaths.ORDER),
+          path: LearnerDashboardPaths.ORDER,
           element: <DashboardOrderLayout />,
           handle: {
             renderLayout: true,
@@ -57,22 +53,22 @@ export function getLearnerDashboardRoutes() {
       ],
     },
     {
-      path: getRoutePath(LearnerDashboardPaths.CERTIFICATES),
+      path: LearnerDashboardPaths.CERTIFICATES,
       handle: { crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.CERTIFICATES] },
       element: <DashboardCertificates />,
     },
     {
-      path: getRoutePath(LearnerDashboardPaths.CONTRACTS),
+      path: LearnerDashboardPaths.CONTRACTS,
       handle: { crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.CONTRACTS] },
       element: <DashboardContracts />,
     },
     {
-      path: getRoutePath(LearnerDashboardPaths.COURSE),
+      path: LearnerDashboardPaths.COURSE,
       element: <RouteInfo title={getRouteLabel(LearnerDashboardPaths.COURSE)} />,
       handle: { crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.COURSE] },
     },
     {
-      path: getRoutePath(LearnerDashboardPaths.PREFERENCES),
+      path: LearnerDashboardPaths.PREFERENCES,
       handle: { crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.PREFERENCES] },
       element: <Outlet />,
       children: [
@@ -81,7 +77,7 @@ export function getLearnerDashboardRoutes() {
           element: <DashboardPreferences />,
         },
         {
-          path: getRoutePath(LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION),
+          path: LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION,
           element: <DashboardEditAddressLoader />,
           handle: {
             crumbLabel:
@@ -89,7 +85,7 @@ export function getLearnerDashboardRoutes() {
           },
         },
         {
-          path: getRoutePath(LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION),
+          path: LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION,
           element: <DashboardCreateAddressLoader />,
           handle: {
             crumbLabel:
@@ -97,7 +93,7 @@ export function getLearnerDashboardRoutes() {
           },
         },
         {
-          path: getRoutePath(LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION),
+          path: LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION,
           element: <DashboardEditCreditCardLoader />,
           handle: {
             crumbLabel:

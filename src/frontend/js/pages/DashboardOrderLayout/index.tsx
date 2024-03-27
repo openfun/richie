@@ -23,13 +23,12 @@ export const DashboardOrderLayout = () => {
   });
   const product = courseProduct?.item?.product;
   const intl = useIntl();
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
 
   const links = useMemo(
     () => [
       {
-        to: getRoutePath(LearnerDashboardPaths.ORDER, { orderId: params.orderId }),
+        to: getDashboardRoutePath(LearnerDashboardPaths.ORDER, { orderId: params.orderId }),
         label: getRouteLabel(LearnerDashboardPaths.ORDER_RUNS),
       },
     ],

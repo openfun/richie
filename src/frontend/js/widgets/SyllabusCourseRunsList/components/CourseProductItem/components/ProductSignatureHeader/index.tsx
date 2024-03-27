@@ -30,7 +30,7 @@ export const ProductSignatureHeader = ({ order }: { order?: Order }) => {
         size="small"
         href={
           getDashboardBasename(intl.locale) +
-          getDashboardRoutePath(intl)(LearnerDashboardPaths.ORDER, { orderId: order!.id })
+          getDashboardRoutePath(LearnerDashboardPaths.ORDER, { orderId: order!.id })
         }
       >
         <FormattedMessage {...messages.contractSignActionLabel} />

@@ -40,7 +40,6 @@ export const messages = defineMessages({
 
 export const TeacherDashboardCourseSidebar = () => {
   const intl = useIntl();
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
   const {
     organizationId: routeOrganizationId,
@@ -86,7 +85,7 @@ export const TeacherDashboardCourseSidebar = () => {
   );
 
   const getMenuLinkFromPath = (basePath: TeacherDashboardPaths) => {
-    const path = getRoutePath(basePath, {
+    const path = getDashboardRoutePath(basePath, {
       organizationId: routeOrganizationId,
       courseId: routeCourseId,
       courseProductRelationId: routeCourseProductRelationId,

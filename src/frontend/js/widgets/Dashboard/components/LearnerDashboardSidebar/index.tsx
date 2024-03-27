@@ -29,7 +29,6 @@ export const LearnerDashboardSidebar = (props: Partial<DashboardSidebarProps>) =
   const intl = useIntl();
   const { user } = useSession();
 
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
 
   const links = useMemo(
@@ -40,7 +39,7 @@ export const LearnerDashboardSidebar = (props: Partial<DashboardSidebarProps>) =
         LearnerDashboardPaths.CONTRACTS,
         LearnerDashboardPaths.PREFERENCES,
       ].map((path) => ({
-        to: getRoutePath(path),
+        to: getDashboardRoutePath(path),
         label: getRouteLabel(path),
       })),
     [],

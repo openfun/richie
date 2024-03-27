@@ -1,8 +1,4 @@
-import type {
-  FormatXMLElementFn,
-  Options as IntlMessageFormatOptions,
-  PrimitiveType,
-} from 'intl-messageformat';
+import type { FormatXMLElementFn, PrimitiveType } from 'intl-messageformat';
 import { useMemo } from 'react';
 import { MessageDescriptor, useIntl } from 'react-intl';
 import { createBrowserRouter, NavigateOptions, useNavigate } from 'react-router-dom';
@@ -31,20 +27,18 @@ const useDashboardRouter = () => {
  * Wrapper for `useNavigate` to avoid repetitive hooks calls.
  */
 export const useDashboardNavigate = () => {
-  const getRoutePath = getDashboardRoutePath(useIntl());
   const navigate = useNavigate();
   return useMemo(
     () =>
       (
         to: number | LearnerDashboardPaths | TeacherDashboardPaths,
         values?: Record<string, PrimitiveType | FormatXMLElementFn<string, string>>,
-        options?: IntlMessageFormatOptions,
         routerOptions?: NavigateOptions,
       ) => {
         if (typeof to === 'number') {
           return navigate(to);
         }
-        return navigate(getRoutePath(to, values, options), routerOptions);
+        return navigate(getDashboardRoutePath(to, values), routerOptions);
       },
     [],
   );
