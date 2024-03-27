@@ -5,15 +5,15 @@ import { defineMessages } from 'react-intl';
  */
 export enum LearnerDashboardPaths {
   COURSES = '/courses',
-  ORDER = '/courses/orders/:orderId',
-  ORDER_RUNS = '/courses/orders/:orderId/runs',
-  COURSE = '/courses/:code',
+  ORDER = `${COURSES}/orders/:orderId`,
+  ORDER_RUNS = `${ORDER}/runs`,
+  COURSE = `${COURSES}/:code`,
   CERTIFICATES = '/certificates',
   CONTRACTS = '/training-contracts',
   PREFERENCES = '/preferences',
-  PREFERENCES_ADDRESS_EDITION = '/preferences/addresses/:addressId',
-  PREFERENCES_ADDRESS_CREATION = '/preferences/addresses/create',
-  PREFERENCES_CREDIT_CARD_EDITION = '/preferences/credit-cards/:creditCardId',
+  PREFERENCES_ADDRESS_EDITION = `${PREFERENCES}/addresses/:addressId`,
+  PREFERENCES_ADDRESS_CREATION = `${PREFERENCES}/addresses/create`,
+  PREFERENCES_CREDIT_CARD_EDITION = `${PREFERENCES}/credit-cards/:creditCardId`,
 }
 
 // Translations of dashboard route labels
