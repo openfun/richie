@@ -86,11 +86,10 @@ export const TeacherDashboardCourseSidebar = () => {
 
   const getMenuLinkFromPath = (basePath: TeacherDashboardPaths) => {
     const path = getDashboardRoutePath(basePath, {
-      organizationId: routeOrganizationId,
-      courseId: routeCourseId,
-      courseProductRelationId: routeCourseProductRelationId,
+      organizationId: routeOrganizationId ?? '',
+      courseId: routeCourseId ?? '',
+      courseProductRelationId: routeCourseProductRelationId ?? '',
     });
-
     const menuLink: MenuLink = {
       to: path,
       label: getRouteLabel(basePath),
@@ -113,7 +112,6 @@ export const TeacherDashboardCourseSidebar = () => {
 
     return menuLink;
   };
-
   const menuLinkList = useMemo(
     () =>
       getMenuRoutes({
