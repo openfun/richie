@@ -22,14 +22,13 @@ const messages = defineMessages({
 export const TeacherDashboardProfileSidebar = () => {
   const intl = useIntl();
   const { user } = useSession();
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
   const { items: organizations } = useOrganizations();
 
   const links = useMemo(
     () =>
       [TeacherDashboardPaths.TEACHER_COURSES].map((path) => ({
-        to: getRoutePath(path),
+        to: getDashboardRoutePath(path),
         label: getRouteLabel(path),
       })),
     [],

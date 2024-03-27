@@ -138,7 +138,6 @@ export const DashboardItemOrder = ({
   });
   const { product } = courseProductRelation || {};
   const needsSignature = OrderHelper.orderNeedsSignature(order, product?.contract_definition);
-  const getRoutePath = getDashboardRoutePath(useIntl());
 
   return (
     <div className="dashboard-item-order">
@@ -168,7 +167,7 @@ export const DashboardItemOrder = ({
                 <RouterButton
                   size="small"
                   className="dashboard-item__button"
-                  href={getRoutePath(LearnerDashboardPaths.ORDER, { orderId: order.id })}
+                  href={getDashboardRoutePath(LearnerDashboardPaths.ORDER, { orderId: order.id })}
                   data-testid="dashboard-item-order__button"
                 >
                   {intl.formatMessage(messages.accessCourse)}
@@ -203,7 +202,7 @@ export const DashboardItemOrder = ({
                     targetCourse,
                     order,
                   )}
-                  notEnrolledUrl={getRoutePath(LearnerDashboardPaths.ORDER, {
+                  notEnrolledUrl={getDashboardRoutePath(LearnerDashboardPaths.ORDER, {
                     orderId: order.id,
                   })}
                   hideEnrollButtons={needsSignature}

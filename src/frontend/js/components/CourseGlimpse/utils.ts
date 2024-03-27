@@ -14,17 +14,16 @@ const getCourseGlimpsePropsFromCourseProductRelation = (
   intl: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {
-  const getRoutePath = getDashboardRoutePath(intl);
   const courseRouteParams = {
     courseId: courseProductRelation.course.id,
     courseProductRelationId: courseProductRelation.id,
   };
   const courseRoute = organizationId
-    ? getRoutePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT, {
+    ? getDashboardRoutePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT, {
         ...courseRouteParams,
         organizationId,
       })
-    : getRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, courseRouteParams);
+    : getDashboardRoutePath(TeacherDashboardPaths.COURSE_PRODUCT, courseRouteParams);
   return {
     id: courseProductRelation.id,
     code: courseProductRelation.course.code,
@@ -67,16 +66,15 @@ const getCourseGlimpsePropsFromJoanieCourse = (
   intl: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {
-  const getRoutePath = getDashboardRoutePath(intl);
   const courseRouteParams = {
     courseId: course.id,
   };
   const courseRoute = organizationId
-    ? getRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION, {
+    ? getDashboardRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION, {
         ...courseRouteParams,
         organizationId,
       })
-    : getRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATION, courseRouteParams);
+    : getDashboardRoutePath(TeacherDashboardPaths.COURSE_GENERAL_INFORMATION, courseRouteParams);
   return {
     id: course.id,
     code: course.code,

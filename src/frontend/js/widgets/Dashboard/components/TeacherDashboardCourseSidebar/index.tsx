@@ -40,7 +40,6 @@ export const messages = defineMessages({
 
 export const TeacherDashboardCourseSidebar = () => {
   const intl = useIntl();
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
   const {
     organizationId: routeOrganizationId,
@@ -86,12 +85,11 @@ export const TeacherDashboardCourseSidebar = () => {
   );
 
   const getMenuLinkFromPath = (basePath: TeacherDashboardPaths) => {
-    const path = getRoutePath(basePath, {
-      organizationId: routeOrganizationId,
-      courseId: routeCourseId,
-      courseProductRelationId: routeCourseProductRelationId,
+    const path = getDashboardRoutePath(basePath, {
+      organizationId: routeOrganizationId ?? '',
+      courseId: routeCourseId ?? '',
+      courseProductRelationId: routeCourseProductRelationId ?? '',
     });
-
     const menuLink: MenuLink = {
       to: path,
       label: getRouteLabel(basePath),
@@ -114,7 +112,6 @@ export const TeacherDashboardCourseSidebar = () => {
 
     return menuLink;
   };
-
   const menuLinkList = useMemo(
     () =>
       getMenuRoutes({

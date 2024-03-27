@@ -1,5 +1,5 @@
 import { Button } from '@openfun/cunningham-react';
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { useState } from 'react';
 import { LearnerContractFrame } from 'components/ContractFrame';
 import { Contract, ContractState, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
@@ -42,11 +42,10 @@ interface SignContractButtonLinkProps {
 }
 
 const SignContractButtonLink = ({ orderId, className }: SignContractButtonLinkProps) => {
-  const getRoutePath = getDashboardRoutePath(useIntl());
   return (
     <RouterButton
       size="small"
-      href={getRoutePath(LearnerDashboardPaths.ORDER, {
+      href={getDashboardRoutePath(LearnerDashboardPaths.ORDER, {
         orderId,
       })}
       className={className}

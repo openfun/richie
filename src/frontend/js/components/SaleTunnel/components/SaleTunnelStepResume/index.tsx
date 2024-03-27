@@ -72,7 +72,7 @@ export const SaleTunnelStepResume = ({ next }: SaleTunnelStepResumeProps) => {
           <Button
             href={
               getDashboardBasename(intl.locale) +
-              getDashboardRoutePath(intl)(LearnerDashboardPaths.ORDER, { orderId: order!.id })
+              getDashboardRoutePath(LearnerDashboardPaths.ORDER, { orderId: order!.id })
             }
           >
             <FormattedMessage {...messages.ctaSignature} />

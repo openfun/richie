@@ -26,7 +26,6 @@ const messages = defineMessages({
 
 export const TeacherDashboardOrganizationSidebar = () => {
   const intl = useIntl();
-  const getRoutePath = getDashboardRoutePath(intl);
   const getRouteLabel = getDashboardRouteLabel(intl);
   const { organizationId, courseProductRelationId } = useParams<{
     organizationId: string;
@@ -38,7 +37,7 @@ export const TeacherDashboardOrganizationSidebar = () => {
   } = useOrganization(organizationId);
 
   const getMenuLinkFromPath = (basePath: TeacherDashboardPaths) => {
-    const path = getRoutePath(basePath, { organizationId });
+    const path = getDashboardRoutePath(basePath, { organizationId });
 
     const menuLink: MenuLink = {
       to: path,

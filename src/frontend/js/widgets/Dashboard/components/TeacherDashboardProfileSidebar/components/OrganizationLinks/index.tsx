@@ -33,7 +33,7 @@ const OrganizationLinks = ({ organizations }: OrganizationLinksProps) => {
         {organizations.map((organization) => (
           <Link
             key={organization.id}
-            to={getDashboardRoutePath(intl)(TeacherDashboardPaths.ORGANIZATION_COURSES, {
+            to={getDashboardRoutePath(TeacherDashboardPaths.ORGANIZATION_COURSES, {
               organizationId: organization.id,
             })}
             className="dashboard-sidebar__organization-section__link"
