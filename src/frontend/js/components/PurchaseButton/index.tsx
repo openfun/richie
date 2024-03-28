@@ -1,11 +1,12 @@
 import c from 'classnames';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useMemo, useState } from 'react';
-import { Button, ButtonProps } from '@openfun/cunningham-react';
+import { Button, ButtonProps, useModal } from '@openfun/cunningham-react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
 import SaleTunnel, { SaleTunnelProps } from 'components/SaleTunnel';
 import { isOpenedCourseRunCertificate, isOpenedCourseRunCredential } from 'utils/CourseRuns';
+import { SaleTunnelV2 } from 'components/SaleTunnelV2';
 
 const messages = defineMessages({
   loginToPurchase: {
@@ -106,6 +107,10 @@ const PurchaseButton = ({
     typeof product?.remaining_order_count !== 'number' || product.remaining_order_count > 0;
   const isPurchasable = hasAtLeastOneRemainingOrder && hasAtLeastOneCourseRun;
 
+  const saleTunnelModal = useModal({
+    isOpenDefault: true,
+  });
+
   return (
     <>
       {!disabled && (
@@ -114,7 +119,13 @@ const PurchaseButton = ({
             size="small"
             data-testid="PurchaseButton__cta"
             className={c('purchase-button__cta', className)}
-            onClick={() => hasAtLeastOneCourseRun && setIsSaleTunnelOpen(true)}
+            // onClick={() => hasAtLeastOneCourseRun && setIsSaleTunnelOpen(true)}
+            onClick={() => {
+              if (hasAtLeastOneCourseRun) {
+                saleTunnelModal.open();
+                // setIsSaleTunnelOpen(true);
+              }
+            }}
             // so that the button is explicit on its own, we add a description that doesn't
             // rely on the text coming from the CMS
             /* eslint-disable-next-line jsx-a11y/aria-props */
@@ -151,6 +162,7 @@ const PurchaseButton = ({
         course={course}
         onFinish={onFinish}
       />
+      <SaleTunnelV2 {...saleTunnelModal} product={product} />
     </>
   );
 };

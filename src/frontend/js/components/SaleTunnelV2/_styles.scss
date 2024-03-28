@@ -1,0 +1,46 @@
+.sale-tunnel {
+
+  &__main {
+    display: flex;
+    justify-content: center;
+    min-height: 400px;
+    gap: rem-calc(68px);
+
+    &__separator {
+      background-color: var(--c--theme--colors--grey87);
+      width: 1px;
+    }
+
+    &__left, &__right {
+      flex: 1;
+    }
+
+    &__left {
+      //background-color: palegoldenrod;
+
+    }
+
+    &__right {
+      //background-color: paleturquoise;
+    }
+  }
+
+  &__footer {
+    margin-top: 1.5rem;
+
+    &__sponsors {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+
+      img {
+        height: 50px;
+        padding: 8px;
+        width: 130px;
+        object-fit: contain;
+      }
+    }
+  }
+
+}

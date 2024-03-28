@@ -1,47 +1,12 @@
-// TODO: Delete this file
-.SaleTunnelStepValidation {
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  width: fit-content;
-  max-width: 100%;
-
-  &__header {
-    margin-bottom: rem-calc(38px);
-    text-align: center;
-  }
-
-  &__metadata {
-    &__item {
-      margin-bottom: rem-calc(8px);
-
-      .icon {
-        display: inline-block;
-        margin-right: rem-calc(8px);
-      }
-    }
-  }
+.product-path {
+  text-align: left;
 
   &__title {
-    color: r-theme-val(steps-content, title-color);
-    font-size: 1.7rem;
-    line-height: 1.2em;
-    margin-bottom: 0;
-  }
-
-  &__price {
-    color: r-theme-val(steps-content, subtitle-color);
-    font-family: $r-font-family-montserrat;
-    font-size: 1rem;
-    margin-bottom: 0;
+    padding-left: 16px;
   }
 
   &__product-detail-list {
     list-style: none;
-
-    @include media-breakpoint-up(md) {
-      max-width: 70%;
-    }
   }
 
   .product-detail-row {

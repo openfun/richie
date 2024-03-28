@@ -19,6 +19,7 @@ const TargetCourseDetail = ({ course }: Props) => {
     <details
       className="product-detail-row__details"
       data-testid={`target-course-detail-${course.code}`}
+      open={true}
     >
       <summary className="product-detail-row__summary h4">
         {course.title}
