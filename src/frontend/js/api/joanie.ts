@@ -57,6 +57,8 @@ export function checkStatus(
   response: Response,
   options: CheckStatusOptions = { fallbackValue: null, ignoredErrorStatus: [] },
 ): Promise<any> {
+  throw new HttpError(418, "I'm a teapot");
+
   if (response.ok) {
     return getResponseBody(response);
   }
