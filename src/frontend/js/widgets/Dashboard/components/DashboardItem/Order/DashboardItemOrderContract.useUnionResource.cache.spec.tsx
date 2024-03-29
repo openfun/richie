@@ -59,7 +59,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       // overwrite useOmniscientOrders call
       fetchMock.get(
         'https://joanie.endpoint/api/v1.0/orders/',
-        { results: [order], next: null, previous: null, count: null },
+        { results: [order], next: null, previous: null, count: 1 },
         { overwriteRoutes: true },
       );
 
@@ -68,12 +68,12 @@ describe('<DashboardItemOrder/> Contract', () => {
         results: [],
         next: null,
         previous: null,
-        count: null,
+        count: 0,
       });
 
       fetchMock.get(
         'https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=50',
-        { results: [order], next: null, previous: null, count: null },
+        { results: [order], next: null, previous: null, count: 1 },
       );
 
       const submitDeferred = new Deferred();
@@ -238,7 +238,7 @@ describe('<DashboardItemOrder/> Contract', () => {
         results: [signedOrder],
         next: null,
         previous: null,
-        count: null,
+        count: 1,
       });
 
       // Contract signing is removed.
@@ -249,7 +249,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       // Go back to the list view to make sure the sign button is not shown anymore.
       fetchMock.get(
         'https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=50',
-        { results: [signedOrder], next: null, previous: null, count: null },
+        { results: [signedOrder], next: null, previous: null, count: 1 },
         { overwriteRoutes: true },
       );
 
