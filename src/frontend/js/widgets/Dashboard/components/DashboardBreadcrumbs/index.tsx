@@ -60,7 +60,7 @@ export const DashboardBreadcrumbs = () => {
         <RouterButton
           href={backPath}
           size="nano"
-          color="tertiary"
+          color="tertiary-text"
           icon={<span className="material-icons">chevron_left</span>}
         >
           <FormattedMessage {...messages.back} />
@@ -69,7 +69,7 @@ export const DashboardBreadcrumbs = () => {
 
       {breadcrumbs.map((breadcrumb) => (
         <li key={breadcrumb.pathname}>
-          <RouterButton href={breadcrumb.pathname} size="nano" color="tertiary">
+          <RouterButton href={breadcrumb.pathname} size="nano" color="tertiary-text">
             {breadcrumb.name}
           </RouterButton>
         </li>
