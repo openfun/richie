@@ -1,5 +1,7 @@
 .sale-tunnel {
 
+  font-size: 14px;
+
   &__main {
     display: flex;
     justify-content: center;
@@ -25,22 +27,65 @@
     }
   }
 
-  &__footer {
-    margin-top: 1.5rem;
+  &__information {
+    display: flex;
+    flex-direction: column;
+    gap: var(--c--theme--spacings--b);
 
-    &__sponsors {
-      margin-top: 8px;
+    &__billing-address {
       display: flex;
-      gap: 8px;
-      justify-content: center;
-
-      img {
-        height: 50px;
-        padding: 8px;
-        width: 130px;
-        object-fit: contain;
-      }
+      align-items: center;
+      gap: 16px;
     }
   }
 
+  &__footer {
+    margin-top: 1.5rem;
+  }
+}
+
+.description {
+  font-size: 14px;
+  color: var(--c--theme--colors--charcoal-500);
+  text-align: left;
+}
+
+.block-title {
+  font-size: var(--c--theme--font--sizes--l);
+  color: var(--c--theme--colors--charcoal-500);
+  font-weight: var(--c--theme--font--weights--extrabold);
+  text-align: left;
+}
+
+.sub-block-title {
+  font-size: 12px;
+  color: var(--c--theme--colors--charcoal-500);
+  font-weight: var(--c--theme--font--weights--bold);
+  text-align: left;
+}
+
+.credit-card-selector__card {
+  display: flex;
+  align-items: center;
+  gap: rem-calc(12px);
+
+  &__info {
+
+    &__title {
+      text-align: left;
+      font-size: 12px;
+      color: var(--c--theme--colors--charcoal-500);
+      font-weight: var(--c--theme--font--weights--bold);
+      font-family: var(--c--theme--font--families--accent);
+    }
+
+    &__meta {
+      display: flex;
+      gap: 12px;
+
+      div:nth-child(2) {
+        color: var(--c--theme--colors--light-grey);
+      }
+    }
+  }
 }

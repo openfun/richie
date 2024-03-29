@@ -4,7 +4,7 @@ import TargetCourseDetail from 'components/SaleTunnel/components/SaleTunnelStepV
 export const ProductPath = ({ product }: { product: Product }) => {
   return (
     <div className="product-path">
-      <h3 className="product-path__title fs-l mb-s">Your learning path</h3>
+      <h3 className="product-path__title block-title mb-s">Your learning path</h3>
       <ol className="product-path__product-detail-list">
         {product.target_courses.map((targetCourse) => (
           <li

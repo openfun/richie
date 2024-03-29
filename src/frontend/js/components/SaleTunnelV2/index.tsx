@@ -1,6 +1,21 @@
-import { Alert, Button, Modal, ModalProps, ModalSize } from '@openfun/cunningham-react';
+import {
+  Alert,
+  Button,
+  DataGrid,
+  DataList,
+  Input,
+  Modal,
+  ModalProps,
+  ModalSize,
+  Select,
+  VariantType,
+} from '@openfun/cunningham-react';
 import { ProductPath } from 'components/SaleTunnelV2/ProductPath';
-import { Product } from 'types/Joanie';
+import { CreditCardBrand, Product } from 'types/Joanie';
+import { SaleTunnelSponsors } from 'components/SaleTunnelV2/SaleTunnelSponsors';
+import { CreditCardBrandLogo } from 'pages/DashboardCreditCardsManagement/CreditCardBrandLogo';
+import { CreditCardFactory } from 'utils/test/factories/joanie';
+import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
 
 interface SaleTunnelV2Props extends Pick<ModalProps, 'isOpen' | 'onClose'> {
   product: Product;
@@ -15,36 +30,86 @@ export const SaleTunnelV2 = (props: SaleTunnelV2Props) => {
             <ProductPath product={props.product} /> {/* <- Slot */}
           </div>
           <div className="sale-tunnel__main__separator" />
-          <div className="sale-tunnel__main__right" />
+          <div className="sale-tunnel__main__right">
+            <SaleTunnelInformation />
+          </div>
         </div>
         <div className="sale-tunnel__footer">
           <Button>Sign contract</Button> {/* <- Slot */}
-          {/* Make this a component */}
-          <div className="sale-tunnel__footer__sponsors">
-            {/* <- Slot */}
-            <img
-              src="https://www.universite-paris-saclay.fr/sites/default/files/media/2019-12/logo-ups.svg"
-              alt="Sponsor"
-            />
-            <img
-              src="https://u-paris.fr/wp-content/uploads/2022/03/Universite_Paris-Cite-logo.jpeg"
-              alt="Sponsor"
-            />
-            <img
-              src="https://ecocampus.fr/wp-content/uploads/2019/12/Logo-Cnam.jpg"
-              alt="Sponsor"
-            />
-            <img
-              src="https://www.univ-toulouse.fr/sites/default/files/Universite-de-Toulouse_0.jpg"
-              alt="Sponsor"
-            />
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Universit%C3%A4t_Bordeaux_Logo.svg/2560px-Universit%C3%A4t_Bordeaux_Logo.svg.png"
-              alt="Sponsor"
-            />
-          </div>
+          <SaleTunnelSponsors />
         </div>
       </div>
     </Modal>
+  );
+};
+
+const SaleTunnelInformation = () => {
+  return (
+    <div className="sale-tunnel__information">
+      <div>
+        <h3 className="block-title mb-t">Informations</h3>
+        <div className="description mb-s">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin elementum.
+        </div>
+        <Input label="Full name" fullWidth={true} />
+        {/* Make this a component ( display the button if no address is selected, etc .. */}
+        <div className="mt-s sale-tunnel__information__billing-address">
+          <Select label="Billing address" options={[]} fullWidth />
+          <Button size="small" icon={<span className="material-icons">add</span>} color="tertiary">
+            Create
+          </Button>
+        </div>
+      </div>
+      <div>
+        <CreditCardSelector />
+      </div>
+      <div>
+        <PaymentScheduleBlock />
+      </div>
+    </div>
+  );
+};
+
+const CreditCardSelector = () => {
+  return (
+    <div className="credit-card-selector">
+      <h4 className="block-title mb-t">Payment method</h4>
+      <div className="description mb-s">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin elementum.
+      </div>
+      <div className="credit-card-selector__card">
+        <CreditCardBrandLogo
+          creditCard={{ ...CreditCardFactory().one(), brand: CreditCardBrand.MASTERCARD }}
+          variant="inline"
+        />
+        <div className="credit-card-selector__card__info">
+          <div className="credit-card-selector__card__info__title">Title</div>
+          <div className="credit-card-selector__card__info__meta">
+            <div>Ends with •••• 9821</div>
+            <div>|</div>
+            <div>Expires on 02/2032</div>
+          </div>
+        </div>
+        <Button
+          icon={<span className="material-icons">edit</span>}
+          color="tertiary-text"
+          size="medium"
+        />
+      </div>
+    </div>
+  );
+};
+
+const PaymentScheduleBlock = () => {
+  return (
+    <div className="payment-schedule">
+      <h4 className="block-title mb-t">Schedule</h4>
+      <Alert type={VariantType.INFO}>
+        The first payment occurs in 14 days, you will be notified to pay the first 30%.
+      </Alert>
+      <div className="mt-t">
+        <PaymentScheduleGrid />
+      </div>
+    </div>
   );
 };

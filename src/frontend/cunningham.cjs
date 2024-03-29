@@ -62,6 +62,7 @@ module.exports = {
           indianred3: '#df484b',
           midnightblue: '#141b2c',
           mantis: '#76ce68',
+          'mantis-darken': '#006908',
         },
       },
       components: {
