@@ -5,9 +5,9 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { useSession } from 'contexts/SessionContext';
-import { checkStatus } from 'api/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { checkStatus } from 'api/utils';
 import { useSessionMutation } from '.';
 
 jest.mock('utils/context', () => ({
