@@ -1,3 +1,7 @@
+//
+// Form objects
+//
+
 // Example of a form class structure:
 // .form
 //  .form-row
@@ -24,5 +28,9 @@
     @include media-breakpoint-down(xs) {
       flex-direction: column;
     }
+  }
+
+  &-footer {
+    margin-top: $block-spacing;
   }
 }

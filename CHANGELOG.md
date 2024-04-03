@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add ready-only user profile in the learner dashboard preferences page.
+  This profile display data from LMS profile.
 - Management command to migrate course runs course link to joanie
 - Add search bar on learner dashboard courses pages.
 - Add a `CertificateHelper` implementing a `getCourse` method

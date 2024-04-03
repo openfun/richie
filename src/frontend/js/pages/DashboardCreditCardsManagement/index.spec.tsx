@@ -12,7 +12,10 @@ import {
 } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { faker } from '@faker-js/faker';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import {
+  UserFactory,
+  RichieContextFactory as mockRichieContextFactory,
+} from 'utils/test/factories/richie';
 import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
@@ -22,13 +25,15 @@ import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqu
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
+import { User } from 'types/User';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
-    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    authentication: { backend: 'fonzie', endpoint: 'https://endpoint.test' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
@@ -38,7 +43,24 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('<DashboardCreditCardsManagement/>', () => {
+  let richieUser: User;
   beforeEach(() => {
+    richieUser = UserFactory().one();
+    const openEdxProfile = OpenEdxApiProfileFactory({
+      username: richieUser.username,
+      email: richieUser.email,
+      name: richieUser.full_name,
+    }).one();
+    const { 'pref-lang': prefLang, ...openEdxAccount } = openEdxProfile;
+
+    fetchMock.get(
+      `https://endpoint.test/api/user/v1/accounts/${richieUser.username}`,
+      openEdxAccount,
+    );
+    fetchMock.get(`https://endpoint.test/api/user/v1/preferences/${richieUser.username}`, {
+      'pref-lang': prefLang,
+    });
+
     fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
   });
@@ -52,7 +74,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
@@ -81,7 +103,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
@@ -118,7 +140,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
@@ -154,7 +176,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
@@ -183,7 +205,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
@@ -232,7 +254,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
@@ -285,7 +307,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
@@ -317,7 +339,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
@@ -345,7 +367,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
@@ -372,7 +394,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
@@ -416,7 +438,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
 
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
           <IntlProvider locale="en">
             <SessionProvider>
               <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
