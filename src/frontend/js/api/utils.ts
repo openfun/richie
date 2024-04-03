@@ -27,7 +27,7 @@ export function getResponseBody(response: Response) {
 }
 
 /*
-    A util to manage Joanie API responses.
+    A util to manage API responses.
     It parses properly the response according to its `Content-Type`
     otherwise it throws an `HttpError`.
 

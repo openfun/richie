@@ -1,6 +1,7 @@
 import { DashboardCreditCardsManagement } from 'pages/DashboardCreditCardsManagement';
 import { DashboardAddressesManagement } from 'pages/DashboardAddressesManagement';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
+import DashboardOpenEdxProfile from 'pages/DashboardOpenEdxProfile';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
@@ -11,6 +12,7 @@ export const DashboardPreferences = () => {
   const navigate = useDashboardNavigate();
   return (
     <div className="dashboard-preferences">
+      <DashboardOpenEdxProfile />
       <DashboardAddressesManagement
         onClickCreate={() => navigate(LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION)}
         onClickEdit={(address) =>

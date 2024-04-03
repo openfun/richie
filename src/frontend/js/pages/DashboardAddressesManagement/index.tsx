@@ -73,7 +73,7 @@ export const DashboardAddressesManagement = ({
                 <FormattedMessage {...messages.emptyList} />
               </p>
             )}
-            {addressesList.length && (
+            {addressesList.length > 0 && (
               <DashboardBox.List>
                 {addressesList.map((address) => (
                   <DashboardAddressBox

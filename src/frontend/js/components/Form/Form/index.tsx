@@ -16,4 +16,8 @@ Form.Row = ({ children, className }: PropsWithChildren<{ className?: string }>) 
   return <div className={c('form-row', className)}>{children}</div>;
 };
 
+Form.Footer = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+  return <div className={c('form-footer', className)}>{children}</div>;
+};
+
 export default Form;
