@@ -135,7 +135,7 @@ describe('useCourseLearnersFilters', () => {
     });
 
     const expectedInitialFilters = {
-      organization_id: undefined,
+      organization_id: defaultOrganization.id,
       course_id: undefined,
       course_product_relation_id: undefined,
     };
@@ -152,7 +152,9 @@ describe('useCourseLearnersFilters', () => {
       result.current.setFilters(newFilters);
     });
 
-    expect(result.current.filters).toStrictEqual(newFilters);
-    expect(result.current.initialFilters).toStrictEqual(expectedInitialFilters);
+    await waitFor(() => {
+      expect(result.current.filters).toStrictEqual(newFilters);
+      expect(result.current.initialFilters).toStrictEqual(expectedInitialFilters);
+    });
   });
 });

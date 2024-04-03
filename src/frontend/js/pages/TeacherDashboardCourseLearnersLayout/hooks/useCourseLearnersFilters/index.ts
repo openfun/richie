@@ -30,7 +30,7 @@ const useCourseLearnersFilters = () => {
       organization_id: organizationId || searchFilters.organization_id,
       course_product_relation_id: courseProductRelationId,
     };
-  }, []);
+  }, [defaultOrganizationId]);
   const [filters, setFilters] = useState<CourseOrderResourceQuery>(initialFilters);
 
   // update current filter with initial value when it's ready
