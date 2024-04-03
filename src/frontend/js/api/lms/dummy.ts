@@ -6,6 +6,12 @@ import { UnknownEnrollment, OpenEdXEnrollment } from 'types';
 import { location } from 'utils/indirection/window';
 import { CURRENT_JOANIE_DEV_DEMO_USER, RICHIE_USER_TOKEN } from 'settings';
 import { base64Decode } from 'utils/base64Parser';
+import {
+  OpenEdxGender,
+  OpenEdxLanguageIsoCode,
+  OpenEdxLevelOfEducation,
+  OpenEdxApiProfile,
+} from 'types/openEdx';
 
 type JWTPayload = {
   email: string;
@@ -89,6 +95,22 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
         localStorage.removeItem(RICHIE_DUMMY_IS_LOGGED_IN);
       },
       accessToken: () => sessionStorage.getItem(RICHIE_USER_TOKEN),
+      account: {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        get: (username: string): Promise<OpenEdxApiProfile> => {
+          return Promise.resolve({
+            username: 'j_do',
+            name: 'John Do',
+            email: 'j.do@whois.net',
+            country: 'fr',
+            level_of_education: OpenEdxLevelOfEducation.MASTER_OR_PROFESSIONNAL_DEGREE,
+            gender: OpenEdxGender.MALE,
+            year_of_birth: '1971',
+            'pref-lang': OpenEdxLanguageIsoCode.ENGLISH,
+            language_proficiencies: [{ code: OpenEdxLanguageIsoCode.ENGLISH }],
+          } as OpenEdxApiProfile);
+        },
+      },
     },
     enrollment: {
       get: async (url: string, user: Nullable<User>) =>

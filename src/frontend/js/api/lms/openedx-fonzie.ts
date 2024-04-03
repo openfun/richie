@@ -1,6 +1,10 @@
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { APILms } from 'types/api';
 import { RICHIE_USER_TOKEN } from 'settings';
+import { isHttpError } from 'utils/errors/HttpError';
+import { handle } from 'utils/errors/handle';
+import { OpenEdxApiProfile } from 'types/openEdx';
+import { checkStatus } from 'api/utils';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 /**
@@ -24,6 +28,8 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
     routes: {
       user: {
         me: `${APIConf.endpoint}/api/v1.0/user/me`,
+        account: `${APIConf.endpoint}/api/user/v1/accounts/:username`,
+        preferences: `${APIConf.endpoint}/api/user/v1/preferences/:username`,
       },
     },
   };
@@ -35,6 +41,35 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
       ...ApiInterface.user,
       accessToken: () => {
         return sessionStorage.getItem(RICHIE_USER_TOKEN);
+      },
+      account: {
+        get: async (username: string) => {
+          const options: RequestInit = {
+            credentials: 'include',
+          };
+
+          try {
+            const account = await fetch(
+              APIOptions.routes.user.account.replace(':username', username),
+              options,
+            ).then(checkStatus);
+            const preferences = await fetch(
+              APIOptions.routes.user.preferences.replace(':username', username),
+              options,
+            ).then(checkStatus);
+
+            return {
+              ...account,
+              ...preferences,
+            } as OpenEdxApiProfile;
+          } catch (e) {
+            if (isHttpError(e)) {
+              handle(new Error(`[GET - Account] > ${e.code} - ${e.message}`));
+            }
+
+            throw e;
+          }
+        },
       },
     },
   };
