@@ -35,10 +35,10 @@ laptop:
 
 ```bash
 $ docker -v
-  Docker version 20.10.12, build e91ed57
+  Docker version 26.0.0, build 2ae903e
 
-$ docker-compose --version
-  docker-compose version 1.29.2, build 5becea4c
+$ docker compose --version
+  Docker Compose version v2.25.0
 ```
 
 ⚠️ You may need to run the following commands with `sudo` but this can be
