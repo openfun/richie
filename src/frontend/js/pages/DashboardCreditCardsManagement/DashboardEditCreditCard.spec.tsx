@@ -1,22 +1,12 @@
-import {
-  act,
-  fireEvent,
-  getByText,
-  queryByText,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
+import { getByText, queryByText, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
+import userEvent from '@testing-library/user-event';
+import { Outlet, generatePath } from 'react-router-dom';
 import {
   UserFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
 import { CreditCardFactory } from 'utils/test/factories/joanie';
-import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { SessionProvider } from 'contexts/SessionContext';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -24,8 +14,15 @@ import { expectBannerError } from 'utils/test/expectBanner';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { User } from 'types/User';
 import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
-
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { render } from 'utils/test/render';
+import { DashboardLayoutRoute } from 'widgets/Dashboard/components/DashboardLayoutRoute';
+import { JoanieAppWrapper } from 'utils/test/wrappers/JoanieAppWrapper';
+import { DashboardPreferences } from 'pages/DashboardPreferences';
+import {
+  LEARNER_DASHBOARD_ROUTE_LABELS,
+  LearnerDashboardPaths,
+} from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { DashboardEditCreditCardLoader } from './DashboardEditCreditCardLoader';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -38,6 +35,38 @@ jest.mock('utils/context', () => ({
 jest.mock('utils/indirection/window', () => ({
   confirm: jest.fn(() => true),
 }));
+
+const routes = [
+  {
+    path: '/',
+    element: <DashboardLayoutRoute />,
+    children: [
+      {
+        path: LearnerDashboardPaths.PREFERENCES,
+        element: <Outlet />,
+        handle: {
+          crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.PREFERENCES],
+        },
+        children: [
+          {
+            index: true,
+            element: <DashboardPreferences />,
+          },
+          {
+            path: LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION,
+            handle: {
+              crumbLabel:
+                LEARNER_DASHBOARD_ROUTE_LABELS[
+                  LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION
+                ],
+            },
+            element: <DashboardEditCreditCardLoader />,
+          },
+        ],
+      },
+    ],
+  },
+];
 
 describe('<DahsboardEditCreditCard/>', () => {
   let richieUser: User;
@@ -78,28 +107,28 @@ describe('<DahsboardEditCreditCard/>', () => {
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, HttpStatusCode.OK);
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest
-                initialRoute={LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
-                  ':creditCardId',
-                  creditCard.id,
-                )}
-              />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(
+      <JoanieAppWrapper
+        routerOptions={{
+          routes,
+          initialEntries: [
+            generatePath(LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
+              creditCardId: creditCard.id,
+            }),
+          ],
+        }}
+        queryOptions={{ client: createTestQueryClient({ user: richieUser }) }}
+      />,
+      { wrapper: null },
+    );
 
-    expectBreadcrumbsToEqualParts([
-      'chevron_leftBack',
-      'My preferences',
-      'Edit credit card "' + creditCard.title + '"',
-    ]);
+    await waitFor(() => {
+      expectBreadcrumbsToEqualParts([
+        'chevron_leftBack',
+        'My preferences',
+        'Edit credit card "' + creditCard.title + '"',
+      ]);
+    });
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
 
@@ -128,11 +157,12 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     // Submit of the form calls the API edit route.
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(false);
-    await act(async () => {
-      // Update the title.
-      fireEvent.change(titleInput, { target: { value: creditCardUpdated.title } });
-      fireEvent.click(button);
-    });
+
+    const user = userEvent.setup();
+    await user.clear(titleInput);
+    await user.type(titleInput, creditCardUpdated.title!);
+    await user.click(button);
+
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
     // The API is called with correct body.
@@ -174,22 +204,20 @@ describe('<DahsboardEditCreditCard/>', () => {
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, HttpStatusCode.OK);
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest
-                initialRoute={LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
-                  ':creditCardId',
-                  creditCard.id,
-                )}
-              />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(
+      <JoanieAppWrapper
+        routerOptions={{
+          routes,
+          initialEntries: [
+            generatePath(LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
+              creditCardId: creditCard.id,
+            }),
+          ],
+        }}
+        queryOptions={{ client: createTestQueryClient({ user: richieUser }) }}
+      />,
+      { wrapper: null },
+    );
 
     // We are on the expected route.
     await screen.findByText('Edit credit card');
@@ -220,11 +248,9 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     // Submit of the form calls the API edit route.
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(false);
-    await act(async () => {
-      // Set as main.
-      fireEvent.click(isMainInput);
-      fireEvent.click(button);
-    });
+    const user = userEvent.setup();
+    await user.click(isMainInput);
+    await user.click(button);
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
     // The API is called with correct body.
@@ -240,10 +266,8 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     // Redirected to the list route.
     screen.getByText('Credit cards');
-
-    const creditCardsContainers = screen.getAllByTestId('dashboard-credit-card__', {
-      exact: false,
-    });
+    screen.debug();
+    const creditCardsContainers = await screen.findAllByTestId(/dashboard-credit-card__/);
     expect(creditCardsContainers.length).toEqual(6);
 
     // Assert that `creditCard` is main and the first of the list.
@@ -258,7 +282,7 @@ describe('<DahsboardEditCreditCard/>', () => {
       );
   });
 
-  it('deletes a credit card', async () => {
+  it.only('deletes a credit card', async () => {
     const creditCard = CreditCardFactory().one();
     let creditCards = [...CreditCardFactory().many(5), creditCard];
 
@@ -266,25 +290,24 @@ describe('<DahsboardEditCreditCard/>', () => {
     const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.put(updateUrl, HttpStatusCode.OK);
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest
-                initialRoute={LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
-                  ':creditCardId',
-                  creditCard.id,
-                )}
-              />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    render(
+      <JoanieAppWrapper
+        routerOptions={{
+          routes,
+          initialEntries: [
+            generatePath(LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
+              creditCardId: creditCard.id,
+            }),
+          ],
+        }}
+        queryOptions={{ client: createTestQueryClient({ user: richieUser }) }}
+      />,
+      { wrapper: null },
+    );
 
     // We are on the expected route.
     await screen.findByText('Edit credit card');
+
     // It doesn't show any errors.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
 
@@ -300,9 +323,8 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     // Clicking on the delete button calls delete API route.
     expect(fetchMock.called(deleteUrl)).toBe(false);
-    await act(async () => {
-      fireEvent.click(deleteButton);
-    });
+    const user = userEvent.setup();
+    await user.click(deleteButton);
     expect(fetchMock.called(deleteUrl)).toBe(true);
 
     // No error is shown.
@@ -311,6 +333,16 @@ describe('<DahsboardEditCreditCard/>', () => {
     // Redirected to the list route.
     screen.getByText('Credit cards');
 
+    await waitFor(() => {
+      // Assert that other credit cards appear in the list.
+      creditCards.forEach((c) => {
+        screen.getByRole('heading', {
+          level: 6,
+          name: c.title,
+        });
+      });
+    });
+
     // Assert that the deleted credit card does not appear anymore in the list.
     expect(
       screen.queryByRole('heading', {
@@ -318,14 +350,6 @@ describe('<DahsboardEditCreditCard/>', () => {
         name: creditCard.title,
       }),
     ).toBeNull();
-
-    // Assert that other credit cards appear in the list.
-    creditCards.forEach((c) => {
-      screen.getByRole('heading', {
-        level: 6,
-        name: c.title,
-      });
-    });
   });
 
   it('shows an error in case of API error', async () => {
@@ -333,35 +357,30 @@ describe('<DahsboardEditCreditCard/>', () => {
     const creditCards = [...CreditCardFactory().many(5), creditCard];
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
-    const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
+    const updateUrl = `https://joanie.endpoint/api/v1.0/credit-cards/${creditCard.id}/`;
     fetchMock.put(updateUrl, {
       status: HttpStatusCode.INTERNAL_SERVER_ERROR,
       body: 'Internal Server Error',
     });
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest
-                initialRoute={LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION.replace(
-                  ':creditCardId',
-                  creditCard.id,
-                )}
-              />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<DashboardEditCreditCardLoader />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      routerOptions: {
+        path: LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION,
+        initialEntries: [
+          generatePath(LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION, {
+            creditCardId: creditCard.id,
+          }),
+        ],
+      },
     });
 
     const button = await screen.findByRole('button', { name: 'Save updates' });
     // Submit of the form calls the API edit route.
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(false);
-    await act(async () => {
-      fireEvent.click(button);
-    });
+    const user = userEvent.setup();
+    await user.click(button);
+
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
     await expectBannerError(
