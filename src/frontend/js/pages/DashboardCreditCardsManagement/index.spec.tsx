@@ -1,4 +1,3 @@
-import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import {
   act,
@@ -7,18 +6,14 @@ import {
   getByText,
   queryByRole,
   queryByText,
-  render,
   screen,
 } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
 import { faker } from '@faker-js/faker';
 import {
   UserFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
 import { CreditCardFactory } from 'utils/test/factories/joanie';
-import { SessionProvider } from 'contexts/SessionContext';
-import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { CreditCard } from 'types/Joanie';
 import { confirm } from 'utils/indirection/window';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
@@ -27,8 +22,15 @@ import { expectBannerError } from 'utils/test/expectBanner';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
 import { User } from 'types/User';
-
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { DashboardPreferences } from 'pages/DashboardPreferences';
+import { render } from 'utils/test/render';
+import { DashboardLayoutRoute } from 'widgets/Dashboard/components/DashboardLayoutRoute';
+import { JoanieAppWrapper } from 'utils/test/wrappers/JoanieAppWrapper';
+import {
+  LEARNER_DASHBOARD_ROUTE_LABELS,
+  LearnerDashboardPaths,
+} from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { DashboardEditCreditCardLoader } from './DashboardEditCreditCardLoader';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -72,17 +74,28 @@ describe('<DashboardCreditCardsManagement/>', () => {
 
   it('renders an empty list with placeholder', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+    const routes = [
+      {
+        path: '/',
+        element: <DashboardLayoutRoute />,
+        children: [
+          {
+            path: LearnerDashboardPaths.PREFERENCES,
+            handle: {
+              crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.PREFERENCES],
+            },
+            element: <DashboardPreferences />,
+          },
+        ],
+      },
+    ];
+    render(
+      <JoanieAppWrapper
+        routerOptions={{ routes, initialEntries: [LearnerDashboardPaths.PREFERENCES] }}
+        queryOptions={{ client: createTestQueryClient({ user: richieUser }) }}
+      />,
+      { wrapper: null },
+    );
     expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My preferences']);
     // The empty placeholder is shown.
     await screen.findByText("You haven't created any credit cards yet.");
@@ -101,16 +114,8 @@ describe('<DashboardCreditCardsManagement/>', () => {
     }).one();
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<DashboardPreferences />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
@@ -138,16 +143,8 @@ describe('<DashboardCreditCardsManagement/>', () => {
     }).one();
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<DashboardPreferences />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
@@ -174,16 +171,8 @@ describe('<DashboardCreditCardsManagement/>', () => {
     }).one();
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<DashboardPreferences />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
@@ -203,16 +192,8 @@ describe('<DashboardCreditCardsManagement/>', () => {
   it('deletes a credit card', async () => {
     const creditCards = CreditCardFactory().many(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<DashboardPreferences />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
@@ -252,16 +233,8 @@ describe('<DashboardCreditCardsManagement/>', () => {
   it('promotes a credit card', async () => {
     const creditCards = CreditCardFactory().many(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<DashboardPreferences />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
@@ -305,16 +278,8 @@ describe('<DashboardCreditCardsManagement/>', () => {
     const mainCreditCard = creditCards[3];
     mainCreditCard.is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<DashboardPreferences />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
     const creditCardsContainers = await screen.findAllByTestId('dashboard-credit-card__', {
@@ -337,16 +302,8 @@ describe('<DashboardCreditCardsManagement/>', () => {
     const mainCreditCard = creditCards[3];
     mainCreditCard.is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<DashboardPreferences />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
     // The delete button is not displayed.
@@ -365,16 +322,8 @@ describe('<DashboardCreditCardsManagement/>', () => {
     const mainCreditCard = creditCards[3];
     mainCreditCard.is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<DashboardPreferences />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
     // The promote button is not displayed.
@@ -392,17 +341,25 @@ describe('<DashboardCreditCardsManagement/>', () => {
     const creditCards = CreditCardFactory().many(5);
     const creditCard = creditCards[2];
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
-    });
+
+    const routes = [
+      {
+        path: LearnerDashboardPaths.PREFERENCES,
+        element: <DashboardPreferences />,
+      },
+      {
+        path: LearnerDashboardPaths.PREFERENCES_CREDIT_CARD_EDITION,
+
+        element: <DashboardEditCreditCardLoader />,
+      },
+    ];
+    render(
+      <JoanieAppWrapper
+        routerOptions={{ routes, initialEntries: [LearnerDashboardPaths.PREFERENCES] }}
+        queryOptions={{ client: createTestQueryClient({ user: richieUser }) }}
+      />,
+      { wrapper: null },
+    );
 
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
@@ -436,16 +393,8 @@ describe('<DashboardCreditCardsManagement/>', () => {
       body: 'Internal Server Error',
     });
 
-    await act(async () => {
-      render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
-      );
+    render(<DashboardPreferences />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
     await expectBannerError('An error occurred while fetching credit cards. Please retry later.');
