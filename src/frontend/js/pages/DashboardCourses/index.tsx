@@ -32,18 +32,8 @@ const messages = defineMessages({
 
 export const DashboardCourses = () => {
   const intl = useIntl();
-  const {
-    data,
-    query,
-    isLoadingMore,
-    isNewSearchLoading,
-    next,
-    hasMore,
-    submitSearch,
-    count,
-    error,
-  } = useLearnerCoursesSearch();
-
+  const { data, isLoadingMore, isNewSearchLoading, next, hasMore, submitSearch, count, error } =
+    useLearnerCoursesSearch();
   const loadMoreButtonRef = useRef<HTMLButtonElement & HTMLAnchorElement>(null);
   useIntersectionObserver({
     target: loadMoreButtonRef,
@@ -61,11 +51,7 @@ export const DashboardCourses = () => {
             <SearchBar onSubmit={submitSearch} />
             <SearchResultsCount nbResults={count} />
           </SearchBar.Container>
-          {count === 0 && !query && (
-            <div className="dashboard__courses__empty">
-              <Banner message={intl.formatMessage(messages.emptyList)} />
-            </div>
-          )}
+
           <div
             className={classNames('dashboard__courses__list', {
               'dashboard-course-list--fade': isNewSearchLoading,
@@ -82,13 +68,21 @@ export const DashboardCourses = () => {
               </div>
             ))}
           </div>
-          {(isLoadingMore || isNewSearchLoading) && (
-            <Spinner aria-labelledby="loading-orders-enrollments">
-              <span id="loading-orders-enrollments">
+
+          {(isNewSearchLoading && data.length === 0) || isLoadingMore ? (
+            <Spinner aria-labelledby="loading-courses-data">
+              <span id="loading-courses-data">
                 <FormattedMessage {...messages.loading} />
               </span>
             </Spinner>
+          ) : (
+            data.length === 0 && (
+              <div className="dashboard__courses__empty">
+                <Banner message={intl.formatMessage(messages.emptyList)} />
+              </div>
+            )
           )}
+
           {hasMore && (
             <Button
               onClick={() => next()}

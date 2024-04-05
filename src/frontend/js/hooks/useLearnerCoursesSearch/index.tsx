@@ -60,7 +60,6 @@ const useLearnerCoursesSearch = () => {
   };
 
   return {
-    query,
     submitSearch,
     data: orderAndEnrollmentList,
     isNewSearchLoading,

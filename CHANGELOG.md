@@ -40,6 +40,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- No results message is no longer displayed on initial loading in 
+  learner and teacher courses list pages.
 - Manage certificate linked to an enrollment
 - Certificate products are not listed anymore in teacher dashboard
 - Fix several SaleTunnel cache issues

@@ -52,7 +52,7 @@ export const TeacherDashboardCoursesLoader = () => {
           courseAndProductList={data}
           loadMore={next}
           isLoadingMore={isLoadingMore}
-          isLoading={isNewSearchLoading}
+          isNewSearchLoading={isNewSearchLoading}
           hasMore={hasMore}
         />
       </div>
