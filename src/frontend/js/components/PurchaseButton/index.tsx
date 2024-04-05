@@ -162,7 +162,7 @@ const PurchaseButton = ({
         course={course}
         onFinish={onFinish}
       />
-      <SaleTunnelV2 {...saleTunnelModal} product={product} />
+      {true && <SaleTunnelV2 {...saleTunnelModal} product={product} />}
     </>
   );
 };

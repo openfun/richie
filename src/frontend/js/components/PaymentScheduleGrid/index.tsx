@@ -57,7 +57,7 @@ export const PaymentScheduleGrid = () => {
             message: 'Periodic',
           },
           {
-            id: '4',
+            id: '5',
             date: '2023-06-15',
             amount: '€ 100.00',
             status: PaymentScheduleStatus.PENDING,

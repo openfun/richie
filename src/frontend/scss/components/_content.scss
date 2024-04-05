@@ -42,3 +42,8 @@ body {
   flex-direction: column;
   height: 100%;
 }
+
+.c__modal__backdrop {
+  // Make sure the overlay is above any random 0-1-2 z-indexes in content and 200 z-index to the top bar
+  z-index:300;
+}

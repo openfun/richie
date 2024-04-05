@@ -70,7 +70,7 @@ const SyllabusCourseRunsList = ({
   const subContainer = useMemo(() => document.querySelector('.' + COURSE_DETAIL_ASIDE_CLASS)!, []);
 
   return (
-    <CunninghamProvider>
+    <CunninghamProvider modalParentSelector={() => document.body}>
       {openedRuns.length === 0 && (
         <div className="course-detail__row course-detail__runs course-detail__runs--open">
           <div className="course-detail__empty">

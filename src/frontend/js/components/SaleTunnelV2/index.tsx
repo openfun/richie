@@ -16,6 +16,7 @@ import { SaleTunnelSponsors } from 'components/SaleTunnelV2/SaleTunnelSponsors';
 import { CreditCardBrandLogo } from 'pages/DashboardCreditCardsManagement/CreditCardBrandLogo';
 import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
+import { AddressSelector } from 'components/SaleTunnelV2/AddressSelector';
 
 interface SaleTunnelV2Props extends Pick<ModalProps, 'isOpen' | 'onClose'> {
   product: Product;
@@ -23,7 +24,7 @@ interface SaleTunnelV2Props extends Pick<ModalProps, 'isOpen' | 'onClose'> {
 
 export const SaleTunnelV2 = (props: SaleTunnelV2Props) => {
   return (
-    <Modal {...props} size={ModalSize.LARGE} title="e-enable clicks-and-mortar supply-chains">
+    <Modal {...props} size={ModalSize.EXTRA_LARGE} title="e-enable clicks-and-mortar supply-chains">
       <div className="sale-tunnel">
         <div className="sale-tunnel__main">
           <div className="sale-tunnel__main__left">
@@ -52,13 +53,7 @@ const SaleTunnelInformation = () => {
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin elementum.
         </div>
         <Input label="Full name" fullWidth={true} />
-        {/* Make this a component ( display the button if no address is selected, etc .. */}
-        <div className="mt-s sale-tunnel__information__billing-address">
-          <Select label="Billing address" options={[]} fullWidth />
-          <Button size="small" icon={<span className="material-icons">add</span>} color="tertiary">
-            Create
-          </Button>
-        </div>
+        <AddressSelector />
       </div>
       <div>
         <CreditCardSelector />
