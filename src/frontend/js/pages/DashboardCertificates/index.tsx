@@ -36,11 +36,12 @@ export const DashboardCertificates = () => {
     }
   }, [certificates.meta?.pagination?.count]);
 
+  if (certificates.states.error) {
+    return <Banner message={certificates.states.error} type={BannerType.ERROR} />;
+  }
+
   return (
     <div className="dashboard-certificates">
-      {certificates.states.error && (
-        <Banner message={certificates.states.error} type={BannerType.ERROR} />
-      )}
       {certificates.items.length === 0 && certificates.states.fetching ? (
         <Spinner aria-labelledby="loading-certificates-data">
           <span id="loading-certificates-data">

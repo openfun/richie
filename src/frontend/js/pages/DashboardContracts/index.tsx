@@ -39,9 +39,12 @@ export const DashboardContracts = () => {
     }
   }, [count]);
 
+  if (error) {
+    return <Banner message={error} type={BannerType.ERROR} />;
+  }
+
   return (
     <div className="dashboard-contracts">
-      {error && <Banner message={error} type={BannerType.ERROR} />}
       {contracts.length === 0 && fetching ? (
         <Spinner aria-labelledby="loading-contract-data">
           <span id="loading-contract-data">
