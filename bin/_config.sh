@@ -36,28 +36,28 @@ function _set_user() {
     echo "🙋(user) ID: ${USER_ID}"
 }
 
-# docker_compose: wrap docker-compose command
+# docker_compose: wrap docker compose command
 #
 # usage: docker_compose [options] [ARGS...]
 #
-# options: docker-compose command options
-# ARGS   : docker-compose command arguments
+# options: docker compose command options
+# ARGS   : docker compose command arguments
 function _docker_compose() {
 
     echo "🐳(compose) project: '${COMPOSE_PROJECT}' file: '${COMPOSE_FILE}'"
-    docker-compose \
+    docker compose \
         -p "${COMPOSE_PROJECT}" \
         -f "${COMPOSE_FILE}" \
         --project-directory "${REPO_DIR}" \
         "$@"
 }
 
-# _dc_run: wrap docker-compose run command
+# _dc_run: wrap docker compose run command
 #
 # usage: _dc_run [options] [ARGS...]
 #
-# options: docker-compose run command options
-# ARGS   : docker-compose run command arguments
+# options: docker compose run command options
+# ARGS   : docker compose run command arguments
 function _dc_run() {
     _set_user
 
@@ -69,12 +69,12 @@ function _dc_run() {
     _docker_compose run --rm $user_args "$@"
 }
 
-# _dc_exec: wrap docker-compose exec command
+# _dc_exec: wrap docker compose exec command
 #
 # usage: _dc_exec [options] [ARGS...]
 #
-# options: docker-compose exec command options
-# ARGS   : docker-compose exec command arguments
+# options: docker compose exec command options
+# ARGS   : docker compose exec command arguments
 function _dc_exec() {
     _set_user
 

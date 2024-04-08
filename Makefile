@@ -28,7 +28,7 @@
 
 # -- Database
 # Database engine switch: if the DB_HOST=mysql environment variable is defined,
-# we'll use the mysql docker-compose service as a database backend instead of
+# we'll use the mysql docker compose service as a database backend instead of
 # postgresql (default).
 ifeq ($(DB_HOST), mysql)
   DB_PORT            = 3306
@@ -42,7 +42,7 @@ endif
 DOCKER_UID           = $(shell id -u)
 DOCKER_GID           = $(shell id -g)
 DOCKER_USER          = $(DOCKER_UID):$(DOCKER_GID)
-COMPOSE              = DOCKER_USER=$(DOCKER_USER) DB_HOST=$(DB_HOST) DB_PORT=$(DB_PORT) docker-compose
+COMPOSE              = DOCKER_USER=$(DOCKER_USER) DB_HOST=$(DB_HOST) DB_PORT=$(DB_PORT) docker compose
 COMPOSE_SSL          = NGINX_CONF=ssl DEV_ENV_FILE=dev-ssl $(COMPOSE)
 COMPOSE_RUN          = $(COMPOSE) run --rm
 COMPOSE_RUN_SSL      = $(COMPOSE_SSL) run --rm
@@ -124,7 +124,7 @@ run-ssl: ## start the development server over TLS
 	@$(WAIT_APP)
 .PHONY: run-ssl
 
-status: ## an alias for "docker-compose ps"
+status: ## an alias for "docker compose ps"
 	@$(COMPOSE) ps
 .PHONY: status
 
@@ -326,7 +326,7 @@ i18n-generate-front: build-ts
 # -- Database
 
 dbshell: ## connect to database shell 
-	docker-compose exec app python sandbox/manage.py dbshell
+	docker compose exec app python sandbox/manage.py dbshell
 .PHONY: dbshell
 
 # -- Misc

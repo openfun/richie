@@ -15,7 +15,7 @@
 #
 #     docker run --rm -e USER_NAME=foo -e HOME='/home/foo' richie:latest python manage.py migrate
 #
-# or define new variables in an environment file to use with docker or docker-compose:
+# or define new variables in an environment file to use with docker or docker compose:
 #
 #     # env.d/production
 #     USER_NAME=foo

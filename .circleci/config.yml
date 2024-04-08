@@ -863,7 +863,7 @@ jobs:
           name: Build app container
           command: |
             cd fun-richie-site-factory
-            docker-compose build app
+            docker compose build app
 
 
   lint-front:

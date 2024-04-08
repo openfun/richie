@@ -119,7 +119,7 @@ RUN rm -rf .git*
 ARG DOCKER_USER
 USER ${DOCKER_USER}
 
-# Target database host (e.g. database engine following docker-compose services
+# Target database host (e.g. database engine following docker compose services
 # name) & port
 ENV DB_HOST=postgresql \
     DB_PORT=5432
