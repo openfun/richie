@@ -16,7 +16,6 @@ export enum TeacherDashboardPaths {
   ORGANIZATION_COURSE_GENERAL_INFORMATION = `${ORGANIZATION_COURSES}/:courseId/information`,
   COURSE = `${TEACHER_COURSES}/:courseId`,
   COURSE_GENERAL_INFORMATION = `${COURSE}/information`,
-  COURSE_CONTRACTS = `${COURSE}/contracts`,
   COURSE_PRODUCT = `${COURSE}/products/:courseProductRelationId`,
   COURSE_PRODUCT_LEARNER_LIST = `${COURSE_PRODUCT}/learners`,
   COURSE_PRODUCT_CONTRACTS = `${COURSE_PRODUCT}/contracts`,
@@ -92,11 +91,6 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.learnerList.label',
     description: "Label to display the product's learner list view.",
     defaultMessage: 'Learners',
-  },
-  [TeacherDashboardPaths.COURSE_CONTRACTS]: {
-    id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.contracts.label',
-    description: 'Label of the course contracts view.',
-    defaultMessage: 'Contracts',
   },
   [TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.contracts.label',

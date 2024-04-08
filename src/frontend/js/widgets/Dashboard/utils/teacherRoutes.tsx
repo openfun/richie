@@ -75,13 +75,6 @@ export function getTeacherDashboardRoutes() {
                 },
               ],
             },
-            {
-              path: TeacherDashboardPaths.COURSE_CONTRACTS,
-              element: <TeacherDashboardCourseContractsLayout />,
-              handle: {
-                crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.COURSE_CONTRACTS],
-              },
-            },
           ],
         },
       ],
