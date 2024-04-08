@@ -62,7 +62,7 @@ const CourseProductItemFooter = ({
         orderGroup={orderGroup}
         buttonProps={{ fullWidth: true }}
       />
-      <p>
+      <p className="product-widget__footer__message">
         <FormattedMessage
           {...messages.nbSeatsAvailable}
           values={{ nb: orderGroup.nb_available_seats }}

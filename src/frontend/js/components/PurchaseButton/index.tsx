@@ -111,7 +111,6 @@ const PurchaseButton = ({
       {!disabled && (
         <>
           <Button
-            size="small"
             data-testid="PurchaseButton__cta"
             className={c('purchase-button__cta', className)}
             onClick={() => hasAtLeastOneCourseRun && setIsSaleTunnelOpen(true)}
