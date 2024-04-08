@@ -216,6 +216,9 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             environ_name="JOANIE_BACKEND",
             environ_prefix=None,
         ),
+        "API_TOKEN": values.Value(
+            None, environ_name="JOANIE_API_TOKEN", environ_prefix=None
+        ),
         "JS_BACKEND": values.Value(
             "joanie", environ_name="JOANIE_JS_BACKEND", environ_prefix=None
         ),
