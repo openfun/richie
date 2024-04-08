@@ -50,7 +50,7 @@ To see all available commands, run:
 
     $ make
 
-We also provide shortcuts for docker-compose commands as sugar scripts in the
+We also provide shortcuts for docker compose commands as sugar scripts in the
 `bin/` directory:
 
 ```

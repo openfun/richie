@@ -15,9 +15,9 @@ case "$1" in
         ;;
 esac
 
-docker-compose pull terraform
+docker compose pull terraform
 
 # Run Terraform commands in the Hashicorp docker container via docker compose
 # shellcheck disable=SC2068
 DOCKER_USER="$(id -u):$(id -g)" \
-    docker-compose run --rm terraform ${args[@]}
+    docker compose run --rm terraform ${args[@]}

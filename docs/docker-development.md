@@ -39,24 +39,24 @@ $ make watch-ts
 
 You can stop/start/restart a container:
 
-    $ docker-compose [stop|start|restart] [app|postgresql|mysql|elasticsearch]
+    $ docker compose [stop|start|restart] [app|postgresql|mysql|elasticsearch]
 
 or stop/start/restart all containers in one command:
 
-    $ docker-compose [stop|start|restart]
+    $ docker compose [stop|start|restart]
 
 ## Debugging
 
 You can easily see the latest logs for a container:
 
-    $ docker-compose logs [app|postgresql|mysql|elasticsearch]
+    $ docker compose logs [app|postgresql|mysql|elasticsearch]
 
 Or follow the stream of logs:
 
-    $ docker-compose logs --follow [app|postgresql|mysql|elasticsearch]
+    $ docker compose logs --follow [app|postgresql|mysql|elasticsearch]
 
 If you need to debug a running container, you can open a Linux shell with the
-`docker-compose exec` command (we use a sugar script here, see next section):
+`docker compose exec` command (we use a sugar script here, see next section):
 
     $ bin/exec [app|postgresql|mysql|elasticsearch] bash
 
@@ -73,16 +73,16 @@ the code directory as a volume in the container. Indeed, the Docker engine will,
 by default, run the containers using the `root` user. Any file created or
 updated by the app container on your host, as a result of the volume mounts,
 will be owned by the local root user. One way to solve this is to use the
-`--user="$(id -u)"` flag when calling the `docker-compose run` or
-`docker-compose exec` commands. By using the user flag trick, the running
+`--user="$(id -u)"` flag when calling the `docker compose run` or
+`docker compose exec` commands. By using the user flag trick, the running
 container user ID will match your local user ID. But, as it's repetitive and
 error-prone, we provide shortcuts that we call our "sugar scripts":
 
-- `bin/run`: is a shortcut for `docker-compose run --rm --user="$(id -u)"`
-- `bin/exec`: is a shortcut for `docker-compose exec --user="$(id -u)"`
-- `bin/pylint`: runs `pylint` in the `app` service using the test docker-compose
+- `bin/run`: is a shortcut for `docker compose run --rm --user="$(id -u)"`
+- `bin/exec`: is a shortcut for `docker compose exec --user="$(id -u)"`
+- `bin/pylint`: runs `pylint` in the `app` service using the test docker compose
   file
-- `bin/pytest`: runs `pytest` in the `app` service using the test docker-compose
+- `bin/pytest`: runs `pytest` in the `app` service using the test docker compose
   file
 
 ## Cleanup
@@ -101,7 +101,7 @@ running:
 If your `elasticsearch` container fails at booting, checkout the logs via:
 
 ```bash
-$ docker-compose logs elasticsearch
+$ docker compose logs elasticsearch
 ```
 
 You may see entries similar to:

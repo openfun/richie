@@ -5,8 +5,8 @@ set -eo pipefail
 # docker container, passing our environment variables
 
 
-docker-compose pull terraform-state
+docker compose pull terraform-state
 
 # Run Terraform commands in the Hashicorp docker container via docker compose
 DOCKER_USER="$(id -u):$(id -g)" \
-    docker-compose run --rm terraform-state "$@"
+    docker compose run --rm terraform-state "$@"

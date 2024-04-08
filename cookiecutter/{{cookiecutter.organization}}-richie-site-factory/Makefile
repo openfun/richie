@@ -12,7 +12,7 @@ COMPOSE              = \
   NGINX_IMAGE_NAME="$(NGINX_IMAGE_NAME)" \
   NGINX_IMAGE_TAG="$(NGINX_IMAGE_TAG)" \
   DOCKER_USER="$(DOCKER_UID):$(DOCKER_GID)" \
-  docker-compose
+  docker compose
 COMPOSE_RUN          = $(COMPOSE) run --rm
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app-dev
 COMPOSE_EXEC         = $(COMPOSE) exec

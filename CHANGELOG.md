@@ -28,6 +28,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Upgrade docker compose to v2.24.5
 - remove dashboard i18n routing
 - Complete `course_detail` RDFa markups
 - Require to accept terms when purchasing product of any kind
@@ -1788,7 +1789,7 @@ through `context_processor`
 - Change the order of placeholders on the course page following feedback from
   our support team,
 - Simplify the Docker development stack to have a single `Dockerfile` and
-  docker-compose configuration for testing either with MySQL or PostgreSQL
+  docker compose configuration for testing either with MySQL or PostgreSQL
   database backend
 - Standardize the project's `Makefile` to make it more easily maintainable by
   our peers

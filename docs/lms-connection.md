@@ -69,18 +69,18 @@ The project started early 2021, but over time, Joanie will handle:
 
 ## Development
 
-For development purposes, the docker-compose project provided on
+For development purposes, the docker compose project provided on
 [Richie's code repository](https://github.com/openfun/richie) is pre-configured to connect
 with an OpenEdx instance started with
 [OpenEdx Docker](https://github.com/openfun/openedx-docker), which provides a ready-to-use
-docker-compose stack of OpenEdx in several flavors. Head over to
+docker compose stack of OpenEdx in several flavors. Head over to
 [OpenEdx Docker README](https://github.com/openfun/openedx-docker#readme) for instructions on how to bootstrap an OpenEdX instance.
 
 Now, start both the OpenEdX and Richie projects separately with `make run`.
 
 Richie should respond on `http://localhost:8070`, OpenEdx on `http://localhost:8073` and both
 apps should be able to communicate with each other via the network bridge defined in
-docker-compose.
+docker compose.
 
 If you want to activate [seamless enrollment](#2-seamless-enrollment) locally for development,
 you will need to set up TLS domains for both Richie and OpenEdX. To do this, head over to our

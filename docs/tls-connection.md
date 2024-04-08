@@ -6,7 +6,7 @@ sidebar_label: TLS connection for development
 
 ## Purpose
 
-By default in the docker-compose environment for development, Richie is hosted on `localhost:8070`
+By default in the docker compose environment for development, Richie is hosted on `localhost:8070`
 and uses a fake LMS backend (`base.BaseLMSBackend`) as you can see if you check the
 `RICHIE_LMS_BACKENDS` setting in `env.d/development`.
 
