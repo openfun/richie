@@ -1,6 +1,7 @@
 import fetchMock from 'fetch-mock';
 import { screen } from '@testing-library/react';
 import { createIntl } from 'react-intl';
+import { generatePath } from 'react-router-dom';
 import { CourseListItem } from 'types/Joanie';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
@@ -74,7 +75,7 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
       courseProductRelation: CourseProductRelationFactory().one(),
       expectedRoutes: [
         TeacherDashboardPaths.COURSE_PRODUCT,
-        TeacherDashboardPaths.COURSE_CONTRACTS,
+        TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS,
         TeacherDashboardPaths.COURSE_PRODUCT_LEARNER_LIST,
       ],
     },
@@ -159,11 +160,17 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
 
       await expectNoSpinner('Loading course...');
       expectedRoutes.forEach((expectedRoute) => {
-        expect(
-          screen.getByRole('link', {
-            name: intl.formatMessage(TEACHER_DASHBOARD_ROUTE_LABELS[expectedRoute]),
+        const menuLink = screen.getByRole('link', {
+          name: intl.formatMessage(TEACHER_DASHBOARD_ROUTE_LABELS[expectedRoute]),
+        });
+        expect(menuLink).toBeInTheDocument();
+        expect(menuLink.getAttribute('href')?.replace(/\?.*/, '')).toBe(
+          generatePath(expectedRoute, {
+            organizationId: organization ? organization.id : null,
+            courseId: course.id,
+            courseProductRelationId: courseProductRelation ? courseProductRelation.id : null,
           }),
-        ).toBeInTheDocument();
+        );
       });
 
       expect(screen.queryByTestId('organization-links')).not.toBeInTheDocument();
