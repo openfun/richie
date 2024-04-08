@@ -181,7 +181,7 @@ describe('PurchaseButton', () => {
     expect(button).toBeDisabled();
 
     // Further, a message is displayed to explain why the CTA is disabled
-    screen.findByText('This product is full, is currently not available for sale');
+    await screen.findByText('There are no more places available for this product.');
   });
 
   it.each([
@@ -318,7 +318,7 @@ describe('PurchaseButton', () => {
       // No alert message
       expect(
         screen.queryByText(
-          'The course run is not active, this product is not currently available for sale',
+          'The course run is not active. This product is not currently available for sale.',
         ),
       ).not.toBeInTheDocument();
     },
@@ -349,8 +349,8 @@ describe('PurchaseButton', () => {
     expect(button).toBeDisabled();
 
     // Further, a message is displayed to explain why the CTA is disabled
-    screen.findByText(
-      'At least one course has no course runs, this product is not currently available for sale',
+    await screen.findByText(
+      'At least one course has no course runs. This product is not currently available for sale.',
     );
   });
 
