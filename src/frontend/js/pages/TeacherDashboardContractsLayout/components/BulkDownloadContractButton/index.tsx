@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import useDownloadContractArchive, {
   ContractDownloadStatus,
 } from 'pages/TeacherDashboardContractsLayout/hooks/useDownloadContractArchive';
-import { Organization } from 'types/Joanie';
+import { CourseProductRelation, Organization } from 'types/Joanie';
 
 const messages = defineMessages({
   bulkDownloadButtonDownloadLabel: {
@@ -25,12 +25,17 @@ const messages = defineMessages({
 });
 
 interface BulkDownloadContractButtonProps {
-  organizationId: Organization['id'];
+  organizationId?: Organization['id'];
+  courseProductRelationId?: CourseProductRelation['id'];
 }
 
-const BulkDownloadContractButton = ({ organizationId }: BulkDownloadContractButtonProps) => {
+const BulkDownloadContractButton = ({
+  organizationId,
+  courseProductRelationId,
+}: BulkDownloadContractButtonProps) => {
   const { downloadContractArchive, createContractArchive, status } = useDownloadContractArchive({
     organizationId,
+    courseProductRelationId,
   });
 
   useEffect(() => {

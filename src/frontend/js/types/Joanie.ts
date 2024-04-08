@@ -596,7 +596,13 @@ interface APIUser {
     download(id: string): Promise<File>;
     zip_archive: {
       check: (id: string) => Promise<Response>;
-      create: ({ organization_id }: { organization_id: string }) => Promise<{ url: string }>;
+      create: ({
+        organization_id,
+        course_product_relation_id,
+      }: {
+        organization_id?: Organization['id'];
+        course_product_relation_id?: CourseProductRelation['id'];
+      }) => Promise<{ url: string }>;
       get: (id: string) => Promise<File>;
     };
   };

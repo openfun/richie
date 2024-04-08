@@ -5,7 +5,9 @@ import { IntlProvider } from 'react-intl';
 import { PropsWithChildren } from 'react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
+import { CourseProductRelationFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import {
+  LocalStorageArchiveFilters,
   storeContractArchiveId,
   unstoreContractArchiveId,
 } from '../useDownloadContractArchive/contractArchiveLocalStorage';
@@ -35,7 +37,28 @@ jest.mock('hooks/useContractArchive', () => ({
   }),
 }));
 
-describe('useCheckContractArchiveExists', () => {
+describe.each([
+  {
+    testLabel: 'for all organization and all trainings',
+    organization: undefined,
+    courseProductRelation: undefined,
+  },
+  {
+    testLabel: 'for a training in an organization',
+    organization: OrganizationFactory().one(),
+    courseProductRelation: CourseProductRelationFactory().one(),
+  },
+  {
+    testLabel: 'for an organization',
+    organization: OrganizationFactory().one(),
+    courseProductRelation: undefined,
+  },
+  {
+    testLabel: 'for a training',
+    organization: undefined,
+    courseProductRelation: CourseProductRelationFactory().one(),
+  },
+])('useCheckContractArchiveExists $testLabel', ({ organization, courseProductRelation }) => {
   const Wrapper = ({ children }: PropsWithChildren) => {
     return (
       <IntlProvider locale="en">
@@ -43,7 +66,14 @@ describe('useCheckContractArchiveExists', () => {
       </IntlProvider>
     );
   };
+  let localStorageArchiveFilters: LocalStorageArchiveFilters;
+
   beforeEach(() => {
+    localStorageArchiveFilters = {
+      organizationId: organization ? organization.id : undefined,
+      courseProductRelationId: courseProductRelation ? courseProductRelation.id : undefined,
+    };
+
     // Joanie providers calls
     fetchMock.get('https://joanie.test/api/v1.0/orders/', []);
     fetchMock.get('https://joanie.test/api/v1.0/credit-cards/', []);
@@ -51,6 +81,8 @@ describe('useCheckContractArchiveExists', () => {
   });
 
   afterEach(() => {
+    unstoreContractArchiveId(localStorageArchiveFilters);
+
     jest.resetAllMocks();
     fetchMock.restore();
     unstoreContractArchiveId();
@@ -58,6 +90,7 @@ describe('useCheckContractArchiveExists', () => {
 
   it('should do nothing and return default value when no contractArchiveId is stored', () => {
     const { result } = renderHook(useCheckContractArchiveExists, {
+      initialProps: localStorageArchiveFilters,
       wrapper: Wrapper,
     });
 
@@ -66,10 +99,14 @@ describe('useCheckContractArchiveExists', () => {
   });
 
   it('should check if archive exist when a id is stored', async () => {
-    storeContractArchiveId(faker.string.uuid());
+    storeContractArchiveId({
+      ...localStorageArchiveFilters,
+      contractArchiveId: faker.string.uuid(),
+    });
     mockCheckArchive.mockResolvedValue(true);
 
     const { result } = renderHook(useCheckContractArchiveExists, {
+      initialProps: localStorageArchiveFilters,
       wrapper: Wrapper,
     });
 
@@ -83,12 +120,15 @@ describe('useCheckContractArchiveExists', () => {
   });
 
   it('should do nothing when enable is false', () => {
-    storeContractArchiveId(faker.string.uuid());
+    storeContractArchiveId({ contractArchiveId: faker.string.uuid() });
     mockCheckArchive.mockResolvedValue(true);
 
-    const { result } = renderHook(() => useCheckContractArchiveExists({ enable: false }), {
-      wrapper: Wrapper,
-    });
+    const { result } = renderHook(
+      () => useCheckContractArchiveExists({ ...localStorageArchiveFilters, enable: false }),
+      {
+        wrapper: Wrapper,
+      },
+    );
 
     expect(result.current.isContractArchiveExists).toBe(false);
     expect(mockCheckArchive).not.toHaveBeenCalled();
@@ -96,6 +136,7 @@ describe('useCheckContractArchiveExists', () => {
 
   it('should trigger polling when checkArchiveExist is call', async () => {
     const { result, rerender } = renderHook(useCheckContractArchiveExists, {
+      initialProps: localStorageArchiveFilters,
       wrapper: Wrapper,
     });
 
@@ -111,7 +152,7 @@ describe('useCheckContractArchiveExists', () => {
     expect(result.current.isContractArchiveExists).toBe(false);
 
     // isPolling it need's a rerender to be updated
-    rerender();
+    rerender(localStorageArchiveFilters);
     expect(result.current.isPolling).toBe(true);
 
     mockCheckArchive.mockResolvedValue(true);

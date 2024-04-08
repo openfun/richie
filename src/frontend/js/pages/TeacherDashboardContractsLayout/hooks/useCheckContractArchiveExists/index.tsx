@@ -2,14 +2,19 @@ import { useEffect, useRef, useState } from 'react';
 import useContractArchive from 'hooks/useContractArchive';
 import { CONTRACT_DOWNLOAD_SETTINGS } from 'settings';
 import { Nullable } from 'types/utils';
+import { CourseProductRelation, Organization } from 'types/Joanie';
 import { getStoredContractArchiveId } from '../useDownloadContractArchive/contractArchiveLocalStorage';
 
 export interface UseCheckContractArchiveExistsProps {
-  enable: boolean;
+  organizationId?: Organization['id'];
+  courseProductRelationId?: CourseProductRelation['id'];
+  enable?: boolean;
 }
 
 const useCheckContractArchiveExist = (
-  { enable }: UseCheckContractArchiveExistsProps = { enable: true },
+  { organizationId, courseProductRelationId, enable = true }: UseCheckContractArchiveExistsProps = {
+    enable: true,
+  },
 ) => {
   // Contract's archive api interface
   const {
@@ -48,13 +53,17 @@ const useCheckContractArchiveExist = (
 
   // This effect will initialize isContractArchiveExists value
   useEffect(() => {
-    const storedContractArchiveId = getStoredContractArchiveId();
+    const storedContractArchiveId = getStoredContractArchiveId({
+      organizationId,
+      courseProductRelationId,
+    });
+
     if (enable && storedContractArchiveId) {
       checkArchiveExists(storedContractArchiveId, { polling: false });
     } else {
       setIsContractArchiveExists(false);
     }
-  }, [enable]);
+  }, [enable, organizationId, courseProductRelationId]);
 
   // Be sure to clear any timeout before unmouting the hook.
   useEffect(() => {

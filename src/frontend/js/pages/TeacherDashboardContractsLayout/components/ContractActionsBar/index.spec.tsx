@@ -97,17 +97,12 @@ describe('TeacherDashboardContractsLayout/ContractActionsBar', () => {
       courseProductRelationId: undefined,
     },
     {
-      label: 'has contract to download and courseProductRelationId',
-      hasContractToDownload: true,
-      courseProductRelationId: faker.string.uuid(),
-    },
-    {
       label: "doesn't have contract to download  and courseProductRelationId",
       hasContractToDownload: false,
       courseProductRelationId: faker.string.uuid(),
     },
   ])(
-    "shouldn't only display sign button when $label",
+    'should only display sign button when $label',
     ({ hasContractToDownload, courseProductRelationId }) => {
       mockHasContractToDownload = hasContractToDownload;
       mockCanSignContracts = true;
@@ -150,27 +145,14 @@ describe('TeacherDashboardContractsLayout/ContractActionsBar', () => {
     ).not.toBeInTheDocument();
   });
 
-  it.each([
-    {
-      label: 'only download is available but we have a courseProductRelationId',
-      hasContractToDownload: true,
-      courseProductRelationId: faker.string.uuid(),
-    },
-    {
-      label: 'no actions are available',
-      hasContractToDownload: false,
-    },
-  ])('should return nothing when $label', ({ hasContractToDownload, courseProductRelationId }) => {
-    mockHasContractToDownload = hasContractToDownload;
+  it('should return nothing when no actions are available', () => {
+    mockHasContractToDownload = false;
     mockCanSignContracts = false;
     mockContractsToSignCount = 0;
 
     render(
       <Wrapper>
-        <ContractActionsBar
-          courseProductRelationId={courseProductRelationId}
-          organizationId={faker.string.uuid()}
-        />
+        <ContractActionsBar organizationId={faker.string.uuid()} />
       </Wrapper>,
     );
 
