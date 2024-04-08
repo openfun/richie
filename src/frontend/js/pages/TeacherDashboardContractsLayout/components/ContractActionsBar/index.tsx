@@ -17,8 +17,7 @@ const ContractActionsBar = ({ organizationId, courseProductRelationId }: Contrac
   });
   const hasContractToDownload = useHasContractToDownload(organizationId, courseProductRelationId);
 
-  const canDownloadContracts = hasContractToDownload && !courseProductRelationId;
-  const nbAvailableActions = [canSignContracts, canDownloadContracts].filter((val) => val).length;
+  const nbAvailableActions = [canSignContracts, hasContractToDownload].filter((val) => val).length;
   const courseProductRelationIds = courseProductRelationId ? [courseProductRelationId] : undefined;
   return (
     nbAvailableActions > 0 && (
@@ -38,7 +37,12 @@ const ContractActionsBar = ({ organizationId, courseProductRelationId }: Contrac
             />
           </div>
         )}
-        {canDownloadContracts && <BulkDownloadContractButton organizationId={organizationId} />}
+        {hasContractToDownload && (
+          <BulkDownloadContractButton
+            organizationId={organizationId}
+            courseProductRelationId={courseProductRelationId}
+          />
+        )}
       </div>
     )
   );

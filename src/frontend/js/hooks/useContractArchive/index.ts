@@ -1,4 +1,5 @@
 import { useJoanieApi } from 'contexts/JoanieApiContext';
+import { CourseProductRelation, Organization } from 'types/Joanie';
 import { browserDownloadFromBlob } from 'utils/download';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { handle } from 'utils/errors/handle';
@@ -50,9 +51,13 @@ const useContractArchive = () => {
           return true;
         }
       },
-      create: async (organizationId: string): Promise<string> => {
+      create: async (
+        organizationId?: Organization['id'],
+        courseProductRelationId?: CourseProductRelation['id'],
+      ): Promise<string> => {
         const response = await api.user.contracts.zip_archive.create({
           organization_id: organizationId,
+          course_product_relation_id: courseProductRelationId,
         });
 
         return extractArchiveId(response.url);

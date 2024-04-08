@@ -8,11 +8,13 @@ import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 
 import {
+  LocalStorageArchiveFilters,
   getStoredContractArchiveId,
   storeContractArchiveId,
   unstoreContractArchiveId,
 } from 'pages/TeacherDashboardContractsLayout/hooks/useDownloadContractArchive/contractArchiveLocalStorage';
 import { CONTRACT_DOWNLOAD_SETTINGS } from 'settings';
+import { CourseProductRelationFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import BulkDownloadContractButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -39,106 +41,145 @@ jest.mock('hooks/useContractArchive', () => ({
   }),
 }));
 
-describe('TeacherDashboardContractsLayout/BulkDownloadContractButton with fake timer', () => {
-  const Wrapper = ({ children }: PropsWithChildren) => {
-    return (
-      <IntlProvider locale="en">
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <JoanieApiProvider>{children}</JoanieApiProvider>
-        </QueryClientProvider>
-      </IntlProvider>
-    );
-  };
+describe.each([
+  {
+    testLabel: 'for all organization and all trainings',
+    organization: undefined,
+    courseProductRelation: undefined,
+  },
+  {
+    testLabel: 'for a training in an organization',
+    organization: OrganizationFactory().one(),
+    courseProductRelation: CourseProductRelationFactory().one(),
+  },
+  {
+    testLabel: 'for an organization',
+    organization: OrganizationFactory().one(),
+    courseProductRelation: undefined,
+  },
+  {
+    testLabel: 'for a training',
+    organization: undefined,
+    courseProductRelation: CourseProductRelationFactory().one(),
+  },
+])(
+  'TeacherDashboardContractsLayout/BulkDownloadContractButton with fake timer, $testLabel',
+  ({ organization, courseProductRelation }) => {
+    let localStorageArchiveFilters: LocalStorageArchiveFilters;
 
-  let contractArchiveId: string;
-  beforeEach(() => {
-    mockHasContractToDownload = true;
+    const Wrapper = ({ children }: PropsWithChildren) => {
+      return (
+        <IntlProvider locale="en">
+          <QueryClientProvider client={createTestQueryClient({ user: true })}>
+            <JoanieApiProvider>{children}</JoanieApiProvider>
+          </QueryClientProvider>
+        </IntlProvider>
+      );
+    };
 
-    const now = Date.now();
-    const unvalidCreationTime =
-      now - CONTRACT_DOWNLOAD_SETTINGS.contractArchiveLocalVaklidityDurationMs * 2;
+    let contractArchiveId: string;
+    beforeEach(() => {
+      localStorageArchiveFilters = {
+        organizationId: organization ? organization.id : undefined,
+        courseProductRelationId: courseProductRelation ? courseProductRelation.id : undefined,
+      };
+      mockHasContractToDownload = true;
 
-    jest.useFakeTimers();
-    jest.setSystemTime(new Date(unvalidCreationTime));
-    contractArchiveId = faker.string.uuid();
-    storeContractArchiveId(contractArchiveId);
-    jest.setSystemTime(new Date(now));
-  });
+      const now = Date.now();
+      const unvalidCreationTime =
+        now - CONTRACT_DOWNLOAD_SETTINGS.contractArchiveLocalVaklidityDurationMs * 2;
 
-  afterEach(() => {
-    jest.runOnlyPendingTimers();
-    jest.useRealTimers();
-    jest.clearAllMocks();
-    unstoreContractArchiveId();
-  });
-
-  it("should return IDLE status and clear stored id when archive doesn't exists on the server", async () => {
-    mockHasContractToDownload = true;
-    mockCheckArchive.mockResolvedValue(false);
-
-    render(
-      <Wrapper>
-        <BulkDownloadContractButton organizationId={faker.string.uuid()} />
-      </Wrapper>,
-    );
-
-    const $downloadButton = screen.queryByRole('button', {
-      name: /Download contracts archive/,
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date(unvalidCreationTime));
+      contractArchiveId = faker.string.uuid();
+      storeContractArchiveId({ ...localStorageArchiveFilters, contractArchiveId });
+      jest.setSystemTime(new Date(now));
     });
-    expect($downloadButton).toBeInTheDocument();
 
-    // BulkDownloadButton is disabled until initiliazed
-    expect($downloadButton).toBeDisabled();
-    expect(mockCheckArchive).toHaveBeenCalledTimes(1);
-
-    // Button should initalize with idle state and propose an archive generation
-    await waitFor(() => {
-      const $createArchiveButton = screen.queryByRole('button', {
-        name: /Request contracts archive/,
+    afterEach(() => {
+      jest.runOnlyPendingTimers();
+      jest.useRealTimers();
+      jest.clearAllMocks();
+      unstoreContractArchiveId({
+        organizationId: organization ? organization.id : undefined,
+        courseProductRelationId: courseProductRelation ? courseProductRelation.id : undefined,
       });
-      expect($createArchiveButton).toBeInTheDocument();
-      expect($createArchiveButton).toBeEnabled();
     });
 
-    expect(getStoredContractArchiveId()).toBe(null);
-    expect(mockGetArchive).not.toHaveBeenCalled();
-    expect(mockCreateArchive).not.toHaveBeenCalled();
+    it("should return IDLE status and clear stored id when archive doesn't exists on the server", async () => {
+      mockHasContractToDownload = true;
+      mockCheckArchive.mockResolvedValue(false);
 
-    // polling shouldn't start, mockCheckArchive shouldn't been called more than once
-    expect(mockCheckArchive).toHaveBeenCalledTimes(1);
-  });
+      render(
+        <Wrapper>
+          <BulkDownloadContractButton
+            organizationId={organization?.id ?? undefined}
+            courseProductRelationId={courseProductRelation?.id ?? undefined}
+          />
+        </Wrapper>,
+      );
 
-  it('should return READY status when archive exists on the server', async () => {
-    mockHasContractToDownload = true;
-    mockCheckArchive.mockResolvedValue(true);
-
-    render(
-      <Wrapper>
-        <BulkDownloadContractButton organizationId={faker.string.uuid()} />
-      </Wrapper>,
-    );
-
-    const $initButton = screen.queryByRole('button', {
-      name: /Download contracts archive/,
-    });
-    expect($initButton).toBeInTheDocument();
-    // BulkDownloadButton is disabled until initiliazed
-    expect($initButton).toBeDisabled();
-    expect(mockCheckArchive).toHaveBeenCalledTimes(1);
-
-    await waitFor(() => {
       const $downloadButton = screen.queryByRole('button', {
         name: /Download contracts archive/,
       });
       expect($downloadButton).toBeInTheDocument();
-      expect($downloadButton).toBeEnabled();
+
+      // BulkDownloadButton is disabled until initiliazed
+      expect($downloadButton).toBeDisabled();
+      expect(mockCheckArchive).toHaveBeenCalledTimes(1);
+
+      // Button should initalize with idle state and propose an archive generation
+      await waitFor(() => {
+        const $createArchiveButton = screen.queryByRole('button', {
+          name: /Request contracts archive/,
+        });
+        expect($createArchiveButton).toBeInTheDocument();
+        expect($createArchiveButton).toBeEnabled();
+      });
+
+      expect(getStoredContractArchiveId()).toBe(null);
+      expect(mockGetArchive).not.toHaveBeenCalled();
+      expect(mockCreateArchive).not.toHaveBeenCalled();
+
+      // polling shouldn't start, mockCheckArchive shouldn't been called more than once
+      expect(mockCheckArchive).toHaveBeenCalledTimes(1);
     });
 
-    expect(getStoredContractArchiveId()).toBe(contractArchiveId);
-    expect(mockGetArchive).not.toHaveBeenCalled();
-    expect(mockCreateArchive).not.toHaveBeenCalled();
+    it('should return READY status when archive exists on the server', async () => {
+      mockHasContractToDownload = true;
+      mockCheckArchive.mockResolvedValue(true);
 
-    // polling shouldn't start, mockCheckArchive shouldn't been called more than once
-    expect(mockCheckArchive).toHaveBeenCalledTimes(1);
-  });
-});
+      render(
+        <Wrapper>
+          <BulkDownloadContractButton
+            organizationId={organization?.id}
+            courseProductRelationId={courseProductRelation?.id}
+          />
+        </Wrapper>,
+      );
+
+      const $initButton = screen.queryByRole('button', {
+        name: /Download contracts archive/,
+      });
+      expect($initButton).toBeInTheDocument();
+      // BulkDownloadButton is disabled until initiliazed
+      expect($initButton).toBeDisabled();
+      expect(mockCheckArchive).toHaveBeenCalledTimes(1);
+
+      await waitFor(() => {
+        const $downloadButton = screen.queryByRole('button', {
+          name: /Download contracts archive/,
+        });
+        expect($downloadButton).toBeInTheDocument();
+        expect($downloadButton).toBeEnabled();
+      });
+
+      expect(getStoredContractArchiveId(localStorageArchiveFilters)).toBe(contractArchiveId);
+      expect(mockGetArchive).not.toHaveBeenCalled();
+      expect(mockCreateArchive).not.toHaveBeenCalled();
+
+      // polling shouldn't start, mockCheckArchive shouldn't been called more than once
+      expect(mockCheckArchive).toHaveBeenCalledTimes(1);
+    });
+  },
+);

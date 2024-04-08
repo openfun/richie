@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import useContractArchive from 'hooks/useContractArchive';
+import { CourseProductRelation, Organization } from 'types/Joanie';
 import useCheckContractArchiveExists from '../useCheckContractArchiveExists';
 import useHasContractToDownload from '../useHasContractToDownload';
 import {
@@ -17,25 +18,35 @@ export enum ContractDownloadStatus {
 }
 
 interface UseTeacherContractsBulkDownloadProps {
-  organizationId: string;
+  organizationId?: Organization['id'];
+  courseProductRelationId?: CourseProductRelation['id'];
 }
 
-const useDownloadContractArchive = ({ organizationId }: UseTeacherContractsBulkDownloadProps) => {
+const useDownloadContractArchive = ({
+  organizationId,
+  courseProductRelationId,
+}: UseTeacherContractsBulkDownloadProps) => {
+  const localstorageArchiveFilters = {
+    organizationId,
+    courseProductRelationId,
+  };
+
   // Contract's archive api interface
   const {
     methods: { get: getArchive, create: createArchive },
   } = useContractArchive();
 
   // Simple hook that verifiy if current user have some fully signed contracts to download.
-  const hasContractToDownload = useHasContractToDownload(organizationId);
+  const hasContractToDownload = useHasContractToDownload(organizationId, courseProductRelationId);
 
   // Component state of the localstorage contract's archive id
   const [contractArchiveId, setContractArchiveId] = useState<string | null>(
-    getStoredContractArchiveId(),
+    getStoredContractArchiveId(localstorageArchiveFilters),
   );
 
   // Hook that handle contract archive existence check and recursive polling of it.
   const { isPolling, isContractArchiveExists, checkArchiveExists } = useCheckContractArchiveExists({
+    ...localstorageArchiveFilters,
     enable: !!hasContractToDownload,
   });
 
@@ -83,7 +94,7 @@ const useDownloadContractArchive = ({ organizationId }: UseTeacherContractsBulkD
   const clearContractArchive = () => {
     setIsDownloadRequest(false);
     setContractArchiveId(null);
-    unstoreContractArchiveId();
+    unstoreContractArchiveId(localstorageArchiveFilters);
   };
 
   // Either download the archive
@@ -105,9 +116,12 @@ const useDownloadContractArchive = ({ organizationId }: UseTeacherContractsBulkD
   const createContractArchive = async () => {
     let newContractArchiveId;
     if (contractArchiveId === null) {
-      newContractArchiveId = await createArchive(organizationId);
+      newContractArchiveId = await createArchive(organizationId, courseProductRelationId);
       setContractArchiveId(newContractArchiveId);
-      storeContractArchiveId(newContractArchiveId);
+      storeContractArchiveId({
+        ...localstorageArchiveFilters,
+        contractArchiveId: newContractArchiveId,
+      });
     } else {
       newContractArchiveId = contractArchiveId;
     }
@@ -126,7 +140,10 @@ const useDownloadContractArchive = ({ organizationId }: UseTeacherContractsBulkD
       return;
     }
 
-    if (isStoredContractArchiveIdExpired() && isContractArchiveExists === false) {
+    if (
+      isStoredContractArchiveIdExpired(localstorageArchiveFilters) &&
+      isContractArchiveExists === false
+    ) {
       setIsContractArchiveIdExpired(true);
       clearContractArchive();
     } else {

@@ -3,7 +3,7 @@ import { PER_PAGE } from 'settings';
 import { ContractState, CourseProductRelation, Organization } from 'types/Joanie';
 
 const useHasContractToDownload = (
-  organizationId: Organization['id'],
+  organizationId?: Organization['id'],
   courseProductRelationId?: CourseProductRelation['id'],
 ) => {
   const {

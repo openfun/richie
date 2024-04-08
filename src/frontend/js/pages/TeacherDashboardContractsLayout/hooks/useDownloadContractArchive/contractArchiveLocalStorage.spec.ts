@@ -15,57 +15,82 @@ describe.each([
     testLabel: 'for all organization and all trainings',
     organization: undefined,
     courseProductRelation: undefined,
+    existingOrganization: undefined,
+    existingCourseProductRelation: undefined,
   },
   {
     testLabel: 'for a training in an organization',
     organization: OrganizationFactory().one(),
     courseProductRelation: CourseProductRelationFactory().one(),
+    existingOrganization: undefined,
+    existingCourseProductRelation: undefined,
   },
   {
     testLabel: 'for an organization',
     organization: OrganizationFactory().one(),
     courseProductRelation: undefined,
+    existingOrganization: undefined,
+    existingCourseProductRelation: undefined,
   },
   {
     testLabel: 'for a training',
     organization: undefined,
     courseProductRelation: CourseProductRelationFactory().one(),
+    existingOrganization: undefined,
+    existingCourseProductRelation: undefined,
   },
-])('contractArchiveLocalStorage $testLabel', ({ organization, courseProductRelation }) => {
-  let localStorageArchiveFilters: LocalStorageArchiveFilters;
+  {
+    testLabel: 'for all organization and all trainings, with a other id already stored',
+    organization: undefined,
+    courseProductRelation: undefined,
+    existingOrganization: OrganizationFactory().one(),
+    existingCourseProductRelation: CourseProductRelationFactory().one(),
+  },
+  {
+    testLabel: 'for a training in an organization, with a other id already stored',
+    organization: OrganizationFactory().one(),
+    courseProductRelation: CourseProductRelationFactory().one(),
+  },
+  {
+    testLabel: 'for an organization, with a other id already stored',
+    organization: OrganizationFactory().one(),
+    courseProductRelation: undefined,
+    existingOrganization: OrganizationFactory().one(),
+    existingCourseProductRelation: CourseProductRelationFactory().one(),
+  },
+  {
+    testLabel: 'for a training, with a other id already stored',
+    organization: undefined,
+    courseProductRelation: CourseProductRelationFactory().one(),
+    existingOrganization: OrganizationFactory().one(),
+    existingCourseProductRelation: CourseProductRelationFactory().one(),
+  },
 
-  beforeEach(() => {
-    localStorageArchiveFilters = {
-      organizationId: organization ? organization.id : undefined,
-      courseProductRelationId: courseProductRelation ? courseProductRelation.id : undefined,
-    };
-
-    // everything should work fine with multiple archive stored
-    storeContractArchiveId({
-      organizationId: OrganizationFactory().one().id,
-      courseProductRelationId: CourseProductRelationFactory().one().id,
-      contractArchiveId: faker.string.uuid(),
-    });
-  });
-
-  afterEach(() => {
-    unstoreContractArchiveId(localStorageArchiveFilters);
-  });
-
-  describe.each([
-    {
-      testLabel: 'Base testing without any other id stored',
-    },
-    {
-      testLabel: 'Testing with a other id already stored',
-      existingOrganization: OrganizationFactory().one(),
-      existingCourseProductRelation: CourseProductRelationFactory().one(),
-    },
-  ])('$testLabel', ({ existingOrganization, existingCourseProductRelation }) => {
+  {
+    testLabel: 'Base testing without any other id stored',
+  },
+  {
+    testLabel: 'Testing with a other id already stored',
+    existingOrganization: OrganizationFactory().one(),
+    existingCourseProductRelation: CourseProductRelationFactory().one(),
+  },
+])(
+  'contractArchiveLocalStorage $testLabel',
+  ({
+    organization,
+    courseProductRelation,
+    existingOrganization,
+    existingCourseProductRelation,
+  }) => {
+    let localStorageArchiveFilters: LocalStorageArchiveFilters;
     let localStorageExistingArchiveFilters: LocalStorageArchiveFilters;
     let exsitingContractId: string;
 
     beforeEach(() => {
+      localStorageArchiveFilters = {
+        organizationId: organization ? organization.id : undefined,
+        courseProductRelationId: courseProductRelation ? courseProductRelation.id : undefined,
+      };
       localStorageExistingArchiveFilters = {
         organizationId: existingOrganization ? existingOrganization.id : undefined,
         courseProductRelationId: existingCourseProductRelation
@@ -84,6 +109,7 @@ describe.each([
     });
 
     afterEach(() => {
+      unstoreContractArchiveId(localStorageArchiveFilters);
       unstoreContractArchiveId(localStorageExistingArchiveFilters);
     });
 
@@ -153,5 +179,5 @@ describe.each([
       jest.runOnlyPendingTimers();
       jest.useRealTimers();
     });
-  });
-});
+  },
+);

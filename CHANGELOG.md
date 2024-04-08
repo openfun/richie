@@ -15,6 +15,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Fixed
 
+- Downloaded contract archive on product page was broken, it now works
+  properly by sending the course_product_relation_id in the archive 
+  creation request.
 - Fix a bug in the learner dashboard contract page where an alert
   message was displayed on successful download.
 
