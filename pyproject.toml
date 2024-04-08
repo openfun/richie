@@ -90,7 +90,7 @@ ci = [
 ]
 sandbox = [
     "django-configurations==2.5.1",
-    "dockerflow==2024.3.0",
+    "dockerflow==2024.4.1",
     "factory-boy==3.3.0",
     "gunicorn==21.2.0",
     "psycopg2-binary==2.9.9",
