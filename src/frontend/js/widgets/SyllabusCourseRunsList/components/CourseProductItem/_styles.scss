@@ -143,14 +143,19 @@
     gap: 0.5rem;
 
     &__message {
+      color: r-theme-val(product-item, base-color);
       text-align: center;
     }
 
     &__order-group {
       text-align: center;
 
-      p {
-        margin-top: 0.25rem;
+      .product-widget__footer__message {
+        margin: 0.5rem 0;
+      }
+
+      &:last-child {
+        margin-bottom: -1rem;
       }
     }
   }
