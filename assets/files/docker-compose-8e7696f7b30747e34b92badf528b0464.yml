@@ -1,5 +1,3 @@
-version: "3.5"
-
 services:
   postgresql:
     image: postgres:9.6
@@ -129,4 +127,4 @@ services:
 networks:
   lms_outside:
     driver: bridge
-    name: "${RICHIE_LMS_NETWORK:-edx_outside}"
+    name: "${RICHIE_LMS_NETWORK:-edx-lms-outside}"
