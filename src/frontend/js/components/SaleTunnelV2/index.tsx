@@ -17,6 +17,7 @@ import { CreditCardBrandLogo } from 'pages/DashboardCreditCardsManagement/Credit
 import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
 import { AddressSelector } from 'components/SaleTunnelV2/AddressSelector';
+import { CreditCardSelector } from 'components/SaleTunnelV2/CreditCardSelector';
 
 interface SaleTunnelV2Props extends Pick<ModalProps, 'isOpen' | 'onClose'> {
   product: Product;
@@ -60,36 +61,6 @@ const SaleTunnelInformation = () => {
       </div>
       <div>
         <PaymentScheduleBlock />
-      </div>
-    </div>
-  );
-};
-
-const CreditCardSelector = () => {
-  return (
-    <div className="credit-card-selector">
-      <h4 className="block-title mb-t">Payment method</h4>
-      <div className="description mb-s">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin elementum.
-      </div>
-      <div className="credit-card-selector__card">
-        <CreditCardBrandLogo
-          creditCard={{ ...CreditCardFactory().one(), brand: CreditCardBrand.MASTERCARD }}
-          variant="inline"
-        />
-        <div className="credit-card-selector__card__info">
-          <div className="credit-card-selector__card__info__title">Title</div>
-          <div className="credit-card-selector__card__info__meta">
-            <div>Ends with •••• 9821</div>
-            <div>|</div>
-            <div>Expires on 02/2032</div>
-          </div>
-        </div>
-        <Button
-          icon={<span className="material-icons">edit</span>}
-          color="tertiary-text"
-          size="medium"
-        />
       </div>
     </div>
   );

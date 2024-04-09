@@ -41,7 +41,7 @@ export const AddressSelector = () => {
       {selectedAddress ? (
         <Button
           size="small"
-          icon={<span className="material-icons">add</span>}
+          icon={<span className="material-icons">edit</span>}
           color="tertiary"
           onClick={editFormModal.open}
         >

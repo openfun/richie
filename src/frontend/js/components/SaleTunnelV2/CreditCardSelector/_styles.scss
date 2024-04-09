@@ -1,0 +1,44 @@
+.credit-card-selector {
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__card {
+    display: flex;
+    align-items: center;
+    gap: rem-calc(12px);
+
+    &__info {
+
+      &__title {
+        text-align: left;
+        font-size: 12px;
+        color: var(--c--theme--colors--charcoal-500);
+        font-weight: var(--c--theme--font--weights--bold);
+        font-family: var(--c--theme--font--families--accent);
+      }
+
+      &__meta {
+        display: flex;
+        gap: 12px;
+
+        div:nth-child(2) {
+          color: var(--c--theme--colors--light-grey);
+        }
+      }
+    }
+
+    &__add-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__modal {
+    text-align: left;
+  }
+}
