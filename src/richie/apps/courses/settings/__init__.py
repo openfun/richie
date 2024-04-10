@@ -246,6 +246,14 @@ CMS_PLACEHOLDER_CONF = {
         "name": _("Assessment and Certification"),
         "plugins": ["CKEditorPlugin"],
     },
+    "courses/cms/course_detail.html course_required_equipment": {
+        "name": _("Required equipment"),
+        "plugins": ["CKEditorPlugin"],
+    },
+    "courses/cms/course_detail.html course_accessibility": {
+        "name": _("Accessibility"),
+        "plugins": ["CKEditorPlugin"],
+    },
     # Organization detail
     "courses/cms/organization_detail.html banner": {
         "name": _("Banner"),
@@ -519,7 +527,13 @@ RICHIE_SIMPLETEXT_CONFIGURATION = [
         "max_length": 5000,
     },
     {
-        "placeholders": ["course_assessment", "course_format", "course_prerequisites"],
+        "placeholders": [
+            "course_assessment",
+            "course_format",
+            "course_prerequisites",
+            "course_accessibility",
+            "course_required_equipment",
+        ],
         "ckeditor": "CKEDITOR_BASIC_CONFIGURATION",
     },
 ]
