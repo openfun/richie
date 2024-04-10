@@ -304,6 +304,19 @@
                         {% endif %}
                     {% endblock prerequisites %}
 
+                    {% block course_required_equipment %}
+                        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_required_equipment" %}
+                            <section class="course-detail__required_equipment course-detail__row course-detail__required_equipment" property="about" typeof="Thing">
+                                <h2 class="course-detail__title" property="name">{% blocktrans context "course_detail__title" %}Required Equipment{% endblocktrans %}</h2>
+                                <div property="description">
+                                {% placeholder "course_required_equipment" or %}
+                                    <p>{% trans 'What are the required equipment to follow this course?' %}</p>
+                                {% endplaceholder %}
+                                </div>
+                            </section>
+                        {% endif %}
+                    {% endblock course_required_equipment %}
+
                     {% block assessment %}
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_assessment" %}
                         <section class="course-detail__row course-detail__assessment">
@@ -318,7 +331,22 @@
                         </section>
                         {% endif %}
                     {% endblock assessment %}
+
+                    {% block course_accessibility %}
+                    {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_accessibility" %}
+                        <section class="course-detail__accessibility course-detail__row course-detail__accessibility">
+                            <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Accessibility{% endblocktrans %}
+                            </h2>
+                            <div property="accessibilitySummary">
+                                {% placeholder "course_accessibility" or %}
+                                <p>{% trans 'What is the accessibility of this course?' %}</p>
+                                {% endplaceholder %}
+                            </div>
+                        </section>
+                        {% endif %}
+                    {% endblock course_accessibility %}
                 </div>
+
 
                 {% block plan %}
                     <div class="course-detail__block course-detail__secondary-group">

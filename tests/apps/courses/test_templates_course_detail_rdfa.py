@@ -168,6 +168,28 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
                     variant=ACCORDION,
                 )
 
+        # Add required equipment
+        placeholder = course.extended_object.placeholders.get(
+            slot="course_required_equipment"
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body="Required equipment section content",
+        )
+
+        # Add accessibility
+        placeholder = course.extended_object.placeholders.get(
+            slot="course_accessibility"
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body="Accessibility section content",
+        )
+
         # Create an ongoing open course run that will be published (created before
         # publishing the page)
         now = datetime(2030, 6, 15, tzinfo=timezone.utc)
@@ -210,7 +232,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         # Retrieve the course top node (body)
         (subject,) = graph.subjects(RDF.type, SDO.Course, unique=True)
 
-        self.assertEqual(len(list(graph.triples((subject, None, None)))), 39)
+        self.assertEqual(len(list(graph.triples((subject, None, None)))), 41)
 
         # Opengraph
         self.assertTrue(
@@ -297,8 +319,12 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         pattern = r"A valuable certificate"
         self.assertIsNotNone(re.search(pattern, str(assessment_value)))
 
+        (accessibility_value,) = graph.objects(subject, SDO.accessibilitySummary)
+        pattern = r"Accessibility section content"
+        self.assertIsNotNone(re.search(pattern, str(accessibility_value)))
+
         abouts = list(graph.objects(subject, SDO.about))
-        self.assertEqual(len(abouts), 2)
+        self.assertEqual(len(abouts), 3)
 
         (format_subject,) = graph.subjects(SDO.name, Literal("Format"))
         self.assertTrue((subject, SDO.about, format_subject) in graph)
@@ -313,6 +339,20 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         (description_value,) = graph.objects(skills_subject, SDO.description)
         pattern = r"Skill 1, Skill 2"
         self.assertIsNotNone(re.search(pattern, str(description_value)))
+
+        (required_equipment_subject,) = graph.subjects(
+            SDO.name, Literal("Required Equipment")
+        )
+        self.assertTrue((subject, SDO.about, required_equipment_subject) in graph)
+        self.assertTrue((required_equipment_subject, RDF.type, SDO.Thing) in graph)
+        (description_value,) = graph.objects(
+            required_equipment_subject, SDO.description
+        )
+        pattern = r"Required equipment section content"
+        self.assertIsNotNone(re.search(pattern, str(description_value)))
+
+        self.assertTrue((subject, SDO.about, format_subject) in graph)
+        self.assertTrue((format_subject, RDF.type, SDO.Thing) in graph)
 
         sections = list(graph.objects(subject, SDO.syllabusSections))
         self.assertEqual(len(sections), 1)
@@ -464,7 +504,6 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         # - Team (Person)
         contributor_subjects = list(graph.objects(subject, SDO.contributor))
         self.assertEqual(len(contributor_subjects), 2)
-
         self.assertTrue(
             (
                 contributor_subjects[0],

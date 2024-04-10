@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## Added
+
+- Add two new sections in DjangoCMS courses: Accessibility and Required
+  Equipment.
+
 ## [2.25.1]
 
 ### Fixed

@@ -40,7 +40,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
     hidden from published page so common users can not see them.
     """
 
-    # pylint: disable=too-many-locals
+    # pylint: disable=too-many-locals, too-many-statements
     def test_templates_course_detail_cms_published_content(self):
         """
         Validate that the important elements are displayed on a published course page
@@ -56,6 +56,9 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             fill_organizations=organizations,
             fill_categories=categories,
             fill_icons=icons,
+            fill_texts={},
+            fill_course_required_equipment="Required equipment section content",
+            fill_course_accessibility="Accessibility section content",
         )
         page = course.extended_object
         # Create an ongoing open course run that will be published (created before
@@ -195,6 +198,26 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             self.assertNotContains(
                 response, organization.extended_object.get_title(), html=True
             )
+
+        self.assertContains(
+            response,
+            '<h2 class="course-detail__title" property="name">Required Equipment</h2>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            "Required equipment section content",
+        )
+
+        self.assertContains(
+            response,
+            '<h2 class="course-detail__title">Accessibility</h2>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            "Accessibility section content",
+        )
 
         # Only the published course run should be in response content
         self.assertEqual(CourseRun.objects.count(), 3)

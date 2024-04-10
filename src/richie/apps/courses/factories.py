@@ -6,6 +6,7 @@ import random
 from collections import namedtuple
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -316,6 +317,40 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         if create and extracted:
             associate_extensions(
                 self, extracted, "course_organizations", "OrganizationPlugin"
+            )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_course_required_equipment(self, create, extracted, **kwargs):
+        """
+        Add course required equipment plugin to course.
+        """
+
+        if create and extracted:
+            add_plugin(
+                language=settings.LANGUAGE_CODE,
+                placeholder=self.extended_object.placeholders.get(
+                    slot="course_required_equipment"
+                ),
+                plugin_type="PlainTextPlugin",
+                body="".join(extracted),
+            )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_course_accessibility(self, create, extracted, **kwargs):
+        """
+        Add course required equipment plugin to course.
+        """
+
+        if create and extracted:
+            add_plugin(
+                language=settings.LANGUAGE_CODE,
+                placeholder=self.extended_object.placeholders.get(
+                    slot="course_accessibility"
+                ),
+                plugin_type="PlainTextPlugin",
+                body="".join(extracted),
             )
 
     @factory.post_generation
