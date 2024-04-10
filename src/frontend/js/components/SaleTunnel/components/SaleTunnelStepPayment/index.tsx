@@ -166,113 +166,124 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
 
   return (
     <section className="SaleTunnelStepPayment">
-      <section className="SaleTunnelStepPayment__block">
-        <header className="SaleTunnelStepPayment__block__header">
-          <h2 className="SaleTunnelStepPayment__block__title">
-            <FormattedMessage {...messages.resumeTile} />
-          </h2>
-        </header>
-        <div className="SaleTunnelStepPayment__block--product">
-          <strong className="SaleTunnelStepPayment__block--product__title">{product.title}</strong>
-          <p className="SaleTunnelStepPayment__block--product__price">
-            <FormattedNumber
-              value={product.price}
-              style="currency"
-              currency={product.price_currency}
-            />
-          </p>
+      <div className="SaleTunnelStepPayment__content">
+        <div className="SaleTunnelStepPayment__column">
+          <section className="SaleTunnelStepPayment__block">
+            <header className="SaleTunnelStepPayment__block__header">
+              <h2 className="SaleTunnelStepPayment__block__title">
+                <FormattedMessage {...messages.resumeTile} />
+              </h2>
+            </header>
+            <div className="SaleTunnelStepPayment__block--product">
+              <strong className="SaleTunnelStepPayment__block--product__title">
+                {product.title}
+              </strong>
+              <p className="SaleTunnelStepPayment__block--product__price">
+                <FormattedNumber
+                  value={product.price}
+                  style="currency"
+                  currency={product.price_currency}
+                />
+              </p>
+            </div>
+          </section>
         </div>
-      </section>
-      <section className="SaleTunnelStepPayment__block">
-        <header className="SaleTunnelStepPayment__block__header">
-          <h2 className="SaleTunnelStepPayment__block__title">
-            <FormattedMessage {...messages.userTile} />
-          </h2>
-        </header>
-        <div className="SaleTunnelStepPayment__block--buyer">
-          <strong className="h6 SaleTunnelStepPayment__block--buyer__name">
-            {UserHelper.getName(user)}
-          </strong>
-          {user.email ? (
-            <p className="SaleTunnelStepPayment__block--buyer__email">{user.email}</p>
-          ) : null}
-          <header
-            tabIndex={-1}
-            id="sale-tunnel-address-header"
-            className="SaleTunnelStepPayment__block--buyer__address-header"
-          >
-            <h3 className="h6">
-              <FormattedMessage {...messages.userBillingAddressFieldset} />
-            </h3>
-            {addressesItems.length > 0 && (
-              <Button
-                size="small"
-                color="secondary"
-                onClick={() => setShowAddressCreationForm(true)}
-                icon={<Icon name={IconTypeEnum.PLUS} className="button__icon" size="small" />}
+
+        <div className="SaleTunnelStepPayment__column">
+          <section className="SaleTunnelStepPayment__block">
+            <header className="SaleTunnelStepPayment__block__header">
+              <h2 className="SaleTunnelStepPayment__block__title">
+                <FormattedMessage {...messages.userTile} />
+              </h2>
+            </header>
+            <div className="SaleTunnelStepPayment__block--buyer">
+              <strong className="h6 SaleTunnelStepPayment__block--buyer__name">
+                {UserHelper.getName(user)}
+              </strong>
+              {user.email ? (
+                <p className="SaleTunnelStepPayment__block--buyer__email">{user.email}</p>
+              ) : null}
+              <header
+                tabIndex={-1}
+                id="sale-tunnel-address-header"
+                className="SaleTunnelStepPayment__block--buyer__address-header"
               >
-                <FormattedMessage {...messages.userBillingAddressAddLabel} />
-              </Button>
-            )}
-          </header>
-          <div className="SaleTunnelStepPayment__block--buyer__address-selection">
-            {addressesItems.length > 0 ? (
-              <Fragment>
-                <Select
-                  className="form-field--minimal"
-                  name="invoice_address"
-                  clearable={false}
-                  label={intl.formatMessage(messages.userBillingAddressSelectLabel)}
-                  onChange={(e) => handleSelectAddress((e.target.value || '') as string)}
-                  defaultValue={selectedAddress!.id || ''}
-                  options={addressesItems.map(({ id, title }) => ({
-                    label: title,
-                    value: id,
-                  }))}
-                />
-                <div className="SaleTunnelStepPayment__block--buyer__address-selection__address">
-                  <AddressView address={selectedAddress!} />
-                </div>
-              </Fragment>
-            ) : (
-              <Fragment>
-                <p className="SaleTunnelStepPayment__block--buyer__address__noAddress">
-                  <em>
-                    <FormattedMessage {...messages.userBillingAddressNoEntry} />
-                  </em>
-                </p>
-                <Button
-                  size="small"
-                  onClick={() => setShowAddressCreationForm(true)}
-                  icon={<Icon name={IconTypeEnum.PLUS} size="small" className="button__icon" />}
-                >
-                  <FormattedMessage {...messages.userBillingAddressCreateLabel} />
-                </Button>
-              </Fragment>
-            )}
-          </div>
+                <h3 className="h6">
+                  <FormattedMessage {...messages.userBillingAddressFieldset} />
+                </h3>
+                {addressesItems.length > 0 && (
+                  <Button
+                    size="small"
+                    color="secondary"
+                    onClick={() => setShowAddressCreationForm(true)}
+                    icon={<Icon name={IconTypeEnum.PLUS} className="button__icon" size="small" />}
+                  >
+                    <FormattedMessage {...messages.userBillingAddressAddLabel} />
+                  </Button>
+                )}
+              </header>
+              <div className="SaleTunnelStepPayment__block--buyer__address-selection">
+                {addressesItems.length > 0 ? (
+                  <Fragment>
+                    <Select
+                      className="form-field--minimal"
+                      name="invoice_address"
+                      clearable={false}
+                      label={intl.formatMessage(messages.userBillingAddressSelectLabel)}
+                      onChange={(e) => handleSelectAddress((e.target.value || '') as string)}
+                      defaultValue={selectedAddress!.id || ''}
+                      options={addressesItems.map(({ id, title }) => ({
+                        label: title,
+                        value: id,
+                      }))}
+                    />
+                    <div className="SaleTunnelStepPayment__block--buyer__address-selection__address">
+                      <AddressView address={selectedAddress!} />
+                    </div>
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <p className="SaleTunnelStepPayment__block--buyer__address__noAddress">
+                      <em>
+                        <FormattedMessage {...messages.userBillingAddressNoEntry} />
+                      </em>
+                    </p>
+                    <Button
+                      size="small"
+                      onClick={() => setShowAddressCreationForm(true)}
+                      icon={<Icon name={IconTypeEnum.PLUS} size="small" className="button__icon" />}
+                    >
+                      <FormattedMessage {...messages.userBillingAddressCreateLabel} />
+                    </Button>
+                  </Fragment>
+                )}
+              </div>
+            </div>
+          </section>
+
+          {creditCards.items?.length > 0 ? (
+            <section className="SaleTunnelStepPayment__block">
+              <header className="SaleTunnelStepPayment__block__header">
+                <h5 className="SaleTunnelStepPayment__block__title">
+                  <FormattedMessage {...messages.registeredCardSectionTitle} />
+                </h5>
+              </header>
+              <ul className="SaleTunnelStepPayment__block--registered-credit-card-list">
+                {creditCards.items.map((card) => (
+                  <li key={`credit-card-${card.id}`}>
+                    <RegisteredCreditCard
+                      selected={selectedCreditCard === card.id}
+                      handleSelect={() => toggleCreditCard(card.id)}
+                      {...card}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
         </div>
-      </section>
-      {creditCards.items?.length > 0 ? (
-        <section className="SaleTunnelStepPayment__block">
-          <header className="SaleTunnelStepPayment__block__header">
-            <h5 className="SaleTunnelStepPayment__block__title">
-              <FormattedMessage {...messages.registeredCardSectionTitle} />
-            </h5>
-          </header>
-          <ul className="SaleTunnelStepPayment__block--registered-credit-card-list">
-            {creditCards.items.map((card) => (
-              <li key={`credit-card-${card.id}`}>
-                <RegisteredCreditCard
-                  selected={selectedCreditCard === card.id}
-                  handleSelect={() => toggleCreditCard(card.id)}
-                  {...card}
-                />
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
+      </div>
+
       <footer className="SaleTunnelStepPayment__footer">
         <PaymentButton
           creditCard={selectedCreditCard}
