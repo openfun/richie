@@ -1,21 +1,22 @@
 .SaleTunnelStepPayment {
-  display: grid;
-  gap: 30px;
-  grid-template:
-    'row_info_slot_0 row_info_slot_1'
-    'row_payment_method_slot_0 row_payment_method_slot_1'
-    'row_footer row_footer';
+  display: flex;
+  flex-direction: column;
+  gap: rem-calc(30px);
+
+  &__content {
+    display: flex;
+    flex-direction: row;
+    gap: rem-calc(30px);
+  }
 
   @include media-breakpoint-down(md) {
     gap: 0;
-    grid-template:
-      'row_info_slot_0'
-      'row_info_slot_1'
-      'row_payment_method_slot_0'
-      'row_payment_method_slot_1'
-      'row_footer';
+    &__content {
+      gap: 0;
+      flex-direction: column;
+    }
 
-    & > &__block {
+    &__block {
       background: r-color('azure2');
       padding: 3rem 1rem;
       margin-bottom: 1rem;
@@ -79,19 +80,8 @@
     }
   }
 
-  & > &__block:nth-child(1) {
-    grid-area: row_info_slot_0;
-  }
-  & > &__block:nth-child(2) {
-    grid-area: row_info_slot_1;
-  }
-  & > &__block:nth-child(3) {
-    grid-area: row_payment_method_slot_1;
-  }
-
   &__footer {
     margin-top: 2.5rem;
-    grid-area: row_footer;
     display: flex;
     align-items: center;
     justify-content: center;
