@@ -13,22 +13,22 @@ import Banner, { BannerType } from 'components/Banner';
 const messages = defineMessages({
   fullNameInputLabel: {
     id: 'components.OpenEdxFullNameForm.fullNameInputLabel',
-    description: 'Label of "fullName" field openEdx full name form',
+    description: 'Label of "fullName" field OpenEdx full name form',
     defaultMessage: 'FullName',
   },
   submitButtonLabel: {
     id: 'components.OpenEdxFullNameForm.submitButtonLabel',
-    description: 'Label of the submit button on openEdx full name form',
+    description: 'Label of the submit button on OpenEdx full name form',
     defaultMessage: 'Submit',
   },
   loadingLabel: {
     id: 'components.OpenEdxFullNameForm.loadingLabel',
-    description: 'Label of the loading profile spinner on openEdx full name form',
+    description: 'Label of the loading profile spinner on OpenEdx full name form',
     defaultMessage: 'Loading...',
   },
   error: {
     id: 'components.OpenEdxFullNameForm.error',
-    description: 'Message displayed i nopenEdx full name form when submit the request fail',
+    description: 'Message displayed if OpenEdx profile update request fail',
     defaultMessage: 'There was an error while updating your full name. Please try again later.',
   },
 });
