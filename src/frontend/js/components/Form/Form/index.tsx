@@ -12,6 +12,10 @@ const Form = ({ children, onSubmit, className, name, noValidate = true }: FormPr
   );
 };
 
+Form.Column = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+  return <div className={c('form-column', className)}>{children}</div>;
+};
+
 Form.Row = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
   return <div className={c('form-row', className)}>{children}</div>;
 };

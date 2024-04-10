@@ -304,6 +304,8 @@ $r-theme: (
     input-hover-color: r-color('grey59'),
     message-color: r-color('grey32'),
     required-note-color: r-color('indianred3'),
+    block-spacing: rem-calc(10px),
+    inline-spacing: rem-calc(16px),
   ),
   organization-thumb: (
     border-color: r-color('grey59'),
