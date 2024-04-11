@@ -7,6 +7,22 @@
     "description": "",
     "message": "Root"
   },
+  "Dashboard.components.SearchBar.clearSearchButtonLabel": {
+    "description": "Label of the dashboard search bar clear button",
+    "message": "clear current research"
+  },
+  "Dashboard.components.SearchBar.searchButtonLabel": {
+    "description": "Label of the dashboard search bar submit button",
+    "message": "Search"
+  },
+  "Dashboard.components.SearchBar.searchPlaceholder": {
+    "description": "Placeholder of the dashboard search bar",
+    "message": "Search"
+  },
+  "Dashboard.components.SearchResultsCount.searchCountText": {
+    "description": "Text to indicate the total number of results for a research",
+    "message": "{nbResults} {nbResults, plural, one {result} other {results}} matching your search"
+  },
   "components.AddressesManagement.actionPromotion": {
     "description": "Action name for address promotion.",
     "message": "повышение"
@@ -113,7 +129,7 @@
   },
   "components.ContractStatus.organizationSignedOn": {
     "description": "Label for the date of sign of a training contract by the organization",
-    "message": "The organization have signed this training contract. Signed on {date}"
+    "message": "The organization has signed this training contract. Signed on {date}"
   },
   "components.ContractStatus.waitingOrganization": {
     "description": "Label displayed when a training contract need to be signed by the organization",
@@ -158,10 +174,6 @@
   "components.CourseGlimpse.organizationIconAlt": {
     "description": "Organization logo alternative text for screen reader users",
     "message": "Организация"
-  },
-  "components.CourseGlimpse.organizationsTitle": {
-    "description": "Organizations title for multiple organizations",
-    "message": "Produced by {nbOrganizations} partners"
   },
   "components.CourseGlimpseFooter.dateIconAlt": {
     "description": "Course date logo alternative text for screen reader users",
@@ -319,21 +331,9 @@
     "description": "Label of the certificates view used in navigation components.",
     "message": "My certificates"
   },
-  "components.Dashboard.DashboardRoutes.certificates.path": {
-    "description": "The path to display the certificates view.",
-    "message": "/certificates"
-  },
   "components.Dashboard.DashboardRoutes.contracts.label": {
     "description": "Label of the training contracts view used in navigation components.",
     "message": "My training contracts"
-  },
-  "components.Dashboard.DashboardRoutes.contracts.path": {
-    "description": "The path to display the training contracts view.",
-    "message": "/training-contracts"
-  },
-  "components.Dashboard.DashboardRoutes.course.path": {
-    "description": "The path to display a course detail view.",
-    "message": "/courses/{code}"
   },
   "components.Dashboard.DashboardRoutes.course.session.label": {
     "description": "Label of the course session view used in navigation components.",
@@ -343,45 +343,21 @@
     "description": "Label of the courses view used in navigation components.",
     "message": "My courses"
   },
-  "components.Dashboard.DashboardRoutes.courses.path": {
-    "description": "The path to display the courses view.",
-    "message": "/courses"
-  },
   "components.Dashboard.DashboardRoutes.order.label": {
     "description": "Label of the order view used in navigation components.",
     "message": "{orderTitle}"
-  },
-  "components.Dashboard.DashboardRoutes.order.path": {
-    "description": "The path to display an order detail view.",
-    "message": "/courses/orders/{orderId}"
   },
   "components.Dashboard.DashboardRoutes.order.runs.label": {
     "description": "Label of the order runs view used in navigation components.",
     "message": "General information"
   },
-  "components.Dashboard.DashboardRoutes.order.runs.path": {
-    "description": "The path to display an order runs view.",
-    "message": "/courses/orders/{orderId}/runs"
-  },
   "components.Dashboard.DashboardRoutes.preferences.addresses.creation.label": {
     "description": "Label of the addresses creation view.",
     "message": "Create address"
   },
-  "components.Dashboard.DashboardRoutes.preferences.addresses.creation.path": {
-    "description": "The path to display the addresses creation view.",
-    "message": "/preferences/addresses/create"
-  },
   "components.Dashboard.DashboardRoutes.preferences.addresses.edition.label": {
     "description": "Label of the addresses edition view.",
     "message": "Edit address \"{addressTitle}\""
-  },
-  "components.Dashboard.DashboardRoutes.preferences.addresses.edition.path": {
-    "description": "The path to display the addresses edition view.",
-    "message": "/preferences/addresses/{addressId}"
-  },
-  "components.Dashboard.DashboardRoutes.preferences.creditCards.edition.path": {
-    "description": "The path to display the credit cards edition view.",
-    "message": "/preferences/credit-cards/{creditCardId}"
   },
   "components.Dashboard.DashboardRoutes.preferences.creditCards.label": {
     "description": "Label of the credit cards edition view.",
@@ -390,10 +366,6 @@
   "components.Dashboard.DashboardRoutes.preferences.label": {
     "description": "Label of the preferences view used in navigation components.",
     "message": "My preferences"
-  },
-  "components.Dashboard.DashboardRoutes.preferences.path": {
-    "description": "The path to display the preferences view.",
-    "message": "/preferences"
   },
   "components.Dashboard.Signature.SignatureDummy.button": {
     "description": "Button displayed below the dummy contract.",
@@ -611,6 +583,10 @@
     "description": "Message displayed inside the contract signin modal when polling the order.",
     "message": "Verifying signature ..."
   },
+  "components.DashboardItem.Order.ContractFrame.pollingDescription": {
+    "description": "Message displayed inside the contract signin modal when polling the order.",
+    "message": "We are waiting for the signature to be validated from our signature platform. It can take up to few minutes. Do not close this page."
+  },
   "components.DashboardItem.Order.OrderStateMessage.statusCanceled": {
     "description": "Status shown on the dashboard order item when order is canceled",
     "message": "Canceled"
@@ -639,9 +615,53 @@
     "description": "Status shown on the dashboard order item when order is submitted.",
     "message": "Submitted"
   },
+  "components.DashboardItem.Order.OrderStateMessage.statusWaitingCounterSignature": {
+    "description": "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
+    "message": "On going"
+  },
   "components.DashboardItem.Order.OrderStateMessage.statusWaitingSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
     "message": "Signature required"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusCanceled": {
+    "description": "Status shown on the dashboard order item when order is canceled",
+    "message": "Canceled"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusCompleted": {
+    "description": "Status shown on the dashboard order item when order is validated with certificate",
+    "message": "Certified"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusDraft": {
+    "description": "Status shown on the dashboard order item when order is draft.",
+    "message": "Pending"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusOnGoing": {
+    "description": "Status shown on the dashboard order item when order is validated with no certificate",
+    "message": "Enrolled"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusOther": {
+    "description": "Status shown on the dashboard order item when order status is unknown",
+    "message": "{state}"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusPending": {
+    "description": "Status shown on the dashboard order item when order is pending.",
+    "message": "Pending"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusSubmitted": {
+    "description": "Status shown on the dashboard order item when order is submitted.",
+    "message": "Pending"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusWaitingCounterSignature": {
+    "description": "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
+    "message": "To be signed"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusWaitingSignature": {
+    "description": "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
+    "message": "Pending for learner's signature"
+  },
+  "components.DashboardItem.more_label": {
+    "description": "Accessible label for the more button on the dashboard item",
+    "message": "See additional options"
   },
   "components.DashboardItemCourseEnrollingRun.contractUnsigned": {
     "description": "Message displayed as disabled button title when a contract needs to be signed.",
@@ -675,29 +695,29 @@
     "description": "Text shown when user is enrolled in a course run",
     "message": "Enrolled"
   },
-  "components.DashboardItemEnrollment.enrolledRunPeriod": {
-    "description": "Text to display the period of a course run",
-    "message": "You are enrolled for the session from {startDate} to {endDate}"
-  },
   "components.DashboardItemEnrollment.firstEnrollCourseConfirmation": {
     "description": "The confirmation message shown to the user when he wants to enroll for the first time ( no existing enrollments )",
     "message": "Are you sure that you want to enroll in this session?"
   },
   "components.DashboardItemEnrollment.gotoCourse": {
     "description": "Button to access course when the user is enrolled",
-    "message": "Access course"
+    "message": "Access to course"
   },
   "components.DashboardItemEnrollment.notEnrolled": {
     "description": "Text shown on a read-only not-enrolled target course",
     "message": "You are not enrolled in this course"
   },
-  "components.DashboardItemEnrollment.runPeriod": {
-    "description": "Text to display the period of a course run",
-    "message": "From {startDate} to {endDate}"
-  },
   "components.DashboardItemEnrollment.statusNotActive": {
     "description": "Text shown when a course run is not active",
     "message": "Not enrolled"
+  },
+  "components.DashboardItemOrder.contactButton": {
+    "description": "Button to contact the organization",
+    "message": "Contact"
+  },
+  "components.DashboardItemOrder.contactDescription": {
+    "description": "Description of the contact information for the organization",
+    "message": "Your training reference is {name} - {email}."
   },
   "components.DashboardItemOrder.gotoCourse": {
     "description": "Button that redirects to the order details",
@@ -707,13 +727,113 @@
     "description": "Accessible label displayed while certificate is being fetched on the dashboard.",
     "message": "Loading certificate..."
   },
+  "components.DashboardItemOrder.organizationDpoContactLabel": {
+    "description": "Label for the organization DPO contact",
+    "message": "Data protection email"
+  },
+  "components.DashboardItemOrder.organizationHeader": {
+    "description": "Header of the organization section",
+    "message": "This training is provided by"
+  },
+  "components.DashboardItemOrder.organizationLogoAlt": {
+    "description": "Alt text for the organization logo",
+    "message": "Logo of the organization"
+  },
+  "components.DashboardItemOrder.organizationMailContactLabel": {
+    "description": "Label for the organization mail contact",
+    "message": "Email"
+  },
+  "components.DashboardItemOrder.organizationPhoneContactLabel": {
+    "description": "Label for the organization phone contact",
+    "message": "Phone"
+  },
+  "components.DashboardItemOrder.syllabusLinkLabel": {
+    "description": "Syllabus link label on order details",
+    "message": "Go to syllabus"
+  },
+  "components.DashboardItemOrder.trainingContractTitle": {
+    "description": "Title of the training contract section",
+    "message": "Training contract"
+  },
+  "components.DashboardOpenEdxProfile.EditButtonLabel": {
+    "description": "Label of the edit button link of the open edx profile form",
+    "message": "Edit your profile"
+  },
+  "components.DashboardOpenEdxProfile.additionalInformationHeader": {
+    "description": "Title of the open edx profile form \"additional information\" block",
+    "message": "Additional account information"
+  },
+  "components.DashboardOpenEdxProfile.baseInformationHeader": {
+    "description": "Title of the open edx profile form \"basic information\" block",
+    "message": "Basic account information"
+  },
+  "components.DashboardOpenEdxProfile.countryInputLabel": {
+    "description": "Label of the openEdx profile \"country\" input",
+    "message": "Country"
+  },
+  "components.DashboardOpenEdxProfile.emailInputDescription": {
+    "description": "Description of the openEdx profile \"email\" input",
+    "message": "Email used when sign-up, FUN-MOOC and leasons communications will be sent at this address"
+  },
+  "components.DashboardOpenEdxProfile.emailInputLabel": {
+    "description": "Label of the openEdx profile \"email\" input",
+    "message": "Email"
+  },
+  "components.DashboardOpenEdxProfile.favoriteLanguageInputLabel": {
+    "description": "Label of the openEdx profile \"favorite language\" input",
+    "message": "Favorite language"
+  },
+  "components.DashboardOpenEdxProfile.fullNameInputDescription": {
+    "description": "Description of the openEdx profile \"fullName\" input",
+    "message": "The name that appears on your certificates and training agreements. Other learners never see your full name"
+  },
+  "components.DashboardOpenEdxProfile.fullNameInputLabel": {
+    "description": "Label of the openEdx profile \"fullName\" input",
+    "message": "Full name"
+  },
+  "components.DashboardOpenEdxProfile.genderInputLabel": {
+    "description": "Label of the openEdx profile \"gender\" input",
+    "message": "Sex"
+  },
+  "components.DashboardOpenEdxProfile.header": {
+    "description": "Title of the dashboard open edx profile block",
+    "message": "Profile"
+  },
+  "components.DashboardOpenEdxProfile.languageInputDescription": {
+    "description": "Description of the openEdx profile \"langue\" input",
+    "message": "The language used on the website. The website languages are limitated."
+  },
+  "components.DashboardOpenEdxProfile.languageInputLabel": {
+    "description": "Label of the openEdx profile \"langue\" input",
+    "message": "Langue"
+  },
+  "components.DashboardOpenEdxProfile.levelOfEducationInputLabel": {
+    "description": "Label of the openEdx profile \"level of education\" input",
+    "message": "Level of education"
+  },
+  "components.DashboardOpenEdxProfile.usernameInputDescription": {
+    "description": "Description of the openEdx profile \"username\" input",
+    "message": "Your name on FUN-MOOC. You cannot change your username."
+  },
+  "components.DashboardOpenEdxProfile.usernameInputLabel": {
+    "description": "Label of the openEdx profile \"username\" input",
+    "message": "Username"
+  },
+  "components.DashboardOpenEdxProfile.yearOfBirthInputLabel": {
+    "description": "Label of the openEdx profile \"year of birth\" input",
+    "message": "Year of birth"
+  },
   "components.DashboardOrderLoader.loading": {
     "description": "Message displayed while loading an order",
     "message": "Loading order ..."
   },
+  "components.DashboardOrderLoader.signLink": {
+    "description": "Link to sign the contract",
+    "message": "sign your contract"
+  },
   "components.DashboardOrderLoader.signatureNeeded": {
     "description": "Banner displayed when the contract is not signed",
-    "message": "You need to sign your contract before enrolling in a course run"
+    "message": "You need to {signLink} before enrolling in a course run"
   },
   "components.DashboardOrderLoader.wrongLinkedProductError": {
     "description": "Error message displayed when order's linked product type is not handle.",
@@ -826,6 +946,14 @@
   "components.LanguageSelector.switchToLanguage": {
     "description": "Accessible link title for the language switching links in language selector",
     "message": "Переключиться на {language}"
+  },
+  "components.ListFilterOrganization.allOrganizationOption": {
+    "description": "Use as organization filter option label for \"all organizations\"",
+    "message": "All organizations"
+  },
+  "components.ListFilterOrganization.organizationFilterLabel": {
+    "description": "Use as organization filter label",
+    "message": "Organization"
   },
   "components.Modal.closeDialog": {
     "description": "Text for the button to close the modal",
@@ -1231,37 +1359,21 @@
     "description": "Label of the course contracts view.",
     "message": "Contracts"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.contracts.path": {
-    "description": "The path to display a course contracts view.",
-    "message": "/teacher/courses/{courseId}/contracts"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.generalInformation.path": {
-    "description": "The path to display the course general information view.",
-    "message": "/teacher/courses/{courseId}/information"
-  },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.label": {
     "description": "Label of the course root view.",
     "message": "{courseTitle}"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.path": {
-    "description": "The path to display the course view.",
-    "message": "/teacher/courses/{courseId}"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.product.contracts.label": {
     "description": "Label of the product contracts view.",
     "message": "Contracts"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.product.contracts.path": {
-    "description": "The path to display a product contracts view.",
-    "message": "/teacher/courses/{courseId}/products/{courseProductRelationId}/contracts"
-  },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.product.label": {
     "description": "Label of the product view.",
-    "message": "Training"
+    "message": "General information"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.product.path": {
-    "description": "The path to display the product view.",
-    "message": "/teacher/courses/{courseId}/products/{courseProductRelationId}"
+  "components.TeacherDashboard.TeacherDashboardRoutes.course.product.learnerList.label": {
+    "description": "Label to display the product's learner list view.",
+    "message": "Learners"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.generalInformation.label": {
     "description": "Label of the course general information view.",
@@ -1271,73 +1383,41 @@
     "description": "Label of the organization contracts view.",
     "message": "Contracts"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.contracts.path": {
-    "description": "The path to display the organization contracts view.",
-    "message": "/teacher/organizations/{organizationId}/contracts"
-  },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.contracts.label": {
     "description": "Label of the organization course's contracts view.",
     "message": "Contracts"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.contracts.path": {
-    "description": "The path to display the organization course's contracts view.",
-    "message": "/teacher/organizations/{organizationId}/courses/{courseId}/contracts"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformation.label": {
     "description": "Label of the organization course general information view.",
     "message": "General information"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.generalInformation.path": {
-    "description": "The path to display the organization course general information view.",
-    "message": "/teacher/organizations/{organizationId}/courses/{courseId}/information"
-  },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.contracts.label": {
     "description": "Label of the organization product's contracts view.",
     "message": "Contracts"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.contracts.path": {
-    "description": "The path to display the organization product's contracts view.",
-    "message": "/teacher/organizations/{organizationId}/courses/{courseId}/products/{courseProductRelationId}/contracts"
-  },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.label": {
     "description": "Label of the organization product view.",
-    "message": "Training"
+    "message": "General information"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.path": {
-    "description": "The path to display the organization product view.",
-    "message": "/teacher/organizations/{organizationId}/courses/{courseId}/products/{courseProductRelationId}"
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.learnerList.label": {
+    "description": "Label to display the organization product's learner list view.",
+    "message": "Learners"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.label": {
     "description": "Label of the organization courses view.",
     "message": "Courses"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.path": {
-    "description": "The path to display the organization courses view.",
-    "message": "/teacher/organizations/{organizationId}/courses"
-  },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.label": {
     "description": "Label of the organization view.",
     "message": "{organizationTitle}"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.organization.path": {
-    "description": "The path to display the organization view.",
-    "message": "/teacher/organizations/{organizationId}"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.label": {
     "description": "Label of the teacher courses liste view.",
     "message": "All my courses"
   },
-  "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.path": {
-    "description": "The path to display the teacher courses liste view.",
-    "message": "/teacher/courses"
-  },
   "components.TeacherDashboard.TeacherDashboardRoutes.root.label": {
     "description": "Label of the teacher dashboard root view.",
     "message": "Teacher dashboard"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.root.path": {
-    "description": "The path to display the teacher dashboard root view.",
-    "message": "/teacher"
   },
   "components.TeacherDashboardCourseList.emptyList": {
     "description": "Empty placeholder of the dashboard's list of trainings",
@@ -1459,6 +1539,26 @@
     "description": "text display under form elements that are optional",
     "message": "(optional)"
   },
+  "components.useCourseRunPeriodMessage.archivedEnrolledRunPeriod": {
+    "description": "Text to display when a course run is archived and the user is enrolled to.",
+    "message": "You are enrolled for this session."
+  },
+  "components.useCourseRunPeriodMessage.futureEnrolledRunPeriod": {
+    "description": "Text to display when a course run is not yet opened and the user is enrolled to.",
+    "message": "You are enrolled for this session. It starts {relativeStartDate}, the {startDate}."
+  },
+  "components.useCourseRunPeriodMessage.futureRunPeriod": {
+    "description": "Text to display the period of a future course run.",
+    "message": "This session starts {relativeStartDate}, the {startDate}"
+  },
+  "components.useCourseRunPeriodMessage.onGoingEnrolledRunPeriod": {
+    "description": "Text to display when a course run is ongoing and the user is enrolled to.",
+    "message": "You are enrolled for this session. It's open from {startDate} to {endDate}"
+  },
+  "components.useCourseRunPeriodMessage.onGoingRunPeriod": {
+    "description": "Text to display when a course run is on going.",
+    "message": "This session started on {startDate} and will end on {endDate}"
+  },
   "components.useStaticFilters.courses": {
     "description": "localized human_name label for coursesConfig filter name",
     "message": "Курсы"
@@ -1514,6 +1614,14 @@
   "hooks.useContracts.errorSelect": {
     "description": "Error message shown to the user when contracts fetch request fails.",
     "message": "An error occurred while fetching contracts. Please retry later."
+  },
+  "hooks.useCourseOrders.errorNotFound": {
+    "description": "Error message shown to the user when no orders matches.",
+    "message": "Cannot find orders"
+  },
+  "hooks.useCourseOrders.errorSelect": {
+    "description": "Error message shown to the user when orders fetch request fails.",
+    "message": "An error occurred while fetching orders. Please retry later."
   },
   "hooks.useCourseProductRelations.errorGet": {
     "description": "Error message shown to the user when course product relation fetch request fails.",
@@ -1611,6 +1719,10 @@
     "description": "Error message shown to the user when it isn't logged.",
     "message": "You aren't logged in."
   },
+  "hooks.useOpenEdxProfile.errorGet": {
+    "description": "Error message shown to the user when openEdx profile fetch request fails.",
+    "message": "An error occurred while fetching your profile. Please retry later."
+  },
   "hooks.useOrders.errorGet": {
     "description": "Error message shown to the user when orders fetch request fails.",
     "message": "An error occurred while fetching orders. Please retry later."
@@ -1671,6 +1783,86 @@
     "description": "Error message shown to the user when no wishlist matches.",
     "message": "Cannot find the wishlist."
   },
+  "openEdxProfile.gender.female": {
+    "description": "Translation for gender \"female\" in openEdx profile",
+    "message": "Female"
+  },
+  "openEdxProfile.gender.male": {
+    "description": "Translation for gender \"male\" in openEdx profile",
+    "message": "Male"
+  },
+  "openEdxProfile.gender.other": {
+    "description": "Translation for gender \"other\" in openEdx profile",
+    "message": "Other"
+  },
+  "openEdxProfile.levelOfEducation.associateDegree": {
+    "description": "Translation for level of education \"associate degree\" in openEdx profile",
+    "message": "Associate degree"
+  },
+  "openEdxProfile.levelOfEducation.bachelorDegree": {
+    "description": "Translation for level of education \"bachelor degree\" in openEdx profile",
+    "message": "Bachelor degree"
+  },
+  "openEdxProfile.levelOfEducation.elementaryPrimarySchool": {
+    "description": "Translation for level of education \"elementary primary school\" in openEdx profile",
+    "message": "Elementary primary school"
+  },
+  "openEdxProfile.levelOfEducation.juniorSecondaryOrMiddleSchool": {
+    "description": "Translation for level of education \"junior secondary or middle school\" in openEdx profile",
+    "message": "Junior secondary or middle school"
+  },
+  "openEdxProfile.levelOfEducation.masterOrProfessionnalDegree": {
+    "description": "Translation for level of education \"master or professional degree\" in openEdx profile",
+    "message": "Master"
+  },
+  "openEdxProfile.levelOfEducation.none": {
+    "description": "Translation for level of education \"none\" in openEdx profile",
+    "message": "None"
+  },
+  "openEdxProfile.levelOfEducation.other": {
+    "description": "Translation for level of education \"other\" in openEdx profile",
+    "message": "Other"
+  },
+  "openEdxProfile.levelOfEducation.phdOrDoctorate": {
+    "description": "Translation for level of education \"phd or doctorate\" in openEdx profile",
+    "message": "PHD"
+  },
+  "openEdxProfile.levelOfEducation.secondaryOrHighSchool": {
+    "description": "Translation for level of education \"secondary or high school\" in openEdx profile",
+    "message": "Secondary or high school"
+  },
+  "pages.CourseLearnerDataGrid.columnActions": {
+    "description": "Label for actions column",
+    "message": "Actions"
+  },
+  "pages.CourseLearnerDataGrid.columnLearnerName": {
+    "description": "Label for learner's name column",
+    "message": "Learner"
+  },
+  "pages.CourseLearnerDataGrid.columnPurchaseDate": {
+    "description": "Label for enrolled date column",
+    "message": "Enrolled on"
+  },
+  "pages.CourseLearnerDataGrid.columnState": {
+    "description": "Label for state column",
+    "message": "State"
+  },
+  "pages.CourseLearnerDataGrid.contactButton": {
+    "description": "Label for the contact learner button",
+    "message": "Contact"
+  },
+  "pages.TeacherDashboardContractsLayout.BulkDownloadContractButton.bulkDownloadButtonDownloadLabel": {
+    "description": "The label of the bulk download button when the zip archive is ready for download",
+    "message": "Download contracts archive"
+  },
+  "pages.TeacherDashboardContractsLayout.BulkDownloadContractButton.bulkDownloadButtonPendingLabel": {
+    "description": "The label of the bulk download button when archive generation is pending",
+    "message": "Generating contracts archive..."
+  },
+  "pages.TeacherDashboardContractsLayout.BulkDownloadContractButton.bulkDownloadButtonRequestArchiveLabel": {
+    "description": "The label of the bulk download button to request the generation of a zip archive",
+    "message": "Request contracts archive"
+  },
   "pages.TeacherDashboardContractsLayout.ContractFilters.contractSignatureStateFilterLabel": {
     "description": "Contract signature state filter label",
     "message": "Signature state"
@@ -1682,6 +1874,14 @@
   "pages.TeacherDashboardCourseContractsLayout.pageTitle": {
     "description": "Use for the page title of the course's contracts page",
     "message": "Contracts"
+  },
+  "pages.TeacherDashboardCourseLearnersLayout.pageTitle": {
+    "description": "Use for the page title of the course's contracts page",
+    "message": "Learners"
+  },
+  "pages.TeacherDashboardCourseLearnersLayout.totalLearnerText": {
+    "description": "Text to indicate the total number of learner on a training",
+    "message": "{nbLearners} {nbLearners, plural, one {learner is enrolled} other {learners are enrolled}} for this training"
   },
   "pages.TeacherDashboardOrganizationContractsLayout.columnLearnerName": {
     "description": "Label for learnerName column",
