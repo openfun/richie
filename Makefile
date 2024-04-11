@@ -245,7 +245,7 @@ lint-back-bandit: ## lint back-end python sources with bandit
 .PHONY: lint-back-bandit
 
 messages: ## create the .po files used for i18n
-	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py makemessages --keep-pot
+	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py makemessages -a --keep-pot
 .PHONY: messages
 
 migrate: ## perform database migrations
