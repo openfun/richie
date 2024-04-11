@@ -266,7 +266,6 @@ describe('<DahsboardEditCreditCard/>', () => {
 
     // Redirected to the list route.
     screen.getByText('Credit cards');
-    screen.debug();
     const creditCardsContainers = await screen.findAllByTestId(/dashboard-credit-card__/);
     expect(creditCardsContainers.length).toEqual(6);
 
