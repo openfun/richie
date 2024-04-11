@@ -12,7 +12,7 @@ import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { genderMessages, levelOfEducationMessages } from 'hooks/useOpenEdxProfile/utils';
 import { HttpStatusCode } from 'utils/errors/HttpError';
-import DashboardOpenEdxProfile from '.';
+import DashboardOpenEdxProfile, { DEFAULT_DISPLAYED_FORM_VALUE } from '.';
 
 jest.mock('utils/errors/handle');
 jest.mock('utils/context', () => ({
@@ -79,6 +79,45 @@ describe('pages.DashboardOpenEdxProfile', () => {
     expect(
       screen.getByDisplayValue(languageNames.of(openEdxAccount.language_proficiencies[0].code)!),
     ).toBeInTheDocument();
+  });
+
+  it('should render empty profile informations', async () => {
+    const richieUser = UserFactory().one();
+    const openEdxProfile = OpenEdxApiProfileFactory({
+      name: '',
+      country: null,
+      year_of_birth: null,
+      level_of_education: null,
+      gender: null,
+      'pref-lang': undefined,
+      language_proficiencies: [],
+    }).one();
+
+    const { 'pref-lang': prefLang, ...openEdxAccount } = openEdxProfile;
+
+    fetchMock.get(
+      `https://endpoint.test/api/user/v1/accounts/${richieUser.username}`,
+      openEdxAccount,
+    );
+    fetchMock.get(`https://endpoint.test/api/user/v1/preferences/${richieUser.username}`, {
+      'pref-lang': prefLang,
+    });
+
+    render(<DashboardOpenEdxProfile />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    expect(screen.getByText('Profile')).toBeInTheDocument();
+
+    expect(await screen.findByDisplayValue(openEdxAccount.username)).toBeInTheDocument();
+
+    expect(screen.getByLabelText('Full name')).toHaveValue(DEFAULT_DISPLAYED_FORM_VALUE);
+    expect(screen.getByLabelText('Country')).toHaveValue(DEFAULT_DISPLAYED_FORM_VALUE);
+    expect(screen.getByLabelText('Langue')).toHaveValue(DEFAULT_DISPLAYED_FORM_VALUE);
+    expect(screen.getByLabelText('Level of education')).toHaveValue(DEFAULT_DISPLAYED_FORM_VALUE);
+    expect(screen.getByLabelText('Sex')).toHaveValue(DEFAULT_DISPLAYED_FORM_VALUE);
+    expect(screen.getByLabelText('Year of birth')).toHaveValue(DEFAULT_DISPLAYED_FORM_VALUE);
+    expect(screen.getByLabelText('Favorite language')).toHaveValue(DEFAULT_DISPLAYED_FORM_VALUE);
   });
 
   it('should display get error when account request fail', async () => {

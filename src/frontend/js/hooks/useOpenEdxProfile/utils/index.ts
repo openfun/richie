@@ -73,12 +73,12 @@ export const genderMessages = defineMessages<OpenEdxGender>({
 });
 
 export interface OpenEdxProfile {
-  username: Maybe<string>;
+  username: string;
   name: Maybe<string>;
   country: Maybe<string>;
   yearOfBirth: Maybe<string>;
   levelOfEducation: Maybe<string>;
-  email: Maybe<string>;
+  email: string;
   dateJoined: Maybe<string>;
   gender: Maybe<string>;
   language: Maybe<string>;
@@ -87,45 +87,26 @@ export interface OpenEdxProfile {
 
 export const parseOpenEdxApiProfile = (
   intl: IntlShape,
-  data?: OpenEdxApiProfile,
+  data: OpenEdxApiProfile,
 ): OpenEdxProfile => {
   const [languageCode] = intl.locale.split('-');
-  const defaultValues: OpenEdxProfile = {
-    username: ' - ',
-    name: ' - ',
-    email: ' - ',
-    language: ' - ',
-    country: ' - ',
-    levelOfEducation: ' - ',
-    gender: ' - ',
-    yearOfBirth: ' - ',
-    favoriteLanguage: ' - ',
-    dateJoined: undefined,
-  };
-
   const languageNames = new Intl.DisplayNames([intl.locale], { type: 'language' });
-  const parsedData = data
-    ? {
-        username: data.username || defaultValues.username,
-        name: data.name || defaultValues.name,
-        email: data.email || defaultValues.email,
-        yearOfBirth: data.year_of_birth || defaultValues.yearOfBirth,
-        dateJoined: data.date_joined || defaultValues.dateJoined,
-        levelOfEducation: data.level_of_education
-          ? intl.formatMessage(levelOfEducationMessages[data.level_of_education])
-          : defaultValues.levelOfEducation,
-        gender: data.gender
-          ? intl.formatMessage(genderMessages[data.gender])
-          : defaultValues.gender,
-        country: data.country
-          ? countries.getName(data.country, languageCode)
-          : defaultValues.country,
-        language: data['pref-lang'] ? languageNames.of(data['pref-lang']) : defaultValues.language,
-        favoriteLanguage: data.language_proficiencies.length
-          ? languageNames.of(data.language_proficiencies[0].code)
-          : defaultValues.favoriteLanguage,
-      }
-    : defaultValues;
+  const parsedData = {
+    username: data.username,
+    name: data.name || undefined,
+    email: data.email,
+    yearOfBirth: data.year_of_birth || undefined,
+    dateJoined: data.date_joined || undefined,
+    levelOfEducation: data.level_of_education
+      ? intl.formatMessage(levelOfEducationMessages[data.level_of_education])
+      : undefined,
+    gender: data.gender ? intl.formatMessage(genderMessages[data.gender]) : undefined,
+    country: data.country ? countries.getName(data.country, languageCode) : undefined,
+    language: data['pref-lang'] ? languageNames.of(data['pref-lang']) : undefined,
+    favoriteLanguage: data.language_proficiencies.length
+      ? languageNames.of(data.language_proficiencies[0].code)
+      : undefined,
+  };
 
   return parsedData;
 };
