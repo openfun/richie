@@ -44,9 +44,12 @@ export const useTerms = ({
   };
 
   return {
-    termsAccepted,
+    termsAccepted: termsAccepted || !product.contract_definition,
     validateTerms,
     renderTermsCheckbox: () => {
+      if (!product.contract_definition) {
+        return null;
+      }
       return (
         <section className="payment-button__terms">
           <Checkbox

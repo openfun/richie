@@ -4,11 +4,13 @@ import { useAddresses } from 'hooks/useAddresses';
 import { Address } from 'types/Joanie';
 import { CreateAddressFormModal } from 'components/SaleTunnelV2/AddressSelector/CreateAddressFormModal';
 import { EditAddressFormModal } from 'components/SaleTunnelV2/AddressSelector/EditAddressFormModal';
+import { useSaleTunnelV2Context } from 'components/SaleTunnelV2/GenericSaleTunnel';
 
 export const AddressSelector = () => {
   const addresses = useAddresses();
 
-  const [selectedAddress, setSelectedAddress] = useState<Address>();
+  const { billingAddress, setBillingAddress } = useSaleTunnelV2Context();
+
   const options = useMemo(
     () =>
       addresses.items.map((address) => ({
@@ -18,11 +20,18 @@ export const AddressSelector = () => {
     [addresses.items],
   );
 
+  // Set main address as default billing address
   useEffect(() => {
-    if (!selectedAddress) {
-      setSelectedAddress(addresses.items.find((address) => address.is_main));
+    if (!billingAddress) {
+      console.log(
+        'set default',
+        addresses.items.find((address) => address.is_main),
+      );
+      setBillingAddress(addresses.items.find((address) => address.is_main));
     }
   }, [addresses.items]);
+
+  console.log('billingAddress', billingAddress, addresses.items);
 
   const createFormModal = useModal();
   const editFormModal = useModal();
@@ -33,12 +42,12 @@ export const AddressSelector = () => {
         label="Billing address"
         options={options}
         fullWidth
-        value={selectedAddress?.id}
+        value={billingAddress?.id}
         onChange={(e) => {
-          setSelectedAddress(addresses.items.find((address) => address.id === e.target.value));
+          setBillingAddress(addresses.items.find((address) => address.id === e.target.value));
         }}
       />
-      {selectedAddress ? (
+      {billingAddress ? (
         <Button
           size="small"
           icon={<span className="material-icons">edit</span>}
@@ -60,16 +69,16 @@ export const AddressSelector = () => {
       <CreateAddressFormModal
         {...createFormModal}
         onSettled={(newAddress) => {
-          setSelectedAddress(newAddress);
+          setBillingAddress(newAddress);
           createFormModal.close();
         }}
       />
       <EditAddressFormModal
         {...editFormModal}
-        address={selectedAddress!}
+        address={billingAddress!}
         onSettled={(updatedAddress) => {
           editFormModal.close();
-          setSelectedAddress(updatedAddress);
+          setBillingAddress(updatedAddress);
         }}
       />
     </div>

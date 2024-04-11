@@ -162,7 +162,15 @@ const PurchaseButton = ({
         course={course}
         onFinish={onFinish}
       />
-      {true && <SaleTunnelV2 {...saleTunnelModal} product={product} />}
+      {true && (
+        <SaleTunnelV2
+          {...saleTunnelModal}
+          product={product}
+          enrollment={enrollment}
+          orderGroup={orderGroup}
+          course={course}
+        />
+      )}
     </>
   );
 };
