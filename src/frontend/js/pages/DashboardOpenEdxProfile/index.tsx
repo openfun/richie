@@ -106,6 +106,8 @@ const messages = defineMessages({
   },
 });
 
+export const DEFAULT_DISPLAYED_FORM_VALUE = ' - ';
+
 const DashboardOpenEdxProfile = () => {
   const intl = useIntl();
   const { user } = useSession();
@@ -130,7 +132,7 @@ const DashboardOpenEdxProfile = () => {
               name="username"
               label={intl.formatMessage(messages.usernameInputLabel)}
               disabled={true}
-              value={openEdxProfileData?.username}
+              value={openEdxProfileData?.username || DEFAULT_DISPLAYED_FORM_VALUE}
               text={intl.formatMessage(messages.usernameInputDescription)}
             />
           </Form.Row>
@@ -141,7 +143,7 @@ const DashboardOpenEdxProfile = () => {
               name="fullName"
               label={intl.formatMessage(messages.fullNameInputLabel)}
               disabled={true}
-              value={openEdxProfileData?.name}
+              value={openEdxProfileData?.name || DEFAULT_DISPLAYED_FORM_VALUE}
               text={intl.formatMessage(messages.fullNameInputDescription)}
             />
           </Form.Row>
@@ -152,7 +154,7 @@ const DashboardOpenEdxProfile = () => {
               name="email"
               label={intl.formatMessage(messages.emailInputLabel)}
               disabled={true}
-              value={openEdxProfileData?.email}
+              value={openEdxProfileData?.email || DEFAULT_DISPLAYED_FORM_VALUE}
               text={intl.formatMessage(messages.emailInputDescription)}
             />
           </Form.Row>
@@ -163,7 +165,7 @@ const DashboardOpenEdxProfile = () => {
               name="language"
               label={intl.formatMessage(messages.languageInputLabel)}
               disabled={true}
-              value={openEdxProfileData?.language}
+              value={openEdxProfileData?.language || DEFAULT_DISPLAYED_FORM_VALUE}
               text={intl.formatMessage(messages.languageInputDescription)}
             />
           </Form.Row>
@@ -174,7 +176,7 @@ const DashboardOpenEdxProfile = () => {
               name="country"
               label={intl.formatMessage(messages.countryInputLabel)}
               disabled={true}
-              value={openEdxProfileData?.country}
+              value={openEdxProfileData?.country || DEFAULT_DISPLAYED_FORM_VALUE}
             />
           </Form.Row>
         </DashboardBox>
@@ -186,7 +188,7 @@ const DashboardOpenEdxProfile = () => {
               name="levelOfEducation"
               label={intl.formatMessage(messages.levelOfEducationInputLabel)}
               disabled={true}
-              value={openEdxProfileData?.levelOfEducation}
+              value={openEdxProfileData?.levelOfEducation || DEFAULT_DISPLAYED_FORM_VALUE}
             />
           </Form.Row>
           <Form.Row>
@@ -196,7 +198,7 @@ const DashboardOpenEdxProfile = () => {
               name="gender"
               label={intl.formatMessage(messages.genderInputLabel)}
               disabled={true}
-              value={openEdxProfileData?.gender}
+              value={openEdxProfileData?.gender || DEFAULT_DISPLAYED_FORM_VALUE}
             />
           </Form.Row>
           <Form.Row>
@@ -206,7 +208,7 @@ const DashboardOpenEdxProfile = () => {
               name="yearOfBirth"
               label={intl.formatMessage(messages.yearOfBirthInputLabel)}
               disabled={true}
-              value={openEdxProfileData?.yearOfBirth}
+              value={openEdxProfileData?.yearOfBirth || DEFAULT_DISPLAYED_FORM_VALUE}
             />
           </Form.Row>
           <Form.Row>
@@ -216,7 +218,7 @@ const DashboardOpenEdxProfile = () => {
               name="favoriteLanguage"
               label={intl.formatMessage(messages.favoriteLanguageInputLabel)}
               disabled={true}
-              value={openEdxProfileData?.favoriteLanguage}
+              value={openEdxProfileData?.favoriteLanguage || DEFAULT_DISPLAYED_FORM_VALUE}
             />
           </Form.Row>
         </DashboardBox>
