@@ -66,6 +66,9 @@ module.exports = {
         },
       },
       components: {
+        tabs: {
+          'border-bottom-color': 'ref(theme.colors.greyscale-300)',
+        },
         button: {
           'font-family': 'Montserrat',
         },
