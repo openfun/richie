@@ -40,6 +40,13 @@ export const LearnerDashboardSidebar = (props: Partial<DashboardSidebarProps>) =
       ].map((path) => ({
         to: generatePath(path),
         label: getRouteLabel(path),
+        activePaths:
+          path === LearnerDashboardPaths.CERTIFICATES
+            ? [
+                LearnerDashboardPaths.ORDER_CERTIFICATES,
+                LearnerDashboardPaths.ENROLLMENT_CERTIFICATES,
+              ]
+            : undefined,
       })),
     [],
   );

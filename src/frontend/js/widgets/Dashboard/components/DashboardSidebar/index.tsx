@@ -8,6 +8,7 @@ export interface MenuLink {
   to: string;
   label: string;
   component?: ReactNode;
+  activePaths?: string[];
 }
 
 export interface DashboardSidebarProps extends PropsWithChildren {

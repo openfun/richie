@@ -11,10 +11,13 @@ interface MenuNavLinkProps {
 
 const MenuNavLink = ({ link, badgeCount }: MenuNavLinkProps) => {
   const location = useLocation();
+  const activePaths = [...(link.activePaths || []), link.to];
+  const isMenuNavLinkActive = activePaths.some((path) => isMenuLinkActive(path, location));
+
   return (
     <li
       className={classNames('dashboard-sidebar__container__nav__item', {
-        active: isMenuLinkActive(link.to, location),
+        active: isMenuNavLinkActive,
       })}
     >
       <NavLink to={link.to} end>
