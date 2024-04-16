@@ -2,7 +2,9 @@
   "extends": [
     "github>openfun/renovate-configuration"
   ],
-  "ignorePaths": ["cookiecutter/**"],
+  "ignorePaths": [
+    "cookiecutter/**"
+  ],
   "packageRules": [
     {
       "enabled": false,
@@ -13,7 +15,8 @@
       "matchPackageNames": [
         "node",
         "bootstrap",
-        "node-fetch"
+        "node-fetch",
+        "eslint"
       ]
     },
     {
