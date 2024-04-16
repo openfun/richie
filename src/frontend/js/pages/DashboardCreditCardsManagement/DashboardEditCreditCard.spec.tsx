@@ -282,7 +282,7 @@ describe('<DahsboardEditCreditCard/>', () => {
       );
   });
 
-  it.only('deletes a credit card', async () => {
+  it('deletes a credit card', async () => {
     const creditCard = CreditCardFactory().one();
     let creditCards = [...CreditCardFactory().many(5), creditCard];
 
