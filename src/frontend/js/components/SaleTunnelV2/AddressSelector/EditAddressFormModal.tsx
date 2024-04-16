@@ -1,4 +1,5 @@
 import { Button, Modal, ModalSize } from '@openfun/cunningham-react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { AddressFormModalProps } from 'components/SaleTunnelV2/AddressSelector/CreateAddressFormModal';
 import { Address } from 'types/Joanie';
 import { AddressFormValues, useDashboardAddressForm } from 'hooks/useDashboardAddressForm';
@@ -6,11 +7,25 @@ import { useAddressesManagement } from 'hooks/useAddressesManagement';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 
+const messages = defineMessages({
+  title: {
+    defaultMessage: 'Edit address',
+    description: 'Edit address modal title.',
+    id: 'components.SaleTunnel.AddressSelector.EditAddressFormModal.title',
+  },
+  save: {
+    defaultMessage: 'Save',
+    description: 'Save button label.',
+    id: 'components.SaleTunnel.AddressSelector.EditAddressFormModal.save',
+  },
+});
+
 export const EditAddressFormModal = ({
   address,
   onSettled,
   ...props
 }: AddressFormModalProps & { address: Address }) => {
+  const intl = useIntl();
   const { FormView, handleSubmit, reset } = useDashboardAddressForm(address);
   const {
     methods: { update },
@@ -33,10 +48,10 @@ export const EditAddressFormModal = ({
     <Modal
       {...props}
       size={ModalSize.MEDIUM}
-      title="Edit address"
+      title={intl.formatMessage(messages.title)}
       actions={
         <Button color="primary" size="small" onClick={handleSubmit(onSubmit)}>
-          Save
+          <FormattedMessage {...messages.save} />
         </Button>
       }
     >

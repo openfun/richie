@@ -1,15 +1,30 @@
 import { Button, Modal, ModalProps, ModalSize } from '@openfun/cunningham-react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Address } from 'types/Joanie';
 import { AddressFormValues, useDashboardAddressForm } from 'hooks/useDashboardAddressForm';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 
+const messages = defineMessages({
+  title: {
+    defaultMessage: 'Add address',
+    description: 'Add address modal title.',
+    id: 'components.SaleTunnel.AddressSelector.CreateAddressFormModal.title',
+  },
+  submit: {
+    defaultMessage: 'Submit',
+    description: 'Submit button label.',
+    id: 'components.SaleTunnel.AddressSelector.CreateAddressFormModal.submit',
+  },
+});
+
 export interface AddressFormModalProps extends Pick<ModalProps, 'isOpen' | 'onClose'> {
   onSettled?: (address: Address) => void;
 }
 
 export const CreateAddressFormModal = (props: AddressFormModalProps) => {
+  const intl = useIntl();
   const { FormView, handleSubmit, reset } = useDashboardAddressForm();
   const {
     methods: { create },
@@ -29,10 +44,10 @@ export const CreateAddressFormModal = (props: AddressFormModalProps) => {
     <Modal
       {...props}
       size={ModalSize.MEDIUM}
-      title="Add address"
+      title={intl.formatMessage(messages.title)}
       actions={
         <Button color="primary" size="small" onClick={handleSubmit(onSubmit)}>
-          Submit
+          <FormattedMessage {...messages.submit} />
         </Button>
       }
     >

@@ -166,6 +166,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
     product_id: productId,
     course_id: course.code,
   });
+
   const product = courseProductRelation?.product;
   const { item: productOrder, states: orderQueryStates } = useProductOrder({
     productId,
@@ -238,7 +239,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
           <footer className="product-widget__footer">
             <CourseProductItemFooter
               course={course}
-              product={product as CredentialProduct}
+              courseProductRelation={courseProductRelation}
               orderGroups={orderGroups}
               orderGroupsAvailable={orderGroupsAvailable}
               canPurchase={canPurchase}

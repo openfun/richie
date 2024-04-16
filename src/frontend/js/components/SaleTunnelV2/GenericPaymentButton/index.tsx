@@ -15,6 +15,7 @@ import { HttpError } from 'utils/errors/HttpError';
 import { PAYMENT_SETTINGS } from 'settings';
 import { Spinner } from 'components/Spinner';
 import PaymentInterface from 'components/PaymentButton/components/PaymentInterfaces';
+import { useMatchMediaLg } from 'hooks/useMatchMedia';
 
 const messages = defineMessages({
   errorAbort: {
@@ -75,17 +76,17 @@ enum ComponentStates {
 }
 
 interface Props {
-  eventKey: string;
   buildOrderPayload: (
     payload: Pick<OrderCreationPayload, 'product_id' | 'has_consent_to_terms'>,
   ) => OrderCreationPayload;
 }
 
-export const GenericPaymentButton = ({ eventKey, buildOrderPayload }: Props) => {
+export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
   const intl = useIntl();
   const API = useJoanieApi();
   const timeoutRef = useRef<NodeJS.Timeout>();
   const {
+    eventKey,
     order,
     billingAddress,
     creditCard,
@@ -97,6 +98,14 @@ export const GenericPaymentButton = ({ eventKey, buildOrderPayload }: Props) => 
   const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<PaymentErrorMessageId>(PaymentErrorMessageId.ERROR_DEFAULT);
+  const isMobile = useMatchMediaLg();
+
+  // This pattern is ugly but I couldn't find a better way to achieve it in a nicer way.
+  // Without this, when we call onPaymentSuccess() directly from the after polling function,
+  // it is not the latest version of the function, so the value of `order` inside the context function (defined in GenericSaleTunnel.tsx)
+  // will be undefined, then calling onFinish(order) with an undefined order.
+  const onPaymentSuccessRef = useRef(onPaymentSuccess);
+  onPaymentSuccessRef.current = onPaymentSuccess;
 
   const { validateTerms, termsAccepted, renderTermsCheckbox } = useTerms({
     product,
@@ -218,7 +227,7 @@ export const GenericPaymentButton = ({ eventKey, buildOrderPayload }: Props) => 
         if (isValidated) {
           setState(ComponentStates.IDLE);
           timeoutRef.current = undefined;
-          onPaymentSuccess();
+          onPaymentSuccessRef.current();
         } else {
           round++;
           timeoutRef.current = setTimeout(checkOrderValidity, PAYMENT_SETTINGS.pollInterval);
@@ -240,6 +249,7 @@ export const GenericPaymentButton = ({ eventKey, buildOrderPayload }: Props) => 
       <Button
         disabled={state === ComponentStates.LOADING}
         onClick={createOrder}
+        fullWidth={isMobile}
         {...(state === ComponentStates.ERROR && {
           'aria-describedby': 'sale-tunnel-payment-error',
         })}

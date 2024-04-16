@@ -73,6 +73,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
           product={product}
           enrollment={enrollment}
           onFinish={(order) => {
+            console.log('FINISH!', order);
             /**
              * As we do not refetch enrollments in DashboardCourses after SaleTunnel cache invalidation ( to avoid
              * scroll reset - and SaleTunnel modal unmounting too early caused by list reset ) we need to manually

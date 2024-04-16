@@ -7,15 +7,72 @@ import {
   RadioGroup,
   useModal,
 } from '@openfun/cunningham-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { CreditCardBrandLogo } from 'pages/DashboardCreditCardsManagement/CreditCardBrandLogo';
 import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { CreditCard, CreditCardBrand } from 'types/Joanie';
 import { useCreditCardsManagement } from 'hooks/useCreditCardsManagement';
 import { Spinner } from 'components/Spinner';
-import { Maybe } from 'types/utils';
+import { useSaleTunnelV2Context } from 'components/SaleTunnelV2/GenericSaleTunnel';
+import { CreditCardExpirationStatus, CreditCardHelper } from 'utils/CreditCardHelper';
+
+const messages = defineMessages({
+  endsWith: {
+    id: 'components.SaleTunnel.CreditCardSelector.endsWith',
+    description: 'Text to show the credit card code',
+    defaultMessage: 'Ends with •••• {code}',
+  },
+  expiration: {
+    id: 'components.SaleTunnel.CreditCardSelector.expiration',
+    description: 'Text to show the credit card expiration date',
+    defaultMessage: 'Expires on {month}/{year}',
+  },
+  expired: {
+    id: 'components.SaleTunnel.CreditCardSelector.expired',
+    description: 'Text to show the credit card expired date',
+    defaultMessage: 'Expired since {month}/{year}',
+  },
+  title: {
+    id: 'components.SaleTunnel.CreditCardSelector.title',
+    description: 'Title for the credit card section',
+    defaultMessage: 'Payment method',
+  },
+  description: {
+    id: 'components.SaleTunnel.CreditCardSelector.description',
+    description: 'Description for the credit card section',
+    defaultMessage: 'Choose your payment method or add a new one during the payment.',
+  },
+  creditCardEmptyInlineDescription: {
+    id: 'components.SaleTunnel.CreditCardSelector.creditCardEmptyInlineDescription',
+    description: 'Description for the empty credit card inline',
+    defaultMessage: 'Add new credit card during payment',
+  },
+  modalTitle: {
+    id: 'components.SaleTunnel.CreditCardSelector.modalTitle',
+    description: 'Title for the credit card modal',
+    defaultMessage: 'Choose credit card',
+  },
+  modalValidate: {
+    id: 'components.SaleTunnel.CreditCardSelector.modalValidate',
+    description: 'Validate button for the credit card modal',
+    defaultMessage: 'Validate',
+  },
+  modalDescription: {
+    id: 'components.SaleTunnel.CreditCardSelector.modalDescription',
+    description: 'Description for the credit card modal',
+    defaultMessage:
+      'Choose the default payment method you want to use for this order and the upcoming payments.',
+  },
+  editCreditCardAriaLabel: {
+    id: 'components.SaleTunnel.CreditCardSelector.editCreditCardAriaLabel',
+    description: 'Aria label for the edit credit card button',
+    defaultMessage: 'Change credit card',
+  },
+});
 
 export const CreditCardSelector = () => {
+  const intl = useIntl();
   const modal = useModal({ isOpenDefault: false });
 
   const {
@@ -23,7 +80,7 @@ export const CreditCardSelector = () => {
     items: creditCards,
   } = useCreditCardsManagement();
 
-  const [creditCard, setCreditCard] = useState<Maybe<CreditCard>>();
+  const { creditCard, setCreditCard } = useSaleTunnelV2Context();
 
   const getDefaultCreditCard = () => {
     if (creditCards.length === 0) {
@@ -44,9 +101,11 @@ export const CreditCardSelector = () => {
 
   return (
     <div className="credit-card-selector">
-      <h4 className="block-title mb-t">Payment method</h4>
+      <h4 className="block-title mb-t">
+        <FormattedMessage {...messages.title} />
+      </h4>
       <div className="description mb-s">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin elementum.
+        <FormattedMessage {...messages.description} />
       </div>
       {fetching ? (
         <Spinner />
@@ -60,6 +119,7 @@ export const CreditCardSelector = () => {
               color="tertiary-text"
               size="medium"
               onClick={modal.open}
+              aria-label={intl.formatMessage(messages.editCreditCardAriaLabel)}
             />
           </div>
           {/* This way we make sure the internal state of the modal is reset each time */}
@@ -80,6 +140,12 @@ export const CreditCardSelector = () => {
 };
 
 const CreditCardInline = ({ creditCard }: { creditCard: CreditCard }) => {
+  const expirationState = useMemo(
+    () => CreditCardHelper.getExpirationState(creditCard),
+    [creditCard],
+  );
+  const expirationMessage =
+    expirationState === CreditCardExpirationStatus.EXPIRED ? messages.expired : messages.expiration;
   return (
     <div className="credit-card-selector__card">
       <CreditCardBrandLogo
@@ -89,9 +155,22 @@ const CreditCardInline = ({ creditCard }: { creditCard: CreditCard }) => {
       <div className="credit-card-selector__card__info">
         <div className="credit-card-selector__card__info__title">{creditCard.title}</div>
         <div className="credit-card-selector__card__info__meta">
-          <div>Ends with •••• 9821</div>
+          <div>
+            <FormattedMessage {...messages.endsWith} values={{ code: creditCard.last_numbers }} />
+          </div>
           <div>|</div>
-          <div>Expires on 02/2032</div>
+          <div>
+            {' '}
+            <FormattedMessage
+              {...expirationMessage}
+              values={{
+                month: creditCard.expiration_month.toLocaleString(undefined, {
+                  minimumIntegerDigits: 2,
+                }),
+                year: creditCard.expiration_year,
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -106,7 +185,9 @@ const CreditCardEmptyInline = () => {
       </div>
       <div className="credit-card-selector__card__info">
         <div className="credit-card-selector__card__info__meta">
-          <div>Add new credit card during payment</div>
+          <div>
+            <FormattedMessage {...messages.creditCardEmptyInlineDescription} />
+          </div>
         </div>
       </div>
     </div>
@@ -123,23 +204,23 @@ const CreditCardSelectorModal = ({
   onChange,
   ...props
 }: CreditCardSelectorModalProps) => {
+  const intl = useIntl();
   const { items: creditCards } = useCreditCardsManagement();
   const [selected, setSelected] = useState(defaultCreditCard);
   return (
     <Modal
       {...props}
       size={ModalSize.MEDIUM}
-      title="Choose credit card"
+      title={intl.formatMessage(messages.modalTitle)}
       actions={
         <Button color="primary" size="small" fullWidth={true} onClick={() => onChange(selected)}>
-          Validate
+          <FormattedMessage {...messages.modalTitle} />
         </Button>
       }
     >
       <div className="credit-card-selector__modal">
         <div className="description mb-s">
-          Choose the default payment method you want to use for this order and the upcoming
-          payments.
+          <FormattedMessage {...messages.modalDescription} />
         </div>
         <RadioGroup fullWidth={true}>
           {creditCards.map((creditCard) => (

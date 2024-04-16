@@ -1,14 +1,34 @@
 import { Button, Select, useModal } from '@openfun/cunningham-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useAddresses } from 'hooks/useAddresses';
 import { Address } from 'types/Joanie';
 import { CreateAddressFormModal } from 'components/SaleTunnelV2/AddressSelector/CreateAddressFormModal';
 import { EditAddressFormModal } from 'components/SaleTunnelV2/AddressSelector/EditAddressFormModal';
 import { useSaleTunnelV2Context } from 'components/SaleTunnelV2/GenericSaleTunnel';
+import { useMatchMediaLg } from 'hooks/useMatchMedia';
+
+const messages = defineMessages({
+  label: {
+    defaultMessage: 'Billing address',
+    description: 'Address field label.',
+    id: 'components.SaleTunnel.AddressSelector.label',
+  },
+  edit: {
+    defaultMessage: 'Edit',
+    description: 'Address edit button.',
+    id: 'components.SaleTunnel.AddressSelector.edit',
+  },
+  create: {
+    defaultMessage: 'Create',
+    description: 'Address create button.',
+    id: 'components.SaleTunnel.AddressSelector.create',
+  },
+});
 
 export const AddressSelector = () => {
+  const intl = useIntl();
   const addresses = useAddresses();
-
   const { billingAddress, setBillingAddress } = useSaleTunnelV2Context();
 
   const options = useMemo(
@@ -23,23 +43,18 @@ export const AddressSelector = () => {
   // Set main address as default billing address
   useEffect(() => {
     if (!billingAddress) {
-      console.log(
-        'set default',
-        addresses.items.find((address) => address.is_main),
-      );
       setBillingAddress(addresses.items.find((address) => address.is_main));
     }
   }, [addresses.items]);
 
-  console.log('billingAddress', billingAddress, addresses.items);
-
   const createFormModal = useModal();
   const editFormModal = useModal();
+  const isMobile = useMatchMediaLg();
 
   return (
     <div className="mt-s sale-tunnel__information__billing-address">
       <Select
-        label="Billing address"
+        label={intl.formatMessage(messages.label)}
         options={options}
         fullWidth
         value={billingAddress?.id}
@@ -53,8 +68,9 @@ export const AddressSelector = () => {
           icon={<span className="material-icons">edit</span>}
           color="tertiary"
           onClick={editFormModal.open}
+          fullWidth={isMobile}
         >
-          Edit
+          <FormattedMessage {...messages.edit} />
         </Button>
       ) : (
         <Button
@@ -62,8 +78,9 @@ export const AddressSelector = () => {
           icon={<span className="material-icons">add</span>}
           color="primary"
           onClick={createFormModal.open}
+          fullWidth={isMobile}
         >
-          Create
+          <FormattedMessage {...messages.create} />
         </Button>
       )}
       <CreateAddressFormModal
@@ -85,7 +102,7 @@ export const AddressSelector = () => {
   );
 };
 
-function getAddressLabel(address: Address) {
+export function getAddressLabel(address: Address) {
   const part = [
     address.first_name,
     address.last_name,

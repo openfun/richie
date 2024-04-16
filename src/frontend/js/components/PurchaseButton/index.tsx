@@ -7,6 +7,7 @@ import * as Joanie from 'types/Joanie';
 import SaleTunnel, { SaleTunnelProps } from 'components/SaleTunnel';
 import { isOpenedCourseRunCertificate, isOpenedCourseRunCredential } from 'utils/CourseRuns';
 import { SaleTunnelV2 } from 'components/SaleTunnelV2';
+import { Organization } from 'types/Joanie';
 
 const messages = defineMessages({
   loginToPurchase: {
@@ -47,6 +48,7 @@ interface PurchaseButtonPropsBase {
   className?: string;
   buttonProps?: ButtonProps;
   onFinish?: SaleTunnelProps['onFinish'];
+  organizations?: Organization[];
 }
 
 interface CredentialPurchaseButtonProps extends PurchaseButtonPropsBase {
@@ -66,6 +68,7 @@ const PurchaseButton = ({
   course,
   enrollment,
   orderGroup,
+  organizations,
   disabled = false,
   className,
   buttonProps,
@@ -108,7 +111,7 @@ const PurchaseButton = ({
   const isPurchasable = hasAtLeastOneRemainingOrder && hasAtLeastOneCourseRun;
 
   const saleTunnelModal = useModal({
-    isOpenDefault: true,
+    isOpenDefault: false,
   });
 
   return (
@@ -166,9 +169,11 @@ const PurchaseButton = ({
         <SaleTunnelV2
           {...saleTunnelModal}
           product={product}
+          organizations={organizations}
           enrollment={enrollment}
           orderGroup={orderGroup}
           course={course}
+          onFinish={onFinish}
         />
       )}
     </>

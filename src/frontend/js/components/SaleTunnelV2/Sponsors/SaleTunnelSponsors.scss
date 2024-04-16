@@ -3,6 +3,8 @@
   display: flex;
   gap: 8px;
   justify-content: center;
+  overflow: hidden;
+  flex-wrap: wrap;
 
   img {
     height: 50px;

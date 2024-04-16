@@ -34,4 +34,10 @@ const useMatchMedia = (query: string): boolean => {
   return matches;
 };
 
+const emCalc = (px: number) => {
+  return px / 16;
+};
+
+export const useMatchMediaLg = () => useMatchMedia(`(max-width: ${emCalc(992)}em)`);
+
 export default useMatchMedia;
