@@ -5,8 +5,11 @@ import { StorybookHelper } from 'utils/StorybookHelper';
 import {
   CourseLightFactory,
   CourseProductRelationFactory,
+  CourseRunFactory,
   CredentialOrderFactory,
   CredentialProductFactory,
+  EnrollmentFactory,
+  TargetCourseFactory,
 } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { UserFactory } from 'utils/test/factories/richie';
@@ -69,8 +72,24 @@ export const WithValidatedOrder: Story = {
     productId: 'AAA',
     course: CourseLightFactory({ code: 'BBB' }).one(),
   },
-  render: (args) =>
-    render(args, { order: CredentialOrderFactory({ state: OrderState.VALIDATED }).one() }),
+  render: (args) => {
+    const courseRunWithEnrollment = CourseRunFactory().one();
+    return render(args, {
+      order: CredentialOrderFactory({
+        state: OrderState.VALIDATED,
+        target_enrollments: EnrollmentFactory({
+          is_active: true,
+          course_run: courseRunWithEnrollment,
+        }).many(1),
+        target_courses: [
+          TargetCourseFactory({
+            course_runs: [courseRunWithEnrollment, ...CourseRunFactory().many(2)],
+          }).one(),
+          ...TargetCourseFactory().many(2),
+        ],
+      }).one(),
+    });
+  },
 };
 
 export const WithSubmittedOrder: Story = {
