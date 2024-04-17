@@ -19,7 +19,7 @@ export const browserDownloadFromBlob = async (
 
     if (newWindow) {
       window.open(url);
-      return;
+      return true;
     }
 
     const $link = document.createElement('a');
