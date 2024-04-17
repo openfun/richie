@@ -196,4 +196,13 @@ describe('<Dashboard />', () => {
     const sidebar = screen.getByTestId('dashboard__sidebar');
     getByText(sidebar, user.full_name!, { exact: false });
   });
+
+  it("should redirect to 404 page when route doesn't exist", async () => {
+    render(<DashboardTest initialRoute="/dummy/route" />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
+
+    expectUrlMatchLocationDisplayed('/dummy/route');
+    expect(screen.getByRole('heading', { name: /Page not found/ }));
+  });
 });

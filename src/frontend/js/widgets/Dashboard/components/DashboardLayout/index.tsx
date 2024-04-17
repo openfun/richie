@@ -6,6 +6,7 @@ import { DashboardBreadcrumbs } from 'widgets/Dashboard/components/DashboardBrea
 
 interface DashboardLayoutProps extends PropsWithChildren<any> {
   sidebar?: ReactNode;
+  hideSidebar?: boolean;
   filters?: ReactNode;
   className?: string;
 }
@@ -15,11 +16,14 @@ export const DashboardLayout = ({
   sidebar,
   filters,
   className,
+  hideSidebar = false,
 }: DashboardLayoutProps) => {
   const location = useLocation();
   return (
     <div className={c('dashboard', className)}>
-      <div className="dashboard__sidebar">{sidebar || <LearnerDashboardSidebar />}</div>
+      <div className="dashboard__sidebar">
+        {!hideSidebar && (sidebar || <LearnerDashboardSidebar />)}
+      </div>
       <main className="dashboard__main">
         <header>
           <DashboardBreadcrumbs />
