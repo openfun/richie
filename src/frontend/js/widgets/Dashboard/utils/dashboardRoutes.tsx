@@ -5,6 +5,7 @@ import type {
   PrimitiveType,
 } from 'intl-messageformat';
 import { generatePath, Navigate, RouteObject } from 'react-router-dom';
+import DashboardPageNotFound from 'pages/DashboardPageNotFound';
 import { DashboardLayoutRoute } from 'widgets/Dashboard/components/DashboardLayoutRoute';
 import { getLearnerDashboardRoutes } from 'widgets/Dashboard/utils/learnerRoutes';
 import { getTeacherDashboardRoutes } from 'widgets/Dashboard/utils/teacherRoutes';
@@ -33,6 +34,13 @@ export function getDashboardRoutes() {
       path: '/',
       element: <DashboardLayoutRoute />,
       children: [
+        {
+          path: '*',
+          element: <DashboardPageNotFound />,
+          handle: {
+            renderLayout: true,
+          },
+        },
         {
           index: true,
           element: <Navigate to={generatePath(LearnerDashboardPaths.COURSES)} replace />,
