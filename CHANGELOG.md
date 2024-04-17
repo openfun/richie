@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Added
 
+- Teacher dashboard route now redirect to learner dashboard route when
+  the user isn't authorized.
 - Add two new sections in DjangoCMS courses: Accessibility and Required
   Equipment.
 - Ongoing product displayed on the syllabus without active enrollment 

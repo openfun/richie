@@ -16,6 +16,9 @@ import {
   LEARNER_DASHBOARD_ROUTE_LABELS,
   LearnerDashboardPaths,
 } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import ProtectedRoute from 'components/ProtectedRoute';
+import { useJoanieUserAbilities } from 'hooks/useJoanieUserAbilities';
+import { abilityActions } from 'utils/AbilitiesHelper';
 
 export interface DashboardRouteHandle {
   crumbLabel?: MessageDescriptor;
@@ -23,6 +26,8 @@ export interface DashboardRouteHandle {
 }
 
 export function getDashboardRoutes() {
+  const joanieUserAbilities = useJoanieUserAbilities();
+
   const routes: RouteObject[] = [
     {
       path: '/',
@@ -33,17 +38,33 @@ export function getDashboardRoutes() {
           element: <Navigate to={generatePath(LearnerDashboardPaths.COURSES)} replace />,
         },
         ...getLearnerDashboardRoutes(),
-        {
-          path: generatePath(TeacherDashboardPaths.ROOT),
-          handle: {
-            renderLayout: true,
-            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_COURSES],
-          },
-          children: getTeacherDashboardRoutes(),
-        },
       ],
     },
   ];
+
+  if (joanieUserAbilities === undefined) {
+    return routes;
+  }
+
+  routes.push({
+    element: (
+      <ProtectedRoute
+        isAllowed={joanieUserAbilities?.can(abilityActions.ACCESS_TEACHER_DASHBOARD)}
+        redirectPath="/"
+      />
+    ),
+    children: [
+      {
+        path: generatePath(TeacherDashboardPaths.ROOT),
+        handle: {
+          renderLayout: true,
+          crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.TEACHER_COURSES],
+        },
+        children: getTeacherDashboardRoutes(),
+      },
+    ],
+  });
+
   return routes;
 }
 
