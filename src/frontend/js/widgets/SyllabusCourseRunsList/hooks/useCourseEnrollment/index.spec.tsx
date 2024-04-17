@@ -15,6 +15,7 @@ import { User } from 'types/User';
 import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/hooks/useCourseEnrollment/index';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { BaseAppWrapper } from 'utils/test/wrappers/BaseAppWrapper';
+import * as apiLmsJoanie from 'api/lms/joanie';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -87,5 +88,36 @@ describe('useCourseEnrollment', () => {
     await waitFor(() =>
       expect(result.current.enrollmentIsActive).toStrictEqual(enrollmentResponse.is_active),
     );
+  });
+
+  it('should not retrieves product enrollment when enabled is false', async () => {
+    const spyIsJoanieResourceLinkProduct = jest.spyOn(apiLmsJoanie, 'isJoanieResourceLinkProduct');
+    spyIsJoanieResourceLinkProduct.mockImplementation(() => true);
+
+    const user: User = UserFactory().one();
+    const courseRun: CourseRun = CourseRunFactory().one();
+
+    const enrollmentResponse = { title: courseRun.id, is_active: faker.datatype.boolean() };
+    const enrollementDefered = new Deferred();
+    fetchMock.get(
+      `${endpoint}/api/enrollment/v1/enrollment/${user.username},${courseRun.resource_link}`,
+      enrollementDefered.promise,
+    );
+
+    const { result } = renderHook(() => useCourseEnrollment(courseRun.resource_link), {
+      wrapper: wrapper(createTestQueryClient({ user })),
+    });
+
+    await act(async () => {
+      enrollementDefered.resolve(enrollmentResponse);
+    });
+
+    expect(fetchMock.called()).toBeTruthy();
+    await waitFor(() => expect(result.current.enrollment).toStrictEqual(enrollmentResponse));
+    await waitFor(() =>
+      expect(result.current.enrollmentIsActive).toStrictEqual(enrollmentResponse.is_active),
+    );
+
+    spyIsJoanieResourceLinkProduct.mockRestore();
   });
 });

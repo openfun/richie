@@ -12,9 +12,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add two new sections in DjangoCMS courses: Accessibility and Required
   Equipment.
+- Ongoing product displayed on the syllabus without active enrollment 
+  now link to the order details page in the learner dashboard.
 
 ## Fixed
 
+- Ongoing product displayed on the syllabus with an active enrollment 
+  now link to the order details page in the learner dashboard instead of 
+  OpenEdx course.
 - Downloaded contract archive on product page was broken, it now works
   properly by sending the course_product_relation_id in the archive 
   creation request.
@@ -22,6 +27,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   message was displayed on successful download.
 
 ## [2.25.1]
+
+## Added
+
 
 ### Fixed
 

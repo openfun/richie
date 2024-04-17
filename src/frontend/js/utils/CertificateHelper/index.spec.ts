@@ -1,10 +1,10 @@
 import {
   CertificateFactory,
-  CertificateOrderFactory,
   CourseLightFactory,
   CourseRunFactory,
-  CredentialOrderFactory,
   EnrollmentLightFactory,
+  NestedCertificateOrderFactory,
+  NestedCredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import { CertificateHelper } from '.';
 
@@ -17,31 +17,40 @@ describe('CertificateHelper', () => {
   );
 
   it.each([
-    CertificateFactory({
-      enrollment: EnrollmentLightFactory({
-        course_run: CourseRunFactory({
-          course: CourseLightFactory({ title: 'Course 1' }).one(),
-        }).one(),
-      }).one(),
-      order: null,
-    }).one(),
-    CertificateFactory({
-      enrollment: null,
-      order: CredentialOrderFactory({
-        course: CourseLightFactory({ title: 'Course 1' }).one(),
-      }).one(),
-    }).one(),
-    CertificateFactory({
-      enrollment: null,
-      order: CertificateOrderFactory({
+    {
+      testLabel: 'for enrollment certificate',
+      certificate: CertificateFactory({
         enrollment: EnrollmentLightFactory({
           course_run: CourseRunFactory({
             course: CourseLightFactory({ title: 'Course 1' }).one(),
           }).one(),
         }).one(),
+        order: null,
       }).one(),
-    }).one(),
-  ])('should return the course from the certificate linked to ', (certificate) => {
+    },
+    {
+      testLabel: 'for credential order certificate',
+      certificate: CertificateFactory({
+        enrollment: null,
+        order: NestedCredentialOrderFactory({
+          course: CourseLightFactory({ title: 'Course 1' }).one(),
+        }).one(),
+      }).one(),
+    },
+    {
+      testLabel: 'for certificate order certificate',
+      certificate: CertificateFactory({
+        enrollment: null,
+        order: NestedCertificateOrderFactory({
+          enrollment: EnrollmentLightFactory({
+            course_run: CourseRunFactory({
+              course: CourseLightFactory({ title: 'Course 1' }).one(),
+            }).one(),
+          }).one(),
+        }).one(),
+      }).one(),
+    },
+  ])('should return the course from the certificate linked to $testLabel', ({ certificate }) => {
     expect(CertificateHelper.getCourse(certificate)?.title).toEqual('Course 1');
   });
 });

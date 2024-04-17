@@ -16,7 +16,7 @@ import { useSessionMutation } from 'utils/react-query/useSessionMutation';
  *
  * @param resourceLink
  */
-const useCourseEnrollment = (resourceLink: string) => {
+const useCourseEnrollment = (resourceLink: string, enabled: boolean = true) => {
   const { user } = useSession();
   const queryClient = useQueryClient();
   const EnrollmentAPI = EnrollmentApiInterface(resourceLink);
@@ -26,12 +26,13 @@ const useCourseEnrollment = (resourceLink: string) => {
     async () => {
       return EnrollmentAPI.get(resourceLink, user!);
     },
+    { enabled: enabled && !!user },
   );
 
   const [{ data: isActive, refetch: refetchIsActive, isLoading: isActiveLoading }] =
     useSessionQuery([...queryKey, 'is_active'], async () => EnrollmentAPI.isEnrolled(enrollment), {
       // Enrollment is null if it has been fetched
-      enabled: !!user && enrollment !== undefined && !isEnrollmentLoading,
+      enabled: enabled && !!user && enrollment !== undefined && !isEnrollmentLoading,
     });
   const { mutateAsync } = useSessionMutation({
     mutationFn: (activeEnrollment: boolean = true) =>
