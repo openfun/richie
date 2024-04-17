@@ -13,6 +13,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add two new sections in DjangoCMS courses: Accessibility and Required
   Equipment.
 
+## Fixed
+
+- Fix a bug in the learner dashboard contract page where an alert
+  message was displayed on successful download.
+
 ## [2.25.1]
 
 ### Fixed

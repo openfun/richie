@@ -13,6 +13,8 @@ import { alert } from 'utils/indirection/window';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import DownloadContractButton from '.';
 
+jest.mock('utils/errors/handle');
+
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
@@ -101,6 +103,7 @@ describe('<DownloadContractButton/>', () => {
     expect(URL.createObjectURL).toHaveBeenCalledWith(expectedFile);
     expect(window.open).toHaveBeenCalledTimes(1);
     expect(window.open).toHaveBeenCalledWith(expectedFile);
+    expect(alert).toHaveBeenCalledTimes(0);
   });
 
   it('fails downloading the contract and shows an error', async () => {
