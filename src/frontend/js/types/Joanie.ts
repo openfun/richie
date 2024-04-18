@@ -1,5 +1,5 @@
 import type { CourseState, OpenEdXEnrollment } from 'types';
-import type { Maybe, Nullable } from 'types/utils';
+import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 import { Course as RichieCourse } from 'types/Course';
@@ -272,8 +272,8 @@ export interface Order {
   state: OrderState;
   product_id: Product['id'];
   target_courses: TargetCourse[];
-  course: Maybe<CourseLight>;
-  enrollment: Maybe<EnrollmentLight>;
+  course: Nullable<CourseLight>;
+  enrollment: Nullable<EnrollmentLight>;
   organization_id: Organization['id'];
   organization: Organization;
   order_group_id?: OrderGroup['id'];
@@ -281,7 +281,7 @@ export interface Order {
 
 export interface CredentialOrder extends Order {
   course: CourseLight;
-  enrollment: undefined;
+  enrollment: null;
 }
 
 export interface CredentialOrderWithPaymentInfo extends CredentialOrder {
@@ -289,9 +289,9 @@ export interface CredentialOrderWithPaymentInfo extends CredentialOrder {
 }
 
 export interface CertificateOrder extends Order {
-  course: undefined;
+  course: null;
   enrollment: EnrollmentLight;
-  target_courses: [];
+  target_courses: never[];
 }
 
 export interface CertificateOrderWithPaymentInfo extends CertificateOrder {
