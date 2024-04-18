@@ -402,19 +402,20 @@ const AbstractOrderFactory = factory((): Order => {
     product_id: faker.string.uuid(),
     target_courses: TargetCourseFactory().many(5),
     target_enrollments: [],
-    enrollment: undefined,
-    course: undefined,
+    enrollment: null,
+    course: null,
     organization_id: faker.string.uuid(),
     organization: OrganizationFactory().one(),
   };
 });
 
 export const CredentialOrderFactory = factory((): CredentialOrder => {
-  return {
+  const order = {
     ...AbstractOrderFactory().one(),
     course: CourseLightFactory().one(),
-    enrollment: undefined,
+    enrollment: null,
   };
+  return order;
 });
 
 export const CredentialOrderWithPaymentFactory = factory((): CredentialOrderWithPaymentInfo => {
@@ -437,12 +438,13 @@ export const CredentialOrderWithOneClickPaymentFactory = factory(
 );
 
 export const CertificateOrderFactory = factory((): CertificateOrder => {
-  return {
+  const order = {
     ...AbstractOrderFactory().one(),
-    course: undefined,
+    course: null,
     target_courses: [],
     enrollment: EnrollmentLightFactory().one(),
   };
+  return order;
 });
 
 export const CertificateOrderWithPaymentFactory = factory((): CertificateOrderWithPaymentInfo => {
