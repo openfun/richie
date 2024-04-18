@@ -3,7 +3,6 @@ import { useMemo, useRef, useState } from 'react';
 import fetchMock from 'fetch-mock';
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
-import { over } from 'lodash-es';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { CreditCardSelector } from 'components/SaleTunnelV2/CreditCardSelector/index';
 import { render } from 'utils/test/render';

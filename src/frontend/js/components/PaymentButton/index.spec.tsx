@@ -213,6 +213,7 @@ describe.each([
       expect(document.activeElement).toBe($error);
     });
 
+    // TODO: Migrate
     it('should render a payment button with a specific label when a credit card is provided', () => {
       /*
       If a credit card is provided, it seems that the payment should be a one click,
@@ -422,6 +423,7 @@ describe.each([
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     });
 
+    // TODO: Migrate
     it('should create an order only the first time the payment interface is shown, and not after aborting', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -549,6 +551,7 @@ describe.each([
       );
     });
 
+    // TODO: Migrate
     it('should render a payment button and not call the order creation route', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -685,6 +688,7 @@ describe.each([
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     });
 
+    // TODO: Migrate
     it('should abort the order if payment does not succeed after a given delay', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -820,6 +824,7 @@ describe.each([
       expect(document.activeElement).toBe($error);
     }, 10000);
 
+    // TODO: Migrate
     it('should render an error message when payment failed', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -914,6 +919,7 @@ describe.each([
       });
     });
 
+    // TODO: Migrate
     it('should show an error if user does not accept the terms', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -959,6 +965,7 @@ describe.each([
       expect(screen.getByText('You must accept the terms.')).toBeInTheDocument();
     });
 
+    // TODO: Migrate
     it('should show a link to the platform terms and conditions', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
