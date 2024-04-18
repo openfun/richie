@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 16:16+0000\n"
-"PO-Revision-Date: 2024-04-11 09:39\n"
+"POT-Creation-Date: 2024-04-18 12:07+0000\n"
+"PO-Revision-Date: 2024-04-18 12:13\n"
 "Last-Translator: \n"
 "Language-Team: Arabic, Saudi Arabia\n"
 "Language: ar_SA\n"
@@ -1086,13 +1086,13 @@ msgid "Complementary information"
 msgstr ""
 
 #: apps/courses/settings/__init__.py:223
-#: apps/courses/templates/courses/cms/course_detail.html:455
+#: apps/courses/templates/courses/cms/course_detail.html:454
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:47
 msgid "License for the course content"
 msgstr ""
 
 #: apps/courses/settings/__init__.py:228
-#: apps/courses/templates/courses/cms/course_detail.html:466
+#: apps/courses/templates/courses/cms/course_detail.html:465
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:56
 msgid "License for the content created by course participants"
 msgstr "رخصة للمحتوى الذي أنشأه المشاركون في الدورة"
@@ -1366,38 +1366,38 @@ msgctxt "course_detail__title"
 msgid "Format"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:288
+#: apps/courses/templates/courses/cms/course_detail.html:287
 msgid "How is the course structured?"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:298
+#: apps/courses/templates/courses/cms/course_detail.html:297
 msgctxt "course_detail__title"
 msgid "Prerequisites"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:301
+#: apps/courses/templates/courses/cms/course_detail.html:300
 msgid "What are the prerequisites to follow this course?"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:311
+#: apps/courses/templates/courses/cms/course_detail.html:310
 msgctxt "course_detail__title"
 msgid "Assessment and certification"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:315
+#: apps/courses/templates/courses/cms/course_detail.html:314
 msgid "How is progress evaluated and/or certified?"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:329
+#: apps/courses/templates/courses/cms/course_detail.html:328
 msgctxt "course_detail__title"
 msgid "Course plan"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:331
+#: apps/courses/templates/courses/cms/course_detail.html:330
 msgid "Enter here the detailed course plan."
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:377
+#: apps/courses/templates/courses/cms/course_detail.html:376
 msgid "\n"
 "                                            This course is part of a program\n"
 "                                        "
@@ -1411,37 +1411,37 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:406
+#: apps/courses/templates/courses/cms/course_detail.html:405
 msgctxt "course_detail__title"
 msgid "Course team"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:411
+#: apps/courses/templates/courses/cms/course_detail.html:410
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:13
 msgid "Who are the teachers in the course team?"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:425
+#: apps/courses/templates/courses/cms/course_detail.html:424
 msgctxt "course_detail__title"
 msgid "Organizations"
 msgstr "المنظمات"
 
-#: apps/courses/templates/courses/cms/course_detail.html:430
+#: apps/courses/templates/courses/cms/course_detail.html:429
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:32
 msgid "What are the organizations publishing this course?"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:451
+#: apps/courses/templates/courses/cms/course_detail.html:450
 msgctxt "course_detail__title"
 msgid "License"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:458
+#: apps/courses/templates/courses/cms/course_detail.html:457
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:50
 msgid "What is the license for the course content?"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:469
+#: apps/courses/templates/courses/cms/course_detail.html:468
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:59
 msgid "What is the license for the content created by course participants?"
 msgstr ""

@@ -129,11 +129,11 @@
   },
   "components.ContractStatus.organizationSignedOn": {
     "description": "Label for the date of sign of a training contract by the organization",
-    "message": "L'établissement a signé ce contrat de formation. Signée le {date}"
+    "message": "L'établissement a signé ce contrat de formation. Signé le {date}"
   },
   "components.ContractStatus.waitingOrganization": {
     "description": "Label displayed when a training contract need to be signed by the organization",
-    "message": "Vous ne pouvez pas télécharger votre contrat de formation tant qu'elle n'a pas été signée par l'établissement."
+    "message": "Vous ne pouvez pas télécharger votre contrat de formation tant qu'il n'a pas été signé par l'établissement."
   },
   "components.ContractStatus.waitingSignature": {
     "description": "Label displayed when a training contract need to be signed by the learner",
@@ -1901,7 +1901,7 @@
   },
   "pages.TeacherDashboardOrganizationContractsLayout.signAllPendingContracts": {
     "description": "Button to sign all pending contracts",
-    "message": "Signer toutes les conventions en attente ({ count })"
+    "message": "Signer tous les contrats de formation en attente ({ count })"
   },
   "utils.ContractHelper.learnerHalfSigned": {
     "description": "Label for unsigned contract status in learner point of view",
