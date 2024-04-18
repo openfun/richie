@@ -40,7 +40,7 @@ export const useSaleTunnelV2Context = () => {
   return context;
 };
 
-enum SaleTunnelStep {
+export enum SaleTunnelStep {
   PAYMENT,
   SUCCESS,
 }
@@ -59,7 +59,6 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
     enrollmentId: props.enrollment?.id,
     productId: props.product.id,
   });
-  console.log('GenericSaleTunnel', order);
 
   const {
     methods: { refetch: refetchOmniscientOrders },

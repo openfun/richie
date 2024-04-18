@@ -88,6 +88,7 @@ describe('SaleTunnelV2', () => {
       // with a regular space. We replace NNBSP (\u202F) and NBSP (\u00a0) with a regular space
       priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
     );
+    expect(screen.queryByText('Purchased')).not.toBeInTheDocument();
 
     /**
      * Purchase.
@@ -229,16 +230,29 @@ describe('SaleTunnelV2', () => {
       name: `Pay ${priceFormatter(product.price_currency, product.price)}`,
     }) as HTMLButtonElement;
 
-    console.log('PAY!');
     await user.click($button);
 
     await screen.findByText('Payment in progress');
     screen.getByText('Payment interface component');
     await user.click(screen.getByTestId('payment-success'));
 
-    screen.logTestingPlaygroundURL();
+    /**
+     * Success step.
+     */
+
+    // Make sure the success step is shown.
+    expect(screen.queryByTestId('GenericSaleTunnelPaymentStep')).not.toBeInTheDocument();
+    screen.getByTestId('GenericSaleTunnelSuccessStep');
+    screen.getByText('Congratulations!');
+    screen.getByText(/Your order has been successfully created/);
+    screen.getByRole('link', { name: 'Sign the training contract' });
+
     /**
      * Make sure the product is displayed as bought ( it verifies cache is well updated ).
      */
+
+    // This way we make sure the cache is updated.
+    await screen.findByText('Purchased');
+    expect(screen.queryByRole('button', { name: product.call_to_action })).not.toBeInTheDocument();
   });
 });

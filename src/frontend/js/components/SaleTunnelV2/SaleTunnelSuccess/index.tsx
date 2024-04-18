@@ -4,7 +4,10 @@ import { SuccessIcon } from 'components/SuccessIcon';
 import { getDashboardBasename } from 'widgets/Dashboard/hooks/useDashboardRouter/getDashboardBasename';
 import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
-import { useSaleTunnelV2Context } from 'components/SaleTunnelV2/GenericSaleTunnel';
+import {
+  GenericSaleTunnelSuccessStep,
+  useSaleTunnelV2Context,
+} from 'components/SaleTunnelV2/GenericSaleTunnel';
 
 const messages = defineMessages({
   congratulations: {
@@ -44,14 +47,14 @@ export const SaleTunnelSuccess = () => {
   const intl = useIntl();
   const { order, product } = useSaleTunnelV2Context();
   return (
-    <section className="SaleTunnelStepResume">
-      <header className="SaleTunnelStepResume__header">
+    <section className="SaleTunnelSuccess" data-testid="GenericSaleTunnelSuccessStep">
+      <header className="SaleTunnelSuccess__header">
         <SuccessIcon />
-        <h3 className="SaleTunnelStepResume__title">
+        <h3 className="SaleTunnelSuccess__title">
           <FormattedMessage {...messages.congratulations} />
         </h3>
       </header>
-      <p className="SaleTunnelStepResume__content">
+      <p className="SaleTunnelSuccess__content">
         <FormattedMessage {...messages.successMessage} />
         <br />
         <FormattedMessage {...messages.successDetailMessage} />
@@ -62,7 +65,7 @@ export const SaleTunnelSuccess = () => {
           </>
         )}
       </p>
-      <footer className="SaleTunnelStepResume__footer">
+      <footer className="SaleTunnelSuccess__footer">
         {product.contract_definition ? (
           <Button
             href={

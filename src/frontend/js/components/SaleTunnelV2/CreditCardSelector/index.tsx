@@ -73,7 +73,7 @@ const messages = defineMessages({
 
 export const CreditCardSelector = () => {
   const intl = useIntl();
-  const modal = useModal({ isOpenDefault: false });
+  const modal = useModal();
 
   const {
     states: { fetching },
@@ -114,13 +114,15 @@ export const CreditCardSelector = () => {
           <div className="credit-card-selector__content">
             {creditCard ? <CreditCardInline creditCard={creditCard} /> : <CreditCardEmptyInline />}
 
-            <Button
-              icon={<span className="material-icons">edit</span>}
-              color="tertiary-text"
-              size="medium"
-              onClick={modal.open}
-              aria-label={intl.formatMessage(messages.editCreditCardAriaLabel)}
-            />
+            {creditCards?.length > 0 && (
+              <Button
+                icon={<span className="material-icons">edit</span>}
+                color="tertiary-text"
+                size="medium"
+                onClick={modal.open}
+                aria-label={intl.formatMessage(messages.editCreditCardAriaLabel)}
+              />
+            )}
           </div>
           {/* This way we make sure the internal state of the modal is reset each time */}
           {modal.isOpen && (
@@ -147,7 +149,7 @@ const CreditCardInline = ({ creditCard }: { creditCard: CreditCard }) => {
   const expirationMessage =
     expirationState === CreditCardExpirationStatus.EXPIRED ? messages.expired : messages.expiration;
   return (
-    <div className="credit-card-selector__card">
+    <div className="credit-card-selector__card" data-testid={`credit-card-${creditCard.id}`}>
       <CreditCardBrandLogo
         creditCard={{ ...CreditCardFactory().one(), brand: CreditCardBrand.MASTERCARD }}
         variant="inline"
@@ -218,7 +220,7 @@ const CreditCardSelectorModal = ({
         </Button>
       }
     >
-      <div className="credit-card-selector__modal">
+      <div className="credit-card-selector__modal" data-testid="CreditCardSelectorModal">
         <div className="description mb-s">
           <FormattedMessage {...messages.modalDescription} />
         </div>
