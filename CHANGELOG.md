@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Duplicated `course_format` placeholder in `course_detail` template
+
 ## [2.25.0]
 
 ### Added
