@@ -1,4 +1,4 @@
-import { Button, Input } from '@openfun/cunningham-react';
+import { Button, ButtonElement, Input } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { FormProvider, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -56,19 +56,15 @@ const validationSchema = Yup.object().shape({
 const OpenEdxFullNameForm = () => {
   const intl = useIntl();
   const { user } = useSession();
-  const queryClient = useQueryClient();
   const buttonRef = useRef<ButtonElement>(null);
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState<boolean>(true);
   const {
     data: openEdxProfileData,
-    methods: { update },
+    methods: { update, invalidate },
     states: { isFetched, isPending },
     error,
   } = useOpenEdxProfile({
     username: user!.username,
-    onUpdateSuccess: () => {
-      setIsSuccess(true);
-    },
   });
 
   const defaultValues = useMemo(
@@ -85,6 +81,7 @@ const OpenEdxFullNameForm = () => {
     reValidateMode: 'onChange',
     resolver: yupResolver(validationSchema),
   });
+
   const { register, handleSubmit, reset, formState } = form;
 
   const onSubmit = async (values: OpenEdxFullNameFormValues) => {
@@ -121,50 +118,50 @@ const OpenEdxFullNameForm = () => {
     <FormProvider {...form}>
       <Form name="openedx-fullname-form" onSubmit={handleSubmit(onSubmit)} noValidate>
         <Form.Row>
-          <Form.Column>
+          <Form.Row>
+            <Input
+              {...register('name', {
+                onChange: onChangeFullName,
+              })}
+              className="form-field"
+              required
+              fullWidth
+              label={intl.formatMessage(messages.fullNameInputLabel)}
+              value={formState.defaultValues?.name}
+              state={
+                error || (formState.errors.name && formState.errors.name.message)
+                  ? 'error'
+                  : 'default'
+              }
+              rightIcon={
+                <Button
+                  ref={buttonRef}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  color="secondary"
+                  size="small"
+                  disabled={isSubmitButtonDisabled}
+                >
+                  {isPending ? <Spinner /> : <FormattedMessage {...messages.submitButtonLabel} />}
+                </Button>
+              }
+              text={
+                error ||
+                getLocalizedCunninghamErrorProp(intl, formState.errors.name?.message).text ||
+                intl.formatMessage(messages.fullNameInputDescription)
+              }
+            />
+          </Form.Row>
+          {openEdxProfileData?.email && (
             <Form.Row>
               <Input
-                {...register('name', {
-                  onBlur: () => {
-                    if ('name' in formState.dirtyFields) {
-                      setIsSuccess(false);
-                    }
-                  },
-                  onChange: onChangeFullName,
-                })}
-                className="form-field"
-                required
-                fullWidth
-                label={intl.formatMessage(messages.fullNameInputLabel)}
-                value={formState.defaultValues?.name}
-                state={
-                  error || (formState.errors.name && formState.errors.name.message)
-                    ? 'error'
-                    : 'default'
-                }
-                rightIcon={isSuccess ? <span className="material-icons">check</span> : undefined}
-                text={
-                  error ||
-                  getLocalizedCunninghamErrorProp(intl, formState.errors.name?.message).text ||
-                  intl.formatMessage(messages.fullNameInputDescription)
-                }
+                label={intl.formatMessage(messages.emailInputLabel)}
+                value={openEdxProfileData?.email}
+                disabled
               />
             </Form.Row>
-            {openEdxProfileData?.email && (
-              <Form.Row>
-                <Input
-                  label={intl.formatMessage(messages.emailInputLabel)}
-                  value={openEdxProfileData?.email}
-                  disabled
-                />
-              </Form.Row>
-            )}
-          </Form.Column>
-          <Form.RowButtonContainer>
-            <Button disabled={isSubmitButtonDisabled}>
-              <FormattedMessage {...messages.submitButtonLabel} />
-            </Button>
-          </Form.RowButtonContainer>
+          )}
         </Form.Row>
       </Form>
     </FormProvider>
