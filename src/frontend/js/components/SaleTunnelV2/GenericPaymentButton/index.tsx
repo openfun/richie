@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@openfun/cunningham-react';
 import type * as Joanie from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
@@ -125,6 +125,14 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     );
   }, [product, saleTunnelProps.course, saleTunnelProps.enrollment, billingAddress, termsAccepted]);
 
+  console.log(
+    '(saleTunnelProps.course || saleTunnelProps.enrollment)',
+    !!(saleTunnelProps.course || saleTunnelProps.enrollment),
+  );
+  console.log('product', !!product);
+  console.log('billingAddress', !!billingAddress);
+  console.log('termsAccepted', !!termsAccepted);
+
   /**
    * Use Joanie API to retrieve an order and check if it's state is validated
    *
@@ -137,6 +145,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
   };
 
   const createPayment = async (orderId: string) => {
+    console.log('createPayment');
     WebAnalyticsAPIHandler()?.sendCourseProductEvent(CourseProductEvent.PAYMENT_CREATION, eventKey);
 
     if (!billingAddress) {
@@ -146,6 +155,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
 
     validateTerms();
 
+    console.log('isReadyToPay', isReadyToPay);
     if (isReadyToPay) {
       setState(ComponentStates.LOADING);
       let paymentInfos = payment;
@@ -153,6 +163,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
       if (!paymentInfos) {
         const billingAddressPayload = ObjectHelper.omit(billingAddress!, 'id', 'is_main');
 
+        console.log('submit...');
         orderMethods.submit(
           {
             id: orderId,
@@ -165,6 +176,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
                 ...orderPayment.payment_info,
                 order_id: orderId,
               };
+              console.log('success!', paymentInfos);
               setPayment(paymentInfos);
             },
             onError: async (createPaymentError: HttpError) => {
@@ -183,6 +195,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
   };
 
   const createOrder = async () => {
+    console.log('createOrder');
     if (!billingAddress) {
       setError(PaymentErrorMessageId.ERROR_ADDRESS);
       setState(ComponentStates.ERROR);
@@ -191,8 +204,10 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     validateTerms();
 
     if (!isReadyToPay) {
+      console.log('A');
       return;
     }
+    console.log('B');
 
     setState(ComponentStates.LOADING);
 
@@ -218,6 +233,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     let round = 0;
 
     const checkOrderValidity = async () => {
+      console.log('checkOrderValidity', round);
       if (round >= PAYMENT_SETTINGS.pollLimit) {
         timeoutRef.current = undefined;
         orderMethods.abort({ id: payment!.order_id, payment_id: payment!.payment_id });
@@ -243,8 +259,29 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     setError(messageId);
   };
 
+  useEffect(() => {
+    if (error === PaymentErrorMessageId.ERROR_ABORTING) {
+      orderMethods
+        .abort({
+          id: payment!.order_id,
+          payment_id: payment!.payment_id,
+        })
+        .then(() => {
+          setPayment(undefined);
+          handleError(PaymentErrorMessageId.ERROR_ABORT);
+        });
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (state === ComponentStates.ERROR) {
+      document.querySelector<HTMLElement>('#sale-tunnel-payment-error')?.focus();
+    }
+  }, [state]);
+
+  console.log('state', state, 'payment', payment);
   return (
-    <>
+    <div data-testid={order && 'payment-button-order-loaded'}>
       {renderTermsCheckbox()}
       <Button
         disabled={state === ComponentStates.LOADING}
@@ -278,6 +315,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
       <p className="payment-button__error" id="sale-tunnel-payment-error" tabIndex={-1}>
         {state === ComponentStates.ERROR && <FormattedMessage {...messages[error]} />}
       </p>
-    </>
+    </div>
   );
 };

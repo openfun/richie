@@ -36,6 +36,10 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('../PaymentButton/components/PaymentInterfaces');
 
+/**
+ * This test aims to test the entire process of buying a product, from the CourseProductItem.
+ */
+
 describe('SaleTunnelV2', () => {
   setupJoanieSession();
 
@@ -45,9 +49,6 @@ describe('SaleTunnelV2', () => {
       style: 'currency',
     }).format(price);
 
-  /**
-   * This test aims to test the entire process of buying a product, from the CourseProductItem.
-   */
   it('the entire process of buying a credential product', async () => {
     /**
      * Initialization.

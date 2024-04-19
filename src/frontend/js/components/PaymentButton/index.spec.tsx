@@ -68,6 +68,10 @@ type WrapperProps = PropsWithChildren<{
   orderGroup?: OrderGroup;
 }>;
 
+/**
+ * This test file contains Sale Tunnel tests both related to the Credential and Certificate products.
+ */
+
 describe.each([
   {
     productType: ProductType.CREDENTIAL,
@@ -213,7 +217,7 @@ describe.each([
       expect(document.activeElement).toBe($error);
     });
 
-    // TODO: Migrate
+    // TODO: Migrate DONE
     it('should render a payment button with a specific label when a credit card is provided', () => {
       /*
       If a credit card is provided, it seems that the payment should be a one click,
@@ -423,7 +427,7 @@ describe.each([
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     });
 
-    // TODO: Migrate
+    // TODO: Migrate DONE
     it('should create an order only the first time the payment interface is shown, and not after aborting', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -551,7 +555,7 @@ describe.each([
       );
     });
 
-    // TODO: Migrate
+    // TODO: Migrate DONE
     it('should render a payment button and not call the order creation route', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -688,7 +692,7 @@ describe.each([
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     });
 
-    // TODO: Migrate
+    // TODO: Migrate DONE
     it('should abort the order if payment does not succeed after a given delay', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -824,7 +828,7 @@ describe.each([
       expect(document.activeElement).toBe($error);
     }, 10000);
 
-    // TODO: Migrate
+    // TODO: Migrate DONE
     it('should render an error message when payment failed', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -919,7 +923,7 @@ describe.each([
       });
     });
 
-    // TODO: Migrate
+    // TODO: Migrate DONE
     it('should show an error if user does not accept the terms', async () => {
       const product: Joanie.Product = ProductFactory().one();
       const billingAddress: Joanie.Address = AddressFactory().one();
@@ -998,6 +1002,7 @@ describe.each([
       expect($terms).toHaveAttribute('href', '/en/about/terms-and-conditions/');
     });
 
+    // TODO: Migrate
     if (productType === ProductType.CREDENTIAL) {
       it('should create an order with an order group', async () => {
         const product: Joanie.Product = ProductFactory().one();
