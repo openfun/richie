@@ -10,8 +10,8 @@ import type * as Joanie from 'types/Joanie';
 import type { Maybe, Nullable } from 'types/utils';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { useSaleTunnelContext } from 'components/SaleTunnel/context';
-import { UserHelper } from 'utils/UserHelper';
 import { AddressView } from 'components/Address';
+import OpenEdxFullNameForm from 'components/OpenEdxFullNameForm';
 import { RegisteredCreditCard } from '../RegisteredCreditCard';
 
 const messages = defineMessages({
@@ -197,12 +197,9 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
               </h2>
             </header>
             <div className="SaleTunnelStepPayment__block--buyer">
-              <strong className="h6 SaleTunnelStepPayment__block--buyer__name">
-                {UserHelper.getName(user)}
-              </strong>
-              {user.email ? (
-                <p className="SaleTunnelStepPayment__block--buyer__email">{user.email}</p>
-              ) : null}
+              <div className="SaleTunnelStepPayment__block--buyer__fullname_form">
+                <OpenEdxFullNameForm />
+              </div>
               <header
                 tabIndex={-1}
                 id="sale-tunnel-address-header"
@@ -250,6 +247,7 @@ export const SaleTunnelStepPayment = ({ next }: SaleTunnelStepPaymentProps) => {
                     </p>
                     <Button
                       size="small"
+                      color="secondary"
                       onClick={() => setShowAddressCreationForm(true)}
                       icon={<Icon name={IconTypeEnum.PLUS} size="small" className="button__icon" />}
                     >

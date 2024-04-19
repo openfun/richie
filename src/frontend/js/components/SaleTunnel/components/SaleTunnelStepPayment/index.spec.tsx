@@ -6,6 +6,7 @@ import { CunninghamProvider } from '@openfun/cunningham-react';
 import { PropsWithChildren, useMemo, useState } from 'react';
 import userEvent from '@testing-library/user-event';
 import { queryByRole } from '@testing-library/dom';
+import { User } from 'types/User';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
@@ -19,9 +20,10 @@ import {
 import { SessionProvider } from 'contexts/SessionContext';
 import { Address, CreditCard, Order, Product } from 'types/Joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { User } from 'types/User';
 import { SaleTunnelContext, SaleTunnelContextType } from 'components/SaleTunnel/context';
 import { Maybe } from 'types/utils';
+import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
+import { OpenEdxApiProfile } from 'types/openEdx';
 import { SaleTunnelStepPayment } from '.';
 
 jest.mock('components/PaymentButton', () => ({
@@ -32,12 +34,14 @@ jest.mock('components/PaymentButton', () => ({
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
-    authentication: { backend: 'fonzie', endpoint: 'https://demo.endpoint' },
+    authentication: { backend: 'fonzie', endpoint: 'https://endpoint.test' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
 describe('SaleTunnelStepPayment', () => {
+  let richieUser: User;
+  let openApiEdxProfile: OpenEdxApiProfile;
   const Wrapper = ({
     children,
     user,
@@ -56,7 +60,7 @@ describe('SaleTunnelStepPayment', () => {
     );
 
     return (
-      <QueryClientProvider client={createTestQueryClient({ user: user || true })}>
+      <QueryClientProvider client={createTestQueryClient({ user: user || richieUser || true })}>
         <IntlProvider locale="en">
           <SessionProvider>
             <CunninghamProvider>
@@ -70,6 +74,23 @@ describe('SaleTunnelStepPayment', () => {
   const mockNext = jest.fn();
 
   beforeEach(() => {
+    richieUser = UserFactory().one();
+    openApiEdxProfile = OpenEdxApiProfileFactory({
+      username: richieUser.username,
+      email: richieUser.email,
+      name: richieUser.full_name,
+    }).one();
+
+    const { 'pref-lang': prefLang, ...openEdxAccount } = openApiEdxProfile;
+
+    fetchMock.get(
+      `https://endpoint.test/api/user/v1/accounts/${richieUser.username}`,
+      openEdxAccount,
+    );
+    fetchMock.get(`https://endpoint.test/api/user/v1/preferences/${richieUser.username}`, {
+      'pref-lang': prefLang,
+    });
+
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
@@ -104,10 +125,26 @@ describe('SaleTunnelStepPayment', () => {
 
   it('should display authenticated user information', async () => {
     const product = ProductFactory().one();
-    const user: User = UserFactory({ full_name: undefined }).one();
+    richieUser = UserFactory({ full_name: undefined }).one();
+    openApiEdxProfile = OpenEdxApiProfileFactory({
+      username: richieUser.username,
+      email: richieUser.email,
+      name: richieUser.full_name,
+    }).one();
+
+    const { 'pref-lang': prefLang, ...openEdxAccount } = openApiEdxProfile;
+
+    fetchMock.get(
+      `https://endpoint.test/api/user/v1/accounts/${richieUser.username}`,
+      openEdxAccount,
+    );
+    fetchMock.get(`https://endpoint.test/api/user/v1/preferences/${richieUser.username}`, {
+      'pref-lang': prefLang,
+    });
+
     await act(async () => {
       render(
-        <Wrapper user={user} product={product}>
+        <Wrapper user={richieUser} product={product}>
           <SaleTunnelStepPayment next={mockNext} />
         </Wrapper>,
       );
@@ -115,7 +152,7 @@ describe('SaleTunnelStepPayment', () => {
 
     // - It should display user information
     screen.getByRole('heading', { level: 2, name: 'Your personal information' });
-    screen.getByText(user.username, { exact: true });
+    await screen.findByDisplayValue(richieUser.username, { exact: true });
   });
 
   it('should display a button to create an address if user has no address ', async () => {

@@ -31,6 +31,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a form to edit user fullname in the payment step of the sale 
+  tunnel.
 - Add ready-only user profile in the learner dashboard preferences page.
   This profile display data from LMS profile.
 - Management command to migrate course runs course link to joanie

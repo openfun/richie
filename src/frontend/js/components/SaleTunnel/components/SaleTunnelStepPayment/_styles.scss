@@ -9,6 +9,10 @@
     gap: rem-calc(30px);
   }
 
+  &__column {
+    flex: 1;
+  }
+
   @include media-breakpoint-down(md) {
     gap: 0;
     &__content {
@@ -113,12 +117,10 @@
 
   &__block--buyer {
     color: r-theme-val(steps-content, content-color);
-
-    &__name,
-    &__email {
-      font-family: $r-font-family-hind;
-      font-size: 1rem;
-      margin: 0;
+    &__fullname_form {
+      // under 355px, an input text with an icon and a button cannot stand in the same line.
+      min-width: rem-calc(355px);
+      margin-bottom: rem-calc(20px);
     }
 
     &__address-header {
