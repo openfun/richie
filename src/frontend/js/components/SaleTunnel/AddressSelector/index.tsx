@@ -3,9 +3,9 @@ import { useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useAddresses } from 'hooks/useAddresses';
 import { Address } from 'types/Joanie';
-import { CreateAddressFormModal } from 'components/SaleTunnelV2/AddressSelector/CreateAddressFormModal';
-import { EditAddressFormModal } from 'components/SaleTunnelV2/AddressSelector/EditAddressFormModal';
-import { useSaleTunnelV2Context } from 'components/SaleTunnelV2/GenericSaleTunnel';
+import { CreateAddressFormModal } from 'components/SaleTunnel/AddressSelector/CreateAddressFormModal';
+import { EditAddressFormModal } from 'components/SaleTunnel/AddressSelector/EditAddressFormModal';
+import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { useMatchMediaLg } from 'hooks/useMatchMedia';
 
 const messages = defineMessages({
@@ -29,7 +29,7 @@ const messages = defineMessages({
 export const AddressSelector = () => {
   const intl = useIntl();
   const addresses = useAddresses();
-  const { billingAddress, setBillingAddress } = useSaleTunnelV2Context();
+  const { billingAddress, setBillingAddress } = useSaleTunnelContext();
 
   const options = useMemo(
     () =>

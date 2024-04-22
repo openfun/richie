@@ -19,10 +19,10 @@ import {
 } from 'utils/test/factories/joanie';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { render } from 'utils/test/render';
-import { SaleTunnelV2, SaleTunnelV2Props } from 'components/SaleTunnelV2/index';
+import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel/index';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { HttpStatusCode } from 'utils/errors/HttpError';
-import { getAddressLabel } from 'components/SaleTunnelV2/AddressSelector';
+import { getAddressLabel } from 'components/SaleTunnel/AddressSelector';
 import { ObjectHelper } from 'utils/ObjectHelper';
 import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
@@ -78,9 +78,9 @@ describe.each([
         style: 'currency',
       }).format(price);
 
-    const Wrapper = (props: Omit<SaleTunnelV2Props, 'isOpen' | 'onClose'>) => {
+    const Wrapper = (props: Omit<SaleTunnelProps, 'isOpen' | 'onClose'>) => {
       return (
-        <SaleTunnelV2
+        <SaleTunnel
           {...props}
           enrollment={enrollment}
           course={productType === ProductType.CREDENTIAL ? course : undefined}

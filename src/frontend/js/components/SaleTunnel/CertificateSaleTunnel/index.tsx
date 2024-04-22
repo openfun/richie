@@ -1,10 +1,10 @@
-import { SaleTunnelV2Props } from 'components/SaleTunnelV2/index';
+import { SaleTunnelProps } from 'components/SaleTunnel/index';
 import { CertificateProduct } from 'types/Joanie';
-import { GenericSaleTunnel } from 'components/SaleTunnelV2/GenericSaleTunnel';
-import { GenericPaymentButton } from 'components/SaleTunnelV2/GenericPaymentButton';
-import { CertificateProductPath } from 'components/SaleTunnelV2/CertificateSaleTunnel/CertificateProductPath';
+import { GenericSaleTunnel } from 'components/SaleTunnel/GenericSaleTunnel';
+import { GenericPaymentButton } from 'components/SaleTunnel/GenericPaymentButton';
+import { CertificateProductPath } from 'components/SaleTunnel/CertificateSaleTunnel/CertificateProductPath';
 
-interface CertificateSaleTunnelProps extends Omit<SaleTunnelV2Props, 'product'> {
+interface CertificateSaleTunnelProps extends Omit<SaleTunnelProps, 'product'> {
   product: CertificateProduct;
 }
 

@@ -1,7 +1,7 @@
 import { Alert, Input, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { AddressSelector } from 'components/SaleTunnelV2/AddressSelector';
-import { CreditCardSelector } from 'components/SaleTunnelV2/CreditCardSelector';
+import { AddressSelector } from 'components/SaleTunnel/AddressSelector';
+import { CreditCardSelector } from 'components/SaleTunnel/CreditCardSelector';
 import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
 
 const messages = defineMessages({

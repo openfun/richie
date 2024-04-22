@@ -5,7 +5,7 @@ import { Button, ButtonProps, useModal } from '@openfun/cunningham-react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
 import { isOpenedCourseRunCertificate, isOpenedCourseRunCredential } from 'utils/CourseRuns';
-import { SaleTunnelV2, SaleTunnelV2Props } from 'components/SaleTunnelV2';
+import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel';
 import { Organization } from 'types/Joanie';
 
 const messages = defineMessages({
@@ -46,7 +46,7 @@ interface PurchaseButtonPropsBase {
   disabled?: boolean;
   className?: string;
   buttonProps?: ButtonProps;
-  onFinish?: SaleTunnelV2Props['onFinish'];
+  onFinish?: SaleTunnelProps['onFinish'];
   organizations?: Organization[];
 }
 
@@ -154,7 +154,7 @@ const PurchaseButton = ({
           )}
         </>
       )}
-      <SaleTunnelV2
+      <SaleTunnel
         {...saleTunnelModal}
         product={product}
         organizations={organizations}

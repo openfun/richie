@@ -4,7 +4,7 @@ import fetchMock from 'fetch-mock';
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CreditCardSelector } from 'components/SaleTunnelV2/CreditCardSelector/index';
+import { CreditCardSelector } from 'components/SaleTunnel/CreditCardSelector/index';
 import { render } from 'utils/test/render';
 import { CreditCard } from 'types/Joanie';
 import {
@@ -12,10 +12,10 @@ import {
   CreditCardFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
-import { SaleTunnelV2Props } from 'components/SaleTunnelV2/index';
+import { SaleTunnelProps } from 'components/SaleTunnel/index';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
-import { SaleTunnelStep, SaleTunnelV2Context, SaleTunnelV2ContextType } from '../GenericSaleTunnel';
+import { SaleTunnelStep, SaleTunnelContext, SaleTunnelContextType } from '../GenericSaleTunnel';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -30,17 +30,17 @@ describe('CreditCardSelector', () => {
 
   const buildWrapper = () => {
     const contextRef = {
-      current: {} as SaleTunnelV2ContextType,
+      current: {} as SaleTunnelContextType,
     };
 
     const Wrapper = () => {
       const [creditCard, setCreditCard] = useState<CreditCard>();
-      const context: SaleTunnelV2ContextType = useMemo(
+      const context: SaleTunnelContextType = useMemo(
         () => ({
           eventKey: 'eventKey',
           order: CredentialOrderFactory().one(),
           product: ProductFactory().one(),
-          props: {} as SaleTunnelV2Props,
+          props: {} as SaleTunnelProps,
           setBillingAddress: jest.fn(),
           creditCard,
           setCreditCard,
@@ -52,9 +52,9 @@ describe('CreditCardSelector', () => {
       contextRef.current = context;
 
       return (
-        <SaleTunnelV2Context.Provider value={context}>
+        <SaleTunnelContext.Provider value={context}>
           <CreditCardSelector />
-        </SaleTunnelV2Context.Provider>
+        </SaleTunnelContext.Provider>
       );
     };
 

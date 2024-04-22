@@ -6,8 +6,8 @@ import { getDashboardRoutePath } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRouteMessages';
 import {
   GenericSaleTunnelSuccessStep,
-  useSaleTunnelV2Context,
-} from 'components/SaleTunnelV2/GenericSaleTunnel';
+  useSaleTunnelContext,
+} from 'components/SaleTunnel/GenericSaleTunnel';
 
 const messages = defineMessages({
   congratulations: {
@@ -45,7 +45,7 @@ const messages = defineMessages({
 
 export const SaleTunnelSuccess = () => {
   const intl = useIntl();
-  const { order, product } = useSaleTunnelV2Context();
+  const { order, product } = useSaleTunnelContext();
   return (
     <section className="SaleTunnelSuccess" data-testid="GenericSaleTunnelSuccessStep">
       <header className="SaleTunnelSuccess__header">

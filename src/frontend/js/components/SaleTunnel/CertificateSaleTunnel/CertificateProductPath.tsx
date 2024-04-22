@@ -1,8 +1,8 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Enrollment, Product } from 'types/Joanie';
-import CourseRunsList from 'components/SaleTunnelV2/ProductPath/CourseRunsList';
-import { ProductPathCertificateDefinition } from 'components/SaleTunnelV2/ProductPath/ProductPathCertificateDefinition';
-import { ProductPathInstructions } from 'components/SaleTunnelV2/ProductPath/ProductPathInstructions';
+import CourseRunsList from 'components/SaleTunnel/ProductPath/CourseRunsList';
+import { ProductPathCertificateDefinition } from 'components/SaleTunnel/ProductPath/ProductPathCertificateDefinition';
+import { ProductPathInstructions } from 'components/SaleTunnel/ProductPath/ProductPathInstructions';
 
 const messages = defineMessages({
   title: {

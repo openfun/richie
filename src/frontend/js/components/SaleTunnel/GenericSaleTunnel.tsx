@@ -1,18 +1,18 @@
 import { Modal, ModalSize } from '@openfun/cunningham-react';
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { SaleTunnelSponsors } from 'components/SaleTunnelV2/Sponsors/SaleTunnelSponsors';
-import { SaleTunnelV2Props } from 'components/SaleTunnelV2/index';
+import { SaleTunnelSponsors } from 'components/SaleTunnel/Sponsors/SaleTunnelSponsors';
+import { SaleTunnelProps } from 'components/SaleTunnel/index';
 import { Address, CreditCard, Order, Product } from 'types/Joanie';
 import useProductOrder from 'hooks/useProductOrder';
-import { SaleTunnelSuccess } from 'components/SaleTunnelV2/SaleTunnelSuccess';
+import { SaleTunnelSuccess } from 'components/SaleTunnel/SaleTunnelSuccess';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
-import { SaleTunnelInformation } from 'components/SaleTunnelV2/SaleTunnelInformation';
+import { SaleTunnelInformation } from 'components/SaleTunnel/SaleTunnelInformation';
 
-export interface SaleTunnelV2ContextType {
-  props: SaleTunnelV2Props;
+export interface SaleTunnelContextType {
+  props: SaleTunnelProps;
   order?: Order;
   product: Product;
   eventKey: string;
@@ -28,13 +28,13 @@ export interface SaleTunnelV2ContextType {
   setCreditCard: (creditCard?: CreditCard) => void;
 }
 
-export const SaleTunnelV2Context = createContext<SaleTunnelV2ContextType>({} as any);
+export const SaleTunnelContext = createContext<SaleTunnelContextType>({} as any);
 
-export const useSaleTunnelV2Context = () => {
-  const context = useContext(SaleTunnelV2Context);
+export const useSaleTunnelContext = () => {
+  const context = useContext(SaleTunnelContext);
 
   if (context === undefined) {
-    throw new Error('useSaleTunnelV2Context must be used within a SaleTunnelV2ContextProvider.');
+    throw new Error('useSaleTunnelContext must be used within a SaleTunnelContextProvider.');
   }
 
   return context;
@@ -45,7 +45,7 @@ export enum SaleTunnelStep {
   SUCCESS,
 }
 
-interface GenericSaleTunnelProps extends SaleTunnelV2Props {
+interface GenericSaleTunnelProps extends SaleTunnelProps {
   eventKey: string;
 
   // slots
@@ -71,7 +71,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
   const [creditCard, setCreditCard] = useState<CreditCard>();
   const [step, setStep] = useState<SaleTunnelStep>(SaleTunnelStep.PAYMENT);
 
-  const context: SaleTunnelV2ContextType = useMemo(
+  const context: SaleTunnelContextType = useMemo(
     () => ({
       eventKey: props.eventKey,
       order,
@@ -100,7 +100,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
   );
 
   return (
-    <SaleTunnelV2Context.Provider value={context}>
+    <SaleTunnelContext.Provider value={context}>
       <GenericSaleTunnelInner
         {...props}
         onClose={() => {
@@ -111,12 +111,12 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
           props.onClose();
         }}
       />
-    </SaleTunnelV2Context.Provider>
+    </SaleTunnelContext.Provider>
   );
 };
 
 export const GenericSaleTunnelInner = (props: GenericSaleTunnelProps) => {
-  const { step } = useSaleTunnelV2Context();
+  const { step } = useSaleTunnelContext();
   switch (step) {
     case SaleTunnelStep.PAYMENT:
       return <GenericSaleTunnelPaymentStep {...props} />;
@@ -131,7 +131,7 @@ export const GenericSaleTunnelInner = (props: GenericSaleTunnelProps) => {
  */
 
 export const GenericSaleTunnelPaymentStep = (props: GenericSaleTunnelProps) => {
-  const { eventKey } = useSaleTunnelV2Context();
+  const { eventKey } = useSaleTunnelContext();
 
   useEffect(() => {
     WebAnalyticsAPIHandler()?.sendCourseProductEvent(CourseProductEvent.OPEN_SALE_TUNNEL, eventKey);
@@ -160,7 +160,7 @@ export const GenericSaleTunnelPaymentStep = (props: GenericSaleTunnelProps) => {
   );
 };
 
-export const GenericSaleTunnelSuccessStep = (props: SaleTunnelV2Props) => {
+export const GenericSaleTunnelSuccessStep = (props: SaleTunnelProps) => {
   return (
     <Modal {...props} size={ModalSize.MEDIUM}>
       <SaleTunnelSuccess />

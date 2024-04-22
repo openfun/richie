@@ -1,6 +1,6 @@
 import { Button, Modal, ModalSize } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { AddressFormModalProps } from 'components/SaleTunnelV2/AddressSelector/CreateAddressFormModal';
+import { AddressFormModalProps } from 'components/SaleTunnel/AddressSelector/CreateAddressFormModal';
 import { Address } from 'types/Joanie';
 import { AddressFormValues, useDashboardAddressForm } from 'hooks/useDashboardAddressForm';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';

@@ -10,10 +10,10 @@ import {
   Product,
   ProductType,
 } from 'types/Joanie';
-import { CredentialSaleTunnel } from 'components/SaleTunnelV2/CredentialSaleTunnel';
-import { CertificateSaleTunnel } from 'components/SaleTunnelV2/CertificateSaleTunnel';
+import { CredentialSaleTunnel } from 'components/SaleTunnel/CredentialSaleTunnel';
+import { CertificateSaleTunnel } from 'components/SaleTunnel/CertificateSaleTunnel';
 
-export interface SaleTunnelV2Props extends Pick<ModalProps, 'isOpen' | 'onClose'> {
+export interface SaleTunnelProps extends Pick<ModalProps, 'isOpen' | 'onClose'> {
   product: Product;
   organizations?: Organization[];
 
@@ -26,7 +26,7 @@ export interface SaleTunnelV2Props extends Pick<ModalProps, 'isOpen' | 'onClose'
 /**
  * This is just a simple wrapper that will render the correct SaleTunnel based on the product type.
  */
-export const SaleTunnelV2 = (props: SaleTunnelV2Props) => {
+export const SaleTunnel = (props: SaleTunnelProps) => {
   return (
     <>
       {props.product.type === ProductType.CREDENTIAL && (

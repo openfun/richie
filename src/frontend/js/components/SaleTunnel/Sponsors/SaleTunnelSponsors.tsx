@@ -1,9 +1,9 @@
-import { useSaleTunnelV2Context } from 'components/SaleTunnelV2/GenericSaleTunnel';
+import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 
 export const SaleTunnelSponsors = () => {
   const {
     props: { organizations },
-  } = useSaleTunnelV2Context();
+  } = useSaleTunnelContext();
   return (
     <div className="sale-tunnel__sponsors">
       {organizations

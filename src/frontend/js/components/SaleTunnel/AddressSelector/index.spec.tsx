@@ -8,17 +8,17 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import {
   SaleTunnelStep,
-  SaleTunnelV2Context,
-  SaleTunnelV2ContextType,
-} from 'components/SaleTunnelV2/GenericSaleTunnel';
+  SaleTunnelContext,
+  SaleTunnelContextType,
+} from 'components/SaleTunnel/GenericSaleTunnel';
 import { Address } from 'types/Joanie';
 import {
   AddressFactory,
   CredentialOrderFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
-import { SaleTunnelV2Props } from 'components/SaleTunnelV2/index';
-import { AddressSelector, getAddressLabel } from 'components/SaleTunnelV2/AddressSelector/index';
+import { SaleTunnelProps } from 'components/SaleTunnel/index';
+import { AddressSelector, getAddressLabel } from 'components/SaleTunnel/AddressSelector/index';
 import { render } from 'utils/test/render';
 import { changeSelect } from 'components/Form/test-utils';
 import { expectMenuToBeClosed, expectMenuToBeOpen } from 'utils/test/Cunningham';
@@ -45,17 +45,17 @@ describe('AddressSelector', () => {
 
   const buildWrapper = () => {
     const contextRef = {
-      current: {} as SaleTunnelV2ContextType,
+      current: {} as SaleTunnelContextType,
     };
 
     const Wrapper = () => {
       const [billingAddress, setBillingAddress] = useState<Address>();
-      const context: SaleTunnelV2ContextType = useMemo(
+      const context: SaleTunnelContextType = useMemo(
         () => ({
           eventKey: 'eventKey',
           order: CredentialOrderFactory().one(),
           product: ProductFactory().one(),
-          props: {} as SaleTunnelV2Props,
+          props: {} as SaleTunnelProps,
           billingAddress,
           setBillingAddress,
           setCreditCard: jest.fn(),
@@ -67,9 +67,9 @@ describe('AddressSelector', () => {
       contextRef.current = context;
 
       return (
-        <SaleTunnelV2Context.Provider value={context}>
+        <SaleTunnelContext.Provider value={context}>
           <AddressSelector />
-        </SaleTunnelV2Context.Provider>
+        </SaleTunnelContext.Provider>
       );
     };
 

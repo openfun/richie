@@ -14,7 +14,7 @@ import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { CreditCard, CreditCardBrand } from 'types/Joanie';
 import { useCreditCardsManagement } from 'hooks/useCreditCardsManagement';
 import { Spinner } from 'components/Spinner';
-import { useSaleTunnelV2Context } from 'components/SaleTunnelV2/GenericSaleTunnel';
+import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { CreditCardExpirationStatus, CreditCardHelper } from 'utils/CreditCardHelper';
 
 const messages = defineMessages({
@@ -80,7 +80,7 @@ export const CreditCardSelector = () => {
     items: creditCards,
   } = useCreditCardsManagement();
 
-  const { creditCard, setCreditCard } = useSaleTunnelV2Context();
+  const { creditCard, setCreditCard } = useSaleTunnelContext();
 
   const getDefaultCreditCard = () => {
     if (creditCards.length === 0) {

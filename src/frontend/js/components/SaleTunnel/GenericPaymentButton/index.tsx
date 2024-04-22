@@ -3,10 +3,10 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@openfun/cunningham-react';
 import type * as Joanie from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { useSaleTunnelV2Context } from 'components/SaleTunnelV2/GenericSaleTunnel';
+import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { useOrders } from 'hooks/useOrders';
 import { OrderCreationPayload, OrderState } from 'types/Joanie';
-import { useTerms } from 'components/SaleTunnelV2/hooks/useTerms';
+import { useTerms } from 'components/SaleTunnel/hooks/useTerms';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { ObjectHelper } from 'utils/ObjectHelper';
@@ -92,7 +92,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     product,
     onPaymentSuccess,
     props: saleTunnelProps,
-  } = useSaleTunnelV2Context();
+  } = useSaleTunnelContext();
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
   const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);

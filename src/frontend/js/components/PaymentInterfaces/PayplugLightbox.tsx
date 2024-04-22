@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { handle } from 'utils/errors/handle';
 import { Payment } from 'types/Joanie';
 import { PaymentErrorMessageId, PaymentInterfaceProps } from 'components/PaymentInterfaces/index';
-import { OneClickPaymentInfo } from 'components/SaleTunnelV2/GenericPaymentButton';
+import { OneClickPaymentInfo } from 'components/SaleTunnel/GenericPaymentButton';
 
 /**
  * Load the form payplug script if it has been not yet uploaded then open

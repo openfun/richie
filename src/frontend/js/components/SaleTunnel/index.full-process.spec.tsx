@@ -16,7 +16,7 @@ import { ACTIVE_ORDER_STATES, CourseRun } from 'types/Joanie';
 import { Priority } from 'types';
 import { expectMenuToBeClosed, expectMenuToBeOpen } from 'utils/test/Cunningham';
 import { changeSelect } from 'components/Form/test-utils';
-import { getAddressLabel } from 'components/SaleTunnelV2/AddressSelector';
+import { getAddressLabel } from 'components/SaleTunnel/AddressSelector';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -40,7 +40,7 @@ jest.mock('../PaymentInterfaces');
  * This test aims to test the entire process of buying a product, from the CourseProductItem.
  */
 
-describe('SaleTunnelV2', () => {
+describe('SaleTunnel', () => {
   setupJoanieSession();
 
   const priceFormatter = (currency: string, price: number) =>

@@ -12,9 +12,9 @@ import {
 import type * as Joanie from 'types/Joanie';
 import { Maybe } from 'types/utils';
 import { OrderCredentialCreationPayload } from 'types/Joanie';
-import { SaleTunnelV2, SaleTunnelV2Props } from 'components/SaleTunnelV2/index';
+import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel/index';
 import { render } from 'utils/test/render';
-import { getAddressLabel } from 'components/SaleTunnelV2/AddressSelector';
+import { getAddressLabel } from 'components/SaleTunnel/AddressSelector';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -42,8 +42,8 @@ jest.mock('../PaymentInterfaces');
  */
 
 describe('SaleTunnel / Credential', () => {
-  const Wrapper = (props: Omit<SaleTunnelV2Props, 'isOpen' | 'onClose'>) => {
-    return <SaleTunnelV2 {...props} isOpen={true} onClose={() => {}} />;
+  const Wrapper = (props: Omit<SaleTunnelProps, 'isOpen' | 'onClose'>) => {
+    return <SaleTunnel {...props} isOpen={true} onClose={() => {}} />;
   };
 
   const formatPrice = (price: number, currency: string) =>
