@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import countries from 'i18n-iso-countries';
 import { Checkbox } from '@openfun/cunningham-react';
 
+import { useEffect } from 'react';
 import { getLocalizedCunninghamErrorProp } from 'components/Form/utils';
 import { messages as managementMessages } from 'components/AddressesManagement';
 import { messages as formMessages } from 'components/Form/messages';
@@ -62,6 +63,10 @@ export const useDashboardAddressForm = (address?: Address) => {
     resolver: yupResolver(validationSchema),
   });
   const { register, handleSubmit, formState } = form;
+
+  useEffect(() => {
+    form.reset(address ?? defaultValues);
+  }, [address]);
 
   const FormView = (
     <FormProvider {...form}>
@@ -143,5 +148,6 @@ export const useDashboardAddressForm = (address?: Address) => {
   return {
     FormView,
     handleSubmit,
+    reset: form.reset,
   };
 };
