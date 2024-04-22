@@ -97,17 +97,18 @@ describe('<UserLogin />', () => {
       dashboard_teacher: { label: 'Teacher dashboard', action: 'https://dashboard.teacher.url' },
     };
 
-    fetchMock.get(
-      'https://endpoint.test/api/v1.0/users/me/',
-      JoanieUserProfileFactory({
-        abilities: {
-          [JoanieUserApiAbilityActions.HAS_ORGANIZATION_ACCESS]: false,
-          [JoanieUserApiAbilityActions.HAS_COURSE_ACCESS]: false,
-        },
-      }).one(),
-    );
     render(<UserLogin context={context} profileUrls={profileUrls} />, {
-      queryOptions: { client: createTestQueryClient({ user }) },
+      queryOptions: {
+        client: createTestQueryClient({
+          user,
+          joanieUserProfile: JoanieUserProfileFactory({
+            abilities: {
+              [JoanieUserApiAbilityActions.HAS_ORGANIZATION_ACCESS]: false,
+              [JoanieUserApiAbilityActions.HAS_COURSE_ACCESS]: false,
+            },
+          }).one(),
+        }),
+      },
     });
 
     const button = await screen.findByLabelText(`Access to your profile settings`, {
@@ -132,16 +133,17 @@ describe('<UserLogin />', () => {
       dashboard_teacher: { label: 'Teacher dashboard', action: 'https://dashboard.teacher.url' },
     };
 
-    fetchMock.get(
-      'https://endpoint.test/api/v1.0/users/me/',
-      JoanieUserProfileFactory({
-        abilities: {
-          [JoanieUserApiAbilityActions.HAS_ORGANIZATION_ACCESS]: true,
-        },
-      }).one(),
-    );
     render(<UserLogin context={context} profileUrls={profileUrls} />, {
-      queryOptions: { client: createTestQueryClient({ user }) },
+      queryOptions: {
+        client: createTestQueryClient({
+          user,
+          joanieUserProfile: JoanieUserProfileFactory({
+            abilities: {
+              [JoanieUserApiAbilityActions.HAS_ORGANIZATION_ACCESS]: true,
+            },
+          }).one(),
+        }),
+      },
     });
 
     const button = await screen.findByLabelText(`Access to your profile settings`, {
