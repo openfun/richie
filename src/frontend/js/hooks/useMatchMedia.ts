@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { matchMedia } from 'utils/indirection/window';
+import { tokens } from 'utils/cunningham-tokens';
 
 /**
  * Hook which listens if a mediaQuery matched.
@@ -33,5 +34,8 @@ const useMatchMedia = (query: string): boolean => {
 
   return matches;
 };
+
+export const useMatchMediaLg = () =>
+  useMatchMedia(`(max-width: ${tokens.themes.default.theme.breakpoints.lg})`);
 
 export default useMatchMedia;
