@@ -92,6 +92,7 @@ export const tokens = {
           indianred3: '#df484b',
           midnightblue: '#141b2c',
           mantis: '#76ce68',
+          'mantis-darken': '#006908',
         },
         font: {
           sizes: {
@@ -138,12 +139,7 @@ export const tokens = {
       },
       components: {
         button: { 'font-family': 'Montserrat' },
-        dashboardListAvatar: {
-          // hsl saturation range: 0, 100
-          saturation: 30,
-          // hsl lightness range: 0, 100
-          lightness: 55,
-        },
+        dashboardListAvatar: { saturation: 30, lightness: 55 },
       },
     },
     dark: {

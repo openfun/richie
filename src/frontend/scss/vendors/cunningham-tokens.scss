@@ -91,6 +91,7 @@ $themes: (
         'indianred3': #df484b,
         'midnightblue': #141b2c,
         'mantis': #76ce68,
+        'mantis-darken': #006908,
       ),
       'font': (
         'sizes': (
@@ -138,9 +139,9 @@ $themes: (
         'st': 0.25rem,
       ),
       'transitions': (
-        'ease-in': cubic-bezier(0.32, 0, 0.67, 0),
-        'ease-out': cubic-bezier(0.33, 1, 0.68, 1),
-        'ease-in-out': cubic-bezier(0.65, 0, 0.35, 1),
+        'ease-in': #{cubic-bezier(0.32, 0, 0.67, 0)},
+        'ease-out': #{cubic-bezier(0.33, 1, 0.68, 1)},
+        'ease-in-out': #{cubic-bezier(0.65, 0, 0.35, 1)},
         'duration': 250ms,
       ),
       'breakpoints': (

@@ -88,6 +88,7 @@
   --c--theme--colors--indianred3: #df484b;
   --c--theme--colors--midnightblue: #141b2c;
   --c--theme--colors--mantis: #76ce68;
+  --c--theme--colors--mantis-darken: #006908;
   --c--theme--font--sizes--h1: 1.75rem;
   --c--theme--font--sizes--h2: 1.375rem;
   --c--theme--font--sizes--h3: 1.125rem;
@@ -132,6 +133,8 @@
   --c--theme--breakpoints--xl: 1200px;
   --c--theme--breakpoints--xxl: 1400px;
   --c--components--button--font-family: Montserrat;
+  --c--components--dashboardlistavatar--saturation: 30;
+  --c--components--dashboardlistavatar--lightness: 55;
 }
 .cunningham-theme--dark {
   --c--theme--colors--greyscale-100: #182536;
