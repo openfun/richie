@@ -1,0 +1,32 @@
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 12px;
+  border-radius: 24px;
+  font-family: var(--c--theme--font--families--accent);
+  font-weight: var(--c--theme--font--weight--semibold);
+  font-size: 12px;
+
+  &--incoming {
+    background-color: var(--c--theme--colors--grey87);
+    color: var(--c--theme--colors--charcoal);
+  }
+
+  &--paid {
+    background-color: var(--c--theme--colors--mantis);
+    color: var(--c--theme--colors--mantis-darken);
+  }
+
+  &--pending {
+    background-color: var(--c--theme--colors--denim);
+    color: var(--c--theme--colors--white);
+  }
+
+  &--require_payment,
+  &--failed {
+    background-color: var(--c--theme--colors--firebrick6);
+    color: var(--c--theme--colors--white);
+  }
+}
