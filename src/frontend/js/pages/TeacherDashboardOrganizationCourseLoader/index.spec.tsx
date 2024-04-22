@@ -44,6 +44,7 @@ describe('components/TeacherDashboardOrganizationCourseLoader', () => {
 
   it('should render', async () => {
     const organization = OrganizationFactory().one();
+
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/`,
       organization,
@@ -78,6 +79,10 @@ describe('components/TeacherDashboardOrganizationCourseLoader', () => {
       `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
     );
 
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?signature_state=half_signed&page=1`,
+      [],
+    );
     await expectNoSpinner('Loading organization...');
 
     expect(
@@ -88,6 +93,7 @@ describe('components/TeacherDashboardOrganizationCourseLoader', () => {
 
     // Lessons
     expect(await screen.findAllByTestId('course-glimpse')).toHaveLength(25);
+    expect(calledUrls).toHaveLength(nbApiCalls);
   });
 
   it('should perform search', async () => {

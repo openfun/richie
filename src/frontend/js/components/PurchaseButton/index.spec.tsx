@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
 import {
   CourseStateFactory,
+  UserFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
 import {
@@ -17,17 +18,19 @@ import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ProductType } from 'types/Joanie';
 import { Priority } from 'types';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import PurchaseButton from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
-    joanie_backend: { endpoint: 'https://joanie.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
 describe('PurchaseButton', () => {
+  setupJoanieSession();
   afterEach(() => {
     fetchMock.restore();
   });
@@ -59,18 +62,18 @@ describe('PurchaseButton', () => {
   });
 
   it('shows cta to open sale tunnel when user is authenticated', async () => {
+    const courseCode = '00000';
     const product = ProductFactory().one();
-    fetchMock
-      .get('https://joanie.test/api/v1.0/addresses/', [])
-      .get('https://joanie.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.test/api/v1.0/orders/', []);
-
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+      {},
+    );
     render(
       <Wrapper client={createTestQueryClient({ user: true })}>
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: '00000' }).one()}
+          course={CourseLightFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
@@ -90,18 +93,21 @@ describe('PurchaseButton', () => {
   });
 
   it('shows cta to open sale tunnel when remaining orders is null', async () => {
+    const user = UserFactory().one();
+    const courseCode = '00000';
     const product = ProductFactory({ remaining_order_count: null }).one();
-    fetchMock
-      .get('https://joanie.test/api/v1.0/addresses/', [])
-      .get('https://joanie.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.test/api/v1.0/orders/', []);
-
+    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
+    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+      {},
+    );
     render(
-      <Wrapper client={createTestQueryClient({ user: true })}>
+      <Wrapper client={createTestQueryClient({ user })}>
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: '00000' }).one()}
+          course={CourseLightFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
@@ -123,20 +129,20 @@ describe('PurchaseButton', () => {
   });
 
   it('shows cta to open sale tunnel when remaining orders is undefined', async () => {
+    const courseCode = '00000';
     const product = ProductFactory().one();
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+      {},
+    );
     delete product.remaining_order_count;
-
-    fetchMock
-      .get('https://joanie.test/api/v1.0/addresses/', [])
-      .get('https://joanie.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.test/api/v1.0/orders/', []);
 
     render(
       <Wrapper client={createTestQueryClient({ user: true })}>
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: '00000' }).one()}
+          course={CourseLightFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
@@ -158,18 +164,18 @@ describe('PurchaseButton', () => {
   });
 
   it('renders a disabled CTA if the product have no remaining orders', async () => {
+    const courseCode = '00000';
     const product = ProductFactory({ remaining_order_count: 0 }).one();
-    fetchMock
-      .get('https://joanie.test/api/v1.0/addresses/', [])
-      .get('https://joanie.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.test/api/v1.0/orders/', []);
-
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+      {},
+    );
     render(
       <Wrapper client={createTestQueryClient({ user: true })}>
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: '00000' }).one()}
+          course={CourseLightFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
@@ -193,19 +199,20 @@ describe('PurchaseButton', () => {
   ])(
     'renders a disabled CTA if one target course has no course runs. Case "$label"',
     async ({ productData }) => {
+      const courseCode = '00000';
       const product = ProductFactory({ ...productData, type: ProductType.CREDENTIAL }).one();
       product.target_courses[0].course_runs = [];
-      fetchMock
-        .get('https://joanie.test/api/v1.0/addresses/', [])
-        .get('https://joanie.test/api/v1.0/credit-cards/', [])
-        .get('https://joanie.test/api/v1.0/orders/', []);
+      fetchMock.get(
+        `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        {},
+      );
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
           <PurchaseButton
             product={product}
             disabled={false}
-            course={CourseLightFactory({ code: '00000' }).one()}
+            course={CourseLightFactory({ code: courseCode }).one()}
           />
         </Wrapper>,
       );
@@ -244,10 +251,10 @@ describe('PurchaseButton', () => {
       const product = CertificateProductFactory().one();
       const enrollment = EnrollmentFactory().one();
       enrollment.course_run.state = CourseStateFactory(courseRunStateData).one();
-      fetchMock
-        .get('https://joanie.test/api/v1.0/addresses/', [])
-        .get('https://joanie.test/api/v1.0/credit-cards/', [])
-        .get('https://joanie.test/api/v1.0/orders/', []);
+      fetchMock.get(
+        `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollment.id}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        {},
+      );
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
@@ -298,10 +305,10 @@ describe('PurchaseButton', () => {
       const enrollment = EnrollmentFactory().one();
       enrollment.course_run.state = CourseStateFactory(courseRunStateData).one();
 
-      fetchMock
-        .get('https://joanie.test/api/v1.0/addresses/', [])
-        .get('https://joanie.test/api/v1.0/credit-cards/', [])
-        .get('https://joanie.test/api/v1.0/orders/', []);
+      fetchMock.get(
+        `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollment.id}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        {},
+      );
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
@@ -325,19 +332,20 @@ describe('PurchaseButton', () => {
   );
 
   it('renders a disabled CTA if product has no target courses', async () => {
+    const courseCode = '00000';
     const product = ProductFactory().one();
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+      {},
+    );
     product.target_courses = [];
-    fetchMock
-      .get('https://joanie.test/api/v1.0/addresses/', [])
-      .get('https://joanie.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.test/api/v1.0/orders/', []);
 
     render(
       <Wrapper client={createTestQueryClient({ user: true })}>
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: '00000' }).one()}
+          course={CourseLightFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
@@ -355,18 +363,19 @@ describe('PurchaseButton', () => {
   });
 
   it('does not render CTA if disabled property is false', async () => {
+    const courseCode = '00000';
     const product = ProductFactory().one();
-    fetchMock
-      .get('https://joanie.test/api/v1.0/addresses/', [])
-      .get('https://joanie.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.test/api/v1.0/orders/', []);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+      {},
+    );
 
     render(
       <Wrapper client={createTestQueryClient({ user: true })}>
         <PurchaseButton
           product={product}
           disabled={true}
-          course={CourseLightFactory({ code: '00000' }).one()}
+          course={CourseLightFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
