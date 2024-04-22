@@ -137,8 +137,8 @@
   }
 
   &--inline {
-    height: 38px;
-    width: 52px;
+    height: rem-calc(38px);
+    width: rem-calc(52px);
     background-color: transparent;
   }
 

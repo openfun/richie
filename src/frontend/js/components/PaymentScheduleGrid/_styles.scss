@@ -7,7 +7,7 @@
   border-radius: 24px;
   font-family: var(--c--theme--font--families--accent);
   font-weight: var(--c--theme--font--weight--semibold);
-  font-size: 12px;
+  font-size: rem-calc(12px);
 
   &--incoming {
     background-color: var(--c--theme--colors--grey87);

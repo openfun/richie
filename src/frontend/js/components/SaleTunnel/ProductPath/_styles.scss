@@ -2,7 +2,7 @@
   text-align: left;
 
   &__title {
-    padding-left: 16px;
+    padding-left: rem-calc(16px);
   }
 
   &__product-detail-list {
@@ -11,7 +11,7 @@
   }
 
   .product-detail-row {
-    padding-left: 12px;
+    padding-left: rem-calc(12px);
     position: relative;
 
     &:not(:last-child) {

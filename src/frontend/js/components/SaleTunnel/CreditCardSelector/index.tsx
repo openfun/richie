@@ -10,8 +10,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { CreditCardBrandLogo } from 'pages/DashboardCreditCardsManagement/CreditCardBrandLogo';
-import { CreditCardFactory } from 'utils/test/factories/joanie';
-import { CreditCard, CreditCardBrand } from 'types/Joanie';
+import { CreditCard } from 'types/Joanie';
 import { useCreditCardsManagement } from 'hooks/useCreditCardsManagement';
 import { Spinner } from 'components/Spinner';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
@@ -88,7 +87,7 @@ export const CreditCardSelector = () => {
     if (creditCards.length === 0) {
       return;
     }
-    const mainCreditCard = creditCards.find((_creditCard) => _creditCard.is_main);
+    const mainCreditCard = creditCards.find((card) => card.is_main);
     if (mainCreditCard) {
       return mainCreditCard;
     }
@@ -163,10 +162,7 @@ const CreditCardInline = ({ creditCard }: { creditCard: CreditCard }) => {
     expirationState === CreditCardExpirationStatus.EXPIRED ? messages.expired : messages.expiration;
   return (
     <div className="credit-card-selector__card" data-testid={`credit-card-${creditCard.id}`}>
-      <CreditCardBrandLogo
-        creditCard={{ ...CreditCardFactory().one(), brand: CreditCardBrand.MASTERCARD }}
-        variant="inline"
-      />
+      <CreditCardBrandLogo creditCard={creditCard} variant="inline" />
       <div className="credit-card-selector__card__info">
         <div className="credit-card-selector__card__info__title">{creditCard.title}</div>
         <div className="credit-card-selector__card__info__meta">
@@ -233,7 +229,7 @@ const CreditCardSelectorModal = ({
         </Button>
       }
     >
-      <div className="credit-card-selector__modal" data-testid="CreditCardSelectorModal">
+      <div className="credit-card-selector__modal" data-testid="credit-card-selector-modal">
         <div className="description mb-s">
           <FormattedMessage {...messages.modalDescription} />
         </div>

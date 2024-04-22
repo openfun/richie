@@ -1,14 +1,7 @@
 import { Children, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import c from 'classnames';
-import {
-  ProductType,
-  OrderState,
-  CourseLight,
-  Product,
-  CredentialOrder,
-  CredentialProduct,
-} from 'types/Joanie';
+import { ProductType, OrderState, CourseLight, Product, CredentialOrder } from 'types/Joanie';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -166,6 +159,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
     product_id: productId,
     course_id: course.code,
   });
+
   const product = courseProductRelation?.product;
   const { item: productOrder, states: orderQueryStates } = useProductOrder({
     productId,
@@ -238,7 +232,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
           <footer className="product-widget__footer">
             <CourseProductItemFooter
               course={course}
-              product={product as CredentialProduct}
+              courseProductRelation={courseProductRelation}
               orderGroups={orderGroups}
               orderGroupsAvailable={orderGroupsAvailable}
               canPurchase={canPurchase}

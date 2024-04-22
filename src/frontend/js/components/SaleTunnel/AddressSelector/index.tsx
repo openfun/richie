@@ -103,8 +103,8 @@ export const AddressSelector = () => {
         {...editFormModal}
         address={billingAddress!}
         onSettled={(updatedAddress) => {
-          editFormModal.close();
           setBillingAddress(updatedAddress);
+          editFormModal.close();
         }}
       />
     </div>

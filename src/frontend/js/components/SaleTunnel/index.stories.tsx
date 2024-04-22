@@ -1,7 +1,7 @@
 import { StoryObj, Meta } from '@storybook/react';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { CourseFactory, ProductFactory } from 'utils/test/factories/joanie';
-import SaleTunnel, { SaleTunnelProps } from './index';
+import { SaleTunnel, SaleTunnelProps } from './index';
 
 export default {
   // component: SaleTunnel,

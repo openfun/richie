@@ -1,6 +1,6 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
-import { CourseLight, CredentialProduct, OrderGroup } from 'types/Joanie';
+import { CourseLight, CourseProductRelation, CredentialProduct, OrderGroup } from 'types/Joanie';
 
 const messages = defineMessages({
   noSeatsAvailable: {
@@ -23,7 +23,7 @@ other {# remaining seats}
 
 interface CourseProductItemFooterProps {
   course: CourseLight;
-  product: CredentialProduct;
+  courseProductRelation: CourseProductRelation;
   canPurchase: boolean;
   orderGroups: OrderGroup[];
   orderGroupsAvailable: OrderGroup[];
@@ -31,7 +31,7 @@ interface CourseProductItemFooterProps {
 
 const CourseProductItemFooter = ({
   course,
-  product,
+  courseProductRelation,
   orderGroups,
   orderGroupsAvailable,
   canPurchase,
@@ -40,7 +40,8 @@ const CourseProductItemFooter = ({
     return (
       <PurchaseButton
         course={course}
-        product={product}
+        product={courseProductRelation.product as CredentialProduct}
+        organizations={courseProductRelation.organizations}
         disabled={!canPurchase}
         buttonProps={{ fullWidth: true }}
       />
@@ -57,7 +58,8 @@ const CourseProductItemFooter = ({
     <div className="product-widget__footer__order-group" key={orderGroup.id}>
       <PurchaseButton
         course={course}
-        product={product}
+        product={courseProductRelation.product as CredentialProduct}
+        organizations={courseProductRelation.organizations}
         disabled={!canPurchase}
         orderGroup={orderGroup}
         buttonProps={{ fullWidth: true }}

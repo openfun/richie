@@ -1,11 +1,104 @@
-.SaleTunnel__modal {
-  min-height: 500px;
+.sale-tunnel {
+  font-size: 14px;
+  text-align: left;
 
-  &-body {
-    padding: 0 3rem 1.5rem 3rem;
+  &__main {
+    display: flex;
+    justify-content: center;
+    min-height: 400px;
+    gap: rem-calc(68px);
 
-    @include media-breakpoint-down(sm) {
-      padding: 0 1rem 1.5rem 1rem;
+    @include media-breakpoint-down(md) {
+      flex-direction: column;
+      gap: 3rem;
+      padding-top: 2rem;
+
+      .product-path__title {
+        display: none;
+      }
+    }
+
+    &__separator {
+      background-color: r-theme-val(sale-tunnel, separator-color);
+      width: 1px;
+
+      @include media-breakpoint-down(md) {
+        width: 100%;
+        height: 1px;
+      }
+    }
+
+    &__left,
+    &__right {
+      flex: 1;
+      overflow: hidden;
     }
   }
+
+  &__information {
+    display: flex;
+    flex-direction: column;
+    gap: var(--c--theme--spacings--b);
+
+    &__billing-address {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      @include media-breakpoint-down(md) {
+        flex-direction: column;
+      }
+    }
+  }
+
+  &__footer {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__total {
+    &__amount {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &__email {
+    &__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__description {
+      color: r-theme-val(sale-tunnel, email-description-color);
+    }
+
+    h4 {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+.description {
+  font-size: 14px;
+  color: r-theme-val(sale-tunnel, description-color);
+  text-align: left;
+}
+
+.block-title {
+  font-size: var(--c--theme--font--sizes--l);
+  color: r-theme-val(sale-tunnel, title-color);
+  font-weight: var(--c--theme--font--weights--extrabold);
+  text-align: left;
+  font-family: var(--c--theme--font--families--accent);
+}
+
+.sub-block-title {
+  font-size: 12px;
+  color: r-theme-val(sale-tunnel, title-color);
+  font-weight: var(--c--theme--font--weights--bold);
+  text-align: left;
 }
