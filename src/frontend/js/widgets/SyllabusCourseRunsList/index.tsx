@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { createPortal } from 'react-dom';
-import { Button } from '@openfun/cunningham-react';
+import { Button, CunninghamProvider } from '@openfun/cunningham-react';
 import { CourseRun, Priority } from 'types';
 import { computeStates } from 'utils/CourseRuns';
 import { SyllabusAsideList } from 'widgets/SyllabusCourseRunsList/components/SyllabusAsideList';
@@ -70,7 +70,7 @@ const SyllabusCourseRunsList = ({
   const subContainer = useMemo(() => document.querySelector('.' + COURSE_DETAIL_ASIDE_CLASS)!, []);
 
   return (
-    <>
+    <CunninghamProvider modalParentSelector={() => document.body}>
       {openedRuns.length === 0 && (
         <div className="course-detail__row course-detail__runs course-detail__runs--open">
           <div className="course-detail__empty">
@@ -107,7 +107,7 @@ const SyllabusCourseRunsList = ({
         />,
         subContainer,
       )}
-    </>
+    </CunninghamProvider>
   );
 };
 
