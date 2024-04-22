@@ -1,11 +1,12 @@
 import c from 'classnames';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useMemo, useState } from 'react';
-import { Button, ButtonProps } from '@openfun/cunningham-react';
+import { useMemo } from 'react';
+import { Button, ButtonProps, useModal } from '@openfun/cunningham-react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
-import SaleTunnel, { SaleTunnelProps } from 'components/SaleTunnel';
 import { isOpenedCourseRunCertificate, isOpenedCourseRunCredential } from 'utils/CourseRuns';
+import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel';
+import { Organization } from 'types/Joanie';
 
 const messages = defineMessages({
   loginToPurchase: {
@@ -46,6 +47,7 @@ interface PurchaseButtonPropsBase {
   className?: string;
   buttonProps?: ButtonProps;
   onFinish?: SaleTunnelProps['onFinish'];
+  organizations?: Organization[];
 }
 
 interface CredentialPurchaseButtonProps extends PurchaseButtonPropsBase {
@@ -65,6 +67,7 @@ const PurchaseButton = ({
   course,
   enrollment,
   orderGroup,
+  organizations,
   disabled = false,
   className,
   buttonProps,
@@ -72,7 +75,6 @@ const PurchaseButton = ({
 }: CredentialPurchaseButtonProps | CertificatePurchaseButtonProps) => {
   const intl = useIntl();
   const { user, login } = useSession();
-  const [isSaleTunnelOpen, setIsSaleTunnelOpen] = useState(false);
 
   const hasAtLeastOneCourseRun = useMemo(() => {
     if (product.type === Joanie.ProductType.CERTIFICATE) {
@@ -106,6 +108,10 @@ const PurchaseButton = ({
     typeof product?.remaining_order_count !== 'number' || product.remaining_order_count > 0;
   const isPurchasable = hasAtLeastOneRemainingOrder && hasAtLeastOneCourseRun;
 
+  const saleTunnelModal = useModal({
+    isOpenDefault: false,
+  });
+
   return (
     <>
       {!disabled && (
@@ -113,7 +119,11 @@ const PurchaseButton = ({
           <Button
             data-testid="PurchaseButton__cta"
             className={c('purchase-button__cta', className)}
-            onClick={() => hasAtLeastOneCourseRun && setIsSaleTunnelOpen(true)}
+            onClick={() => {
+              if (hasAtLeastOneCourseRun) {
+                saleTunnelModal.open();
+              }
+            }}
             // so that the button is explicit on its own, we add a description that doesn't
             // rely on the text coming from the CMS
             /* eslint-disable-next-line jsx-a11y/aria-props */
@@ -142,9 +152,9 @@ const PurchaseButton = ({
         </>
       )}
       <SaleTunnel
-        isOpen={isSaleTunnelOpen}
-        onClose={() => setIsSaleTunnelOpen(false)}
+        {...saleTunnelModal}
         product={product}
+        organizations={organizations}
         enrollment={enrollment}
         orderGroup={orderGroup}
         course={course}

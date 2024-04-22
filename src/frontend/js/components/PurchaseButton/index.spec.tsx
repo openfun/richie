@@ -3,6 +3,7 @@ import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import {
   CourseStateFactory,
   UserFactory,
@@ -29,6 +30,14 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
+jest.mock('utils/indirection/window', () => ({
+  matchMedia: () => ({
+    matches: true,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  }),
+}));
+
 describe('PurchaseButton', () => {
   setupJoanieSession();
   afterEach(() => {
@@ -38,7 +47,9 @@ describe('PurchaseButton', () => {
   const Wrapper = ({ client, children }: React.PropsWithChildren<{ client: QueryClient }>) => (
     <IntlProvider locale="en">
       <QueryClientProvider client={client}>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <CunninghamProvider>{children}</CunninghamProvider>
+        </SessionProvider>
       </QueryClientProvider>
     </IntlProvider>
   );
@@ -89,7 +100,7 @@ describe('PurchaseButton', () => {
     await userEvent.click(button);
 
     // - SaleTunnel should have been opened
-    expect(screen.getByTestId('SaleTunnel__modal')).toBeInTheDocument();
+    expect(screen.getByTestId('GenericSaleTunnelPaymentStep')).toBeInTheDocument();
   });
 
   it('shows cta to open sale tunnel when remaining orders is null', async () => {
@@ -125,7 +136,7 @@ describe('PurchaseButton', () => {
     await userEvent.click(button);
 
     // - SaleTunnel should have been opened
-    expect(await screen.findByTestId('SaleTunnel__modal')).toBeInTheDocument();
+    expect(await screen.findByTestId('GenericSaleTunnelPaymentStep')).toBeInTheDocument();
   });
 
   it('shows cta to open sale tunnel when remaining orders is undefined', async () => {
@@ -160,7 +171,7 @@ describe('PurchaseButton', () => {
     await userEvent.click(button);
 
     // - SaleTunnel should have been opened
-    expect(await screen.findByTestId('SaleTunnel__modal')).toBeInTheDocument();
+    expect(await screen.findByTestId('GenericSaleTunnelPaymentStep')).toBeInTheDocument();
   });
 
   it('renders a disabled CTA if the product have no remaining orders', async () => {
