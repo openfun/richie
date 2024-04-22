@@ -1,8 +1,15 @@
+import classNames from 'classnames';
 import { CreditCard } from 'types/Joanie';
 
-export const CreditCardBrandLogo = ({ creditCard }: { creditCard: CreditCard }) => {
+export const CreditCardBrandLogo = ({
+  creditCard,
+  variant = 'default',
+}: {
+  creditCard: CreditCard;
+  variant?: 'default' | 'inline';
+}) => {
   return (
-    <div className="credit-card-brand-logo">
+    <div className={classNames('credit-card-brand-logo', 'credit-card-brand-logo--' + variant)}>
       <img
         alt=""
         src={
