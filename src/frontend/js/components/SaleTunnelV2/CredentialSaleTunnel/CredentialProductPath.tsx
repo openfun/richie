@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Product } from 'types/Joanie';
-import TargetCourseDetail from 'components/SaleTunnel/components/SaleTunnelStepValidation/TargetCourseDetail';
+import TargetCourseDetail from 'components/SaleTunnelV2/ProductPath/TargetCourseDetail';
 import { ProductPathCertificateDefinition } from 'components/SaleTunnelV2/ProductPath/ProductPathCertificateDefinition';
 import { ProductPathInstructions } from 'components/SaleTunnelV2/ProductPath/ProductPathInstructions';
 

@@ -34,7 +34,7 @@ jest.mock('utils/indirection/window', () => ({
   }),
 }));
 
-jest.mock('../PaymentButton/components/PaymentInterfaces');
+jest.mock('../PaymentInterfaces');
 
 /**
  * This test aims to test the entire process of buying a product, from the CourseProductItem.

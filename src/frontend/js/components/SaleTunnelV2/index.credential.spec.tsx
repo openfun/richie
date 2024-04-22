@@ -35,7 +35,7 @@ jest.mock('utils/indirection/window', () => ({
   }),
 }));
 
-jest.mock('../PaymentButton/components/PaymentInterfaces');
+jest.mock('../PaymentInterfaces');
 
 /**
  * This test file contains Sale Tunnel tests exclusively related to the Credential product.

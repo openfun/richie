@@ -2,6 +2,7 @@ import { act, cleanup, fireEvent, screen, waitFor } from '@testing-library/react
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import userEvent from '@testing-library/user-event';
+import PaymentButton from 'components/PaymentButton';
 import { OrderCredentialCreationPayload, OrderState, Product, ProductType } from 'types/Joanie';
 import {
   AddressFactory,
@@ -27,7 +28,6 @@ import { PAYMENT_SETTINGS } from 'settings';
 import type * as Joanie from 'types/Joanie';
 import { Maybe } from 'types/utils';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import PaymentButton from 'components/PaymentButton';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -48,7 +48,7 @@ jest.mock('utils/indirection/window', () => ({
   }),
 }));
 
-jest.mock('../PaymentButton/components/PaymentInterfaces');
+jest.mock('../PaymentInterfaces');
 
 describe.each([
   {

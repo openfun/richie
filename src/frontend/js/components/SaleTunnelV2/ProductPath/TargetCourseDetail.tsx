@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { TargetCourse } from 'types/Joanie';
 import { Priority } from 'types';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import CourseRunsList from './CourseRunsList';
+import CourseRunsList from 'components/SaleTunnelV2/ProductPath/CourseRunsList';
 
 type Props = {
   course: TargetCourse;

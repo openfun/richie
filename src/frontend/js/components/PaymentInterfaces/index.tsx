@@ -1,7 +1,15 @@
 import { lazy, Suspense, useEffect } from 'react';
 import * as Joanie from 'types/Joanie';
 import { handle } from 'utils/errors/handle';
-import { PaymentErrorMessageId } from 'components/PaymentButton';
+
+export enum PaymentErrorMessageId {
+  ERROR_ABORT = 'errorAbort',
+  ERROR_ABORTING = 'errorAborting',
+  ERROR_ADDRESS = 'errorAddress',
+  ERROR_DEFAULT = 'errorDefault',
+  ERROR_FULL_PRODUCT = 'errorFullProduct',
+  ERROR_TERMS = 'errorTerms',
+}
 
 const LazyPayplugLightbox = lazy(() => import('./PayplugLightbox'));
 const LazyDummy = lazy(() => import('./Dummy'));

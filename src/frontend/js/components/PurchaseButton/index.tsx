@@ -1,12 +1,11 @@
 import c from 'classnames';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Button, ButtonProps, useModal } from '@openfun/cunningham-react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
-import SaleTunnel, { SaleTunnelProps } from 'components/SaleTunnel';
 import { isOpenedCourseRunCertificate, isOpenedCourseRunCredential } from 'utils/CourseRuns';
-import { SaleTunnelV2 } from 'components/SaleTunnelV2';
+import { SaleTunnelV2, SaleTunnelV2Props } from 'components/SaleTunnelV2';
 import { Organization } from 'types/Joanie';
 
 const messages = defineMessages({
@@ -47,7 +46,7 @@ interface PurchaseButtonPropsBase {
   disabled?: boolean;
   className?: string;
   buttonProps?: ButtonProps;
-  onFinish?: SaleTunnelProps['onFinish'];
+  onFinish?: SaleTunnelV2Props['onFinish'];
   organizations?: Organization[];
 }
 
@@ -76,7 +75,6 @@ const PurchaseButton = ({
 }: CredentialPurchaseButtonProps | CertificatePurchaseButtonProps) => {
   const intl = useIntl();
   const { user, login } = useSession();
-  const [isSaleTunnelOpen, setIsSaleTunnelOpen] = useState(false);
 
   const hasAtLeastOneCourseRun = useMemo(() => {
     if (product.type === Joanie.ProductType.CERTIFICATE) {
@@ -156,26 +154,15 @@ const PurchaseButton = ({
           )}
         </>
       )}
-      <SaleTunnel
-        isOpen={isSaleTunnelOpen}
-        onClose={() => setIsSaleTunnelOpen(false)}
+      <SaleTunnelV2
+        {...saleTunnelModal}
         product={product}
+        organizations={organizations}
         enrollment={enrollment}
         orderGroup={orderGroup}
         course={course}
         onFinish={onFinish}
       />
-      {true && (
-        <SaleTunnelV2
-          {...saleTunnelModal}
-          product={product}
-          organizations={organizations}
-          enrollment={enrollment}
-          orderGroup={orderGroup}
-          course={course}
-          onFinish={onFinish}
-        />
-      )}
     </>
   );
 };

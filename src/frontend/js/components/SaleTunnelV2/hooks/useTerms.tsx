@@ -1,9 +1,9 @@
 import { Checkbox } from '@openfun/cunningham-react';
 import { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { PaymentErrorMessageId } from 'components/PaymentButton/index';
 import { Product } from 'types/Joanie';
 import context from 'utils/context';
+import { PaymentErrorMessageId } from 'components/PaymentInterfaces';
 
 const messages = defineMessages({
   termsMessage: {

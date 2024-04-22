@@ -5,16 +5,15 @@ import type * as Joanie from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSaleTunnelV2Context } from 'components/SaleTunnelV2/GenericSaleTunnel';
 import { useOrders } from 'hooks/useOrders';
-import { PaymentErrorMessageId } from 'components/PaymentButton';
-import { OrderCreationPayload, OrderState, ProductType } from 'types/Joanie';
-import { useTerms } from 'components/PaymentButton/hooks/useTerms';
+import { OrderCreationPayload, OrderState } from 'types/Joanie';
+import { useTerms } from 'components/SaleTunnelV2/hooks/useTerms';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { ObjectHelper } from 'utils/ObjectHelper';
 import { HttpError } from 'utils/errors/HttpError';
 import { PAYMENT_SETTINGS } from 'settings';
 import { Spinner } from 'components/Spinner';
-import PaymentInterface from 'components/PaymentButton/components/PaymentInterfaces';
+import PaymentInterface, { PaymentErrorMessageId } from 'components/PaymentInterfaces';
 import { useMatchMediaLg } from 'hooks/useMatchMedia';
 
 const messages = defineMessages({
@@ -125,14 +124,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     );
   }, [product, saleTunnelProps.course, saleTunnelProps.enrollment, billingAddress, termsAccepted]);
 
-  console.log(
-    '(saleTunnelProps.course || saleTunnelProps.enrollment)',
-    !!(saleTunnelProps.course || saleTunnelProps.enrollment),
-  );
-  console.log('product', !!product);
-  console.log('billingAddress', !!billingAddress);
-  console.log('termsAccepted', !!termsAccepted);
-
   /**
    * Use Joanie API to retrieve an order and check if it's state is validated
    *
@@ -145,7 +136,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
   };
 
   const createPayment = async (orderId: string) => {
-    console.log('createPayment');
     WebAnalyticsAPIHandler()?.sendCourseProductEvent(CourseProductEvent.PAYMENT_CREATION, eventKey);
 
     if (!billingAddress) {
@@ -155,7 +145,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
 
     validateTerms();
 
-    console.log('isReadyToPay', isReadyToPay);
     if (isReadyToPay) {
       setState(ComponentStates.LOADING);
       let paymentInfos = payment;
@@ -163,7 +152,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
       if (!paymentInfos) {
         const billingAddressPayload = ObjectHelper.omit(billingAddress!, 'id', 'is_main');
 
-        console.log('submit...');
         orderMethods.submit(
           {
             id: orderId,
@@ -176,7 +164,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
                 ...orderPayment.payment_info,
                 order_id: orderId,
               };
-              console.log('success!', paymentInfos);
               setPayment(paymentInfos);
             },
             onError: async (createPaymentError: HttpError) => {
@@ -195,7 +182,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
   };
 
   const createOrder = async () => {
-    console.log('createOrder');
     if (!billingAddress) {
       setError(PaymentErrorMessageId.ERROR_ADDRESS);
       setState(ComponentStates.ERROR);
@@ -204,10 +190,8 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     validateTerms();
 
     if (!isReadyToPay) {
-      console.log('A');
       return;
     }
-    console.log('B');
 
     setState(ComponentStates.LOADING);
 
@@ -233,7 +217,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     let round = 0;
 
     const checkOrderValidity = async () => {
-      console.log('checkOrderValidity', round);
       if (round >= PAYMENT_SETTINGS.pollLimit) {
         timeoutRef.current = undefined;
         orderMethods.abort({ id: payment!.order_id, payment_id: payment!.payment_id });
@@ -279,7 +262,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     }
   }, [state]);
 
-  console.log('state', state, 'payment', payment);
   return (
     <div data-testid={order && 'payment-button-order-loaded'}>
       {renderTermsCheckbox()}

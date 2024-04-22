@@ -1,7 +1,6 @@
 import { handle } from 'utils/errors/handle';
 import { useAsyncEffect } from 'hooks/useAsyncEffect';
-import { PaymentErrorMessageId } from 'components/PaymentButton';
-import type { PaymentInterfaceProps } from '.';
+import { PaymentErrorMessageId, PaymentInterfaceProps } from 'components/PaymentInterfaces/index';
 
 /**
  * !!! DEVELOPMENT PURPOSE ONLY !!!

@@ -1,5 +1,5 @@
 import { PaymentErrorMessageId } from 'components/PaymentButton';
-import { PaymentInterfaceProps } from '..';
+import { PaymentInterfaceProps } from 'components/PaymentInterfaces/index';
 
 const PaymentInterface = ({ onError, onSuccess }: PaymentInterfaceProps) => (
   <p>

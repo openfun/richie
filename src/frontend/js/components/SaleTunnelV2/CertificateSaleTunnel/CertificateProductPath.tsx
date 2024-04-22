@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Enrollment, Product } from 'types/Joanie';
-import CourseRunsList from 'components/SaleTunnel/components/SaleTunnelStepValidation/CourseRunsList';
+import CourseRunsList from 'components/SaleTunnelV2/ProductPath/CourseRunsList';
 import { ProductPathCertificateDefinition } from 'components/SaleTunnelV2/ProductPath/ProductPathCertificateDefinition';
 import { ProductPathInstructions } from 'components/SaleTunnelV2/ProductPath/ProductPathInstructions';
 

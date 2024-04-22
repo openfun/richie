@@ -4,13 +4,13 @@ import { PaymentProviders } from 'types/Joanie';
 import { handle as mockHandle } from 'utils/errors/handle';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { PaymentFactory } from 'utils/test/factories/joanie';
-import PaymentInterface from '.';
+import PaymentInterface from 'components/PaymentInterfaces/index';
 
-jest.mock('./PayplugLightbox', () => ({
+jest.mock('components/PaymentInterfaces/PayplugLightbox', () => ({
   __esModule: true,
   default: () => 'Payplug lightbox',
 }));
-jest.mock('./Dummy', () => ({
+jest.mock('components/PaymentInterfaces/Dummy', () => ({
   __esModule: true,
   default: () => 'Dummy payment component',
 }));
