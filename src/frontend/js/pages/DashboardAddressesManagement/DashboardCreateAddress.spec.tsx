@@ -5,7 +5,10 @@ import { getByText, render, screen, waitFor } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { PropsWithChildren } from 'react';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import {
+  UserFactory,
+  RichieContextFactory as mockRichieContextFactory,
+} from 'utils/test/factories/richie';
 import { AddressFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
@@ -18,6 +21,7 @@ import { changeSelect } from 'components/Form/test-utils';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { User } from 'types/User';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -56,8 +60,9 @@ const fillForm = async (address: Address, user: UserEvent = userEvent.setup()) =
 };
 
 describe('<DashboardCreateAddress/>', () => {
+  let richieUser: User;
   const Wrapper = ({ children }: PropsWithChildren) => (
-    <QueryClientProvider client={createTestQueryClient({ user: true })}>
+    <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
       <IntlProvider locale="en">
         <SessionProvider>{children}</SessionProvider>
       </IntlProvider>
@@ -66,6 +71,7 @@ describe('<DashboardCreateAddress/>', () => {
   let user: UserEvent;
 
   beforeEach(() => {
+    richieUser = UserFactory().one();
     user = userEvent.setup();
     fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
@@ -124,6 +130,7 @@ describe('<DashboardCreateAddress/>', () => {
   it('creates an address and redirect to preferences', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     fetchMock.post('https://joanie.endpoint/api/v1.0/addresses/', []);
+
     render(
       <Wrapper>
         <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION} />
@@ -141,6 +148,9 @@ describe('<DashboardCreateAddress/>', () => {
     await fillForm(address, user);
 
     // Form submit calls the API create route.
+    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${richieUser.username}`, {});
+    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${richieUser.username}`, {});
+
     expect(
       fetchMock.called('https://joanie.endpoint/api/v1.0/addresses/', { method: 'post' }),
     ).toBe(false);

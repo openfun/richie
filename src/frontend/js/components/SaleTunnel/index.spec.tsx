@@ -7,6 +7,7 @@ import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/fac
 import { CourseLightFactory, ProductFactory } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import SaleTunnel from '.';
 
 const StepComponent =
@@ -31,11 +32,13 @@ jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
     authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
-    joanie_backend: { endpoint: 'https://joanie.test' },
+    joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
 
 describe('SaleTunnel', () => {
+  setupJoanieSession();
+
   afterEach(() => {
     fetchMock.restore();
   });
@@ -49,8 +52,12 @@ describe('SaleTunnel', () => {
   );
 
   it('does not render when isOpen property is false', async () => {
+    const courseCode = '00000';
     const product = ProductFactory().one();
-
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+      [],
+    );
     await act(async () => {
       render(
         <Wrapper>
@@ -68,12 +75,12 @@ describe('SaleTunnel', () => {
   });
 
   it('renders sale tunnel with working steps when isOpen property is true', async () => {
+    const courseCode = '00000';
     const product = ProductFactory().one();
-    fetchMock
-      .get('https://joanie.test/api/v1.0/addresses/', [])
-      .get('https://joanie.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.test/api/v1.0/orders/', []);
-
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+      [],
+    );
     const onClose = jest.fn();
 
     await act(async () => {
@@ -113,17 +120,18 @@ describe('SaleTunnel', () => {
 
     // - Terminated, resume.onExit callback is triggered, orders should have been refetched.
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    expect(fetchMock.lastUrl()).toBe('https://joanie.test/api/v1.0/orders/');
+    expect(fetchMock.lastUrl()).toBe('https://joanie.endpoint/api/v1.0/orders/');
 
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
   it('executes onClose callback when user closes the sale tunnel', async () => {
+    const courseCode = '00000';
     const product = ProductFactory().one();
-    fetchMock
-      .get('https://joanie.test/api/v1.0/addresses/', [])
-      .get('https://joanie.test/api/v1.0/credit-cards/', [])
-      .get('https://joanie.test/api/v1.0/orders/', []);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+      [],
+    );
 
     const onClose = jest.fn();
 
@@ -134,7 +142,7 @@ describe('SaleTunnel', () => {
             isOpen={true}
             product={product}
             onClose={onClose}
-            course={CourseLightFactory({ code: '00000' }).one()}
+            course={CourseLightFactory({ code: courseCode }).one()}
           />
         </Wrapper>,
       );

@@ -25,15 +25,30 @@ RESET_MODULE_EXCEPTIONS.forEach((moduleName) => {
   });
 });
 
+let unmatchedCallMessage: string = '';
 beforeAll(() => {
   // As dialog is rendered through a Portal, we have to add the DOM element in which the dialog will be rendered.
   const modalExclude = document.createElement('div');
   modalExclude.setAttribute('id', 'modal-exclude');
   document.body.appendChild(modalExclude);
+
+  const originalWarn = console.warn;
+  console.warn = (message) => {
+    if (message.match(/^Unmatched /)) {
+      unmatchedCallMessage = message;
+    }
+
+    return originalWarn(message);
+  };
 });
 
 afterEach(() => {
   FactoryConfig.resetUniqueStore();
   fetchMock.restore();
   jest.clearAllMocks();
+
+  if (unmatchedCallMessage) {
+    throw new Error(unmatchedCallMessage);
+  }
+  unmatchedCallMessage = '';
 });

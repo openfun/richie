@@ -87,9 +87,15 @@ describe('<Dashboard />', () => {
   });
 
   it('changes route when using the sidebar', async () => {
+    const user = UserFactory().one();
+    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
+    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [], { overwriteRoutes: true });
     render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
       wrapper: BaseJoanieAppWrapper,
+      queryOptions: {
+        client: createTestQueryClient({ user }),
+      },
     });
     await expectNoSpinner('Loading orders and enrollments...');
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.COURSES);
@@ -103,12 +109,18 @@ describe('<Dashboard />', () => {
   });
 
   it('redirect when clicking on the breadcrumbs back button', async () => {
+    const user = UserFactory().one();
+    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
+    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
     const address: Address = AddressFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address], {
       overwriteRoutes: true,
     });
     render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
       wrapper: BaseJoanieAppWrapper,
+      queryOptions: {
+        client: createTestQueryClient({ user }),
+      },
     });
     await expectNoSpinner('Loading orders and enrollments...');
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.COURSES);
@@ -154,6 +166,8 @@ describe('<Dashboard />', () => {
 
   it('should render username in sidebar if full_name is not defined', async () => {
     const user: User = UserFactory({ full_name: undefined }).one();
+    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
+    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
     render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
       wrapper: BaseJoanieAppWrapper,
       queryOptions: {
@@ -167,7 +181,10 @@ describe('<Dashboard />', () => {
   });
 
   it('should render full_name in sidebar', async () => {
-    const user: User = UserFactory().one();
+    const user = UserFactory().one();
+    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
+    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
+
     render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
       wrapper: BaseJoanieAppWrapper,
       queryOptions: {

@@ -48,6 +48,10 @@ describe('components/TeacherDashboardTrainingLoader', () => {
   it('should render TeacherDashboardTrainingLoader page', async () => {
     const courseProductRelation = CourseProductRelationFactory().one();
     fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/?course_product_relation_id=${courseProductRelation.id}`,
+      [],
+    );
+    fetchMock.get(
       `https://joanie.endpoint/api/v1.0/course-product-relations/${courseProductRelation.id}/`,
       courseProductRelation,
     );
@@ -83,6 +87,7 @@ describe('components/TeacherDashboardTrainingLoader', () => {
     // sidebar placeholder
     await expectNoSpinner('Loading course...');
 
+    nbApiCalls += 1; // organizations api call
     nbApiCalls += 1; // course-product-relations api call
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
@@ -117,6 +122,10 @@ describe('components/TeacherDashboardTrainingLoader', () => {
       `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/${courseProductRelation.id}/`,
       courseProductRelation,
     );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?course_product_relation_id=${courseProductRelation.id}&signature_state=half_signed&page=1&page_size=25`,
+      [],
+    );
 
     const user = UserFactory().one();
     render(
@@ -149,6 +158,7 @@ describe('components/TeacherDashboardTrainingLoader', () => {
     // sidebar placeholder
     await expectNoSpinner('Loading course...');
 
+    nbApiCalls += 1; // contracts api call
     nbApiCalls += 1; // course-product-relations api call
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
