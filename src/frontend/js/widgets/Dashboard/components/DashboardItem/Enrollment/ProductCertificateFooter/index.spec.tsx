@@ -34,7 +34,7 @@ jest.mock('utils/context', () => ({
 }));
 jest.mock('components/SaleTunnel', () => ({
   __esModule: true,
-  default: ({ isOpen, onFinish }: SaleTunnelProps) => {
+  SaleTunnel: ({ isOpen, onFinish }: SaleTunnelProps) => {
     const React = require('react');
     const Factories = require('utils/test/factories/joanie');
     // Automatically call onFinish() callback after 100ms when the SaleTunnel is opened to simulate a payment.

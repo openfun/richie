@@ -1,4 +1,11 @@
-import { Button, Modal, ModalProps, ModalSize } from '@openfun/cunningham-react';
+import {
+  Alert,
+  Button,
+  Modal,
+  ModalProps,
+  ModalSize,
+  VariantType,
+} from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Address } from 'types/Joanie';
 import { AddressFormValues, useDashboardAddressForm } from 'hooks/useDashboardAddressForm';
@@ -55,8 +62,7 @@ export const CreateAddressFormModal = (props: AddressFormModalProps) => {
         {isPending && <Spinner />}
         {!isPending && (
           <div>
-            {/*  Replace with alert */}
-            {error && <Banner message={error} type={BannerType.ERROR} rounded />}
+            {error && <Alert type={VariantType.ERROR}>{error}</Alert>}
             {FormView}
           </div>
         )}

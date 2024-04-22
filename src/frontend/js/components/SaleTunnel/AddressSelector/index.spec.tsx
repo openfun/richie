@@ -51,7 +51,7 @@ describe('AddressSelector', () => {
       const [billingAddress, setBillingAddress] = useState<Address>();
       const context: SaleTunnelContextType = useMemo(
         () => ({
-          eventKey: 'eventKey',
+          webAnalyticsEventKey: 'eventKey',
           order: CredentialOrderFactory().one(),
           product: ProductFactory().one(),
           props: {} as SaleTunnelProps,
@@ -179,7 +179,7 @@ describe('AddressSelector', () => {
       'Billing address' + getAddressLabel(addresses[1]) + 'closearrow_drop_down',
     );
   });
-  it.only('has an existing main billing address and edit it', async () => {
+  it('has an existing main billing address and edit it', async () => {
     const address = AddressFactory({
       is_main: true,
     }).one();
@@ -206,8 +206,6 @@ describe('AddressSelector', () => {
         'Billing address' + getAddressLabel(address) + 'closearrow_drop_down',
       ),
     );
-
-    screen.logTestingPlaygroundURL();
 
     const user = userEvent.setup();
     // edit address.

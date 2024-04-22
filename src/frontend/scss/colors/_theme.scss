@@ -466,6 +466,12 @@ $r-theme: (
     title-color: r-color('charcoal'),
     base-color: r-color('purplish-grey'),
   ),
+  sale-tunnel: (
+    description-color: r-color('charcoal'),
+    title-color: r-color('charcoal'),
+    separator-color: r-color('grey87'),
+    email-description-color: r-color('purplish-grey'),
+  ),
   search-results: (
     overlay: r-color('black'),
     color: r-color('light-grey'),

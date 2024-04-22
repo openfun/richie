@@ -1,11 +1,10 @@
-import { Button, Modal, ModalSize } from '@openfun/cunningham-react';
+import { Alert, Button, Modal, ModalSize, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { AddressFormModalProps } from 'components/SaleTunnel/AddressSelector/CreateAddressFormModal';
 import { Address } from 'types/Joanie';
 import { AddressFormValues, useDashboardAddressForm } from 'hooks/useDashboardAddressForm';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
 import { Spinner } from 'components/Spinner';
-import Banner, { BannerType } from 'components/Banner';
 
 const messages = defineMessages({
   title: {
@@ -59,7 +58,7 @@ export const EditAddressFormModal = ({
         {isPending && <Spinner />}
         {!isPending && (
           <div>
-            {error && <Banner message={error} type={BannerType.ERROR} rounded />}
+            {error && <Alert type={VariantType.ERROR}>{error}</Alert>}
             {FormView}
           </div>
         )}
