@@ -1,5 +1,6 @@
-import { fireEvent, getByText, screen, act } from '@testing-library/react';
+import { getByText, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
+import userEvent from '@testing-library/user-event';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
@@ -87,14 +88,14 @@ describe('<Dashboard />', () => {
   });
 
   it('changes route when using the sidebar', async () => {
-    const user = UserFactory().one();
-    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
-    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
+    const richieUser = UserFactory().one();
+    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${richieUser.username}`, {});
+    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${richieUser.username}`, {});
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [], { overwriteRoutes: true });
     render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
       wrapper: BaseJoanieAppWrapper,
       queryOptions: {
-        client: createTestQueryClient({ user }),
+        client: createTestQueryClient({ user: richieUser }),
       },
     });
     await expectNoSpinner('Loading orders and enrollments...');
@@ -102,16 +103,17 @@ describe('<Dashboard />', () => {
 
     // Go to "My Preferences" route.
     const link = screen.getByRole('link', { name: 'My preferences' });
-    await act(async () => {
-      fireEvent.click(link);
-    });
+    fetchMock.get('https://demo.endpoint/api/v1.0/user/me', richieUser);
+    const user = userEvent.setup();
+    await user.click(link);
+
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.PREFERENCES);
   });
 
   it('redirect when clicking on the breadcrumbs back button', async () => {
-    const user = UserFactory().one();
-    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
-    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
+    const richieUser = UserFactory().one();
+    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${richieUser.username}`, {});
+    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${richieUser.username}`, {});
     const address: Address = AddressFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address], {
       overwriteRoutes: true,
@@ -119,7 +121,7 @@ describe('<Dashboard />', () => {
     render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
       wrapper: BaseJoanieAppWrapper,
       queryOptions: {
-        client: createTestQueryClient({ user }),
+        client: createTestQueryClient({ user: richieUser }),
       },
     });
     await expectNoSpinner('Loading orders and enrollments...');
@@ -128,17 +130,17 @@ describe('<Dashboard />', () => {
 
     // Go to "My Preferences" route.
     const link = screen.getByRole('link', { name: 'My preferences' });
-    await act(async () => {
-      fireEvent.click(link);
-    });
+    fetchMock.get('https://demo.endpoint/api/v1.0/user/me', richieUser);
+    const user = userEvent.setup();
+    await user.click(link);
+
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.PREFERENCES);
     expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My preferences']);
 
     // Go to the address edit route.
     const button = await screen.findByRole('button', { name: 'Edit' });
-    await act(async () => {
-      fireEvent.click(button);
-    });
+    await user.click(button);
+
     expectUrlMatchLocationDisplayed(
       LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(':addressId', address.id),
     );
@@ -150,51 +152,48 @@ describe('<Dashboard />', () => {
 
     // Click on back button goes back to "My Preferences".
     const backButton = await screen.findByRole('link', { name: /Back/ });
-    await act(async () => {
-      fireEvent.click(backButton);
-    });
+    await user.click(backButton);
+
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.PREFERENCES);
     expectBreadcrumbsToEqualParts(['chevron_leftBack', 'My preferences']);
 
     // Click again on back button to get redirect to website's root.
     expect(location.replace).not.toHaveBeenCalled();
-    await act(async () => {
-      fireEvent.click(backButton);
-    });
+    await user.click(backButton);
     expect(location.replace).toHaveBeenCalledWith('https://localhost');
   });
 
   it('should render username in sidebar if full_name is not defined', async () => {
-    const user: User = UserFactory({ full_name: undefined }).one();
-    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
-    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
+    const richieUser: User = UserFactory({ full_name: undefined }).one();
+    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${richieUser.username}`, {});
+    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${richieUser.username}`, {});
     render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
       wrapper: BaseJoanieAppWrapper,
       queryOptions: {
-        client: createTestQueryClient({ user }),
+        client: createTestQueryClient({ user: richieUser }),
       },
     });
     await expectNoSpinner('Loading orders and enrollments...');
 
     const sidebar = screen.getByTestId('dashboard__sidebar');
-    getByText(sidebar, user.username, { exact: false });
+    getByText(sidebar, richieUser.username, { exact: false });
   });
 
   it('should render full_name in sidebar', async () => {
-    const user = UserFactory().one();
-    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
-    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
+    const richieUser = UserFactory().one();
+    fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${richieUser.username}`, {});
+    fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${richieUser.username}`, {});
 
     render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
       wrapper: BaseJoanieAppWrapper,
       queryOptions: {
-        client: createTestQueryClient({ user }),
+        client: createTestQueryClient({ user: richieUser }),
       },
     });
     await expectNoSpinner('Loading orders and enrollments...');
 
     const sidebar = screen.getByTestId('dashboard__sidebar');
-    getByText(sidebar, user.full_name!, { exact: false });
+    getByText(sidebar, richieUser.full_name!, { exact: false });
   });
 
   it("should redirect to 404 page when route doesn't exist", async () => {
