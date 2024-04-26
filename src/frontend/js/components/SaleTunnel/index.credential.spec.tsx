@@ -1,6 +1,9 @@
 import fetchMock from 'fetch-mock';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
+} from 'utils/test/factories/richie';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import {
   AddressFactory,
@@ -15,6 +18,10 @@ import { OrderCredentialCreationPayload } from 'types/Joanie';
 import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel/index';
 import { render } from 'utils/test/render';
 import { getAddressLabel } from 'components/SaleTunnel/AddressSelector';
+import { User } from 'types/User';
+import { OpenEdxApiProfile } from 'types/openEdx';
+import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -42,6 +49,9 @@ jest.mock('../PaymentInterfaces');
  */
 
 describe('SaleTunnel / Credential', () => {
+  let richieUser: User;
+  let openApiEdxProfile: OpenEdxApiProfile;
+
   const Wrapper = (props: Omit<SaleTunnelProps, 'isOpen' | 'onClose'>) => {
     return <SaleTunnel {...props} isOpen={true} onClose={() => {}} />;
   };
@@ -53,6 +63,27 @@ describe('SaleTunnel / Credential', () => {
     }).format(price);
 
   setupJoanieSession();
+
+  beforeEach(() => {
+    richieUser = UserFactory().one();
+    openApiEdxProfile = OpenEdxApiProfileFactory({
+      username: richieUser.username,
+      email: richieUser.email,
+      name: richieUser.full_name,
+    }).one();
+
+    const { 'pref-lang': prefLang, ...openEdxAccount } = openApiEdxProfile;
+
+    fetchMock.get(`https://auth.test/api/user/v1/accounts/${richieUser.username}`, openEdxAccount);
+    fetchMock.patch(
+      `https://auth.test/api/user/v1/accounts/${richieUser.username}`,
+      openEdxAccount,
+    );
+    fetchMock.get(`https://auth.test/api/user/v1/preferences/${richieUser.username}`, {
+      'pref-lang': prefLang,
+    });
+    fetchMock.get(`https://auth.test/api/v1.0/user/me`, richieUser);
+  });
 
   it('should create an order with an order group', async () => {
     const course = CourseFactory().one();
@@ -81,7 +112,9 @@ describe('SaleTunnel / Credential', () => {
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} course={course} orderGroup={orderGroup} />);
+    render(<Wrapper product={product} course={course} orderGroup={orderGroup} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
 
     // - wait for address to be loaded.
     await screen.findByText(getAddressLabel(billingAddress));
