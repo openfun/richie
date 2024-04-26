@@ -8,6 +8,7 @@ import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate';
 import { CertificateType } from 'types/Joanie';
+import { PER_PAGE } from 'settings';
 
 const messages = defineMessages({
   loading: {
@@ -27,7 +28,7 @@ interface CertificatesListProps {
 }
 const CertificatesList = ({ certificateType }: CertificatesListProps) => {
   const intl = useIntl();
-  const pagination = usePagination({});
+  const pagination = usePagination({ itemsPerPage: PER_PAGE.certificateList });
   const certificates = useCertificates(
     {
       type: certificateType,
