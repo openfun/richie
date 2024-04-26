@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Added
 
+- The enrollment's certificate tab in learner dashbaord is no longer
+  displayed when the list is empty.
 - User profile in the learner dashboard is now always synchronized with 
   openEdx profile informations.
 - Add a tab in learner dashboard certificate page to render both order
