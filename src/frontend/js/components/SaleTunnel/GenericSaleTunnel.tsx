@@ -26,6 +26,9 @@ export interface SaleTunnelContextType {
   setBillingAddress: (address?: Address) => void;
   creditCard?: CreditCard;
   setCreditCard: (creditCard?: CreditCard) => void;
+  registerSubmitCallback: (key: string, callback: () => Promise<void>) => void;
+  unregisterSubmitCallback: (key: string) => void;
+  runSubmitCallbacks: () => Promise<void>;
 }
 
 export const SaleTunnelContext = createContext<SaleTunnelContextType>({} as any);
@@ -72,6 +75,9 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
   const [billingAddress, setBillingAddress] = useState<Address>();
   const [creditCard, setCreditCard] = useState<CreditCard>();
   const [step, setStep] = useState<SaleTunnelStep>(SaleTunnelStep.PAYMENT);
+  const [submitCallbacks, setSubmitCallbacks] = useState<Map<string, () => Promise<void>>>(
+    new Map(),
+  );
 
   const context: SaleTunnelContextType = useMemo(
     () => ({
@@ -97,8 +103,21 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
         props.onFinish?.(order!);
       },
       step,
+      registerSubmitCallback: (key, callback) => {
+        setSubmitCallbacks((prev) => new Map(prev).set(key, callback));
+      },
+      unregisterSubmitCallback: (key) => {
+        setSubmitCallbacks((prev) => {
+          const c = new Map(prev);
+          c.delete(key);
+          return c;
+        });
+      },
+      runSubmitCallbacks: async () => {
+        await Promise.all(Array.from(submitCallbacks.values()).map((cb) => cb()));
+      },
     }),
-    [props, order, billingAddress, creditCard, step],
+    [props, order, billingAddress, creditCard, step, submitCallbacks],
   );
 
   return (

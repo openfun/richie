@@ -93,6 +93,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     product,
     onPaymentSuccess,
     props: saleTunnelProps,
+    runSubmitCallbacks,
   } = useSaleTunnelContext();
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
   const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
@@ -186,6 +187,16 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
   };
 
   const createOrder = async () => {
+    setState(ComponentStates.LOADING);
+
+    try {
+      await runSubmitCallbacks();
+    } catch (e) {
+      // Example: full name failed saving to OpenEDX.
+      setState(ComponentStates.IDLE);
+      return;
+    }
+
     if (!billingAddress) {
       setError(PaymentErrorMessageId.ERROR_ADDRESS);
       setState(ComponentStates.ERROR);
@@ -196,8 +207,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     if (!isReadyToPay) {
       return;
     }
-
-    setState(ComponentStates.LOADING);
 
     if (order) {
       createPayment(order.id);

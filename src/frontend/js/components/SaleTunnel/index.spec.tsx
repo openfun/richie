@@ -15,7 +15,10 @@ import {
   CreditCardFactory,
   EnrollmentFactory,
 } from 'utils/test/factories/joanie';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
+} from 'utils/test/factories/richie';
 import { render } from 'utils/test/render';
 import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel/index';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
@@ -23,6 +26,10 @@ import { HttpStatusCode } from 'utils/errors/HttpError';
 import { getAddressLabel } from 'components/SaleTunnel/AddressSelector';
 import { ObjectHelper } from 'utils/ObjectHelper';
 import { PAYMENT_SETTINGS } from 'settings';
+import { User } from 'types/User';
+import { OpenEdxApiProfile } from 'types/openEdx';
+import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -67,6 +74,9 @@ describe.each([
     const enrollment =
       productType === ProductType.CERTIFICATE ? EnrollmentFactory().one() : undefined;
 
+    let richieUser: User;
+    let openApiEdxProfile: OpenEdxApiProfile;
+
     const formatPrice = (price: number, currency: string) =>
       new Intl.NumberFormat('en', {
         currency,
@@ -94,6 +104,23 @@ describe.each([
       sessionStorage.clear();
 
       nbApiCalls = 3;
+
+      richieUser = UserFactory().one();
+      openApiEdxProfile = OpenEdxApiProfileFactory({
+        username: richieUser.username,
+        email: richieUser.email,
+        name: richieUser.full_name,
+      }).one();
+
+      const { 'pref-lang': prefLang, ...openEdxAccount } = openApiEdxProfile;
+
+      fetchMock.get(
+        `https://auth.test/api/user/v1/accounts/${richieUser.username}`,
+        openEdxAccount,
+      );
+      fetchMock.get(`https://auth.test/api/user/v1/preferences/${richieUser.username}`, {
+        'pref-lang': prefLang,
+      });
     });
 
     setupJoanieSession();
@@ -139,7 +166,9 @@ describe.each([
         overwriteRoutes: true,
       });
 
-      render(<Wrapper product={product} />);
+      render(<Wrapper product={product} />, {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      });
 
       const $button = (await screen.findByRole('button', {
         name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
@@ -174,9 +203,13 @@ describe.each([
           overwriteRoutes: true,
         });
 
-      render(<Wrapper product={product} />);
+      render(<Wrapper product={product} />, {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      });
       nbApiCalls += 1; // useProductOrder call.
-      expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+      nbApiCalls += 1; // get user account call.
+      nbApiCalls += 1; // get user preferences call.
+      await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
       const $terms = screen.getByLabelText(
         'By checking this box, you accept the General Terms of Sale',
@@ -300,7 +333,9 @@ describe.each([
           overwriteRoutes: true,
         });
 
-      render(<Wrapper product={product} />);
+      render(<Wrapper product={product} />, {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      });
       await waitFor(() => {
         expect(screen.getByTestId('payment-button-order-loaded')).toBeInTheDocument();
       });
@@ -312,7 +347,9 @@ describe.each([
       await user.click($terms);
 
       nbApiCalls += 1; // useProductOrder get order with filters
-      expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+      nbApiCalls += 1; // get user account call.
+      nbApiCalls += 1; // get user preferences call.
+      await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
       const $button = screen.getByRole('button', {
         name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
       }) as HTMLButtonElement;
@@ -421,11 +458,15 @@ describe.each([
           overwriteRoutes: true,
         });
 
-      render(<Wrapper product={product} />);
+      render(<Wrapper product={product} />, {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      });
       await waitFor(() => {
         expect(screen.getByTestId('payment-button-order-loaded')).toBeInTheDocument();
       });
       nbApiCalls += 1; // fetcher order for userProductOrder
+      nbApiCalls += 1; // get user account call.
+      nbApiCalls += 1; // get user preferences call.
       const apiCalls = fetchMock.calls().map((call) => call[0]);
       expect(apiCalls).toContain(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
@@ -545,9 +586,13 @@ describe.each([
           overwriteRoutes: true,
         });
 
-      render(<Wrapper product={product} />);
+      render(<Wrapper product={product} />, {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      });
       nbApiCalls += 1; // useProductOrder get order with filters
-      expect(fetchMock.calls()).toHaveLength(nbApiCalls);
+      nbApiCalls += 1; // get user account call.
+      nbApiCalls += 1; // get user preferences call.
+      await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
       const $terms = screen.getByLabelText(
         'By checking this box, you accept the General Terms of Sale',
@@ -615,7 +660,9 @@ describe.each([
           overwriteRoutes: true,
         });
 
-      render(<Wrapper product={product} />);
+      render(<Wrapper product={product} />, {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      });
 
       const $button = screen.getByRole('button', {
         name: `Pay ${formatPrice(product.price, product.price_currency)}`,
@@ -655,7 +702,9 @@ describe.each([
         [],
       );
 
-      render(<Wrapper product={product} />);
+      render(<Wrapper product={product} />, {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      });
 
       const $terms = screen.getByRole('link', { name: 'General Terms of Sale' });
       expect($terms).toHaveAttribute('href', '/en/about/terms-and-conditions/');

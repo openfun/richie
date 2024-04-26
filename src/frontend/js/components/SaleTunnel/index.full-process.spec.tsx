@@ -262,7 +262,6 @@ describe('SaleTunnel', () => {
     const $button = screen.getByRole('button', {
       name: `Pay ${priceFormatter(product.price_currency, product.price)}`,
     }) as HTMLButtonElement;
-
     await user.click($button);
 
     await screen.findByText('Payment in progress');

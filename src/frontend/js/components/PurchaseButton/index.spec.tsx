@@ -20,12 +20,15 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { ProductType } from 'types/Joanie';
 import { Priority } from 'types';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
+import { User } from 'types/User';
+import { OpenEdxApiProfile } from 'types/openEdx';
+import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
 import PurchaseButton from '.';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
-    authentication: { backend: 'fonzie', endpoint: 'https://auth.endpoint.test' },
+    authentication: { backend: 'fonzie', endpoint: 'https://auth.test' },
     joanie_backend: { endpoint: 'https://joanie.endpoint' },
   }).one(),
 }));
@@ -39,7 +42,31 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('PurchaseButton', () => {
+  let richieUser: User;
+  let openApiEdxProfile: OpenEdxApiProfile;
   setupJoanieSession();
+
+  beforeEach(() => {
+    richieUser = UserFactory().one();
+    openApiEdxProfile = OpenEdxApiProfileFactory({
+      username: richieUser.username,
+      email: richieUser.email,
+      name: richieUser.full_name,
+    }).one();
+
+    const { 'pref-lang': prefLang, ...openEdxAccount } = openApiEdxProfile;
+
+    fetchMock.get(`https://auth.test/api/user/v1/accounts/${richieUser.username}`, openEdxAccount);
+    fetchMock.patch(
+      `https://auth.test/api/user/v1/accounts/${richieUser.username}`,
+      openEdxAccount,
+    );
+    fetchMock.get(`https://auth.test/api/user/v1/preferences/${richieUser.username}`, {
+      'pref-lang': prefLang,
+    });
+    fetchMock.get(`https://auth.test/api/v1.0/user/me`, richieUser);
+  });
+
   afterEach(() => {
     fetchMock.restore();
   });
@@ -79,8 +106,9 @@ describe('PurchaseButton', () => {
       `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
       {},
     );
+
     render(
-      <Wrapper client={createTestQueryClient({ user: true })}>
+      <Wrapper client={createTestQueryClient({ user: richieUser })}>
         <PurchaseButton
           product={product}
           disabled={false}
@@ -100,11 +128,11 @@ describe('PurchaseButton', () => {
     await userEvent.click(button);
 
     // - SaleTunnel should have been opened
-    expect(screen.getByTestId('GenericSaleTunnelPaymentStep')).toBeInTheDocument();
+    expect(screen.getByTestId('generic-sale-tunnel-payment-step')).toBeInTheDocument();
   });
 
   it('shows cta to open sale tunnel when remaining orders is null', async () => {
-    const user = UserFactory().one();
+    const user = richieUser;
     const courseCode = '00000';
     const product = ProductFactory({ remaining_order_count: null }).one();
     fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
@@ -136,7 +164,7 @@ describe('PurchaseButton', () => {
     await userEvent.click(button);
 
     // - SaleTunnel should have been opened
-    expect(await screen.findByTestId('GenericSaleTunnelPaymentStep')).toBeInTheDocument();
+    expect(await screen.findByTestId('generic-sale-tunnel-payment-step')).toBeInTheDocument();
   });
 
   it('shows cta to open sale tunnel when remaining orders is undefined', async () => {
@@ -149,7 +177,7 @@ describe('PurchaseButton', () => {
     delete product.remaining_order_count;
 
     render(
-      <Wrapper client={createTestQueryClient({ user: true })}>
+      <Wrapper client={createTestQueryClient({ user: richieUser })}>
         <PurchaseButton
           product={product}
           disabled={false}
@@ -171,7 +199,7 @@ describe('PurchaseButton', () => {
     await userEvent.click(button);
 
     // - SaleTunnel should have been opened
-    expect(await screen.findByTestId('GenericSaleTunnelPaymentStep')).toBeInTheDocument();
+    expect(await screen.findByTestId('generic-sale-tunnel-payment-step')).toBeInTheDocument();
   });
 
   it('renders a disabled CTA if the product have no remaining orders', async () => {
@@ -182,7 +210,7 @@ describe('PurchaseButton', () => {
       {},
     );
     render(
-      <Wrapper client={createTestQueryClient({ user: true })}>
+      <Wrapper client={createTestQueryClient({ user: richieUser })}>
         <PurchaseButton
           product={product}
           disabled={false}
@@ -219,7 +247,7 @@ describe('PurchaseButton', () => {
       );
 
       render(
-        <Wrapper client={createTestQueryClient({ user: true })}>
+        <Wrapper client={createTestQueryClient({ user: richieUser })}>
           <PurchaseButton
             product={product}
             disabled={false}

@@ -1,15 +1,16 @@
-import { Button, ButtonElement, Input } from '@openfun/cunningham-react';
+import { ButtonElement, Input } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { FormProvider, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useSession } from 'contexts/SessionContext';
 import useOpenEdxProfile from 'hooks/useOpenEdxProfile';
 import Form, { getLocalizedCunninghamErrorProp } from 'components/Form';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
 import { UserHelper } from 'utils/UserHelper';
+import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 
 const messages = defineMessages({
   emailInputLabel: {
@@ -20,7 +21,7 @@ const messages = defineMessages({
   fullNameInputLabel: {
     id: 'components.OpenEdxFullNameForm.fullNameInputLabel',
     description: 'Label of "fullName" field of the openEdx full name form',
-    defaultMessage: 'FullName',
+    defaultMessage: 'Full name',
   },
   fullNameInputDescription: {
     id: 'components.OpenEdxFullNameForm.fullNameInputDescription',
@@ -55,9 +56,9 @@ const validationSchema = Yup.object().shape({
 
 const OpenEdxFullNameForm = () => {
   const intl = useIntl();
+  const { registerSubmitCallback, unregisterSubmitCallback } = useSaleTunnelContext();
   const { user } = useSession();
   const buttonRef = useRef<ButtonElement>(null);
-  const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState<boolean>(true);
   const {
     data: openEdxProfileData,
     methods: { update, invalidate },
@@ -84,22 +85,39 @@ const OpenEdxFullNameForm = () => {
 
   const { register, handleSubmit, reset, formState } = form;
 
-  const onSubmit = async (values: OpenEdxFullNameFormValues) => {
-    await update(values);
-    buttonRef.current?.blur();
-    invalidate();
-    setIsSubmitButtonDisabled(true);
-  };
-
-  const onChangeFullName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsSubmitButtonDisabled(e.target.value.trim() === defaultValues.name);
-  };
-
   useEffect(() => {
     if (openEdxProfileData) {
       reset({ name: (openEdxProfileData ? UserHelper.getName(openEdxProfileData) : '')?.trim() });
     }
   }, [openEdxProfileData]);
+
+  useEffect(() => {
+    registerSubmitCallback('openEdxFullNameForm', async () => {
+      return new Promise<void>((resolve, reject) => {
+        // Don't save if the form has not been modified.
+        if (!formState.isDirty) {
+          resolve();
+          return;
+        }
+
+        handleSubmit(async (values) => {
+          // We need to rely on onSuccess and onError callbacks bring up the promise state up to the SaleTunnel context.
+          // This is because update() function is not asynchronous, it is a mutator wrapper by react-query.
+          update(values, {
+            onSuccess: () => {
+              buttonRef.current?.blur();
+              invalidate();
+              resolve();
+            },
+            onError: (e) => reject(e),
+          });
+        })();
+      });
+    });
+    return () => {
+      unregisterSubmitCallback('openEdxFullNameForm');
+    };
+  }, [formState.isDirty, handleSubmit, update]);
 
   if (!isFetched && isPending) {
     return (
@@ -116,53 +134,32 @@ const OpenEdxFullNameForm = () => {
 
   return (
     <FormProvider {...form}>
-      <Form name="openedx-fullname-form" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Form.Row>
-          <Form.Row>
-            <Input
-              {...register('name', {
-                onChange: onChangeFullName,
-              })}
-              className="form-field"
-              required
-              fullWidth
-              label={intl.formatMessage(messages.fullNameInputLabel)}
-              value={formState.defaultValues?.name}
-              state={
-                error || (formState.errors.name && formState.errors.name.message)
-                  ? 'error'
-                  : 'default'
-              }
-              rightIcon={
-                <Button
-                  ref={buttonRef}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                  color="secondary"
-                  size="small"
-                  disabled={isSubmitButtonDisabled}
-                >
-                  {isPending ? <Spinner /> : <FormattedMessage {...messages.submitButtonLabel} />}
-                </Button>
-              }
-              text={
-                error ||
-                getLocalizedCunninghamErrorProp(intl, formState.errors.name?.message).text ||
-                intl.formatMessage(messages.fullNameInputDescription)
-              }
-            />
-          </Form.Row>
-          {openEdxProfileData?.email && (
-            <Form.Row>
-              <Input
-                label={intl.formatMessage(messages.emailInputLabel)}
-                value={openEdxProfileData?.email}
-                disabled
-              />
-            </Form.Row>
-          )}
-        </Form.Row>
+      <Form name="openedx-fullname-form" noValidate>
+        <Input
+          {...register('name')}
+          className="form-field"
+          required
+          fullWidth
+          label={intl.formatMessage(messages.fullNameInputLabel)}
+          value={formState.defaultValues?.name}
+          state={
+            error || (formState.errors.name && formState.errors.name.message) ? 'error' : 'default'
+          }
+          text={
+            error ||
+            getLocalizedCunninghamErrorProp(intl, formState.errors.name?.message).text ||
+            intl.formatMessage(messages.fullNameInputDescription)
+          }
+        />
+
+        {openEdxProfileData?.email && (
+          <Input
+            className="mt-t"
+            label={intl.formatMessage(messages.emailInputLabel)}
+            value={openEdxProfileData?.email}
+            disabled
+          />
+        )}
       </Form>
     </FormProvider>
   );

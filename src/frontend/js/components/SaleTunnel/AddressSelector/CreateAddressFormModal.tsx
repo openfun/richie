@@ -11,7 +11,6 @@ import { Address } from 'types/Joanie';
 import { AddressFormValues, useDashboardAddressForm } from 'hooks/useDashboardAddressForm';
 import { useAddressesManagement } from 'hooks/useAddressesManagement';
 import { Spinner } from 'components/Spinner';
-import Banner, { BannerType } from 'components/Banner';
 
 const messages = defineMessages({
   title: {
