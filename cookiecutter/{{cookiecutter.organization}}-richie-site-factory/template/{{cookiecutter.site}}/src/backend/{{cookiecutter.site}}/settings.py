@@ -693,8 +693,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 release=get_release(),
                 integrations=[DjangoIntegration()],
             )
-            with sentry_sdk.configure_scope() as scope:
-                scope.set_extra("application", "backend")
+            sentry_sdk.set_tag("application", "backend")
 
         # Customize DjangoCMS placeholders configuration
         cls.CMS_PLACEHOLDER_CONF = merge_dict(

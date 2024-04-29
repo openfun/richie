@@ -636,8 +636,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 release=get_release(),
                 integrations=[DjangoIntegration()],
             )
-            with sentry_sdk.configure_scope() as scope:
-                scope.set_extra("application", "backend")
+            sentry_sdk.set_tag("application", "backend")
 
         # If a Joanie Backend has been configured, we add it into LMS_BACKENDS dict
         if cls.JOANIE_BACKEND.get("BASE_URL") is not None:

@@ -18,6 +18,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Ongoing product displayed on the syllabus without active enrollment 
   now link to the order details page in the learner dashboard.
 
+## Changed
+
+- Migrate to Sentry SDK 2.0
+
 ## Fixed
 
 - Ongoing product displayed on the syllabus with an active enrollment 
