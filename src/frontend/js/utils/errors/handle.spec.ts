@@ -13,14 +13,14 @@ jest.mock('utils/context', () => ({
 }));
 jest.mock('@sentry/browser', () => ({
   init: jest.fn(),
-  configureScope: jest.fn(),
+  setTag: jest.fn(),
   captureException: jest.fn(),
 }));
 
 describe('handle', () => {
   it('should initialize sentry', () => {
     expect(Sentry.init).toBeCalledTimes(1);
-    expect(Sentry.configureScope).toBeCalledTimes(1);
+    expect(Sentry.setTag).toBeCalledTimes(1);
   });
 
   it('should report error to sentry', () => {
