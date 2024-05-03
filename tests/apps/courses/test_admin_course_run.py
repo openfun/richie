@@ -3,13 +3,12 @@ Test suite defining the admin pages for the CourseRun model
 """
 
 import random
-from datetime import datetime
+from datetime import datetime, timezone
 
 from django.test.utils import override_settings
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone as django_timezone
 
-import pytz
 from cms.models import GlobalPagePermission, PagePermission
 from cms.test_utils.testcases import CMSTestCase
 
@@ -350,7 +349,7 @@ class CourseRunAdminTestCase(CMSTestCase):
             "sync_mode": "manual",
             "display_mode": "detailed",
         }
-        with timezone.override(pytz.utc):
+        with django_timezone.override(timezone.utc):
             response = self.client.post(url, data, follow=True)
         self.assertEqual(response.status_code, status_code)
 
@@ -454,7 +453,7 @@ class CourseRunAdminTestCase(CMSTestCase):
             "sync_mode": "manual",
             "display_mode": "detailed",
         }
-        with timezone.override(pytz.utc):
+        with django_timezone.override(timezone.utc):
             response = self.client.post(url, data, follow=True)
         self.assertEqual(response.status_code, status_code)
 
@@ -464,14 +463,19 @@ class CourseRunAdminTestCase(CMSTestCase):
         check_method(course_run.title, "My title")
         check_method(course_run.languages, ["fr", "en"])
         check_method(course_run.resource_link, "https://example.com/my-resource-link")
-        check_method(course_run.start, datetime(2015, 1, 15, 7, 6, 15, tzinfo=pytz.utc))
-        check_method(course_run.end, datetime(2015, 1, 30, 23, 52, 34, tzinfo=pytz.utc))
         check_method(
-            course_run.enrollment_start,
-            datetime(2015, 1, 2, 13, 13, 7, tzinfo=pytz.utc),
+            course_run.start, datetime(2015, 1, 15, 7, 6, 15, tzinfo=timezone.utc)
         )
         check_method(
-            course_run.enrollment_end, datetime(2015, 1, 23, 9, 7, 11, tzinfo=pytz.utc)
+            course_run.end, datetime(2015, 1, 30, 23, 52, 34, tzinfo=timezone.utc)
+        )
+        check_method(
+            course_run.enrollment_start,
+            datetime(2015, 1, 2, 13, 13, 7, tzinfo=timezone.utc),
+        )
+        check_method(
+            course_run.enrollment_end,
+            datetime(2015, 1, 23, 9, 7, 11, tzinfo=timezone.utc),
         )
         check_method(course_run.enrollment_count, 5)
         check_method(course_run.sync_mode, "manual")

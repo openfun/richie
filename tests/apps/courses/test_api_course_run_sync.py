@@ -179,7 +179,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         self.assertFalse(mock_signal.called)
 
     @override_settings(
-        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="utc"
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="UTC"
     )
     def test_api_course_run_sync_create_sync_to_public_draft_course(self, mock_signal):
         """
@@ -235,7 +235,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         self.assertFalse(mock_signal.called)
 
     @override_settings(
-        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="utc"
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="UTC"
     )
     def test_api_course_run_sync_create_sync_to_public_published_course(
         self, mock_signal
@@ -294,7 +294,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
 
     @override_settings(
-        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_draft", TIME_ZONE="utc"
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_draft", TIME_ZONE="UTC"
     )
     def test_api_course_run_sync_create_sync_to_draft(self, mock_signal):
         """
@@ -343,7 +343,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         self.assertFalse(mock_signal.called)
 
-    @override_settings(TIME_ZONE="utc")
+    @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_create_partial_required(self, mock_signal):
         """
         If the submitted data is not related to an existing course run and some required fields
@@ -378,7 +378,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         self.assertFalse(mock_signal.called)
 
-    @override_settings(TIME_ZONE="utc")
+    @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_create_partial_not_required(self, mock_signal):
         """
         If the submitted data is not related to an existing course run and some optional fields
@@ -536,7 +536,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         self.assertFalse(mock_signal.called)
 
-    @override_settings(TIME_ZONE="utc")
+    @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_existing_published_sync_to_public(self, mock_signal):
         """
         If a course run exists in "sync_to_public" mode (draft and public versions),
@@ -598,7 +598,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             sender=Page, instance=course.extended_object, language=None
         )
 
-    @override_settings(TIME_ZONE="utc")
+    @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_existing_draft_sync_to_public(self, mock_signal):
         """
         If a course run exists in "sync_to_public" mode (only draft version), and the course
@@ -653,7 +653,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         self.assertFalse(mock_signal.called)
 
-    @override_settings(TIME_ZONE="utc")
+    @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_existing_draft_with_public_course_sync_to_public(
         self, mock_signal
     ):
@@ -716,7 +716,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             sender=Page, instance=course.extended_object, language=None
         )
 
-    @override_settings(TIME_ZONE="utc")
+    @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_existing_published_sync_to_draft(self, mock_signal):
         """
         If a course run exists in "sync_to_draft" mode (draft and public versions),
@@ -778,7 +778,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         self.assertFalse(mock_signal.called)
 
-    @override_settings(TIME_ZONE="utc")
+    @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_existing_draft_sync_to_draft(self, mock_signal):
         """
         If a course run exists in "sync_to_draft" mode (only draft version),
@@ -832,7 +832,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         self.assertFalse(mock_signal.called)
 
-    @override_settings(TIME_ZONE="utc")
+    @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_existing_partial(self, mock_signal):
         """
         If a course run exists, it can be partially updated and the other fields should not
@@ -883,7 +883,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         self.assertFalse(mock_signal.called)
 
     @override_settings(
-        TIME_ZONE="utc",
+        TIME_ZONE="UTC",
         RICHIE_LMS_BACKENDS=[
             {
                 "BASE_URL": "http://localhost:8073",
@@ -957,7 +957,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         self.assertFalse(mock_signal.called)
 
     @override_settings(
-        TIME_ZONE="utc",
+        TIME_ZONE="UTC",
         RICHIE_LMS_BACKENDS=[
             {
                 "BASE_URL": "http://localhost:8073",
@@ -1014,7 +1014,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
     # Bulk
 
     @override_settings(
-        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="utc"
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="UTC"
     )
     def test_api_course_run_sync_create_bulk_success(self, mock_signal):
         """
@@ -1089,7 +1089,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         self.assertEqual(public_serializer.data, data)
 
     @override_settings(
-        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="utc"
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="UTC"
     )
     def test_api_course_run_sync_create_bulk_missing_resource_link(self, _mock_signal):
         """
@@ -1134,7 +1134,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         self.assertFalse(CourseRun.objects.exists())
 
     @override_settings(
-        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="utc"
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="UTC"
     )
     def test_api_course_run_sync_create_bulk_errors(self, mock_signal):
         """

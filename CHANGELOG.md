@@ -15,7 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   the user isn't authorized.
 - Add two new sections in DjangoCMS courses: Accessibility and Required
   Equipment.
-- Ongoing product displayed on the syllabus without active enrollment 
+- Ongoing product displayed on the syllabus without active enrollment
   now link to the order details page in the learner dashboard.
 
 ## Changed
@@ -24,11 +24,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Fixed
 
-- Ongoing product displayed on the syllabus with an active enrollment 
-  now link to the order details page in the learner dashboard instead of 
+- Ongoing product displayed on the syllabus with an active enrollment
+  now link to the order details page in the learner dashboard instead of
   OpenEdx course.
 - Downloaded contract archive on product page was broken, it now works
-  properly by sending the course_product_relation_id in the archive 
+  properly by sending the course_product_relation_id in the archive
   creation request.
 - Fix a bug in the learner dashboard contract page where an alert
   message was displayed on successful download.
@@ -46,7 +46,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Add a form to edit user fullname in the payment step of the sale 
+- Add a form to edit user fullname in the payment step of the sale
   tunnel.
 - Add ready-only user profile in the learner dashboard preferences page.
   This profile display data from LMS profile.
@@ -54,15 +54,15 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add search bar on learner dashboard courses pages.
 - Add a `CertificateHelper` implementing a `getCourse` method
 - Add search bar on teacher dashboard courses pages.
-- Add background colors to default user's avatar when they're used 
-  in a list. Theses colors are generated from user's fullname and 
+- Add background colors to default user's avatar when they're used
+  in a list. Theses colors are generated from user's fullname and
   configurable with cunningham tokens.
 - Add dedicated messages for order's status when they're visualized on
   the teacher dashbaord.
 - Add Organization block to order details.
-- Add teacher dashboard page to list training's learners. This listing 
+- Add teacher dashboard page to list training's learners. This listing
   can be accessed under a training or an organization's training.
-- Add a "more" button to DashboardItem and Orders containing a link to 
+- Add a "more" button to DashboardItem and Orders containing a link to
   go to syllabus
 - `related_organizations` placeholder on organization detail page
 
@@ -76,18 +76,18 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Require to accept terms when purchasing product of any kind
 - Rename trainings root menu entry label
 - Upgrade to node 20
-- Contract list in the teacher dashbaord are now filtered by 
+- Contract list in the teacher dashbaord are now filtered by
   courseProductRelationId instead of courseId and productId.
-- Switch from setup.cfg to pyproject.toml 
+- Switch from setup.cfg to pyproject.toml
 
 ### Fixed
 
-- No results message is no longer displayed on initial loading in 
+- No results message is no longer displayed on initial loading in
   learner and teacher courses list pages.
 - Manage certificate linked to an enrollment
 - Certificate products are not listed anymore in teacher dashboard
 - Fix several SaleTunnel cache issues
-- Fix course access link in learner dashboard. This link must not be 
+- Fix course access link in learner dashboard. This link must not be
   display when the course isn't open.
 - Fix CreditCardHelper
 - Remove enrollment start on some course run
@@ -106,9 +106,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- Fix on teacher dashboard courses list. During infinit scroll loading the 
+- Fix on teacher dashboard courses list. During infinit scroll loading the
   window scroll was reset at the top of the page.
-- Fix impossible logout issue 
+- Fix impossible logout issue
 - Add signature polling description
 - Fix malformed CourseProductItem Order dashboard links
 - Await logout authentication request logout trigger
@@ -126,7 +126,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add a footer on enrollment's item in the learner dashboard. It give the
   possibility to purchase linked product or download linked certificate.
 - Add download contracts pages on the teacher dashboard.
-- Add a contract information and actions in learner dashboard order's 
+- Add a contract information and actions in learner dashboard order's
   listing and details.
 - In the learner dashboard, enroll actions are disabled when an unsigned
   contract is linked to the order.
@@ -137,14 +137,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Teacher dashboard access is restricted to user which has access to a course 
+- Teacher dashboard access is restricted to user which has access to a course
   or an organization.
-- Frontend Order type have been split into two: CredentialOrder and 
+- Frontend Order type have been split into two: CredentialOrder and
   CertificateOrder.
 - Update PurchaseButton messages to aid with translation.
 - Update courses and organizations default permissions
 - Update cunningham to 2.0.0
-- Update frontend components OrderStateMessage with new computed state 
+- Update frontend components OrderStateMessage with new computed state
   'waiting signature'
 - Update SaleTunnel to add certificate product course run information.
 - Update SaleTunnel to display product instructions.
@@ -161,7 +161,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix typo on the DashboardOrderLoader component.
 - Prevent LTIConsumer component to rerender on user session update
-- Fix Order interface against changed field 'target_enrollments' and 
+- Fix Order interface against changed field 'target_enrollments' and
   'enrollment'
 - Fix dashboard mobile layout.
 - Course details characteristics overflow issue
@@ -203,7 +203,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add cunningham and design system.
 - Specific sidebar for order related routes
 - List teacher's course's course runs in the teacher course dashboard page.
-- Teacher dashboard course list now includes courses and courses product 
+- Teacher dashboard course list now includes courses and courses product
 relations.
 - Add a page for training details (courseProductRelation) in the teacher
 dashboard.
@@ -211,9 +211,9 @@ dashboard.
 - Finalize the design of teacher dashboard organization sidebar.
 - Use union of organization courses and course product relations on organization
 course's listing page.
-- The product purchase button is now disabled and display a contextual 
+- The product purchase button is now disabled and display a contextual
 information message when the product have no remaining order.
-- Add all available languages for the course in the characteristics section 
+- Add all available languages for the course in the characteristics section
 on the course details page.
 - Change footer text and remove datime on glimpse course according state.
 
@@ -264,7 +264,7 @@ through `context_processor`
 - Add CourseAddToWishlist button to add/remove a course from users wishlist
 - Added Enrollment's pagination in the dashboard
 - Allow multiple web analytics providers at the same time.
-- Display `localizedMessage` on Course Enrollment when backend has 
+- Display `localizedMessage` on Course Enrollment when backend has
   `localizedMessage` on the 400 error payload
 - Navigation skeleton of the teacher dashboard
 
@@ -347,7 +347,7 @@ through `context_processor`
 - Prevent product course run enrollment when user owns the product
   through an invalid order
 - Display a message in the sales tunnel when at least one course has no course
-  runs, to say that this product is not currently available for sale. 
+  runs, to say that this product is not currently available for sale.
 - Show error message when user tries to enroll or unroll to a
   course run and the requests fails
 - Fix courses badges css.
@@ -437,7 +437,7 @@ through `context_processor`
 ### Changed
 
 - Migrate code and type to comply with the new Joanie API
-- On blogpost detail view, move categories list on the right side 
+- On blogpost detail view, move categories list on the right side
 - Fake authentication interface when using the `base` api interface
 - Avoid lag experienced by user on logout by not waiting for the logout request
   to succeed
@@ -482,7 +482,7 @@ through `context_processor`
 - Add a `CourseProductList` Component
 - Add a `SaleTunnel` component
 - Add an `AddressesManagement` component
-- Add a `PaymentButton` component 
+- Add a `PaymentButton` component
 - Add a `PaymentInterface` component to lazy load the right payment component
   according to the provider used
 - Create a `StepBreadcrumb` component to display progress within a step process

@@ -2,12 +2,12 @@
 Tests for the course viewset
 """
 
+from datetime import timezone
 from unittest import mock
 
 from django.test.utils import override_settings
-from django.utils import timezone
+from django.utils import timezone as django_timezone
 
-import pytz
 from cms.test_utils.testcases import CMSTestCase
 from elasticsearch.exceptions import NotFoundError
 
@@ -33,7 +33,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
         would be broken if we did not enforce timezone normalization.
         """
         super().setUp()
-        timezone.activate(pytz.utc)
+        django_timezone.activate(timezone.utc)
 
     def test_viewsets_courses_retrieve(self, *_):
         """

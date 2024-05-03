@@ -2,12 +2,11 @@
 Tests for the course indexer
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest import mock
 
 from django.test import TestCase
 
-import pytz
 from cms.api import add_plugin, create_page
 
 from richie.apps.core.helpers import create_i18n_page
@@ -821,7 +820,7 @@ class CoursesIndexersTestCase(TestCase):
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
                 "state": CourseState(
-                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, pytz.utc)
+                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, timezone.utc)
                 ),
             },
         )
@@ -873,7 +872,7 @@ class CoursesIndexersTestCase(TestCase):
                 "organizations": [],
                 "title": "Duis eu arcu erat",
                 "state": CourseState(
-                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, pytz.utc)
+                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, timezone.utc)
                 ),
             },
         )
@@ -924,7 +923,7 @@ class CoursesIndexersTestCase(TestCase):
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
                 "state": CourseState(
-                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, pytz.utc)
+                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, timezone.utc)
                 ),
             },
         )
@@ -975,7 +974,7 @@ class CoursesIndexersTestCase(TestCase):
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
                 "state": CourseState(
-                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, pytz.utc)
+                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, timezone.utc)
                 ),
             },
         )
