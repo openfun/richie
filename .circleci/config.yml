@@ -450,7 +450,7 @@ jobs:
           DB_PASSWORD: pass
           DB_PORT: 5432
       # services
-      - image: cimg/postgres:9.6
+      - image: cimg/postgres:12.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -531,7 +531,7 @@ jobs:
           DB_PASSWORD: pass
           DB_PORT: 5432
       # services
-      - image: cimg/postgres:9.6
+      - image: cimg/postgres:12.10
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS

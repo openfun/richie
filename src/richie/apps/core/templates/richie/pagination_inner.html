@@ -7,7 +7,7 @@ because wrapper tags are missing. See richie/pagination.html
 <ul class="pagination__list">
     {% for page in pages %}
       {% if page %}
-        {% ifequal page page_obj.number %}
+        {% if page == page_obj.number %}
           <li class="pagination__item pagination__item--current">
             <span class="pagination__page-number">
               <span class="offscreen">
@@ -45,7 +45,7 @@ because wrapper tags are missing. See richie/pagination.html
               </a>
             </li>
           {% endif %}
-        {% endifequal %}
+        {% endif %}
       {% else %}
         <li class="pagination__item pagination__item--placeholder">...</li>
       {% endif %}

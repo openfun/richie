@@ -3,15 +3,15 @@ Unit tests for the Course model
 """
 
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest import mock
 
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.client import RequestFactory
-from django.utils import timezone, translation
+from django.utils import timezone as django_timezone
+from django.utils import translation
 
-import pytz
 from cms.constants import PUBLISHER_STATE_DEFAULT, PUBLISHER_STATE_DIRTY
 from parler.utils.context import switch_language
 
@@ -30,7 +30,7 @@ class CourseRunModelsTestCase(TestCase):
 
     def setUp(self):
         super().setUp()
-        self.now = timezone.now()
+        self.now = django_timezone.now()
 
     def test_models_course_run_get_course_direct_child_with_parent(self):
         """
@@ -142,9 +142,9 @@ class CourseRunModelsTestCase(TestCase):
                 int(course_run.enrollment_start.timestamp()) + 1,
                 int(course_run.enrollment_end.timestamp()) - 1,
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
-        with mock.patch.object(timezone, "now", return_value=now):
+        with mock.patch.object(django_timezone, "now", return_value=now):
             state = course_run.state
 
         self.assertIn(dict(state)["priority"], [0, 1])
@@ -155,9 +155,9 @@ class CourseRunModelsTestCase(TestCase):
                 int(course_run.enrollment_end.timestamp()),
                 int(datetime(9999, 12, 31).timestamp()),
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
-        with mock.patch.object(timezone, "now", return_value=now):
+        with mock.patch.object(django_timezone, "now", return_value=now):
             state = course_run.state
 
         self.assertEqual(
@@ -182,9 +182,9 @@ class CourseRunModelsTestCase(TestCase):
                 int(course_run.enrollment_start.timestamp()) + 1,
                 int(course_run.start.timestamp()) - 1,
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
-        with mock.patch.object(timezone, "now", return_value=now):
+        with mock.patch.object(django_timezone, "now", return_value=now):
             state = course_run.state
 
         self.assertEqual(
@@ -203,9 +203,9 @@ class CourseRunModelsTestCase(TestCase):
                 int(course_run.start.timestamp()) + 1,
                 int(course_run.end.timestamp()) - 1,
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
-        with mock.patch.object(timezone, "now", return_value=now):
+        with mock.patch.object(django_timezone, "now", return_value=now):
             state = course_run.state
 
         self.assertEqual(
@@ -224,9 +224,9 @@ class CourseRunModelsTestCase(TestCase):
                 int(course_run.end.timestamp()) + 1,
                 int(datetime(9999, 12, 31).timestamp()) - 1,
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
-        with mock.patch.object(timezone, "now", return_value=now):
+        with mock.patch.object(django_timezone, "now", return_value=now):
             state = course_run.state
 
         self.assertEqual(
@@ -251,9 +251,9 @@ class CourseRunModelsTestCase(TestCase):
                 int(course_run.enrollment_start.timestamp()) + 1,
                 int(course_run.start.timestamp()) - 1,
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
-        with mock.patch.object(timezone, "now", return_value=now):
+        with mock.patch.object(django_timezone, "now", return_value=now):
             state = course_run.state
 
         self.assertEqual(
@@ -272,9 +272,9 @@ class CourseRunModelsTestCase(TestCase):
                 int(course_run.start.timestamp()) + 1,
                 int(datetime(9999, 12, 31).timestamp()) - 1,
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
-        with mock.patch.object(timezone, "now", return_value=now):
+        with mock.patch.object(django_timezone, "now", return_value=now):
             state = course_run.state
 
         self.assertEqual(
@@ -729,7 +729,7 @@ class CourseRunModelsTestCase(TestCase):
         Scheduling a course run that was to be scheduled should mark the related
         course page dirty.
         """
-        now = timezone.now()
+        now = django_timezone.now()
         course_run = CourseRunFactory(start=None, enrollment_start=now)
         self.assertTrue(course_run.direct_course.extended_object.publish("en"))
         title_obj = course_run.direct_course.extended_object.title_set.first()
@@ -750,7 +750,7 @@ class CourseRunModelsTestCase(TestCase):
         self.assertTrue(course_run.direct_course.extended_object.publish("en"))
         title_obj = course_run.direct_course.extended_object.title_set.first()
 
-        course_run.end = timezone.now()
+        course_run.end = django_timezone.now()
         course_run.save()
         course_run.mark_course_dirty()
         title_obj.refresh_from_db()

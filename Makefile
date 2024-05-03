@@ -325,7 +325,7 @@ i18n-generate-front: build-ts
 
 # -- Database
 
-dbshell: ## connect to database shell 
+dbshell: ## connect to database shell
 	docker compose exec app python sandbox/manage.py dbshell
 .PHONY: dbshell
 

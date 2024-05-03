@@ -4,14 +4,13 @@ Courses factories
 
 import random
 from collections import namedtuple
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from django.conf import settings
-from django.utils import timezone
+from django.utils import timezone as django_timezone
 from django.utils.translation import gettext_lazy as _
 
 import factory
-import pytz
 from cms.api import add_plugin
 
 from richie.plugins.nesteditem.defaults import ACCORDION
@@ -462,13 +461,13 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
         of course be forced if we want something else), then the other significant dates
         for the course run are chosen randomly in periods that make sense with this start date.
         """
-        now = timezone.now()
+        now = django_timezone.now()
         period = timedelta(days=200)
         return datetime.utcfromtimestamp(
             random.randrange(  # nosec
                 int((now - period).timestamp()), int((now + period).timestamp())
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
     @factory.lazy_attribute
     def end(self):
@@ -482,7 +481,7 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
             random.randrange(  # nosec
                 int(self.start.timestamp()), int((self.start + period).timestamp())
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
     @factory.lazy_attribute
     def enrollment_start(self):
@@ -496,7 +495,7 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
             random.randrange(  # nosec
                 int((self.start - period).timestamp()), int(self.start.timestamp())
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
     @factory.lazy_attribute
     def enrollment_end(self):
@@ -521,7 +520,7 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
             random.randrange(  # nosec
                 int(enrollment_start.timestamp()), int(max_enrollment_end.timestamp())
             )
-        ).replace(tzinfo=pytz.utc)
+        ).replace(tzinfo=timezone.utc)
 
     @factory.lazy_attribute
     def enrollment_count(self):

@@ -4,13 +4,12 @@ End-to-end tests for the course detail view
 
 import random
 import re
-from datetime import timedelta
+from datetime import timedelta, timezone
 
 from django.test.utils import override_settings
-from django.utils import timezone
+from django.utils import timezone as django_timezone
 
 import lxml.html
-import pytz
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
@@ -63,7 +62,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         page = course.extended_object
         # Create an ongoing open course run that will be published (created before
         # publishing the page)
-        now = timezone.now()
+        now = django_timezone.now()
         course_run = CourseRunFactory(
             direct_course=course,
             start=now - timedelta(hours=1),
@@ -274,7 +273,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             fill_categories=categories,
         )
         page = course.extended_object
-        now = timezone.now()
+        now = django_timezone.now()
         course_run = CourseRunFactory(
             direct_course=course,
             start=now - timedelta(hours=1),
@@ -646,7 +645,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
     def setUp(self):
         super().setUp()
-        self.now = timezone.now()
+        self.now = django_timezone.now()
 
     def create_run_ongoing_open(self, course, **kwargs):
         """
@@ -1056,7 +1055,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             '<meta name="description"',
         )
 
-    @timezone.override(pytz.utc)
+    @django_timezone.override(timezone.utc)
     def test_templates_course_detail_runs_catalog_visibility(self):
         """
         Check each course run catalog visibility.
@@ -1169,7 +1168,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             ),
         )
 
-    @timezone.override(pytz.utc)
+    @django_timezone.override(timezone.utc)
     def test_templates_course_detail_hidden_courses(self):
         """
         Check that each run on different state (Open, to be scheduled, hidden, ongoing, archived)
@@ -1260,7 +1259,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, course_run_title_archived_hidden)
 
-    @timezone.override(pytz.utc)
+    @django_timezone.override(timezone.utc)
     def test_templates_course_detail_scroll_to_open_course_runs_single_run(
         self,
     ):
@@ -1289,7 +1288,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             response, "course runs are currently open for this course"
         )
 
-    @timezone.override(pytz.utc)
+    @django_timezone.override(timezone.utc)
     def test_templates_course_detail_scroll_to_open_course_runs_no_open_runs(
         self,
     ):

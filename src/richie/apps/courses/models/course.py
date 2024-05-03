@@ -4,18 +4,17 @@ Declare and configure the models for the courses application
 
 # pylint: disable=too-many-lines
 from collections.abc import Mapping
-from datetime import MAXYEAR, datetime
+from datetime import MAXYEAR, datetime, timezone
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models
 from django.db.models import Q, Sum
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone as django_timezone
 from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 
-import pytz
 from cms.constants import PUBLISHER_STATE_DIRTY
 from cms.extensions.extension_pool import extension_pool
 from cms.models import Page, PagePermission
@@ -35,7 +34,7 @@ from .organization import Organization, OrganizationPluginModel
 from .person import Person, PersonPluginModel
 from .role import PageRole
 
-MAX_DATE = datetime(MAXYEAR, 12, 31, tzinfo=pytz.utc)
+MAX_DATE = datetime(MAXYEAR, 12, 31, tzinfo=timezone.utc)
 
 
 class CourseState(Mapping):
@@ -894,7 +893,7 @@ class CourseRun(TranslatableModel):
         end = end or MAX_DATE
         enrollment_end = enrollment_end or MAX_DATE
 
-        now = timezone.now()
+        now = django_timezone.now()
         if start < now:
             if end > now:
                 if enrollment_end > now:

@@ -20,7 +20,7 @@ from richie.apps.courses.models import CourseRun, CourseRunCatalogVisibility
 @mock.patch.object(post_publish, "send", wraps=post_publish.send)
 @override_settings(RICHIE_COURSE_RUN_SYNC_SECRETS=["shared secret"])
 @override_settings(
-    TIME_ZONE="utc",
+    TIME_ZONE="UTC",
     RICHIE_LMS_BACKENDS=[
         {
             "BASE_URL": "http://localhost:8073",
