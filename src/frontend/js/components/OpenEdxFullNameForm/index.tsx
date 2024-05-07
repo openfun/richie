@@ -151,15 +151,6 @@ const OpenEdxFullNameForm = () => {
             intl.formatMessage(messages.fullNameInputDescription)
           }
         />
-
-        {openEdxProfileData?.email && (
-          <Input
-            className="mt-t"
-            label={intl.formatMessage(messages.emailInputLabel)}
-            value={openEdxProfileData?.email}
-            disabled
-          />
-        )}
       </Form>
     </FormProvider>
   );
