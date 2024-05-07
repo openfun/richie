@@ -246,99 +246,6 @@ jobs:
           name: upload files to crowdin
           command: crowdin upload sources -c crowdin/config.yml
 
-  test-back-mysql-5:
-    docker:
-      - image: cimg/python:3.10
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
-        environment:
-          DJANGO_SETTINGS_MODULE: settings
-          DJANGO_CONFIGURATION: Test
-          DJANGO_SECRET_KEY: ThisIsAnExampleKeyForTestPurposeOnly
-          PYTHONPATH: /home/circleci/fun/sandbox
-          RICHIE_ES_HOST: localhost
-          DB_ENGINE: django.db.backends.mysql
-          # The DB_HOST should match the host name and cannot be set from here
-          # where it will be escaped. See the test command instead:
-          # DB_HOST=${HOSTNAME}
-          DB_HOST:
-          DB_NAME: richie
-          DB_USER: fun
-          DB_PASSWORD: pass
-          DB_PORT: 3306
-      # services
-      - image: cimg/mysql:5.7
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
-        environment:
-          MYSQL_ROOT_PASSWORD:
-          MYSQL_DATABASE: test_richie
-          MYSQL_USER: fun
-          MYSQL_PASSWORD: pass
-        command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
-      - image: elasticsearch:7.14.0
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
-        environment:
-          discovery.type: single-node
-      - image: docker.io/bitnami/redis:6.0-debian-10
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
-        name: redis-primary
-        environment:
-          ALLOW_EMPTY_PASSWORD: yes
-          REDIS_REPLICATION_MODE: master
-      - image: docker.io/bitnami/redis-sentinel:6.0-debian-10
-        auth:
-          username: $DOCKER_USER
-          password: $DOCKER_PASS
-        name: redis-sentinel
-        environment:
-          REDIS_MASTER_HOST: redis-primary
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v2-back-dependencies-{{ .Revision }}
-      # Attach the frontend production build
-      - attach_workspace:
-          at: ~/fun
-      - *install-libcairo2-dev
-      # While running tests, we need to make the /data directory writable for
-      # the circleci user
-      - run:
-          name: Create writable /data
-          command: |
-            sudo mkdir /data && \
-            sudo chown circleci:circleci /data
-      # Run back-end (Django) test suite
-      #
-      # Nota bene:
-      #
-      # 1. to run the django test suite, we need to ensure that both MySQL and
-      #    ElasticSearch services are up and ready. To achieve this, we wrap the
-      #    pytest command execution with dockerize, a tiny tool installed in the
-      #    CircleCI image. In our case, dockerize will wait up to one minute
-      #    that both the database and elastisearch containers opened their
-      #    expected tcp port (3306 and 9200 resp.).
-      # 2. We should avoid using localhost for the DB_HOST with MySQL as the
-      #    client will try to use a local socket (_e.g._
-      #    `/var/run/mysqld/mysqld.sock`) instead of the database host and port
-      #    ¯\_(ツ)_/¯.
-      - run:
-          name: Run tests
-          command: |
-            DB_HOST=${HOSTNAME} dockerize \
-              -wait tcp://${HOSTNAME}:3306 \
-              -wait tcp://${HOSTNAME}:9200 \
-              -timeout 60s \
-                ~/.local/bin/pytest
-
   test-back-mysql-8:
     docker:
       - image: cimg/python:3.10
@@ -1082,13 +989,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test-back-mysql-5:
-          requires:
-            - build-back
-            - build-front-production
-          filters:
-            tags:
-              only: /.*/
       - test-back-mysql-8:
           requires:
             - build-back
@@ -1139,7 +1039,6 @@ workflows:
       - package-back:
           requires:
             - test-front
-            - test-back-mysql-5
             - test-back-mysql-8
             - test-back-postgresql
             - test-back-postgresql-es6

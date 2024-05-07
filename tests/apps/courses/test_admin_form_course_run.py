@@ -255,7 +255,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         CourseRunAdminForm.request = request
 
         form = CourseRunAdminForm()
-        self.assertEqual(form.fields["languages"].choices[32][1], "German")
+        self.assertEqual(form.fields["languages"].choices[33][1], "German")
 
         with translation.override("fr"):
             form = CourseRunAdminForm()
