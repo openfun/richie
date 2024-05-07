@@ -52,15 +52,15 @@ class CourseRunAdminTestCase(CMSTestCase):
         response = self.client.get(url, follow=True)
 
         # Check that the page includes all our fields
-        self.assertContains(response, "id_title")
-        self.assertContains(response, "id_resource_link")
-        self.assertContains(response, "id_start_", count=3)
-        self.assertContains(response, "id_end_", count=3)
-        self.assertContains(response, "id_enrollment_start_", count=3)
-        self.assertContains(response, "id_enrollment_end_", count=3)
-        self.assertContains(response, "id_languages")
-        self.assertContains(response, "id_enrollment_count")
-        self.assertContains(response, "id_sync_mode")
+        self.assertContains(response, "id_title", count=2)
+        self.assertContains(response, "id_resource_link", count=2)
+        self.assertContains(response, "id_start_", count=2)
+        self.assertContains(response, "id_end_", count=2)
+        self.assertContains(response, "id_enrollment_start_", count=2)
+        self.assertContains(response, "id_enrollment_end_", count=2)
+        self.assertContains(response, "id_languages", count=3)
+        self.assertContains(response, "id_enrollment_count", count=3)
+        self.assertContains(response, "id_sync_mode", count=2)
 
     # List
 
@@ -208,12 +208,12 @@ class CourseRunAdminTestCase(CMSTestCase):
         # Check that the page includes all our fields
         self.assertContains(response, "id_title", count=2)
         self.assertContains(response, "id_resource_link", count=2)
-        self.assertContains(response, "id_start_", count=3)
-        self.assertContains(response, "id_end_", count=3)
-        self.assertContains(response, "id_enrollment_start_", count=3)
-        self.assertContains(response, "id_enrollment_end_", count=3)
-        self.assertContains(response, "id_languages", count=2)
-        self.assertContains(response, "id_enrollment_count", count=2)
+        self.assertContains(response, "id_start_", count=2)
+        self.assertContains(response, "id_end_", count=2)
+        self.assertContains(response, "id_enrollment_start_", count=2)
+        self.assertContains(response, "id_enrollment_end_", count=2)
+        self.assertContains(response, "id_languages", count=3)
+        self.assertContains(response, "id_enrollment_count", count=3)
         self.assertContains(response, "id_sync_mode", count=2)
 
     def test_admin_course_run_change_view_get_superuser_public(self):
@@ -319,12 +319,12 @@ class CourseRunAdminTestCase(CMSTestCase):
         # Check that the page includes all our fields
         self.assertContains(response, "id_title", count=2)
         self.assertContains(response, "id_resource_link", count=2)
-        self.assertContains(response, "id_start_", count=3)
-        self.assertContains(response, "id_end_", count=3)
-        self.assertContains(response, "id_enrollment_start_", count=3)
-        self.assertContains(response, "id_enrollment_end_", count=3)
-        self.assertContains(response, "id_languages", count=2)
-        self.assertContains(response, "id_enrollment_count", count=2)
+        self.assertContains(response, "id_start_", count=2)
+        self.assertContains(response, "id_end_", count=2)
+        self.assertContains(response, "id_enrollment_start_", count=2)
+        self.assertContains(response, "id_enrollment_end_", count=2)
+        self.assertContains(response, "id_languages", count=3)
+        self.assertContains(response, "id_enrollment_count", count=3)
         self.assertContains(response, "id_sync_mode", count=2)
 
     # Add

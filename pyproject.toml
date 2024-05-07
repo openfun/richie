@@ -25,7 +25,7 @@ classifiers = [
 ]
 dependencies = [
     "arrow",
-    "Django==4.0",
+    "Django==4.1",
     "djangocms-file",
     "djangocms-googlemap",
     "djangocms-link",
