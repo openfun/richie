@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+- Dropped support for postgres version < 12
+- Dropped support for MySQL version < 8
 - Add new `dashboard-splitted-card` theme scheme
 ```
   dashboard-splitted-card: (
@@ -45,7 +47,7 @@ $ make migrate
   `scss/trumps/_bootstrap.scss` file. You have to import it in your `_main.scss` file.
   ```scss
   // ...
-  
+
   // Import bootstrap reset
   @import 'richie-education/scss/trumps/bootstrap';
   ```
@@ -67,7 +69,7 @@ $ make migrate
   the urls module of your app.
   ```python
   from richie.apps.courses.urls import redirects_urlpatterns as courses_redirects_urlpatterns
-  
+
   urlpatterns += [
     re_path(r"^redirects/", include([*courses_redirects_urlpatterns])),
   ]
@@ -81,7 +83,7 @@ $ make migrate
   @import '@openfun/cunningham-react/dist/style';
   @import 'richie-education/scss/vendors/cunningham-tokens';
   @import 'richie-education/scss/vendors/css/cunningham-tokens';
-  
+
   // Override default Richie settings variables
   @import 'richie-education/scss/colors/palette';
   // ...
@@ -89,12 +91,12 @@ $ make migrate
   `yarn build-theme` command generates tokens files `scss/vendors/cunningham-tokens.scss` and
   `scss/vendors/css/cunningham-tokens.css`. `$palette` variable is now deprecated and will be
   removed in the next major release. Currently this is only an alias to the
-  `map.get($theme, colors)` ($theme is a sass variable exported by `cunninghtam-tokens.scss`). 
-- Components `CourseGlimpse` and `CourseGlimpseList` has been moved from `js/widgets/Search` folder to 
+  `map.get($theme, colors)` ($theme is a sass variable exported by `cunninghtam-tokens.scss`).
+- Components `CourseGlimpse` and `CourseGlimpseList` has been moved from `js/widgets/Search` folder to
   `js/components` folder. Update your overrides.json and path in your custom scss files accordingly.
-- `js/utils/test/factories.ts` have been split into multiple files: joanie.ts, richie.ts and 
+- `js/utils/test/factories.ts` have been split into multiple files: joanie.ts, richie.ts and
   reactQuery.ts. Update your import accordingly.
- 
+
 ## 2.20.1 to 2.21.0
 
 - Frontend folder architecture has been totally reworked. If you have overridden
@@ -141,7 +143,7 @@ $ make migrate
 
 ## 2.18.x to 2.19.x
 
-- In `_theme.scss`, `course-detail` scheme now accepts two new optional properties to style 
+- In `_theme.scss`, `course-detail` scheme now accepts two new optional properties to style
   the course run CTA and feedback color in the course detail subheader:
   - `subheader-run-cta`
   - `subheader-run-feedback-color`
@@ -179,7 +181,7 @@ $ make migrate
     "JS_COURSE_REGEX": r"^.*/api/v1.0/(course-runs|products)/([^/]*)/?$",
     # A list of course run properties to not update
     "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": [],
-    # The synchronization mode ("manual", "sync_to_public" or "sync_to_draft") 
+    # The synchronization mode ("manual", "sync_to_public" or "sync_to_draft")
     "DEFAULT_COURSE_RUN_SYNC_MODE": "sync_to_public",
   }
   ```
@@ -224,7 +226,7 @@ $ make migrate
   - `_main.scss`
   ```diff
   +   @import 'richie-education/scss/tools/utils';
-  
+
   +   @import 'richie-education/js/components/AddressesManagement/styles';
   +   @import 'richie-education/js/components/CourseProductCertificateItem/styles';
   +   @import 'richie-education/js/components/CourseProductCourseRuns/styles';
@@ -239,7 +241,7 @@ $ make migrate
   ...
   +   @import 'richie-education/scss/components/templates/richie/multiple-columns';
   ```
-  
+
   - Only if you have overridden `_palette.scss`:
   ```diff
   $palette = {
@@ -335,7 +337,7 @@ $ make migrate
 
 ## 2.11.x to 2.12.x
 
-- If you overrode `course-detail` theme within `theme.scss`, you have to add these four 
+- If you overrode `course-detail` theme within `theme.scss`, you have to add these four
   new properties
   ```scss
   view-more-runs-color: r-color('firebrick6'),
@@ -348,8 +350,8 @@ $ make migrate
 
 - If you overrode `richie/base.html`, the `branding_footer` template block has been renamed to
   `body_footer_brand` and the link was integrated in the block so it can be customized.
-- The file `_colors.scss` has been divided into `_palette.scss` for the palette, 
-  `_gradients.scss`, `_schemes.scss`  and `_theme.scss`. Those files are now located in a 
+- The file `_colors.scss` has been divided into `_palette.scss` for the palette,
+  `_gradients.scss`, `_schemes.scss`  and `_theme.scss`. Those files are now located in a
   dedicated folder `colors`.
 
 ## 2.9.x to 2.10.x

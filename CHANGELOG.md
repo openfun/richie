@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Changed
 
+- Upgrade to Django version 4.2 (pin version < 5)
 - Migrate to Sentry SDK 2.0
 
 ## Fixed

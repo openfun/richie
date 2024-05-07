@@ -37,7 +37,7 @@ class CoursesSignalsTestCase(TestCase):
         Run commit hooks as if the database transaction had been successful.
         """
         while connection.run_on_commit:
-            _sids, func = connection.run_on_commit.pop(0)
+            _sids, func, _published_value = connection.run_on_commit.pop(0)
             func()
 
     def test_signals_courses_publish(self, mock_bulk, *_):
