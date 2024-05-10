@@ -37,7 +37,9 @@ export const DashboardAvatar = ({
           alt={title}
         />
       ) : (
-        <span className="dashboard__avatar__letter">{StringHelper.abbreviate(title, 3)}</span>
+        <span className="dashboard__avatar__letter" aria-label={title}>
+          {StringHelper.abbreviate(title, 3)}
+        </span>
       )}
     </div>
   );
