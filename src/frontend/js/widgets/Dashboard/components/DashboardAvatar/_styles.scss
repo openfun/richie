@@ -3,6 +3,7 @@ $avatar-size: 2.5em;
 
 .dashboard {
   &__avatar {
+    position: relative;
     box-shadow: r-theme-val(dashboard-sidebar, base-shadow);
     background-color: r-theme-val(dashboard-avatar, background-color);
     border-radius: 100%;
