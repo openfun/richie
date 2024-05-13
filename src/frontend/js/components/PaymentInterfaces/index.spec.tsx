@@ -10,6 +10,10 @@ jest.mock('components/PaymentInterfaces/PayplugLightbox', () => ({
   __esModule: true,
   default: () => 'Payplug lightbox',
 }));
+jest.mock('components/PaymentInterfaces/LyraPopIn', () => ({
+  __esModule: true,
+  default: () => 'Lyra Pop-in',
+}));
 jest.mock('components/PaymentInterfaces/Dummy', () => ({
   __esModule: true,
   default: () => 'Dummy payment component',
@@ -33,6 +37,7 @@ describe('PaymentInterface', () => {
   });
 
   it('should return null and handle an error if payment provider is not implemented', () => {
+    // @ts-ignore
     const payment: Joanie.Payment = PaymentFactory({ provider_name: 'unknown-provider' }).one();
 
     const { container } = render(
@@ -53,6 +58,16 @@ describe('PaymentInterface', () => {
     render(<PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />);
 
     await screen.findByText('Payplug lightbox');
+    expect(onError).not.toHaveBeenCalled();
+  });
+
+  it('should render the lyra pop-in when provider is Lyra', async () => {
+    const payment: Joanie.Payment = PaymentFactory({
+      provider_name: PaymentProviders.LYRA,
+    }).one();
+    render(<PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />);
+
+    await screen.findByText('Lyra Pop-in');
     expect(onError).not.toHaveBeenCalled();
   });
 
