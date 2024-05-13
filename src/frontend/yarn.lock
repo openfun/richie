@@ -2737,6 +2737,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@lyracom/embedded-form-glue@1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@lyracom/embedded-form-glue/-/embedded-form-glue-1.4.2.tgz#0077da8803027d459edcdeaa1c796886ecb3de17"
+  integrity sha512-UrHIJ1T8qNId/FHgoh7iKwyTIGPi3PWYeg+ULDIyD1hysb7627/lT927yZQ1HPrIzSV6LFkuL7sxBTxMtjvC0A==
+
 "@mdn/browser-compat-data@^5.2.34":
   version "5.2.43"
   resolved "https://registry.yarnpkg.com/@mdn/browser-compat-data/-/browser-compat-data-5.2.43.tgz#3c13e6801b25e97502b124b760709b4a2c1745b1"
