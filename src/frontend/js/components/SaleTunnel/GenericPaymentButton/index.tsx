@@ -5,7 +5,8 @@ import type * as Joanie from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { useOrders } from 'hooks/useOrders';
-import { OrderCreationPayload, OrderState } from 'types/Joanie';
+import { OrderCreationPayload, OrderState, PaymentWithId } from 'types/Joanie';
+import type { Maybe, Nullable } from 'types/utils';
 import { useTerms } from 'components/SaleTunnel/hooks/useTerms';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
@@ -67,7 +68,6 @@ const messages = defineMessages({
 });
 
 type PaymentInfo = Joanie.Payment & { order_id: string };
-export type OneClickPaymentInfo = Joanie.PaymentOneClick & { order_id: string };
 
 enum ComponentStates {
   IDLE = 'idle',
@@ -96,9 +96,13 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     runSubmitCallbacks,
   } = useSaleTunnelContext();
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
-  const [payment, setPayment] = useState<PaymentInfo | OneClickPaymentInfo>();
+  const [payment, setPayment] = useState<PaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<PaymentErrorMessageId>(PaymentErrorMessageId.ERROR_DEFAULT);
+  const hasPaymentId = (p: Maybe<Joanie.Payment>): p is Extract<Joanie.Payment, PaymentWithId> => {
+    return Boolean(p?.hasOwnProperty('payment_id'));
+  };
+  const paymentId = hasPaymentId(payment) ? payment.payment_id : undefined;
   const isMobile = useMatchMediaLg();
 
   // This pattern is ugly but I couldn't find a better way to achieve it in a nicer way.
@@ -232,7 +236,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     const checkOrderValidity = async () => {
       if (round >= PAYMENT_SETTINGS.pollLimit) {
         timeoutRef.current = undefined;
-        orderMethods.abort({ id: payment!.order_id, payment_id: payment!.payment_id });
+        orderMethods.abort({ id: payment!.order_id, payment_id: paymentId });
         setState(ComponentStates.ERROR);
       } else {
         const isValidated = await isOrderValidated(payment!.order_id);
@@ -260,7 +264,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
       orderMethods
         .abort({
           id: payment!.order_id,
-          payment_id: payment!.payment_id,
+          payment_id: paymentId,
         })
         .then(() => {
           setPayment(undefined);

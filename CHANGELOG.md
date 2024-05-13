@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Added
 
+- Add Lyra payment interface
 - Add 404 error page on the dashboard router.
 - Teacher dashboard route now redirect to learner dashboard route when
   the user isn't authorized.

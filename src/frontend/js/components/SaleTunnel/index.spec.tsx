@@ -2,7 +2,7 @@ import { act, cleanup, fireEvent, screen, waitFor } from '@testing-library/react
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import userEvent from '@testing-library/user-event';
-import { OrderState, Product, ProductType } from 'types/Joanie';
+import { OrderState, Product, ProductType, DummyPayment } from 'types/Joanie';
 import {
   AddressFactory,
   CertificateOrderWithOneClickPaymentFactory,
@@ -554,7 +554,7 @@ describe.each([
       expect(
         JSON.parse(fetchMock.calls()[fetchMock.calls().length - 3][1]!.body!.toString()),
       ).toEqual({
-        payment_id: paymentInfo.payment_id,
+        payment_id: (paymentInfo as DummyPayment).payment_id,
       });
 
       // - An error message should be displayed and focused (for screen reader users)

@@ -429,10 +429,7 @@ export const CredentialOrderWithOneClickPaymentFactory = factory(
   (): CredentialOrderWithPaymentInfo => {
     return {
       ...CredentialOrderFactory().one(),
-      payment_info: {
-        ...PaymentFactory().one(),
-        is_paid: true,
-      },
+      payment_info: PaymentFactory().one(),
     };
   },
 );
@@ -458,10 +455,7 @@ export const CertificateOrderWithOneClickPaymentFactory = factory(
   (): CertificateOrderWithPaymentInfo => {
     return {
       ...CertificateOrderFactory().one(),
-      payment_info: {
-        ...PaymentFactory().one(),
-        is_paid: true,
-      },
+      payment_info: PaymentFactory().one(),
     };
   },
 );

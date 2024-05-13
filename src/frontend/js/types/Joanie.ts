@@ -3,6 +3,7 @@ import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 import { Course as RichieCourse } from 'types/Course';
+import { PaymentErrorMessageId } from 'components/PaymentInterfaces/types';
 import { JoanieUserProfile } from './User';
 
 // - Generic
@@ -285,7 +286,7 @@ export interface CredentialOrder extends Order {
 }
 
 export interface CredentialOrderWithPaymentInfo extends CredentialOrder {
-  payment_info: Payment | PaymentOneClick;
+  payment_info: Payment;
 }
 
 export interface CertificateOrder extends Order {
@@ -295,7 +296,7 @@ export interface CertificateOrder extends Order {
 }
 
 export interface CertificateOrderWithPaymentInfo extends CertificateOrder {
-  payment_info: Payment | PaymentOneClick;
+  payment_info: Payment;
 }
 
 export type OrderLite = Pick<
@@ -405,20 +406,43 @@ export interface UserWishlistCreationPayload {
 export enum PaymentProviders {
   DUMMY = 'dummy',
   PAYPLUG = 'payplug',
+  LYRA = 'lyra',
 }
 
-export interface Payment {
+export interface PaymentWithId {
   payment_id: string;
-  provider_name: string;
-  url: string;
 }
 
-export interface PaymentOneClick extends Payment {
-  is_paid: boolean;
+export interface DummyPayment extends PaymentWithId {
+  provider_name: PaymentProviders.DUMMY;
+  url: string;
+  is_paid?: boolean;
 }
+
+export interface PayplugPayment extends PaymentWithId {
+  provider_name: PaymentProviders.PAYPLUG;
+  url: string;
+  is_paid?: boolean;
+}
+
+export interface LyraPayment {
+  provider_name: PaymentProviders.LYRA;
+  form_token: string;
+  configuration: {
+    public_key: string;
+    base_url: string;
+  };
+}
+
+export type Payment = DummyPayment | PayplugPayment | LyraPayment;
+
+export type PaymentInterfaceProps<P extends Payment = Payment> = P & {
+  onSuccess: () => void;
+  onError: (messageId: PaymentErrorMessageId) => void;
+};
 
 export interface OrderPaymentInfo {
-  payment_info: Payment | PaymentOneClick;
+  payment_info: Payment;
 }
 
 // - API
@@ -443,7 +467,7 @@ export type OrderCreationPayload = OrderCertificateCreationPayload | OrderCreden
 
 interface OrderAbortPayload {
   id: Order['id'];
-  payment_id?: Payment['payment_id'];
+  payment_id?: string;
 }
 
 interface OrderSubmitPayload {
