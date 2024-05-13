@@ -126,7 +126,6 @@
 }
 
 .credit-card-brand-logo {
-  background-color: r-theme-val(credit-card-brand-logo, background-color);
   border-radius: $border-radius;
   height: 50px;
   width: 83px;
@@ -139,7 +138,6 @@
   &--inline {
     height: rem-calc(38px);
     width: rem-calc(52px);
-    background-color: transparent;
   }
 
   img {
