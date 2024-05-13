@@ -19,7 +19,7 @@ const messages = defineMessages({
  * @param onClick Handler to call when the user clicks on the search icon.
  */
 export const SearchInput = ({
-  inputProps, // just a passthrough from react-autosuggest to react-autosuggest
+  inputProps: { key, ...inputProps }, // just a passthrough from react-autosuggest to react-autosuggest
   onClick = () => {}, // by default, do nothing, this will just remove focus and close suggestions
 }: { inputProps: any; onClick?: () => void } & CommonDataProps) => (
   <div className="search-input">
