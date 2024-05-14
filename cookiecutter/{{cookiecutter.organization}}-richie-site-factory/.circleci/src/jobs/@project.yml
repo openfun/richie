@@ -2,7 +2,7 @@
 # Check that the git history is clean and complies with our expectations
 lint-git:
   docker:
-    - image: cimg/python:3.10
+    - image: cimg/python:3.11
   working_directory: ~/fun
   steps:
     - checkout

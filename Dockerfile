@@ -15,7 +15,7 @@
 #
 
 # ---- Base image to inherit from ----
-FROM python:3.10-buster as base
+FROM python:3.11-bookworm as base
 
 # ---- Front-end builder image ----
 FROM node:20.11 as front-builder
