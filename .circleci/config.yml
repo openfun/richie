@@ -42,7 +42,7 @@ jobs:
   # Check that the git history is clean and complies with our expectations
   lint-git:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -155,7 +155,7 @@ jobs:
   # Build backend development environment
   build-back:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -177,7 +177,7 @@ jobs:
   # Build backend translations
   build-back-i18n:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -203,7 +203,7 @@ jobs:
 
   lint-back:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -248,7 +248,7 @@ jobs:
 
   test-back-mysql-8:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -341,7 +341,7 @@ jobs:
 
   test-back-postgresql:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -422,7 +422,7 @@ jobs:
 
   test-back-postgresql-es6:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -504,7 +504,7 @@ jobs:
   # ---- Packaging jobs ----
   check-versions:
     docker:
-      - image: cimg/python:3.10-node
+      - image: cimg/python:3.11-node
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -549,7 +549,7 @@ jobs:
 
   package-back:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -580,7 +580,7 @@ jobs:
   #     environment variables in CircleCI UI (with your PyPI credentials)
   pypi:
     docker:
-      - image: cimg/python:3.10
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -707,7 +707,7 @@ jobs:
 
   cookiecutter-bootstrap:
     docker:
-      - image: cimg/python:3.10-node
+      - image: cimg/python:3.11-node
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -831,7 +831,7 @@ jobs:
   # environment variables in CircleCI UI (with your PyPI credentials)
   npm:
     docker:
-      - image: cimg/python:3.10-node
+      - image: cimg/python:3.11-node
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS

@@ -585,7 +585,7 @@ class CoursesIndexersTestCase(TestCase):
             course_icons_placeholder,
             CategoryPlugin,
             "en",
-            **{"page": category.extended_object}
+            **{"page": category.extended_object},
         )
         course.extended_object.publish("en")
         # Make sure we associate an image-less picture with the category through
