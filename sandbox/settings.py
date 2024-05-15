@@ -714,9 +714,12 @@ class Production(Base):
     # the filename, that is calculated from the file content, so that browsers always
     # get the updated version of each file.
     STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
         "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
-        }
+            "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+        },
     }
 
     # For more details about CMS_CACHE_DURATION, see :

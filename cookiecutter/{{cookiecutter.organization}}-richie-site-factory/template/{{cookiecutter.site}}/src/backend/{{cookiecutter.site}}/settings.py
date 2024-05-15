@@ -197,9 +197,12 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     # the filename, that is calculated from the file content, so that browsers always
     # get the updated version of each file.
     STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
         "staticfiles": {
-            "BACKEND": values.Value("base.storage.CDNManifestStaticFilesStorage")
-        }
+            "BACKEND": "base.storage.CDNManifestStaticFilesStorage",
+        },
     }
 
     AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
@@ -724,9 +727,12 @@ class Test(Base):
     """Test environment settings"""
 
     STORAGES = {
-        "staticfile": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"
-        }
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
     }
 
 
@@ -754,7 +760,14 @@ class Production(Base):
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SESSION_COOKIE_SECURE = True
 
-    STORAGES = {"default": {"BACKEND": "base.storage.MediaStorage"}}
+    STORAGES = {
+        "default": {
+            "BACKEND": "base.storage.MediaStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "base.storage.CDNManifestStaticFilesStorage",
+        },
+    }
     AWS_DEFAULT_ACL = None
     AWS_LOCATION = "media"
 
