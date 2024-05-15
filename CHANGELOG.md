@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Added
 
+- User profile in the learner dashboard is now always synchronized with 
+  openEdx profile informations.
 - Add a tab in learner dashboard certificate page to render both order
   certificate and enrollment certificate lists.
 - Add Lyra payment interface

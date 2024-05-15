@@ -128,6 +128,7 @@ describe('<DashboardCreateAddress/>', () => {
   });
 
   it('creates an address and redirect to preferences', async () => {
+    fetchMock.get('https://demo.endpoint/api/v1.0/user/me', richieUser);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
     fetchMock.post('https://joanie.endpoint/api/v1.0/addresses/', []);
 

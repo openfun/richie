@@ -55,6 +55,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     }).one();
     const { 'pref-lang': prefLang, ...openEdxAccount } = openEdxProfile;
 
+    fetchMock.get('https://endpoint.test/api/v1.0/user/me', richieUser);
     fetchMock.get(
       `https://endpoint.test/api/user/v1/accounts/${richieUser.username}`,
       openEdxAccount,
