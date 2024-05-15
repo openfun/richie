@@ -10,6 +10,7 @@ import {
   within,
 } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
+import userEvent from '@testing-library/user-event';
 import {
   UserFactory,
   RichieContextFactory as mockRichieContextFactory,
@@ -54,6 +55,7 @@ describe('<DashboardEditAddress/>', () => {
     fetchMock.put(updateUrl, HttpStatusCode.OK);
 
     const richieUser = UserFactory().one();
+    fetchMock.get('https://demo.endpoint/api/v1.0/user/me', richieUser);
     fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${richieUser.username}`, {});
     fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${richieUser.username}`, {});
 
@@ -111,11 +113,10 @@ describe('<DashboardEditAddress/>', () => {
 
     // Submit of the form calls the API edit route.
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(false);
-    await act(async () => {
-      // it is not necessary to update all fields as it is mocked above.
-      fireEvent.change($titleInput, { target: { value: addressUpdated.title } });
-      fireEvent.click($button);
-    });
+    const user = userEvent.setup();
+    await user.clear($titleInput);
+    await user.type($titleInput, addressUpdated.title);
+    await user.click($button);
     expect(fetchMock.called(updateUrl, { method: 'put' })).toBe(true);
 
     // The API is called with correct body.

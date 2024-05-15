@@ -1,13 +1,13 @@
-import { Input } from '@openfun/cunningham-react';
+import { Button, Input } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useSession } from 'contexts/SessionContext';
 import useOpenEdxProfile from 'hooks/useOpenEdxProfile';
 import { DashboardBox } from 'widgets/Dashboard/components/DashboardBox';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
-import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import Form from 'components/Form';
 import context from 'utils/context';
 import Banner, { BannerType } from 'components/Banner';
+import { REACT_QUERY_SETTINGS } from 'settings';
 
 const messages = defineMessages({
   // page elements
@@ -111,7 +111,12 @@ export const DEFAULT_DISPLAYED_FORM_VALUE = ' - ';
 const DashboardOpenEdxProfile = () => {
   const intl = useIntl();
   const { user } = useSession();
+
   const { data: openEdxProfileData, error } = useOpenEdxProfile({ username: user!.username });
+
+  const onClickModifyProfile = () => {
+    sessionStorage.removeItem(REACT_QUERY_SETTINGS.cacheStorage.key);
+  };
 
   if (error) {
     return (
@@ -225,13 +230,13 @@ const DashboardOpenEdxProfile = () => {
       </DashboardBox.List>
 
       <Form.Footer>
-        <RouterButton
+        <Button
           fullWidth
-          target="_blank"
+          onClick={onClickModifyProfile}
           href={`${context.authentication.endpoint}/account/settings`}
         >
           <FormattedMessage {...messages.editButtonLabel} />
-        </RouterButton>
+        </Button>
       </Form.Footer>
     </DashboardCard>
   );

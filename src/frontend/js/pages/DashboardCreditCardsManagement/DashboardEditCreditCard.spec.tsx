@@ -97,6 +97,7 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('updates a credit card name', async () => {
+    fetchMock.get('https://endpoint.test/api/v1.0/user/me', richieUser);
     const creditCard = CreditCardFactory().one();
     const creditCards = [...CreditCardFactory().many(5), creditCard];
     const creditCardUpdated = CreditCardFactory().one();
@@ -195,6 +196,7 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('sets credit card as main', async () => {
+    fetchMock.get('https://endpoint.test/api/v1.0/user/me', richieUser);
     const creditCard = CreditCardFactory().one();
     const creditCards = [...CreditCardFactory().many(5), creditCard];
     const creditCardUpdated = { ...creditCard };
@@ -282,6 +284,7 @@ describe('<DahsboardEditCreditCard/>', () => {
   });
 
   it('deletes a credit card', async () => {
+    fetchMock.get('https://endpoint.test/api/v1.0/user/me', richieUser);
     const creditCard = CreditCardFactory().one();
     let creditCards = [...CreditCardFactory().many(5), creditCard];
 

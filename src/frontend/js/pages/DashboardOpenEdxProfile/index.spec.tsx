@@ -12,6 +12,7 @@ import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { genderMessages, levelOfEducationMessages } from 'hooks/useOpenEdxProfile/utils';
 import { HttpStatusCode } from 'utils/errors/HttpError';
+import { User } from 'types/User';
 import DashboardOpenEdxProfile, { DEFAULT_DISPLAYED_FORM_VALUE } from '.';
 
 jest.mock('utils/errors/handle');
@@ -29,12 +30,17 @@ jest.mock('utils/context', () => ({
 }));
 
 describe('pages.DashboardOpenEdxProfile', () => {
+  let richieUser: User;
   setupJoanieSession();
+
+  beforeEach(() => {
+    richieUser = UserFactory().one();
+    fetchMock.get('https://endpoint.test/api/v1.0/user/me', richieUser);
+  });
 
   it('should render profile informations', async () => {
     const intl = createIntl({ locale: 'en' });
     const languageNames = new Intl.DisplayNames([intl.locale], { type: 'language' });
-    const richieUser = UserFactory().one();
     const openEdxProfile = OpenEdxApiProfileFactory({
       username: richieUser.username,
       email: richieUser.email,
@@ -82,7 +88,6 @@ describe('pages.DashboardOpenEdxProfile', () => {
   });
 
   it('should render empty profile informations', async () => {
-    const richieUser = UserFactory().one();
     const openEdxProfile = OpenEdxApiProfileFactory({
       name: '',
       country: null,
@@ -121,8 +126,6 @@ describe('pages.DashboardOpenEdxProfile', () => {
   });
 
   it('should display get error when account request fail', async () => {
-    const richieUser = UserFactory().one();
-
     fetchMock.get(
       `https://endpoint.test/api/user/v1/accounts/${richieUser.username}`,
       new Response('', { status: HttpStatusCode.NOT_FOUND }),
@@ -141,7 +144,6 @@ describe('pages.DashboardOpenEdxProfile', () => {
   });
 
   it('should display get error when preferences request fail', async () => {
-    const richieUser = UserFactory().one();
     const openEdxProfile = OpenEdxApiProfileFactory({
       username: richieUser.username,
       email: richieUser.email,
