@@ -126,9 +126,11 @@ describe('AddressSelector', () => {
     await changeSelect($countryField, countries.getName(address?.country, 'en')!, user);
     await user.click($submitButton);
 
-    expect(billingAddressInput).toHaveTextContent(
-      'Billing address' + getAddressLabel(address) + 'closearrow_drop_down',
-    );
+    await waitFor(() => {
+      expect(billingAddressInput).toHaveTextContent(
+        'Billing address' + getAddressLabel(address) + 'closearrow_drop_down',
+      );
+    });
   });
   it('has an existing main billing address and choose another', async () => {
     const address = AddressFactory({
