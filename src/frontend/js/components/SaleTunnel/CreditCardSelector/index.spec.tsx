@@ -117,7 +117,7 @@ describe('CreditCardSelector', () => {
     render(<Wrapper />);
     await expectNoSpinner();
 
-    screen.getByTestId('credit-card-' + mainCreditCard.id);
+    await screen.findByTestId('credit-card-' + mainCreditCard.id);
     screen.getByText(mainCreditCard.title!);
     screen.getByText('Ends with •••• ' + mainCreditCard.last_numbers);
     screen.getByText(
@@ -153,7 +153,7 @@ describe('CreditCardSelector', () => {
     render(<Wrapper />);
     await expectNoSpinner();
 
-    screen.getByTestId('credit-card-' + mainCreditCard.id);
+    await screen.findByTestId('credit-card-' + mainCreditCard.id);
     screen.getByText(mainCreditCard.title!);
     screen.getByText('Ends with •••• ' + mainCreditCard.last_numbers);
 
@@ -196,7 +196,7 @@ describe('CreditCardSelector', () => {
     expect(screen.queryByTestId('credit-card-selector-modal')).not.toBeInTheDocument();
 
     expect(contextRef.current.creditCard!.id).toEqual(creditCards[0].id);
-    screen.getByTestId('credit-card-' + creditCards[0].id);
+    await screen.findByTestId('credit-card-' + creditCards[0].id);
     screen.getByText(creditCards[0].title!);
     screen.getByText('Ends with •••• ' + creditCards[0].last_numbers);
   });
@@ -222,7 +222,7 @@ describe('CreditCardSelector', () => {
     render(<Wrapper />);
     await expectNoSpinner();
 
-    screen.getByTestId('credit-card-' + mainCreditCard.id);
+    await screen.findByTestId('credit-card-' + mainCreditCard.id);
     screen.getByText(mainCreditCard.title!);
     screen.getByText('Ends with •••• ' + mainCreditCard.last_numbers);
     expect(contextRef.current.creditCard!.id).toEqual(mainCreditCard.id);
@@ -271,7 +271,7 @@ describe('CreditCardSelector', () => {
     render(<Wrapper />);
     await expectNoSpinner();
 
-    screen.getByTestId('credit-card-' + mainCreditCard.id);
+    await screen.findByTestId('credit-card-' + mainCreditCard.id);
     screen.getByText(mainCreditCard.title!);
     screen.getByText('Ends with •••• ' + mainCreditCard.last_numbers);
     expect(screen.queryByText('Add new credit card during payment')).not.toBeInTheDocument();
@@ -306,7 +306,7 @@ describe('CreditCardSelector', () => {
     render(<Wrapper />);
     await expectNoSpinner();
 
-    screen.getByTestId('credit-card-' + mainCreditCard.id);
+    await screen.findByTestId('credit-card-' + mainCreditCard.id);
     screen.getByText(mainCreditCard.title!);
     screen.getByText('Ends with •••• ' + mainCreditCard.last_numbers);
     screen.getByText(

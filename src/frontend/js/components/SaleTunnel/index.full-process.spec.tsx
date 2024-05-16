@@ -217,7 +217,9 @@ describe('SaleTunnel', () => {
     await changeSelect($countryField, countries.getName(address?.country, 'en')!, user);
     await user.click($submitButton);
 
-    within(billingAddressInput).getByText(getAddressLabel(address));
+    expect(
+      await within(billingAddressInput).findByText(getAddressLabel(address)),
+    ).toBeInTheDocument();
 
     /**
      * Make sure no credit card is selected.
