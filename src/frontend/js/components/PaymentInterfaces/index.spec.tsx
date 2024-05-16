@@ -1,10 +1,9 @@
 import { render, screen } from '@testing-library/react';
-import type * as Joanie from 'types/Joanie';
-import { PaymentProviders } from 'types/Joanie';
 import { handle as mockHandle } from 'utils/errors/handle';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { PaymentFactory } from 'utils/test/factories/joanie';
 import PaymentInterface from 'components/PaymentInterfaces/index';
+import { Payment, PaymentProviders } from 'components/PaymentInterfaces/types';
 
 jest.mock('components/PaymentInterfaces/PayplugLightbox', () => ({
   __esModule: true,
@@ -38,7 +37,7 @@ describe('PaymentInterface', () => {
 
   it('should return null and handle an error if payment provider is not implemented', () => {
     // @ts-ignore
-    const payment: Joanie.Payment = PaymentFactory({ provider_name: 'unknown-provider' }).one();
+    const payment: Payment = PaymentFactory({ provider_name: 'unknown-provider' }).one();
 
     const { container } = render(
       <PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />,
@@ -52,7 +51,7 @@ describe('PaymentInterface', () => {
   });
 
   it('should render the payplug lightbox when provider is Payplug', async () => {
-    const payment: Joanie.Payment = PaymentFactory({
+    const payment: Payment = PaymentFactory({
       provider_name: PaymentProviders.PAYPLUG,
     }).one();
     render(<PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />);
@@ -62,7 +61,7 @@ describe('PaymentInterface', () => {
   });
 
   it('should render the lyra pop-in when provider is Lyra', async () => {
-    const payment: Joanie.Payment = PaymentFactory({
+    const payment: Payment = PaymentFactory({
       provider_name: PaymentProviders.LYRA,
     }).one();
     render(<PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />);
@@ -72,7 +71,7 @@ describe('PaymentInterface', () => {
   });
 
   it('should render the dummy payment component when provider is Dummy', async () => {
-    const payment: Joanie.Payment = PaymentFactory({ provider_name: PaymentProviders.DUMMY }).one();
+    const payment: Payment = PaymentFactory({ provider_name: PaymentProviders.DUMMY }).one();
     render(<PaymentInterface onSuccess={onSuccess} onError={onError} {...payment} />);
 
     await screen.findByText('Dummy payment component');

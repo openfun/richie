@@ -1,5 +1,4 @@
-import { PaymentInterfaceProps } from 'types/Joanie';
-import { PaymentErrorMessageId } from 'components/PaymentInterfaces/types';
+import { PaymentErrorMessageId, PaymentInterfaceProps } from 'components/PaymentInterfaces/types';
 
 const PaymentInterface = ({ onError, onSuccess }: PaymentInterfaceProps) => (
   <p>

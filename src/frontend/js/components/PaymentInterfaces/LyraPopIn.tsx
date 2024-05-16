@@ -1,8 +1,11 @@
 import KRGlue from '@lyracom/embedded-form-glue';
 import { useIntl } from 'react-intl';
 import { useRef } from 'react';
-import * as Joanie from 'types/Joanie';
-import { PaymentErrorMessageId } from 'components/PaymentInterfaces/types';
+import {
+  PaymentErrorMessageId,
+  PaymentInterfaceProps,
+  LyraPayment,
+} from 'components/PaymentInterfaces/types';
 import { useAsyncEffect } from 'hooks/useAsyncEffect';
 import { handle } from 'utils/errors/handle';
 
@@ -18,7 +21,7 @@ const LyraPopIn = ({
   onError,
   configuration,
   form_token: formToken,
-}: Joanie.PaymentInterfaceProps<Joanie.LyraPayment>) => {
+}: PaymentInterfaceProps<LyraPayment>) => {
   const intl = useIntl();
   const shouldAbort = useRef<Boolean>(true);
 

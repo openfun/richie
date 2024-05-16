@@ -17,8 +17,6 @@ import {
   OrderState,
   Organization,
   OrganizationLight,
-  Payment,
-  PaymentProviders,
   ProductType,
   TargetCourse,
   JoanieFile,
@@ -41,6 +39,7 @@ import {
   ContractLight,
   DefinitionResourcesProduct,
 } from 'types/Joanie';
+import { Payment, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { JoanieUserApiAbilityActions, JoanieUserProfile } from 'types/User';

@@ -2,7 +2,7 @@ import KRGlue from '@lyracom/embedded-form-glue';
 import { render } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { waitFor } from '@testing-library/dom';
-import { LyraPayment, PaymentProviders } from 'types/Joanie';
+import { LyraPayment, PaymentProviders } from 'components/PaymentInterfaces/types';
 import LyraPopIn from './LyraPopIn';
 
 const mockKR: Partial<KR> = {

@@ -1,7 +1,10 @@
 import { lazy, Suspense, useEffect } from 'react';
-import * as Joanie from 'types/Joanie';
 import { handle } from 'utils/errors/handle';
-import { PaymentErrorMessageId } from 'components/PaymentInterfaces/types';
+import {
+  PaymentErrorMessageId,
+  PaymentProviders,
+  PaymentInterfaceProps,
+} from 'components/PaymentInterfaces/types';
 
 const LazyPayplugLightbox = lazy(() => import('./PayplugLightbox'));
 const LazyDummy = lazy(() => import('./Dummy'));
@@ -11,8 +14,8 @@ const LazyLyraPopIn = lazy(() => import('./LyraPopIn'));
  * In charge of rendering the right payment interface according to the
  * `provider` property. Return null if the provider is not supported.
  */
-const PaymentInterface = (props: Joanie.PaymentInterfaceProps) => {
-  const isNotImplementedProvider = !Object.values<string>(Joanie.PaymentProviders).includes(
+const PaymentInterface = (props: PaymentInterfaceProps) => {
+  const isNotImplementedProvider = !Object.values<string>(PaymentProviders).includes(
     props.provider_name,
   );
 
@@ -28,11 +31,9 @@ const PaymentInterface = (props: Joanie.PaymentInterfaceProps) => {
 
   return (
     <Suspense fallback={null}>
-      {props.provider_name === Joanie.PaymentProviders.PAYPLUG && (
-        <LazyPayplugLightbox {...props} />
-      )}
-      {props.provider_name === Joanie.PaymentProviders.DUMMY && <LazyDummy {...props} />}
-      {props.provider_name === Joanie.PaymentProviders.LYRA && <LazyLyraPopIn {...props} />}
+      {props.provider_name === PaymentProviders.PAYPLUG && <LazyPayplugLightbox {...props} />}
+      {props.provider_name === PaymentProviders.DUMMY && <LazyDummy {...props} />}
+      {props.provider_name === PaymentProviders.LYRA && <LazyLyraPopIn {...props} />}
     </Suspense>
   );
 };

@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { handle } from 'utils/errors/handle';
-import { PayplugPayment, PaymentInterfaceProps } from 'types/Joanie';
-import { PaymentErrorMessageId } from 'components/PaymentInterfaces/types';
+import {
+  PaymentErrorMessageId,
+  PayplugPayment,
+  PaymentInterfaceProps,
+} from 'components/PaymentInterfaces/types';
 
 /**
  * Load the form payplug script if it has been not yet uploaded then open

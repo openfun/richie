@@ -1,7 +1,10 @@
 import { handle } from 'utils/errors/handle';
 import { useAsyncEffect } from 'hooks/useAsyncEffect';
-import * as Joanie from 'types/Joanie';
-import { PaymentErrorMessageId } from 'components/PaymentInterfaces/types';
+import {
+  PaymentErrorMessageId,
+  PaymentInterfaceProps,
+  DummyPayment,
+} from 'components/PaymentInterfaces/types';
 
 /**
  * !!! DEVELOPMENT PURPOSE ONLY !!!
@@ -10,12 +13,12 @@ import { PaymentErrorMessageId } from 'components/PaymentInterfaces/types';
  *
  */
 
-const DummyPayment = ({
+const DummyPaymentInterface = ({
   url,
   payment_id,
   onSuccess,
   onError,
-}: Joanie.PaymentInterfaceProps<Joanie.DummyPayment>) => {
+}: PaymentInterfaceProps<DummyPayment>) => {
   useAsyncEffect(async () => {
     try {
       const response = await fetch(url, {
@@ -46,4 +49,4 @@ const DummyPayment = ({
   return null;
 };
 
-export default DummyPayment;
+export default DummyPaymentInterface;
