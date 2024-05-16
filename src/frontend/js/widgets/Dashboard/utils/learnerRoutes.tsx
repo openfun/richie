@@ -1,5 +1,5 @@
 import { MessageDescriptor, useIntl } from 'react-intl';
-import { Outlet, RouteObject } from 'react-router-dom';
+import { Navigate, Outlet, RouteObject } from 'react-router-dom';
 import RouteInfo from 'widgets/Dashboard/components/RouteInfo';
 import { DashboardCreateAddressLoader } from 'pages/DashboardAddressesManagement/DashboardCreateAddressLoader';
 import { DashboardEditAddressLoader } from 'pages/DashboardAddressesManagement/DashboardEditAddressLoader';
@@ -15,6 +15,7 @@ import {
   LEARNER_DASHBOARD_ROUTE_LABELS,
   LearnerDashboardPaths,
 } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { CertificateType } from 'types/Joanie';
 
 export interface DashboardRouteHandle {
   crumbLabel?: MessageDescriptor;
@@ -54,8 +55,26 @@ export function getLearnerDashboardRoutes() {
     },
     {
       path: LearnerDashboardPaths.CERTIFICATES,
-      handle: { crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.CERTIFICATES] },
-      element: <DashboardCertificates />,
+      children: [
+        {
+          index: true,
+          element: <Navigate to={LearnerDashboardPaths.ORDER_CERTIFICATES} replace />,
+        },
+        {
+          path: LearnerDashboardPaths.ORDER_CERTIFICATES,
+          handle: {
+            crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.ORDER_CERTIFICATES],
+          },
+          element: <DashboardCertificates certificateType={CertificateType.ORDER} />,
+        },
+        {
+          path: LearnerDashboardPaths.ENROLLMENT_CERTIFICATES,
+          handle: {
+            crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.ORDER_CERTIFICATES],
+          },
+          element: <DashboardCertificates certificateType={CertificateType.ENROLLMENT} />,
+        },
+      ],
     },
     {
       path: LearnerDashboardPaths.CONTRACTS,

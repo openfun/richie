@@ -56,7 +56,7 @@ describe('<DashboardCertificates/>', () => {
   });
 
   it('renders an empty list of certificates', async () => {
-    fetchMock.get('https://joanie.endpoint/api/v1.0/certificates/?page=1&page_size=10', {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/certificates/?type=order&page=1&page_size=10', {
       results: [],
       next: null,
       previous: null,
@@ -88,7 +88,7 @@ describe('<DashboardCertificates/>', () => {
     const certificatesPage1 = certificates.slice(0, 10);
     const certificatesPage2 = certificates.slice(10, 20);
 
-    fetchMock.get('https://joanie.endpoint/api/v1.0/certificates/?page=1&page_size=10', {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/certificates/?type=order&page=1&page_size=10', {
       results: certificatesPage1,
       next: null,
       previous: null,
@@ -97,7 +97,7 @@ describe('<DashboardCertificates/>', () => {
 
     const page2Deferred = new Deferred();
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/certificates/?page=2&page_size=10',
+      'https://joanie.endpoint/api/v1.0/certificates/?type=order&page=2&page_size=10',
       page2Deferred.promise,
     );
 
@@ -156,7 +156,7 @@ describe('<DashboardCertificates/>', () => {
   });
 
   it('shows an error when request to retrieve certificates fails', async () => {
-    fetchMock.get('https://joanie.endpoint/api/v1.0/certificates/?page=1&page_size=10', {
+    fetchMock.get('https://joanie.endpoint/api/v1.0/certificates/?type=order&page=1&page_size=10', {
       status: HttpStatusCode.INTERNAL_SERVER_ERROR,
       body: 'Internal Server Error',
     });
