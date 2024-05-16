@@ -1,12 +1,11 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@openfun/cunningham-react';
-import type * as Joanie from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { useOrders } from 'hooks/useOrders';
-import { OrderCreationPayload, OrderState, PaymentWithId } from 'types/Joanie';
-import type { Maybe, Nullable } from 'types/utils';
+import { OrderCreationPayload, OrderState } from 'types/Joanie';
+import type { Maybe } from 'types/utils';
 import { useTerms } from 'components/SaleTunnel/hooks/useTerms';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
@@ -16,7 +15,7 @@ import { PAYMENT_SETTINGS } from 'settings';
 import { Spinner } from 'components/Spinner';
 import PaymentInterface from 'components/PaymentInterfaces';
 import { useMatchMediaLg } from 'hooks/useMatchMedia';
-import { PaymentErrorMessageId } from 'components/PaymentInterfaces/types';
+import { PaymentErrorMessageId, Payment, PaymentWithId } from 'components/PaymentInterfaces/types';
 
 const messages = defineMessages({
   errorAbort: {
@@ -67,7 +66,7 @@ const messages = defineMessages({
   },
 });
 
-type PaymentInfo = Joanie.Payment & { order_id: string };
+type PaymentInfo = Payment & { order_id: string };
 
 enum ComponentStates {
   IDLE = 'idle',
@@ -99,7 +98,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
   const [payment, setPayment] = useState<PaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<PaymentErrorMessageId>(PaymentErrorMessageId.ERROR_DEFAULT);
-  const hasPaymentId = (p: Maybe<Joanie.Payment>): p is Extract<Joanie.Payment, PaymentWithId> => {
+  const hasPaymentId = (p: Maybe<Payment>): p is Extract<Payment, PaymentWithId> => {
     return Boolean(p?.hasOwnProperty('payment_id'));
   };
   const paymentId = hasPaymentId(payment) ? payment.payment_id : undefined;

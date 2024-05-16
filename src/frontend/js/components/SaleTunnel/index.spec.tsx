@@ -2,7 +2,8 @@ import { act, cleanup, fireEvent, screen, waitFor } from '@testing-library/react
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import userEvent from '@testing-library/user-event';
-import { OrderState, Product, ProductType, DummyPayment } from 'types/Joanie';
+import { OrderState, Product, ProductType } from 'types/Joanie';
+import { DummyPayment } from 'components/PaymentInterfaces/types';
 import {
   AddressFactory,
   CertificateOrderWithOneClickPaymentFactory,
