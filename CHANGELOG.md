@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Added
 
+- Add a tab in learner dashboard certificate page to render both order
+  certificate and enrollment certificate lists.
 - Add Lyra payment interface
 - Add 404 error page on the dashboard router.
 - Teacher dashboard route now redirect to learner dashboard route when

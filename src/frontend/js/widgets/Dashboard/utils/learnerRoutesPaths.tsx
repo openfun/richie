@@ -9,6 +9,8 @@ export enum LearnerDashboardPaths {
   ORDER_RUNS = `${ORDER}/runs`,
   COURSE = `${COURSES}/:code`,
   CERTIFICATES = '/certificates',
+  ORDER_CERTIFICATES = '/certificates/order',
+  ENROLLMENT_CERTIFICATES = '/certificates/enrollment',
   CONTRACTS = '/training-contracts',
   PREFERENCES = '/preferences',
   PREFERENCES_ADDRESS_EDITION = `${PREFERENCES}/addresses/:addressId`,
@@ -41,6 +43,16 @@ export const LEARNER_DASHBOARD_ROUTE_LABELS = defineMessages<LearnerDashboardPat
     id: 'components.Dashboard.DashboardRoutes.certificates.label',
     description: 'Label of the certificates view used in navigation components.',
     defaultMessage: 'My certificates',
+  },
+  [LearnerDashboardPaths.ORDER_CERTIFICATES]: {
+    id: 'components.Dashboard.DashboardRoutes.certificates.order.label',
+    description: 'Label of the order certificates view used in navigation components.',
+    defaultMessage: 'My certificates',
+  },
+  [LearnerDashboardPaths.ENROLLMENT_CERTIFICATES]: {
+    id: 'components.Dashboard.DashboardRoutes.certificates.enrollment.label',
+    description: 'Label of the enrollment certificates view used in navigation components.',
+    defaultMessage: 'My attestations of achievement',
   },
   [LearnerDashboardPaths.CONTRACTS]: {
     id: 'components.Dashboard.DashboardRoutes.contracts.label',

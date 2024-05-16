@@ -114,6 +114,14 @@ export type Certificate = {
     }
 );
 
+export enum CertificateType {
+  ORDER = 'order',
+  ENROLLMENT = 'enrollment',
+}
+export interface CertificateResourcesQuery extends PaginatedResourceQuery {
+  type?: CertificateType;
+}
+
 // - Organization
 export interface OrganizationLight {
   code: string;
@@ -551,7 +559,7 @@ interface APIUser {
   };
   certificates: {
     download(id: string): Promise<File>;
-    get<Filters extends PaginatedResourceQuery = PaginatedResourceQuery>(
+    get<Filters extends CertificateResourcesQuery = CertificateResourcesQuery>(
       filters?: Filters,
     ): Filters extends { id: string }
       ? Promise<Certificate>

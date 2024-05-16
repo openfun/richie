@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
-import { useResource, useResources, UseResourcesProps } from 'hooks/useResources';
-import { API, Certificate, PaginatedResourceQuery } from 'types/Joanie';
+import { QueryOptions, useResource, useResources, UseResourcesProps } from 'hooks/useResources';
+import { API, Certificate, CertificateResourcesQuery } from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 
 const messages = defineMessages({
@@ -16,12 +16,22 @@ const messages = defineMessages({
   },
 });
 
-const props: UseResourcesProps<Certificate, PaginatedResourceQuery, API['user']['certificates']> = {
+const props: UseResourcesProps<
+  Certificate,
+  CertificateResourcesQuery,
+  API['user']['certificates']
+> = {
   queryKey: ['certificates'],
   apiInterface: () => useJoanieApi().user.certificates,
   session: true,
   messages,
 };
 
-export const useCertificates = useResources(props);
+export const useCertificates = (
+  filters: CertificateResourcesQuery,
+  queryOptions?: QueryOptions<Certificate>,
+) => {
+  return useResources(props)(filters, queryOptions);
+};
+
 export const useCertificate = useResource(props);

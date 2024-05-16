@@ -1,74 +1,49 @@
-import { useEffect } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { keepPreviousData } from '@tanstack/query-core';
-import { Pagination, usePagination } from 'components/Pagination';
-import { useCertificates } from 'hooks/useCertificates';
-import { Spinner } from 'components/Spinner';
-import Banner, { BannerType } from 'components/Banner';
-import { DashboardItemCertificate } from 'widgets/Dashboard/components/DashboardItem/Certificate';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import { CertificateType } from 'types/Joanie';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import Tabs from '../../components/Tabs';
+import CertificatesList from './components/CertificateList';
 
 const messages = defineMessages({
-  loading: {
-    defaultMessage: 'Loading certificates...',
-    description: 'Message displayed while loading certificates',
-    id: 'components.DashboardCertificates.loading',
+  orderCertificateTabLabel: {
+    id: 'components.DashboardCertificates.orderCertificateTabLabel',
+    description: 'The label of the order certificate tab',
+    defaultMessage: 'Certificates',
   },
-  empty: {
-    defaultMessage: 'You have no certificates yet.',
-    description: 'Message displayed when there are no certificates',
-    id: 'components.DashboardCertificates.empty',
+  enrollmentCertificateTabLabel: {
+    id: 'components.DashboardCertificates.enrollmentCertificateTabLabel',
+    description: 'The label of the enrollment certificate tab',
+    defaultMessage: 'Attestations of achievement',
   },
 });
 
-export const DashboardCertificates = () => {
-  const intl = useIntl();
-  const pagination = usePagination({});
-  const certificates = useCertificates(
-    {
-      page: pagination.currentPage,
-      page_size: pagination.itemsPerPage,
-    },
-    { placeholderData: keepPreviousData },
-  );
-  useEffect(() => {
-    if (certificates.meta?.pagination?.count) {
-      pagination.setItemsCount(certificates.meta.pagination.count);
-    }
-  }, [certificates.meta?.pagination?.count]);
+interface DashboardCertificatesProps {
+  certificateType: CertificateType;
+}
 
-  if (certificates.states.error) {
-    return <Banner message={certificates.states.error} type={BannerType.ERROR} />;
-  }
-
+export const DashboardCertificates = ({ certificateType }: DashboardCertificatesProps) => {
   return (
     <div className="dashboard-certificates">
-      {certificates.items.length === 0 && certificates.states.fetching ? (
-        <Spinner aria-labelledby="loading-certificates-data">
-          <span id="loading-certificates-data">
-            <FormattedMessage {...messages.loading} />
-          </span>
-        </Spinner>
-      ) : (
-        <div>
-          {certificates.items.length === 0 ? (
-            <Banner message={intl.formatMessage(messages.empty)} type={BannerType.INFO} />
-          ) : (
-            <>
-              <div
-                className={[
-                  'dashboard-certificates__list',
-                  certificates.states.fetching ? 'dashboard__list--loading' : '',
-                ].join(' ')}
-              >
-                {certificates.items.map((certificate) => (
-                  <DashboardItemCertificate key={certificate.id} certificate={certificate} />
-                ))}
-              </div>
-              <Pagination {...pagination} />
-            </>
-          )}
-        </div>
-      )}
+      <Tabs
+        initialActiveTabName={
+          certificateType === CertificateType.ORDER
+            ? 'order-certificate-tab'
+            : 'enrollment-certificate-tab'
+        }
+      >
+        <Tabs.Tab name="order-certificate-tab" href={LearnerDashboardPaths.ORDER_CERTIFICATES}>
+          <FormattedMessage {...messages.orderCertificateTabLabel} />
+        </Tabs.Tab>
+        <Tabs.Tab
+          name="enrollment-certificate-tab"
+          href={LearnerDashboardPaths.ENROLLMENT_CERTIFICATES}
+        >
+          <FormattedMessage {...messages.enrollmentCertificateTabLabel} />
+        </Tabs.Tab>
+      </Tabs>
+      <div className="dashboard-certificates__content">
+        <CertificatesList certificateType={certificateType} />
+      </div>
     </div>
   );
 };
