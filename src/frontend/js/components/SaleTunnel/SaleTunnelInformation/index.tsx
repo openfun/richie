@@ -1,7 +1,7 @@
 import { Alert, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
 import { AddressSelector } from 'components/SaleTunnel/AddressSelector';
-import { CreditCardSelector } from 'components/SaleTunnel/CreditCardSelector';
+import { CreditCardSelector } from 'components/CreditCardSelector';
 import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import OpenEdxFullNameForm from 'components/OpenEdxFullNameForm';
@@ -23,6 +23,16 @@ const messages = defineMessages({
     id: 'components.SaleTunnel.Information.fullNameLabel',
     description: 'Label for the full name input',
     defaultMessage: 'Full name',
+  },
+  paymentMethodTitle: {
+    id: 'components.SaleTunnel.CreditCardSelector.title',
+    description: 'Title for the credit card section',
+    defaultMessage: 'Payment method',
+  },
+  paymentMethodDescription: {
+    id: 'components.SaleTunnel.CreditCardSelector.description',
+    description: 'Description for the credit card section',
+    defaultMessage: 'Choose your payment method or add a new one during the payment.',
   },
   totalInfo: {
     id: 'components.SaleTunnel.Information.total.info',
@@ -64,12 +74,27 @@ export const SaleTunnelInformation = () => {
         </div>
       </div>
       <div>
-        <CreditCardSelector />
+        <CreditCardSelectorWrapper />
       </div>
       <div>
         <Total />
       </div>
     </div>
+  );
+};
+
+const CreditCardSelectorWrapper = () => {
+  const { creditCard, setCreditCard } = useSaleTunnelContext();
+  return (
+    <>
+      <h4 className="block-title mb-t">
+        <FormattedMessage {...messages.paymentMethodTitle} />
+      </h4>
+      <div className="description mb-s">
+        <FormattedMessage {...messages.paymentMethodDescription} />
+      </div>
+      <CreditCardSelector creditCard={creditCard} setCreditCard={setCreditCard} />
+    </>
   );
 };
 
