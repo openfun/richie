@@ -1,4 +1,5 @@
 @import '../../js/components/AddressesManagement/styles';
+@import '../../js/components/CreditCardSelector/styles';
 @import '../../js/components/ContractFrame/styles';
 @import '../../js/components/Tabs/styles';
 @import '../../js/components/TeacherDashboardCourseList/styles';
@@ -8,7 +9,6 @@
 @import '../../js/components/PurchaseButton/styles';
 @import '../../js/components/SaleTunnel/styles';
 @import '../../js/components/SaleTunnel/AddressSelector/styles';
-@import '../../js/components/SaleTunnel/CreditCardSelector/styles';
 @import '../../js/components/SaleTunnel/ProductPath/styles';
 @import '../../js/components/SaleTunnel/Sponsors/SaleTunnelSponsors';
 @import '../../js/components/SuccessIcon/styles';
@@ -32,6 +32,7 @@
 @import '../../js/widgets/Dashboard/components/DashboardCard/styles';
 @import '../../js/widgets/Dashboard/components/DashboardItem/Certificate/styles';
 @import '../../js/widgets/Dashboard/components/DashboardItem/Order/styles';
+@import '../../js/widgets/Dashboard/components/DashboardItem/Order/OrderPaymentDetailsModal/styles';
 @import '../../js/widgets/Dashboard/components/DashboardItem/Contract/_styles';
 @import '../../js/widgets/Dashboard/components/DashboardItem/styles';
 @import '../../js/widgets/Dashboard/components/DashboardLayout/styles';
