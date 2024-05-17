@@ -33,16 +33,6 @@ const messages = defineMessages({
     description: 'Text to show the credit card expired date',
     defaultMessage: 'Expired since {month}/{year}',
   },
-  title: {
-    id: 'components.SaleTunnel.CreditCardSelector.title',
-    description: 'Title for the credit card section',
-    defaultMessage: 'Payment method',
-  },
-  description: {
-    id: 'components.SaleTunnel.CreditCardSelector.description',
-    description: 'Description for the credit card section',
-    defaultMessage: 'Choose your payment method or add a new one during the payment.',
-  },
   creditCardEmptyInlineDescription: {
     id: 'components.SaleTunnel.CreditCardSelector.creditCardEmptyInlineDescription',
     description: 'Description for the empty credit card inline',
@@ -71,7 +61,17 @@ const messages = defineMessages({
   },
 });
 
-export const CreditCardSelector = () => {
+export interface CreditCardSelectorProps {
+  creditCard?: CreditCard;
+  setCreditCard: (creditCard?: CreditCard) => void;
+  quickRemove?: boolean;
+}
+
+export const CreditCardSelector = ({
+  creditCard,
+  setCreditCard,
+  quickRemove = true,
+}: CreditCardSelectorProps) => {
   const intl = useIntl();
   const modal = useModal();
   const isMobile = useMatchMediaLg();
@@ -80,8 +80,6 @@ export const CreditCardSelector = () => {
     states: { fetching },
     items: creditCards,
   } = useCreditCardsManagement();
-
-  const { creditCard, setCreditCard } = useSaleTunnelContext();
 
   const getDefaultCreditCard = () => {
     if (creditCards.length === 0) {
@@ -102,12 +100,6 @@ export const CreditCardSelector = () => {
 
   return (
     <div className="credit-card-selector">
-      <h4 className="block-title mb-t">
-        <FormattedMessage {...messages.title} />
-      </h4>
-      <div className="description mb-s">
-        <FormattedMessage {...messages.description} />
-      </div>
       {fetching ? (
         <Spinner />
       ) : (
@@ -125,7 +117,7 @@ export const CreditCardSelector = () => {
               />
             )}
           </div>
-          {creditCard && (
+          {creditCard && quickRemove && (
             <Button
               onClick={() => setCreditCard(undefined)}
               size="small"
