@@ -25,7 +25,6 @@ export const PaymentScheduleGrid = () => {
             renderCell: (context) =>
               context.row.status ? <StatusPill status={context.row.status} /> : '',
           },
-          { field: 'message' },
         ]}
         rows={[
           {
@@ -33,35 +32,30 @@ export const PaymentScheduleGrid = () => {
             date: '2023-03-15',
             amount: '€ 100.00',
             status: PaymentScheduleStatus.PAID,
-            message: 'First payment (30%)',
           },
           {
             id: '2',
             date: '2023-04-15',
             amount: '€ 100.00',
             status: PaymentScheduleStatus.REQUIRE_PAYMENT,
-            message: 'Periodic',
           },
           {
             id: '3',
             date: '2023-05-15',
             amount: '€ 100.00',
             status: PaymentScheduleStatus.FAILED,
-            message: 'Periodic',
           },
           {
             id: '4',
             date: '2023-06-15',
             amount: '€ 100.00',
             status: PaymentScheduleStatus.INCOMING,
-            message: 'Periodic',
           },
           {
             id: '5',
             date: '2023-06-15',
             amount: '€ 100.00',
             status: PaymentScheduleStatus.PENDING,
-            message: 'Periodic',
           },
           {
             id: 'total',
