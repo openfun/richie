@@ -60,6 +60,7 @@ export const fetchEntity = async <
   }
 
   if (data) {
+    eofRef.current = { ...eofRef.current, [queryKeyString]: Math.ceil(data.count / perPage) };
     return data;
   }
   try {
