@@ -94,11 +94,8 @@ const useUnionResource = <
 
   // to force execution of useEffect::fetchNewPage(),
   // reset need to generate a uniq key that is part of it's dependencies.
-  const reset = (eofKey?: string) => {
-    if (eofKey) {
-      delete eofRef.current[eofKey];
-    }
-
+  const reset = () => {
+    eofRef.current = {};
     setStack([]);
     setPage(0);
     setTotalCount(undefined);
@@ -112,10 +109,10 @@ const useUnionResource = <
   // by generating a new update key
   if (refetchOnInvalidation) {
     useQueryKeyInvalidateListener(queryAConfig.queryKey, () => {
-      reset(queryAConfig.queryKey.join('-'));
+      reset();
     });
     useQueryKeyInvalidateListener(queryBConfig.queryKey, () => {
-      reset(queryBConfig.queryKey.join('-'));
+      reset();
     });
   }
 

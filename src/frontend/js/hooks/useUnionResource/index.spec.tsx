@@ -336,6 +336,7 @@ describe('useUnionResource', () => {
 
     calledUrls = fetchMock.calls().map((call) => call[0]);
     expectedQueries += 1; // fetch dataA first page
+    expectedQueries += 1; // fetch dataB first page
     expect(calledUrls).toHaveLength(expectedQueries);
     expect(calledUrls).toContain('http://data.a/?isFiltered=true&page=1');
     expect(result.current.hasMore).toBe(false);

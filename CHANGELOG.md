@@ -34,6 +34,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Fixed
 
+- Fix an issue on dashboard search when no results were reached 
 - Ongoing product displayed on the syllabus with an active enrollment
   now link to the order details page in the learner dashboard instead of
   OpenEdx course.
