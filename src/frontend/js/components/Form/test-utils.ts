@@ -1,4 +1,4 @@
-import { within } from '@testing-library/dom';
+import { screen, within } from '@testing-library/dom';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 
 export const changeSelect = async (
@@ -7,7 +7,11 @@ export const changeSelect = async (
   user: UserEvent = userEvent.setup(),
 ) => {
   await userEvent.click($input);
-  const $selectListBox = within($input.closest('.c__field')!).getByRole('listbox');
+  const $label = document.getElementById($input.getAttribute('aria-labelledby')!)!;
+  const inputName = $label.textContent!;
+  const $selectListBox = screen.getByRole('listbox', {
+    name: inputName,
+  });
   await user.click(
     within($selectListBox).getByRole('option', {
       name: value,
