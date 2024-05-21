@@ -34,6 +34,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Fixed
 
+- Filter out inactive enrollments in the learner dashboard
 - Prevent title to overflow in DashboardItem component
 - Fix an issue on dashboard search when no results were reached 
 - Ongoing product displayed on the syllabus with an active enrollment
