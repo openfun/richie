@@ -298,6 +298,7 @@ def create_demo_site():
             nb_cards = 4 * random.randint(0, 1)  # nosec
 
             # Partners
+            partner_section = None
             if nb_half_rows or nb_full_rows:
                 partner_section = add_plugin(
                     language=language,
@@ -336,6 +337,7 @@ def create_demo_site():
                     **glimpse_data,
                 )
             # Sponsors
+            sponsor_section = None
             if nb_cards:
                 sponsor_section = add_plugin(
                     language=language,
