@@ -61,6 +61,7 @@ export const useOrdersEnrollments = ({
       fn: api.user.enrollments.get,
       filters: {
         was_created_by_order: false,
+        is_active: true,
         query,
       },
     },

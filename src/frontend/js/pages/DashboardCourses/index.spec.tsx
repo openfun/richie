@@ -108,7 +108,7 @@ describe('<DashboardCourses/>', () => {
     );
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&is_active=true&page=1&page_size=${perPage}`,
       enrollmentsDeferred.promise,
     );
 
@@ -179,16 +179,16 @@ describe('<DashboardCourses/>', () => {
     });
 
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&is_active=true&page=1&page_size=${perPage}`,
       {
         results: enrollments.slice(0, perPage),
-        next: `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=2&page_size=${perPage}`,
+        next: `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&is_active=true&page=2&page_size=${perPage}`,
         previous: null,
         count: enrollments.length,
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=2&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&is_active=true&page=2&page_size=${perPage}`,
       {
         results: enrollments.slice(perPage, perPage * 2),
         next: `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=3&page_size=${perPage}`,
@@ -197,7 +197,7 @@ describe('<DashboardCourses/>', () => {
       },
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=3&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&is_active=true&page=3&page_size=${perPage}`,
       {
         results: enrollments.slice(perPage * 2, perPage * 3),
         next: null,
@@ -241,7 +241,7 @@ describe('<DashboardCourses/>', () => {
       ordersDeferred.promise,
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=${perPage}`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&is_active=true&page=1&page_size=${perPage}`,
       { results: [], next: null, previous: null, count: 0 },
     );
 

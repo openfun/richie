@@ -12,17 +12,17 @@ import CertificateStatus from '../../CertificateStatus';
 const messages = defineMessages({
   buyProductCertificateLabel: {
     id: 'components.ProductCertificateFooter.buyProductCertificateLabel',
-    description: 'Label on the enrollement row that propose to buy a product of type certificate',
+    description: 'Label on the enrollment row that propose to buy a product of type certificate',
     defaultMessage: 'An exam which delivers a certificate can be purchased for this course.',
   },
   downloadProductCertificateLabel: {
     id: 'components.ProductCertificateFooter.downloadProductCertificateLabel',
-    description: 'Label on the enrollement row that propose to download a certificate',
+    description: 'Label on the enrollment row that propose to download a certificate',
     defaultMessage: 'A certificate is available for download.',
   },
   pendingProductCertificateLabel: {
     id: 'components.ProductCertificateFooter.pendingProductCertificateLabel',
-    description: 'Label on the enrollement when a product of type certificate have been bought',
+    description: 'Label on the enrollment when a product of type certificate have been bought',
     defaultMessage: 'Finish this course to obtain your certificate.',
   },
 });
@@ -42,7 +42,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
   const { item: certificate } = useCertificate(activeOrder?.certificate_id);
 
   // The course run is no longer available
-  // and no product certificate had been bought therefore there isn't any certifcate to download.
+  // and no product certificate had been bought therefore there isn't any certificate to download.
   if (!activeOrder && !isOpenedCourseRunCertificate(enrollment.course_run.state)) {
     return null;
   }
@@ -72,10 +72,11 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
           className="dashboard-item__button"
           product={product}
           enrollment={enrollment}
+          buttonProps={{ size: 'small' }}
           onFinish={(order) => {
             /**
-             * As we do not refetch enrollments in DashboardCourses after SaleTunnel cache invalidation ( to avoid
-             * scroll reset - and SaleTunnel modal unmounting too early caused by list reset ) we need to manually
+             * As we do not refetch enrollments in DashboardCourses after SaleTunnel cache invalidation (to avoid
+             * scroll reset - and SaleTunnel modal unmounting too early caused by list reset) we need to manually
              * update the active order in the enrollment in order to hide the buy button and display the download button.
              */
             setActiveOrder(order);

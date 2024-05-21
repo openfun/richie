@@ -186,7 +186,7 @@ describe('<ProductCertificateFooter/>', () => {
     enrollment.product_relations[0].product = CertificateProductFactory().one();
 
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=${PER_PAGE.useOrdersEnrollments}`,
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&is_active=true&page=1&page_size=${PER_PAGE.useOrdersEnrollments}`,
       {
         results: [enrollment],
         next: null,

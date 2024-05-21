@@ -45,7 +45,7 @@ describe('<Dashboard />', () => {
 
   beforeEach(() => {
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&page=1&page_size=50',
+      'https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&is_active=true&page=1&page_size=50',
       { count: 0, results: [] },
     );
     fetchMock.get(
