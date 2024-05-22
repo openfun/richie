@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.25-beta.0 to 2.26.0
+
 - Dropped support for postgres version < 12
 - Dropped support for MySQL version < 8
 - Add new `dashboard-splitted-card` theme scheme
