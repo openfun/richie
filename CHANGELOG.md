@@ -8,12 +8,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
-## Added
+## [2.26.0]
 
-- The enrollment's certificate tab in learner dashbaord is no longer
+### Added
+
+- The enrollment's certificate tab in learner dashboard is no longer
   displayed when the list is empty.
 - User profile in the learner dashboard is now always synchronized with 
-  openEdx profile informations.
+  openEdx profile information.
 - Add a tab in learner dashboard certificate page to render both order
   certificate and enrollment certificate lists.
 - Add Lyra payment interface
@@ -26,13 +28,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   now link to the order details page in the learner dashboard.
 - Add new sale tunnel
 
-## Changed
+### Changed
 
 - Upgrade to Python 3.11
 - Upgrade to Django version 4.2 (pin version < 5)
 - Migrate to Sentry SDK 2.0
 
-## Fixed
+### Fixed
 
 - Filter out inactive enrollments in the learner dashboard
 - Prevent title to overflow in DashboardItem component
@@ -47,9 +49,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   message was displayed on successful download.
 
 ## [2.25.1]
-
-## Added
-
 
 ### Fixed
 
@@ -2090,7 +2089,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.25.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.26.0...master
+[2.26.0]: https://github.com/openfun/richie/compare/v2.25.1...v2.26.0
 [2.25.1]: https://github.com/openfun/richie/compare/v2.25.0...v2.25.1
 [2.25.0]: https://github.com/openfun/richie/compare/v2.25.0-beta.1...v2.25.0
 [2.25.0-beta.1]: https://github.com/openfun/richie/compare/v2.25.0-beta.0...v2.25.0-beta.1

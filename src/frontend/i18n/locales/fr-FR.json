@@ -327,8 +327,16 @@
     "description": "Help text below the \"Unenroll now\" CTA when an enrollment attempt has already failed.",
     "message": "Se désinscrire de ce cours"
   },
+  "components.Dashboard.DashboardRoutes.certificates.enrollment.label": {
+    "description": "Label of the enrollment certificates view used in navigation components.",
+    "message": "Mes attestations de réussite"
+  },
   "components.Dashboard.DashboardRoutes.certificates.label": {
     "description": "Label of the certificates view used in navigation components.",
+    "message": "Mes certificats"
+  },
+  "components.Dashboard.DashboardRoutes.certificates.order.label": {
+    "description": "Label of the order certificates view used in navigation components.",
     "message": "Mes certificats"
   },
   "components.Dashboard.DashboardRoutes.contracts.label": {
@@ -439,9 +447,17 @@
     "description": "Message displayed when there are no certificates",
     "message": "Vous n'avez pas encore de certificats."
   },
+  "components.DashboardCertificates.enrollmentCertificateTabLabel": {
+    "description": "The label of the enrollment certificate tab",
+    "message": "Attestations de réussite"
+  },
   "components.DashboardCertificates.loading": {
     "description": "Message displayed while loading certificates",
     "message": "Chargement des certificats..."
+  },
+  "components.DashboardCertificates.orderCertificateTabLabel": {
+    "description": "The label of the order certificate tab",
+    "message": "Certificats"
   },
   "components.DashboardContracts.empty": {
     "description": "Message displayed when there are no training contracts",
@@ -967,6 +983,30 @@
     "description": "label of the settings link",
     "message": "Paramètres"
   },
+  "components.OpenEdxFullNameForm.emailInputLabel": {
+    "description": "Label of \"email\" field of the openEdx full name form",
+    "message": "Courriel"
+  },
+  "components.OpenEdxFullNameForm.error": {
+    "description": "Message displayed i nopenEdx full name form when submit the request fail",
+    "message": "Une erreur s'est produite lors de la mise à jour de votre nom. Veuillez réessayer plus tard."
+  },
+  "components.OpenEdxFullNameForm.fullNameInputDescription": {
+    "description": "Descripiton on the \"fullName\" field of the openEdx full name form.",
+    "message": "Merci de vérifier que votre nom est correct. Celui-ci sera utilisé dans les documents officiels (e.g : certificat)"
+  },
+  "components.OpenEdxFullNameForm.fullNameInputLabel": {
+    "description": "Label of \"fullName\" field of the openEdx full name form",
+    "message": "Nom complet"
+  },
+  "components.OpenEdxFullNameForm.loadingLabel": {
+    "description": "Label of the loading profile spinner on openEdx full name form",
+    "message": "Chargement..."
+  },
+  "components.OpenEdxFullNameForm.submitButtonLabel": {
+    "description": "Label of the submit button on openEdx full name form",
+    "message": "Sauvegarder"
+  },
   "components.PaginateCourseSearch.currentlyReadingLastPageN": {
     "description": "Accessibility helper in pagination, shown next to the current page number when it is the last page.",
     "message": "Actuellement sur la dernière page: {page}"
@@ -1036,28 +1076,124 @@
     "message": "En cochant cette case, vous acceptez les"
   },
   "components.ProductCertificateFooter.buyProductCertificateLabel": {
-    "description": "Label on the enrollement row that propose to buy a product of type certificate",
+    "description": "Label on the enrollment row that propose to buy a product of type certificate",
     "message": "Un examen qui délivre un certificat peut être acheté pour ce cours."
   },
   "components.ProductCertificateFooter.downloadProductCertificateLabel": {
-    "description": "Label on the enrollement row that propose to download a certificate",
+    "description": "Label on the enrollment row that propose to download a certificate",
     "message": "Un certificat est disponible en téléchargement."
   },
   "components.ProductCertificateFooter.pendingProductCertificateLabel": {
-    "description": "Label on the enrollement when a product of type certificate have been bought",
+    "description": "Label on the enrollment when a product of type certificate have been bought",
     "message": "Terminez ce cours pour obtenir votre certificat."
-  },
-  "components.RegisteredCreditCard.expirationDate": {
-    "description": "Credit card expiration date label",
-    "message": "Date d'expiration : {expirationDate}"
-  },
-  "components.RegisteredCreditCard.inputAriaLabel": {
-    "description": "ARIA Label read by screen reader to inform which card is focused",
-    "message": "{selected, select, true {Déselectionner} other {Sélectionner}} la carte {title}"
   },
   "components.RootSearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
     "message": "Recherche de cours"
+  },
+  "components.SaleTunnel.AddressSelector.CreateAddressFormModal.submit": {
+    "description": "Submit button label.",
+    "message": "Créer"
+  },
+  "components.SaleTunnel.AddressSelector.CreateAddressFormModal.title": {
+    "description": "Add address modal title.",
+    "message": "Ajouter une adresse"
+  },
+  "components.SaleTunnel.AddressSelector.EditAddressFormModal.save": {
+    "description": "Save button label.",
+    "message": "Sauvegarder"
+  },
+  "components.SaleTunnel.AddressSelector.EditAddressFormModal.title": {
+    "description": "Edit address modal title.",
+    "message": "Modifier l'adresse"
+  },
+  "components.SaleTunnel.AddressSelector.create": {
+    "description": "Address create button.",
+    "message": "Créer"
+  },
+  "components.SaleTunnel.AddressSelector.edit": {
+    "description": "Address edit button.",
+    "message": "Éditer"
+  },
+  "components.SaleTunnel.AddressSelector.label": {
+    "description": "Address field label.",
+    "message": "Adresse de facturation"
+  },
+  "components.SaleTunnel.Certificate.ProductPath.title": {
+    "description": "Title of certificate product path section",
+    "message": "Plan de formation"
+  },
+  "components.SaleTunnel.Credential.ProductPath.title": {
+    "description": "Title of credential product path section",
+    "message": "Plan de formation"
+  },
+  "components.SaleTunnel.CreditCardSelector.creditCardEmptyInlineDescription": {
+    "description": "Description for the empty credit card inline",
+    "message": "Utiliser une autre carte de crédit lors du paiement"
+  },
+  "components.SaleTunnel.CreditCardSelector.description": {
+    "description": "Description for the credit card section",
+    "message": "Choisissez votre carte de crédit ou ajoutez-en une nouvelle lors du paiement."
+  },
+  "components.SaleTunnel.CreditCardSelector.editCreditCardAriaLabel": {
+    "description": "Aria label for the edit credit card button",
+    "message": "Changer de carte de crédit"
+  },
+  "components.SaleTunnel.CreditCardSelector.endsWith": {
+    "description": "Text to show the credit card code",
+    "message": "Se termine par •••• {code}"
+  },
+  "components.SaleTunnel.CreditCardSelector.expiration": {
+    "description": "Text to show the credit card expiration date",
+    "message": "Expire le {month}/{year}"
+  },
+  "components.SaleTunnel.CreditCardSelector.expired": {
+    "description": "Text to show the credit card expired date",
+    "message": "Expirée depuis {month}/{year}"
+  },
+  "components.SaleTunnel.CreditCardSelector.modalDescription": {
+    "description": "Description for the credit card modal",
+    "message": "Choisissez la méthode de paiement par défaut que vous souhaitez utiliser pour cette commande et les paiements à venir."
+  },
+  "components.SaleTunnel.CreditCardSelector.modalTitle": {
+    "description": "Title for the credit card modal",
+    "message": "Choisir une carte de crédit"
+  },
+  "components.SaleTunnel.CreditCardSelector.modalValidate": {
+    "description": "Validate button for the credit card modal",
+    "message": "Valider"
+  },
+  "components.SaleTunnel.CreditCardSelector.title": {
+    "description": "Title for the credit card section",
+    "message": "Moyen de paiement"
+  },
+  "components.SaleTunnel.Information.description": {
+    "description": "Description of the information section",
+    "message": "Ces informations seront utilisées pour la facturation"
+  },
+  "components.SaleTunnel.Information.email.info": {
+    "description": "Info for the email",
+    "message": "Ce courriel sera utilisé pour vous envoyer des courriels de confirmation, c'est celui avec lequel vous avez créé votre compte."
+  },
+  "components.SaleTunnel.Information.email.label": {
+    "description": "Label for the email",
+    "message": "Courriel du compte"
+  },
+  "components.SaleTunnel.Information.fullNameLabel": {
+    "description": "Label for the full name input",
+    "message": "Nom complet"
+  },
+  "components.SaleTunnel.Information.title": {
+    "description": "Title for the information section",
+    "message": "Informations"
+  },
+  "components.SaleTunnel.Information.total.info": {
+    "description": "Information about the total amount",
+    "message": "Vous payerez ensuite sur la plateforme sécurisée de notre prestataire de paiement."
+  },
+  "components.SaleTunnel.Information.total.label": {
+    "description": "Label for the total amount",
+    "message": "Total"
   },
   "components.SaleTunnel.callToActionDescription": {
     "description": "Additional description announced by screen readers when focusing the call to action buying button",
@@ -1079,26 +1215,6 @@
     "description": "Label displayed below the product's CTA when there is no remaining available seat for the product",
     "message": "Il n'y a pas plus de places disponibles pour ce produit."
   },
-  "components.SaleTunnel.stepPayment": {
-    "description": "Label of the Payment step",
-    "message": "Paiement"
-  },
-  "components.SaleTunnel.stepResume": {
-    "description": "Label of the Resume step",
-    "message": "Continuer"
-  },
-  "components.SaleTunnel.stepValidation": {
-    "description": "Label of the Validation step",
-    "message": "Validation"
-  },
-  "components.SaleTunnelStepPayment.registeredCardSectionTitle": {
-    "description": "Label for the registered credit cards section",
-    "message": "Vos cartes enregistrées"
-  },
-  "components.SaleTunnelStepPayment.resumeTile": {
-    "description": "Label for the resume tile",
-    "message": "Vous êtes sur le point d'acheter"
-  },
   "components.SaleTunnelStepPayment.termsMessageLink": {
     "description": "Clickable link included in the terms message",
     "message": "Conditions générales de vente"
@@ -1106,30 +1222,6 @@
   "components.SaleTunnelStepPayment.termsMessageLinkTitle": {
     "description": "Title of clickable link included in the terms message",
     "message": "Ouvrir un aperçu des Conditions Générales de Vente"
-  },
-  "components.SaleTunnelStepPayment.userBillingAddressAddLabel": {
-    "description": "Label for the billing address add button",
-    "message": "Ajouter une adresse"
-  },
-  "components.SaleTunnelStepPayment.userBillingAddressCreateLabel": {
-    "description": "Label for the billing address create button",
-    "message": "Créer une adresse"
-  },
-  "components.SaleTunnelStepPayment.userBillingAddressFieldset": {
-    "description": "Label for the billing address fieldset",
-    "message": "Adresse de facturation"
-  },
-  "components.SaleTunnelStepPayment.userBillingAddressNoEntry": {
-    "description": "Message displayed when the user has no address.",
-    "message": "Vous n'avez pas encore d'adresse de facturation."
-  },
-  "components.SaleTunnelStepPayment.userBillingAddressSelectLabel": {
-    "description": "Label for the billing address select",
-    "message": "Sélectionner une adresse de facturation"
-  },
-  "components.SaleTunnelStepPayment.userTile": {
-    "description": "Label for the user information tile",
-    "message": "Vos informations personnelles"
   },
   "components.SaleTunnelStepResume.congratulations": {
     "description": "Text displayed to thank user for his order",
@@ -1163,10 +1255,6 @@
     "description": "Course run date text",
     "message": "Du {start} au {end}"
   },
-  "components.SaleTunnelStepValidation.includingVAT": {
-    "description": "Text displayed next to the price to mention this is the price including VAT.",
-    "message": "TTC"
-  },
   "components.SaleTunnelStepValidation.language": {
     "description": "Label displayed before the list of languages",
     "message": "{ count, plural, one {Langue :} other {Langues :} }"
@@ -1174,10 +1262,6 @@
   "components.SaleTunnelStepValidation.noCourseRunAvailable": {
     "description": "Text displayed when no course run are opened for the course",
     "message": "Aucune session disponible pour ce cours."
-  },
-  "components.SaleTunnelStepValidation.proceedToPayment": {
-    "description": "CTA to go to payment step",
-    "message": "Procéder au paiement"
   },
   "components.Search.errorMessage": {
     "description": "Error message for Search view when the request to load courses fails",
@@ -1275,10 +1359,6 @@
     "description": "Label of \"sign contract\" action.",
     "message": "Signer"
   },
-  "components.StepBreadcrumb.stepCount": {
-    "description": "Info about current step, not visible, only announced by screen readers",
-    "message": "Étape {current, number} de {total, number} {active, select, true {(actif)} other {}}"
-  },
   "components.StudentDashboardSidebar.header": {
     "description": "Title of the dashboard sidebar",
     "message": "Bienvenue {name}"
@@ -1354,10 +1434,6 @@
   "components.SyllabusSimpleCourseRunsList.viewMore": {
     "description": "Button displayed on the syllabus when not all course runs are displayed",
     "message": "Voir plus"
-  },
-  "components.TeacherDashboard.TeacherDashboardRoutes.course.contracts.label": {
-    "description": "Label of the course contracts view.",
-    "message": "Contrats de formation"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.label": {
     "description": "Label of the course root view.",
@@ -1723,6 +1799,10 @@
     "description": "Error message shown to the user when openEdx profile fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération de votre profil. Veuillez réessayer plus tard."
   },
+  "hooks.useOpenEdxProfile.errorUpdate": {
+    "description": "Error message shown to the user when openEdx profile fullname post request fails.",
+    "message": "Une erreur s'est produite lors de la mise à jour de votre nom. Veuillez réessayer plus tard."
+  },
   "hooks.useOrders.errorGet": {
     "description": "Error message shown to the user when orders fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération de vos commandes. Veuillez réessayer plus tard."
@@ -1830,6 +1910,18 @@
   "openEdxProfile.levelOfEducation.secondaryOrHighSchool": {
     "description": "Translation for level of education \"secondary or high school\" in openEdx profile",
     "message": "Lycée / enseignement secondaire"
+  },
+  "page.PageNotFound.pageNotFoundHomeLink": {
+    "description": "Home link of the page not found page",
+    "message": "Retour à la page d'accueil"
+  },
+  "page.PageNotFound.pageNotFoundSubTitle": {
+    "description": "Subtitle of the page not found page",
+    "message": "Le contenu demandé n'existe pas."
+  },
+  "page.PageNotFound.pageNotFoundTitle": {
+    "description": "Title of the page not found page",
+    "message": "Page introuvable"
   },
   "pages.CourseLearnerDataGrid.columnActions": {
     "description": "Label for actions column",
