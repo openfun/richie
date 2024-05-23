@@ -886,7 +886,7 @@ describe('<DashboardItemOrder/>', () => {
       .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, validOrder);
 
     order.state = OrderState.FAILED_PAYMENT;
-    order.payment_schedule![1].state = PaymentScheduleState.FAILED;
+    order.payment_schedule![1].state = PaymentScheduleState.REFUSED;
 
     const formatPrice = (price: number, currency: string) =>
       new Intl.NumberFormat('en', {

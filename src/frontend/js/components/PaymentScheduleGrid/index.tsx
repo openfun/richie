@@ -1,14 +1,15 @@
 import { DataList } from '@openfun/cunningham-react';
 import { useIntl } from 'react-intl';
 import { StringHelper } from 'utils/StringHelper';
-import { OrderPaymentSchedule, PaymentScheduleState } from 'types/Joanie';
+import { PaymentSchedule, PaymentScheduleState } from 'types/Joanie';
 
-export const PaymentScheduleGrid = ({
-  paymentSchedule,
-}: {
-  paymentSchedule: OrderPaymentSchedule;
-}) => {
+type Props = {
+  schedule: PaymentSchedule;
+};
+
+export const PaymentScheduleGrid = ({ schedule }: Props) => {
   const intl = useIntl();
+
   return (
     <div className="payment-schedule__grid">
       <DataList
@@ -33,12 +34,12 @@ export const PaymentScheduleGrid = ({
               context.row.state ? <StatusPill state={context.row.state} /> : '',
           },
         ]}
-        rows={paymentSchedule.map((installment) => ({
-          id: installment.due_date,
+        rows={schedule.map((installment) => ({
+          id: installment.id,
           date: installment.due_date,
           amount: intl.formatNumber(installment.amount, {
-            style: 'currency',
             currency: installment.currency,
+            style: 'currency',
           }),
           state: installment.state,
         }))}
