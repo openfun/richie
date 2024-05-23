@@ -31,7 +31,7 @@ import {
   Order,
   OrderEnrollment,
   OrderGroup,
-  OrderInstallment,
+  PaymentInstallment,
   OrderLite,
   OrderState,
   Organization,
@@ -354,8 +354,9 @@ export const CourseListItemFactory = factory((): CourseListItem => {
   };
 });
 
-export const OrderInstallmentFactory = factory((): OrderInstallment => {
+export const PaymentInstallmentFactory = factory((): PaymentInstallment => {
   return {
+    id: faker.string.uuid(),
     currency: faker.finance.currencyCode(),
     amount: faker.number.int(),
     due_date: faker.date.future().toISOString(),
@@ -431,7 +432,7 @@ export const CredentialOrderFactory = factory((): CredentialOrder => {
     ...AbstractOrderFactory().one(),
     course: CourseLightFactory().one(),
     enrollment: null,
-    payment_schedule: OrderInstallmentFactory().many(3),
+    payment_schedule: PaymentInstallmentFactory().many(3),
   };
   return order;
 });
