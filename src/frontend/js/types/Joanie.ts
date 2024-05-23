@@ -271,20 +271,6 @@ export enum OrderState {
 
 export const ACTIVE_ORDER_STATES = [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED];
 
-export enum PaymentScheduleState {
-  PENDING = 'pending',
-  PAID = 'paid',
-  FAILED = 'refused',
-}
-
-export interface OrderInstallment {
-  amount: number;
-  currency: string;
-  due_date: string;
-  state: PaymentScheduleState;
-}
-export type OrderPaymentSchedule = OrderInstallment[];
-
 export interface Order {
   id: string;
   created_on: string;
@@ -303,7 +289,7 @@ export interface Order {
   organization_id: Organization['id'];
   organization: Organization;
   order_group_id?: OrderGroup['id'];
-  payment_schedule?: OrderPaymentSchedule;
+  payment_schedule?: PaymentSchedule;
 }
 
 export interface CredentialOrder extends Order {
@@ -433,6 +419,22 @@ export interface UserWishlistCreationPayload {
 export interface OrderPaymentInfo {
   payment_info: Payment;
 }
+
+export enum PaymentScheduleState {
+  PENDING = 'pending',
+  PAID = 'paid',
+  REFUSED = 'refused',
+}
+
+export interface PaymentInstallment {
+  id: string;
+  amount: number;
+  currency: string;
+  due_date: string;
+  state: PaymentScheduleState;
+}
+
+export type PaymentSchedule = readonly PaymentInstallment[];
 
 // - API
 export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> {
@@ -640,6 +642,11 @@ export interface API {
       : Promise<PaginatedResponse<CourseListItem>>;
     products: {
       get(filters?: CourseProductQueryFilters): Promise<Nullable<CourseProductRelation>>;
+      paymentSchedule: {
+        get(
+          filters?: CourseProductQueryFilters,
+        ): Promise<Nullable<{ payment_schedule: PaymentSchedule }>>;
+      };
     };
     orders: {
       get(
