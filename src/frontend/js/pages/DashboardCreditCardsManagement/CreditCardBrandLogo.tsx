@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { CreditCard } from 'types/Joanie';
+import { CreditCard, CreditCardBrand } from 'types/Joanie';
 
 export const CreditCardBrandLogo = ({
   creditCard,
@@ -8,13 +8,17 @@ export const CreditCardBrandLogo = ({
   creditCard: CreditCard;
   variant?: 'default' | 'inline';
 }) => {
+  const creditCardBrand = Object.values<string>(CreditCardBrand).includes(creditCard.brand)
+    ? creditCard.brand
+    : CreditCardBrand.CB;
+
   return (
     <div className={classNames('credit-card-brand-logo', 'credit-card-brand-logo--' + variant)}>
       <img
         alt=""
         src={
           '/static/richie/images/components/DashboardCreditCardsManagement/logo_' +
-          creditCard.brand +
+          creditCardBrand +
           '.svg'
         }
       />
