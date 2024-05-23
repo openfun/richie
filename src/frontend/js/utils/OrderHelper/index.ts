@@ -5,6 +5,7 @@ import {
   OrderState,
   ContractDefinition,
   NestedCourseOrder,
+  PaymentScheduleState,
 } from 'types/Joanie';
 
 export enum OrderStatus {
@@ -95,6 +96,8 @@ export class OrderHelper {
   }
 
   static getFailedInstallment(order: Order) {
-    return order.payment_schedule?.find((installment) => installment.state === 'refused');
+    return order.payment_schedule?.find(
+      (installment) => installment.state === PaymentScheduleState.REFUSED,
+    );
   }
 }
