@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Use CB logo as fallback if credit card is unknown
+
 ## [2.26.0]
 
 ### Added

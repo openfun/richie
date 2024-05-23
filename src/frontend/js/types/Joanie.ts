@@ -379,7 +379,7 @@ export enum CreditCardBrand {
 
 // Credit Card
 export interface CreditCard {
-  brand: CreditCardBrand;
+  brand: CreditCardBrand | string;
   expiration_month: number;
   expiration_year: number;
   id: string;
