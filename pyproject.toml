@@ -48,7 +48,7 @@ dependencies = [
     "exrex==0.11.0",
     "importlib-metadata",
     "oauthlib==3.2.2",
-    "requests==2.32.1",
+    "requests==2.32.2",
 ]
 
 [project.urls]
@@ -98,7 +98,7 @@ sandbox = [
     "factory-boy==3.3.0",
     "gunicorn==22.0.0",
     "psycopg2-binary==2.9.9",
-    "sentry-sdk==2.2.0",
+    "sentry-sdk==2.3.1",
 ]
 
 [tool.flake8]
