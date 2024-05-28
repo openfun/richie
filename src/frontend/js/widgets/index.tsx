@@ -3,6 +3,7 @@ import includes from 'lodash-es/includes';
 import startCase from 'lodash-es/startCase';
 import { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { HistoryProvider } from 'hooks/useHistory';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Spinner } from 'components/Spinner';
@@ -100,10 +101,12 @@ export const Root = ({ richieReactSpots }: RootProps) => {
   });
 
   return (
-    <SessionProvider>
-      <HistoryProvider>
-        <Suspense fallback={<Spinner />}>{portals}</Suspense>
-      </HistoryProvider>
-    </SessionProvider>
+    <CunninghamProvider>
+      <SessionProvider>
+        <HistoryProvider>
+          <Suspense fallback={<Spinner />}>{portals}</Suspense>
+        </HistoryProvider>
+      </SessionProvider>
+    </CunninghamProvider>
   );
 };
