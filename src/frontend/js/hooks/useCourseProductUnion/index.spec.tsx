@@ -1,16 +1,15 @@
 import { renderHook, waitFor } from '@testing-library/react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
+import { QueryClient } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { PropsWithChildren } from 'react';
 import { CourseListItem, CourseProductRelation } from 'types/Joanie';
-import { History, HistoryContext } from 'hooks/useHistory';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
 import { getRoutes } from 'api/joanie';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { CourseListItemFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { useCourseProductUnion } from '.';
 
 jest.mock('utils/context', () => ({
@@ -24,27 +23,14 @@ jest.mock('utils/context', () => ({
 const PER_PAGE = 3;
 
 const renderUseCourseProductUnion = ({ organizationId }: { organizationId?: string } = {}) => {
-  const Wrapper = ({ client, children }: PropsWithChildren<{ client?: QueryClient }>) => {
-    const historyPushState = jest.fn();
-    const historyReplaceState = jest.fn();
-    const makeHistoryOf: (params: any) => History = () => [
-      {
-        state: { name: '', data: {} },
-        title: '',
-        url: `/`,
-      },
-      historyPushState,
-      historyReplaceState,
-    ];
-
+  const Wrapper = ({
+    client = createTestQueryClient({ user: true }),
+    children,
+  }: PropsWithChildren<{ client?: QueryClient }>) => {
     return (
-      <QueryClientProvider client={client ?? createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <HistoryContext.Provider value={makeHistoryOf({})}>
-            <SessionProvider>{children}</SessionProvider>
-          </HistoryContext.Provider>
-        </IntlProvider>
-      </QueryClientProvider>
+      <BaseJoanieAppWrapper queryOptions={{ client }}>
+        <SessionProvider>{children}</SessionProvider>
+      </BaseJoanieAppWrapper>
     );
   };
 

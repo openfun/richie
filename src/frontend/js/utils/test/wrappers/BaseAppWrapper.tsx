@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import BaseSessionProvider from 'contexts/SessionContext/BaseSessionProvider';
 import { AppWrapperProps } from './types';
-import { ReactQueryAppWrapper } from './ReactQueryAppWrapper';
+import AppWrapper from './AppWrapper';
 
 export const BaseAppWrapper = ({
   children,
@@ -9,8 +9,8 @@ export const BaseAppWrapper = ({
   queryOptions,
 }: PropsWithChildren<AppWrapperProps>) => {
   return (
-    <ReactQueryAppWrapper queryOptions={queryOptions} intlOptions={intlOptions}>
+    <AppWrapper queryOptions={queryOptions} intlOptions={intlOptions}>
       <BaseSessionProvider>{children}</BaseSessionProvider>
-    </ReactQueryAppWrapper>
+    </AppWrapper>
   );
 };

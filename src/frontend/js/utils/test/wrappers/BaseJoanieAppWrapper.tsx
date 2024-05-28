@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { AppWrapperProps } from './types';
-import { ReactQueryAppWrapper } from './ReactQueryAppWrapper';
+import AppWrapper from './AppWrapper';
 
 export const BaseJoanieAppWrapper = ({
   children,
@@ -10,8 +10,8 @@ export const BaseJoanieAppWrapper = ({
   queryOptions,
 }: PropsWithChildren<AppWrapperProps>) => {
   return (
-    <ReactQueryAppWrapper queryOptions={queryOptions} intlOptions={intlOptions}>
+    <AppWrapper queryOptions={queryOptions} intlOptions={intlOptions}>
       <JoanieSessionProvider>{children}</JoanieSessionProvider>
-    </ReactQueryAppWrapper>
+    </AppWrapper>
   );
 };

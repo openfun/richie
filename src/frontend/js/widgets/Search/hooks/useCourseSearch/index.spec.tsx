@@ -3,7 +3,7 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { PropsWithChildren } from 'react';
 import { APIListRequestParams } from 'types/api';
 import { Deferred } from 'utils/test/deferred';
-import { ReactQueryAppWrapper } from 'utils/test/wrappers/ReactQueryAppWrapper';
+import AppWrapper from 'utils/test/wrappers/AppWrapper';
 import { fetchList } from '../../utils/getResourceList';
 import { useCourseSearch } from '.';
 
@@ -16,7 +16,7 @@ const mockFetchList = fetchList as jest.MockedFunction<typeof fetchList>;
 describe('widgets/Search/hooks/useCourseSearch', () => {
   let locale: string;
   const wrapper = ({ children }: PropsWithChildren) => (
-    <ReactQueryAppWrapper intlOptions={{ locale }}>{children}</ReactQueryAppWrapper>
+    <AppWrapper intlOptions={{ locale }}>{children}</AppWrapper>
   );
 
   it('gets the courses with the passed params', async () => {

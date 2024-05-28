@@ -1,17 +1,15 @@
 import { findByRole, render, screen, waitFor } from '@testing-library/react';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { CredentialOrder } from 'types/Joanie';
 import { CredentialOrderFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
 import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { expectUrlMatchLocationDisplayed } from 'utils/test/expectUrlMatchLocationDisplayed';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -23,14 +21,11 @@ jest.mock('utils/context', () => ({
 
 describe('<DashboardOrderLayout />', () => {
   const WrapperWithDashboard = (route: string) => {
+    const client = createTestQueryClient({ user: true });
     return (
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <SessionProvider>
-            <DashboardTest initialRoute={route} />
-          </SessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>
+      <BaseJoanieAppWrapper queryOptions={{ client }}>
+        <DashboardTest initialRoute={route} />
+      </BaseJoanieAppWrapper>
     );
   };
 

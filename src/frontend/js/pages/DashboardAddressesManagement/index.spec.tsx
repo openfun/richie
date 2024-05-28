@@ -8,15 +8,13 @@ import {
   render,
   screen,
 } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
-import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import {
   UserFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { AddressFactory } from 'utils/test/factories/joanie';
-import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import * as Joanie from 'types/Joanie';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
@@ -41,7 +39,7 @@ jest.mock('utils/indirection/window', () => ({
   confirm: jest.fn(() => true),
 }));
 
-describe('<DashAddressesManagement/>', () => {
+describe('<DashboardAddressesManagement/>', () => {
   let richieUser: User;
   beforeEach(() => {
     richieUser = UserFactory().one();
@@ -72,15 +70,12 @@ describe('<DashAddressesManagement/>', () => {
 
   it('renders an empty list with placeholder', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
+    const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <BaseJoanieAppWrapper queryOptions={{ client }}>
+          <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
+        </BaseJoanieAppWrapper>,
       );
     });
 
@@ -94,15 +89,12 @@ describe('<DashAddressesManagement/>', () => {
   it('renders a list with addresses', async () => {
     const addresses = AddressFactory().many(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
+    const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <BaseJoanieAppWrapper queryOptions={{ client }}>
+          <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
+        </BaseJoanieAppWrapper>,
       );
     });
 
@@ -117,15 +109,12 @@ describe('<DashAddressesManagement/>', () => {
   it('deletes an address', async () => {
     const addresses = AddressFactory().many(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
+    const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <BaseJoanieAppWrapper queryOptions={{ client }}>
+          <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
+        </BaseJoanieAppWrapper>,
       );
     });
     // No error is shown.
@@ -163,15 +152,12 @@ describe('<DashAddressesManagement/>', () => {
   it('promotes an address', async () => {
     const addresses = AddressFactory().many(5);
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
+    const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <BaseJoanieAppWrapper queryOptions={{ client }}>
+          <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
+        </BaseJoanieAppWrapper>,
       );
     });
     // No error is shown.
@@ -215,15 +201,12 @@ describe('<DashAddressesManagement/>', () => {
     const addresses = AddressFactory().many(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
+    const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <BaseJoanieAppWrapper queryOptions={{ client }}>
+          <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
+        </BaseJoanieAppWrapper>,
       );
     });
 
@@ -239,15 +222,12 @@ describe('<DashAddressesManagement/>', () => {
     const addresses = AddressFactory().many(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
+    const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <BaseJoanieAppWrapper queryOptions={{ client }}>
+          <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
+        </BaseJoanieAppWrapper>,
       );
     });
 
@@ -266,15 +246,12 @@ describe('<DashAddressesManagement/>', () => {
     const addresses = AddressFactory().many(5);
     addresses[0].is_main = true;
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', addresses);
+    const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <BaseJoanieAppWrapper queryOptions={{ client }}>
+          <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
+        </BaseJoanieAppWrapper>,
       );
     });
 
@@ -291,15 +268,12 @@ describe('<DashAddressesManagement/>', () => {
 
   it('redirects to the create address route', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
+    const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <BaseJoanieAppWrapper queryOptions={{ client }}>
+          <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
+        </BaseJoanieAppWrapper>,
       );
     });
     // Clicking on the create button redirects to the create route.
@@ -314,15 +288,12 @@ describe('<DashAddressesManagement/>', () => {
   it('redirects to the edit address route', async () => {
     const address = AddressFactory().one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address]);
+    const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <BaseJoanieAppWrapper queryOptions={{ client }}>
+          <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
+        </BaseJoanieAppWrapper>,
       );
     });
 
@@ -343,16 +314,12 @@ describe('<DashAddressesManagement/>', () => {
       status: HttpStatusCode.INTERNAL_SERVER_ERROR,
       body: 'Internal Server Error',
     });
-
+    const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
       render(
-        <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-          <IntlProvider locale="en">
-            <SessionProvider>
-              <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
-            </SessionProvider>
-          </IntlProvider>
-        </QueryClientProvider>,
+        <BaseJoanieAppWrapper queryOptions={{ client }}>
+          <DashboardTest initialRoute={LearnerDashboardPaths.PREFERENCES} />
+        </BaseJoanieAppWrapper>,
       );
     });
 

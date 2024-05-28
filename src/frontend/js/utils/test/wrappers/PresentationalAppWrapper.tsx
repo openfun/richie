@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
-import { CunninghamProvider } from '@openfun/cunningham-react';
-import { IntlWrapper, IntlWrapperProps } from './IntlWrapper';
+import { IntlWrapperProps } from './IntlWrapper';
 import { RouterWrapper, RouterWrapperProps } from './RouterWrapper';
+import AppWrapper from './AppWrapper';
 
 export const PresentationalAppWrapper = ({
   children,
@@ -9,10 +9,8 @@ export const PresentationalAppWrapper = ({
   routerOptions,
 }: PropsWithChildren<{ intlOptions?: IntlWrapperProps; routerOptions?: RouterWrapperProps }>) => {
   return (
-    <IntlWrapper {...intlOptions}>
-      <CunninghamProvider>
-        <RouterWrapper {...routerOptions}>{children}</RouterWrapper>
-      </CunninghamProvider>
-    </IntlWrapper>
+    <AppWrapper intlOptions={intlOptions}>
+      <RouterWrapper {...routerOptions}>{children}</RouterWrapper>
+    </AppWrapper>
   );
 };

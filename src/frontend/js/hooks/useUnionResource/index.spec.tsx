@@ -7,7 +7,7 @@ import { noop } from 'utils';
 import { mockPaginatedResponse } from 'utils/test/mockPaginatedResponse';
 import { PER_PAGE } from 'settings';
 import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
-import { ReactQueryAppWrapper } from 'utils/test/wrappers/ReactQueryAppWrapper';
+import AppWrapper from 'utils/test/wrappers/AppWrapper';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { QueryConfig, FetchDataFunction } from './utils/fetchEntity';
 import useUnionResource from '.';
@@ -98,7 +98,7 @@ describe('useUnionResource', () => {
           queryAConfig,
           queryBConfig,
         }),
-      { wrapper: ReactQueryAppWrapper },
+      { wrapper: AppWrapper },
     );
 
     expect(result.current.isLoading).toBe(true);
@@ -122,7 +122,7 @@ describe('useUnionResource', () => {
           queryAConfig,
           queryBConfig,
         }),
-      { wrapper: ReactQueryAppWrapper },
+      { wrapper: AppWrapper },
     );
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -141,7 +141,7 @@ describe('useUnionResource', () => {
           queryAConfig,
           queryBConfig,
         }),
-      { wrapper: ReactQueryAppWrapper },
+      { wrapper: AppWrapper },
     );
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -160,7 +160,7 @@ describe('useUnionResource', () => {
           queryAConfig,
           queryBConfig,
         }),
-      { wrapper: ReactQueryAppWrapper },
+      { wrapper: AppWrapper },
     );
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -203,7 +203,7 @@ describe('useUnionResource', () => {
           queryAConfig,
           queryBConfig,
         }),
-      { wrapper: ReactQueryAppWrapper },
+      { wrapper: AppWrapper },
     );
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -266,7 +266,7 @@ describe('useUnionResource', () => {
           queryAConfig,
           queryBConfig,
         }),
-      { wrapper: ReactQueryAppWrapper },
+      { wrapper: AppWrapper },
     );
 
     expect(result.current.isLoading).toBe(true);
@@ -301,7 +301,7 @@ describe('useUnionResource', () => {
           queryAConfig: queries?.queryA || queryAConfig,
           queryBConfig: queries?.queryB || queryBConfig,
         }),
-      { wrapper: ReactQueryAppWrapper },
+      { wrapper: AppWrapper },
     );
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
@@ -370,9 +370,7 @@ describe('useUnionResource', () => {
         }),
       {
         wrapper: ({ children }) => (
-          <ReactQueryAppWrapper queryOptions={{ client: queryClient }}>
-            {children}
-          </ReactQueryAppWrapper>
+          <AppWrapper queryOptions={{ client: queryClient }}>{children}</AppWrapper>
         ),
       },
     );
@@ -416,9 +414,7 @@ describe('useUnionResource', () => {
         }),
       {
         wrapper: ({ children }) => (
-          <ReactQueryAppWrapper queryOptions={{ client: queryClient }}>
-            {children}
-          </ReactQueryAppWrapper>
+          <AppWrapper queryOptions={{ client: queryClient }}>{children}</AppWrapper>
         ),
       },
     );
