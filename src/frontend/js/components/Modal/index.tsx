@@ -1,7 +1,7 @@
 import { ReactNode, useMemo } from 'react';
 import ReactModal from 'react-modal';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Button, CunninghamProvider } from '@openfun/cunningham-react';
+import { Button } from '@openfun/cunningham-react';
 import { StringHelper } from 'utils/StringHelper';
 import { Icon, IconTypeEnum } from 'components/Icon';
 
@@ -69,28 +69,26 @@ export const Modal = ({
       overlayClassName={mergeClasses({ base: 'modal__overlay', classes: overlayClassName })}
       {...props}
     >
-      <CunninghamProvider>
-        <header className={headerClasses.join(' ')}>
-          {StringHelper.isString(title) && <h2>{title}</h2>}
-          {!StringHelper.isString(title) && title}
-          {hasCloseButton && (
-            <Button
-              aria-label={intl.formatMessage(messages.closeDialog)}
-              className="modal__closeButton"
-              onClick={(e) => props.onRequestClose?.(e)}
-              title={intl.formatMessage(messages.closeDialog)}
-              color="tertiary"
-              size="small"
-            >
-              <Icon name={IconTypeEnum.ROUND_CLOSE} />
-              <span className="offscreen">
-                <FormattedMessage {...messages.closeDialog} />
-              </span>
-            </Button>
-          )}
-        </header>
-        {children}
-      </CunninghamProvider>
+      <header className={headerClasses.join(' ')}>
+        {StringHelper.isString(title) && <h2>{title}</h2>}
+        {!StringHelper.isString(title) && title}
+        {hasCloseButton && (
+          <Button
+            aria-label={intl.formatMessage(messages.closeDialog)}
+            className="modal__closeButton"
+            onClick={(e) => props.onRequestClose?.(e)}
+            title={intl.formatMessage(messages.closeDialog)}
+            color="tertiary"
+            size="small"
+          >
+            <Icon name={IconTypeEnum.ROUND_CLOSE} />
+            <span className="offscreen">
+              <FormattedMessage {...messages.closeDialog} />
+            </span>
+          </Button>
+        )}
+      </header>
+      {children}
     </ReactModal>
   );
 };

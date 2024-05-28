@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, useMemo, useState } from 'react';
+import { noop } from 'utils';
 import {
   DashboardBreadcrumbsMeta,
   DashboardBreadcrumbsPlaceholders,
@@ -9,9 +10,10 @@ interface DashboardBreadcrumbsContextInterface {
   meta: DashboardBreadcrumbsMeta;
 }
 
-export const DashboardBreadcrumbsContext = createContext<DashboardBreadcrumbsContextInterface>(
-  {} as any,
-);
+export const DashboardBreadcrumbsContext = createContext<DashboardBreadcrumbsContextInterface>({
+  meta: { placeholders: {} },
+  pushBreadcrumbsPlaceholders: noop,
+});
 
 /**
  * Provider that needs to wrap any component using the DashboardBreadcrumbs component.
