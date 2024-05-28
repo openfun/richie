@@ -1,4 +1,3 @@
-import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import {
   act,
@@ -9,22 +8,20 @@ import {
   waitFor,
   within,
 } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
 import userEvent from '@testing-library/user-event';
 import {
   UserFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
 import { AddressFactory } from 'utils/test/factories/joanie';
-import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
 import { expectBreadcrumbsToEqualParts } from 'utils/test/expectBreadcrumbsToEqualParts';
-import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -59,19 +56,16 @@ describe('<DashboardEditAddress/>', () => {
     fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${richieUser.username}`, {});
     fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${richieUser.username}`, {});
 
+    const client = createTestQueryClient({ user: richieUser });
     render(
-      <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-        <IntlProvider locale="en">
-          <SessionProvider>
-            <DashboardTest
-              initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
-                ':addressId',
-                address.id,
-              )}
-            />
-          </SessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>,
+      <BaseJoanieAppWrapper queryOptions={{ client }}>
+        <DashboardTest
+          initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
+            ':addressId',
+            address.id,
+          )}
+        />
+      </BaseJoanieAppWrapper>,
     );
     await waitFor(() => {
       expectBreadcrumbsToEqualParts([
@@ -142,20 +136,16 @@ describe('<DashboardEditAddress/>', () => {
     // Mock the edit API route to return a 500 status.
     const updateUrl = 'https://joanie.endpoint/api/v1.0/addresses/' + address.id + '/';
     fetchMock.put(updateUrl, { status: HttpStatusCode.INTERNAL_SERVER_ERROR, body: 'Bad request' });
-
+    const client = createTestQueryClient({ user: true });
     const { container } = render(
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <JoanieSessionProvider>
-            <DashboardTest
-              initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
-                ':addressId',
-                address.id,
-              )}
-            />
-          </JoanieSessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>,
+      <BaseJoanieAppWrapper queryOptions={{ client }}>
+        <DashboardTest
+          initialRoute={LearnerDashboardPaths.PREFERENCES_ADDRESS_EDITION.replace(
+            ':addressId',
+            address.id,
+          )}
+        />
+      </BaseJoanieAppWrapper>,
     );
     await waitFor(() => {
       expectBreadcrumbsToEqualParts([

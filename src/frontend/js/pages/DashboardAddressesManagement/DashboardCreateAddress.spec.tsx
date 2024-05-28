@@ -1,8 +1,6 @@
-import { QueryClientProvider } from '@tanstack/react-query';
 import countries from 'i18n-iso-countries';
 import fetchMock from 'fetch-mock';
 import { getByText, render, screen, waitFor } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { PropsWithChildren } from 'react';
 import {
@@ -10,7 +8,6 @@ import {
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
 import { AddressFactory } from 'utils/test/factories/joanie';
-import { SessionProvider } from 'contexts/SessionContext';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { Address } from 'types/Joanie';
 import { expectFetchCall } from 'utils/test/expectFetchCall';
@@ -22,6 +19,7 @@ import { HttpStatusCode } from 'utils/errors/HttpError';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { User } from 'types/User';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -61,13 +59,10 @@ const fillForm = async (address: Address, user: UserEvent = userEvent.setup()) =
 
 describe('<DashboardCreateAddress/>', () => {
   let richieUser: User;
-  const Wrapper = ({ children }: PropsWithChildren) => (
-    <QueryClientProvider client={createTestQueryClient({ user: richieUser })}>
-      <IntlProvider locale="en">
-        <SessionProvider>{children}</SessionProvider>
-      </IntlProvider>
-    </QueryClientProvider>
-  );
+  const Wrapper = ({ children }: PropsWithChildren) => {
+    const client = createTestQueryClient({ user: richieUser });
+    return <BaseJoanieAppWrapper queryOptions={{ client }}>{children}</BaseJoanieAppWrapper>;
+  };
   let user: UserEvent;
 
   beforeEach(() => {

@@ -7,17 +7,16 @@ import { resolveAll } from 'utils/resolveAll';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError, expectBannerInfo } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
-import * as mockUseHistory from 'hooks/useHistory';
+import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { CertificateFactory } from 'utils/test/factories/joanie';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
-import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 
 jest.mock('hooks/useHistory', () => ({
   __esModule: true,
-  ...mockUseHistory,
+  ...jest.requireActual('hooks/useHistory'),
   useHistory: () => [jest.fn(), jest.fn(), jest.fn()],
 }));
 

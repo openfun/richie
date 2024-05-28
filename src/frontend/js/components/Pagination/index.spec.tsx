@@ -3,7 +3,8 @@ import { IntlProvider } from 'react-intl';
 import { useEffect } from 'react';
 import userEvent from '@testing-library/user-event';
 import { Pagination, usePagination } from 'components/Pagination/index';
-import { History, HistoryContext } from 'hooks/useHistory';
+import { HistoryContext } from 'hooks/useHistory';
+import { makeHistoryOf } from 'utils/test/makeHistoryOf';
 
 jest.mock('utils/indirection/window', () => ({
   location: {},
@@ -11,17 +12,6 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('<Pagination/>', () => {
-  const historyPushState = jest.fn();
-  const historyReplaceState = jest.fn();
-  const makeHistoryOf: (params: any) => History = () => [
-    {
-      state: { name: '', data: {} },
-      title: '',
-      url: `/`,
-    },
-    historyPushState,
-    historyReplaceState,
-  ];
   it('does not display pagination ( 0 pages )', async () => {
     const pagination = renderHook(() => usePagination({ itemsPerPage: 10 }));
     await waitFor(() => expect(pagination.result.current.maxPage).toBeUndefined());
@@ -147,7 +137,7 @@ describe('<Pagination/>', () => {
       }, []);
       return (
         <IntlProvider locale="en">
-          <HistoryContext.Provider value={makeHistoryOf({})}>
+          <HistoryContext.Provider value={makeHistoryOf()}>
             <Pagination {...pagination} />
           </HistoryContext.Provider>
         </IntlProvider>
@@ -197,7 +187,7 @@ describe('<Pagination/>', () => {
       }, []);
       return (
         <IntlProvider locale="en">
-          <HistoryContext.Provider value={makeHistoryOf({})}>
+          <HistoryContext.Provider value={makeHistoryOf()}>
             <Pagination {...pagination} />
           </HistoryContext.Provider>
         </IntlProvider>

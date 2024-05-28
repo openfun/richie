@@ -1,4 +1,3 @@
-import { CunninghamProvider } from '@openfun/cunningham-react';
 import { PropsWithChildren } from 'react';
 import fetchMock from 'fetch-mock';
 import { DashboardBreadcrumbsProvider } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
@@ -27,11 +26,9 @@ export const JoanieAppWrapper = ({
 }: PropsWithChildren<AppWrapperProps>) => {
   return (
     <BaseJoanieAppWrapper intlOptions={intlOptions} queryOptions={queryOptions}>
-      <CunninghamProvider>
-        <DashboardBreadcrumbsProvider>
-          <RouterWrapper {...routerOptions}>{children}</RouterWrapper>
-        </DashboardBreadcrumbsProvider>
-      </CunninghamProvider>
+      <DashboardBreadcrumbsProvider>
+        <RouterWrapper {...routerOptions}>{children}</RouterWrapper>
+      </DashboardBreadcrumbsProvider>
     </BaseJoanieAppWrapper>
   );
 };

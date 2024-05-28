@@ -2,6 +2,7 @@ import { PropsWithChildren } from 'react';
 import { QueryClient } from '@tanstack/query-core';
 import { RenderOptions as TestingLibraryRenderOptions } from '@testing-library/react';
 import { Nullable } from 'types/utils';
+import { History } from 'hooks/useHistory';
 import { IntlWrapperProps } from './IntlWrapper';
 import { RouterWrapperProps } from './RouterWrapper';
 
@@ -21,6 +22,7 @@ export interface AppWrapperProps {
   wrapper?: Nullable<(props: PropsWithChildren<{ options?: AppWrapperProps }>) => JSX.Element>;
   intlOptions?: IntlWrapperProps;
   queryOptions?: QueryOptions;
+  historyOptions?: History;
   routerOptions?: RouterWrapperProps;
   testingLibraryOptions?: TestingLibraryRenderOptions;
 }
