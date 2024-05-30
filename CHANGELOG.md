@@ -17,6 +17,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Use CB logo as fallback if credit card is unknown
 - Put CunninghamProvider at root level
 - Resubmit order on payment failure
+- Render course run resource link with button look'n feel when it does not match
+  a LMS Backend
 
 ## [2.26.0]
 
