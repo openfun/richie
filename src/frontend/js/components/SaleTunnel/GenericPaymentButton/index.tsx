@@ -135,6 +135,13 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     );
   }, [product, saleTunnelProps.course, saleTunnelProps.enrollment, billingAddress, termsAccepted]);
 
+  const isBusy = useMemo(() => {
+    return (
+      state === ComponentStates.LOADING ||
+      (state === ComponentStates.ERROR && error === PaymentErrorMessageId.ERROR_ABORTING)
+    );
+  }, [state, error]);
+
   /**
    * Use Joanie API to retrieve an order and check if it's state is validated
    *
@@ -291,9 +298,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     <>
       {renderTermsCheckbox()}
       <Button
-        disabled={
-          state === ComponentStates.LOADING || error === PaymentErrorMessageId.ERROR_POLLING_LIMIT
-        }
+        disabled={isBusy || error === PaymentErrorMessageId.ERROR_POLLING_LIMIT}
         onClick={createOrder}
         data-testid={order && 'payment-button-order-loaded'}
         fullWidth={isMobile}
@@ -301,7 +306,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
           'aria-describedby': 'sale-tunnel-payment-error',
         })}
       >
-        {state === ComponentStates.LOADING ? (
+        {isBusy ? (
           <Spinner theme="light" aria-labelledby="payment-in-progress">
             <span id="payment-in-progress">
               <FormattedMessage {...messages.paymentInProgress} />
@@ -323,9 +328,9 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
         <PaymentInterface {...payment} onError={handleError} onSuccess={handleSuccess} />
       )}
       {state === ComponentStates.ERROR && (
-      <p className="payment-button__error" id="sale-tunnel-payment-error" tabIndex={-1}>
+        <p className="payment-button__error" id="sale-tunnel-payment-error" tabIndex={-1}>
           <FormattedMessage {...messages[error || PaymentErrorMessageId.ERROR_DEFAULT]} />
-      </p>
+        </p>
       )}
     </>
   );

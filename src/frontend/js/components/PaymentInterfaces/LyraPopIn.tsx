@@ -1,6 +1,6 @@
 import KRGlue from '@lyracom/embedded-form-glue';
 import { useIntl } from 'react-intl';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import {
   PaymentErrorMessageId,
   PaymentInterfaceProps,
@@ -28,10 +28,11 @@ const LyraPopIn = ({
   const handleError = (error?: Error) => {
     if (error) handle(`[LyraPopIn] - ${error}`);
 
-    if (shouldAbort) {
+    if (shouldAbort.current) {
       onError(PaymentErrorMessageId.ERROR_ABORTING);
+    } else {
+      onError(PaymentErrorMessageId.ERROR_DEFAULT);
     }
-    onError(PaymentErrorMessageId.ERROR_DEFAULT);
   };
 
   const initializeLyraForm = async () => {
@@ -91,9 +92,9 @@ const LyraPopIn = ({
     };
 
     const handleFormError = async (error: KRError) => {
-      // Do not close the pop-in if the error is a client error.
-      if (!error.errorCode.startsWith('CLIENT_')) {
-        shouldAbort.current = false;
+      // Do not close the pop-in if the error is a invalid data error (CLIENT_3XX).
+      // https://docs.lyra.com/fr/rest/V4.0/javascript/features/js_error_management.html#client004
+      if (!error.errorCode.startsWith('CLIENT_3')) {
         await KR.closePopin(formId);
         handleError();
       }
@@ -121,6 +122,11 @@ const LyraPopIn = ({
       const container = document.getElementById(LYRA_FORM_ID);
       if (container) container.remove();
     };
+  }, []);
+
+  useEffect(() => {
+    // Abort the payment if the user tries to leave the page.
+    window.addEventListener('beforeunload', () => handleError(), { once: true });
   }, []);
 
   return null;
