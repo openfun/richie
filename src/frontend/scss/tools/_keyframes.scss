@@ -1,0 +1,40 @@
+//
+// keyframe-strokedLineAppear
+//
+// Generate a keyframe to make svg stroked element appears slightly
+//
+// @param {string}  name     the keyframe's name to use from `animation`
+// @param {length}  length   the full length of the stroke line`
+// @param {reverse} reverse  animation direction`
+@mixin keyframe-strokedLineAppear($name, $length, $reverse: false) {
+  $direction: 1;
+  @if $reverse == true {
+    $direction: -1;
+  }
+
+  @keyframes #{$name} {
+    from {
+      stroke-dashoffset: $direction * $length;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+%keyframe-wave {
+  @keyframes wave {
+    0% {
+      transform: scale(1);
+    }
+    33% {
+      transform: scale(1.2);
+    }
+    66% {
+      transform: scale(0.8);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}

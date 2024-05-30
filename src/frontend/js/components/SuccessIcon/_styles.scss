@@ -12,21 +12,7 @@
   max-height: 100%;
   stroke: currentColor;
   width: 4.5rem;
-
-  @keyframes wave {
-    0% {
-      transform: scale(1);
-    }
-    33% {
-      transform: scale(1.2);
-    }
-    66% {
-      transform: scale(0.8);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
+  @extend %keyframe-wave;
 
   & > * {
     fill: none;
