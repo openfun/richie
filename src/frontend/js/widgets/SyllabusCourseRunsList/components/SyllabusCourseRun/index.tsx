@@ -1,4 +1,5 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { Button } from '@openfun/cunningham-react';
 import { CourseRun, CourseRunDisplayMode } from 'types';
 import useDateFormat from 'hooks/useDateFormat';
 import { extractResourceId, isJoanieResourceLinkProduct } from 'api/lms/joanie';
@@ -83,9 +84,9 @@ const OpenedCourseRun = ({ courseRun }: { courseRun: CourseRun }) => {
       {findLmsBackend(courseRun.resource_link) ? (
         <CourseRunEnrollment courseRun={courseRun} />
       ) : (
-        <a className="course-run-enrollment__cta" href={courseRun.resource_link}>
+        <Button className="course-run-enrollment__cta" href={courseRun.resource_link} fullWidth>
           {StringHelper.capitalizeFirst(courseRun.state.call_to_action)}
-        </a>
+        </Button>
       )}
     </>
   );
