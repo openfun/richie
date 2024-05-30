@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Improve Lyra error management to abort payment properly
+
 ### Fixed
 
 - Use CB logo as fallback if credit card is unknown
