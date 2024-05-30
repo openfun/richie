@@ -104,7 +104,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
   const [payment, setPayment] = useState<PaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
-  const [error, setError] = useState<PaymentErrorMessageId>(PaymentErrorMessageId.ERROR_DEFAULT);
+  const [error, setError] = useState<PaymentErrorMessageId>();
   const hasPaymentId = (p: Maybe<Payment>): p is Extract<Payment, PaymentWithId> => {
     return Boolean(p?.hasOwnProperty('payment_id'));
   };
@@ -122,8 +122,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     product,
     error,
     onError: (e) => {
-      setError(e);
-      setState(ComponentStates.ERROR);
+      handleError(e);
     },
   });
 
@@ -154,17 +153,16 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     );
 
     if (!billingAddress) {
-      setError(PaymentErrorMessageId.ERROR_ADDRESS);
-      setState(ComponentStates.ERROR);
+      handleError(PaymentErrorMessageId.ERROR_ADDRESS);
     }
 
     validateTerms();
 
     if (isReadyToPay) {
       setState(ComponentStates.LOADING);
-      let paymentInfos = payment;
+      setError(undefined);
 
-      if (!paymentInfos) {
+      if (!payment) {
         const billingAddressPayload = ObjectHelper.omit(billingAddress!, 'id', 'is_main');
 
         orderMethods.submit(
@@ -175,7 +173,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
           },
           {
             onSuccess: (orderPayment) => {
-              paymentInfos = {
+              const paymentInfos = {
                 ...orderPayment.payment_info,
                 order_id: orderId,
               };
@@ -185,10 +183,10 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
               if (createPaymentError.responseBody) {
                 const responseErrors = await createPaymentError.responseBody;
                 if ('max_validated_orders' in responseErrors) {
-                  setError(PaymentErrorMessageId.ERROR_FULL_PRODUCT);
+                  handleError(PaymentErrorMessageId.ERROR_FULL_PRODUCT);
                 }
               }
-              setState(ComponentStates.ERROR);
+              handleError();
             },
           },
         );
@@ -208,8 +206,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     }
 
     if (!billingAddress) {
-      setError(PaymentErrorMessageId.ERROR_ADDRESS);
-      setState(ComponentStates.ERROR);
+      handleError(PaymentErrorMessageId.ERROR_ADDRESS);
     }
 
     validateTerms();
@@ -230,7 +227,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
           createPayment(newOrder.id);
         },
         onError: async () => {
-          setState(ComponentStates.ERROR);
+          handleError();
         },
       });
     }
