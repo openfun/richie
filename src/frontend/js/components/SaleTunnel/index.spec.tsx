@@ -3,7 +3,6 @@ import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import userEvent from '@testing-library/user-event';
 import { OrderState, Product, ProductType } from 'types/Joanie';
-import { DummyPayment } from 'components/PaymentInterfaces/types';
 import {
   AddressFactory,
   CertificateOrderWithOneClickPaymentFactory,
@@ -456,7 +455,7 @@ describe.each([
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     });
 
-    it('should abort the order if payment does not succeed after a given delay', async () => {
+    it('should display an error message if order is not validated after a given delay', async () => {
       const product = ProductFactory().one();
       const billingAddress = AddressFactory({
         is_main: true,
@@ -560,34 +559,19 @@ describe.each([
         expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit - 1);
       });
 
-      // - This round should be the last after which the order should be aborted
+      // - This round should be the last
       await act(async () => {
         jest.runOnlyPendingTimers();
       });
 
-      await waitFor(
-        async () => {
-          // +1 is for orders invalidation.
-          // +1 is for useProductOrder call invalidation.
-          expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit + 2);
-          expect(fetchMock.calls()[fetchMock.calls().length - 3][0]).toBe(
-            `https://joanie.endpoint/api/v1.0/orders/${order.id}/abort/`,
-          );
-        },
-        {
-          timeout: 1100,
-        },
-      );
-
-      expect(
-        JSON.parse(fetchMock.calls()[fetchMock.calls().length - 3][1]!.body!.toString()),
-      ).toEqual({
-        payment_id: (paymentInfo as DummyPayment).payment_id,
-      });
-
       // - An error message should be displayed and focused (for screen reader users)
-      const $error = screen.getByText('An error occurred during payment. Please retry later.');
+      const $error = screen.getByText(
+        'Your payment has succeeded but your order validation is taking too long, you can close this dialog and come back later.',
+      );
       expect(document.activeElement).toBe($error);
+
+      // - Payment button should be disabled
+      expect($button.disabled).toBe(true);
     }, 10000);
 
     it('should render an error message when payment failed', async () => {
