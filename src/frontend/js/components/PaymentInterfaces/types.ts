@@ -5,6 +5,7 @@ export enum PaymentErrorMessageId {
   ERROR_DEFAULT = 'errorDefault',
   ERROR_FULL_PRODUCT = 'errorFullProduct',
   ERROR_TERMS = 'errorTerms',
+  ERROR_POLLING_LIMIT = 'errorPollingLimit',
 }
 
 export enum PaymentProviders {

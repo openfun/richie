@@ -33,6 +33,13 @@ const messages = defineMessages({
     description: 'Error message shown when payment creation request failed.',
     id: 'components.PaymentButton.errorDefault',
   },
+  errorPollingLimit: {
+    defaultMessage:
+      'Your payment has succeeded but your order validation is taking too long, you can close this dialog and come back later.',
+    description:
+      'Error message shown when the polling limit has been reached and the order is not yet validated.',
+    id: 'components.PaymentButton.errorPollingLimit',
+  },
   errorFullProduct: {
     defaultMessage: 'There are no more places available for this product.',
     description:
@@ -235,8 +242,9 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     const checkOrderValidity = async () => {
       if (round >= PAYMENT_SETTINGS.pollLimit) {
         timeoutRef.current = undefined;
-        orderMethods.abort({ id: payment!.order_id, payment_id: paymentId });
-        setState(ComponentStates.ERROR);
+        // @TODO Instead of displaying a raw error message, we could call onSuccess with a "special" argument
+        // to display a different message in the SaleTunnelSuccess component.
+        handleError(PaymentErrorMessageId.ERROR_POLLING_LIMIT);
       } else {
         const isValidated = await isOrderValidated(payment!.order_id);
         if (isValidated) {
@@ -286,7 +294,9 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     <>
       {renderTermsCheckbox()}
       <Button
-        disabled={state === ComponentStates.LOADING}
+        disabled={
+          state === ComponentStates.LOADING || error === PaymentErrorMessageId.ERROR_POLLING_LIMIT
+        }
         onClick={createOrder}
         data-testid={order && 'payment-button-order-loaded'}
         fullWidth={isMobile}
@@ -315,9 +325,11 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
       {state === ComponentStates.LOADING && payment && (
         <PaymentInterface {...payment} onError={handleError} onSuccess={handleSuccess} />
       )}
+      {state === ComponentStates.ERROR && (
       <p className="payment-button__error" id="sale-tunnel-payment-error" tabIndex={-1}>
-        {state === ComponentStates.ERROR && <FormattedMessage {...messages[error]} />}
+          <FormattedMessage {...messages[error || PaymentErrorMessageId.ERROR_DEFAULT]} />
       </p>
+      )}
     </>
   );
 };
