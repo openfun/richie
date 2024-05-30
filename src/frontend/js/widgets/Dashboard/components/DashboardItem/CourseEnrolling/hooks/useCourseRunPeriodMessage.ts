@@ -8,7 +8,8 @@ const messages = defineMessages({
   onGoingRunPeriod: {
     id: 'components.useCourseRunPeriodMessage.onGoingRunPeriod',
     description: 'Text to display when a course run is on going.',
-    defaultMessage: 'This session started on {startDate} and will end on {endDate}',
+    defaultMessage:
+      'This session started on {startDate} {endDate, select, undefined {} other {and will end on {endDate}}}',
   },
   futureRunPeriod: {
     id: 'components.useCourseRunPeriodMessage.futureRunPeriod',
@@ -18,7 +19,8 @@ const messages = defineMessages({
   onGoingEnrolledRunPeriod: {
     id: 'components.useCourseRunPeriodMessage.onGoingEnrolledRunPeriod',
     description: 'Text to display when a course run is ongoing and the user is enrolled to.',
-    defaultMessage: "You are enrolled for this session. It's open from {startDate} to {endDate}",
+    defaultMessage:
+      "You are enrolled for this session. It's open from {startDate} {endDate, select, undefined {} other {to {endDate}}}",
   },
   futureEnrolledRunPeriod: {
     id: 'components.useCourseRunPeriodMessage.futureEnrolledRunPeriod',

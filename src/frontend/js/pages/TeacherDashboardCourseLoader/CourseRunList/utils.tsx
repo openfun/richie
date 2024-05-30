@@ -8,7 +8,7 @@ import CourseRunListCell from './CourseRunListCell';
 
 export const messages = defineMessages({
   dataCourseRunPeriod: {
-    defaultMessage: 'From {from} to {to}',
+    defaultMessage: 'From {from} {to, select, undefined {} other {to {to}}}',
     description: 'Message displayed in course run datagrid for course run period',
     id: 'components.CourseRunList.dataCourseRunPeriod',
   },
@@ -42,7 +42,7 @@ export const buildCourseRunData = (intl: IntlShape, courseRuns: CourseRun[]) => 
       <CourseRunListCell
         textContent={intl.formatMessage(messages.dataCourseRunPeriod, {
           from: intl.formatDate(new Date(courseRun.start)),
-          to: intl.formatDate(new Date(courseRun.end)),
+          to: courseRun.end ? intl.formatDate(new Date(courseRun.end)) : undefined,
         })}
         variant={CourseRunListCell.SMALL}
       />

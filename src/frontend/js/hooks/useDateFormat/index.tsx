@@ -1,4 +1,5 @@
 import { type FormatDateOptions, useIntl } from 'react-intl';
+import { Maybe } from 'types/utils';
 
 export const DEFAULT_DATE_FORMAT: FormatDateOptions = {
   day: '2-digit',
@@ -29,7 +30,11 @@ export const DATETIME_FORMAT: FormatDateOptions = {
 const useDateFormat = (formatOptions: FormatDateOptions = {}) => {
   const intl = useIntl();
 
-  function formatDate(date: string | Date | number, options: FormatDateOptions = {}) {
+  function formatDate(date: Maybe<string | Date | number>, options: FormatDateOptions = {}) {
+    if (date === undefined) {
+      return undefined;
+    }
+
     return intl.formatDate(date, {
       ...DEFAULT_DATE_FORMAT,
       ...formatOptions,

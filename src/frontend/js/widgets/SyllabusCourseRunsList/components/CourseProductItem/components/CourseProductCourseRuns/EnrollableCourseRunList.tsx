@@ -18,7 +18,7 @@ import CourseRunSection, { messages as sectionMessages } from './CourseRunSectio
 
 const messages = defineMessages({
   ariaSelectCourseRun: {
-    defaultMessage: 'Select course run from {start} to {end}.',
+    defaultMessage: 'Select course run from {start} {end, select, undefined {} other {to {end}}}.',
     description:
       'Accessible label used by screen reader when user checked a course run radio input.',
     id: 'components.EnrollableCourseRunList.ariaSelectCourseRun',
