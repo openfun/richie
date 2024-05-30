@@ -266,9 +266,13 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
           payment_id: paymentId,
         })
         .then(() => {
-          setPayment(undefined);
           handleError(PaymentErrorMessageId.ERROR_ABORT);
+        })
+        .catch(() => {
+          handleError();
         });
+    } else if (state === ComponentStates.ERROR) {
+      setPayment(undefined);
     }
   }, [error]);
 

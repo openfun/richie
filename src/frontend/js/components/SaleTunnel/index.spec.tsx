@@ -228,6 +228,15 @@ describe.each([
       // - wait for address to be loaded.
       await screen.findByText(getAddressLabel(billingAddress));
 
+      // - Order should not have been submitted yet
+      expect(
+        fetchMock
+          .calls()
+          .filter(
+            (call) => call[0] === `https://joanie.endpoint/api/v1.0/orders/${order.id}/submit/`,
+          ),
+      ).toHaveLength(0);
+
       // - User clicks on pay button
       await user.click($button);
 
@@ -243,6 +252,15 @@ describe.each([
       expect(fetchMock.lastUrl()).toBe(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
       );
+
+      // - Order should have been submitted once
+      expect(
+        fetchMock
+          .calls()
+          .filter(
+            (call) => call[0] === `https://joanie.endpoint/api/v1.0/orders/${order.id}/submit/`,
+          ),
+      ).toHaveLength(1);
 
       // - Spinner should be displayed
       screen.getByText('Payment in progress');
@@ -295,6 +313,15 @@ describe.each([
       nbApiCalls += 1; // useProductOrder call (invalidate from submit)
 
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
+
+      // - Order should not have been re-submitted
+      expect(
+        fetchMock
+          .calls()
+          .filter(
+            (call) => call[0] === `https://joanie.endpoint/api/v1.0/orders/${order.id}/submit/`,
+          ),
+      ).toHaveLength(2);
       expect(fetchMock.lastUrl()).toBe(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
       );
@@ -646,6 +673,101 @@ describe.each([
       screen.getByRole('button', {
         name: `Pay ${formatPrice(product.price, product.price_currency)}`,
       });
+    });
+
+    it('should resubmit the order when user retry to pay after a payment failure', async () => {
+      const product = ProductFactory().one();
+      const billingAddress = AddressFactory({
+        is_main: true,
+      }).one();
+      const { payment_info: paymentInfo, ...order } = OrderWithPaymentFactory().one();
+
+      fetchMock
+        .get(
+          `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+          [],
+        )
+        .post('https://joanie.endpoint/api/v1.0/orders/', order)
+        .patch(`https://joanie.endpoint/api/v1.0/orders/${order.id}/submit/`, {
+          payment_info: paymentInfo,
+        })
+        .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, {
+          ...order,
+          state: OrderState.SUBMITTED,
+        })
+        .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
+          overwriteRoutes: true,
+        });
+
+      render(<Wrapper product={product} />, {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      });
+      nbApiCalls += 1; // useProductOrder get order with filters
+      nbApiCalls += 1; // get user account call.
+      nbApiCalls += 1; // get user preferences call.
+      await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
+
+      const $terms = screen.getByLabelText(
+        'By checking this box, you accept the General Terms of Sale',
+      );
+      const user = userEvent.setup({ delay: null });
+      await user.click($terms);
+
+      const $button = screen.getByRole('button', {
+        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+      }) as HTMLButtonElement;
+
+      // - wait for address to be loaded.
+      await screen.findByText(getAddressLabel(billingAddress));
+
+      // - User clicks on pay button
+      await user.click($button);
+
+      // - Update the response of order list to react to order creation.
+      fetchMock.get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [
+          {
+            ...order,
+            state: OrderState.SUBMITTED,
+          },
+        ],
+        { overwriteRoutes: true },
+      );
+
+      // - Route to create order should have been called
+      nbApiCalls += 1; // order post create (invalidate queries)
+      nbApiCalls += 1; // order get (invalidate queries)
+      nbApiCalls += 1; // useProductOrder call (invalidate from create)
+      nbApiCalls += 1; // order submit (invalidate queries)
+      nbApiCalls += 1; // order get (invalidate queries)
+      nbApiCalls += 1; // useProductOrder call (invalidate from submit)
+
+      await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
+
+      // - Payment interface should be displayed
+      await screen.findByText('Payment interface component');
+
+      // - Simulate the payment has failed
+      await user.click(screen.getByTestId('payment-failure'));
+
+      // - An error message should be displayed
+      const $error = screen.getByText('An error occurred during payment. Please retry later.');
+      expect(document.activeElement).toBe($error);
+
+      // - Payment button should have been restore to its idle state
+      expect($button.disabled).toBe(false);
+      screen.getByRole('button', {
+        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+      });
+
+      // - User clicks on pay button again
+      await user.click($button);
+
+      nbApiCalls += 1; // order submit (invalidate queries)
+      nbApiCalls += 1; // order get (invalidate queries)
+      nbApiCalls += 1; // useProductOrder call (invalidate from submit)
+      await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
     });
 
     it('should show an error if user does not accept the terms', async () => {
