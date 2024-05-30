@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Use CB logo as fallback if credit card is unknown
 - Put CunninghamProvider at root level
+- Resubmit order on payment failure
 
 ## [2.26.0]
 
