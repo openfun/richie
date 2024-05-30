@@ -18,7 +18,7 @@ other {# course runs}
     id: 'components.SaleTunnelStepValidation.availableCourseRuns',
   },
   courseRunDates: {
-    defaultMessage: 'From {start} to {end}',
+    defaultMessage: 'From {start} {end, select, undefined {} other {to {end}}}',
     description: 'Course run date text',
     id: 'components.SaleTunnelStepValidation.courseRunDates',
   },

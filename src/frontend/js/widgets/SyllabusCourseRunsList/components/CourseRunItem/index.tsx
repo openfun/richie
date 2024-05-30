@@ -8,12 +8,12 @@ const messages = defineMessages({
   courseRunTitleWithDates: {
     id: 'components.CourseRunItem.courseRunTitleWithDates',
     description: 'Course run details displayed on the syllabus',
-    defaultMessage: '{title}, from {start} to {end}',
+    defaultMessage: '{title}, from {start} {end, select, undefined {} other {to {end}}}',
   },
   courseRunWithDates: {
     id: 'components.CourseRunItem.courseRunWithDates',
     description: 'Course run details displayed on the syllabus when it has no title',
-    defaultMessage: 'From {start} to {end}',
+    defaultMessage: 'From {start} {end, select, undefined {} other {to {end}}}',
   },
 });
 

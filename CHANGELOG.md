@@ -19,6 +19,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Resubmit order on payment failure
 - Render course run resource link with button look'n feel when it does not match
   a LMS Backend
+- Manage display of CourseRun dates when end date and/or enrollment date are
+  undefined
 
 ## [2.26.0]
 

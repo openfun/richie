@@ -35,7 +35,7 @@ const messages = defineMessages({
     id: 'components.CourseProductItem.loadingInitial',
   },
   fromTo: {
-    defaultMessage: 'From {from} to {to}',
+    defaultMessage: 'From {from} {to, select, undefined {} other {to {to}}}',
     description: 'Course run date range',
     id: 'components.CourseProductItem.fromTo',
   },
@@ -105,7 +105,7 @@ const Header = ({ product, order, hasPurchased, canPurchase, compact }: HeaderPr
               {...messages.fromTo}
               values={{
                 from: formatDate(minDate!),
-                to: formatDate(maxDate!),
+                to: formatDate(maxDate),
               }}
             />
           </p>
