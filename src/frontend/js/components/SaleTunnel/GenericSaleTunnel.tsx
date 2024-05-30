@@ -10,6 +10,7 @@ import { CourseProductEvent } from 'types/web-analytics';
 import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { SaleTunnelInformation } from 'components/SaleTunnel/SaleTunnelInformation';
 import { useEnrollments } from 'hooks/useEnrollments';
+import SaleTunnelNotValidated from './SaleTunnelNotValidated';
 
 export interface SaleTunnelContextType {
   props: SaleTunnelProps;
@@ -18,7 +19,7 @@ export interface SaleTunnelContextType {
   webAnalyticsEventKey: string;
 
   // internal
-  onPaymentSuccess: () => void;
+  onPaymentSuccess: (validated?: boolean) => void;
   step: SaleTunnelStep;
 
   // meta
@@ -46,6 +47,7 @@ export const useSaleTunnelContext = () => {
 export enum SaleTunnelStep {
   PAYMENT,
   SUCCESS,
+  NOT_VALIDATED,
 }
 
 interface GenericSaleTunnelProps extends SaleTunnelProps {
@@ -89,8 +91,12 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       setBillingAddress,
       creditCard,
       setCreditCard,
-      onPaymentSuccess: () => {
-        setStep(SaleTunnelStep.SUCCESS);
+      onPaymentSuccess: (validated: boolean = true) => {
+        if (validated) {
+          setStep(SaleTunnelStep.SUCCESS);
+        } else {
+          setStep(SaleTunnelStep.NOT_VALIDATED);
+        }
         WebAnalyticsAPIHandler()?.sendCourseProductEvent(
           CourseProductEvent.PAYMENT_SUCCEED,
           props.eventKey,
@@ -143,6 +149,8 @@ export const GenericSaleTunnelInner = (props: GenericSaleTunnelProps) => {
       return <GenericSaleTunnelPaymentStep {...props} />;
     case SaleTunnelStep.SUCCESS:
       return <GenericSaleTunnelSuccessStep {...props} />;
+    case SaleTunnelStep.NOT_VALIDATED:
+      return <GenericSaleTunnelNotValidatedStep {...props} />;
   }
   throw new Error('Invalid step: ' + step);
 };
@@ -187,7 +195,15 @@ export const GenericSaleTunnelPaymentStep = (props: GenericSaleTunnelProps) => {
 export const GenericSaleTunnelSuccessStep = (props: SaleTunnelProps) => {
   return (
     <Modal {...props} size={ModalSize.MEDIUM}>
-      <SaleTunnelSuccess closeModal={() => props.onClose()} />
+      <SaleTunnelSuccess closeModal={props.onClose} />
+    </Modal>
+  );
+};
+
+export const GenericSaleTunnelNotValidatedStep = (props: SaleTunnelProps) => {
+  return (
+    <Modal {...props} size={ModalSize.MEDIUM}>
+      <SaleTunnelNotValidated closeModal={props.onClose} />
     </Modal>
   );
 };

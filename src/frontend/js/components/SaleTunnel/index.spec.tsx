@@ -455,7 +455,7 @@ describe.each([
       expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     });
 
-    it('should display an error message if order is not validated after a given delay', async () => {
+    it('should render SaleTunnelNotValidated if order is not validated after a given delay', async () => {
       const product = ProductFactory().one();
       const billingAddress = AddressFactory({
         is_main: true,
@@ -548,6 +548,7 @@ describe.each([
       screen.getByText('Payment in progress');
 
       fetchMock.resetHistory();
+      nbApiCalls = 0;
       // - Wait until order has been polled 29 times.
       await act(async () => {
         await jest.advanceTimersByTimeAsync(
@@ -557,21 +558,40 @@ describe.each([
 
       await waitFor(async () => {
         expect(fetchMock.calls()).toHaveLength(PAYMENT_SETTINGS.pollLimit - 1);
+        nbApiCalls += PAYMENT_SETTINGS.pollLimit - 1;
       });
 
       // - This round should be the last
       await act(async () => {
         jest.runOnlyPendingTimers();
+        nbApiCalls += 1; // last poll round
       });
 
-      // - An error message should be displayed and focused (for screen reader users)
-      const $error = screen.getByText(
-        'Your payment has succeeded but your order validation is taking too long, you can close this dialog and come back later.',
-      );
-      expect(document.activeElement).toBe($error);
+      nbApiCalls += 1; // useProductOrder call (invalidate)
+      nbApiCalls += 1; // orders get (invalidate queries)
 
-      // - Payment button should be disabled
-      expect($button.disabled).toBe(true);
+      // - The SaleTunnelNotValidated component should be rendered
+      screen.getByTestId('generic-sale-tunnel-not-validated-step');
+      screen.getByText("Sorry, you'll have to wait a little longer!");
+
+      // If productType is credential, the button should redirect to the dashboard
+      if (productType === ProductType.CREDENTIAL) {
+        const $link = screen.getByRole('link', {
+          name: 'Close',
+        });
+        expect($link.getAttribute('href')).toBe(`/en/dashboard/courses/orders/${order.id}`);
+      } else {
+        // Otherwise, the button should close the modal
+        screen.getByRole('button', {
+          name: 'Close',
+        });
+      }
+
+      // - And poller should be stopped
+      await act(async () => {
+        jest.runOnlyPendingTimers();
+      });
+      expect(fetchMock.calls()).toHaveLength(nbApiCalls);
     }, 10000);
 
     it('should render an error message when payment failed', async () => {

@@ -33,13 +33,6 @@ const messages = defineMessages({
     description: 'Error message shown when payment creation request failed.',
     id: 'components.PaymentButton.errorDefault',
   },
-  errorPollingLimit: {
-    defaultMessage:
-      'Your payment has succeeded but your order validation is taking too long, you can close this dialog and come back later.',
-    description:
-      'Error message shown when the polling limit has been reached and the order is not yet validated.',
-    id: 'components.PaymentButton.errorPollingLimit',
-  },
   errorFullProduct: {
     defaultMessage: 'There are no more places available for this product.',
     description:
@@ -246,9 +239,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     const checkOrderValidity = async () => {
       if (round >= PAYMENT_SETTINGS.pollLimit) {
         timeoutRef.current = undefined;
-        // @TODO Instead of displaying a raw error message, we could call onSuccess with a "special" argument
-        // to display a different message in the SaleTunnelSuccess component.
-        handleError(PaymentErrorMessageId.ERROR_POLLING_LIMIT);
+        onPaymentSuccessRef.current(false);
       } else {
         const isValidated = await isOrderValidated(payment!.order_id);
         if (isValidated) {
@@ -298,7 +289,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     <>
       {renderTermsCheckbox()}
       <Button
-        disabled={isBusy || error === PaymentErrorMessageId.ERROR_POLLING_LIMIT}
+        disabled={isBusy}
         onClick={createOrder}
         data-testid={order && 'payment-button-order-loaded'}
         fullWidth={isMobile}

@@ -102,3 +102,32 @@
   font-weight: var(--c--theme--font--weights--bold);
   text-align: left;
 }
+
+.sale-tunnel-end {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  &__title {
+    color: r-theme-val(steps-content, title-color);
+    font-size: 1.5rem;
+  }
+
+  &__content {
+    color: r-theme-val(steps-content, content-color);
+    font-size: 0.875rem;
+    line-height: 1.3em;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+
+  &__footer {
+    margin-top: 2.5rem;
+  }
+}
