@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add WarningIcon component
+
 ### Changed
 
 - Improve Lyra error management to abort payment properly
