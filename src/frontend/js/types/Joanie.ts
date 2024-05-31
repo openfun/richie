@@ -454,6 +454,10 @@ export interface OrderCredentialCreationPayload extends AbstractOrderProductCrea
 
 export type OrderCreationPayload = OrderCertificateCreationPayload | OrderCredentialCreationPayload;
 
+export type OrderSubmitInstallmentPayment = {
+  credit_card_id?: string;
+};
+
 interface OrderAbortPayload {
   id: Order['id'];
   payment_id?: string;
@@ -576,6 +580,10 @@ interface APIUser {
     };
     submit(payload: OrderSubmitPayload): Promise<OrderPaymentInfo>;
     submit_for_signature(id: string): Promise<ContractInvitationLinkResponse>;
+    submit_installment_payment(
+      id: string,
+      payload?: OrderSubmitInstallmentPayment,
+    ): Promise<Payment>;
   };
   certificates: {
     download(id: string): Promise<File>;
