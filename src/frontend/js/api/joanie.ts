@@ -97,6 +97,7 @@ export const getRoutes = () => {
           download: `${baseUrl}/orders/:id/invoice/`,
         },
         submit_for_signature: `${baseUrl}/orders/:id/submit_for_signature/`,
+        submit_installment_payment: `${baseUrl}/orders/:id/submit_installment_payment/`,
       },
       certificates: {
         download: `${baseUrl}/certificates/:id/download/`,
@@ -290,6 +291,11 @@ const API = (): Joanie.API => {
         submit_for_signature: async (id) =>
           fetchWithJWT(ROUTES.user.orders.submit_for_signature.replace(':id', id), {
             method: 'POST',
+          }).then(checkStatus),
+        submit_installment_payment: async (id, payload) =>
+          fetchWithJWT(ROUTES.user.orders.submit_installment_payment.replace(':id', id), {
+            method: 'POST',
+            body: JSON.stringify(payload),
           }).then(checkStatus),
       },
       enrollments: {
