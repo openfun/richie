@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add order payment information in the dashboard, including a specific
+  interface displayed on failed installment in order to retry the payment.
+
 ## [2.29.0]
 
 ### Added

@@ -21,11 +21,19 @@ import {
   CertificateFactory,
   CourseLightFactory,
   CourseRunFactory,
-  EnrollmentFactory,
   CredentialOrderFactory,
+  CredentialOrderWithPaymentFactory,
+  EnrollmentFactory,
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
-import { Certificate, CourseLight, CourseRun, CredentialOrder, OrderState } from 'types/Joanie';
+import {
+  Certificate,
+  CourseLight,
+  CourseRun,
+  CredentialOrder,
+  OrderState,
+  PaymentScheduleState,
+} from 'types/Joanie';
 import { resolveAll } from 'utils/resolveAll';
 import { confirm } from 'utils/indirection/window';
 import { Priority } from 'types';
@@ -40,6 +48,7 @@ import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { OrderHelper } from 'utils/OrderHelper';
 import { DashboardTest } from '../../DashboardTest';
 import { DashboardItemOrder } from './DashboardItemOrder';
 
@@ -53,7 +62,14 @@ jest.mock('utils/context', () => ({
 
 jest.mock('utils/indirection/window', () => ({
   confirm: jest.fn(() => true),
+  matchMedia: () => ({
+    matches: true,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  }),
 }));
+
+jest.mock('../../../../../components/PaymentInterfaces');
 
 describe('<DashboardItemOrder/>', () => {
   setupJoanieSession();
@@ -851,5 +867,97 @@ describe('<DashboardItemOrder/>', () => {
     within(block).getByText(new RegExp(order.organization?.address?.city!));
     within(block).getByText(new RegExp(order.organization?.address?.postcode!));
     within(block).getByText(new RegExp(order.organization?.address?.country!));
+  });
+
+  it('renders a writable order with failed payment and retry it successfully', async () => {
+    const { payment_info: paymentInfo, ...order } = CredentialOrderWithPaymentFactory().one();
+
+    const validOrder = { ...order };
+    validOrder.payment_schedule = [
+      { ...order.payment_schedule![0] },
+      { ...order.payment_schedule![1] },
+      { ...order.payment_schedule![2] },
+    ];
+    fetchMock
+      .post(
+        `https://joanie.endpoint/api/v1.0/orders/${order.id}/submit_installment_payment/`,
+        paymentInfo,
+      )
+      .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, validOrder);
+
+    order.state = OrderState.FAILED_PAYMENT;
+    order.payment_schedule![1].state = PaymentScheduleState.FAILED;
+
+    const formatPrice = (price: number, currency: string) =>
+      new Intl.NumberFormat('en', {
+        currency,
+        style: 'currency',
+      }).format(price);
+
+    const { product } = mockCourseProductWithOrder(order);
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/orders/',
+      { results: [order], next: null, previous: null, count: null },
+      { overwriteRoutes: true },
+    );
+
+    render(
+      <DashboardTest initialRoute={LearnerDashboardPaths.ORDER.replace(':orderId', order.id)} />,
+      { wrapper: BaseJoanieAppWrapper },
+    );
+
+    await screen.findByRole('heading', { level: 5, name: product.title });
+    screen.getByText(/a payment failed, please update your payment method/i);
+    const failedInstallment = OrderHelper.getFailedInstallment(order)!;
+    const button = screen.getByRole('button', {
+      name: 'Pay ' + formatPrice(failedInstallment.amount, failedInstallment.currency),
+    });
+    const user = userEvent.setup();
+
+    await user.click(button);
+
+    // Retry modal is shown.
+    screen.getByText('Retry payment');
+    screen.getByText(
+      /The payment failed, please choose another payment method or add a new one during the payment/,
+    );
+    screen.getByText('Use another credit card during payment');
+
+    // Prepare for cache invalidation.
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/orders/',
+      { results: [validOrder], next: null, previous: null, count: null },
+      { overwriteRoutes: true },
+    );
+
+    // Click on pay button.
+    const payButton = screen.getByTestId('order-payment-retry-modal-submit-button');
+    expect(payButton.innerHTML.replace('&nbsp;', ' ')).toEqual(
+      'Pay ' +
+        formatPrice(failedInstallment.amount, failedInstallment.currency).replace(
+          /(\u202F|\u00a0)/g,
+          ' ',
+        ),
+    );
+    await user.click(payButton);
+    // Pay via mocked payment interface
+    screen.getByText('Payment interface component');
+    await user.click(screen.getByTestId('payment-success'));
+
+    // Make sure retry modal is closed.
+    expect(screen.queryByText('Retry payment')).not.toBeInTheDocument();
+
+    // Success modal is shown, close it.
+    screen.getByText('Payment successful');
+    screen.getByText('The payment was successful');
+    const okButton = screen.getByRole('button', { name: 'Ok' });
+    await user.click(okButton);
+
+    // Warning alert is not shown anymore.
+    await waitFor(() => {
+      expect(
+        screen.queryByText(/a payment failed, please update your payment method/i),
+      ).not.toBeInTheDocument();
+    });
   });
 });
