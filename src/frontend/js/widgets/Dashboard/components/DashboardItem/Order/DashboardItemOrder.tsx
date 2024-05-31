@@ -1,5 +1,5 @@
-import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
-import { Button } from '@openfun/cunningham-react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { Alert, Button, useModal, VariantType } from '@openfun/cunningham-react';
 import classNames from 'classnames';
 import { generatePath } from 'react-router-dom';
 import { CourseLight, CredentialOrder, Product } from 'types/Joanie';
@@ -16,6 +16,8 @@ import ContractStatus from 'components/ContractStatus';
 import SignContractButton from 'components/SignContractButton';
 import { AddressView } from 'components/Address';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { OrderPaymentDetailsModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderPaymentDetailsModal';
+import { OrderPaymentRetryModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderPaymentRetryModal';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../CourseEnrolling';
 import { DashboardItem } from '../index';
@@ -77,6 +79,31 @@ const messages = defineMessages({
     id: 'components.DashboardItemOrder.organizationDpoContactLabel',
     description: 'Label for the organization DPO contact',
     defaultMessage: 'Data protection email',
+  },
+  paymentTitle: {
+    id: 'components.DashboardItemOrder.paymentTitle',
+    description: 'Label for the payment block',
+    defaultMessage: 'Payment',
+  },
+  paymentLabel: {
+    id: 'components.DashboardItemOrder.paymentLabel',
+    description: 'Label for the payment block',
+    defaultMessage: 'You can see and manage all installments.',
+  },
+  paymentButton: {
+    id: 'components.DashboardItemOrder.paymentButton',
+    description: 'Button label for the payment block',
+    defaultMessage: 'Manage payment',
+  },
+  paymentNeededMessage: {
+    id: 'components.DashboardItemOrder.paymentNeededMessage',
+    description: 'Message displayed when payment is needed',
+    defaultMessage: 'A payment failed, please update your payment method',
+  },
+  paymentNeededButton: {
+    id: 'components.DashboardItemOrder.paymentNeededButton',
+    description: 'Button label for the payment needed message',
+    defaultMessage: 'Pay {amount}',
   },
 });
 
@@ -299,8 +326,69 @@ const OrganizationBlock = ({ order, product }: { order: CredentialOrder; product
             </div>
           </div>
         )}
+        <Installment order={order} />
       </div>
     </div>
+  );
+};
+
+const Installment = ({ order }: { order: CredentialOrder }) => {
+  const modal = useModal();
+  const retryModal = useModal();
+  const failedInstallment = OrderHelper.getFailedInstallment(order);
+  const intl = useIntl();
+
+  const pay = async () => {
+    retryModal.open();
+  };
+
+  return (
+    <>
+      <div className="dashboard-splitted-card__item">
+        <div
+          className={classNames('dashboard-splitted-card__item__title', {
+            'dashboard-splitted-card__item__title--dot': !!failedInstallment,
+          })}
+        >
+          <span>
+            <FormattedMessage {...messages.paymentTitle} />
+          </span>
+        </div>
+        {failedInstallment && (
+          <Alert
+            className="mb-t"
+            type={VariantType.ERROR}
+            buttons={
+              <Button size="small" onClick={pay}>
+                <FormattedMessage
+                  {...messages.paymentNeededButton}
+                  values={{
+                    amount: intl.formatNumber(failedInstallment.amount, {
+                      style: 'currency',
+                      currency: failedInstallment.currency,
+                    }),
+                  }}
+                />
+              </Button>
+            }
+          >
+            <FormattedMessage {...messages.paymentNeededMessage} />
+          </Alert>
+        )}
+        <div className="dashboard-splitted-card__item__description">
+          <FormattedMessage {...messages.paymentLabel} />
+        </div>
+        <div className="dashboard-splitted-card__item__actions">
+          <Button size="small" color="secondary" onClick={modal.open}>
+            <FormattedMessage {...messages.paymentButton} />
+          </Button>
+        </div>
+      </div>
+      <OrderPaymentDetailsModal {...modal} order={order} />
+      {failedInstallment && (
+        <OrderPaymentRetryModal {...retryModal} installment={failedInstallment} order={order} />
+      )}
+    </>
   );
 };
 
