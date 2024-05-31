@@ -74,6 +74,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Ongoing product displayed on the syllabus without active enrollment
   now link to the order details page in the learner dashboard.
 - Add new sale tunnel
+- Add order payment information in the dashboard, including a specific
+  interface displayed on failed installment in order to retry the payment.
 
 ### Changed
 
