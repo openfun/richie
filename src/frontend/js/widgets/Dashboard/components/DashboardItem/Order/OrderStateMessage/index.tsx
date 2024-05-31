@@ -36,6 +36,9 @@ const OrderStateMessage = ({ order, contractDefinition, messages }: OrderStateMe
     [OrderStatus.WAITING_COUNTER_SIGNATURE]: messages.statusWaitingCounterSignature,
     [OrderStatus.COMPLETED]: messages.statusCompleted,
     [OrderStatus.ON_GOING]: messages.statusOnGoing,
+    [OrderStatus.NO_PAYMENT]: messages.statusNoPayment,
+    [OrderStatus.PENDING_PAYMENT]: messages.statusPendingPayment,
+    [OrderStatus.FAILED_PAYMENT]: messages.statusFailedPayment,
   };
   const status = OrderHelper.getState(order, contractDefinition);
 
