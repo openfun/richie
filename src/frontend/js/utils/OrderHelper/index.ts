@@ -16,6 +16,9 @@ export enum OrderStatus {
   WAITING_COUNTER_SIGNATURE = 'waiting_counter_signature',
   COMPLETED = 'completed',
   ON_GOING = 'on_going',
+  NO_PAYMENT = 'no_payment',
+  PENDING_PAYMENT = 'pending_payment',
+  FAILED_PAYMENT = 'failed_payment',
 }
 
 /**
@@ -44,6 +47,9 @@ export class OrderHelper {
       [OrderState.SUBMITTED]: OrderStatus.SUBMITTED,
       [OrderState.PENDING]: OrderStatus.PENDING,
       [OrderState.CANCELED]: OrderStatus.CANCELED,
+      [OrderState.NO_PAYMENT]: OrderStatus.NO_PAYMENT,
+      [OrderState.PENDING_PAYMENT]: OrderStatus.PENDING_PAYMENT,
+      [OrderState.FAILED_PAYMENT]: OrderStatus.PENDING_PAYMENT,
     };
 
     if (order.state in orderStatusMap) {
@@ -86,5 +92,9 @@ export class OrderHelper {
       order.contract.student_signed_on &&
       !order.contract.organization_signed_on
     );
+  }
+
+  static getFailedInstallment(order: Order) {
+    return order.payment_schedule?.find((installment) => installment.state === 'refused');
   }
 }
