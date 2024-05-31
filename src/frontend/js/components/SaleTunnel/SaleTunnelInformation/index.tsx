@@ -2,7 +2,6 @@ import { Alert, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
 import { AddressSelector } from 'components/SaleTunnel/AddressSelector';
 import { CreditCardSelector } from 'components/CreditCardSelector';
-import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import OpenEdxFullNameForm from 'components/OpenEdxFullNameForm';
 import { useSession } from 'contexts/SessionContext';
@@ -154,9 +153,7 @@ const PaymentScheduleBlock = () => {
       <Alert type={VariantType.INFO}>
         The first payment occurs in 14 days, you will be notified to pay the first 30%.
       </Alert>
-      <div className="mt-t">
-        <PaymentScheduleGrid />
-      </div>
+      <div className="mt-t">{/* <PaymentScheduleGrid /> */}</div>
     </div>
   );
 };

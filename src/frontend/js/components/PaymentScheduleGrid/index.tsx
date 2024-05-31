@@ -1,7 +1,14 @@
 import { DataList } from '@openfun/cunningham-react';
+import { useIntl } from 'react-intl';
 import { StringHelper } from 'utils/StringHelper';
+import { OrderPaymentSchedule, PaymentScheduleState } from 'types/Joanie';
 
-export const PaymentScheduleGrid = () => {
+export const PaymentScheduleGrid = ({
+  paymentSchedule,
+}: {
+  paymentSchedule: OrderPaymentSchedule;
+}) => {
+  const intl = useIntl();
   return (
     <div className="payment-schedule__grid">
       <DataList
@@ -21,71 +28,29 @@ export const PaymentScheduleGrid = () => {
               ),
           },
           {
-            id: 'status',
+            id: 'state',
             renderCell: (context) =>
-              context.row.status ? <StatusPill status={context.row.status} /> : '',
-          },
-          { field: 'message' },
-        ]}
-        rows={[
-          {
-            id: '1',
-            date: '2023-03-15',
-            amount: '€ 100.00',
-            status: PaymentScheduleStatus.PAID,
-            message: 'First payment (30%)',
-          },
-          {
-            id: '2',
-            date: '2023-04-15',
-            amount: '€ 100.00',
-            status: PaymentScheduleStatus.REQUIRE_PAYMENT,
-            message: 'Periodic',
-          },
-          {
-            id: '3',
-            date: '2023-05-15',
-            amount: '€ 100.00',
-            status: PaymentScheduleStatus.FAILED,
-            message: 'Periodic',
-          },
-          {
-            id: '4',
-            date: '2023-06-15',
-            amount: '€ 100.00',
-            status: PaymentScheduleStatus.INCOMING,
-            message: 'Periodic',
-          },
-          {
-            id: '5',
-            date: '2023-06-15',
-            amount: '€ 100.00',
-            status: PaymentScheduleStatus.PENDING,
-            message: 'Periodic',
-          },
-          {
-            id: 'total',
-            date: 'Total',
-            amount: '€ 1150.00',
+              context.row.state ? <StatusPill state={context.row.state} /> : '',
           },
         ]}
+        rows={paymentSchedule.map((installment) => ({
+          id: installment.due_date,
+          date: installment.due_date,
+          amount: intl.formatNumber(installment.amount, {
+            style: 'currency',
+            currency: installment.currency,
+          }),
+          state: installment.state,
+        }))}
       />
     </div>
   );
 };
 
-export enum PaymentScheduleStatus {
-  INCOMING = 'incoming',
-  PENDING = 'pending',
-  PAID = 'paid',
-  FAILED = 'failed',
-  REQUIRE_PAYMENT = 'require_payment',
-}
-
-export const StatusPill = ({ status }: { status: PaymentScheduleStatus }) => {
+export const StatusPill = ({ state }: { state: PaymentScheduleState }) => {
   return (
-    <span className={`status-pill status-pill--${status}`}>
-      {StringHelper.capitalizeFirst(status.replace('_', ' '))}
+    <span className={`status-pill status-pill--${state}`}>
+      {StringHelper.capitalizeFirst(state.replace('_', ' '))}
     </span>
   );
 };

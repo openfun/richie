@@ -4,40 +4,42 @@ import {
   Address,
   Certificate,
   CertificateDefinition,
-  CourseListItem,
+  CertificateOrder,
+  CertificateOrderWithPaymentInfo,
+  CertificateProduct,
+  Contract,
+  ContractDefinition,
+  ContractLight,
   CourseLight,
+  CourseListItem,
   CourseProduct,
   CourseProductRelation,
   CourseRun,
+  CredentialOrder,
+  CredentialOrderWithPaymentInfo,
+  CredentialProduct,
   CreditCard,
   CreditCardBrand,
+  DefinitionResourcesProduct,
   Enrollment,
+  EnrollmentLight,
   EnrollmentState,
+  JoanieFile,
+  NestedCertificateOrder,
+  NestedCourseOrder,
+  NestedCredentialOrder,
+  Order,
+  OrderEnrollment,
+  OrderGroup,
+  OrderInstallment,
   OrderLite,
   OrderState,
   Organization,
   OrganizationLight,
+  PaymentScheduleState,
   ProductType,
   TargetCourse,
-  JoanieFile,
-  Contract,
-  OrderEnrollment,
-  ContractDefinition,
-  NestedCredentialOrder,
-  NestedCertificateOrder,
-  Order,
-  CertificateOrder,
-  CredentialOrder,
-  CertificateOrderWithPaymentInfo,
-  CredentialOrderWithPaymentInfo,
-  EnrollmentLight,
-  OrderGroup,
-  CertificateProduct,
-  CredentialProduct,
-  NestedCourseOrder,
   UserLight,
-  ContractLight,
-  DefinitionResourcesProduct,
 } from 'types/Joanie';
 import { Payment, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
@@ -347,6 +349,15 @@ export const CourseListItemFactory = factory((): CourseListItem => {
   };
 });
 
+export const OrderInstallmentFactory = factory((): OrderInstallment => {
+  return {
+    currency: faker.finance.currencyCode(),
+    amount: faker.number.int(),
+    due_date: faker.date.future().toISOString(),
+    state: PaymentScheduleState.PAID,
+  };
+});
+
 export const OrderEnrollmentFactory = factory((): OrderEnrollment => {
   return {
     id: faker.string.uuid(),
@@ -415,6 +426,7 @@ export const CredentialOrderFactory = factory((): CredentialOrder => {
     ...AbstractOrderFactory().one(),
     course: CourseLightFactory().one(),
     enrollment: null,
+    payment_schedule: OrderInstallmentFactory().many(3),
   };
   return order;
 });
