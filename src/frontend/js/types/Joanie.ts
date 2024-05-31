@@ -263,10 +263,27 @@ export enum OrderState {
   SUBMITTED = 'submitted',
   CANCELED = 'canceled',
   PENDING = 'pending',
+  PENDING_PAYMENT = 'pending_payment',
   VALIDATED = 'validated',
+  NO_PAYMENT = 'no_payment',
+  FAILED_PAYMENT = 'failed_payment',
 }
 
 export const ACTIVE_ORDER_STATES = [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED];
+
+export enum PaymentScheduleState {
+  PENDING = 'pending',
+  PAID = 'paid',
+  FAILED = 'refused',
+}
+
+export interface OrderInstallment {
+  amount: number;
+  currency: string;
+  due_date: string;
+  state: PaymentScheduleState;
+}
+export type OrderPaymentSchedule = OrderInstallment[];
 
 export interface Order {
   id: string;
@@ -286,6 +303,7 @@ export interface Order {
   organization_id: Organization['id'];
   organization: Organization;
   order_group_id?: OrderGroup['id'];
+  payment_schedule?: OrderPaymentSchedule;
 }
 
 export interface CredentialOrder extends Order {
