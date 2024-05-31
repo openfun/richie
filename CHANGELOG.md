@@ -12,11 +12,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Added new 'large-banner' plugin template variant `compacted-banner` that
   is more compacted than variant `hero-intro`.
+- Add order payment information in the dashboard, including a specific
+  interface displayed on failed installment in order to retry the payment.
 
 ### Changed
 
 - Remove News subheader in blogpost detail page
-
 
 ## [2.29.2]
 

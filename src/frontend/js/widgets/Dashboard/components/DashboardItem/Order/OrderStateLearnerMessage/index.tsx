@@ -29,6 +29,12 @@ export const messages = defineMessages({
       'Status shown on the dashboard order item when order is validated with certificate',
     defaultMessage: 'Completed',
   },
+  statusPendingPayment: {
+    id: 'components.DashboardItem.Order.OrderStateMessage.statusPendingPayment',
+    description:
+      'Status shown on the dashboard order item when order is validated with certificate and pending payment',
+    defaultMessage: 'Completed',
+  },
   statusWaitingSignature: {
     id: 'components.DashboardItem.Order.OrderStateMessage.statusWaitingSignature',
     description:
@@ -45,6 +51,16 @@ export const messages = defineMessages({
     id: 'components.DashboardItem.Order.OrderStateMessage.statusCanceled',
     description: 'Status shown on the dashboard order item when order is canceled',
     defaultMessage: 'Canceled',
+  },
+  statusNoPayment: {
+    id: 'components.DashboardItem.Order.OrderStateMessage.statusNoPayment',
+    description: 'Status shown on the dashboard order item when order is in no payment state',
+    defaultMessage: 'Failed payment',
+  },
+  statusFailedPayment: {
+    id: 'components.DashboardItem.Order.OrderStateMessage.statusFailedPayment',
+    description: 'Status shown on the dashboard order item when order is in failed payment state',
+    defaultMessage: 'Failed payment',
   },
   statusOther: {
     id: 'components.DashboardItem.Order.OrderStateMessage.statusOther',
