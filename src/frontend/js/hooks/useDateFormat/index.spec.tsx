@@ -34,4 +34,16 @@ describe('useDateFormat', () => {
 
     expect(dateFormatter.current(undefined)).toBe(undefined);
   });
+
+  it('date is null it should return undefined', () => {
+    const { result: dateFormatter } = renderHook(
+      () =>
+        useDateFormat({
+          month: 'long',
+        }),
+      { wrapper: IntlWrapper },
+    );
+
+    expect(dateFormatter.current(null)).toBe(undefined);
+  });
 });
