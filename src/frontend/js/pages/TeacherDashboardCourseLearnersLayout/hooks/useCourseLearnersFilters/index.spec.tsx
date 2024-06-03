@@ -1,6 +1,5 @@
 import fetchMock from 'fetch-mock';
-import { renderHook, waitFor } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { CourseProductRelationFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { JoanieAppWrapper, setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
