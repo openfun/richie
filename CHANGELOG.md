@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- useDateFormat did not return undefined with null values
+
 ## [2.27.0]
 
 ### Added

@@ -30,12 +30,12 @@ const messages = defineMessages({
   runPeriod: {
     id: 'components.SyllabusCourseRun.enrollmentPeriod',
     description: 'Enrollment date of an opened course run block',
-    defaultMessage: 'From {startDate} to {endDate}',
+    defaultMessage: 'From {startDate} {endDate, select, undefined {} other {to {endDate}}}',
   },
   coursePeriod: {
     id: 'components.SyllabusCourseRun.coursePeriod',
     description: 'Course date of an opened course run block',
-    defaultMessage: 'From {startDate} to {endDate}',
+    defaultMessage: 'From {startDate} {endDate, select, undefined {} other {to {endDate}}}',
   },
 });
 
