@@ -48,7 +48,7 @@ dependencies = [
     "exrex==0.11.0",
     "importlib-metadata",
     "oauthlib==3.2.2",
-    "requests==2.32.2",
+    "requests==2.32.3",
 ]
 
 [project.urls]
@@ -77,7 +77,7 @@ dev = [
     "flake8-pyproject==1.2.3",
     "htmlmin==0.1.12",
     "ipdb==0.13.13",
-    "ipython==8.24.0",
+    "ipython==8.25.0",
     "isort==5.13.2",
     "lxml==5.2.2",
     "msgpack==1.0.8",
