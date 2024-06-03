@@ -213,7 +213,7 @@
   },
   "components.CourseProductItem.fromTo": {
     "description": "Course run date range",
-    "message": "From {from} to {to}"
+    "message": "From {from} {to, select, undefined {} other {to {to}}}"
   },
   "components.CourseProductItem.loadingInitial": {
     "description": "Accessible text for the initial loading spinner displayed when product is fetching",
@@ -293,11 +293,11 @@
   },
   "components.CourseRunItem.courseRunTitleWithDates": {
     "description": "Course run details displayed on the syllabus",
-    "message": "{title}, from {start} to {end}"
+    "message": "{title}, from {start} {end, select, undefined {} other {to {end}}}"
   },
   "components.CourseRunItem.courseRunWithDates": {
     "description": "Course run details displayed on the syllabus when it has no title",
-    "message": "From {start} to {end}"
+    "message": "From {start} {end, select, undefined {} other {to {end}}}"
   },
   "components.CourseRunItemWithEnrollment.enrolled": {
     "description": "Help text for users are enrolled in the course run.",
@@ -317,7 +317,7 @@
   },
   "components.CourseRunList.dataCourseRunPeriod": {
     "description": "Message displayed in course run datagrid for course run period",
-    "message": "From {from} to {to}"
+    "message": "From {from} {to, select, undefined {} other {to {to}}}"
   },
   "components.CourseRunList.noCourseRunAvailable": {
     "description": "Text displayed when no course run are opened for the course",
@@ -877,7 +877,7 @@
   },
   "components.EnrollableCourseRunList.ariaSelectCourseRun": {
     "description": "Accessible label used by screen reader when user checked a course run radio input.",
-    "message": "Select course run from {start} to {end}."
+    "message": "Select course run from {start} {end, select, undefined {} other {to {end}}}."
   },
   "components.EnrollableCourseRunList.enroll": {
     "description": "Text label for the enroll button",
@@ -919,9 +919,17 @@
     "description": "Accessible label displayed when user is being unenrolled.",
     "message": "Unenrolling..."
   },
+  "components.EnrollmentDate.enrollClosed": {
+    "description": "Text label for the enrollment dates when enrollment is passed",
+    "message": "Enrollment closed since {date}"
+  },
   "components.EnrollmentDate.enrollFrom": {
     "description": "Text label for the enrollment dates when enrollment is not yet opened",
     "message": "Enrollment from {date}"
+  },
+  "components.EnrollmentDate.enrollSince": {
+    "description": "Text label for the enrollment dates when enrollment opened and never closed",
+    "message": "Enrollment open since {date}"
   },
   "components.EnrollmentDate.enrollUntil": {
     "description": "Text label for the enrollment dates when enrollment is opened",
@@ -1223,37 +1231,13 @@
     "description": "Title of clickable link included in the terms message",
     "message": "Open a preview of the General Terms of Sale"
   },
-  "components.SaleTunnelStepResume.congratulations": {
-    "description": "Text displayed to thank user for his order",
-    "message": "Congratulations!"
-  },
-  "components.SaleTunnelStepResume.cta": {
-    "description": "Label to the call to action to close sale tunnel",
-    "message": "Start this course now!"
-  },
-  "components.SaleTunnelStepResume.ctaSignature": {
-    "description": "Label to the call to action to close sale tunnel if there is a pending signature",
-    "message": "Sign the training contract"
-  },
-  "components.SaleTunnelStepResume.successDetailMessage": {
-    "description": "Text to remind that order's invoice will be send by email soon",
-    "message": "You will receive your invoice by email in a few moments."
-  },
-  "components.SaleTunnelStepResume.successDetailSignatureMessage": {
-    "description": "Text to remind that order needs to be signed",
-    "message": "In order to enroll to course runs you first need to sign the training contract."
-  },
-  "components.SaleTunnelStepResume.successMessage": {
-    "description": "Message to confirm that order has been created",
-    "message": "Your order has been successfully created."
-  },
   "components.SaleTunnelStepValidation.availableCourseRuns": {
     "description": "Course runs available text",
     "message": "{ count, plural, =0 {No course runs} one {One course run} other {# course runs} } available"
   },
   "components.SaleTunnelStepValidation.courseRunDates": {
     "description": "Course run date text",
-    "message": "From {start} to {end}"
+    "message": "From {start} {end, select, undefined {} other {to {end}}}"
   },
   "components.SaleTunnelStepValidation.language": {
     "description": "Label displayed before the list of languages",
@@ -1262,6 +1246,46 @@
   "components.SaleTunnelStepValidation.noCourseRunAvailable": {
     "description": "Text displayed when no course run are opened for the course",
     "message": "No session available for this course."
+  },
+  "components.SaleTunnelSuccess.congratulations": {
+    "description": "Text displayed to thank user for his order",
+    "message": "Congratulations!"
+  },
+  "components.SaleTunnelSuccess.cta": {
+    "description": "Label to the call to action to close sale tunnel",
+    "message": "Start this course now!"
+  },
+  "components.SaleTunnelSuccess.ctaSignature": {
+    "description": "Label to the call to action to close sale tunnel if there is a pending signature",
+    "message": "Sign the training contract"
+  },
+  "components.SaleTunnelSuccess.successDetailMessage": {
+    "description": "Text to remind that order's invoice will be send by email soon",
+    "message": "You will receive your invoice by email in a few moments."
+  },
+  "components.SaleTunnelSuccess.successDetailSignatureMessage": {
+    "description": "Text to remind that order needs to be signed",
+    "message": "In order to enroll to course runs you first need to sign the training contract."
+  },
+  "components.SaleTunnelSuccess.successMessage": {
+    "description": "Message to confirm that order has been created",
+    "message": "Your order has been successfully created."
+  },
+  "components.SaleTunnelSuccessNotValidated.apology": {
+    "description": "Text displayed to thank user for his order",
+    "message": "Sorry, you'll have to wait a little longer!"
+  },
+  "components.SaleTunnelSuccessNotValidated.cta": {
+    "description": "Label to the call to action to close sale tunnel",
+    "message": "Close"
+  },
+  "components.SaleTunnelSuccessNotValidated.description": {
+    "description": "Text to remind that order's invoice will be send by email soon",
+    "message": "Your payment has succeeded but your order validation is taking too long, you can close this dialog and come back later. You will receive your invoice by email in a few moments."
+  },
+  "components.SaleTunnelSuccessNotValidated.title": {
+    "description": "Message to confirm that order has been created",
+    "message": "It takes too long to validate your order."
   },
   "components.Search.errorMessage": {
     "description": "Error message for Search view when the request to load courses fails",
@@ -1629,11 +1653,11 @@
   },
   "components.useCourseRunPeriodMessage.onGoingEnrolledRunPeriod": {
     "description": "Text to display when a course run is ongoing and the user is enrolled to.",
-    "message": "You are enrolled for this session. It's open from {startDate} to {endDate}"
+    "message": "You are enrolled for this session. It's open from {startDate} {endDate, select, undefined {} other {to {endDate}}}"
   },
   "components.useCourseRunPeriodMessage.onGoingRunPeriod": {
     "description": "Text to display when a course run is on going.",
-    "message": "This session started on {startDate} and will end on {endDate}"
+    "message": "This session started on {startDate} {endDate, select, undefined {} other {and will end on {endDate}}}"
   },
   "components.useStaticFilters.courses": {
     "description": "localized human_name label for coursesConfig filter name",
