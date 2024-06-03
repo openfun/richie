@@ -1,7 +1,6 @@
-import { screen } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
-import { act } from 'react-dom/test-utils';
 import {
   RichieContextFactory as mockRichieContextFactory,
   UserFactory,
