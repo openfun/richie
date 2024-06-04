@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - useDateFormat did not return undefined with null values
 - PurchaseButton instantiated a hook conditionnaly
+- Make UserHelper manages OpenEdxProfile object to extract name
 
 ## [2.27.0]
 
