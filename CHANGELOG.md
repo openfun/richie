@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - useDateFormat did not return undefined with null values
+- PurchaseButton instantiated a hook conditionnaly
 
 ## [2.27.0]
 
