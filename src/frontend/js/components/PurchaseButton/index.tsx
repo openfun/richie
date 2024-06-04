@@ -93,6 +93,14 @@ const PurchaseButton = ({
     );
   }, [product]);
 
+  const hasAtLeastOneRemainingOrder =
+    typeof product?.remaining_order_count !== 'number' || product.remaining_order_count > 0;
+  const isPurchasable = hasAtLeastOneRemainingOrder && hasAtLeastOneCourseRun;
+
+  const saleTunnelModal = useModal({
+    isOpenDefault: false,
+  });
+
   if (!user) {
     return (
       <Button fullWidth onClick={login}>
@@ -103,14 +111,6 @@ const PurchaseButton = ({
       </Button>
     );
   }
-
-  const hasAtLeastOneRemainingOrder =
-    typeof product?.remaining_order_count !== 'number' || product.remaining_order_count > 0;
-  const isPurchasable = hasAtLeastOneRemainingOrder && hasAtLeastOneCourseRun;
-
-  const saleTunnelModal = useModal({
-    isOpenDefault: false,
-  });
 
   return (
     <>
