@@ -69,10 +69,9 @@ const OpenEdxFullNameForm = () => {
   });
 
   const defaultValues = useMemo(
-    () =>
-      ({
-        name: (openEdxProfileData ? UserHelper.getName(openEdxProfileData) : '')?.trim(),
-      }) as OpenEdxFullNameFormValues,
+    () => ({
+      name: (openEdxProfileData ? UserHelper.getName(openEdxProfileData) : '')?.trim(),
+    }),
     [openEdxProfileData],
   );
 
