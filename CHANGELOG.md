@@ -19,6 +19,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - PurchaseButton instantiated a hook conditionnaly
 - Make UserHelper manages OpenEdxProfile object to extract name
 
+### Added
+
+- Load React JS bundles from CDN on all pages
+
 ## [2.27.0]
 
 ### Added
