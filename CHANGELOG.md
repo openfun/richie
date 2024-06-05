@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Disable button to sign a contract in learner dashboard
+  if the order is not validated
+
 ### Fixed
 
 - useDateFormat did not return undefined with null values
