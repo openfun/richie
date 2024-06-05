@@ -51,6 +51,12 @@
             {% endblock meta_rdfa_context %}
             {% endblock meta_rdfa %}
 
+            {% block meta_public_path %}
+                {% if CDN_DOMAIN %}
+                    <meta name="public-path" value="{{ CDN_DOMAIN }}" />
+                {% endif %}
+            {% endblock meta_public_path%}
+
         {% endblock meta %}
         {% if MEDIA_URL_IS_EXTERNAL %}
             {% if MEDIA_HOSTNAME_PRECONNECT %}

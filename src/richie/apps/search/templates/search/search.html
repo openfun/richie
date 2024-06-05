@@ -2,13 +2,6 @@
 {% load cms_tags i18n static %}
 {% get_current_language as LANGUAGE_CODE %}
 
-{% block meta %}
-  {{ block.super }}
-  {% if CDN_DOMAIN %}
-  <meta name="public-path" value="{{ CDN_DOMAIN }}" />
-  {% endif %}
-{% endblock meta %}
-
 {% block head_title %}{% page_attribute "page_title" %}{% endblock head_title %}
 
 {% block topbar_searchbar %}{% endblock topbar_searchbar %}
