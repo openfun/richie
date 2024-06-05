@@ -13,7 +13,7 @@ import {
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
-import { Contract, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
+import { Contract, CredentialOrder, NestedCredentialOrder, OrderState } from 'types/Joanie';
 import SignContractButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -112,6 +112,17 @@ describe('<SignContractButton/>', () => {
         await user.click($signButton!);
 
         expect(screen.getByTestId('dashboard-contract-frame')).toBeInTheDocument();
+      });
+
+      it('should display a disabled button when order state is not validated', async () => {
+        order.state = OrderState.PENDING;
+        render(
+          <Wrapper>
+            <SignContractButton order={order} contract={contract} writable={true} />
+          </Wrapper>,
+        );
+        const $signButton = screen.queryByRole('button', { name: 'Sign' });
+        expect($signButton).toBeDisabled();
       });
     });
 

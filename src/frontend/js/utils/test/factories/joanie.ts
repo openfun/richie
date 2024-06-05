@@ -375,6 +375,7 @@ export const NestedCertificateOrderFactory = factory((): NestedCertificateOrder 
     organization: OrganizationFactory().one(),
     product_title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
     owner_name: faker.internet.userName(),
+    state: OrderState.VALIDATED,
   };
 });
 
@@ -386,6 +387,7 @@ export const NestedCredentialOrderFactory = factory((): NestedCredentialOrder =>
     organization: OrganizationFactory().one(),
     product_title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
     owner_name: faker.internet.userName(),
+    state: OrderState.VALIDATED,
   };
 });
 

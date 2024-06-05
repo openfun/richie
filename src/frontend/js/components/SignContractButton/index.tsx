@@ -3,7 +3,13 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import { useState } from 'react';
 import { generatePath } from 'react-router-dom';
 import { LearnerContractFrame } from 'components/ContractFrame';
-import { Contract, ContractState, CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
+import {
+  Contract,
+  ContractState,
+  CredentialOrder,
+  NestedCredentialOrder,
+  OrderState,
+} from 'types/Joanie';
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import DownloadContractButton from 'components/DownloadContractButton';
 import { Maybe } from 'types/utils';
@@ -60,6 +66,8 @@ const SignContractButton = ({ order, contract, writable, className }: SignContra
   const [contractFrameOpened, setContractFrameOpened] = useState(false);
   const [contractLoading, setContractLoading] = useState(false);
   const contractState = ContractHelper.getState(contract);
+  const notReadyToSign =
+    order.state !== OrderState.VALIDATED || contractLoading || contractFrameOpened;
 
   if (!writable && contractState === ContractState.UNSIGNED) {
     return <SignContractButtonLink orderId={order.id} className={className} />;
@@ -75,7 +83,7 @@ const SignContractButton = ({ order, contract, writable, className }: SignContra
           size="small"
           className={className}
           onClick={() => setContractFrameOpened(true)}
-          disabled={contractLoading || contractFrameOpened}
+          disabled={notReadyToSign}
         >
           <FormattedMessage {...messages.contractSignActionLabel} />
         </Button>

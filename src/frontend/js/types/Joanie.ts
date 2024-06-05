@@ -324,6 +324,7 @@ export interface AbstractNestedOrder {
   organization: Organization;
   product_title: string;
   owner_name: string;
+  state: OrderState;
 }
 export interface NestedCertificateOrder extends AbstractNestedOrder {
   course: undefined;
