@@ -18,6 +18,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - useDateFormat did not return undefined with null values
 - PurchaseButton instantiated a hook conditionnaly
 - Make UserHelper manages OpenEdxProfile object to extract name
+- Do not display unpublished children categories in the public 
+  category detail page
 
 ### Added
 

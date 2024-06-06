@@ -1691,3 +1691,32 @@ class CategoryModelsTestCase(TestCase):
             self.assertEqual(
                 set(parent_category.get_children_categories()), set(child_categories)
             )
+
+    def test_models_category_get_children_categories_publisher_draft_state(self):
+        """
+        According to the publisher_is_draft flag, the method should return published
+        or draft children categories.
+        """
+
+        draft_parent_category = CategoryFactory(should_publish=True)
+        draft_children = CategoryFactory.create_batch(
+            2, page_parent=draft_parent_category.extended_object, should_publish=True
+        )
+
+        # Unpublish first children, so only the second one is published
+        draft_children[0].extended_object.unpublish("en")
+
+        public_parent_category = draft_parent_category.public_extension
+        public_children = [draft_children[1].public_extension]
+
+        with self.assertNumQueries(2):
+            self.assertEqual(
+                set(draft_parent_category.get_children_categories()),
+                set(draft_children),
+            )
+
+        with self.assertNumQueries(3):
+            self.assertEqual(
+                set(public_parent_category.get_children_categories()),
+                set(public_children),
+            )
