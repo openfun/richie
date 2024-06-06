@@ -106,10 +106,19 @@ class Category(EsIdMixin, BasePageExtension):
         objects related to this category. A convenient method since
         ``page.get_child_pages`` return every direct child page, no matter
         it's a Category or not.
+
+        In public mode, we only return published categories.
         """
-        return Category.objects.filter(
-            extended_object__in=self.extended_object.get_child_pages()
-        ).select_related("extended_object")
+        filters = {"extended_object__in": self.extended_object.get_child_pages()}
+
+        if not self.extended_object.publisher_is_draft:
+            filters.update(extended_object__title_set__published=True)
+
+        return (
+            Category.objects.filter(**filters)
+            .select_related("extended_object")
+            .distinct()
+        )
 
 
 def get_category_limit_choices_to():
