@@ -1,9 +1,9 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import React from 'react';
-import { CourseRun, Priority } from 'types';
+import { PacedCourse, CourseRun, Priority } from 'types';
+import { CourseRunHelper } from 'utils/CourseRunHelper';
 import { SyllabusSimpleCourseRunsList } from 'widgets/SyllabusCourseRunsList/components/SyllabusSimpleCourseRunsList';
 import { SyllabusCourseRun } from 'widgets/SyllabusCourseRunsList/components/SyllabusCourseRun';
-import { CourseLight } from 'types/Joanie';
 
 const messages = defineMessages({
   otherCourseRuns: {
@@ -57,7 +57,7 @@ export const SyllabusAsideList = ({
   maxArchivedCourseRuns,
 }: {
   courseRuns: CourseRun[];
-  course: CourseLight;
+  course: PacedCourse;
   maxArchivedCourseRuns: number;
 }) => {
   const intl = useIntl();
@@ -106,6 +106,8 @@ export const SyllabusAsideList = ({
     [Priority.ARCHIVED_CLOSED].includes(run.state.priority),
   );
 
+  const showLanguages = CourseRunHelper.IsAllCourseRunsWithSameLanguages(courseRuns);
+
   return (
     <>
       <h2 className="course-detail__title">
@@ -134,7 +136,12 @@ export const SyllabusAsideList = ({
           className="course-detail__row course-detail__runs course-detail__runs--open"
         >
           {openedRuns.map((run) => (
-            <SyllabusCourseRun key={run.id} courseRun={run} course={course} />
+            <SyllabusCourseRun
+              key={run.id}
+              courseRun={run}
+              course={course}
+              showLanguages={showLanguages}
+            />
           ))}
         </div>
       )}

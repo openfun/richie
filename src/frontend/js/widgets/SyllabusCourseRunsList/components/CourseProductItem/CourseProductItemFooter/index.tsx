@@ -1,6 +1,7 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
-import { CourseLight, CourseProductRelation, CredentialProduct, OrderGroup } from 'types/Joanie';
+import { CourseProductRelation, CredentialProduct, OrderGroup } from 'types/Joanie';
+import { PacedCourse } from 'types';
 
 const messages = defineMessages({
   noSeatsAvailable: {
@@ -22,7 +23,7 @@ other {# remaining seats}
 });
 
 interface CourseProductItemFooterProps {
-  course: CourseLight;
+  course: PacedCourse;
   courseProductRelation: CourseProductRelation;
   canPurchase: boolean;
   orderGroups: OrderGroup[];

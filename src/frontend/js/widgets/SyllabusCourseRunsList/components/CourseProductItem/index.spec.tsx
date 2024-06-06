@@ -1,9 +1,11 @@
 import { getByText, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
-  CourseLightFactory,
+  RichieContextFactory as mockRichieContextFactory,
+  PacedCourseFactory,
+} from 'utils/test/factories/richie';
+import {
   CourseProductRelationFactory,
   EnrollmentFactory,
   CredentialOrderFactory,
@@ -81,7 +83,7 @@ describe('CourseProductItem', () => {
 
     render(
       <CourseProductItem
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
         productId={product.id}
       />,
       { queryOptions: { client: createTestQueryClient({ user: null }) } },
@@ -103,7 +105,7 @@ describe('CourseProductItem', () => {
 
     render(
       <CourseProductItem
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
         productId={product.id}
       />,
       { queryOptions: { client: createTestQueryClient({ user: null }) } },
@@ -162,7 +164,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
       { queryOptions: { client: createTestQueryClient({ user: null }) } },
     );
@@ -183,7 +185,7 @@ describe('CourseProductItem', () => {
 
     const { container } = render(
       <CourseProductItem
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
         productId={relation.product.id}
         compact
       />,
@@ -234,7 +236,7 @@ describe('CourseProductItem', () => {
     const { product } = relation;
     const order = CredentialOrderFactory({
       product_id: product.id,
-      course: CourseLightFactory({ code: '00000' }).one(),
+      course: PacedCourseFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
     }).one();
 
@@ -255,7 +257,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
     );
 
@@ -293,7 +295,7 @@ describe('CourseProductItem', () => {
     const relation = CourseProductRelationFactory().one();
     const order: CredentialOrder = CredentialOrderFactory({
       product_id: relation.product.id,
-      course: CourseLightFactory({ code: '00000' }).one(),
+      course: PacedCourseFactory({ code: '00000' }).one(),
       target_courses: relation.product.target_courses,
     }).one();
 
@@ -314,7 +316,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={relation.product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
         compact
       />,
     );
@@ -364,7 +366,7 @@ describe('CourseProductItem', () => {
     }).one();
     const order: CredentialOrder = CredentialOrderFactory({
       product_id: product.id,
-      course: CourseLightFactory({ code: '00000' }).one(),
+      course: PacedCourseFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       target_enrollments: [enrollment],
     }).one();
@@ -386,7 +388,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
     );
 
@@ -425,7 +427,7 @@ describe('CourseProductItem', () => {
     const { product } = relation;
     const order = CredentialOrderFactory({
       product_id: product.id,
-      course: CourseLightFactory({ code: '00000' }).one(),
+      course: PacedCourseFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
@@ -446,7 +448,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
     );
 
@@ -495,7 +497,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
     );
 
@@ -529,7 +531,7 @@ describe('CourseProductItem', () => {
     const { product } = relation;
     const order = CredentialOrderFactory({
       product_id: product.id,
-      course: CourseLightFactory({ code: '00000' }).one(),
+      course: PacedCourseFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       state: OrderState.SUBMITTED,
     }).one();
@@ -550,7 +552,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
     );
 
@@ -600,7 +602,7 @@ describe('CourseProductItem', () => {
       const order = CredentialOrderFactory({
         product_id: product.id,
         target_courses: product.target_courses,
-        course: CourseLightFactory({ code: '00000' }).one(),
+        course: PacedCourseFactory({ code: '00000' }).one(),
         state: orderState,
       }).one();
       fetchMock.get(
@@ -621,7 +623,7 @@ describe('CourseProductItem', () => {
       render(
         <CourseProductItem
           productId={product.id}
-          course={CourseLightFactory({ code: '00000' }).one()}
+          course={PacedCourseFactory({ code: '00000' }).one()}
         />,
       );
 
@@ -649,7 +651,7 @@ describe('CourseProductItem', () => {
     const order = CredentialOrderFactory({
       product_id: product.id,
       target_courses: product.target_courses,
-      course: CourseLightFactory({ code: '00000' }).one(),
+      course: PacedCourseFactory({ code: '00000' }).one(),
       state: OrderState.VALIDATED,
     }).one();
     fetchMock.get(
@@ -670,7 +672,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
     );
 
@@ -686,7 +688,7 @@ describe('CourseProductItem', () => {
     const relation = CourseProductRelationFactory().one();
     const order: CredentialOrder = CredentialOrderFactory({
       product_id: relation.product.id,
-      course: CourseLightFactory({ code: '00000' }).one(),
+      course: PacedCourseFactory({ code: '00000' }).one(),
       target_courses: relation.product.target_courses,
       state: OrderState.SUBMITTED,
     }).one();
@@ -707,7 +709,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={relation.product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
         compact={true}
       />,
     );
@@ -751,7 +753,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
       { queryOptions: { client: createTestQueryClient({ user: null }) } },
     );
@@ -767,7 +769,7 @@ describe('CourseProductItem', () => {
     const { product } = relation;
     const order = CredentialOrderFactory({
       product_id: product.id,
-      course: CourseLightFactory({ code: '00000' }).one(),
+      course: PacedCourseFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
@@ -788,7 +790,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
     );
 
@@ -806,7 +808,7 @@ describe('CourseProductItem', () => {
     const { product } = relation;
     const order = CredentialOrderFactory({
       product_id: product.id,
-      course: CourseLightFactory({ code: '00000' }).one(),
+      course: PacedCourseFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
@@ -827,7 +829,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
     );
 
@@ -846,7 +848,7 @@ describe('CourseProductItem', () => {
     const { product } = relation;
     const order = CredentialOrderFactory({
       product_id: product.id,
-      course: CourseLightFactory({ code: '00000' }).one(),
+      course: PacedCourseFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       state: OrderState.PENDING,
     }).one();
@@ -867,7 +869,7 @@ describe('CourseProductItem', () => {
     render(
       <CourseProductItem
         productId={product.id}
-        course={CourseLightFactory({ code: '00000' }).one()}
+        course={PacedCourseFactory({ code: '00000' }).one()}
       />,
     );
 

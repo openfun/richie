@@ -5,9 +5,11 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  PacedCourseFactory,
+} from 'utils/test/factories/richie';
 import { location } from 'utils/indirection/window';
-import { CourseLightFactory } from 'utils/test/factories/joanie';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
 import { HttpStatusCode } from 'utils/errors/HttpError';
@@ -37,7 +39,7 @@ jest.mock('utils/context', () => ({
 
 describe('CourseWishButton', () => {
   setupJoanieSession();
-  const course = CourseLightFactory().one();
+  const course = PacedCourseFactory().one();
 
   it('renders a log me link', async () => {
     fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.code}/wish/`, {

@@ -6,12 +6,12 @@ import userEvent from '@testing-library/user-event';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import {
   CourseStateFactory,
+  PacedCourseFactory,
   UserFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
 import {
   CertificateProductFactory,
-  CourseLightFactory,
   EnrollmentFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
@@ -89,7 +89,7 @@ describe('PurchaseButton', () => {
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: '00000' }).one()}
+          course={PacedCourseFactory({ code: '00000' }).one()}
         />
       </Wrapper>,
     );
@@ -112,7 +112,7 @@ describe('PurchaseButton', () => {
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: courseCode }).one()}
+          course={PacedCourseFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
@@ -146,7 +146,7 @@ describe('PurchaseButton', () => {
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: courseCode }).one()}
+          course={PacedCourseFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
@@ -181,7 +181,7 @@ describe('PurchaseButton', () => {
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: courseCode }).one()}
+          course={PacedCourseFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
@@ -214,7 +214,7 @@ describe('PurchaseButton', () => {
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: courseCode }).one()}
+          course={PacedCourseFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
@@ -251,7 +251,7 @@ describe('PurchaseButton', () => {
           <PurchaseButton
             product={product}
             disabled={false}
-            course={CourseLightFactory({ code: courseCode }).one()}
+            course={PacedCourseFactory({ code: courseCode }).one()}
           />
         </Wrapper>,
       );
@@ -384,7 +384,7 @@ describe('PurchaseButton', () => {
         <PurchaseButton
           product={product}
           disabled={false}
-          course={CourseLightFactory({ code: courseCode }).one()}
+          course={PacedCourseFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );
@@ -414,7 +414,7 @@ describe('PurchaseButton', () => {
         <PurchaseButton
           product={product}
           disabled={true}
-          course={CourseLightFactory({ code: courseCode }).one()}
+          course={PacedCourseFactory({ code: courseCode }).one()}
         />
       </Wrapper>,
     );

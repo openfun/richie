@@ -3,6 +3,7 @@ import {
   findByRole,
   getByRole,
   getByText,
+  queryByText,
   queryByRole,
   screen,
   within,
@@ -15,13 +16,14 @@ import { faker } from '@faker-js/faker';
 import {
   CourseRunFactoryFromPriority,
   RichieContextFactory as mockRichieContextFactory,
+  PacedCourseFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
 import SyllabusCourseRunsList from 'widgets/SyllabusCourseRunsList/index';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseRun, Priority } from 'types';
 import { CourseProductRelation } from 'types/Joanie';
-import { CourseLightFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
+import { CourseProductRelationFactory } from 'utils/test/factories/joanie';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { StringHelper } from 'utils/StringHelper';
 import { computeStates } from 'utils/CourseRuns';
@@ -131,6 +133,83 @@ describe('<SyllabusCourseRunsList/>', () => {
     });
   };
 
+  const expectFullDates = (container: HTMLElement, courseRun: CourseRun) => {
+    [courseRun] = computeStates([courseRun]);
+    const intl = createIntl({ locale: 'en' });
+    const heading = getByRole(container, 'heading', {
+      name: courseRun.title,
+    });
+    const runContainer = heading.parentNode! as HTMLElement;
+
+    const enrollmentNode = getByText(runContainer, 'Enrollment');
+
+    const enrollmentDatesContainer = enrollmentNode.nextSibling!;
+    const enrollmentStart = intl.formatDate(
+      new Date(courseRun.enrollment_start),
+      DEFAULT_DATE_FORMAT,
+    );
+    const enrollmentEnd = intl.formatDate(new Date(courseRun.enrollment_end), DEFAULT_DATE_FORMAT);
+    expect(enrollmentDatesContainer.textContent).toEqual(
+      `From ${enrollmentStart} to ${enrollmentEnd}`,
+    );
+
+    const courseNode = enrollmentDatesContainer.nextSibling!;
+    expect(courseNode.textContent).toEqual('Course');
+
+    const start = intl.formatDate(new Date(courseRun.start), DEFAULT_DATE_FORMAT);
+    const end = intl.formatDate(new Date(courseRun.end), DEFAULT_DATE_FORMAT);
+
+    const datesContainer = courseNode.nextSibling!;
+    expect(datesContainer.textContent).toEqual(`From ${start} to ${end}`);
+  };
+
+  const expectCompactedDates = (container: HTMLElement, courseRun: CourseRun) => {
+    [courseRun] = computeStates([courseRun]);
+    const intl = createIntl({ locale: 'en' });
+    const heading = getByRole(container, 'heading', {
+      name: courseRun.title,
+    });
+    const runContainer = heading.parentNode! as HTMLElement;
+    const courseDatesText = courseRun.end
+      ? `Available until ${intl.formatDate(new Date(courseRun.end), DEFAULT_DATE_FORMAT)}`
+      : `Available`;
+
+    const courseDatesContainer = getByText(runContainer, courseDatesText);
+    expect(courseDatesContainer).not.toBeNull();
+
+    getByRole(runContainer, 'link', {
+      name: StringHelper.capitalizeFirst(courseRun.state.call_to_action)!,
+    });
+  };
+
+  const expectLanguageVisibility = (
+    container: HTMLElement,
+    courseRun: CourseRun,
+    isLanguagesVisible: boolean,
+  ) => {
+    [courseRun] = computeStates([courseRun]);
+    const intl = createIntl({ locale: 'en' });
+    const heading = getByRole(container, 'heading', {
+      name: courseRun.title,
+    });
+
+    const runContainer = heading.parentNode! as HTMLElement;
+
+    const languagesNode = queryByText(runContainer, 'Languages');
+    if (isLanguagesVisible) {
+      expect(languagesNode).not.toBeNull();
+
+      const languagesContainer = languagesNode?.nextSibling! as HTMLElement;
+      getByText(languagesContainer, IntlHelper.getLocalizedLanguages(courseRun.languages, intl));
+    } else {
+      expect(languagesNode).toBeNull();
+    }
+
+    getByRole(runContainer, 'link', {
+      name: StringHelper.capitalizeFirst(courseRun.state.call_to_action)!,
+    });
+  };
+
   const expectCourseProduct = async (container: HTMLElement, relation: CourseProductRelation) => {
     const heading = await findByRole(container, 'heading', {
       name: relation.product.title,
@@ -145,7 +224,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   };
 
   it('has no opened course run', async () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
     const courseRuns = [
       CourseRunFactoryFromPriority(Priority.FUTURE_NOT_YET_OPEN)().one(),
       CourseRunFactoryFromPriority(Priority.FUTURE_CLOSED)({
@@ -182,7 +261,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   });
 
   it('has one opened course run', async () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
     const courseRuns = [
       CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)().one(),
       CourseRunFactoryFromPriority(Priority.FUTURE_CLOSED)({
@@ -221,7 +300,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   });
 
   it('has one forever open course run', async () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
     const startDate = faker.date.past();
     const enrollmentStartDate = faker.date.past();
     const courseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
@@ -263,7 +342,7 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
   });
   it('has multiple opened course run', async () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
     const courseRuns = [
       CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)().one(),
       CourseRunFactoryFromPriority(Priority.FUTURE_OPEN)().one(),
@@ -302,7 +381,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   });
 
   it('has one opened product', async () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
     const relation = CourseProductRelationFactory().one();
     const resourceLink = `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${relation.product.id}/`;
     fetchMock.get(resourceLink, relation);
@@ -333,7 +412,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   });
 
   it('renders a specific title in portal when there is one opened course run', () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
 
     render(
       <SyllabusCourseRunsList
@@ -356,7 +435,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   });
 
   it('renders a specific title in portal when there are multiple opened course run', () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
     render(
       <SyllabusCourseRunsList
         courseRuns={[
@@ -381,7 +460,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   });
 
   it('renders different categories correctly', async () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
     const courseRuns = [
       CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)().one(),
       CourseRunFactoryFromPriority(Priority.FUTURE_OPEN)().one(),
@@ -445,7 +524,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   });
 
   it('renders an opened course run with an existing LMS Backend', () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
     const courseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)().one();
     courseRun.resource_link = 'https://openedx.endpoint' + courseRun.resource_link;
 
@@ -472,7 +551,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   });
 
   it('limits the amount of archived course runs displayed', async () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
     const courseRuns = [...Array(MAX_ARCHIVED_COURSE_RUNS * 2)]
       .map(() => CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)().one())
       .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
@@ -516,7 +595,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   });
 
   it('does not limit the amount of archived course runs displayed', async () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
 
     const courseRuns = [...Array(MAX_ARCHIVED_COURSE_RUNS - 1)]
       .map(() => CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)().one())
@@ -545,7 +624,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   });
 
   it('renders opened runs with the same locale as the user above', async () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
 
     const refDate = faker.date.future();
     const futureDate = (days: number) => {
@@ -614,8 +693,225 @@ describe('<SyllabusCourseRunsList/>', () => {
     expectCourseRunOpened(elements[4], courseRuns[4]);
   });
 
+  it('renders instructor pace opened run with same languages', async () => {
+    const course = PacedCourseFactory({ is_self_paced: false }).one();
+
+    const courseRuns: CourseRun[] = [
+      CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+        languages: ['en'],
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        languages: ['en'],
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        languages: ['en'],
+      }).one(),
+    ];
+
+    render(
+      <SyllabusCourseRunsList
+        courseRuns={courseRuns}
+        course={course}
+        maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
+      />,
+      {
+        queryOptions: { client: createTestQueryClient({ user: null }) },
+      },
+    );
+
+    // Header of the opened run.
+    expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
+      1,
+    );
+
+    // Assert that the run displays the extended dates.
+    expectFullDates(getHeaderContainer(), courseRuns[0]);
+
+    // Assert that the run does not display the containers related to languages.
+    expectLanguageVisibility(getHeaderContainer(), courseRuns[0], false);
+
+    const portalContainer = getPortalContainer();
+
+    // Expect that all closed course runs to be present.
+    courseRuns.slice(1).forEach((run) => expectCourseRunInList(portalContainer, run));
+  });
+
+  it('renders instructor pace opened run with different languages', async () => {
+    const course = PacedCourseFactory({ is_self_paced: false }).one();
+
+    const courseRuns: CourseRun[] = [
+      CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+        languages: ['en'],
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        languages: ['it'],
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        languages: ['fr'],
+      }).one(),
+    ];
+
+    render(
+      <SyllabusCourseRunsList
+        courseRuns={courseRuns}
+        course={course}
+        maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
+      />,
+      {
+        queryOptions: { client: createTestQueryClient({ user: null }) },
+      },
+    );
+
+    // Header of the opened run.
+    expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
+      1,
+    );
+
+    // Assert that the run displays the extended dates.
+    expectFullDates(getHeaderContainer(), courseRuns[0]);
+
+    // Assert that the run displays its languages.
+    expectLanguageVisibility(getHeaderContainer(), courseRuns[0], true);
+
+    const portalContainer = getPortalContainer();
+
+    // Expect that all closed course runs to be present.
+    courseRuns.slice(1).forEach((run) => expectCourseRunInList(portalContainer, run));
+  });
+
+  it('renders self-paced opened run with different languages', async () => {
+    const course = PacedCourseFactory({ is_self_paced: true }).one();
+
+    const courseRuns = [
+      CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+        languages: ['it'],
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        languages: ['en'],
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        languages: ['fr'],
+      }).one(),
+    ];
+
+    render(
+      <SyllabusCourseRunsList
+        courseRuns={courseRuns}
+        course={course}
+        maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
+      />,
+      {
+        queryOptions: { client: createTestQueryClient({ user: null }) },
+      },
+    );
+
+    // Header of the opened run.
+    expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
+      1,
+    );
+
+    // Assert that the run displays the containers related to the self-paced run dates.
+    expectCompactedDates(getHeaderContainer(), courseRuns[0]);
+
+    // Assert that the run displays the containers related to languages.
+    expectLanguageVisibility(getHeaderContainer(), courseRuns[0], true);
+
+    const portalContainer = getPortalContainer();
+
+    // Expect that all closed course runs to be present.
+    courseRuns.slice(1).forEach((run) => expectCourseRunInList(portalContainer, run));
+  });
+
+  it('renders self-paced opened run with same languages', async () => {
+    const course = PacedCourseFactory({ is_self_paced: true }).one();
+
+    const courseRuns: CourseRun[] = [
+      CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+        languages: ['en'],
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        languages: ['en'],
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        languages: ['en'],
+      }).one(),
+    ];
+
+    render(
+      <SyllabusCourseRunsList
+        courseRuns={courseRuns}
+        course={course}
+        maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
+      />,
+      {
+        queryOptions: { client: createTestQueryClient({ user: null }) },
+      },
+    );
+
+    // Header of the opened run.
+    expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
+      1,
+    );
+
+    // Assert that the run displays the simplified version of dates
+    expectCompactedDates(getHeaderContainer(), courseRuns[0]);
+
+    // Assert that the run doesn't display the languages
+    expectLanguageVisibility(getHeaderContainer(), courseRuns[0], false);
+
+    const portalContainer = getPortalContainer();
+
+    // Expect that all closed course runs to be present.
+    courseRuns.slice(1).forEach((run) => expectCourseRunInList(portalContainer, run));
+  });
+
+  it('renders self-paced opened forever run with same languages', async () => {
+    const course = PacedCourseFactory({ is_self_paced: true }).one();
+
+    const courseRuns: CourseRun[] = [
+      CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+        languages: ['en'],
+        end: undefined,
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        languages: ['en'],
+      }).one(),
+      CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+        languages: ['en'],
+      }).one(),
+    ];
+
+    render(
+      <SyllabusCourseRunsList
+        courseRuns={courseRuns}
+        course={course}
+        maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
+      />,
+      {
+        queryOptions: { client: createTestQueryClient({ user: null }) },
+      },
+    );
+
+    // Header of the opened run.
+    expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
+      1,
+    );
+
+    // Assert that the run displays the simplified version of dates,
+    // with hidden course end date.
+    expectCompactedDates(getHeaderContainer(), courseRuns[0]);
+
+    // Assert that the run doesn't display the languages
+    expectLanguageVisibility(getHeaderContainer(), courseRuns[0], false);
+
+    const portalContainer = getPortalContainer();
+
+    // Expect that all closed course runs to be present.
+    courseRuns.slice(1).forEach((run) => expectCourseRunInList(portalContainer, run));
+  });
+
   it('renders course runs with snapshot link if needed', async () => {
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
     const refDate = faker.date.past();
     const pastDate = (days: number) => {
       const date = new Date(refDate.getTime());
@@ -661,7 +957,7 @@ describe('<SyllabusCourseRunsList/>', () => {
 
   it('renders ongoing course runs with enrollment information', async () => {
     const user = UserFactory().one();
-    const course = CourseLightFactory().one();
+    const course = PacedCourseFactory().one();
 
     const onGoingCourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_CLOSED)({
       title: 'Ongoing course run',
