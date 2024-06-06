@@ -2,14 +2,15 @@ import React, { useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { createPortal } from 'react-dom';
 import { Button, CunninghamProvider } from '@openfun/cunningham-react';
-import { CourseRun, Priority } from 'types';
+import { PacedCourse, CourseRun, Priority } from 'types';
 import { computeStates } from 'utils/CourseRuns';
+import { CourseRunHelper } from 'utils/CourseRunHelper';
 import { SyllabusAsideList } from 'widgets/SyllabusCourseRunsList/components/SyllabusAsideList';
+import { SyllabusCourseRunCompacted } from 'widgets/SyllabusCourseRunsList/components/SyllabusCourseRunCompacted';
 import { SyllabusCourseRun } from 'widgets/SyllabusCourseRunsList/components/SyllabusCourseRun';
 import { DjangoCMSPluginsInit } from 'components/DjangoCMSTemplate';
 import { isJoanieEnabled } from 'api/joanie';
 import context from 'utils/context';
-import { CourseLight } from 'types/Joanie';
 import CourseWishButton from './components/CourseWishButton';
 
 const OPENED_COURSES_ELEMENT_ID = 'courseDetailsRunsOpen';
@@ -41,7 +42,7 @@ const SyllabusCourseRunsList = ({
   maxArchivedCourseRuns,
 }: {
   courseRuns: CourseRun[];
-  course: CourseLight;
+  course: PacedCourse;
   maxArchivedCourseRuns: number;
 }) => {
   useEffect(() => {
@@ -60,6 +61,8 @@ const SyllabusCourseRunsList = ({
     );
   }, [courseRunsComputed]);
 
+  const runsWithSameLanguages = CourseRunHelper.IsAllCourseRunsWithSameLanguages(courseRuns);
+
   const choose = (e: React.MouseEvent) => {
     e.preventDefault();
     document
@@ -76,16 +79,29 @@ const SyllabusCourseRunsList = ({
           <div className="course-detail__empty">
             <FormattedMessage {...messages.noOpenedCourseRuns} />
             {isJoanieEnabled && Boolean(context?.features.WISHLIST) && (
-              <CourseWishButton course={course} />
+              <CourseWishButton course={course.courseLight} />
             )}
           </div>
         </div>
       )}
-      {openedRuns.length === 1 && (
-        <div className="course-detail__row course-detail__runs course-detail__runs--open">
-          <SyllabusCourseRun courseRun={openedRuns[0]} course={course} />
-        </div>
-      )}
+      {openedRuns.length === 1 &&
+        (course.is_self_paced && openedRuns[0].state.priority !== Priority.ARCHIVED_OPEN ? (
+          <div className="course-detail__row course-detail__runs course-detail__runs--open">
+            <SyllabusCourseRunCompacted
+              courseRun={openedRuns[0]}
+              course={course.courseLight}
+              showLanguages={runsWithSameLanguages}
+            />
+          </div>
+        ) : (
+          <div className="course-detail__row course-detail__runs course-detail__runs--open">
+            <SyllabusCourseRun
+              courseRun={openedRuns[0]}
+              course={course.courseLight}
+              showLanguages={runsWithSameLanguages}
+            />
+          </div>
+        ))}
       {openedRuns.length > 1 && (
         <div className="course-detail__row course-detail__runs course-detail__go-to-open-runs">
           <p>
