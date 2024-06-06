@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import countries from 'i18n-iso-countries';
 import {
   RichieContextFactory as mockRichieContextFactory,
+  PacedCourseFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
 import { render } from 'utils/test/render';
@@ -12,8 +13,8 @@ import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import CourseProductItem from 'widgets/SyllabusCourseRunsList/components/CourseProductItem';
 import {
   AddressFactory,
-  CourseProductRelationFactory,
   CredentialOrderWithPaymentFactory,
+  CourseProductRelationFactory,
 } from 'utils/test/factories/joanie';
 import { ACTIVE_ORDER_STATES, CourseRun } from 'types/Joanie';
 import { Priority } from 'types';
@@ -101,9 +102,15 @@ describe('SaleTunnel', () => {
       [],
     );
 
-    render(<CourseProductItem productId={product.id} course={course} />, {
-      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
-    });
+    render(
+      <CourseProductItem
+        productId={product.id}
+        course={PacedCourseFactory({ id: course.id, code: course.code }).one()}
+      />,
+      {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      },
+    );
 
     // Wait for product information to be fetched
     await screen.findByRole('heading', { level: 3, name: product.title });

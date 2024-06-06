@@ -16,6 +16,12 @@ export enum CourseRunDisplayMode {
   DETAILED = 'detailed',
 }
 
+export interface PacedCourse {
+  id: string;
+  code: string;
+  is_self_paced: boolean;
+}
+
 export interface CourseRun {
   id: number;
   resource_link: string;

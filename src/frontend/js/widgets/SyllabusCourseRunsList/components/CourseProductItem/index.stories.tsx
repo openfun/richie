@@ -3,7 +3,6 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import {
-  CourseLightFactory,
   CourseProductRelationFactory,
   CourseRunFactory,
   CredentialOrderFactory,
@@ -12,7 +11,7 @@ import {
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { UserFactory } from 'utils/test/factories/richie';
+import { UserFactory, PacedCourseFactory } from 'utils/test/factories/richie';
 import { CredentialOrder, OrderState } from 'types/Joanie';
 import { Maybe } from 'types/utils';
 import CourseProductItem, { CourseProductItemProps } from '.';
@@ -49,7 +48,7 @@ export default {
   },
   args: {
     productId: 'AAA',
-    course: CourseLightFactory({ code: 'BBB' }).one(),
+    course: PacedCourseFactory({ code: 'BBB' }).one(),
   },
   render: (args) => render(args),
 } as Meta<typeof CourseProductItem>;
@@ -61,7 +60,7 @@ export const Default: Story = {};
 export const WithPendingOrder: Story = {
   args: {
     productId: 'AAA',
-    course: CourseLightFactory({ code: 'BBB' }).one(),
+    course: PacedCourseFactory({ code: 'BBB' }).one(),
   },
   render: (args) =>
     render(args, { order: CredentialOrderFactory({ state: OrderState.PENDING }).one() }),
@@ -70,7 +69,7 @@ export const WithPendingOrder: Story = {
 export const WithValidatedOrder: Story = {
   args: {
     productId: 'AAA',
-    course: CourseLightFactory({ code: 'BBB' }).one(),
+    course: PacedCourseFactory({ code: 'BBB' }).one(),
   },
   render: (args) => {
     const courseRunWithEnrollment = CourseRunFactory().one();
@@ -95,7 +94,7 @@ export const WithValidatedOrder: Story = {
 export const WithSubmittedOrder: Story = {
   args: {
     productId: 'AAA',
-    course: CourseLightFactory({ code: 'BBB' }).one(),
+    course: PacedCourseFactory({ code: 'BBB' }).one(),
   },
   render: (args) =>
     render(args, { order: CredentialOrderFactory({ state: OrderState.SUBMITTED }).one() }),

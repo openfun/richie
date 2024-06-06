@@ -1,5 +1,4 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Button } from '@openfun/cunningham-react';
 import { CourseRun, CourseRunDisplayMode, PacedCourse } from 'types';
 import useDateFormat from 'hooks/useDateFormat';
 import { extractResourceId, isJoanieResourceLinkProduct } from 'api/lms/joanie';
@@ -11,34 +10,29 @@ import CourseRunEnrollment from '../CourseRunEnrollment';
 import CourseProductItem from '../CourseProductItem';
 
 const messages = defineMessages({
-  enrollment: {
-    id: 'components.SyllabusCourseRun.enrollment',
-    description: 'Title of the enrollment dates section of an opened course run block',
-    defaultMessage: 'Enrollment',
-  },
   course: {
-    id: 'components.SyllabusCourseRun.course',
+    id: 'components.SyllabusCourseRunCompacted.course',
     description: 'Title of the course dates section of an opened course run block',
     defaultMessage: 'Course',
   },
   languages: {
-    id: 'components.SyllabusCourseRun.languages',
+    id: 'components.SyllabusCourseRunCompacted.languages',
     description: 'Title of the languages section of an opened course run block',
     defaultMessage: 'Languages',
   },
-  runPeriod: {
-    id: 'components.SyllabusCourseRun.enrollmentPeriod',
-    description: 'Enrollment date of an opened course run block',
-    defaultMessage: 'From {startDate} {endDate, select, undefined {} other {to {endDate}}}',
+  selfPaceRunPeriod: {
+    id: 'components.SyllabusCourseRunCompacted.selfPaceCoursePeriod',
+    description: 'Course date of an opened and self paced course run block',
+    defaultMessage: 'Available until {endDate}',
   },
-  coursePeriod: {
-    id: 'components.SyllabusCourseRun.coursePeriod',
-    description: 'Course date of an opened course run block',
-    defaultMessage: 'From {startDate} {endDate, select, undefined {} other {to {endDate}}}',
+  selfPaceNoEndDate: {
+    id: 'components.SyllabusCourseRunCompacted.selfPaceNoEndDate',
+    description: 'Self paced course run block with no end date',
+    defaultMessage: 'Available',
   },
 });
 
-const OpenedCourseRun = ({
+const OpenedSelfPacedCourseRun = ({
   courseRun,
   showLanguages,
 }: {
@@ -47,39 +41,28 @@ const OpenedCourseRun = ({
 }) => {
   const formatDate = useDateFormat();
   const intl = useIntl();
-  const enrollmentStart = courseRun.enrollment_start
-    ? formatDate(courseRun.enrollment_start)
-    : '...';
-  const enrollmentEnd = courseRun.enrollment_end ? formatDate(courseRun.enrollment_end) : '...';
-  const start = courseRun.start ? formatDate(courseRun.start) : '...';
   const end = courseRun.end ? formatDate(courseRun.end) : '...';
+  const hasEndDate = end !== '...';
   return (
     <>
       {courseRun.title && <h3>{StringHelper.capitalizeFirst(courseRun.title)}</h3>}
       <dl>
-        <dt>
-          <FormattedMessage {...messages.enrollment} />
-        </dt>
+        {!showLanguages && (
+          <dt>
+            <FormattedMessage {...messages.course} />
+          </dt>
+        )}
         <dd>
-          <FormattedMessage
-            {...messages.runPeriod}
-            values={{
-              startDate: enrollmentStart,
-              endDate: enrollmentEnd,
-            }}
-          />
-        </dd>
-        <dt>
-          <FormattedMessage {...messages.course} />
-        </dt>
-        <dd>
-          <FormattedMessage
-            {...messages.runPeriod}
-            values={{
-              startDate: start,
-              endDate: end,
-            }}
-          />
+          {hasEndDate ? (
+            <FormattedMessage
+              {...messages.selfPaceRunPeriod}
+              values={{
+                endDate: end,
+              }}
+            />
+          ) : (
+            <FormattedMessage {...messages.selfPaceNoEndDate} />
+          )}
         </dd>
         {!showLanguages && (
           <>
@@ -93,15 +76,15 @@ const OpenedCourseRun = ({
       {findLmsBackend(courseRun.resource_link) ? (
         <CourseRunEnrollment courseRun={courseRun} />
       ) : (
-        <Button className="course-run-enrollment__cta" href={courseRun.resource_link} fullWidth>
+        <a className="course-run-enrollment__cta" href={courseRun.resource_link}>
           {StringHelper.capitalizeFirst(courseRun.state.call_to_action)}
-        </Button>
+        </a>
       )}
     </>
   );
 };
 
-export const SyllabusCourseRun = ({
+export const SyllabusCourseRunCompacted = ({
   courseRun,
   course,
   showLanguages,
@@ -120,7 +103,7 @@ export const SyllabusCourseRun = ({
             compact={courseRun.display_mode === CourseRunDisplayMode.COMPACT}
           />
         ) : (
-          <OpenedCourseRun courseRun={courseRun} showLanguages={showLanguages} />
+          <OpenedSelfPacedCourseRun courseRun={courseRun} showLanguages={showLanguages} />
         )}
       </div>
     </DjangoCMSTemplate>

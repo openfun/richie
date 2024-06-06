@@ -8,7 +8,6 @@ import {
   CertificateOrderWithOneClickPaymentFactory,
   CertificateOrderWithPaymentFactory,
   CertificateProductFactory,
-  CourseFactory,
   CredentialOrderWithOneClickPaymentFactory,
   CredentialOrderWithPaymentFactory,
   CredentialProductFactory,
@@ -17,6 +16,7 @@ import {
 } from 'utils/test/factories/joanie';
 import {
   RichieContextFactory as mockRichieContextFactory,
+  PacedCourseFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
 import { render } from 'utils/test/render';
@@ -70,7 +70,7 @@ describe.each([
   ({ productType, ProductFactory, OrderWithOneClickPaymentFactory, OrderWithPaymentFactory }) => {
     let nbApiCalls: number;
 
-    const course = CourseFactory().one();
+    const course = PacedCourseFactory().one();
     const enrollment =
       productType === ProductType.CERTIFICATE ? EnrollmentFactory().one() : undefined;
 

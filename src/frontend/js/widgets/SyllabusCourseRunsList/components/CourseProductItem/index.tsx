@@ -1,7 +1,7 @@
 import { Children, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import c from 'classnames';
-import { ProductType, OrderState, CourseLight, Product, CredentialOrder } from 'types/Joanie';
+import { ProductType, OrderState, Product, CredentialOrder } from 'types/Joanie';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -12,6 +12,7 @@ import useProductOrder from 'hooks/useProductOrder';
 import { OrderHelper } from 'utils/OrderHelper';
 import { handle } from 'utils/errors/handle';
 import { ProductSignatureHeader } from 'widgets/SyllabusCourseRunsList/components/CourseProductItem/components/ProductSignatureHeader';
+import { PacedCourse } from 'types';
 import CertificateItem from './components/CourseProductCertificateItem';
 import CourseRunItem from './components/CourseRunItem';
 import CourseProductItemFooter from './CourseProductItemFooter';
@@ -48,7 +49,7 @@ const messages = defineMessages({
 
 export interface CourseProductItemProps {
   compact?: boolean;
-  course: CourseLight;
+  course: PacedCourse;
   productId: Product['id'];
 }
 

@@ -298,7 +298,11 @@ def course_runs_list_widget_props(context):
 
     return json.dumps(
         {
-            "course": {"id": course.id, "code": course.code},
+            "course": {
+                "id": course.id,
+                "code": course.code,
+                "is_self_paced": course.is_self_paced,
+            },
             "courseRuns": course_runs,
             "maxArchivedCourseRuns": getattr(
                 settings,

@@ -2,12 +2,12 @@ import fetchMock from 'fetch-mock';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import {
   RichieContextFactory as mockRichieContextFactory,
+  PacedCourseFactory,
   UserFactory,
 } from 'utils/test/factories/richie';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import {
   AddressFactory,
-  CourseFactory,
   CredentialOrderWithPaymentFactory,
   CredentialProductFactory,
   OrderGroupFactory,
@@ -86,7 +86,7 @@ describe('SaleTunnel / Credential', () => {
   });
 
   it('should create an order with an order group', async () => {
-    const course = CourseFactory().one();
+    const course = PacedCourseFactory().one();
     const product = CredentialProductFactory().one();
     const orderGroup = OrderGroupFactory().one();
     const billingAddress: Joanie.Address = AddressFactory({ is_main: true }).one();

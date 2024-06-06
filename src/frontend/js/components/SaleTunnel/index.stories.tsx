@@ -1,6 +1,7 @@
 import { StoryObj, Meta } from '@storybook/react';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
-import { CourseFactory, ProductFactory } from 'utils/test/factories/joanie';
+import { ProductFactory } from 'utils/test/factories/joanie';
+import { PacedCourseFactory } from 'utils/test/factories/richie';
 import { SaleTunnel, SaleTunnelProps } from './index';
 
 export default {
@@ -10,7 +11,7 @@ export default {
       isOpen: true,
       product: ProductFactory().one(),
       onClose: () => {},
-      course: CourseFactory().one(),
+      course: PacedCourseFactory().one(),
       // enrollment?: Enrollment;
       // product: CredentialProduct | CertificateProduct;
       // orderGroup?: OrderGroup;

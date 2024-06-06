@@ -5,9 +5,11 @@
 import { screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
-import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import {
+  RichieContextFactory as mockRichieContextFactory,
+  PacedCourseFactory,
+} from 'utils/test/factories/richie';
 import { HttpStatusCode } from 'utils/errors/HttpError';
-import { CourseLightFactory } from 'utils/test/factories/joanie';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
@@ -29,7 +31,7 @@ jest.mock('utils/context', () => ({
 describe('CourseWishButton', () => {
   const joanieSessionData = setupJoanieSession();
   let nbApiCalls: number;
-  const course = CourseLightFactory().one();
+  const course = PacedCourseFactory().one();
 
   beforeEach(() => {
     nbApiCalls = joanieSessionData.nbSessionApiRequest;

@@ -7,6 +7,7 @@ import * as Joanie from 'types/Joanie';
 import { isOpenedCourseRunCertificate, isOpenedCourseRunCredential } from 'utils/CourseRuns';
 import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel';
 import { Organization } from 'types/Joanie';
+import { PacedCourse } from 'types';
 
 const messages = defineMessages({
   loginToPurchase: {
@@ -52,7 +53,7 @@ interface PurchaseButtonPropsBase {
 
 interface CredentialPurchaseButtonProps extends PurchaseButtonPropsBase {
   product: Joanie.CredentialProduct;
-  course: Joanie.CourseLight;
+  course: PacedCourse;
   enrollment?: undefined;
 }
 
