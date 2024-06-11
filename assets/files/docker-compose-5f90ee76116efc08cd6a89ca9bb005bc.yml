@@ -1,0 +1,130 @@
+services:
+  postgresql:
+    image: postgres:12
+    ports:
+      - "5472:5432"
+    env_file:
+      - env.d/development/postgresql
+
+  mysql:
+    image: mysql:8.0
+    env_file:
+      - env.d/development/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+  elasticsearch:
+    image: "${ELASTICSEARCH_IMAGE:-docker.elastic.co/elasticsearch/elasticsearch:7.14.0}"
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+
+  app:
+    build:
+      context: .
+      target: development
+      args:
+        DOCKER_USER: ${DOCKER_USER:-1000}
+    image: richie:development
+    env_file:
+      - env.d/development/common
+      - env.d/development/${DEV_ENV_FILE:-dev}
+      - env.d/development/${DB_HOST:-postgresql}
+    networks:
+      default:
+        aliases:
+          - app-service
+    volumes:
+      - .:/app
+      - ./data/static:/data/static
+      - ./data/media:/data/media
+      - ./data/smedia:/data/smedia
+    depends_on:
+      - "${DB_HOST:-postgresql}"
+      - "elasticsearch"
+    stdin_open: true
+    tty: true
+
+  nginx:
+    image: nginx
+    ports:
+      - "8070:8070"
+    networks:
+      default:
+        aliases:
+          - nginx
+      lms_outside:
+        aliases:
+          - richie
+    volumes:
+      - ./docker/files/etc/nginx/${NGINX_CONF:-conf.d}:/etc/nginx/conf.d:ro
+    depends_on:
+      - app
+
+  storybook:
+    image: node:20.11
+    ports:
+      - "8076:6006"
+    working_dir: /app/src/frontend
+    command: npm run storybook
+    environment:
+      - HOME=/tmp
+    user: "${DOCKER_USER:-1000}"
+    volumes:
+      - .:/app
+
+  frontend:
+    image: node:20.11
+    working_dir: /app/src/frontend
+    user: "${DOCKER_USER:-1000}"
+    volumes:
+      - .:/app
+
+  crowdin:
+    image: crowdin/cli:4.0.0
+    volumes:
+      - ".:/app"
+    env_file:
+      - env.d/development/crowdin
+    user: "${DOCKER_USER:-1000}"
+    working_dir: /app
+
+  redis-sentinel:
+    image: docker.io/bitnami/redis-sentinel:6.0-debian-10
+    depends_on:
+      - redis-primary
+      - redis-replica1
+      - redis-replica2
+    environment:
+      - REDIS_MASTER_HOST=redis-primary
+
+  redis-primary:
+    image: docker.io/bitnami/redis:6.0-debian-10
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=master
+
+  redis-replica1:
+    image: docker.io/bitnami/redis:6.0-debian-10
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis-primary
+    depends_on:
+      - redis-primary
+
+  redis-replica2:
+    image: docker.io/bitnami/redis:6.0-debian-10
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis-primary
+    depends_on:
+      - redis-primary
+
+  dockerize:
+    image: jwilder/dockerize
+
+networks:
+  lms_outside:
+    driver: bridge
+    name: "${RICHIE_LMS_NETWORK:-edx-lms-outside}"
