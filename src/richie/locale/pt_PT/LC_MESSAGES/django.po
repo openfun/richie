@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 13:04+0000\n"
-"PO-Revision-Date: 2024-05-22 09:27\n"
+"POT-Creation-Date: 2024-06-10 08:21+0000\n"
+"PO-Revision-Date: 2024-06-11 09:26\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -103,32 +103,32 @@ msgstr "O seu navegador não suporta este formato de vídeo."
 msgid "You are here:"
 msgstr "Você está aqui:"
 
-#: apps/core/templates/richie/base.html:84
+#: apps/core/templates/richie/base.html:90
 msgid "Skip to main content"
 msgstr "Saltar para o conteúdo"
 
-#: apps/core/templates/richie/base.html:95
+#: apps/core/templates/richie/base.html:101
 msgid "Go to homepage"
 msgstr "Ir para a página inicial"
 
-#: apps/core/templates/richie/base.html:104
+#: apps/core/templates/richie/base.html:110
 msgid "Menu"
 msgstr "Menu"
 
-#: apps/core/templates/richie/base.html:121
+#: apps/core/templates/richie/base.html:127
 msgid "Contact us"
 msgstr "Contacte-nos"
 
-#: apps/core/templates/richie/base.html:168
+#: apps/core/templates/richie/base.html:174
 msgid "Life-changing learning!"
 msgstr "Aprendizagem que muda a sua vida!"
 
-#: apps/core/templates/richie/base.html:176
+#: apps/core/templates/richie/base.html:182
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr "Saiba mais"
 
-#: apps/core/templates/richie/base.html:188
+#: apps/core/templates/richie/base.html:194
 msgid "Powered by"
 msgstr "Desenvolvido por"
 
@@ -553,13 +553,13 @@ msgstr "publicação"
 msgid "blog posts"
 msgstr "publicações"
 
-#: apps/courses/models/blog.py:92 apps/courses/models/category.py:155
+#: apps/courses/models/blog.py:92 apps/courses/models/category.py:164
 #: apps/courses/models/course.py:1031 apps/courses/models/organization.py:200
 #: apps/courses/models/organization.py:234
 msgid "variant"
 msgstr "variante"
 
-#: apps/courses/models/blog.py:95 apps/courses/models/category.py:158
+#: apps/courses/models/blog.py:95 apps/courses/models/category.py:167
 #: apps/courses/models/course.py:1034 apps/courses/models/organization.py:203
 #: apps/courses/models/organization.py:237
 msgid "Optional glimpse variant for a custom look."
@@ -581,11 +581,11 @@ msgstr "categoria"
 msgid "categories"
 msgstr "categorias"
 
-#: apps/courses/models/category.py:165
+#: apps/courses/models/category.py:174
 msgid "category plugin"
 msgstr "plugin de categoria"
 
-#: apps/courses/models/category.py:166
+#: apps/courses/models/category.py:175
 msgid "category plugins"
 msgstr "plugins de categoria"
 
@@ -1121,11 +1121,11 @@ msgstr "Avaliação e Certificação"
 
 #: apps/courses/settings/__init__.py:250
 msgid "Required equipment"
-msgstr ""
+msgstr "Equipamento necessário"
 
 #: apps/courses/settings/__init__.py:254
 msgid "Accessibility"
-msgstr ""
+msgstr "Acessibilidade"
 
 #: apps/courses/settings/__init__.py:259 apps/courses/settings/__init__.py:288
 #: apps/courses/templates/courses/cms/category_detail.html:40
@@ -1392,11 +1392,11 @@ msgstr "Quais são os pré-requisitos para este curso?"
 #: apps/courses/templates/courses/cms/course_detail.html:310
 msgctxt "course_detail__title"
 msgid "Required Equipment"
-msgstr ""
+msgstr "Equipamento Necessário"
 
 #: apps/courses/templates/courses/cms/course_detail.html:313
 msgid "What are the required equipment to follow this course?"
-msgstr ""
+msgstr "Quais são os equipamentos necessários para frequentar este curso?"
 
 #: apps/courses/templates/courses/cms/course_detail.html:323
 msgctxt "course_detail__title"
@@ -1410,11 +1410,11 @@ msgstr "Como é avaliado o progresso e/ou certificado?"
 #: apps/courses/templates/courses/cms/course_detail.html:338
 msgctxt "course_detail__title"
 msgid "Accessibility"
-msgstr ""
+msgstr "Acessibilidade"
 
 #: apps/courses/templates/courses/cms/course_detail.html:342
 msgid "What is the accessibility of this course?"
-msgstr ""
+msgstr "Qual é a acessibilidade deste curso?"
 
 #: apps/courses/templates/courses/cms/course_detail.html:356
 msgctxt "course_detail__title"
@@ -1515,11 +1515,11 @@ msgstr "Organização principal"
 #: apps/courses/templates/courses/cms/organization_detail.html:119
 msgctxt "organization_detail__title"
 msgid "Related organizations"
-msgstr ""
+msgstr "Organizações relacionadas"
 
 #: apps/courses/templates/courses/cms/organization_detail.html:125
 msgid "Are there organizations affiliated to this organization?"
-msgstr ""
+msgstr "Existem organizações afiliadas a esta organização?"
 
 #: apps/courses/templates/courses/cms/organization_detail.html:149
 msgid "Related courses pagination"

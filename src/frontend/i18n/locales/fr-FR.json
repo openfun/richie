@@ -349,7 +349,7 @@
   },
   "components.Dashboard.DashboardRoutes.courses.label": {
     "description": "Label of the courses view used in navigation components.",
-    "message": "Mes cours"
+    "message": "Mes cours et formations"
   },
   "components.Dashboard.DashboardRoutes.order.label": {
     "description": "Label of the order view used in navigation components.",
@@ -1429,7 +1429,7 @@
   },
   "components.SyllabusCourseRun.coursePeriod": {
     "description": "Course date of an opened course run block",
-    "message": "Du {startDate} au {endDate}"
+    "message": "From {startDate} {endDate, select, undefined {} other {to {endDate}}}"
   },
   "components.SyllabusCourseRun.enrollment": {
     "description": "Title of the enrollment dates section of an opened course run block",
@@ -1437,7 +1437,7 @@
   },
   "components.SyllabusCourseRun.enrollmentPeriod": {
     "description": "Enrollment date of an opened course run block",
-    "message": "Du {startDate} au {endDate}"
+    "message": "From {startDate} {endDate, select, undefined {} other {to {endDate}}}"
   },
   "components.SyllabusCourseRun.languages": {
     "description": "Title of the languages section of an opened course run block",
@@ -1513,7 +1513,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.label": {
     "description": "Label of the teacher courses liste view.",
-    "message": "Tous mes cours"
+    "message": "Tous mes cours et formations"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.root.label": {
     "description": "Label of the teacher dashboard root view.",
@@ -1565,7 +1565,7 @@
   },
   "components.TeacherDashboardCoursesLoader.title.filteredCourses": {
     "description": "Filtered courses title",
-    "message": "Vos cours"
+    "message": "Vos cours et formations"
   },
   "components.TeacherDashboardCoursesLoader.title.incoming": {
     "description": "Incoming courses title",
