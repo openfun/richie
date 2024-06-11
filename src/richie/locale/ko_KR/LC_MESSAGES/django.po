@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 13:04+0000\n"
-"PO-Revision-Date: 2024-05-22 09:27\n"
+"POT-Creation-Date: 2024-06-10 08:21+0000\n"
+"PO-Revision-Date: 2024-06-11 09:26\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -102,32 +102,32 @@ msgstr ""
 msgid "You are here:"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:84
+#: apps/core/templates/richie/base.html:90
 msgid "Skip to main content"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:95
+#: apps/core/templates/richie/base.html:101
 msgid "Go to homepage"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:104
+#: apps/core/templates/richie/base.html:110
 msgid "Menu"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:121
+#: apps/core/templates/richie/base.html:127
 msgid "Contact us"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:168
+#: apps/core/templates/richie/base.html:174
 msgid "Life-changing learning!"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:176
+#: apps/core/templates/richie/base.html:182
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:188
+#: apps/core/templates/richie/base.html:194
 msgid "Powered by"
 msgstr ""
 
@@ -552,13 +552,13 @@ msgstr ""
 msgid "blog posts"
 msgstr ""
 
-#: apps/courses/models/blog.py:92 apps/courses/models/category.py:155
+#: apps/courses/models/blog.py:92 apps/courses/models/category.py:164
 #: apps/courses/models/course.py:1031 apps/courses/models/organization.py:200
 #: apps/courses/models/organization.py:234
 msgid "variant"
 msgstr ""
 
-#: apps/courses/models/blog.py:95 apps/courses/models/category.py:158
+#: apps/courses/models/blog.py:95 apps/courses/models/category.py:167
 #: apps/courses/models/course.py:1034 apps/courses/models/organization.py:203
 #: apps/courses/models/organization.py:237
 msgid "Optional glimpse variant for a custom look."
@@ -580,11 +580,11 @@ msgstr ""
 msgid "categories"
 msgstr ""
 
-#: apps/courses/models/category.py:165
+#: apps/courses/models/category.py:174
 msgid "category plugin"
 msgstr ""
 
-#: apps/courses/models/category.py:166
+#: apps/courses/models/category.py:175
 msgid "category plugins"
 msgstr ""
 

@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.28.0]
+
 ### Changed
 
 - Disable button to sign a contract in learner dashboard
@@ -2127,7 +2129,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.27.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.28.0...master
+[2.28.0]: https://github.com/openfun/richie/compare/v2.27.0...v2.28.0
 [2.27.0]: https://github.com/openfun/richie/compare/v2.26.0...v2.27.0
 [2.26.0]: https://github.com/openfun/richie/compare/v2.25.1...v2.26.0
 [2.25.1]: https://github.com/openfun/richie/compare/v2.25.0...v2.25.1

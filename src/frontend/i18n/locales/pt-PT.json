@@ -9,19 +9,19 @@
   },
   "Dashboard.components.SearchBar.clearSearchButtonLabel": {
     "description": "Label of the dashboard search bar clear button",
-    "message": "clear current research"
+    "message": "limpar pesquisa atual"
   },
   "Dashboard.components.SearchBar.searchButtonLabel": {
     "description": "Label of the dashboard search bar submit button",
-    "message": "Search"
+    "message": "Pesquisar"
   },
   "Dashboard.components.SearchBar.searchPlaceholder": {
     "description": "Placeholder of the dashboard search bar",
-    "message": "Search"
+    "message": "Pesquisar"
   },
   "Dashboard.components.SearchResultsCount.searchCountText": {
     "description": "Text to indicate the total number of results for a research",
-    "message": "{nbResults} {nbResults, plural, one {result} other {results}} matching your search"
+    "message": "{nbResults} {nbResults, plural, one {resultado} other {resultados}} que correspondem à sua pesquisa"
   },
   "components.AddressesManagement.actionPromotion": {
     "description": "Action name for address promotion.",
@@ -213,7 +213,7 @@
   },
   "components.CourseProductItem.fromTo": {
     "description": "Course run date range",
-    "message": "From {from} {to, select, undefined {} other {to {to}}}"
+    "message": "De {from} {to, select, undefined {} other {para {to}}}"
   },
   "components.CourseProductItem.loadingInitial": {
     "description": "Accessible text for the initial loading spinner displayed when product is fetching",
@@ -293,11 +293,11 @@
   },
   "components.CourseRunItem.courseRunTitleWithDates": {
     "description": "Course run details displayed on the syllabus",
-    "message": "{title}, from {start} {end, select, undefined {} other {to {end}}}"
+    "message": "{title}, de {start} {end, select, undefined {} other {até {end}}}"
   },
   "components.CourseRunItem.courseRunWithDates": {
     "description": "Course run details displayed on the syllabus when it has no title",
-    "message": "From {start} {end, select, undefined {} other {to {end}}}"
+    "message": "De {start} {end, select, undefined {} other {até {end}}}"
   },
   "components.CourseRunItemWithEnrollment.enrolled": {
     "description": "Help text for users are enrolled in the course run.",
@@ -317,7 +317,7 @@
   },
   "components.CourseRunList.dataCourseRunPeriod": {
     "description": "Message displayed in course run datagrid for course run period",
-    "message": "From {from} {to, select, undefined {} other {to {to}}}"
+    "message": "De {from} {to, select, undefined {} other {até {to}}}"
   },
   "components.CourseRunList.noCourseRunAvailable": {
     "description": "Text displayed when no course run are opened for the course",
@@ -329,7 +329,7 @@
   },
   "components.Dashboard.DashboardRoutes.certificates.enrollment.label": {
     "description": "Label of the enrollment certificates view used in navigation components.",
-    "message": "My attestations of achievement"
+    "message": "Os meus atestados de realização"
   },
   "components.Dashboard.DashboardRoutes.certificates.label": {
     "description": "Label of the certificates view used in navigation components.",
@@ -337,7 +337,7 @@
   },
   "components.Dashboard.DashboardRoutes.certificates.order.label": {
     "description": "Label of the order certificates view used in navigation components.",
-    "message": "My certificates"
+    "message": "Os meus certificados"
   },
   "components.Dashboard.DashboardRoutes.contracts.label": {
     "description": "Label of the training contracts view used in navigation components.",
@@ -449,7 +449,7 @@
   },
   "components.DashboardCertificates.enrollmentCertificateTabLabel": {
     "description": "The label of the enrollment certificate tab",
-    "message": "Attestations of achievement"
+    "message": "Atestados de realização"
   },
   "components.DashboardCertificates.loading": {
     "description": "Message displayed while loading certificates",
@@ -457,7 +457,7 @@
   },
   "components.DashboardCertificates.orderCertificateTabLabel": {
     "description": "The label of the order certificate tab",
-    "message": "Certificates"
+    "message": "Certificados"
   },
   "components.DashboardContracts.empty": {
     "description": "Message displayed when there are no training contracts",
@@ -633,7 +633,7 @@
   },
   "components.DashboardItem.Order.OrderStateMessage.statusWaitingCounterSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
-    "message": "On going"
+    "message": "Em curso"
   },
   "components.DashboardItem.Order.OrderStateMessage.statusWaitingSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
@@ -641,19 +641,19 @@
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusCanceled": {
     "description": "Status shown on the dashboard order item when order is canceled",
-    "message": "Canceled"
+    "message": "Cancelado"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusCompleted": {
     "description": "Status shown on the dashboard order item when order is validated with certificate",
-    "message": "Certified"
+    "message": "Certificado"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusDraft": {
     "description": "Status shown on the dashboard order item when order is draft.",
-    "message": "Pending"
+    "message": "Pendente"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusOnGoing": {
     "description": "Status shown on the dashboard order item when order is validated with no certificate",
-    "message": "Enrolled"
+    "message": "Inscrito"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusOther": {
     "description": "Status shown on the dashboard order item when order status is unknown",
@@ -661,23 +661,23 @@
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusPending": {
     "description": "Status shown on the dashboard order item when order is pending.",
-    "message": "Pending"
+    "message": "Pendente"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusSubmitted": {
     "description": "Status shown on the dashboard order item when order is submitted.",
-    "message": "Pending"
+    "message": "Pendente"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusWaitingCounterSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
-    "message": "To be signed"
+    "message": "A assinar"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusWaitingSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
-    "message": "Pending for learner's signature"
+    "message": "Pendente para assinatura do formando"
   },
   "components.DashboardItem.more_label": {
     "description": "Accessible label for the more button on the dashboard item",
-    "message": "See additional options"
+    "message": "Ver opções adicionais"
   },
   "components.DashboardItemCourseEnrollingRun.contractUnsigned": {
     "description": "Message displayed as disabled button title when a contract needs to be signed.",
@@ -729,11 +729,11 @@
   },
   "components.DashboardItemOrder.contactButton": {
     "description": "Button to contact the organization",
-    "message": "Contact"
+    "message": "Contacto"
   },
   "components.DashboardItemOrder.contactDescription": {
     "description": "Description of the contact information for the organization",
-    "message": "Your training reference is {name} - {email}."
+    "message": "A sua referência de formação é {name} - {email}."
   },
   "components.DashboardItemOrder.gotoCourse": {
     "description": "Button that redirects to the order details",
@@ -745,15 +745,15 @@
   },
   "components.DashboardItemOrder.organizationDpoContactLabel": {
     "description": "Label for the organization DPO contact",
-    "message": "Data protection email"
+    "message": "E-mail de proteção de dados"
   },
   "components.DashboardItemOrder.organizationHeader": {
     "description": "Header of the organization section",
-    "message": "This training is provided by"
+    "message": "Esta formação é ministrada por"
   },
   "components.DashboardItemOrder.organizationLogoAlt": {
     "description": "Alt text for the organization logo",
-    "message": "Logo of the organization"
+    "message": "Logótipo da organização"
   },
   "components.DashboardItemOrder.organizationMailContactLabel": {
     "description": "Label for the organization mail contact",
@@ -761,35 +761,35 @@
   },
   "components.DashboardItemOrder.organizationPhoneContactLabel": {
     "description": "Label for the organization phone contact",
-    "message": "Phone"
+    "message": "Telefone"
   },
   "components.DashboardItemOrder.syllabusLinkLabel": {
     "description": "Syllabus link label on order details",
-    "message": "Go to syllabus"
+    "message": "Ir para o programa de estudos"
   },
   "components.DashboardItemOrder.trainingContractTitle": {
     "description": "Title of the training contract section",
-    "message": "Training contract"
+    "message": "Contrato de formação"
   },
   "components.DashboardOpenEdxProfile.EditButtonLabel": {
     "description": "Label of the edit button link of the open edx profile form",
-    "message": "Edit your profile"
+    "message": "Editar o seu perfil"
   },
   "components.DashboardOpenEdxProfile.additionalInformationHeader": {
     "description": "Title of the open edx profile form \"additional information\" block",
-    "message": "Additional account information"
+    "message": "Informações adicionais sobre a conta"
   },
   "components.DashboardOpenEdxProfile.baseInformationHeader": {
     "description": "Title of the open edx profile form \"basic information\" block",
-    "message": "Basic account information"
+    "message": "Informações básicas sobre a conta"
   },
   "components.DashboardOpenEdxProfile.countryInputLabel": {
     "description": "Label of the openEdx profile \"country\" input",
-    "message": "Country"
+    "message": "País"
   },
   "components.DashboardOpenEdxProfile.emailInputDescription": {
     "description": "Description of the openEdx profile \"email\" input",
-    "message": "Email used when sign-up, FUN-MOOC and leasons communications will be sent at this address"
+    "message": "O e-mail utilizado na inscrição, as comunicações FUN-MOOC e leasons serão enviadas para este endereço"
   },
   "components.DashboardOpenEdxProfile.emailInputLabel": {
     "description": "Label of the openEdx profile \"email\" input",
@@ -797,47 +797,47 @@
   },
   "components.DashboardOpenEdxProfile.favoriteLanguageInputLabel": {
     "description": "Label of the openEdx profile \"favorite language\" input",
-    "message": "Favorite language"
+    "message": "Língua preferida"
   },
   "components.DashboardOpenEdxProfile.fullNameInputDescription": {
     "description": "Description of the openEdx profile \"fullName\" input",
-    "message": "The name that appears on your certificates and training agreements. Other learners never see your full name"
+    "message": "O nome que aparece nos seus certificados e acordos de formação. Os outros formandos nunca vêem o seu nome completo"
   },
   "components.DashboardOpenEdxProfile.fullNameInputLabel": {
     "description": "Label of the openEdx profile \"fullName\" input",
-    "message": "Full name"
+    "message": "Nome completo"
   },
   "components.DashboardOpenEdxProfile.genderInputLabel": {
     "description": "Label of the openEdx profile \"gender\" input",
-    "message": "Sex"
+    "message": "Género"
   },
   "components.DashboardOpenEdxProfile.header": {
     "description": "Title of the dashboard open edx profile block",
-    "message": "Profile"
+    "message": "Perfil"
   },
   "components.DashboardOpenEdxProfile.languageInputDescription": {
     "description": "Description of the openEdx profile \"langue\" input",
-    "message": "The language used on the website. The website languages are limitated."
+    "message": "A língua utilizada no sítio Web. As línguas do sítio Web são limitadas."
   },
   "components.DashboardOpenEdxProfile.languageInputLabel": {
     "description": "Label of the openEdx profile \"langue\" input",
-    "message": "Langue"
+    "message": "Língua"
   },
   "components.DashboardOpenEdxProfile.levelOfEducationInputLabel": {
     "description": "Label of the openEdx profile \"level of education\" input",
-    "message": "Level of education"
+    "message": "Nível de educação"
   },
   "components.DashboardOpenEdxProfile.usernameInputDescription": {
     "description": "Description of the openEdx profile \"username\" input",
-    "message": "Your name on FUN-MOOC. You cannot change your username."
+    "message": "O teu nome no FUN-MOOC. Não pode alterar o seu nome de utilizador."
   },
   "components.DashboardOpenEdxProfile.usernameInputLabel": {
     "description": "Label of the openEdx profile \"username\" input",
-    "message": "Username"
+    "message": "Nome de utilizador"
   },
   "components.DashboardOpenEdxProfile.yearOfBirthInputLabel": {
     "description": "Label of the openEdx profile \"year of birth\" input",
-    "message": "Year of birth"
+    "message": "Ano de nascimento"
   },
   "components.DashboardOrderLoader.loading": {
     "description": "Message displayed while loading an order",
@@ -845,11 +845,11 @@
   },
   "components.DashboardOrderLoader.signLink": {
     "description": "Link to sign the contract",
-    "message": "sign your contract"
+    "message": "assinar o seu contrato"
   },
   "components.DashboardOrderLoader.signatureNeeded": {
     "description": "Banner displayed when the contract is not signed",
-    "message": "You need to {signLink} before enrolling in a course run"
+    "message": "É necessário {signLink} antes de se inscrever num curso"
   },
   "components.DashboardOrderLoader.wrongLinkedProductError": {
     "description": "Error message displayed when order's linked product type is not handle.",
@@ -877,7 +877,7 @@
   },
   "components.EnrollableCourseRunList.ariaSelectCourseRun": {
     "description": "Accessible label used by screen reader when user checked a course run radio input.",
-    "message": "Select course run from {start} {end, select, undefined {} other {to {end}}}."
+    "message": "Selecionar a edição de curso a partir de {start} {end, select, undefined {} other {até {end}}}."
   },
   "components.EnrollableCourseRunList.enroll": {
     "description": "Text label for the enroll button",
@@ -921,7 +921,7 @@
   },
   "components.EnrollmentDate.enrollClosed": {
     "description": "Text label for the enrollment dates when enrollment is passed",
-    "message": "Enrollment closed since {date}"
+    "message": "Inscrição encerrada desde {date}"
   },
   "components.EnrollmentDate.enrollFrom": {
     "description": "Text label for the enrollment dates when enrollment is not yet opened",
@@ -929,7 +929,7 @@
   },
   "components.EnrollmentDate.enrollSince": {
     "description": "Text label for the enrollment dates when enrollment opened and never closed",
-    "message": "Enrollment open since {date}"
+    "message": "Inscrições abertas desde {date}"
   },
   "components.EnrollmentDate.enrollUntil": {
     "description": "Text label for the enrollment dates when enrollment is opened",
@@ -973,11 +973,11 @@
   },
   "components.ListFilterOrganization.allOrganizationOption": {
     "description": "Use as organization filter option label for \"all organizations\"",
-    "message": "All organizations"
+    "message": "Todas as organizações"
   },
   "components.ListFilterOrganization.organizationFilterLabel": {
     "description": "Use as organization filter label",
-    "message": "Organization"
+    "message": "Organização"
   },
   "components.Modal.closeDialog": {
     "description": "Text for the button to close the modal",
@@ -997,23 +997,23 @@
   },
   "components.OpenEdxFullNameForm.error": {
     "description": "Message displayed i nopenEdx full name form when submit the request fail",
-    "message": "There was an error while updating your full name. Please try again later."
+    "message": "Ocorreu um erro ao atualizar o seu nome completo. Por favor, tente novamente mais tarde."
   },
   "components.OpenEdxFullNameForm.fullNameInputDescription": {
     "description": "Descripiton on the \"fullName\" field of the openEdx full name form.",
-    "message": "Please check that your fullname is correct. It will be used on official document (e.g: certificate)"
+    "message": "Verifique se o seu nome completo está correto. Este será utilizado num documento oficial (por exemplo, certificado)"
   },
   "components.OpenEdxFullNameForm.fullNameInputLabel": {
     "description": "Label of \"fullName\" field of the openEdx full name form",
-    "message": "Full name"
+    "message": "Nome completo"
   },
   "components.OpenEdxFullNameForm.loadingLabel": {
     "description": "Label of the loading profile spinner on openEdx full name form",
-    "message": "Loading..."
+    "message": "Carregando..."
   },
   "components.OpenEdxFullNameForm.submitButtonLabel": {
     "description": "Label of the submit button on openEdx full name form",
-    "message": "Submit"
+    "message": "Submeter"
   },
   "components.PaginateCourseSearch.currentlyReadingLastPageN": {
     "description": "Accessibility helper in pagination, shown next to the current page number when it is the last page.",
@@ -1101,103 +1101,103 @@
   },
   "components.SaleTunnel.AddressSelector.CreateAddressFormModal.submit": {
     "description": "Submit button label.",
-    "message": "Create"
+    "message": "Criar"
   },
   "components.SaleTunnel.AddressSelector.CreateAddressFormModal.title": {
     "description": "Add address modal title.",
-    "message": "Add address"
+    "message": "Adicionar endereço"
   },
   "components.SaleTunnel.AddressSelector.EditAddressFormModal.save": {
     "description": "Save button label.",
-    "message": "Save"
+    "message": "Guardar"
   },
   "components.SaleTunnel.AddressSelector.EditAddressFormModal.title": {
     "description": "Edit address modal title.",
-    "message": "Edit address"
+    "message": "Editar endereço"
   },
   "components.SaleTunnel.AddressSelector.create": {
     "description": "Address create button.",
-    "message": "Create"
+    "message": "Criar"
   },
   "components.SaleTunnel.AddressSelector.edit": {
     "description": "Address edit button.",
-    "message": "Edit"
+    "message": "Editar"
   },
   "components.SaleTunnel.AddressSelector.label": {
     "description": "Address field label.",
-    "message": "Billing address"
+    "message": "Endereço de faturação"
   },
   "components.SaleTunnel.Certificate.ProductPath.title": {
     "description": "Title of certificate product path section",
-    "message": "Your learning path"
+    "message": "O seu percurso de aprendizagem"
   },
   "components.SaleTunnel.Credential.ProductPath.title": {
     "description": "Title of credential product path section",
-    "message": "Your learning path"
+    "message": "O seu percurso de aprendizagem"
   },
   "components.SaleTunnel.CreditCardSelector.creditCardEmptyInlineDescription": {
     "description": "Description for the empty credit card inline",
-    "message": "Use another credit card during payment"
+    "message": "Utilizar outro cartão de crédito durante o pagamento"
   },
   "components.SaleTunnel.CreditCardSelector.description": {
     "description": "Description for the credit card section",
-    "message": "Choose your payment method or add a new one during the payment."
+    "message": "Escolha o seu método de pagamento ou adicione um novo método durante o pagamento."
   },
   "components.SaleTunnel.CreditCardSelector.editCreditCardAriaLabel": {
     "description": "Aria label for the edit credit card button",
-    "message": "Change credit card"
+    "message": "Alterar o cartão de crédito"
   },
   "components.SaleTunnel.CreditCardSelector.endsWith": {
     "description": "Text to show the credit card code",
-    "message": "Ends with •••• {code}"
+    "message": "Termina com •••• {code}"
   },
   "components.SaleTunnel.CreditCardSelector.expiration": {
     "description": "Text to show the credit card expiration date",
-    "message": "Expires on {month}/{year}"
+    "message": "Expira em {month}/{year}"
   },
   "components.SaleTunnel.CreditCardSelector.expired": {
     "description": "Text to show the credit card expired date",
-    "message": "Expired since {month}/{year}"
+    "message": "Expirado desde {month}/{year}"
   },
   "components.SaleTunnel.CreditCardSelector.modalDescription": {
     "description": "Description for the credit card modal",
-    "message": "Choose the default payment method you want to use for this order and the upcoming payments."
+    "message": "Seleccione o método de pagamento predefinido que pretende utilizar para esta encomenda e para os pagamentos seguintes."
   },
   "components.SaleTunnel.CreditCardSelector.modalTitle": {
     "description": "Title for the credit card modal",
-    "message": "Choose credit card"
+    "message": "Escolher o cartão de crédito"
   },
   "components.SaleTunnel.CreditCardSelector.modalValidate": {
     "description": "Validate button for the credit card modal",
-    "message": "Validate"
+    "message": "Validar"
   },
   "components.SaleTunnel.CreditCardSelector.title": {
     "description": "Title for the credit card section",
-    "message": "Payment method"
+    "message": "Método de pagamento"
   },
   "components.SaleTunnel.Information.description": {
     "description": "Description of the information section",
-    "message": "Those information will be used for billing"
+    "message": "Essas informações serão utilizadas para faturação"
   },
   "components.SaleTunnel.Information.email.info": {
     "description": "Info for the email",
-    "message": "This email will be used to send you confirmation mails, it is the one you created your account with."
+    "message": "Este correio electrónico será utilizado para lhe enviar mensagens de confirmação, pois foi com ele que criou a sua conta."
   },
   "components.SaleTunnel.Information.email.label": {
     "description": "Label for the email",
-    "message": "Account email"
+    "message": "Correio eletrónico da conta"
   },
   "components.SaleTunnel.Information.fullNameLabel": {
     "description": "Label for the full name input",
-    "message": "Full name"
+    "message": "Nome completo"
   },
   "components.SaleTunnel.Information.title": {
     "description": "Title for the information section",
-    "message": "Information"
+    "message": "Informações"
   },
   "components.SaleTunnel.Information.total.info": {
     "description": "Information about the total amount",
-    "message": "You will then pay on the secured platform of our payment provider."
+    "message": "O pagamento será efetuado através da plataforma segura do nosso fornecedor de serviços de pagamento."
   },
   "components.SaleTunnel.Information.total.label": {
     "description": "Label for the total amount",
@@ -1237,7 +1237,7 @@
   },
   "components.SaleTunnelStepValidation.courseRunDates": {
     "description": "Course run date text",
-    "message": "From {start} {end, select, undefined {} other {to {end}}}"
+    "message": "De {start} {end, select, undefined {} other {até {end}}}"
   },
   "components.SaleTunnelStepValidation.language": {
     "description": "Label displayed before the list of languages",
@@ -1249,43 +1249,43 @@
   },
   "components.SaleTunnelSuccess.congratulations": {
     "description": "Text displayed to thank user for his order",
-    "message": "Congratulations!"
+    "message": "Parabéns!"
   },
   "components.SaleTunnelSuccess.cta": {
     "description": "Label to the call to action to close sale tunnel",
-    "message": "Start this course now!"
+    "message": "Comece este curso agora!"
   },
   "components.SaleTunnelSuccess.ctaSignature": {
     "description": "Label to the call to action to close sale tunnel if there is a pending signature",
-    "message": "Sign the training contract"
+    "message": "Assinar o contrato de formação"
   },
   "components.SaleTunnelSuccess.successDetailMessage": {
     "description": "Text to remind that order's invoice will be send by email soon",
-    "message": "You will receive your invoice by email in a few moments."
+    "message": "Receberá a sua fatura por correio eletrónico dentro de alguns instantes."
   },
   "components.SaleTunnelSuccess.successDetailSignatureMessage": {
     "description": "Text to remind that order needs to be signed",
-    "message": "In order to enroll to course runs you first need to sign the training contract."
+    "message": "Para se inscrever nos cursos, é necessário assinar o contrato de formação."
   },
   "components.SaleTunnelSuccess.successMessage": {
     "description": "Message to confirm that order has been created",
-    "message": "Your order has been successfully created."
+    "message": "A sua encomenda foi criada com sucesso."
   },
   "components.SaleTunnelSuccessNotValidated.apology": {
     "description": "Text displayed to thank user for his order",
-    "message": "Sorry, you'll have to wait a little longer!"
+    "message": "Lamento, mas vão ter de esperar mais um pouco!"
   },
   "components.SaleTunnelSuccessNotValidated.cta": {
     "description": "Label to the call to action to close sale tunnel",
-    "message": "Close"
+    "message": "Fechar"
   },
   "components.SaleTunnelSuccessNotValidated.description": {
     "description": "Text to remind that order's invoice will be send by email soon",
-    "message": "Your payment has succeeded but your order validation is taking too long, you can close this dialog and come back later. You will receive your invoice by email in a few moments."
+    "message": "O seu pagamento foi efetuado com sucesso, mas a validação da encomenda demora tempo. Pode fechar esta caixa de diálogo e voltar mais tarde. Receberá a sua fatura por correio eletrónico dentro de alguns instantes."
   },
   "components.SaleTunnelSuccessNotValidated.title": {
     "description": "Message to confirm that order has been created",
-    "message": "It takes too long to validate your order."
+    "message": "Demora demasiado tempo a validar a sua encomenda."
   },
   "components.Search.errorMessage": {
     "description": "Error message for Search view when the request to load courses fails",
@@ -1429,7 +1429,7 @@
   },
   "components.SyllabusCourseRun.coursePeriod": {
     "description": "Course date of an opened course run block",
-    "message": "De {startDate} a {endDate}"
+    "message": "De {startDate} {endDate, select, undefined {} other {até {endDate}}}"
   },
   "components.SyllabusCourseRun.enrollment": {
     "description": "Title of the enrollment dates section of an opened course run block",
@@ -1437,7 +1437,7 @@
   },
   "components.SyllabusCourseRun.enrollmentPeriod": {
     "description": "Enrollment date of an opened course run block",
-    "message": "De {startDate} a {endDate}"
+    "message": "De {startDate} {endDate, select, undefined {} other {até {endDate}}}"
   },
   "components.SyllabusCourseRun.languages": {
     "description": "Title of the languages section of an opened course run block",
@@ -1469,11 +1469,11 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.product.label": {
     "description": "Label of the product view.",
-    "message": "General information"
+    "message": "Informações gerais"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.product.learnerList.label": {
     "description": "Label to display the product's learner list view.",
-    "message": "Learners"
+    "message": "Alunos"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.generalInformation.label": {
     "description": "Label of the course general information view.",
@@ -1497,11 +1497,11 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.label": {
     "description": "Label of the organization product view.",
-    "message": "General information"
+    "message": "Informações gerais"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.learnerList.label": {
     "description": "Label to display the organization product's learner list view.",
-    "message": "Learners"
+    "message": "Alunos"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.label": {
     "description": "Label of the organization courses view.",
@@ -1641,23 +1641,23 @@
   },
   "components.useCourseRunPeriodMessage.archivedEnrolledRunPeriod": {
     "description": "Text to display when a course run is archived and the user is enrolled to.",
-    "message": "You are enrolled for this session."
+    "message": "Está inscrito para esta sessão."
   },
   "components.useCourseRunPeriodMessage.futureEnrolledRunPeriod": {
     "description": "Text to display when a course run is not yet opened and the user is enrolled to.",
-    "message": "You are enrolled for this session. It starts {relativeStartDate}, the {startDate}."
+    "message": "Está inscrito nesta sessão. Começa {relativeStartDate}, a {startDate}."
   },
   "components.useCourseRunPeriodMessage.futureRunPeriod": {
     "description": "Text to display the period of a future course run.",
-    "message": "This session starts {relativeStartDate}, the {startDate}"
+    "message": "Esta sessão tem início {relativeStartDate}, a {startDate}"
   },
   "components.useCourseRunPeriodMessage.onGoingEnrolledRunPeriod": {
     "description": "Text to display when a course run is ongoing and the user is enrolled to.",
-    "message": "You are enrolled for this session. It's open from {startDate} {endDate, select, undefined {} other {to {endDate}}}"
+    "message": "Está inscrito para esta sessão. Está aberta a partir de {startDate} {endDate, select, undefined {} other {para {endDate}}}"
   },
   "components.useCourseRunPeriodMessage.onGoingRunPeriod": {
     "description": "Text to display when a course run is on going.",
-    "message": "This session started on {startDate} {endDate, select, undefined {} other {and will end on {endDate}}}"
+    "message": "Esta sessão teve início em {startDate} {endDate, select, undefined {} other {e terminará em {endDate}}}"
   },
   "components.useStaticFilters.courses": {
     "description": "localized human_name label for coursesConfig filter name",
@@ -1717,11 +1717,11 @@
   },
   "hooks.useCourseOrders.errorNotFound": {
     "description": "Error message shown to the user when no orders matches.",
-    "message": "Cannot find orders"
+    "message": "Não é possível encontrar encomendas"
   },
   "hooks.useCourseOrders.errorSelect": {
     "description": "Error message shown to the user when orders fetch request fails.",
-    "message": "An error occurred while fetching orders. Please retry later."
+    "message": "Ocorreu um erro durante a pesquisa de encomendas. Por favor, tente novamente mais tarde."
   },
   "hooks.useCourseProductRelations.errorGet": {
     "description": "Error message shown to the user when course product relation fetch request fails.",
@@ -1821,11 +1821,11 @@
   },
   "hooks.useOpenEdxProfile.errorGet": {
     "description": "Error message shown to the user when openEdx profile fetch request fails.",
-    "message": "An error occurred while fetching your profile. Please retry later."
+    "message": "Ocorreu um erro ao procurar o seu perfil. Por favor, tente novamente mais tarde."
   },
   "hooks.useOpenEdxProfile.errorUpdate": {
     "description": "Error message shown to the user when openEdx profile fullname post request fails.",
-    "message": "An error occurred while updating your full name. Please retry later."
+    "message": "Ocorreu um erro ao atualizar o seu nome completo. Por favor, tente novamente mais tarde."
   },
   "hooks.useOrders.errorGet": {
     "description": "Error message shown to the user when orders fetch request fails.",
@@ -1889,43 +1889,43 @@
   },
   "openEdxProfile.gender.female": {
     "description": "Translation for gender \"female\" in openEdx profile",
-    "message": "Female"
+    "message": "Feminino"
   },
   "openEdxProfile.gender.male": {
     "description": "Translation for gender \"male\" in openEdx profile",
-    "message": "Male"
+    "message": "Masculino"
   },
   "openEdxProfile.gender.other": {
     "description": "Translation for gender \"other\" in openEdx profile",
-    "message": "Other"
+    "message": "Outros"
   },
   "openEdxProfile.levelOfEducation.associateDegree": {
     "description": "Translation for level of education \"associate degree\" in openEdx profile",
-    "message": "Associate degree"
+    "message": "Licenciatura"
   },
   "openEdxProfile.levelOfEducation.bachelorDegree": {
     "description": "Translation for level of education \"bachelor degree\" in openEdx profile",
-    "message": "Bachelor degree"
+    "message": "Bacharelato"
   },
   "openEdxProfile.levelOfEducation.elementaryPrimarySchool": {
     "description": "Translation for level of education \"elementary primary school\" in openEdx profile",
-    "message": "Elementary primary school"
+    "message": "Escola primária elementar"
   },
   "openEdxProfile.levelOfEducation.juniorSecondaryOrMiddleSchool": {
     "description": "Translation for level of education \"junior secondary or middle school\" in openEdx profile",
-    "message": "Junior secondary or middle school"
+    "message": "Ensino secundário ou médio"
   },
   "openEdxProfile.levelOfEducation.masterOrProfessionnalDegree": {
     "description": "Translation for level of education \"master or professional degree\" in openEdx profile",
-    "message": "Master"
+    "message": "Mestre"
   },
   "openEdxProfile.levelOfEducation.none": {
     "description": "Translation for level of education \"none\" in openEdx profile",
-    "message": "None"
+    "message": "Nenhum"
   },
   "openEdxProfile.levelOfEducation.other": {
     "description": "Translation for level of education \"other\" in openEdx profile",
-    "message": "Other"
+    "message": "Outros"
   },
   "openEdxProfile.levelOfEducation.phdOrDoctorate": {
     "description": "Translation for level of education \"phd or doctorate\" in openEdx profile",
@@ -1933,39 +1933,39 @@
   },
   "openEdxProfile.levelOfEducation.secondaryOrHighSchool": {
     "description": "Translation for level of education \"secondary or high school\" in openEdx profile",
-    "message": "Secondary or high school"
+    "message": "Escola secundária ou liceu"
   },
   "page.PageNotFound.pageNotFoundHomeLink": {
     "description": "Home link of the page not found page",
-    "message": "Back to the home page"
+    "message": "Voltar à página inicial"
   },
   "page.PageNotFound.pageNotFoundSubTitle": {
     "description": "Subtitle of the page not found page",
-    "message": "The requested content does not exist."
+    "message": "O conteúdo solicitado não existe."
   },
   "page.PageNotFound.pageNotFoundTitle": {
     "description": "Title of the page not found page",
-    "message": "Page not found"
+    "message": "Página não encontrada"
   },
   "pages.CourseLearnerDataGrid.columnActions": {
     "description": "Label for actions column",
-    "message": "Actions"
+    "message": "Ações"
   },
   "pages.CourseLearnerDataGrid.columnLearnerName": {
     "description": "Label for learner's name column",
-    "message": "Learner"
+    "message": "Formando"
   },
   "pages.CourseLearnerDataGrid.columnPurchaseDate": {
     "description": "Label for enrolled date column",
-    "message": "Enrolled on"
+    "message": "Inscrito em"
   },
   "pages.CourseLearnerDataGrid.columnState": {
     "description": "Label for state column",
-    "message": "State"
+    "message": "Estado"
   },
   "pages.CourseLearnerDataGrid.contactButton": {
     "description": "Label for the contact learner button",
-    "message": "Contact"
+    "message": "Contacto"
   },
   "pages.TeacherDashboardContractsLayout.BulkDownloadContractButton.bulkDownloadButtonDownloadLabel": {
     "description": "The label of the bulk download button when the zip archive is ready for download",
@@ -1993,11 +1993,11 @@
   },
   "pages.TeacherDashboardCourseLearnersLayout.pageTitle": {
     "description": "Use for the page title of the course's contracts page",
-    "message": "Learners"
+    "message": "Alunos"
   },
   "pages.TeacherDashboardCourseLearnersLayout.totalLearnerText": {
     "description": "Text to indicate the total number of learner on a training",
-    "message": "{nbLearners} {nbLearners, plural, one {learner is enrolled} other {learners are enrolled}} for this training"
+    "message": "{nbLearners} {nbLearners, plural, one {aluno está inscrito} other {alunos estão inscritos}} nesta formação"
   },
   "pages.TeacherDashboardOrganizationContractsLayout.columnLearnerName": {
     "description": "Label for learnerName column",
