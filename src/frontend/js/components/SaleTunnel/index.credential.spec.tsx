@@ -98,6 +98,10 @@ describe('SaleTunnel / Credential', () => {
         `https://joanie.endpoint/api/v1.0/orders/?course_code=${course.code}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
         [],
       )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+        [],
+      )
       .post('https://joanie.endpoint/api/v1.0/orders/', (url, { body }) => {
         createOrderPayload = JSON.parse(body as any);
         return order;
