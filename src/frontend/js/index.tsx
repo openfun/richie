@@ -11,6 +11,7 @@ import 'core-js/modules/es.array.iterator';
 import 'core-js/modules/es.promise';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import countries from 'i18n-iso-countries';
 import { createRoot } from 'react-dom/client';
 import createQueryClient from 'utils/react-query/createQueryClient';
@@ -116,6 +117,7 @@ async function render() {
     const reactRoot = createRoot(rootContainer);
     reactRoot.render(
       <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
         <IntlProvider locale={locale} messages={translatedMessages} defaultLocale="en-US">
           <Root richieReactSpots={richieReactSpots} />
         </IntlProvider>
