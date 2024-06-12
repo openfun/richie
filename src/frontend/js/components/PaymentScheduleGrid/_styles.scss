@@ -1,3 +1,16 @@
+.payment-schedule__grid {
+  .payment-schedule__cell {
+    &--wrapped {
+      white-space: normal;
+    }
+
+    &--alignRight {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+
 .status-pill {
   display: inline-flex;
   align-items: center;
