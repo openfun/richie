@@ -1,5 +1,6 @@
-import { Modal, ModalSize } from '@openfun/cunningham-react';
+import { Alert, Modal, ModalSize, VariantType } from '@openfun/cunningham-react';
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { SaleTunnelSponsors } from 'components/SaleTunnel/Sponsors/SaleTunnelSponsors';
 import { SaleTunnelProps } from 'components/SaleTunnel/index';
 import { Address, CreditCard, Order, Product } from 'types/Joanie';
@@ -11,6 +12,15 @@ import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { SaleTunnelInformation } from 'components/SaleTunnel/SaleTunnelInformation';
 import { useEnrollments } from 'hooks/useEnrollments';
 import SaleTunnelNotValidated from './SaleTunnelNotValidated';
+
+const messages = defineMessages({
+  walkthrough: {
+    id: 'components.SaleTunnel.GenericSaleTunnel.walkthrough',
+    defaultMessage:
+      'To enroll in the training, you will first be invited to sign the training agreement and then to define a payment method. You will not be charged during this step; the first payment will take place on the date mentioned in the payment schedule above.',
+    description: 'Message explaining the credential sale tunnel process',
+  },
+});
 
 export interface SaleTunnelContextType {
   props: SaleTunnelProps;
@@ -188,7 +198,14 @@ export const GenericSaleTunnelPaymentStep = (props: GenericSaleTunnelProps) => {
             <SaleTunnelInformation />
           </div>
         </div>
-        <div className="sale-tunnel__footer">{props.paymentNode}</div>
+        <div className="sale-tunnel__footer">
+          <div style={{ maxWidth: '680px' }} className="mb-s" data-testid="walkthrough-banner">
+            <Alert type={VariantType.INFO}>
+              <FormattedMessage {...messages.walkthrough} />
+            </Alert>
+          </div>
+          {props.paymentNode}
+        </div>
       </div>
     </Modal>
   );

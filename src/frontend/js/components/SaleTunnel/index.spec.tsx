@@ -154,38 +154,6 @@ describe.each([
           };
     };
 
-    it('should render a payment button with a specific label when a credit card is provided', async () => {
-      const product = ProductFactory().one();
-      const creditCard = CreditCardFactory().one();
-      const address = AddressFactory().one();
-
-      fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/`, [], {
-        overwriteRoutes: true,
-      });
-      fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
-        [],
-      );
-      fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address], {
-        overwriteRoutes: true,
-      });
-      fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard], {
-        overwriteRoutes: true,
-      });
-
-      render(<Wrapper product={product} />, {
-        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
-      });
-
-      const $button = (await screen.findByRole('button', {
-        name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
-      })) as HTMLButtonElement;
-
-      // a billing address is missing, but the button stays enabled
-      // this allows the user to get feedback on what's missing to make the payment by clicking on the button
-      expect($button.disabled).toBe(false);
-    });
-
     it('should create an order only the first time the payment interface is shown, and not after aborting', async () => {
       const product = ProductFactory().one();
       const billingAddress = AddressFactory({
@@ -228,9 +196,10 @@ describe.each([
       const user = userEvent.setup({ delay: null });
       await user.click($terms);
 
-      const $button = screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
-      }) as HTMLButtonElement;
+      const $button = screen.getByRole<HTMLButtonElement>('button', {
+        name: `Subscribe`,
+      });
+      nbApiCalls += 1; // product payment-schedule call
 
       // - Payment button should not be disabled.
       expect($button.disabled).toBe(false);
@@ -394,7 +363,7 @@ describe.each([
       nbApiCalls += 1; // product payment schedule call.
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
       const $button = screen.getByRole('button', {
-        name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
+        name: `Subscribe`,
       }) as HTMLButtonElement;
 
       // - Payment button should not be disabled.
@@ -403,7 +372,7 @@ describe.each([
       // - wait for address to be loaded.
       await screen.findByText(getAddressLabel(billingAddress));
 
-      // - User clicks on pay button
+      // - User clicks on Subscribe button
       fetchMock.get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
         [orderSubmitted],
@@ -527,7 +496,7 @@ describe.each([
       await user.click($terms);
 
       const $button = screen.getByRole('button', {
-        name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
+        name: `Subscribe`,
       }) as HTMLButtonElement;
 
       // - wait for address to be loaded.
@@ -659,7 +628,7 @@ describe.each([
       await user.click($terms);
 
       const $button = screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        name: `Subscribe`,
       }) as HTMLButtonElement;
 
       // - wait for address to be loaded.
@@ -701,7 +670,7 @@ describe.each([
       // - Payment button should have been restore to its idle state
       expect($button.disabled).toBe(false);
       screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        name: 'Subscribe',
       });
     });
 
@@ -749,7 +718,7 @@ describe.each([
       await user.click($terms);
 
       const $button = screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        name: `Subscribe`,
       }) as HTMLButtonElement;
 
       // - wait for address to be loaded.
@@ -793,7 +762,7 @@ describe.each([
       // - Payment button should have been restore to its idle state
       expect($button.disabled).toBe(false);
       screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        name: `Subscribe`,
       });
 
       // - User clicks on pay button again
@@ -827,7 +796,7 @@ describe.each([
       });
 
       const $button = screen.getByRole('button', {
-        name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+        name: 'Subscribe',
       }) as HTMLButtonElement;
 
       // - As all information are provided, payment button should not be disabled.
@@ -912,6 +881,26 @@ describe.each([
           name: StringHelper.capitalizeFirst(installment.state.replace('_', ' '))!,
         });
       });
+    });
+
+    it('should show a walkthrough to explain the subscription process', async () => {
+      const product = ProductFactory().one();
+      const schedule = PaymentInstallmentFactory().many(2);
+      fetchMock
+        .get(
+          `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+          [],
+        )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+          schedule,
+        );
+
+      render(<Wrapper product={product} />, {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      });
+
+      screen.getByTestId('walkthrough-banner');
     });
   },
 );

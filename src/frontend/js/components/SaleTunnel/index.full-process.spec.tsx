@@ -268,7 +268,7 @@ describe('SaleTunnel', () => {
       });
 
     const $button = screen.getByRole('button', {
-      name: `Pay ${priceFormatter(product.price_currency, product.price)}`,
+      name: `Subscribe`,
     }) as HTMLButtonElement;
     await user.click($button);
 

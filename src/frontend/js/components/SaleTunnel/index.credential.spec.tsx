@@ -56,12 +56,6 @@ describe('SaleTunnel / Credential', () => {
     return <SaleTunnel {...props} isOpen={true} onClose={() => {}} />;
   };
 
-  const formatPrice = (price: number, currency: string) =>
-    new Intl.NumberFormat('en', {
-      currency,
-      style: 'currency',
-    }).format(price);
-
   setupJoanieSession();
 
   beforeEach(() => {
@@ -124,7 +118,7 @@ describe('SaleTunnel / Credential', () => {
     await screen.findByText(getAddressLabel(billingAddress));
 
     const $button = screen.getByRole('button', {
-      name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+      name: `Subscribe`,
     }) as HTMLButtonElement;
 
     const $terms = screen.getByLabelText(
