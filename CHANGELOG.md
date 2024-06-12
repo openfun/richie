@@ -8,9 +8,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Display Payment Schedule into SaleTunnel
+
 ### Changed
 
 - Improve lyra error catching management
+
 
 ### Fixed
 
