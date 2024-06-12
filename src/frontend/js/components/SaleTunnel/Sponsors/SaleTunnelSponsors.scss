@@ -1,15 +1,14 @@
 .sale-tunnel__sponsors {
   margin-top: 8px;
   display: flex;
-  gap: 8px;
-  justify-content: center;
+  gap: 16px;
+  justify-content: flex-start;
+  align-items: center;
   overflow: hidden;
   flex-wrap: wrap;
 
   img {
-    height: 50px;
-    padding: 8px;
-    width: 130px;
+    width: 90px;
     object-fit: contain;
   }
 }
