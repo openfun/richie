@@ -177,16 +177,18 @@ export const GenericSaleTunnelPaymentStep = (props: GenericSaleTunnelProps) => {
     <Modal {...props} size={ModalSize.EXTRA_LARGE} title={props.product.title} closeOnEsc={false}>
       <div className="sale-tunnel" data-testid="generic-sale-tunnel-payment-step">
         <div className="sale-tunnel__main">
-          <div className="sale-tunnel__main__left">{props.asideNode}</div>
+          <div className="sale-tunnel__main__column sale-tunnel__main__left ">
+            <div>{props.asideNode}</div>
+            <div>
+              <SaleTunnelSponsors />
+            </div>
+          </div>
           <div className="sale-tunnel__main__separator" />
           <div className="sale-tunnel__main__right">
             <SaleTunnelInformation />
           </div>
         </div>
-        <div className="sale-tunnel__footer">
-          {props.paymentNode}
-          <SaleTunnelSponsors />
-        </div>
+        <div className="sale-tunnel__footer">{props.paymentNode}</div>
       </div>
     </Modal>
   );
