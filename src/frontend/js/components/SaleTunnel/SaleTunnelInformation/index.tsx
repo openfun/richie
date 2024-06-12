@@ -60,7 +60,7 @@ const messages = defineMessages({
 
 export const SaleTunnelInformation = () => {
   return (
-    <div className="sale-tunnel__information">
+    <div className="sale-tunnel__main__column sale-tunnel__information">
       <div>
         <h3 className="block-title mb-t">
           <FormattedMessage {...messages.title} />
@@ -78,6 +78,7 @@ export const SaleTunnelInformation = () => {
         <CreditCardSelectorWrapper />
       </div>
       <div>
+        <PaymentScheduleBlock />
         <Total />
       </div>
     </div>

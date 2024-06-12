@@ -14,6 +14,7 @@ import {
   AddressFactory,
   CourseProductRelationFactory,
   CredentialOrderWithPaymentFactory,
+  PaymentInstallmentFactory,
 } from 'utils/test/factories/joanie';
 import { ACTIVE_ORDER_STATES, CourseRun } from 'types/Joanie';
 import { Priority } from 'types';
@@ -84,11 +85,16 @@ describe('SaleTunnel', () => {
      * Initialization.
      */
     const relation = CourseProductRelationFactory().one();
+    const paymentSchedule = PaymentInstallmentFactory().many(2);
     const { product, course } = relation;
 
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
       relation,
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+      paymentSchedule,
     );
     fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
     const orderQueryParameters = {

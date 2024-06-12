@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Display Payment Schedule into SaleTunnel
+
 ## [2.28.1]
 
 ### Fixed

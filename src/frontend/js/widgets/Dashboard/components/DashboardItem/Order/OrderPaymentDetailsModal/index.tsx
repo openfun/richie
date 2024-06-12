@@ -82,7 +82,7 @@ export const OrderPaymentDetailsModal = ({ order, ...props }: PaymentModalProps)
             <FormattedMessage {...messages.paymentNeededMessage} />
           </Alert>
         )}
-        {order.payment_schedule && <PaymentScheduleGrid paymentSchedule={order.payment_schedule} />}
+        {order.payment_schedule && <PaymentScheduleGrid schedule={order.payment_schedule} />}
       </Modal>
       {failedInstallment && (
         <OrderPaymentRetryModal {...retryModal} installment={failedInstallment} order={order} />

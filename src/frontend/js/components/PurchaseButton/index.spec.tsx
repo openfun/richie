@@ -102,10 +102,15 @@ describe('PurchaseButton', () => {
   it('shows cta to open sale tunnel when user is authenticated', async () => {
     const courseCode = '00000';
     const product = ProductFactory().one();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-      {},
-    );
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        {},
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-schedule/`,
+        [],
+      );
 
     render(
       <Wrapper client={createTestQueryClient({ user: richieUser })}>
@@ -137,10 +142,15 @@ describe('PurchaseButton', () => {
     const product = ProductFactory({ remaining_order_count: null }).one();
     fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
     fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-      {},
-    );
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        {},
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-schedule/`,
+        [],
+      );
     render(
       <Wrapper client={createTestQueryClient({ user })}>
         <PurchaseButton
@@ -170,10 +180,15 @@ describe('PurchaseButton', () => {
   it('shows cta to open sale tunnel when remaining orders is undefined', async () => {
     const courseCode = '00000';
     const product = ProductFactory().one();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-      {},
-    );
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        {},
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-schedule/`,
+        [],
+      );
     delete product.remaining_order_count;
 
     render(
