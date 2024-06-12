@@ -2,6 +2,8 @@ import { act, cleanup, fireEvent, screen, waitFor } from '@testing-library/react
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import userEvent from '@testing-library/user-event';
+import { within } from '@testing-library/dom';
+import { createIntl } from 'react-intl';
 import { OrderState, Product, ProductType } from 'types/Joanie';
 import {
   AddressFactory,
@@ -13,6 +15,7 @@ import {
   CredentialProductFactory,
   CreditCardFactory,
   EnrollmentFactory,
+  PaymentInstallmentFactory,
 } from 'utils/test/factories/joanie';
 import {
   RichieContextFactory as mockRichieContextFactory,
@@ -30,6 +33,8 @@ import { User } from 'types/User';
 import { OpenEdxApiProfile } from 'types/openEdx';
 import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { StringHelper } from 'utils/StringHelper';
+import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -72,7 +77,9 @@ describe.each([
 
     const course = PacedCourseFactory().one();
     const enrollment =
-      productType === ProductType.CERTIFICATE ? EnrollmentFactory().one() : undefined;
+      productType === ProductType.CERTIFICATE
+        ? EnrollmentFactory({ course_run: { course } }).one()
+        : undefined;
 
     let richieUser: User;
     let openApiEdxProfile: OpenEdxApiProfile;
@@ -189,6 +196,10 @@ describe.each([
       fetchMock
         .get(
           `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+          [],
+        )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
           [],
         )
         .post('https://joanie.endpoint/api/v1.0/orders/', order)
@@ -348,6 +359,10 @@ describe.each([
           `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
           [initialOrder],
         )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+          [],
+        )
         .post('https://joanie.endpoint/api/v1.0/orders/', order)
         .patch(`https://joanie.endpoint/api/v1.0/orders/${order.id}/submit/`, {
           payment_info: paymentInfo,
@@ -376,6 +391,7 @@ describe.each([
       nbApiCalls += 1; // useProductOrder get order with filters
       nbApiCalls += 1; // get user account call.
       nbApiCalls += 1; // get user preferences call.
+      nbApiCalls += 1; // product payment schedule call.
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
       const $button = screen.getByRole('button', {
         name: `Pay in one click ${formatPrice(product.price, product.price_currency)}`,
@@ -472,6 +488,10 @@ describe.each([
           `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
           [orderSubmitted],
         )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+          [],
+        )
         .post('https://joanie.endpoint/api/v1.0/orders/', order)
         .patch(`https://joanie.endpoint/api/v1.0/orders/${order.id}/submit/`, {
           payment_info: paymentInfo,
@@ -494,6 +514,7 @@ describe.each([
       nbApiCalls += 1; // fetcher order for userProductOrder
       nbApiCalls += 1; // get user account call.
       nbApiCalls += 1; // get user preferences call.
+      nbApiCalls += 1; // get product payment schedule.
       const apiCalls = fetchMock.calls().map((call) => call[0]);
       expect(apiCalls).toContain(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
@@ -606,6 +627,10 @@ describe.each([
           `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
           [],
         )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+          [],
+        )
         .post('https://joanie.endpoint/api/v1.0/orders/', order)
         .patch(`https://joanie.endpoint/api/v1.0/orders/${order.id}/submit/`, {
           payment_info: paymentInfo,
@@ -624,6 +649,7 @@ describe.each([
       nbApiCalls += 1; // useProductOrder get order with filters
       nbApiCalls += 1; // get user account call.
       nbApiCalls += 1; // get user preferences call.
+      nbApiCalls += 1; // get product payment schedule.
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
       const $terms = screen.getByLabelText(
@@ -691,6 +717,10 @@ describe.each([
           `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
           [],
         )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+          [],
+        )
         .post('https://joanie.endpoint/api/v1.0/orders/', order)
         .patch(`https://joanie.endpoint/api/v1.0/orders/${order.id}/submit/`, {
           payment_info: paymentInfo,
@@ -709,6 +739,7 @@ describe.each([
       nbApiCalls += 1; // useProductOrder get order with filters
       nbApiCalls += 1; // get user account call.
       nbApiCalls += 1; // get user preferences call.
+      nbApiCalls += 1; // product payment schedule call.
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
       const $terms = screen.getByLabelText(
@@ -783,6 +814,10 @@ describe.each([
           `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
           [],
         )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+          [],
+        )
         .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
           overwriteRoutes: true,
         });
@@ -811,23 +846,15 @@ describe.each([
     it('should show a link to the platform terms and conditions', async () => {
       const product = ProductFactory().one();
 
-      const fetchOrderQueryParams =
-        product.type === ProductType.CREDENTIAL
-          ? {
-              course_code: course.code,
-              product_id: product.id,
-              state: ['pending', 'validated', 'submitted'],
-            }
-          : {
-              enrollment_id: enrollment?.id,
-              product_id: product.id,
-              state: ['pending', 'validated', 'submitted'],
-            };
-
-      fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(fetchOrderQueryParams)}`,
-        [],
-      );
+      fetchMock
+        .get(
+          `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+          [],
+        )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+          [],
+        );
 
       render(<Wrapper product={product} />, {
         queryOptions: { client: createTestQueryClient({ user: richieUser }) },
@@ -835,6 +862,56 @@ describe.each([
 
       const $terms = screen.getByRole('link', { name: 'General Terms of Sale' });
       expect($terms).toHaveAttribute('href', '/en/about/terms-and-conditions/');
+    });
+
+    it('should show the product payment schedule', async () => {
+      const intl = createIntl({ locale: 'en' });
+      const product = ProductFactory().one();
+      const schedule = PaymentInstallmentFactory().many(2);
+      fetchMock
+        .get(
+          `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+          [],
+        )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+          schedule,
+        );
+
+      render(<Wrapper product={product} />, {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      });
+
+      await screen.findByRole('heading', {
+        level: 4,
+        name: 'Payment schedule',
+      });
+
+      const scheduleTable = screen.getByRole('table');
+      const scheduleTableRows = within(scheduleTable).getAllByRole('row');
+      expect(scheduleTableRows).toHaveLength(schedule.length);
+
+      scheduleTableRows.forEach((row, index) => {
+        const installment = schedule[index];
+        // A first column should show the installment index
+        within(row).getByRole('cell', {
+          name: (index + 1).toString(),
+        });
+        // A 2nd column should show the installment amount
+        within(row).getByRole('cell', {
+          name: formatPrice(installment.amount, installment.currency),
+        });
+        // A 3rd column should show the installment withdraw date
+        within(row).getByRole('cell', {
+          name: `Withdrawn on ${intl.formatDate(installment.due_date, {
+            ...DEFAULT_DATE_FORMAT,
+          })}`,
+        });
+        // A 4th column should show the installment state
+        within(row).getByRole('cell', {
+          name: StringHelper.capitalizeFirst(installment.state.replace('_', ' '))!,
+        });
+      });
     });
   },
 );

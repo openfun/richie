@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   is more compacted than variant `hero-intro`.
 - Add order payment information in the dashboard, including a specific
   interface displayed on failed installment in order to retry the payment.
+- Display Payment Schedule into SaleTunnel
 
 ### Changed
 
