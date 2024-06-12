@@ -1,20 +1,6 @@
 import { defineMessages } from 'react-intl';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  API,
-  CourseProductQueryFilters,
-  CourseProductRelation,
-  PaymentInstallment,
-  PaymentSchedule,
-  Product,
-} from 'types/Joanie';
-import {
-  QueryOptions,
-  useResource,
-  useResources,
-  useResourcesCustom,
-  UseResourcesProps,
-} from 'hooks/useResources';
+import { API, CourseProductQueryFilters, CourseProductRelation, Product } from 'types/Joanie';
+import { QueryOptions, useResourcesCustom, UseResourcesProps } from 'hooks/useResources';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 
 export const messages = defineMessages({
@@ -57,14 +43,3 @@ export const useCourseProduct = (
   const { items, ...subRes } = resources;
   return { ...subRes, item: items[0] };
 };
-
-const courseProductPaymentScheduleProps: UseResourcesProps<
-  PaymentSchedule,
-  CourseProductQueryFilters,
-  API['courses']['products']['paymentSchedule']
-> = {
-  queryKey: ['courses-products', 'payment-schedule'],
-  apiInterface: () => useJoanieApi().courses.products.paymentSchedule,
-};
-
-export const useCourseProductPaymentSchedule = useResources(courseProductPaymentScheduleProps);
