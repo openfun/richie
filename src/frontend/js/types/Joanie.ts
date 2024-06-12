@@ -643,9 +643,7 @@ export interface API {
     products: {
       get(filters?: CourseProductQueryFilters): Promise<Nullable<CourseProductRelation>>;
       paymentSchedule: {
-        get(
-          filters?: CourseProductQueryFilters,
-        ): Promise<Nullable<{ payment_schedule: PaymentSchedule }>>;
+        get(filters?: CourseProductQueryFilters): Promise<Nullable<PaymentSchedule>>;
       };
     };
     orders: {
