@@ -50,14 +50,9 @@ const messages = defineMessages({
     id: 'components.PaymentButton.errorTerms',
   },
   pay: {
-    defaultMessage: 'Pay {price}',
+    defaultMessage: 'Subscribe',
     description: 'CTA label to proceed to the payment of the product',
     id: 'components.PaymentButton.pay',
-  },
-  payInOneClick: {
-    defaultMessage: 'Pay in one click {price}',
-    description: 'CTA label to proceed to the one click payment of the product',
-    id: 'components.PaymentButton.payInOneClick',
   },
   paymentInProgress: {
     defaultMessage: 'Payment in progress',
@@ -310,7 +305,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
           </Spinner>
         ) : (
           <FormattedMessage
-            {...(creditCard ? messages.payInOneClick : messages.pay)}
+            {...messages.pay}
             values={{
               price: intl.formatNumber(product.price, {
                 style: 'currency',
