@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix ProductCertificateFooter component to display proper CTA
+  according to Order state
+
 ## [2.28.0]
 
 ### Changed
