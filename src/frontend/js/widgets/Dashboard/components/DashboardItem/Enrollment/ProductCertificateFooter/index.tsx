@@ -2,7 +2,7 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import { useState } from 'react';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { CertificateProduct, Enrollment, ProductType } from 'types/Joanie';
+import { CertificateProduct, Enrollment, OrderState, ProductType } from 'types/Joanie';
 import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import { useCertificate } from 'hooks/useCertificates';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
@@ -36,14 +36,14 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
   if (product.type !== ProductType.CERTIFICATE) {
     return null;
   }
-  const [activeOrder, setActiveOrder] = useState(
+  const [order, setOrder] = useState(
     OrderHelper.getActiveEnrollmentOrder(enrollment.orders || [], product.id),
   );
-  const { item: certificate } = useCertificate(activeOrder?.certificate_id);
+  const { item: certificate } = useCertificate(order?.certificate_id);
 
   // The course run is no longer available
   // and no product certificate had been bought therefore there isn't any certificate to download.
-  if (!activeOrder && !isOpenedCourseRunCertificate(enrollment.course_run.state)) {
+  if (!order && !isOpenedCourseRunCertificate(enrollment.course_run.state)) {
     return null;
   }
 
@@ -51,7 +51,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
     <div className="dashboard-item__course-enrolling__infos">
       <div className="dashboard-item__block__status">
         <Icon name={IconTypeEnum.CERTIFICATE} />
-        {activeOrder ? (
+        {order?.state === OrderState.VALIDATED ? (
           <>
             {product.certificate_definition.title + '. '}
             <CertificateStatus certificate={certificate} productType={product.type} />
@@ -60,11 +60,11 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
           <FormattedMessage {...messages.buyProductCertificateLabel} />
         )}
       </div>
-      {activeOrder ? (
-        activeOrder.certificate_id && (
+      {order?.state === OrderState.VALIDATED ? (
+        order.certificate_id && (
           <DownloadCertificateButton
             className="dashboard-item__button"
-            certificateId={activeOrder.certificate_id}
+            certificateId={order.certificate_id}
           />
         )
       ) : (
@@ -73,13 +73,14 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
           product={product}
           enrollment={enrollment}
           buttonProps={{ size: 'small' }}
-          onFinish={(order) => {
+          disabled={order?.state === OrderState.SUBMITTED}
+          onFinish={(o) => {
             /**
              * As we do not refetch enrollments in DashboardCourses after SaleTunnel cache invalidation (to avoid
              * scroll reset - and SaleTunnel modal unmounting too early caused by list reset) we need to manually
              * update the active order in the enrollment in order to hide the buy button and display the download button.
              */
-            setActiveOrder(order);
+            setOrder(o);
           }}
         />
       )}

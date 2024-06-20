@@ -115,7 +115,7 @@ describe('<ProductCertificateFooter/>', () => {
     },
   ])(
     "shouldn't display purchase button for a closed course run without order (state $courseRunStateData.priority).",
-    async ({ courseRunStateData }) => {
+    ({ courseRunStateData }) => {
       render(
         <ProductCertificateFooter
           product={product}
@@ -132,7 +132,7 @@ describe('<ProductCertificateFooter/>', () => {
     },
   );
 
-  it('should display download button for a course run with certificate.', async () => {
+  it('should display download button for a course run with certificate.', () => {
     const order = OrderEnrollmentFactory({
       certificate_id: 'FAKE_CERTIFICATE_ID',
       state: OrderState.VALIDATED,
@@ -147,11 +147,41 @@ describe('<ProductCertificateFooter/>', () => {
       CertificateFactory({ id: order.certificate_id }).one(),
     );
     render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
-    expect(await screen.findByRole('button', { name: 'Download' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Download' })).toBeInTheDocument();
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
 
-  it('should not display button (download or purchase) for a course run with order but without certificate.', async () => {
+  it('should not display purchase button for a course run with submitted order.', () => {
+    const order = OrderEnrollmentFactory({
+      certificate_id: undefined,
+      product_id: product.id,
+      state: OrderState.SUBMITTED,
+    }).one();
+    const enrollment = EnrollmentFactory({
+      orders: [order],
+      course_run: CourseRunFactory({ course }).one(),
+    }).one();
+    render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
+    expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
+    expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
+  });
+
+  it('should display purchase button for a course run with pending order.', () => {
+    const order = OrderEnrollmentFactory({
+      certificate_id: undefined,
+      product_id: product.id,
+      state: OrderState.PENDING,
+    }).one();
+    const enrollment = EnrollmentFactory({
+      orders: [order],
+      course_run: CourseRunFactory({ course }).one(),
+    }).one();
+    render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
+    expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
+    expect(screen.getByTestId('PurchaseButton__cta')).toBeInTheDocument();
+  });
+
+  it('should not display button (download or purchase) for a course run with order but without certificate.', () => {
     const order = OrderEnrollmentFactory({
       certificate_id: undefined,
       product_id: product.id,
@@ -161,7 +191,7 @@ describe('<ProductCertificateFooter/>', () => {
       course_run: CourseRunFactory({ course }).one(),
     }).one();
     render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
-    expect(await screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
 
