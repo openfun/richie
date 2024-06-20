@@ -125,7 +125,7 @@
   },
   "components.ContractStatus.learnerSignedOn": {
     "description": "Label for the date of sign of a training contract by the learner",
-    "message": "Vous avez signé ce contrat de formation. Signée le {date}"
+    "message": "Vous avez signé ce contrat de formation. Signé le {date}"
   },
   "components.ContractStatus.organizationSignedOn": {
     "description": "Label for the date of sign of a training contract by the organization",
@@ -253,7 +253,7 @@
   },
   "components.CourseRunEnrollment.enroll": {
     "description": "CTA for users who can enroll in the course run or could enroll if they logged in.",
-    "message": "S’inscrire maintenant"
+    "message": "Je m'inscris"
   },
   "components.CourseRunEnrollment.enrolled": {
     "description": "Help text for users who see the \"Go to course\" CTA on course run enrollment",
@@ -281,7 +281,7 @@
   },
   "components.CourseRunEnrollment.loginToEnroll": {
     "description": "Helper text in the enroll button for non logged in users",
-    "message": "Connectez-vous pour vous inscrire"
+    "message": "Je me connecte pour m’inscrire"
   },
   "components.CourseRunEnrollment.unenroll": {
     "description": "Help text below the \"Unenroll now\" CTA when an enrollment attempt has already failed.",
@@ -1209,7 +1209,7 @@
   },
   "components.SaleTunnel.loginToPurchase": {
     "description": "Label displayed inside the product's CTA when user is not logged in",
-    "message": "Connectez-vous pour acheter {product}"
+    "message": "Je me connecte pour m’inscrire {product}"
   },
   "components.SaleTunnel.noCourseRunToPurchaseCertificate": {
     "description": "Label displayed below the product's CTA when there is no courseRun",
@@ -1261,7 +1261,7 @@
   },
   "components.SaleTunnelSuccess.successDetailMessage": {
     "description": "Text to remind that order's invoice will be send by email soon",
-    "message": "Vous allez recevoir votre facture par mail dans quelques instants."
+    "message": "Vous allez recevoir votre preuve de paiement par mail dans quelques instants."
   },
   "components.SaleTunnelSuccess.successDetailSignatureMessage": {
     "description": "Text to remind that order needs to be signed",
@@ -1281,7 +1281,7 @@
   },
   "components.SaleTunnelSuccessNotValidated.description": {
     "description": "Text to remind that order's invoice will be send by email soon",
-    "message": "Votre paiement a été accepté mais la validation de votre commande prend plus de temps que prévu, vous pouvez fermer cette fenêtre et revenir plus tard. Vous allez recevoir votre facture par mail dans quelques instants."
+    "message": "Votre paiement a été accepté mais la validation de votre commande prend plus de temps que prévu, vous pouvez fermer cette fenêtre et revenir plus tard. Vous allez recevoir votre preuve de paiement par mail dans quelques instants."
   },
   "components.SaleTunnelSuccessNotValidated.title": {
     "description": "Message to confirm that order has been created",
@@ -1429,7 +1429,7 @@
   },
   "components.SyllabusCourseRun.coursePeriod": {
     "description": "Course date of an opened course run block",
-    "message": "From {startDate} {endDate, select, undefined {} other {to {endDate}}}"
+    "message": "Du {startDate} {endDate, select, undefined {} other {au {endDate}}}"
   },
   "components.SyllabusCourseRun.enrollment": {
     "description": "Title of the enrollment dates section of an opened course run block",
@@ -1437,7 +1437,7 @@
   },
   "components.SyllabusCourseRun.enrollmentPeriod": {
     "description": "Enrollment date of an opened course run block",
-    "message": "From {startDate} {endDate, select, undefined {} other {to {endDate}}}"
+    "message": "Du {startDate} {endDate, select, undefined {} other {au {endDate}}}"
   },
   "components.SyllabusCourseRun.languages": {
     "description": "Title of the languages section of an opened course run block",
@@ -2025,7 +2025,7 @@
   },
   "utils.ContractHelper.learnerSigned": {
     "description": "Label for signed contract status in learner point of view",
-    "message": "Signée"
+    "message": "Signé"
   },
   "utils.ContractHelper.learnerUnsigned": {
     "description": "Label for unsigned contract status in learner point of view",
@@ -2037,7 +2037,7 @@
   },
   "utils.ContractHelper.organizationSigned": {
     "description": "Label for signed contract status in organization point of view",
-    "message": "Signée"
+    "message": "Signé"
   },
   "utils.ContractHelper.organizationUnsigned": {
     "description": "Label for unsigned contract status in organization point of view",
