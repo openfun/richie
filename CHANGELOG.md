@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix RDFa errors on Google Search Console
+- Fix course enrollment count shouldn't include the hidden runs.
+
 ## [2.28.1]
 
 ### Fixed

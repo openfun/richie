@@ -481,10 +481,14 @@ class Course(EsIdMixin, BasePageExtension):
         node = self.extended_object.node
         current_and_descendant_nodes = node.__class__.get_tree(parent=node)
 
-        return CourseRun.objects.filter(
-            direct_course__extended_object__node__in=current_and_descendant_nodes,
-            direct_course__extended_object__publisher_is_draft=is_draft,
-        ).aggregate(sum=Sum("enrollment_count"))["sum"]
+        return (
+            CourseRun.objects.filter(
+                direct_course__extended_object__node__in=current_and_descendant_nodes,
+                direct_course__extended_object__publisher_is_draft=is_draft,
+            )
+            .exclude(catalog_visibility=CourseRunCatalogVisibility.HIDDEN)
+            .aggregate(sum=Sum("enrollment_count"))["sum"]
+        )
 
     @cached_property
     def languages_display(self):
