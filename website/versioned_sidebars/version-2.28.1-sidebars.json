@@ -1,0 +1,22 @@
+{
+  "docs": {
+    "Getting started": ["discover", "cookiecutter"],
+    "Recipes": [
+      "filters-customization",
+      "django-react-interop",
+      "building-the-frontend",
+      "frontend-overrides",
+      "internationalization",
+      "lms-connection",
+      "web-analytics"
+    ],
+    "Contributing": [
+      "installation",
+      "docker-development",
+      "native-installation",
+      "contributing-guide",
+      "accessibility-testing",
+      "css-guidelines"
+    ]
+  }
+}
