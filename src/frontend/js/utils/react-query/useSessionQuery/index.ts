@@ -45,7 +45,7 @@ export function useSessionQuery<
   }, [user, options?.enabled]);
 
   const staleTime = useMemo(() => {
-    if (options?.staleTime !== undefined && options.staleTime >= 0) {
+    if (typeof options?.staleTime === 'number' && options.staleTime >= 0) {
       return options.staleTime;
     }
     return REACT_QUERY_SETTINGS.staleTimes.sessionItems;
