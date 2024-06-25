@@ -16,7 +16,8 @@
         "node",
         "bootstrap",
         "node-fetch",
-        "eslint"
+        "eslint",
+        "fetch-mock"
       ]
     },
     {

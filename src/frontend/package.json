@@ -103,7 +103,7 @@
     "eslint-plugin-react": "7.34.2",
     "eslint-plugin-react-hooks": "4.6.2",
     "eslint-plugin-storybook": "0.8.0",
-    "fetch-mock": "10.0.5",
+    "fetch-mock": "<10",
     "file-loader": "6.2.0",
     "glob": "10.4.1",
     "i18n-iso-countries": "7.11.2",
