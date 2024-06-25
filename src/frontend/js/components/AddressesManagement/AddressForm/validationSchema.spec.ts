@@ -15,7 +15,7 @@ describe('validationSchema', () => {
       first_name: faker.person.firstName(),
       last_name: faker.person.lastName(),
       postcode: faker.location.zipCode(),
-      title: faker.lorem.word(),
+      title: faker.lorem.word({ length: { min: 2, max: 15 } }),
       save: false,
     };
 
@@ -130,7 +130,7 @@ describe('validationSchema', () => {
       result.current.setValue('first_name', faker.person.firstName());
       result.current.setValue('last_name', faker.person.lastName());
       result.current.setValue('postcode', faker.location.zipCode());
-      result.current.setValue('title', faker.lorem.word());
+      result.current.setValue('title', faker.lorem.word({ length: { min: 2, max: 15 } }));
       result.current.trigger();
     });
 
