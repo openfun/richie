@@ -25,7 +25,7 @@
     "skipLibCheck": true,
     "strict": true,
     "sourceMap": true,
-    "target": "es6"
+    "target": "es2018"
   },
   "include": ["./**/*"]
 }
