@@ -263,7 +263,10 @@ export enum OrderState {
   SUBMITTED = 'submitted',
   CANCELED = 'canceled',
   PENDING = 'pending',
+  PENDING_PAYMENT = 'pending_payment',
   VALIDATED = 'validated',
+  NO_PAYMENT = 'no_payment',
+  FAILED_PAYMENT = 'failed_payment',
 }
 
 export const ACTIVE_ORDER_STATES = [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED];
@@ -286,6 +289,7 @@ export interface Order {
   organization_id: Organization['id'];
   organization: Organization;
   order_group_id?: OrderGroup['id'];
+  payment_schedule?: PaymentSchedule;
 }
 
 export interface CredentialOrder extends Order {
@@ -416,6 +420,22 @@ export interface OrderPaymentInfo {
   payment_info: Payment;
 }
 
+export enum PaymentScheduleState {
+  PENDING = 'pending',
+  PAID = 'paid',
+  REFUSED = 'refused',
+}
+
+export interface PaymentInstallment {
+  id: string;
+  amount: number;
+  currency: string;
+  due_date: string;
+  state: PaymentScheduleState;
+}
+
+export type PaymentSchedule = readonly PaymentInstallment[];
+
 // - API
 export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> {
   is_main?: boolean;
@@ -435,6 +455,10 @@ export interface OrderCredentialCreationPayload extends AbstractOrderProductCrea
 }
 
 export type OrderCreationPayload = OrderCertificateCreationPayload | OrderCredentialCreationPayload;
+
+export type OrderSubmitInstallmentPayment = {
+  credit_card_id?: string;
+};
 
 interface OrderAbortPayload {
   id: Order['id'];
@@ -558,6 +582,10 @@ interface APIUser {
     };
     submit(payload: OrderSubmitPayload): Promise<OrderPaymentInfo>;
     submit_for_signature(id: string): Promise<ContractInvitationLinkResponse>;
+    submit_installment_payment(
+      id: string,
+      payload?: OrderSubmitInstallmentPayment,
+    ): Promise<Payment>;
   };
   certificates: {
     download(id: string): Promise<File>;
@@ -614,6 +642,9 @@ export interface API {
       : Promise<PaginatedResponse<CourseListItem>>;
     products: {
       get(filters?: CourseProductQueryFilters): Promise<Nullable<CourseProductRelation>>;
+      paymentSchedule: {
+        get(filters?: CourseProductQueryFilters): Promise<Nullable<PaymentSchedule>>;
+      };
     };
     orders: {
       get(

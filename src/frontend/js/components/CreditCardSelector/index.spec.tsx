@@ -1,21 +1,16 @@
 import { screen, within } from '@testing-library/react';
-import { useMemo, useState } from 'react';
+import { useState, useEffect } from 'react';
 import fetchMock from 'fetch-mock';
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CreditCardSelector } from 'components/SaleTunnel/CreditCardSelector/index';
 import { render } from 'utils/test/render';
 import { CreditCard } from 'types/Joanie';
-import {
-  CredentialOrderFactory,
-  CreditCardFactory,
-  ProductFactory,
-} from 'utils/test/factories/joanie';
-import { SaleTunnelProps } from 'components/SaleTunnel/index';
+import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
-import { SaleTunnelStep, SaleTunnelContext, SaleTunnelContextType } from '../GenericSaleTunnel';
+import { SaleTunnelContextType } from 'components/SaleTunnel/GenericSaleTunnel';
+import { CreditCardSelector } from 'components/CreditCardSelector/index';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -43,30 +38,10 @@ describe('CreditCardSelector', () => {
 
     const Wrapper = () => {
       const [creditCard, setCreditCard] = useState<CreditCard>();
-      const context: SaleTunnelContextType = useMemo(
-        () => ({
-          webAnalyticsEventKey: 'eventKey',
-          order: CredentialOrderFactory().one(),
-          product: ProductFactory().one(),
-          props: {} as SaleTunnelProps,
-          setBillingAddress: jest.fn(),
-          creditCard,
-          setCreditCard,
-          onPaymentSuccess: jest.fn(),
-          step: SaleTunnelStep.PAYMENT,
-          registerSubmitCallback: jest.fn(),
-          unregisterSubmitCallback: jest.fn(),
-          runSubmitCallbacks: jest.fn(),
-        }),
-        [creditCard],
-      );
-      contextRef.current = context;
-
-      return (
-        <SaleTunnelContext.Provider value={context}>
-          <CreditCardSelector />
-        </SaleTunnelContext.Provider>
-      );
+      useEffect(() => {
+        contextRef.current.creditCard = creditCard;
+      }, [creditCard]);
+      return <CreditCardSelector creditCard={creditCard} setCreditCard={setCreditCard} />;
     };
 
     return { contextRef, Wrapper };
@@ -76,11 +51,6 @@ describe('CreditCardSelector', () => {
   it('renders component when no credit card exists, with no edit button', async () => {
     const { Wrapper } = buildWrapper();
     render(<Wrapper />);
-
-    screen.getByRole('heading', {
-      name: 'Payment method',
-    });
-    screen.getByText('Choose your payment method or add a new one during the payment.');
 
     // During loading state, the spinner should be displayed and the current selected card should not be displayed.
     expect(screen.queryByText('Add new credit card during payment')).not.toBeInTheDocument();

@@ -136,21 +136,21 @@ export const useResourcesRoot = <
   const mutation = (session ? useSessionMutation : useMutation) as typeof useMutation;
 
   const writeHandlers = {
-    create: api.create
+    create: api?.create
       ? mutation({
           mutationFn: api.create,
           onSuccess,
           onError: () => setError(intl.formatMessage(actualMessages.errorCreate)),
         })
       : undefined,
-    update: api.update
+    update: api?.update
       ? mutation({
           mutationFn: api.update,
           onSuccess,
           onError: () => setError(intl.formatMessage(actualMessages.errorUpdate)),
         })
       : undefined,
-    delete: api.delete
+    delete: api?.delete
       ? mutation({
           mutationFn: api.delete,
           onSuccess,
