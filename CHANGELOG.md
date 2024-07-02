@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- On self-paced courses with single run display a simplified
+  version of the syllabus.
+
 ## [2.28.1]
 
 ### Fixed

@@ -1,4 +1,5 @@
 import { Nullable } from 'types/utils';
+import { CourseLight } from './Joanie';
 
 export enum CourseStateTextEnum {
   ENROLLMENT_OPENED = 'open for enrollment',
@@ -14,6 +15,11 @@ export type StateCTA = 'enroll now' | 'study now' | undefined;
 export enum CourseRunDisplayMode {
   COMPACT = 'compact',
   DETAILED = 'detailed',
+}
+
+export interface PacedCourse {
+  courseLight: CourseLight;
+  is_self_paced: boolean;
 }
 
 export interface CourseRun {

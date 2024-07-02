@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { CourseStateTextEnum, Priority } from 'types';
+import { PacedCourse, CourseStateTextEnum, Priority } from 'types';
 import {
   Address,
   Certificate,
@@ -274,6 +274,13 @@ export const CourseFactory = factory((): CourseListItem => {
     course_run_ids: [faker.string.uuid()],
     state: CourseStateFactory().one(),
     cover: JoanieFileFactory().one(),
+  };
+});
+
+export const PacedCourseFactory = factory((): PacedCourse => {
+  return {
+    courseLight: CourseLightFactory().one(),
+    is_self_paced: false,
   };
 });
 
