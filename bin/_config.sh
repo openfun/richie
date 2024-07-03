@@ -7,12 +7,8 @@ UNSET_USER=0
 COMPOSE_PROJECT="richie"
 
 # By default, all commands are run on Postgresql.
-# They can be run on Mysql by setting an environment variable: `DB_ENGINE=mysql`
-if [[ "${DB_ENGINE}" == "mysql" ]]; then
-    COMPOSE_FILE="${REPO_DIR}/docker/compose/development/mysql/docker-compose.yml"
-else
-    COMPOSE_FILE="${REPO_DIR}/docker-compose.yml"
-fi
+# They can be run on Mysql by setting an environment variable: `DB_HOST=mysql`
+COMPOSE_FILE="-f ${REPO_DIR}/docker-compose.yml -f ${REPO_DIR}/docker-compose-${DB_HOST:-postgresql}.yml"
 
 # _set_user: set (or unset) default user id used to run docker commands
 #
@@ -47,8 +43,9 @@ function _docker_compose() {
     echo "🐳(compose) project: '${COMPOSE_PROJECT}' file: '${COMPOSE_FILE}'"
     docker compose \
         -p "${COMPOSE_PROJECT}" \
-        -f "${COMPOSE_FILE}" \
+        ${COMPOSE_FILE} \
         --project-directory "${REPO_DIR}" \
+        --env-file env.d/development/${DB_HOST:-postgresql}  \
         "$@"
 }
 

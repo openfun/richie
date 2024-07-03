@@ -1,16 +1,4 @@
 services:
-  postgresql:
-    image: postgres:12
-    ports:
-      - "5472:5432"
-    env_file:
-      - env.d/development/postgresql
-
-  mysql:
-    image: mysql:8.0
-    env_file:
-      - env.d/development/mysql
-    command: --default-authentication-plugin=mysql_native_password
 
   elasticsearch:
     image: "${ELASTICSEARCH_IMAGE:-docker.elastic.co/elasticsearch/elasticsearch:7.14.0}"
@@ -39,8 +27,8 @@ services:
       - ./data/media:/data/media
       - ./data/smedia:/data/smedia
     depends_on:
-      - "${DB_HOST:-postgresql}"
-      - "elasticsearch"
+      elasticsearch:
+        condition: service_started
     stdin_open: true
     tty: true
 

@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8.0
+    env_file:
+      - env.d/development/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 1s
+      timeout: 2s
+      retries: 300
+
+  app:
+    depends_on:
+      mysql:
+        condition: service_healthy 
+        restart: true

@@ -1,0 +1,19 @@
+services:
+  postgresql:
+    image: postgres:12
+    ports:
+      - "5472:5432"
+    env_file:
+      - env.d/development/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 2s
+      retries: 300
+
+  app:
+    depends_on:
+      postgresql:
+        condition: service_healthy 
+        restart: true
+
