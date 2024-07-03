@@ -22,6 +22,7 @@ from richie.apps.core.factories import PageFactory, TitleFactory
 from richie.apps.courses import defaults, factories
 from richie.apps.courses.cms_plugins import CoursePlugin
 from richie.apps.courses.models import Course, CourseRun, CourseRunTranslation, Program
+from richie.apps.courses.models.course import CourseRunCatalogVisibility
 
 # pylint: disable=too-many-public-methods
 
@@ -940,6 +941,26 @@ class CourseModelsTestCase(TestCase):
         with self.assertNumQueries(0):
             enrollment_count_sum = course.public_extension.course_runs_enrollment_count
             self.assertEqual(enrollment_count_sum, 5)
+
+    def test_models_course_course_runs_enrollment_count_hidden_run(self):
+        """
+        The `course_runs_enrollment_count` property should not include the hidden course runs.
+        """
+        course = factories.CourseFactory()
+
+        # Create random course runs for this course
+        factories.CourseRunFactory(enrollment_count=30, direct_course=course)
+        factories.CourseRunFactory(enrollment_count=20, direct_course=course)
+        factories.CourseRunFactory(
+            enrollment_count=10,
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
+        )
+        course.extended_object.publish("en")
+        course.refresh_from_db()
+
+        enrollment_count_sum = course.public_extension.course_runs_enrollment_count
+        self.assertEqual(enrollment_count_sum, 50)
 
     def test_models_course_course_runs_dict(self):
         """The `course_runs_dict` property should be computed on once per request."""
