@@ -471,6 +471,11 @@ interface OrderSubmitPayload {
   credit_card_id?: CreditCard['id'];
 }
 
+interface OrderSetPaymentMethodPayload {
+  id: Order['id'];
+  credit_card_id: CreditCard['id'];
+}
+
 export interface PaginatedResourceQuery extends ResourcesQuery {
   page?: number;
   page_size?: number;
@@ -587,6 +592,7 @@ interface APIUser {
       id: string,
       payload?: OrderSubmitInstallmentPayment,
     ): Promise<Payment>;
+    set_payment_method(payload: OrderSetPaymentMethodPayload): Promise<void>;
   };
   certificates: {
     download(id: string): Promise<File>;
