@@ -42,7 +42,7 @@ endif
 DOCKER_UID           = $(shell id -u)
 DOCKER_GID           = $(shell id -g)
 DOCKER_USER          = $(DOCKER_UID):$(DOCKER_GID)
-COMPOSE              = DOCKER_USER=$(DOCKER_USER) DB_HOST=$(DB_HOST) DB_PORT=$(DB_PORT) docker compose
+COMPOSE              = DOCKER_USER=$(DOCKER_USER) DB_HOST=$(DB_HOST) DB_PORT=$(DB_PORT) docker compose -f docker-compose.yml -f docker-compose-$(DB_HOST).yml
 COMPOSE_SSL          = NGINX_CONF=ssl DEV_ENV_FILE=dev-ssl $(COMPOSE)
 COMPOSE_RUN          = $(COMPOSE) run --rm
 COMPOSE_RUN_SSL      = $(COMPOSE_SSL) run --rm
@@ -263,7 +263,7 @@ search-index: ## (re)generate the Elasticsearch index
 .PHONY: search-index
 
 superuser: ## Create an admin user with password "admin"
-	@$(COMPOSE) up -d mysql
+	@$(COMPOSE) up -d ${DB_HOST}
 	@echo "Wait for services to be up..."
 	@$(WAIT_DB)
 	@$(MANAGE) shell -c "from django.contrib.auth.models import User; not User.objects.filter(username='admin').exists() and User.objects.create_superuser('admin', 'admin@example.com', 'admin')"
@@ -326,7 +326,7 @@ i18n-generate-front: build-ts
 # -- Database
 
 dbshell: ## connect to database shell
-	docker compose exec app python sandbox/manage.py dbshell
+	@$(COMPOSE) exec app python sandbox/manage.py dbshell
 .PHONY: dbshell
 
 # -- Misc
