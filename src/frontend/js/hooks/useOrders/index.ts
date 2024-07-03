@@ -1,4 +1,5 @@
-import { defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   API,
   CertificateOrder,
@@ -12,7 +13,7 @@ import {
 } from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
-import { QueryOptions, useResource, useResourcesCustom, UseResourcesProps } from './useResources';
+import { QueryOptions, useResource, useResourcesCustom, UseResourcesProps } from '../useResources';
 
 export type OrderResourcesQuery = PaginatedResourceQuery & {
   course_code?: CourseLight['code'];
@@ -35,6 +36,21 @@ const messages = defineMessages({
     id: 'hooks.useOrders.errorNotFound',
     description: 'Error message shown to the user when no orders matches.',
     defaultMessage: 'Cannot find the orders.',
+  },
+  errorAbort: {
+    id: 'hooks.useOrders.errorAbort',
+    description: 'Error message shown to the user when aborting mutation failed.',
+    defaultMessage: 'Cannot abort the order.',
+  },
+  errorSubmit: {
+    id: 'hooks.useOrders.errorSubmit',
+    description: 'Error message shown to the user when submit mutation failed.',
+    defaultMessage: 'Cannot submit the order.',
+  },
+  errorSetPaymentMethod: {
+    id: 'hooks.useOrders.errorSetPaymentMethod',
+    description: 'Error message shown to the user when set payment method mutation failed.',
+    defaultMessage: "Cannot set the order's payment method.",
   },
 });
 
@@ -73,25 +89,47 @@ const useOrdersBase =
     filters?: OrderResourcesQuery,
     queryOptions?: QueryOptions<CredentialOrder | CertificateOrder>,
   ) => {
+    const intl = useIntl();
     const custom = useResourcesCustom({ ...props, filters, queryOptions });
+    const queryClient = useQueryClient();
+    const api = props.apiInterface();
+    const onSuccess = async () => {
+      custom.methods.setError(undefined);
+      await custom.methods.invalidate();
+      props.onMutationSuccess?.(queryClient);
+    };
     const abortHandler = useSessionMutation({
-      mutationFn: useJoanieApi().user.orders.abort,
-      onSuccess: () => {
-        custom.methods.invalidate();
-      },
+      mutationFn: api.abort,
+      onSuccess,
+      onError: () => custom.methods.setError(intl.formatMessage(messages.errorAbort)),
     });
     const submitHandler = useSessionMutation({
-      mutationFn: useJoanieApi().user.orders.submit,
-      onSuccess: () => {
-        custom.methods.invalidate();
-      },
+      mutationFn: api.submit,
+      onSuccess,
+      onError: () => custom.methods.setError(intl.formatMessage(messages.errorSubmit)),
     });
+    const setPaymentMethodHandler = useSessionMutation({
+      mutationFn: api.set_payment_method,
+      onSuccess,
+      onError: () => custom.methods.setError(intl.formatMessage(messages.errorSetPaymentMethod)),
+    });
+
     return {
       ...custom,
       methods: {
         ...custom.methods,
         abort: abortHandler.mutateAsync,
         submit: submitHandler.mutateAsync,
+        set_payment_method: setPaymentMethodHandler.mutateAsync,
+      },
+      states: {
+        ...custom.states,
+        aborting: abortHandler.isPending,
+        submitting: submitHandler.isPending,
+        settingPaymentMethod: setPaymentMethodHandler.isPending,
+        isPending: [custom.states, submitHandler, abortHandler, setPaymentMethodHandler].some(
+          (value) => value?.isPending,
+        ),
       },
     };
   };
