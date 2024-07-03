@@ -79,9 +79,9 @@ export const getRoutes = () => {
       },
       creditCards: {
         get: `${baseUrl}/credit-cards/:id/`,
-        create: `${baseUrl}/credit-cards/`,
         update: `${baseUrl}/credit-cards/:id/`,
         delete: `${baseUrl}/credit-cards/:id/`,
+        tokenize: `${baseUrl}/credit-cards/tokenize-card/`,
       },
       addresses: {
         get: `${baseUrl}/addresses/:id/`,
@@ -229,11 +229,6 @@ const API = (): Joanie.API => {
         get: async (filters?: ResourcesQuery) => {
           return fetchWithJWT(buildApiUrl(ROUTES.user.creditCards.get, filters)).then(checkStatus);
         },
-        create: async (creditCard) =>
-          fetchWithJWT(ROUTES.user.creditCards.create, {
-            method: 'POST',
-            body: JSON.stringify(creditCard),
-          }).then(checkStatus),
         update: async ({ id, ...creditCard }) => {
           return fetchWithJWT(ROUTES.user.creditCards.update.replace(':id', id), {
             method: 'PUT',
@@ -244,6 +239,8 @@ const API = (): Joanie.API => {
           fetchWithJWT(ROUTES.user.creditCards.delete.replace(':id', id), {
             method: 'DELETE',
           }).then(checkStatus),
+        tokenize: async () =>
+          fetchWithJWT(ROUTES.user.creditCards.tokenize, { method: 'POST' }).then(checkStatus),
       },
       addresses: {
         get: (id?: string) => {

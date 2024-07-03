@@ -563,11 +563,12 @@ interface APIUser {
     update(payload: Address): Promise<Address>;
   };
   creditCards: {
-    create(payload: Omit<CreditCard, 'id'>): Promise<CreditCard>;
     delete(id: CreditCard['id']): Promise<void>;
+    get(): Promise<PaginatedResponse<CreditCard>>;
     get(filters?: ResourcesQuery): Promise<CreditCard>;
     get(): Promise<CreditCard[]>;
     update(payload: CreditCard): Promise<CreditCard>;
+    tokenize(): Promise<Payment>;
   };
   orders: {
     abort(payload: OrderAbortPayload): Promise<void>;

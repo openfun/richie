@@ -59,6 +59,7 @@ const emptyArray: never[] = [];
  * @param queryOptions - Pass custom options to react-query.
  * @param localized - Is the resource local-dependent ? If so, the query will be invalidated on locale change.
  * @param resourceMessages - Custom messages to use for this resource.
+ * @param onMutationSuccess - Custom callback triggered on mutation success.
  */
 export const useResourcesRoot = <
   TData extends Resource,
