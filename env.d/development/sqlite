@@ -1,0 +1,5 @@
+# App database configuration
+DB_NAME=db.sqlite3
+
+DB_HOST=sqlite
+DB_ENGINE=django.db.backends.sqlite3
