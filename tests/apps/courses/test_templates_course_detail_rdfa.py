@@ -25,6 +25,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     PersonFactory,
 )
+from richie.apps.courses.models import CourseRunCatalogVisibility
 from richie.plugins.nesteditem.defaults import ACCORDION
 
 # pylint: disable=too-many-lines,too-many-locals,too-many-statements
@@ -212,6 +213,27 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             enrollment_end=datetime(2030, 6, 20, tzinfo=timezone.utc),
             languages=["de"],
             enrollment_count=3000,
+        )
+        CourseRunFactory(
+            title="A hidden course run",
+            direct_course=course,
+            start=datetime(2010, 6, 1, tzinfo=timezone.utc),
+            end=datetime(2050, 7, 10, tzinfo=timezone.utc),
+            enrollment_start=datetime(2010, 6, 13, tzinfo=timezone.utc),
+            enrollment_end=datetime(2050, 6, 20, tzinfo=timezone.utc),
+            languages=["pt"],
+            enrollment_count=100,
+            catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
+        )
+        CourseRunFactory(
+            title="A to be scheduled run",
+            direct_course=course,
+            start=None,
+            end=None,
+            enrollment_start=None,
+            enrollment_end=None,
+            languages=["en"],
+            enrollment_count=0,
         )
 
         contributor1.extended_object.publish("en")
@@ -551,6 +573,9 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             self.assertTrue((course_run_subject, RDF.type, SDO.CourseInstance) in graph)
             self.assertTrue(
                 (course_run_subject, SDO.courseMode, Literal("online")) in graph
+            )
+            self.assertTrue(
+                (course_run_subject, SDO.courseWorkload, Literal("PT3H")) in graph
             )
 
         for title in ["Run 0", "Run 1"]:

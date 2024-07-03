@@ -369,18 +369,19 @@
                 <div class="course-detail__aside">
                     {% render_model_add course "" "" "get_admin_url_to_add_run" %}
                     {% with runs_dict=current_page.course.course_runs_dict %}
-                        {% with open_visible_runs=runs_dict.0|add:runs_dict.1|add:runs_dict.2|visible_on_course_page:request.toolbar.edit_mode_active %}
+                        {% with runs_without_to_be_scheduled=runs_dict.0|add:runs_dict.1|add:runs_dict.2|add:runs_dict.3|add:runs_dict.4|add:runs_dict.5|add:runs_dict.6|visible_on_course_page:request.toolbar.edit_mode_active %}
                             <!--
                                 As course runs are rendered through React, we use meta tags to
                                 setup course runs RFDa properties.
-                             -->
-                            {% for run in open_visible_runs %}
+                                -->
+                            {% for run in runs_without_to_be_scheduled %}
                                 <span rel="hasCourseInstance" typeof="CourseInstance">
-                                    <meta property="name" content="{{ run.title }}"  />
-                                    <meta property="inLanguage" content="{{ run.get_languages_display }}"  />
-                                    <meta property="courseMode" content="online"  />
+                                    <meta property="name" content='{{ run.title|default:current_page.get_title }}' />
+                                    <meta property="inLanguage" content="{{ run.get_languages_display }}" />
+                                    <meta property="courseMode" content="online" />
                                     <meta property="startDate" content="{{ run.start|date:'Y-m-d' }}"  />
                                     <meta property="endDate" content="{{ run.end|date:'Y-m-d' }}"  />
+                                    <meta property="courseWorkload" content="{{ current_page.course.pt_effort }}" />
                                 </span>
                             {% endfor %}
                         {% endwith %}
