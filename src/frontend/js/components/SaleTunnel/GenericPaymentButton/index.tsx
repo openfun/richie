@@ -6,7 +6,6 @@ import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { useOrders } from 'hooks/useOrders';
 import { OrderCreationPayload, OrderState } from 'types/Joanie';
 import type { Maybe } from 'types/utils';
-import { useTerms } from 'components/SaleTunnel/hooks/useTerms';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import { CourseProductEvent } from 'types/web-analytics';
 import { ObjectHelper } from 'utils/ObjectHelper';
@@ -70,9 +69,7 @@ enum ComponentStates {
 }
 
 interface Props {
-  buildOrderPayload: (
-    payload: Pick<OrderCreationPayload, 'product_id' | 'has_consent_to_terms'>,
-  ) => OrderCreationPayload;
+  buildOrderPayload: (payload: Pick<OrderCreationPayload, 'product_id'>) => OrderCreationPayload;
 }
 
 export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
@@ -106,22 +103,9 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
   const onPaymentSuccessRef = useRef(onPaymentSuccess);
   onPaymentSuccessRef.current = onPaymentSuccess;
 
-  const { validateTerms, termsAccepted, renderTermsCheckbox } = useTerms({
-    product,
-    error,
-    onError: (e) => {
-      handleError(e);
-    },
-  });
-
   const isReadyToPay = useMemo(() => {
-    return (
-      (saleTunnelProps.course || saleTunnelProps.enrollment) &&
-      product &&
-      billingAddress &&
-      termsAccepted
-    );
-  }, [product, saleTunnelProps.course, saleTunnelProps.enrollment, billingAddress, termsAccepted]);
+    return (saleTunnelProps.course || saleTunnelProps.enrollment) && product && billingAddress;
+  }, [product, saleTunnelProps.course, saleTunnelProps.enrollment, billingAddress]);
 
   const isBusy = useMemo(() => {
     return (
@@ -150,8 +134,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     if (!billingAddress) {
       handleError(PaymentErrorMessageId.ERROR_ADDRESS);
     }
-
-    validateTerms();
 
     if (isReadyToPay) {
       setState(ComponentStates.LOADING);
@@ -205,8 +187,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
       handleError(PaymentErrorMessageId.ERROR_ADDRESS);
     }
 
-    validateTerms();
-
     if (!isReadyToPay) {
       return;
     }
@@ -216,7 +196,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     } else {
       const payload = buildOrderPayload({
         product_id: product.id,
-        has_consent_to_terms: termsAccepted,
       });
       orderMethods.create(payload, {
         onSuccess: (newOrder) => {
@@ -287,7 +266,6 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
 
   return (
     <>
-      {renderTermsCheckbox()}
       <Button
         disabled={isBusy}
         onClick={createOrder}
