@@ -254,11 +254,6 @@ describe('SaleTunnel', () => {
     /**
      * Pay
      */
-    const $terms = screen.getByLabelText(
-      'By checking this box, you accept the General Terms of Sale',
-    );
-    await user.click($terms);
-
     const { payment_info: paymentInfo, ...order } = CredentialOrderWithPaymentFactory().one();
     fetchMock
       .get(

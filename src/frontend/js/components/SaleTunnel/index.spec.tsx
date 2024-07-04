@@ -190,11 +190,7 @@ describe.each([
       nbApiCalls += 1; // get user preferences call.
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
-      const $terms = screen.getByLabelText(
-        'By checking this box, you accept the General Terms of Sale',
-      );
       const user = userEvent.setup({ delay: null });
-      await user.click($terms);
 
       const $button = screen.getByRole<HTMLButtonElement>('button', {
         name: `Subscribe`,
@@ -352,10 +348,6 @@ describe.each([
       });
 
       const user = userEvent.setup({ delay: null });
-      const $terms = screen.getByLabelText(
-        'By checking this box, you accept the General Terms of Sale',
-      );
-      await user.click($terms);
 
       nbApiCalls += 1; // useProductOrder get order with filters
       nbApiCalls += 1; // get user account call.
@@ -489,11 +481,7 @@ describe.each([
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
       );
 
-      const $terms = screen.getByLabelText(
-        'By checking this box, you accept the General Terms of Sale',
-      );
       const user = userEvent.setup({ delay: null });
-      await user.click($terms);
 
       const $button = screen.getByRole('button', {
         name: `Subscribe`,
@@ -621,11 +609,7 @@ describe.each([
       nbApiCalls += 1; // get product payment schedule.
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
-      const $terms = screen.getByLabelText(
-        'By checking this box, you accept the General Terms of Sale',
-      );
       const user = userEvent.setup({ delay: null });
-      await user.click($terms);
 
       const $button = screen.getByRole('button', {
         name: `Subscribe`,
@@ -711,11 +695,7 @@ describe.each([
       nbApiCalls += 1; // product payment schedule call.
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
-      const $terms = screen.getByLabelText(
-        'By checking this box, you accept the General Terms of Sale',
-      );
       const user = userEvent.setup({ delay: null });
-      await user.click($terms);
 
       const $button = screen.getByRole('button', {
         name: `Subscribe`,
@@ -772,65 +752,6 @@ describe.each([
       nbApiCalls += 1; // order get (invalidate queries)
       nbApiCalls += 1; // useProductOrder call (invalidate from submit)
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
-    });
-
-    it('should show an error if user does not accept the terms', async () => {
-      const product = ProductFactory().one();
-      const billingAddress = AddressFactory({ is_main: true }).one();
-
-      fetchMock
-        .get(
-          `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
-          [],
-        )
-        .get(
-          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-          [],
-        )
-        .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
-          overwriteRoutes: true,
-        });
-
-      render(<Wrapper product={product} />, {
-        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
-      });
-
-      const $button = screen.getByRole('button', {
-        name: 'Subscribe',
-      }) as HTMLButtonElement;
-
-      // - As all information are provided, payment button should not be disabled.
-      expect($button.disabled).toBe(false);
-
-      expect(screen.queryByText('You must accept the terms')).not.toBeInTheDocument();
-
-      // - User clicks on pay button
-      await act(async () => {
-        fireEvent.click($button);
-      });
-
-      expect(screen.getByText('You must accept the terms.')).toBeInTheDocument();
-    });
-
-    it('should show a link to the platform terms and conditions', async () => {
-      const product = ProductFactory().one();
-
-      fetchMock
-        .get(
-          `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
-          [],
-        )
-        .get(
-          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-          [],
-        );
-
-      render(<Wrapper product={product} />, {
-        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
-      });
-
-      const $terms = screen.getByRole('link', { name: 'General Terms of Sale' });
-      expect($terms).toHaveAttribute('href', '/en/about/terms-and-conditions/');
     });
 
     it('should show the product payment schedule', async () => {
