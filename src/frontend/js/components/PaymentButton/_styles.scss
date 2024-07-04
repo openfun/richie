@@ -10,18 +10,4 @@
     margin-top: 0.5rem;
     margin-bottom: 0;
   }
-
-  &__terms {
-    button {
-      color: $link-color;
-      text-decoration: underline;
-      background-color: transparent;
-      border: none;
-      padding: 0;
-
-      &:hover {
-        color: $link-hover-color;
-      }
-    }
-  }
 }
