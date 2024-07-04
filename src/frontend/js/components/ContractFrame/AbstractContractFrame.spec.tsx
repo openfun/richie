@@ -115,6 +115,7 @@ describe('<AbstractContractFrame />', () => {
     const mockCheckSignature = jest.fn(async () => checkSignatureDeferred.promise);
     const mockOnDone = jest.fn();
     const mockOnClose = jest.fn();
+    fetchMock.post('https://joanie.endpoint/api/v1.0/signature/notifications/', 200);
 
     await act(async () => {
       render(
@@ -176,6 +177,7 @@ describe('<AbstractContractFrame />', () => {
     const mockCheckSignature = jest.fn(async () => checkSignatureDeferred.promise);
     const mockOnDone = jest.fn();
     const mockOnClose = jest.fn();
+    fetchMock.post('https://joanie.endpoint/api/v1.0/signature/notifications/', 200);
 
     await act(async () => {
       render(
@@ -300,6 +302,7 @@ describe('<AbstractContractFrame />', () => {
     const mockCheckSignature = jest.fn(async () => checkSignatureDeferred.promise);
     const mockOnDone = jest.fn();
     const mockOnClose = jest.fn();
+    fetchMock.post('https://joanie.endpoint/api/v1.0/signature/notifications/', 200);
 
     await act(async () => {
       render(

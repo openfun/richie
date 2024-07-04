@@ -114,6 +114,7 @@ describe('<SignContractButton/>', () => {
     fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, signedOrder, {
       overwriteRoutes: true,
     });
+    fetchMock.post(`https://joanie.endpoint/api/v1.0/signature/notifications/`, 200);
     const $modal = screen.getByTestId('dashboard-contract-frame');
     await user.click(await within($modal).findByRole('button', { name: 'Sign' }));
 

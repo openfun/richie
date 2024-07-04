@@ -4,6 +4,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { SignatureProps } from 'components/ContractFrame';
 import { DummyContractPlaceholder } from 'widgets/Dashboard/components/Signature/DummyContractPlaceholder';
 import { CONTRACT_SETTINGS } from 'settings';
+import { getAPIEndpoint } from 'api/joanie';
 
 const messages = defineMessages({
   button: {
@@ -23,12 +24,30 @@ enum SignatureDummySteps {
   SIGNING_LOADING,
 }
 
-export const SignatureDummy = ({ onDone }: SignatureProps) => {
+export const SignatureDummy = ({ invitationLink, onDone }: SignatureProps) => {
   const [step, setStep] = useState(SignatureDummySteps.SIGNING);
+
+  const baseUrl = getAPIEndpoint();
+  const link = new URL(invitationLink);
+  const reference = link.searchParams.get('reference');
+  const event = link.searchParams.get('eventTarget');
+  const sendSignatureNotification = () => {
+    fetch(`${baseUrl}/signature/notifications/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        event_type: event,
+        reference,
+      }),
+    });
+  };
 
   const sign = () => {
     setStep(SignatureDummySteps.SIGNING_LOADING);
     setTimeout(() => {
+      sendSignatureNotification();
       onDone();
     }, CONTRACT_SETTINGS.dummySignatureSignTimeout);
   };
