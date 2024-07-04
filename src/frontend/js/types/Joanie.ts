@@ -444,7 +444,6 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
 interface AbstractOrderProductCreationPayload {
   product_id: Product['id'];
   order_group_id?: OrderGroup['id'];
-  has_consent_to_terms: boolean;
 }
 
 interface OrderCertificateCreationPayload extends AbstractOrderProductCreationPayload {
