@@ -121,13 +121,6 @@ describe('SaleTunnel / Credential', () => {
       name: `Subscribe`,
     }) as HTMLButtonElement;
 
-    const $terms = screen.getByLabelText(
-      'By checking this box, you accept the General Terms of Sale',
-    );
-    await act(async () => {
-      fireEvent.click($terms);
-    });
-
     // - Payment button should not be disabled.
     expect($button.disabled).toBe(false);
 
