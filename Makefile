@@ -43,14 +43,13 @@ DOCKER_UID           = $(shell id -u)
 DOCKER_GID           = $(shell id -g)
 DOCKER_USER          = $(DOCKER_UID):$(DOCKER_GID)
 COMPOSE              = DOCKER_USER=$(DOCKER_USER) DB_HOST=$(DB_HOST) DB_PORT=$(DB_PORT) docker compose -f docker-compose.yml -f docker-compose-$(DB_HOST).yml
-COMPOSE_SSL          = NGINX_CONF=ssl DEV_ENV_FILE=dev-ssl $(COMPOSE)
+SSL_ENV              = NGINX_CONF=ssl DEV_ENV_FILE=dev-ssl
 COMPOSE_RUN          = $(COMPOSE) run --rm
-COMPOSE_RUN_SSL      = $(COMPOSE_SSL) run --rm
 COMPOSE_EXEC         = $(COMPOSE) exec
+COMPOSE_UP_WAIT      = $(COMPOSE) up --wait --wait-timeout 60
 COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
 COMPOSE_EXEC_FRONTEND= $(COMPOSE_EXEC) frontend
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
-COMPOSE_RUN_SSL_APP  = $(COMPOSE_RUN_SSL) app
 COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin crowdin
 COMPOSE_TEST_RUN     = $(COMPOSE) run --rm -e DJANGO_CONFIGURATION=Test
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
@@ -68,10 +67,6 @@ YARN                 = $(COMPOSE_RUN_FRONTEND) yarn
 
 # -- Django
 MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
-MANAGE_SSL           = $(COMPOSE_RUN_SSL_APP) python sandbox/manage.py
-WAIT_DB              = $(COMPOSE_RUN) dockerize -wait tcp://$(DB_HOST):$(DB_PORT) -timeout 60s
-WAIT_ES              = $(COMPOSE_RUN) dockerize -wait tcp://elasticsearch:9200 -timeout 60s
-WAIT_APP             = $(COMPOSE_RUN) dockerize -wait tcp://app:8000 -timeout 60s
 
 # ==============================================================================
 # RULES
@@ -109,19 +104,13 @@ logs: ## display app logs (follow mode)
 .PHONY: logs
 
 run: ## start the development server
-	@$(COMPOSE) up -d nginx
-	@echo "Wait for services to be up..."
-	@$(WAIT_DB)
-	@$(WAIT_ES)
-	@$(WAIT_APP)
+	@echo "Start and wait for ${DB_HOST}, elasticsearch and app to be up..."
+	@$(COMPOSE_UP_WAIT) -d nginx $(DB_HOST) elasticsearch app
 .PHONY: run
 
 run-ssl: ## start the development server over TLS
-	@$(COMPOSE_SSL) up -d nginx
-	@echo "Wait for services to be up..."
-	@$(WAIT_DB)
-	@$(WAIT_ES)
-	@$(WAIT_APP)
+	@echo "Start and wait for services to be up..."
+	@$(SSL_ENV) $(COMPOSE_UP_WAIT) -d nginx $(DB_HOST) elasticsearch app
 .PHONY: run-ssl
 
 status: ## an alias for "docker compose ps"
@@ -249,23 +238,20 @@ messages: ## create the .po files used for i18n
 .PHONY: messages
 
 migrate: ## perform database migrations
-	@$(COMPOSE) up -d ${DB_HOST}
-	@$(WAIT_DB)
+	@echo "Start and wait for ${DB_HOST} to be up..."
+	@$(COMPOSE_UP_WAIT) -d ${DB_HOST}
 	@$(MANAGE) migrate
 .PHONY: migrate
 
 search-index: ## (re)generate the Elasticsearch index
-	@$(COMPOSE) up -d ${DB_HOST}
-	@$(WAIT_DB)
-	@$(COMPOSE) up -d elasticsearch
-	@$(WAIT_ES)
+	@echo "Start and wait for ${DB_HOST} & elasticsearch to be up..."
+	@$(COMPOSE_UP_WAIT) -d ${DB_HOST} elasticsearch
 	@$(MANAGE) bootstrap_elasticsearch
 .PHONY: search-index
 
 superuser: ## Create an admin user with password "admin"
-	@$(COMPOSE) up -d ${DB_HOST}
-	@echo "Wait for services to be up..."
-	@$(WAIT_DB)
+	@echo "Start and wait for ${DB_HOST} to be up..."
+	@$(COMPOSE_UP_WAIT) -d ${DB_HOST}
 	@$(MANAGE) shell -c "from django.contrib.auth.models import User; not User.objects.filter(username='admin').exists() and User.objects.create_superuser('admin', 'admin@example.com', 'admin')"
 .PHONY: superuser
 
