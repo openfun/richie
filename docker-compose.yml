@@ -5,7 +5,11 @@ services:
     environment:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-
+    healthcheck:
+      test: ["CMD", "echo", "''", ">", "/dev/tcp/127.0.0.1/9200", "||", "exit", "1"]
+      interval: 1s
+      timeout: 2s
+      retries: 300
   app:
     build:
       context: .
@@ -29,9 +33,15 @@ services:
     depends_on:
       elasticsearch:
         condition: service_started
+      redis-sentinel:
+        condition: service_started
     stdin_open: true
     tty: true
-
+    healthcheck:
+      test: ["CMD", "echo", "''", ">", "/dev/tcp/127.0.0.1/8000", "||", "exit", "1"]
+      interval: 1s
+      timeout: 2s
+      retries: 3600
   nginx:
     image: nginx
     ports:
@@ -84,12 +94,22 @@ services:
       - redis-replica2
     environment:
       - REDIS_MASTER_HOST=redis-primary
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -p 26379  ping | grep PONG"]
+      interval: 1s
+      timeout: 2s
+      retries: 300
 
   redis-primary:
     image: docker.io/bitnami/redis:6.0-debian-10
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_REPLICATION_MODE=master
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -p 6379 ping | grep PONG"]
+      interval: 1s
+      timeout: 2s
+      retries: 300
 
   redis-replica1:
     image: docker.io/bitnami/redis:6.0-debian-10
@@ -99,6 +119,11 @@ services:
       - REDIS_MASTER_HOST=redis-primary
     depends_on:
       - redis-primary
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -p 6379 ping | grep PONG"]
+      interval: 1s
+      timeout: 2s
+      retries: 300
 
   redis-replica2:
     image: docker.io/bitnami/redis:6.0-debian-10
@@ -108,9 +133,11 @@ services:
       - REDIS_MASTER_HOST=redis-primary
     depends_on:
       - redis-primary
-
-  dockerize:
-    image: jwilder/dockerize
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -p 6379 ping | grep PONG"]
+      interval: 1s
+      timeout: 2s
+      retries: 300
 
 networks:
   lms_outside:
