@@ -42,5 +42,5 @@ export type Payment = DummyPayment | PayplugPayment | LyraPayment;
 
 export type PaymentInterfaceProps<P extends Payment = Payment> = P & {
   onSuccess: () => void;
-  onError: (messageId: PaymentErrorMessageId) => void;
+  onError: (messageId: string | PaymentErrorMessageId) => void;
 };
