@@ -25,11 +25,13 @@ const LyraPopIn = ({
   const intl = useIntl();
   const shouldAbort = useRef<Boolean>(true);
 
-  const handleError = (error?: Error) => {
-    if (error) handle(`[LyraPopIn] - ${error}`);
+  const handleError = (error?: Error | string) => {
+    if (error && typeof error === 'string') handle(`[LyraPopIn] - ${error}`);
 
     if (shouldAbort.current) {
       onError(PaymentErrorMessageId.ERROR_ABORTING);
+    } else if (typeof error === 'string') {
+      onError(error);
     } else {
       onError(PaymentErrorMessageId.ERROR_DEFAULT);
     }
@@ -95,8 +97,13 @@ const LyraPopIn = ({
       // Do not close the pop-in if the error is a invalid data error (CLIENT_3XX).
       // https://docs.lyra.com/fr/rest/V4.0/javascript/features/js_error_management.html#client004
       if (!error.errorCode.startsWith('CLIENT_3')) {
+        shouldAbort.current = false;
         await KR.closePopin(formId);
-        handleError();
+        let errorMessages = error.errorMessage;
+        if (error.detailedErrorMessage) {
+          errorMessages += `: ${error.detailedErrorMessage}`;
+        }
+        handleError(errorMessages);
       }
     };
 

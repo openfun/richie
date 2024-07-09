@@ -29,8 +29,8 @@ export const useTerms = ({
   error,
 }: {
   product: Product;
-  onError: (error: PaymentErrorMessageId) => void;
-  error?: PaymentErrorMessageId;
+  onError: (error: PaymentErrorMessageId | string) => void;
+  error?: PaymentErrorMessageId | string;
 }) => {
   const intl = useIntl();
   const [termsAccepted, setTermsAccepted] = useState(false);

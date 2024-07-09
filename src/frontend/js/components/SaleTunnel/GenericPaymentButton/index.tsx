@@ -97,7 +97,7 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
   const [payment, setPayment] = useState<PaymentInfo>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
-  const [error, setError] = useState<PaymentErrorMessageId>();
+  const [error, setError] = useState<PaymentErrorMessageId | string>();
   const hasPaymentId = (p: Maybe<Payment>): p is Extract<Payment, PaymentWithId> => {
     return Boolean(p?.hasOwnProperty('payment_id'));
   };
@@ -256,7 +256,9 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
     checkOrderValidity();
   };
 
-  const handleError = (messageId: PaymentErrorMessageId = PaymentErrorMessageId.ERROR_DEFAULT) => {
+  const handleError = (
+    messageId: PaymentErrorMessageId | string = PaymentErrorMessageId.ERROR_DEFAULT,
+  ) => {
     setState(ComponentStates.ERROR);
     setError(messageId);
   };
@@ -274,6 +276,8 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
         .catch(() => {
           handleError();
         });
+    } else if (error && !messages.hasOwnProperty(error)) {
+      orderMethods.invalidate();
     } else if (state === ComponentStates.ERROR) {
       setPayment(undefined);
     }
@@ -320,7 +324,13 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
       )}
       {state === ComponentStates.ERROR && (
         <p className="payment-button__error" id="sale-tunnel-payment-error" tabIndex={-1}>
-          <FormattedMessage {...messages[error || PaymentErrorMessageId.ERROR_DEFAULT]} />
+          {!error || messages.hasOwnProperty(error) ? (
+            <FormattedMessage
+              {...messages[(error as PaymentErrorMessageId) || PaymentErrorMessageId.ERROR_DEFAULT]}
+            />
+          ) : (
+            error
+          )}
         </p>
       )}
     </>
