@@ -17,6 +17,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix course enrollment count shouldn't include the hidden runs.
 - Fix RDFa errors on Google Search Console
 
+### Removed
+
+- csrftoken in richie context
+
 ## [2.28.1]
 
 ### Fixed

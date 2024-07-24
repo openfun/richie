@@ -152,7 +152,6 @@ export const RichieContextFactory = factory<CommonDataProps['context']>(() => ({
     backend: APIBackend.OPENEDX_HAWTHORN,
     endpoint: 'https://endpoint.test',
   },
-  csrftoken: faker.string.alphanumeric(64),
   environment: 'test',
   features: {},
   lms_backends: [
