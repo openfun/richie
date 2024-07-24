@@ -23,7 +23,6 @@ enum FEATURES {
 
 export interface RichieContext {
   authentication: AuthenticationBackend;
-  csrftoken: string;
   environment: string;
   features: Partial<Record<FEATURES, boolean>>;
   joanie_backend?: JoanieBackend;

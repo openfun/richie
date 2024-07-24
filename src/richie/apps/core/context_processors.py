@@ -10,7 +10,6 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.files.storage import get_storage_class
 from django.http.request import HttpRequest
-from django.middleware.csrf import get_token
 from django.utils.translation import get_language_from_request
 
 from cms.models import Page
@@ -250,7 +249,6 @@ class FrontendContextProcessor:
     def context_processor(self, request: HttpRequest) -> dict:
         """Get the frontend context processor."""
         context = {
-            "csrftoken": get_token(request),
             "environment": getattr(settings, "ENVIRONMENT", ""),
             "release": getattr(settings, "RELEASE", ""),
             "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
