@@ -70,7 +70,7 @@ universal = true
 dev = [
     "bandit==1.7.9",
     "black==24.4.2",
-    "pyRdfa3==3.6.2",
+    "pyRdfa3==3.6.4",
     "cssselect==1.2.0",
     "factory-boy==3.3.0",
     "flake8==7.1.0",
@@ -82,9 +82,9 @@ dev = [
     "lxml==5.2.2",
     "msgpack==1.0.8",
     "mysqlclient==2.2.4",
-    "pylint==3.2.5",
+    "pylint==3.2.6",
     "pylint-django==2.5.5",
-    "pytest==8.2.2",
+    "pytest==8.3.2",
     "pytest-cov==5.0.0",
     "pytest-django==4.8.0",
     "responses==0.25.3",
@@ -98,7 +98,7 @@ sandbox = [
     "factory-boy==3.3.0",
     "gunicorn==22.0.0",
     "psycopg2-binary==2.9.9",
-    "sentry-sdk==2.7.1",
+    "sentry-sdk==2.11.0",
 ]
 
 [tool.flake8]
