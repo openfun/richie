@@ -706,6 +706,29 @@ class CourseRunCatalogVisibility(models.TextChoices):
     HIDDEN = "hidden", _("hidden - hide on the course page and from search results")
 
 
+class CourseRunOffer(models.TextChoices):
+    """Course run offer choices."""
+
+    FREE = "free", _("free - The entire course can be completed without cost")
+    PARTIALLY_FREE = "partially_free", _(
+        "partially_free - More than half of the course is for free"
+    )
+    SUBSCRIPTION = "subscription", _(
+        "subscription - Must be a subscriber or paid member to complete the entire course"
+    )
+    PAID = "paid", _("paid - Must pay to complete the course")
+
+
+class CertificateOffer(models.TextChoices):
+    """Course run offer choices."""
+
+    FREE = "free", _("free - The certification can be completed without cost")
+    SUBSCRIPTION = "subscription", _(
+        "subscription - Must be a subscriber or paid member to carry out the certification process"
+    )
+    PAID = "paid", _("paid - Must pay to carry out the certification process")
+
+
 class CourseRunDisplayMode(models.TextChoices):
     """Course run catalog display modes."""
 
@@ -742,7 +765,6 @@ class CourseRun(TranslatableModel):
         default=CourseRunSyncMode.MANUAL,
         verbose_name=_("Synchronization mode"),
     )
-
     title = TranslatedField()
     resource_link = models.CharField(
         _("resource link"), max_length=200, blank=True, null=True
@@ -773,6 +795,40 @@ class CourseRun(TranslatableModel):
         choices=CourseRunCatalogVisibility.choices,
         default=CourseRunCatalogVisibility.COURSE_AND_SEARCH,
         blank=False,
+        max_length=20,
+    )
+    price = models.DecimalField(
+        _("price"),
+        max_digits=9,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text=_("The price of the course run"),
+    )
+    price_currency = models.CharField(
+        max_length=7,
+        default=getattr(settings, "RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY", "EUR"),
+    )
+    offer = models.CharField(
+        _("offer"),
+        choices=lazy(lambda: CourseRunOffer.choices, tuple)(),
+        blank=True,
+        null=True,
+        max_length=20,
+    )
+    certificate_price = models.DecimalField(
+        _("certificate price"),
+        max_digits=9,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text=_("The price of the certificate"),
+    )
+    certificate_offer = models.CharField(
+        _("certificate offer"),
+        choices=lazy(lambda: CertificateOffer.choices, tuple)(),
+        blank=True,
+        null=True,
         max_length=20,
     )
     display_mode = models.CharField(
