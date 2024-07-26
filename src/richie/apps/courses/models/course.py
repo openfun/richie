@@ -685,6 +685,28 @@ class Course(EsIdMixin, BasePageExtension):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    def generate_course_runs_offers_dict_rdfa(self):
+        """
+        Generate course run dict offers for rdfa purposes
+        based on the Google developers definition:
+        https://developers.google.com/search/docs/appearance/structured-data/course-info?hl=pt-br#guidelines
+        """
+
+        def clean_offer(offer: str) -> str:
+            return offer.replace(" ", "").replace("_", " ").title()
+
+        return {
+            "offers": [
+                {
+                    "@type": "Offer",
+                    "category": clean_offer(run.offer),
+                    "priceCurrency": run.price_currency.upper(),
+                    "price": float(run.price),
+                }
+                for run in self.course_runs
+            ]
+        }
+
 
 class CourseRunSyncMode(models.TextChoices):
     """Course run synchronization mode choices for the "sync_mode" field."""
@@ -704,6 +726,29 @@ class CourseRunCatalogVisibility(models.TextChoices):
         "course_only - show on the course page and hide from search results"
     )
     HIDDEN = "hidden", _("hidden - hide on the course page and from search results")
+
+
+class CourseRunOffer(models.TextChoices):
+    """Course run offer choices."""
+
+    FREE = "free", _("free - The entire course can be completed without cost")
+    PARTIALLY_FREE = "partially_free", _(
+        "partially_free - More than half of the course is for free"
+    )
+    SUBSCRIPTION = "subscription", _(
+        "subscription - Must be a subscriber or paid member to complete the entire course"
+    )
+    PAID = "paid", _("paid - Must pay to complete the course")
+
+
+class CertificateOffer(models.TextChoices):
+    """Course run offer choices."""
+
+    FREE = "free", _("free - The certification can be completed without cost")
+    SUBSCRIPTION = "subscription", _(
+        "subscription - Must be a subscriber or paid member to carry out the certification process"
+    )
+    PAID = "paid", _("paid - Must pay to carry out the certification process")
 
 
 class CourseRunDisplayMode(models.TextChoices):
@@ -742,7 +787,6 @@ class CourseRun(TranslatableModel):
         default=CourseRunSyncMode.MANUAL,
         verbose_name=_("Synchronization mode"),
     )
-
     title = TranslatedField()
     resource_link = models.CharField(
         _("resource link"), max_length=200, blank=True, null=True
@@ -772,6 +816,46 @@ class CourseRun(TranslatableModel):
         _("catalog visibility"),
         choices=CourseRunCatalogVisibility.choices,
         default=CourseRunCatalogVisibility.COURSE_AND_SEARCH,
+        blank=False,
+        max_length=20,
+    )
+    price = models.DecimalField(
+        _("price"),
+        max_digits=9,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text=_("The price of the course run"),
+    )
+    price_currency = models.CharField(
+        max_length=7,
+        default=getattr(settings, "RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY", "EUR"),
+    )
+    offer = models.CharField(
+        _("offer"),
+        choices=lazy(lambda: CourseRunOffer.choices, tuple)(),
+        default=getattr(
+            settings, "RICHIE_DEFAULT_COURSE_RUN_OFFER", CourseRunOffer.FREE
+        ),
+        blank=False,
+        max_length=20,
+    )
+    certificate_price = models.DecimalField(
+        _("certificate_price"),
+        max_digits=9,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text=_("The price of the certificate"),
+    )
+    certificate_offer = models.CharField(
+        _("certificate_offer"),
+        choices=lazy(lambda: CertificateOffer.choices, tuple)(),
+        default=getattr(
+            settings,
+            "RICHIE_DEFAULT_COURSE_RUN_CERTIFICATE_OFFER",
+            CertificateOffer.FREE,
+        ),
         blank=False,
         max_length=20,
     )

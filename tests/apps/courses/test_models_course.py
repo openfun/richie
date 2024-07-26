@@ -1719,3 +1719,127 @@ class CourseModelsTestCase(TestCase):
         """
         course = factories.CourseFactory(duration=[7, "hour"], effort=[7, "hour"])
         self.assertIsNone(course.get_pace_display())
+
+    def test_templates_course_runs_offers_dict_rdfa_fields(self):
+        """
+        Validates the fields of the generated rdfa dict
+        """
+
+        course: Course = factories.CourseFactory()
+
+        for _ in range(1, 5):
+            factories.CourseRunFactory(direct_course=course)
+
+        info = course.generate_course_runs_offers_dict_rdfa()
+
+        self.assertTrue(isinstance(info, dict))
+        self.assertTrue(isinstance(info["offers"], list))
+
+        for offer in info["offers"]:
+            self.assertTrue(isinstance(offer, dict))
+            self.assertTrue(isinstance(offer["@type"], str))
+            self.assertTrue(isinstance(offer["category"], str))
+            self.assertTrue(isinstance(offer["priceCurrency"], str))
+            self.assertTrue(isinstance(offer["price"], float))
+
+    def test_templates_course_runs_offers_dict_rdfa_paid(self):
+        """
+        Validates the content of the generated rdfa dict for a paid offer
+        """
+
+        course: Course = factories.CourseFactory()
+        factories.CourseRunFactory(
+            direct_course=course, price="77.51", offer="paid", price_currency="EUR"
+        )
+
+        info = course.generate_course_runs_offers_dict_rdfa()
+
+        self.assertTrue(isinstance(info, dict))
+        self.assertTrue(isinstance(info["offers"], list))
+        self.assertEqual(len(info["offers"]), 1)
+
+        offer = info["offers"][0]
+
+        self.assertTrue(isinstance(offer, dict))
+        self.assertEqual(offer["@type"], "Offer")
+        self.assertEqual(offer["category"], "Paid")
+        self.assertEqual(offer["priceCurrency"], "EUR")
+        self.assertEqual(offer["price"], 77.51)
+
+    def test_templates_course_runs_offers_dict_rdfa_free(self):
+        """
+        Validates the content of the generated rdfa dict for a free offer
+        """
+
+        course: Course = factories.CourseFactory()
+        factories.CourseRunFactory(
+            direct_course=course, price="64.02", offer="free", price_currency="EUR"
+        )
+
+        info = course.generate_course_runs_offers_dict_rdfa()
+
+        self.assertTrue(isinstance(info, dict))
+        self.assertTrue(isinstance(info["offers"], list))
+        self.assertEqual(len(info["offers"]), 1)
+
+        offer = info["offers"][0]
+
+        self.assertTrue(isinstance(offer, dict))
+        self.assertEqual(offer["@type"], "Offer")
+        self.assertEqual(offer["category"], "Free")
+        self.assertEqual(offer["priceCurrency"], "EUR")
+        self.assertEqual(offer["price"], 64.02)
+
+    def test_templates_course_runs_offers_dict_rdfa_partiallty_free(self):
+        """
+        Validates the content of the generated rdfa dict for a partiallty free offer
+        """
+
+        course: Course = factories.CourseFactory()
+        factories.CourseRunFactory(
+            direct_course=course,
+            price="31.09",
+            offer="partially_free",
+            price_currency="EUR",
+        )
+
+        info = course.generate_course_runs_offers_dict_rdfa()
+
+        self.assertTrue(isinstance(info, dict))
+        self.assertTrue(isinstance(info["offers"], list))
+        self.assertEqual(len(info["offers"]), 1)
+
+        offer = info["offers"][0]
+
+        self.assertTrue(isinstance(offer, dict))
+        self.assertEqual(offer["@type"], "Offer")
+        self.assertEqual(offer["category"], "Partially Free")
+        self.assertEqual(offer["priceCurrency"], "EUR")
+        self.assertEqual(offer["price"], 31.09)
+
+    def test_templates_course_runs_offers_dict_rdfa_subscription(self):
+        """
+        Validates the content of the generated rdfa dict for a subscription offer
+        """
+
+        course: Course = factories.CourseFactory()
+        factories.CourseRunFactory(
+            direct_course=course,
+            price="31.09",
+            offer="subscription",
+            price_currency="EUR",
+        )
+
+        info = course.generate_course_runs_offers_dict_rdfa()
+
+        self.assertTrue(isinstance(info, dict))
+        self.assertTrue(isinstance(info["offers"], list))
+        self.assertEqual(len(info["offers"]), 1)
+
+        offer = info["offers"][0]
+
+        self.assertTrue(isinstance(offer, dict))
+        self.assertEqual(offer["@type"], "Offer")
+        self.assertEqual(offer["category"], "Subscription")
+        self.assertEqual(offer["priceCurrency"], "EUR")
+        self.assertEqual(offer["price"], 31.09)

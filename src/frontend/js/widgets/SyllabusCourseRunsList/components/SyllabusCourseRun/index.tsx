@@ -46,6 +46,21 @@ const messages = defineMessages({
     description: 'Course date of an opened course run block',
     defaultMessage: 'From {startDate} {endDate, select, undefined {} other {to {endDate}}}',
   },
+  coursePrice: {
+    id: 'components.SyllabusCourseRun.coursePrice',
+    description: 'Title of the course enrollment section of an opened course run block',
+    defaultMessage: 'Enrollment Price',
+  },
+  courseOffer: {
+    id: 'components.SyllabusCourseRun.courseOffer',
+    description: 'Title of the course enrollment section of an opened course run block',
+    defaultMessage: 'Course offer',
+  },
+  certificationPrice: {
+    id: 'components.SyllabusCourseRun.certificationPrice',
+    description: 'Title of the course enrollment section of an opened course run block',
+    defaultMessage: 'Certification Price',
+  },
 });
 
 const OpenedCourseRun = ({
@@ -63,6 +78,33 @@ const OpenedCourseRun = ({
   const enrollmentEnd = courseRun.enrollment_end ? formatDate(courseRun.enrollment_end) : '...';
   const start = courseRun.start ? formatDate(courseRun.start) : '...';
   const end = courseRun.end ? formatDate(courseRun.end) : '...';
+  const enrollmentPrice = courseRun.price != null ? intl.formatNumber(courseRun.price, {
+    style: 'currency',
+    currency: courseRun.price_currency,
+  }) : "...";
+  const certificatePrice = courseRun.certificate_price != null ? intl.formatNumber(courseRun.certificate_price, {
+    style: 'currency',
+    currency: courseRun.price_currency,
+  }) : "...";
+  const offer = (courseRun.offer ?? "NONE").toUpperCase().replaceAll(" ", "_");
+  const certificationOffer = (courseRun.certificate_offer ?? "NONE").toUpperCase().replaceAll(" ", "_");
+
+  const courseOfferMessage = {
+    "PAID": "The course content is paid.",
+    "FREE": "The course content is free.",
+    "PARTIALLY_FREE": "This course is partially free, see below the price.",
+    "SUBSCRIPTION": "Subscribe to access the course content.",
+    "NONE": ""
+  }[offer]
+
+  const certificationOfferMessage = {
+    "PAID": "The certification process is paid.",
+    "FREE": "The certification process is free.",
+    "PARTIALLY_FREE": "",
+    "SUBSCRIPTION": "The certification process is offered through subscription.",
+    "NONE": ""
+  }[certificationOffer]
+
   return (
     <>
       {courseRun.title && <h3>{StringHelper.capitalizeFirst(courseRun.title)}</h3>}
@@ -97,6 +139,24 @@ const OpenedCourseRun = ({
               <FormattedMessage {...messages.languages} />
             </dt>
             <dd>{IntlHelper.getLocalizedLanguages(courseRun.languages, intl)}</dd>
+          </>
+        )}
+        {courseRun.price != null && (
+          <>
+            <dt>
+              <FormattedMessage {...messages.coursePrice} />
+            </dt>
+            <dd>
+              {`${courseOfferMessage}`}<br/>{`${enrollmentPrice}`}
+            </dd>
+          </>
+        )}
+        {courseRun.certificate_price != null && (
+          <>
+            <dt>
+              <FormattedMessage {...messages.certificationPrice} />
+            </dt>
+            <dd>{`${certificationOfferMessage}`}<br/>{`${certificatePrice}`}</dd>
           </>
         )}
       </dl>

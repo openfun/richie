@@ -41,6 +41,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Grid options for the Section plugin
 - Make user waive its right of withdrawal when purchasing
   a course product relation with `is_withdrawable` set to `false`
+- Add offer and price fields to courseRun displayed at admin view
 
 ### Changed
 

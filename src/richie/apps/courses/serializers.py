@@ -41,6 +41,11 @@ class ReactPropsCourseRunSerializer(serializers.ModelSerializer):
             "catalog_visibility",
             "display_mode",
             "snapshot",
+            "price",
+            "price_currency",
+            "offer",
+            "certificate_price",
+            "certificate_offer",
         ]
 
     def get_snapshot(self, course_run):
@@ -75,6 +80,11 @@ class CourseRunSerializer(serializers.ModelSerializer):
             "state",
             "enrollment_count",
             "catalog_visibility",
+            "price",
+            "price_currency",
+            "offer",
+            "certificate_price",
+            "certificate_offer",
         ]
 
 
@@ -84,6 +94,33 @@ class SyncCourseRunSerializer(serializers.ModelSerializer):
     """
 
     languages = ListMultipleChoiceField(choices=lazy(lambda: ALL_LANGUAGES, tuple)())
+    price = serializers.DecimalField(
+        max_digits=9,
+        decimal_places=2,
+        allow_null=True,
+        required=False,
+    )
+    price_currency = serializers.CharField(
+        max_length=7,
+        allow_null=True,
+        required=False,
+    )
+    offer = serializers.CharField(
+        allow_null=True,
+        max_length=20,
+        required=False,
+    )
+    certificate_price = serializers.DecimalField(
+        max_digits=9,
+        decimal_places=2,
+        allow_null=True,
+        required=False,
+    )
+    certificate_offer = serializers.CharField(
+        allow_null=True,
+        max_length=20,
+        required=False,
+    )
 
     class Meta:
         model = CourseRun
@@ -96,5 +133,10 @@ class SyncCourseRunSerializer(serializers.ModelSerializer):
             "languages",
             "enrollment_count",
             "catalog_visibility",
+            "price",
+            "price_currency",
+            "offer",
+            "certificate_price",
+            "certificate_offer",
         ]
         extra_kwargs = {"resource_link": {"required": True}}
