@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add offer and price fields to courseRun displayed at admin view
 - Add Additional Information section for a category and
     use them in a course page
 - Added new page extension `MainMenuEntry`

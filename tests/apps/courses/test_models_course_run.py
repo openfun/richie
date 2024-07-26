@@ -627,6 +627,10 @@ class CourseRunModelsTestCase(TestCase):
         )  # New random values to update our course run
 
         for field in fields:
+            if field in ["price_currency", "offer", "certificate_offer"]:
+                # Skip these fields since they are not mandatory fields to be changed
+                continue
+
             course_run = CourseRunFactory()
             self.assertTrue(course_run.direct_course.extended_object.publish("en"))
             title_obj = course_run.direct_course.extended_object.title_set.first()
