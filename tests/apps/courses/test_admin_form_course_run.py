@@ -36,9 +36,15 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_end_0": "2015-01-23",
             "enrollment_end_1": "09:07:11",
             "catalog_visibility": "course_and_search",
+            "price_currency": "EUR",
+            "offer": "free",
+            "price": 0.0,
+            "certificate_offer": "free",
+            "certificate_price": 0.0,
             "sync_mode": "manual",
             "display_mode": "detailed",
         }
+
         request = RequestFactory().get("/")
         request.user = user
         CourseRunAdminForm.request = request
@@ -110,16 +116,15 @@ class CourseRunAdminTestCase(CMSTestCase):
         form = CourseRunAdminForm(data={"resource_link": "https://example.com"})
 
         self.assertFalse(form.is_valid())
-        self.assertEqual(
-            form.errors,
-            {
-                "direct_course": ["This field is required."],
-                "display_mode": ["This field is required."],
-                "languages": ["This field is required."],
-                "catalog_visibility": ["This field is required."],
-                "sync_mode": ["This field is required."],
-            },
-        )
+
+        for field in [
+            "direct_course",
+            "display_mode",
+            "languages",
+            "catalog_visibility",
+            "sync_mode",
+        ]:
+            self.assertEqual(form.errors[field], ["This field is required."])
 
     # Direct course choices
 

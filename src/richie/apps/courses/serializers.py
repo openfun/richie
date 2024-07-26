@@ -41,6 +41,11 @@ class ReactPropsCourseRunSerializer(serializers.ModelSerializer):
             "catalog_visibility",
             "display_mode",
             "snapshot",
+            "price",
+            "price_currency",
+            "offer",
+            "certificate_price",
+            "certificate_offer",
         ]
 
     def get_snapshot(self, course_run):
@@ -75,6 +80,11 @@ class CourseRunSerializer(serializers.ModelSerializer):
             "state",
             "enrollment_count",
             "catalog_visibility",
+            "price",
+            "price_currency",
+            "offer",
+            "certificate_price",
+            "certificate_offer",
         ]
 
 
@@ -96,5 +106,10 @@ class SyncCourseRunSerializer(serializers.ModelSerializer):
             "languages",
             "enrollment_count",
             "catalog_visibility",
+            "price",
+            "price_currency",
+            "offer",
+            "certificate_price",
+            "certificate_offer",
         ]
         extra_kwargs = {"resource_link": {"required": True}}

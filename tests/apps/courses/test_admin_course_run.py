@@ -346,6 +346,11 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_end_0": "2015-01-23",
             "enrollment_end_1": "09:07:11",
             "catalog_visibility": "course_and_search",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "price": 59.98,
+            "certificate_offer": "paid",
+            "certificate_price": 59.98,
             "sync_mode": "manual",
             "display_mode": "detailed",
         }
@@ -434,6 +439,7 @@ class CourseRunAdminTestCase(CMSTestCase):
 
     def _prepare_change_view_post(self, course_run, course, status_code, check_method):
         """Helper method to test the change view."""
+
         url = reverse("admin:courses_courserun_change", args=[course_run.id])
         data = {
             "direct_course": course.id,
@@ -450,6 +456,11 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_end_1": "09:07:11",
             "enrollment_count": "5",
             "catalog_visibility": "course_and_search",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "price": "59.98",
+            "certificate_offer": "paid",
+            "certificate_price": "29.98",
             "sync_mode": "manual",
             "display_mode": "detailed",
         }
@@ -479,13 +490,21 @@ class CourseRunAdminTestCase(CMSTestCase):
         )
         check_method(course_run.enrollment_count, 5)
         check_method(course_run.sync_mode, "manual")
+        check_method(course_run.offer, "paid")
+        check_method(float(course_run.price), 59.98)
+        check_method(course_run.certificate_offer, "paid")
+        check_method(float(course_run.certificate_price), 29.98)
+
         return response
 
     def test_admin_course_run_change_view_post_anonymous(self):
         """
         Anonymous users should not be allowed to update course runs via the admin.
         """
-        course_run = CourseRunFactory()
+        course_run = CourseRunFactory(
+            offer="free",
+            certificate_offer="free",
+        )
         snapshot = CourseFactory(page_parent=course_run.direct_course.extended_object)
 
         response = self._prepare_change_view_post(
@@ -499,7 +518,10 @@ class CourseRunAdminTestCase(CMSTestCase):
         """
         Validate that the draft course run can be updated via the admin.
         """
-        course_run = CourseRunFactory()
+        course_run = CourseRunFactory(
+            offer="paid",
+            certificate_offer="paid",
+        )
         snapshot = CourseFactory(page_parent=course_run.direct_course.extended_object)
 
         user = UserFactory(is_staff=True, is_superuser=True)
@@ -511,7 +533,10 @@ class CourseRunAdminTestCase(CMSTestCase):
         """
         Validate that the public course run can not be updated via the admin.
         """
-        course_run = CourseRunFactory()
+        course_run = CourseRunFactory(
+            offer="free",
+            certificate_offer="free",
+        )
         snapshot = CourseFactory(page_parent=course_run.direct_course.extended_object)
         course_run.direct_course.extended_object.publish("en")
         course_run.refresh_from_db()
@@ -528,7 +553,10 @@ class CourseRunAdminTestCase(CMSTestCase):
         Staff users with missing page permissions can not update a course run via the admin
         unless CMS permissions are not activated.
         """
-        course_run = CourseRunFactory()
+        course_run = CourseRunFactory(
+            offer="free",
+            certificate_offer="free",
+        )
         snapshot = CourseFactory(page_parent=course_run.direct_course.extended_object)
 
         user = UserFactory(is_staff=True)

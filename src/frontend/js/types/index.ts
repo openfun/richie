@@ -35,6 +35,11 @@ export interface CourseRun {
   title?: string;
   snapshot?: string;
   display_mode: CourseRunDisplayMode;
+  price?: number;
+  price_currency?: string;
+  offer?: string;
+  certificate_price?: number;
+  certificate_offer?: string;
 }
 
 export enum Priority {
