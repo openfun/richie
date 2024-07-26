@@ -46,6 +46,17 @@ export const CourseStateFutureOpenFactory = factory<CourseState>(() => {
 });
 
 export const CourseRunFactory = factory<CourseRun>(() => {
+
+  var offers = ["PAID", "FREE", "PARTIALLY_FREE", "SUBSCRIPTION"];
+  const offer = offers[Math.floor(Math.random() * offers.length)];
+
+  offers = ["PAID", "FREE", "SUBSCRIPTION"];
+  const certificateOffer = offers[Math.floor(Math.random() * offers.length)];
+
+  const currency = faker.finance.currency().code;
+  const price = ["FREE", "PARTIALLY_FREE"].includes(offer) ? 0 : parseFloat(faker.finance.amount({ min: 1, max: 100, symbol: currency, autoFormat: true }));
+  const cerficatePrice = certificateOffer == "FREE" ? 0 : parseFloat(faker.finance.amount({ min: 1, max: 100, symbol: currency, autoFormat: true }));
+
   return {
     id: faker.number.int(),
     resource_link: FactoryHelper.unique(faker.internet.url),
@@ -58,6 +69,11 @@ export const CourseRunFactory = factory<CourseRun>(() => {
     dashboard_link: null,
     title: faker.lorem.sentence(3),
     display_mode: CourseRunDisplayMode.DETAILED,
+    price: price,
+    price_currency: currency,
+    offer: offer,
+    certificate_price: cerficatePrice,
+    certificate_offer: certificateOffer,
   };
 });
 
