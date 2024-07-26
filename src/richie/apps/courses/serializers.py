@@ -75,6 +75,8 @@ class CourseRunSerializer(serializers.ModelSerializer):
             "state",
             "enrollment_count",
             "catalog_visibility",
+            "offer",
+            "price",
         ]
 
 

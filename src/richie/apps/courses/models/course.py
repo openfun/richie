@@ -702,6 +702,19 @@ class CourseRunCatalogVisibility(models.TextChoices):
     HIDDEN = "hidden", _("hidden - hide on the course page and from search results")
 
 
+class CourseRunOffer(models.TextChoices):
+    """Course run offer choices."""
+
+    FREE = "free", _("free - The entire course can be completed without cost")
+    PARTIALLY_FREE = "partially_free", _(
+        "partially_free - More than half of the course is for free"
+    )
+    SUBSCRIPTION = "subscription", _(
+        "subscription - The user must be a subscriber or paid member to complete the entire course"
+    )
+    PAID = "paid", _("paid - The user must pay to complete the course")
+
+
 class CourseRunDisplayMode(models.TextChoices):
     """Course run catalog display modes."""
 
@@ -770,6 +783,19 @@ class CourseRun(TranslatableModel):
         default=CourseRunCatalogVisibility.COURSE_AND_SEARCH,
         blank=False,
         max_length=20,
+    )
+    offer = models.CharField(
+        _("offer"),
+        choices=CourseRunOffer.choices,
+        default=CourseRunOffer.FREE,
+        blank=False,
+        max_length=20,
+    )
+    price = models.FloatField(
+        _("price"),
+        default=0.0,
+        blank=False,
+        help_text=_("The cost of the course"),
     )
     display_mode = models.CharField(
         choices=CourseRunDisplayMode.choices,

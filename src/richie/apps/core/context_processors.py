@@ -101,6 +101,16 @@ def site_metas(request: HttpRequest):
             settings.RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT
         )
 
+    if getattr(settings, "RICHIE_DEFAULT_COURSE_RUN_OFFER", None):
+        context["RICHIE_DEFAULT_COURSE_RUN_OFFER"] = (
+            settings.RICHIE_DEFAULT_COURSE_RUN_OFFER
+        )
+
+    if getattr(settings, "RICHIE_DEFAULT_COURSE_RUN_PRICE", None):
+        context["RICHIE_DEFAULT_COURSE_RUN_PRICE"] = (
+            settings.RICHIE_DEFAULT_COURSE_RUN_PRICE
+        )
+
     return context
 
 
