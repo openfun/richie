@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add offer and price fields to courseRun displayed at admin
+  view.
+
 ## [2.28.1]
 
 ### Fixed

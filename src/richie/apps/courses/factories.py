@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 import factory
 from cms.api import add_plugin
 
+from richie.apps.courses.models.course import CourseRunOffer
 from richie.plugins.nesteditem.defaults import ACCORDION
 
 from ..core.defaults import ALL_LANGUAGES
@@ -528,6 +529,22 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
         The number of enrollments of a course run is a random integer between 0 and 10,000.
         """
         return random.randint(0, 10000)  # nosec
+
+    @factory.lazy_attribute
+    def price(self):
+        """
+        The price of a course run is a random float between 1 and 100.
+        """
+        return random.randint(100, 10000) / 100  # nosec
+
+    @factory.lazy_attribute
+    def offer(self):
+        """
+        The offer of a course run is read from Django settings.
+        """
+        return (
+            CourseRunOffer.FREE if self.price == 0.0 else CourseRunOffer.PAID
+        )  # nosec
 
 
 class CategoryFactory(BLDPageExtensionDjangoModelFactory):

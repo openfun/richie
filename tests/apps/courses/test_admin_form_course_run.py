@@ -36,6 +36,8 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_end_0": "2015-01-23",
             "enrollment_end_1": "09:07:11",
             "catalog_visibility": "course_and_search",
+            "offer": "free",
+            "price": 0.0,
             "sync_mode": "manual",
             "display_mode": "detailed",
         }
@@ -117,6 +119,7 @@ class CourseRunAdminTestCase(CMSTestCase):
                 "display_mode": ["This field is required."],
                 "languages": ["This field is required."],
                 "catalog_visibility": ["This field is required."],
+                "offer": ["This field is required."],
                 "sync_mode": ["This field is required."],
             },
         )
