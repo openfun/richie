@@ -332,6 +332,13 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         environ_prefix=None,
     )
 
+    # Course run price currency value that would be shown on course detail page
+    RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY = values.Value(
+        "EUR",
+        environ_name="RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY",
+        environ_prefix=None,
+    )
+
     # Internationalization
     TIME_ZONE = "Europe/Paris"
     USE_I18N = True

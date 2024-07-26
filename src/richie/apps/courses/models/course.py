@@ -706,6 +706,19 @@ class CourseRunCatalogVisibility(models.TextChoices):
     HIDDEN = "hidden", _("hidden - hide on the course page and from search results")
 
 
+class CourseRunOffer(models.TextChoices):
+    """Course run offer choices."""
+
+    FREE = "free", _("free - The entire course can be completed without cost")
+    PARTIALLY_FREE = "partially_free", _(
+        "partially_free - More than half of the course is for free"
+    )
+    SUBSCRIPTION = "subscription", _(
+        "subscription - The user must be a subscriber or paid member to complete the entire course"
+    )
+    PAID = "paid", _("paid - The user must pay to complete the course")
+
+
 class CourseRunDisplayMode(models.TextChoices):
     """Course run catalog display modes."""
 
@@ -774,6 +787,20 @@ class CourseRun(TranslatableModel):
         default=CourseRunCatalogVisibility.COURSE_AND_SEARCH,
         blank=False,
         max_length=20,
+    )
+    offer = models.CharField(
+        _("offer"),
+        choices=lazy(lambda: CourseRunOffer.choices, tuple)(),
+        default=CourseRunOffer.FREE,
+        blank=False,
+        max_length=20,
+    )
+    price = models.DecimalField(
+        _("price"),
+        max_digits=9,
+        decimal_places=2,
+        null=True, blank=True,
+        help_text=_("The price of the course run"),
     )
     display_mode = models.CharField(
         choices=CourseRunDisplayMode.choices,
@@ -860,6 +887,7 @@ class CourseRun(TranslatableModel):
     def save(self, *args, **kwargs):
         """Enforce validation each time an instance is saved."""
         self.full_clean()
+        self.price = float(self.price)
         super().save(*args, **kwargs)
 
     # pylint: disable=signature-differs

@@ -598,6 +598,13 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         environ_prefix=None,
     )
 
+    # Course run price currency value that would be shown on course detail page
+    RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY = values.Value(
+        "EUR",
+        environ_name="RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY",
+        environ_prefix=None,
+    )
+
     @classmethod
     def _get_environment(cls):
         """Environment in which the application is launched."""

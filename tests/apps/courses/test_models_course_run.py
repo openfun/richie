@@ -19,7 +19,7 @@ from richie.apps.core.defaults import ALL_LANGUAGES
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 from richie.apps.courses.models import CourseRun, CourseRunTranslation
-from richie.apps.courses.models.course import CourseRunCatalogVisibility
+from richie.apps.courses.models.course import CourseRunCatalogVisibility, CourseRunOffer
 
 
 # pylint: disable=too-many-public-methods
@@ -623,6 +623,8 @@ class CourseRunModelsTestCase(TestCase):
         stub = CourseRunFactory(
             sync_mode="manual",
             catalog_visibility=CourseRunCatalogVisibility.COURSE_ONLY,
+            offer=CourseRunOffer.SUBSCRIPTION,
+            price=3.0,
             display_mode="compact",
         )  # New random values to update our course run
 
