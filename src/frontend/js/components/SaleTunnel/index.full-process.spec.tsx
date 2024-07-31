@@ -1,8 +1,9 @@
-import { screen, within } from '@testing-library/react';
+import { act, screen, within } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import userEvent from '@testing-library/user-event';
 import countries from 'i18n-iso-countries';
+import { getAllByRole } from '@testing-library/dom';
 import {
   RichieContextFactory as mockRichieContextFactory,
   PacedCourseFactory,
@@ -13,11 +14,14 @@ import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import CourseProductItem from 'widgets/SyllabusCourseRunsList/components/CourseProductItem';
 import {
   AddressFactory,
-  CredentialOrderWithPaymentFactory,
-  PaymentInstallmentFactory,
+  ContractFactory,
   CourseProductRelationFactory,
+  CredentialOrderFactory,
+  CreditCardFactory,
+  PaymentFactory,
+  PaymentInstallmentFactory,
 } from 'utils/test/factories/joanie';
-import { ACTIVE_ORDER_STATES, CourseRun } from 'types/Joanie';
+import { CourseRun, NOT_CANCELED_ORDER_STATES, OrderState } from 'types/Joanie';
 import { Priority } from 'types';
 import { expectMenuToBeClosed, expectMenuToBeOpen } from 'utils/test/Cunningham';
 import { changeSelect } from 'components/Form/test-utils';
@@ -26,6 +30,7 @@ import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
 import { User } from 'types/User';
 import { OpenEdxApiProfile } from 'types/openEdx';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
+import { Deferred } from 'utils/test/deferred';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -54,6 +59,12 @@ describe('SaleTunnel', () => {
   let openApiEdxProfile: OpenEdxApiProfile;
   setupJoanieSession();
 
+  const dateFormatter = Intl.DateTimeFormat('en', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+
   const priceFormatter = (currency: string, price: number) =>
     new Intl.NumberFormat('en', {
       currency,
@@ -81,13 +92,14 @@ describe('SaleTunnel', () => {
     fetchMock.get(`https://auth.test/api/v1.0/user/me`, richieUser);
   });
 
-  it('tests the entire process of buying a credential product', async () => {
+  it('tests the entire process of subscribing to a credential product', async () => {
     /**
      * Initialization.
      */
-    const relation = CourseProductRelationFactory().one();
+    const course = PacedCourseFactory().one();
+    const relation = CourseProductRelationFactory({ course }).one();
     const paymentSchedule = PaymentInstallmentFactory().many(2);
-    const { product, course } = relation;
+    const { product } = relation;
 
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
@@ -101,22 +113,16 @@ describe('SaleTunnel', () => {
     const orderQueryParameters = {
       product_id: product.id,
       course_code: course.code,
-      state: ACTIVE_ORDER_STATES,
+      state: NOT_CANCELED_ORDER_STATES,
     };
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
       [],
     );
 
-    render(
-      <CourseProductItem
-        productId={product.id}
-        course={PacedCourseFactory({ id: course.id, code: course.code }).one()}
-      />,
-      {
-        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
-      },
-    );
+    render(<CourseProductItem productId={product.id} course={course} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
 
     // Wait for product information to be fetched
     await screen.findByRole('heading', { level: 3, name: product.title });
@@ -216,10 +222,11 @@ describe('SaleTunnel', () => {
 
     // - User fulfills address fields
     const address = AddressFactory({ is_main: true }).one();
-    fetchMock.post('https://joanie.endpoint/api/v1.0/addresses/', address);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', [address], {
-      overwriteRoutes: true,
-    });
+    fetchMock
+      .post('https://joanie.endpoint/api/v1.0/addresses/', address)
+      .get('https://joanie.endpoint/api/v1.0/addresses/', [address], {
+        overwriteRoutes: true,
+      });
 
     await user.type($titleField, address.title);
     await user.type($firstnameField, address.first_name);
@@ -235,16 +242,23 @@ describe('SaleTunnel', () => {
     ).toBeInTheDocument();
 
     /**
-     * Make sure no credit card is selected.
+     * Make sure the payment schedule is displayed.
      */
-    screen.getByRole('heading', {
-      name: 'Payment method',
+    screen.getByRole('heading', { name: 'Payment schedule' });
+    paymentSchedule.forEach((installment, index) => {
+      const row = screen.getByTestId(installment.id);
+      const cells = getAllByRole(row, 'cell');
+      expect(cells).toHaveLength(4);
+      expect(cells[0]).toHaveTextContent((index + 1).toString());
+      expect(cells[1]).toHaveTextContent(
+        priceFormatter(installment.currency, installment.amount).replace(/(\u202F|\u00a0)/g, ' '),
+      );
+      expect(cells[2]).toHaveTextContent(
+        `Withdrawn on ${dateFormatter.format(new Date(installment.due_date))}`,
+      );
+      expect(cells[3]).toHaveTextContent(new RegExp(installment.state, 'i'));
     });
-    screen.getByText('Use another credit card during payment');
 
-    /**
-     * Make sure the total is the correct one.
-     */
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
       'Total' +
@@ -252,29 +266,84 @@ describe('SaleTunnel', () => {
     );
 
     /**
-     * Pay
+     * Subscribe
      */
-    const { payment_info: paymentInfo, ...order } = CredentialOrderWithPaymentFactory().one();
+    const order = CredentialOrderFactory({ state: OrderState.TO_SIGN }).one();
     fetchMock
+      .post('https://joanie.endpoint/api/v1.0/orders/', order)
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
         [order],
         { overwriteRoutes: true },
-      )
-      .post('https://joanie.endpoint/api/v1.0/orders/', order)
-      .patch(`https://joanie.endpoint/api/v1.0/orders/${order.id}/submit/`, {
-        paymentInfo,
-      })
-      .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, {
-        ...order,
-      });
+      );
 
     const $button = screen.getByRole('button', {
       name: `Subscribe`,
     }) as HTMLButtonElement;
     await user.click($button);
 
-    await screen.findByText('Payment in progress');
+    order.state = OrderState.TO_SAVE_PAYMENT_METHOD;
+    order.contract = ContractFactory({ student_signed_on: new Date().toISOString() }).one();
+
+    const checkSignatureDeferred = new Deferred();
+
+    fetchMock
+      .post(`https://joanie.endpoint/api/v1.0/orders/${order.id}/submit_for_signature/`, {
+        invitation_link: 'https://dummysignaturebackend.fr/contract/1/sign',
+      })
+      .post(`https://joanie.endpoint/api/v1.0/signature/notifications/`, 200)
+      .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, checkSignatureDeferred.promise, {
+        overwriteRoutes: true,
+      })
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+        [order],
+        { overwriteRoutes: true },
+      );
+
+    const $signButton = await screen.findByRole('button', { name: 'Sign' });
+    await user.click($signButton);
+
+    screen.getByRole('heading', { name: 'Signing the contract ...' });
+
+    // Then the signature check polling should be started
+    await screen.findByRole('heading', { name: 'Verifying signature ...' });
+    expect(
+      screen.getByText(
+        'We are waiting for the signature to be validated from our signature platform. It can take up to few minutes. Do not close this page.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('status')).toBeInTheDocument();
+
+    await act(async () => {
+      checkSignatureDeferred.resolve(order);
+    });
+
+    /**
+     * Save payment method step
+     */
+    const paymentMethod = CreditCardFactory().one();
+    order.state = OrderState.PENDING;
+    order.credit_card_id = paymentMethod.id;
+    fetchMock
+      .post('https://joanie.endpoint/api/v1.0/credit-cards/tokenize-card/', PaymentFactory().one())
+      .post(`https://joanie.endpoint/api/v1.0/orders/${order.id}/payment-method/`, 200)
+      .get(
+        'https://joanie.endpoint/api/v1.0/credit-cards/',
+        { results: [paymentMethod] },
+        { overwriteRoutes: true },
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+        [order],
+        { overwriteRoutes: true },
+      );
+    await screen.findByRole('heading', { name: 'Define a payment method' });
+    screen.getByText('Use another credit card');
+
+    const $defineButton = screen.getByRole('button', { name: 'Define' });
+    await user.click($defineButton);
+
     screen.getByText('Payment interface component');
     await user.click(screen.getByTestId('payment-success'));
 
@@ -283,11 +352,9 @@ describe('SaleTunnel', () => {
      */
 
     // Make sure the success step is shown.
-    expect(screen.queryByTestId('generic-sale-tunnel-payment-step')).not.toBeInTheDocument();
     await screen.findByTestId('generic-sale-tunnel-success-step');
-    screen.getByText('Congratulations!');
-    screen.getByText(/Your order has been successfully created/);
-    screen.getByRole('link', { name: 'Sign the training contract' });
+    screen.getByText('Subscription confirmed!');
+    screen.getByRole('link', { name: 'Close' });
 
     /**
      * Make sure the product is displayed as bought ( it verifies cache is well updated ).

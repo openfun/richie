@@ -211,7 +211,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       // We have the success message.
       await screen.findByRole('heading', { name: 'Congratulations!' });
       screen.getByText(
-        'You will receive an email once your contract will be fully signed. You can now enroll in your course runs!',
+        'You will receive an email once your contract will be fully signed. You can now finalize your subscription.',
       );
       const nextButton = screen.getByRole('button', { name: 'Next' });
 
