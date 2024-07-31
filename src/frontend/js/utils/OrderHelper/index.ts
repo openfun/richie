@@ -1,5 +1,6 @@
 import {
   ACTIVE_ORDER_STATES,
+  ENROLLABLE_ORDER_STATES,
   NestedCourseOrder,
   Order,
   OrderEnrollment,
@@ -84,5 +85,15 @@ export class OrderHelper {
     return order.payment_schedule?.find(
       (installment) => installment.state === PaymentScheduleState.REFUSED,
     );
+  }
+
+  static allowEnrollment(order?: Order | NestedCourseOrder | OrderEnrollment) {
+    if (!order) return false;
+    return ENROLLABLE_ORDER_STATES.includes(order.state);
+  }
+
+  static isActive(order?: Order | NestedCourseOrder | OrderEnrollment) {
+    if (!order) return false;
+    return ACTIVE_ORDER_STATES.includes(order.state);
   }
 }

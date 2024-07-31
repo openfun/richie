@@ -9,7 +9,6 @@ import {
   CourseRun,
   CredentialOrder,
   Enrollment,
-  Product,
 } from 'types/Joanie';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
@@ -68,10 +67,11 @@ const messages = defineMessages({
     description: 'Text displayed when course runs list is loading',
     id: 'components.DashboardItemCourseEnrollingRun.courseRunsLoading',
   },
-  contractUnsigned: {
-    id: 'components.DashboardItemCourseEnrollingRun.contractUnsigned',
-    description: 'Message displayed as disabled button title when a contract needs to be signed.',
-    defaultMessage: 'You have to sign the training contract before enrolling to your course.',
+  cannotEnroll: {
+    id: 'components.DashboardItemCourseEnrollingRun.cannotEnroll',
+    description:
+      'Message displayed as disabled button title when the order state does not allow enrollment.',
+    defaultMessage: 'You cannot enroll yet to this training.',
   },
 });
 
@@ -81,7 +81,6 @@ interface DashboardItemCourseEnrollingProps {
   course: AbstractCourse;
   activeEnrollment?: Enrollment;
   order?: CredentialOrder;
-  product?: Product;
   writable: boolean;
   hideEnrollButtons?: boolean;
   icon?: boolean;
@@ -93,7 +92,6 @@ export const DashboardItemCourseEnrolling = ({
   activeEnrollment,
   writable,
   order,
-  product,
   icon = false,
   notEnrolledUrl = '#',
   hideEnrollButtons,
@@ -121,7 +119,6 @@ export const DashboardItemCourseEnrolling = ({
           course={course}
           enrollments={CoursesHelper.findCourseEnrollmentsInOrder(course, order)}
           order={order}
-          product={product}
         />
       )}
     </div>
@@ -132,14 +129,12 @@ interface DashboardItemCourseEnrollingRunsProps {
   course: AbstractCourse;
   enrollments: Enrollment[];
   order?: CredentialOrder;
-  product?: Product;
 }
 
 const DashboardItemCourseEnrollingRuns = ({
   course,
   enrollments,
   order,
-  product,
 }: DashboardItemCourseEnrollingRunsProps) => {
   const { enroll, isLoading, error } = useEnroll(enrollments, order);
 
@@ -176,7 +171,6 @@ const DashboardItemCourseEnrollingRuns = ({
           selected={data.selected}
           enroll={() => enroll(data.courseRun)}
           order={order}
-          product={product}
         />
       ))}
       {isLoading && (
@@ -200,7 +194,6 @@ interface DashboardItemCourseEnrollingRunProps {
   selected: boolean;
   enroll: () => void;
   order?: CredentialOrder | CertificateOrder;
-  product?: Product;
 }
 
 export const DashboardItemCourseEnrollingRun = ({
@@ -208,14 +201,11 @@ export const DashboardItemCourseEnrollingRun = ({
   selected,
   enroll,
   order,
-  product,
 }: DashboardItemCourseEnrollingRunProps) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
   const courseRunPeriodMessage = useCourseRunPeriodMessage(courseRun, selected);
-  const haveToSignContract = order
-    ? OrderHelper.orderNeedsSignature(order, product?.contract_definition)
-    : false;
+  const canEnroll = OrderHelper.allowEnrollment(order);
   const isOpenedForEnrollment = useMemo(
     () => courseRun.state.priority < Priority.FUTURE_NOT_YET_OPEN,
     [courseRun],
@@ -266,11 +256,11 @@ export const DashboardItemCourseEnrollingRun = ({
       ) : (
         <div>
           <Button
-            disabled={!isOpenedForEnrollment || haveToSignContract}
+            disabled={!isOpenedForEnrollment || !canEnroll}
             color="tertiary"
             size="small"
             onClick={enroll}
-            title={haveToSignContract ? intl.formatMessage(messages.contractUnsigned) : ''}
+            title={!canEnroll ? intl.formatMessage(messages.cannotEnroll) : ''}
           >
             <FormattedMessage {...messages.enrollRun} />
           </Button>
