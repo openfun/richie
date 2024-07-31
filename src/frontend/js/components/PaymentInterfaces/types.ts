@@ -1,10 +1,13 @@
 export enum PaymentErrorMessageId {
   ERROR_ABORT = 'errorAbort',
-  ERROR_ABORTING = 'errorAborting',
+  ERROR_DEFAULT = 'errorDefault',
+}
+
+export enum SubscriptionErrorMessageId {
+  ERROR_ABORT = 'errorAbort',
   ERROR_ADDRESS = 'errorAddress',
   ERROR_DEFAULT = 'errorDefault',
   ERROR_FULL_PRODUCT = 'errorFullProduct',
-  ERROR_TERMS = 'errorTerms',
 }
 
 export enum PaymentProviders {

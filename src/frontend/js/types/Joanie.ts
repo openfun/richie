@@ -484,11 +484,6 @@ export type OrderSubmitInstallmentPayment = {
   credit_card_id?: string;
 };
 
-interface OrderAbortPayload {
-  id: Order['id'];
-  payment_id?: string;
-}
-
 interface OrderSubmitPayload {
   id: Order['id'];
   billing_address: Omit<Address, 'id' | 'is_main'>;
@@ -600,7 +595,7 @@ interface APIUser {
     tokenize(): Promise<Payment>;
   };
   orders: {
-    abort(payload: OrderAbortPayload): Promise<void>;
+    cancel(id: Order['id']): Promise<void>;
     create(payload: OrderCreationPayload): Promise<CredentialOrder | CertificateOrder>;
     get<Filters extends OrderResourcesQuery = OrderResourcesQuery>(
       filters?: Filters,
