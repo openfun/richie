@@ -91,7 +91,7 @@ export const getRoutes = () => {
         delete: `${baseUrl}/addresses/:id/`,
       },
       orders: {
-        abort: `${baseUrl}/orders/:id/abort/`,
+        cancel: `${baseUrl}/orders/:id/cancel/`,
         create: `${baseUrl}/orders/`,
         submit: `${baseUrl}/orders/:id/submit/`,
         get: `${baseUrl}/orders/:id/`,
@@ -264,10 +264,9 @@ const API = (): Joanie.API => {
           }).then(checkStatus),
       },
       orders: {
-        abort: async ({ id, payment_id }) => {
-          return fetchWithJWT(ROUTES.user.orders.abort.replace(':id', id), {
+        cancel: async (id) => {
+          return fetchWithJWT(ROUTES.user.orders.cancel.replace(':id', id), {
             method: 'POST',
-            body: payment_id ? JSON.stringify({ payment_id }) : undefined,
           }).then(checkStatus);
         },
         create: async (payload) =>

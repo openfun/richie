@@ -37,15 +37,10 @@ const messages = defineMessages({
     description: 'Error message shown to the user when no orders matches.',
     defaultMessage: 'Cannot find the orders.',
   },
-  errorAbort: {
-    id: 'hooks.useOrders.errorAbort',
-    description: 'Error message shown to the user when aborting mutation failed.',
-    defaultMessage: 'Cannot abort the order.',
-  },
-  errorSubmit: {
-    id: 'hooks.useOrders.errorSubmit',
-    description: 'Error message shown to the user when submit mutation failed.',
-    defaultMessage: 'Cannot submit the order.',
+  errorCancel: {
+    id: 'hooks.useOrders.errorCancel',
+    description: 'Error message shown to the user when cancel mutation failed.',
+    defaultMessage: 'Cannot cancel the order.',
   },
   errorSetPaymentMethod: {
     id: 'hooks.useOrders.errorSetPaymentMethod',
@@ -98,15 +93,10 @@ const useOrdersBase =
       await custom.methods.invalidate();
       props.onMutationSuccess?.(queryClient);
     };
-    const abortHandler = useSessionMutation({
-      mutationFn: api.abort,
+    const cancelHandler = useSessionMutation({
+      mutationFn: api.cancel,
       onSuccess,
-      onError: () => custom.methods.setError(intl.formatMessage(messages.errorAbort)),
-    });
-    const submitHandler = useSessionMutation({
-      mutationFn: api.submit,
-      onSuccess,
-      onError: () => custom.methods.setError(intl.formatMessage(messages.errorSubmit)),
+      onError: () => custom.methods.setError(intl.formatMessage(messages.errorCancel)),
     });
     const setPaymentMethodHandler = useSessionMutation({
       mutationFn: api.set_payment_method,
@@ -118,16 +108,14 @@ const useOrdersBase =
       ...custom,
       methods: {
         ...custom.methods,
-        abort: abortHandler.mutateAsync,
-        submit: submitHandler.mutateAsync,
+        cancel: cancelHandler.mutateAsync,
         set_payment_method: setPaymentMethodHandler.mutateAsync,
       },
       states: {
         ...custom.states,
-        aborting: abortHandler.isPending,
-        submitting: submitHandler.isPending,
+        cancelling: cancelHandler.isPending,
         settingPaymentMethod: setPaymentMethodHandler.isPending,
-        isPending: [custom.states, submitHandler, abortHandler, setPaymentMethodHandler].some(
+        isPending: [custom.states, cancelHandler, setPaymentMethodHandler].some(
           (value) => value?.isPending,
         ),
       },
