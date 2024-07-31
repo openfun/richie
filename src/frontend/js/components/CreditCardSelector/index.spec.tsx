@@ -53,11 +53,11 @@ describe('CreditCardSelector', () => {
     render(<Wrapper />);
 
     // During loading state, the spinner should be displayed and the current selected card should not be displayed.
-    expect(screen.queryByText('Add new credit card during payment')).not.toBeInTheDocument();
+    expect(screen.queryByText('Use another credit card')).not.toBeInTheDocument();
     await expectSpinner();
     await expectNoSpinner();
 
-    screen.getByText('Use another credit card during payment');
+    screen.getByText('Use another credit card');
 
     // As the user has no credit card, the edit button should not be displayed.
     expect(
@@ -206,7 +206,7 @@ describe('CreditCardSelector', () => {
     await user.click(editButton);
 
     const radio = screen.getByRole('radio', {
-      name: /Use another credit card during payment/i,
+      name: /Use another credit card/i,
     });
     await user.click(radio);
 
@@ -216,7 +216,7 @@ describe('CreditCardSelector', () => {
     await user.click(submitButton);
 
     expect(screen.queryByTestId('credit-card-selector-modal')).not.toBeInTheDocument();
-    screen.getByText('Use another credit card during payment');
+    screen.getByText('Use another credit card');
     expect(contextRef.current.creditCard).toBeUndefined();
   });
 
@@ -244,15 +244,15 @@ describe('CreditCardSelector', () => {
     await screen.findByTestId('credit-card-' + mainCreditCard.id);
     screen.getByText(mainCreditCard.title!);
     screen.getByText('Ends with •••• ' + mainCreditCard.last_numbers);
-    expect(screen.queryByText('Add new credit card during payment')).not.toBeInTheDocument();
     expect(contextRef.current.creditCard!.id).toEqual(mainCreditCard.id);
 
     const user = userEvent.setup();
-    const button = screen.getByRole('button', { name: /use another credit card during payment/i });
+    const button = screen.getByRole('button', { name: /use another credit card/i });
     await user.click(button);
 
     expect(screen.queryByTestId('credit-card-selector-modal')).not.toBeInTheDocument();
-    screen.getByText('Use another credit card during payment');
+    screen.getByText('Use another credit card');
+    expect(button).not.toBeInTheDocument();
     expect(contextRef.current.creditCard).toBeUndefined();
   });
 

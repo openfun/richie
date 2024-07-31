@@ -315,6 +315,7 @@ export interface Order {
   organization: Organization;
   order_group_id?: OrderGroup['id'];
   payment_schedule?: PaymentSchedule;
+  credit_card_id?: CreditCard['id'];
 }
 
 export interface CredentialOrder extends Order {
@@ -322,18 +323,10 @@ export interface CredentialOrder extends Order {
   enrollment: null;
 }
 
-export interface CredentialOrderWithPaymentInfo extends CredentialOrder {
-  payment_info: Payment;
-}
-
 export interface CertificateOrder extends Order {
   course: null;
   enrollment: EnrollmentLight;
   target_courses: never[];
-}
-
-export interface CertificateOrderWithPaymentInfo extends CertificateOrder {
-  payment_info: Payment;
 }
 
 export type OrderLite = Pick<
@@ -471,6 +464,7 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
 interface AbstractOrderProductCreationPayload {
   product_id: Product['id'];
   order_group_id?: OrderGroup['id'];
+  billing_address: Omit<Address, 'id' | 'is_main'>;
 }
 
 interface OrderCertificateCreationPayload extends AbstractOrderProductCreationPayload {

@@ -18,6 +18,11 @@ export const SaleTunnelSponsors = () => {
   const {
     props: { organizations },
   } = useSaleTunnelContext();
+
+  if (!organizations || organizations.length === 0) {
+    return null;
+  }
+
   return (
     <>
       <h3 className="block-title">

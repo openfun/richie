@@ -22,8 +22,8 @@ import {
   CourseLightFactory,
   CourseRunFactory,
   CredentialOrderFactory,
-  CredentialOrderWithPaymentFactory,
   EnrollmentFactory,
+  PaymentFactory,
   TargetCourseFactory,
 } from 'utils/test/factories/joanie';
 import {
@@ -91,7 +91,7 @@ describe('<DashboardItemOrder/>', () => {
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + (order.course as CourseLight).code);
-    await screen.findByText('Pending');
+    await screen.findByText('Pending for the first direct debit');
     await screen.findByRole('link', { name: 'View details' });
   });
 
@@ -119,7 +119,7 @@ describe('<DashboardItemOrder/>', () => {
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + (order.course as CourseLight).code);
-    await screen.findByText('Completed');
+    await screen.findByText('Successfully completed');
     await screen.findByRole('link', { name: 'View details' });
     await expectSpinner('Loading certificate...');
     deferred.resolve(certificate);
@@ -138,7 +138,7 @@ describe('<DashboardItemOrder/>', () => {
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     await screen.findByText('Ref. ' + (order.course as CourseLight).code);
-    await screen.findByText('Completed');
+    await screen.findByText('Successfully completed');
     await screen.findByRole('link', { name: 'View details' });
     await expectNoSpinner('Loading certificate ...');
   });
@@ -870,7 +870,8 @@ describe('<DashboardItemOrder/>', () => {
   });
 
   it('renders a writable order with failed payment and retry it successfully', async () => {
-    const { payment_info: paymentInfo, ...order } = CredentialOrderWithPaymentFactory().one();
+    const order = CredentialOrderFactory().one();
+    const paymentInfo = PaymentFactory().one();
 
     const validOrder = { ...order };
     validOrder.payment_schedule = [
@@ -921,7 +922,7 @@ describe('<DashboardItemOrder/>', () => {
     screen.getByText(
       /The payment failed, please choose another payment method or add a new one during the payment/,
     );
-    screen.getByText('Use another credit card during payment');
+    screen.getByText('Use another credit card');
 
     // Prepare for cache invalidation.
     fetchMock.get(

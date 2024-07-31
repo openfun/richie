@@ -105,14 +105,23 @@
   text-align: left;
 }
 
-.sale-tunnel-end {
+.sale-tunnel-step {
   align-items: center;
   display: flex;
   flex-direction: column;
 
   &__header {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
     margin-bottom: 0;
     text-align: center;
+
+    & > .icon {
+      --size: 4.5rem;
+      height: var(--size);
+      width: var(--size);
+    }
   }
 
   &__title {

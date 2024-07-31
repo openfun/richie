@@ -1,6 +1,7 @@
 import {
   Alert,
   Button,
+  Loader,
   Modal,
   ModalProps,
   ModalSize,
@@ -8,12 +9,14 @@ import {
   VariantType,
 } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
 import { CreditCard, Order } from 'types/Joanie';
 import { CreditCardSelector } from 'components/CreditCardSelector';
 import { OrderHelper } from 'utils/OrderHelper';
 import { OrderPaymentRetryModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderPaymentRetryModal';
+import { Maybe } from 'types/utils';
+import { useCreditCard } from 'hooks/useCreditCards';
 
 const messages = defineMessages({
   title: {
@@ -57,7 +60,7 @@ export const OrderPaymentDetailsModal = ({ order, ...props }: PaymentModalProps)
         <h3 className="order-payment-details__title mb-s">
           <FormattedMessage {...messages.paymentMethodTitle} />
         </h3>
-        <CreditCardSelectorWrapper />
+        <CreditCardSelectorWrapper selectedCreditCardId={order.credit_card_id} />
         <h3 className="order-payment-details__title mb-s mt-b">
           <FormattedMessage {...messages.scheduleTitle} />
         </h3>
@@ -91,14 +94,31 @@ export const OrderPaymentDetailsModal = ({ order, ...props }: PaymentModalProps)
   );
 };
 
-const CreditCardSelectorWrapper = () => {
-  // TODO: At the moment is automatically selects the default credit card but it must select the credit card used to
-  // buy the order.
-  const [creditCard, setCreditCard] = useState<CreditCard>();
+const CreditCardSelectorWrapper = ({
+  selectedCreditCardId,
+}: {
+  selectedCreditCardId: Maybe<string>;
+}) => {
+  const {
+    item: creditCard,
+    states: { fetching },
+  } = useCreditCard(selectedCreditCardId);
+  const [selectedCreditCard, setSelectedCreditCard] = useState<Maybe<CreditCard>>(creditCard);
+
+  useEffect(() => {
+    if (!selectedCreditCard && creditCard) {
+      setSelectedCreditCard(creditCard);
+    }
+  }, [creditCard]);
+
+  if (fetching) {
+    return <Loader size="small" />;
+  }
+
   return (
     <CreditCardSelector
-      creditCard={creditCard}
-      setCreditCard={setCreditCard}
+      creditCard={selectedCreditCard || creditCard}
+      setCreditCard={setSelectedCreditCard}
       quickRemove={false}
       allowEdit={false}
     />
