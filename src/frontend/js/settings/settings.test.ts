@@ -1,5 +1,5 @@
-// This confiuration file is used for testing.
-// Mostly usefull to test our test tools.
+// This configuration file is used for testing.
+// Mostly useful to test our test tools.
 import { DevDemoUser } from 'api/lms/dummy';
 
 /**
@@ -14,3 +14,12 @@ import { DevDemoUser } from 'api/lms/dummy';
  *  * student_user
  */
 export const CURRENT_JOANIE_DEV_DEMO_USER: DevDemoUser = 'admin';
+
+export const CONTRACT_SETTINGS = {
+  // Interval in ms to poll the related order when a signature has succeeded.
+  pollInterval: 150,
+  // Number of retries
+  pollLimit: 45,
+  // Simulated sign request delay
+  dummySignatureSignTimeout: 100,
+};

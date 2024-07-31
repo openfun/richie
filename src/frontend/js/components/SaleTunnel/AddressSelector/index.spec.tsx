@@ -59,10 +59,11 @@ describe('AddressSelector', () => {
           setBillingAddress,
           setCreditCard: jest.fn(),
           onPaymentSuccess: jest.fn(),
-          step: SaleTunnelStep.PAYMENT,
+          step: SaleTunnelStep.IDLE,
           registerSubmitCallback: jest.fn(),
           unregisterSubmitCallback: jest.fn(),
           runSubmitCallbacks: jest.fn(),
+          nextStep: jest.fn(),
         }),
         [billingAddress],
       );

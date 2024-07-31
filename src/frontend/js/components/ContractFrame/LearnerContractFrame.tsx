@@ -1,12 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { CredentialOrder, NestedCredentialOrder } from 'types/Joanie';
+import { Order, AbstractNestedOrder } from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import AbstractContractFrame, {
   AbstractProps,
 } from 'components/ContractFrame/AbstractContractFrame';
 
 interface Props extends AbstractProps {
-  order: CredentialOrder | NestedCredentialOrder;
+  order: Order | AbstractNestedOrder;
 }
 
 const LearnerContractFrame = ({ order, onDone, ...props }: Props) => {

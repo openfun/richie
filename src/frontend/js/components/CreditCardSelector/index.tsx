@@ -35,7 +35,7 @@ const messages = defineMessages({
   creditCardEmptyInlineDescription: {
     id: 'components.SaleTunnel.CreditCardSelector.creditCardEmptyInlineDescription',
     description: 'Description for the empty credit card inline',
-    defaultMessage: 'Use another credit card during payment',
+    defaultMessage: 'Use another credit card',
   },
   modalTitle: {
     id: 'components.SaleTunnel.CreditCardSelector.modalTitle',
@@ -122,7 +122,7 @@ export const CreditCardSelector = ({
             <Button
               onClick={() => setCreditCard(undefined)}
               size="small"
-              color="tertiary"
+              color="secondary"
               className="mt-t"
               fullWidth={isMobile}
             >

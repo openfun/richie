@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- SaleTunnel has been fully rework to comply with the purchase workflow
 - Replace order abort mutation by order cancel mutation
 
 ### Fixed
