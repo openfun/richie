@@ -5,7 +5,6 @@ import {
   Certificate,
   CertificateDefinition,
   CertificateOrder,
-  CertificateOrderWithPaymentInfo,
   CertificateProduct,
   Contract,
   ContractDefinition,
@@ -16,7 +15,6 @@ import {
   CourseProductRelation,
   CourseRun,
   CredentialOrder,
-  CredentialOrderWithPaymentInfo,
   CredentialProduct,
   CreditCard,
   CreditCardBrand,
@@ -430,56 +428,22 @@ const AbstractOrderFactory = factory((): Order => {
   };
 });
 
-export const CredentialOrderFactory = factory((): CredentialOrder => {
-  const order = {
+export const CredentialOrderFactory = factory(
+  (): CredentialOrder => ({
     ...AbstractOrderFactory().one(),
     course: CourseLightFactory().one(),
     enrollment: null,
     payment_schedule: PaymentInstallmentFactory().many(3),
-  };
-  return order;
-});
-
-export const CredentialOrderWithPaymentFactory = factory((): CredentialOrderWithPaymentInfo => {
-  return {
-    ...CredentialOrderFactory().one(),
-    payment_info: PaymentFactory().one(),
-  };
-});
-
-export const CredentialOrderWithOneClickPaymentFactory = factory(
-  (): CredentialOrderWithPaymentInfo => {
-    return {
-      ...CredentialOrderFactory().one(),
-      payment_info: PaymentFactory().one(),
-    };
-  },
+  }),
 );
 
-export const CertificateOrderFactory = factory((): CertificateOrder => {
-  const order = {
+export const CertificateOrderFactory = factory(
+  (): CertificateOrder => ({
     ...AbstractOrderFactory().one(),
     course: null,
     target_courses: [],
     enrollment: EnrollmentLightFactory().one(),
-  };
-  return order;
-});
-
-export const CertificateOrderWithPaymentFactory = factory((): CertificateOrderWithPaymentInfo => {
-  return {
-    ...CertificateOrderFactory().one(),
-    payment_info: PaymentFactory().one(),
-  };
-});
-
-export const CertificateOrderWithOneClickPaymentFactory = factory(
-  (): CertificateOrderWithPaymentInfo => {
-    return {
-      ...CertificateOrderFactory().one(),
-      payment_info: PaymentFactory().one(),
-    };
-  },
+  }),
 );
 
 export const AddressFactory = factory((): Address => {

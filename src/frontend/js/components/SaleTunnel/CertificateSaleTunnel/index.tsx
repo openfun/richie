@@ -1,8 +1,8 @@
 import { SaleTunnelProps } from 'components/SaleTunnel/index';
 import { CertificateProduct } from 'types/Joanie';
 import { GenericSaleTunnel } from 'components/SaleTunnel/GenericSaleTunnel';
-import { GenericPaymentButton } from 'components/SaleTunnel/GenericPaymentButton';
 import { CertificateProductPath } from 'components/SaleTunnel/CertificateSaleTunnel/CertificateProductPath';
+import SubscriptionButton from 'components/SaleTunnel/SubscriptionButton';
 
 interface CertificateSaleTunnelProps extends Omit<SaleTunnelProps, 'product'> {
   product: CertificateProduct;
@@ -23,7 +23,7 @@ const CertificatePaymentButton = ({
   enrollment,
 }: Pick<CertificateSaleTunnelProps, 'enrollment'>) => {
   return (
-    <GenericPaymentButton
+    <SubscriptionButton
       buildOrderPayload={(payload) => {
         return {
           ...payload,

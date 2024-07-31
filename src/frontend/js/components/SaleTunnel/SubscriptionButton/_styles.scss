@@ -1,0 +1,7 @@
+.subscription-button {
+  &__error {
+    color: r-theme-val(form, input-color-error);
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+}
