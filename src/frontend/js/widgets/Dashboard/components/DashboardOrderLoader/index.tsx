@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 import { useOmniscientOrder } from 'hooks/useOrders';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
-import { useCourseProduct } from 'hooks/useCourseProducts';
 import { isCredentialOrder } from 'pages/DashboardCourses/useOrdersEnrollments';
 import { handle } from 'utils/errors/handle';
 import { OrderHelper } from 'utils/OrderHelper';
@@ -39,10 +38,6 @@ export const DashboardOrderLoader = () => {
     item: order,
     states: { fetching: fetchingOrder, error: errorOrder },
   } = useOmniscientOrder(params.orderId);
-  const {
-    item: courseProduct,
-    states: { fetching: fetchingCourseProduct, error: errorCourseProduct },
-  } = useCourseProduct({ course_id: order?.course?.code, product_id: order?.product_id });
   const intl = useIntl();
 
   const credentialOrder = order && isCredentialOrder(order) ? order : undefined;
@@ -52,12 +47,9 @@ export const DashboardOrderLoader = () => {
       return intl.formatMessage(messages.wrongLinkedProductError);
     }
   }, [credentialOrder]);
-  const error = errorOrder || errorCourseProduct || wrongLinkedProductError;
-  const fetching = fetchingOrder || fetchingCourseProduct;
-  const needsSignature = OrderHelper.orderNeedsSignature(
-    order,
-    courseProduct?.product.contract_definition,
-  );
+  const error = errorOrder || wrongLinkedProductError;
+  const fetching = fetchingOrder;
+  const needsSignature = order ? OrderHelper.orderNeedsSignature(order) : false;
 
   return (
     <>

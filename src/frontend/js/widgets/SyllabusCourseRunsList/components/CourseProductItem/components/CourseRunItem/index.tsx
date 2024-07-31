@@ -26,7 +26,6 @@ other {Languages:}
 interface Props {
   targetCourse: Joanie.TargetCourse;
   order?: Joanie.CredentialOrder;
-  product: Product;
 }
 
 const CourseRunItem = ({ targetCourse, order, product }: Props) => {
@@ -92,8 +91,7 @@ const CourseRunItem = ({ targetCourse, order, product }: Props) => {
       {isEnrollable && !isEnrolled && (
         <EnrollableCourseRunList
           courseRuns={targetCourse.course_runs.filter(isOpenedCourseRun)}
-          order={order}
-          product={product}
+          order={order!}
         />
       )}
       {isEnrollable && isEnrolled && <EnrolledCourseRun enrollment={courseRunEnrollment} />}
