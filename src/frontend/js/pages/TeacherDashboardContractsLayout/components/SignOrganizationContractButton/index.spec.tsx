@@ -5,6 +5,7 @@ import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -21,11 +22,13 @@ jest.mock('utils/context', () => ({
 describe('TeacherDashboardContractsLayout/SignOrganizationContractButton', () => {
   const Wrapper = ({ children }: PropsWithChildren) => {
     return (
-      <IntlProvider locale="en">
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <JoanieApiProvider>{children}</JoanieApiProvider>
-        </QueryClientProvider>
-      </IntlProvider>
+      <CunninghamProvider>
+        <IntlProvider locale="en">
+          <QueryClientProvider client={createTestQueryClient({ user: true })}>
+            <JoanieApiProvider>{children}</JoanieApiProvider>
+          </QueryClientProvider>
+        </IntlProvider>
+      </CunninghamProvider>
     );
   };
 
@@ -46,8 +49,6 @@ describe('TeacherDashboardContractsLayout/SignOrganizationContractButton', () =>
     expect(
       screen.getByRole('button', { name: 'Sign all pending contracts (12)' }),
     ).toBeInTheDocument();
-    const DashboardContractFramePortal = document.getElementsByClassName('ReactModalPortal');
-    expect(DashboardContractFramePortal).toHaveLength(1);
   });
 
   it("shouldn't display sign button user don't have some contract to sign", () => {
@@ -63,8 +64,6 @@ describe('TeacherDashboardContractsLayout/SignOrganizationContractButton', () =>
     expect(
       screen.queryByRole('button', { name: /Sign all pending contracts/ }),
     ).not.toBeInTheDocument();
-    const DashboardContractFramePortal = document.getElementsByClassName('ReactModalPortal');
-    expect(DashboardContractFramePortal).toHaveLength(1);
   });
 
   it.each([
