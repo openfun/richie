@@ -20,6 +20,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Remove News subheader in blogpost detail page
 
+### Fixed
+
+- Normalize credit card brand on CreditCardBrandLogo component
+
 ## [2.29.2]
 
 ### Fixed
