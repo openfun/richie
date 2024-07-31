@@ -17,7 +17,6 @@ import { ProductHelper } from 'utils/ProductHelper';
 import useProductOrder from 'hooks/useProductOrder';
 import { OrderHelper } from 'utils/OrderHelper';
 import { handle } from 'utils/errors/handle';
-import { ProductSignatureHeader } from 'widgets/SyllabusCourseRunsList/components/CourseProductItem/components/ProductSignatureHeader';
 import { PacedCourse } from 'types';
 import CertificateItem from './components/CourseProductCertificateItem';
 import CourseRunItem from './components/CourseRunItem';
@@ -122,9 +121,6 @@ const Header = ({ product, order, hasPurchased, canPurchase, compact }: HeaderPr
   );
 };
 const Content = ({ product, order }: { product: Product; order?: CredentialOrder }) => {
-  const needsSignature = order
-    ? OrderHelper.orderNeedsSignature(order, product.contract_definition)
-    : false;
   const targetCourses = useMemo(() => {
     if (order) {
       return order.target_courses;
@@ -139,10 +135,9 @@ const Content = ({ product, order }: { product: Product; order?: CredentialOrder
 
   return (
     <ol className="product-widget__content">
-      {needsSignature && <ProductSignatureHeader order={order} />}
       {Children.toArray(
         targetCourses.map((target_course) => (
-          <CourseRunItem targetCourse={target_course} order={order} product={product} />
+          <CourseRunItem targetCourse={target_course} order={order} />
         )),
       )}
       {product.certificate_definition && (

@@ -143,7 +143,7 @@ export const ContractFactory = factory((): Contract => {
     organization_signatory: null,
     created_on: faker.date.past().toISOString(),
     definition: ContractDefinitionFactory().one(),
-    order: NestedCredentialOrderFactory().one(),
+    order: NestedCredentialOrderFactory({ state: OrderState.TO_SIGN }).one(),
   };
 });
 

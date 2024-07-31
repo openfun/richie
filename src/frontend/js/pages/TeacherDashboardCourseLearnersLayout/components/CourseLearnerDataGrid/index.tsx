@@ -74,12 +74,7 @@ const CourseLearnerDataGrid = ({
       headerName: intl.formatMessage(messages.columnState),
       enableSorting: false,
       renderCell: (params: { row: Row }) => {
-        return (
-          <OrderStateTeacherMessage
-            order={params.row.courseOrder}
-            contractDefinition={params.row.courseOrder.product.contract_definition_id}
-          />
-        );
+        return <OrderStateTeacherMessage order={params.row.courseOrder} />;
       },
     },
     {

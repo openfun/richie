@@ -19,6 +19,7 @@ import { render } from 'utils/test/render';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { OrderState } from 'types/Joanie';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -49,9 +50,10 @@ describe('<DashboardItemOrder/> Contract', () => {
   describe('writable', () => {
     it('successfully sign a contract', async () => {
       const order = CredentialOrderFactory({
+        state: OrderState.TO_SIGN,
         target_courses: TargetCourseFactory().many(1),
         target_enrollments: [],
-        contract: ContractFactory({ student_signed_on: undefined }).one(),
+        contract: ContractFactory({ student_signed_on: null }).one(),
       }).one();
 
       // learner dashboard course page do one call to course product relation per order
@@ -82,6 +84,7 @@ describe('<DashboardItemOrder/> Contract', () => {
         `https://joanie.endpoint/api/v1.0/orders/${order.id}/submit_for_signature/`,
         submitDeferred.promise,
       );
+      fetchMock.post(`https://joanie.endpoint/api/v1.0/signature/notifications/`, 200);
 
       // delay: null is needed because as we are using fake timers it would mock the timers of
       // RTL too. See https://github.com/testing-library/user-event/issues/833.
@@ -92,11 +95,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       });
 
       await expectNoSpinner('Loading orders and enrollments...');
-
-      expect(
-        await screen.findByRole('heading', { level: 5, name: product.title }),
-      ).toBeInTheDocument();
-
+      await screen.findByRole('heading', { level: 5, name: product.title });
       // Make sure the sign button is shown.
       await user.click(screen.getByRole('link', { name: 'Sign' }));
 

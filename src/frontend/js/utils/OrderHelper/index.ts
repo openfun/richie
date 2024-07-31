@@ -1,56 +1,51 @@
 import {
-  OrderEnrollment,
   ACTIVE_ORDER_STATES,
-  Order,
-  OrderState,
-  ContractDefinition,
   NestedCourseOrder,
+  Order,
+  OrderEnrollment,
+  OrderState,
   PaymentScheduleState,
 } from 'types/Joanie';
 
 export enum OrderStatus {
-  DRAFT = 'draft',
-  SUBMITTED = 'submitted',
-  PENDING = 'pending',
+  ASSIGNED = 'assigned',
   CANCELED = 'canceled',
-  WAITING_SIGNATURE = 'waiting_signature',
-  WAITING_COUNTER_SIGNATURE = 'waiting_counter_signature',
   COMPLETED = 'completed',
-  ON_GOING = 'on_going',
-  NO_PAYMENT = 'no_payment',
-  PENDING_PAYMENT = 'pending_payment',
+  DRAFT = 'draft',
   FAILED_PAYMENT = 'failed_payment',
+  NO_PAYMENT = 'no_payment',
+  PASSED = 'passed',
+  PENDING = 'pending',
+  PENDING_PAYMENT = 'pending_payment',
+  WAITING_COUNTER_SIGNATURE = 'waiting_counter_signature',
+  WAITING_PAYMENT_METHOD = 'waiting_payment_method',
+  WAITING_SIGNATURE = 'waiting_signature',
 }
 
 /**
  * Helper class for orders
  */
 export class OrderHelper {
-  static getState(order: Order | NestedCourseOrder, contractDefinition?: ContractDefinition) {
-    const { certificate_id: certificateId } = order;
-
-    if (order.state === OrderState.VALIDATED) {
-      if (OrderHelper.orderNeedsSignature(order, contractDefinition)) {
-        return OrderStatus.WAITING_SIGNATURE;
-      }
-      if (OrderHelper.orderNeedsCounterSignature(order)) {
-        return OrderStatus.WAITING_COUNTER_SIGNATURE;
-      }
-      if (certificateId) {
-        return OrderStatus.COMPLETED;
-      } else {
-        return OrderStatus.ON_GOING;
-      }
+  static getState(order: Order | NestedCourseOrder) {
+    if (OrderHelper.allowEnrollment(order) && OrderHelper.orderNeedsCounterSignature(order)) {
+      return OrderStatus.WAITING_COUNTER_SIGNATURE;
+    }
+    if (order.state === OrderState.COMPLETED && order.certificate_id) {
+      return OrderStatus.PASSED;
     }
 
     const orderStatusMap = {
-      [OrderState.DRAFT]: OrderStatus.DRAFT,
-      [OrderState.SUBMITTED]: OrderStatus.SUBMITTED,
-      [OrderState.PENDING]: OrderStatus.PENDING,
+      [OrderState.ASSIGNED]: OrderStatus.ASSIGNED,
       [OrderState.CANCELED]: OrderStatus.CANCELED,
+      [OrderState.COMPLETED]: OrderStatus.COMPLETED,
+      [OrderState.DRAFT]: OrderStatus.DRAFT,
+      [OrderState.FAILED_PAYMENT]: OrderStatus.FAILED_PAYMENT,
       [OrderState.NO_PAYMENT]: OrderStatus.NO_PAYMENT,
+      [OrderState.PENDING]: OrderStatus.PENDING,
       [OrderState.PENDING_PAYMENT]: OrderStatus.PENDING_PAYMENT,
-      [OrderState.FAILED_PAYMENT]: OrderStatus.PENDING_PAYMENT,
+      [OrderState.SIGNING]: OrderStatus.WAITING_SIGNATURE,
+      [OrderState.TO_SAVE_PAYMENT_METHOD]: OrderStatus.WAITING_PAYMENT_METHOD,
+      [OrderState.TO_SIGN]: OrderStatus.WAITING_SIGNATURE,
     };
 
     if (order.state in orderStatusMap) {
@@ -69,18 +64,8 @@ export class OrderHelper {
     return orders.find(filter);
   }
 
-  /**
-   * tell us if a order need to be sign by it's owner (the learner user).
-   */
-  static orderNeedsSignature(
-    order: Order | NestedCourseOrder,
-    contractDefinition?: ContractDefinition,
-  ) {
-    return (
-      order?.state === OrderState.VALIDATED &&
-      contractDefinition &&
-      !(order.contract && order.contract.student_signed_on)
-    );
+  static orderNeedsSignature(order: Order | NestedCourseOrder) {
+    return [OrderState.TO_SIGN, OrderState.SIGNING].includes(order.state);
   }
 
   /**
@@ -88,7 +73,7 @@ export class OrderHelper {
    */
   static orderNeedsCounterSignature(order: Order | NestedCourseOrder) {
     return (
-      order?.state === OrderState.VALIDATED &&
+      ACTIVE_ORDER_STATES.includes(order.state) &&
       order.contract &&
       order.contract.student_signed_on &&
       !order.contract.organization_signed_on

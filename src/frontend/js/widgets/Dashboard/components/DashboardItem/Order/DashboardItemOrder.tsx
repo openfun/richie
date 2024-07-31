@@ -164,13 +164,15 @@ export const DashboardItemOrder = ({
     course_id: course.code,
   });
   const { product } = courseProductRelation || {};
-  const needsSignature = OrderHelper.orderNeedsSignature(order, product?.contract_definition);
+  const needsSignature = OrderHelper.orderNeedsSignature(order);
+
+  if (!product) return null;
 
   return (
     <div className="dashboard-item-order">
       <DashboardItem
         data-testid={`dashboard-item-order-${order.id}`}
-        title={product?.title ?? ''}
+        title={product.title}
         code={'Ref. ' + course.code}
         imageUrl={course.cover?.src}
         more={
@@ -185,10 +187,7 @@ export const DashboardItemOrder = ({
             <div className="dashboard-item-order__footer">
               <div className="dashboard-item__block__status">
                 <Icon name={IconTypeEnum.SCHOOL} />
-                <OrderStateLearnerMessage
-                  order={order}
-                  contractDefinition={product?.contract_definition}
-                />
+                <OrderStateLearnerMessage order={order} />
               </div>
               {showDetailsButton && (
                 <RouterButton
@@ -206,7 +205,7 @@ export const DashboardItemOrder = ({
                 key={`DashboardItemOrderContract_${order.id}`}
                 title={product.title}
                 order={order}
-                contract_definition={product?.contract_definition!}
+                contract_definition={product.contract_definition!}
                 contract={order.contract}
                 writable={writable}
                 mode="compact"
@@ -224,7 +223,6 @@ export const DashboardItemOrder = ({
                   writable={writable}
                   course={targetCourse}
                   order={order}
-                  product={product}
                   activeEnrollment={CoursesHelper.findActiveCourseEnrollmentInOrder(
                     targetCourse,
                     order,
@@ -397,7 +395,7 @@ const ContractItem = ({ product, order }: { order: CredentialOrder; product: Pro
     return;
   }
 
-  const needsSignature = OrderHelper.orderNeedsSignature(order, product.contract_definition);
+  const needsSignature = OrderHelper.orderNeedsSignature(order);
   return (
     <div
       id={`dashboard-item-contract-${order.id}`}
