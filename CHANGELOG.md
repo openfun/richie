@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Improve lyra error catching management
+- Replace order abort mutation by order cancel mutation
 
 ### Fixed
 

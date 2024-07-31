@@ -9,10 +9,7 @@ const PaymentInterface = ({ onError, onSuccess }: PaymentInterfaceProps) => (
     >
       Simulate payment failure
     </button>
-    <button
-      data-testid="payment-abort"
-      onClick={() => onError(PaymentErrorMessageId.ERROR_ABORTING)}
-    >
+    <button data-testid="payment-abort" onClick={() => onError(PaymentErrorMessageId.ERROR_ABORT)}>
       Simulate payment abort
     </button>
     <button data-testid="payment-success" onClick={onSuccess}>
