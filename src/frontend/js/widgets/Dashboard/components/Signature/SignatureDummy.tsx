@@ -28,6 +28,7 @@ export const SignatureDummy = ({ invitationLink, onDone }: SignatureProps) => {
   const [step, setStep] = useState(SignatureDummySteps.SIGNING);
 
   const baseUrl = getAPIEndpoint();
+  // eslint-disable-next-line compat/compat
   const link = new URL(invitationLink);
   const reference = link.searchParams.get('reference');
   const event = link.searchParams.get('eventTarget');
@@ -63,11 +64,13 @@ export const SignatureDummy = ({ invitationLink, onDone }: SignatureProps) => {
         </div>
       )}
       {step === SignatureDummySteps.SIGNING_LOADING && (
-        <div className="ContractFrame__loading-container">
+        <div className="ContractFrame__container">
           <h3 className="ContractFrame__caption">
             <FormattedMessage {...messages.signing} />
           </h3>
-          <Loader />
+          <div className="ContractFrame__footer">
+            <Loader />
+          </div>
         </div>
       )}
     </>
