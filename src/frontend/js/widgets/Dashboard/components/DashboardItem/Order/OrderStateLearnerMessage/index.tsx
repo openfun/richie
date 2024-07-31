@@ -1,71 +1,70 @@
 import { defineMessages } from 'react-intl';
-import OrderStateMessage, { OrderStateMessageBaseProps } from '../OrderStateMessage';
+import OrderStateMessage, { OrderStateMessageBaseProps, MessageKeys } from '../OrderStateMessage';
 
-export const messages = defineMessages({
+export const messages = defineMessages<MessageKeys>({
   statusDraft: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusDraft',
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusDraft',
     description: 'Status shown on the dashboard order item when order is draft.',
-    defaultMessage: 'Draft',
-  },
-  statusSubmitted: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusSubmitted',
-    description: 'Status shown on the dashboard order item when order is submitted.',
-    defaultMessage: 'Submitted',
-  },
-  statusPending: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusPending',
-    description: 'Status shown on the dashboard order item when order is pending.',
     defaultMessage: 'Pending',
   },
-  statusOnGoing: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusOnGoing',
-    description:
-      'Status shown on the dashboard order item when order is validated with no certificate',
+  statusAssigned: {
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusAssigned',
+    description: 'Status shown on the dashboard order item when order is assigned.',
+    defaultMessage: 'Pending',
+  },
+  statusPending: {
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusPending',
+    description: 'Status shown on the dashboard order item when order is pending.',
+    defaultMessage: 'Pending for the first direct debit',
+  },
+  statusPendingPayment: {
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusPendingPayment',
+    description: 'Status shown on the dashboard order item when order is pending for payment',
     defaultMessage: 'On going',
   },
   statusCompleted: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusCompleted',
-    description:
-      'Status shown on the dashboard order item when order is validated with certificate',
-    defaultMessage: 'Completed',
-  },
-  statusPendingPayment: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusPendingPayment',
-    description:
-      'Status shown on the dashboard order item when order is validated with certificate and pending payment',
-    defaultMessage: 'Completed',
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusCompleted',
+    description: 'Status shown on the dashboard order item when order is completed',
+    defaultMessage: 'On going',
   },
   statusWaitingSignature: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusWaitingSignature',
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusWaitingSignature',
     description:
       "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
     defaultMessage: 'Signature required',
   },
   statusWaitingCounterSignature: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusWaitingCounterSignature',
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusWaitingCounterSignature',
     description:
       "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
     defaultMessage: 'On going',
   },
+  statusWaitingPaymentMethod: {
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusWaitingPaymentMethod',
+    description:
+      'Status shown on the dashboard order item when order is in to_save_payment_method state.',
+    defaultMessage: 'Payment method is missing',
+  },
   statusCanceled: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusCanceled',
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusCanceled',
     description: 'Status shown on the dashboard order item when order is canceled',
     defaultMessage: 'Canceled',
   },
   statusNoPayment: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusNoPayment',
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusNoPayment',
     description: 'Status shown on the dashboard order item when order is in no payment state',
-    defaultMessage: 'Failed payment',
+    defaultMessage: 'First direct debit has failed',
   },
   statusFailedPayment: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusFailedPayment',
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusFailedPayment',
     description: 'Status shown on the dashboard order item when order is in failed payment state',
-    defaultMessage: 'Failed payment',
+    defaultMessage: 'Last direct debit has failed',
   },
-  statusOther: {
-    id: 'components.DashboardItem.Order.OrderStateMessage.statusOther',
-    description: 'Status shown on the dashboard order item when order status is unknown',
-    defaultMessage: '{state}',
+  statusPassed: {
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusPassed',
+    description:
+      'Status shown on the dashboard order item when order is completed and has a certificate',
+    defaultMessage: 'Successfully completed',
   },
 });
 

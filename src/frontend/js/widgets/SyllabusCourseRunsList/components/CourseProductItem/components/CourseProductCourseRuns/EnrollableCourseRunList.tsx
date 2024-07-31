@@ -11,7 +11,6 @@ import useDateFormat from 'hooks/useDateFormat';
 import { IntlHelper } from 'utils/IntlHelper';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
 import EnrollmentDate from 'components/EnrollmentDate';
-import { Product } from 'types/Joanie';
 import { OrderHelper } from 'utils/OrderHelper';
 import { messages as sharedMessages } from '../CourseRunItem';
 import CourseRunSection, { messages as sectionMessages } from './CourseRunSection';
@@ -53,16 +52,13 @@ const messages = defineMessages({
 interface Props {
   courseRuns: Joanie.CourseRun[];
   order: Joanie.Order;
-  product: Product;
 }
 
-const EnrollableCourseRunList = ({ courseRuns, order, product }: Props) => {
+const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
   const formRef = useRef<HTMLFormElement>(null);
-  const needsSignature = order
-    ? OrderHelper.orderNeedsSignature(order, product.contract_definition)
-    : false;
+  const needsSignature = order ? OrderHelper.orderNeedsSignature(order) : false;
 
   const [selectedCourseRun, setSelectedCourseRun] = useState<Maybe<Joanie.CourseRun>>();
   const [submitted, setSubmitted] = useState(false);

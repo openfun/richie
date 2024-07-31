@@ -11,7 +11,7 @@ import {
   CredentialOrderFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
-import type { CourseLight, CourseRun, Enrollment } from 'types/Joanie';
+import { CourseLight, CourseRun, Enrollment, OrderState } from 'types/Joanie';
 import { Deferred } from 'utils/test/deferred';
 import { CourseStateTextEnum, Priority } from 'types';
 import { IntlHelper } from 'utils/IntlHelper';
@@ -114,10 +114,9 @@ describe('CourseProductCourseRuns', () => {
 
     it('renders a warning message when no course runs are provided', () => {
       const order = CredentialOrderFactory().one();
-      const product = ProductFactory().one();
 
       fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
-      render(<EnrollableCourseRunList courseRuns={[]} order={order} product={product} />, {
+      render(<EnrollableCourseRunList courseRuns={[]} order={order} />, {
         wrapper: BaseJoanieAppWrapper,
       });
 
@@ -127,12 +126,9 @@ describe('CourseProductCourseRuns', () => {
     it('renders a list of course runs with a call to action to enroll', async () => {
       const courseRuns: CourseRun[] = CourseRunFactory().many(2);
       const order = CredentialOrderFactory().one();
-      const product = ProductFactory({
-        contract_definition: undefined,
-      }).one();
 
       fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
-      render(<EnrollableCourseRunList courseRuns={courseRuns} order={order} product={product} />, {
+      render(<EnrollableCourseRunList courseRuns={courseRuns} order={order} />, {
         wrapper: BaseJoanieAppWrapper,
       });
 
@@ -247,7 +243,7 @@ describe('CourseProductCourseRuns', () => {
       fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/${course.code}/`, HttpStatusCode.OK);
       fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
 
-      render(<EnrollableCourseRunList courseRuns={courseRuns} order={order} product={product} />, {
+      render(<EnrollableCourseRunList courseRuns={courseRuns} order={order} />, {
         wrapper: BaseJoanieAppWrapper,
       });
 
@@ -355,12 +351,10 @@ describe('CourseProductCourseRuns', () => {
           text: CourseStateTextEnum.STARTING_ON,
         },
       }).one();
-      const product = ProductFactory().one();
-      product.contract_definition = undefined;
       const order = CredentialOrderFactory().one();
 
       fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
-      render(<EnrollableCourseRunList courseRuns={[courseRun]} order={order} product={product} />, {
+      render(<EnrollableCourseRunList courseRuns={[courseRun]} order={order} />, {
         wrapper: BaseJoanieAppWrapper,
       });
 
@@ -438,11 +432,10 @@ describe('CourseProductCourseRuns', () => {
           text: CourseStateTextEnum.STARTING_ON,
         },
       }).one();
-      const product = ProductFactory().one();
-      const order = CredentialOrderFactory().one();
+      const order = CredentialOrderFactory({ state: OrderState.TO_SIGN }).one();
 
       fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
-      render(<EnrollableCourseRunList courseRuns={[courseRun]} order={order} product={product} />, {
+      render(<EnrollableCourseRunList courseRuns={[courseRun]} order={order} />, {
         wrapper: BaseJoanieAppWrapper,
       });
 

@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import { screen } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { CourseLight } from 'types/Joanie';
+import { CourseLight, OrderState } from 'types/Joanie';
 import {
   ContractDefinitionFactory,
   ContractFactory,
@@ -124,6 +124,7 @@ describe('<DashboardItemOrder/> Contract', () => {
 
     it('renders a non-writable order with a contract not signed yet', async () => {
       const order = CredentialOrderFactory({
+        state: OrderState.TO_SIGN,
         target_courses: TargetCourseFactory().many(1),
         target_enrollments: [],
         contract: ContractFactory({ student_signed_on: undefined }).one(),
@@ -186,6 +187,7 @@ describe('<DashboardItemOrder/> Contract', () => {
     });
     it('renders a writable order with a contract not signed yet', async () => {
       const order = CredentialOrderFactory({
+        state: OrderState.TO_SIGN,
         target_courses: TargetCourseFactory().many(1),
         target_enrollments: [],
         contract: null,
