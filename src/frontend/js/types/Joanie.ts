@@ -354,9 +354,11 @@ export interface AbstractNestedOrder {
   product_title: string;
   owner_name: string;
   state: OrderState;
+  course: Nullable<CourseLight>;
+  enrollment: Nullable<EnrollmentLight>;
 }
 export interface NestedCertificateOrder extends AbstractNestedOrder {
-  course: undefined;
+  course: null;
   enrollment: EnrollmentLight;
 }
 export const isNestedCredentialOrder = (
@@ -367,7 +369,7 @@ export const isNestedCredentialOrder = (
 
 export interface NestedCredentialOrder extends AbstractNestedOrder {
   course: CourseLight;
-  enrollment: undefined;
+  enrollment: null;
 }
 
 export type OrderEnrollment = Pick<Order, 'id' | 'state' | 'product_id' | 'certificate_id'>;
