@@ -14,7 +14,7 @@ import CourseLearnerDataGrid from '.';
 describe('pages/CourseLearnerDataGrid', () => {
   it('should render a list of user', async () => {
     const courseOrderList = NestedCourseOrderFactory({
-      state: OrderState.VALIDATED,
+      state: OrderState.COMPLETED,
       certificate_id: faker.string.uuid(),
     }).many(3);
     render(
