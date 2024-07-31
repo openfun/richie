@@ -376,10 +376,10 @@ export interface OrderGroup {
 }
 
 export enum CreditCardBrand {
-  MASTERCARD = 'Mastercard',
-  MAESTRO = 'Maestro',
-  VISA = 'Visa',
-  CB = 'CB',
+  MASTERCARD = 'mastercard',
+  MAESTRO = 'maestro',
+  VISA = 'visa',
+  CB = 'cb',
 }
 
 // Credit Card

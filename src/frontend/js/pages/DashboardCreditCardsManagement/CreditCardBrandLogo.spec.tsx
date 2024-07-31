@@ -23,7 +23,7 @@ describe('CreditCardBrandLogo', () => {
     render(<CreditCardBrandLogo creditCard={creditCard} />);
     expect(screen.getByRole('presentation')).toHaveAttribute(
       'src',
-      '/static/richie/images/components/DashboardCreditCardsManagement/logo_CB.svg',
+      '/static/richie/images/components/DashboardCreditCardsManagement/logo_cb.svg',
     );
   });
 });
