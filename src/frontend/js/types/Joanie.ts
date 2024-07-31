@@ -480,12 +480,6 @@ export type OrderSubmitInstallmentPayment = {
   credit_card_id?: string;
 };
 
-interface OrderSubmitPayload {
-  id: Order['id'];
-  billing_address: Omit<Address, 'id' | 'is_main'>;
-  credit_card_id?: CreditCard['id'];
-}
-
 interface OrderSetPaymentMethodPayload {
   id: Order['id'];
   credit_card_id: CreditCard['id'];
@@ -601,7 +595,6 @@ interface APIUser {
     invoice: {
       download(payload: { order_id: Order['id']; invoice_reference: string }): Promise<File>;
     };
-    submit(payload: OrderSubmitPayload): Promise<OrderPaymentInfo>;
     submit_for_signature(id: string): Promise<ContractInvitationLinkResponse>;
     submit_installment_payment(
       id: string,
