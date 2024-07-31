@@ -1,7 +1,13 @@
 import { Children, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import c from 'classnames';
-import { ProductType, OrderState, Product, CredentialOrder } from 'types/Joanie';
+import {
+  ProductType,
+  Product,
+  CredentialOrder,
+  PURCHASABLE_ORDER_STATES,
+  ACTIVE_ORDER_STATES,
+} from 'types/Joanie';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -22,12 +28,6 @@ const messages = defineMessages({
     defaultMessage: 'Purchased',
     description: 'Message displayed when authenticated user owned the product',
     id: 'components.CourseProductItem.purchased',
-  },
-  pending: {
-    defaultMessage: 'Pending',
-    description:
-      'Message displayed when authenticated user has purchased the product but order is still pending',
-    id: 'components.CourseProductItem.pending',
   },
   loading: {
     defaultMessage: 'Loading product information...',
@@ -64,10 +64,10 @@ const Header = ({ product, order, hasPurchased, canPurchase, compact }: HeaderPr
   const intl = useIntl();
   const formatDate = useDateFormat();
 
-  // compact mode is available for product until they got a VALIDATED order.
+  // compact mode is available for product until they got an active order.
   const canShowMetadata = useMemo(() => {
-    return compact && (!order || [OrderState.SUBMITTED, OrderState.PENDING].includes(order!.state));
-  }, [compact, hasPurchased]);
+    return compact && (!order || canPurchase);
+  }, [compact, hasPurchased, canPurchase]);
 
   const [minDate, maxDate] = useMemo(() => {
     if (!canShowMetadata) return [undefined, undefined];
@@ -84,8 +84,7 @@ const Header = ({ product, order, hasPurchased, canPurchase, compact }: HeaderPr
       <div className="product-widget__header-main">
         <h3 className="product-widget__title">{product.title}</h3>
         <strong className="product-widget__price h6">
-          {order?.state === OrderState.VALIDATED && <FormattedMessage {...messages.purchased} />}
-          {order?.state === OrderState.SUBMITTED && <FormattedMessage {...messages.pending} />}
+          {hasPurchased && <FormattedMessage {...messages.purchased} />}
           {canPurchase && (
             <FormattedNumber
               currency={product.price_currency}
@@ -168,8 +167,8 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
   });
 
   const order = productOrder as CredentialOrder;
-  const canPurchase = !order || order.state === OrderState.PENDING;
-  const hasPurchased = (order && order.state === OrderState.VALIDATED) ?? false;
+  const canPurchase = !order || PURCHASABLE_ORDER_STATES.includes(order.state);
+  const hasPurchased = !!order && ACTIVE_ORDER_STATES.includes(order.state);
 
   const hasError = Boolean(productQueryStates.error);
   const isFetching = productQueryStates.fetching || orderQueryStates.fetching;

@@ -67,7 +67,9 @@ const SignContractButton = ({ order, contract, writable, className }: SignContra
   const [contractLoading, setContractLoading] = useState(false);
   const contractState = ContractHelper.getState(contract);
   const notReadyToSign =
-    order.state !== OrderState.VALIDATED || contractLoading || contractFrameOpened;
+    ![OrderState.TO_SIGN, OrderState.SIGNING].includes(order.state) ||
+    contractLoading ||
+    contractFrameOpened;
 
   if (!writable && contractState === ContractState.UNSIGNED) {
     return <SignContractButtonLink orderId={order.id} className={className} />;

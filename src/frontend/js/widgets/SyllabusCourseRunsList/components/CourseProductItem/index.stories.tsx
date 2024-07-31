@@ -57,16 +57,7 @@ type Story = StoryObj<typeof CourseProductItem>;
 
 export const Default: Story = {};
 
-export const WithPendingOrder: Story = {
-  args: {
-    productId: 'AAA',
-    course: PacedCourseFactory({ code: 'BBB' }).one(),
-  },
-  render: (args) =>
-    render(args, { order: CredentialOrderFactory({ state: OrderState.PENDING }).one() }),
-};
-
-export const WithValidatedOrder: Story = {
+export const WithCompletedOrder: Story = {
   args: {
     productId: 'AAA',
     course: PacedCourseFactory({ code: 'BBB' }).one(),
@@ -75,7 +66,7 @@ export const WithValidatedOrder: Story = {
     const courseRunWithEnrollment = CourseRunFactory().one();
     return render(args, {
       order: CredentialOrderFactory({
-        state: OrderState.VALIDATED,
+        state: OrderState.COMPLETED,
         target_enrollments: EnrollmentFactory({
           is_active: true,
           course_run: courseRunWithEnrollment,
@@ -91,11 +82,19 @@ export const WithValidatedOrder: Story = {
   },
 };
 
-export const WithSubmittedOrder: Story = {
+export const WithPendingOrder: Story = {
   args: {
     productId: 'AAA',
     course: PacedCourseFactory({ code: 'BBB' }).one(),
   },
   render: (args) =>
-    render(args, { order: CredentialOrderFactory({ state: OrderState.SUBMITTED }).one() }),
+    render(args, { order: CredentialOrderFactory({ state: OrderState.PENDING }).one() }),
+};
+
+export const WithNoOrder: Story = {
+  args: {
+    productId: 'AAA',
+    course: PacedCourseFactory({ code: 'BBB' }).one(),
+  },
+  render: (args) => render(args),
 };

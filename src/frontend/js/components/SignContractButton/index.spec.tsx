@@ -77,7 +77,7 @@ describe('<SignContractButton/>', () => {
             testCase === TestCase.FROM_ORDER_WITH_CONTRACT
               ? ContractFactory({ student_signed_on: null }).one()
               : undefined;
-          order = OrderFactory({ contract: orderContract }).one();
+          order = OrderFactory({ contract: orderContract, state: OrderState.TO_SIGN }).one();
           contract = order.contract;
         }
       });

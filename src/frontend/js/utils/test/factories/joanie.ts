@@ -314,7 +314,7 @@ export const NestedCourseOrderFactory = factory((): NestedCourseOrder => {
     owner: UserLightFactory().one(),
     course_id: faker.string.uuid(),
     product_id: faker.string.uuid(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
     enrollment_id: faker.string.uuid(),
     organization: OrganizationFactory().one(),
     certificate_id: faker.string.uuid(),
@@ -363,7 +363,7 @@ export const OrderEnrollmentFactory = factory((): OrderEnrollment => {
   return {
     id: faker.string.uuid(),
     product_id: faker.string.uuid(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
   };
 });
 
@@ -375,19 +375,19 @@ export const OrderLiteFactory = factory((): OrderLite => {
     main_invoice_reference: faker.string.uuid(),
     total: faker.number.int(),
     product_id: faker.string.uuid(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
   };
 });
 
 export const NestedCertificateOrderFactory = factory((): NestedCertificateOrder => {
   return {
     id: faker.string.uuid(),
-    course: undefined,
+    course: null,
     enrollment: EnrollmentLightFactory().one(),
     organization: OrganizationFactory().one(),
     product_title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
     owner_name: faker.internet.userName(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
   };
 });
 
@@ -395,11 +395,11 @@ export const NestedCredentialOrderFactory = factory((): NestedCredentialOrder =>
   return {
     id: faker.string.uuid(),
     course: CourseLightFactory().one(),
-    enrollment: undefined,
+    enrollment: null,
     organization: OrganizationFactory().one(),
     product_title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
     owner_name: faker.internet.userName(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
   };
 });
 
@@ -411,7 +411,7 @@ const AbstractOrderFactory = factory((): Order => {
     total: faker.number.int(),
     total_currency: faker.finance.currencyCode(),
     main_invoice_reference: faker.string.uuid(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
     product_id: faker.string.uuid(),
     target_courses: TargetCourseFactory().many(5),
     target_enrollments: [],
