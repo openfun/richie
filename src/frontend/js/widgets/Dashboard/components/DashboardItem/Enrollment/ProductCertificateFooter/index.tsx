@@ -2,7 +2,13 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import { useState } from 'react';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { CertificateProduct, Enrollment, OrderState, ProductType } from 'types/Joanie';
+import {
+  ACTIVE_ORDER_STATES,
+  CertificateProduct,
+  Enrollment,
+  ProductType,
+  PURCHASABLE_ORDER_STATES,
+} from 'types/Joanie';
 import DownloadCertificateButton from 'components/DownloadCertificateButton';
 import { useCertificate } from 'hooks/useCertificates';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
@@ -51,7 +57,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
     <div className="dashboard-item__course-enrolling__infos">
       <div className="dashboard-item__block__status">
         <Icon name={IconTypeEnum.CERTIFICATE} />
-        {order?.state === OrderState.VALIDATED ? (
+        {order && ACTIVE_ORDER_STATES.includes(order.state) ? (
           <>
             {product.certificate_definition.title + '. '}
             <CertificateStatus certificate={certificate} productType={product.type} />
@@ -60,7 +66,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
           <FormattedMessage {...messages.buyProductCertificateLabel} />
         )}
       </div>
-      {order?.state === OrderState.VALIDATED ? (
+      {order && ACTIVE_ORDER_STATES.includes(order.state) ? (
         order.certificate_id && (
           <DownloadCertificateButton
             className="dashboard-item__button"
@@ -73,7 +79,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
           product={product}
           enrollment={enrollment}
           buttonProps={{ size: 'small' }}
-          disabled={order?.state === OrderState.SUBMITTED}
+          disabled={order && !PURCHASABLE_ORDER_STATES.includes(order.state)}
           onFinish={(o) => {
             /**
              * As we do not refetch enrollments in DashboardCourses after SaleTunnel cache invalidation (to avoid

@@ -9,7 +9,7 @@ import { ContractFactory, CredentialOrderFactory } from 'utils/test/factories/jo
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { useOmniscientOrders } from 'hooks/useOrders';
-import { CredentialOrder } from 'types/Joanie';
+import { OrderState, CredentialOrder } from 'types/Joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import SignContractButton from '.';
 
@@ -64,6 +64,7 @@ describe('<SignContractButton/>', () => {
       );
     };
     const order = CredentialOrderFactory({
+      state: OrderState.TO_SIGN,
       contract: ContractFactory({ student_signed_on: undefined }).one(),
     }).one();
     fetchMock.get(
