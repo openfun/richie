@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useOrders } from 'hooks/useOrders';
-import { ACTIVE_ORDER_STATES } from 'types/Joanie';
+import { NOT_CANCELED_ORDER_STATES } from 'types/Joanie';
 
 interface UseProductOrderProps {
   courseCode?: string;
@@ -12,7 +12,7 @@ const useProductOrder = ({ courseCode, enrollmentId, productId }: UseProductOrde
     course_code: courseCode,
     enrollment_id: enrollmentId,
     product_id: productId,
-    state: ACTIVE_ORDER_STATES,
+    state: NOT_CANCELED_ORDER_STATES,
   });
 
   const order = useMemo(() => {
