@@ -17,30 +17,18 @@ iframe#lex-persona {
 
 .ContractFrame {
   &__modal-body {
-    padding: 0 3rem 1.5rem 3rem;
+    padding: 1.5rem 3rem;
   }
 
-  &__loading-container {
+  &__container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 3rem 0;
-    gap: 4rem;
   }
 
   &__caption {
     color: r-theme-val(contract-frame, title-color);
     font-size: 1.5rem;
-  }
-
-  &__finished {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    button {
-      margin-top: 2.5rem;
-    }
   }
 
   &__content {
@@ -58,5 +46,9 @@ iframe#lex-persona {
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+  }
+
+  &__footer {
+    margin-top: 2.5rem;
   }
 }

@@ -4,6 +4,7 @@ import fetchMock from 'fetch-mock';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PropsWithChildren } from 'react';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
@@ -33,11 +34,13 @@ jest.mock('settings', () => ({
 describe('<AbstractContractFrame />', () => {
   const Wrapper = ({ children }: PropsWithChildren) => {
     return (
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <JoanieSessionProvider>{children}</JoanieSessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>
+      <CunninghamProvider>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+          <IntlProvider locale="en">
+            <JoanieSessionProvider>{children}</JoanieSessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>
+      </CunninghamProvider>
     );
   };
 
@@ -78,7 +81,7 @@ describe('<AbstractContractFrame />', () => {
     expect(await screen.findByTestId('dashboard-contract-frame')).toBeInTheDocument();
 
     const user = userEvent.setup();
-    await user.click(screen.getByRole('button', { name: 'Close dialog' }));
+    await user.click(screen.getByRole('button', { name: 'close' }));
     expect(mockOnClose).toHaveBeenCalled();
   });
 
@@ -224,7 +227,7 @@ describe('<AbstractContractFrame />', () => {
     // have been called
     await expectBannerError('An error happened while verifying signature. Please come back later.');
     expect(mockOnDone).not.toHaveBeenCalled();
-    button = screen.getByRole('button', { name: 'Close dialog' });
+    button = screen.getByRole('button', { name: 'close' });
     await user.click(button);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -239,6 +242,7 @@ describe('<AbstractContractFrame />', () => {
     const mockCheckSignature = jest.fn(async () => checkSignatureDeferred.promise);
     const mockOnDone = jest.fn();
     const mockOnClose = jest.fn();
+    fetchMock.post('https://joanie.endpoint/api/v1.0/signature/notifications/', 200);
 
     await act(async () => {
       render(
@@ -287,7 +291,7 @@ describe('<AbstractContractFrame />', () => {
       'The signature is taking more time than expected ... please come back later.',
     );
     expect(mockOnDone).not.toHaveBeenCalled();
-    button = screen.getByRole('button', { name: 'Close dialog' });
+    button = screen.getByRole('button', { name: 'close' });
     await user.click(button);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -326,7 +330,7 @@ describe('<AbstractContractFrame />', () => {
     );
 
     // Dummy signature interface should have been rendered
-    const button = screen.getByRole('button', { name: 'Close dialog' });
+    const button = screen.getByRole('button', { name: 'close' });
     await user.click(button);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);

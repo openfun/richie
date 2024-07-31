@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { ContractFactory, CredentialOrderFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -30,13 +31,15 @@ jest.mock('settings', () => ({
 describe('<SignContractButton/>', () => {
   const Wrapper = ({ children }: PropsWithChildren) => {
     return (
-      <QueryClientProvider client={createTestQueryClient({ user: true })}>
-        <IntlProvider locale="en">
-          <SessionProvider>
-            <MemoryRouter>{children}</MemoryRouter>
-          </SessionProvider>
-        </IntlProvider>
-      </QueryClientProvider>
+      <CunninghamProvider>
+        <QueryClientProvider client={createTestQueryClient({ user: true })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <MemoryRouter>{children}</MemoryRouter>
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>
+      </CunninghamProvider>
     );
   };
 
@@ -123,11 +126,11 @@ describe('<SignContractButton/>', () => {
     expect(
       await within($modal).findByRole('heading', { name: 'Congratulations!' }),
     ).toBeInTheDocument();
-    // Orders's cache validation shouln't have close the ContractFrame.
+    // Orders's cache validation shouln't have closed the ContractFrame.
     expect(screen.queryByTestId('dashboard-contract-frame')).toBeInTheDocument();
 
     // Close modal.
-    const $closeButton = screen.getByRole('button', { name: 'Close dialog' });
+    const $closeButton = screen.getByRole('button', { name: 'close' });
     await user.click($closeButton);
     expect(screen.queryByTestId('dashboard-contract-frame')).not.toBeInTheDocument();
 

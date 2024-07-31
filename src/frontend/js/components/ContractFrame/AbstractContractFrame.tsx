@@ -1,11 +1,11 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
-import { Button, Loader } from '@openfun/cunningham-react';
+import { Button, Loader, Modal, ModalSize } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Modal } from 'components/Modal';
 import { Maybe } from 'types/utils';
 import { CONTRACT_SETTINGS } from 'settings';
 import Banner, { BannerType } from 'components/Banner';
 import { SuccessIcon } from 'components/SuccessIcon';
+import { noop } from 'utils';
 
 /*
   /!\ This component should not be used directly, only its implementations should be.
@@ -109,15 +109,16 @@ export interface SignatureProps {
   invitationLink: string;
 }
 
-const AbstractContractFrame = ({ isOpen, ...props }: Props) => {
+const AbstractContractFrame = ({ isOpen, onClose = noop, ...props }: Props) => {
   return (
     <Modal
       isOpen={isOpen}
-      shouldCloseOnOverlayClick={false}
-      shouldCloseOnEsc={false}
-      onRequestClose={props.onClose}
+      closeOnClickOutside={false}
+      closeOnEsc={false}
+      onClose={onClose}
+      size={ModalSize.LARGE}
     >
-      <ContractFrameContent {...props} />
+      <ContractFrameContent {...props} onClose={onClose} />
     </Modal>
   );
 };
@@ -220,11 +221,13 @@ const ContractFrameContent = ({
 
   const renderLoadingContract = () => {
     return (
-      <div className="ContractFrame__loading-container">
+      <div className="ContractFrame__container">
         <h3 className="ContractFrame__caption">
           <FormattedMessage {...messages.loadingContract} />
         </h3>
-        <Loader />
+        <div className="ContractFrame__footer">
+          <Loader />
+        </div>
       </div>
     );
   };
@@ -256,20 +259,20 @@ const ContractFrameContent = ({
         </Suspense>
       )}
       {step === ContractSteps.POLLING && (
-        <div className="ContractFrame__loading-container">
-          <div>
-            <h3 className="ContractFrame__caption">
-              <FormattedMessage {...messages.polling} />
-            </h3>
-            <p className="ContractFrame__content">
-              <FormattedMessage {...messages.pollingDescription} />
-            </p>
+        <div className="ContractFrame__container">
+          <h3 className="ContractFrame__caption">
+            <FormattedMessage {...messages.polling} />
+          </h3>
+          <p className="ContractFrame__content">
+            <FormattedMessage {...messages.pollingDescription} />
+          </p>
+          <div className="ContractFrame__footer">
+            <Loader />
           </div>
-          <Loader />
         </div>
       )}
       {step === ContractSteps.FINISHED && (
-        <div className="ContractFrame__finished">
+        <div className="ContractFrame__container">
           <SuccessIcon />
           <h3 className="ContractFrame__caption">
             <FormattedMessage {...messages.finishedCaption} />
@@ -277,9 +280,11 @@ const ContractFrameContent = ({
           <p className="ContractFrame__content">
             <FormattedMessage {...messages.finishedDescription} />
           </p>
-          <Button onClick={onClose}>
-            <FormattedMessage {...messages.finishedButton} />
-          </Button>
+          <div className="ContractFrame__footer">
+            <Button onClick={onClose}>
+              <FormattedMessage {...messages.finishedButton} />
+            </Button>
+          </div>
         </div>
       )}
     </div>
