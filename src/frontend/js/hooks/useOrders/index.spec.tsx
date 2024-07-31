@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { SessionProvider } from 'contexts/SessionContext';
-import { AddressFactory, CertificateOrderFactory } from 'utils/test/factories/joanie';
+import { CertificateOrderFactory } from 'utils/test/factories/joanie';
 import { Deferred } from 'utils/test/deferred';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { useOmniscientOrder, useOmniscientOrders, useOrder, useOrders } from '.';
@@ -107,12 +107,10 @@ describe('useOrders', () => {
       expect(result.current.item).toEqual(orders[2]);
     });
 
-    it('submits an order', async () => {
+    it('cancels an order', async () => {
       const deferrer = new Deferred();
       const id = faker.string.uuid();
-      const billingAddress = AddressFactory().one();
-      const creditCardId = faker.string.uuid();
-      fetchMock.patch(`https://joanie.endpoint/api/v1.0/orders/${id}/submit/`, deferrer.promise);
+      fetchMock.post(`https://joanie.endpoint/api/v1.0/orders/${id}/cancel/`, deferrer.promise);
 
       const { result } = renderHook(() => useOmniscientOrders(undefined, { enabled: false }), {
         wrapper: Wrapper,
@@ -123,18 +121,14 @@ describe('useOrders', () => {
       });
 
       await act(async () => {
-        result.current.methods.submit({
-          id,
-          billing_address: billingAddress,
-          credit_card_id: creditCardId,
-        });
+        result.current.methods.cancel(id);
       });
 
       await waitFor(() => {
         expect(result.current.states.isPending).toBe(true);
       });
       expect(result.current.states.fetching).toBe(false);
-      expect(result.current.states.submitting).toBe(true);
+      expect(result.current.states.cancelling).toBe(true);
 
       await act(async () => {
         deferrer.resolve(HttpStatusCode.OK);
@@ -143,81 +137,13 @@ describe('useOrders', () => {
       await waitFor(() => {
         expect(result.current.states.isPending).toBe(false);
       });
-      expect(result.current.states.submitting).toBe(false);
+      expect(result.current.states.cancelling).toBe(false);
     });
 
-    it('manages submit mutation failure', async () => {
-      const id = faker.string.uuid();
-      const billingAddress = AddressFactory().one();
-      const creditCardId = faker.string.uuid();
-      fetchMock.patch(
-        `https://joanie.endpoint/api/v1.0/orders/${id}/submit/`,
-        HttpStatusCode.INTERNAL_SERVER_ERROR,
-      );
-
-      const { result } = renderHook(() => useOmniscientOrders(undefined, { enabled: false }), {
-        wrapper: Wrapper,
-      });
-
-      await waitFor(() => {
-        expect(result.current).not.toBeNull();
-      });
-
-      expect(result.current.states.error).toBe(undefined);
-
-      await act(async () => {
-        await expect(
-          result.current.methods.submit({
-            id,
-            billing_address: billingAddress,
-            credit_card_id: creditCardId,
-          }),
-        ).rejects.toThrow('Internal Server Error');
-      });
-
-      expect(result.current.states.error).toBe('Cannot submit the order.');
-      expect(result.current.states.isPending).toBe(false);
-      expect(result.current.states.submitting).toBe(false);
-    });
-
-    it('aborts an order', async () => {
-      const deferrer = new Deferred();
-      const id = faker.string.uuid();
-      const paymentId = faker.string.uuid();
-      fetchMock.post(`https://joanie.endpoint/api/v1.0/orders/${id}/abort/`, deferrer.promise);
-
-      const { result } = renderHook(() => useOmniscientOrders(undefined, { enabled: false }), {
-        wrapper: Wrapper,
-      });
-
-      await waitFor(() => {
-        expect(result.current).not.toBeNull();
-      });
-
-      await act(async () => {
-        result.current.methods.abort({ id, payment_id: paymentId });
-      });
-
-      await waitFor(() => {
-        expect(result.current.states.isPending).toBe(true);
-      });
-      expect(result.current.states.fetching).toBe(false);
-      expect(result.current.states.aborting).toBe(true);
-
-      await act(async () => {
-        deferrer.resolve(HttpStatusCode.OK);
-      });
-
-      await waitFor(() => {
-        expect(result.current.states.isPending).toBe(false);
-      });
-      expect(result.current.states.aborting).toBe(false);
-    });
-
-    it('manages abort mutation failure', async () => {
+    it('manages cancel mutation failure', async () => {
       const id = faker.string.uuid();
       fetchMock.post(
-        `https://joanie.endpoint/api/v1.0/orders/${id}/abort/`,
+        `https://joanie.endpoint/api/v1.0/orders/${id}/cancel/`,
         HttpStatusCode.INTERNAL_SERVER_ERROR,
       );
 
@@ -232,16 +158,12 @@ describe('useOrders', () => {
       expect(result.current.states.error).toBe(undefined);
 
       await act(async () => {
-        await expect(
-          result.current.methods.abort({
-            id,
-          }),
-        ).rejects.toThrow('Internal Server Error');
+        await expect(result.current.methods.cancel(id)).rejects.toThrow('Internal Server Error');
       });
 
-      expect(result.current.states.error).toBe('Cannot abort the order.');
+      expect(result.current.states.error).toBe('Cannot cancel the order.');
       expect(result.current.states.isPending).toBe(false);
-      expect(result.current.states.aborting).toBe(false);
+      expect(result.current.states.cancelling).toBe(false);
     });
 
     it("set an order's payment method", async () => {
@@ -310,7 +232,7 @@ describe('useOrders', () => {
 
       expect(result.current.states.error).toBe("Cannot set the order's payment method.");
       expect(result.current.states.isPending).toBe(false);
-      expect(result.current.states.aborting).toBe(false);
+      expect(result.current.states.cancelling).toBe(false);
     });
   });
 
@@ -377,23 +299,13 @@ describe('useOrders', () => {
       expect(result.current.item).toEqual(order);
     });
 
-    it('has a method to submit an order', async () => {
+    it('has a method to cancel an order', async () => {
       const { result } = renderHook(() => useOrders(undefined, { enabled: false }), {
         wrapper: Wrapper,
       });
 
       await waitFor(() => {
-        expect(result.current.methods.submit).not.toBeUndefined();
-      });
-    });
-
-    it('has a method to abort an order', async () => {
-      const { result } = renderHook(() => useOrders(undefined, { enabled: false }), {
-        wrapper: Wrapper,
-      });
-
-      await waitFor(() => {
-        expect(result.current.methods.abort).not.toBeUndefined();
+        expect(result.current.methods.cancel).not.toBeUndefined();
       });
     });
 
