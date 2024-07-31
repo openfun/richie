@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { faker } from '@faker-js/faker';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
   ContractFactory,
@@ -57,13 +58,15 @@ describe('<SignContractButton/>', () => {
     let order: CredentialOrder | NestedCredentialOrder;
     const Wrapper = ({ children }: PropsWithChildren) => {
       return (
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <IntlProvider locale="en">
-            <JoanieApiProvider>
-              <MemoryRouter>{children}</MemoryRouter>
-            </JoanieApiProvider>
-          </IntlProvider>
-        </QueryClientProvider>
+        <CunninghamProvider>
+          <QueryClientProvider client={createTestQueryClient({ user: true })}>
+            <IntlProvider locale="en">
+              <JoanieApiProvider>
+                <MemoryRouter>{children}</MemoryRouter>
+              </JoanieApiProvider>
+            </IntlProvider>
+          </QueryClientProvider>
+        </CunninghamProvider>
       );
     };
 
@@ -88,11 +91,10 @@ describe('<SignContractButton/>', () => {
             <SignContractButton order={order} contract={contract} writable={false} />
           </Wrapper>,
         );
-        expect(screen.getByRole('link', { name: 'Sign' })).toBeInTheDocument();
 
+        expect(screen.getByRole('link', { name: 'Sign' })).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
-        expect(document.querySelector('div.ReactModalPortal')).not.toBeInTheDocument();
       });
 
       it('should display a button that open ContractFrame modal', async () => {
@@ -101,9 +103,9 @@ describe('<SignContractButton/>', () => {
             <SignContractButton order={order} contract={contract} writable={true} />
           </Wrapper>,
         );
+
         const $signButton = screen.queryByRole('button', { name: 'Sign' });
         expect($signButton).toBeInTheDocument();
-        expect(document.querySelector('div.ReactModalPortal')).toBeInTheDocument();
 
         expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
         expect(screen.queryByRole('link', { name: 'Sign' })).not.toBeInTheDocument();
@@ -145,7 +147,6 @@ describe('<SignContractButton/>', () => {
             <SignContractButton order={order} contract={contract} writable={false} />
           </Wrapper>,
         );
-        expect(document.querySelector('div.ReactModalPortal')).toBeInTheDocument();
 
         expect(screen.queryByRole('link', { name: 'Sign' })).not.toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
@@ -163,8 +164,6 @@ describe('<SignContractButton/>', () => {
             <SignContractButton order={order} contract={contract} writable={true} />
           </Wrapper>,
         );
-
-        expect(document.querySelector('div.ReactModalPortal')).toBeInTheDocument();
 
         expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
@@ -194,11 +193,10 @@ describe('<SignContractButton/>', () => {
             <SignContractButton order={order} contract={contract} writable={false} />
           </Wrapper>,
         );
-        expect(screen.queryByRole('button', { name: 'Download' })).toBeInTheDocument();
-        expect(document.querySelector('div.ReactModalPortal')).toBeInTheDocument();
 
-        expect(screen.queryByRole('link', { name: 'Sign' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Download' })).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: 'Sign' })).not.toBeInTheDocument();
       });
 
       it('should display a button to download the training contract', async () => {
@@ -214,8 +212,6 @@ describe('<SignContractButton/>', () => {
         );
 
         expect(screen.queryByRole('button', { name: 'Download' })).toBeInTheDocument();
-        expect(document.querySelector('div.ReactModalPortal')).toBeInTheDocument();
-
         expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
         expect(screen.queryByRole('link', { name: 'Sign' })).not.toBeInTheDocument();
       });
