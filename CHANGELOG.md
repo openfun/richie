@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add order payment information in the dashboard, including a specific
   interface displayed on failed installment in order to retry the payment.
 
+### Fixed
+
+- Normalize credit card brand on CreditCardBrandLogo component
+
 ## [2.29.0]
 
 ### Added

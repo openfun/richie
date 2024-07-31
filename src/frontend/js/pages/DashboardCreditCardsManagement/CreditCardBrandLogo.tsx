@@ -8,8 +8,10 @@ export const CreditCardBrandLogo = ({
   creditCard: CreditCard;
   variant?: 'default' | 'inline';
 }) => {
-  const creditCardBrand = Object.values<string>(CreditCardBrand).includes(creditCard.brand)
-    ? creditCard.brand
+  const creditCardBrand = Object.values<string>(CreditCardBrand).includes(
+    creditCard.brand.toLowerCase(),
+  )
+    ? creditCard.brand.toLowerCase()
     : CreditCardBrand.CB;
 
   return (
