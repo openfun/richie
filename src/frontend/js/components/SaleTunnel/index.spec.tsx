@@ -6,6 +6,11 @@ import { within } from '@testing-library/dom';
 import { createIntl } from 'react-intl';
 import { OrderState, Product, ProductType } from 'types/Joanie';
 import {
+  RichieContextFactory as mockRichieContextFactory,
+  UserFactory,
+  PacedCourseFactory,
+} from 'utils/test/factories/richie';
+import {
   AddressFactory,
   CertificateOrderWithOneClickPaymentFactory,
   CertificateOrderWithPaymentFactory,
@@ -17,11 +22,6 @@ import {
   EnrollmentFactory,
   PaymentInstallmentFactory,
 } from 'utils/test/factories/joanie';
-import {
-  RichieContextFactory as mockRichieContextFactory,
-  PacedCourseFactory,
-  UserFactory,
-} from 'utils/test/factories/richie';
 import { render } from 'utils/test/render';
 import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel/index';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
