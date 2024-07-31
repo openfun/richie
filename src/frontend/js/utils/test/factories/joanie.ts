@@ -45,6 +45,9 @@ import { Payment, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { JoanieUserApiAbilityActions, JoanieUserProfile } from 'types/User';
+import { SaleTunnelContextType, SaleTunnelStep } from 'components/SaleTunnel/GenericSaleTunnel';
+import { SaleTunnelProps } from 'components/SaleTunnel';
+import { noop } from 'utils/index';
 import { factory } from './factories';
 
 export const UserLightFactory = factory((): UserLight => {
@@ -512,3 +515,21 @@ export const PaymentFactory = factory((): Payment => {
     url: faker.internet.url(),
   };
 });
+
+export const SaleTunnelContextFactory = factory(
+  (): SaleTunnelContextType => ({
+    webAnalyticsEventKey: 'eventKey',
+    order: CredentialOrderFactory().one(),
+    product: ProductFactory().one(),
+    props: {} as SaleTunnelProps,
+    billingAddress: undefined,
+    setBillingAddress: noop,
+    setCreditCard: noop,
+    onPaymentSuccess: noop,
+    step: SaleTunnelStep.IDLE,
+    registerSubmitCallback: noop,
+    unregisterSubmitCallback: noop,
+    runSubmitCallbacks: () => new Promise((resolve) => resolve()),
+    nextStep: noop,
+  }),
+);
