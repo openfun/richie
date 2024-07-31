@@ -4,6 +4,7 @@ import { IntlProvider } from 'react-intl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
 import { CunninghamProvider } from '@openfun/cunningham-react';
+import queryString from 'query-string';
 import {
   CourseStateFactory,
   PacedCourseFactory,
@@ -17,7 +18,7 @@ import {
 } from 'utils/test/factories/joanie';
 import { SessionProvider } from 'contexts/SessionContext';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { ProductType } from 'types/Joanie';
+import { NOT_CANCELED_ORDER_STATES, ProductType } from 'types/Joanie';
 import { Priority } from 'types';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { User } from 'types/User';
@@ -102,11 +103,14 @@ describe('PurchaseButton', () => {
   it('shows cta to open sale tunnel when user is authenticated', async () => {
     const courseCode = '00000';
     const product = ProductFactory().one();
+    const orderQueryParameters = {
+      course_code: courseCode,
+      product_id: product.id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`;
     fetchMock
-      .get(
-        `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-        {},
-      )
+      .get(url, {})
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-schedule/`,
         [],
@@ -142,11 +146,14 @@ describe('PurchaseButton', () => {
     const product = ProductFactory({ remaining_order_count: null }).one();
     fetchMock.get(`https://demo.endpoint/api/user/v1/accounts/${user.username}`, {});
     fetchMock.get(`https://demo.endpoint/api/user/v1/preferences/${user.username}`, {});
+    const orderQueryParameters = {
+      course_code: courseCode,
+      product_id: product.id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`;
     fetchMock
-      .get(
-        `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-        {},
-      )
+      .get(url, {})
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-schedule/`,
         [],
@@ -180,11 +187,14 @@ describe('PurchaseButton', () => {
   it('shows cta to open sale tunnel when remaining orders is undefined', async () => {
     const courseCode = '00000';
     const product = ProductFactory().one();
+    const orderQueryParameters = {
+      course_code: courseCode,
+      product_id: product.id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`;
     fetchMock
-      .get(
-        `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-        {},
-      )
+      .get(url, {})
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-schedule/`,
         [],
@@ -220,10 +230,13 @@ describe('PurchaseButton', () => {
   it('renders a disabled CTA if the product have no remaining orders', async () => {
     const courseCode = '00000';
     const product = ProductFactory({ remaining_order_count: 0 }).one();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-      {},
-    );
+    const orderQueryParameters = {
+      course_code: courseCode,
+      product_id: product.id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`;
+    fetchMock.get(url, {});
     render(
       <Wrapper client={createTestQueryClient({ user: richieUser })}>
         <PurchaseButton
@@ -256,10 +269,14 @@ describe('PurchaseButton', () => {
       const courseCode = '00000';
       const product = ProductFactory({ ...productData, type: ProductType.CREDENTIAL }).one();
       product.target_courses[0].course_runs = [];
-      fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-        {},
-      );
+
+      const orderQueryParameters = {
+        course_code: courseCode,
+        product_id: product.id,
+        state: NOT_CANCELED_ORDER_STATES,
+      };
+      const url = `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`;
+      fetchMock.get(url, {});
 
       render(
         <Wrapper client={createTestQueryClient({ user: richieUser })}>
@@ -305,10 +322,14 @@ describe('PurchaseButton', () => {
       const product = CertificateProductFactory().one();
       const enrollment = EnrollmentFactory().one();
       enrollment.course_run.state = CourseStateFactory(courseRunStateData).one();
-      fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollment.id}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-        {},
-      );
+
+      const orderQueryParameters = {
+        enrollment_id: enrollment.id,
+        product_id: product.id,
+        state: NOT_CANCELED_ORDER_STATES,
+      };
+      const url = `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`;
+      fetchMock.get(url, {});
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
@@ -359,10 +380,13 @@ describe('PurchaseButton', () => {
       const enrollment = EnrollmentFactory().one();
       enrollment.course_run.state = CourseStateFactory(courseRunStateData).one();
 
-      fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollment.id}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-        {},
-      );
+      const orderQueryParameters = {
+        enrollment_id: enrollment.id,
+        product_id: product.id,
+        state: NOT_CANCELED_ORDER_STATES,
+      };
+      const url = `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`;
+      fetchMock.get(url, {});
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
@@ -388,10 +412,14 @@ describe('PurchaseButton', () => {
   it('renders a disabled CTA if product has no target courses', async () => {
     const courseCode = '00000';
     const product = ProductFactory().one();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-      {},
-    );
+
+    const orderQueryParameters = {
+      course_code: courseCode,
+      product_id: product.id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`;
+    fetchMock.get(url, {});
     product.target_courses = [];
 
     render(
@@ -419,10 +447,14 @@ describe('PurchaseButton', () => {
   it('does not render CTA if disabled property is false', async () => {
     const courseCode = '00000';
     const product = ProductFactory().one();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?course_code=${courseCode}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
-      {},
-    );
+
+    const orderQueryParameters = {
+      course_code: courseCode,
+      product_id: product.id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`;
+    fetchMock.get(url, {});
 
     render(
       <Wrapper client={createTestQueryClient({ user: true })}>
