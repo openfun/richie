@@ -16,9 +16,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Improve lyra error catching management
 
-
 ### Fixed
 
+- Normalize credit card brand on CreditCardBrandLogo component
 - Fix typo in page-admin autocomplete url path
 - Fix course enrollment count shouldn't include the hidden runs.
 - Fix RDFa errors on Google Search Console
