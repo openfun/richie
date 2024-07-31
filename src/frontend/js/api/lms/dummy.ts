@@ -68,7 +68,7 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
 
   const dummyOpenEdxApiProfile: OpenEdxApiProfile = {
     username: 'j_do',
-    name: 'John Do',
+    name: 'John Doe',
     email: 'j.do@whois.net',
     country: 'fr',
     level_of_education: OpenEdxLevelOfEducation.MASTER_OR_PROFESSIONNAL_DEGREE,
@@ -112,17 +112,6 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
       account: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         get: (username: string): Promise<OpenEdxApiProfile> => {
-          return Promise.resolve({
-            username: 'j_do',
-            name: 'John Do',
-            email: 'j.do@whois.net',
-            country: 'fr',
-            level_of_education: OpenEdxLevelOfEducation.MASTER_OR_PROFESSIONNAL_DEGREE,
-            gender: OpenEdxGender.MALE,
-            year_of_birth: '1971',
-            'pref-lang': OpenEdxLanguageIsoCode.ENGLISH,
-            language_proficiencies: [{ code: OpenEdxLanguageIsoCode.ENGLISH }],
-          } as OpenEdxApiProfile);
           return Promise.resolve(dummyOpenEdxApiProfile);
         },
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
