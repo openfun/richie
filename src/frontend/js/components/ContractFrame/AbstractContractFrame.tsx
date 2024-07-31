@@ -63,7 +63,7 @@ export const messages = defineMessages({
   },
   finishedDescription: {
     defaultMessage:
-      'You will receive an email once your contract will be fully signed. You can now enroll in your course runs!',
+      'You will receive an email once your contract will be fully signed. You can now finalize your subscription.',
     description: 'Message displayed inside the contract signin modal when the contract is signed.',
     id: 'components.DashboardItem.Order.ContractFrame.finishedDescription',
   },
