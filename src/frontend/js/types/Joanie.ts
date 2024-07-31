@@ -259,17 +259,42 @@ export interface EnrollmentLight {
 
 // Order
 export enum OrderState {
-  DRAFT = 'draft',
-  SUBMITTED = 'submitted',
+  ASSIGNED = 'assigned',
   CANCELED = 'canceled',
+  COMPLETED = 'completed',
+  DRAFT = 'draft',
+  FAILED_PAYMENT = 'failed_payment',
+  NO_PAYMENT = 'no_payment',
   PENDING = 'pending',
   PENDING_PAYMENT = 'pending_payment',
-  VALIDATED = 'validated',
-  NO_PAYMENT = 'no_payment',
-  FAILED_PAYMENT = 'failed_payment',
+  SIGNING = 'signing',
+  TO_SAVE_PAYMENT_METHOD = 'to_save_payment_method',
+  TO_SIGN = 'to_sign',
 }
 
-export const ACTIVE_ORDER_STATES = [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED];
+export const PURCHASABLE_ORDER_STATES = [
+  OrderState.DRAFT,
+  OrderState.ASSIGNED,
+  OrderState.TO_SIGN,
+  OrderState.SIGNING,
+  OrderState.TO_SAVE_PAYMENT_METHOD,
+];
+
+export const ACTIVE_ORDER_STATES = [
+  OrderState.PENDING,
+  OrderState.PENDING_PAYMENT,
+  OrderState.NO_PAYMENT,
+  OrderState.FAILED_PAYMENT,
+  OrderState.COMPLETED,
+];
+
+export const NOT_CANCELED_ORDER_STATES = [...ACTIVE_ORDER_STATES, ...PURCHASABLE_ORDER_STATES];
+
+export const ENROLLABLE_ORDER_STATES = [
+  OrderState.COMPLETED,
+  OrderState.PENDING_PAYMENT,
+  OrderState.FAILED_PAYMENT,
+];
 
 export interface Order {
   id: string;

@@ -9,7 +9,7 @@ import {
 } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useRef, useState } from 'react';
-import { CreditCard, Order, PaymentInstallment, OrderState } from 'types/Joanie';
+import { CreditCard, Order, PaymentInstallment, ACTIVE_ORDER_STATES } from 'types/Joanie';
 import { CreditCardSelector } from 'components/CreditCardSelector';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { Payment, PaymentErrorMessageId } from 'components/PaymentInterfaces/types';
@@ -111,10 +111,7 @@ export const OrderPaymentRetryModal = ({ installment, order, ...props }: Props) 
 
   const isOrderValidated = async (id: string): Promise<Boolean> => {
     const orderToCheck = await API.user.orders.get({ id });
-    return (
-      orderToCheck?.state === OrderState.VALIDATED ||
-      orderToCheck?.state === OrderState.PENDING_PAYMENT
-    );
+    return orderToCheck !== null && ACTIVE_ORDER_STATES.includes(orderToCheck.state);
   };
 
   const settled = async () => {
