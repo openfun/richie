@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Display Payment Schedule into SaleTunnel
+- Add OrderHelper allowEnrollment
 
 ### Changed
 

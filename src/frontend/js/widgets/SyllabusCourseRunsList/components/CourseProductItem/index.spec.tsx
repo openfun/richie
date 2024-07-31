@@ -349,49 +349,43 @@ describe('CourseProductItem', () => {
     },
   );
 
-  it('renders product informations for a purchased product in compact mode', async () => {
+  it.each(ENROLLABLE_ORDER_STATES)('renders product information for a %s order', async (state) => {
     const relation = CourseProductRelationFactory().one();
-    const order: CredentialOrder = CredentialOrderFactory({
-      product_id: relation.product.id,
+    const { product } = relation;
+    const order = CredentialOrderFactory({
+      product_id: product.id,
       course: PacedCourseFactory({ code: '00000' }).one(),
-      target_courses: relation.product.target_courses,
+      target_courses: product.target_courses,
+      state,
     }).one();
 
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/00000/products/${relation.product.id}/`,
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
       relation,
     );
     const orderQueryParameters = {
+      course_code: order.course.code,
       product_id: order.product_id,
-      course_code: order.course?.code,
-      state: ACTIVE_ORDER_STATES,
+      state: NOT_CANCELED_ORDER_STATES,
     };
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
-      [order],
-    );
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
 
     render(
       <CourseProductItem
-        productId={relation.product.id}
+        productId={product.id}
         course={PacedCourseFactory({ code: '00000' }).one()}
-        compact
       />,
     );
 
     // Wait for product information to be fetched
-    await screen.findByRole('heading', { level: 3, name: relation.product.title });
+    await screen.findByRole('heading', { level: 3, name: product.title });
 
     // - In place of product price, a label should be displayed
     const $enrolledInfo = await screen.findByText('Purchased');
     expect($enrolledInfo.tagName).toBe('STRONG');
     expect($enrolledInfo.classList.contains('h6')).toBe(true);
-
-    // - Product date range and languages should not be displayed anymore
-    expect(screen.queryByTestId('product-widget__header-metadata-dates')).not.toBeInTheDocument();
-    expect(
-      screen.queryByTestId('product-widget__header-metadata-languages'),
-    ).not.toBeInTheDocument();
 
     // - Render all order's target courses information with EnrollableCourseRunList component
     await waitFor(() => {
@@ -414,6 +408,76 @@ describe('CourseProductItem', () => {
     // - Does not Render PurchaseButton cta
     expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
   });
+
+  it.each(ENROLLABLE_ORDER_STATES)(
+    'renders product informations for a %s order in compact mode',
+    async (state) => {
+      const relation = CourseProductRelationFactory().one();
+      const order: CredentialOrder = CredentialOrderFactory({
+        product_id: relation.product.id,
+        course: PacedCourseFactory({ code: '00000' }).one(),
+        target_courses: relation.product.target_courses,
+        state,
+      }).one();
+
+      fetchMock.get(
+        `https://joanie.endpoint/api/v1.0/courses/00000/products/${relation.product.id}/`,
+        relation,
+      );
+      const orderQueryParameters = {
+        product_id: order.product_id,
+        course_code: order.course?.code,
+        state: NOT_CANCELED_ORDER_STATES,
+      };
+      fetchMock.get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+        [order],
+      );
+
+      render(
+        <CourseProductItem
+          productId={relation.product.id}
+          course={PacedCourseFactory({ code: '00000' }).one()}
+          compact
+        />,
+      );
+
+      // Wait for product information to be fetched
+      await screen.findByRole('heading', { level: 3, name: relation.product.title });
+
+      // - In place of product price, a label should be displayed
+      const $enrolledInfo = await screen.findByText('Purchased');
+      expect($enrolledInfo.tagName).toBe('STRONG');
+      expect($enrolledInfo.classList.contains('h6')).toBe(true);
+
+      // - Product date range and languages should not be displayed anymore
+      expect(screen.queryByTestId('product-widget__header-metadata-dates')).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('product-widget__header-metadata-languages'),
+      ).not.toBeInTheDocument();
+
+      // - Render all order's target courses information with EnrollableCourseRunList component
+      await waitFor(() => {
+        order.target_courses.forEach((course) => {
+          const $item = screen.getByTestId(`course-item-${course.code}`);
+          // the course title shouldn't be a heading to prevent misdirection for screen reader users,
+          // but we want to it to visually look like a h5
+          const $courseTitle = getByText($item, course.title);
+          expect($courseTitle.tagName).toBe('STRONG');
+          expect($courseTitle.classList.contains('h5')).toBe(true);
+          screen.getByTestId(
+            `EnrollableCourseRunList-${course.course_runs.map(({ id }) => id).join('-')}-${order.id}`,
+          );
+        });
+      });
+
+      // - Render <CertificateItem />
+      screen.getByTestId('CertificateItem');
+
+      // - Does not Render PurchaseButton cta
+      expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
+    },
+  );
 
   it('renders enrollment information when user is enrolled to a course run', async () => {
     const relation = CourseProductRelationFactory().one();
@@ -504,28 +568,6 @@ describe('CourseProductItem', () => {
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
         [order],
       );
-  it('renders sale tunnel button if user already has a pending order', async () => {
-    const relation = CourseProductRelationFactory().one();
-    const { product } = relation;
-    const order = CredentialOrderFactory({
-      product_id: product.id,
-      course: PacedCourseFactory({ code: '00000' }).one(),
-      target_courses: product.target_courses,
-      state: OrderState.PENDING,
-    }).one();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
-      relation,
-    );
-    const orderQueryParameters = {
-      product_id: order.product_id,
-      course_code: order.course?.code,
-      state: ACTIVE_ORDER_STATES,
-    };
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
-      [order],
-    );
 
       render(
         <CourseProductItem
