@@ -3,7 +3,6 @@ import { useState } from 'react';
 import PurchaseButton from 'components/PurchaseButton';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import {
-  ACTIVE_ORDER_STATES,
   CertificateProduct,
   Enrollment,
   ProductType,
@@ -57,7 +56,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
     <div className="dashboard-item__course-enrolling__infos">
       <div className="dashboard-item__block__status">
         <Icon name={IconTypeEnum.CERTIFICATE} />
-        {order && ACTIVE_ORDER_STATES.includes(order.state) ? (
+        {OrderHelper.isActive(order) ? (
           <>
             {product.certificate_definition.title + '. '}
             <CertificateStatus certificate={certificate} productType={product.type} />
@@ -66,11 +65,11 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
           <FormattedMessage {...messages.buyProductCertificateLabel} />
         )}
       </div>
-      {order && ACTIVE_ORDER_STATES.includes(order.state) ? (
-        order.certificate_id && (
+      {OrderHelper.isActive(order) ? (
+        order!.certificate_id && (
           <DownloadCertificateButton
             className="dashboard-item__button"
-            certificateId={order.certificate_id}
+            certificateId={order!.certificate_id}
           />
         )
       ) : (

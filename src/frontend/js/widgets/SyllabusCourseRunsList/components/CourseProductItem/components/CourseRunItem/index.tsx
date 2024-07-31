@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 import { defineMessages } from 'react-intl';
 import { Priority } from 'types';
 import type * as Joanie from 'types/Joanie';
-import { OrderState, Product } from 'types/Joanie';
 import { CoursesHelper } from 'utils/CoursesHelper';
+import { OrderHelper } from 'utils/OrderHelper';
 import {
   CourseRunList,
   EnrollableCourseRunList,
@@ -28,10 +28,10 @@ interface Props {
   order?: Joanie.CredentialOrder;
 }
 
-const CourseRunItem = ({ targetCourse, order, product }: Props) => {
-  const isEnrollable = order?.state === OrderState.VALIDATED;
+const CourseRunItem = ({ targetCourse, order }: Props) => {
+  const isEnrollable = OrderHelper.allowEnrollment(order);
   const courseRunEnrollment = isEnrollable
-    ? CoursesHelper.findActiveCourseEnrollmentInOrder(targetCourse, order)
+    ? CoursesHelper.findActiveCourseEnrollmentInOrder(targetCourse, order!)
     : undefined;
   const isEnrolled = !!courseRunEnrollment?.is_active;
 

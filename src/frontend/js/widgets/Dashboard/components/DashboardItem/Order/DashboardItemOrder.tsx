@@ -165,6 +165,7 @@ export const DashboardItemOrder = ({
   });
   const { product } = courseProductRelation || {};
   const needsSignature = OrderHelper.orderNeedsSignature(order);
+  const canEnroll = OrderHelper.allowEnrollment(order);
 
   if (!product) return null;
 
@@ -230,7 +231,7 @@ export const DashboardItemOrder = ({
                   notEnrolledUrl={generatePath(LearnerDashboardPaths.ORDER, {
                     orderId: order.id,
                   })}
-                  hideEnrollButtons={needsSignature}
+                  hideEnrollButtons={!canEnroll}
                 />
               }
             />
