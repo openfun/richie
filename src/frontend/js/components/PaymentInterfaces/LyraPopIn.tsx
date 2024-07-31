@@ -29,7 +29,7 @@ const LyraPopIn = ({
     if (error && typeof error === 'string') handle(`[LyraPopIn] - ${error}`);
 
     if (shouldAbort.current) {
-      onError(PaymentErrorMessageId.ERROR_ABORTING);
+      onError(PaymentErrorMessageId.ERROR_ABORT);
     } else if (typeof error === 'string') {
       onError(error);
     } else {
@@ -114,7 +114,7 @@ const LyraPopIn = ({
 
     const handleClosePopIn = () => {
       if (shouldAbort.current === true) {
-        onError(PaymentErrorMessageId.ERROR_ABORTING);
+        onError(PaymentErrorMessageId.ERROR_ABORT);
       }
     };
 

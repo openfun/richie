@@ -27,7 +27,7 @@ const PayplugLightbox = ({
       switch (event.data) {
         case 'closePayPlugFrame':
           ref.current = setTimeout(() => {
-            onError(PaymentErrorMessageId.ERROR_ABORTING);
+            onError(PaymentErrorMessageId.ERROR_ABORT);
           }, 2000);
           break;
       }
