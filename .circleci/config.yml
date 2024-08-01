@@ -849,6 +849,11 @@ jobs:
             if [[ -z "${CIRCLE_TAG+x}" ]]; then
               python -m pip install --upgrade setuptools_scm
               NEXT_VERSION=$(python -m setuptools_scm)
+              # Match version like 1.2.3.dev123
+              if [[ $NEXT_VERSION =~ ([[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+)\.([[:alnum:]]+) ]]; then
+                # transform it in 1.2.3-dev123
+                NEXT_VERSION="${BASH_REMATCH[1]}-${BASH_REMATCH[2]}"
+              fi
               cd src/frontend/
               npm version $NEXT_VERSION
               cd ~/fun
