@@ -19,7 +19,7 @@ urlpatterns = ROUTER.urls + [
         "course-runs-sync/?$", sync_course_runs_from_request, name="course_run_sync"
     ),
     path(
-        "page-admin-autocomplete/<slug:model_name>>/",
+        "page-admin-autocomplete/<slug:model_name>/",
         PageAdminAutocomplete.as_view(),
         name="page-admin-autocomplete",
     ),
