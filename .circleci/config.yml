@@ -1061,7 +1061,9 @@ workflows:
             - package-back
           filters:
             branches:
-              only: master
+              # Temporary publish version on development merge, should be rollback
+              # to master once new sale tunnel will be production ready.
+              only: development
             tags:
               only: /^v.*/
 
@@ -1076,7 +1078,9 @@ workflows:
             - test-front-package
           filters:
             branches:
-              only: master
+              # Temporary publish version on development merge, should be rollback
+              # to master once new sale tunnel will be production ready.
+              only: development
             tags:
               only: /^v.*/
 
