@@ -1,5 +1,5 @@
-import { FormattedMessage, useIntl, defineMessages } from 'react-intl';
-import { Button } from '@openfun/cunningham-react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { Alert, Button, useModal, VariantType } from '@openfun/cunningham-react';
 import classNames from 'classnames';
 import { generatePath } from 'react-router-dom';
 import { CourseLight, CredentialOrder, Product } from 'types/Joanie';
@@ -16,6 +16,8 @@ import ContractStatus from 'components/ContractStatus';
 import SignContractButton from 'components/SignContractButton';
 import { AddressView } from 'components/Address';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { OrderPaymentDetailsModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderPaymentDetailsModal';
+import { OrderPaymentRetryModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderPaymentRetryModal';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../CourseEnrolling';
 import { DashboardItem } from '../index';
@@ -78,6 +80,31 @@ const messages = defineMessages({
     description: 'Label for the organization DPO contact',
     defaultMessage: 'Data protection email',
   },
+  paymentTitle: {
+    id: 'components.DashboardItemOrder.paymentTitle',
+    description: 'Label for the payment block',
+    defaultMessage: 'Payment',
+  },
+  paymentLabel: {
+    id: 'components.DashboardItemOrder.paymentLabel',
+    description: 'Label for the payment block',
+    defaultMessage: 'You can see and manage all installments.',
+  },
+  paymentButton: {
+    id: 'components.DashboardItemOrder.paymentButton',
+    description: 'Button label for the payment block',
+    defaultMessage: 'Manage payment',
+  },
+  paymentNeededMessage: {
+    id: 'components.DashboardItemOrder.paymentNeededMessage',
+    description: 'Message displayed when payment is needed',
+    defaultMessage: 'A payment failed, please update your payment method',
+  },
+  paymentNeededButton: {
+    id: 'components.DashboardItemOrder.paymentNeededButton',
+    description: 'Button label for the payment needed message',
+    defaultMessage: 'Pay {amount}',
+  },
 });
 
 interface DashboardItemOrderProps {
@@ -137,13 +164,16 @@ export const DashboardItemOrder = ({
     course_id: course.code,
   });
   const { product } = courseProductRelation || {};
-  const needsSignature = OrderHelper.orderNeedsSignature(order, product?.contract_definition);
+  const needsSignature = OrderHelper.orderNeedsSignature(order);
+  const canEnroll = OrderHelper.allowEnrollment(order);
+
+  if (!product) return null;
 
   return (
     <div className="dashboard-item-order">
       <DashboardItem
         data-testid={`dashboard-item-order-${order.id}`}
-        title={product?.title ?? ''}
+        title={product.title}
         code={'Ref. ' + course.code}
         imageUrl={course.cover?.src}
         more={
@@ -158,10 +188,7 @@ export const DashboardItemOrder = ({
             <div className="dashboard-item-order__footer">
               <div className="dashboard-item__block__status">
                 <Icon name={IconTypeEnum.SCHOOL} />
-                <OrderStateLearnerMessage
-                  order={order}
-                  contractDefinition={product?.contract_definition}
-                />
+                <OrderStateLearnerMessage order={order} />
               </div>
               {showDetailsButton && (
                 <RouterButton
@@ -179,7 +206,7 @@ export const DashboardItemOrder = ({
                 key={`DashboardItemOrderContract_${order.id}`}
                 title={product.title}
                 order={order}
-                contract_definition={product?.contract_definition!}
+                contract_definition={product.contract_definition!}
                 contract={order.contract}
                 writable={writable}
                 mode="compact"
@@ -197,7 +224,6 @@ export const DashboardItemOrder = ({
                   writable={writable}
                   course={targetCourse}
                   order={order}
-                  product={product}
                   activeEnrollment={CoursesHelper.findActiveCourseEnrollmentInOrder(
                     targetCourse,
                     order,
@@ -205,7 +231,7 @@ export const DashboardItemOrder = ({
                   notEnrolledUrl={generatePath(LearnerDashboardPaths.ORDER, {
                     orderId: order.id,
                   })}
-                  hideEnrollButtons={needsSignature}
+                  hideEnrollButtons={!canEnroll}
                 />
               }
             />
@@ -299,8 +325,69 @@ const OrganizationBlock = ({ order, product }: { order: CredentialOrder; product
             </div>
           </div>
         )}
+        <Installment order={order} />
       </div>
     </div>
+  );
+};
+
+const Installment = ({ order }: { order: CredentialOrder }) => {
+  const modal = useModal();
+  const retryModal = useModal();
+  const failedInstallment = OrderHelper.getFailedInstallment(order);
+  const intl = useIntl();
+
+  const pay = async () => {
+    retryModal.open();
+  };
+
+  return (
+    <>
+      <div className="dashboard-splitted-card__item">
+        <div
+          className={classNames('dashboard-splitted-card__item__title', {
+            'dashboard-splitted-card__item__title--dot': !!failedInstallment,
+          })}
+        >
+          <span>
+            <FormattedMessage {...messages.paymentTitle} />
+          </span>
+        </div>
+        {failedInstallment && (
+          <Alert
+            className="mb-t"
+            type={VariantType.ERROR}
+            buttons={
+              <Button size="small" onClick={pay}>
+                <FormattedMessage
+                  {...messages.paymentNeededButton}
+                  values={{
+                    amount: intl.formatNumber(failedInstallment.amount, {
+                      style: 'currency',
+                      currency: failedInstallment.currency,
+                    }),
+                  }}
+                />
+              </Button>
+            }
+          >
+            <FormattedMessage {...messages.paymentNeededMessage} />
+          </Alert>
+        )}
+        <div className="dashboard-splitted-card__item__description">
+          <FormattedMessage {...messages.paymentLabel} />
+        </div>
+        <div className="dashboard-splitted-card__item__actions">
+          <Button size="small" color="secondary" onClick={modal.open}>
+            <FormattedMessage {...messages.paymentButton} />
+          </Button>
+        </div>
+      </div>
+      <OrderPaymentDetailsModal {...modal} order={order} />
+      {failedInstallment && (
+        <OrderPaymentRetryModal {...retryModal} installment={failedInstallment} order={order} />
+      )}
+    </>
   );
 };
 
@@ -309,7 +396,7 @@ const ContractItem = ({ product, order }: { order: CredentialOrder; product: Pro
     return;
   }
 
-  const needsSignature = OrderHelper.orderNeedsSignature(order, product.contract_definition);
+  const needsSignature = OrderHelper.orderNeedsSignature(order);
   return (
     <div
       id={`dashboard-item-contract-${order.id}`}

@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { PropsWithChildren } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
+import { CunninghamProvider } from '@openfun/cunningham-react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 
@@ -50,11 +51,13 @@ jest.mock('pages/TeacherDashboardContractsLayout/hooks/useHasContractToDownload/
 describe('TeacherDashboardContractsLayout/ContractActionsBar', () => {
   const Wrapper = ({ children }: PropsWithChildren) => {
     return (
-      <IntlProvider locale="en">
-        <QueryClientProvider client={createTestQueryClient({ user: true })}>
-          <JoanieApiProvider>{children}</JoanieApiProvider>
-        </QueryClientProvider>
-      </IntlProvider>
+      <CunninghamProvider>
+        <IntlProvider locale="en">
+          <QueryClientProvider client={createTestQueryClient({ user: true })}>
+            <JoanieApiProvider>{children}</JoanieApiProvider>
+          </QueryClientProvider>
+        </IntlProvider>
+      </CunninghamProvider>
     );
   };
 

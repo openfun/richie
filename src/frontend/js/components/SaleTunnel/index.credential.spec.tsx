@@ -1,5 +1,6 @@
 import fetchMock from 'fetch-mock';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import queryString from 'query-string';
 import {
   RichieContextFactory as mockRichieContextFactory,
   PacedCourseFactory,
@@ -8,13 +9,13 @@ import {
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import {
   AddressFactory,
-  CredentialOrderWithPaymentFactory,
+  CredentialOrderFactory,
   CredentialProductFactory,
   OrderGroupFactory,
 } from 'utils/test/factories/joanie';
 import type * as Joanie from 'types/Joanie';
 import { Maybe } from 'types/utils';
-import { OrderCredentialCreationPayload } from 'types/Joanie';
+import { NOT_CANCELED_ORDER_STATES, OrderCredentialCreationPayload } from 'types/Joanie';
 import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel/index';
 import { render } from 'utils/test/render';
 import { getAddressLabel } from 'components/SaleTunnel/AddressSelector';
@@ -56,12 +57,6 @@ describe('SaleTunnel / Credential', () => {
     return <SaleTunnel {...props} isOpen={true} onClose={() => {}} />;
   };
 
-  const formatPrice = (price: number, currency: string) =>
-    new Intl.NumberFormat('en', {
-      currency,
-      style: 'currency',
-    }).format(price);
-
   setupJoanieSession();
 
   beforeEach(() => {
@@ -92,21 +87,22 @@ describe('SaleTunnel / Credential', () => {
     const billingAddress: Joanie.Address = AddressFactory({ is_main: true }).one();
 
     let createOrderPayload: Maybe<OrderCredentialCreationPayload>;
-    const { payment_info: paymentInfo, ...order } = CredentialOrderWithPaymentFactory().one();
+    const order = CredentialOrderFactory({ order_group_id: orderGroup.id }).one();
+    const orderQueryParameters = {
+      course_code: course.code,
+      product_id: product.id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`;
     fetchMock
+      .get(url, [])
       .get(
-        `https://joanie.endpoint/api/v1.0/orders/?course_code=${course.code}&product_id=${product.id}&state=pending&state=validated&state=submitted`,
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
         [],
       )
-      .post('https://joanie.endpoint/api/v1.0/orders/', (url, { body }) => {
+      .post('https://joanie.endpoint/api/v1.0/orders/', (_, { body }) => {
         createOrderPayload = JSON.parse(body as any);
         return order;
-      })
-      .patch(`https://joanie.endpoint/api/v1.0/orders/${order.id}/submit/`, {
-        paymentInfo,
-      })
-      .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, {
-        ...order,
       })
       .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
         overwriteRoutes: true,
@@ -120,15 +116,8 @@ describe('SaleTunnel / Credential', () => {
     await screen.findByText(getAddressLabel(billingAddress));
 
     const $button = screen.getByRole('button', {
-      name: `Pay ${formatPrice(product.price, product.price_currency)}`,
+      name: `Subscribe`,
     }) as HTMLButtonElement;
-
-    const $terms = screen.getByLabelText(
-      'By checking this box, you accept the General Terms of Sale',
-    );
-    await act(async () => {
-      fireEvent.click($terms);
-    });
 
     // - Payment button should not be disabled.
     expect($button.disabled).toBe(false);

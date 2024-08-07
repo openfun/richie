@@ -2,12 +2,12 @@ import { act, fireEvent, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 
 import { faker } from '@faker-js/faker';
-import { Deferred } from 'utils/test/deferred';
-import { EnrollmentFactory as JoanieEnrollment } from 'utils/test/factories/joanie';
 import {
   CourseRunFactory,
   RichieContextFactory as mockRichieContextFactory,
 } from 'utils/test/factories/richie';
+import { Deferred } from 'utils/test/deferred';
+import { EnrollmentFactory as JoanieEnrollment } from 'utils/test/factories/joanie';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { Priority } from 'types';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';

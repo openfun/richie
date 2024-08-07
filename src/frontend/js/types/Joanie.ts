@@ -259,14 +259,42 @@ export interface EnrollmentLight {
 
 // Order
 export enum OrderState {
-  DRAFT = 'draft',
-  SUBMITTED = 'submitted',
+  ASSIGNED = 'assigned',
   CANCELED = 'canceled',
+  COMPLETED = 'completed',
+  DRAFT = 'draft',
+  FAILED_PAYMENT = 'failed_payment',
+  NO_PAYMENT = 'no_payment',
   PENDING = 'pending',
-  VALIDATED = 'validated',
+  PENDING_PAYMENT = 'pending_payment',
+  SIGNING = 'signing',
+  TO_SAVE_PAYMENT_METHOD = 'to_save_payment_method',
+  TO_SIGN = 'to_sign',
 }
 
-export const ACTIVE_ORDER_STATES = [OrderState.PENDING, OrderState.VALIDATED, OrderState.SUBMITTED];
+export const PURCHASABLE_ORDER_STATES = [
+  OrderState.DRAFT,
+  OrderState.ASSIGNED,
+  OrderState.TO_SIGN,
+  OrderState.SIGNING,
+  OrderState.TO_SAVE_PAYMENT_METHOD,
+];
+
+export const ACTIVE_ORDER_STATES = [
+  OrderState.PENDING,
+  OrderState.PENDING_PAYMENT,
+  OrderState.NO_PAYMENT,
+  OrderState.FAILED_PAYMENT,
+  OrderState.COMPLETED,
+];
+
+export const NOT_CANCELED_ORDER_STATES = [...ACTIVE_ORDER_STATES, ...PURCHASABLE_ORDER_STATES];
+
+export const ENROLLABLE_ORDER_STATES = [
+  OrderState.COMPLETED,
+  OrderState.PENDING_PAYMENT,
+  OrderState.FAILED_PAYMENT,
+];
 
 export interface Order {
   id: string;
@@ -286,6 +314,8 @@ export interface Order {
   organization_id: Organization['id'];
   organization: Organization;
   order_group_id?: OrderGroup['id'];
+  payment_schedule?: PaymentSchedule;
+  credit_card_id?: CreditCard['id'];
 }
 
 export interface CredentialOrder extends Order {
@@ -293,18 +323,10 @@ export interface CredentialOrder extends Order {
   enrollment: null;
 }
 
-export interface CredentialOrderWithPaymentInfo extends CredentialOrder {
-  payment_info: Payment;
-}
-
 export interface CertificateOrder extends Order {
   course: null;
   enrollment: EnrollmentLight;
   target_courses: never[];
-}
-
-export interface CertificateOrderWithPaymentInfo extends CertificateOrder {
-  payment_info: Payment;
 }
 
 export type OrderLite = Pick<
@@ -325,9 +347,11 @@ export interface AbstractNestedOrder {
   product_title: string;
   owner_name: string;
   state: OrderState;
+  course: Nullable<CourseLight>;
+  enrollment: Nullable<EnrollmentLight>;
 }
 export interface NestedCertificateOrder extends AbstractNestedOrder {
-  course: undefined;
+  course: null;
   enrollment: EnrollmentLight;
 }
 export const isNestedCredentialOrder = (
@@ -338,7 +362,7 @@ export const isNestedCredentialOrder = (
 
 export interface NestedCredentialOrder extends AbstractNestedOrder {
   course: CourseLight;
-  enrollment: undefined;
+  enrollment: null;
 }
 
 export type OrderEnrollment = Pick<Order, 'id' | 'state' | 'product_id' | 'certificate_id'>;
@@ -372,10 +396,10 @@ export interface OrderGroup {
 }
 
 export enum CreditCardBrand {
-  MASTERCARD = 'Mastercard',
-  MAESTRO = 'Maestro',
-  VISA = 'Visa',
-  CB = 'CB',
+  MASTERCARD = 'mastercard',
+  MAESTRO = 'maestro',
+  VISA = 'visa',
+  CB = 'cb',
 }
 
 // Credit Card
@@ -416,6 +440,22 @@ export interface OrderPaymentInfo {
   payment_info: Payment;
 }
 
+export enum PaymentScheduleState {
+  PENDING = 'pending',
+  PAID = 'paid',
+  REFUSED = 'refused',
+}
+
+export interface PaymentInstallment {
+  id: string;
+  amount: number;
+  currency: string;
+  due_date: string;
+  state: PaymentScheduleState;
+}
+
+export type PaymentSchedule = readonly PaymentInstallment[];
+
 // - API
 export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> {
   is_main?: boolean;
@@ -424,7 +464,7 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
 interface AbstractOrderProductCreationPayload {
   product_id: Product['id'];
   order_group_id?: OrderGroup['id'];
-  has_consent_to_terms: boolean;
+  billing_address: Omit<Address, 'id' | 'is_main'>;
 }
 
 interface OrderCertificateCreationPayload extends AbstractOrderProductCreationPayload {
@@ -436,15 +476,13 @@ export interface OrderCredentialCreationPayload extends AbstractOrderProductCrea
 
 export type OrderCreationPayload = OrderCertificateCreationPayload | OrderCredentialCreationPayload;
 
-interface OrderAbortPayload {
-  id: Order['id'];
-  payment_id?: string;
-}
+export type OrderSubmitInstallmentPayment = {
+  credit_card_id?: string;
+};
 
-interface OrderSubmitPayload {
+interface OrderSetPaymentMethodPayload {
   id: Order['id'];
-  billing_address: Omit<Address, 'id' | 'is_main'>;
-  credit_card_id?: CreditCard['id'];
+  credit_card_id: CreditCard['id'];
 }
 
 export interface PaginatedResourceQuery extends ResourcesQuery {
@@ -539,14 +577,15 @@ interface APIUser {
     update(payload: Address): Promise<Address>;
   };
   creditCards: {
-    create(payload: Omit<CreditCard, 'id'>): Promise<CreditCard>;
     delete(id: CreditCard['id']): Promise<void>;
+    get(): Promise<PaginatedResponse<CreditCard>>;
     get(filters?: ResourcesQuery): Promise<CreditCard>;
     get(): Promise<CreditCard[]>;
     update(payload: CreditCard): Promise<CreditCard>;
+    tokenize(): Promise<Payment>;
   };
   orders: {
-    abort(payload: OrderAbortPayload): Promise<void>;
+    cancel(id: Order['id']): Promise<void>;
     create(payload: OrderCreationPayload): Promise<CredentialOrder | CertificateOrder>;
     get<Filters extends OrderResourcesQuery = OrderResourcesQuery>(
       filters?: Filters,
@@ -556,8 +595,12 @@ interface APIUser {
     invoice: {
       download(payload: { order_id: Order['id']; invoice_reference: string }): Promise<File>;
     };
-    submit(payload: OrderSubmitPayload): Promise<OrderPaymentInfo>;
     submit_for_signature(id: string): Promise<ContractInvitationLinkResponse>;
+    submit_installment_payment(
+      id: string,
+      payload?: OrderSubmitInstallmentPayment,
+    ): Promise<Payment>;
+    set_payment_method(payload: OrderSetPaymentMethodPayload): Promise<void>;
   };
   certificates: {
     download(id: string): Promise<File>;
@@ -614,6 +657,9 @@ export interface API {
       : Promise<PaginatedResponse<CourseListItem>>;
     products: {
       get(filters?: CourseProductQueryFilters): Promise<Nullable<CourseProductRelation>>;
+      paymentSchedule: {
+        get(filters?: CourseProductQueryFilters): Promise<Nullable<PaymentSchedule>>;
+      };
     };
     orders: {
       get(

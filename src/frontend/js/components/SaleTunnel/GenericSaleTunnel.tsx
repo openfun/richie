@@ -1,8 +1,16 @@
 import { Modal, ModalSize } from '@openfun/cunningham-react';
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+} from 'react';
 import { SaleTunnelSponsors } from 'components/SaleTunnel/Sponsors/SaleTunnelSponsors';
 import { SaleTunnelProps } from 'components/SaleTunnel/index';
-import { Address, CreditCard, Order, Product } from 'types/Joanie';
+import { Address, CreditCard, Order, OrderState, Product } from 'types/Joanie';
 import useProductOrder from 'hooks/useProductOrder';
 import { SaleTunnelSuccess } from 'components/SaleTunnel/SaleTunnelSuccess';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
@@ -10,7 +18,8 @@ import { CourseProductEvent } from 'types/web-analytics';
 import { useOmniscientOrders, useOrders } from 'hooks/useOrders';
 import { SaleTunnelInformation } from 'components/SaleTunnel/SaleTunnelInformation';
 import { useEnrollments } from 'hooks/useEnrollments';
-import SaleTunnelNotValidated from './SaleTunnelNotValidated';
+import SaleTunnelSavePaymentMethod from 'components/SaleTunnel/SaleTunnelSavePaymentMethod';
+import { LearnerContractFrame } from 'components/ContractFrame';
 
 export interface SaleTunnelContextType {
   props: SaleTunnelProps;
@@ -19,7 +28,7 @@ export interface SaleTunnelContextType {
   webAnalyticsEventKey: string;
 
   // internal
-  onPaymentSuccess: (validated?: boolean) => void;
+  onPaymentSuccess: () => void;
   step: SaleTunnelStep;
 
   // meta
@@ -30,6 +39,7 @@ export interface SaleTunnelContextType {
   registerSubmitCallback: (key: string, callback: () => Promise<void>) => void;
   unregisterSubmitCallback: (key: string) => void;
   runSubmitCallbacks: () => Promise<void>;
+  nextStep: () => void;
 }
 
 export const SaleTunnelContext = createContext<SaleTunnelContextType>({} as any);
@@ -45,9 +55,10 @@ export const useSaleTunnelContext = () => {
 };
 
 export enum SaleTunnelStep {
-  PAYMENT,
+  IDLE,
+  SIGN,
+  SAVE_PAYMENT,
   SUCCESS,
-  NOT_VALIDATED,
 }
 
 interface GenericSaleTunnelProps extends SaleTunnelProps {
@@ -76,10 +87,34 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
   } = useEnrollments(undefined, { enabled: false });
   const [billingAddress, setBillingAddress] = useState<Address>();
   const [creditCard, setCreditCard] = useState<CreditCard>();
-  const [step, setStep] = useState<SaleTunnelStep>(SaleTunnelStep.PAYMENT);
+  const [step, setStep] = useState<SaleTunnelStep>(SaleTunnelStep.IDLE);
   const [submitCallbacks, setSubmitCallbacks] = useState<Map<string, () => Promise<void>>>(
     new Map(),
   );
+
+  const nextStep = useCallback(() => {
+    if (order)
+      switch (step) {
+        case SaleTunnelStep.IDLE:
+          if ([OrderState.TO_SIGN, OrderState.SIGNING].includes(order.state)) {
+            setStep(SaleTunnelStep.SIGN);
+          } else if (order.state === OrderState.TO_SAVE_PAYMENT_METHOD) {
+            setStep(SaleTunnelStep.SAVE_PAYMENT);
+          }
+          break;
+        case SaleTunnelStep.SIGN:
+          if (order.state === OrderState.TO_SAVE_PAYMENT_METHOD) {
+            setStep(SaleTunnelStep.SAVE_PAYMENT);
+          }
+          if (order.state === OrderState.COMPLETED) {
+            setStep(SaleTunnelStep.SUCCESS);
+          }
+          break;
+        case SaleTunnelStep.SAVE_PAYMENT:
+          setStep(SaleTunnelStep.SUCCESS);
+          break;
+      }
+  }, [order, step]);
 
   const context: SaleTunnelContextType = useMemo(
     () => ({
@@ -91,12 +126,9 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       setBillingAddress,
       creditCard,
       setCreditCard,
-      onPaymentSuccess: (validated: boolean = true) => {
-        if (validated) {
-          setStep(SaleTunnelStep.SUCCESS);
-        } else {
-          setStep(SaleTunnelStep.NOT_VALIDATED);
-        }
+      nextStep,
+      onPaymentSuccess: () => {
+        nextStep();
         WebAnalyticsAPIHandler()?.sendCourseProductEvent(
           CourseProductEvent.PAYMENT_SUCCEED,
           props.eventKey,
@@ -144,13 +176,16 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
 
 export const GenericSaleTunnelInner = (props: GenericSaleTunnelProps) => {
   const { step } = useSaleTunnelContext();
+
   switch (step) {
-    case SaleTunnelStep.PAYMENT:
-      return <GenericSaleTunnelPaymentStep {...props} />;
+    case SaleTunnelStep.IDLE:
+      return <GenericSaleTunnelInitialStep {...props} />;
+    case SaleTunnelStep.SIGN:
+      return <GenericSaleTunnelSignStep {...props} />;
+    case SaleTunnelStep.SAVE_PAYMENT:
+      return <GenericSaleTunnelSavePaymentMethodStep {...props} />;
     case SaleTunnelStep.SUCCESS:
       return <GenericSaleTunnelSuccessStep {...props} />;
-    case SaleTunnelStep.NOT_VALIDATED:
-      return <GenericSaleTunnelNotValidatedStep {...props} />;
   }
   throw new Error('Invalid step: ' + step);
 };
@@ -159,7 +194,7 @@ export const GenericSaleTunnelInner = (props: GenericSaleTunnelProps) => {
  * Steps.
  */
 
-export const GenericSaleTunnelPaymentStep = (props: GenericSaleTunnelProps) => {
+export const GenericSaleTunnelInitialStep = (props: GenericSaleTunnelProps) => {
   const { webAnalyticsEventKey } = useSaleTunnelContext();
 
   useEffect(() => {
@@ -174,19 +209,21 @@ export const GenericSaleTunnelPaymentStep = (props: GenericSaleTunnelProps) => {
   }, []);
 
   return (
-    <Modal {...props} size={ModalSize.EXTRA_LARGE} title={props.product.title} closeOnEsc={false}>
+    <Modal {...props} size={ModalSize.EXTRA_LARGE} title={props.product.title}>
       <div className="sale-tunnel" data-testid="generic-sale-tunnel-payment-step">
         <div className="sale-tunnel__main">
-          <div className="sale-tunnel__main__left">{props.asideNode}</div>
+          <div className="sale-tunnel__main__column sale-tunnel__main__left ">
+            <div>{props.asideNode}</div>
+            <div>
+              <SaleTunnelSponsors />
+            </div>
+          </div>
           <div className="sale-tunnel__main__separator" />
           <div className="sale-tunnel__main__right">
             <SaleTunnelInformation />
           </div>
         </div>
-        <div className="sale-tunnel__footer">
-          {props.paymentNode}
-          <SaleTunnelSponsors />
-        </div>
+        <div className="sale-tunnel__footer">{props.paymentNode}</div>
       </div>
     </Modal>
   );
@@ -200,10 +237,26 @@ export const GenericSaleTunnelSuccessStep = (props: SaleTunnelProps) => {
   );
 };
 
-export const GenericSaleTunnelNotValidatedStep = (props: SaleTunnelProps) => {
+export const GenericSaleTunnelSavePaymentMethodStep = (props: SaleTunnelProps) => {
   return (
-    <Modal {...props} size={ModalSize.MEDIUM}>
-      <SaleTunnelNotValidated closeModal={props.onClose} />
+    <Modal {...props} size={ModalSize.LARGE}>
+      <SaleTunnelSavePaymentMethod />
     </Modal>
+  );
+};
+
+export const GenericSaleTunnelSignStep = ({ isOpen, onClose }: SaleTunnelProps) => {
+  const { order, nextStep } = useSaleTunnelContext();
+
+  const handleDone = useCallback(nextStep, [order]);
+
+  useEffect(() => {
+    if (![OrderState.TO_SIGN, OrderState.SIGNING].includes(order!.state)) {
+      nextStep();
+    }
+  }, [order]);
+
+  return (
+    <LearnerContractFrame order={order!} isOpen={isOpen} onClose={onClose} onDone={handleDone} />
   );
 };

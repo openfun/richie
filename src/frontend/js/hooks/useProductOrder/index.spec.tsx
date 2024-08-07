@@ -9,7 +9,7 @@ import { CourseLightFactory, CredentialOrderFactory } from 'utils/test/factories
 import { SessionProvider } from 'contexts/SessionContext';
 import { Deferred } from 'utils/test/deferred';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { ACTIVE_ORDER_STATES } from 'types/Joanie';
+import { NOT_CANCELED_ORDER_STATES, OrderState } from 'types/Joanie';
 import useProductOrder from '.';
 
 jest.mock('utils/context', () => ({
@@ -45,69 +45,86 @@ describe('useProductOrder', () => {
     );
   };
 
-  it.each(ACTIVE_ORDER_STATES)(
-    'should retrieves the last order when order.state is %s',
-    async (currentState) => {
-      // the most recent order of accepted state will be return
-      const order = CredentialOrderFactory({
-        state: currentState,
-        created_on: new Date().toISOString(),
-        course: CourseLightFactory({ code: '00000' }).one(),
-      }).one();
-      const ordersByState = ACTIVE_ORDER_STATES.filter((state) => state !== currentState).map(
-        (state) =>
-          CredentialOrderFactory({
-            state,
-            created_on: faker.date.past({ years: 1 }).toISOString(),
-            course: CourseLightFactory({ code: '00000' }).one(),
-            product_id: order.product_id,
-          }).one(),
-      );
-      ordersByState.push(order);
+  it.each([
+    OrderState.DRAFT,
+    OrderState.ASSIGNED,
+    OrderState.TO_SIGN,
+    OrderState.SIGNING,
+    OrderState.TO_SAVE_PAYMENT_METHOD,
+    OrderState.PENDING,
+    OrderState.PENDING_PAYMENT,
+    OrderState.NO_PAYMENT,
+    OrderState.FAILED_PAYMENT,
+    OrderState.COMPLETED,
+  ])('should retrieves the last order when order.state is %s', async (currentState) => {
+    // the most recent order of accepted state will be return
+    const order = CredentialOrderFactory({
+      state: currentState,
+      created_on: new Date().toISOString(),
+      course: CourseLightFactory({ code: '00000' }).one(),
+    }).one();
+    const ordersByState = NOT_CANCELED_ORDER_STATES.filter((state) => state !== currentState).map(
+      (state) =>
+        CredentialOrderFactory({
+          state,
+          created_on: faker.date.past({ years: 1 }).toISOString(),
+          course: CourseLightFactory({ code: '00000' }).one(),
+          product_id: order.product_id,
+        }).one(),
+    );
+    ordersByState.push(order);
 
-      const responseDeferred = new Deferred();
-      fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/orders/?course_code=00000&product_id=${order.product_id}&state=pending&state=validated&state=submitted`,
-        responseDeferred.promise,
-      );
+    const responseDeferred = new Deferred();
+    const url =
+      'https://joanie.endpoint/api/v1.0/orders/' +
+      '?course_code=00000' +
+      `&product_id=${order.product_id}` +
+      `&state=${OrderState.PENDING}` +
+      `&state=${OrderState.PENDING_PAYMENT}` +
+      `&state=${OrderState.NO_PAYMENT}` +
+      `&state=${OrderState.FAILED_PAYMENT}` +
+      `&state=${OrderState.COMPLETED}` +
+      `&state=${OrderState.DRAFT}` +
+      `&state=${OrderState.ASSIGNED}` +
+      `&state=${OrderState.TO_SIGN}` +
+      `&state=${OrderState.SIGNING}` +
+      `&state=${OrderState.TO_SAVE_PAYMENT_METHOD}`;
+    fetchMock.get(url, responseDeferred.promise);
 
-      const { result } = renderHook(
-        () => useProductOrder({ productId: order.product_id, courseCode: '00000' }),
-        {
-          wrapper: Wrapper,
-        },
-      );
+    const { result } = renderHook(
+      () => useProductOrder({ productId: order.product_id, courseCode: '00000' }),
+      {
+        wrapper: Wrapper,
+      },
+    );
 
-      await waitFor(() => {
-        expect(result.current.states.fetching).toBe(true);
-        expect(result.current.item).toBeUndefined();
-      });
-      nbApiCalls += 1; // call orders from useProductOrder
-      const calledUrls = fetchMock.calls().map((call) => call[0]);
-      expect(calledUrls).toHaveLength(nbApiCalls);
-      expect(calledUrls).toContain(
-        `https://joanie.endpoint/api/v1.0/orders/?course_code=00000&product_id=${order.product_id}&state=pending&state=validated&state=submitted`,
-      );
-      expect(result.current.states.creating).toBe(false);
-      expect(result.current.states.deleting).toBeUndefined();
-      expect(result.current.states.updating).toBeUndefined();
-      expect(result.current.states.isPending).toBe(true);
-      expect(result.current.states.error).toBe(undefined);
+    await waitFor(() => {
+      expect(result.current.states.fetching).toBe(true);
+      expect(result.current.item).toBeUndefined();
+    });
+    nbApiCalls += 1; // call orders from useProductOrder
+    const calledUrls = fetchMock.calls().map((call) => call[0]);
+    expect(calledUrls).toHaveLength(nbApiCalls);
+    expect(calledUrls).toContain(url);
+    expect(result.current.states.creating).toBe(false);
+    expect(result.current.states.deleting).toBeUndefined();
+    expect(result.current.states.updating).toBeUndefined();
+    expect(result.current.states.isPending).toBe(true);
+    expect(result.current.states.error).toBe(undefined);
 
-      await act(async () => {
-        responseDeferred.resolve(ordersByState);
-      });
+    await act(async () => {
+      responseDeferred.resolve(ordersByState);
+    });
 
-      await waitFor(() => {
-        expect(result.current.states.fetching).toBe(false);
-        expect(result.current.item).toEqual(order);
-      });
+    await waitFor(() => {
+      expect(result.current.states.fetching).toBe(false);
+      expect(result.current.item).toEqual(order);
+    });
 
-      expect(result.current.states.creating).toBe(false);
-      expect(result.current.states.deleting).toBeUndefined();
-      expect(result.current.states.updating).toBeUndefined();
-      expect(result.current.states.isPending).toBe(false);
-      expect(result.current.states.error).toBe(undefined);
-    },
-  );
+    expect(result.current.states.creating).toBe(false);
+    expect(result.current.states.deleting).toBeUndefined();
+    expect(result.current.states.updating).toBeUndefined();
+    expect(result.current.states.isPending).toBe(false);
+    expect(result.current.states.error).toBe(undefined);
+  });
 });

@@ -9,7 +9,6 @@ import useOpenEdxProfile from 'hooks/useOpenEdxProfile';
 import Form, { getLocalizedCunninghamErrorProp } from 'components/Form';
 import { Spinner } from 'components/Spinner';
 import Banner, { BannerType } from 'components/Banner';
-import { UserHelper } from 'utils/UserHelper';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 
 const messages = defineMessages({
@@ -51,7 +50,7 @@ export interface OpenEdxFullNameFormValues {
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required(),
+  name: Yup.string().required().min(3),
 });
 
 const OpenEdxFullNameForm = () => {
@@ -70,7 +69,7 @@ const OpenEdxFullNameForm = () => {
 
   const defaultValues = useMemo(
     () => ({
-      name: (openEdxProfileData ? UserHelper.getName(openEdxProfileData) : '')?.trim(),
+      name: (openEdxProfileData?.name || '')?.trim(),
     }),
     [openEdxProfileData],
   );
@@ -82,19 +81,20 @@ const OpenEdxFullNameForm = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const { register, handleSubmit, reset, formState } = form;
+  const { getValues, register, handleSubmit, reset, formState } = form;
 
   useEffect(() => {
     if (openEdxProfileData) {
-      reset({ name: (openEdxProfileData ? UserHelper.getName(openEdxProfileData) : '')?.trim() });
+      reset({ name: (openEdxProfileData?.name || '')?.trim() });
     }
   }, [openEdxProfileData]);
 
   useEffect(() => {
     registerSubmitCallback('openEdxFullNameForm', async () => {
       return new Promise<void>((resolve, reject) => {
+        const { name } = getValues();
         // Don't save if the form has not been modified.
-        if (!formState.isDirty) {
+        if (name && !formState.isDirty) {
           resolve();
           return;
         }
@@ -110,7 +110,7 @@ const OpenEdxFullNameForm = () => {
             },
             onError: (e) => reject(e),
           });
-        })();
+        }, reject)();
       });
     });
     return () => {

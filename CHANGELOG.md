@@ -8,12 +8,20 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Display Payment Schedule into SaleTunnel
+- Add OrderHelper allowEnrollment
+
 ### Changed
 
+- SaleTunnel has been fully rework to comply with the purchase workflow
 - Improve lyra error catching management
+- Replace order abort mutation by order cancel mutation
 
 ### Fixed
 
+- Normalize credit card brand on CreditCardBrandLogo component
 - Fix typo in page-admin autocomplete url path
 - Fix course enrollment count shouldn't include the hidden runs.
 - Fix RDFa errors on Google Search Console
@@ -94,6 +102,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Ongoing product displayed on the syllabus without active enrollment
   now link to the order details page in the learner dashboard.
 - Add new sale tunnel
+- Add order payment information in the dashboard, including a specific
+  interface displayed on failed installment in order to retry the payment.
 
 ### Changed
 

@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { screen, getByText } from '@testing-library/react';
-import { CredentialOrderFactory, ProductFactory } from 'utils/test/factories/joanie';
+import { CredentialOrderFactory } from 'utils/test/factories/joanie';
 import type { CourseRun, CredentialOrder } from 'types/Joanie';
 import { OrderState } from 'types/Joanie';
 import { render } from 'utils/test/render';
@@ -15,14 +15,16 @@ jest.mock('../CourseProductCourseRuns', () => ({
 describe('CourseRunItem', () => {
   it('does not allow user which purchase the product to enroll to course if order state is not validated', async () => {
     const order: CredentialOrder = CredentialOrderFactory({
-      state: faker.helpers.arrayElement([OrderState.CANCELED, OrderState.PENDING]),
+      state: faker.helpers.arrayElement([
+        OrderState.CANCELED,
+        OrderState.PENDING,
+        OrderState.NO_PAYMENT,
+      ]),
     }).one();
-    const product = ProductFactory().one();
-    product.contract_definition = undefined;
 
     const targetCourse = order.target_courses[0];
 
-    render(<CourseRunItem targetCourse={targetCourse} order={order} product={product} />, {
+    render(<CourseRunItem targetCourse={targetCourse} order={order} />, {
       wrapper: null,
     });
 

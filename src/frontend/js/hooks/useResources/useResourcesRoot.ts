@@ -59,6 +59,7 @@ const emptyArray: never[] = [];
  * @param queryOptions - Pass custom options to react-query.
  * @param localized - Is the resource local-dependent ? If so, the query will be invalidated on locale change.
  * @param resourceMessages - Custom messages to use for this resource.
+ * @param onMutationSuccess - Custom callback triggered on mutation success.
  */
 export const useResourcesRoot = <
   TData extends Resource,
@@ -136,21 +137,21 @@ export const useResourcesRoot = <
   const mutation = (session ? useSessionMutation : useMutation) as typeof useMutation;
 
   const writeHandlers = {
-    create: api.create
+    create: api?.create
       ? mutation({
           mutationFn: api.create,
           onSuccess,
           onError: () => setError(intl.formatMessage(actualMessages.errorCreate)),
         })
       : undefined,
-    update: api.update
+    update: api?.update
       ? mutation({
           mutationFn: api.update,
           onSuccess,
           onError: () => setError(intl.formatMessage(actualMessages.errorUpdate)),
         })
       : undefined,
-    delete: api.delete
+    delete: api?.delete
       ? mutation({
           mutationFn: api.delete,
           onSuccess,

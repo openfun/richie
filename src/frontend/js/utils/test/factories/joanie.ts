@@ -4,45 +4,48 @@ import {
   Address,
   Certificate,
   CertificateDefinition,
-  CourseListItem,
+  CertificateOrder,
+  CertificateProduct,
+  Contract,
+  ContractDefinition,
+  ContractLight,
   CourseLight,
+  CourseListItem,
   CourseProduct,
   CourseProductRelation,
   CourseRun,
+  CredentialOrder,
+  CredentialProduct,
   CreditCard,
   CreditCardBrand,
+  DefinitionResourcesProduct,
   Enrollment,
+  EnrollmentLight,
   EnrollmentState,
+  JoanieFile,
+  NestedCertificateOrder,
+  NestedCourseOrder,
+  NestedCredentialOrder,
+  Order,
+  OrderEnrollment,
+  OrderGroup,
+  PaymentInstallment,
   OrderLite,
   OrderState,
   Organization,
   OrganizationLight,
+  PaymentScheduleState,
   ProductType,
   TargetCourse,
-  JoanieFile,
-  Contract,
-  OrderEnrollment,
-  ContractDefinition,
-  NestedCredentialOrder,
-  NestedCertificateOrder,
-  Order,
-  CertificateOrder,
-  CredentialOrder,
-  CertificateOrderWithPaymentInfo,
-  CredentialOrderWithPaymentInfo,
-  EnrollmentLight,
-  OrderGroup,
-  CertificateProduct,
-  CredentialProduct,
-  NestedCourseOrder,
   UserLight,
-  ContractLight,
-  DefinitionResourcesProduct,
 } from 'types/Joanie';
 import { Payment, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { JoanieUserApiAbilityActions, JoanieUserProfile } from 'types/User';
+import { SaleTunnelContextType, SaleTunnelStep } from 'components/SaleTunnel/GenericSaleTunnel';
+import { SaleTunnelProps } from 'components/SaleTunnel';
+import { noop } from 'utils/index';
 import { factory } from './factories';
 
 export const UserLightFactory = factory((): UserLight => {
@@ -138,7 +141,7 @@ export const ContractFactory = factory((): Contract => {
     organization_signatory: null,
     created_on: faker.date.past().toISOString(),
     definition: ContractDefinitionFactory().one(),
-    order: NestedCredentialOrderFactory().one(),
+    order: NestedCredentialOrderFactory({ state: OrderState.TO_SIGN }).one(),
   };
 });
 
@@ -312,7 +315,7 @@ export const NestedCourseOrderFactory = factory((): NestedCourseOrder => {
     owner: UserLightFactory().one(),
     course_id: faker.string.uuid(),
     product_id: faker.string.uuid(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
     enrollment_id: faker.string.uuid(),
     organization: OrganizationFactory().one(),
     certificate_id: faker.string.uuid(),
@@ -347,11 +350,21 @@ export const CourseListItemFactory = factory((): CourseListItem => {
   };
 });
 
+export const PaymentInstallmentFactory = factory((): PaymentInstallment => {
+  return {
+    id: faker.string.uuid(),
+    currency: faker.finance.currencyCode(),
+    amount: faker.number.int(),
+    due_date: faker.date.future().toISOString(),
+    state: PaymentScheduleState.PAID,
+  };
+});
+
 export const OrderEnrollmentFactory = factory((): OrderEnrollment => {
   return {
     id: faker.string.uuid(),
     product_id: faker.string.uuid(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
   };
 });
 
@@ -363,19 +376,19 @@ export const OrderLiteFactory = factory((): OrderLite => {
     main_invoice_reference: faker.string.uuid(),
     total: faker.number.int(),
     product_id: faker.string.uuid(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
   };
 });
 
 export const NestedCertificateOrderFactory = factory((): NestedCertificateOrder => {
   return {
     id: faker.string.uuid(),
-    course: undefined,
+    course: null,
     enrollment: EnrollmentLightFactory().one(),
     organization: OrganizationFactory().one(),
     product_title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
     owner_name: faker.internet.userName(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
   };
 });
 
@@ -383,11 +396,11 @@ export const NestedCredentialOrderFactory = factory((): NestedCredentialOrder =>
   return {
     id: faker.string.uuid(),
     course: CourseLightFactory().one(),
-    enrollment: undefined,
+    enrollment: null,
     organization: OrganizationFactory().one(),
     product_title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
     owner_name: faker.internet.userName(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
   };
 });
 
@@ -399,7 +412,7 @@ const AbstractOrderFactory = factory((): Order => {
     total: faker.number.int(),
     total_currency: faker.finance.currencyCode(),
     main_invoice_reference: faker.string.uuid(),
-    state: OrderState.VALIDATED,
+    state: OrderState.COMPLETED,
     product_id: faker.string.uuid(),
     target_courses: TargetCourseFactory().many(5),
     target_enrollments: [],
@@ -410,55 +423,22 @@ const AbstractOrderFactory = factory((): Order => {
   };
 });
 
-export const CredentialOrderFactory = factory((): CredentialOrder => {
-  const order = {
+export const CredentialOrderFactory = factory(
+  (): CredentialOrder => ({
     ...AbstractOrderFactory().one(),
     course: CourseLightFactory().one(),
     enrollment: null,
-  };
-  return order;
-});
-
-export const CredentialOrderWithPaymentFactory = factory((): CredentialOrderWithPaymentInfo => {
-  return {
-    ...CredentialOrderFactory().one(),
-    payment_info: PaymentFactory().one(),
-  };
-});
-
-export const CredentialOrderWithOneClickPaymentFactory = factory(
-  (): CredentialOrderWithPaymentInfo => {
-    return {
-      ...CredentialOrderFactory().one(),
-      payment_info: PaymentFactory().one(),
-    };
-  },
+    payment_schedule: PaymentInstallmentFactory().many(3),
+  }),
 );
 
-export const CertificateOrderFactory = factory((): CertificateOrder => {
-  const order = {
+export const CertificateOrderFactory = factory(
+  (): CertificateOrder => ({
     ...AbstractOrderFactory().one(),
     course: null,
     target_courses: [],
     enrollment: EnrollmentLightFactory().one(),
-  };
-  return order;
-});
-
-export const CertificateOrderWithPaymentFactory = factory((): CertificateOrderWithPaymentInfo => {
-  return {
-    ...CertificateOrderFactory().one(),
-    payment_info: PaymentFactory().one(),
-  };
-});
-
-export const CertificateOrderWithOneClickPaymentFactory = factory(
-  (): CertificateOrderWithPaymentInfo => {
-    return {
-      ...CertificateOrderFactory().one(),
-      payment_info: PaymentFactory().one(),
-    };
-  },
+  }),
 );
 
 export const AddressFactory = factory((): Address => {
@@ -494,3 +474,21 @@ export const PaymentFactory = factory((): Payment => {
     url: faker.internet.url(),
   };
 });
+
+export const SaleTunnelContextFactory = factory(
+  (): SaleTunnelContextType => ({
+    webAnalyticsEventKey: 'eventKey',
+    order: CredentialOrderFactory().one(),
+    product: ProductFactory().one(),
+    props: {} as SaleTunnelProps,
+    billingAddress: undefined,
+    setBillingAddress: noop,
+    setCreditCard: noop,
+    onPaymentSuccess: noop,
+    step: SaleTunnelStep.IDLE,
+    registerSubmitCallback: noop,
+    unregisterSubmitCallback: noop,
+    runSubmitCallbacks: () => new Promise((resolve) => resolve()),
+    nextStep: noop,
+  }),
+);

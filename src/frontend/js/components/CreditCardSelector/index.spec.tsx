@@ -1,21 +1,16 @@
 import { screen, within } from '@testing-library/react';
-import { useMemo, useState } from 'react';
+import { useState, useEffect } from 'react';
 import fetchMock from 'fetch-mock';
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CreditCardSelector } from 'components/SaleTunnel/CreditCardSelector/index';
 import { render } from 'utils/test/render';
 import { CreditCard } from 'types/Joanie';
-import {
-  CredentialOrderFactory,
-  CreditCardFactory,
-  ProductFactory,
-} from 'utils/test/factories/joanie';
-import { SaleTunnelProps } from 'components/SaleTunnel/index';
+import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
-import { SaleTunnelStep, SaleTunnelContext, SaleTunnelContextType } from '../GenericSaleTunnel';
+import { SaleTunnelContextType } from 'components/SaleTunnel/GenericSaleTunnel';
+import { CreditCardSelector } from 'components/CreditCardSelector/index';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -43,30 +38,10 @@ describe('CreditCardSelector', () => {
 
     const Wrapper = () => {
       const [creditCard, setCreditCard] = useState<CreditCard>();
-      const context: SaleTunnelContextType = useMemo(
-        () => ({
-          webAnalyticsEventKey: 'eventKey',
-          order: CredentialOrderFactory().one(),
-          product: ProductFactory().one(),
-          props: {} as SaleTunnelProps,
-          setBillingAddress: jest.fn(),
-          creditCard,
-          setCreditCard,
-          onPaymentSuccess: jest.fn(),
-          step: SaleTunnelStep.PAYMENT,
-          registerSubmitCallback: jest.fn(),
-          unregisterSubmitCallback: jest.fn(),
-          runSubmitCallbacks: jest.fn(),
-        }),
-        [creditCard],
-      );
-      contextRef.current = context;
-
-      return (
-        <SaleTunnelContext.Provider value={context}>
-          <CreditCardSelector />
-        </SaleTunnelContext.Provider>
-      );
+      useEffect(() => {
+        contextRef.current.creditCard = creditCard;
+      }, [creditCard]);
+      return <CreditCardSelector creditCard={creditCard} setCreditCard={setCreditCard} />;
     };
 
     return { contextRef, Wrapper };
@@ -77,17 +52,12 @@ describe('CreditCardSelector', () => {
     const { Wrapper } = buildWrapper();
     render(<Wrapper />);
 
-    screen.getByRole('heading', {
-      name: 'Payment method',
-    });
-    screen.getByText('Choose your payment method or add a new one during the payment.');
-
     // During loading state, the spinner should be displayed and the current selected card should not be displayed.
-    expect(screen.queryByText('Add new credit card during payment')).not.toBeInTheDocument();
+    expect(screen.queryByText('Use another credit card')).not.toBeInTheDocument();
     await expectSpinner();
     await expectNoSpinner();
 
-    screen.getByText('Use another credit card during payment');
+    screen.getByText('Use another credit card');
 
     // As the user has no credit card, the edit button should not be displayed.
     expect(
@@ -236,7 +206,7 @@ describe('CreditCardSelector', () => {
     await user.click(editButton);
 
     const radio = screen.getByRole('radio', {
-      name: /Use another credit card during payment/i,
+      name: /Use another credit card/i,
     });
     await user.click(radio);
 
@@ -246,7 +216,7 @@ describe('CreditCardSelector', () => {
     await user.click(submitButton);
 
     expect(screen.queryByTestId('credit-card-selector-modal')).not.toBeInTheDocument();
-    screen.getByText('Use another credit card during payment');
+    screen.getByText('Use another credit card');
     expect(contextRef.current.creditCard).toBeUndefined();
   });
 
@@ -274,15 +244,15 @@ describe('CreditCardSelector', () => {
     await screen.findByTestId('credit-card-' + mainCreditCard.id);
     screen.getByText(mainCreditCard.title!);
     screen.getByText('Ends with •••• ' + mainCreditCard.last_numbers);
-    expect(screen.queryByText('Add new credit card during payment')).not.toBeInTheDocument();
     expect(contextRef.current.creditCard!.id).toEqual(mainCreditCard.id);
 
     const user = userEvent.setup();
-    const button = screen.getByRole('button', { name: /use another credit card during payment/i });
+    const button = screen.getByRole('button', { name: /use another credit card/i });
     await user.click(button);
 
     expect(screen.queryByTestId('credit-card-selector-modal')).not.toBeInTheDocument();
-    screen.getByText('Use another credit card during payment');
+    screen.getByText('Use another credit card');
+    expect(button).not.toBeInTheDocument();
     expect(contextRef.current.creditCard).toBeUndefined();
   });
 

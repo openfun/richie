@@ -15,7 +15,8 @@ import context from 'utils/context';
 import { JOANIE_API_VERSION } from 'settings';
 import { ResourcesQuery } from 'hooks/useResources';
 import { ObjectHelper } from 'utils/ObjectHelper';
-import { Maybe } from 'types/utils';
+import { Maybe, Nullable } from 'types/utils';
+import { PaymentSchedule } from 'types/Joanie';
 import { checkStatus, getFileFromResponse } from './utils';
 
 /*
@@ -78,9 +79,9 @@ export const getRoutes = () => {
       },
       creditCards: {
         get: `${baseUrl}/credit-cards/:id/`,
-        create: `${baseUrl}/credit-cards/`,
         update: `${baseUrl}/credit-cards/:id/`,
         delete: `${baseUrl}/credit-cards/:id/`,
+        tokenize: `${baseUrl}/credit-cards/tokenize-card/`,
       },
       addresses: {
         get: `${baseUrl}/addresses/:id/`,
@@ -89,14 +90,15 @@ export const getRoutes = () => {
         delete: `${baseUrl}/addresses/:id/`,
       },
       orders: {
-        abort: `${baseUrl}/orders/:id/abort/`,
+        cancel: `${baseUrl}/orders/:id/cancel/`,
         create: `${baseUrl}/orders/`,
-        submit: `${baseUrl}/orders/:id/submit/`,
         get: `${baseUrl}/orders/:id/`,
         invoice: {
           download: `${baseUrl}/orders/:id/invoice/`,
         },
         submit_for_signature: `${baseUrl}/orders/:id/submit_for_signature/`,
+        submit_installment_payment: `${baseUrl}/orders/:id/submit_installment_payment/`,
+        set_payment_method: `${baseUrl}/orders/:id/payment-method/`,
       },
       certificates: {
         download: `${baseUrl}/certificates/:id/download/`,
@@ -141,6 +143,9 @@ export const getRoutes = () => {
       },
       products: {
         get: `${baseUrl}/courses/:course_id/products/:id/`,
+        paymentSchedule: {
+          get: `${baseUrl}/courses/:course_id/products/:id/payment-schedule/`,
+        },
       },
       orders: {
         get: `${baseUrl}/courses/:course_id/orders/:id/`,
@@ -224,11 +229,6 @@ const API = (): Joanie.API => {
         get: async (filters?: ResourcesQuery) => {
           return fetchWithJWT(buildApiUrl(ROUTES.user.creditCards.get, filters)).then(checkStatus);
         },
-        create: async (creditCard) =>
-          fetchWithJWT(ROUTES.user.creditCards.create, {
-            method: 'POST',
-            body: JSON.stringify(creditCard),
-          }).then(checkStatus),
         update: async ({ id, ...creditCard }) => {
           return fetchWithJWT(ROUTES.user.creditCards.update.replace(':id', id), {
             method: 'PUT',
@@ -239,6 +239,8 @@ const API = (): Joanie.API => {
           fetchWithJWT(ROUTES.user.creditCards.delete.replace(':id', id), {
             method: 'DELETE',
           }).then(checkStatus),
+        tokenize: async () =>
+          fetchWithJWT(ROUTES.user.creditCards.tokenize, { method: 'POST' }).then(checkStatus),
       },
       addresses: {
         get: (id?: string) => {
@@ -260,20 +262,14 @@ const API = (): Joanie.API => {
           }).then(checkStatus),
       },
       orders: {
-        abort: async ({ id, payment_id }) => {
-          return fetchWithJWT(ROUTES.user.orders.abort.replace(':id', id), {
+        cancel: async (id) => {
+          return fetchWithJWT(ROUTES.user.orders.cancel.replace(':id', id), {
             method: 'POST',
-            body: payment_id ? JSON.stringify({ payment_id }) : undefined,
           }).then(checkStatus);
         },
         create: async (payload) =>
           fetchWithJWT(ROUTES.user.orders.create, {
             method: 'POST',
-            body: JSON.stringify(payload),
-          }).then(checkStatus),
-        submit: async ({ id, ...payload }) =>
-          fetchWithJWT(ROUTES.user.orders.submit.replace(':id', id), {
-            method: 'PATCH',
             body: JSON.stringify(payload),
           }).then(checkStatus),
         get: async (filters) => {
@@ -290,6 +286,16 @@ const API = (): Joanie.API => {
         submit_for_signature: async (id) =>
           fetchWithJWT(ROUTES.user.orders.submit_for_signature.replace(':id', id), {
             method: 'POST',
+          }).then(checkStatus),
+        submit_installment_payment: async (id, payload) =>
+          fetchWithJWT(ROUTES.user.orders.submit_installment_payment.replace(':id', id), {
+            method: 'POST',
+            body: JSON.stringify(payload),
+          }).then(checkStatus),
+        set_payment_method: async ({ id, ...payload }) =>
+          fetchWithJWT(ROUTES.user.orders.set_payment_method.replace(':id', id), {
+            method: 'POST',
+            body: JSON.stringify(payload),
           }).then(checkStatus),
       },
       enrollments: {
@@ -417,6 +423,25 @@ const API = (): Joanie.API => {
           }
 
           return fetchWithJWT(buildApiUrl(ROUTES.courses.products.get, filters)).then(checkStatus);
+        },
+        paymentSchedule: {
+          get: async (
+            filters?: Joanie.CourseProductQueryFilters,
+          ): Promise<Nullable<PaymentSchedule>> => {
+            if (!filters) {
+              throw new Error(
+                'A course code and a product id are required to fetch a course product',
+              );
+            } else if (!filters.course_id) {
+              throw new Error('A course code is required to fetch a course product');
+            } else if (!filters.id) {
+              throw new Error('A product id is required to fetch a course product');
+            }
+
+            return fetchWithJWT(
+              buildApiUrl(ROUTES.courses.products.paymentSchedule.get, filters),
+            ).then(checkStatus);
+          },
         },
       },
       orders: {

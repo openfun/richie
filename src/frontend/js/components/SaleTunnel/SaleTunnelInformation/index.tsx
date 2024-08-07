@@ -1,12 +1,12 @@
-import { Alert, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
 import { AddressSelector } from 'components/SaleTunnel/AddressSelector';
-import { CreditCardSelector } from 'components/SaleTunnel/CreditCardSelector';
 import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import OpenEdxFullNameForm from 'components/OpenEdxFullNameForm';
 import { useSession } from 'contexts/SessionContext';
 import useOpenEdxProfile from 'hooks/useOpenEdxProfile';
+import { usePaymentSchedule } from 'hooks/usePaymentSchedule';
+import { Spinner } from 'components/Spinner';
 
 const messages = defineMessages({
   title: {
@@ -49,7 +49,7 @@ const messages = defineMessages({
 
 export const SaleTunnelInformation = () => {
   return (
-    <div className="sale-tunnel__information">
+    <div className="sale-tunnel__main__column sale-tunnel__information">
       <div>
         <h3 className="block-title mb-t">
           <FormattedMessage {...messages.title} />
@@ -64,15 +64,12 @@ export const SaleTunnelInformation = () => {
         </div>
       </div>
       <div>
-        <CreditCardSelector />
-      </div>
-      <div>
+        <PaymentScheduleBlock />
         <Total />
       </div>
     </div>
   );
 };
-
 const Email = () => {
   const { user } = useSession();
   const { data: openEdxProfileData } = useOpenEdxProfile({
@@ -98,9 +95,6 @@ const Total = () => {
   const { product } = useSaleTunnelContext();
   return (
     <div className="sale-tunnel__total">
-      <Alert type={VariantType.INFO}>
-        <FormattedMessage {...messages.totalInfo} />
-      </Alert>
       <div className="sale-tunnel__total__amount mt-t" data-testid="sale-tunnel__total__amount">
         <div className="block-title">
           <FormattedMessage {...messages.totalLabel} />
@@ -117,20 +111,22 @@ const Total = () => {
   );
 };
 
-/**
- * Ready for V2.
- */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PaymentScheduleBlock = () => {
-  return null;
+  const { props } = useSaleTunnelContext();
+  const query = usePaymentSchedule({
+    course_code: props.course?.code || props.enrollment!.course_run.course.code,
+    product_id: props.product.id,
+  });
+
+  if (!query.data || query.isLoading) {
+    return <Spinner size="large" />;
+  }
+
   return (
     <div className="payment-schedule">
-      <h4 className="block-title mb-t">Schedule</h4>
-      <Alert type={VariantType.INFO}>
-        The first payment occurs in 14 days, you will be notified to pay the first 30%.
-      </Alert>
+      <h4 className="block-title mb-t">Payment schedule</h4>
       <div className="mt-t">
-        <PaymentScheduleGrid />
+        <PaymentScheduleGrid schedule={query.data} />
       </div>
     </div>
   );
