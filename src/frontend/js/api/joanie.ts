@@ -44,7 +44,8 @@ function fetchWithJWT(routes: RequestInfo, options: RequestInit = {}) {
       // eslint-disable-next-line @typescript-eslint/dot-notation
       headers['Authorization'] = `Bearer ${accessToken}`;
     }
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_error) {
     throw new Error(
       `Joanie requires JWT Token to fetch data, but the configured authentication
       api does not contains a method \`accessToken\` to retrieve this information.`,

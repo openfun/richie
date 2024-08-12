@@ -199,7 +199,8 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
 
     try {
       await runSubmitCallbacks();
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
       // Example: full name failed saving to OpenEDX.
       setState(ComponentStates.IDLE);
       return;

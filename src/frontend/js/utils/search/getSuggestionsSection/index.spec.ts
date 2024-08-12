@@ -23,8 +23,9 @@ describe('utils/search/getSuggestionsSection', () => {
     let suggestionsSection;
     try {
       suggestionsSection = await getSuggestionsSection('courses', 'Courses', 'some search');
-    } catch (error) {
-      fail('Did not expect getSuggestionsSection to fail');
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
+      fail('Did not expect getSuggestionsSect ion to fail');
     }
 
     expect(suggestionsSection).toEqual({
