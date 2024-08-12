@@ -156,7 +156,8 @@ const ContractFrameContent = ({
     try {
       const link = await getInvitationLink();
       startStepSign(link);
-    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
       setErrored(intl.formatMessage(messages.errorSubmitForSignature));
     }
   };
@@ -200,7 +201,8 @@ const ContractFrameContent = ({
             round++;
             timeoutRef.current = setTimeout(poll, CONTRACT_SETTINGS.pollInterval);
           }
-        } catch (e) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (_error) {
           setErrored(intl.formatMessage(messages.errorPolling));
         }
       }
