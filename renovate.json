@@ -17,7 +17,8 @@
         "bootstrap",
         "node-fetch",
         "eslint",
-        "fetch-mock"
+        "fetch-mock",
+        "iframe-resizer"
       ]
     },
     {
