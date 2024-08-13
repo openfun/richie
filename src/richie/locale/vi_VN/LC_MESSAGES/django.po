@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-10 08:21+0000\n"
-"PO-Revision-Date: 2024-06-11 09:26\n"
+"POT-Creation-Date: 2024-07-03 14:08+0000\n"
+"PO-Revision-Date: 2024-08-13 13:46\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -553,13 +553,13 @@ msgid "blog posts"
 msgstr ""
 
 #: apps/courses/models/blog.py:92 apps/courses/models/category.py:164
-#: apps/courses/models/course.py:1031 apps/courses/models/organization.py:200
+#: apps/courses/models/course.py:1035 apps/courses/models/organization.py:200
 #: apps/courses/models/organization.py:234
 msgid "variant"
 msgstr ""
 
 #: apps/courses/models/blog.py:95 apps/courses/models/category.py:167
-#: apps/courses/models/course.py:1034 apps/courses/models/organization.py:203
+#: apps/courses/models/course.py:1038 apps/courses/models/organization.py:203
 #: apps/courses/models/organization.py:237
 msgid "Optional glimpse variant for a custom look."
 msgstr ""
@@ -664,163 +664,163 @@ msgstr ""
 msgid "courses"
 msgstr ""
 
-#: apps/courses/models/course.py:576
+#: apps/courses/models/course.py:580
 msgid "Self paced"
 msgstr ""
 
-#: apps/courses/models/course.py:591 apps/courses/models/course.py:600
+#: apps/courses/models/course.py:595 apps/courses/models/course.py:604
 msgid "~{pace:d} {effort_unit!s}/{duration_unit!s}"
 msgstr ""
 
-#: apps/courses/models/course.py:607
+#: apps/courses/models/course.py:611
 msgid "~{pace_hours:d}h{pace_minutes:d}/{duration_unit!s}"
 msgstr ""
 
-#: apps/courses/models/course.py:688
+#: apps/courses/models/course.py:692
 msgid "Manual"
 msgstr ""
 
-#: apps/courses/models/course.py:689
+#: apps/courses/models/course.py:693
 msgid "Synchronization to draft page"
 msgstr ""
 
-#: apps/courses/models/course.py:690
+#: apps/courses/models/course.py:694
 msgid "Synchronization to public page"
 msgstr ""
 
-#: apps/courses/models/course.py:697
+#: apps/courses/models/course.py:701
 msgid "course_and_search - show on the course page and include in search results"
 msgstr ""
 
-#: apps/courses/models/course.py:700
+#: apps/courses/models/course.py:704
 msgid "course_only - show on the course page and hide from search results"
 msgstr ""
 
-#: apps/courses/models/course.py:702
+#: apps/courses/models/course.py:706
 msgid "hidden - hide on the course page and from search results"
 msgstr ""
 
-#: apps/courses/models/course.py:709
+#: apps/courses/models/course.py:713
 msgid "compact - show minimal information about the course run (only for products)."
 msgstr ""
 
-#: apps/courses/models/course.py:712
+#: apps/courses/models/course.py:716
 msgid "detailed - show all information about the course run (only for products)."
 msgstr ""
 
-#: apps/courses/models/course.py:739
+#: apps/courses/models/course.py:743
 msgid "Synchronization mode"
 msgstr ""
 
-#: apps/courses/models/course.py:744
+#: apps/courses/models/course.py:748
 msgid "resource link"
 msgstr ""
 
-#: apps/courses/models/course.py:746
+#: apps/courses/models/course.py:750
 msgid "course start"
 msgstr ""
 
-#: apps/courses/models/course.py:747
+#: apps/courses/models/course.py:751
 msgid "course end"
 msgstr ""
 
-#: apps/courses/models/course.py:749
+#: apps/courses/models/course.py:753
 msgid "enrollment start"
 msgstr ""
 
-#: apps/courses/models/course.py:751
+#: apps/courses/models/course.py:755
 msgid "enrollment end"
 msgstr ""
 
-#: apps/courses/models/course.py:759
+#: apps/courses/models/course.py:763
 msgid "The list of languages in which the course content is available."
 msgstr ""
 
-#: apps/courses/models/course.py:762
+#: apps/courses/models/course.py:766
 msgid "enrollment count"
 msgstr ""
 
-#: apps/courses/models/course.py:765
+#: apps/courses/models/course.py:769
 msgid "The number of enrolled students"
 msgstr ""
 
-#: apps/courses/models/course.py:768
+#: apps/courses/models/course.py:772
 msgid "catalog visibility"
 msgstr ""
 
-#: apps/courses/models/course.py:783
+#: apps/courses/models/course.py:787
 msgid "course run"
 msgstr ""
 
-#: apps/courses/models/course.py:784
+#: apps/courses/models/course.py:788
 msgid "course runs"
 msgstr ""
 
-#: apps/courses/models/course.py:969
+#: apps/courses/models/course.py:973
 msgid "title"
 msgstr ""
 
-#: apps/courses/models/course.py:974
+#: apps/courses/models/course.py:978
 msgid "Course run translation"
 msgstr ""
 
-#: apps/courses/models/course.py:975
+#: apps/courses/models/course.py:979
 msgid "Course run translations"
 msgstr ""
 
-#: apps/courses/models/course.py:980
+#: apps/courses/models/course.py:984
 msgid "Empty title"
 msgstr ""
 
-#: apps/courses/models/course.py:1041
+#: apps/courses/models/course.py:1045
 msgid "course plugin"
 msgstr ""
 
-#: apps/courses/models/course.py:1042
+#: apps/courses/models/course.py:1046
 msgid "course plugins"
 msgstr ""
 
-#: apps/courses/models/course.py:1059 plugins/large_banner/models.py:39
+#: apps/courses/models/course.py:1063 plugins/large_banner/models.py:39
 msgid "logo"
 msgstr ""
 
-#: apps/courses/models/course.py:1061
+#: apps/courses/models/course.py:1065
 msgid "url"
 msgstr ""
 
-#: apps/courses/models/course.py:1064 apps/courses/models/course.py:1088
+#: apps/courses/models/course.py:1068 apps/courses/models/course.py:1092
 msgid "name"
 msgstr ""
 
-#: apps/courses/models/course.py:1066 apps/courses/models/course.py:1089
+#: apps/courses/models/course.py:1070 apps/courses/models/course.py:1093
 msgid "content"
 msgstr ""
 
-#: apps/courses/models/course.py:1071
+#: apps/courses/models/course.py:1075
 msgid "licence"
 msgstr ""
 
-#: apps/courses/models/course.py:1072
+#: apps/courses/models/course.py:1076
 msgid "licences"
 msgstr ""
 
-#: apps/courses/models/course.py:1094
+#: apps/courses/models/course.py:1098
 msgid "Licence translation"
 msgstr ""
 
-#: apps/courses/models/course.py:1095
+#: apps/courses/models/course.py:1099
 msgid "licence translations"
 msgstr ""
 
-#: apps/courses/models/course.py:1109
+#: apps/courses/models/course.py:1113
 msgid "description"
 msgstr ""
 
-#: apps/courses/models/course.py:1113
+#: apps/courses/models/course.py:1117
 msgid "licence plugin"
 msgstr ""
 
-#: apps/courses/models/course.py:1114
+#: apps/courses/models/course.py:1118
 msgid "licence plugins"
 msgstr ""
 
@@ -1081,13 +1081,13 @@ msgid "Complementary information"
 msgstr ""
 
 #: apps/courses/settings/__init__.py:223
-#: apps/courses/templates/courses/cms/course_detail.html:482
+#: apps/courses/templates/courses/cms/course_detail.html:483
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:47
 msgid "License for the course content"
 msgstr ""
 
 #: apps/courses/settings/__init__.py:228
-#: apps/courses/templates/courses/cms/course_detail.html:493
+#: apps/courses/templates/courses/cms/course_detail.html:494
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:56
 msgid "License for the content created by course participants"
 msgstr ""
@@ -1418,7 +1418,7 @@ msgstr ""
 msgid "Enter here the detailed course plan."
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:404
+#: apps/courses/templates/courses/cms/course_detail.html:405
 msgid "\n"
 "                                            This course is part of a program\n"
 "                                        "
@@ -1427,37 +1427,37 @@ msgid_plural "\n"
 "                                        "
 msgstr[0] ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:433
+#: apps/courses/templates/courses/cms/course_detail.html:434
 msgctxt "course_detail__title"
 msgid "Course team"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:438
+#: apps/courses/templates/courses/cms/course_detail.html:439
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:13
 msgid "Who are the teachers in the course team?"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:452
+#: apps/courses/templates/courses/cms/course_detail.html:453
 msgctxt "course_detail__title"
 msgid "Organizations"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:457
+#: apps/courses/templates/courses/cms/course_detail.html:458
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:32
 msgid "What are the organizations publishing this course?"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:478
+#: apps/courses/templates/courses/cms/course_detail.html:479
 msgctxt "course_detail__title"
 msgid "License"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:485
+#: apps/courses/templates/courses/cms/course_detail.html:486
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:50
 msgid "What is the license for the course content?"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:496
+#: apps/courses/templates/courses/cms/course_detail.html:497
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:59
 msgid "What is the license for the content created by course participants?"
 msgstr ""
