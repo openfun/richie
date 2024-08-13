@@ -207,10 +207,6 @@
     "description": "Course run languages",
     "message": "Disponible en {languages}"
   },
-  "components.CourseProductItem.contractSignActionLabel": {
-    "description": "Label of \"sign contract\" action on the syllabus.",
-    "message": "Sign your training contract"
-  },
   "components.CourseProductItem.fromTo": {
     "description": "Course run date range",
     "message": "From {from} {to, select, undefined {} other {to {to}}}"
@@ -227,17 +223,9 @@
     "description": "Message displayed when no seats are available for the product",
     "message": "Sorry, no seats available for now"
   },
-  "components.CourseProductItem.pending": {
-    "description": "Message displayed when authenticated user has purchased the product but order is still pending",
-    "message": "Pending"
-  },
   "components.CourseProductItem.purchased": {
     "description": "Message displayed when authenticated user owned the product",
     "message": "Acheté"
-  },
-  "components.CourseProductItem.signatureNeeded": {
-    "description": "Banner displayed when the contract is not signed on the syllabus",
-    "message": "You need to sign your training contract before enrolling to course runs"
   },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
@@ -589,7 +577,7 @@
   },
   "components.DashboardItem.Order.ContractFrame.finishedDescription": {
     "description": "Message displayed inside the contract signin modal when the contract is signed.",
-    "message": "You will receive an email once your contract will be fully signed. You can now enroll in your course runs!"
+    "message": "You will receive an email once your contract will be fully signed. You can now finalize your subscription."
   },
   "components.DashboardItem.Order.ContractFrame.loadingContract": {
     "description": "Message displayed inside the contract signin modal when loading the contract.",
@@ -603,73 +591,97 @@
     "description": "Message displayed inside the contract signin modal when polling the order.",
     "message": "We are waiting for the signature to be validated from our signature platform. It can take up to few minutes. Do not close this page."
   },
-  "components.DashboardItem.Order.OrderStateMessage.statusCanceled": {
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusAssigned": {
+    "description": "Status shown on the dashboard order item when order is assigned.",
+    "message": "Pending"
+  },
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusCanceled": {
     "description": "Status shown on the dashboard order item when order is canceled",
     "message": "Canceled"
   },
-  "components.DashboardItem.Order.OrderStateMessage.statusCompleted": {
-    "description": "Status shown on the dashboard order item when order is validated with certificate",
-    "message": "Completed"
-  },
-  "components.DashboardItem.Order.OrderStateMessage.statusDraft": {
-    "description": "Status shown on the dashboard order item when order is draft.",
-    "message": "Draft"
-  },
-  "components.DashboardItem.Order.OrderStateMessage.statusOnGoing": {
-    "description": "Status shown on the dashboard order item when order is validated with no certificate",
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusCompleted": {
+    "description": "Status shown on the dashboard order item when order is completed",
     "message": "On going"
   },
-  "components.DashboardItem.Order.OrderStateMessage.statusOther": {
-    "description": "Status shown on the dashboard order item when order status is unknown",
-    "message": "{state}"
-  },
-  "components.DashboardItem.Order.OrderStateMessage.statusPending": {
-    "description": "Status shown on the dashboard order item when order is pending.",
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusDraft": {
+    "description": "Status shown on the dashboard order item when order is draft.",
     "message": "Pending"
   },
-  "components.DashboardItem.Order.OrderStateMessage.statusSubmitted": {
-    "description": "Status shown on the dashboard order item when order is submitted.",
-    "message": "Submitted"
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusFailedPayment": {
+    "description": "Status shown on the dashboard order item when order is in failed payment state",
+    "message": "Last direct debit has failed"
   },
-  "components.DashboardItem.Order.OrderStateMessage.statusWaitingCounterSignature": {
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusNoPayment": {
+    "description": "Status shown on the dashboard order item when order is in no payment state",
+    "message": "First direct debit has failed"
+  },
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusPassed": {
+    "description": "Status shown on the dashboard order item when order is completed and has a certificate",
+    "message": "Successfully completed"
+  },
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusPending": {
+    "description": "Status shown on the dashboard order item when order is pending.",
+    "message": "Pending for the first direct debit"
+  },
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusPendingPayment": {
+    "description": "Status shown on the dashboard order item when order is pending for payment",
+    "message": "On going"
+  },
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusWaitingCounterSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
     "message": "On going"
   },
-  "components.DashboardItem.Order.OrderStateMessage.statusWaitingSignature": {
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusWaitingPaymentMethod": {
+    "description": "Status shown on the dashboard order item when order is in to_save_payment_method state.",
+    "message": "Payment method is missing"
+  },
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusWaitingSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
     "message": "Signature required"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusAssigned": {
+    "description": "Status shown on the dashboard order item when order is assigned.",
+    "message": "Pending"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusCanceled": {
     "description": "Status shown on the dashboard order item when order is canceled",
     "message": "Canceled"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusCompleted": {
-    "description": "Status shown on the dashboard order item when order is validated with certificate",
-    "message": "Certified"
+    "description": "Status shown on the dashboard order item when order is completed",
+    "message": "On going"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusDraft": {
     "description": "Status shown on the dashboard order item when order is draft.",
     "message": "Pending"
   },
-  "components.DashboardItem.Order.OrderStateTeacherMessage.statusOnGoing": {
-    "description": "Status shown on the dashboard order item when order is validated with no certificate",
-    "message": "Enrolled"
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusFailedPayment": {
+    "description": "Status shown on the dashboard order item when order is in failed payment state",
+    "message": "Last direct debit has failed"
   },
-  "components.DashboardItem.Order.OrderStateTeacherMessage.statusOther": {
-    "description": "Status shown on the dashboard order item when order status is unknown",
-    "message": "{state}"
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusNoPayment": {
+    "description": "Status shown on the dashboard order item when order is in no payment state",
+    "message": "First direct debit has failed"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusPassed": {
+    "description": "Status shown on the dashboard order item when order is completed with certificate",
+    "message": "Certified"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusPending": {
     "description": "Status shown on the dashboard order item when order is pending.",
-    "message": "Pending"
+    "message": "Pending for the first direct debit"
   },
-  "components.DashboardItem.Order.OrderStateTeacherMessage.statusSubmitted": {
-    "description": "Status shown on the dashboard order item when order is submitted.",
-    "message": "Pending"
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusPendingPayment": {
+    "description": "Status shown on the dashboard order item when order is validated with no certificate",
+    "message": "On going"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusWaitingCounterSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
     "message": "To be signed"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusWaitingPaymentMethod": {
+    "description": "Status shown on the dashboard order item when order is in to_save_payment_method state.",
+    "message": "Payment method is missing"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusWaitingSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
@@ -679,9 +691,9 @@
     "description": "Accessible label for the more button on the dashboard item",
     "message": "See additional options"
   },
-  "components.DashboardItemCourseEnrollingRun.contractUnsigned": {
-    "description": "Message displayed as disabled button title when a contract needs to be signed.",
-    "message": "You have to sign the training contract before enrolling to your course."
+  "components.DashboardItemCourseEnrollingRun.cannotEnroll": {
+    "description": "Message displayed as disabled button title when the order state does not allow enrollment.",
+    "message": "You cannot enroll yet to this training."
   },
   "components.DashboardItemCourseEnrollingRun.courseRunsLoading": {
     "description": "Text displayed when course runs list is loading",
@@ -727,6 +739,50 @@
     "description": "Text shown when a course run is not active",
     "message": "Not enrolled"
   },
+  "components.DashboardItemOrder.OrderPaymentRetryModal.description": {
+    "description": "Message displayed when payment is needed",
+    "message": "The payment failed, please choose another payment method or add a new one during the payment"
+  },
+  "components.DashboardItemOrder.OrderPaymentRetryModal.errorAbortingPolling": {
+    "description": "Error message when submitting installment payment fails",
+    "message": "Your payment has succeeded but your order validation is taking too long, you can close this dialog and come back later."
+  },
+  "components.DashboardItemOrder.OrderPaymentRetryModal.errorFailedSubmitInstallmentPayment": {
+    "description": "Error message when submitting installment payment fails",
+    "message": "Failed to submit installment payment, please retry later."
+  },
+  "components.DashboardItemOrder.OrderPaymentRetryModal.paymentInProgress": {
+    "description": "Label for screen reader when a retry payment is in progress.",
+    "message": "Payment in progress"
+  },
+  "components.DashboardItemOrder.OrderPaymentRetryModal.submit": {
+    "description": "Message displayed when payment is needed",
+    "message": "Pay {amount}"
+  },
+  "components.DashboardItemOrder.OrderPaymentRetryModal.successDescription": {
+    "description": "Description of the payment success modal",
+    "message": "The payment was successful"
+  },
+  "components.DashboardItemOrder.OrderPaymentRetryModal.successTitle": {
+    "description": "Title of the payment success modal",
+    "message": "Payment successful"
+  },
+  "components.DashboardItemOrder.OrderPaymentRetryModal.title": {
+    "description": "Title of the payment retry modal",
+    "message": "Retry payment"
+  },
+  "components.DashboardItemOrder.PaymentModal.paymentMethodTitle": {
+    "description": "Title of the payment method section",
+    "message": "Payment method"
+  },
+  "components.DashboardItemOrder.PaymentModal.scheduleTitle": {
+    "description": "Title of the payment schedule",
+    "message": "Repayment schedule"
+  },
+  "components.DashboardItemOrder.PaymentModal.title": {
+    "description": "Title of the payment modal",
+    "message": "Payment details"
+  },
   "components.DashboardItemOrder.contactButton": {
     "description": "Button to contact the organization",
     "message": "Contact"
@@ -762,6 +818,26 @@
   "components.DashboardItemOrder.organizationPhoneContactLabel": {
     "description": "Label for the organization phone contact",
     "message": "Phone"
+  },
+  "components.DashboardItemOrder.paymentButton": {
+    "description": "Button label for the payment block",
+    "message": "Manage payment"
+  },
+  "components.DashboardItemOrder.paymentLabel": {
+    "description": "Label for the payment block",
+    "message": "You can see and manage all installments."
+  },
+  "components.DashboardItemOrder.paymentNeededButton": {
+    "description": "Button label for the payment needed message",
+    "message": "Pay {amount}"
+  },
+  "components.DashboardItemOrder.paymentNeededMessage": {
+    "description": "Message displayed when payment is needed",
+    "message": "The payment failed, please update your payment method"
+  },
+  "components.DashboardItemOrder.paymentTitle": {
+    "description": "Label for the payment block",
+    "message": "Payment"
   },
   "components.DashboardItemOrder.syllabusLinkLabel": {
     "description": "Syllabus link label on order details",
@@ -1047,41 +1123,17 @@
     "description": "Error message shown when user aborts the payment.",
     "message": "Vous avez annulé le paiement."
   },
-  "components.PaymentButton.errorAborting": {
-    "description": "Error message shown when user asks to abort the payment.",
-    "message": "Aborting the payment..."
-  },
-  "components.PaymentButton.errorAddress": {
-    "description": "Error message shown when the user didn't select a billing address.",
-    "message": "You must have a billing address."
-  },
   "components.PaymentButton.errorDefault": {
     "description": "Error message shown when payment creation request failed.",
     "message": "Une erreur s'est produite lors du paiement. Veuillez réessayer plus tard."
   },
-  "components.PaymentButton.errorFullProduct": {
-    "description": "Error message shown when payment creation request failed because there is no remaining available seat for the product.",
-    "message": "There are no more places available for this product."
+  "components.PaymentButton.tokenizingPayment": {
+    "description": "Label for screen reader when a credit card is being tokenized.",
+    "message": "Payment method definition in progress."
   },
-  "components.PaymentButton.errorTerms": {
-    "description": "Error message shown when the user didn't check the terms checkbox.",
-    "message": "You must accept the terms."
-  },
-  "components.PaymentButton.pay": {
-    "description": "CTA label to proceed to the payment of the product",
-    "message": "Pay {price}"
-  },
-  "components.PaymentButton.payInOneClick": {
-    "description": "CTA label to proceed to the one click payment of the product",
-    "message": "Pay in one click {price}"
-  },
-  "components.PaymentButton.paymentInProgress": {
-    "description": "Label for screen reader when a payment is in progress.",
-    "message": "Payment in progress"
-  },
-  "components.PaymentButton.termsMessage": {
-    "description": "Message next to the checkbox in order to accept the terms",
-    "message": "By checking this box, you accept the"
+  "components.PaymentScheduleGrid.withdrawnAt": {
+    "description": "Label displayed to explain when the installment will be withdrawn.",
+    "message": "Withdrawn on {date}"
   },
   "components.ProductCertificateFooter.buyProductCertificateLabel": {
     "description": "Label on the enrollment row that propose to buy a product of type certificate",
@@ -1137,11 +1189,7 @@
   },
   "components.SaleTunnel.CreditCardSelector.creditCardEmptyInlineDescription": {
     "description": "Description for the empty credit card inline",
-    "message": "Use another credit card during payment"
-  },
-  "components.SaleTunnel.CreditCardSelector.description": {
-    "description": "Description for the credit card section",
-    "message": "Choose your payment method or add a new one during the payment."
+    "message": "Use another credit card"
   },
   "components.SaleTunnel.CreditCardSelector.editCreditCardAriaLabel": {
     "description": "Aria label for the edit credit card button",
@@ -1171,10 +1219,6 @@
     "description": "Validate button for the credit card modal",
     "message": "Validate"
   },
-  "components.SaleTunnel.CreditCardSelector.title": {
-    "description": "Title for the credit card section",
-    "message": "Payment method"
-  },
   "components.SaleTunnel.Information.description": {
     "description": "Description of the information section",
     "message": "Those information will be used for billing"
@@ -1203,6 +1247,26 @@
     "description": "Label for the total amount",
     "message": "Total"
   },
+  "components.SaleTunnel.Sponsors.SaleTunnelSponsors.blockTitle": {
+    "description": "Title for the universities section in the sale tunnel",
+    "message": "University"
+  },
+  "components.SaleTunnel.SubscriptionButton.subscribe": {
+    "description": "Label of the button to subscribe to a product.",
+    "message": "Subscribe"
+  },
+  "components.SaleTunnel.SubscriptionButton.walkthroughToSavePayment": {
+    "description": "Message explaining the subscription process with only a payment method to set.",
+    "message": "To enroll in the training, you will be invited to define a payment method."
+  },
+  "components.SaleTunnel.SubscriptionButton.walkthroughToSign": {
+    "description": "Message explaining the subscription process with only a training agreement to sign.",
+    "message": "To enroll in the training, you will be invited to sign the training agreement."
+  },
+  "components.SaleTunnel.SubscriptionButton.walkthroughToSignAndSavePayment": {
+    "description": "Message explaining the subscription process with a training agreement to sign and a payment method to set.",
+    "message": "To enroll in the training, you will first be invited to sign the training agreement and then to define a payment method."
+  },
   "components.SaleTunnel.callToActionDescription": {
     "description": "Additional description announced by screen readers when focusing the call to action buying button",
     "message": "Acheter {product}"
@@ -1223,13 +1287,17 @@
     "description": "Label displayed below the product's CTA when there is no remaining available seat for the product",
     "message": "Il n'y a pas plus de places disponibles pour ce produit."
   },
-  "components.SaleTunnelStepPayment.termsMessageLink": {
-    "description": "Clickable link included in the terms message",
-    "message": "General Terms of Sale"
+  "components.SaleTunnelSavePaymentMethod.cta": {
+    "description": "Label to the call to action to close sale tunnel",
+    "message": "Define"
   },
-  "components.SaleTunnelStepPayment.termsMessageLinkTitle": {
-    "description": "Title of clickable link included in the terms message",
-    "message": "Open a preview of the General Terms of Sale"
+  "components.SaleTunnelSavePaymentMethod.description": {
+    "description": "Text to explain what the user has to do in the 'save payment method' step",
+    "message": "This is the last step to validate your subscription, you must define a payment method. This one will be used to debit installments. You will not be charged during this step. Pick an existing payment method or add a new one."
+  },
+  "components.SaleTunnelSavePaymentMethod.title": {
+    "description": "Content title",
+    "message": "Define a payment method"
   },
   "components.SaleTunnelStepValidation.availableCourseRuns": {
     "description": "Course runs available text",
@@ -1249,43 +1317,19 @@
   },
   "components.SaleTunnelSuccess.congratulations": {
     "description": "Text displayed to thank user for his order",
-    "message": "Congratulations!"
+    "message": "Subscription confirmed!"
   },
   "components.SaleTunnelSuccess.cta": {
     "description": "Label to the call to action to close sale tunnel",
-    "message": "Start this course now!"
-  },
-  "components.SaleTunnelSuccess.ctaSignature": {
-    "description": "Label to the call to action to close sale tunnel if there is a pending signature",
-    "message": "Sign the training contract"
+    "message": "Close"
   },
   "components.SaleTunnelSuccess.successDetailMessage": {
-    "description": "Text to remind that order's invoice will be send by email soon",
-    "message": "You will receive your invoice by email in a few moments."
-  },
-  "components.SaleTunnelSuccess.successDetailSignatureMessage": {
-    "description": "Text to remind that order needs to be signed",
-    "message": "In order to enroll to course runs you first need to sign the training contract."
+    "description": "Text to explain when the user will be able to start its training.",
+    "message": "You will be able to start your training once the first installment will be paid."
   },
   "components.SaleTunnelSuccess.successMessage": {
     "description": "Message to confirm that order has been created",
-    "message": "Your order has been successfully created."
-  },
-  "components.SaleTunnelSuccessNotValidated.apology": {
-    "description": "Text displayed to thank user for his order",
-    "message": "Sorry, you'll have to wait a little longer!"
-  },
-  "components.SaleTunnelSuccessNotValidated.cta": {
-    "description": "Label to the call to action to close sale tunnel",
-    "message": "Close"
-  },
-  "components.SaleTunnelSuccessNotValidated.description": {
-    "description": "Text to remind that order's invoice will be send by email soon",
-    "message": "Your payment has succeeded but your order validation is taking too long, you can close this dialog and come back later. You will receive your invoice by email in a few moments."
-  },
-  "components.SaleTunnelSuccessNotValidated.title": {
-    "description": "Message to confirm that order has been created",
-    "message": "It takes too long to validate your order."
+    "message": "Your order has been successfully registered."
   },
   "components.Search.errorMessage": {
     "description": "Error message for Search view when the request to load courses fails",
@@ -1390,6 +1434,22 @@
   "components.StudentDashboardSidebar.subHeader": {
     "description": "Sub title of the dashboard sidebar",
     "message": "Vous êtes sur votre tableau de bord"
+  },
+  "components.SubscriptionButton.errorAddress": {
+    "description": "Error message shown when the user didn't select a billing address.",
+    "message": "You must have a billing address."
+  },
+  "components.SubscriptionButton.errorDefault": {
+    "description": "Error message shown when order creation request failed.",
+    "message": "An error occurred during order creation. Please retry later."
+  },
+  "components.SubscriptionButton.errorFullProduct": {
+    "description": "Error message shown when order creation request failed because there is no remaining available seat for the product.",
+    "message": "There are no more places available for this product."
+  },
+  "components.SubscriptionButton.orderCreationInProgress": {
+    "description": "Label for screen reader when an order creation is in progress.",
+    "message": "Order creation in progress"
   },
   "components.SyllabusAsideList.archived": {
     "description": "Message displayed on syllabus when there are archived course runs",
@@ -1775,10 +1835,6 @@
     "description": "Error message shown to the user when course fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération du cours. Veuillez réessayer plus tard."
   },
-  "hooks.useCreditCards.errorCreate": {
-    "description": "Error message shown to the user when credit card creation request fails.",
-    "message": "An error occurred while creating the credit card. Please retry later."
-  },
   "hooks.useCreditCards.errorDelete": {
     "description": "Error message shown to the user when credit card deletion request fails.",
     "message": "Une erreur s'est produite lors de la suppression de la carte de crédit. Veuillez réessayer plus tard."
@@ -1790,6 +1846,10 @@
   "hooks.useCreditCards.errorSelect": {
     "description": "Error message shown to the user when credit cards fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération des cartes de crédit. Veuillez réessayer plus tard."
+  },
+  "hooks.useCreditCards.errorTokenize": {
+    "description": "Error message shown to the user when credit card tokenize request fails.",
+    "message": "An error occurred while adding a credit card. Please retry later."
   },
   "hooks.useCreditCards.errorUpdate": {
     "description": "Error message shown to the user when credit card update request fails.",
@@ -1843,6 +1903,10 @@
     "description": "Error message shown to the user when openEdx profile fullname post request fails.",
     "message": "An error occurred while updating your full name. Please retry later."
   },
+  "hooks.useOrders.errorCancel": {
+    "description": "Error message shown to the user when cancel mutation failed.",
+    "message": "Cannot cancel the order."
+  },
   "hooks.useOrders.errorGet": {
     "description": "Error message shown to the user when orders fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération de vos commandes. Veuillez réessayer plus tard."
@@ -1850,6 +1914,10 @@
   "hooks.useOrders.errorNotFound": {
     "description": "Error message shown to the user when no orders matches.",
     "message": "Commandes introuvables."
+  },
+  "hooks.useOrders.errorSetPaymentMethod": {
+    "description": "Error message shown to the user when set payment method mutation failed.",
+    "message": "Cannot set the order's payment method."
   },
   "hooks.useOrdersEnrollments.errorGet": {
     "description": "Error message shown to the user when orders or enrollments fetch request fails.",
