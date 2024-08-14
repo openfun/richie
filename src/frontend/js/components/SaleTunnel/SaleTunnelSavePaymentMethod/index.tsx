@@ -10,7 +10,7 @@ import { Spinner } from 'components/Spinner';
 import PaymentInterfaces from 'components/PaymentInterfaces';
 import { useOrders } from 'hooks/useOrders';
 import { CreditCardSelector } from 'components/CreditCardSelector';
-import { useJoanieApi } from 'contexts/JoanieApiContext';
+import { PAYMENT_SETTINGS } from 'settings';
 
 const messages = defineMessages({
   title: {
@@ -48,11 +48,12 @@ const messages = defineMessages({
 
 const SaleTunnelSavePaymentMethod = () => {
   const initialCreditCards = useRef<CreditCard[]>();
-  const pollingTimeoutRef = useRef<NodeJS.Timeout>();
-  const JoanieApi = useJoanieApi();
+  const [shouldPoll, setShouldPoll] = useState(false);
   const [payment, setPayment] = useState<Payment>();
   const [error, setError] = useState<string>();
-  const creditCards = useCreditCards();
+  const creditCardsQuery = useCreditCards(undefined, {
+    refetchInterval: shouldPoll && PAYMENT_SETTINGS.pollInterval,
+  });
   const orders = useOrders(undefined, { enabled: false });
   const { order, nextStep, creditCard, setCreditCard } = useSaleTunnelContext();
 
@@ -64,23 +65,20 @@ const SaleTunnelSavePaymentMethod = () => {
   };
 
   const tokenizePaymentMethod = async () => {
-    const data = await creditCards.methods.tokenize();
+    const data = await creditCardsQuery.methods.tokenize();
     setPayment(data);
     setError(undefined);
   };
 
-  const waitForNewCreditCard = async () => {
-    const { results } = await JoanieApi.user.creditCards.get();
+  const waitForNewCreditCard = () => {
     const initialIds = initialCreditCards.current!.map((cc) => cc.id);
-    const newCard = results.find((cc) => !initialIds.includes(cc.id));
+    const newCard = creditCardsQuery.items.find((cc) => !initialIds.includes(cc.id));
 
-    if (!newCard) {
-      pollingTimeoutRef.current = setTimeout(waitForNewCreditCard, 1000);
-      return;
-    }
+    if (!newCard) return;
 
     setCreditCard(newCard);
-    await setPaymentMethod(newCard.id);
+    setShouldPoll(false);
+    setPaymentMethod(newCard.id);
   };
 
   const handleError = (message: string = PaymentErrorMessageId.ERROR_DEFAULT) => {
@@ -90,22 +88,17 @@ const SaleTunnelSavePaymentMethod = () => {
 
   useEffect(() => {
     if (!payment) {
-      initialCreditCards.current = creditCards.items;
+      initialCreditCards.current = creditCardsQuery.items;
+    } else {
+      waitForNewCreditCard();
     }
-  }, [creditCards]);
+  }, [creditCardsQuery.items]);
 
   useEffect(() => {
     if (order?.state !== OrderState.TO_SAVE_PAYMENT_METHOD) {
       nextStep();
     }
   }, [order]);
-
-  useEffect(
-    () => () => {
-      clearTimeout(pollingTimeoutRef.current);
-    },
-    [],
-  );
 
   return (
     <section
@@ -150,7 +143,11 @@ const SaleTunnelSavePaymentMethod = () => {
           </p>
         )}
         {payment && (
-          <PaymentInterfaces {...payment} onSuccess={waitForNewCreditCard} onError={handleError} />
+          <PaymentInterfaces
+            {...payment}
+            onSuccess={() => setShouldPoll(true)}
+            onError={handleError}
+          />
         )}
       </footer>
     </section>

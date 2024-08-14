@@ -23,3 +23,8 @@ export const CONTRACT_SETTINGS = {
   // Simulated sign request delay
   dummySignatureSignTimeout: 100,
 };
+
+export const PAYMENT_SETTINGS = {
+  // Interval in ms to poll the related order when a payment has succeeded.
+  pollInterval: 150,
+};
