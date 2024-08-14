@@ -1,7 +1,7 @@
 import { Children, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import c from 'classnames';
-import { ProductType, Product, CredentialOrder, PURCHASABLE_ORDER_STATES } from 'types/Joanie';
+import { ProductType, Product, CredentialOrder } from 'types/Joanie';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -156,7 +156,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
   });
 
   const order = productOrder as CredentialOrder;
-  const canPurchase = !order || PURCHASABLE_ORDER_STATES.includes(order.state);
+  const canPurchase = OrderHelper.isPurchasable(order);
   const hasPurchased = OrderHelper.isActive(order);
   const canEnroll = OrderHelper.allowEnrollment(order);
 
