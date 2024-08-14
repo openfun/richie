@@ -217,7 +217,6 @@ describe.each([
 
     // - Route to create order should have been called
     nbApiCalls += 1; // order create
-    nbApiCalls += 1; // order get (invalidate queries)
     nbApiCalls += 1; // useProductOrder call (invalidate from create)
 
     await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));

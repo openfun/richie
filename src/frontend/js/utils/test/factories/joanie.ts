@@ -484,7 +484,6 @@ export const SaleTunnelContextFactory = factory(
     billingAddress: undefined,
     setBillingAddress: noop,
     setCreditCard: noop,
-    onPaymentSuccess: noop,
     step: SaleTunnelStep.IDLE,
     registerSubmitCallback: noop,
     unregisterSubmitCallback: noop,
