@@ -8,7 +8,9 @@ from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
 
 from storages.backends.s3boto3 import S3Boto3Storage
 
-STATIC_POSTPROCESS_IGNORE_REGEX = re.compile(r"^richie\/js\/[0-9]*\..*\.index\.js$")
+STATIC_POSTPROCESS_IGNORE_REGEX = re.compile(
+    r"^richie\/js\/build\/[0-9]*\..*\.index\.js(\.map)?$"
+)
 
 
 class CDNManifestStaticFilesStorage(ManifestStaticFilesStorage):
