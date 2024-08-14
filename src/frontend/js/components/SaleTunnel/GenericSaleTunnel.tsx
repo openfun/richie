@@ -28,7 +28,6 @@ export interface SaleTunnelContextType {
   webAnalyticsEventKey: string;
 
   // internal
-  onPaymentSuccess: () => void;
   step: SaleTunnelStep;
 
   // meta
@@ -75,16 +74,6 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
     enrollmentId: props.enrollment?.id,
     productId: props.product.id,
   });
-
-  const {
-    methods: { refetch: refetchOmniscientOrders },
-  } = useOmniscientOrders();
-  const {
-    methods: { invalidate: invalidateOrders },
-  } = useOrders(undefined, { enabled: false });
-  const {
-    methods: { invalidate: invalidateEnrollments },
-  } = useEnrollments(undefined, { enabled: false });
   const [billingAddress, setBillingAddress] = useState<Address>();
   const [creditCard, setCreditCard] = useState<CreditCard>();
   const [step, setStep] = useState<SaleTunnelStep>(SaleTunnelStep.IDLE);
@@ -127,19 +116,6 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       creditCard,
       setCreditCard,
       nextStep,
-      onPaymentSuccess: () => {
-        nextStep();
-        WebAnalyticsAPIHandler()?.sendCourseProductEvent(
-          CourseProductEvent.PAYMENT_SUCCEED,
-          props.eventKey,
-        );
-        // Once the user has completed the purchase, we need to refetch the orders
-        // to update the ordersQuery cache
-        invalidateOrders();
-        refetchOmniscientOrders();
-        invalidateEnrollments();
-        props.onFinish?.(order!);
-      },
       step,
       registerSubmitCallback: (key, callback) => {
         setSubmitCallbacks((prev) => new Map(prev).set(key, callback));
@@ -230,6 +206,34 @@ export const GenericSaleTunnelInitialStep = (props: GenericSaleTunnelProps) => {
 };
 
 export const GenericSaleTunnelSuccessStep = (props: SaleTunnelProps) => {
+  const {
+    webAnalyticsEventKey,
+    props: { onFinish },
+    order,
+  } = useSaleTunnelContext();
+  const {
+    methods: { refetch: refetchOmniscientOrders },
+  } = useOmniscientOrders();
+  const {
+    methods: { invalidate: invalidateOrders },
+  } = useOrders(undefined, { enabled: false });
+  const {
+    methods: { invalidate: invalidateEnrollments },
+  } = useEnrollments(undefined, { enabled: false });
+
+  useEffect(() => {
+    WebAnalyticsAPIHandler()?.sendCourseProductEvent(
+      CourseProductEvent.PAYMENT_SUCCEED,
+      webAnalyticsEventKey,
+    );
+    // Once the user has completed the purchase, we need to refetch the orders
+    // to update the ordersQuery cache
+    invalidateOrders();
+    refetchOmniscientOrders();
+    invalidateEnrollments();
+    onFinish?.(order!);
+  }, []);
+
   return (
     <Modal {...props} size={ModalSize.MEDIUM}>
       <SaleTunnelSuccess closeModal={props.onClose} />
