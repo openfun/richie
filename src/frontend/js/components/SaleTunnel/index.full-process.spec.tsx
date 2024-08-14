@@ -328,11 +328,9 @@ describe('SaleTunnel', () => {
     fetchMock
       .post('https://joanie.endpoint/api/v1.0/credit-cards/tokenize-card/', PaymentFactory().one())
       .post(`https://joanie.endpoint/api/v1.0/orders/${order.id}/payment-method/`, 200)
-      .get(
-        'https://joanie.endpoint/api/v1.0/credit-cards/',
-        { results: [paymentMethod] },
-        { overwriteRoutes: true },
-      )
+      .get('https://joanie.endpoint/api/v1.0/credit-cards/', [paymentMethod], {
+        overwriteRoutes: true,
+      })
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
         [order],
