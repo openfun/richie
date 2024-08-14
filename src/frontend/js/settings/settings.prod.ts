@@ -31,8 +31,6 @@ export const REACT_QUERY_SETTINGS = {
 export const PAYMENT_SETTINGS = {
   // Interval in ms to poll the related order when a payment has succeeded.
   pollInterval: 1000,
-  // Number of retries
-  pollLimit: 30,
 };
 
 export const CONTRACT_SETTINGS = {

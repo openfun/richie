@@ -78,7 +78,7 @@ export const CreditCardSelector = ({
   const isMobile = useMatchMediaLg();
 
   const {
-    states: { fetching },
+    states: { fetching, isFetched },
     items: creditCards,
   } = useCreditCardsManagement();
 
@@ -101,7 +101,7 @@ export const CreditCardSelector = ({
 
   return (
     <div className="credit-card-selector">
-      {fetching ? (
+      {!isFetched && fetching ? (
         <Spinner />
       ) : (
         <>
