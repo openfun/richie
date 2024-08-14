@@ -6,6 +6,7 @@ import {
   OrderEnrollment,
   OrderState,
   PaymentScheduleState,
+  PURCHASABLE_ORDER_STATES,
 } from 'types/Joanie';
 
 export enum OrderStatus {
@@ -95,5 +96,10 @@ export class OrderHelper {
   static isActive(order?: Order | NestedCourseOrder | OrderEnrollment) {
     if (!order) return false;
     return ACTIVE_ORDER_STATES.includes(order.state);
+  }
+
+  static isPurchasable(order?: Order | NestedCourseOrder | OrderEnrollment) {
+    if (!order) return true;
+    return PURCHASABLE_ORDER_STATES.includes(order.state);
   }
 }
