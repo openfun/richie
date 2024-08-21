@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix LyraPopIn critical error
 - Fix typo in page-admin autocomplete url path
 - Fix course enrollment count shouldn't include the hidden runs.
 - Fix RDFa errors on Google Search Console

@@ -279,7 +279,8 @@ export const GenericPaymentButton = ({ buildOrderPayload }: Props) => {
         });
     } else if (error && !messages.hasOwnProperty(error)) {
       orderMethods.invalidate();
-    } else if (state === ComponentStates.ERROR) {
+    }
+    if (state === ComponentStates.ERROR) {
       setPayment(undefined);
     }
   }, [error]);
