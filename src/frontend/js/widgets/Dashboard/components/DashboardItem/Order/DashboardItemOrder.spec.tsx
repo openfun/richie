@@ -881,7 +881,7 @@ describe('<DashboardItemOrder/>', () => {
     ];
     fetchMock
       .post(
-        `https://joanie.endpoint/api/v1.0/orders/${order.id}/submit_installment_payment/`,
+        `https://joanie.endpoint/api/v1.0/orders/${order.id}/submit-installment-payment/`,
         paymentInfo,
       )
       .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, validOrder);

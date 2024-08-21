@@ -98,7 +98,7 @@ export const getRoutes = () => {
           download: `${baseUrl}/orders/:id/invoice/`,
         },
         submit_for_signature: `${baseUrl}/orders/:id/submit_for_signature/`,
-        submit_installment_payment: `${baseUrl}/orders/:id/submit_installment_payment/`,
+        submit_installment_payment: `${baseUrl}/orders/:id/submit-installment-payment/`,
         set_payment_method: `${baseUrl}/orders/:id/payment-method/`,
       },
       certificates: {
