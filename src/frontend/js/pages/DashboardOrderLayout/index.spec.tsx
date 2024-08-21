@@ -1,7 +1,8 @@
 import { findByRole, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
+import queryString from 'query-string';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CredentialOrder } from 'types/Joanie';
+import { CredentialOrder, NOT_CANCELED_ORDER_STATES } from 'types/Joanie';
 import { CredentialOrderFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
 import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
@@ -54,6 +55,14 @@ describe('<DashboardOrderLayout />', () => {
       { results: [order], next: null, previous: null, count: null },
       { overwriteRoutes: true },
     );
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
 
     render(WrapperWithDashboard(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
 

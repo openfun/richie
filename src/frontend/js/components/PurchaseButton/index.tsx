@@ -4,7 +4,7 @@ import { Button, ButtonProps, useModal } from '@openfun/cunningham-react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
 import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel';
-import { Organization } from 'types/Joanie';
+import { CourseLight, Organization } from 'types/Joanie';
 import { PacedCourse } from 'types';
 import { ProductHelper } from 'utils/ProductHelper';
 
@@ -52,7 +52,7 @@ interface PurchaseButtonPropsBase {
 
 interface CredentialPurchaseButtonProps extends PurchaseButtonPropsBase {
   product: Joanie.CredentialProduct;
-  course: PacedCourse;
+  course: PacedCourse | CourseLight;
   enrollment?: undefined;
 }
 
