@@ -96,12 +96,17 @@ const LyraPopIn = ({
     const handleFormError = async (error: KRError) => {
       // Do not close the pop-in if the error is a invalid data error (CLIENT_3XX).
       // https://docs.lyra.com/fr/rest/V4.0/javascript/features/js_error_management.html#client004
-      if (!error.errorCode.startsWith('CLIENT_3')) {
+      const { errorCode, errorMessage, detailedErrorMessage } = error;
+      // Since the latest version of Lyra SDK released on 20/08/2024,
+      // the error code CLIENT_106 is raised when the user closes the pop-in so with our
+      // current implementation it triggers an infinite loop...
+      // A patch from Lyra is planned, until that we have to ignore this error.
+      if (!errorCode.startsWith('CLIENT_3') && !['CLIENT_106'].includes(errorCode)) {
         shouldAbort.current = false;
         await KR.closePopin(formId);
-        let errorMessages = error.errorMessage;
-        if (error.detailedErrorMessage) {
-          errorMessages += `: ${error.detailedErrorMessage}`;
+        let errorMessages = errorMessage;
+        if (detailedErrorMessage) {
+          errorMessages += `: ${detailedErrorMessage}`;
         }
         handleError(errorMessages);
       }
