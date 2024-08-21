@@ -1,13 +1,12 @@
 import c from 'classnames';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useMemo } from 'react';
 import { Button, ButtonProps, useModal } from '@openfun/cunningham-react';
 import { useSession } from 'contexts/SessionContext';
 import * as Joanie from 'types/Joanie';
-import { isOpenedCourseRunCertificate, isOpenedCourseRunCredential } from 'utils/CourseRuns';
 import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel';
 import { Organization } from 'types/Joanie';
 import { PacedCourse } from 'types';
+import { ProductHelper } from 'utils/ProductHelper';
 
 const messages = defineMessages({
   loginToPurchase: {
@@ -77,26 +76,9 @@ const PurchaseButton = ({
   const intl = useIntl();
   const { user, login } = useSession();
 
-  const hasAtLeastOneCourseRun = useMemo(() => {
-    if (product.type === Joanie.ProductType.CERTIFICATE) {
-      if (!enrollment?.course_run) {
-        throw new Error(
-          'Unable to instanciate PurchaseButton with a product CERTIFICATE without the according CourseRun.',
-        );
-      }
-      return isOpenedCourseRunCertificate(enrollment.course_run.state);
-    }
-    return (
-      product.target_courses.length > 0 &&
-      product.target_courses.every(({ course_runs }) =>
-        course_runs.some((targetCourseRun) => isOpenedCourseRunCredential(targetCourseRun.state)),
-      )
-    );
-  }, [product]);
-
-  const hasAtLeastOneRemainingOrder =
-    typeof product?.remaining_order_count !== 'number' || product.remaining_order_count > 0;
-  const isPurchasable = hasAtLeastOneRemainingOrder && hasAtLeastOneCourseRun;
+  const hasOpenedTargetCourse = ProductHelper.hasOpenedTargetCourse(product, enrollment);
+  const hasRemainingSeat = ProductHelper.hasRemainingSeats(product);
+  const isPurchasable = hasRemainingSeat && hasOpenedTargetCourse;
 
   const saleTunnelModal = useModal({
     isOpenDefault: false,
@@ -121,7 +103,7 @@ const PurchaseButton = ({
             data-testid="PurchaseButton__cta"
             className={c('purchase-button__cta', className)}
             onClick={() => {
-              if (hasAtLeastOneCourseRun) {
+              if (hasOpenedTargetCourse) {
                 saleTunnelModal.open();
               }
             }}
@@ -136,7 +118,7 @@ const PurchaseButton = ({
           >
             {product.call_to_action}
           </Button>
-          {!hasAtLeastOneCourseRun && (
+          {!hasOpenedTargetCourse && (
             <p className="purchase-button__no-course-run">
               <FormattedMessage
                 {...(product.type === Joanie.ProductType.CREDENTIAL
@@ -145,7 +127,7 @@ const PurchaseButton = ({
               />
             </p>
           )}
-          {hasAtLeastOneCourseRun && !hasAtLeastOneRemainingOrder && (
+          {hasOpenedTargetCourse && !hasRemainingSeat && (
             <p className="purchase-button__no-course-run">
               <FormattedMessage {...messages.noRemainingOrder} />
             </p>
