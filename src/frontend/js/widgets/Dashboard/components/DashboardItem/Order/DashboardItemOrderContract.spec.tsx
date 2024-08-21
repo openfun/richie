@@ -77,7 +77,9 @@ describe('<DashboardItemOrder/> Contract', () => {
       await screen.findByRole('heading', { level: 5, name: product.title });
 
       expect(
-        screen.queryByText('You have to sign this training contract to access your training.'),
+        screen.queryByText(
+          'You have to sign this training contract to finalize your subscription.',
+        ),
       ).not.toBeInTheDocument();
       expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
       expect(screen.getByText('On going')).toBeInTheDocument();
@@ -111,7 +113,9 @@ describe('<DashboardItemOrder/> Contract', () => {
       await screen.findByRole('heading', { level: 5, name: product.title });
 
       expect(
-        screen.queryByText('You have to sign this training contract to access your training.'),
+        screen.queryByText(
+          'You have to sign this training contract to finalize your subscription.',
+        ),
       ).not.toBeInTheDocument();
       expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
       expect(screen.getByText('On going')).toBeInTheDocument();
@@ -147,7 +151,7 @@ describe('<DashboardItemOrder/> Contract', () => {
 
       expect(screen.getByText('Ref. ' + (order.course as CourseLight).code)).toBeInTheDocument();
       expect(
-        screen.getByText('You have to sign this training contract to access your training.'),
+        screen.getByText('You have to sign this training contract to finalize your subscription.'),
       ).toBeInTheDocument();
       expect(screen.getByText('Signature required')).toBeInTheDocument();
       expect(screen.getByRole('link', { name: 'Sign' })).toBeInTheDocument();
@@ -212,7 +216,7 @@ describe('<DashboardItemOrder/> Contract', () => {
       expect(screen.getByText('Signature required')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Sign' })).toBeInTheDocument();
       expect(
-        screen.getByText('You have to sign this training contract to access your training.'),
+        screen.getByText('You have to sign this training contract to finalize your subscription.'),
       ).toBeInTheDocument();
 
       expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
@@ -254,7 +258,9 @@ describe('<DashboardItemOrder/> Contract', () => {
       expect(screen.getByText('On going')).toBeInTheDocument();
       expect(screen.queryByRole('button', { name: 'Sign' })).not.toBeInTheDocument();
       expect(
-        screen.queryByText('You have to sign this training contract to access your training.'),
+        screen.queryByText(
+          'You have to sign this training contract to finalize your subscription.',
+        ),
       ).not.toBeInTheDocument();
 
       expect(screen.getByRole('button', { name: 'Download' })).toBeInTheDocument();
