@@ -15,7 +15,7 @@ const messages = defineMessages({
     id: 'components.ContractStatus.organizationSignedOn',
   },
   waitingLearnerSignature: {
-    defaultMessage: 'You have to sign this training contract to access your training.',
+    defaultMessage: 'You have to sign this training contract to finalize your subscription.',
     description: 'Label displayed when a training contract need to be signed by the learner',
     id: 'components.ContractStatus.waitingSignature',
   },

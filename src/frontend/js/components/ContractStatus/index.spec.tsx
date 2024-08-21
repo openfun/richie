@@ -23,7 +23,7 @@ describe('<ContractStatus />', () => {
     );
 
     expect(
-      screen.queryByText('You have to sign this training contract to access your training.'),
+      screen.queryByText('You have to sign this training contract to finalize your subscription.'),
     ).toBeInTheDocument();
 
     expect(screen.queryByText(/You signed this training contract/)).not.toBeInTheDocument();

@@ -122,7 +122,7 @@ describe.each([
     expect(await screen.findByText(contract.definition.title)).toBeInTheDocument();
     expect(screen.getByText(contract.order.product_title)).toBeInTheDocument();
     expect(
-      screen.getByText('You have to sign this training contract to access your training.'),
+      screen.getByText('You have to sign this training contract to finalize your subscription.'),
     ).toBeInTheDocument();
 
     expect(screen.queryByRole('button', { name: 'Sign' })).toBeInTheDocument();
@@ -149,7 +149,7 @@ describe.each([
     expect(await screen.findByText(contract.definition.title)).toBeInTheDocument();
     expect(screen.getByText(contract.order.product_title)).toBeInTheDocument();
     expect(
-      screen.getByText('You have to sign this training contract to access your training.'),
+      screen.getByText('You have to sign this training contract to finalize your subscription.'),
     ).toBeInTheDocument();
 
     expect(screen.queryByRole('link', { name: 'Sign' })).toBeInTheDocument();
