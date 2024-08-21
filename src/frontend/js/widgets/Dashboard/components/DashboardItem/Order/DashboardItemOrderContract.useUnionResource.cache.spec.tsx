@@ -3,6 +3,7 @@
 import fetchMock from 'fetch-mock';
 import { act, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import queryString from 'query-string';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import {
@@ -19,7 +20,7 @@ import { render } from 'utils/test/render';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
-import { OrderState } from 'types/Joanie';
+import { NOT_CANCELED_ORDER_STATES, OrderState } from 'types/Joanie';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -65,6 +66,16 @@ describe('<DashboardItemOrder/> Contract', () => {
         { results: [order], next: null, previous: null, count: 1 },
         { overwriteRoutes: true },
       );
+
+      // overwrite useProductOrder call
+      const orderQueryParameters = {
+        course_code: order.course.code,
+        product_id: order.product_id,
+        state: NOT_CANCELED_ORDER_STATES,
+      };
+      const queryParams = queryString.stringify(orderQueryParameters);
+      const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+      fetchMock.get(url, [order]);
 
       // mock useUnionResources calls
       fetchMock.get('begin:https://joanie.endpoint/api/v1.0/enrollments/', {
