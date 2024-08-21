@@ -1,9 +1,10 @@
 import fetchMock from 'fetch-mock';
 import { faker } from '@faker-js/faker';
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
+import queryString from 'query-string';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { CourseLight, OrderState } from 'types/Joanie';
+import { CourseLight, NOT_CANCELED_ORDER_STATES, OrderState } from 'types/Joanie';
 import {
   ContractDefinitionFactory,
   ContractFactory,
@@ -178,6 +179,15 @@ describe('<DashboardItemOrder/> Contract', () => {
         { overwriteRoutes: true },
       );
 
+      const orderQueryParameters = {
+        course_code: order.course.code,
+        product_id: order.product_id,
+        state: NOT_CANCELED_ORDER_STATES,
+      };
+      const queryParams = queryString.stringify(orderQueryParameters);
+      const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+      fetchMock.get(url, [order]);
+
       render(
         <DashboardTest initialRoute={LearnerDashboardPaths.ORDER.replace(':orderId', order.id)} />,
         { wrapper: BaseJoanieAppWrapper },
@@ -205,6 +215,15 @@ describe('<DashboardItemOrder/> Contract', () => {
         { overwriteRoutes: true },
       );
 
+      const orderQueryParameters = {
+        course_code: order.course.code,
+        product_id: order.product_id,
+        state: NOT_CANCELED_ORDER_STATES,
+      };
+      const queryParams = queryString.stringify(orderQueryParameters);
+      const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+      fetchMock.get(url, [order]);
+
       render(
         <DashboardTest initialRoute={LearnerDashboardPaths.ORDER.replace(':orderId', order.id)} />,
         { wrapper: BaseJoanieAppWrapper },
@@ -226,7 +245,15 @@ describe('<DashboardItemOrder/> Contract', () => {
       expect($enrollButtons).toHaveLength(order.target_courses[0].course_runs.length);
       $enrollButtons.forEach(($button) => expect($button).toBeDisabled());
 
-      await expectBannerError('You need to sign your contract before enrolling in a course run');
+      await expectBannerError(
+        'You have to sign your training contract to finalize your subscription.',
+      );
+
+      // The payment block should not display information about the payment schedule
+      const paymentBlock = screen.getByTestId('dashboard-item-payment-method');
+      within(paymentBlock).getByText(
+        'You will able to manage your payment installment here once your subscription is finalized.',
+      );
     });
 
     it('renders a writable order with a signed contract', async () => {
@@ -245,6 +272,15 @@ describe('<DashboardItemOrder/> Contract', () => {
         { results: [order], next: null, previous: null, count: null },
         { overwriteRoutes: true },
       );
+
+      const orderQueryParameters = {
+        course_code: order.course.code,
+        product_id: order.product_id,
+        state: NOT_CANCELED_ORDER_STATES,
+      };
+      const queryParams = queryString.stringify(orderQueryParameters);
+      const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+      fetchMock.get(url, [order]);
 
       render(
         <DashboardTest initialRoute={LearnerDashboardPaths.ORDER.replace(':orderId', order.id)} />,
@@ -291,6 +327,15 @@ describe('<DashboardItemOrder/> Contract', () => {
         { results: [order], next: null, previous: null, count: null },
         { overwriteRoutes: true },
       );
+
+      const orderQueryParameters = {
+        course_code: order.course.code,
+        product_id: order.product_id,
+        state: NOT_CANCELED_ORDER_STATES,
+      };
+      const queryParams = queryString.stringify(orderQueryParameters);
+      const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+      fetchMock.get(url, [order]);
 
       const DOWNLOAD_URL = `https://joanie.endpoint/api/v1.0/contracts/${
         order.contract!.id

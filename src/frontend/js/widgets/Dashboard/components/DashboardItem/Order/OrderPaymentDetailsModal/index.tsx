@@ -26,7 +26,7 @@ const messages = defineMessages({
   },
   scheduleTitle: {
     id: 'components.DashboardItemOrder.PaymentModal.scheduleTitle',
-    defaultMessage: 'Repayment schedule',
+    defaultMessage: 'Payment schedule',
     description: 'Title of the payment schedule',
   },
   paymentMethodTitle: {
@@ -54,6 +54,7 @@ export const OrderPaymentDetailsModal = ({ order, ...props }: PaymentModalProps)
   const intl = useIntl();
   const retryModal = useModal();
   const failedInstallment = OrderHelper.getFailedInstallment(order);
+
   return (
     <>
       <Modal {...props} size={ModalSize.MEDIUM} title={intl.formatMessage(messages.title)}>

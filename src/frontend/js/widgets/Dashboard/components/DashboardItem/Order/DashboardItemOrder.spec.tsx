@@ -12,6 +12,7 @@ import {
 import { faker } from '@faker-js/faker';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
+import queryString from 'query-string';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import {
   CourseStateFactory,
@@ -31,6 +32,7 @@ import {
   CourseLight,
   CourseRun,
   CredentialOrder,
+  NOT_CANCELED_ORDER_STATES,
   OrderState,
   PaymentScheduleState,
 } from 'types/Joanie';
@@ -257,6 +259,15 @@ describe('<DashboardItemOrder/>', () => {
     order.target_courses = [];
     const { product } = mockCourseProductWithOrder(order);
 
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
+
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />);
 
     await screen.findByRole('heading', { level: 5, name: product.title });
@@ -283,6 +294,15 @@ describe('<DashboardItemOrder/>', () => {
     ];
 
     const { product } = mockCourseProductWithOrder(order);
+
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
 
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />);
 
@@ -349,6 +369,14 @@ describe('<DashboardItemOrder/>', () => {
       { results: [order], next: null, previous: null, count: null },
       { overwriteRoutes: true },
     );
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
 
     // The order with an enrollment that will be returned from the API when the orders will be
     // invalided after the click on the Enroll button.
@@ -432,6 +460,15 @@ describe('<DashboardItemOrder/>', () => {
       { overwriteRoutes: true },
     );
 
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
+
     fetchMock.post('https://joanie.endpoint/api/v1.0/enrollments/', {
       status: HttpStatusCode.INTERNAL_SERVER_ERROR,
       body: 'Internal Server Error',
@@ -502,6 +539,14 @@ describe('<DashboardItemOrder/>', () => {
       { results: [order], next: null, previous: null, count: null },
       { overwriteRoutes: true },
     );
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
 
     // The order with new enrollment that will be returned from the API when the orders will be
     // invalided after the click on the Enroll button.
@@ -608,6 +653,14 @@ describe('<DashboardItemOrder/>', () => {
       { results: [order], next: null, previous: null, count: null },
       { overwriteRoutes: true },
     );
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
 
     const courseRun = order.target_courses[0].course_runs[0];
     const newEnrolledCourseRun = order.target_courses[0].course_runs[1];
@@ -693,6 +746,14 @@ describe('<DashboardItemOrder/>', () => {
       { results: [order], next: null, previous: null, count: null },
       { overwriteRoutes: true },
     );
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
 
     // The order with new enrollment that will be returned from the API when the orders will be
     // invalided after the click on the Enroll button.
@@ -772,6 +833,14 @@ describe('<DashboardItemOrder/>', () => {
       }).many(1),
     }).one();
     const { product } = mockCourseProductWithOrder(order);
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
 
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />);
 
@@ -808,6 +877,15 @@ describe('<DashboardItemOrder/>', () => {
 
     const { product } = mockCourseProductWithOrder(order);
 
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
+
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />);
 
     await screen.findByRole('heading', { level: 5, name: product.title });
@@ -836,6 +914,15 @@ describe('<DashboardItemOrder/>', () => {
 
     const { product } = mockCourseProductWithOrder(order);
 
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
+
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />);
 
     await screen.findByRole('heading', { level: 5, name: product.title });
@@ -851,6 +938,15 @@ describe('<DashboardItemOrder/>', () => {
   it('renders a writable order with organization details', async () => {
     const order: CredentialOrder = CredentialOrderFactory().one();
     const { product } = mockCourseProductWithOrder(order);
+
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
 
     render(<DashboardItemOrder order={order} writable={true} showDetailsButton={false} />);
 
@@ -885,6 +981,15 @@ describe('<DashboardItemOrder/>', () => {
         paymentInfo,
       )
       .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, validOrder);
+
+    const orderQueryParameters = {
+      course_code: order.course.code,
+      product_id: order.product_id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    const queryParams = queryString.stringify(orderQueryParameters);
+    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
+    fetchMock.get(url, [order]);
 
     order.state = OrderState.FAILED_PAYMENT;
     order.payment_schedule![1].state = PaymentScheduleState.REFUSED;
