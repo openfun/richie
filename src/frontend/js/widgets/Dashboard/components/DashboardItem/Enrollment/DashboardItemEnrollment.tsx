@@ -1,8 +1,17 @@
 import { useMemo } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Enrollment, isCertificateProduct } from 'types/Joanie';
 import { Enrolled } from '../CourseEnrolling';
 import { DashboardItem } from '..';
 import ProductCertificateFooter from './ProductCertificateFooter';
+
+const messages = defineMessages({
+  syllabusLinkLabel: {
+    id: 'components.DashboardItemEnrollment.syllabusLinkLabel',
+    description: 'Syllabus link label on order details',
+    defaultMessage: 'Go to syllabus',
+  },
+});
 
 interface DashboardItemCourseRunProps {
   enrollment: Enrollment;
@@ -38,5 +47,18 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
     return partialFooterList;
   }, [enrollment, course]);
 
-  return <DashboardItem title={course.title} code={'Ref. ' + course.code} footer={footerList} />;
+  return (
+    <DashboardItem
+      title={course.title}
+      code={'Ref. ' + course.code}
+      more={
+        <li>
+          <a className="selector__list__link" href={`/redirects/courses/${course.code}`}>
+            <FormattedMessage {...messages.syllabusLinkLabel} />
+          </a>
+        </li>
+      }
+      footer={footerList}
+    />
+  );
 };

@@ -1,5 +1,6 @@
 import { screen } from '@testing-library/react';
 import { faker } from '@faker-js/faker';
+import { userEvent } from '@testing-library/user-event';
 import { Enrollment } from 'types/Joanie';
 import {
   CourseStateFactory,
@@ -80,5 +81,27 @@ describe('<DashboardItemEnrollment/>', () => {
     screen.getByText(enrollment.course_run.course!.title);
     screen.getByText('Ref. ' + enrollment.course_run.course!.code);
     screen.getByText('Not enrolled');
+  });
+
+  it('renders a link to go to the syllabus', async () => {
+    const enrollment: Enrollment = EnrollmentFactory({
+      is_active: false,
+      course_run: CourseRunWithCourseFactory().one(),
+    }).one();
+
+    render(<DashboardItemEnrollment enrollment={enrollment} />);
+    screen.getByRole('heading', { level: 5, name: enrollment.course_run.course!.title });
+
+    const moreButton = screen.getByRole('combobox', {
+      name: 'See additional options',
+    });
+
+    const user = userEvent.setup();
+    await user.click(moreButton);
+
+    const link = screen.getByRole('link', { name: 'Go to syllabus' });
+    expect(link.getAttribute('href')).toBe(
+      '/redirects/courses/' + enrollment.course_run.course.code,
+    );
   });
 });
