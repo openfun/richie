@@ -49,7 +49,7 @@
     "@formatjs/intl-relativetimeformat": "11.2.14",
     "@hookform/resolvers": "3.9.0",
     "@lyracom/embedded-form-glue": "1.4.2",
-    "@openfun/cunningham-react": "2.9.3",
+    "@openfun/cunningham-react": "2.9.4",
     "@openfun/cunningham-tokens": "2.1.1",
     "@sentry/browser": "8.26.0",
     "@sentry/types": "8.26.0",
