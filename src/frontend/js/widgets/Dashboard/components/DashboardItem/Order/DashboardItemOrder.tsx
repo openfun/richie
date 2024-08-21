@@ -10,6 +10,7 @@ import { OrderHelper } from 'utils/OrderHelper';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import OrganizationBlock from 'widgets/Dashboard/components/DashboardItem/Order/OrganizationBlock';
 import CertificateItem from 'widgets/Dashboard/components/DashboardItem/Order/CertificateItem';
+import { ProductHelper } from 'utils/ProductHelper';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { DashboardItemCourseEnrolling } from '../CourseEnrolling';
 import { DashboardItem } from '../index';
@@ -42,6 +43,13 @@ const messages = defineMessages({
     description: 'CTA label displayed when the order is missing a payment method',
     defaultMessage: 'Define',
   },
+  notResumable: {
+    id: 'components.DashboardItemOrder.notResumable',
+    description:
+      'Message displayed when the order subscription is not completed but the product is no more purchasable',
+    defaultMessage:
+      'The subscription process cannot be resumed. The related training is no more purchasable.',
+  },
 });
 
 interface DashboardItemOrderProps {
@@ -67,6 +75,8 @@ export const DashboardItemOrder = ({
   const needsSignature = OrderHelper.orderNeedsSignature(order);
   const needsPaymentMethod = order.state === OrderState.TO_SAVE_PAYMENT_METHOD;
   const isActive = OrderHelper.isActive(order);
+  const isProductPurchasable = ProductHelper.isPurchasable(courseProductRelation?.product);
+  const isNotResumable = !isActive && !isProductPurchasable;
   const canEnroll = OrderHelper.allowEnrollment(order);
 
   if (!product) return null;
@@ -89,10 +99,19 @@ export const DashboardItemOrder = ({
           <>
             <div className="dashboard-item-order__footer">
               <div className="dashboard-item__block__status">
-                <Icon name={IconTypeEnum.SCHOOL} />
-                <OrderStateLearnerMessage order={order} />
+                {isNotResumable ? (
+                  <>
+                    <Icon name={IconTypeEnum.ROUND_CLOSE} size="small" />
+                    <FormattedMessage {...messages.notResumable} />
+                  </>
+                ) : (
+                  <>
+                    <Icon name={IconTypeEnum.SCHOOL} />
+                    <OrderStateLearnerMessage order={order} />
+                  </>
+                )}
               </div>
-              {showDetailsButton && (
+              {!isNotResumable && showDetailsButton && (
                 <RouterButton
                   size="small"
                   className="dashboard-item__button"
@@ -103,7 +122,7 @@ export const DashboardItemOrder = ({
                 </RouterButton>
               )}
             </div>
-            {!writable && needsSignature && (
+            {!writable && isProductPurchasable && needsSignature && (
               <DashboardItemContract
                 key={`DashboardItemOrderContract_${order.id}`}
                 title={product.title}
@@ -114,7 +133,7 @@ export const DashboardItemOrder = ({
                 mode="compact"
               />
             )}
-            {!writable && needsPaymentMethod && (
+            {!writable && isProductPurchasable && needsPaymentMethod && (
               <DashboardItem
                 title=""
                 data-testid={`dashboard-item-payment-method-${order.id}`}
@@ -150,33 +169,39 @@ export const DashboardItemOrder = ({
           </>
         }
       >
-        <DashboardSubItemsList
-          subItems={order.target_courses?.map((targetCourse) => (
-            <DashboardSubItem
-              title={targetCourse.title}
-              footer={
-                <DashboardItemCourseEnrolling
-                  writable={writable}
-                  course={targetCourse}
-                  order={order}
-                  activeEnrollment={CoursesHelper.findActiveCourseEnrollmentInOrder(
-                    targetCourse,
-                    order,
-                  )}
-                  notEnrolledUrl={generatePath(LearnerDashboardPaths.ORDER, {
-                    orderId: order.id,
-                  })}
-                  hideEnrollButtons={!canEnroll}
-                />
-              }
-            />
-          ))}
-        />
+        {!isNotResumable && (
+          <DashboardSubItemsList
+            subItems={order.target_courses?.map((targetCourse) => (
+              <DashboardSubItem
+                title={targetCourse.title}
+                footer={
+                  <DashboardItemCourseEnrolling
+                    writable={writable}
+                    course={targetCourse}
+                    order={order}
+                    activeEnrollment={CoursesHelper.findActiveCourseEnrollmentInOrder(
+                      targetCourse,
+                      order,
+                    )}
+                    notEnrolledUrl={generatePath(LearnerDashboardPaths.ORDER, {
+                      orderId: order.id,
+                    })}
+                    hideEnrollButtons={!canEnroll}
+                  />
+                }
+              />
+            ))}
+          />
+        )}
       </DashboardItem>
-      {showCertificate && !!product?.certificate_definition && (
-        <CertificateItem order={order} product={product} />
+      {!isNotResumable && (
+        <>
+          {showCertificate && !!product?.certificate_definition && (
+            <CertificateItem order={order} product={product} />
+          )}
+          {writable && <OrganizationBlock order={order} product={product} />}
+        </>
       )}
-      {writable && <OrganizationBlock order={order} product={product} />}
     </div>
   );
 };
