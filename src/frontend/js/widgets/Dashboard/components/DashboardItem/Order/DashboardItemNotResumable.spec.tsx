@@ -1,19 +1,18 @@
 /**
- * Test suite for DashboardItem component with an order in the state TO_SAVE_PAYMENT_METHOD.
+ * Test suite for DashboardItem component with a non-resumable order (inactive and related product
+ * is no more purchasable (no remaining seats if order group, some target courses are not opened)).
  */
+
 import fetchMock from 'fetch-mock';
-import { screen } from '@testing-library/react';
-import { within } from '@testing-library/dom';
+import { render, screen, within } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { CredentialOrderFactory } from 'utils/test/factories/joanie';
 import { OrderState } from 'types/Joanie';
-import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
-import { render } from 'utils/test/render';
+import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
-import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
-import { expectBannerError, expectNoBannerError } from 'utils/test/expectBanner';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -23,7 +22,7 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
-describe('DashboardItem / Save Payment Methode State', () => {
+describe('DashboardItemOrder / Not resumable', () => {
   setupJoanieSession();
   beforeEach(() => {
     fetchMock.get(
@@ -37,9 +36,9 @@ describe('DashboardItem / Save Payment Methode State', () => {
   });
 
   describe('non-writable', () => {
-    it('renders elements to explain that a payment method is missing', async () => {
+    it('renders elements to explain that the order process is not resumable', async () => {
       const order = CredentialOrderFactory({
-        state: OrderState.TO_SAVE_PAYMENT_METHOD,
+        state: OrderState.TO_SIGN,
       }).one();
 
       fetchMock.get('begin:https://joanie.endpoint/api/v1.0/orders/', {
@@ -50,6 +49,8 @@ describe('DashboardItem / Save Payment Methode State', () => {
       });
 
       const { product } = mockCourseProductWithOrder(order);
+      // Make product no more purchasable
+      product.remaining_order_count = 0;
 
       render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
         wrapper: BaseJoanieAppWrapper,
@@ -57,20 +58,17 @@ describe('DashboardItem / Save Payment Methode State', () => {
 
       const dashboardItem = await screen.findByTestId(`dashboard-item-order-${order.id}`);
       within(dashboardItem).getByRole('heading', { level: 5, name: product.title });
-      within(dashboardItem).getByText('A payment method is missing');
       within(dashboardItem).getByText(
-        'You must define a payment method to finalize your subscription.',
+        'The subscription process cannot be resumed. The related training is no more purchasable.',
       );
-      const link = within(dashboardItem).getByRole('link', { name: 'Define' });
-      expect(link).toHaveAttribute('href', `/courses/orders/${order.id}`);
-      await expectNoBannerError(
-        'You have to define a payment method to finalize your subscription.',
-      );
+
+      // No subitem should be displayed (target course details)
+      expect(within(dashboardItem).queryAllByTestId('dashboard-sub-item')).toHaveLength(0);
     });
   });
 
   describe('writable', () => {
-    it('renders elements to explain that a payment method is missing', async () => {
+    it('renders elements to explain that the order process is not resumable', async () => {
       const order = CredentialOrderFactory({
         state: OrderState.TO_SAVE_PAYMENT_METHOD,
       }).one();
@@ -85,6 +83,8 @@ describe('DashboardItem / Save Payment Methode State', () => {
       fetchMock.get(url, [order]);
 
       const { product } = mockCourseProductWithOrder(order);
+      // Make product no more purchasable
+      product.remaining_order_count = 0;
 
       render(
         <DashboardTest initialRoute={LearnerDashboardPaths.ORDER.replace(':orderId', order.id)} />,
@@ -95,22 +95,15 @@ describe('DashboardItem / Save Payment Methode State', () => {
 
       const dashboardItem = await screen.findByTestId(`dashboard-item-order-${order.id}`);
       within(dashboardItem).getByRole('heading', { level: 5, name: product.title });
-      expect(
-        within(dashboardItem).queryByText('A payment method is missing'),
-      ).not.toBeInTheDocument();
-      expect(within(dashboardItem).queryByRole('link', { name: 'Define' })).not.toBeInTheDocument();
-      await expectBannerError('You have to define a payment method to finalize your subscription.');
-      const link = screen.getByRole('link', { name: 'define a payment method' });
-      expect(link).toHaveAttribute('href', '#dashboard-item-payment-method');
-
-      // The payment block should display information about the missing payment method
-      const paymentBlock = screen.getByTestId('dashboard-item-payment-method');
-      const title = within(paymentBlock).getByText('Payment');
-      expect(title.parentElement).toHaveClass('dashboard-splitted-card__item__title--dot');
-      within(paymentBlock).getByText(
-        'To finalize your subscription, you must define a payment method.',
+      within(dashboardItem).getByText(
+        'The subscription process cannot be resumed. The related training is no more purchasable.',
       );
-      within(paymentBlock).getByRole('button', { name: 'Define' });
+
+      // No subitem should be displayed (target course details)
+      expect(within(dashboardItem).queryAllByTestId('dashboard-sub-item')).toHaveLength(0);
+
+      // Organization block should not be displayed
+      expect(within(dashboardItem).queryByTestId('organization-block')).toBeNull();
     });
   });
 });
