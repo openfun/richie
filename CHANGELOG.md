@@ -8,6 +8,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.29.0]
+
+### Added
+
+- On self-paced courses with single run display a simplified
+  version of the syllabus.
+
 ### Changed
 
 - Improve lyra error catching management
@@ -23,11 +30,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Removed
 
 - csrftoken in richie context
-
-### Added
-
-- On self-paced courses with single run display a simplified
-  version of the syllabus.
 
 ## [2.28.1]
 
@@ -2157,7 +2159,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.28.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.29.0...master
+[2.29.0]: https://github.com/openfun/richie/compare/v2.28.1...v2.29.0
 [2.28.1]: https://github.com/openfun/richie/compare/v2.28.0...v2.28.1
 [2.28.0]: https://github.com/openfun/richie/compare/v2.27.0...v2.28.0
 [2.27.0]: https://github.com/openfun/richie/compare/v2.26.0...v2.27.0
