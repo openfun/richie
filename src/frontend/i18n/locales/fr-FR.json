@@ -237,7 +237,7 @@
   },
   "components.CourseProductItem.signatureNeeded": {
     "description": "Banner displayed when the contract is not signed on the syllabus",
-    "message": "Vous devez signer votre contrat de formation afin de pouvoir vous inscrire aux sessions de cours"
+    "message": "Vous devez signer votre contrat de formation afin de pouvoir vous inscrire aux sessions"
   },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
@@ -589,7 +589,7 @@
   },
   "components.DashboardItem.Order.ContractFrame.finishedDescription": {
     "description": "Message displayed inside the contract signin modal when the contract is signed.",
-    "message": "Vous recevrez un email une fois que votre contrat sera entièrement signé. Vous pouvez dès à présent vous inscrire aux sessions de cours !"
+    "message": "Vous recevrez un email une fois que votre contrat sera entièrement signé. Vous pouvez dès à présent vous inscrire aux sessions de ce cours !"
   },
   "components.DashboardItem.Order.ContractFrame.loadingContract": {
     "description": "Message displayed inside the contract signin modal when loading the contract.",
@@ -681,7 +681,7 @@
   },
   "components.DashboardItemCourseEnrollingRun.contractUnsigned": {
     "description": "Message displayed as disabled button title when a contract needs to be signed.",
-    "message": "Vous devez signer votre contrat de formation afin de pouvoir vous inscrire aux sessions du cours."
+    "message": "Vous devez signer votre contrat de formation afin de pouvoir vous inscrire à votre cours."
   },
   "components.DashboardItemCourseEnrollingRun.courseRunsLoading": {
     "description": "Text displayed when course runs list is loading",
@@ -1053,7 +1053,7 @@
   },
   "components.PaymentButton.errorAddress": {
     "description": "Error message shown when the user didn't select a billing address.",
-    "message": "Vous devez avoir une adresse de facturation."
+    "message": "Vous devez sélectionner une adresse de facturation."
   },
   "components.PaymentButton.errorDefault": {
     "description": "Error message shown when payment creation request failed.",
@@ -1257,7 +1257,7 @@
   },
   "components.SaleTunnelSuccess.ctaSignature": {
     "description": "Label to the call to action to close sale tunnel if there is a pending signature",
-    "message": "Signer la convention de formation"
+    "message": "Signer le contrat de formation"
   },
   "components.SaleTunnelSuccess.successDetailMessage": {
     "description": "Text to remind that order's invoice will be send by email soon",
@@ -1265,7 +1265,7 @@
   },
   "components.SaleTunnelSuccess.successDetailSignatureMessage": {
     "description": "Text to remind that order needs to be signed",
-    "message": "Pour pouvoir débuter la formation, vous devez tout d'abord signer la convention de formation."
+    "message": "Pour pouvoir débuter la formation, vous devez tout d'abord signer le contrat de formation."
   },
   "components.SaleTunnelSuccess.successMessage": {
     "description": "Message to confirm that order has been created",
@@ -1442,6 +1442,22 @@
   "components.SyllabusCourseRun.languages": {
     "description": "Title of the languages section of an opened course run block",
     "message": "Langues"
+  },
+  "components.SyllabusCourseRunCompacted.course": {
+    "description": "Title of the course dates section of an opened course run block",
+    "message": "Cours"
+  },
+  "components.SyllabusCourseRunCompacted.languages": {
+    "description": "Title of the languages section of an opened course run block",
+    "message": "Langues"
+  },
+  "components.SyllabusCourseRunCompacted.selfPaceCoursePeriod": {
+    "description": "Course date of an opened and self paced course run block",
+    "message": "Disponible jusqu'au {endDate}"
+  },
+  "components.SyllabusCourseRunCompacted.selfPaceNoEndDate": {
+    "description": "Self paced course run block with no end date",
+    "message": "Disponible"
   },
   "components.SyllabusCourseRunsList.multipleOpenedCourseRuns": {
     "description": "Message displayed when there are multiple opened course runs on a syllabus",

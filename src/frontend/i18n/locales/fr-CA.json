@@ -229,7 +229,7 @@
   },
   "components.CourseProductItem.pending": {
     "description": "Message displayed when authenticated user has purchased the product but order is still pending",
-    "message": "En attente"
+    "message": "Pending"
   },
   "components.CourseProductItem.purchased": {
     "description": "Message displayed when authenticated user owned the product",
@@ -1049,11 +1049,11 @@
   },
   "components.PaymentButton.errorAborting": {
     "description": "Error message shown when user asks to abort the payment.",
-    "message": "Paiement en cours d'annulation..."
+    "message": "Aborting the payment..."
   },
   "components.PaymentButton.errorAddress": {
     "description": "Error message shown when the user didn't select a billing address.",
-    "message": "Vous devez avoir une adresse de facturation."
+    "message": "You must have a billing address."
   },
   "components.PaymentButton.errorDefault": {
     "description": "Error message shown when payment creation request failed.",
@@ -1061,7 +1061,7 @@
   },
   "components.PaymentButton.errorFullProduct": {
     "description": "Error message shown when payment creation request failed because there is no remaining available seat for the product.",
-    "message": "Il n'y a pas plus de places disponibles pour ce produit."
+    "message": "There are no more places available for this product."
   },
   "components.PaymentButton.errorTerms": {
     "description": "Error message shown when the user didn't check the terms checkbox.",
@@ -1069,15 +1069,15 @@
   },
   "components.PaymentButton.pay": {
     "description": "CTA label to proceed to the payment of the product",
-    "message": "Payer {price}"
+    "message": "Pay {price}"
   },
   "components.PaymentButton.payInOneClick": {
     "description": "CTA label to proceed to the one click payment of the product",
-    "message": "Payer en un clic {price}"
+    "message": "Pay in one click {price}"
   },
   "components.PaymentButton.paymentInProgress": {
     "description": "Label for screen reader when a payment is in progress.",
-    "message": "Paiement en cours"
+    "message": "Payment in progress"
   },
   "components.PaymentButton.termsMessage": {
     "description": "Message next to the checkbox in order to accept the terms",
@@ -1443,6 +1443,22 @@
     "description": "Title of the languages section of an opened course run block",
     "message": "Langues"
   },
+  "components.SyllabusCourseRunCompacted.course": {
+    "description": "Title of the course dates section of an opened course run block",
+    "message": "Course"
+  },
+  "components.SyllabusCourseRunCompacted.languages": {
+    "description": "Title of the languages section of an opened course run block",
+    "message": "Languages"
+  },
+  "components.SyllabusCourseRunCompacted.selfPaceCoursePeriod": {
+    "description": "Course date of an opened and self paced course run block",
+    "message": "Available until {endDate}"
+  },
+  "components.SyllabusCourseRunCompacted.selfPaceNoEndDate": {
+    "description": "Self paced course run block with no end date",
+    "message": "Available"
+  },
   "components.SyllabusCourseRunsList.multipleOpenedCourseRuns": {
     "description": "Message displayed when there are multiple opened course runs on a syllabus",
     "message": "{count} sessions sont actuellement ouvertes pour ce cours"
@@ -1761,7 +1777,7 @@
   },
   "hooks.useCreditCards.errorCreate": {
     "description": "Error message shown to the user when credit card creation request fails.",
-    "message": "Une erreur s'est produite lors de la création de la carte de crédit. Veuillez réessayer plus tard."
+    "message": "An error occurred while creating the credit card. Please retry later."
   },
   "hooks.useCreditCards.errorDelete": {
     "description": "Error message shown to the user when credit card deletion request fails.",

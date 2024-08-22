@@ -1443,6 +1443,22 @@
     "description": "Title of the languages section of an opened course run block",
     "message": "Languages"
   },
+  "components.SyllabusCourseRunCompacted.course": {
+    "description": "Title of the course dates section of an opened course run block",
+    "message": "Course"
+  },
+  "components.SyllabusCourseRunCompacted.languages": {
+    "description": "Title of the languages section of an opened course run block",
+    "message": "Languages"
+  },
+  "components.SyllabusCourseRunCompacted.selfPaceCoursePeriod": {
+    "description": "Course date of an opened and self paced course run block",
+    "message": "Available until {endDate}"
+  },
+  "components.SyllabusCourseRunCompacted.selfPaceNoEndDate": {
+    "description": "Self paced course run block with no end date",
+    "message": "Available"
+  },
   "components.SyllabusCourseRunsList.multipleOpenedCourseRuns": {
     "description": "Message displayed when there are multiple opened course runs on a syllabus",
     "message": "{count} course runs are currently open for this course"

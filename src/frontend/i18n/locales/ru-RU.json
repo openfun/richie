@@ -1049,7 +1049,7 @@
   },
   "components.PaymentButton.errorAborting": {
     "description": "Error message shown when user asks to abort the payment.",
-    "message": "Прерывание оплаты..."
+    "message": "Aborting the payment..."
   },
   "components.PaymentButton.errorAddress": {
     "description": "Error message shown when the user didn't select a billing address.",
@@ -1069,15 +1069,15 @@
   },
   "components.PaymentButton.pay": {
     "description": "CTA label to proceed to the payment of the product",
-    "message": "Оплатить {price}"
+    "message": "Pay {price}"
   },
   "components.PaymentButton.payInOneClick": {
     "description": "CTA label to proceed to the one click payment of the product",
-    "message": "Оплатить в один клик {price}"
+    "message": "Pay in one click {price}"
   },
   "components.PaymentButton.paymentInProgress": {
     "description": "Label for screen reader when a payment is in progress.",
-    "message": "Оплата в процессе"
+    "message": "Payment in progress"
   },
   "components.PaymentButton.termsMessage": {
     "description": "Message next to the checkbox in order to accept the terms",
@@ -1442,6 +1442,22 @@
   "components.SyllabusCourseRun.languages": {
     "description": "Title of the languages section of an opened course run block",
     "message": "Languages"
+  },
+  "components.SyllabusCourseRunCompacted.course": {
+    "description": "Title of the course dates section of an opened course run block",
+    "message": "Course"
+  },
+  "components.SyllabusCourseRunCompacted.languages": {
+    "description": "Title of the languages section of an opened course run block",
+    "message": "Languages"
+  },
+  "components.SyllabusCourseRunCompacted.selfPaceCoursePeriod": {
+    "description": "Course date of an opened and self paced course run block",
+    "message": "Available until {endDate}"
+  },
+  "components.SyllabusCourseRunCompacted.selfPaceNoEndDate": {
+    "description": "Self paced course run block with no end date",
+    "message": "Available"
   },
   "components.SyllabusCourseRunsList.multipleOpenedCourseRuns": {
     "description": "Message displayed when there are multiple opened course runs on a syllabus",
