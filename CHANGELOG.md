@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.29.1]
+
 ### Fixed
 
 - Fix LyraPopIn critical error (`CLIENT_101`)
@@ -2163,7 +2165,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.29.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.29.1...master
+[2.29.1]: https://github.com/openfun/richie/compare/v2.29.0...v2.29.1
 [2.29.0]: https://github.com/openfun/richie/compare/v2.28.1...v2.29.0
 [2.28.1]: https://github.com/openfun/richie/compare/v2.28.0...v2.28.1
 [2.28.0]: https://github.com/openfun/richie/compare/v2.27.0...v2.28.0
