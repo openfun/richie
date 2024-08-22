@@ -19,6 +19,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add link to the course syllabus in an enrollment item
     in the learner dashboard
 - Add `PaymentScheduleHelper` utils
+- Display installment information on certificate product blocks
 
 ### Changed
 

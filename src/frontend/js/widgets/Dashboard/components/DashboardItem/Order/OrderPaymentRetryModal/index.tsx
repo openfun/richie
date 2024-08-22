@@ -9,7 +9,13 @@ import {
 } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useRef, useState } from 'react';
-import { CreditCard, Order, PaymentInstallment, ACTIVE_ORDER_STATES } from 'types/Joanie';
+import {
+  CreditCard,
+  Order,
+  OrderEnrollment,
+  PaymentInstallment,
+  ACTIVE_ORDER_STATES,
+} from 'types/Joanie';
 import { CreditCardSelector } from 'components/CreditCardSelector';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { Payment, PaymentErrorMessageId } from 'components/PaymentInterfaces/types';
@@ -65,7 +71,7 @@ const messages = defineMessages({
 
 interface Props extends Pick<ModalProps, 'isOpen' | 'onClose'> {
   installment: PaymentInstallment;
-  order: Order;
+  order: Order | OrderEnrollment;
 }
 
 enum ComponentStates {
