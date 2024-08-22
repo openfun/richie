@@ -365,7 +365,10 @@ export interface NestedCredentialOrder extends AbstractNestedOrder {
   enrollment: null;
 }
 
-export type OrderEnrollment = Pick<Order, 'id' | 'state' | 'product_id' | 'certificate_id'>;
+export type OrderEnrollment = Pick<
+  Order,
+  'id' | 'state' | 'product_id' | 'certificate_id' | 'payment_schedule'
+>;
 
 export interface NestedCourseOrder {
   id: Order['id'];
