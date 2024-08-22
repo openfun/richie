@@ -5,7 +5,6 @@ import {
   Order,
   OrderEnrollment,
   OrderState,
-  PaymentScheduleState,
   PURCHASABLE_ORDER_STATES,
 } from 'types/Joanie';
 
@@ -79,12 +78,6 @@ export class OrderHelper {
       order.contract &&
       order.contract.student_signed_on &&
       !order.contract.organization_signed_on
-    );
-  }
-
-  static getFailedInstallment(order: Order) {
-    return order.payment_schedule?.find(
-      (installment) => installment.state === PaymentScheduleState.REFUSED,
     );
   }
 

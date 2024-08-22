@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add `PaymentScheduleHelper` utils
 - Add link to the course syllabus in an enrollment item
   in the learner dashboard
 - Display Payment Schedule into SaleTunnel

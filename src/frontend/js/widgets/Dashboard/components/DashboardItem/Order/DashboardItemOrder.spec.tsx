@@ -50,7 +50,7 @@ import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
-import { OrderHelper } from 'utils/OrderHelper';
+import PaymentScheduleHelper from 'utils/PaymentScheduleHelper';
 import { DashboardTest } from '../../DashboardTest';
 import { DashboardItemOrder } from './DashboardItemOrder';
 
@@ -1014,7 +1014,7 @@ describe('<DashboardItemOrder/>', () => {
 
     await screen.findByRole('heading', { level: 5, name: product.title });
     screen.getByText(/a payment failed, please update your payment method/i);
-    const failedInstallment = OrderHelper.getFailedInstallment(order)!;
+    const failedInstallment = PaymentScheduleHelper.getFailedInstallment(order.payment_schedule)!;
     const button = screen.getByRole('button', {
       name: 'Pay ' + formatPrice(failedInstallment.amount, failedInstallment.currency),
     });
