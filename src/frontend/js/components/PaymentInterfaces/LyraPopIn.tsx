@@ -98,10 +98,10 @@ const LyraPopIn = ({
       // https://docs.lyra.com/fr/rest/V4.0/javascript/features/js_error_management.html#client004
       const { errorCode, errorMessage, detailedErrorMessage } = error;
       // Since the latest version of Lyra SDK released on 20/08/2024,
-      // the error code CLIENT_106 is raised when the user closes the pop-in so with our
+      // error codes CLIENT_101, CLIENT_106 are raised when the user closes the pop-in so with our
       // current implementation it triggers an infinite loop...
       // A patch from Lyra is planned, until that we have to ignore this error.
-      if (!errorCode.startsWith('CLIENT_3') && !['CLIENT_106'].includes(errorCode)) {
+      if (!errorCode.startsWith('CLIENT_3') && !['CLIENT_101', 'CLIENT_106'].includes(errorCode)) {
         shouldAbort.current = false;
         await KR.closePopin(formId);
         let errorMessages = errorMessage;

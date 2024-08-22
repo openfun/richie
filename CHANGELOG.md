@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix LyraPopIn critical error (`CLIENT_101`)
+
 ## [2.29.0]
 
 ### Added
