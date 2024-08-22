@@ -13,10 +13,10 @@ import { useState, useEffect } from 'react';
 import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
 import { CreditCard, Order } from 'types/Joanie';
 import { CreditCardSelector } from 'components/CreditCardSelector';
-import { OrderHelper } from 'utils/OrderHelper';
 import { OrderPaymentRetryModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderPaymentRetryModal';
 import { Maybe } from 'types/utils';
 import { useCreditCard } from 'hooks/useCreditCards';
+import PaymentScheduleHelper from 'utils/PaymentScheduleHelper';
 
 const messages = defineMessages({
   title: {
@@ -53,7 +53,7 @@ interface PaymentModalProps extends Pick<ModalProps, 'isOpen' | 'onClose'> {
 export const OrderPaymentDetailsModal = ({ order, ...props }: PaymentModalProps) => {
   const intl = useIntl();
   const retryModal = useModal();
-  const failedInstallment = OrderHelper.getFailedInstallment(order);
+  const failedInstallment = PaymentScheduleHelper.getFailedInstallment(order.payment_schedule);
 
   return (
     <>

@@ -8,6 +8,7 @@ import { OrderPaymentDetailsModal } from 'widgets/Dashboard/components/Dashboard
 import { OrderPaymentRetryModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderPaymentRetryModal';
 import { SaleTunnel } from 'components/SaleTunnel';
 import { Spinner } from 'components/Spinner';
+import PaymentScheduleHelper from 'utils/PaymentScheduleHelper';
 
 const messages = defineMessages({
   paymentTitle: {
@@ -60,7 +61,7 @@ type Props = {
 
 const Installment = ({ order }: Props) => {
   const isActive = OrderHelper.isActive(order);
-  const failedInstallment = OrderHelper.getFailedInstallment(order);
+  const failedInstallment = PaymentScheduleHelper.getFailedInstallment(order.payment_schedule);
   const needsPaymentMethod = order.state === OrderState.TO_SAVE_PAYMENT_METHOD;
   const shouldDisplayDot = needsPaymentMethod || !!failedInstallment;
 
@@ -127,7 +128,7 @@ const InstallmentManager = ({ order }: Props) => {
   const intl = useIntl();
   const modal = useModal();
   const retryModal = useModal();
-  const failedInstallment = OrderHelper.getFailedInstallment(order);
+  const failedInstallment = PaymentScheduleHelper.getFailedInstallment(order.payment_schedule);
 
   const pay = async () => {
     retryModal.open();
