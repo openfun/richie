@@ -370,6 +370,7 @@ export const OrderEnrollmentFactory = factory((): OrderEnrollment => {
     id: faker.string.uuid(),
     product_id: faker.string.uuid(),
     state: OrderState.COMPLETED,
+    payment_schedule: PaymentInstallmentFactory().many(1),
   };
 });
 

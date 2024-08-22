@@ -1,10 +1,11 @@
-import { screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { screen, waitForElementToBeRemoved, within } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
 import {
   CertificateProduct,
   CourseLight,
   OrderState,
+  PaymentScheduleState,
   ProductType,
   PURCHASABLE_ORDER_STATES,
 } from 'types/Joanie';
@@ -19,6 +20,7 @@ import {
   OrderEnrollmentFactory,
   EnrollmentFactory,
   CertificateProductFactory,
+  PaymentInstallmentFactory,
 } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
@@ -56,11 +58,33 @@ jest.mock('components/SaleTunnel', () => ({
     return <div data-testid="SaleTunnelMock" />;
   },
 }));
+jest.mock('widgets/Dashboard/components/DashboardItem/Order/OrderPaymentRetryModal', () => ({
+  __esModule: true,
+  OrderPaymentRetryModal: ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+    if (!isOpen) return null;
+
+    return (
+      <div data-testid="OrderPaymentRetryModalMock">
+        <button onClick={onClose}>Trigger Close</button>
+      </div>
+    );
+  },
+}));
 
 describe('<ProductCertificateFooter/>', () => {
   let product: CertificateProduct;
   let course: CourseLight;
   setupJoanieSession();
+  const dateFormatter = Intl.DateTimeFormat('en', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+  const priceFormatter = (currency: string, price: number) =>
+    new Intl.NumberFormat('en', {
+      currency,
+      style: 'currency',
+    }).format(price);
 
   beforeEach(() => {
     product = CertificateProductFactory({ type: ProductType.CERTIFICATE }).one();
@@ -222,7 +246,7 @@ describe('<ProductCertificateFooter/>', () => {
     render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
       wrapper: BaseJoanieAppWrapper,
     });
-    // <TestWrapper client={client} />);
+
     const user = userEvent.setup();
     await expectNoSpinner('Loading orders and enrollments...');
     await screen.findByRole('heading', {
@@ -237,4 +261,97 @@ describe('<ProductCertificateFooter/>', () => {
     // Then the onFinish() callback of the SaleTunnel is automatically called via the mock.
     await waitForElementToBeRemoved(screen.queryByTestId('PurchaseButton__cta'));
   });
+
+  it.each([OrderState.PENDING, OrderState.PENDING_PAYMENT])(
+    'should display upcoming installment information if there is one (%s)',
+    (state) => {
+      const installment = PaymentInstallmentFactory({ state: PaymentScheduleState.PENDING }).one();
+      const order = OrderEnrollmentFactory({
+        certificate_id: undefined,
+        product_id: product.id,
+        state,
+        payment_schedule: [installment],
+      }).one();
+      const enrollment = EnrollmentFactory({ orders: [order] }).one();
+
+      render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
+
+      if (order.state === OrderState.PENDING) {
+        // As the order is in pending state, the user should see the following message.
+        screen.getByText('You will be able to pass the exam once the installment has been paid.', {
+          exact: false,
+        });
+      } else if (order.state === OrderState.PENDING_PAYMENT) {
+        expect(
+          screen.queryByText(
+            'You will be able to pass the exam once the installment has been paid.',
+            {
+              exact: false,
+            },
+          ),
+        ).toBeNull();
+      }
+
+      const amount = priceFormatter(installment.currency, installment.amount);
+      const dueDate = dateFormatter.format(new Date(installment.due_date));
+      screen.getByText(`The next installment (${amount}) will be withdrawn on the ${dueDate}.`, {
+        exact: false,
+        collapseWhitespace: false,
+      });
+    },
+  );
+
+  it.each([OrderState.NO_PAYMENT, OrderState.FAILED_PAYMENT])(
+    'should display installment refused information if the order has one (%s)',
+    async (state) => {
+      const installment = PaymentInstallmentFactory({ state: PaymentScheduleState.REFUSED }).one();
+      const order = OrderEnrollmentFactory({
+        certificate_id: undefined,
+        product_id: product.id,
+        state,
+        payment_schedule: [installment],
+      }).one();
+      const enrollment = EnrollmentFactory({ orders: [order] }).one();
+
+      fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, order);
+
+      render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
+
+      if (order.state === OrderState.NO_PAYMENT) {
+        // As the order is in no_payment state, the user should see the following message.
+        screen.getByText('You will be able to pass the exam once the installment has been paid.', {
+          exact: false,
+        });
+      } else if (order.state === OrderState.FAILED_PAYMENT) {
+        expect(
+          screen.queryByText(
+            'You will be able to pass the exam once the installment has been paid.',
+            {
+              exact: false,
+            },
+          ),
+        ).toBeNull();
+      }
+
+      const amount = priceFormatter(installment.currency, installment.amount);
+
+      screen.getByText(
+        `Last direct debit has failed. Please resolve your situation as soon as possible.`,
+      );
+      const button = screen.getByRole('button', { name: `Pay ${amount}` });
+
+      expect(screen.queryByTestId('OrderPaymentRetryModalMock')).not.toBeInTheDocument();
+      const user = userEvent.setup();
+      await user.click(button);
+
+      const retryModal = screen.getByTestId('OrderPaymentRetryModalMock');
+      const closeButton = within(retryModal).getByRole('button', { name: 'Trigger Close' });
+
+      fetchMock.resetHistory();
+      // Closing the retry modal should invalidate order query.
+      await user.click(closeButton);
+      expect(fetchMock.calls()).toHaveLength(1);
+      expect(fetchMock.lastUrl()).toBe(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`);
+    },
+  );
 });
