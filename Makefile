@@ -257,7 +257,7 @@ superuser: ## Create an admin user with password "admin"
 
 test-back: ## run back-end tests, or specific test like `make test-back tests/apps/core/test_web_analytics.py`
 	@args="$(filter-out $@,$(MAKECMDGOALS))" && \
-    DB_PORT=$(DB_PORT) bin/pytest $${args:-${1}}
+    DB_PORT=$(DB_PORT) bin/pytest --reuse-db $${args:-${1}}
 .PHONY: test-back
 
 # -- Internationalization

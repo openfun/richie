@@ -6,6 +6,7 @@
 from .blog import *
 from .category import *
 from .course import *
+from .index import *
 from .organization import *
 from .person import *
 from .program import *

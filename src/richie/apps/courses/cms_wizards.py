@@ -577,3 +577,73 @@ wizard_pool.register(
         weight=200,
     )
 )
+
+
+class IndexPageWizardForm(BaseWizardForm):
+    """
+    Opposed to other extensions, this wizard form allow for a null reverse id since
+    index pages are commonly at the root of the page tree.
+    """
+
+    model = models.IndexPage
+
+    def clean(self):
+        """
+        Bypass ``BasePageExtension.clean`` method in case of null reverse id
+        since it would lead to an exception.
+        """
+        if self.model.PAGE["reverse_id"]:
+            cleaned_data = super().clean()
+        else:
+            cleaned_data = super(BaseWizardForm, self).clean()
+
+            # If the slug is not explicitly set, generate it from the title
+            if cleaned_data.get("title") and not cleaned_data.get("slug"):
+                cleaned_data["slug"] = slugify(cleaned_data["title"])[:200]
+
+            if len(cleaned_data["slug"]) > 255:
+                raise forms.ValidationError(
+                    {"slug": [_("This slug is too long, it should be less than 255")]}
+                )
+
+            if Page.objects.filter(title_set__slug=cleaned_data["slug"]).exists():
+                raise forms.ValidationError(
+                    {"slug": [_("This slug is already in use")]}
+                )
+
+        return cleaned_data
+
+    @cached_property
+    def parent_page(self):
+        """
+        By pass ``BasePageExtension.parent_page`` property in case of null reverse id
+        since it would lead to exception.
+        """
+        if self.model.PAGE["reverse_id"]:
+            return super().parent_page
+
+        return None
+
+    def save(self):
+        """
+        The parent form from BasePageExtension created the page.
+        And this method creates the associated index extension.
+        """
+        page = super().save()
+        models.IndexPage.objects.create(extended_object=page)
+        return page
+
+
+class IndexPageWizard(Wizard):
+    """A page wizard to create a page with an IndexPage extension object."""
+
+
+wizard_pool.register(
+    IndexPageWizard(
+        title="New IndexPage",
+        weight=200,
+        model=models.IndexPage,
+        form=IndexPageWizardForm,
+        description="Create a new IndexPage instance",
+    )
+)
