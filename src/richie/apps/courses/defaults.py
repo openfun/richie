@@ -312,6 +312,10 @@ ORGANIZATIONS_PAGE = {
     "reverse_id": "organizations",
     "template": "courses/cms/organization_detail.html",
 }
+MENUENTRIES_PAGE = {
+    "reverse_id": None,
+    "template": "richie/single_column.html",
+}
 PERSONS_PAGE = {"reverse_id": "persons", "template": "courses/cms/person_detail.html"}
 PROGRAMS_PAGE = {
     "reverse_id": "programs",
@@ -382,3 +386,11 @@ EFFORT_UNITS = {
 # Maximum number of archived course runs displayed by default on course detail page.
 # The additional runs can be viewed by clicking on `View more` link.
 RICHIE_MAX_ARCHIVED_COURSE_RUNS = 10
+
+# Define possible hover color that can be choosen for an MainMenuEntry and to apply on
+# its menu item
+MENU_ENTRY_COLOR_CLASSES = getattr(
+    settings,
+    "RICHIE_MENU_ENTRY_COLOR_CLASSES",
+    (("", _("None")),),
+)

@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add Additional Information section for a category and
     use them in a course page
+- Added new page extension `MainMenuEntry`
 
 ## [2.33.0] - 2024-12-02
 

@@ -208,6 +208,11 @@
       @include sv-flex(0, 0, auto);
     }
 
+    // Define color variable for default item color on hover then available variants
+    @if r-theme-val(topbar, item-hover-color) {
+      --r--menu--item--hover--color: #{r-theme-val(topbar, item-hover-color)};
+    }
+
     & > a {
       @include sv-flex(1, 0, 100%);
       display: flex;
@@ -228,6 +233,7 @@
         @include media-breakpoint-up($r-topbar-breakpoint) {
           position: relative;
 
+          // If there is no default hover color we assume there is also no variant
           @if r-theme-val(topbar, item-hover-color) {
             &::after {
               content: '';
@@ -236,7 +242,7 @@
               left: 0;
               right: 0;
               height: 8px;
-              background-color: r-theme-val(topbar, item-hover-color);
+              background-color: var(--r--menu--item--hover--color);
               border-top-left-radius: 0.2rem;
               border-top-right-radius: 0.2rem;
             }

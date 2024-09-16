@@ -659,6 +659,13 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "body > svg, #main-menu, .body-footer, .body-mentions"
     )
 
+    # Wheither you can create PageIndex extension on page through toolbar if true or
+    # just editing existing extension if false
+    RICHIE_MAINMENUENTRY_ALLOW_CREATION = False
+
+    # Define which node level can be processed to search for pageindex extension
+    RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL = 0
+
     # pylint: disable=invalid-name
     @property
     def ENVIRONMENT(self):

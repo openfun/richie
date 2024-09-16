@@ -16,6 +16,41 @@ $ make migrate
 
 ## Unreleased
 
+- Header menu template has been modified to include features from `MainMenuEntry`
+- There is a new setting that can be used to define a list of color variant for the menu
+  entry of a page:
+
+  ```
+  RICHIE_MENU_ENTRY_COLOR_CLASSES = (
+      ("", _("None")),
+      ("red", _("Red")),
+  )
+  ```
+
+  Selected choice value will be used as a variant name in a classname prefixed with
+  `topbar__item--`, so here for the *Red* it would be `topbar__item--red`. However it
+  depends from your menu template.
+
+- There is a new setting that defines if admin can create a new PageIndex extension
+  for a page:
+
+  ```
+  RICHIE_MAINMENUENTRY_ALLOW_CREATION = False
+  ```
+
+  When migrating to this release you would probably to turn it on until you added the
+  extension to your main pages then it turn it off
+
+- There is a new setting that defines the allowed page level that can hold
+  a PageIndex extension:
+
+  ```
+  RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL = 0
+  ```
+
+  Other page levels won't be allowed to create a PageIndex extension. Commonly it would
+  be `0` for when your main menu list the root pages.
+
 ## 2.31.0 to 2.33.0
 
 - Add new `slider` plugin theme scheme:
