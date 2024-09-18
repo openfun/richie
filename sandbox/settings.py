@@ -598,6 +598,13 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         environ_prefix=None,
     )
 
+    # Wheither you can create PageIndex extension on page through toolbar if true or
+    # just editing existing extension if false
+    RICHIE_PAGEINDEX_ALLOW_CREATION = False
+
+    # Define which node level can be processed to search for pageindex extension
+    RICHIE_PAGEINDEX_MENU_ALLOWED_LEVEL = 0
+
     @classmethod
     def _get_environment(cls):
         """Environment in which the application is launched."""
