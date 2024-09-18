@@ -251,7 +251,12 @@ export const CourseRunFactory = factory((): CourseRun => {
       call_to_action: 'enroll now',
       text: CourseStateTextEnum.ENROLLMENT_OPENED,
     }).one(),
-    languages: faker.helpers.multiple(faker.location.countryCode, { count: { min: 1, max: 5 } }),
+    languages: faker.helpers.multiple(() => faker.location.countryCode(), {
+      count: {
+        min: 1,
+        max: 5,
+      },
+    }),
   };
 });
 
