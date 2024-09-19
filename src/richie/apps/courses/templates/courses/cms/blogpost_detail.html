@@ -26,12 +26,6 @@
 
 {% block body_rdfa %} vocab="https://schema.org/" typeof="Article"{% endblock body_rdfa %}
 
-{% block subheader_content %}
-    <div class="subheader__container">
-        <h1 class="subheader__title">{% page_attribute "page_title" request.current_page.parent_page %}</h1>
-    </div>
-{% endblock subheader_content %}
-
 {% block content %}
     {% spaceless %}
     {% block content_header %}{%  endblock %}
