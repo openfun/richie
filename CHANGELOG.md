@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Added new page extension `MainMenuEntry`.
+
 ### Changed
 
 - Remove News subheader in blogpost detail page

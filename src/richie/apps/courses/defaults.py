@@ -312,7 +312,7 @@ ORGANIZATIONS_PAGE = {
     "reverse_id": "organizations",
     "template": "courses/cms/organization_detail.html",
 }
-INDEXES_PAGE = {
+MENUENTRIES_PAGE = {
     "reverse_id": None,
     "template": "richie/single_column.html",
 }
@@ -343,11 +343,6 @@ PAGES_INFO = {
         "title": "Courses",
         "in_navigation": True,
         "template": "search/search.html",
-    },
-    INDEXES_PAGE["reverse_id"]: {
-        "title": "Indexes",
-        "in_navigation": True,
-        "template": "richie/single_column.html",
     },
     ORGANIZATIONS_PAGE["reverse_id"]: {
         "title": "Organizations",
@@ -392,15 +387,10 @@ EFFORT_UNITS = {
 # The additional runs can be viewed by clicking on `View more` link.
 RICHIE_MAX_ARCHIVED_COURSE_RUNS = 10
 
-# Define possible hover color that can be choosen for an IndexPage and to apply on
+# Define possible hover color that can be choosen for an MainMenuEntry and to apply on
 # its menu item
-INDEX_MENU_COLOR_CLASSES = getattr(
+MENU_ENTRY_COLOR_CLASSES = getattr(
     settings,
-    "RICHIE_INDEX_MENU_COLOR_CLASSES",
-    # (("", "None"),)
-    (
-        ("", "None"),
-        ("primary", "Primary"),
-        ("warning", "Warning"),
-    ),
+    "RICHIE_MENU_ENTRY_COLOR_CLASSES",
+    (("", _("None")),),
 )

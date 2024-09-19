@@ -912,14 +912,14 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
                 )
 
 
-class IndexPageFactory(BLDPageExtensionDjangoModelFactory):
+class MainMenuEntryFactory(BLDPageExtensionDjangoModelFactory):
     """
-    A factory to automatically generate random yet meaningful index page extensions
+    A factory to automatically generate random yet meaningful menu entry page extensions
     and their related page in our tests.
     """
 
     class Meta:
-        model = models.IndexPage
+        model = models.MainMenuEntry
         exclude = [
             "page_in_navigation",
             "page_languages",
@@ -930,6 +930,6 @@ class IndexPageFactory(BLDPageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = models.IndexPage.PAGE["template"]
+    page_template = models.MainMenuEntry.PAGE["template"]
     allow_submenu = False
     menu_color = ""

@@ -580,11 +580,11 @@ RICHIE_SIMPLEPICTURE_PRESETS = {
 
 # If true the toolbar item will already be showed. If false only a page which already
 # have the extension will have the toolbar item and users won't be able to add
-# pageindex extension on existing page, only create new page with index extension
+# MainMenuEntry extension on existing page, only create new page with index extension
 # through the wizard.
-RICHIE_PAGEINDEX_ALLOW_CREATION = False
+RICHIE_MAINMENUENTRY_ALLOW_CREATION = False
 
-# Define which node level can be processed to search for pageindex extension. You can
-# set it to 'None' for never processing any node.
+# Define which node level can be processed to search for MainMenuEntry extension. You
+# can set it to 'None' for never processing any node.
 # This is a limit against performance issues to avoid making querysets for nothing.
-RICHIE_PAGEINDEX_MENU_ALLOWED_LEVEL = 0
+RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL = 0

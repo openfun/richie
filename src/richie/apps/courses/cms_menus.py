@@ -7,24 +7,24 @@ from django.conf import settings
 from menus.base import Modifier
 from menus.menu_pool import menu_pool
 
-from .models import IndexPage
+from .models import MainMenuEntry
 
 
-class MenuWithIndexPage(Modifier):
+class MenuWithMainMenuEntry(Modifier):
     """
-    Menu modifier to include IndexPage extension data in menu template context.
+    Menu modifier to include MainMenuEntry extension data in menu template context.
 
     In menu template you will be able to reach possible extension data from node
     attribute ``menu_extension``. If node page has no extension it will have an empty
-    dict. Only a specific node level is processedn nodes with a different level won't
-    have the attribute ``menu_extension`` at all.
+    dict. Only a specific node level is processed and nodes with a different level
+    won't have the attribute ``menu_extension`` at all.
     """
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def modify(self, request, nodes, namespace, root_id, post_cut, breadcrumb):
         """
         Patch navigation nodes to include data from possible extension
-        ``IndexPage``.
+        ``MainMenuEntry``.
 
         For performance:
 
@@ -47,7 +47,7 @@ class MenuWithIndexPage(Modifier):
         page_ids = [
             node.id
             for node in nodes
-            if node.level == settings.RICHIE_PAGEINDEX_MENU_ALLOWED_LEVEL
+            if node.level == settings.RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL
         ]
 
         # No need to continue if we don't have any valid node
@@ -56,7 +56,7 @@ class MenuWithIndexPage(Modifier):
 
         # We directly get the extensions from their related page id and serialized
         # as a dict instead of model object
-        extension_queryset = IndexPage.objects.filter(
+        extension_queryset = MainMenuEntry.objects.filter(
             extended_object_id__in=page_ids
         ).values("extended_object_id", "allow_submenu", "menu_color")
 
@@ -76,4 +76,4 @@ class MenuWithIndexPage(Modifier):
         return nodes
 
 
-menu_pool.register_modifier(MenuWithIndexPage)
+menu_pool.register_modifier(MenuWithMainMenuEntry)

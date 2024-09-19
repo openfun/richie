@@ -1,5 +1,5 @@
 """
-Declare and configure the models for the index part
+Declare and configure the models for the menu entry part
 """
 
 from django.db import models
@@ -11,21 +11,21 @@ from ...core.models import BasePageExtension
 from .. import defaults
 
 
-class IndexPage(BasePageExtension):
+class MainMenuEntry(BasePageExtension):
     """
-    The IndexPage extension defines some options for a page entry in the main menu.
+    The MainMenuEntry extension defines some options for a page entry in the main menu.
     """
 
-    PAGE = defaults.INDEXES_PAGE
+    PAGE = defaults.MENUENTRIES_PAGE
 
     class Meta:
-        db_table = "richie_index"
+        db_table = "richie_menuentry"
         ordering = ["-pk"]
-        verbose_name = _("index")
-        verbose_name_plural = _("indexes")
+        verbose_name = _("main menu entry")
+        verbose_name_plural = _("main menu entries")
 
     def __str__(self):
-        """Human representation of an index page"""
+        """Human representation of an main menu entry page"""
         model = self._meta.verbose_name.title()
         name = self.extended_object.get_title()
         return f"{model:s}: {name:s}"
@@ -43,9 +43,9 @@ class IndexPage(BasePageExtension):
         max_length=10,
         default="",
         blank=True,
-        choices=defaults.INDEX_MENU_COLOR_CLASSES,
-        help_text=_("A color used to display page in menu"),
+        choices=defaults.MENU_ENTRY_COLOR_CLASSES,
+        help_text=_("A color used to display page entry in menu."),
     )
 
 
-extension_pool.register(IndexPage)
+extension_pool.register(MainMenuEntry)
