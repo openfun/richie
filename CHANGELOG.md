@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Remove News subheader in blogpost detail page
+
+
 ## [2.29.2]
 
 ### Fixed
