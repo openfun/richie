@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Added new 'large-banner' plugin template variant `compacted-banner` that
+  is more compacted than variant `hero-intro`.
+
 ### Changed
 
 - Remove News subheader in blogpost detail page

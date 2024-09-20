@@ -1,0 +1,19 @@
+{% load static i18n cms_tags rfc_5646_locale %}
+<div class="compacted-banner">
+    <div class="compacted-banner__inner">
+        <div class="compacted-banner__body">
+            <div class="compacted-banner__content">
+                {{ instance.content|safe }}
+            </div>
+
+            <div class="compacted-banner__search">
+                <div class="richie-react richie-react--root-search-suggest-field"
+                    data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}"}'></div>
+
+                <a class="compacted-banner__cta" href="{% page_url 'courses' %}">
+                    {% trans "Explore our catalog" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

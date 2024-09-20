@@ -11,5 +11,6 @@ LARGEBANNER_TEMPLATES = getattr(
     [
         ("richie/large_banner/large_banner.html", _("Default")),
         ("richie/large_banner/hero-intro.html", _("Hero introduction")),
+        ("richie/large_banner/compacted.html", _("Compacted introduction")),
     ],
 )

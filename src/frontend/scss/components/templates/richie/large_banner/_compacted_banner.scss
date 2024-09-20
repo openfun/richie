@@ -1,0 +1,149 @@
+// A compact banner without image contents
+// Opposed to 'hero-intro' this variant delegates the top padding for topbar in 'over'
+// mode in content component
+//
+.compacted-banner {
+  position: relative;
+  padding: 0;
+
+  &__inner {
+    padding: 1rem 0;
+
+    @include media-breakpoint-up(lg) {
+      display: flex;
+    }
+  }
+
+  &__body {
+    @include make-container();
+    @include make-container-max-widths();
+    padding: 1rem;
+    text-align: center;
+
+    @include media-breakpoint-up(lg) {
+      display: flex;
+      padding: 2rem;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
+
+  // NOTE: Force disabling of hardcoded hero title class from some already save
+  // contents. Sadly we can not disable the huge font size
+  .hero-intro__title {
+    margin-bottom: 1rem !important;
+    width: auto;
+    color: inherit;
+
+    strong {
+      color: inherit;
+      font-weight: inherit;
+    }
+  }
+
+  // NOTE: Apply the color+weight behavior with 'strong' element alike in
+  // 'hero-intro__title' but naturally on title elements without any class
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: r-theme-val(compacted-banner, title-color);
+    margin-bottom: 0.5em;
+
+    strong {
+      color: r-theme-val(compacted-banner, title-alt-color);
+      font-weight: inherit;
+    }
+  }
+
+  // NOTE: Implement again the 'hero-intro__title' equivalent behavior
+  &__title {
+    @include responsive-spacer('margin-bottom', 1);
+    @include font-size($extra-font-size);
+    color: r-theme-val(compacted-banner, title-color);
+
+    strong {
+      color: r-theme-val(compacted-banner, title-alt-color);
+      font-weight: inherit;
+    }
+  }
+
+  &__content {
+    @include font-size($h5-font-size);
+    color: r-theme-val(compacted-banner, content-color);
+  }
+
+  &__search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+
+    .richie-react--root-search-suggest-field {
+      @include sv-flex(1, 0, 100%);
+      position: relative;
+
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, 320px);
+      }
+
+      .react-autosuggest__container {
+        margin-bottom: 0;
+      }
+
+      input {
+        background: r-theme-val(compacted-banner, search-input-background);
+      }
+
+      .search-input {
+        &__btn {
+          background: r-theme-val(compacted-banner, search-btn-background);
+          border-top-right-radius: 3rem;
+          border-bottom-right-radius: 3rem;
+
+          &__icon {
+            fill: r-theme-val(compacted-banner, search-icon-fill);
+          }
+        }
+      }
+    }
+  }
+
+  &__cta {
+    @include sv-flex(0, 0, auto);
+    @include button-size(
+      $btn-padding-y,
+      $btn-padding-x,
+      $btn-font-size,
+      $btn-line-height,
+      $btn-border-radius
+    );
+    @include button-variant(
+      r-theme-val(compacted-banner, cta-variant-from),
+      r-theme-val(compacted-banner, cta-variant-to)
+    );
+    margin: 1.2rem 0 0;
+    font-size: $font-size-base;
+    color: r-theme-val(compacted-banner, cta-color);
+    border-radius: 2rem;
+    @if r-theme-val(compacted-banner, cta-border) {
+      border: 1px solid r-theme-val(compacted-banner, cta-border);
+    }
+
+    @include media-breakpoint-up(lg) {
+      margin-top: 0;
+      @include responsive-spacer('margin-left', 0, $breakpoints: ('lg': 3));
+    }
+
+    &:after {
+      content: '→';
+      margin-left: 1rem;
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
