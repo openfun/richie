@@ -16,6 +16,22 @@ $ make migrate
 
 ## Unreleased
 
+- Add new `compacted-banner` theme scheme
+```
+  compacted-banner: (
+    title-color: r-color('charcoal'),
+    title-alt-color: r-color('firebrick6'),
+    content-color: r-color('black'),
+    search-input-background: rgba(r-color('white'), 0.7),
+    search-btn-background: r-color('firebrick6'),
+    search-icon-fill: r-color('white'),
+    cta-variant-from: rgba(r-color('white'), 0.8),
+    cta-variant-to: rgba(r-color('white'), 0.8),
+    cta-color: r-color('firebrick6'),
+    cta-border: r-color('white'),
+  ),
+```
+
 ## 2.25-beta.0 to 2.26.0
 
 - Dropped support for postgres version < 12

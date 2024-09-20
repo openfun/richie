@@ -28,6 +28,20 @@ body {
       background-size: 100% 100%;
     }
   }
+
+  // Apply the top padding behavior with topbar over mode only on the first child which
+  // is the only variant that can be exposed to issue with topbar over
+  .compacted-banner:first-child {
+    .compacted-banner__inner {
+      @include media-breakpoint-up(lg) {
+        @if $r-topbar-height {
+          padding: $r-topbar-height 0 1rem;
+        } @else {
+          padding: 1rem 0 1rem;
+        }
+      }
+    }
+  }
 }
 
 // Container relative to some modal components
