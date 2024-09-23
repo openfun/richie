@@ -9,7 +9,7 @@ export enum OpenEdxLevelOfEducation {
   JUNIOR_SECONDARY_OR_MIDDLE_SCHOOL = 'jhs',
   ELEMENTARY_PRIMARY_SCHOOL = 'el',
   NONE = 'none',
-  OTHER = 'o',
+  OTHER = 'other',
 }
 
 // * null
