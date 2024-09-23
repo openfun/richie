@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix Open EdX Level education enum "other" value
+
 ## [2.29.1]
 
 ### Fixed
