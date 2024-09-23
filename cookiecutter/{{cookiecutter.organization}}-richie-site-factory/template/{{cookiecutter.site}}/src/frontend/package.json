@@ -21,7 +21,7 @@
     "CMS"
   ],
   "dependencies": {
-    "richie-education": "2.29.1"
+    "richie-education": "2.29.2"
   },
   "devDependencies": {
     "@formatjs/cli": "6.2.4",
