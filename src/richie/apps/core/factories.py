@@ -23,7 +23,7 @@ from PIL import Image as PILimage
 from ..core.helpers import create_i18n_page, get_permissions
 
 
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments,too-many-positional-arguments
 def create_text_plugin(
     page,
     slot,

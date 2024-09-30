@@ -32,7 +32,7 @@ from ..serializers import ReactPropsCourseRunSerializer
 register = template.Library()
 
 
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments,too-many-positional-arguments
 def get_plugins_render_tag(
     context, name, varname, nodelist, page_lookup=None, edit=True
 ):
@@ -97,7 +97,7 @@ class PlaceholderAsPlugins(Placeholder):
         blocks=[("endplaceholder_as_plugins", "nodelist")],
     )
 
-    # pylint: disable=arguments-renamed,too-many-arguments
+    # pylint: disable=arguments-renamed,too-many-arguments,too-many-positional-arguments
     def render_tag(self, context, name, varname, extra_bits, nodelist=None):
         return get_plugins_render_tag(context, name, varname, nodelist)
 
@@ -148,7 +148,7 @@ class GetPlaceholderPlugins(Tag):
         blocks=[("endget_placeholder_plugins", "nodelist")],
     )
 
-    # pylint: disable=arguments-differ,too-many-arguments, unused-argument
+    # noqa pylint: disable=arguments-differ,too-many-arguments,unused-argument,too-many-positional-arguments
     def render_tag(
         self, context, name, page_lookup, varname, extra_bits, nodelist=None
     ):
