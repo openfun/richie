@@ -13,7 +13,8 @@ export const getLocalizedErrorMessage = (
     return intl.formatMessage(errorMessages[ErrorKeys.MIXED_INVALID]);
   }
 
-  return intl.formatMessage(errorMessages[error.key], error.values);
+  const message = intl.formatMessage(errorMessages[error.key], error.values);
+  return message as string | string[];
 };
 
 interface CunninghamErrorProp {
