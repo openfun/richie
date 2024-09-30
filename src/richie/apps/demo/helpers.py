@@ -3,7 +3,7 @@
 from richie.apps.courses.factories import CategoryFactory
 
 
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments,too-many-positional-arguments
 def create_categories(
     children=None,
     color=None,

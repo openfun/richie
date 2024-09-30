@@ -23,7 +23,7 @@ class BaseFilterDefinition:
 
     SORTING_CONF, SORTING_COUNT, SORTING_NAME = "conf", "count", "name"
 
-    # pylint: disable=too-many-arguments
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
     def __init__(
         self,
         name,
