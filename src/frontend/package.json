@@ -51,7 +51,7 @@
     "@lyracom/embedded-form-glue": "1.4.2",
     "@openfun/cunningham-react": "2.9.4",
     "@openfun/cunningham-tokens": "2.1.1",
-    "@sentry/browser": "8.32.0",
+    "@sentry/browser": "8.33.0",
     "@sentry/types": "8.32.0",
     "@storybook/addon-actions": "8.3.4",
     "@storybook/addon-essentials": "8.3.4",
