@@ -2,6 +2,7 @@
 Toolbar extension for the courses application
 """
 
+from django.conf import settings
 from django.utils.text import capfirst
 from django.utils.translation import gettext_lazy as _
 
@@ -12,7 +13,7 @@ from cms.utils.page_permissions import user_can_add_subpage, user_can_change_pag
 from cms.utils.urlutils import admin_reverse
 
 from .defaults import PAGE_EXTENSION_TOOLBAR_ITEM_POSITION
-from .models import Category, Course, Organization, Person
+from .models import Category, Course, MainMenuEntry, Organization, Person
 
 
 class BaseExtensionToolbar(ExtensionToolbar):
@@ -131,3 +132,52 @@ class PersonExtensionToolbar(BaseExtensionToolbar):
     """
 
     model = Person
+
+
+@toolbar_pool.register
+class MainMenuEntryExtensionToolbar(BaseExtensionToolbar):
+    """
+    This extension class customizes the toolbar for the MainMenuEntry page extension.
+    """
+
+    model = MainMenuEntry
+
+    def populate(self):
+        """
+        Specific extension populate method.
+
+        This extension entry only appears in toolbar if page already have extension or
+        if setting ``RICHIE_MAINMENUENTRY_ALLOW_CREATION`` is true. Finally the page
+        level must also match the allowed level from setting
+        ``RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL``.
+        """
+        # always use draft if we have a page
+        self.page = get_page_draft(self.request.current_page)
+        if not self.page:
+            # Nothing to do
+            return
+
+        # setup the extension toolbar with permissions and sanity checks
+        page_menu = self._setup_extension_toolbar()
+
+        if user_can_change_page(user=self.request.user, page=self.page):
+            # Retrieves extension instance (if any) and toolbar URL
+            page_extension, admin_url = self.get_page_extension_admin()
+            # Get the page node level
+            level = self.page.node.get_depth() - 1
+            allowed = page_extension is not None or (
+                page_extension is None
+                and settings.RICHIE_MAINMENUENTRY_ALLOW_CREATION is True
+            )
+            if (
+                allowed
+                and level == settings.RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL
+                and admin_url
+            ):
+                # Adds a toolbar item in position 0 (at the top of the menu)
+                page_menu.add_modal_item(
+                    _("Main menu settings"),
+                    url=admin_url,
+                    disabled=not self.toolbar.edit_mode_active,
+                    position=PAGE_EXTENSION_TOOLBAR_ITEM_POSITION,
+                )

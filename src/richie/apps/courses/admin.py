@@ -280,6 +280,21 @@ class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
         return JsonResponse({"id": new_page.course.id})
 
 
+class MainMenuEntryAdmin(PageExtensionAdmin):
+    """
+    Admin class for the MainMenuEntry model
+    """
+
+    list_display = ["title", "allow_submenu"]
+
+    # pylint: disable=no-self-use
+    def title(self, obj):
+        """
+        Get the page title from the related page
+        """
+        return obj.extended_object.get_title()
+
+
 class OrganizationAdmin(PageExtensionAdmin):
     """
     Admin class for the Organization model
@@ -349,6 +364,7 @@ admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Course, CourseAdmin)
 admin.site.register(models.CourseRun, CourseRunAdmin)
 admin.site.register(models.Licence, LicenceAdmin)
+admin.site.register(models.MainMenuEntry, MainMenuEntryAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.PageRole, PageRoleAdmin)
 admin.site.register(models.Person, PersonAdmin)

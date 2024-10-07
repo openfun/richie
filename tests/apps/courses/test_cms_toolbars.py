@@ -14,6 +14,7 @@ from cms.toolbar.items import AjaxItem, Menu, ModalItem
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.factories import (
     CourseFactory,
+    MainMenuEntryFactory,
     OrganizationFactory,
     PersonFactory,
 )
@@ -211,6 +212,114 @@ class CoursesCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
             results = page_menu.find_items(ModalItem, name="Person settings...")
             self.assertEqual(results, [])
 
+            # Check that the index page item is absent with default settings
+            results = page_menu.find_items(ModalItem, name="Main menu settings...")
+            self.assertEqual(results, [])
+
+    @override_settings(CMS_PERMISSION=False)
+    def test_cms_toolbars_menuentry_extension_availability(self):
+        """
+        MainMenuEntry extension has advanced toolbar behaviors depending from settings.
+        """
+        # Testing with a superuser proves our point
+        superuser = UserFactory(is_staff=True, is_superuser=True)
+
+        # Create a page not related to any page extension
+        page = create_page(
+            "A page", template="richie/single_column.html", language="en"
+        )
+        # Create a page on level 0 and with existing extension
+        menuentry = MainMenuEntryFactory(page_parent=page)
+
+        cases = [[False, False], [False, True], [True, False]]
+
+        for args in cases:
+            # Extension should not be created from toolbar for any level but could be
+            # edited from tree level 0
+            with self.settings(
+                RICHIE_MAINMENUENTRY_ALLOW_CREATION=False,
+                RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL=0,
+            ):
+                toolbar = self.get_toolbar_for_page(page, superuser, *args)
+                page_menu = toolbar.find_items(Menu, name="Page")[0].item
+
+                # menuentry page entry is present
+                results = page_menu.find_items(ModalItem, name="Main menu settings...")
+                self.assertEqual(results, [])
+
+                toolbar = self.get_toolbar_for_page(
+                    menuentry.extended_object, superuser, *args
+                )
+                page_menu = toolbar.find_items(Menu, name="Page")[0].item
+
+                # menuentry page entry is present
+                results = page_menu.find_items(ModalItem, name="Main menu settings...")
+                self.assertEqual(results, [])
+
+            # Extension should not be created from toolbar for any level but could be
+            # edited from tree level 1
+            with self.settings(
+                RICHIE_MAINMENUENTRY_ALLOW_CREATION=False,
+                RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL=1,
+            ):
+                toolbar = self.get_toolbar_for_page(page, superuser, *args)
+                page_menu = toolbar.find_items(Menu, name="Page")[0].item
+
+                # menuentry page entry is present
+                results = page_menu.find_items(ModalItem, name="Main menu settings...")
+                self.assertEqual(results, [])
+
+                toolbar = self.get_toolbar_for_page(
+                    menuentry.extended_object, superuser, *args
+                )
+                page_menu = toolbar.find_items(Menu, name="Page")[0].item
+
+                # menuentry page entry is present
+                results = page_menu.find_items(ModalItem, name="Main menu settings...")
+                self.assertEqual(len(results), 1)
+
+            # Extension should be created or edited from toolbar for tree level 0
+            with self.settings(
+                RICHIE_MAINMENUENTRY_ALLOW_CREATION=True,
+                RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL=0,
+            ):
+                toolbar = self.get_toolbar_for_page(page, superuser, *args)
+                page_menu = toolbar.find_items(Menu, name="Page")[0].item
+
+                # menuentry page entry is present
+                results = page_menu.find_items(ModalItem, name="Main menu settings...")
+                self.assertEqual(len(results), 1)
+
+                toolbar = self.get_toolbar_for_page(
+                    menuentry.extended_object, superuser, *args
+                )
+                page_menu = toolbar.find_items(Menu, name="Page")[0].item
+
+                # menuentry page entry is present
+                results = page_menu.find_items(ModalItem, name="Main menu settings...")
+                self.assertEqual(results, [])
+
+            # Extension should be created or edited from toolbar for tree level 1
+            with self.settings(
+                RICHIE_MAINMENUENTRY_ALLOW_CREATION=True,
+                RICHIE_MAINMENUENTRY_MENU_ALLOWED_LEVEL=1,
+            ):
+                toolbar = self.get_toolbar_for_page(page, superuser, *args)
+                page_menu = toolbar.find_items(Menu, name="Page")[0].item
+
+                # menuentry page entry is present
+                results = page_menu.find_items(ModalItem, name="Main menu settings...")
+                self.assertEqual(results, [])
+
+                toolbar = self.get_toolbar_for_page(
+                    menuentry.extended_object, superuser, *args
+                )
+                page_menu = toolbar.find_items(Menu, name="Page")[0].item
+
+                # menuentry page entry is present
+                results = page_menu.find_items(ModalItem, name="Main menu settings...")
+                self.assertEqual(len(results), 1)
+
     @override_settings(CMS_PERMISSION=False)
     # pylint: disable=too-many-locals
     def test_cms_toolbars_person_has_page_extension_settings_item(self):
@@ -260,5 +369,20 @@ class CoursesCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
         for args, method in cases:
             toolbar = self.get_toolbar_for_page(person.extended_object, *args)
             item = method(toolbar, "Person settings...")
+            if item:
+                self.assertEqual(item.url, url)
+
+    @override_settings(CMS_PERMISSION=False)
+    def test_cms_toolbars_menuentry_has_page_extension_settings_item(self):
+        """
+        Validate that a new item to edit the menu entry is available only when
+        visiting the page in edit mode and for users with permission to edit the page.
+        """
+        menuentry = MainMenuEntryFactory()
+        url = f"/en/admin/courses/mainmenuentry/{menuentry.id:d}/change/"
+
+        for args, method in self.get_cases_for_page_change():
+            toolbar = self.get_toolbar_for_page(menuentry.extended_object, *args)
+            item = method(toolbar, "Main menu settings...")
             if item:
                 self.assertEqual(item.url, url)

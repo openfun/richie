@@ -910,3 +910,26 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
                     plugin_type="PlainTextPlugin",
                     body=text,
                 )
+
+
+class MainMenuEntryFactory(BLDPageExtensionDjangoModelFactory):
+    """
+    A factory to automatically generate random yet meaningful menu entry page extensions
+    and their related page in our tests.
+    """
+
+    class Meta:
+        model = models.MainMenuEntry
+        exclude = [
+            "page_in_navigation",
+            "page_languages",
+            "page_parent",
+            "page_reverse_id",
+            "page_template",
+            "page_title",
+        ]
+
+    # fields concerning the related page
+    page_template = models.MainMenuEntry.PAGE["template"]
+    allow_submenu = False
+    menu_color = ""
