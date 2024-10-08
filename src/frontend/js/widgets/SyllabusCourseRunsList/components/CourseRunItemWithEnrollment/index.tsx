@@ -8,6 +8,8 @@ import { getDashboardBasename } from 'widgets/Dashboard/hooks/useDashboardRouter
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import useCourseRunOrder from 'hooks/useCourseRunOrder';
 import { Spinner } from 'components/Spinner';
+import { OrderHelper } from 'utils/OrderHelper';
+import { extractResourceMetadata } from 'api/lms/joanie';
 
 const messages = defineMessages({
   goToCourse: {
@@ -33,6 +35,8 @@ type Props = {
 
 const CourseRunItemWithEnrollment = ({ item }: Props) => {
   const intl = useIntl();
+  const resourceLinkResources = extractResourceMetadata(item.resource_link);
+  const isProduct = !!(resourceLinkResources?.course && resourceLinkResources?.product);
   const {
     item: order,
     states: { isFetched },
@@ -43,14 +47,12 @@ const CourseRunItemWithEnrollment = ({ item }: Props) => {
 
   const { enrollmentIsActive: courseRunEnrollmentIsActive } = useCourseEnrollment(
     item.resource_link,
-    isFetched && !order,
+    !isProduct,
   );
 
-  // user is enroll to a product if any of the product's target course have a active enrollment
-  const productEnrollmentIsActive = order?.target_enrollments.some((enrollment) => {
-    return enrollment.is_active;
-  });
-  const enrollmentIsActive = !!(courseRunEnrollmentIsActive || productEnrollmentIsActive);
+  // user is enrolled to a product if there is an active order for the product
+  const orderIsActive = OrderHelper.isActive(order);
+  const enrollmentIsActive = !!(courseRunEnrollmentIsActive || orderIsActive);
 
   if (!isFetched) {
     return <Spinner />;
@@ -58,7 +60,7 @@ const CourseRunItemWithEnrollment = ({ item }: Props) => {
 
   return (
     <>
-      {enrollmentIsActive || !!order ? (
+      {enrollmentIsActive ? (
         // eslint-disable-next-line jsx-a11y/control-has-associated-label
         <a href={courseUrl} title={intl.formatMessage(messages.goToCourse)}>
           <CourseRunItem item={item} />
