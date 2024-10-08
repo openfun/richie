@@ -21,7 +21,7 @@ const useCourseRunOrder = (courseRun: CourseRun) => {
     product_id: resourceLinkResources?.product,
   });
 
-  return { item: orders.length > 0 ? orders[0] : undefined, states: { fetching, isFetched } };
+  return { item: orders?.[0], states: { fetching, isFetched } };
 };
 
 export default useCourseRunOrder;
