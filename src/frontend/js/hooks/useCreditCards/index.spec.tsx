@@ -145,7 +145,9 @@ describe('useCreditCards', () => {
       responseDeferred.resolve({});
     });
 
-    expect(result.current.states.tokenizing).toBe(false);
+    await waitFor(() => {
+      expect(result.current.states.tokenizing).toBe(false);
+    });
     expect(result.current.states.isPending).toBe(false);
     expect(result.current.states.error).toBe(undefined);
   });
