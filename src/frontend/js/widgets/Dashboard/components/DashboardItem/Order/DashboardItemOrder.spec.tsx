@@ -995,10 +995,7 @@ describe('<DashboardItemOrder/>', () => {
     order.payment_schedule![1].state = PaymentScheduleState.REFUSED;
 
     const formatPrice = (price: number, currency: string) =>
-      new Intl.NumberFormat('en', {
-        currency,
-        style: 'currency',
-      }).format(price);
+      new Intl.NumberFormat('en', { currency, style: 'currency' }).format(price);
 
     const { product } = mockCourseProductWithOrder(order);
     fetchMock.get(
@@ -1038,12 +1035,10 @@ describe('<DashboardItemOrder/>', () => {
 
     // Click on pay button.
     const payButton = screen.getByTestId('order-payment-retry-modal-submit-button');
-    expect(payButton.innerHTML.replace('&nbsp;', ' ')).toEqual(
+    expect(payButton).toHaveTextContent(
       'Pay ' +
-        formatPrice(failedInstallment.amount, failedInstallment.currency).replace(
-          /(\u202F|\u00a0)/g,
-          ' ',
-        ),
+        formatPrice(failedInstallment.amount, failedInstallment.currency).replaceAll(/\s/g, ' '),
+      { normalizeWhitespace: true },
     );
     await user.click(payButton);
     // Pay via mocked payment interface
@@ -1054,7 +1049,7 @@ describe('<DashboardItemOrder/>', () => {
     expect(screen.queryByText('Retry payment')).not.toBeInTheDocument();
 
     // Success modal is shown, close it.
-    screen.getByText('Payment successful');
+    await screen.findByText('Payment successful');
     screen.getByText('The payment was successful');
     const okButton = screen.getByRole('button', { name: 'Ok' });
     await user.click(okButton);
