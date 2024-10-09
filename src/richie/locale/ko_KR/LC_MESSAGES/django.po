@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-03 14:08+0000\n"
-"PO-Revision-Date: 2024-08-13 13:46\n"
+"POT-Creation-Date: 2024-10-08 09:59+0000\n"
+"PO-Revision-Date: 2024-10-16 09:25\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -1034,7 +1034,7 @@ msgstr ""
 
 #: apps/courses/settings/__init__.py:170 apps/courses/settings/__init__.py:345
 #: apps/courses/settings/__init__.py:365
-#: apps/courses/templates/courses/cms/blogpost_detail.html:95
+#: apps/courses/templates/courses/cms/blogpost_detail.html:89
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:10
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:42
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:86
@@ -1094,7 +1094,7 @@ msgstr ""
 
 #: apps/courses/settings/__init__.py:233 apps/courses/settings/__init__.py:269
 #: apps/courses/settings/__init__.py:309 apps/courses/settings/__init__.py:341
-#: apps/courses/templates/courses/cms/blogpost_detail.html:51
+#: apps/courses/templates/courses/cms/blogpost_detail.html:45
 #: apps/courses/templates/courses/cms/blogpost_list.html:16
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:67
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:116
@@ -1184,34 +1184,34 @@ msgstr ""
 msgid "Full width"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:53
+#: apps/courses/templates/courses/cms/blogpost_detail.html:47
 msgid "No categories yet."
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:65
+#: apps/courses/templates/courses/cms/blogpost_detail.html:59
 msgid "Not published yet"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:75
+#: apps/courses/templates/courses/cms/blogpost_detail.html:69
 msgid "No author yet"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:127
+#: apps/courses/templates/courses/cms/blogpost_detail.html:121
 #: apps/courses/templates/courses/cms/organization_detail.html:102
 #: apps/courses/templates/courses/cms/program_detail.html:65
 msgid "No excerpt content"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:137
+#: apps/courses/templates/courses/cms/blogpost_detail.html:131
 #: apps/courses/templates/courses/cms/program_detail.html:73
 msgid "No body content"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:156
+#: apps/courses/templates/courses/cms/blogpost_detail.html:150
 msgid "Related posts"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:165
+#: apps/courses/templates/courses/cms/blogpost_detail.html:159
 msgid "Other categories of articles"
 msgstr ""
 
@@ -1783,6 +1783,10 @@ msgstr ""
 msgid "Hero introduction"
 msgstr ""
 
+#: plugins/large_banner/defaults.py:14
+msgid "Compacted introduction"
+msgstr ""
+
 #: plugins/large_banner/models.py:32
 msgid "background image"
 msgstr ""
@@ -1795,12 +1799,13 @@ msgstr ""
 msgid "Choose template to render plugin."
 msgstr ""
 
-#: plugins/large_banner/templates/richie/large_banner/hero-intro.html:17
-msgid "Search in our courses"
-msgstr ""
-
+#: plugins/large_banner/templates/richie/large_banner/compacted.html:14
 #: plugins/large_banner/templates/richie/large_banner/hero-intro.html:24
 msgid "Explore our catalog"
+msgstr ""
+
+#: plugins/large_banner/templates/richie/large_banner/hero-intro.html:17
+msgid "Search in our courses"
 msgstr ""
 
 #: plugins/lti_consumer/cms_plugins.py:38

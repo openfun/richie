@@ -137,7 +137,7 @@
   },
   "components.ContractStatus.waitingSignature": {
     "description": "Label displayed when a training contract need to be signed by the learner",
-    "message": "You have to sign this training contract to access your training."
+    "message": "You have to sign this training contract to finalize your subscription."
   },
   "components.CountrySelectField.label": {
     "description": "label of the country select",
@@ -739,6 +739,50 @@
     "description": "Text shown when a course run is not active",
     "message": "Not enrolled"
   },
+  "components.DashboardItemEnrollment.syllabusLinkLabel": {
+    "description": "Syllabus link label on order details",
+    "message": "Go to syllabus"
+  },
+  "components.DashboardItemOrder.CertificateItem.loadingCertificate": {
+    "description": "Accessible label displayed while certificate is being fetched on the dashboard.",
+    "message": "Loading certificate..."
+  },
+  "components.DashboardItemOrder.ContractItem.trainingContractTitle": {
+    "description": "Title of the training contract section",
+    "message": "Training contract"
+  },
+  "components.DashboardItemOrder.Installment.defineButton": {
+    "description": "Button label to define payment method",
+    "message": "Define"
+  },
+  "components.DashboardItemOrder.Installment.paymentButton": {
+    "description": "Button label for the payment block",
+    "message": "Manage payment"
+  },
+  "components.DashboardItemOrder.Installment.paymentInactiveDescription": {
+    "description": "Explanation displayed when the order is not yet active and do not miss payment method",
+    "message": "You will able to manage your payment installment here once your subscription is finalized."
+  },
+  "components.DashboardItemOrder.Installment.paymentLabel": {
+    "description": "Label for the payment block",
+    "message": "You can see and manage all installments."
+  },
+  "components.DashboardItemOrder.Installment.paymentMethodMissingMessage": {
+    "description": "Message displayed when payment method is missing",
+    "message": "To finalize your subscription, you must define a payment method."
+  },
+  "components.DashboardItemOrder.Installment.paymentNeededButton": {
+    "description": "Button label for the payment needed message",
+    "message": "Pay {amount}"
+  },
+  "components.DashboardItemOrder.Installment.paymentNeededMessage": {
+    "description": "Message displayed when payment is needed",
+    "message": "A payment failed, please update your payment method"
+  },
+  "components.DashboardItemOrder.Installment.paymentTitle": {
+    "description": "Label for the payment block",
+    "message": "Payment"
+  },
   "components.DashboardItemOrder.OrderPaymentRetryModal.description": {
     "description": "Message displayed when payment is needed",
     "message": "The payment failed, please choose another payment method or add a new one during the payment"
@@ -771,61 +815,73 @@
     "description": "Title of the payment retry modal",
     "message": "Retry payment"
   },
+  "components.DashboardItemOrder.OrganizationBlock.contactButton": {
+    "description": "Button to contact the organization",
+    "message": "Contact"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.contactDescription": {
+    "description": "Description of the contact information for the organization",
+    "message": "Your training reference is {name} - {email}."
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationDpoContactLabel": {
+    "description": "Label for the organization DPO contact",
+    "message": "Data protection email"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationHeader": {
+    "description": "Header of the organization section",
+    "message": "This training is provided by"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationLogoAlt": {
+    "description": "Alt text for the organization logo",
+    "message": "Logo of the organization"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationMailContactLabel": {
+    "description": "Label for the organization mail contact",
+    "message": "Email"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationPhoneContactLabel": {
+    "description": "Label for the organization phone contact",
+    "message": "Phone"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationSubtitleAddress": {
+    "description": "Subtitle for the organization address section",
+    "message": "Address"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationSubtitleContacts": {
+    "description": "Subtitle for the organization contacts section",
+    "message": "Contacts"
+  },
   "components.DashboardItemOrder.PaymentModal.paymentMethodTitle": {
     "description": "Title of the payment method section",
     "message": "Payment method"
   },
   "components.DashboardItemOrder.PaymentModal.scheduleTitle": {
     "description": "Title of the payment schedule",
-    "message": "Repayment schedule"
+    "message": "Payment schedule"
   },
   "components.DashboardItemOrder.PaymentModal.title": {
     "description": "Title of the payment modal",
     "message": "Payment details"
   },
-  "components.DashboardItemOrder.contactButton": {
-    "description": "Button to contact the organization",
-    "message": "Contact"
-  },
-  "components.DashboardItemOrder.contactDescription": {
-    "description": "Description of the contact information for the organization",
-    "message": "Your training reference is {name} - {email}."
-  },
   "components.DashboardItemOrder.gotoCourse": {
     "description": "Button that redirects to the order details",
     "message": "View details"
   },
-  "components.DashboardItemOrder.loadingCertificate": {
-    "description": "Accessible label displayed while certificate is being fetched on the dashboard.",
-    "message": "Loading certificate..."
+  "components.DashboardItemOrder.missingPaymentMethodCTA": {
+    "description": "CTA label displayed when the order is missing a payment method",
+    "message": "Define"
   },
-  "components.DashboardItemOrder.organizationDpoContactLabel": {
-    "description": "Label for the organization DPO contact",
-    "message": "Data protection email"
+  "components.DashboardItemOrder.missingPaymentMethodDescription": {
+    "description": "Description message displayed when the order is missing a payment method",
+    "message": "You must define a payment method to finalize your subscription."
   },
-  "components.DashboardItemOrder.organizationHeader": {
-    "description": "Header of the organization section",
-    "message": "This training is provided by"
+  "components.DashboardItemOrder.missingPaymentMethodTitle": {
+    "description": "Main message displayed when the order is missing a payment method",
+    "message": "A payment method is missing"
   },
-  "components.DashboardItemOrder.organizationLogoAlt": {
-    "description": "Alt text for the organization logo",
-    "message": "Logo of the organization"
-  },
-  "components.DashboardItemOrder.organizationMailContactLabel": {
-    "description": "Label for the organization mail contact",
-    "message": "Email"
-  },
-  "components.DashboardItemOrder.organizationPhoneContactLabel": {
-    "description": "Label for the organization phone contact",
-    "message": "Phone"
-  },
-  "components.DashboardItemOrder.paymentButton": {
-    "description": "Button label for the payment block",
-    "message": "Manage payment"
-  },
-  "components.DashboardItemOrder.paymentLabel": {
-    "description": "Label for the payment block",
-    "message": "You can see and manage all installments."
+  "components.DashboardItemOrder.notResumable": {
+    "description": "Message displayed when the order subscription is not completed but the product is no more purchasable",
+    "message": "The subscription process cannot be resumed. The related training is no more purchasable."
   },
   "components.DashboardItemOrder.paymentNeededButton": {
     "description": "Button label for the payment needed message",
@@ -835,17 +891,9 @@
     "description": "Message displayed when payment is needed",
     "message": "The payment failed, please update your payment method"
   },
-  "components.DashboardItemOrder.paymentTitle": {
-    "description": "Label for the payment block",
-    "message": "Payment"
-  },
   "components.DashboardItemOrder.syllabusLinkLabel": {
     "description": "Syllabus link label on order details",
     "message": "Go to syllabus"
-  },
-  "components.DashboardItemOrder.trainingContractTitle": {
-    "description": "Title of the training contract section",
-    "message": "Training contract"
   },
   "components.DashboardOpenEdxProfile.EditButtonLabel": {
     "description": "Label of the edit button link of the open edx profile form",
@@ -915,17 +963,25 @@
     "description": "Label of the openEdx profile \"year of birth\" input",
     "message": "Year of birth"
   },
+  "components.DashboardOrderLoader.definePaymentMethodLink": {
+    "description": "Link to define a payment method",
+    "message": "define a payment method"
+  },
   "components.DashboardOrderLoader.loading": {
     "description": "Message displayed while loading an order",
     "message": "Loading order ..."
   },
+  "components.DashboardOrderLoader.paymentMethodMissing": {
+    "description": "Error message displayed when no payment method is defined.",
+    "message": "You have to {definePaymentMethodLink} to finalize your subscription."
+  },
   "components.DashboardOrderLoader.signLink": {
     "description": "Link to sign the contract",
-    "message": "sign your contract"
+    "message": "sign your training contract"
   },
   "components.DashboardOrderLoader.signatureNeeded": {
     "description": "Banner displayed when the contract is not signed",
-    "message": "You need to {signLink} before enrolling in a course run"
+    "message": "You have to {signLink} to finalize your subscription."
   },
   "components.DashboardOrderLoader.wrongLinkedProductError": {
     "description": "Error message displayed when order's linked product type is not handle.",
@@ -1131,6 +1187,18 @@
     "description": "Label for screen reader when a credit card is being tokenized.",
     "message": "Payment method definition in progress."
   },
+  "components.PaymentScheduleGrid.state.paid": {
+    "description": "Label displayed for paid payment state",
+    "message": "Paid"
+  },
+  "components.PaymentScheduleGrid.state.pending": {
+    "description": "Label displayed for pending payment state",
+    "message": "Pending"
+  },
+  "components.PaymentScheduleGrid.state.refused": {
+    "description": "Label displayed for refused payment state",
+    "message": "Refused"
+  },
   "components.PaymentScheduleGrid.withdrawnAt": {
     "description": "Label displayed to explain when the installment will be withdrawn.",
     "message": "Withdrawn on {date}"
@@ -1142,6 +1210,22 @@
   "components.ProductCertificateFooter.downloadProductCertificateLabel": {
     "description": "Label on the enrollment row that propose to download a certificate",
     "message": "A certificate is available for download."
+  },
+  "components.ProductCertificateFooter.examAccessBlocked": {
+    "description": "Message displayed when the exam access is blocked",
+    "message": "You will be able to pass the exam once the installment has been paid."
+  },
+  "components.ProductCertificateFooter.failedInstallmentMessage": {
+    "description": "Message displayed when the last installment has failed",
+    "message": "Last direct debit has failed. Please resolve your situation as soon as possible."
+  },
+  "components.ProductCertificateFooter.nextInstallmentMessage": {
+    "description": "Message displayed when an installment is pending",
+    "message": "The next installment ({amount}) will be withdrawn on the {due_date}."
+  },
+  "components.ProductCertificateFooter.paymentNeededButton": {
+    "description": "Button label for the payment needed message",
+    "message": "Pay {amount}"
   },
   "components.ProductCertificateFooter.pendingProductCertificateLabel": {
     "description": "Label on the enrollment when a product of type certificate have been bought",
@@ -1234,6 +1318,10 @@
   "components.SaleTunnel.Information.fullNameLabel": {
     "description": "Label for the full name input",
     "message": "Full name"
+  },
+  "components.SaleTunnel.Information.paymentSchedule": {
+    "description": "Title for the payment schedule section",
+    "message": "Payment schedule"
   },
   "components.SaleTunnel.Information.title": {
     "description": "Title for the information section",
