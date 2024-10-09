@@ -142,7 +142,7 @@ describe('<AbstractContractFrame />', () => {
     await user.click(button);
 
     // The dummy interface should be loading
-    screen.getByRole('heading', { name: 'Signing the contract ...' });
+    await screen.findByRole('heading', { name: 'Signing the contract ...' });
 
     // Then the signature check polling should be started
     await waitFor(() => {

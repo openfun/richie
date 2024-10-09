@@ -16,6 +16,24 @@ const messages = defineMessages({
   },
 });
 
+export const stateMessages = defineMessages({
+  [PaymentScheduleState.PENDING]: {
+    id: 'components.PaymentScheduleGrid.state.pending',
+    defaultMessage: 'Pending',
+    description: 'Label displayed for pending payment state',
+  },
+  [PaymentScheduleState.PAID]: {
+    id: 'components.PaymentScheduleGrid.state.paid',
+    defaultMessage: 'Paid',
+    description: 'Label displayed for paid payment state',
+  },
+  [PaymentScheduleState.REFUSED]: {
+    id: 'components.PaymentScheduleGrid.state.refused',
+    defaultMessage: 'Refused',
+    description: 'Label displayed for refused payment state',
+  },
+});
+
 export const PaymentScheduleGrid = ({ schedule }: Props) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
@@ -65,7 +83,11 @@ export const PaymentScheduleGrid = ({ schedule }: Props) => {
 export const StatusPill = ({ state }: { state: PaymentScheduleState }) => {
   return (
     <span className={`status-pill status-pill--${state}`}>
-      {StringHelper.capitalizeFirst(state.replace('_', ' '))}
+      {state in stateMessages ? (
+        <FormattedMessage {...stateMessages[state]} />
+      ) : (
+        StringHelper.capitalizeFirst(state.replace('_', ' '))
+      )}
     </span>
   );
 };
