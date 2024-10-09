@@ -137,7 +137,7 @@
   },
   "components.ContractStatus.waitingSignature": {
     "description": "Label displayed when a training contract need to be signed by the learner",
-    "message": "Vous devez signer ce contrat de formation pour accéder à votre formation."
+    "message": "Vous devez signer ce contrat de formation pour finaliser votre souscription."
   },
   "components.CountrySelectField.label": {
     "description": "label of the country select",
@@ -577,7 +577,7 @@
   },
   "components.DashboardItem.Order.ContractFrame.finishedDescription": {
     "description": "Message displayed inside the contract signin modal when the contract is signed.",
-    "message": "Vous recevrez un courriel une fois que votre convention de formation sera signée par toutes les parties. Vous pouvez dès à présent finaliser votre souscription."
+    "message": "Vous recevrez un courriel une fois que votre contrat de formation sera signé par toutes les parties. Vous pouvez dès à présent finaliser votre souscription."
   },
   "components.DashboardItem.Order.ContractFrame.loadingContract": {
     "description": "Message displayed inside the contract signin modal when loading the contract.",
@@ -609,19 +609,19 @@
   },
   "components.DashboardItem.Order.OrderStateLearnerMessage.statusFailedPayment": {
     "description": "Status shown on the dashboard order item when order is in failed payment state",
-    "message": "Le dernier prélèvement automatique a échoué"
+    "message": "Le dernier prélèvement a échoué"
   },
   "components.DashboardItem.Order.OrderStateLearnerMessage.statusNoPayment": {
     "description": "Status shown on the dashboard order item when order is in no payment state",
-    "message": "Le premier prélèvement automatique a échoué"
+    "message": "Le premier prélèvement a échoué"
   },
   "components.DashboardItem.Order.OrderStateLearnerMessage.statusPassed": {
     "description": "Status shown on the dashboard order item when order is completed and has a certificate",
-    "message": "Terminé avec succès"
+    "message": "Terminée avec succès"
   },
   "components.DashboardItem.Order.OrderStateLearnerMessage.statusPending": {
     "description": "Status shown on the dashboard order item when order is pending.",
-    "message": "En attente du premier prélèvement automatique"
+    "message": "En attente du premier prélèvement"
   },
   "components.DashboardItem.Order.OrderStateLearnerMessage.statusPendingPayment": {
     "description": "Status shown on the dashboard order item when order is pending for payment",
@@ -657,19 +657,19 @@
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusFailedPayment": {
     "description": "Status shown on the dashboard order item when order is in failed payment state",
-    "message": "Le dernier prélèvement automatique a échoué"
+    "message": "Le dernier prélèvement a échoué"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusNoPayment": {
     "description": "Status shown on the dashboard order item when order is in no payment state",
-    "message": "Le premier prélèvement automatique a échoué"
+    "message": "Le premier prélèvement a échoué"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusPassed": {
     "description": "Status shown on the dashboard order item when order is completed with certificate",
-    "message": "Certifié"
+    "message": "Certifiée"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusPending": {
     "description": "Status shown on the dashboard order item when order is pending.",
-    "message": "En attente du premier prélèvement automatique"
+    "message": "En attente du premier prélèvement"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusPendingPayment": {
     "description": "Status shown on the dashboard order item when order is validated with no certificate",
@@ -739,9 +739,53 @@
     "description": "Text shown when a course run is not active",
     "message": "Non inscrit"
   },
+  "components.DashboardItemEnrollment.syllabusLinkLabel": {
+    "description": "Syllabus link label on order details",
+    "message": "Accéder au syllabus"
+  },
+  "components.DashboardItemOrder.CertificateItem.loadingCertificate": {
+    "description": "Accessible label displayed while certificate is being fetched on the dashboard.",
+    "message": "Chargement du certificat..."
+  },
+  "components.DashboardItemOrder.ContractItem.trainingContractTitle": {
+    "description": "Title of the training contract section",
+    "message": "Contrat de formation"
+  },
+  "components.DashboardItemOrder.Installment.defineButton": {
+    "description": "Button label to define payment method",
+    "message": "Définir"
+  },
+  "components.DashboardItemOrder.Installment.paymentButton": {
+    "description": "Button label for the payment block",
+    "message": "Gérer les paiements"
+  },
+  "components.DashboardItemOrder.Installment.paymentInactiveDescription": {
+    "description": "Explanation displayed when the order is not yet active and do not miss payment method",
+    "message": "Vous pourrez gérer vos échéances ici une fois que votre souscription sera finalisée."
+  },
+  "components.DashboardItemOrder.Installment.paymentLabel": {
+    "description": "Label for the payment block",
+    "message": "Vous pouvez voir et gérer toutes les échéances."
+  },
+  "components.DashboardItemOrder.Installment.paymentMethodMissingMessage": {
+    "description": "Message displayed when payment method is missing",
+    "message": "Pour finaliser votre souscription, vous devez définir un moyen de paiement."
+  },
+  "components.DashboardItemOrder.Installment.paymentNeededButton": {
+    "description": "Button label for the payment needed message",
+    "message": "Payer {amount}"
+  },
+  "components.DashboardItemOrder.Installment.paymentNeededMessage": {
+    "description": "Message displayed when payment is needed",
+    "message": "Un paiement a échoué, veuillez mettre à jour votre moyen de paiement"
+  },
+  "components.DashboardItemOrder.Installment.paymentTitle": {
+    "description": "Label for the payment block",
+    "message": "Paiement"
+  },
   "components.DashboardItemOrder.OrderPaymentRetryModal.description": {
     "description": "Message displayed when payment is needed",
-    "message": "Le paiement a échoué, veuillez choisir un autre moyen de paiement ou en ajouter un nouveau pendant le paiement"
+    "message": "Le paiement a échoué, veuillez choisir un autre moyen de paiement existant ou en ajouter un nouveau pendant le paiement"
   },
   "components.DashboardItemOrder.OrderPaymentRetryModal.errorAbortingPolling": {
     "description": "Error message when submitting installment payment fails",
@@ -765,11 +809,47 @@
   },
   "components.DashboardItemOrder.OrderPaymentRetryModal.successTitle": {
     "description": "Title of the payment success modal",
-    "message": "Paiement réussi"
+    "message": "Paiement accepté"
   },
   "components.DashboardItemOrder.OrderPaymentRetryModal.title": {
     "description": "Title of the payment retry modal",
-    "message": "Réessayer le paiement"
+    "message": "Nouvelle tentative de paiement"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.contactButton": {
+    "description": "Button to contact the organization",
+    "message": "Contacter"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.contactDescription": {
+    "description": "Description of the contact information for the organization",
+    "message": "Votre référent de formation est {name} - {email}."
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationDpoContactLabel": {
+    "description": "Label for the organization DPO contact",
+    "message": "Courriel du délégué à la protection des données"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationHeader": {
+    "description": "Header of the organization section",
+    "message": "Cette formation est gérée par"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationLogoAlt": {
+    "description": "Alt text for the organization logo",
+    "message": "Logo de l'établissement"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationMailContactLabel": {
+    "description": "Label for the organization mail contact",
+    "message": "Courriel"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationPhoneContactLabel": {
+    "description": "Label for the organization phone contact",
+    "message": "Téléphone"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationSubtitleAddress": {
+    "description": "Subtitle for the organization address section",
+    "message": "Adresse"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.organizationSubtitleContacts": {
+    "description": "Subtitle for the organization contacts section",
+    "message": "Contacts"
   },
   "components.DashboardItemOrder.PaymentModal.paymentMethodTitle": {
     "description": "Title of the payment method section",
@@ -781,51 +861,27 @@
   },
   "components.DashboardItemOrder.PaymentModal.title": {
     "description": "Title of the payment modal",
-    "message": "Détails du paiement"
-  },
-  "components.DashboardItemOrder.contactButton": {
-    "description": "Button to contact the organization",
-    "message": "Contacter"
-  },
-  "components.DashboardItemOrder.contactDescription": {
-    "description": "Description of the contact information for the organization",
-    "message": "Votre référent de formation est {name} - {email}."
+    "message": "Informations sur le paiement"
   },
   "components.DashboardItemOrder.gotoCourse": {
     "description": "Button that redirects to the order details",
     "message": "Voir le détail"
   },
-  "components.DashboardItemOrder.loadingCertificate": {
-    "description": "Accessible label displayed while certificate is being fetched on the dashboard.",
-    "message": "Chargement du certificat..."
+  "components.DashboardItemOrder.missingPaymentMethodCTA": {
+    "description": "CTA label displayed when the order is missing a payment method",
+    "message": "Définir"
   },
-  "components.DashboardItemOrder.organizationDpoContactLabel": {
-    "description": "Label for the organization DPO contact",
-    "message": "Email du délégué à la protection des données"
+  "components.DashboardItemOrder.missingPaymentMethodDescription": {
+    "description": "Description message displayed when the order is missing a payment method",
+    "message": "Vous devez définir un moyen de paiement pour finaliser votre abonnement."
   },
-  "components.DashboardItemOrder.organizationHeader": {
-    "description": "Header of the organization section",
-    "message": "Cette formation est gérée par"
+  "components.DashboardItemOrder.missingPaymentMethodTitle": {
+    "description": "Main message displayed when the order is missing a payment method",
+    "message": "Un moyen de paiement est manquant"
   },
-  "components.DashboardItemOrder.organizationLogoAlt": {
-    "description": "Alt text for the organization logo",
-    "message": "Logo de l'établissement"
-  },
-  "components.DashboardItemOrder.organizationMailContactLabel": {
-    "description": "Label for the organization mail contact",
-    "message": "Courriel"
-  },
-  "components.DashboardItemOrder.organizationPhoneContactLabel": {
-    "description": "Label for the organization phone contact",
-    "message": "Téléphone"
-  },
-  "components.DashboardItemOrder.paymentButton": {
-    "description": "Button label for the payment block",
-    "message": "Gérer les paiements"
-  },
-  "components.DashboardItemOrder.paymentLabel": {
-    "description": "Label for the payment block",
-    "message": "Vous pouvez voir et gérer tous les prélèvements."
+  "components.DashboardItemOrder.notResumable": {
+    "description": "Message displayed when the order subscription is not completed but the product is no more purchasable",
+    "message": "La souscription ne peut pas être finalisée. Cette formation n'est plus disponible à l'achat."
   },
   "components.DashboardItemOrder.paymentNeededButton": {
     "description": "Button label for the payment needed message",
@@ -835,17 +891,9 @@
     "description": "Message displayed when payment is needed",
     "message": "Le paiement a échoué, veuillez mettre à jour votre moyen de paiement"
   },
-  "components.DashboardItemOrder.paymentTitle": {
-    "description": "Label for the payment block",
-    "message": "Paiement"
-  },
   "components.DashboardItemOrder.syllabusLinkLabel": {
     "description": "Syllabus link label on order details",
     "message": "Accéder au syllabus"
-  },
-  "components.DashboardItemOrder.trainingContractTitle": {
-    "description": "Title of the training contract section",
-    "message": "Contrat de formation"
   },
   "components.DashboardOpenEdxProfile.EditButtonLabel": {
     "description": "Label of the edit button link of the open edx profile form",
@@ -915,17 +963,25 @@
     "description": "Label of the openEdx profile \"year of birth\" input",
     "message": "Année de naissance"
   },
+  "components.DashboardOrderLoader.definePaymentMethodLink": {
+    "description": "Link to define a payment method",
+    "message": "définir un moyen de paiement"
+  },
   "components.DashboardOrderLoader.loading": {
     "description": "Message displayed while loading an order",
     "message": "Chargement de la commande..."
   },
+  "components.DashboardOrderLoader.paymentMethodMissing": {
+    "description": "Error message displayed when no payment method is defined.",
+    "message": "Vous devez {definePaymentMethodLink} pour finaliser votre souscription."
+  },
   "components.DashboardOrderLoader.signLink": {
     "description": "Link to sign the contract",
-    "message": "signer votre contrat"
+    "message": "signer votre contrat de formation"
   },
   "components.DashboardOrderLoader.signatureNeeded": {
     "description": "Banner displayed when the contract is not signed",
-    "message": "Vous devez {signLink} afin de pouvoir vous inscrire à une session"
+    "message": "Vous devez {signLink} pour finaliser votre souscription."
   },
   "components.DashboardOrderLoader.wrongLinkedProductError": {
     "description": "Error message displayed when order's linked product type is not handle.",
@@ -1131,9 +1187,21 @@
     "description": "Label for screen reader when a credit card is being tokenized.",
     "message": "Définition du moyen de paiement en cours."
   },
+  "components.PaymentScheduleGrid.state.paid": {
+    "description": "Label displayed for paid payment state",
+    "message": "Payée"
+  },
+  "components.PaymentScheduleGrid.state.pending": {
+    "description": "Label displayed for pending payment state",
+    "message": "En attente"
+  },
+  "components.PaymentScheduleGrid.state.refused": {
+    "description": "Label displayed for refused payment state",
+    "message": "Refusée"
+  },
   "components.PaymentScheduleGrid.withdrawnAt": {
     "description": "Label displayed to explain when the installment will be withdrawn.",
-    "message": "Prélevé le {date}"
+    "message": "Prélevée le {date}"
   },
   "components.ProductCertificateFooter.buyProductCertificateLabel": {
     "description": "Label on the enrollment row that propose to buy a product of type certificate",
@@ -1142,6 +1210,22 @@
   "components.ProductCertificateFooter.downloadProductCertificateLabel": {
     "description": "Label on the enrollment row that propose to download a certificate",
     "message": "Un certificat est disponible en téléchargement."
+  },
+  "components.ProductCertificateFooter.examAccessBlocked": {
+    "description": "Message displayed when the exam access is blocked",
+    "message": "Vous serez en mesure de passer l'examen dès que l'échéance aura été prélevée."
+  },
+  "components.ProductCertificateFooter.failedInstallmentMessage": {
+    "description": "Message displayed when the last installment has failed",
+    "message": "Le dernier prélèvement a échoué. Merci de régulariser votre situation dès que possible."
+  },
+  "components.ProductCertificateFooter.nextInstallmentMessage": {
+    "description": "Message displayed when an installment is pending",
+    "message": "La prochaine échéance ({amount}) sera prélevée le {due_date}."
+  },
+  "components.ProductCertificateFooter.paymentNeededButton": {
+    "description": "Button label for the payment needed message",
+    "message": "Payer {amount}"
   },
   "components.ProductCertificateFooter.pendingProductCertificateLabel": {
     "description": "Label on the enrollment when a product of type certificate have been bought",
@@ -1235,6 +1319,10 @@
     "description": "Label for the full name input",
     "message": "Nom complet"
   },
+  "components.SaleTunnel.Information.paymentSchedule": {
+    "description": "Title for the payment schedule section",
+    "message": "Échéancier"
+  },
   "components.SaleTunnel.Information.title": {
     "description": "Title for the information section",
     "message": "Informations"
@@ -1257,15 +1345,15 @@
   },
   "components.SaleTunnel.SubscriptionButton.walkthroughToSavePayment": {
     "description": "Message explaining the subscription process with only a payment method to set.",
-    "message": "Pour vous inscrire à la formation, vous serez invité à définir un moyen de paiement."
+    "message": "Pour vous inscrire, vous serez invité à définir un moyen de paiement."
   },
   "components.SaleTunnel.SubscriptionButton.walkthroughToSign": {
     "description": "Message explaining the subscription process with only a training agreement to sign.",
-    "message": "Pour vous inscrire à la formation, vous serez invité à signer la convention de formation."
+    "message": "Pour vous inscrire, vous serez invité à signer le contrat de formation."
   },
   "components.SaleTunnel.SubscriptionButton.walkthroughToSignAndSavePayment": {
     "description": "Message explaining the subscription process with a training agreement to sign and a payment method to set.",
-    "message": "Pour vous inscrire à la formation, vous serez d'abord invité à signer la convention de formation, puis à définir un moyen de paiement."
+    "message": "Pour vous inscrire, vous serez d'abord invité à signer le contrat de formation, puis à définir un moyen de paiement."
   },
   "components.SaleTunnel.callToActionDescription": {
     "description": "Additional description announced by screen readers when focusing the call to action buying button",
@@ -1293,11 +1381,11 @@
   },
   "components.SaleTunnelSavePaymentMethod.description": {
     "description": "Text to explain what the user has to do in the 'save payment method' step",
-    "message": "Il s'agit de la dernière étape pour valider votre souscription, vous devez définir un moyen de paiement. Celui-ci sera utilisé pour prélever les échéances dues. Vous ne serez pas facturé pendant cette étape. Sélectionnez un moyen de paiement existant ou ajoutez-en un nouveau."
+    "message": "Il s'agit de la dernière étape pour valider votre souscription, vous devez définir un moyen de paiement. Celui-ci sera utilisé pour prélever les échéances dues. Aucun prélèvement ne sera effectué durant cette étape. Sélectionnez un moyen de paiement existant ou ajoutez-en un nouveau."
   },
   "components.SaleTunnelSavePaymentMethod.title": {
     "description": "Content title",
-    "message": "Définition du moyen de paiement"
+    "message": "Définir un moyen de paiement"
   },
   "components.SaleTunnelStepValidation.availableCourseRuns": {
     "description": "Course runs available text",
@@ -1325,7 +1413,7 @@
   },
   "components.SaleTunnelSuccess.successDetailMessage": {
     "description": "Text to explain when the user will be able to start its training.",
-    "message": "Vous pourrez commencer votre formation dès que la première échéance sera prélevée."
+    "message": "Vous pourrez débuter votre formation dès que la première échéance aura été prélevée."
   },
   "components.SaleTunnelSuccess.successMessage": {
     "description": "Message to confirm that order has been created",
@@ -1437,7 +1525,7 @@
   },
   "components.SubscriptionButton.errorAddress": {
     "description": "Error message shown when the user didn't select a billing address.",
-    "message": "Vous devez sélectionner une adresse de facturation."
+    "message": "Vous devez spécifier une adresse de facturation."
   },
   "components.SubscriptionButton.errorDefault": {
     "description": "Error message shown when order creation request failed.",
@@ -1445,7 +1533,7 @@
   },
   "components.SubscriptionButton.errorFullProduct": {
     "description": "Error message shown when order creation request failed because there is no remaining available seat for the product.",
-    "message": "Il n'y a pas plus de places disponibles pour ce produit."
+    "message": "Il n'y a pas plus de places disponibles."
   },
   "components.SubscriptionButton.orderCreationInProgress": {
     "description": "Label for screen reader when an order creation is in progress.",
@@ -1917,7 +2005,7 @@
   },
   "hooks.useOrders.errorSetPaymentMethod": {
     "description": "Error message shown to the user when set payment method mutation failed.",
-    "message": "Impossible de définir le moyen de paiement de cette commande."
+    "message": "Impossible de définir un moyen de paiement de cette commande."
   },
   "hooks.useOrdersEnrollments.errorGet": {
     "description": "Error message shown to the user when orders or enrollments fetch request fails.",

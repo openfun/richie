@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.30.0] - 2024-10-16
+
 ### Added
 
 - Added new 'large-banner' plugin template variant `compacted-banner` that
@@ -33,19 +35,19 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix logic to know if user is enrolled to a ongoing product
 - Normalize credit card brand on CreditCardBrandLogo component
 
-## [2.29.2]
+## [2.29.2] - 2024-09-23
 
 ### Fixed
 
 - Fix Open EdX Level education enum "other" value
 
-## [2.29.1]
+## [2.29.1] - 2024-08-22
 
 ### Fixed
 
 - Fix LyraPopIn critical error (`CLIENT_101`)
 
-## [2.29.0]
+## [2.29.0] - 2024-08-21
 
 ### Added
 
@@ -68,14 +70,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - csrftoken in richie context
 
-## [2.28.1]
+## [2.28.1] - 2024-06-21
 
 ### Fixed
 
 - Fix ProductCertificateFooter component to display proper CTA
   according to Order state
 
-## [2.28.0]
+## [2.28.0] - 2024-06-11
 
 ### Changed
 
@@ -94,7 +96,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Load React JS bundles from CDN on all pages
 
-## [2.27.0]
+## [2.27.0] - 2024-06-03
 
 ### Added
 
@@ -115,7 +117,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Manage display of CourseRun dates when end date and/or enrollment date are
   undefined
 
-## [2.26.0]
+## [2.26.0] - 2024-05-22
 
 ### Added
 
@@ -155,13 +157,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix a bug in the learner dashboard contract page where an alert
   message was displayed on successful download.
 
-## [2.25.1]
+## [2.25.1] - 2024-04-18
 
 ### Fixed
 
 - Duplicated `course_format` placeholder in `course_detail` template
 
-## [2.25.0]
+## [2.25.0] - 2024-04-11
 
 ### Added
 
@@ -215,7 +217,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix enrollment cache not invalided after buying certificate product.
 - Fix a typo on ContractStatus component
 
-## [2.25.0-beta.1]
+## [2.25.0-beta.1] - 2024-01-05
 
 ### Added
 
@@ -234,7 +236,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix search facets count metadata issue (ignore not listed courses)
 - Fix `getCourseGlimpseProps` method to handle localized course urls
 
-## [2.25.0-beta.0]
+## [2.25.0-beta.0] - 2024-01-03
 
 ### Added
 
@@ -2196,7 +2198,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.29.2...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.30.0...master
+[2.30.0]: https://github.com/openfun/richie/compare/v2.29.2...v2.30.0
 [2.29.2]: https://github.com/openfun/richie/compare/v2.29.1...v2.29.2
 [2.29.1]: https://github.com/openfun/richie/compare/v2.29.0...v2.29.1
 [2.29.0]: https://github.com/openfun/richie/compare/v2.28.1...v2.29.0
