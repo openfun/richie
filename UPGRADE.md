@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.25-beta.0 to 2.30.0
+
 - Add new `compacted-banner` theme scheme
 ```
   compacted-banner: (
