@@ -24,6 +24,11 @@ const messages = defineMessages({
     description: 'Label for the full name input',
     defaultMessage: 'Full name',
   },
+  paymentSchedule: {
+    id: 'components.SaleTunnel.Information.paymentSchedule',
+    description: 'Title for the payment schedule section',
+    defaultMessage: 'Payment schedule',
+  },
   totalInfo: {
     id: 'components.SaleTunnel.Information.total.info',
     description: 'Information about the total amount',
@@ -124,7 +129,9 @@ const PaymentScheduleBlock = () => {
 
   return (
     <div className="payment-schedule">
-      <h4 className="block-title mb-t">Payment schedule</h4>
+      <h4 className="block-title mb-t">
+        <FormattedMessage {...messages.paymentSchedule} />
+      </h4>
       <div className="mt-t">
         <PaymentScheduleGrid schedule={query.data} />
       </div>
