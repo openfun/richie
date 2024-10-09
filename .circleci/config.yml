@@ -1061,7 +1061,7 @@ workflows:
             - package-back
           filters:
             branches:
-              only: master
+              only: chore/release
             tags:
               only: /^v.*/
 
@@ -1076,7 +1076,7 @@ workflows:
             - test-front-package
           filters:
             branches:
-              only: master
+              only: chore/release
             tags:
               only: /^v.*/
 
