@@ -27,11 +27,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update Learner dashboard to finalize subscription process
 - SaleTunnel has been fully rework to comply with the purchase workflow
 - Replace order abort mutation by order cancel mutation
+- enroll now action component from link to button
 
 ### Fixed
 
 - Fix logic to know if user is enrolled to a ongoing product
 - Normalize credit card brand on CreditCardBrandLogo component
+- fix enroll action validation
 
 ## [2.29.2]
 
