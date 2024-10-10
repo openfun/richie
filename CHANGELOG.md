@@ -33,11 +33,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update Learner dashboard to finalize subscription process
 - SaleTunnel has been fully rework to comply with the purchase workflow
 - Replace order abort mutation by order cancel mutation
+- Button instead of link to "Enroll now" CTA in SyllabusCourseRunCompacted
 
 ### Fixed
 
 - Fix logic to know if user is enrolled to a ongoing product
 - Normalize credit card brand on CreditCardBrandLogo component
+- Display SyllabusCourseRunCompacted only for self-paced ongoing opened runs
 
 ## [2.29.2] - 2024-09-23
 
