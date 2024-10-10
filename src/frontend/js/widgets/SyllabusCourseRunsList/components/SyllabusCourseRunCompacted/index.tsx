@@ -8,6 +8,7 @@ import { IntlHelper } from 'utils/IntlHelper';
 import { DjangoCMSPluginCourseRun, DjangoCMSTemplate } from 'components/DjangoCMSTemplate';
 import CourseRunEnrollment from '../CourseRunEnrollment';
 import CourseProductItem from '../CourseProductItem';
+import { Button } from '@openfun/cunningham-react';
 
 const messages = defineMessages({
   course: {
@@ -76,9 +77,9 @@ const OpenedSelfPacedCourseRun = ({
       {findLmsBackend(courseRun.resource_link) ? (
         <CourseRunEnrollment courseRun={courseRun} />
       ) : (
-        <a className="course-run-enrollment__cta" href={courseRun.resource_link}>
+        <Button className="course-run-enrollment__cta" href={courseRun.resource_link} fullWidth>
           {StringHelper.capitalizeFirst(courseRun.state.call_to_action)}
-        </a>
+        </Button>
       )}
     </>
   );
