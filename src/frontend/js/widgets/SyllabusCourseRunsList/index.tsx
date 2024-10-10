@@ -85,7 +85,7 @@ const SyllabusCourseRunsList = ({
         </div>
       )}
       {openedRuns.length === 1 &&
-        (course.is_self_paced && openedRuns[0].state.priority !== Priority.ARCHIVED_OPEN ? (
+        (course.is_self_paced && openedRuns[0].state.priority === Priority.ONGOING_OPEN ? (
           <div className="course-detail__row course-detail__runs course-detail__runs--open">
             <SyllabusCourseRunCompacted
               courseRun={openedRuns[0]}
