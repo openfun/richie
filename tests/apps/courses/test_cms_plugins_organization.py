@@ -101,7 +101,8 @@ class OrganizationPluginTestCase(CMSTestCase):
         self.assertIn(
             (
                 '<div class="organization-glimpse"><a href="/en/public-title/" '
-                'title="public title" property="author" typeof="CollegeOrUniversity">'
+                'title="Link to the organization page of public title" '
+                'property="author" typeof="CollegeOrUniversity">'
             ),
             htmlmin.minify(
                 response.content.decode("UTF-8"), remove_optional_attribute_quotes=False
@@ -129,7 +130,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertIn(
-            '<a href="/fr/titre-public/" title="titre public"',
+            '<a href="/fr/titre-public/" title="Link to the organization page of titre public"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
         pattern = (
@@ -287,7 +288,8 @@ class OrganizationPluginTestCase(CMSTestCase):
         self.assertIn(
             (
                 '<div class="organization-glimpse">'
-                '<a href="/en/organisation-publique/" title="organisation publique" '
+                '<a href="/en/organisation-publique/" '
+                'title="Link to the organization page of organisation publique" '
                 'property="author" typeof="CollegeOrUniversity">'
             ),
             htmlmin.minify(
