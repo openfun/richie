@@ -36,6 +36,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix organization glimpse card title for accessibility purposes
 - Fix logic to know if user is enrolled to a ongoing product
 - Normalize credit card brand on CreditCardBrandLogo component
 
