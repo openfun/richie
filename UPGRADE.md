@@ -16,6 +16,33 @@ $ make migrate
 
 ## Unreleased
 
+- Add new `r-section-grid-sizes` variable
+```
+  $r-section-grid-sizes: (
+    '50x50': 1fr 1fr,
+    '33x33x33': 1fr 1fr 1fr,
+    '25x75': 25% 2fr,
+    '75x25': 2fr 25%,
+  );
+```
+- Add new `r-section-grid-gutters` variable
+```
+  $r-section-grid-gutters: (
+    'sm': 0.5rem,
+    'xl': 1rem,
+  );
+```
+- There is a new setting that can be used to define custom column sizes for Section
+```
+    RICHIE_SECTION_GRID_COLUMNS = [
+        ("", _("None")),
+        ("33x33x33", _("Three columns: (33% | 33% | 33%)")),
+        ("50x50", _("Two columns: (50% | 50%)")),
+        ("25x75", _("Two columns: (25% | 75%)")),
+        ("75x25", _("Two columns: (75% | 25%)")),
+    ]
+```
+
 ## 2.25-beta.0 to 2.30.0
 
 - Add new `compacted-banner` theme scheme

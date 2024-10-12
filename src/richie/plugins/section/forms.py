@@ -31,4 +31,6 @@ class SectionForm(forms.ModelForm):
             "title",
             "template",
             "attributes",
+            "grid_columns",
+            "grid_gutter",
         }

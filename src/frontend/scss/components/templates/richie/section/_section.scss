@@ -1,3 +1,6 @@
+$r-section-grid-sizes: () !default;
+$r-section-grid-gutters: () !default;
+
 section {
   // Ensure caesura always takes full width with some space around
   // within flex grid
@@ -70,6 +73,9 @@ section {
       }
     }
   }
+
+  // Enable CSS grid
+  @include m-o-grid($r-section-grid-sizes, $r-section-grid-gutters);
 }
 
 //
@@ -126,6 +132,9 @@ section {
       line-height: 1.1;
     }
   }
+
+  // Enable CSS grid
+  @include m-o-grid($r-section-grid-sizes, $r-section-grid-gutters);
 
   .category-glimpse {
     @include sv-flex(1, 0, calc(15% - 1rem));
