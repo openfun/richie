@@ -20,3 +20,16 @@ SECTION_TEMPLATES = getattr(
         ("richie/section/section_tiles.html", _("Item tiles")),
     ],
 )
+
+
+SECTION_GRID_COLUMNS = getattr(
+    settings,
+    "RICHIE_SECTION_GRID_COLUMNS",
+    [
+        ("", _("None")),
+        ("33x33x33", _("Three columns: (33% | 33% | 33%)")),
+        ("50x50", _("Two columns: (50% | 50%)")),
+        ("25x75", _("Two columns: (25% | 75%)")),
+        ("75x25", _("Two columns: (75% | 25%)")),
+    ],
+)
