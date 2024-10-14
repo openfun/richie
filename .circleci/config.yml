@@ -418,7 +418,9 @@ jobs:
               -wait tcp://localhost:5432 \
               -wait tcp://localhost:9200 \
               -timeout 60s \
-                ~/.local/bin/pytest
+                ~/.local/bin/pytest --junitxml=./reports/pytest/junit.xml
+      - store_test_results:
+          path: ./reports/pytest/
 
   test-back-postgresql-es6:
     docker:
@@ -803,8 +805,15 @@ jobs:
       - *checkout_fun
       - *restore_node_modules
       - run:
+          name: Prepare test reporting
+          command: |
+            yarn add --dev jest-junit
+            mkdir -p ./reports/jest
+      - run:
           name: Run tests
-          command: yarn test -w 3 --shard "$(($CIRCLE_NODE_INDEX + 1))/$CIRCLE_NODE_TOTAL"
+          command: JEST_JUNIT_OUTPUT_DIR=./reports/jest yarn test -w 3 --shard "$(($CIRCLE_NODE_INDEX + 1))/$CIRCLE_NODE_TOTAL" --reporters=default --reporters=jest-junit
+      - store_test_results:
+          path: ./reports/jest/
 
   test-front-package:
     docker:
