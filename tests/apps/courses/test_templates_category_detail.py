@@ -21,6 +21,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     PersonFactory,
 )
+from richie.plugins.nesteditem.defaults import ACCORDION
 
 
 class CategoryCMSTestCase(CMSTestCase):
@@ -553,3 +554,164 @@ class CategoryCMSTestCase(CMSTestCase):
             response,
             '<meta name="description"',
         )
+
+
+class CategoryAdditionalInfoCMSTestCase(CMSTestCase):
+    """
+    End-to-end test suite to validate the content and Ux of the category detail view
+    in terms of the additional information section
+    """
+
+    def test_template_category_detail_additional_information(self):
+        """
+        Validates the creation of additional information for a category and its content
+        """
+
+        info_quantity = 3
+        category = CategoryFactory.create(page_title="Accessible", should_publish=True)
+        placeholder = category.extended_object.placeholders.get(
+            slot="additional_information"
+        )
+
+        section = add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title="Additional Information",
+        )
+
+        container = add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="NestedItemPlugin",
+            variant=ACCORDION,
+            target=section,
+        )
+
+        for question in range(1, info_quantity):
+            question_container = add_plugin(
+                language="en",
+                placeholder=placeholder,
+                plugin_type="NestedItemPlugin",
+                target=container,
+                content=f"{question}. question?",
+                variant=ACCORDION,
+            )
+
+            add_plugin(
+                language="en",
+                placeholder=placeholder,
+                plugin_type="NestedItemPlugin",
+                target=question_container,
+                content=f"Answer of question {question}.",
+                variant=ACCORDION,
+            )
+
+        page = category.get_page()
+        page.publish("en")
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Additional Information")
+
+        for question in range(1, info_quantity):
+            self.assertContains(response, f"{question}. question?")
+            self.assertContains(response, f"Answer of question {question}.")
+
+    def test_template_category_detail_no_additional_info_edit_mode(self):
+        """
+        Validates the behavior whether editing the page or not to show
+        the message indicating that it is possible to enter data to
+        the section of additional information
+        """
+
+        category = CategoryFactory.create(page_title="Accessible", should_publish=True)
+
+        page = category.get_page()
+        page.publish("en")
+
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(
+            response, "Enter additional information for this category"
+        )
+
+        staff = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=staff.username, password="password")
+        url = f"{url:s}?edit"
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Enter additional information for this category")
+
+    def test_template_category_detail_additional_info_page_id(self):
+        """
+        Validates the behavior when the page has additional information
+        but without page id, it shows the message indicating to register
+        the page id
+        """
+
+        category = CategoryFactory.create(page_title="Accessible", should_publish=True)
+        placeholder = category.extended_object.placeholders.get(
+            slot="additional_information"
+        )
+
+        section = add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title="Additional Information",
+        )
+
+        container = add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="NestedItemPlugin",
+            variant=ACCORDION,
+            target=section,
+        )
+
+        for question in range(1, 3):
+            question_container = add_plugin(
+                language="en",
+                placeholder=placeholder,
+                plugin_type="NestedItemPlugin",
+                target=container,
+                content=f"{question}. question?",
+                variant=ACCORDION,
+            )
+
+            add_plugin(
+                language="en",
+                placeholder=placeholder,
+                plugin_type="NestedItemPlugin",
+                target=question_container,
+                content=f"Answer of question {question}.",
+                variant=ACCORDION,
+            )
+
+        message = (
+            "Configure this page id to show this additional "
+            "information on all related course pages"
+        )
+
+        page = category.get_page()
+        page.publish("en")
+        url = page.get_absolute_url()
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, message)
+
+        page.reverse_id = "accessible"
+        page.save()
+        page.publish("en")
+
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, message)

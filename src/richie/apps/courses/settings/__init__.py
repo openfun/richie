@@ -305,6 +305,25 @@ CMS_PLACEHOLDER_CONF = {
         "plugins": ["CKEditorPlugin"],
         "limits": {"CKEditorPlugin": 1},
     },
+    "courses/cms/category_detail.html additional_information": {
+        "name": _("Additional Information"),
+        "plugins": ["SectionPlugin"],
+        "parent_classes": {
+            "CKEditorPlugin": ["SectionPlugin"],
+            "SimplePicturePlugin": ["SectionPlugin"],
+            "GlimpsePlugin": ["SectionPlugin"],
+            "NestedItemPlugin": ["SectionPlugin"],
+        },
+        "child_classes": {
+            "SectionPlugin": [
+                "CKEditorPlugin",
+                "SimplePicturePlugin",
+                "GlimpsePlugin",
+                "NestedItemPlugin",
+            ],
+            "NestedItemPlugin": ["NestedItemPlugin"],
+        },
+    },
     # Person detail
     "courses/cms/person_detail.html categories": {
         "name": _("Categories"),

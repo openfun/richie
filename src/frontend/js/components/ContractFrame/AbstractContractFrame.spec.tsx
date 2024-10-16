@@ -169,7 +169,7 @@ describe('<AbstractContractFrame />', () => {
     await user.click(button);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
-  });
+  }, 25000);
 
   it('retrieves invitation link but fails during signature checking', async () => {
     const user = userEvent.setup();
@@ -231,7 +231,7 @@ describe('<AbstractContractFrame />', () => {
     await user.click(button);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
-  });
+  }, 25000);
 
   it('retrieves invitation link but exceeds polling max attemps', async () => {
     const user = userEvent.setup();

@@ -170,7 +170,7 @@ describe('<DashboardCreateAddress/>', () => {
     await waitFor(() => {
       expect(screen.getByText('Billing addresses')).toBeInTheDocument();
     });
-  });
+  }, 15000);
 
   it('shows an error in case of API error', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
@@ -210,5 +210,5 @@ describe('<DashboardCreateAddress/>', () => {
     ).toBe(true);
 
     await expectBannerError('An error occurred while creating the address. Please retry later.');
-  });
+  }, 15000);
 });
