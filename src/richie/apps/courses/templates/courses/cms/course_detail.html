@@ -445,6 +445,24 @@
             {% endif %}
         {% endblock team %}
 
+        {% block course_faq %}
+            <div class="course-detail__faqs course-detail__block course-detail__row">
+                {% with is_syllabus_property=True %}   
+                    {% get_categories_pages_have_faqs current_page.course as pages_have_faqs %}
+                    {% if pages_have_faqs %}
+                        <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Crucial information{% endblocktrans %}</h2>            
+                        
+                        {% for page in pages_have_faqs %}
+                            {% with reverse_id=page.reverse_id %}
+                                <h3 class="course-detail__faq_title">{{ page.get_title }}</h3>
+                                {% show_placeholder "course_faq" reverse_id %}
+                            {% endwith %}
+                        {% endfor %}                           
+                    {% endif %}
+                {% endwith %}
+            </div>
+        {% endblock course_faq %}
+
         {% block organizations %}
             {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_organizations" %}
             <div class="course-detail__organizations course-detail__block">
