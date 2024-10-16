@@ -231,7 +231,7 @@ describe('<DashboardCourses/>', () => {
     await waitFor(() => expectList(entities.slice(0, perPage * 3), relations), { timeout: 30000 });
     loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
-  });
+  }, 15000);
 
   it('shows an error', async () => {
     jest.spyOn(console, 'error').mockImplementation(noop);

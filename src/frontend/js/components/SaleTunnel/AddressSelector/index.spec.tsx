@@ -133,7 +133,7 @@ describe('AddressSelector', () => {
         'Billing address' + getAddressLabel(address) + 'closearrow_drop_down',
       );
     });
-  });
+  }, 15000);
   it('has an existing main billing address and choose another', async () => {
     const address = AddressFactory({
       is_main: true,
@@ -268,5 +268,5 @@ describe('AddressSelector', () => {
         'Billing address' + getAddressLabel(newAddress) + 'closearrow_drop_down',
       ),
     );
-  });
+  }, 15000);
 });

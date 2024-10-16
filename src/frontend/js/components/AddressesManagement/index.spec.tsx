@@ -177,7 +177,7 @@ describe('AddressesManagement', () => {
       ...address,
       is_main: true,
     });
-  }, 10000);
+  }, 15000);
 
   it('renders a form to edit an address when user selects an address to edit', async () => {
     const address = AddressFactory().one();

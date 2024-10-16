@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add Additional Information section for a category and
+    use them in a course page
+
 ## [2.33.0] - 2024-12-02
 
 ### Added

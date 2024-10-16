@@ -472,6 +472,23 @@
             {% endif %}
         {% endblock information %}
 
+        {% block category_additional_information %}
+            <!-- Showing all categories additional information of categories pages that have a page id -->
+
+            {% get_categories_pages_additional_information current_page.course as pages %}
+            {% if pages %}
+                <div class="course-detail__additional-info course-detail__block course-detail__row">
+                    {% with is_syllabus_property=True %}   
+                        {% for page in pages %}
+                            {% with reverse_id=page.reverse_id %}
+                                {% show_placeholder "additional_information" reverse_id %}
+                            {% endwith %}
+                        {% endfor %}                           
+                    {% endwith %}
+                </div>
+            {% endif %}    
+        {% endblock category_additional_information %}
+
         {% block licenses %}
             {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_license_content" or not current_page|is_empty_placeholder:"course_license_participation" %}
             <div class="course-detail__license course-detail__block course-detail__block--divider">

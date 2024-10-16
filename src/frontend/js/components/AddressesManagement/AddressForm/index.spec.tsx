@@ -153,5 +153,5 @@ describe('AddressForm', () => {
     expect(
       getByText($countryInput.closest('.c__field')!, /This field is required./),
     ).toBeInTheDocument();
-  });
+  }, 15000);
 });

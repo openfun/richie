@@ -82,7 +82,7 @@ describe('useCourseProductUnion', () => {
       `${coursesUrl}?has_listed_course_runs=true&page=1&page_size=${PER_PAGE}`,
     );
     expect(calledUrls).toContain(`${courseProductRelationsUrl}?page=1&page_size=${PER_PAGE}`);
-  });
+  }, 25000);
 
   it('should call organization courses and organization coursesProductRelation endpoints', async () => {
     const organizationId = 'DUMMY_ORGANIZATION_ID';

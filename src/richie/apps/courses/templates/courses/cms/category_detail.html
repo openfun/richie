@@ -190,6 +190,19 @@
             {% endif %}
         {% endwith %}
 
+        <div id="page{{ page_suffix }}" class="category-detail__additional-info category-detail__block">
+            <div class="category-detail__row">
+                {% if not current_page|is_empty_placeholder:"additional_information" and not current_page.reverse_id %}
+                    <p class="category-detail__empty">{% trans 'Configure this page id to show this additional information on all related course pages' %}</p>
+                {% endif %}
+                {% placeholder "additional_information" or %}
+                    {% if request.toolbar.edit_mode_active %}
+                        <p class="category-detail__empty">{% trans 'Enter additional information for this category' %}</p>
+                    {% endif %}
+                {% endplaceholder %}
+            </div>
+        </div>
+
         {% with persons=category.get_persons %}
             {% if persons %}
                 {% autopaginate persons GLIMPSE_PAGINATION_PERSONS %}
