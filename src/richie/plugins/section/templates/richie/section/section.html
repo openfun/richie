@@ -7,7 +7,7 @@
                 {{ instance.title|safe }}
             </h{{ header_level|default:2 }}>
         {% endif %}
-        <div class="section__items">
+        <div class="{% if instance.grid_columns %}section__grid section__grid--{{ instance.grid_columns }}{% if instance.grid_gutter %} section__grid--with-gutter{% endif %}{% else %}section__items{% endif %}">
             {% for plugin in instance.child_plugin_instances %}
                 {% with header_level=3 %}
                     {% render_plugin plugin %}

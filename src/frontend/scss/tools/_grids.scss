@@ -1,0 +1,50 @@
+// Basic CSS grid
+
+// Define CSS grid rules for content
+@mixin m-o-grid($grid-sizes, $grid-gutters) {
+  // CSS grid definition
+  &__grid {
+    display: grid;
+    grid-template-columns: 100%;
+
+    // Neutralize and adapt some rules that for content items that can define some
+    // rules which conflict with expected section grid behaviors
+    & > * {
+      min-width: auto !important;
+      max-width: none !important;
+    }
+
+    // Adjust button caesura
+    & > .button-caesura {
+      display: block;
+    }
+
+    // Enable column size only for large screen and up
+    @include media-breakpoint-up(lg) {
+      @each $key, $value in $r-section-grid-sizes {
+        &--#{$key} {
+          grid-template-columns: $value;
+        }
+      }
+    }
+
+    // Variants with a gutter between content items
+    &--with-gutter {
+      @if map-get($r-section-grid-gutters, 'sm') {
+        column-gap: map-get($r-section-grid-gutters, 'sm');
+        row-gap: map-get($r-section-grid-gutters, 'sm');
+      }
+      @each $key, $value in $r-section-grid-gutters {
+        @include media-breakpoint-up($key) {
+          column-gap: $value;
+          row-gap: $value;
+        }
+      }
+
+      // Disable contents margin in profit of grid gutter
+      & > * {
+        margin: 0 !important;
+      }
+    }
+  }
+}

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Grid options for the Section plugin
+
 ## [2.30.0] - 2024-10-16
 
 ### Added

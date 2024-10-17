@@ -243,6 +243,18 @@ migrate: ## perform database migrations
 	@$(MANAGE) migrate
 .PHONY: migrate
 
+migrations: ## create all pending migrations
+	@echo "Start and wait for ${DB_HOST} to be up..."
+	@$(COMPOSE_UP_WAIT) -d ${DB_HOST}
+	@$(MANAGE) makemigrations -v 3
+.PHONY: migrations
+
+check-migrations: ## check if there is pending migrations to create
+	@echo "Start and wait for ${DB_HOST} to be up..."
+	@$(COMPOSE_UP_WAIT) -d ${DB_HOST}
+	@$(MANAGE) makemigrations --check --dry-run -v 3
+.PHONY: check
+
 search-index: ## (re)generate the Elasticsearch index
 	@echo "Start and wait for ${DB_HOST} & elasticsearch to be up..."
 	@$(COMPOSE_UP_WAIT) -d ${DB_HOST} elasticsearch

@@ -165,3 +165,20 @@ $r-search-filters-gutter: 0.2rem !default;
 $r-ease-in: cubic-bezier(0.5, 0, 0.75, 0) !default;
 $r-ease-out: cubic-bezier(0.25, 1, 0.5, 1) !default;
 $r-ease-in-out: cubic-bezier(0.76, 0, 0.24, 1) !default;
+
+// Define the grid column template for Section grid
+// Each item will be a variant to allow on grid
+$r-section-grid-sizes: (
+  '50x50': 1fr 1fr,
+  '33x33x33': 1fr 1fr 1fr,
+  '25x75': 25% 2fr,
+  '75x25': 2fr 25%,
+);
+
+// Define gutter size to apply on Section grid
+// Each item is a breakpoint where to apply the gutter, breakpoint 'sm' is used as
+// the default gutter size for minimal breakpoint if defined
+$r-section-grid-gutters: (
+  'sm': 0.5rem,
+  'xl': 1rem,
+);
