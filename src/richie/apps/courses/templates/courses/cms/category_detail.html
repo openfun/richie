@@ -190,6 +190,15 @@
             {% endif %}
         {% endwith %}
 
+        <div id="page{{ page_suffix }}" class="category-detail__course_faq category-detail__block">
+            <div class="category-detail__row">
+                <h2 class="category-detail__title">{% trans "Category FAQ's" %}</h2>
+                {% placeholder "course_faq" or %}
+                    <p class="category-detail__empty">{% trans 'Enter a FAQ for this category' %}</p>
+                {% endplaceholder %}
+            </div>
+        </div>
+
         {% with persons=category.get_persons %}
             {% if persons %}
                 {% autopaginate persons GLIMPSE_PAGINATION_PERSONS %}

@@ -304,6 +304,11 @@ CMS_PLACEHOLDER_CONF = {
         "plugins": ["CKEditorPlugin"],
         "limits": {"CKEditorPlugin": 1},
     },
+    "courses/cms/category_detail.html course_faq": {
+        "name": _("Faq"),
+        "plugins": ["NestedItemPlugin"],
+        "child_classes": {"NestedItemPlugin": ["NestedItemPlugin"]},
+    },
     # Person detail
     "courses/cms/person_detail.html categories": {
         "name": _("Categories"),
