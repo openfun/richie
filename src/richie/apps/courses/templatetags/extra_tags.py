@@ -1,6 +1,7 @@
 """Custom template tags for the courses application of Richie."""
 
 import json
+from typing import List
 
 from django import template
 from django.conf import settings
@@ -21,8 +22,10 @@ from cms.templatetags.cms_tags import (
 from cms.toolbar.utils import get_toolbar_from_request
 from cms.utils import get_site_id
 from cms.utils.plugins import get_plugins
+from cms.api import Page
 
 from richie.apps.courses.defaults import RICHIE_MAX_ARCHIVED_COURSE_RUNS
+from richie.apps.courses.models.course import Course
 
 from ..lms import LMSHandler
 from ..models import CourseRunCatalogVisibility
@@ -270,6 +273,16 @@ def joanie_product_widget_props(context):
 
     return json.dumps({"productId": product_id, "courseCode": course_code})
 
+@register.simple_tag()
+def get_categories_pages_have_faqs(course: Course) -> list[Page]:
+    """
+    Return a list with all pages have faq
+    """
+    
+    categories_pages: list[Page] = course.get_root_to_leaf_public_category_pages().filter(reverse_id__isnull=False)
+    pages_have_faq: list[Page] = [page for page in categories_pages if not page.get_placeholders().get(slot="course_faq") is None]
+
+    return pages_have_faq
 
 @register.simple_tag(takes_context=True)
 def course_runs_list_widget_props(context):
