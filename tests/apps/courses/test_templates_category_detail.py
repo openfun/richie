@@ -21,6 +21,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     PersonFactory,
 )
+from richie.plugins.nesteditem.defaults import ACCORDION
 
 
 class CategoryCMSTestCase(CMSTestCase):
@@ -553,3 +554,40 @@ class CategoryCMSTestCase(CMSTestCase):
             response,
             '<meta name="description"',
         )
+    
+    def test_template_category_detail_add_course_faq(self):
+        """
+        Validate the creation of a FAQ for a category
+        """
+
+        category = CategoryFactory()
+        placeholder = category.extended_object.placeholders.get(slot="course_faq")
+        container = add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="NestedItemPlugin",
+            variant=ACCORDION,
+        )
+        for question in range(1, 3):
+            question_container = add_plugin(
+                language="en",
+                placeholder=placeholder,
+                plugin_type="NestedItemPlugin",
+                target=container,
+                content=f"{question}. question?",
+                variant=ACCORDION,
+            )
+
+            for answer in range(1, 3):
+                add_plugin(
+                    language="en",
+                    placeholder=placeholder,
+                    plugin_type="NestedItemPlugin",
+                    target=question_container,
+                    content=f"{question}.{answer} - Answer of question {question}.",
+                    variant=ACCORDION,
+                )
+        
+        url = category.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
