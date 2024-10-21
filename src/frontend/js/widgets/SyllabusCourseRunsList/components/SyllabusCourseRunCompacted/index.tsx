@@ -1,3 +1,4 @@
+import { Button } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { CourseRun, CourseRunDisplayMode, PacedCourse } from 'types';
 import useDateFormat from 'hooks/useDateFormat';
@@ -76,9 +77,9 @@ const OpenedSelfPacedCourseRun = ({
       {findLmsBackend(courseRun.resource_link) ? (
         <CourseRunEnrollment courseRun={courseRun} />
       ) : (
-        <a className="course-run-enrollment__cta" href={courseRun.resource_link}>
+        <Button className="course-run-enrollment__cta" href={courseRun.resource_link} fullWidth>
           {StringHelper.capitalizeFirst(courseRun.state.call_to_action)}
-        </a>
+        </Button>
       )}
     </>
   );
