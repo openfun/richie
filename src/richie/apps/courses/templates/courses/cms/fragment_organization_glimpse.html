@@ -4,7 +4,7 @@
 <div
     class="organization-{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-{{ organization_variant }}--draft{% endif %}"
 >
-    <a href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}" property="{{ organization_property|default:'author' }}" typeof="CollegeOrUniversity">
+    <a href="{{ organization_page.get_absolute_url }}" title="{% blocktranslate with title=organization_page.get_title %}Link to the organization page of {{ title }}{% endblocktranslate %}" property="{{ organization_property|default:'author' }}" typeof="CollegeOrUniversity">
         <meta property="url" content="{{ SITE.web_url }}{{ organization_page.get_absolute_url }}" />
         {% if organization_variant == "row" %}
             <div class="organization-{{ organization_variant }}__logo">
