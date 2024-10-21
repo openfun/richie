@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:12
+    image: postgres:13.16
     environment:
       - POSTGRES_DB=richie_${RICHIE_SITE:?}
     env_file:
