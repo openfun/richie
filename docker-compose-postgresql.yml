@@ -1,6 +1,6 @@
 services:
   postgresql:
-    image: postgres:12
+    image: postgres:13.16
     ports:
       - "5472:5432"
     env_file:
@@ -16,4 +16,3 @@ services:
       postgresql:
         condition: service_healthy 
         restart: true
-
