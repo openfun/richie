@@ -206,6 +206,7 @@ export const CredentialProductFactory = factory((): CredentialProduct => {
     remaining_order_count: faker.number.int({ min: 1, max: 100 }),
     state: CourseStateFactory().one(),
     instructions: null,
+    is_withdrawable: true,
   };
 });
 
@@ -490,6 +491,8 @@ export const SaleTunnelContextFactory = factory(
     billingAddress: undefined,
     setBillingAddress: noop,
     setCreditCard: noop,
+    setHasWaivedWithdrawalRight: noop,
+    hasWaivedWithdrawalRight: false,
     step: SaleTunnelStep.IDLE,
     registerSubmitCallback: noop,
     unregisterSubmitCallback: noop,

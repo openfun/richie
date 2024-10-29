@@ -63,6 +63,8 @@ describe('AddressSelector', () => {
           unregisterSubmitCallback: jest.fn(),
           runSubmitCallbacks: jest.fn(),
           nextStep: jest.fn(),
+          hasWaivedWithdrawalRight: false,
+          setHasWaivedWithdrawalRight: jest.fn(),
         }),
         [billingAddress],
       );

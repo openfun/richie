@@ -149,6 +149,7 @@ export interface Product {
   state: CourseState;
   instructions: Nullable<string>;
   contract_definition?: ContractDefinition;
+  is_withdrawable: boolean;
 }
 
 export interface CredentialProduct extends Product {
@@ -468,6 +469,7 @@ interface AbstractOrderProductCreationPayload {
   product_id: Product['id'];
   order_group_id?: OrderGroup['id'];
   billing_address: Omit<Address, 'id' | 'is_main'>;
+  has_waived_withdrawal_right: boolean;
 }
 
 interface OrderCertificateCreationPayload extends AbstractOrderProductCreationPayload {
