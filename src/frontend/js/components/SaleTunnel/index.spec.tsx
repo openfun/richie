@@ -453,4 +453,44 @@ describe.each([
 
     screen.getByTestId('walkthrough-banner');
   });
+
+  it('should show a checkbox to waive withdrawal right if the product is not withdrawable', async () => {
+    const product = ProductFactory({ is_withdrawable: false }).one();
+    const schedule = PaymentInstallmentFactory().many(2);
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+        schedule,
+      );
+
+    render(<Wrapper product={product} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    screen.getByTestId('withdraw-right-checkbox');
+  });
+
+  it('should not show a checkbox to waive withdrawal right if the product is withdrawable', async () => {
+    const product = ProductFactory({ is_withdrawable: true }).one();
+    const schedule = PaymentInstallmentFactory().many(2);
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+        schedule,
+      );
+
+    render(<Wrapper product={product} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    expect(screen.queryByTestId('withdraw-right-checkbox')).toBeNull();
+  });
 });
