@@ -21,7 +21,7 @@ module.exports = (env) => {
     ? require(path.join(process.cwd(), richieSettings)).overrides
     : {};
 
-  const babelCompileDeps = ['react-intl', 'react-modal', 'strict-uri-encode'];
+  const babelCompileDeps = ['react-modal'];
 
   // Get the version from package.json to make it available in the bundle
   let version;
