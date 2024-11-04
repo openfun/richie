@@ -98,8 +98,12 @@ describe('SaleTunnel', () => {
      * Initialization.
      */
     const course = PacedCourseFactory().one();
-    const product = ProductFactory({ is_withdrawable: false }).one();
-    const relation = CourseProductRelationFactory({ course, product }).one();
+    const product = ProductFactory().one();
+    const relation = CourseProductRelationFactory({
+      course,
+      product,
+      is_withdrawable: false,
+    }).one();
     const paymentSchedule = PaymentInstallmentFactory().many(2);
 
     fetchMock.get(

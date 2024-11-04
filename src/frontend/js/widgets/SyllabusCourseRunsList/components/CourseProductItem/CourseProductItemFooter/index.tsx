@@ -43,6 +43,7 @@ const CourseProductItemFooter = ({
         course={course}
         product={courseProductRelation.product as CredentialProduct}
         organizations={courseProductRelation.organizations}
+        isWithdrawable={courseProductRelation.is_withdrawable}
         disabled={!canPurchase}
         buttonProps={{ fullWidth: true }}
       />
@@ -61,6 +62,7 @@ const CourseProductItemFooter = ({
         course={course}
         product={courseProductRelation.product as CredentialProduct}
         organizations={courseProductRelation.organizations}
+        isWithdrawable={courseProductRelation.is_withdrawable}
         disabled={!canPurchase}
         orderGroup={orderGroup}
         buttonProps={{ fullWidth: true }}

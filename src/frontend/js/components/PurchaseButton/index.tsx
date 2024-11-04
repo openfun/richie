@@ -43,6 +43,7 @@ const messages = defineMessages({
 interface PurchaseButtonPropsBase {
   product: Joanie.CredentialProduct | Joanie.CertificateProduct;
   orderGroup?: Joanie.OrderGroup;
+  isWithdrawable: boolean;
   disabled?: boolean;
   className?: string;
   buttonProps?: ButtonProps;
@@ -67,6 +68,7 @@ const PurchaseButton = ({
   course,
   enrollment,
   orderGroup,
+  isWithdrawable,
   organizations,
   disabled = false,
   className,
@@ -141,6 +143,7 @@ const PurchaseButton = ({
         enrollment={enrollment}
         orderGroup={orderGroup}
         course={course}
+        isWithdrawable={isWithdrawable}
         onFinish={onFinish}
       />
     </>

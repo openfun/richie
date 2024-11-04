@@ -12,7 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Grid options for the Section plugin
 - Make user waive its right of withdrawal when purchasing
-  a product with `is_withdrawable` set to `false`
+  a course product relation with `is_withdrawable` set to `false`
 
 ## [2.30.0] - 2024-10-16
 

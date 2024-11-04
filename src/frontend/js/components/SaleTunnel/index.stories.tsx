@@ -12,6 +12,7 @@ export default {
       product: ProductFactory().one(),
       onClose: () => {},
       course: PacedCourseFactory().one(),
+      isWithdrawable: true,
       // enrollment?: Enrollment;
       // product: CredentialProduct | CertificateProduct;
       // orderGroup?: OrderGroup;

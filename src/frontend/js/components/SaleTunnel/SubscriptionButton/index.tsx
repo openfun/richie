@@ -116,7 +116,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       return;
     }
 
-    if (!product.is_withdrawable && !hasWaivedWithdrawalRight) {
+    if (!saleTunnelProps.isWithdrawable && !hasWaivedWithdrawalRight) {
       handleError(SubscriptionErrorMessageId.ERROR_WITHDRAWAL_RIGHT);
       return;
     }

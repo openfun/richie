@@ -175,7 +175,7 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     nbApiCalls += 1; // useProductOrder call.
@@ -262,7 +262,7 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     nbApiCalls += 1; // useProductOrder get order with filters
@@ -337,7 +337,7 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -373,7 +373,7 @@ describe.each([
           overwriteRoutes: true,
         });
 
-      render(<Wrapper product={product} />, {
+      render(<Wrapper product={product} isWithdrawable={true} />, {
         queryOptions: { client: createTestQueryClient({ user: richieUser }) },
       });
 
@@ -398,7 +398,7 @@ describe.each([
         schedule,
       );
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -447,7 +447,7 @@ describe.each([
         schedule,
       );
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -455,7 +455,7 @@ describe.each([
   });
 
   it('should show a checkbox to waive withdrawal right if the product is not withdrawable', async () => {
-    const product = ProductFactory({ is_withdrawable: false }).one();
+    const product = ProductFactory().one();
     const schedule = PaymentInstallmentFactory().many(2);
     fetchMock
       .get(
@@ -467,7 +467,7 @@ describe.each([
         schedule,
       );
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={false} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -475,7 +475,7 @@ describe.each([
   });
 
   it('should not show a checkbox to waive withdrawal right if the product is withdrawable', async () => {
-    const product = ProductFactory({ is_withdrawable: true }).one();
+    const product = ProductFactory().one();
     const schedule = PaymentInstallmentFactory().many(2);
     fetchMock
       .get(
@@ -487,7 +487,7 @@ describe.each([
         schedule,
       );
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 

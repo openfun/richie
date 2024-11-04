@@ -149,7 +149,6 @@ export interface Product {
   state: CourseState;
   instructions: Nullable<string>;
   contract_definition?: ContractDefinition;
-  is_withdrawable: boolean;
 }
 
 export interface CredentialProduct extends Product {
@@ -185,6 +184,7 @@ export interface CourseProductRelationLight {
 
 export interface CourseProductRelation extends CourseProductRelationLight {
   order_groups: OrderGroup[];
+  is_withdrawable: boolean;
 }
 export function isCourseProductRelation(
   entity: CourseListItem | CourseProductRelationLight | RichieCourse,

@@ -63,9 +63,14 @@ const messages = defineMessages({
 export interface ProductCertificateFooterProps {
   product: CertificateProduct;
   enrollment: Enrollment;
+  isWithdrawable: boolean;
 }
 
-const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFooterProps) => {
+const ProductCertificateFooter = ({
+  product,
+  enrollment,
+  isWithdrawable,
+}: ProductCertificateFooterProps) => {
   const [order, setOrder] = useState(
     OrderHelper.getActiveEnrollmentOrder(enrollment.orders || [], product.id),
   );
@@ -103,6 +108,7 @@ const ProductCertificateFooter = ({ product, enrollment }: ProductCertificateFoo
         className="dashboard-item__button"
         product={product}
         enrollment={enrollment}
+        isWithdrawable={isWithdrawable}
         buttonProps={{ size: 'small' }}
         disabled={!isPurchasable}
         onFinish={(o) => {
