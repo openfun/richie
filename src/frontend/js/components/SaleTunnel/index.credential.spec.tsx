@@ -53,8 +53,8 @@ describe('SaleTunnel / Credential', () => {
   let richieUser: User;
   let openApiEdxProfile: OpenEdxApiProfile;
 
-  const Wrapper = (props: Omit<SaleTunnelProps, 'isOpen' | 'onClose'>) => {
-    return <SaleTunnel {...props} isOpen={true} onClose={() => {}} />;
+  const Wrapper = (props: Omit<SaleTunnelProps, 'isWithdrawable' | 'isOpen' | 'onClose'>) => {
+    return <SaleTunnel {...props} isWithdrawable={true} isOpen={true} onClose={() => {}} />;
   };
 
   setupJoanieSession();

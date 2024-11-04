@@ -124,6 +124,7 @@ describe('<ProductCertificateFooter/>', () => {
               course,
             }).one(),
           }).one()}
+          isWithdrawable={true}
         />,
       );
       expect(screen.getByTestId('PurchaseButton__cta')).toBeInTheDocument();
@@ -155,6 +156,7 @@ describe('<ProductCertificateFooter/>', () => {
               course,
             }).one(),
           }).one()}
+          isWithdrawable={true}
         />,
       );
 
@@ -176,7 +178,9 @@ describe('<ProductCertificateFooter/>', () => {
       'https://joanie.endpoint/api/v1.0/certificates/FAKE_CERTIFICATE_ID/',
       CertificateFactory({ id: order.certificate_id }).one(),
     );
-    render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
+    render(
+      <ProductCertificateFooter product={product} enrollment={enrollment} isWithdrawable={true} />,
+    );
     expect(screen.getByRole('button', { name: 'Download' })).toBeInTheDocument();
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
@@ -193,7 +197,13 @@ describe('<ProductCertificateFooter/>', () => {
         orders: [order],
         course_run: CourseRunFactory({ course }).one(),
       }).one();
-      render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
+      render(
+        <ProductCertificateFooter
+          product={product}
+          enrollment={enrollment}
+          isWithdrawable={true}
+        />,
+      );
       expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
       expect(screen.getByTestId('PurchaseButton__cta')).toBeInTheDocument();
     },
@@ -208,7 +218,9 @@ describe('<ProductCertificateFooter/>', () => {
       orders: [order],
       course_run: CourseRunFactory({ course }).one(),
     }).one();
-    render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
+    render(
+      <ProductCertificateFooter product={product} enrollment={enrollment} isWithdrawable={true} />,
+    );
     expect(screen.queryByRole('button', { name: 'Download' })).not.toBeInTheDocument();
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
@@ -274,7 +286,13 @@ describe('<ProductCertificateFooter/>', () => {
       }).one();
       const enrollment = EnrollmentFactory({ orders: [order] }).one();
 
-      render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
+      render(
+        <ProductCertificateFooter
+          product={product}
+          enrollment={enrollment}
+          isWithdrawable={true}
+        />,
+      );
 
       if (order.state === OrderState.PENDING) {
         // As the order is in pending state, the user should see the following message.
@@ -315,7 +333,13 @@ describe('<ProductCertificateFooter/>', () => {
 
       fetchMock.get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, order);
 
-      render(<ProductCertificateFooter product={product} enrollment={enrollment} />);
+      render(
+        <ProductCertificateFooter
+          product={product}
+          enrollment={enrollment}
+          isWithdrawable={true}
+        />,
+      );
 
       if (order.state === OrderState.NO_PAYMENT) {
         // As the order is in no_payment state, the user should see the following message.

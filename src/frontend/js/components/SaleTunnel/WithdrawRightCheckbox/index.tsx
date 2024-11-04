@@ -19,7 +19,7 @@ const messages = defineMessages({
 
 const WithdrawRightCheckbox = () => {
   const {
-    product,
+    props: { isWithdrawable },
     registerSubmitCallback,
     unregisterSubmitCallback,
     hasWaivedWithdrawalRight,
@@ -27,8 +27,8 @@ const WithdrawRightCheckbox = () => {
   } = useSaleTunnelContext();
   const [hasErrorState, setHasError] = useState(false);
   const setError = useCallback(async () => {
-    setHasError(!product.is_withdrawable && !hasWaivedWithdrawalRight);
-  }, [hasWaivedWithdrawalRight, product.is_withdrawable]);
+    setHasError(!isWithdrawable && !hasWaivedWithdrawalRight);
+  }, [hasWaivedWithdrawalRight, isWithdrawable]);
 
   useEffect(() => {
     registerSubmitCallback('withdrawalRight', setError);
@@ -37,7 +37,7 @@ const WithdrawRightCheckbox = () => {
     };
   }, [setError]);
 
-  if (product.is_withdrawable) return null;
+  if (isWithdrawable) return null;
   return (
     <section
       className="mt-t subscription-button__waiveCheckbox"

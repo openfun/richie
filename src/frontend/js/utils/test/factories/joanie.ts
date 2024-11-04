@@ -206,7 +206,6 @@ export const CredentialProductFactory = factory((): CredentialProduct => {
     remaining_order_count: faker.number.int({ min: 1, max: 100 }),
     state: CourseStateFactory().one(),
     instructions: null,
-    is_withdrawable: true,
   };
 });
 
@@ -338,6 +337,7 @@ export const CourseProductRelationFactory = factory((): CourseProductRelation =>
     product: ProductFactory().one(),
     organizations: OrganizationFactory().many(1),
     order_groups: [],
+    is_withdrawable: true,
   };
 });
 
