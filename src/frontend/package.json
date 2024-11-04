@@ -148,7 +148,8 @@
     "workerDirectory": "../richie/static/richie/js"
   },
   "volta": {
-    "node": "20.11.0"
+    "node": "20.11.0",
+    "yarn": "1.22.22"
   },
   "devDependencies": {
     "@storybook/addon-mdx-gfm": "8.3.6",
