@@ -7,6 +7,7 @@ import {
   CourseQueryFilters,
   CourseProductRelationQueryFilters,
   ProductType,
+  CourseProductRelationLight,
 } from 'types/Joanie';
 import useUnionResource, { ResourceUnionPaginationProps } from 'hooks/useUnionResource';
 
@@ -40,7 +41,7 @@ export const useCourseProductUnion = ({
   const api = useJoanieApi();
   return useUnionResource<
     CourseListItem,
-    CourseProductRelation,
+    CourseProductRelation | CourseProductRelationLight,
     CourseQueryFilters,
     CourseProductRelationQueryFilters
   >({

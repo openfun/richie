@@ -175,17 +175,20 @@ export interface DefinitionResourcesProduct {
   contract_definition_id: Nullable<ContractDefinition['id']>;
 }
 
-export interface CourseProductRelation {
+export interface CourseProductRelationLight {
   id: string;
   course: CourseLight;
   organizations: Organization[];
   product: Product;
   created_on: string;
+}
+
+export interface CourseProductRelation extends CourseProductRelationLight {
   order_groups: OrderGroup[];
 }
 export function isCourseProductRelation(
-  entity: CourseListItem | CourseProductRelation | RichieCourse,
-): entity is CourseProductRelation {
+  entity: CourseListItem | CourseProductRelationLight | RichieCourse,
+): entity is CourseProductRelationLight {
   return 'course' in entity && 'product' in entity;
 }
 
@@ -699,7 +702,7 @@ export interface API {
       filters?: Filters,
     ): Filters extends { id: string }
       ? Promise<Nullable<CourseProductRelation>>
-      : Promise<PaginatedResponse<CourseProductRelation>>;
+      : Promise<PaginatedResponse<CourseProductRelationLight>>;
   };
   contractDefinitions: {
     previewTemplate(id: string): Promise<File>;
