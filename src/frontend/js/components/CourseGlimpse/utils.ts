@@ -3,14 +3,14 @@ import { generatePath } from 'react-router-dom';
 import { Course as RichieCourse, isRichieCourse } from 'types/Course';
 import {
   CourseListItem as JoanieCourse,
-  CourseProductRelation,
+  CourseProductRelationLight,
   isCourseProductRelation,
 } from 'types/Joanie';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { CourseGlimpseCourse } from '.';
 
 const getCourseGlimpsePropsFromCourseProductRelation = (
-  courseProductRelation: CourseProductRelation,
+  courseProductRelation: CourseProductRelationLight,
   intl: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {
@@ -95,7 +95,7 @@ const getCourseGlimpsePropsFromJoanieCourse = (
 };
 
 export const getCourseGlimpseProps = (
-  course: RichieCourse | (JoanieCourse | CourseProductRelation),
+  course: RichieCourse | (JoanieCourse | CourseProductRelationLight),
   intl?: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {

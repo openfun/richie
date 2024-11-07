@@ -4,4 +4,12 @@
     margin-top: 0.5rem;
     margin-bottom: 0;
   }
+
+  &__waiveCheckbox {
+    & > .waiveCheckbox__input {
+      /* Just add 1 px offset to prevent border input to be hidden
+         due to the overflow hidden applied to the parent block */
+      margin-left: 1px;
+    }
+  }
 }

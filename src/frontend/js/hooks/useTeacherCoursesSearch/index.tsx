@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useCourseProductUnion } from 'hooks/useCourseProductUnion';
-import { CourseListItem, CourseProductRelation, ProductType } from 'types/Joanie';
+import { CourseListItem, CourseProductRelationLight, ProductType } from 'types/Joanie';
 import { Maybe, Nullable } from 'types/utils';
 
 const useTeacherCoursesSearch = () => {
@@ -9,7 +9,7 @@ const useTeacherCoursesSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [count, setCount] = useState<Maybe<number>>(0);
   const [courseAndProductList, setCourseAndProductList] = useState<
-    (CourseListItem | CourseProductRelation)[]
+    (CourseListItem | CourseProductRelationLight)[]
   >([]);
   const [isNewSearchLoading, setIsNewSearchLoading] = useState(false);
   const query = searchParams.get('query') || undefined;

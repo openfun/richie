@@ -337,6 +337,7 @@ export const CourseProductRelationFactory = factory((): CourseProductRelation =>
     product: ProductFactory().one(),
     organizations: OrganizationFactory().many(1),
     order_groups: [],
+    is_withdrawable: true,
   };
 });
 
@@ -490,6 +491,8 @@ export const SaleTunnelContextFactory = factory(
     billingAddress: undefined,
     setBillingAddress: noop,
     setCreditCard: noop,
+    setHasWaivedWithdrawalRight: noop,
+    hasWaivedWithdrawalRight: false,
     step: SaleTunnelStep.IDLE,
     registerSubmitCallback: noop,
     unregisterSubmitCallback: noop,

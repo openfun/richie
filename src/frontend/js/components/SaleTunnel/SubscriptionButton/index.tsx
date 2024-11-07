@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Alert, Button, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
@@ -50,6 +50,11 @@ const messages = defineMessages({
     description: "Error message shown when the user didn't select a billing address.",
     id: 'components.SubscriptionButton.errorAddress',
   },
+  errorWithdrawalRight: {
+    defaultMessage: 'You must waive your withdrawal right.',
+    description: "Error message shown when the user must waive its withdrawal right but doesn't.",
+    id: 'components.SubscriptionButton.errorWithdrawalRight',
+  },
   orderCreationInProgress: {
     defaultMessage: 'Order creation in progress',
     description: 'Label for screen reader when an order creation is in progress.',
@@ -65,7 +70,10 @@ enum ComponentStates {
 
 interface Props {
   buildOrderPayload: (
-    payload: Pick<OrderCreationPayload, 'product_id' | 'billing_address' | 'order_group_id'>,
+    payload: Pick<
+      OrderCreationPayload,
+      'product_id' | 'billing_address' | 'order_group_id' | 'has_waived_withdrawal_right'
+    >,
   ) => OrderCreationPayload;
 }
 
@@ -74,6 +82,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     order,
     creditCard,
     billingAddress,
+    hasWaivedWithdrawalRight,
     product,
     nextStep,
     runSubmitCallbacks,
@@ -107,10 +116,16 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       return;
     }
 
+    if (!saleTunnelProps.isWithdrawable && !hasWaivedWithdrawalRight) {
+      handleError(SubscriptionErrorMessageId.ERROR_WITHDRAWAL_RIGHT);
+      return;
+    }
+
     const payload = buildOrderPayload({
       product_id: product.id,
       billing_address: billingAddress!,
       order_group_id: saleTunnelProps.orderGroup?.id,
+      has_waived_withdrawal_right: hasWaivedWithdrawalRight,
     });
 
     orderMethods.create(payload, {

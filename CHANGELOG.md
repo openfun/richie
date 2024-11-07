@@ -11,6 +11,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Grid options for the Section plugin
+- Make user waive its right of withdrawal when purchasing
+  a course product relation with `is_withdrawable` set to `false`
+
+### Changed
+
+- Changed `multiple-columns` CSS component so its columns include a padding
 
 ## [2.30.0] - 2024-10-16
 
@@ -33,12 +39,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update Learner dashboard to finalize subscription process
 - SaleTunnel has been fully rework to comply with the purchase workflow
 - Replace order abort mutation by order cancel mutation
+- Button instead of link to "Enroll now" CTA in SyllabusCourseRunCompacted
 
 ### Fixed
 
 - Fix organization glimpse card title for accessibility purposes
 - Fix logic to know if user is enrolled to a ongoing product
 - Normalize credit card brand on CreditCardBrandLogo component
+- Display SyllabusCourseRunCompacted only for self-paced ongoing opened runs
 
 ## [2.29.2] - 2024-09-23
 

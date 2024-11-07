@@ -119,6 +119,7 @@ const PaymentMethodManager = ({ order }: Props) => {
         {...modal}
         product={relation.product as CredentialProduct}
         course={relation.course}
+        isWithdrawable={relation.is_withdrawable}
       />
     </>
   );

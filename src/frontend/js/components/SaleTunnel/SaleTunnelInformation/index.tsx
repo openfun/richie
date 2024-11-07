@@ -7,6 +7,7 @@ import { useSession } from 'contexts/SessionContext';
 import useOpenEdxProfile from 'hooks/useOpenEdxProfile';
 import { usePaymentSchedule } from 'hooks/usePaymentSchedule';
 import { Spinner } from 'components/Spinner';
+import WithdrawRightCheckbox from 'components/SaleTunnel/WithdrawRightCheckbox';
 
 const messages = defineMessages({
   title: {
@@ -71,6 +72,7 @@ export const SaleTunnelInformation = () => {
       <div>
         <PaymentScheduleBlock />
         <Total />
+        <WithdrawRightCheckbox />
       </div>
     </div>
   );

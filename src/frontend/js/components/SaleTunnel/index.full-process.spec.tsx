@@ -20,6 +20,7 @@ import {
   CreditCardFactory,
   PaymentFactory,
   PaymentInstallmentFactory,
+  ProductFactory,
 } from 'utils/test/factories/joanie';
 import { CourseRun, NOT_CANCELED_ORDER_STATES, OrderState } from 'types/Joanie';
 import { Priority } from 'types';
@@ -97,9 +98,13 @@ describe('SaleTunnel', () => {
      * Initialization.
      */
     const course = PacedCourseFactory().one();
-    const relation = CourseProductRelationFactory({ course }).one();
+    const product = ProductFactory().one();
+    const relation = CourseProductRelationFactory({
+      course,
+      product,
+      is_withdrawable: false,
+    }).one();
     const paymentSchedule = PaymentInstallmentFactory().many(2);
-    const { product } = relation;
 
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
@@ -266,6 +271,11 @@ describe('SaleTunnel', () => {
     );
 
     /**
+     * Make sure the checkbox to waive withdrawal right is displayed
+     */
+    const $waiveCheckbox = screen.getByLabelText('I waive my right of withdrawal');
+
+    /**
      * Subscribe
      */
     const order = CredentialOrderFactory({ state: OrderState.TO_SIGN }).one();
@@ -280,6 +290,14 @@ describe('SaleTunnel', () => {
     const $button = screen.getByRole('button', {
       name: `Subscribe`,
     }) as HTMLButtonElement;
+    await user.click($button);
+
+    /**
+     * An error should be displayed if the user has not waived its withdrawal right.
+     */
+    screen.getByText('You must waive your withdrawal right.');
+
+    await user.click($waiveCheckbox);
     await user.click($button);
 
     order.state = OrderState.TO_SAVE_PAYMENT_METHOD;

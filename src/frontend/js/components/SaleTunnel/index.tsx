@@ -17,7 +17,7 @@ import { PacedCourse } from 'types';
 export interface SaleTunnelProps extends Pick<ModalProps, 'isOpen' | 'onClose'> {
   product: Product;
   organizations?: Organization[];
-
+  isWithdrawable: boolean;
   course?: PacedCourse | CourseLight;
   enrollment?: Enrollment;
   orderGroup?: OrderGroup;

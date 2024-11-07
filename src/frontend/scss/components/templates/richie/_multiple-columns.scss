@@ -23,11 +23,6 @@
     padding: 1rem;
   }
 
-  // Impose tiny horizontal padding to every section row
-  .section__row {
-    padding: $cell-gutter;
-  }
-
   // ----------
   // Shared base adjustments for short columns (25+33+50)
   // ----------
@@ -117,6 +112,8 @@
   // ----------
   &__w25 {
     @include sv-flex(1, 0, 100%);
+    padding: $cell-gutter;
+
     @include media-breakpoint-up(lg) {
       @include sv-flex(1, 0, 25%);
     }
@@ -169,6 +166,8 @@
   // ----------
   &__w33 {
     @include sv-flex(1, 0, 100%);
+    padding: $cell-gutter;
+
     @include media-breakpoint-up(lg) {
       @include sv-flex(1, 0, 33.3333%);
     }
@@ -193,6 +192,8 @@
   // ----------
   &__w50 {
     @include sv-flex(1, 0, 100%);
+    padding: $cell-gutter;
+
     @include media-breakpoint-up(lg) {
       @include sv-flex(1, 0, 50%);
     }
@@ -268,6 +269,8 @@
   // ----------
   &__w75 {
     @include sv-flex(1, 0, 100%);
+    padding: $cell-gutter;
+
     @include media-breakpoint-up(lg) {
       @include sv-flex(1, 0, 75%);
     }

@@ -35,6 +35,8 @@ export interface SaleTunnelContextType {
   setBillingAddress: (address?: Address) => void;
   creditCard?: CreditCard;
   setCreditCard: (creditCard?: CreditCard) => void;
+  hasWaivedWithdrawalRight: boolean;
+  setHasWaivedWithdrawalRight: (hasWaivedWithdrawalRight: boolean) => void;
   registerSubmitCallback: (key: string, callback: () => Promise<void>) => void;
   unregisterSubmitCallback: (key: string) => void;
   runSubmitCallbacks: () => Promise<void>;
@@ -76,6 +78,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
   });
   const [billingAddress, setBillingAddress] = useState<Address>();
   const [creditCard, setCreditCard] = useState<CreditCard>();
+  const [hasWaivedWithdrawalRight, setHasWaivedWithdrawalRight] = useState(false);
   const [step, setStep] = useState<SaleTunnelStep>(SaleTunnelStep.IDLE);
   const [submitCallbacks, setSubmitCallbacks] = useState<Map<string, () => Promise<void>>>(
     new Map(),
@@ -115,6 +118,8 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       setBillingAddress,
       creditCard,
       setCreditCard,
+      hasWaivedWithdrawalRight,
+      setHasWaivedWithdrawalRight,
       nextStep,
       step,
       registerSubmitCallback: (key, callback) => {
@@ -131,7 +136,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
         await Promise.all(Array.from(submitCallbacks.values()).map((cb) => cb()));
       },
     }),
-    [props, order, billingAddress, creditCard, step, submitCallbacks],
+    [props, order, billingAddress, creditCard, step, submitCallbacks, hasWaivedWithdrawalRight],
   );
 
   return (

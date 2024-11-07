@@ -175,7 +175,7 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     nbApiCalls += 1; // useProductOrder call.
@@ -262,7 +262,7 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     nbApiCalls += 1; // useProductOrder get order with filters
@@ -337,7 +337,7 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -373,7 +373,7 @@ describe.each([
           overwriteRoutes: true,
         });
 
-      render(<Wrapper product={product} />, {
+      render(<Wrapper product={product} isWithdrawable={true} />, {
         queryOptions: { client: createTestQueryClient({ user: richieUser }) },
       });
 
@@ -398,7 +398,7 @@ describe.each([
         schedule,
       );
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -447,10 +447,50 @@ describe.each([
         schedule,
       );
 
-    render(<Wrapper product={product} />, {
+    render(<Wrapper product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
     screen.getByTestId('walkthrough-banner');
+  });
+
+  it('should show a checkbox to waive withdrawal right if the product is not withdrawable', async () => {
+    const product = ProductFactory().one();
+    const schedule = PaymentInstallmentFactory().many(2);
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+        schedule,
+      );
+
+    render(<Wrapper product={product} isWithdrawable={false} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    screen.getByTestId('withdraw-right-checkbox');
+  });
+
+  it('should not show a checkbox to waive withdrawal right if the product is withdrawable', async () => {
+    const product = ProductFactory().one();
+    const schedule = PaymentInstallmentFactory().many(2);
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+        schedule,
+      );
+
+    render(<Wrapper product={product} isWithdrawable={true} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    expect(screen.queryByTestId('withdraw-right-checkbox')).toBeNull();
   });
 });

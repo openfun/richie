@@ -91,6 +91,7 @@ describe('PurchaseButton', () => {
           product={product}
           disabled={false}
           course={PacedCourseFactory({ code: '00000' }).one()}
+          isWithdrawable={true}
         />
       </Wrapper>,
     );
@@ -122,6 +123,7 @@ describe('PurchaseButton', () => {
           product={product}
           disabled={false}
           course={PacedCourseFactory({ code: courseCode }).one()}
+          isWithdrawable={true}
         />
       </Wrapper>,
     );
@@ -164,6 +166,7 @@ describe('PurchaseButton', () => {
           product={product}
           disabled={false}
           course={PacedCourseFactory({ code: courseCode }).one()}
+          isWithdrawable={true}
         />
       </Wrapper>,
     );
@@ -207,6 +210,7 @@ describe('PurchaseButton', () => {
           product={product}
           disabled={false}
           course={PacedCourseFactory({ code: courseCode }).one()}
+          isWithdrawable={true}
         />
       </Wrapper>,
     );
@@ -243,6 +247,7 @@ describe('PurchaseButton', () => {
           product={product}
           disabled={false}
           course={PacedCourseFactory({ code: courseCode }).one()}
+          isWithdrawable={true}
         />
       </Wrapper>,
     );
@@ -284,6 +289,7 @@ describe('PurchaseButton', () => {
             product={product}
             disabled={false}
             course={PacedCourseFactory({ code: courseCode }).one()}
+            isWithdrawable={true}
           />
         </Wrapper>,
       );
@@ -333,7 +339,12 @@ describe('PurchaseButton', () => {
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton product={product} disabled={false} enrollment={enrollment} />
+          <PurchaseButton
+            product={product}
+            disabled={false}
+            enrollment={enrollment}
+            isWithdrawable={true}
+          />
         </Wrapper>,
       );
 
@@ -390,7 +401,12 @@ describe('PurchaseButton', () => {
 
       render(
         <Wrapper client={createTestQueryClient({ user: true })}>
-          <PurchaseButton product={product} disabled={false} enrollment={enrollment} />
+          <PurchaseButton
+            product={product}
+            disabled={false}
+            enrollment={enrollment}
+            isWithdrawable={true}
+          />
         </Wrapper>,
       );
 
@@ -428,6 +444,7 @@ describe('PurchaseButton', () => {
           product={product}
           disabled={false}
           course={PacedCourseFactory({ code: courseCode }).one()}
+          isWithdrawable={true}
         />
       </Wrapper>,
     );
@@ -462,6 +479,7 @@ describe('PurchaseButton', () => {
           product={product}
           disabled={true}
           course={PacedCourseFactory({ code: courseCode }).one()}
+          isWithdrawable={true}
         />
       </Wrapper>,
     );

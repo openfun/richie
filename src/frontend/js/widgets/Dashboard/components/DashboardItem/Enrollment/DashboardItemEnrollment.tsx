@@ -33,13 +33,14 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
         </div>
       </div>,
     ];
-    enrollment.product_relations.forEach(({ product }) => {
+    enrollment.product_relations.forEach(({ product, is_withdrawable }) => {
       if (isCertificateProduct(product)) {
         partialFooterList.push(
           <ProductCertificateFooter
             key={[enrollment.id, product.id].join('_')}
             product={product}
             enrollment={enrollment}
+            isWithdrawable={is_withdrawable}
           />,
         );
       }

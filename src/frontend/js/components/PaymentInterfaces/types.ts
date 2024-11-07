@@ -8,6 +8,7 @@ export enum SubscriptionErrorMessageId {
   ERROR_ADDRESS = 'errorAddress',
   ERROR_DEFAULT = 'errorDefault',
   ERROR_FULL_PRODUCT = 'errorFullProduct',
+  ERROR_WITHDRAWAL_RIGHT = 'errorWithdrawalRight',
 }
 
 export enum PaymentProviders {
