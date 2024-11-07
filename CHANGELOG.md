@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Make user waive its right of withdrawal when purchasing
   a course product relation with `is_withdrawable` set to `false`
 
+### Changed
+
+- Changed `multiple-columns` CSS component so its columns include a padding
+
 ## [2.30.0] - 2024-10-16
 
 ### Added
