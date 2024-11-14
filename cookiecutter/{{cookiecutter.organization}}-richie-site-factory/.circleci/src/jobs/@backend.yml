@@ -73,7 +73,7 @@ test-back:
         DB_USER: richie_user
         DB_PASSWORD: pass
         DB_PORT: 5432
-    - image: cimg/postgres:12.10
+    - image: cimg/postgres:16.4
       environment:
         POSTGRES_DB: richie
         POSTGRES_USER: richie_user
