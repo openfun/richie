@@ -357,12 +357,12 @@ jobs:
           DB_PASSWORD: pass
           DB_PORT: 5432
       # services
-      - image: cimg/postgres:12.10
+      - image: cimg/postgres:16.4
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
         environment:
-          POSTGRES_DB: test_richie
+          POSTGRES_DB: richie
           POSTGRES_USER: fun
           POSTGRES_PASSWORD: pass
       - image: elasticsearch:7.14.0
@@ -440,12 +440,12 @@ jobs:
           DB_PASSWORD: pass
           DB_PORT: 5432
       # services
-      - image: cimg/postgres:12.10
+      - image: cimg/postgres:16.4
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
         environment:
-          POSTGRES_DB: test_richie
+          POSTGRES_DB: richie
           POSTGRES_USER: fun
           POSTGRES_PASSWORD: pass
       - image: fundocker/openshift-elasticsearch:6.6.2
