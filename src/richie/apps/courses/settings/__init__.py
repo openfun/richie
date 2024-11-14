@@ -32,7 +32,7 @@ def richie_placeholder_conf(name):
     """
     return {
         "name": name,
-        "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
+        "excluded_plugins": ["GoogleMapPlugin"],
         "parent_classes": {
             "BlogPostPlugin": ["SectionPlugin"],
             "CategoryPlugin": ["SectionPlugin"],
@@ -55,6 +55,7 @@ def richie_placeholder_conf(name):
                 "OrganizationPlugin",
                 "PersonPlugin",
                 "ProgramPlugin",
+                "CKEditorPlugin",
             ],
             "NestedItemPlugin": ["NestedItemPlugin", "LinkPlugin"],
         },

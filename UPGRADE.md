@@ -16,6 +16,22 @@ $ make migrate
 
 ## Unreleased
 
+- There is a new Sass settings that can be used to define 'simple-text' box properties:
+  ```scss
+  $r-simpletext-margin-bottom: 0.5rem;
+  $r-simpletext-variant-padding: 1rem;
+  $r-simpletext-variant-radius: 0.75rem;
+  ```
+  These are the default component values but you may customize them if needed.
+
+- Add new `simpletext-variant-box` theme scheme:
+  ```scss
+  simpletext-variant-box: (
+    primary-color: r-color('denim'),
+    secondary-color: r-color('white'),
+  ),
+  ```
+
 - Add new `r-section-grid-sizes` variable
 ```
   $r-section-grid-sizes: (

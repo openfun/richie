@@ -11,6 +11,8 @@ from django.utils.translation import gettext_lazy as _
 from cms.models.pluginmodel import CMSPlugin
 from djangocms_text_ckeditor.html import clean_html
 
+from .defaults import SIMPLETEXT_VARIANTS
+
 
 class SimpleText(CMSPlugin):
     """
@@ -21,6 +23,14 @@ class SimpleText(CMSPlugin):
     """
 
     body = models.TextField(_("body"))
+    variant = models.CharField(
+        _("Box variant"),
+        max_length=50,
+        blank=True,
+        choices=SIMPLETEXT_VARIANTS,
+        default="",
+        help_text=_("Enable a themed box to enclose content."),
+    )
 
     def __str__(self):
         return Truncator(strip_tags(self.body)).words(6, truncate="...")

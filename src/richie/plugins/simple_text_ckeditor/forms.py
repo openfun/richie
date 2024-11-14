@@ -25,7 +25,7 @@ class CKEditorPluginForm(forms.ModelForm):
 
         model = SimpleText
         widgets = {"body": TextEditorWidget}
-        fields = ["body"]
+        fields = ["body", "variant"]
 
     def clean_body(self):
         """Normalize and unescape the text submitted by CKEditor then remove useless spaces."""

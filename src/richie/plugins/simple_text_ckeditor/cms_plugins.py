@@ -32,7 +32,7 @@ class CKEditorPlugin(CMSPluginBase):
     name = _("Simple text")
     render_template = "richie/simple_text_ckeditor/simple_text.html"
 
-    fieldsets = ((None, {"fields": ["body"]}),)
+    fieldsets = ((None, {"fields": ["body", "variant"]}),)
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         """
