@@ -362,7 +362,7 @@ jobs:
           username: $DOCKER_USER
           password: $DOCKER_PASS
         environment:
-          POSTGRES_DB: test_richie
+          POSTGRES_DB: test_richie_2
           POSTGRES_USER: fun
           POSTGRES_PASSWORD: pass
       - image: elasticsearch:7.14.0
@@ -445,7 +445,7 @@ jobs:
           username: $DOCKER_USER
           password: $DOCKER_PASS
         environment:
-          POSTGRES_DB: test_richie
+          POSTGRES_DB: test_richie_2
           POSTGRES_USER: fun
           POSTGRES_PASSWORD: pass
       - image: fundocker/openshift-elasticsearch:6.6.2
