@@ -1,0 +1,43 @@
+// CKEditor 'simple text' plugin
+//
+// This aims to only adjust every possible plugins so they correctly fit since they
+// were done for 100% size only. No colour, font or anything else should be changed
+// here.
+//
+$r-simpletext-margin-bottom: 0.5rem !default;
+$r-simpletext-variant-padding: 1rem !default;
+$r-simpletext-variant-radius: 0.75rem !default;
+
+.simple-text {
+  margin-bottom: $r-simpletext-margin-bottom;
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+
+  &__variant-round-box {
+    padding: $r-simpletext-variant-padding;
+    border: 1px solid transparent;
+    border-radius: $r-simpletext-variant-radius;
+  }
+
+  &__variant-stroked {
+    border-color: r-theme-val(simpletext-variant-box, primary-color);
+    background: r-theme-val(simpletext-variant-box, secondary-color);
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: r-theme-val(simpletext-variant-box, primary-color);
+    }
+  }
+
+  &__variant-fulfilled {
+    color: r-theme-val(simpletext-variant-box, secondary-color);
+    border-color: r-theme-val(simpletext-variant-box, primary-color);
+    background: r-theme-val(simpletext-variant-box, primary-color);
+  }
+}

@@ -1,1 +1,3 @@
+{% spaceless %}{% if instance.variant %}<div class="simple-text simple-text__variant-round-box simple-text__variant-{{ instance.variant }}">{% endif %}
 {{ instance.body|safe }}
+{% if instance.variant %}</div>{% endif %}{% endspaceless %}

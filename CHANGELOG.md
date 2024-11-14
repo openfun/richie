@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Changed `multiple-columns` CSS component so its columns include a padding
+- Changed `CKEditorPlugin` for new field `variant` to choose a variant style;
 
 ## [2.30.0] - 2024-10-16
 
