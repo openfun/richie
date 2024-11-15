@@ -24,7 +24,10 @@ class NestedItemCMSPluginsTestCase(CMSPluginTestCase):
         with self.assertRaises(IntegrityError) as cm:
             NestedItemFactory(content=None)
         self.assertTrue(
-            'null value in column "content" violates not-null constraint'
+            (
+                'null value in column "content" of relation "nesteditem_nesteditem"'
+                " violates not-null constraint"
+            )
             in str(cm.exception)
             or "Column 'content' cannot be null" in str(cm.exception)
         )
@@ -37,7 +40,10 @@ class NestedItemCMSPluginsTestCase(CMSPluginTestCase):
         with self.assertRaises(IntegrityError) as cm:
             NestedItemFactory(variant=None)
         self.assertTrue(
-            'null value in column "variant" violates not-null constraint'
+            (
+                'null value in column "variant" of relation "nesteditem_nesteditem"'
+                " violates not-null constraint"
+            )
             in str(cm.exception)
             or "Column 'variant' cannot be null" in str(cm.exception)
         )
