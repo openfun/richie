@@ -23,7 +23,11 @@ class LicenceTestCase(TestCase):
             LicenceFactory(name=None)
         self.assertTrue(
             # Postgresql
-            'null value in column "name" violates not-null' in str(cm.exception)
+            (
+                'null value in column "name" of relation "richie_licence_translation"'
+                " violates not-null constraint"
+            )
+            in str(cm.exception)
             # Mysql
             or "Column 'name' cannot be null" in str(cm.exception)
         )
@@ -57,7 +61,11 @@ class LicenceTestCase(TestCase):
 
         self.assertTrue(
             # Postgresql
-            'null value in column "logo_id" violates not-null' in str(cm.exception)
+            (
+                'null value in column "logo_id" of relation "richie_licence"'
+                " violates not-null constraint"
+            )
+            in str(cm.exception)
             # Mysql
             or "Column 'logo_id' cannot be null" in str(cm.exception)
         )
@@ -71,7 +79,11 @@ class LicenceTestCase(TestCase):
 
         self.assertTrue(
             # Postgresql
-            'null value in column "content" violates not-null' in str(cm.exception)
+            (
+                'null value in column "content" of relation "richie_licence_translation"'
+                " violates not-null constraint"
+            )
+            in str(cm.exception)
             # Mysql
             or "Column 'content' cannot be null" in str(cm.exception)
         )

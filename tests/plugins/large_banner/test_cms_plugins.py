@@ -26,7 +26,10 @@ class LargeBannerCMSPluginsTestCase(TestCase):
         with self.assertRaises(IntegrityError) as cm:
             LargeBannerFactory(title=None)
         self.assertTrue(
-            'null value in column "title" violates not-null constraint'
+            (
+                'null value in column "title" of relation "large_banner_largebanner"'
+                " violates not-null constraint"
+            )
             in str(cm.exception)
             or "Column 'title' cannot be null" in str(cm.exception)
         )
