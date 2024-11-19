@@ -51,7 +51,7 @@ import { factory } from './factories';
 export const UserLightFactory = factory((): UserLight => {
   return {
     id: faker.string.uuid(),
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
     full_name: faker.person.fullName(),
     email: faker.internet.email(),
   };
@@ -59,7 +59,7 @@ export const UserLightFactory = factory((): UserLight => {
 export const JoanieUserProfileFactory = factory((): JoanieUserProfile => {
   return {
     id: faker.string.uuid(),
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
     full_name: faker.person.fullName(),
     is_superuser: false,
     is_staff: false,
@@ -394,7 +394,7 @@ export const NestedCertificateOrderFactory = factory((): NestedCertificateOrder 
     enrollment: EnrollmentLightFactory().one(),
     organization: OrganizationFactory().one(),
     product_title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
-    owner_name: faker.internet.userName(),
+    owner_name: faker.internet.username(),
     state: OrderState.COMPLETED,
   };
 });
@@ -406,7 +406,7 @@ export const NestedCredentialOrderFactory = factory((): NestedCredentialOrder =>
     enrollment: null,
     organization: OrganizationFactory().one(),
     product_title: FactoryHelper.unique(faker.lorem.words, { args: [1] }),
-    owner_name: faker.internet.userName(),
+    owner_name: faker.internet.username(),
     state: OrderState.COMPLETED,
   };
 });
@@ -415,7 +415,7 @@ const AbstractOrderFactory = factory((): Order => {
   return {
     id: faker.string.uuid(),
     created_on: faker.date.past({ years: 1 }).toISOString(),
-    owner: faker.internet.userName(),
+    owner: faker.internet.username(),
     total: faker.number.int(),
     total_currency: faker.finance.currencyCode(),
     main_invoice_reference: faker.string.uuid(),
