@@ -493,4 +493,41 @@ describe.each([
 
     expect(screen.queryByTestId('withdraw-right-checkbox')).toBeNull();
   });
+
+  it('should show a specific checkbox to waive withdrawal right according to the product type', async () => {
+    const product = ProductFactory().one();
+    const schedule = PaymentInstallmentFactory().many(2);
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+        schedule,
+      );
+
+    render(<Wrapper product={product} isWithdrawable={false} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    screen.getByTestId('withdraw-right-checkbox');
+
+    const expectedMessages =
+      productType === ProductType.CERTIFICATE
+        ? [
+            'If the examination period begins before the end of the 14-day withdrawal period mentioned in Article L221-18 of the French Consumer Code, you must check the box below to proceed with your registration.',
+            'I acknowledge that I have expressly requested my registration for the examination before the expiration date of the withdrawal period.',
+            'I expressly waive my right of withdrawal in order to register for the examination before the expiration of the withdrawal period.',
+          ]
+        : [
+            'The training program you wish to enroll in begins before the end of the 14-day withdrawal period mentioned in Article L221-18 of the French Consumer Code. You must check the box below to proceed with your registration.',
+            'I acknowledge that I have expressly requested to begin the training before the expiration date of the withdrawal period.',
+            'I expressly waive my right of withdrawal in order to begin the training before the expiration of the withdrawal period.',
+          ];
+
+    expectedMessages.forEach((message) => {
+      screen.getByText(message);
+    });
+  });
 });

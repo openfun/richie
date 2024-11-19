@@ -1,30 +1,72 @@
 import { Alert, Checkbox, VariantType } from '@openfun/cunningham-react';
 import { useCallback, useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl/lib';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
+import { ProductType } from 'types/Joanie';
 
 const messages = defineMessages({
-  waiveCheckboxExplanation: {
-    defaultMessage:
-      'This training will start before the end of your withdrawal period. You must waive it to subscribe.',
-    description: 'Text to explain why the user has to waive to its withdrawal right.',
-    id: 'components.SaleTunnel.WithdrawRightCheckbox.waiverLabel',
-  },
   waiveCheckboxLabel: {
-    defaultMessage: 'I waive my right of withdrawal',
+    defaultMessage: 'By checking this box:',
     description: 'Label of the checkbox to waive the withdrawal right.',
     id: 'components.SaleTunnel.WithdrawRightCheckbox.waiveCheckboxLabel',
   },
 });
 
+const credentialProductMessages = defineMessages({
+  waiveCheckboxExplanation: {
+    defaultMessage:
+      'The training program you wish to enroll in begins before the end of the 14-day withdrawal period mentioned in Article L221-18 of the French Consumer Code. You must check the box below to proceed with your registration.',
+    description: 'Text to explain why the user has to waive to its withdrawal right.',
+    id: 'components.SaleTunnel.WithdrawRightCheckbox.credential.waiverLabel',
+  },
+  waiveCheckboxHelperClause1: {
+    defaultMessage:
+      'I acknowledge that I have expressly requested to begin the training before the expiration date of the withdrawal period.',
+    description: 'First clause item for the waiver checkbox.',
+    id: 'components.SaleTunnel.WithdrawRightCheckbox.credential.waiveCheckboxHelperClause1',
+  },
+  waiveCheckboxHelperClause2: {
+    defaultMessage:
+      'I expressly waive my right of withdrawal in order to begin the training before the expiration of the withdrawal period.',
+    description: 'Second clause item for the waiver checkbox.',
+    id: 'components.SaleTunnel.WithdrawRightCheckbox.credential.waiveCheckboxHelperClause2',
+  },
+});
+
+const certificateProductMessages = defineMessages({
+  waiveCheckboxExplanation: {
+    defaultMessage:
+      'If the examination period begins before the end of the 14-day withdrawal period mentioned in Article L221-18 of the French Consumer Code, you must check the box below to proceed with your registration.',
+    description: 'Text to explain why the user has to waive to its withdrawal right.',
+    id: 'components.SaleTunnel.WithdrawRightCheckbox.certificate.waiverLabel',
+  },
+  waiveCheckboxHelperClause1: {
+    defaultMessage:
+      'I acknowledge that I have expressly requested my registration for the examination before the expiration date of the withdrawal period.',
+    description: 'First clause item for the waiver checkbox.',
+    id: 'components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause1',
+  },
+  waiveCheckboxHelperClause2: {
+    defaultMessage:
+      'I expressly waive my right of withdrawal in order to register for the examination before the expiration of the withdrawal period.',
+    description: 'Second clause item for the waiver checkbox.',
+    id: 'components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause2',
+  },
+});
+
 const WithdrawRightCheckbox = () => {
   const {
-    props: { isWithdrawable },
+    props: { isWithdrawable, product },
     registerSubmitCallback,
     unregisterSubmitCallback,
     hasWaivedWithdrawalRight,
     setHasWaivedWithdrawalRight,
   } = useSaleTunnelContext();
+  const intl = useIntl();
+  const clauseMessages =
+    product.type === ProductType.CERTIFICATE
+      ? certificateProductMessages
+      : credentialProductMessages;
   const [hasErrorState, setHasError] = useState(false);
   const setError = useCallback(async () => {
     setHasError(!isWithdrawable && !hasWaivedWithdrawalRight);
@@ -44,13 +86,17 @@ const WithdrawRightCheckbox = () => {
       data-testid="withdraw-right-checkbox"
     >
       <Alert type={hasErrorState ? VariantType.ERROR : VariantType.WARNING} className="mb-s">
-        <FormattedMessage {...messages.waiveCheckboxExplanation} />
+        <FormattedMessage {...clauseMessages.waiveCheckboxExplanation} />
       </Alert>
       <Checkbox
         className="waiveCheckbox__input"
-        label={<FormattedMessage {...messages.waiveCheckboxLabel} />}
+        label={intl.formatMessage(messages.waiveCheckboxLabel)}
         checked={hasWaivedWithdrawalRight}
         onChange={(e) => setHasWaivedWithdrawalRight(e.target.checked)}
+        textItems={[
+          intl.formatMessage(clauseMessages.waiveCheckboxHelperClause1),
+          intl.formatMessage(clauseMessages.waiveCheckboxHelperClause2),
+        ]}
       />
     </section>
   );

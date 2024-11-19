@@ -273,7 +273,9 @@ describe('SaleTunnel', () => {
     /**
      * Make sure the checkbox to waive withdrawal right is displayed
      */
-    const $waiveCheckbox = screen.getByLabelText('I waive my right of withdrawal');
+    const $waiveCheckbox = within(screen.getByTestId('withdraw-right-checkbox')).getByRole(
+      'checkbox',
+    );
 
     /**
      * Subscribe
