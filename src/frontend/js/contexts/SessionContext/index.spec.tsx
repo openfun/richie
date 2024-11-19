@@ -119,7 +119,7 @@ describe('SessionProvider', () => {
     });
 
     it('provides user infos if user is authenticated then stores in cache', async () => {
-      const username = faker.internet.userName();
+      const username = faker.internet.username();
       const userDeferred = new Deferred();
       fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
       const { result } = renderHook(useSession, {
@@ -146,7 +146,7 @@ describe('SessionProvider', () => {
     });
 
     it('destroy session then logout', async () => {
-      const username = faker.internet.userName();
+      const username = faker.internet.username();
       const userDeferred = new Deferred();
 
       fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);

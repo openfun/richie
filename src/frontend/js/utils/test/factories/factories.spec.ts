@@ -38,7 +38,7 @@ describe('factory', () => {
     }
     return {
       fullname,
-      username: faker.internet.userName(),
+      username: faker.internet.username(),
       mainAddress: DemoAddressFactory().one(),
       addresses: DemoAddressFactory().many(3),
       favoriteColors: Array(2).fill(faker.color.human()),

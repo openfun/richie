@@ -48,7 +48,7 @@ describe('OpenEdX Hawthorn API', () => {
   describe('enrollment', () => {
     beforeEach(() => {
       courseId = faker.string.uuid();
-      username = faker.internet.userName();
+      username = faker.internet.username();
       fetchMock.restore();
       mockHandle.mockRestore();
     });

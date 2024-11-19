@@ -22,7 +22,7 @@ describe('Fonzie API', () => {
 
   it('uses its own route to get user information', async () => {
     const user = {
-      username: faker.internet.userName(),
+      username: faker.internet.username(),
     };
 
     fetchMock.get('https://demo.endpoint.api/api/v1.0/user/me', user);

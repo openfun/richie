@@ -9,7 +9,7 @@ import { factory } from './factories';
 
 export const OpenEdxApiProfileFactory = factory((): OpenEdxApiProfile => {
   return {
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
     name: faker.person.fullName(),
     country: faker.location.countryCode(),
     year_of_birth: faker.date.past().toISOString(),

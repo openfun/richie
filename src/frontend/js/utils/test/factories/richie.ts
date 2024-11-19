@@ -154,7 +154,7 @@ export const UserFactory = factory<User>(() => ({
   access_token: faker.lorem.word(12),
   full_name: faker.person.fullName(),
   email: faker.internet.email(),
-  username: faker.internet.userName(),
+  username: faker.internet.username(),
 }));
 
 export const FonzieUserFactory = factory<User>(() => ({
