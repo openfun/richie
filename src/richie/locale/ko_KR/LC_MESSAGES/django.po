@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-08 09:59+0000\n"
-"PO-Revision-Date: 2024-10-16 09:25\n"
+"POT-Creation-Date: 2024-11-19 14:16+0000\n"
+"PO-Revision-Date: 2024-11-20 14:09\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -932,108 +932,108 @@ msgstr ""
 msgid "{:s} | {:s}"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:78
+#: apps/courses/settings/__init__.py:79
 msgid "Course page"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:79
+#: apps/courses/settings/__init__.py:80
 msgid "Organization list"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:80
+#: apps/courses/settings/__init__.py:81
 msgid "Organization page"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:81
+#: apps/courses/settings/__init__.py:82
 msgid "Category list"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:82
+#: apps/courses/settings/__init__.py:83
 msgid "Category page"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:83
+#: apps/courses/settings/__init__.py:84
 msgid "Blog post list"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:84
+#: apps/courses/settings/__init__.py:85
 msgid "Blog post page"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:85
+#: apps/courses/settings/__init__.py:86
 msgid "Person page"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:86
+#: apps/courses/settings/__init__.py:87
 msgid "Person list"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:87
+#: apps/courses/settings/__init__.py:88
 msgid "Program page"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:88
+#: apps/courses/settings/__init__.py:89
 msgid "Program list"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:89
+#: apps/courses/settings/__init__.py:90
 msgid "Search"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:90
+#: apps/courses/settings/__init__.py:91
 msgid "List of child pages"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:91
+#: apps/courses/settings/__init__.py:92
 msgid "Homepage"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:92
+#: apps/courses/settings/__init__.py:93
 msgid "Single column"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:93
+#: apps/courses/settings/__init__.py:94 plugins/section/defaults.py:30
 msgid "Three columns: (33% | 33% | 33%)"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:94
+#: apps/courses/settings/__init__.py:95 plugins/section/defaults.py:31
 msgid "Two columns: (50% | 50%)"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:95
+#: apps/courses/settings/__init__.py:96 plugins/section/defaults.py:32
 msgid "Two columns: (25% | 75%)"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:96
+#: apps/courses/settings/__init__.py:97 plugins/section/defaults.py:33
 msgid "Two columns: (75% | 25%)"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:103
+#: apps/courses/settings/__init__.py:104
 msgid "Footer"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:108
+#: apps/courses/settings/__init__.py:109
 msgid "Static headline"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:115 apps/courses/settings/__init__.py:136
-#: apps/courses/settings/__init__.py:139 apps/courses/settings/__init__.py:149
-#: apps/courses/settings/__init__.py:156 apps/courses/settings/__init__.py:163
-#: apps/courses/settings/__init__.py:384
+#: apps/courses/settings/__init__.py:116 apps/courses/settings/__init__.py:137
+#: apps/courses/settings/__init__.py:140 apps/courses/settings/__init__.py:150
+#: apps/courses/settings/__init__.py:157 apps/courses/settings/__init__.py:164
+#: apps/courses/settings/__init__.py:385
 msgid "Main content"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:142 apps/courses/settings/__init__.py:152
-#: apps/courses/settings/__init__.py:159 apps/courses/settings/__init__.py:166
+#: apps/courses/settings/__init__.py:143 apps/courses/settings/__init__.py:153
+#: apps/courses/settings/__init__.py:160 apps/courses/settings/__init__.py:167
 msgid "Secondary content"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:145
+#: apps/courses/settings/__init__.py:146
 msgid "Third content"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:170 apps/courses/settings/__init__.py:345
-#: apps/courses/settings/__init__.py:365
+#: apps/courses/settings/__init__.py:171 apps/courses/settings/__init__.py:346
+#: apps/courses/settings/__init__.py:366
 #: apps/courses/templates/courses/cms/blogpost_detail.html:89
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:10
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:42
@@ -1044,56 +1044,56 @@ msgstr ""
 msgid "Cover"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:175
+#: apps/courses/settings/__init__.py:176
 msgid "Catch phrase"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:180
+#: apps/courses/settings/__init__.py:181
 msgid "Teaser"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:185
+#: apps/courses/settings/__init__.py:186
 msgid "About the course"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:190
+#: apps/courses/settings/__init__.py:191
 msgid "What you will learn"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:194
+#: apps/courses/settings/__init__.py:195
 msgid "Format"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:198
+#: apps/courses/settings/__init__.py:199
 msgid "Prerequisites"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:202
+#: apps/courses/settings/__init__.py:203
 msgid "Team"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:206
+#: apps/courses/settings/__init__.py:207
 msgid "Plan"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:211
+#: apps/courses/settings/__init__.py:212
 msgid "Complementary information"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:223
+#: apps/courses/settings/__init__.py:224
 #: apps/courses/templates/courses/cms/course_detail.html:483
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:47
 msgid "License for the course content"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:228
+#: apps/courses/settings/__init__.py:229
 #: apps/courses/templates/courses/cms/course_detail.html:494
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:56
 msgid "License for the content created by course participants"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:233 apps/courses/settings/__init__.py:269
-#: apps/courses/settings/__init__.py:309 apps/courses/settings/__init__.py:341
+#: apps/courses/settings/__init__.py:234 apps/courses/settings/__init__.py:270
+#: apps/courses/settings/__init__.py:310 apps/courses/settings/__init__.py:342
 #: apps/courses/templates/courses/cms/blogpost_detail.html:45
 #: apps/courses/templates/courses/cms/blogpost_list.html:16
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:67
@@ -1102,85 +1102,85 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:237 apps/courses/settings/__init__.py:298
+#: apps/courses/settings/__init__.py:238 apps/courses/settings/__init__.py:299
 msgid "Icon"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:242 apps/courses/settings/__init__.py:283
-#: apps/courses/settings/__init__.py:331
+#: apps/courses/settings/__init__.py:243 apps/courses/settings/__init__.py:284
+#: apps/courses/settings/__init__.py:332
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:27
 #: apps/courses/templates/courses/cms/person_detail.html:112
 #: apps/search/defaults.py:109
 msgid "Organizations"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:246
+#: apps/courses/settings/__init__.py:247
 msgid "Assessment and Certification"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:250
+#: apps/courses/settings/__init__.py:251
 msgid "Required equipment"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:254
+#: apps/courses/settings/__init__.py:255
 msgid "Accessibility"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:259 apps/courses/settings/__init__.py:288
+#: apps/courses/settings/__init__.py:260 apps/courses/settings/__init__.py:289
 #: apps/courses/templates/courses/cms/category_detail.html:40
 msgid "Banner"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:264 apps/courses/settings/__init__.py:293
+#: apps/courses/settings/__init__.py:265 apps/courses/settings/__init__.py:294
 #: apps/courses/templates/courses/cms/category_detail.html:60
 #: apps/courses/templates/courses/cms/fragment_category_glimpse.html:50
 msgid "Logo"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:273 apps/courses/settings/__init__.py:303
+#: apps/courses/settings/__init__.py:274 apps/courses/settings/__init__.py:304
 msgid "Description"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:278 apps/courses/settings/__init__.py:350
-#: apps/courses/settings/__init__.py:370
+#: apps/courses/settings/__init__.py:279 apps/courses/settings/__init__.py:351
+#: apps/courses/settings/__init__.py:371
 #: apps/courses/templates/courses/cms/fragment_organization_glimpse.html:44
 msgid "Excerpt"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:313
+#: apps/courses/settings/__init__.py:314
 msgid "Portrait"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:318
+#: apps/courses/settings/__init__.py:319
 msgid "Bio"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:323
+#: apps/courses/settings/__init__.py:324
 msgid "Main Content"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:336
+#: apps/courses/settings/__init__.py:337
 msgid "Author"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:355 apps/courses/settings/__init__.py:375
+#: apps/courses/settings/__init__.py:356 apps/courses/settings/__init__.py:376
 msgid "Body"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:359
+#: apps/courses/settings/__init__.py:360
 msgid "Headline"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:380
+#: apps/courses/settings/__init__.py:381
 #: apps/courses/templates/courses/cms/person_detail.html:130
 msgid "Courses"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:506
+#: apps/courses/settings/__init__.py:507
 msgid "Button caesura"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:508
+#: apps/courses/settings/__init__.py:509
 msgid "Full width"
 msgstr ""
 
@@ -1487,6 +1487,11 @@ msgid "\n"
 "        <br />\n"
 "        If what you need is a %(model)s page, you need to create it via the wizard and choose \"New %(model)s page\".\n"
 "        "
+msgstr ""
+
+#: apps/courses/templates/courses/cms/fragment_organization_glimpse.html:8
+#, python-format
+msgid "Link to the organization page of %(title)s"
 msgstr ""
 
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:8
@@ -1888,7 +1893,7 @@ msgstr ""
 msgid "plain text"
 msgstr ""
 
-#: plugins/section/cms_plugins.py:29
+#: plugins/section/cms_plugins.py:42
 msgid "Section"
 msgstr ""
 
@@ -1924,12 +1929,32 @@ msgstr ""
 msgid "Item tiles"
 msgstr ""
 
+#: plugins/section/defaults.py:29 plugins/simple_text_ckeditor/defaults.py:12
+msgid "None"
+msgstr ""
+
 #: plugins/section/models.py:30
 msgid "Optional template for custom look."
 msgstr ""
 
 #: plugins/section/models.py:33
 msgid "Attributes"
+msgstr ""
+
+#: plugins/section/models.py:38
+msgid "Grid"
+msgstr ""
+
+#: plugins/section/models.py:44
+msgid "Define a Grid to use for contents, when no Grid is enable each content can define its own width."
+msgstr ""
+
+#: plugins/section/models.py:49
+msgid "Grid gutter"
+msgstr ""
+
+#: plugins/section/models.py:52
+msgid "Enable a gutter between content items when Grid is enabled."
 msgstr ""
 
 #: plugins/simple_picture/cms_plugins.py:28
@@ -1940,8 +1965,28 @@ msgstr ""
 msgid "Simple text"
 msgstr ""
 
-#: plugins/simple_text_ckeditor/models.py:23
+#: plugins/simple_text_ckeditor/defaults.py:13
+msgid "Transparent box"
+msgstr ""
+
+#: plugins/simple_text_ckeditor/defaults.py:14
+msgid "Fulfilled box"
+msgstr ""
+
+#: plugins/simple_text_ckeditor/defaults.py:15
+msgid "Stroked box"
+msgstr ""
+
+#: plugins/simple_text_ckeditor/models.py:25
 msgid "body"
+msgstr ""
+
+#: plugins/simple_text_ckeditor/models.py:27
+msgid "Box variant"
+msgstr ""
+
+#: plugins/simple_text_ckeditor/models.py:32
+msgid "Enable a themed box to enclose content."
 msgstr ""
 
 #: plugins/simple_text_ckeditor/validators.py:20

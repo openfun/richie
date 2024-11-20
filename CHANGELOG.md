@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.31.0] - 2024-11-20
+
 ### Added
 
 - Grid options for the Section plugin
@@ -2213,7 +2215,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.30.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.31.0...master
+[2.31.0]: https://github.com/openfun/richie/compare/v2.30.0...v2.31.0
 [2.30.0]: https://github.com/openfun/richie/compare/v2.29.2...v2.30.0
 [2.29.2]: https://github.com/openfun/richie/compare/v2.29.1...v2.29.2
 [2.29.1]: https://github.com/openfun/richie/compare/v2.29.0...v2.29.1

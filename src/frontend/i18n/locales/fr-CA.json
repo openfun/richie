@@ -1355,6 +1355,34 @@
     "description": "Message explaining the subscription process with a training agreement to sign and a payment method to set.",
     "message": "To enroll in the training, you will first be invited to sign the training agreement and then to define a payment method."
   },
+  "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause1": {
+    "description": "First clause item for the waiver checkbox.",
+    "message": "I acknowledge that I have expressly requested my registration for the examination before the expiration date of the withdrawal period."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause2": {
+    "description": "Second clause item for the waiver checkbox.",
+    "message": "I expressly waive my right of withdrawal in order to register for the examination before the expiration of the withdrawal period."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiverLabel": {
+    "description": "Text to explain why the user has to waive to its withdrawal right.",
+    "message": "If the examination period begins before the end of the 14-day withdrawal period mentioned in Article L221-18 of the French Consumer Code, you must check the box below to proceed with your registration."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.credential.waiveCheckboxHelperClause1": {
+    "description": "First clause item for the waiver checkbox.",
+    "message": "I acknowledge that I have expressly requested to begin the training before the expiration date of the withdrawal period."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.credential.waiveCheckboxHelperClause2": {
+    "description": "Second clause item for the waiver checkbox.",
+    "message": "I expressly waive my right of withdrawal in order to begin the training before the expiration of the withdrawal period."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.credential.waiverLabel": {
+    "description": "Text to explain why the user has to waive to its withdrawal right.",
+    "message": "The training program you wish to enroll in begins before the end of the 14-day withdrawal period mentioned in Article L221-18 of the French Consumer Code. You must check the box below to proceed with your registration."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.waiveCheckboxLabel": {
+    "description": "Label of the checkbox to waive the withdrawal right.",
+    "message": "By checking this box:"
+  },
   "components.SaleTunnel.callToActionDescription": {
     "description": "Additional description announced by screen readers when focusing the call to action buying button",
     "message": "Acheter {product}"
@@ -1534,6 +1562,10 @@
   "components.SubscriptionButton.errorFullProduct": {
     "description": "Error message shown when order creation request failed because there is no remaining available seat for the product.",
     "message": "There are no more places available for this product."
+  },
+  "components.SubscriptionButton.errorWithdrawalRight": {
+    "description": "Error message shown when the user must waive its withdrawal right but doesn't.",
+    "message": "You must waive your withdrawal right."
   },
   "components.SubscriptionButton.orderCreationInProgress": {
     "description": "Label for screen reader when an order creation is in progress.",

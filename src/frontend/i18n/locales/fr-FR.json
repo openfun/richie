@@ -1355,6 +1355,34 @@
     "description": "Message explaining the subscription process with a training agreement to sign and a payment method to set.",
     "message": "Pour vous inscrire, vous serez d'abord invité à signer le contrat de formation, puis à définir un moyen de paiement."
   },
+  "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause1": {
+    "description": "First clause item for the waiver checkbox.",
+    "message": "Je reconnais avoir expressément demandé mon inscription à l’examen avant la date d’expiration du délai de rétractation."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause2": {
+    "description": "Second clause item for the waiver checkbox.",
+    "message": "Je renonce expressément à l’exercice de mon droit de rétractation afin de pouvoir m'inscrire à l’examen avant l’expiration du délai de rétractation."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiverLabel": {
+    "description": "Text to explain why the user has to waive to its withdrawal right.",
+    "message": "Si la période d’examen commence avant la fin du délai de rétractation de 14 jours mentionné à l’article L221-18 du code de la consommation, vous devez cocher la case ci-dessous pour poursuivre votre inscription."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.credential.waiveCheckboxHelperClause1": {
+    "description": "First clause item for the waiver checkbox.",
+    "message": "Je reconnais avoir expressément demandé vouloir commencer la formation avant la date d’expiration du délai de rétractation."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.credential.waiveCheckboxHelperClause2": {
+    "description": "Second clause item for the waiver checkbox.",
+    "message": "Je renonce expressément à l’exercice de mon droit de rétractation afin de pouvoir commencer la formation avant l’expiration du délai de rétractation."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.credential.waiverLabel": {
+    "description": "Text to explain why the user has to waive to its withdrawal right.",
+    "message": "La formation à laquelle vous voulez vous inscrire commence avant la fin du délai de rétractation de 14 jours mentionné à l’article L221-18 du code de la consommation. Vous devez cocher la case ci-dessous pour poursuivre votre inscription."
+  },
+  "components.SaleTunnel.WithdrawRightCheckbox.waiveCheckboxLabel": {
+    "description": "Label of the checkbox to waive the withdrawal right.",
+    "message": "En cochant cette case : "
+  },
   "components.SaleTunnel.callToActionDescription": {
     "description": "Additional description announced by screen readers when focusing the call to action buying button",
     "message": "Acheter {product}"
@@ -1534,6 +1562,10 @@
   "components.SubscriptionButton.errorFullProduct": {
     "description": "Error message shown when order creation request failed because there is no remaining available seat for the product.",
     "message": "Il n'y a pas plus de places disponibles."
+  },
+  "components.SubscriptionButton.errorWithdrawalRight": {
+    "description": "Error message shown when the user must waive its withdrawal right but doesn't.",
+    "message": "Vous devez renoncer à votre droit de rétraction."
   },
   "components.SubscriptionButton.orderCreationInProgress": {
     "description": "Label for screen reader when an order creation is in progress.",
