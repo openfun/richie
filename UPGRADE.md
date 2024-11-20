@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.30.0 to 2.31.0
+
 - There is a new Sass settings that can be used to define 'simple-text' box properties:
   ```scss
   $r-simpletext-margin-bottom: 0.5rem;

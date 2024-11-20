@@ -130,7 +130,10 @@ class OrganizationPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertIn(
-            '<a href="/fr/titre-public/" title="Link to the organization page of titre public"',
+            (
+                r'<a href="/fr/titre-public/" '
+                r'title="Lien vers la page de l\'organisation de titre public"'
+            ),
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
         pattern = (
