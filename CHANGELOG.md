@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add Slider plugin
+
 ## [2.32.0] - 2024-11-27
 
 ### Changed

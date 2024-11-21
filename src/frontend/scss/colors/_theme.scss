@@ -151,6 +151,12 @@ $r-theme: (
     primary-color: r-color('denim'),
     secondary-color: r-color('white'),
   ),
+  slider-plugin: (
+    arrows-color: r-color('white'),
+    arrows-hover-color: r-color('firebrick6'),
+    index-color: r-color('charcoal'),
+    index-hover-color: r-color('black'),
+  ),
   blogpost-glimpse: (
     card-background: r-color('white'),
     title-color: r-color('black'),

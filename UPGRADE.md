@@ -16,6 +16,26 @@ $ make migrate
 
 ## Unreleased
 
+- Add new `slider` plugin theme scheme:
+  ```scss
+  slider-plugin: (
+    arrows-color: r-color('firebrick6'),
+    arrows-hover-color: r-color('firebrick6'),
+    index-color: r-color('firebrick6'),
+    index-hover-color: r-color('firebrick6'),
+  ),
+  ```
+
+- There is a new Sass settings that can be used to define 'slider' content font properties:
+  ```scss
+  $r-slider-title-fontsize: $h1-font-size;
+  $r-slider-title-fontweight: $font-weight-bold;
+  $r-slider-title-fontfamily: $headings-font-family;
+  $r-slider-content-fontsize: $h4-font-size;
+  $r-slider-content-line-height: 1.1;
+  ```
+  These are the default component values but you may customize them if needed.
+
 ## 2.30.0 to 2.31.0
 
 - There is a new Sass settings that can be used to define 'simple-text' box properties:

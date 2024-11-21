@@ -1,0 +1,4 @@
+{% load cms_tags i18n %}{% spaceless %}
+    <div id="{{ instance.front_identifier }}" class="slider" data-props-source="#{{ instance.payload_identifier }}"></div>
+    {{ instance.get_slider_payload|json_script:instance.payload_identifier }}
+{% endspaceless %}
