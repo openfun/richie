@@ -114,7 +114,7 @@ CMS_PLACEHOLDER_CONF = {
     # Homepage
     "richie/homepage.html maincontent": {
         "name": _("Main content"),
-        "plugins": ["LargeBannerPlugin", "SectionPlugin"],
+        "plugins": ["LargeBannerPlugin", "SectionPlugin", "SliderPlugin"],
         "child_classes": {
             "SectionPlugin": [
                 "BlogPostPlugin",

@@ -422,6 +422,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "richie.plugins.section",
         "richie.plugins.simple_picture",
         "richie.plugins.simple_text_ckeditor",
+        "richie.plugins.slider",
         "richie.plugins.lti_consumer",
         "richie",
         # Third party apps
