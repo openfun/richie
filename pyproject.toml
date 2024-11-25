@@ -32,7 +32,7 @@ dependencies = [
     "Django<5",
     "djangocms-file",
     "djangocms-googlemap",
-    "djangocms-link",
+    "djangocms-link<5",
     "djangocms-picture",
     "djangocms-text-ckeditor",
     "djangocms-video",
