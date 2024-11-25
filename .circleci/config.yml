@@ -36,6 +36,11 @@ aliases:
       command: |
         sudo apt-get update
         sudo apt-get install -y libcairo2-dev
+  
+  - &count_cpus
+    run:
+      name: Count the number of available cpu cores
+      command: echo "export NB_CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)" >> $BASH_ENV
 
 jobs:
   # Git jobs
@@ -210,6 +215,7 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - *count_cpus
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -224,7 +230,7 @@ jobs:
           command: ~/.local/bin/black . --check
       - run:
           name: Lint code with pylint
-          command: ~/.local/bin/pylint src/richie/apps src/richie/plugins sandbox tests
+          command: ~/.local/bin/pylint -j "${NB_CPUS}" src/richie/apps src/richie/plugins sandbox tests
       - run:
           name: Lint code with bandit
           command: ~/.local/bin/bandit -qr src/richie/apps src/richie/plugins sandbox
@@ -804,6 +810,7 @@ jobs:
     steps:
       - *checkout_fun
       - *restore_node_modules
+      - *count_cpus
       - run:
           name: Prepare test reporting
           command: |
@@ -811,7 +818,7 @@ jobs:
             mkdir -p ./reports/jest
       - run:
           name: Run tests
-          command: JEST_JUNIT_OUTPUT_DIR=./reports/jest yarn test -w 3 --shard "$(($CIRCLE_NODE_INDEX + 1))/$CIRCLE_NODE_TOTAL" --reporters=default --reporters=jest-junit
+          command: JEST_JUNIT_OUTPUT_DIR=./reports/jest yarn test -w "${NB_CPUS}" --shard "$(($CIRCLE_NODE_INDEX + 1))/$CIRCLE_NODE_TOTAL" --reporters=default --reporters=jest-junit
       - store_test_results:
           path: ./reports/jest/
 
