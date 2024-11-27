@@ -68,7 +68,7 @@ universal = true
 
 [project.optional-dependencies]
 dev = [
-    "bandit==1.7.10",
+    "bandit==1.8.0",
     "black==24.10.0",
     "pyRdfa3==3.6.4",
     "cssselect==1.2.0",
@@ -98,7 +98,7 @@ sandbox = [
     "factory-boy==3.3.1",
     "gunicorn==23.0.0",
     "psycopg2-binary==2.9.10",
-    "sentry-sdk==2.18.0",
+    "sentry-sdk==2.19.0",
 ]
 
 [tool.flake8]
