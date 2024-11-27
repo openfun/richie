@@ -1355,17 +1355,17 @@
     "description": "Message explaining the subscription process with a training agreement to sign and a payment method to set.",
     "message": "Pour vous inscrire, vous serez d'abord invité à signer le contrat de formation, puis à définir un moyen de paiement."
   },
+  "components.SaleTunnel.WithdrawRightCheckbox.certificate .waiveCheckboxHelperClause2": {
+    "description": "Second clause item for the waiver checkbox.",
+    "message": "Je comprends que si j'accède à l'examen pendant ce délai, je renonce expressément à l’exercice de mon droit de rétractation."
+  },
   "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause1": {
     "description": "First clause item for the waiver checkbox.",
-    "message": "Je reconnais avoir expressément demandé mon inscription à l’examen avant la date d’expiration du délai de rétractation."
-  },
-  "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause2": {
-    "description": "Second clause item for the waiver checkbox.",
-    "message": "Je renonce expressément à l’exercice de mon droit de rétractation afin de pouvoir m'inscrire à l’examen avant l’expiration du délai de rétractation."
+    "message": "Je reconnais avoir été informé de mon droit légal de rétractation, qui me permet d'annuler mon inscription dans un délai de 14 jours à compter de la date de mon paiement."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiverLabel": {
     "description": "Text to explain why the user has to waive to its withdrawal right.",
-    "message": "Si la période d’examen commence avant la fin du délai de rétractation de 14 jours mentionné à l’article L221-18 du code de la consommation, vous devez cocher la case ci-dessous pour poursuivre votre inscription."
+    "message": "Si vous accédez à l'examen, vous reconnaissez renoncer à votre droit de rétractation de 14 jours, tel que prévu par l'article L221-18 du Code de la consommation."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.credential.waiveCheckboxHelperClause1": {
     "description": "First clause item for the waiver checkbox.",

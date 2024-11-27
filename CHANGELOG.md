@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Update withdrawal waiver messages for certificate product
+
 ## [2.31.0] - 2024-11-20
 
 ### Added
