@@ -1355,17 +1355,17 @@
     "description": "Message explaining the subscription process with a training agreement to sign and a payment method to set.",
     "message": "Para se inscrever na formação, será primeiro convidado a assinar o acordo de formação e, em seguida, a definir um método de pagamento."
   },
+  "components.SaleTunnel.WithdrawRightCheckbox.certificate .waiveCheckboxHelperClause2": {
+    "description": "Second clause item for the waiver checkbox.",
+    "message": "I understand that if I access the exam during this period, I expressly waive my right of withdrawal."
+  },
   "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause1": {
     "description": "First clause item for the waiver checkbox.",
-    "message": "I acknowledge that I have expressly requested my registration for the examination before the expiration date of the withdrawal period."
-  },
-  "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause2": {
-    "description": "Second clause item for the waiver checkbox.",
-    "message": "I expressly waive my right of withdrawal in order to register for the examination before the expiration of the withdrawal period."
+    "message": "I acknowledge that I have been informed of my legal right of withdrawal, which allows me to cancel my registration within 14 days from the date of payment."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiverLabel": {
     "description": "Text to explain why the user has to waive to its withdrawal right.",
-    "message": "If the examination period begins before the end of the 14-day withdrawal period mentioned in Article L221-18 of the French Consumer Code, you must check the box below to proceed with your registration."
+    "message": "If you access the exam, you acknowledge waiving your 14-day withdrawal right, as provided for in Article L221-18 of the French Consumer Code."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.credential.waiveCheckboxHelperClause1": {
     "description": "First clause item for the waiver checkbox.",

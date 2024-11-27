@@ -36,21 +36,21 @@ const credentialProductMessages = defineMessages({
 const certificateProductMessages = defineMessages({
   waiveCheckboxExplanation: {
     defaultMessage:
-      'If the examination period begins before the end of the 14-day withdrawal period mentioned in Article L221-18 of the French Consumer Code, you must check the box below to proceed with your registration.',
+      'If you access the exam, you acknowledge waiving your 14-day withdrawal right, as provided for in Article L221-18 of the French Consumer Code.',
     description: 'Text to explain why the user has to waive to its withdrawal right.',
     id: 'components.SaleTunnel.WithdrawRightCheckbox.certificate.waiverLabel',
   },
   waiveCheckboxHelperClause1: {
     defaultMessage:
-      'I acknowledge that I have expressly requested my registration for the examination before the expiration date of the withdrawal period.',
+      'I acknowledge that I have been informed of my legal right of withdrawal, which allows me to cancel my registration within 14 days from the date of payment.',
     description: 'First clause item for the waiver checkbox.',
     id: 'components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause1',
   },
   waiveCheckboxHelperClause2: {
     defaultMessage:
-      'I expressly waive my right of withdrawal in order to register for the examination before the expiration of the withdrawal period.',
+      'I understand that if I access the exam during this period, I expressly waive my right of withdrawal.',
     description: 'Second clause item for the waiver checkbox.',
-    id: 'components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause2',
+    id: 'components.SaleTunnel.WithdrawRightCheckbox.certificate .waiveCheckboxHelperClause2',
   },
 });
 
