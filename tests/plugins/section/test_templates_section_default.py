@@ -27,7 +27,7 @@ class DefaultTemplatesTestCase(CMSPluginTestCase):
             placeholder,
             plugin_type="LinkPlugin",
             language="en",
-            external_link="http://www.example.com/1",
+            link={"external_link": "http://www.example.com/1"},
             name="Example 1",
             target=parent,
         )
@@ -35,7 +35,7 @@ class DefaultTemplatesTestCase(CMSPluginTestCase):
             placeholder,
             plugin_type="LinkPlugin",
             language="en",
-            external_link="http://www.example.com/2",
+            link={"external_link": "http://www.example.com/2"},
             name="Example 2",
             target=parent,
         )
@@ -159,7 +159,7 @@ class DefaultTemplatesTestCase(CMSPluginTestCase):
                 placeholder,
                 plugin_type="LinkPlugin",
                 language="en",
-                external_link="http://www.example.com/1",
+                link={"external_link": "http://www.example.com/1"},
                 name="Example 1",
                 target=parent,
             )
@@ -167,7 +167,7 @@ class DefaultTemplatesTestCase(CMSPluginTestCase):
                 placeholder,
                 plugin_type="LinkPlugin",
                 language="en",
-                external_link="http://www.example.com/2",
+                link={"external_link": "http://www.example.com/2"},
                 name="Example 2",
                 target=parent,
             )
