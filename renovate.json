@@ -31,8 +31,7 @@
       "matchPackageNames": [
         "Django",
         "django-cms",
-        "elasticsearch",
-        "djangocms-link"
+        "elasticsearch"
       ]
     }
   ]

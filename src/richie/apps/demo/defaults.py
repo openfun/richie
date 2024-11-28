@@ -373,47 +373,57 @@ SINGLECOLUMN_CONTENT.update(getattr(settings, "RICHIE_DEMO_SINGLECOLUMN_CONTENT"
 
 FOOTER_CONTENT = {
     "en": [
-        {"name": "About", "internal_link": "annex__about"},
-        {"name": "Sitemap", "internal_link": "annex__sitemap"},
-        {"name": "Style guide", "external_link": "/styleguide/"},
+        {"name": "About", "link": {"internal_link": "annex__about"}},
+        {"name": "Sitemap", "link": {"internal_link": "annex__sitemap"}},
+        {"name": "Style guide", "link": {"external_link": "/styleguide/"}},
         {
             "title": "Richie community",
             "items": [
-                {"name": "Website", "external_link": "https://richie.education"},
+                {
+                    "name": "Website",
+                    "link": {"external_link": "https://richie.education"},
+                },
                 {
                     "name": "Github",
-                    "external_link": "https://github.com/openfun/richie",
+                    "link": {"external_link": "https://github.com/openfun/richie"},
                 },
                 {
                     "name": "Site factory",
-                    "external_link": "https://github.com/openfun/richie-site-factory",
+                    "link": {
+                        "external_link": "https://github.com/openfun/richie-site-factory"
+                    },
                 },
                 {
                     "name": "Example site",
-                    "external_link": "https://www.fun-campus.fr",
+                    "link": {"external_link": "https://www.fun-campus.fr"},
                 },
             ],
         },
     ],
     "fr": [
-        {"name": "A propos", "internal_link": "annex__about"},
-        {"name": "Plan du site", "internal_link": "annex__sitemap"},
-        {"name": "Style guide", "external_link": "/styleguide/"},
+        {"name": "A propos", "link": {"internal_link": "annex__about"}},
+        {"name": "Plan du site", "link": {"internal_link": "annex__sitemap"}},
+        {"name": "Style guide", "link": {"external_link": "/styleguide/"}},
         {
             "title": "Communauté Richie",
             "items": [
-                {"name": "Site web", "external_link": "https://richie.education"},
+                {
+                    "name": "Site web",
+                    "link": {"external_link": "https://richie.education"},
+                },
                 {
                     "name": "Github",
-                    "external_link": "https://github.com/openfun/richie",
+                    "link": {"external_link": "https://github.com/openfun/richie"},
                 },
                 {
                     "name": "Usine à sites",
-                    "external_link": "https://github.com/openfun/richie-site-factory",
+                    "link": {
+                        "external_link": "https://github.com/openfun/richie-site-factory"
+                    },
                 },
                 {
                     "name": "Site exemple",
-                    "external_link": "https://www.fun-campus.fr",
+                    "link": {"external_link": "https://www.fun-campus.fr"},
                 },
             ],
         },

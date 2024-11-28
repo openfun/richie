@@ -81,6 +81,9 @@ def create_demo_site():
     # Create pages as described in PAGES_INFOS
     pages_created = recursive_page_creation(site, defaults.PAGES_INFO)
 
+    def get_internal_link(page):
+        return f"cms.page:{page.id}"
+
     # Create the footer links
     def create_footer_link(**link_info):
         """
@@ -89,9 +92,10 @@ def create_demo_site():
         Links can be nested into a NestedItemPlugin, in this case link_info contains
         a target key.
         """
-        if "internal_link" in link_info:
+        if "internal_link" in link_info["link"]:
             link_info = link_info.copy()
-            link_info["internal_link"] = pages_created[link_info["internal_link"]]
+            link_page = pages_created[link_info["link"]["internal_link"]]
+            link_info["link"] = {"internal_link": get_internal_link(link_page)}
         add_plugin(plugin_type="LinkPlugin", **link_info)
 
     footer_static_ph = StaticPlaceholder.objects.get_or_create(code="footer")[0]
@@ -486,7 +490,7 @@ def create_demo_site():
             target=courses_section,
             name=content["courses_button_title"],
             template=content["button_template_name"],
-            internal_link=pages_created["courses"],
+            link={"internal_link": get_internal_link(pages_created["courses"])},
         )
 
         # Add highlighted blogposts
@@ -512,7 +516,7 @@ def create_demo_site():
             target=blogposts_section,
             name=content["blogposts_button_title"],
             template=content["button_template_name"],
-            internal_link=pages_created["blogposts"],
+            link={"internal_link": get_internal_link(pages_created["blogposts"])},
         )
 
         # Add highlighted programs
@@ -538,7 +542,7 @@ def create_demo_site():
             target=programs_section,
             name=content["programs_button_title"],
             template=content["button_template_name"],
-            internal_link=pages_created["programs"],
+            link={"internal_link": get_internal_link(pages_created["programs"])},
         )
 
         # Add highlighted organizations
@@ -566,7 +570,7 @@ def create_demo_site():
             target=organizations_section,
             name=content["organizations_button_title"],
             template=content["button_template_name"],
-            internal_link=pages_created["organizations"],
+            link={"internal_link": get_internal_link(pages_created["organizations"])},
         )
 
         # Add highlighted subjects
@@ -592,7 +596,7 @@ def create_demo_site():
             target=subjects_section,
             name=content["subjects_button_title"],
             template=content["button_template_name"],
-            internal_link=pages_created["categories"],
+            link={"internal_link": get_internal_link(pages_created["categories"])},
         )
 
         # Add highlighted persons
@@ -618,7 +622,7 @@ def create_demo_site():
             target=persons_section,
             name=content["persons_button_title"],
             template=content["button_template_name"],
-            internal_link=pages_created["persons"],
+            link={"internal_link": get_internal_link(pages_created["persons"])},
         )
 
         # Add Glimpse quotes with empty title
@@ -756,7 +760,7 @@ def create_demo_site():
             target=sample_section,
             name=content["section_sample_button_title"],
             template=content["button_template_name"],
-            internal_link=pages_created["home"],
+            link={"internal_link": get_internal_link(pages_created["home"])},
         )
         # Add a licence
         if licences:

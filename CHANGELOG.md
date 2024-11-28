@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add Slider plugin
 
+### Fixed
+
+- Ugrade to djangocms-link 5
+
 ## [2.32.0] - 2024-11-27
 
 ### Changed
