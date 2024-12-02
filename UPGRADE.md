@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.31.0 to 2.33.0
+
 - Add new `slider` plugin theme scheme:
   ```scss
   slider-plugin: (
