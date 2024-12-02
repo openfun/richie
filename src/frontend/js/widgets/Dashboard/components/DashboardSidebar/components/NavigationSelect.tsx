@@ -1,7 +1,7 @@
 import { Select, SelectHandle } from '@openfun/cunningham-react';
 import { useMemo, useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { matchPath, useLocation, useNavigate } from 'react-router-dom';
+import { matchPath, useLocation, useNavigate } from 'react-router';
 import { MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';
 
 const messages = defineMessages({

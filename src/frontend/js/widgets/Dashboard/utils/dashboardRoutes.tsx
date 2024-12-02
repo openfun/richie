@@ -4,7 +4,7 @@ import type {
   Options as IntlMessageFormatOptions,
   PrimitiveType,
 } from 'intl-messageformat';
-import { generatePath, Navigate, RouteObject } from 'react-router-dom';
+import { generatePath, Navigate, RouteObject } from 'react-router';
 import DashboardPageNotFound from 'pages/DashboardPageNotFound';
 import { DashboardLayoutRoute } from 'widgets/Dashboard/components/DashboardLayoutRoute';
 import { getLearnerDashboardRoutes } from 'widgets/Dashboard/utils/learnerRoutes';

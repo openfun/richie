@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { faker } from '@faker-js/faker';
 import { TargetCourseFactory } from 'utils/test/factories/joanie';
 import { StorybookHelper } from 'utils/StorybookHelper';

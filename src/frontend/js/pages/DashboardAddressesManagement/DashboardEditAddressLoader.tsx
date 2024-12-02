@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import Banner, { BannerType } from 'components/Banner';
 import { Spinner } from 'components/Spinner';
 import { useAddress } from 'hooks/useAddresses';

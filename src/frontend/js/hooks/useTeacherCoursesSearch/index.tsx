@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router';
 import { useCourseProductUnion } from 'hooks/useCourseProductUnion';
 import { CourseListItem, CourseProductRelationLight, ProductType } from 'types/Joanie';
 import { Maybe, Nullable } from 'types/utils';

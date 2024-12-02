@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router';
 import { useOrganizations } from 'hooks/useOrganizations';
 import { CourseProductRelation, Organization } from 'types/Joanie';
 

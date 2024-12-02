@@ -1,4 +1,4 @@
-import { RouterProvider, RouterProviderProps } from 'react-router-dom';
+import { RouterProvider, RouterProviderProps } from 'react-router';
 import { useEffect } from 'react';
 import { location } from 'utils/indirection/window';
 import { useSession } from 'contexts/SessionContext';

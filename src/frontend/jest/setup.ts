@@ -8,6 +8,13 @@ import { FactoryConfig } from 'utils/test/factories/factories';
 global.Request = Request as any;
 global.Response = Response as any;
 
+// https://github.com/remix-run/react-router/issues/12363#issuecomment-2496226528
+if (!globalThis.TextEncoder || !globalThis.TextDecoder) {
+  const { TextDecoder, TextEncoder } = require('node:util');
+  globalThis.TextEncoder = TextEncoder;
+  globalThis.TextDecoder = TextDecoder;
+}
+
 /*
  * A little trick to prevent so package to be reset when using `jest.resetModules()`.
  * https://github.com/facebook/jest/issues/8987#issuecomment-584898030

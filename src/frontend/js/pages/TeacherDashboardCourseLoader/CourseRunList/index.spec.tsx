@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import { capitalize } from 'lodash-es';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import { CourseRunFactory } from 'utils/test/factories/joanie';
 import CourseRunList from '.';
 

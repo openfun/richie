@@ -1,4 +1,4 @@
-import { Location, matchPath, resolvePath } from 'react-router-dom';
+import { Location, matchPath, resolvePath } from 'react-router';
 
 export const isMenuLinkActive = (to: string, location: Location) => {
   const path = resolvePath(to).pathname;

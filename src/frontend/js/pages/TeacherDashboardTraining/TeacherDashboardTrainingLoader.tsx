@@ -1,5 +1,5 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { TeacherDashboardCourseSidebar } from 'widgets/Dashboard/components/TeacherDashboardCourseSidebar';

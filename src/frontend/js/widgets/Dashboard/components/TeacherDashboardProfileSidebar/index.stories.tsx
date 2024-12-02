@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { UserFactory } from 'utils/test/factories/richie';
 import { TeacherDashboardProfileSidebar } from 'widgets/Dashboard/components/TeacherDashboardProfileSidebar';
 import { StorybookHelper } from 'utils/StorybookHelper';

@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
 import { useCreditCard } from 'hooks/useCreditCards';
 import { Spinner } from 'components/Spinner';

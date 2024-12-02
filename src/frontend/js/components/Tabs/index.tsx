@@ -9,7 +9,7 @@ import {
   cloneElement,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { noop } from 'utils';
 
 interface TabProps extends PropsWithChildren {

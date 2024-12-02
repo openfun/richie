@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { generatePath, Link } from 'react-router-dom';
+import { generatePath, Link } from 'react-router';
 import { Organization } from 'types/Joanie';
 import { StringHelper } from 'utils/StringHelper';
 

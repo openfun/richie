@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router';
 import { Spinner } from 'components/Spinner';
 import { useOrganization } from 'hooks/useOrganizations';
 import { DashboardSidebar, MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';

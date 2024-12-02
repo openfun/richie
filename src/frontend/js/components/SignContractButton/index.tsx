@@ -1,7 +1,7 @@
 import { Button } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useState } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import { LearnerContractFrame } from 'components/ContractFrame';
 import {
   Contract,

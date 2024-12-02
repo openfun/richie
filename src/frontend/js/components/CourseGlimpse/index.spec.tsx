@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import { CommonDataProps } from 'types/commonDataProps';
 import { RichieContextFactory } from 'utils/test/factories/richie';
 import { CourseStateTextEnum } from 'types';

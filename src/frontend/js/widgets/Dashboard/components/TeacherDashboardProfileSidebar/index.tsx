@@ -1,6 +1,6 @@
 import { defineMessages, useIntl } from 'react-intl';
 import { useMemo } from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import { DashboardSidebar } from 'widgets/Dashboard/components/DashboardSidebar';
 import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useSession } from 'contexts/SessionContext';

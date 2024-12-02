@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { Link, RouteObject } from 'react-router-dom';
+import { Link, RouteObject } from 'react-router';
 import { render } from 'utils/test/render';
 import { RouterWrapper } from 'utils/test/wrappers/RouterWrapper';
 import ProtectedRoute from '.';

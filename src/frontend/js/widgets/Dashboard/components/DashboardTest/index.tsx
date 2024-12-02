@@ -1,4 +1,4 @@
-import { createMemoryRouter } from 'react-router-dom';
+import { createMemoryRouter } from 'react-router';
 import Dashboard from 'widgets/Dashboard';
 import { getDashboardRoutes } from 'widgets/Dashboard/utils/dashboardRoutes';
 

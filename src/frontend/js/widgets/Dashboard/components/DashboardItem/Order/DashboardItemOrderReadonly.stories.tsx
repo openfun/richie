@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { CredentialOrder, OrderState, Product, TargetCourse } from 'types/Joanie';
 import {
   CredentialOrderFactory,

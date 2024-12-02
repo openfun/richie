@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import c from 'classnames';
 import { LearnerDashboardSidebar } from 'widgets/Dashboard/components/LearnerDashboardSidebar';
 import { DashboardBreadcrumbs } from 'widgets/Dashboard/components/DashboardBreadcrumbs';

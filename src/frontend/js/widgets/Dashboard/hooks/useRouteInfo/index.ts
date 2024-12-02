@@ -1,4 +1,4 @@
-import { useLocation, useMatches } from 'react-router-dom';
+import { useLocation, useMatches } from 'react-router';
 
 /**
  * Retrieve route information

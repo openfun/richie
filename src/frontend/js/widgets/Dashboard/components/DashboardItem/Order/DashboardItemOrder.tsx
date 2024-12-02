@@ -1,5 +1,5 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import { CredentialOrder, OrderState } from 'types/Joanie';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CoursesHelper } from 'utils/CoursesHelper';

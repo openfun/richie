@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { MessageDescriptor, useIntl } from 'react-intl';
-import { createBrowserRouter, generatePath, NavigateOptions, useNavigate } from 'react-router-dom';
+import { createBrowserRouter, generatePath, NavigateOptions, useNavigate } from 'react-router';
 import { getDashboardRoutes } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';

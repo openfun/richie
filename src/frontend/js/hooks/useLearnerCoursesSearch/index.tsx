@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { Enrollment, CredentialOrder, OrderState, ProductType } from 'types/Joanie';
 import { Maybe, Nullable } from 'types/utils';
 import { useOrdersEnrollments } from 'pages/DashboardCourses/useOrdersEnrollments';

@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useMemo } from 'react';
 import { useOmniscientOrder } from 'hooks/useOrders';

@@ -27,7 +27,7 @@ type RenderFunction = (
  * the same contexts.
  *
  * The provided {@param element} is to be wrapped in :
- * - react router (react-router-dom)
+ * - react router (react-router)
  * - react i18n context (react-intl)
  * - query context (react-query)
  *
