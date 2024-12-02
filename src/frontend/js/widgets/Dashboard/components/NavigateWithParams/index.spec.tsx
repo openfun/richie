@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import LocationDisplay from 'utils/test/LocationDisplay';
 import { render } from 'utils/test/render';

@@ -1,5 +1,5 @@
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router';
 import { useMemo } from 'react';
 import { capitalize } from 'lodash-es';
 import { DashboardSidebar, MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';

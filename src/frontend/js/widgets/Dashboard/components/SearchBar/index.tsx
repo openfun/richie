@@ -1,7 +1,7 @@
 import { Button, Input } from '@openfun/cunningham-react';
 import { MouseEvent, PropsWithChildren, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { Nullable } from 'types/utils';
 
 const messages = defineMessages({

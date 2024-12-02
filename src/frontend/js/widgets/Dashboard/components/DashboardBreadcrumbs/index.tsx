@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { useMatches } from 'react-router-dom';
+import { useMatches } from 'react-router';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 import { IntlHelper } from 'utils/IntlHelper';
 import { DashboardBreadcrumbsContext } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';

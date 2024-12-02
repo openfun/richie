@@ -1,7 +1,7 @@
 import fetchMock from 'fetch-mock';
 import { screen } from '@testing-library/react';
 import { createIntl } from 'react-intl';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import { CourseListItem } from 'types/Joanie';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {

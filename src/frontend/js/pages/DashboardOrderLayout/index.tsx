@@ -1,4 +1,4 @@
-import { generatePath, Outlet, useParams } from 'react-router-dom';
+import { generatePath, Outlet, useParams } from 'react-router';
 import { useIntl } from 'react-intl';
 import { useMemo } from 'react';
 import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes';

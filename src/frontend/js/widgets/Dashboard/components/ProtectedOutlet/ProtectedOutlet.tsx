@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { location } from 'utils/indirection/window';
 
 export interface ProtectedOutletProps {

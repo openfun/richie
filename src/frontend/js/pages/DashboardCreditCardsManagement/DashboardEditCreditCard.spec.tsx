@@ -1,7 +1,7 @@
 import { getByText, queryByText, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
-import { Outlet, generatePath } from 'react-router-dom';
+import { Outlet, generatePath } from 'react-router';
 import {
   UserFactory,
   RichieContextFactory as mockRichieContextFactory,
@@ -267,7 +267,7 @@ describe('<DahsboardEditCreditCard/>', () => {
     );
 
     // Redirected to the list route.
-    screen.getByText('Credit cards');
+    await screen.findByText('Credit cards');
     const creditCardsContainers = await screen.findAllByTestId(/dashboard-credit-card__/);
     expect(creditCardsContainers.length).toEqual(6);
 
@@ -333,7 +333,7 @@ describe('<DahsboardEditCreditCard/>', () => {
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
 
     // Redirected to the list route.
-    screen.getByText('Credit cards');
+    await screen.findByText('Credit cards');
 
     await waitFor(() => {
       // Assert that other credit cards appear in the list.

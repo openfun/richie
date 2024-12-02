@@ -1,5 +1,5 @@
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { capitalize } from 'lodash-es';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';

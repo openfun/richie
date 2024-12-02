@@ -3,7 +3,7 @@ import { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor, act } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';

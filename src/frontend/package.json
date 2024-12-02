@@ -125,7 +125,7 @@
     "react-hook-form": "7.53.2",
     "react-intl": "7.0.1",
     "react-modal": "3.16.1",
-    "react-router-dom": "7.0.1",
+    "react-router": "7.0.1",
     "sass": "1.81.0",
     "source-map-loader": "5.0.0",
     "storybook": "8.4.6",

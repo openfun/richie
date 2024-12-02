@@ -2,7 +2,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { DataGrid, usePagination } from '@openfun/cunningham-react';
 import { useEffect, useMemo } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router';
 import { ContractHelper, ContractStatePoV } from 'utils/ContractHelper';
 import { useOrganizationContracts } from 'hooks/useContracts';
 import Banner, { BannerType } from 'components/Banner';

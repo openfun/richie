@@ -1,4 +1,4 @@
-import { RouteObject } from 'react-router-dom';
+import { RouteObject } from 'react-router';
 import { act, fireEvent, screen } from '@testing-library/react';
 import { location } from 'utils/indirection/window';
 import { render } from 'utils/test/render';

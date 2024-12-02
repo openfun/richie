@@ -1,4 +1,4 @@
-import { createSearchParams } from 'react-router-dom';
+import { createSearchParams } from 'react-router';
 import { useMemo } from 'react';
 import { MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';
 import { ContractState, CourseProductRelation, Organization } from 'types/Joanie';

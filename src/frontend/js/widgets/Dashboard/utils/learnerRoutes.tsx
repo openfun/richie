@@ -1,5 +1,5 @@
 import { MessageDescriptor, useIntl } from 'react-intl';
-import { Navigate, Outlet, RouteObject } from 'react-router-dom';
+import { Navigate, Outlet, RouteObject } from 'react-router';
 import RouteInfo from 'widgets/Dashboard/components/RouteInfo';
 import { DashboardCreateAddressLoader } from 'pages/DashboardAddressesManagement/DashboardCreateAddressLoader';
 import { DashboardEditAddressLoader } from 'pages/DashboardAddressesManagement/DashboardEditAddressLoader';

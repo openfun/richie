@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { UserFactory } from 'utils/test/factories/richie';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import MenuNavLink from './components/MenuNavLink';

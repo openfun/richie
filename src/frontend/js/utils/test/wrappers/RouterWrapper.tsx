@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { RouteObject, RouterProvider, createMemoryRouter } from 'react-router-dom';
+import { RouteObject, RouterProvider, createMemoryRouter } from 'react-router';
 import { Maybe } from 'types/utils';
 
 export interface RouterWrapperProps extends PropsWithChildren {

@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import { SuccessIcon } from 'components/SuccessIcon';
 import { getDashboardBasename } from 'widgets/Dashboard/hooks/useDashboardRouter/getDashboardBasename';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';

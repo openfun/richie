@@ -1,4 +1,4 @@
-import { generatePath, Navigate, NavigateProps, useParams } from 'react-router-dom';
+import { generatePath, Navigate, NavigateProps, useParams } from 'react-router';
 
 interface NavigateWithParamsProps extends NavigateProps {
   to: string;

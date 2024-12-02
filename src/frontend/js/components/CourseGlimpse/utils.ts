@@ -1,5 +1,5 @@
 import { IntlShape } from 'react-intl';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import { Course as RichieCourse, isRichieCourse } from 'types/Course';
 import {
   CourseListItem as JoanieCourse,

@@ -1,4 +1,4 @@
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';

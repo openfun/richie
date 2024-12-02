@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { createMemoryRouter, Outlet, RouteObject, RouterProvider } from 'react-router-dom';
+import { createMemoryRouter, Outlet, RouteObject, RouterProvider } from 'react-router';
 import { defineMessages } from 'react-intl';
 import { DashboardBreadcrumbsProvider } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
-import { generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router';
 import { CourseRun } from 'types';
 import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/hooks/useCourseEnrollment';
 import CourseRunItem from 'widgets/SyllabusCourseRunsList/components/CourseRunItem';

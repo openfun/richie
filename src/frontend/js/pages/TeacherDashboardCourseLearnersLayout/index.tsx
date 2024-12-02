@@ -1,6 +1,6 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router';
 import { SortModel, usePagination } from '@openfun/cunningham-react';
 import { useEffect, useMemo, useState } from 'react';
 import { TeacherDashboardCourseSidebar } from 'widgets/Dashboard/components/TeacherDashboardCourseSidebar';

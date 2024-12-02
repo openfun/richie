@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router';
 import Badge from 'components/Badge';
 import { MenuLink } from '../..';
 import { isMenuLinkActive } from '../../utils';

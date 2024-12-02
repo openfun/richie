@@ -1,4 +1,4 @@
-import { Outlet, useMatches } from 'react-router-dom';
+import { Outlet, useMatches } from 'react-router';
 import { DashboardRouteHandle } from 'widgets/Dashboard/hooks/useDashboardRouter';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { DashboardBreadcrumbsProvider } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
