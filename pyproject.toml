@@ -77,20 +77,20 @@ dev = [
     "flake8-pyproject==1.2.3",
     "htmlmin==0.1.12",
     "ipdb==0.13.13",
-    "ipython==8.29.0",
+    "ipython==8.30.0",
     "isort==5.13.2",
     "lxml==5.3.0",
     "msgpack==1.1.0",
     "mysqlclient==2.2.6",
-    "pylint==3.3.1",
+    "pylint==3.3.2",
     "pylint-django==2.6.1",
-    "pytest==8.3.3",
+    "pytest==8.3.4",
     "pytest-cov==6.0.0",
     "pytest-django==4.9.0",
     "responses==0.25.3",
 ]
 ci = [
-    "twine==5.1.1",
+    "twine==6.0.1",
 ]
 sandbox = [
     "django-configurations==2.5.1",
