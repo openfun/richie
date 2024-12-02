@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.33.0] - 2024-12-02
+
 ### Added
 
 - Add Slider plugin
@@ -2229,7 +2231,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.32.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.33.0...master
+[2.33.0]: https://github.com/openfun/richie/compare/v2.32.0...v2.33.0
 [2.32.0]: https://github.com/openfun/richie/compare/v2.31.0...v2.32.0
 [2.31.0]: https://github.com/openfun/richie/compare/v2.30.0...v2.31.0
 [2.30.0]: https://github.com/openfun/richie/compare/v2.29.2...v2.30.0
