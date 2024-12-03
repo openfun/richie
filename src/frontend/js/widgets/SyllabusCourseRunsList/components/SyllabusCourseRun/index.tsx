@@ -11,6 +11,16 @@ import CourseRunEnrollment from '../CourseRunEnrollment';
 import CourseProductItem from '../CourseProductItem';
 
 const messages = defineMessages({
+  enrollNow: {
+    id: 'components.SyllabusCourseRun.enrollNow',
+    description: 'CTA for users to enroll on ongoing of future open course.',
+    defaultMessage: 'Enroll now',
+  },
+  studyNow: {
+    id: 'components.SyllabusCourseRun.studyNow',
+    description: 'CTA for users to enroll on archived course.',
+    defaultMessage: 'Study now',
+  },
   enrollment: {
     id: 'components.SyllabusCourseRun.enrollment',
     description: 'Title of the enrollment dates section of an opened course run block',
@@ -94,7 +104,12 @@ const OpenedCourseRun = ({
         <CourseRunEnrollment courseRun={courseRun} />
       ) : (
         <Button className="course-run-enrollment__cta" href={courseRun.resource_link} fullWidth>
-          {StringHelper.capitalizeFirst(courseRun.state.call_to_action)}
+          {courseRun.state.call_to_action === 'enroll now' ? (
+            <FormattedMessage {...messages.enrollNow} />
+          ) : null}
+          {courseRun.state.call_to_action === 'study now' ? (
+            <FormattedMessage {...messages.studyNow} />
+          ) : null}
         </Button>
       )}
     </>

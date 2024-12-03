@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
     use them in a course page
 - Added new page extension `MainMenuEntry`
 
+### Fixed
+
+- Fix frontend translation of Enroll now for external LMS backend
+
 ## [2.33.0] - 2024-12-02
 
 ### Added
