@@ -595,7 +595,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         iframe = html.cssselect(".subheader__teaser .aspect-ratio iframe")[0]
         self.assertIn("allowfullscreen", iframe.keys())
         self.assertEqual(iframe.get("title"), video_sample.label)
-        self.assertEqual(iframe.get("src"), video_sample.url)
+        self.assertEqual(iframe.get("data-src"), video_sample.url + "?&autoplay=1")
 
     def test_templates_course_detail_teaser_empty_cover_image(self):
         """
@@ -634,7 +634,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         iframe = html.cssselect(".subheader__teaser .aspect-ratio iframe")[0]
         self.assertIn("allowfullscreen", iframe.keys())
         self.assertEqual(iframe.get("title"), video_sample.label)
-        self.assertEqual(iframe.get("src"), video_sample.url)
+        self.assertEqual(iframe.get("data-src"), video_sample.url + "?&autoplay=1")
 
 
 # pylint: disable=too-many-public-methods
