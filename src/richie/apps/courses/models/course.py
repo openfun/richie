@@ -796,6 +796,11 @@ class CourseRun(TranslatableModel):
         blank=False,
         max_length=20,
     )
+    price_editable = models.BooleanField(
+        _("price is editable"),
+        null=False,
+        default=False,
+    )
     price = models.DecimalField(
         _("price"),
         max_digits=9,
@@ -817,8 +822,13 @@ class CourseRun(TranslatableModel):
         blank=False,
         max_length=20,
     )
+    certificate_price_editable = models.BooleanField(
+        _("certificate price is editable"),
+        null=False,
+        default=False,
+    )
     certificate_price = models.DecimalField(
-        _("certificate_price"),
+        _("certificate price"),
         max_digits=9,
         decimal_places=2,
         null=True,
@@ -826,7 +836,7 @@ class CourseRun(TranslatableModel):
         help_text=_("The price of the certificate"),
     )
     certificate_offer = models.CharField(
-        _("certificate_offer"),
+        _("certificate offer"),
         choices=lazy(lambda: CertificateOffer.choices, tuple)(),
         default=getattr(
             settings,
