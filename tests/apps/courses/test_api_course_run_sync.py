@@ -1422,3 +1422,70 @@ class SyncCourseRunApiTestCase(CMSTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
+
+    @override_settings(
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public",
+        TIME_ZONE="UTC",
+    )
+    def test_api_course_run_sync_price_info_as_optional(self, mock_signal):
+
+        link = "http://example.edx:8073/courses/course-v1:edX+DemoX+01/course/"
+        course = CourseFactory(code="DemoX")
+        course.extended_object.publish("en")
+        course.refresh_from_db()
+
+        self.assertEqual(
+            course.extended_object.title_set.first().publisher_state,
+            PUBLISHER_STATE_DEFAULT,
+        )
+        mock_signal.reset_mock()
+
+        data = {
+            "resource_link": link,
+            "start": "2020-12-09T09:31:59.417817Z",
+            "end": "2021-03-14T09:31:59.417895Z",
+            "enrollment_start": "2020-11-09T09:31:59.417936Z",
+            "enrollment_end": "2020-12-24T09:31:59.417972Z",
+            "languages": ["en", "fr"],
+            "enrollment_count": 15682,
+            "catalog_visibility": "course_and_search",
+        }
+
+        response = self.client.post(
+            "/api/v1.0/course-runs-sync",
+            data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=(
+                "SIG-HMAC-SHA256 25de22f3674a207a2bd3923dcc5e302a21c9aac8eee7c835f084349da69d0472"
+            ),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"success": True})
+        self.assertEqual(CourseRun.objects.count(), 2)
+    
+        draft_course_run = CourseRun.objects.get(direct_course=course)
+        draft_serializer = SyncCourseRunSerializer(instance=draft_course_run)
+        
+        self.assertEqual(draft_serializer.data["price"], None)
+        self.assertEqual(draft_serializer.data["price_currency"], "EUR")
+        self.assertEqual(draft_serializer.data["offer"], "free")
+        self.assertEqual(draft_serializer.data["certificate_price"], None)
+        self.assertEqual(draft_serializer.data["certificate_offer"], "free")
+
+        public_course_run = CourseRun.objects.get(direct_course=course.public_extension)
+        public_serializer = SyncCourseRunSerializer(instance=public_course_run)
+        
+        self.assertEqual(public_serializer.data["price"], None)
+        self.assertEqual(public_serializer.data["price_currency"], "EUR")
+        self.assertEqual(public_serializer.data["offer"], "free")
+        self.assertEqual(public_serializer.data["certificate_price"], None)
+        self.assertEqual(public_serializer.data["certificate_offer"], "free")
+
+        self.assertEqual(
+            course.extended_object.title_set.first().publisher_state,
+            PUBLISHER_STATE_DEFAULT,
+        )
+        mock_signal.assert_called_once_with(
+            sender=Page, instance=course.extended_object, language=None
+        )

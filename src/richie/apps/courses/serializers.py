@@ -94,33 +94,6 @@ class SyncCourseRunSerializer(serializers.ModelSerializer):
     """
 
     languages = ListMultipleChoiceField(choices=lazy(lambda: ALL_LANGUAGES, tuple)())
-    price = serializers.DecimalField(
-        max_digits=9,
-        decimal_places=2,
-        allow_null=True,
-        required=False,
-    )
-    price_currency = serializers.CharField(
-        max_length=7,
-        allow_null=True,
-        required=False,
-    )
-    offer = serializers.CharField(
-        allow_null=True,
-        max_length=20,
-        required=False,
-    )
-    certificate_price = serializers.DecimalField(
-        max_digits=9,
-        decimal_places=2,
-        allow_null=True,
-        required=False,
-    )
-    certificate_offer = serializers.CharField(
-        allow_null=True,
-        max_length=20,
-        required=False,
-    )
 
     class Meta:
         model = CourseRun
