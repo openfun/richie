@@ -685,29 +685,6 @@ class Course(EsIdMixin, BasePageExtension):
         self.full_clean()
         super().save(*args, **kwargs)
 
-    def generate_course_runs_offers_dict_rdfa(self):
-        """
-        Generate course run dict offers for rdfa purposes
-        based on the Google developers definition:
-        https://developers.google.com/search/docs/appearance/structured-data/course-info?hl=pt-br#guidelines
-        """
-
-        def clean_offer(offer: str) -> str:
-            return offer.replace(" ", "").replace("_", " ").title()
-
-        return {
-            "offers": [
-                {
-                    "@type": "Offer",
-                    "category": clean_offer(run.offer),
-                    "priceCurrency": run.price_currency.upper(),
-                    "price": float(run.price),
-                }
-                for run in self.course_runs
-            ]
-        }
-
-
 class CourseRunSyncMode(models.TextChoices):
     """Course run synchronization mode choices for the "sync_mode" field."""
 

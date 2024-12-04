@@ -623,7 +623,6 @@ class CourseRunModelsTestCase(TestCase):
         stub = CourseRunFactory(
             sync_mode="manual",
             catalog_visibility=CourseRunCatalogVisibility.COURSE_ONLY,
-            offer=CourseRunOffer.SUBSCRIPTION,
             price=3.0,
             display_mode="compact",
         )  # New random values to update our course run

@@ -92,7 +92,7 @@ const OpenedCourseRun = ({
   const courseOfferMessage = {
     "PAID": "The course content is paid.",
     "FREE": "The course content is free.",
-    "PARTIALLY_FREE": "This course is partially free, see below the price.",
+    "PARTIALLY_FREE": "The course content is free.",
     "SUBSCRIPTION": "Subscribe to access the course content.",
     "NONE": ""
   }[offer]

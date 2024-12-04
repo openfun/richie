@@ -1288,7 +1288,7 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain("<dd>This course is partially free, see below the price.<br>€0.00</dd>")
+    expect(content).toContain("<dd>The course content is free.<br>€0.00</dd>")
     expect(content).toContain("<dd>The certification process is paid.<br>€59.99</dd>")
   });
 
