@@ -51,15 +51,45 @@ const messages = defineMessages({
     description: 'Title of the course enrollment section of an opened course run block',
     defaultMessage: 'Enrollment Price',
   },
-  courseOffer: {
-    id: 'components.SyllabusCourseRun.courseOffer',
-    description: 'Title of the course enrollment section of an opened course run block',
-    defaultMessage: 'Course offer',
-  },
   certificationPrice: {
     id: 'components.SyllabusCourseRun.certificationPrice',
     description: 'Title of the course enrollment section of an opened course run block',
-    defaultMessage: 'Certification Price',
+    defaultMessage: 'Certification price',
+  },
+  coursePaidOffer: {
+    id: 'components.SyllabusCourseRun.coursePaidOffer',
+    description: 'Title of the certification section of an opened course run block',
+    defaultMessage: 'The course content is paid.',
+  },
+  courseFreeOffer: {
+    id: 'components.SyllabusCourseRun.courseFreeOffer',
+    description: 'Title of the certification section of an opened course run block',
+    defaultMessage: 'The course content is free.',
+  },
+  coursePartiallyFree: {
+    id: 'components.SyllabusCourseRun.coursePartiallyFree',
+    description: 'Title of the certification section of an opened course run block',
+    defaultMessage: 'The course content is free.',
+  },
+  courseSubscriptionOffer: {
+    id: 'components.SyllabusCourseRun.courseSubscriptionOffer',
+    description: 'Title of the certification section of an opened course run block',
+    defaultMessage: 'Subscribe to access the course content.',
+  },
+  certificatePaidOffer: {
+    id: 'components.SyllabusCourseRun.certificatePaidOffer',
+    description: 'Title of the certification section of an opened course run block',
+    defaultMessage: 'The certification process is paid.',
+  },
+  certificateFreeOffer: {
+    id: 'components.SyllabusCourseRun.certificateFreeOffer',
+    description: 'Title of the certification section of an opened course run block',
+    defaultMessage: 'The certification process is free.',
+  },
+  certificateSubscriptionOffer: {
+    id: 'components.SyllabusCourseRun.certificateSubscriptionOffer',
+    description: 'Title of the certification section of an opened course run block',
+    defaultMessage: 'The certification process is offered through subscription.',
   },
 });
 
@@ -90,18 +120,17 @@ const OpenedCourseRun = ({
   const certificationOffer = (courseRun.certificate_offer ?? "NONE").toUpperCase().replaceAll(" ", "_");
 
   const courseOfferMessage = {
-    "PAID": "The course content is paid.",
-    "FREE": "The course content is free.",
-    "PARTIALLY_FREE": "The course content is free.",
-    "SUBSCRIPTION": "Subscribe to access the course content.",
+    "PAID": messages.coursePaidOffer,
+    "FREE": messages.courseFreeOffer,
+    "PARTIALLY_FREE": messages.coursePartiallyFree,
+    "SUBSCRIPTION": messages.courseSubscriptionOffer,
     "NONE": ""
   }[offer]
 
   const certificationOfferMessage = {
-    "PAID": "The certification process is paid.",
-    "FREE": "The certification process is free.",
-    "PARTIALLY_FREE": "",
-    "SUBSCRIPTION": "The certification process is offered through subscription.",
+    "PAID": messages.certificatePaidOffer,
+    "FREE": messages.certificateFreeOffer,
+    "SUBSCRIPTION": messages.certificateSubscriptionOffer,
     "NONE": ""
   }[certificationOffer]
 
