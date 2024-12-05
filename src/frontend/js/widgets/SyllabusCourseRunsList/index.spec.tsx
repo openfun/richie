@@ -1325,8 +1325,8 @@ describe('<SyllabusCourseRunsList/>', () => {
       languages: ['en'],
     }).one();
 
-    courseRun.price = undefined
-    courseRun.certificate_price = undefined
+    courseRun.offer = undefined;
+    courseRun.certificate_offer = undefined;
   
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">

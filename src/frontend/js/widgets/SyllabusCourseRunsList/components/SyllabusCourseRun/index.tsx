@@ -81,11 +81,11 @@ const OpenedCourseRun = ({
   const enrollmentPrice = courseRun.price != null ? intl.formatNumber(courseRun.price, {
     style: 'currency',
     currency: courseRun.price_currency,
-  }) : "...";
+  }) : "";
   const certificatePrice = courseRun.certificate_price != null ? intl.formatNumber(courseRun.certificate_price, {
     style: 'currency',
     currency: courseRun.price_currency,
-  }) : "...";
+  }) : "";
   const offer = (courseRun.offer ?? "NONE").toUpperCase().replaceAll(" ", "_");
   const certificationOffer = (courseRun.certificate_offer ?? "NONE").toUpperCase().replaceAll(" ", "_");
 
@@ -141,7 +141,7 @@ const OpenedCourseRun = ({
             <dd>{IntlHelper.getLocalizedLanguages(courseRun.languages, intl)}</dd>
           </>
         )}
-        {courseRun.price != null && (
+        {courseOfferMessage && (
           <>
             <dt>
               <FormattedMessage {...messages.coursePrice} />
@@ -151,7 +151,7 @@ const OpenedCourseRun = ({
             </dd>
           </>
         )}
-        {courseRun.certificate_price != null && (
+        {certificationOfferMessage && (
           <>
             <dt>
               <FormattedMessage {...messages.certificationPrice} />
