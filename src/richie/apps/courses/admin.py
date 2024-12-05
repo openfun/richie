@@ -57,10 +57,8 @@ class CourseRunAdminForm(TranslatableModelForm):
             "languages",
             "enrollment_count",
             "catalog_visibility",
-            "price_editable",
             "offer",
             "price",
-            "certificate_price_editable",
             "certificate_offer",
             "certificate_price",
             "sync_mode",
@@ -91,12 +89,6 @@ class CourseRunAdminForm(TranslatableModelForm):
                 .filter(extended_object__publisher_is_draft=True)
                 .distinct()
             )
-
-            self.fields["offer"].disabled = not self.instance.price_editable
-            self.fields["price"].disabled = not self.instance.price_editable
-
-            self.fields['certificate_offer'].disabled = not self.instance.certificate_price_editable
-            self.fields['certificate_price'].disabled = not self.instance.certificate_price_editable
         else:
             course_query = models.Course.objects.filter(
                 extended_object__publisher_is_draft=True

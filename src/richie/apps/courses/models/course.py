@@ -796,11 +796,6 @@ class CourseRun(TranslatableModel):
         blank=False,
         max_length=20,
     )
-    price_editable = models.BooleanField(
-        _("price is editable"),
-        null=False,
-        default=False,
-    )
     price = models.DecimalField(
         _("price"),
         max_digits=9,
@@ -816,16 +811,9 @@ class CourseRun(TranslatableModel):
     offer = models.CharField(
         _("offer"),
         choices=lazy(lambda: CourseRunOffer.choices, tuple)(),
-        default=getattr(
-            settings, "RICHIE_DEFAULT_COURSE_RUN_OFFER", CourseRunOffer.FREE
-        ),
-        blank=False,
+        blank=True,
+        null=True,
         max_length=20,
-    )
-    certificate_price_editable = models.BooleanField(
-        _("certificate price is editable"),
-        null=False,
-        default=False,
     )
     certificate_price = models.DecimalField(
         _("certificate price"),
@@ -838,12 +826,8 @@ class CourseRun(TranslatableModel):
     certificate_offer = models.CharField(
         _("certificate offer"),
         choices=lazy(lambda: CertificateOffer.choices, tuple)(),
-        default=getattr(
-            settings,
-            "RICHIE_DEFAULT_COURSE_RUN_CERTIFICATE_OFFER",
-            CertificateOffer.FREE,
-        ),
-        blank=False,
+        blank=True,
+        null=True,
         max_length=20,
     )
     display_mode = models.CharField(

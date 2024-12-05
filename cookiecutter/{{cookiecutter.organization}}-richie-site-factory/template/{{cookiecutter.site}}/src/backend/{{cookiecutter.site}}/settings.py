@@ -332,22 +332,10 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         environ_prefix=None,
     )
 
-    RICHIE_DEFAULT_COURSE_RUN_OFFER = values.Value(
-        "free",
-        environ_name="RICHIE_DEFAULT_COURSE_RUN_OFFER",
-        environ_prefix=None,
-    )
-
     # Course run price currency value that would be shown on course detail page
     RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY = values.Value(
         "EUR",
         environ_name="RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY",
-        environ_prefix=None,
-    )
-
-    RICHIE_DEFAULT_COURSE_RUN_CERTIFICATE_OFFER = values.Value(
-        "free",
-        environ_name="RICHIE_DEFAULT_COURSE_RUN_CERTIFICATE_OFFER",
         environ_prefix=None,
     )
 
