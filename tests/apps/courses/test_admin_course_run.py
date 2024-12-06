@@ -346,6 +346,8 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_end_0": "2015-01-23",
             "enrollment_end_1": "09:07:11",
             "catalog_visibility": "course_and_search",
+            "offer": "free",
+            "price": 0.0,
             "sync_mode": "manual",
             "display_mode": "detailed",
         }
@@ -450,6 +452,8 @@ class CourseRunAdminTestCase(CMSTestCase):
             "enrollment_end_1": "09:07:11",
             "enrollment_count": "5",
             "catalog_visibility": "course_and_search",
+            "offer": "free",
+            "price": 0.0,
             "sync_mode": "manual",
             "display_mode": "detailed",
         }
