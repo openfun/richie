@@ -43,47 +43,47 @@ const messages = defineMessages({
   },
   coursePrice: {
     id: 'components.SyllabusCourseRunCompacted.coursePrice',
-    description: 'Title of the course enrollment section of an opened course run block',
+    description: 'Title of the course enrollment price section of an opened course run block',
     defaultMessage: 'Enrollment price',
   },
   certificationPrice: {
     id: 'components.SyllabusCourseRunCompacted.certificationPrice',
-    description: 'Title of the certification section of an opened course run block',
+    description: 'Title of the certification price section of an opened course run block',
     defaultMessage: 'Certification price',
   },
   coursePaidOffer: {
     id: 'components.SyllabusCourseRunCompacted.coursePaidOffer',
-    description: 'Title of the certification section of an opened course run block',
+    description: 'Message for the paid course offer of an opened course run block',
     defaultMessage: 'The course content is paid.',
   },
   courseFreeOffer: {
     id: 'components.SyllabusCourseRunCompacted.courseFreeOffer',
-    description: 'Title of the certification section of an opened course run block',
+    description: 'Message for the free course offer of an opened course run block',
     defaultMessage: 'The course content is free.',
   },
   coursePartiallyFree: {
     id: 'components.SyllabusCourseRunCompacted.coursePartiallyFree',
-    description: 'Title of the certification section of an opened course run block',
+    description: 'Message for the partially free course offer of an opened course run block',
     defaultMessage: 'The course content is free.',
   },
   courseSubscriptionOffer: {
     id: 'components.SyllabusCourseRunCompacted.courseSubscriptionOffer',
-    description: 'Title of the certification section of an opened course run block',
+    description: 'Message for the subscription course offer of an opened course run block',
     defaultMessage: 'Subscribe to access the course content.',
   },
   certificatePaidOffer: {
     id: 'components.SyllabusCourseRunCompacted.certificatePaidOffer',
-    description: 'Title of the certification section of an opened course run block',
+    description: 'Messagge for the paid certification offer of an opened course run block',
     defaultMessage: 'The certification process is paid.',
   },
   certificateFreeOffer: {
     id: 'components.SyllabusCourseRunCompacted.certificateFreeOffer',
-    description: 'Title of the certification section of an opened course run block',
+    description: 'Message for the free certification offer of an opened course run block',
     defaultMessage: 'The certification process is free.',
   },
   certificateSubscriptionOffer: {
     id: 'components.SyllabusCourseRunCompacted.certificateSubscriptionOffer',
-    description: 'Title of the certification section of an opened course run block',
+    description: 'Message for the subscription certification offer of an opened course run block',
     defaultMessage: 'The certification process is offered through subscription.',
   },
 });
@@ -99,31 +99,43 @@ const OpenedSelfPacedCourseRun = ({
   const intl = useIntl();
   const end = courseRun.end ? formatDate(courseRun.end) : '...';
   const hasEndDate = end !== '...';
-  const enrollmentPrice = courseRun?.price != null ? intl.formatNumber(courseRun.price, {
-    style: 'currency',
-    currency: courseRun.price_currency,
-  }) : "";
-  const certificatePrice = courseRun?.certificate_price != null ? intl.formatNumber(courseRun.certificate_price, {
-    style: 'currency',
-    currency: courseRun.price_currency,
-  }) : "";
-  const offer = (courseRun.offer ?? "NONE").toUpperCase().replaceAll(" ", "_");
-  const certificationOffer = (courseRun.certificate_offer ?? "NONE").toUpperCase().replaceAll(" ", "_");
+  var courseOfferMessage = undefined;
+  var certificationOfferMessage = undefined;
+  var enrollmentPrice = "";
+  var certificatePrice = "";
 
-  const courseOfferMessage = {
-    "PAID": messages.coursePaidOffer,
-    "FREE": messages.courseFreeOffer,
-    "PARTIALLY_FREE": messages.coursePartiallyFree,
-    "SUBSCRIPTION": messages.courseSubscriptionOffer,
-    "NONE": ""
-  }[offer]
+  if(courseRun.offer){
+    const offer = courseRun.offer.toUpperCase().replaceAll(" ", "_");
+    courseOfferMessage = {
+      "PAID": messages.coursePaidOffer,
+      "FREE": messages.courseFreeOffer,
+      "PARTIALLY_FREE": messages.coursePartiallyFree,
+      "SUBSCRIPTION": messages.courseSubscriptionOffer,
+    }[offer]
 
-  const certificationOfferMessage = {
-    "PAID": messages.certificatePaidOffer,
-    "FREE": messages.certificateFreeOffer,
-    "SUBSCRIPTION": messages.certificateSubscriptionOffer,
-    "NONE": ""
-  }[certificationOffer]
+    if((courseRun.price ?? -1) >= 0){
+      enrollmentPrice = intl.formatNumber(courseRun.price!, {
+        style: 'currency',
+        currency: courseRun.price_currency,
+      });
+    }
+  } 
+
+  if(courseRun.certificate_offer){
+    const certificationOffer = courseRun.certificate_offer.toUpperCase().replaceAll(" ", "")
+    certificationOfferMessage = {
+      "PAID": messages.certificatePaidOffer,
+      "FREE": messages.certificateFreeOffer,
+      "SUBSCRIPTION": messages.certificateSubscriptionOffer,
+    }[certificationOffer]
+
+    if((courseRun.certificate_price ?? -1) >= 0){
+      certificatePrice = intl.formatNumber(courseRun.certificate_price!, {
+        style: 'currency',
+        currency: courseRun.price_currency,
+      })
+    }
+  }
 
   return (
     <>
@@ -160,7 +172,7 @@ const OpenedSelfPacedCourseRun = ({
               <FormattedMessage {...messages.coursePrice} />
             </dt>
             <dd>
-              {`${courseOfferMessage}`}<br/>{`${enrollmentPrice}`}
+              <FormattedMessage {...courseOfferMessage} /><br/>{`${enrollmentPrice}`}
             </dd>
           </>
         )}
@@ -169,7 +181,9 @@ const OpenedSelfPacedCourseRun = ({
             <dt>
               <FormattedMessage {...messages.certificationPrice} />
             </dt>
-            <dd>{`${certificationOfferMessage}`}<br/>{`${certificatePrice}`}</dd>
+            <dd>
+              <FormattedMessage {...certificationOfferMessage} /><br/>{`${certificatePrice}`}
+            </dd>
           </>
         )}
       </dl>
