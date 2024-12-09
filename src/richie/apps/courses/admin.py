@@ -57,6 +57,10 @@ class CourseRunAdminForm(TranslatableModelForm):
             "languages",
             "enrollment_count",
             "catalog_visibility",
+            "offer",
+            "price",
+            "certificate_offer",
+            "certificate_price",
             "sync_mode",
             "display_mode",
         ]
@@ -77,7 +81,7 @@ class CourseRunAdminForm(TranslatableModelForm):
 
         if "direct_course" not in self.fields:
             return
-
+        
         if self.instance.pk:
             course_query = (
                 self.instance.get_course()
@@ -150,6 +154,10 @@ class CourseRunAdmin(FrontendEditableAdminMixin, TranslatableAdmin):
         "languages",
         "enrollment_count",
         "catalog_visibility",
+        "offer",
+        "price",
+        "certificate_offer",
+        "certificate_price",
         "sync_mode",
     )
     list_display = ["id"]
