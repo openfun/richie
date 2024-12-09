@@ -98,7 +98,7 @@ sandbox = [
     "factory-boy==3.3.1",
     "gunicorn==23.0.0",
     "psycopg2-binary==2.9.10",
-    "sentry-sdk==2.19.0",
+    "sentry-sdk==2.19.2",
 ]
 
 [tool.flake8]
