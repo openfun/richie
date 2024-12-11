@@ -45,6 +45,21 @@ $ make migrate
     dropdown-item-padding: 0.5rem 1rem,
   ),
   ```
+- The program page has been extended with new fields and a new layout.
+  The look and feel are now very similar to a regular course, with the inclusion of a
+  new header that displays the associated organization(s) and details like effor and duration.
+
+  A program now has the option of having `learning objetives` just like a course.
+
+  In case you have overridden the `program_detail.html` template, you will need to update your
+  `src/frontend/scss/colors/_theme.scss` file to include the following properties:
+
+  ```
+  checkmark-list-decoration: url('../../richie/images/components/checkmark.svg'),
+  checkmark-list-decoration-color: r-color('indianred3'),
+  ```
+
+  This will ensure that the checkmarks are displayed correctly.
 ## 2.33.0 to 2.34.0
 
 - Header menu template has been modified to include features from `MainMenuEntry`

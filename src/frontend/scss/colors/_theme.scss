@@ -491,6 +491,8 @@ $r-theme: (
   ),
   program-detail: (
     cover-empty-background: r-color('smoke'),
+    checkmark-list-decoration: url('../../richie/images/components/checkmark.svg'),
+    checkmark-list-decoration-color: r-color('indianred3'),
   ),
   registered-credit-card: (
     title-color: r-color('charcoal'),

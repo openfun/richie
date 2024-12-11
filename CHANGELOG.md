@@ -19,6 +19,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   in order to avoid repeating unnecessary and critical implementations
   for each instance. If any customization is necessary, it is up to the
   site-factory implementation. Otherwise, as expected, it keeps up to Richie.
+- Update Programs page with new fields
 
 ## [2.34.0] - 2025-02-13
 
