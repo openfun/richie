@@ -27,6 +27,8 @@ from ..core.factories import (
 from . import defaults, models
 from .defaults import ROLE_CHOICES
 
+# pylint: disable=too-many-lines
+
 VideoSample = namedtuple("VideoSample", ["label", "image", "url"])
 
 VIDEO_SAMPLE_LINKS = (
@@ -864,6 +866,87 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
     # fields concerning the related page
     page_template = models.Program.PAGE["template"]
 
+    # pylint: disable=no-self-use
+    @factory.lazy_attribute
+    def duration(self):
+        """Generate a random duration for the course between 1 day and 10 months."""
+        return [
+            random.randint(1, 10),  # nosec
+            random.choice(list(defaults.TIME_UNITS.keys())[2:]),  # nosec
+        ]
+
+    # pylint: disable=no-self-use
+    @factory.lazy_attribute
+    def effort(self):
+        """Generate a random effort for the course between 1 minute and 500 hours."""
+        return [
+            random.randint(1, 500),  # nosec
+            random.choice(list(defaults.EFFORT_UNITS.keys())),  # nosec
+        ]
+
+    # pylint: disable=no-self-use
+    @factory.lazy_attribute
+    def price(self):
+        """Generate a random price for the program between 1 and 100 euros."""
+        return random.randint(1, 500)  # nosec
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_teaser(self, create, extracted, **kwargs):
+        """
+        Add a video plugin for teaser with a random url
+        """
+
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                placeholder = self.extended_object.placeholders.get(
+                    slot="program_teaser"
+                )
+
+                video_sample = (
+                    extracted
+                    if isinstance(extracted, VideoSample)
+                    else random.choice(VIDEO_SAMPLE_LINKS)  # nosec
+                )
+
+                add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="VideoPlayerPlugin",
+                    label=video_sample.label,
+                    embed_link=video_sample.url,
+                )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_categories(self, create, extracted, **kwargs):
+        """Add categories plugin to organization from a given list of category instances."""
+        if create and extracted:
+            associate_extensions(
+                self, extracted, "program_categories", "CategoryPlugin"
+            )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_team(self, create, extracted, **kwargs):
+        """
+        Add person plugin for course team from given person instance list
+        """
+        if create and extracted:
+            associate_extensions(self, extracted, "program_team", "PersonPlugin")
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_organizations(self, create, extracted, **kwargs):
+        """
+        Add organizations plugin to course from a given list of organization instances.
+        """
+
+        if create and extracted:
+            associate_extensions(
+                self, extracted, "program_organizations", "OrganizationPlugin"
+            )
+
     @factory.post_generation
     # pylint: disable=unused-argument
     def fill_body(self, create, extracted, **kwargs):
@@ -875,6 +958,21 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
                 self.extended_object,
                 "program_body",
                 nb_paragraphs=random.randint(4, 6),  # nosec
+                languages=self.extended_object.get_languages(),
+                plugin_type="TextPlugin",
+            )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_objectives(self, create, extracted, **kwargs):
+        """
+        Add simple text plugin for objectives with a random number of paragraphs
+        """
+        if create and extracted:
+            create_text_plugin(
+                self.extended_object,
+                "program_objectives",
+                nb_paragraphs=random.randint(2, 4),  # nosec
                 languages=self.extended_object.get_languages(),
                 plugin_type="TextPlugin",
             )

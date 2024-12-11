@@ -361,6 +361,24 @@ class PersonAdmin(PageExtensionAdmin):
         return obj.extended_object.get_title()
 
 
+class ProgramAdmin(PageExtensionAdmin):
+    """Admin class for the Program model"""
+
+    list_display = ["title"]
+    frontend_editable_fields = (
+        "duration",
+        "effort",
+        "price",
+    )
+
+    # pylint: disable=no-self-use
+    def title(self, obj):
+        """
+        Display the course title as a read-only field from the related page
+        """
+        return obj.extended_object.get_title()
+
+
 class LicenceAdmin(TranslatableAdmin):
     """
     Admin class for the Licence model
@@ -378,3 +396,4 @@ admin.site.register(models.MainMenuEntry, MainMenuEntryAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.PageRole, PageRoleAdmin)
 admin.site.register(models.Person, PersonAdmin)
+admin.site.register(models.Program, ProgramAdmin)

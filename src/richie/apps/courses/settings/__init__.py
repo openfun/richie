@@ -381,24 +381,57 @@ CMS_PLACEHOLDER_CONF = {
         "child_classes": {"SectionPlugin": ["CKEditorPlugin"]},
     },
     # Program page detail
+    "courses/cms/program_detail.html program_categories": {
+        "name": _("Categories"),
+        "plugins": ["CategoryPlugin"],
+    },
     "courses/cms/program_detail.html program_cover": {
         "name": _("Cover"),
         "plugins": ["SimplePicturePlugin"],
         "limits": {"SimplePicturePlugin": 1},
+    },
+    "courses/cms/program_detail.html program_teaser": {
+        "name": _("Teaser"),
+        "plugins": ["VideoPlayerPlugin"],
+        "limits": {"VideoPlayerPlugin": 1},
     },
     "courses/cms/program_detail.html program_excerpt": {
         "name": _("Excerpt"),
         "plugins": ["PlainTextPlugin"],
         "limits": {"PlainTextPlugin": 1},
     },
+    "courses/cms/program_detail.html program_organizations": {
+        "name": _("Organizations"),
+        "plugins": ["OrganizationPlugin"],
+    },
     "courses/cms/program_detail.html program_body": {
         "name": _("Body"),
         "plugins": ["CKEditorPlugin"],
         "limits": {"CKEditorPlugin": 1},
     },
+    "courses/cms/program_detail.html program_objectives": {
+        "name": _("What you will learn"),
+        "plugins": ["CKEditorPlugin"],
+    },
     "courses/cms/program_detail.html program_courses": {
         "name": _("Courses"),
         "plugins": ["CoursePlugin"],
+    },
+    "courses/cms/program_detail.html program_team": {
+        "name": _("Instructors"),
+        "plugins": ["PersonPlugin"],
+    },
+    "courses/cms/program_detail.html program_information": {
+        "name": _("Complementary information"),
+        "plugins": ["SectionPlugin"],
+        "parent_classes": {
+            "CKEditorPlugin": ["SectionPlugin"],
+            "SimplePicturePlugin": ["SectionPlugin"],
+            "GlimpsePlugin": ["SectionPlugin"],
+        },
+        "child_classes": {
+            "SectionPlugin": ["CKEditorPlugin", "SimplePicturePlugin", "GlimpsePlugin"]
+        },
     },
     "courses/cms/program_list.html maincontent": {
         "name": _("Main content"),

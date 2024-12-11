@@ -2,11 +2,13 @@
 //
 
 .program-detail {
+  $detail-selector: &;
   margin: 0 auto;
   padding: 0;
 
   &__block {
     @include detail-block;
+
     @if $body-padding-fix {
       @include content-padding-fix($target: '&:last-child');
     }
@@ -52,6 +54,75 @@
     font-size: 1rem;
     padding-left: $grid-gutter-width;
     padding-right: $grid-gutter-width;
+  }
+
+  &__objectives {
+    ul {
+      padding-left: 0.3rem;
+      list-style-type: none;
+
+      li {
+        position: relative;
+        margin-top: 0.5rem;
+        font-size: 1rem;
+        padding-left: 1.5rem;
+
+        &::before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0.2rem;
+          left: 0;
+          width: 0.8rem;
+          height: 0.8rem;
+          background-repeat: no-repeat;
+          background-color: r-theme-val(program-detail, checkmark-list-decoration-color);
+          -webkit-mask: r-theme-val(program-detail, checkmark-list-decoration);
+          mask: r-theme-val(program-detail, checkmark-list-decoration);
+          -webkit-mask-size: cover;
+          mask-size: cover;
+        }
+      }
+    }
+  }
+
+  &__content {
+    @include media-breakpoint-up(lg) {
+      padding-right: 3rem;
+    }
+  }
+
+  &__aside {
+    padding: 1rem 0;
+
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, $r-program-aside);
+      padding: 3rem 1rem;
+    }
+
+    #{$detail-selector}__row {
+      margin-bottom: 1.5rem;
+    }
+
+    #{$detail-selector}__title {
+      @include font-size($h3-font-size);
+      padding-bottom: 1rem;
+
+      @if r-theme-val(course-detail, aside-title-border) {
+        border-bottom: $onepixel solid r-theme-val(course-detail, aside-title-border);
+      }
+    }
+  }
+
+  &__main {
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, calc(100% - #{$r-program-subheader-aside}));
+      display: flex;
+      justify-content: flex-start;
+      align-content: flex-start;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
   }
 
   &__courses {
