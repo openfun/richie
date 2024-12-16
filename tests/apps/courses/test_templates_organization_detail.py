@@ -2,6 +2,7 @@
 End-to-end tests for the organization detail view
 """
 
+import datetime
 import re
 from unittest import mock
 
@@ -16,9 +17,11 @@ from richie.apps.courses.cms_plugins import CategoryPlugin, OrganizationPlugin
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
+    CourseRunFactory,
     OrganizationFactory,
     PersonFactory,
 )
+from richie.apps.courses.models.course import CourseRun, CourseRunCatalogVisibility
 
 
 class OrganizationCMSTestCase(CMSTestCase):
@@ -698,3 +701,48 @@ class OrganizationCMSTestCase(CMSTestCase):
         section = html.cssselect(".organization-detail__organizations")[0]
         organization_glimpse = section.cssselect(".section__items--organizations > *")
         self.assertEqual(len(organization_glimpse), 2)
+
+    def test_templates_organization_detail_cms_published_hidden_courses(self):
+        """
+        Ensures that changing the course run `catalog_visibility` paratemer
+        will prevent it from showing on the organization detail page
+        """
+
+        organization = OrganizationFactory(should_publish=True)
+        course = CourseFactory.create(
+            fill_organizations=[organization], should_publish=True
+        )
+        CourseRunFactory.create(
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.COURSE_AND_SEARCH,
+            start=datetime.datetime.now(),
+            end=datetime.datetime.now() + datetime.timedelta(days=5),
+            enrollment_start=datetime.datetime.now() - datetime.timedelta(days=2),
+            enrollment_end=datetime.datetime.now() - datetime.timedelta(days=1),
+        )
+
+        course.refresh_from_db()
+        add_plugin(
+            course.extended_object.placeholders.get(slot="course_organizations"),
+            OrganizationPlugin,
+            "en",
+            page=organization.extended_object,
+        )
+
+        courses_query = organization.get_courses()
+
+        self.assertEqual(courses_query.count(), 1)
+        self.assertEqual(course.state["priority"], 5)
+        self.assertEqual(course.state["text"], "on-going")
+
+        course_runs = CourseRun.objects.filter(direct_course=course)
+        self.assertEqual(len(course_runs), 1)
+
+        course_runs[0].catalog_visibility = CourseRunCatalogVisibility.HIDDEN
+        course_runs[0].save()
+
+        courses_query = organization.get_courses()
+
+        self.assertEqual(courses_query.count(), 1)
+        self.assertEqual(course.state["priority"], 7)
+        self.assertEqual(course.state["text"], "to be scheduled")
