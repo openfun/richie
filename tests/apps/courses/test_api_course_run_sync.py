@@ -21,7 +21,19 @@ from richie.apps.courses.serializers import SyncCourseRunSerializer
 
 # pylint: disable=too-many-public-methods
 @mock.patch.object(post_publish, "send", wraps=post_publish.send)
-@override_settings(RICHIE_COURSE_RUN_SYNC_SECRETS=["shared secret"])
+@override_settings(
+    RICHIE_COURSE_RUN_SYNC_SECRETS=["shared secret"],
+    RICHIE_LMS_BACKENDS=[
+        {
+            "BASE_URL": "http://localhost:8073",
+            "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
+            "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": [],
+            "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+            "JS_BACKEND": "dummy",
+            "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
+        }
+    ],
+)
 class SyncCourseRunApiTestCase(CMSTestCase):
     """Test calls to sync a course run via API endpoint."""
 
@@ -200,6 +212,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "languages": ["en", "fr"],
             "enrollment_count": 46782,
             "catalog_visibility": "course_and_search",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
         }
 
         self.assertEqual(
@@ -210,7 +227,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
 
         authorization = (
             "SIG-HMAC-SHA256 "
-            "5bdfb326b35fccaef9961e03cf617c359c86ffbb6c64e0f7e074aa011e8af9d6"
+            "8c70578af0fd658c5d2c55b1e47f1266060a1897e8fb15a690e25d7af0061c6e"
         )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
@@ -255,6 +272,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "languages": ["en", "fr"],
             "enrollment_count": 324,
             "catalog_visibility": "course_and_search",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
         }
         self.assertEqual(
             course.extended_object.title_set.first().publisher_state,
@@ -267,7 +289,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 8e232f3a6071a10cded2740bdc71aed06aa637719d28f968c7b7d35eccd765f7"
+                "SIG-HMAC-SHA256 41ee852433729021123b84d25a0c6124b5a3ecab6a1739bce0709325bfa54c77"
             ),
         )
 
@@ -312,6 +334,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "languages": ["en", "fr"],
             "enrollment_count": 47892,
             "catalog_visibility": "course_and_search",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
         }
         self.assertEqual(
             course.extended_object.title_set.first().publisher_state,
@@ -324,7 +351,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 bb453816becb5df16949b915dd577a2cabf734e4429bfbd3bdb727bde39c58b7"
+                "SIG-HMAC-SHA256 06c4ac99d2c51bfd395247564fdca4bce30eab7fb7e5abfe5a1e6250172bbf8f"
             ),
         )
 
@@ -392,6 +419,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "languages": ["en", "fr"],
             "enrollment_count": 45,
             "catalog_visibility": "course_and_search",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
         }
 
         self.assertEqual(
@@ -405,7 +437,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 723d3312759b6755bc8bbe05a9c2c719d2b4a3bdf381e2036a93119bf192aeda"
+                "SIG-HMAC-SHA256 7bcb01fbbaac9d5bb2189d1dda76f77dbc4776e471f8660f11b47c75ac41e530"
             ),
         )
 
@@ -536,7 +568,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         self.assertFalse(mock_signal.called)
 
-    @override_settings(TIME_ZONE="UTC")
+    @override_settings(
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public",
+        TIME_ZONE="UTC",
+    )
     def test_api_course_run_sync_existing_published_sync_to_public(self, mock_signal):
         """
         If a course run exists in "sync_to_public" mode (draft and public versions),
@@ -565,6 +600,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "languages": ["en", "fr"],
             "enrollment_count": 15682,
             "catalog_visibility": "course_and_search",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
         }
 
         response = self.client.post(
@@ -572,7 +612,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 25de22f3674a207a2bd3923dcc5e302a21c9aac8eee7c835f084349da69d0472"
+                "SIG-HMAC-SHA256 380334d89f9937a4e4d5a396bdf11dae92aad007c19584b6a30fe7d16dec7f0e"
             ),
         )
 
@@ -627,6 +667,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "languages": ["en", "fr"],
             "enrollment_count": 2042,
             "catalog_visibility": "course_and_search",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
         }
 
         response = self.client.post(
@@ -634,7 +679,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 6f85261b995a8ca78b5610cfe47fd6a0e321f26c671b606d12225bbea72fc8f0"
+                "SIG-HMAC-SHA256 6498774003a35f135813cd6189e4d3661f9552dc46127734bf5def851caf1a03"
             ),
         )
 
@@ -683,6 +728,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "languages": ["en", "fr"],
             "enrollment_count": 103123,
             "catalog_visibility": "course_and_search",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
         }
 
         response = self.client.post(
@@ -690,7 +740,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 262963565518c85901059500b274568a4d5583d507c375604e9845083d5d7095"
+                "SIG-HMAC-SHA256 22ea488f43f4ff56eedbc16aa49acc63365185c082ac6357187f0d6bca5c4d75"
             ),
         )
 
@@ -747,6 +797,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "languages": ["en", "fr"],
             "enrollment_count": 542,
             "catalog_visibility": "course_and_search",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
         }
 
         response = self.client.post(
@@ -754,7 +809,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 db30268ee706fd147c6f04567faa88ed84fd06f08dbc944fff6c0a4973b06599"
+                "SIG-HMAC-SHA256 87245828104eec056bc7c8f6faf9183576bf4e7130202ada838b0035614e431b"
             ),
         )
 
@@ -806,6 +861,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "languages": ["en", "fr"],
             "enrollment_count": 986,
             "catalog_visibility": "course_and_search",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
         }
 
         response = self.client.post(
@@ -813,7 +873,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 3bed4a7b1595f49957bd949ed0192d5f1416d4f6a1c409fc8b03b1a1ebad0f39"
+                "SIG-HMAC-SHA256 be70df8c3b07c60be7b3d4551ac385c5cd6fd5e994e4eac4cb92f83ae05dabf3"
             ),
         )
 
@@ -923,6 +983,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "languages": ["en", "fr"],
             "enrollment_count": 12345,
             "catalog_visibility": "course_and_search",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
         }
 
         response = self.client.post(
@@ -930,7 +995,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             data,
             content_type="application/json",
             HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 13433eb9159326b7d0f38ea86ab1ef8510ac4bc643d997d2ad01e349bee15570"
+                "SIG-HMAC-SHA256 12b922f6065af2c46c8eda92bc9e3842cbf001e921356cedc30afcdb3566687d"
             ),
         )
         self.assertEqual(response.status_code, 200)
@@ -1037,6 +1102,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "languages": ["en", "fr"],
                 "enrollment_count": 46782,
                 "catalog_visibility": "course_and_search",
+                "price": "59.99",
+                "price_currency": "EUR",
+                "offer": "paid",
+                "certificate_price": "19.99",
+                "certificate_offer": "paid",
             },
             {
                 "resource_link": resource_link2,
@@ -1047,6 +1117,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "languages": ["en"],
                 "enrollment_count": 210,
                 "catalog_visibility": "course_and_search",
+                "price": "59.99",
+                "price_currency": "EUR",
+                "offer": "paid",
+                "certificate_price": "19.99",
+                "certificate_offer": "paid",
             },
         ]
 
@@ -1054,7 +1129,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
 
         authorization = (
             "SIG-HMAC-SHA256 "
-            "3f23b25632caa04b5fb9ac8b21f5143779fb61b6fa9b0422fce0f6fdad0b3de3"
+            "6b62d01d2d7708fc8757bdc52b1e6bbc11ab93503a7238f8e69ec28b20f60ab6"
         )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
@@ -1133,9 +1208,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         self.assertFalse(CourseRun.objects.exists())
 
-    @override_settings(
-        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public", TIME_ZONE="UTC"
-    )
+    @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_create_bulk_errors(self, mock_signal):
         """
         When errors occur on one of the course runs in bulk. The error is included
@@ -1158,6 +1231,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "languages": ["en", "fr"],
                 "enrollment_count": 46782,
                 "catalog_visibility": "course_and_search",
+                "price": "59.99",
+                "price_currency": "EUR",
+                "offer": "paid",
+                "certificate_price": "19.99",
+                "certificate_offer": "paid",
             },
             {
                 "resource_link": resource_link2,
@@ -1168,6 +1246,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "languages": ["en"],
                 "enrollment_count": 210,
                 "catalog_visibility": "course_and_search",
+                "price": "59.99",
+                "price_currency": "EUR",
+                "offer": "paid",
+                "certificate_price": "19.99",
+                "certificate_offer": "paid",
             },
         ]
 
@@ -1175,7 +1258,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
 
         authorization = (
             "SIG-HMAC-SHA256 "
-            "26339b1ef2d8203b097345e3176ebe857645768c1a65877805c4c30d70ae4495"
+            "6443aa9d7549a40eaa190c06317fa74354ce525659089aaeb3a8354ed325e27e"
         )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
@@ -1339,3 +1422,73 @@ class SyncCourseRunApiTestCase(CMSTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
+
+    @override_settings(
+        RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_public",
+        TIME_ZONE="UTC",
+    )
+    def test_api_course_run_sync_price_info_as_optional(self, mock_signal):
+        """
+        Ensure the price information as optional
+        """
+
+        link = "http://example.edx:8073/courses/course-v1:edX+DemoX+01/course/"
+        course = CourseFactory(code="DemoX")
+        course.extended_object.publish("en")
+        course.refresh_from_db()
+
+        self.assertEqual(
+            course.extended_object.title_set.first().publisher_state,
+            PUBLISHER_STATE_DEFAULT,
+        )
+        mock_signal.reset_mock()
+
+        data = {
+            "resource_link": link,
+            "start": "2020-12-09T09:31:59.417817Z",
+            "end": "2021-03-14T09:31:59.417895Z",
+            "enrollment_start": "2020-11-09T09:31:59.417936Z",
+            "enrollment_end": "2020-12-24T09:31:59.417972Z",
+            "languages": ["en", "fr"],
+            "enrollment_count": 15682,
+            "catalog_visibility": "course_and_search",
+        }
+
+        response = self.client.post(
+            "/api/v1.0/course-runs-sync",
+            data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=(
+                "SIG-HMAC-SHA256 25de22f3674a207a2bd3923dcc5e302a21c9aac8eee7c835f084349da69d0472"
+            ),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"success": True})
+        self.assertEqual(CourseRun.objects.count(), 2)
+
+        draft_course_run = CourseRun.objects.get(direct_course=course)
+        draft_serializer = SyncCourseRunSerializer(instance=draft_course_run)
+
+        self.assertEqual(draft_serializer.data["price_currency"], "EUR")
+        self.assertEqual(draft_serializer.data["price"], None)
+        self.assertEqual(draft_serializer.data["offer"], None)
+        self.assertEqual(draft_serializer.data["certificate_price"], None)
+        self.assertEqual(draft_serializer.data["certificate_offer"], None)
+
+        public_course_run = CourseRun.objects.get(direct_course=course.public_extension)
+        public_serializer = SyncCourseRunSerializer(instance=public_course_run)
+
+        self.assertEqual(public_serializer.data["price_currency"], "EUR")
+        self.assertEqual(public_serializer.data["price"], None)
+        self.assertEqual(public_serializer.data["offer"], None)
+        self.assertEqual(public_serializer.data["certificate_price"], None)
+        self.assertEqual(public_serializer.data["certificate_offer"], None)
+
+        self.assertEqual(
+            course.extended_object.title_set.first().publisher_state,
+            PUBLISHER_STATE_DEFAULT,
+        )
+        mock_signal.assert_called_once_with(
+            sender=Page, instance=course.extended_object, language=None
+        )

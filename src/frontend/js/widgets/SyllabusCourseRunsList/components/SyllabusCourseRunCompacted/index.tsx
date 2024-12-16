@@ -41,6 +41,51 @@ const messages = defineMessages({
     description: 'Self paced course run block with no end date',
     defaultMessage: 'Available',
   },
+  coursePrice: {
+    id: 'components.SyllabusCourseRunCompacted.coursePrice',
+    description: 'Title of the course enrollment price section of an opened course run block',
+    defaultMessage: 'Enrollment price',
+  },
+  certificationPrice: {
+    id: 'components.SyllabusCourseRunCompacted.certificationPrice',
+    description: 'Title of the certification price section of an opened course run block',
+    defaultMessage: 'Certification price',
+  },
+  coursePaidOffer: {
+    id: 'components.SyllabusCourseRunCompacted.coursePaidOffer',
+    description: 'Message for the paid course offer of an opened course run block',
+    defaultMessage: 'The course content is paid.',
+  },
+  courseFreeOffer: {
+    id: 'components.SyllabusCourseRunCompacted.courseFreeOffer',
+    description: 'Message for the free course offer of an opened course run block',
+    defaultMessage: 'The course content is free.',
+  },
+  coursePartiallyFree: {
+    id: 'components.SyllabusCourseRunCompacted.coursePartiallyFree',
+    description: 'Message for the partially free course offer of an opened course run block',
+    defaultMessage: 'The course content is free.',
+  },
+  courseSubscriptionOffer: {
+    id: 'components.SyllabusCourseRunCompacted.courseSubscriptionOffer',
+    description: 'Message for the subscription course offer of an opened course run block',
+    defaultMessage: 'Subscribe to access the course content.',
+  },
+  certificatePaidOffer: {
+    id: 'components.SyllabusCourseRunCompacted.certificatePaidOffer',
+    description: 'Messagge for the paid certification offer of an opened course run block',
+    defaultMessage: 'The certification process is paid.',
+  },
+  certificateFreeOffer: {
+    id: 'components.SyllabusCourseRunCompacted.certificateFreeOffer',
+    description: 'Message for the free certification offer of an opened course run block',
+    defaultMessage: 'The certification process is free.',
+  },
+  certificateSubscriptionOffer: {
+    id: 'components.SyllabusCourseRunCompacted.certificateSubscriptionOffer',
+    description: 'Message for the subscription certification offer of an opened course run block',
+    defaultMessage: 'The certification process is offered through subscription.',
+  },
 });
 
 const OpenedSelfPacedCourseRun = ({
@@ -54,6 +99,44 @@ const OpenedSelfPacedCourseRun = ({
   const intl = useIntl();
   const end = courseRun.end ? formatDate(courseRun.end) : '...';
   const hasEndDate = end !== '...';
+  let courseOfferMessage = null;
+  let certificationOfferMessage = null;
+  let enrollmentPrice = '';
+  let certificatePrice = '';
+
+  if (courseRun.offer) {
+    const offer = courseRun.offer.toUpperCase().replaceAll(' ', '_');
+    courseOfferMessage = {
+      PAID: messages.coursePaidOffer,
+      FREE: messages.courseFreeOffer,
+      PARTIALLY_FREE: messages.coursePartiallyFree,
+      SUBSCRIPTION: messages.courseSubscriptionOffer,
+    }[offer];
+
+    if ((courseRun.price ?? -1) >= 0) {
+      enrollmentPrice = intl.formatNumber(courseRun.price!, {
+        style: 'currency',
+        currency: courseRun.price_currency,
+      });
+    }
+  }
+
+  if (courseRun.certificate_offer) {
+    const certificationOffer = courseRun.certificate_offer.toUpperCase().replaceAll(' ', '');
+    certificationOfferMessage = {
+      PAID: messages.certificatePaidOffer,
+      FREE: messages.certificateFreeOffer,
+      SUBSCRIPTION: messages.certificateSubscriptionOffer,
+    }[certificationOffer];
+
+    if ((courseRun.certificate_price ?? -1) >= 0) {
+      certificatePrice = intl.formatNumber(courseRun.certificate_price!, {
+        style: 'currency',
+        currency: courseRun.price_currency,
+      });
+    }
+  }
+
   return (
     <>
       {courseRun.title && <h3>{StringHelper.capitalizeFirst(courseRun.title)}</h3>}
@@ -81,6 +164,30 @@ const OpenedSelfPacedCourseRun = ({
               <FormattedMessage {...messages.languages} />
             </dt>
             <dd>{IntlHelper.getLocalizedLanguages(courseRun.languages, intl)}</dd>
+          </>
+        )}
+        {courseOfferMessage && (
+          <>
+            <dt>
+              <FormattedMessage {...messages.coursePrice} />
+            </dt>
+            <dd>
+              <FormattedMessage {...courseOfferMessage} />
+              <br />
+              {`${enrollmentPrice}`}
+            </dd>
+          </>
+        )}
+        {certificationOfferMessage && (
+          <>
+            <dt>
+              <FormattedMessage {...messages.certificationPrice} />
+            </dt>
+            <dd>
+              <FormattedMessage {...certificationOfferMessage} />
+              <br />
+              {`${certificatePrice}`}
+            </dd>
           </>
         )}
       </dl>

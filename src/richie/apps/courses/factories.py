@@ -13,6 +13,7 @@ from django.utils.translation import gettext_lazy as _
 import factory
 from cms.api import add_plugin
 
+from richie.apps.courses.models.course import CertificateOffer, CourseRunOffer
 from richie.plugins.nesteditem.defaults import ACCORDION
 
 from ..core.defaults import ALL_LANGUAGES
@@ -441,6 +442,13 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
     resource_link = factory.Faker("uri")
     sync_mode = models.CourseRunSyncMode.SYNC_TO_PUBLIC
     display_mode = models.CourseRunDisplayMode.DETAILED
+    price_currency = "EUR"
+    price = factory.Faker(
+        "pydecimal", min_value=1, max_value=100, left_digits=5, right_digits=2
+    )
+    certificate_price = factory.Faker(
+        "pydecimal", min_value=1, max_value=100, left_digits=5, right_digits=2
+    )
 
     # pylint: disable=no-self-use
     @factory.lazy_attribute
@@ -528,6 +536,24 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
         The number of enrollments of a course run is a random integer between 0 and 10,000.
         """
         return random.randint(0, 10000)  # nosec
+
+    @factory.lazy_attribute
+    def offer(self):
+        """
+        The offer of a course run is read from Django settings.
+        """
+        return CourseRunOffer.FREE if self.price == 0.0 else CourseRunOffer.PAID
+
+    @factory.lazy_attribute
+    def certificate_offer(self):
+        """
+        The offer of a course run is read from Django settings.
+        """
+        return (
+            CertificateOffer.FREE
+            if self.certificate_price == 0.0
+            else CourseRunOffer.PAID
+        )
 
 
 class CategoryFactory(BLDPageExtensionDjangoModelFactory):
