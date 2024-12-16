@@ -21,6 +21,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Change `SearchInput` to have a label, for accessibility purposes
+- Change `branding_topbar` to have and additonal layer in `branding_topbar_logo`
 
 ## [2.33.0] - 2024-12-02
 
