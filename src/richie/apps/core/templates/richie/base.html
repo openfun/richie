@@ -98,11 +98,13 @@
                     <div class="topbar__container">
                         <header class="topbar__header">
                             <div class="topbar__brand">
-                                <a href="/" title="{% trans "Go to homepage" %}" rel="home" accesskey="h">
                                 {% block branding_topbar %}
+                                <a href="/" title="{% trans "Go to homepage" %}" rel="home" accesskey="h">
+                                    {% block branding_topbar_logo %}
                                     <img src="{% static "richie/images/logo.png" %}" class="topbar__logo" alt="{{ SITE.name }}">
-                                {% endblock branding_topbar %}
+                                    {% endblock branding_topbar_logo %}
                                 </a>
+                                {% endblock branding_topbar %}
 
                                 <button
                                     class="topbar__hamburger"

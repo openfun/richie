@@ -27,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Change `SearchInput` to have a label, for accessibility purposes
 - Use new credit card promote endpoint
 - Allow user to remove a main credit card
+- Change `branding_topbar` to have and additonal layer in `branding_topbar_logo`
 
 ### Fixed
 

@@ -56,6 +56,11 @@ $ make migrate
   Other page levels won't be allowed to create a PageIndex extension. Commonly it would
   be `0` for when your main menu list the root pages.
 
+- After the change to the `base.html` template, you will now need to add the
+  `branding_topbar_logo` block to the `branding_topbar` block to have the same functionality.
+  If this remains the same in any site on your site factory, the `Go to homepage` link won't be
+  available.
+
 ## 2.31.0 to 2.33.0
 
 - Add new `slider` plugin theme scheme:
