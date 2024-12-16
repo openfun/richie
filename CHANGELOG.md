@@ -18,6 +18,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix frontend translation of Enroll now for external LMS backend
 
+### Changed
+
+- Change `branding_topbar` to have and additonal layer in `branding_topbar_logo`
+
 ## [2.33.0] - 2024-12-02
 
 ### Added
