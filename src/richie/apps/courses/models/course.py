@@ -633,7 +633,7 @@ class Course(EsIdMixin, BasePageExtension):
 
         for course_run in self.course_runs.only(
             "start", "end", "enrollment_start", "enrollment_end"
-        ):
+        ).exclude(catalog_visibility=CourseRunCatalogVisibility.HIDDEN):
             state = course_run.state
             best_state = min(state, best_state)
             if state["priority"] == CourseState.ONGOING_OPEN:

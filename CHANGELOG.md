@@ -32,6 +32,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Skip hidden course runs from state calculation
 - Fix frontend translation of Enroll now for external LMS backend
 
 ## [2.33.0] - 2024-12-02

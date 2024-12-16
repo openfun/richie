@@ -9,6 +9,7 @@ from django.utils import timezone
 
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 from richie.apps.courses.models import CourseState
+from richie.apps.courses.models.course import CourseRunCatalogVisibility
 
 
 class CourseRunModelsTestCase(TestCase):
@@ -206,3 +207,30 @@ class CourseRunModelsTestCase(TestCase):
         with self.assertNumQueries(1):
             state = course.state
         self.assertEqual(state, expected_state)
+
+    def test_models_course_state_does_not_compute_hidden_runs(self):
+        """
+        Confirm that course state should never be computed across course runs
+        having `catalog_visibility` as `hidden`.
+        """
+        course = CourseFactory(should_publish=True)
+        on_going_course_run = self.create_run_ongoing_open(course)
+        future_open_course_run = self.create_run_future_open(course)
+
+        self.assertEqual(course.state["priority"], 0)
+
+        on_going_course_run.catalog_visibility = CourseRunCatalogVisibility.HIDDEN
+        on_going_course_run.save()
+
+        course.refresh_from_db()
+        on_going_course_run.refresh_from_db()
+
+        self.assertEqual(course.state["priority"], 1)
+
+        future_open_course_run.catalog_visibility = CourseRunCatalogVisibility.HIDDEN
+        future_open_course_run.save()
+
+        course.refresh_from_db()
+        future_open_course_run.refresh_from_db()
+
+        self.assertEqual(course.state["priority"], 7)
