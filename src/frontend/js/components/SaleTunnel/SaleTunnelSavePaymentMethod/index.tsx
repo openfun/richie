@@ -47,7 +47,7 @@ const messages = defineMessages({
 });
 
 const SaleTunnelSavePaymentMethod = () => {
-  const initialCreditCards = useRef<CreditCard[]>();
+  const initialCreditCards = useRef<CreditCard[]>([]);
   const [shouldPoll, setShouldPoll] = useState(false);
   const [payment, setPayment] = useState<Payment>();
   const [error, setError] = useState<string>();
@@ -71,7 +71,7 @@ const SaleTunnelSavePaymentMethod = () => {
   };
 
   const waitForNewCreditCard = () => {
-    const initialIds = initialCreditCards.current!.map((cc) => cc.id);
+    const initialIds = initialCreditCards.current.map((cc) => cc.id);
     const newCard = creditCardsQuery.items.find((cc) => !initialIds.includes(cc.id));
 
     if (!newCard) return;

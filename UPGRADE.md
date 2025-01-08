@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+- We upgrade our frontend to React 19, you have to update your dependecies and overriden
+  components accordingly.
 - Header menu template has been modified to include features from `MainMenuEntry`
 - There is a new setting that can be used to define a list of color variant for the menu
   entry of a page:

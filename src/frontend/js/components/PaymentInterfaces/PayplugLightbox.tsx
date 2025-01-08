@@ -17,7 +17,7 @@ const PayplugLightbox = ({
   onError,
   ...props
 }: PaymentInterfaceProps<PayplugPayment>) => {
-  const ref = useRef<ReturnType<typeof setTimeout>>();
+  const ref = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   /** type guard to check if the payment is a payment one click */
   const isPaidPayment = (p: PayplugPayment) => p?.is_paid === true;

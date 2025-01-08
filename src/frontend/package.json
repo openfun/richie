@@ -49,8 +49,8 @@
     "@formatjs/intl-relativetimeformat": "11.4.8",
     "@hookform/resolvers": "3.9.1",
     "@lyracom/embedded-form-glue": "1.4.2",
-    "@openfun/cunningham-react": "2.9.4",
-    "@openfun/cunningham-tokens": "2.1.1",
+    "@openfun/cunningham-react": "3.0.0",
+    "@openfun/cunningham-tokens": "2.2.0",
     "@sentry/browser": "8.42.0",
     "@sentry/types": "8.42.0",
     "@storybook/addon-actions": "8.4.7",
@@ -142,7 +142,9 @@
   "resolutions": {
     "@testing-library/dom": "10.4.0",
     "@types/react": "19.0.1",
-    "@types/react-dom": "19.0.1"
+    "@types/react-dom": "19.0.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
   },
   "msw": {
     "workerDirectory": "../richie/static/richie/js"
