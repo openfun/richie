@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- BREAKING CHANGE - Upgrade to React 19
+
 ## [2.34.0] - 2025-02-13
 
 ### Added
@@ -27,7 +31,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix frontend translation of Enroll now for external LMS backend
-
 
 ## [2.33.0] - 2024-12-02
 
@@ -233,7 +236,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   in a list. Theses colors are generated from user's fullname and
   configurable with cunningham tokens.
 - Add dedicated messages for order's status when they're visualized on
-  the teacher dashbaord.
+  the teacher dashboard.
 - Add Organization block to order details.
 - Add teacher dashboard page to list training's learners. This listing
   can be accessed under a training or an organization's training.
@@ -251,7 +254,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Require to accept terms when purchasing product of any kind
 - Rename trainings root menu entry label
 - Upgrade to node 20
-- Contract list in the teacher dashbaord are now filtered by
+- Contract list in the teacher dashboard are now filtered by
   courseProductRelationId instead of courseId and productId.
 - Switch from setup.cfg to pyproject.toml
 
@@ -275,7 +278,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Add bulk signature on teacher dashbaord organization's course list page.
+- Add bulk signature on teacher dashboard organization's course list page.
 - Add signature polling description
 - Add Course run link into Order detail view
 
@@ -382,7 +385,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 relations.
 - Add a page for training details (courseProductRelation) in the teacher
 dashboard.
-- Add a link to the LMS course run session in teacher dashbaord course run lists
+- Add a link to the LMS course run session in teacher dashboard course run lists
 - Finalize the design of teacher dashboard organization sidebar.
 - Use union of organization courses and course product relations on organization
 course's listing page.
@@ -408,7 +411,7 @@ through `context_processor`
 ### Removed
 
 - Remove unused route in teacher dashboard.
-- Fix teacher dashbaord breadcrumb.
+- Fix teacher dashboard breadcrumb.
 
 ## [2.22.0] - 2023-04-20
 

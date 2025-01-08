@@ -16,6 +16,9 @@ $ make migrate
 
 ## Unreleased
 
+- We upgrade our frontend to React 19, you have to update your dependencies
+  and overriden components accordingly.
+
 ## 2.33.0 to 2.34.0
 
 - Header menu template has been modified to include features from `MainMenuEntry`

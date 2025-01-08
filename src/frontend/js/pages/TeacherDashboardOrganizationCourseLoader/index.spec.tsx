@@ -41,6 +41,9 @@ describe('components/TeacherDashboardOrganizationCourseLoader', () => {
   beforeEach(() => {
     nbApiCalls = joanieSessionData.nbSessionApiRequest;
   });
+  afterEach(() => {
+    fetchMock.restore();
+  });
 
   it('should render', async () => {
     const organization = OrganizationFactory().one();
@@ -59,6 +62,10 @@ describe('components/TeacherDashboardOrganizationCourseLoader', () => {
       `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
       mockPaginatedResponse(CourseProductRelationFactory().many(15), 15, false),
     );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?signature_state=half_signed&page=1`,
+      [],
+    );
 
     render(<TeacherDashboardOrganizationCourseLoader />, {
       routerOptions: {
@@ -70,6 +77,7 @@ describe('components/TeacherDashboardOrganizationCourseLoader', () => {
 
     nbApiCalls += 1; // course api call
     nbApiCalls += 1; // course-product-relations api call
+    nbApiCalls += 1; // contracts api call
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
     expect(calledUrls).toContain(
@@ -77,11 +85,6 @@ describe('components/TeacherDashboardOrganizationCourseLoader', () => {
     );
     expect(calledUrls).toContain(
       `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/?product_type=credential&page=1&page_size=${perPage}`,
-    );
-
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?signature_state=half_signed&page=1`,
-      [],
     );
     await expectNoSpinner('Loading organization...');
 
