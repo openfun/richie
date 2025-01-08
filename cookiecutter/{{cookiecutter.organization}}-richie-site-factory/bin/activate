@@ -8,6 +8,9 @@ declare -a sites
 declare -i default=1
 declare -i choice
 declare -i n_sites
+declare -a databases=("mysql" "postgresql" "sqlite") 
+declare -i database_choice
+declare -i n_databases
 
 # List sites by looking in the "sites" directory
 # and store them in an array
@@ -17,6 +20,7 @@ read -r -a sites <<< "$(
     xargs
 )"
 n_sites=${#sites[@]}
+n_databases=${#databases[@]}
 
 if [[ n_sites -eq 0 ]]; then
     (>&2 echo "You should first add a site to the project by running: make add-site")
@@ -49,5 +53,27 @@ if [[ ${choice} -le 0 ]]; then
     choice=${default}
 fi
 
+prompt="Select an available database to activate:\\n"
+for (( i=0; i<n_databases; i++ )); do
+    prompt+="[$((i+1))] ${databases[$i]}"
+    if [[ $((i+1)) -eq ${default} ]]; then
+        prompt+=" (default)"
+    fi
+    prompt+="\\n"
+done
+prompt+="Your choice: "
+read -r -p "$(echo -e "${prompt}")" database_choice
+
+if [[ ${choice} -le 0 ]]; then
+    database_choice=${default}
+fi
+
 # Activate the chosen site
 echo "RICHIE_SITE=${sites[$((choice-1))]}" > .env
+echo "ACTIVATED_DB=${databases[$((database_choice-1))]}" >> .env
+
+if [[ ${database_choice} == 1 ]]; then
+    echo "DB_PORT=3306" >> .env
+else [[ ${database_choice} == 2 ]];
+    echo "DB_PORT=5472" >> .env
+fi
