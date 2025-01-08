@@ -98,7 +98,7 @@ describe.each([
     expect(mockCheckArchive).not.toHaveBeenCalled();
   });
 
-  it('should check if archive exist when a id is stored', async () => {
+  it('should check if archive exist when an id is stored', async () => {
     storeContractArchiveId({
       ...localStorageArchiveFilters,
       contractArchiveId: faker.string.uuid(),
@@ -115,7 +115,9 @@ describe.each([
       expect(mockCheckArchive).toHaveBeenCalledTimes(1);
     });
 
-    expect(result.current.isPolling).toBe(false);
+    await waitFor(() => {
+      expect(result.current.isPolling).toBe(false);
+    });
     expect(result.current.isContractArchiveExists).toBe(true);
   });
 

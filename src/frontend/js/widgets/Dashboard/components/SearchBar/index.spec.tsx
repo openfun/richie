@@ -4,7 +4,7 @@ import { render } from 'utils/test/render';
 import { PresentationalAppWrapper } from 'utils/test/wrappers/PresentationalAppWrapper';
 import SearchBar from '.';
 
-describe('Dashbaord/components/SearchBar', () => {
+describe('Dashboard/components/SearchBar', () => {
   it('should render', () => {
     render(<SearchBar onSubmit={jest.fn()} />, { wrapper: PresentationalAppWrapper });
     expect(screen.getByRole('textbox', { name: /Search/ })).toBeInTheDocument();

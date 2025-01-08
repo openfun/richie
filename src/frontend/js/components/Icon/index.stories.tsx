@@ -29,7 +29,7 @@ type IconContainerProps = {
 };
 const IconContainer = ({ name, enumKey }: IconContainerProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>(undefined);
   const ENUM_NAME = 'IconTypeEnum';
 
   const styleContainer: CSSProperties = {

@@ -25,7 +25,7 @@ const useCheckContractArchiveExist = (
   // stay null until fetched
   const [isContractArchiveExists, setIsContractArchiveExists] = useState<Nullable<boolean>>(null);
 
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>(undefined);
 
   // This method will check if the archive exists on the server
   // option.polling === true will recursivly poll archive existence

@@ -3,7 +3,7 @@ import { render } from 'utils/test/render';
 import { PresentationalAppWrapper } from 'utils/test/wrappers/PresentationalAppWrapper';
 import SearchResultsCount from '.';
 
-describe('Dashbaord/components/SearchResultsCount', () => {
+describe('Dashboard/components/SearchResultsCount', () => {
   it('should render singular message', () => {
     render(<SearchResultsCount nbResults={1} />, {
       wrapper: PresentationalAppWrapper,

@@ -83,7 +83,7 @@ enum ComponentStates {
 export const OrderPaymentRetryModal = ({ installment, order, ...props }: Props) => {
   const intl = useIntl();
   const API = useJoanieApi();
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>(undefined);
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
   const [payment, setPayment] = useState<Payment>();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);

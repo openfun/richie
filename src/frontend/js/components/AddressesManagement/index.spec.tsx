@@ -6,7 +6,7 @@ import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import countries from 'i18n-iso-countries';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { CunninghamProvider } from '@openfun/cunningham-react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
