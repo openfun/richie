@@ -11,6 +11,30 @@ declare -i n_sites
 declare -a databases=("mysql" "postgresql" "sqlite") 
 declare -i database_choice
 declare -i n_databases
+declare -A languages=(
+    ["Portuguese"]='("pt", _("Portuguese"))'
+    ["English"]='("en", _("English"))'
+    ["French (France)"]='("fr", _("French (France)"))'
+    ["French (Canada)"]='("fr-ca", _("French (Canada)"))'
+    ["Spanish"]='("es", _("Spanish"))'
+    ["Russian"]='("ru", _("Russian"))'
+    ["Vietnamese"]='("vi", _("Vietnamese"))'
+    ["Arabic (Saudi Arabia)"]='("ar-sa", _("Arabic (Saudi Arabia)"))'
+    ["Korean"]='("ko", _("Korean"))'
+)
+declare -A selected_languages
+ordered_languages=(
+    "English"
+    "Portuguese"
+    "French (France)"
+    "French (Canada)"
+    "Spanish"
+    "Russian"
+    "Vietnamese"
+    "Arabic (Saudi Arabia)"
+    "Korean"
+)
+ordered_languages_choices=""
 
 # List sites by looking in the "sites" directory
 # and store them in an array
@@ -30,27 +54,26 @@ fi
 if [[ n_sites -eq 1 ]]; then
     # If there is only one site, just activate it
     echo "RICHIE_SITE=${sites[0]}" > .env
-    exit 0
-fi
+else
+    prompt="Select an available site to activate:\\n"
+    for (( i=0; i<n_sites; i++ )); do
+        prompt+="[$((i+1))] ${sites[$i]}"
+        if [[ $((i+1)) -eq ${default} ]]; then
+            prompt+=" (default)"
+        fi
+        prompt+="\\n"
+    done
+    prompt+="Your choice: "
+    read -r -p "$(echo -e "${prompt}")" choice
 
-prompt="Select an available site to activate:\\n"
-for (( i=0; i<n_sites; i++ )); do
-    prompt+="[$((i+1))] ${sites[$i]}"
-    if [[ $((i+1)) -eq ${default} ]]; then
-        prompt+=" (default)"
+    if [[ ${choice} -gt n_sites ]]; then
+        (>&2 echo "Invalid choice ${choice} (should be <= ${n_sites})")
+        exit 10
     fi
-    prompt+="\\n"
-done
-prompt+="Your choice: "
-read -r -p "$(echo -e "${prompt}")" choice
 
-if [[ ${choice} -gt n_sites ]]; then
-    (>&2 echo "Invalid choice ${choice} (should be <= ${n_sites})")
-    exit 10
-fi
-
-if [[ ${choice} -le 0 ]]; then
-    choice=${default}
+    if [[ ${choice} -le 0 ]]; then
+        choice=${default}
+    fi
 fi
 
 prompt="Select an available database to activate:\\n"
@@ -77,3 +100,29 @@ if [[ ${database_choice} == 1 ]]; then
 else [[ ${database_choice} == 2 ]];
     echo "DB_PORT=5472" >> .env
 fi
+
+for language in "${!languages[@]}"; do
+    while true; do
+        read -p "Enable $language? (y/n): " answer
+        if [[ "$answer" != "y" && "$answer" != "n" ]]; then
+            echo "Please enter 'y' or 'n'."
+        else
+            if [[ "$answer" == "y" ]]; then
+                selected_languages["$language"]="${languages["$language"]}"
+            fi
+            break
+        fi
+    done
+done
+
+for language in "${ordered_languages[@]}"; do
+    if [[ -n "${selected_languages["$language"]}" ]]; then
+        if [[ -z $ordered_languages_choices ]]; then
+            ordered_languages_choices="${selected_languages["$language"]}"
+        else
+            ordered_languages_choices="$ordered_languages_choices, ${selected_languages["$language"]}"
+        fi
+    fi
+done
+
+echo "LANGUAGES=($ordered_languages_choices)" >> .env
