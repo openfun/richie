@@ -68,7 +68,7 @@ universal = true
 
 [project.optional-dependencies]
 dev = [
-    "bandit==1.8.0",
+    "bandit==1.8.2",
     "black==24.10.0",
     "pyRdfa3==3.6.4",
     "cssselect==1.2.0",
@@ -81,13 +81,13 @@ dev = [
     "isort==5.13.2",
     "lxml==5.3.0",
     "msgpack==1.1.0",
-    "mysqlclient==2.2.6",
+    "mysqlclient==2.2.7",
     "pylint==3.3.3",
     "pylint-django==2.6.1",
     "pytest==8.3.4",
     "pytest-cov==6.0.0",
     "pytest-django==4.9.0",
-    "responses==0.25.3",
+    "responses==0.25.6",
 ]
 ci = [
     "twine==6.0.1",
@@ -98,7 +98,7 @@ sandbox = [
     "factory-boy==3.3.1",
     "gunicorn==23.0.0",
     "psycopg2-binary==2.9.10",
-    "sentry-sdk==2.19.2",
+    "sentry-sdk==2.20.0",
 ]
 
 [tool.flake8]
