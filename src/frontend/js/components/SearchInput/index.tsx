@@ -9,6 +9,11 @@ const messages = defineMessages({
     description: 'Accessibility text for the search button inside the Search input.',
     id: 'components.SearchInput.button',
   },
+  label: {
+    defaultMessage: 'Search',
+    description: 'Accessibility text for the search input label.',
+    id: 'components.SearchInput.label',
+  },
 });
 
 /**
@@ -23,7 +28,10 @@ export const SearchInput = ({
   onClick = () => {}, // by default, do nothing, this will just remove focus and close suggestions
 }: { inputProps: any; onClick?: () => void } & CommonDataProps) => (
   <div className="search-input">
-    <input {...inputProps} />
+    <label className="offscreen" htmlFor="search-input-field">
+      <FormattedMessage {...messages.label} />
+    </label>
+    <input {...inputProps} id="search-input-field" />
     <button className="search-input__btn" onClick={onClick}>
       <Icon name={IconTypeEnum.MAGNIFYING_GLASS} className="search-input__btn__icon" />{' '}
       <span className="offscreen">

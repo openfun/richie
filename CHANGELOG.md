@@ -18,6 +18,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix frontend translation of Enroll now for external LMS backend
 
+### Changed
+
+- Change `SearchInput` to have a label, for accessibility purposes
+
 ## [2.33.0] - 2024-12-02
 
 ### Added
