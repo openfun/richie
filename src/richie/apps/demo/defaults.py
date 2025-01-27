@@ -1,4 +1,5 @@
 """Parameters that define how the demo site will be built."""
+from django.utils.translation import gettext_lazy as _
 
 from django.conf import settings
 
@@ -33,60 +34,60 @@ NB_OBJECTS = {
 }
 NB_OBJECTS.update(getattr(settings, "RICHIE_DEMO_NB_OBJECTS", {}))
 
-PAGES_INFO = {
+PAGES_INFO = lambda lang_code: {
     "home": {
-        "title": {"en": "Home", "fr": "Accueil"},
+        "title": {f"{lang_code}": _("Home")},
         "in_navigation": False,
         "is_homepage": True,
         "template": "richie/homepage.html",
     },
     "blogposts": {
-        "title": {"en": "News", "fr": "Actualités"},
+        "title": {f"{lang_code}": _("News")},
         "in_navigation": True,
         "template": "courses/cms/blogpost_list.html",
     },
     "courses": {
-        "title": {"en": "Courses", "fr": "Cours"},
+        "title": {f"{lang_code}": _("Courses")},
         "in_navigation": True,
         "template": "search/search.html",
     },
     "categories": {
-        "title": {"en": "Categories", "fr": "Catégories"},
+        "title": {f"{lang_code}": _("Categories")},
         "in_navigation": True,
         "template": "courses/cms/category_list.html",
     },
     "organizations": {
-        "title": {"en": "Organizations", "fr": "Établissements"},
+        "title": {f"{lang_code}": _("Organizations")},
         "in_navigation": True,
         "template": "courses/cms/organization_list.html",
     },
     "persons": {
-        "title": {"en": "Persons", "fr": "Personnes"},
+        "title": {f"{lang_code}": _("Persons")},
         "in_navigation": True,
         "template": "courses/cms/person_list.html",
     },
     "programs": {
-        "title": {"en": "Programs", "fr": "Parcours"},
+        "title": {f"{lang_code}": _("Programs")},
         "in_navigation": True,
         "template": "courses/cms/program_list.html",
     },
     "annex": {
-        "title": {"en": "Annex", "fr": "Annexe"},
+        "title": {f"{lang_code}": _("Annex")},
         "in_navigation": False,
         "template": "richie/single_column.html",
         "children": {
             "annex__about": {
-                "title": {"en": "About", "fr": "A propos"},
+                "title": {f"{lang_code}": _("About")},
                 "in_navigation": True,
                 "template": "richie/single_column.html",
             },
             "annex__sitemap": {
-                "title": {"en": "Sitemap", "fr": "Plan de site"},
+                "title": {f"{lang_code}": _("Sitemap")},
                 "in_navigation": True,
                 "template": "richie/single_column.html",
             },
             "login-error": {
-                "title": {"en": "Login error", "fr": "Erreur de connexion"},
+                "title": {f"{lang_code}": _("Login error")},
                 "in_navigation": False,
                 "template": "richie/single_column.html",
             },
@@ -96,12 +97,12 @@ PAGES_INFO = {
 PAGES_INFO.update(getattr(settings, "RICHIE_DEMO_PAGES_INFO", {}))
 
 
-LEVELS_INFO = {
-    "page_title": {"en": "Level", "fr": "Niveau"},
+LEVELS_INFO = lambda lang_code: {
+    "page_title":  {f"{lang_code}": _("Level")}, 
     "children": [
-        {"page_title": {"en": "Beginner", "fr": "Débutant"}},
-        {"page_title": {"en": "Advanced", "fr": "Avancé"}},
-        {"page_title": {"en": "Expert", "fr": "Expert"}},
+        {"page_title":  {f"{lang_code}": _("Beginner")}},
+        {"page_title":  {f"{lang_code}": _("Advanced")}},
+        {"page_title":  {f"{lang_code}": _("Expert")}},
     ],
     "page_reverse_id": "levels",
 }
