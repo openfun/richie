@@ -72,7 +72,7 @@ dev = [
     "black==24.10.0",
     "pyRdfa3==3.6.4",
     "cssselect==1.2.0",
-    "factory-boy==3.3.1",
+    "factory-boy==3.3.3",
     "flake8==7.1.1",
     "flake8-pyproject==1.2.3",
     "htmlmin==0.1.12",
@@ -95,7 +95,7 @@ ci = [
 sandbox = [
     "django-configurations==2.5.1",
     "dockerflow==2024.4.2",
-    "factory-boy==3.3.1",
+    "factory-boy==3.3.3",
     "gunicorn==23.0.0",
     "psycopg2-binary==2.9.10",
     "sentry-sdk==2.19.2",

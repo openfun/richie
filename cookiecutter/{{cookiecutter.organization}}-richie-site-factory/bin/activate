@@ -12,22 +12,23 @@ declare -a databases=("mysql" "postgresql" "sqlite")
 declare -i database_choice
 declare -i n_databases
 declare -A languages=(
-    ["Portuguese"]='("pt", _("Portuguese"))'
-    ["English"]='("en", _("English"))'
-    ["French (France)"]='("fr", _("French (France)"))'
-    ["French (Canada)"]='("fr-ca", _("French (Canada)"))'
-    ["Spanish"]='("es", _("Spanish"))'
-    ["Russian"]='("ru", _("Russian"))'
-    ["Vietnamese"]='("vi", _("Vietnamese"))'
-    ["Arabic (Saudi Arabia)"]='("ar-sa", _("Arabic (Saudi Arabia)"))'
-    ["Korean"]='("ko", _("Korean"))'
+    ["Portuguese"]='("pt", "Portuguese")'
+    ["Portuguese (Brazil)"]='("pt-br", "Portuguese (Brazil)")'
+    ["French"]='("fr", "French (France)")'
+    ["Spanish"]='("es", "Spanish")'
+    ["Russian"]='("ru", "Russian")'
+    ["Vietnamese"]='("vi", "Vietnamese")'
+    ["Arabic (Saudi Arabia)"]='("ar", "Arabic (Saudi Arabia)")'
+    ["Korean"]='("ko", "Korean")'
 )
-declare -A selected_languages
+declare -A selected_languages=(
+    ["English"]='("en", "English")'
+)
 ordered_languages=(
     "English"
     "Portuguese"
+    "Portuguese (Brazil)"
     "French (France)"
-    "French (Canada)"
     "Spanish"
     "Russian"
     "Vietnamese"
@@ -52,7 +53,7 @@ if [[ n_sites -eq 0 ]]; then
 fi
 
 if [[ n_sites -eq 1 ]]; then
-    # If there is only one site, just activate it
+    # If there is only one site, activate it
     echo "RICHIE_SITE=${sites[0]}" > .env
 else
     prompt="Select an available site to activate:\\n"
@@ -91,16 +92,7 @@ if [[ ${choice} -le 0 ]]; then
     database_choice=${default}
 fi
 
-# Activate the chosen site
-echo "RICHIE_SITE=${sites[$((choice-1))]}" > .env
-echo "ACTIVATED_DB=${databases[$((database_choice-1))]}" >> .env
-
-if [[ ${database_choice} == 1 ]]; then
-    echo "DB_PORT=3306" >> .env
-else [[ ${database_choice} == 2 ]];
-    echo "DB_PORT=5472" >> .env
-fi
-
+echo "Select the languages this site will support:"
 for language in "${!languages[@]}"; do
     while true; do
         read -p "Enable $language? (y/n): " answer
@@ -125,4 +117,27 @@ for language in "${ordered_languages[@]}"; do
     fi
 done
 
+# Activate the chosen site
+# Set the database and port
+# Set the LANGUAGES variables
+echo "RICHIE_SITE=${sites[$((choice-1))]}" > .env
+echo "ACTIVATED_DB=${databases[$((database_choice-1))]}" >> .env
+
+if [[ ${database_choice} == 1 ]]; then
+    echo "DB_PORT=3306" >> .env
+else [[ ${database_choice} == 2 ]];
+    echo "DB_PORT=5472" >> .env
+fi
+
 echo "LANGUAGES=($ordered_languages_choices)" >> .env
+
+echo """
+Site activated successfully!
+
+The configurations are set in the.env file
+
+Please, note that you can change the languages
+order in the .env file according to your needs.
+English is the default language and if the site
+will not suport it, you can remove it from there.
+"""
