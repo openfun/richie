@@ -1,9 +1,9 @@
 """
-    RedisCache with a fallback cache to prevent denial of service if Redis is down
-    Freely inspired by django-cache-fallback
+RedisCache with a fallback cache to prevent denial of service if Redis is down
+Freely inspired by django-cache-fallback
 
-    Credits:
-    - https://github.com/Kub-AT/django-cache-fallback/
+Credits:
+- https://github.com/Kub-AT/django-cache-fallback/
 """
 
 import logging
