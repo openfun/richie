@@ -93,7 +93,7 @@ class PagesTests(CMSTestCase):
         """
         Create a page and make sure it includes the frontend context as included
         in `base.html`. All characters for use in javascript string should be escaped
-        (i.e: '"' should be escaped with \u0022 and '\' with \u005C) to prevent an issue when
+        (i.e: '"' should be escaped with \u0022 and '\' with \u005c) to prevent an issue when
         this variable contains unescaped characters for javascript (e.g: '\').
 
         ⚠️ If this test fails, before fixing it, identify if this change has had

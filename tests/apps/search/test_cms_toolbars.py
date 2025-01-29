@@ -1,5 +1,4 @@
-"""Test suite of the toolbar extension for search related it pages
-"""
+"""Test suite of the toolbar extension for search related it pages"""
 
 from django.contrib.auth.models import AnonymousUser, Permission
 
