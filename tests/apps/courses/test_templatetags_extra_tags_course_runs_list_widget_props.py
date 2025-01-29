@@ -28,7 +28,14 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
         a visibility_catalog different from "hidden" and not to be scheduled.
         """
         course = factories.CourseFactory(should_publish=True)
-        course_run = factories.CourseRunFactory(direct_course=course)
+        course_run = factories.CourseRunFactory(
+            direct_course=course,
+            offer="paid",
+            price="59.99",
+            certificate_offer="paid",
+            certificate_price="29.99",
+        )
+
         # Create a hidden course run
         factories.CourseRunFactory(
             catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
@@ -87,6 +94,11 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             "catalog_visibility": course_run.catalog_visibility,
                             "display_mode": "detailed",
                             "snapshot": None,
+                            "price": "59.99",
+                            "price_currency": "EUR",
+                            "offer": "paid",
+                            "certificate_price": "29.99",
+                            "certificate_offer": "paid",
                         }
                     ],
                     "maxArchivedCourseRuns": 10,
@@ -102,7 +114,13 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
         """
         course = factories.CourseFactory(should_publish=True)
         snapshot = factories.CourseFactory(page_parent=course.extended_object)
-        course_run = factories.CourseRunFactory(direct_course=snapshot)
+        course_run = factories.CourseRunFactory(
+            direct_course=snapshot,
+            offer="paid",
+            price="59.99",
+            certificate_offer="paid",
+            certificate_price="29.99",
+        )
 
         request = RequestFactory().get("/")
         request.current_page = course.extended_object
@@ -151,6 +169,11 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             "catalog_visibility": course_run.catalog_visibility,
                             "display_mode": "detailed",
                             "snapshot": snapshot.extended_object.get_absolute_url(),
+                            "price": "59.99",
+                            "price_currency": "EUR",
+                            "offer": "paid",
+                            "certificate_price": "29.99",
+                            "certificate_offer": "paid",
                         }
                     ],
                     "maxArchivedCourseRuns": 10,
@@ -168,15 +191,30 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
         course = factories.CourseFactory(
             code="DemoX", page_languages=["en"], should_publish=False
         )
-        factories.CourseRunFactory(direct_course=course)
+        factories.CourseRunFactory(
+            direct_course=course,
+            offer="paid",
+            price="59.99",
+            certificate_offer="paid",
+            certificate_price="29.99",
+        )
         # Create a hidden course run
         factories.CourseRunFactory(
-            catalog_visibility=CourseRunCatalogVisibility.HIDDEN, direct_course=course
+            catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
+            direct_course=course,
+            offer="paid",
+            price="59.99",
+            certificate_offer="paid",
+            certificate_price="29.99",
         )
         # Create a "to be scheduled" course run
         factories.CourseRunFactory(
             start=None,
             direct_course=course,
+            offer="paid",
+            price="59.99",
+            certificate_offer="paid",
+            certificate_price="29.99",
         )
 
         page = course.extended_object
@@ -232,6 +270,11 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             "catalog_visibility": course_run.catalog_visibility,
                             "display_mode": "detailed",
                             "snapshot": None,
+                            "price": "59.99",
+                            "price_currency": "EUR",
+                            "offer": "paid",
+                            "certificate_price": "29.99",
+                            "certificate_offer": "paid",
                         }
                         for course_run in course.course_runs.all()
                     ],
