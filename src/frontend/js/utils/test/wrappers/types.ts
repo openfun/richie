@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactElement } from 'react';
 import { QueryClient } from '@tanstack/query-core';
 import { RenderOptions as TestingLibraryRenderOptions } from '@testing-library/react';
 import { Nullable } from 'types/utils';
@@ -19,7 +19,7 @@ interface QueryOptions {
  * @property queryOptions options to configure a custom client used by react-query for a test
  */
 export interface AppWrapperProps {
-  wrapper?: Nullable<(props: PropsWithChildren<{ options?: AppWrapperProps }>) => JSX.Element>;
+  wrapper?: Nullable<(props: PropsWithChildren<{ options?: AppWrapperProps }>) => ReactElement>;
   intlOptions?: IntlWrapperProps;
   queryOptions?: QueryOptions;
   historyOptions?: History;

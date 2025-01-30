@@ -134,7 +134,7 @@ const ContractFrameContent = ({
   const [signatureType, setSignatureType] = useState<SignatureType>();
   const [invitationLink, setInvitationLink] = useState<Maybe<string>>();
   const [error, setError] = useState<Maybe<string>>();
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout>(undefined);
 
   const setErrored = (e: string) => {
     setStep(ContractSteps.ERROR);

@@ -195,11 +195,7 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
       step,
     },
     dispatch,
-  ] = useReducer<React.Reducer<ReducerState, ReducerAction>, ReducerState>(
-    reducer,
-    initialState(user, props.courseRun, enrollmentIsActive),
-    (s) => s,
-  );
+  ] = useReducer(reducer, initialState(user, props.courseRun, enrollmentIsActive));
 
   const setEnroll = useCallback(
     async (isActive: boolean = true) => {

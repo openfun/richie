@@ -132,6 +132,7 @@
   --c--theme--breakpoints--lg: 992px;
   --c--theme--breakpoints--xl: 1200px;
   --c--theme--breakpoints--xxl: 1400px;
+  --c--components--tabs--border-bottom-color: var(--c--theme--colors--greyscale-300);
   --c--components--button--font-family: Montserrat;
   --c--components--dashboardlistavatar--saturation: 30;
   --c--components--dashboardlistavatar--lightness: 55;
