@@ -13,6 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add Additional Information section for a category and
     use them in a course page
 - Added new page extension `MainMenuEntry`
+- Added database selection to activate script
+- Added org_dockerhub parameter to cookiecutter
 
 ### Fixed
 
