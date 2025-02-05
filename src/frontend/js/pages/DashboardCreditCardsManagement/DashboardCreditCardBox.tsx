@@ -76,11 +76,9 @@ export const DashboardCreditCardBox = ({ creditCard, promote, edit, remove }: Pr
               <FormattedMessage {...messages.edit} />
             </Button>
           </div>
-          {!creditCard.is_main && (
-            <Button color="primary" onClick={() => remove(creditCard)}>
-              <FormattedMessage {...messages.delete} />
-            </Button>
-          )}
+          <Button color="primary" onClick={() => remove(creditCard)}>
+            <FormattedMessage {...messages.delete} />
+          </Button>
         </>
       }
     >

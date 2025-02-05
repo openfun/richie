@@ -24,6 +24,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Change `SearchInput` to have a label, for accessibility purposes
 - Use new credit card promote endpoint
+- Allow user to remove a main credit card
 
 ## [2.33.0] - 2024-12-02
 
