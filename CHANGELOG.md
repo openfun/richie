@@ -13,6 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add Additional Information section for a category and
     use them in a course page
 - Added new page extension `MainMenuEntry`
+- Add explicit error when a user tries to delete a credit card
+  that is still in use
 
 ### Fixed
 

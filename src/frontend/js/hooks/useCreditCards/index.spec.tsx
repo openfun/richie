@@ -235,4 +235,27 @@ describe('useCreditCards', () => {
     expect(result.current.states.isPending).toBe(false);
     expect(result.current.states.updating).toBe(false);
   });
+
+  it('has a specific error when credit card deletion fails because it is used', async () => {
+    const creditCard = CreditCardFactory({
+      id: '1',
+      last_numbers: '1337',
+    }).one();
+    fetchMock.delete('https://joanie.endpoint/api/v1.0/credit-cards/1/', HttpStatusCode.CONFLICT);
+    const { result } = renderHook(() => useCreditCards(undefined, { enabled: true }), {
+      wrapper: Wrapper,
+    });
+
+    await waitFor(() => {
+      expect(result.current).not.toBeNull();
+    });
+
+    await act(async () => {
+      result.current.methods.delete(creditCard);
+    });
+
+    expect(result.current.states.error).toBe(
+      'Cannot delete the credit card •••• •••• •••• 1337 because it is used to pay at least one of your order.',
+    );
+  });
 });
