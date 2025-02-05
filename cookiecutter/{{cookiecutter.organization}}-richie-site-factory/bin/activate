@@ -8,7 +8,11 @@ declare -a sites
 declare -i default=1
 declare -i choice
 declare -i n_sites
-declare -a databases=("mysql" "postgresql" "sqlite") 
+declare -a databases=("postgresql" "mysql" "sqlite")
+# Note that the ports respect the sequence of the databases
+# list, which means that it is necessary to identify the port
+# in accordance with the position of the database name
+declare -a databases_ports=("5472" "3306" "")
 declare -i database_choice
 declare -i n_databases
 declare -A languages=(
@@ -25,7 +29,7 @@ declare -A selected_languages=(
 )
 ordered_languages=(
     "English"
-    "Portuguese"
+    "Portuguese (Portugal)"
     "French (France)"
     "Spanish"
     "Russian"
@@ -86,56 +90,69 @@ done
 prompt+="Your choice: "
 read -r -p "$(echo -e "${prompt}")" database_choice
 
-if [[ ${choice} -le 0 ]]; then
+if [[ ${database_choice} -le 0 ]]; then
     database_choice=${default}
 fi
 
-echo "Select the languages this site will support:"
-for language in "${!languages[@]}"; do
-    while true; do
-        read -p "Enable $language? (y/n): " answer
-        if [[ "$answer" != "y" && "$answer" != "n" ]]; then
-            echo "Please enter 'y' or 'n'."
-        else
-            if [[ "$answer" == "y" ]]; then
-                selected_languages["$language"]="${languages["$language"]}"
-            fi
+while true; do
+    echo "Do you want to set up languages for this site? (y/n)"
+    read -r setup_languages
+    if [[ "$setup_languages" != "y" && "$setup_languages" != "n" ]]; then
+        echo "Please enter 'y' or 'n'."
+    else
+        if [[ "$setup_languages" != "y" ]]; then
+            echo "Skipping language setup."
             break
-        fi
-    done
-done
-
-for language in "${ordered_languages[@]}"; do
-    if [[ -n "${selected_languages["$language"]}" ]]; then
-        if [[ -z $ordered_languages_choices ]]; then
-            ordered_languages_choices="${selected_languages["$language"]}"
         else
-            ordered_languages_choices="$ordered_languages_choices, ${selected_languages["$language"]}"
+            echo "Select the languages this site will support:"
+            for language in "${!languages[@]}"; do
+                while true; do
+                    read -p "Enable $language? (y/n): " answer
+                    if [[ "$answer" != "y" && "$answer" != "n" ]]; then
+                        echo "Please enter 'y' or 'n'."
+                    else
+                        if [[ "$answer" == "y" ]]; then
+                            selected_languages["$language"]="${languages["$language"]}"
+                        fi
+                        break
+                    fi
+                done
+            done
+
+            for language in "${ordered_languages[@]}"; do
+                if [[ -n "${selected_languages["$language"]}" ]]; then
+                    if [[ -z $ordered_languages_choices ]]; then
+                        ordered_languages_choices="${selected_languages["$language"]}"
+                    else
+                        ordered_languages_choices="$ordered_languages_choices, ${selected_languages["$language"]}"
+                    fi
+                fi
+            done
+            break
         fi
     fi
 done
 
 # Activate the chosen site
 # Set the database and port
-# Set the LANGUAGES variables
 echo "RICHIE_SITE=${sites[$((choice-1))]}" > .env
 echo "ACTIVATED_DB=${databases[$((database_choice-1))]}" >> .env
+echo "DB_PORT=${databases_ports[$((database_choice-1))]}" >> .env
 
-if [[ ${database_choice} == 1 ]]; then
-    echo "DB_PORT=3306" >> .env
-else [[ ${database_choice} == 2 ]];
-    echo "DB_PORT=5472" >> .env
+if [[ "$setup_languages" == "y" ]]; then
+    # Set the LANGUAGES variables in the .env file
+    echo "LANGUAGES=($ordered_languages_choices)" >> .env
+    break
 fi
-
-echo "LANGUAGES=($ordered_languages_choices)" >> .env
 
 echo """
 Site activated successfully!
 
 The configurations are set in the .env file
 
-Please, note that you can change the languages
-order in the .env file according to your needs.
-English is the default language and if the site
-will not suport it, you can remove it from there.
+Please, if you set up languages, note that  you
+can change the languages order in the .env file
+according to your needs. English is the default
+language and if the site will not suport it, you
+can remove it from there.
 """
