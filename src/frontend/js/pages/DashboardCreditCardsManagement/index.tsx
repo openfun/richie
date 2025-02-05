@@ -51,27 +51,27 @@ export const DashboardCreditCardsManagement = ({ onClickEdit }: Props) => {
 
   return (
     <DashboardCard header={<FormattedMessage {...messages.header} />}>
-      <div className="dashboard-credit-cards">
-        {isPending && <Spinner />}
-        {!isPending && (
-          <>
-            {error && <Banner message={error} type={BannerType.ERROR} rounded />}
-            {!error && creditCardsList.length === 0 && (
-              <p className="dashboard-credit-cards__empty">
-                <FormattedMessage {...messages.emptyList} />
-              </p>
-            )}
-            {creditCardsList.map((creditCard) => (
-              <DashboardCreditCardBox
-                creditCard={creditCard}
-                key={creditCard.id}
-                edit={(_creditCard) => onClickEdit?.(_creditCard)}
-                promote={({ id }) => promote(id)}
-                remove={safeDelete}
-              />
-            ))}
-          </>
+      <div className="dashboard-credit-cards" aria-busy={isPending}>
+        {isPending && (
+          <div className="dashboard-credit-cards__loading-overlay">
+            <Spinner />
+          </div>
         )}
+        {error && <Banner message={error} type={BannerType.ERROR} rounded />}
+        {!error && creditCardsList.length === 0 && (
+          <p className="dashboard-credit-cards__empty">
+            <FormattedMessage {...messages.emptyList} />
+          </p>
+        )}
+        {creditCardsList.map((creditCard) => (
+          <DashboardCreditCardBox
+            key={creditCard.id}
+            creditCard={creditCard}
+            edit={(instance) => onClickEdit?.(instance)}
+            promote={({ id }) => promote(id)}
+            remove={safeDelete}
+          />
+        ))}
       </div>
     </DashboardCard>
   );
