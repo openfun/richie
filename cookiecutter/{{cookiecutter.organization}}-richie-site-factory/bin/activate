@@ -8,6 +8,32 @@ declare -a sites
 declare -i default=1
 declare -i choice
 declare -i n_sites
+declare -a databases=("mysql" "postgresql" "sqlite") 
+declare -i database_choice
+declare -i n_databases
+declare -A languages=(
+    ["Portuguese"]='("pt", "Portuguese")'
+    ["French"]='("fr", "French (France)")'
+    ["Spanish"]='("es", "Spanish")'
+    ["Russian"]='("ru", "Russian")'
+    ["Vietnamese"]='("vi", "Vietnamese")'
+    ["Arabic (Saudi Arabia)"]='("ar", "Arabic (Saudi Arabia)")'
+    ["Korean"]='("ko", "Korean")'
+)
+declare -A selected_languages=(
+    ["English"]='("en", "English")'
+)
+ordered_languages=(
+    "English"
+    "Portuguese"
+    "French (France)"
+    "Spanish"
+    "Russian"
+    "Vietnamese"
+    "Arabic (Saudi Arabia)"
+    "Korean"
+)
+ordered_languages_choices=""
 
 # List sites by looking in the "sites" directory
 # and store them in an array
@@ -17,6 +43,7 @@ read -r -a sites <<< "$(
     xargs
 )"
 n_sites=${#sites[@]}
+n_databases=${#databases[@]}
 
 if [[ n_sites -eq 0 ]]; then
     (>&2 echo "You should first add a site to the project by running: make add-site")
@@ -24,30 +51,91 @@ if [[ n_sites -eq 0 ]]; then
 fi
 
 if [[ n_sites -eq 1 ]]; then
-    # If there is only one site, just activate it
+    # If there is only one site, activate it
     echo "RICHIE_SITE=${sites[0]}" > .env
-    exit 0
+else
+    prompt="Select an available site to activate:\\n"
+    for (( i=0; i<n_sites; i++ )); do
+        prompt+="[$((i+1))] ${sites[$i]}"
+        if [[ $((i+1)) -eq ${default} ]]; then
+            prompt+=" (default)"
+        fi
+        prompt+="\\n"
+    done
+    prompt+="Your choice: "
+    read -r -p "$(echo -e "${prompt}")" choice
+
+    if [[ ${choice} -gt n_sites ]]; then
+        (>&2 echo "Invalid choice ${choice} (should be <= ${n_sites})")
+        exit 10
+    fi
+
+    if [[ ${choice} -le 0 ]]; then
+        choice=${default}
+    fi
 fi
 
-prompt="Select an available site to activate:\\n"
-for (( i=0; i<n_sites; i++ )); do
-    prompt+="[$((i+1))] ${sites[$i]}"
+prompt="Select an available database to activate:\\n"
+for (( i=0; i<n_databases; i++ )); do
+    prompt+="[$((i+1))] ${databases[$i]}"
     if [[ $((i+1)) -eq ${default} ]]; then
         prompt+=" (default)"
     fi
     prompt+="\\n"
 done
 prompt+="Your choice: "
-read -r -p "$(echo -e "${prompt}")" choice
-
-if [[ ${choice} -gt n_sites ]]; then
-    (>&2 echo "Invalid choice ${choice} (should be <= ${n_sites})")
-    exit 10
-fi
+read -r -p "$(echo -e "${prompt}")" database_choice
 
 if [[ ${choice} -le 0 ]]; then
-    choice=${default}
+    database_choice=${default}
 fi
 
+echo "Select the languages this site will support:"
+for language in "${!languages[@]}"; do
+    while true; do
+        read -p "Enable $language? (y/n): " answer
+        if [[ "$answer" != "y" && "$answer" != "n" ]]; then
+            echo "Please enter 'y' or 'n'."
+        else
+            if [[ "$answer" == "y" ]]; then
+                selected_languages["$language"]="${languages["$language"]}"
+            fi
+            break
+        fi
+    done
+done
+
+for language in "${ordered_languages[@]}"; do
+    if [[ -n "${selected_languages["$language"]}" ]]; then
+        if [[ -z $ordered_languages_choices ]]; then
+            ordered_languages_choices="${selected_languages["$language"]}"
+        else
+            ordered_languages_choices="$ordered_languages_choices, ${selected_languages["$language"]}"
+        fi
+    fi
+done
+
 # Activate the chosen site
+# Set the database and port
+# Set the LANGUAGES variables
 echo "RICHIE_SITE=${sites[$((choice-1))]}" > .env
+echo "ACTIVATED_DB=${databases[$((database_choice-1))]}" >> .env
+
+if [[ ${database_choice} == 1 ]]; then
+    echo "DB_PORT=3306" >> .env
+else [[ ${database_choice} == 2 ]];
+    echo "DB_PORT=5472" >> .env
+fi
+
+echo "LANGUAGES=($ordered_languages_choices)" >> .env
+
+echo """
+Site activated successfully!
+
+The configurations are set in the .env file
+
+Please, note that you can change the languages
+order in the .env file according to your needs.
+English is the default language and if the site
+will not suport it, you can remove it from there.
+"""
