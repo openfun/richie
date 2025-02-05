@@ -1,5 +1,9 @@
 {
     "_organization": null,
+    "_org_dockerhub": null,
+    "_nginx_image_name": null,
+    "_nginx_image_tag": null,
+    "_elasticsearch_image_name": null,
     "site": null,
     "domain": null
 }

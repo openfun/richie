@@ -88,6 +88,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Added new page extension `MainMenuEntry`
 - Add explicit error when a user tries to delete a credit card
   that is still in use
+- Added org_dockerhub, nginx_image_name, nginx_image_tag
+    and elasticsearch_image_name parameters to cookiecutter
 
 ### Changed
 

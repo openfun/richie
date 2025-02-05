@@ -75,39 +75,39 @@ hub:
           - run:
               name: Tag app image
               command: |
-                docker images fundocker/<< parameters.image_name >>
+                docker images {{cookiecutter.org_dockerhub}}/<< parameters.image_name >>
                 # Display either:
                 # - DOCKER_TAG: main (Git branch)
                 # or
                 # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
                 echo "DOCKER_TAG: ${DOCKER_TAG}"
-                docker tag << parameters.site >>:production fundocker/<< parameters.image_name >>:${DOCKER_TAG}
+                docker tag << parameters.site >>:production {{cookiecutter.org_dockerhub}}/<< parameters.image_name >>:${DOCKER_TAG}
                 if [[ -n "$CIRCLE_TAG" ]]; then
-                    docker tag << parameters.site >>:production fundocker/<< parameters.image_name >>:latest
+                    docker tag << parameters.site >>:production {{cookiecutter.org_dockerhub}}/<< parameters.image_name >>:latest
                 fi
-                docker images | grep -E "^fundocker/<< parameters.image_name >>\s*(${DOCKER_TAG}.*|latest|main)"
+                docker images | grep -E "^{{cookiecutter.org_dockerhub}}/<< parameters.image_name >>\s*(${DOCKER_TAG}.*|latest|main)"
           - run:
               name: Tag nginx image
               command: |
-                docker images fundocker/<< parameters.image_name >>-nginx
+                docker images {{cookiecutter.org_dockerhub}}/<< parameters.image_name >>-nginx
                 echo "DOCKER_TAG: ${DOCKER_TAG}"
-                docker tag << parameters.site >>-nginx:production fundocker/<< parameters.image_name >>-nginx:${DOCKER_TAG}
+                docker tag << parameters.site >>-nginx:production {{cookiecutter.org_dockerhub}}/<< parameters.image_name >>-nginx:${DOCKER_TAG}
                 if [[ -n "$CIRCLE_TAG" ]]; then
-                    docker tag << parameters.site >>-nginx:production fundocker/<< parameters.image_name >>-nginx:latest
+                    docker tag << parameters.site >>-nginx:production {{cookiecutter.org_dockerhub}}/<< parameters.image_name >>-nginx:latest
                 fi
-                docker images | grep -E "^fundocker/<< parameters.image_name >>-nginx\s*(${DOCKER_TAG}.*|latest|main)"
+                docker images | grep -E "^{{cookiecutter.org_dockerhub}}/<< parameters.image_name >>-nginx\s*(${DOCKER_TAG}.*|latest|main)"
           # Publish images
           - run:
               name: Publish app image
               command: |
-                docker push fundocker/<< parameters.image_name >>:${DOCKER_TAG}
+                docker push {{cookiecutter.org_dockerhub}}/<< parameters.image_name >>:${DOCKER_TAG}
                 if [[ -n "$CIRCLE_TAG" ]]; then
-                  docker push fundocker/<< parameters.image_name >>:latest
+                  docker push {{cookiecutter.org_dockerhub}}/<< parameters.image_name >>:latest
                 fi
           - run:
               name: Publish nginx image
               command: |
-                docker push fundocker/<< parameters.image_name >>-nginx:${DOCKER_TAG}
+                docker push {{cookiecutter.org_dockerhub}}/<< parameters.image_name >>-nginx:${DOCKER_TAG}
                 if [[ -n "$CIRCLE_TAG" ]]; then
-                  docker push fundocker/<< parameters.image_name >>-nginx:latest
+                  docker push {{cookiecutter.org_dockerhub}}/<< parameters.image_name >>-nginx:latest
                 fi
