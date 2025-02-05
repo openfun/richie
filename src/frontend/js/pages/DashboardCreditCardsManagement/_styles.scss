@@ -2,11 +2,22 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  position: relative;
 
   &__empty {
     text-align: center;
     color: r-theme-val(dashboard-credit-cards, empty-color);
     margin: 0;
+  }
+
+  &__loading-overlay {
+    position: absolute;
+    pointer-events: none;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
   }
 }
 
@@ -32,9 +43,6 @@
       font-size: 18px;
       color: r-theme-val(dashboard-credit-card-box, base-color);
     }
-  }
-
-  &__data {
   }
 
   &__brand {
