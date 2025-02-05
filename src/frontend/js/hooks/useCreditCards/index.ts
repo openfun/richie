@@ -1,8 +1,10 @@
 import { defineMessages, useIntl } from 'react-intl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { MutateOptions } from '@tanstack/query-core';
 import { API, CreditCard } from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 import {
   QueryOptions,
   ResourcesQuery,
@@ -26,6 +28,13 @@ const messages = defineMessages({
     id: 'hooks.useCreditCards.errorDelete',
     description: 'Error message shown to the user when credit card deletion request fails.',
     defaultMessage: 'An error occurred while deleting the credit card. Please retry later.',
+  },
+  errorCannotDelete: {
+    id: 'hooks.useCreditCards.errorCannotDelete',
+    description:
+      'Error message shown to the user when trying to delete a credit card that is used to pay at least order.',
+    defaultMessage:
+      'Cannot delete the credit card •••• •••• •••• {last_numbers} because it is used to pay at least one of your order.',
   },
   errorTokenize: {
     id: 'hooks.useCreditCards.errorTokenize',
@@ -70,10 +79,34 @@ const useCreditCardResources =
       onError: () => custom.methods.setError(intl.formatMessage(messages.errorPromote)),
     });
 
+    /**
+     * Override the default delete mutation to handle error more specifically.
+     * If the error is a 409, it means the credit card is used to pay at least one order
+     * and the user should be informed about that.
+     */
+    const deleteMutateAsync = async (creditCard: CreditCard, options?: MutateOptions) => {
+      return custom.methods.delete(creditCard.id, {
+        ...options,
+        onError: (error: HttpError, variables, context) => {
+          if (error.code === HttpStatusCode.CONFLICT) {
+            custom.methods.setError(
+              intl.formatMessage(messages.errorCannotDelete, {
+                last_numbers: creditCard.last_numbers,
+              }),
+            );
+          } else {
+            custom.methods.setError(intl.formatMessage(messages.errorDelete));
+          }
+          options?.onError?.(error, variables, context);
+        },
+      });
+    };
+
     return {
       ...custom,
       methods: {
         ...custom.methods,
+        delete: deleteMutateAsync,
         tokenize: tokenizeHandler.mutateAsync,
         promote: promoteHandler.mutateAsync,
       },

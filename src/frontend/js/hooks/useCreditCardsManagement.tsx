@@ -31,7 +31,7 @@ export const useCreditCardsManagement = () => {
     if (!sure) {
       return;
     }
-    creditCards.methods.delete(creditCard.id, options);
+    creditCards.methods.delete(creditCard, options);
   };
 
   return {
