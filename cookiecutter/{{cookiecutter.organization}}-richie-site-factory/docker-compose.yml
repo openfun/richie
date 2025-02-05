@@ -1,24 +1,20 @@
+include:
+  - docker-compose-${ACTIVATED_DB}.yml
 services:
-  db:
-    image: postgres:16.4
-    environment:
-      - POSTGRES_DB=richie_${RICHIE_SITE:?}
-    env_file:
-      - "env.d/development"
-    ports:
-      - "5440:5432"
-    volumes:
-      - ./data/db/${RICHIE_SITE:?}:/var/lib/postgresql/data
-
   elasticsearch:
-    image: fundocker/openshift-elasticsearch:6.6.2
+    image: {{cookiecutter.elasticsearch_image_name}}
     environment:
       - discovery.type=single-node
     env_file:
       - "env.d/development"
+      - "env.d/${ACTIVATED_DB}"
     ports:
       - "9220:9200"
-
+    healthcheck:
+      test: ["CMD", "echo", "''", ">", "/dev/tcp/127.0.0.1/9200", "||", "exit", "1"]
+      interval: 1s
+      timeout: 2s
+      retries: 300
   app-dev:
     build:
       context: .
@@ -28,11 +24,13 @@ services:
         SITE: ${RICHIE_SITE:?}
     image: "${RICHIE_SITE:?}:development"
     environment:
-      - DB_NAME=richie_${RICHIE_SITE:?}
       - DJANGO_SETTINGS_MODULE=${RICHIE_SITE:?}.settings
       - DJANGO_CONFIGURATION=Development
       - RICHIE_ES_INDICES_PREFIX=richie_${RICHIE_SITE:?}
-    env_file: env.d/development
+    env_file:
+      - ".env"
+      - "env.d/development"
+      - "env.d/${ACTIVATED_DB}"
     networks:
       - default
       - lms_outside
@@ -42,7 +40,7 @@ services:
       - "./sites/${RICHIE_SITE:?}/src/backend:/app"
       - "./data/media/${RICHIE_SITE:?}:/data/media"
     depends_on:
-      - "db"
+      - "${ACTIVATED_DB}"
       - "elasticsearch"
       - "redis-sentinel"
     user: ${DOCKER_USER:-1000}
@@ -58,18 +56,20 @@ services:
     # unique and avoid collisions in parallel builds.
     image: "${RICHIE_SITE:?}:production"
     environment:
-      - DB_NAME=richie_${RICHIE_SITE:?}
       - DJANGO_SETTINGS_MODULE=${RICHIE_SITE:?}.settings
       - DJANGO_CONFIGURATION=ContinuousIntegration
       - RICHIE_ES_INDICES_PREFIX=richie_${RICHIE_SITE:?}
-    env_file: env.d/development
+    env_file:
+      - ".env"
+      - "env.d/development"
+      - "env.d/${ACTIVATED_DB}"
     networks:
       - default
       - lms_outside
     volumes:
       - ./data/media/${RICHIE_SITE:?}:/data/media
     depends_on:
-      - "db"
+      - "${ACTIVATED_DB}"
       - "elasticsearch"
       - "redis-sentinel"
     user: ${DOCKER_USER:-1000}
@@ -80,8 +80,8 @@ services:
       target: nginx
       args:
         DOCKER_USER: ${DOCKER_USER:-1000}
-        NGINX_IMAGE_NAME: ${NGINX_IMAGE_NAME:-fundocker/openshift-nginx}
-        NGINX_IMAGE_TAG: ${NGINX_IMAGE_TAG:-1.13}
+        NGINX_IMAGE_NAME: ${NGINX_IMAGE_NAME:-{{cookiecutter.nginx_image_name}}}
+        NGINX_IMAGE_TAG: ${NGINX_IMAGE_TAG:-{{cookiecutter.nginx_image_tag}}}
         SITE: ${RICHIE_SITE:?}
     image: "${RICHIE_SITE:?}-nginx:production"
     ports:

@@ -8,18 +8,6 @@ DJANGO_ALLOWED_HOSTS=*
 # Elastic search
 RICHIE_ES_HOST=elasticsearch
 
-# PostgreSQL db container configuration
-POSTGRES_DB=richie
-POSTGRES_USER=fun
-POSTGRES_PASSWORD=pass
-
-# App database configuration
-DB_HOST=db
-DB_NAME=richie
-DB_USER=fun
-DB_PASSWORD=pass
-DB_PORT=5432
-
 # LMS Backend
 EDX_BACKEND=richie.apps.courses.lms.base.BaseLMSBackend
 EDX_BASE_URL=http://localhost:8073
