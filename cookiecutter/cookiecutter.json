@@ -1,5 +1,9 @@
 {
     "organization": null,
+    "org_dockerhub": "fundocker",
+    "nginx_image_name": "fundocker/openshift-nginx",
+    "nginx_image_tag": "1.13",
+    "elasticsearch_image_name": "fundocker/openshift-elasticsearch:6.6.2",
     "_copy_without_render": [
         ".circleci",
         "bin/activate",
