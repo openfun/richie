@@ -1,2 +1,6 @@
 default_context:
     _organization: {{cookiecutter.organization}}
+    _org_dockerhub: {{cookiecutter.org_dockerhub}}
+    _nginx_image_name: {{cookiecutter.nginx_image_name}}
+    _nginx_image_tag: {{cookiecutter.nginx_image_tag}}
+    _elasticsearch_image_name: {{cookiecutter.elasticsearch_image_name}}
