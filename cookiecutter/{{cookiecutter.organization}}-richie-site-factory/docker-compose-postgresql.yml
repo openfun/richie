@@ -1,0 +1,14 @@
+services:
+  postgresql:
+    image: postgres:16.4
+    ports:
+      - "5472:5432"
+    env_file:
+      - env.d/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 2s
+      retries: 300
+    volumes:
+      - ./data/db/${RICHIE_SITE:?}:/var/lib/postgresql/data
