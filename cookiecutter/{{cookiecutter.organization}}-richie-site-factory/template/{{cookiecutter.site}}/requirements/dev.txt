@@ -1,7 +1,7 @@
 bandit==1.7.5
 black==24.3.0
-Faker==13.2.0
-factory-boy==3.2.1
+Faker==35.2.0
+factory-boy==3.3.3
 flake8==6.0.0
 flake8-pyproject==1.2.3
 isort==5.12.0

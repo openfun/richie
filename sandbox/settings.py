@@ -466,6 +466,23 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     # fallback/default languages throughout the app.
     # Use "en" as default as it is the language that is most likely to be spoken by any visitor
     # when their preferred language, whatever it is, is unavailable
+
+    # An example of setting all the languages available in the project
+    # LANGUAGES = values.Value(
+    #     (
+    #         ("en", _("English")),
+    #         ("fr", _("French")),
+    #         ("pt", _("Portuguese")),
+    #         ("pt-br", _("Brazilian Portuguese")),
+    #         ("es", _("Spanish")),
+    #         ("ru", _("Russian")),
+    #         ("vi", _("Vietnamese")),
+    #         ("ar", _("Arabic (Saudi Arabia)")),
+    #         ("ko", _("Korean")),
+    #     ),
+    #     environ_name="LANGUAGES",
+    # )
+
     LANGUAGES = (("en", _("English")), ("fr", _("French")))
 
     # - Django CMS

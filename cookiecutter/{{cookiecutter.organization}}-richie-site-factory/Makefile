@@ -72,7 +72,7 @@ generate-site: ## generate a new site using cookiecutter
 .PHONY: generate-site
 
 add-site: generate-site ## add a new site to the site factory
-	@echo "RICHIE_SITE=$(shell ls -td sites/* | head -1 | cut -f2 -d'/')" > .env
+	@bin/activate
 .PHONY: add-site
 
 .env: ## site should be activated
@@ -314,5 +314,5 @@ env.d/development:
 	cp env.d/development.dist env.d/development
 
 help:
-	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m  %-30s\033[0m %s\n", $$1, $$2}'
 .PHONY: help
