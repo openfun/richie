@@ -1,0 +1,1495 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: richie\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-31 17:41+0100\n"
+"PO-Revision-Date: 2024-11-20 14:09\n"
+"Last-Translator: \n"
+"Language-Team: Russian\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 "
+"&& n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 "
+"&& n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
+"X-Crowdin-Project: richie\n"
+"X-Crowdin-Project-ID: 308578\n"
+"X-Crowdin-Language: ru\n"
+"X-Crowdin-File: backend.pot\n"
+"X-Crowdin-File-ID: 32\n"
+
+#: newsite/settings.py:250 newsite/settings.py:260
+#, fuzzy
+#| msgid "dashboard"
+msgid "Dashboard"
+msgstr "панель управления"
+
+#: newsite/settings.py:251
+msgid "{base_url:s}/dashboard/"
+msgstr ""
+
+#: newsite/settings.py:261
+#, fuzzy
+#| msgid "dashboard"
+msgid "/dashboard/"
+msgstr "панель управления"
+
+#: newsite/settings.py:264
+#, fuzzy
+#| msgid "dashboard"
+msgid "Teacher dashboard"
+msgstr "панель управления"
+
+#: newsite/settings.py:265
+#, fuzzy
+#| msgid "dashboard"
+msgid "/dashboard/teacher"
+msgstr "панель управления"
+
+#: newsite/settings.py:287
+msgid "Profile"
+msgstr ""
+
+#: newsite/settings.py:288
+msgid "{base_url:s}/u/(username)"
+msgstr ""
+
+#: newsite/settings.py:291
+#, fuzzy
+#| msgid "Accordion"
+msgid "Account"
+msgstr "Аккордеон"
+
+#: newsite/settings.py:292
+msgid "{base_url:s}/account/settings"
+msgstr ""
+
+#: newsite/settings.py:385
+msgid "Teaser"
+msgstr "Тизер"
+
+#: newsite/settings.py:476 newsite/settings.py:483
+msgid "English"
+msgstr ""
+
+#: newsite/settings.py:476 newsite/settings.py:483
+msgid "French"
+msgstr ""
+
+msgid "Richie Plugins"
+msgstr "Плагины Richie"
+
+msgid "Define a duration as a number of time units"
+msgstr "Определить длительность как количество единиц времени"
+
+#, python-format
+msgid "%(value)s is not a valid choice for a time unit."
+msgstr "%(value)s - недопустимый выбор единицы времени."
+
+msgid "A composite duration should be a pair: number and time unit."
+msgstr "Составная длительность должна быть парой: число и единица времени."
+
+msgid "A composite duration should be a round number of time units."
+msgstr ""
+"Составная продолжительность должна представлять собой круглое число "
+"единиц времени."
+
+msgid "A composite duration should be positive."
+msgstr "Составная продолжительность должна быть положительной."
+
+msgid "Define an effort"
+msgstr "Определить усилия"
+
+msgid "An effort should be a triplet: number, time unit and reference unit."
+msgstr ""
+"Усилие должно быть триплетом: число, единица времени и единица отсчета."
+
+msgid "An effort should be a round number of time units."
+msgstr "Усилие должно представлять собой круглое число единиц времени."
+
+msgid "An effort should be positive."
+msgstr "Усилие должно быть положительным."
+
+msgid "The effort time unit should be shorter than the reference unit."
+msgstr "Единица времени усилия должна быть короче, чем единица отсчета."
+
+msgid "{:s} and {:s}"
+msgstr "{:s} и {:s}"
+
+msgid " and "
+msgstr " и "
+
+#, python-format
+msgid "You can only select up to %(limit_value)d choices."
+msgstr "Вы можете выбрать только %(limit_value)d вариантов."
+
+#, python-format
+msgid "Multi select field (up to %(max_choices)s choices)"
+msgstr "Поле множественного выбора (до %(max_choices)s вариантов)"
+
+#, python-format
+msgid "Value %(value)s is not a valid choice."
+msgid_plural "Values %(value)s are not valid choices."
+msgstr[0] "Значение %(value)s не является допустимым вариантом."
+msgstr[1] "Значения %(value)s не являются допустимыми вариантами."
+msgstr[2] "Значения %(value)s не являются допустимыми вариантами."
+msgstr[3] "Значения %(value)s не являются допустимыми вариантами."
+
+msgid ""
+"Storing {:d} choices could require storing a CharField of up to {:d} "
+"characters. Please reduce 'max_choices' or increase 'max_length'."
+msgstr ""
+"Хранение {:d} вариантов может потребовать хранения CharField размером до "
+"{:d} символов. Уменьшите значение 'max_choices' или увеличьте значение "
+"'max_length'."
+
+msgid "Video"
+msgstr "Видео"
+
+msgid "Your browser doesn't support this video format."
+msgstr "Ваш браузер не поддерживает этот формат видео."
+
+msgid "You are here:"
+msgstr "Вы находитесь здесь:"
+
+msgid "Skip to main content"
+msgstr "Перейти к основному содержимому"
+
+msgid "Go to homepage"
+msgstr "Вернуться на главную страницу"
+
+msgid "Menu"
+msgstr "Меню"
+
+msgid "Contact us"
+msgstr "Свяжитесь с нами"
+
+msgid "Life-changing learning!"
+msgstr "Обучение, меняющее жизнь!"
+
+msgid "Learn more"
+msgstr "Узнать больше"
+
+msgid "Powered by"
+msgstr "Работает на"
+
+msgid "This page has no child objects"
+msgstr "У этой страницы нет дочерних объектов"
+
+msgid "Back to home"
+msgstr "Вернуться на главную"
+
+msgid "Pagination"
+msgstr "Постраничная навигация"
+
+#, python-format
+msgid "Currently reading last page %(page)s"
+msgstr "В настоящее время чтение последней страницы %(page)s"
+
+#, python-format
+msgid "Currently reading page %(page)s"
+msgstr "Сейчас чтение страницы %(page)s"
+
+#, python-format
+msgid "Page %(page)s"
+msgstr "Страница %(page)s"
+
+#, python-format
+msgid "Previous page %(page)s"
+msgstr "Предыдущая страница %(page)s"
+
+#, python-format
+msgid "Last page %(page)s"
+msgstr "Последняя страница %(page)s"
+
+#, python-format
+msgid "Next page %(page)s"
+msgstr "Следующая страница %(page)s"
+
+#, python-format
+msgid "Richie news: %(title)s"
+msgstr "Новости Richie: %(title)s"
+
+#, python-format
+msgid "Richie news: %(title)s %(url)s"
+msgstr "Новости Richie: %(title)s %(url)s"
+
+msgid "Share on Facebook"
+msgstr "Поделитесь на Facebook"
+
+msgid "Share on Twitter"
+msgstr "Поделиться через Twitter"
+
+msgid "Share on Linkedin"
+msgstr "Поделиться на LinkedIn"
+
+msgid "Share by Email"
+msgstr "Поделиться по электронной почте"
+
+msgid "Follow a course online with Richie"
+msgstr "Пройдите курс обучения онлайн вместе с Richie"
+
+#, python-format
+msgid "I just enrolled to the course \"%(title)s\" on Richie: %(url)s"
+msgstr "Я записался на курс \"%(title)s\" на Richie\": %(url)s"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "Twitter page"
+msgstr "Страничка Twitter"
+
+msgid "Linkedin page"
+msgstr "Linkedin"
+
+msgid "Bad request"
+msgstr "Неверный запрос"
+
+msgid ""
+"Your query seems to be malformed. Please check your data and try again."
+msgstr ""
+"Похоже, ваш запрос имеет неправильный формат. Пожалуйста, проверьте ваши "
+"данные и повторите попытку."
+
+msgid "Forbidden"
+msgstr "Доступ запрещен"
+
+msgid "You do not have the required permissions to access this resource."
+msgstr "У вас нет требуемых прав для доступа к этому ресурсу."
+
+msgid "Page not found"
+msgstr "Страница не найдена"
+
+msgid "The requested resource does not exist."
+msgstr "Запрошенный ресурс не существует."
+
+msgid "Server bad request"
+msgstr "Неверный запрос сервера"
+
+msgid "Something went wrong. Please try again later."
+msgstr "Что-то пошло не так. Пожалуйста, попробуйте позже."
+
+msgid "Course could not be found."
+msgstr "Курс не может быть найден."
+
+msgid "See user group"
+msgstr "Посмотреть группу пользователей"
+
+msgid "See filer folder"
+msgstr "Смотреть папку filer"
+
+msgid "Organization"
+msgstr "Организация"
+
+msgid "Organization by Category"
+msgstr "Организация по категориям"
+
+msgid "Category"
+msgstr "Категория"
+
+msgid "Course"
+msgstr "Курс"
+
+msgid "Person"
+msgstr "Человек"
+
+msgid "Licence"
+msgstr "Лицензия"
+
+msgid "Post"
+msgstr "Пост"
+
+msgid "Program"
+msgstr "Программа"
+
+msgid "{!s} settings"
+msgstr "Настройки {!s}"
+
+msgid "Snapshot this page..."
+msgstr "Снимок этой страницы..."
+
+msgid ""
+"This will place a copy of this page as its child and move all its "
+"courseruns as children of its new copy."
+msgstr ""
+"Это поместит копию этой страницы в качестве ее дочерней и переместит все "
+"её этапы курса в качестве дочерних для ее новой копии."
+
+msgid "New page"
+msgstr "Новая страница"
+
+msgid "Create a new page next to the current page."
+msgstr "Создать новую страницу рядом с текущей страницей."
+
+msgid "New sub page"
+msgstr "Новая подстраница"
+
+msgid "Create a page below the current page."
+msgstr "Создайте страницу под текущей страницей."
+
+msgid "Page title"
+msgstr "Заголовок страницы"
+
+msgid "Title of the page in current language"
+msgstr "Заголовок страницы на текущем языке"
+
+msgid "Page slug"
+msgstr "Slug страницы"
+
+msgid "Slug of the page in current language"
+msgstr "Slug страницы на текущем языке"
+
+msgid ""
+"This slug is too long. The length of the path built by prepending the "
+"slug of the parent page would be {:d} characters long and it should be "
+"less than 255"
+msgstr ""
+"Этот slug слишком длинный. Длина пути, созданного в ожидании slug "
+"родительской страницы, будет равна {:d} символам, и она должна быть "
+"меньше 255"
+
+msgid "This slug is already in use"
+msgstr "Этот slug уже используется"
+
+msgid ""
+"You must first create a parent page and set its `reverse_id` to `{:s}`."
+msgstr ""
+"Сначала вы должны создать родительскую страницу и установить `reverse_id` "
+"в `{:s}`."
+
+msgid "Code"
+msgstr "Код"
+
+msgid "Unique reference for the course."
+msgstr "Уникальная ссылка на курс."
+
+msgid "New course page"
+msgstr "Новая страница курса"
+
+msgid "Create a new course page"
+msgstr "Создать новую страницу курса"
+
+msgid "Unique reference for the organization."
+msgstr "Уникальная ссылка для организации."
+
+msgid "New organization page"
+msgstr "Новая страница организации"
+
+msgid "Create a new organization page"
+msgstr "Создать новую страницу организации"
+
+msgid "New category page"
+msgstr "Новая страница категории"
+
+msgid "Create a new category page"
+msgstr "Создать новую страницу категории"
+
+msgid "New blog post"
+msgstr "Новая запись блога"
+
+msgid "Create a new blog post"
+msgstr "Создать новую запись блога"
+
+msgid "New person page"
+msgstr "Новая страница человека"
+
+msgid "Create a new person page"
+msgstr "Создать новую страницу человека"
+
+msgid "New program"
+msgstr "Новая программа"
+
+msgid "Create a new program"
+msgstr "Создать новую программу"
+
+msgid "Admin"
+msgstr "Администратор"
+
+msgid "Inherit"
+msgstr "Наследовать"
+
+msgid "Default"
+msgstr "По-умолчанию"
+
+msgid "Mini"
+msgstr "Мини"
+
+msgid "Favorite"
+msgstr "Избранное"
+
+msgid "Badge"
+msgstr "Значок"
+
+msgid "Tag"
+msgstr "Тег"
+
+msgid "Small"
+msgstr "Маленький"
+
+msgid "Large"
+msgstr "Большой"
+
+msgid "Card"
+msgstr "Карточка"
+
+msgid "Row"
+msgstr "Строка"
+
+msgid "minute"
+msgstr "минута"
+
+msgid "minutes"
+msgstr "минут"
+
+msgid "hour"
+msgstr "час"
+
+msgid "hours"
+msgstr "часов"
+
+msgid "day"
+msgstr "день"
+
+msgid "days"
+msgstr "дней"
+
+msgid "week"
+msgstr "неделя"
+
+msgid "weeks"
+msgstr "недель"
+
+msgid "month"
+msgstr "месяц"
+
+msgid "months"
+msgstr "месяцев"
+
+msgid "Run {:d}"
+msgstr "Запустить {:d}"
+
+msgid "You can't snapshot a snapshot."
+msgstr "Вы не можете сделать снимок снимка."
+
+msgid "You don't have sufficient permissions to snapshot this page."
+msgstr "У вас недостаточно прав для снимка этой страницы."
+
+msgid "Archived on {now:%Y-%m-%d %H:%M:%S}"
+msgstr "Архивировано {now:%Y-%m-%d %H:%M:%S}"
+
+msgid "{title:s} ({version!s})"
+msgstr "{title:s} ({version!s})"
+
+msgid "blog post"
+msgstr "запись в блоге"
+
+msgid "blog posts"
+msgstr "записи в блоге"
+
+msgid "variant"
+msgstr "вариант"
+
+msgid "Optional glimpse variant for a custom look."
+msgstr ""
+"Дополнительный вариант с проблеском для придания индивидуального вида."
+
+msgid "blog post plugin"
+msgstr "плагин для записи в блоге"
+
+msgid "blog post plugins"
+msgstr "плагины для записи в блоге"
+
+msgid "category"
+msgstr "категория"
+
+msgid "categories"
+msgstr "категории"
+
+msgid "category plugin"
+msgstr "плагин категории"
+
+msgid "category plugins"
+msgstr "плагины категории"
+
+msgid "enroll now"
+msgstr "записаться сейчас"
+
+msgid "study now"
+msgstr "начать обучение"
+
+msgid "starting on"
+msgstr "начиная с"
+
+msgid "closing on"
+msgstr "закрытие с"
+
+msgid "enrollment closed"
+msgstr "зачисление закрыто"
+
+msgid "on-going"
+msgstr "в настоящее время"
+
+msgid "archived"
+msgstr "архивировано"
+
+msgid "to be scheduled"
+msgstr "будет запланировано"
+
+msgid "forever open"
+msgstr "всегда открыты"
+
+msgid "code"
+msgstr "код"
+
+msgid "The course time range."
+msgstr "Интервал времени курса."
+
+msgid "Total amount of time to complete this course."
+msgstr "Общее количество времени для завершения этого курса."
+
+msgid "is listed"
+msgstr "в списке"
+
+msgid "Tick if you want the course to be visible on the search page."
+msgstr "Отметьте, если хотите, чтобы курс был виден на странице поиска."
+
+msgid "is self paced"
+msgstr "самостоятельный"
+
+msgid "Tick if the course pace is self paced."
+msgstr "Отметьте, если темп прохождения курса - самостоятельный."
+
+msgid "course"
+msgstr "курс"
+
+msgid "courses"
+msgstr "курсы"
+
+msgid "Self paced"
+msgstr "Самостоятельный"
+
+msgid "~{pace:d} {effort_unit!s}/{duration_unit!s}"
+msgstr "~{pace:d} {effort_unit!s}/{duration_unit!s}"
+
+msgid "~{pace_hours:d}h{pace_minutes:d}/{duration_unit!s}"
+msgstr "~{pace_hours:d}ч{pace_minutes:d}/{duration_unit!s}"
+
+msgid "Manual"
+msgstr "Руководство"
+
+msgid "Synchronization to draft page"
+msgstr "Синхронизация с черновиком страницы"
+
+msgid "Synchronization to public page"
+msgstr "Синхронизация с публичной страницей"
+
+msgid ""
+"course_and_search - show on the course page and include in search results"
+msgstr ""
+"course_and_search - показать на странице курса и включить в результаты "
+"поиска"
+
+msgid "course_only - show on the course page and hide from search results"
+msgstr ""
+"course_only - показывать на странице курса и скрыть от результатов поиска"
+
+msgid "hidden - hide on the course page and from search results"
+msgstr "hidden - скрыть на странице курса и из результатов поиска"
+
+msgid "Synchronization mode"
+msgstr "Режим синхронизации"
+
+msgid "resource link"
+msgstr "ссылка на ресурс"
+
+msgid "course start"
+msgstr "начало курса"
+
+msgid "course end"
+msgstr "конец курса"
+
+msgid "enrollment start"
+msgstr "начало зачисления"
+
+msgid "enrollment end"
+msgstr "окончание зачисления"
+
+msgid "The list of languages in which the course content is available."
+msgstr "Список языков, на которых доступно содержимое курса."
+
+msgid "enrollment count"
+msgstr "количество зачислений"
+
+msgid "The number of enrolled students"
+msgstr "Количество зачисленных студентов"
+
+msgid "catalog visibility"
+msgstr "видимость каталога"
+
+msgid "course run"
+msgstr "запуск курса"
+
+msgid "course runs"
+msgstr "этапы курса"
+
+msgid "title"
+msgstr "заголовок"
+
+msgid "Course run translation"
+msgstr "Перевод запуска курса"
+
+msgid "Course run translations"
+msgstr "Переводы запуска курса"
+
+msgid "Empty title"
+msgstr "Пустой заголовок"
+
+msgid "course plugin"
+msgstr "плагин курса"
+
+msgid "course plugins"
+msgstr "плагины курса"
+
+msgid "logo"
+msgstr "лого"
+
+msgid "url"
+msgstr "url"
+
+msgid "name"
+msgstr "имя"
+
+msgid "content"
+msgstr "контент"
+
+msgid "licence"
+msgstr "лицензия"
+
+msgid "licences"
+msgstr "лицензии"
+
+msgid "Licence translation"
+msgstr "Перевод лицензии"
+
+msgid "licence translations"
+msgstr "переводы лицензий"
+
+msgid "description"
+msgstr "описание"
+
+msgid "licence plugin"
+msgstr "плагин лицензии"
+
+msgid "licence plugins"
+msgstr "плагины лицензии"
+
+msgid "organization"
+msgstr "организация"
+
+msgid "organizations"
+msgstr "организации"
+
+msgid "organization plugin"
+msgstr "плагин организации"
+
+msgid "organization plugins"
+msgstr "плагины организации"
+
+msgid "organizations by category plugin"
+msgstr "организации по плагину категории"
+
+msgid "organizations by category plugins"
+msgstr "организации по плагинам категории"
+
+msgid "person"
+msgstr "человек"
+
+msgid "persons"
+msgstr "люди"
+
+msgid "Custom bio"
+msgstr "Пользовательская биография"
+
+msgid ""
+"Optional: provide a custom bio (if you leave it empty, it will display "
+"the person's bio)."
+msgstr ""
+"Необязательно: укажите пользовательскую биографию (если оставить ее "
+"пустым, она отобразит биографию человека)."
+
+msgid "person plugin"
+msgstr "плагин человека"
+
+msgid "person plugins"
+msgstr "плагины человека"
+
+msgid "program"
+msgstr "программа"
+
+msgid "programs"
+msgstr "программы"
+
+msgid "program plugin"
+msgstr "плагин программы"
+
+msgid "program plugins"
+msgstr "плагины программы"
+
+msgid "role"
+msgstr "роль"
+
+msgid ""
+"A role describes all the permissions that should be granted to the user "
+"group."
+msgstr ""
+"Роль описывает все разрешения, которые должны быть предоставлены группе "
+"пользователей."
+
+msgid "page"
+msgstr "страница"
+
+msgid "Page to which this role grants permissions."
+msgstr "Страница, к которой эта роль предоставляет разрешения."
+
+msgid "group"
+msgstr "группа"
+
+msgid "User group that this role controls."
+msgstr "Группа пользователей, которой управляет эта роль."
+
+msgid "filer folder"
+msgstr "filer папка"
+
+msgid "Filer folder that this role controls."
+msgstr "Filer папка, которой управляет эта роль."
+
+msgid "page role"
+msgstr "роль страницы"
+
+msgid "page roles"
+msgstr "роли страницы"
+
+msgid "{:s} | {:s}"
+msgstr "{:s} | {:s}"
+
+msgid "Course page"
+msgstr "Страница курса"
+
+msgid "Organization list"
+msgstr "Список организаций"
+
+msgid "Organization page"
+msgstr "Страница организации"
+
+msgid "Category list"
+msgstr "Список категорий"
+
+msgid "Category page"
+msgstr "Страница категории"
+
+msgid "Blog post list"
+msgstr "Список записей блога"
+
+msgid "Blog post page"
+msgstr "Страница записи блога"
+
+msgid "Person page"
+msgstr "Страница человека"
+
+msgid "Person list"
+msgstr "Список людей"
+
+msgid "Program page"
+msgstr "Страница программы"
+
+msgid "Program list"
+msgstr "Список программ"
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "List of child pages"
+msgstr "Список дочерних страниц"
+
+msgid "Homepage"
+msgstr "Домашняя страница"
+
+msgid "Single column"
+msgstr "Одна колонка"
+
+msgid "Three columns: (33% | 33% | 33%)"
+msgstr "Три колонки: (33% | 33% | 33%)"
+
+msgid "Two columns: (50% | 50%)"
+msgstr "Две колонки: (50% | 50%)"
+
+msgid "Two columns: (25% | 75%)"
+msgstr "Две колонки: (25% | 75%)"
+
+msgid "Two columns: (75% | 25%)"
+msgstr "Две колонки: (75% | 25%)"
+
+msgid "Footer"
+msgstr "Подвал"
+
+msgid "Static headline"
+msgstr "Статический заголовок"
+
+msgid "Main content"
+msgstr "Основной контент"
+
+msgid "Secondary content"
+msgstr "Дополнительное содержимое"
+
+msgid "Third content"
+msgstr "Третье содержимое"
+
+msgid "Cover"
+msgstr "Обложка"
+
+msgid "Catch phrase"
+msgstr "Меткая фраза"
+
+msgid "About the course"
+msgstr "О курсе"
+
+msgid "What you will learn"
+msgstr "Чему вы научитесь"
+
+msgid "Format"
+msgstr "Формат"
+
+msgid "Prerequisites"
+msgstr "Предварительные условия"
+
+msgid "Team"
+msgstr "Команда"
+
+msgid "Plan"
+msgstr "План"
+
+msgid "Complementary information"
+msgstr "Дополнительная информация"
+
+msgid "License for the course content"
+msgstr "Лицензия на содержимое курса"
+
+msgid "License for the content created by course participants"
+msgstr "Лицензия на контент, созданный участниками курса"
+
+msgid "Categories"
+msgstr "Категории"
+
+msgid "Icon"
+msgstr "Иконка"
+
+msgid "Organizations"
+msgstr "Организации"
+
+msgid "Assessment and Certification"
+msgstr "Оценка и сертификация"
+
+msgid "Banner"
+msgstr "Баннер"
+
+msgid "Logo"
+msgstr "Лого"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Excerpt"
+msgstr "Выдержка"
+
+msgid "Portrait"
+msgstr "Портрет"
+
+msgid "Bio"
+msgstr "О себе"
+
+msgid "Main Content"
+msgstr "Основной Контент"
+
+msgid "Author"
+msgstr "Автор"
+
+msgid "Body"
+msgstr "Тело"
+
+msgid "Headline"
+msgstr "Заголовок"
+
+msgid "Courses"
+msgstr "Курсы"
+
+msgid "Button caesura"
+msgstr "Кнопка цезура"
+
+msgid "Full width"
+msgstr "Во всю ширину"
+
+msgid "No categories yet."
+msgstr "Еще нет категорий."
+
+msgid "Not published yet"
+msgstr "Ещё не опубликовано"
+
+msgid "No author yet"
+msgstr "Пока нет автора"
+
+msgid "No excerpt content"
+msgstr "Контент без выдержки"
+
+msgid "No body content"
+msgstr "Контент без тела"
+
+msgid "Related posts"
+msgstr "Похожие записи"
+
+msgid "Other categories of articles"
+msgstr "Другие категории статей"
+
+msgid "No associated blogposts"
+msgstr "Нет связанных блогов"
+
+#, python-format
+msgid "%(category_title)s - Category"
+msgstr "%(category_title)s - Категория"
+
+msgid "Sub categories"
+msgstr "Подкатегории"
+
+msgid "Related courses"
+msgstr "Связанные курсы"
+
+msgid "Courses pagination"
+msgstr "Пагинация курсов"
+
+msgid "See all courses"
+msgstr "Посмотреть все курсы"
+
+msgid "Related organizations"
+msgstr "Связанные организации"
+
+msgid "Related organizations pagination"
+msgstr "Пагинация связанных курсов"
+
+msgid "Related blogposts"
+msgstr "Похожие блоги"
+
+msgid "Related blogposts pagination"
+msgstr "Пагинация связанных блогов"
+
+msgid "Related persons"
+msgstr "Связанные люди"
+
+msgid "Related persons pagination"
+msgstr "Пагинация связанных персон"
+
+msgid "No categories"
+msgstr "Нет категорий"
+
+#, python-format
+msgid "%(course_title)s - Course"
+msgstr "%(course_title)s - Курс"
+
+msgid "Ref. "
+msgstr "Ссылка. "
+
+msgid "No associated categories"
+msgstr "Нет связанных категорий"
+
+msgid "Duration:"
+msgstr "Длительность:"
+
+msgid "Effort:"
+msgstr "Усилие:"
+
+msgid "Pace:"
+msgstr "Темп:"
+
+msgid ""
+"Add a teaser video or add a cover image below and it will be used as "
+"teaser image as well."
+msgstr ""
+"Добавьте видео тизер или добавьте обложку ниже и оно также будет "
+"использоваться в качестве тизерного изображения."
+
+msgid "course cover image"
+msgstr "обложка курса"
+
+#, python-format
+msgid ""
+"\n"
+"                        Archived on %(creation_date)s\n"
+"                    "
+msgstr ""
+"\n"
+"                        Архивировано %(creation_date)s\n"
+"                    "
+
+msgid "Go to current version"
+msgstr "Перейти к текущей версии"
+
+msgid "Glimpse cover"
+msgstr "Glimpse обложка"
+
+msgid "Add an image for course cover on its glimpse."
+msgstr "Добавить изображение для обложки курса на его glimpse."
+
+msgctxt "course_detail__title"
+msgid "What you will learn"
+msgstr "Чему вы научитесь"
+
+msgid "At the end of this course, you will be able to:"
+msgstr "По окончании этого курса вы сможете:"
+
+msgctxt "course_detail__title"
+msgid "Description"
+msgstr "Описание"
+
+msgctxt "course_detail__title"
+msgid "Format"
+msgstr "Формат"
+
+msgid "How is the course structured?"
+msgstr "Как структурирован курс?"
+
+msgctxt "course_detail__title"
+msgid "Prerequisites"
+msgstr "Предварительные условия"
+
+msgid "What are the prerequisites to follow this course?"
+msgstr "Каковы предварительные условия для прохождения этого курса?"
+
+msgctxt "course_detail__title"
+msgid "Assessment and certification"
+msgstr "Оценка и сертификация"
+
+msgid "How is progress evaluated and/or certified?"
+msgstr "Как оценивается и/или сертифицируется прогресс?"
+
+msgctxt "course_detail__title"
+msgid "Course plan"
+msgstr "План курса"
+
+msgid "Enter here the detailed course plan."
+msgstr "Введите подробный план курса."
+
+msgctxt "course_detail__title"
+msgid "Course team"
+msgstr "Команда курса"
+
+msgid "Who are the teachers in the course team?"
+msgstr "Кто является преподавателями в команде курсов?"
+
+msgctxt "course_detail__title"
+msgid "Organizations"
+msgstr "Организации"
+
+msgid "What are the organizations publishing this course?"
+msgstr "Какие организации публикуют этот курс?"
+
+msgctxt "course_detail__title"
+msgid "License"
+msgstr "Лицензия"
+
+msgid "What is the license for the course content?"
+msgstr "Какова лицензия на содержимое курса?"
+
+msgid "What is the license for the content created by course participants?"
+msgstr "Какова лицензия на контент, созданный участниками курса?"
+
+msgid "Course code"
+msgstr "Код курса"
+
+msgid "Course date"
+msgstr "Дата курса"
+
+msgid "Course team"
+msgstr "Команда курса"
+
+msgid "License"
+msgstr "Лицензия"
+
+#, python-format
+msgid ""
+"\n"
+"        A %(model)s object is missing on this %(model)s page. Please "
+"select another page template.\n"
+"        <br />\n"
+"        If what you need is a %(model)s page, you need to create it via "
+"the wizard and choose \"New %(model)s page\".\n"
+"        "
+msgstr ""
+"\n"
+"        На этой странице %(model)s отсутствует объект %(model)s. "
+"Пожалуйста, выберите другой шаблон страницы.\n"
+"        <br />\n"
+"        Если вам нужна страница %(model)s, вы должны создать его через "
+"мастер и выбрать \"Новая %(model)s страница\".\n"
+"        "
+
+msgid "Main organization"
+msgstr "Основная организация"
+
+msgid "Related courses pagination"
+msgstr "Пагинация связанных курсов"
+
+msgid "No organization yet"
+msgstr "Организаций пока нет"
+
+msgid "Enter your bio here..."
+msgstr "Введите вашу биографию..."
+
+#, python-format
+msgid "%(title)s avatar"
+msgstr "Аватар %(title)s"
+
+msgid "No associated organizations"
+msgstr "Нет связанных организаций"
+
+msgid "Blogposts"
+msgstr "Записи в блогах"
+
+msgid "Blogposts pagination"
+msgstr "Пагинация блогов"
+
+msgid "No persons"
+msgstr "Нет людей"
+
+#, python-format
+msgid "%(program_title)s - Program"
+msgstr "%(program_title)s - Программа"
+
+msgid "program cover image"
+msgstr "обложка программы"
+
+msgid "No associated programs"
+msgstr "Нет связанных программ"
+
+#, python-brace-format
+msgid "Run {i:d}"
+msgstr "Запустить {i:d}"
+
+msgid "Regenerate search index..."
+msgstr "Пересоздать индекс поиска..."
+
+msgid "New courses"
+msgstr "Новые курсы"
+
+msgid "First session"
+msgstr "Первая сессия"
+
+msgid "Availability"
+msgstr "Доступность"
+
+msgid "Languages"
+msgstr "Языки"
+
+msgid "Subjects"
+msgstr "Темы"
+
+msgid "Levels"
+msgstr "Уровни"
+
+msgid "Persons"
+msgstr "Люди"
+
+msgid "Licences"
+msgstr "Лицензии"
+
+msgid "Weekly pace"
+msgstr "Недельный темп"
+
+msgid "Self-paced"
+msgstr "В своём темпе"
+
+msgid "Less than one hour"
+msgstr "Меньше одного часа"
+
+msgid "One to two hours"
+msgstr "От одного до двух часов"
+
+msgid "More than two hours"
+msgstr "Более двух часов"
+
+msgid "Open for enrollment"
+msgstr "Открыть для зачисления"
+
+msgid "Coming soon"
+msgstr "Скоро появится"
+
+msgid "On-going"
+msgstr "В настоящее Время"
+
+msgid "Archived"
+msgstr "Архивировано"
+
+msgid "Sort by configuration"
+msgstr "Сортировать по конфигурации"
+
+msgid "Sort by facet count"
+msgstr "Сортировать по количеству аспектов"
+
+msgid "Sort alphabetically"
+msgstr "Сортировать по алфавиту"
+
+msgid "You are not allowed to manage the search index."
+msgstr "Вы не можете управлять поисковым индексом."
+
+msgid "The search index was successfully bootstrapped"
+msgstr "Поисковый индекс успешно загружен"
+
+msgid "Glimpse"
+msgstr "Glimpse"
+
+msgid "Link settings"
+msgstr "Настройки ссылок"
+
+msgid "Square card"
+msgstr "Квадратная карточка"
+
+msgid "Quote"
+msgstr "Цитата"
+
+msgid "Half row"
+msgstr "Половина строки"
+
+msgid "Full row"
+msgstr "Полная строка"
+
+msgid "Variant"
+msgstr "Вариант"
+
+msgid "Form factor variant"
+msgstr "Вариант коэффициента формы"
+
+msgid "image"
+msgstr "изображение"
+
+msgid "Content"
+msgstr "Контент"
+
+msgid "External URL"
+msgstr "Внешний URL"
+
+msgid "Make the glimpse as a link with an external URL."
+msgstr "Сделать glimpse как ссылку с внешним URL."
+
+msgid "Internal URL"
+msgstr "Внутренний URL"
+
+msgid "Make the glimpse as a link with an internal (page) URL."
+msgstr "Сделать glimpse как ссылку с внутренним (страничкой) URL."
+
+msgid "HTML Sitemap"
+msgstr "HTML карта сайта"
+
+msgid ""
+"Press save to create a site map. You will then be able to add a child "
+"plugin for each subtree in your sitemap."
+msgstr ""
+"Нажмите кнопку «Сохранить», чтобы создать карту сайта. Затем вы сможете "
+"добавить дочерний плагин для каждого поддерева на карте сайта."
+
+msgid "HTML sitemap page"
+msgstr "Страница HTML карты сайта"
+
+msgid "root page"
+msgstr "корневая страница"
+
+msgid ""
+"This page will be at the root of your sitemap (or its children if the "
+"\"include root page\" flag is unticked)."
+msgstr ""
+"Эта страница будет в корне вашей карты сайта (или её дочерних частей, "
+"если флаг \"включая корневую страницу\" не отмечен)."
+
+msgid "max depth"
+msgstr "максимальная глубина"
+
+msgid ""
+"Limit the level of nesting that your sitemap will contain below this "
+"page. An empty field or 0 equals to no limit."
+msgstr ""
+"Ограничить уровень вложения, который ваша карта сайта будет содержать "
+"ниже этой страницы. Пустое поле или 0 означает без ограничений."
+
+msgid "in navigation"
+msgstr "в навигации"
+
+msgid ""
+"Tick to exclude from sitemap the pages that are excluded from navigation."
+msgstr ""
+"Отметьте, чтобы исключить из карты сайта страницы, исключенные из "
+"навигации."
+
+msgid "include root page"
+msgstr "включая корневую страницу"
+
+msgid ""
+"Tick to include the root page and its descendants. Untick to include only "
+"its descendants."
+msgstr ""
+"Отметьте, чтобы включить корневую страницу и ее потомков. Удалите отметку "
+"для включения только его потомков."
+
+msgid "HTML Sitemaps"
+msgstr "HTML карты сайта"
+
+msgid "Sitemap"
+msgstr "Карта сайта"
+
+msgid "Large Banner"
+msgstr "Большой Баннер"
+
+msgid "Medias"
+msgstr "СМИ"
+
+msgid "Hero introduction"
+msgstr "Hero введение"
+
+msgid "background image"
+msgstr "фоновое изображение"
+
+msgid "Template"
+msgstr "Шаблон"
+
+msgid "Choose template to render plugin."
+msgstr "Выберите шаблон для плагина рендеринга."
+
+msgid "Explore our catalog"
+msgstr "Ознакомьтесь с нашим каталогом"
+
+msgid "Search in our courses"
+msgstr "Поиск в наших курсах"
+
+msgid "Advanced settings"
+msgstr "Расширенные настройки"
+
+msgid "LTI consumer"
+msgstr "LTI потребитель"
+
+msgid "Custom provider configuration"
+msgstr "Пользовательская конфигурация провайдера"
+
+msgid "shared secret"
+msgstr "общий секрет"
+
+msgid ""
+"The url is not valid for this provider. It should be of the form \"{:s}\"."
+msgstr ""
+"URL не действителен для этого провайдера. Он должен быть в форме \"{:s}\"."
+
+msgid ""
+"The url is not valid for this provider. It should start with \"{:s}\"."
+msgstr ""
+"URL не действителен для этого провайдера. Он должен начинаться с \"{:s}\"."
+
+msgid "Please choose a predefined provider, or fill fields below"
+msgstr "Пожалуйста, выберите провайдера или заполните поля ниже"
+
+msgid "Please choose a predefined provider above, or fill this field"
+msgstr ""
+"Пожалуйста, выберите выбранного провайдера выше или заполните это поле"
+
+msgid "Please fill this field"
+msgstr "Пожалуйста, заполните это поле"
+
+msgid "LTI url"
+msgstr "LTI url"
+
+msgid ""
+"For a predefined provider, leave this field empty for uploading new "
+"content."
+msgstr ""
+"Для предопределенного поставщика оставьте это поле пустым для загрузки "
+"нового содержимого."
+
+msgid "Predefined LTI provider"
+msgstr "Предопределенный провайдер LTI"
+
+msgid "Please choose a predefined provider or fill fields below."
+msgstr "Пожалуйста, выберите провайдера или заполните поля ниже."
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "Nested item"
+msgstr "Вложенный элемент"
+
+msgid "List"
+msgstr "Список"
+
+msgid "Plain text"
+msgstr "Простой текст"
+
+msgid "plain text"
+msgstr "простой текст"
+
+msgid "Section"
+msgstr "Раздел"
+
+msgid "Primary scheme"
+msgstr "Основная схема"
+
+msgid "Secondary scheme"
+msgstr "Вторичная схема"
+
+msgid "Tertiary scheme"
+msgstr "Третичная схема"
+
+msgid "Quaternary scheme"
+msgstr "Четвертичная схема"
+
+msgid "Quinary scheme"
+msgstr "Пятеричная схема"
+
+msgid "Senary scheme"
+msgstr "Шестеричная схема"
+
+msgid "Septenary scheme"
+msgstr "Семеричная схема"
+
+msgid "Item tiles"
+msgstr "Плитки элементов"
+
+msgid "Optional template for custom look."
+msgstr "Дополнительный шаблон для пользовательского вида."
+
+msgid "Attributes"
+msgstr "Атрибуты"
+
+msgid "Image"
+msgstr "Изображение"
+
+msgid "Simple text"
+msgstr "Обычный текст"
+
+msgid "body"
+msgstr "тело"
+
+#, python-format
+msgid ""
+"Ensure this text has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this text has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+"Убедитесь, что текст содержит не более %(limit_value)d символа (сейчас "
+"%(show_value)d)."
+msgstr[1] ""
+"Убедитесь, что текст содержит не более %(limit_value)d символов (сейчас "
+"%(show_value)d)."
+msgstr[2] ""
+"Убедитесь, что текст содержит не более %(limit_value)d символов (сейчас "
+"%(show_value)d)."
+msgstr[3] ""
+"Убедитесь, что текст содержит не более %(limit_value)d символов (сейчас "
+"%(show_value)d)."

@@ -1,0 +1,66 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: richie\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-31 17:41+0100\n"
+"PO-Revision-Date: 2024-11-20 14:09\n"
+"Last-Translator: \n"
+"Language-Team: Vietnamese\n"
+"Language: vi_VN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: richie\n"
+"X-Crowdin-Project-ID: 308578\n"
+"X-Crowdin-Language: vi\n"
+"X-Crowdin-File: backend.pot\n"
+"X-Crowdin-File-ID: 32\n"
+
+#: newsite/settings.py:250 newsite/settings.py:260
+msgid "Dashboard"
+msgstr ""
+
+#: newsite/settings.py:251
+msgid "{base_url:s}/dashboard/"
+msgstr ""
+
+#: newsite/settings.py:261
+msgid "/dashboard/"
+msgstr ""
+
+#: newsite/settings.py:264
+msgid "Teacher dashboard"
+msgstr ""
+
+#: newsite/settings.py:265
+msgid "/dashboard/teacher"
+msgstr ""
+
+#: newsite/settings.py:287
+msgid "Profile"
+msgstr ""
+
+#: newsite/settings.py:288
+msgid "{base_url:s}/u/(username)"
+msgstr ""
+
+#: newsite/settings.py:291
+msgid "Account"
+msgstr ""
+
+#: newsite/settings.py:292
+msgid "{base_url:s}/account/settings"
+msgstr ""
+
+#: newsite/settings.py:385
+msgid "Teaser"
+msgstr ""
+
+#: newsite/settings.py:476 newsite/settings.py:483
+msgid "English"
+msgstr ""
+
+#: newsite/settings.py:476 newsite/settings.py:483
+msgid "French"
+msgstr ""

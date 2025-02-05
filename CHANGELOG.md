@@ -94,6 +94,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
     the database and the languages that the activating site
     will support. It also reflects in changes in the docker
     compose file in order to run the site with the selected database.
+- Improved create demo site script to multilingual generation.
+
+### Fixed
+
+- Fix frontend translation of Enroll now for external LMS backend
 
 ### Changed
 
