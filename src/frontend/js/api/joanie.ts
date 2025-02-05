@@ -83,6 +83,7 @@ export const getRoutes = () => {
         update: `${baseUrl}/credit-cards/:id/`,
         delete: `${baseUrl}/credit-cards/:id/`,
         tokenize: `${baseUrl}/credit-cards/tokenize-card/`,
+        promote: `${baseUrl}/credit-cards/:id/promote/`,
       },
       addresses: {
         get: `${baseUrl}/addresses/:id/`,
@@ -242,6 +243,10 @@ const API = (): Joanie.API => {
           }).then(checkStatus),
         tokenize: async () =>
           fetchWithJWT(ROUTES.user.creditCards.tokenize, { method: 'POST' }).then(checkStatus),
+        promote: async (id) =>
+          fetchWithJWT(ROUTES.user.creditCards.promote.replace(':id', id), {
+            method: 'PATCH',
+          }).then(checkStatus),
       },
       addresses: {
         get: (id?: string) => {

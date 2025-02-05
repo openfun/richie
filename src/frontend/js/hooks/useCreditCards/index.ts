@@ -37,6 +37,11 @@ const messages = defineMessages({
     description: 'Error message shown to the user when no credit cards matches.',
     defaultMessage: 'Cannot find the credit card',
   },
+  errorPromote: {
+    id: 'hooks.useCreditCards.errorPromote',
+    description: 'Error message shown to the user when promoting a credit card fails.',
+    defaultMessage: 'Cannot set the credit card as default',
+  },
 });
 
 const useCreditCardResources =
@@ -55,17 +60,31 @@ const useCreditCardResources =
       },
       onError: () => custom.methods.setError(intl.formatMessage(messages.errorTokenize)),
     });
+    const promoteHandler = mutation({
+      mutationFn: api.promote,
+      onSuccess: async () => {
+        custom.methods.setError(undefined);
+        custom.methods.invalidate();
+        props.onMutationSuccess?.(queryClient);
+      },
+      onError: () => custom.methods.setError(intl.formatMessage(messages.errorPromote)),
+    });
 
     return {
       ...custom,
       methods: {
         ...custom.methods,
         tokenize: tokenizeHandler.mutateAsync,
+        promote: promoteHandler.mutateAsync,
       },
       states: {
         ...custom.states,
-        isPending: [tokenizeHandler, custom.states].some((value) => value?.isPending),
+        isPending: [tokenizeHandler, promoteHandler, custom.states].some(
+          (value) => value?.isPending,
+        ),
+        updating: custom.states.updating || promoteHandler.isPending,
         tokenizing: tokenizeHandler.isPending,
+        promoting: promoteHandler.isPending,
       },
     };
   };

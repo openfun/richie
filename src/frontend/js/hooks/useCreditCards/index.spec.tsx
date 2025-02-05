@@ -175,4 +175,64 @@ describe('useCreditCards', () => {
     expect(result.current.states.isPending).toBe(false);
     expect(result.current.states.tokenizing).toBe(false);
   });
+
+  it('promotes a credit card', async () => {
+    const responseDeferred = new Deferred();
+    fetchMock.patch(
+      'https://joanie.endpoint/api/v1.0/credit-cards/1/promote/',
+      responseDeferred.promise,
+    );
+    const { result } = renderHook(() => useCreditCards(undefined, { enabled: false }), {
+      wrapper: Wrapper,
+    });
+
+    await waitFor(() => {
+      expect(result.current).not.toBeNull();
+    });
+
+    await act(async () => {
+      result.current.methods.promote('1');
+    });
+
+    await waitFor(() => {
+      expect(result.current.states.updating).toBe(true);
+    });
+
+    expect(result.current.states.deleting).toBe(false);
+    expect(result.current.states.tokenizing).toBe(false);
+    expect(result.current.states.fetching).toBe(false);
+    expect(result.current.states.isFetched).toBe(true);
+    expect(result.current.states.isPending).toBe(true);
+    expect(result.current.states.error).toBe(undefined);
+
+    await act(async () => {
+      responseDeferred.resolve({});
+    });
+
+    expect(result.current.states.updating).toBe(false);
+    expect(result.current.states.isPending).toBe(false);
+    expect(result.current.states.error).toBe(undefined);
+  });
+
+  it('manages error during credit card promotion', async () => {
+    fetchMock.patch(
+      'https://joanie.endpoint/api/v1.0/credit-cards/1/promote/',
+      HttpStatusCode.INTERNAL_SERVER_ERROR,
+    );
+    const { result } = renderHook(() => useCreditCards(undefined, { enabled: true }), {
+      wrapper: Wrapper,
+    });
+
+    await waitFor(() => {
+      expect(result.current).not.toBeNull();
+    });
+
+    await act(async () => {
+      await expect(result.current.methods.promote('1')).rejects.toThrow('Internal Server Error');
+    });
+
+    expect(result.current.states.error).toBe('Cannot set the credit card as default');
+    expect(result.current.states.isPending).toBe(false);
+    expect(result.current.states.updating).toBe(false);
+  });
 });

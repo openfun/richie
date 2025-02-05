@@ -591,6 +591,7 @@ interface APIUser {
     get(): Promise<CreditCard[]>;
     update(payload: CreditCard): Promise<CreditCard>;
     tokenize(): Promise<Payment>;
+    promote(id: CreditCard['id']): Promise<void>;
   };
   orders: {
     cancel(id: Order['id']): Promise<void>;
