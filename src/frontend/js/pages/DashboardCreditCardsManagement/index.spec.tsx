@@ -251,8 +251,9 @@ describe('<DashboardCreditCardsManagement/>', () => {
     expect(queryByText(creditCardContainer, 'Default credit card')).toBeNull();
 
     // Mock the update url and the refresh URL to return the first credit card as main.
-    const updateUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
-    fetchMock.put(updateUrl, []);
+    const promoteUrl =
+      'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/promote/';
+    fetchMock.patch(promoteUrl, {});
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/credit-cards/',
       [{ ...creditCard, is_main: true }, ...creditCards.splice(1)],
@@ -260,11 +261,11 @@ describe('<DashboardCreditCardsManagement/>', () => {
     );
 
     // Clicking on the promote button calls the update API route.
-    expect(fetchMock.called(updateUrl)).toBe(false);
+    expect(fetchMock.called(promoteUrl)).toBe(false);
     await act(async () => {
       fireEvent.click(promoteButton);
     });
-    expect(fetchMock.called(updateUrl)).toBe(true);
+    expect(fetchMock.called(promoteUrl)).toBe(true);
 
     // Assert that "Default credit card" is displayed on the credit card's box.
     creditCardContainer = screen.getByTestId('dashboard-credit-card__' + creditCard.id);

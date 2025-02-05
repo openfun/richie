@@ -33,7 +33,7 @@ export const DashboardCreditCardsManagement = ({ onClickEdit }: Props) => {
   const intl = useIntl();
   const {
     states: { error, isPending },
-    methods: { setError, update, safeDelete },
+    methods: { promote, safeDelete },
     ...creditCards
   } = useCreditCardsManagement();
 
@@ -54,17 +54,6 @@ export const DashboardCreditCardsManagement = ({ onClickEdit }: Props) => {
     return creditCards.items.sort(sortByMainFirstThenByTitle);
   }, [creditCards.items]);
 
-  const promote = (creditCard: CreditCard) => {
-    if (creditCard.is_main) {
-      setError(intl.formatMessage(messages.errorCannotPromoteMain));
-      return;
-    }
-    update({
-      ...creditCard,
-      is_main: true,
-    });
-  };
-
   return (
     <DashboardCard header={<FormattedMessage {...messages.header} />}>
       <div className="dashboard-credit-cards">
@@ -82,7 +71,7 @@ export const DashboardCreditCardsManagement = ({ onClickEdit }: Props) => {
                 creditCard={creditCard}
                 key={creditCard.id}
                 edit={(_creditCard) => onClickEdit?.(_creditCard)}
-                promote={promote}
+                promote={({ id }) => promote(id)}
                 remove={safeDelete}
               />
             ))}
