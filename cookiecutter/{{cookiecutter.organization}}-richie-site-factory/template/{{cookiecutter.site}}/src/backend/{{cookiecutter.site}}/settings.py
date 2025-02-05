@@ -491,14 +491,23 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     # fallback/default languages throughout the app.
     # Use "en" as default as it is the language that is most likely to be spoken by any visitor
     # when their preferred language, whatever it is, is unavailable
-    LANGUAGES = os.getenv("LANGUAGES") or [("en", _("English")), ("fr", _("French"))]
+    LANGUAGES = os.getenv("LANGUAGES") or [
+        ("en", _("English")),
+        ("{{cookiecutter.second_lang_code}}", _("{{cookiecutter.second_lang_name}}")),
+    ]
 
     if isinstance(LANGUAGES, str):
         try:
             LANGUAGES = ast.literal_eval(LANGUAGES)
             LANGUAGES = [(code, _(name)) for code, name in LANGUAGES]
         except:
-            LANGUAGES = [("en", _("English")), ("fr", _("French"))]
+            LANGUAGES = [
+                ("en", _("English")),
+                (
+                    "{{cookiecutter.second_lang_code}}",
+                    _("{{cookiecutter.second_lang_name}}"),
+                ),
+            ]
 
     # - Django CMS
     CMS_LANGUAGES = {
