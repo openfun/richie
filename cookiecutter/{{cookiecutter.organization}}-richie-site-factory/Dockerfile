@@ -1,5 +1,5 @@
-ARG NGINX_IMAGE_NAME=fundocker/openshift-nginx
-ARG NGINX_IMAGE_TAG=1.13
+ARG NGINX_IMAGE_NAME={{cookiecutter.nginx_image_name}}
+ARG NGINX_IMAGE_TAG={{cookiecutter.nginx_image_tag}}
 ARG STATIC_ROOT=/data/static
 ARG SITE
 
