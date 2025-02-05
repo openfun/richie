@@ -191,7 +191,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('deletes a credit card', async () => {
-    const creditCards = CreditCardFactory().many(5);
+    const creditCards = CreditCardFactory().many(2);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
     render(<DashboardPreferences />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
@@ -211,6 +211,46 @@ describe('<DashboardCreditCardsManagement/>', () => {
     const deleteUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
     fetchMock.delete(deleteUrl, []);
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards.splice(1), {
+      overwriteRoutes: true,
+    });
+
+    // Clicking on the delete button calls delete API route.
+    expect(fetchMock.called(deleteUrl)).toBe(false);
+    // Clicking on the delete button calls window.confirm function.
+    expect(confirm).not.toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.click(deleteButton);
+    });
+    expect(fetchMock.called(deleteUrl)).toBe(true);
+    expect(confirm).toHaveBeenCalled();
+
+    // No error is shown.
+    expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
+
+    // The address does not appear anymore in the list.
+    expect(screen.queryByText(creditCard.title!)).toBeNull();
+  });
+
+  it('deletes a main credit card', async () => {
+    const creditCard = CreditCardFactory({ is_main: true }).one();
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
+    render(<DashboardPreferences />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+    // No error is shown.
+    expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
+
+    // Find the delete button of the credit card.
+    await screen.findByText(creditCard.title!);
+    const creditCardContainer = screen.getByTestId('dashboard-credit-card__' + creditCard.id);
+    const deleteButton = getByRole(creditCardContainer, 'button', {
+      name: 'Delete',
+    });
+
+    // Mock delete route and the refresh route to returns `creditCards` without the first one.
+    const deleteUrl = 'https://joanie.endpoint/api/v1.0/credit-cards/' + creditCard.id + '/';
+    fetchMock.delete(deleteUrl, []);
+    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [], {
       overwriteRoutes: true,
     });
 
@@ -297,26 +337,6 @@ describe('<DashboardCreditCardsManagement/>', () => {
       .forEach((creditCardContainer) =>
         expect(queryByText(creditCardContainer, 'Default credit card')).toBeNull(),
       );
-  });
-
-  it('cannot delete a main credit card', async () => {
-    const creditCards = CreditCardFactory().many(5);
-    const mainCreditCard = creditCards[3];
-    mainCreditCard.is_main = true;
-    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', creditCards);
-    render(<DashboardPreferences />, {
-      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
-    });
-
-    // The delete button is not displayed.
-    const creditCardContainer = await screen.findByTestId(
-      'dashboard-credit-card__' + mainCreditCard.id,
-    );
-    expect(
-      queryByRole(creditCardContainer, 'button', {
-        name: 'Delete',
-      }),
-    ).toBeNull();
   });
 
   it('cannot promote a main credit card', async () => {

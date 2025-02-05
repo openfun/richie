@@ -13,11 +13,6 @@ const messages = defineMessages({
     description: 'Title of the dashboard credit cards management block',
     defaultMessage: 'Credit cards',
   },
-  errorCannotPromoteMain: {
-    id: 'components.DashboardCreditCardsManagement.errorCannotPromoteMain',
-    description: 'Error shown if a user tries to promote a main credit card',
-    defaultMessage: 'Cannot promote main credit card.',
-  },
   emptyList: {
     id: 'components.DashboardCreditCardsManagement.emptyList',
     description: 'Empty placeholder of the dashboard credit cards management block',
