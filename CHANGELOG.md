@@ -90,6 +90,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   that is still in use
 - Added org_dockerhub, nginx_image_name, nginx_image_tag
     and elasticsearch_image_name parameters to cookiecutter
+- Added in the activate script the possibility to select 
+    the database and the languages that the activating site
+    will support. It also reflects in changes in the docker
+    compose file in order to run the site with the selected database.
 
 ### Changed
 

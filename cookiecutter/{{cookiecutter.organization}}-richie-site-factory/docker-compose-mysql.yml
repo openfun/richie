@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_DATABASE=richie_${RICHIE_SITE:?}
+    command: --default-authentication-plugin=caching_sha2_password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 1s
+      timeout: 2s
+      retries: 300
+    volumes:
+      - ./data/db/${RICHIE_SITE:?}:/var/lib/mysql
