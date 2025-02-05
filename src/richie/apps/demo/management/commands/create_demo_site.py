@@ -18,12 +18,11 @@ from cms.models import StaticPlaceholder
 from richie.apps.core.factories import create_text_plugin, image_getter
 from richie.apps.core.helpers import recursive_page_creation
 from richie.apps.courses import factories, models
+from richie.apps.demo import defaults
+from richie.apps.demo.helpers import create_categories
+from richie.apps.demo.utils import pick_image
 from richie.plugins.glimpse import defaults as glimpse_defaults
 from richie.plugins.glimpse.factories import GlimpseFactory
-
-from ... import defaults
-from ...helpers import create_categories
-from ...utils import pick_image
 
 logger = logging.getLogger("richie.commands.demo.create_demo_site")
 
@@ -72,6 +71,9 @@ def create_demo_site():
     )
     site.name = "Richie demonstration"
     site.save()
+
+    languages = getattr(settings, "LANGUAGES", ())
+    languages = [language_code for language_code, _ in languages]
 
     lms_endpoint = (
         getattr(settings, "RICHIE_LMS_BACKENDS", None)
@@ -179,12 +181,14 @@ def create_demo_site():
 
     # Create organizations under the `Organizations` page
     organizations = []
+
     for i in range(defaults.NB_OBJECTS["organizations"]):
         # Randomly assign each organization to a partnership level category
+
         organizations.append(
             factories.OrganizationFactory(
                 page_in_navigation=True,
-                page_languages=["en", "fr"],
+                page_languages=languages,
                 page_parent=pages_created["organizations"],
                 fill_banner=pick_image("banner"),
                 fill_categories=(
@@ -206,9 +210,10 @@ def create_demo_site():
             organizations,
             random.randint(1, defaults.NB_OBJECTS["person_organizations"]),  # nosec
         )
+
         person = factories.PersonFactory(
             page_in_navigation=True,
-            page_languages=["en", "fr"],
+            page_languages=languages,
             page_parent=pages_created["persons"],
             fill_categories=random.sample(
                 subjects,
@@ -255,10 +260,9 @@ def create_demo_site():
             if licences
             else []
         )
-
         course = factories.CourseFactory(
             page_in_navigation=True,
-            page_languages=["en", "fr"],
+            page_languages=languages,
             page_parent=pages_created["courses"],
             fill_licences=course_licences,
             fill_team=random.sample(
@@ -367,17 +371,12 @@ def create_demo_site():
 
         # Add a random number of course runs to the course
         nb_course_runs = get_number_of_course_runs()
-        # pick a subset of languages for this course (otherwise all courses will have more or
-        # less all the languages across their course runs!)
-        languages_subset = random.sample(
-            ["de", "en", "es", "fr", "it", "nl"], random.randint(1, 4)  # nosec
-        )
         # only half the courses have an enrollment count defined
         for i in range(nb_course_runs):
             course_run = factories.CourseRunFactory(
                 __sequence=i,
                 languages=random.sample(
-                    languages_subset, random.randint(1, len(languages_subset))  # nosec
+                    languages, random.randint(1, len(languages))  # nosec
                 ),
                 direct_course=course,
                 resource_link=f"{lms_endpoint}/courses/course-v1:edX+DemoX+Demo_Course/info",
@@ -400,7 +399,7 @@ def create_demo_site():
     for _i in range(defaults.NB_OBJECTS["blogposts"]):
         post = factories.BlogPostFactory.create(
             page_in_navigation=True,
-            page_languages=["en", "fr"],
+            page_languages=languages,
             page_parent=pages_created["blogposts"],
             fill_cover=pick_image("cover"),
             fill_excerpt=True,
@@ -416,10 +415,11 @@ def create_demo_site():
 
     # Create programs under the `Programs` page
     programs = []
+
     for _i in range(defaults.NB_OBJECTS["programs"]):
         program = factories.ProgramFactory.create(
             page_in_navigation=True,
-            page_languages=["en", "fr"],
+            page_languages=languages,
             page_parent=pages_created["programs"],
             fill_cover=pick_image("cover"),
             fill_excerpt=True,
