@@ -1,3 +1,9 @@
+# -- Load .env file
+ifneq (,$(wildcard .env))
+	include .env
+  	export $(shell sed 's/=.*//' .env)
+endif
+
 # -- Terminal colors
 COLOR_INFO    = \033[0;36m
 COLOR_RESET   = \033[0m
@@ -13,15 +19,13 @@ COMPOSE              = \
   NGINX_IMAGE_TAG="$(NGINX_IMAGE_TAG)" \
   DOCKER_USER="$(DOCKER_UID):$(DOCKER_GID)" \
   docker compose
+COMPOSE_UP_WAIT      = $(COMPOSE) up -d --wait --wait-timeout 60
 COMPOSE_RUN          = $(COMPOSE) run --rm
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app-dev
 COMPOSE_EXEC         = $(COMPOSE) exec
 COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app-dev
 COMPOSE_TEST_RUN     = $(COMPOSE) run --rm -e DJANGO_CONFIGURATION=Test
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app-dev
-WAIT_DB              = $(COMPOSE_RUN) dockerize -wait tcp://db:5432 -timeout 60s
-WAIT_ES              = $(COMPOSE_RUN) dockerize -wait tcp://elasticsearch:9200 -timeout 60s
-WAIT_SENTINEL        = $(COMPOSE_RUN) dockerize -wait tcp://redis-sentinel:26379 -wait tcp://redis-primary:6379 -timeout 20s
 
 # -- Node
 
@@ -44,7 +48,7 @@ bootstrap: \
   env.d/aws \
   env.d/development \
   data/media/$(RICHIE_SITE)/.keep \
-  data/db/$(RICHIE_SITE) \
+  data/${ACTIVATED_DB}/$(RICHIE_SITE) \
   stop \
   build-front \
   build \
@@ -84,7 +88,7 @@ build: .env ## build all containers
 reset: .env ## Remove database and local files
 	$(COMPOSE) stop
 	rm -Ir data/* || exit 0
-	$(COMPOSE) rm db
+	$(COMPOSE) rm ${ACTIVATED_DB}
 .PHONY: reset
 
 down: .env ## stop & remove containers
@@ -96,11 +100,9 @@ logs: .env ## display app logs (follow mode)
 .PHONY: logs
 
 run: .env ## start the wsgi (production) or development server
-	@$(COMPOSE) up -V -d redis-sentinel
-	@$(WAIT_SENTINEL)
-	@$(COMPOSE) up -d nginx
-	@$(COMPOSE) up -d app-dev
-	@$(WAIT_DB)
+	@$(COMPOSE_UP_WAIT) -V redis-sentinel
+	@$(COMPOSE_UP_WAIT) nginx
+	@$(COMPOSE_UP_WAIT) app-dev
 .PHONY: run
 
 stop: .env ## stop the development server
@@ -179,8 +181,7 @@ check: .env ## perform django checks
 .PHONY: check
 
 demo-site: .env ## create a demo site
-	@$(COMPOSE) up -d db
-	@$(WAIT_DB)
+	@$(COMPOSE_UP_WAIT) ${ACTIVATED_DB}
 	@$(MANAGE) flush
 	@$(MANAGE) create_demo_site
 	@${MAKE} search-index
@@ -255,20 +256,20 @@ i18n-front: .env ## Extract and compile translation files used for react-intl
 .PHONY: i18n-front
 
 migrate: .env ## perform database migrations
-	@$(COMPOSE) up -d db
-	@$(WAIT_DB)
+	@echo "Start and wait for ${ACTIVATED_DB} to be up..."
+	@$(COMPOSE_UP_WAIT) ${ACTIVATED_DB}
 	@$(MANAGE) migrate
 .PHONY: migrate
 
 search-index: .env ## (re)generate the Elasticsearch index
-	@$(COMPOSE) up -d elasticsearch
-	@$(WAIT_ES)
+	@echo "Start and wait for ${ACTIVATED_DB} & elasticsearch to be up..."
+	@$(COMPOSE_UP_WAIT) elasticsearch
 	@$(MANAGE) bootstrap_elasticsearch
 .PHONY: search-index
 
-superuser: .env ## create a DjangoCMS superuser
-	@$(COMPOSE) up -d db
-	@$(WAIT_DB)
+superuser: .env ## Create an admin user with password "admin"
+	@echo "Start and wait for ${ACTIVATED_DB} to be up..."
+	@$(COMPOSE_UP_WAIT) ${ACTIVATED_DB}
 	@$(MANAGE) createsuperuser
 .PHONY: superuser
 
@@ -278,8 +279,7 @@ ci-check: .env ## run django check management command on productin image
 .PHONY: ci-check
 
 ci-migrate: .env ## run django migrate command on production image
-	@$(COMPOSE) up -d db
-	@$(WAIT_DB)
+	@$(COMPOSE) up -d ${ACTIVATED_DB}
 	$(COMPOSE_RUN) app python manage.py migrate
 .PHONY: ci-migrate
 
@@ -306,9 +306,9 @@ data/media/$(RICHIE_SITE)/.keep: .env
 	@mkdir -p data/media/$(RICHIE_SITE)
 	@touch data/media/$(RICHIE_SITE)/.keep
 
-data/db/$(RICHIE_SITE): .env
-	@echo 'Preparing db volume...'
-	@mkdir -p data/db/$(RICHIE_SITE)
+data/${ACTIVATED_DB}/$(RICHIE_SITE): .env
+	@echo 'Preparing ${ACTIVATED_DB} volume...'
+	@mkdir -p data/${ACTIVATED_DB}/$(RICHIE_SITE)
 
 env.d/development:
 	cp env.d/development.dist env.d/development
