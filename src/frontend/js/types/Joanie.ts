@@ -265,6 +265,8 @@ export interface EnrollmentLight {
 export enum OrderState {
   ASSIGNED = 'assigned',
   CANCELED = 'canceled',
+  REFUNDING = 'refunding',
+  REFUNDED = 'refunded',
   COMPLETED = 'completed',
   DRAFT = 'draft',
   FAILED_PAYMENT = 'failed_payment',
@@ -293,6 +295,12 @@ export const ACTIVE_ORDER_STATES = [
 ];
 
 export const NOT_CANCELED_ORDER_STATES = [...ACTIVE_ORDER_STATES, ...PURCHASABLE_ORDER_STATES];
+
+export const CANCELED_ORDER_STATES = [
+  OrderState.CANCELED,
+  OrderState.REFUNDING,
+  OrderState.REFUNDED,
+];
 
 export const ENROLLABLE_ORDER_STATES = [
   OrderState.COMPLETED,

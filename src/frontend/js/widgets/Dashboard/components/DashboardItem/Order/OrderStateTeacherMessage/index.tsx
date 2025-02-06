@@ -67,6 +67,11 @@ export const messages = defineMessages<MessageKeys>({
       'Status shown on the dashboard order item when order is completed with certificate',
     defaultMessage: 'Certified',
   },
+  statusRefunded: {
+    id: 'components.DashboardItem.Order.OrderStateTeacherMessage.statusRefunded',
+    description: 'Status shown on the dashboard order item when order is refunded',
+    defaultMessage: 'Refunded',
+  },
 });
 
 const OrderStateTeacherMessage = (props: OrderStateMessageBaseProps) => {

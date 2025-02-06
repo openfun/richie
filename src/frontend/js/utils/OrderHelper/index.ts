@@ -11,6 +11,7 @@ import {
 export enum OrderStatus {
   ASSIGNED = 'assigned',
   CANCELED = 'canceled',
+  REFUNDED = 'refunded',
   COMPLETED = 'completed',
   DRAFT = 'draft',
   FAILED_PAYMENT = 'failed_payment',
@@ -38,6 +39,8 @@ export class OrderHelper {
     const orderStatusMap = {
       [OrderState.ASSIGNED]: OrderStatus.ASSIGNED,
       [OrderState.CANCELED]: OrderStatus.CANCELED,
+      [OrderState.REFUNDING]: OrderStatus.CANCELED,
+      [OrderState.REFUNDED]: OrderStatus.REFUNDED,
       [OrderState.COMPLETED]: OrderStatus.COMPLETED,
       [OrderState.DRAFT]: OrderStatus.DRAFT,
       [OrderState.FAILED_PAYMENT]: OrderStatus.FAILED_PAYMENT,
