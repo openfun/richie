@@ -22,9 +22,10 @@
   font-weight: var(--c--theme--font--weight--semibold);
   font-size: rem-calc(12px);
 
-  &--incoming {
-    background-color: var(--c--theme--colors--grey87);
-    color: var(--c--theme--colors--charcoal);
+  &--canceled,
+  &--refunded {
+    color: var(--c--theme--colors--white);
+    background-color: var(--c--theme--colors--grey59);
   }
 
   &--paid {
@@ -37,8 +38,8 @@
     color: var(--c--theme--colors--white);
   }
 
-  &--require_payment,
-  &--failed {
+  &--refused,
+  &--error {
     background-color: var(--c--theme--colors--firebrick6);
     color: var(--c--theme--colors--white);
   }

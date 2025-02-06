@@ -22,6 +22,12 @@ export const stateMessages = defineMessages({
     defaultMessage: 'Pending',
     description: 'Label displayed for pending payment state',
   },
+  [PaymentScheduleState.ERROR]: {
+    id: 'components.PaymentScheduleGrid.state.error',
+    defaultMessage: 'Pending',
+    description:
+      'Label displayed for error payment state. For learner we assume to display `pending`.',
+  },
   [PaymentScheduleState.PAID]: {
     id: 'components.PaymentScheduleGrid.state.paid',
     defaultMessage: 'Paid',
@@ -31,6 +37,16 @@ export const stateMessages = defineMessages({
     id: 'components.PaymentScheduleGrid.state.refused',
     defaultMessage: 'Refused',
     description: 'Label displayed for refused payment state',
+  },
+  [PaymentScheduleState.CANCELED]: {
+    id: 'components.PaymentScheduleGrid.state.canceled',
+    defaultMessage: 'Canceled',
+    description: 'Label displayed for canceled payment state',
+  },
+  [PaymentScheduleState.REFUNDED]: {
+    id: 'components.PaymentScheduleGrid.state.refunded',
+    defaultMessage: 'Refunded',
+    description: 'Label displayed for refunded payment state',
   },
 });
 
