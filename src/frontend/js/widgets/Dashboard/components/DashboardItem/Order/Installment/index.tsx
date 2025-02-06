@@ -61,6 +61,7 @@ type Props = {
 
 const Installment = ({ order }: Props) => {
   const isActive = OrderHelper.isActive(order);
+  const isCanceled = OrderHelper.isCanceled(order);
   const failedInstallment = PaymentScheduleHelper.getFailedInstallment(order.payment_schedule);
   const needsPaymentMethod = order.state === OrderState.TO_SAVE_PAYMENT_METHOD;
   const shouldDisplayDot = needsPaymentMethod || !!failedInstallment;
@@ -80,13 +81,13 @@ const Installment = ({ order }: Props) => {
           <FormattedMessage {...messages.paymentTitle} />
         </span>
       </div>
-      {!isActive && !needsPaymentMethod && (
+      {!isActive && !isCanceled && !needsPaymentMethod && (
         <p className="dashboard-splitted-card__item__description">
           <FormattedMessage {...messages.paymentInactiveDescription} />
         </p>
       )}
       <PaymentMethodManager order={order} />
-      {isActive && <InstallmentManager order={order} />}
+      {(isActive || isCanceled) && <InstallmentManager order={order} />}
     </div>
   );
 };
