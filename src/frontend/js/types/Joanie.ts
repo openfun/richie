@@ -448,8 +448,11 @@ export interface OrderPaymentInfo {
 }
 
 export enum PaymentScheduleState {
-  PENDING = 'pending',
+  CANCELED = 'canceled',
+  ERROR = 'error',
   PAID = 'paid',
+  PENDING = 'pending',
+  REFUNDED = 'refunded',
   REFUSED = 'refused',
 }
 
