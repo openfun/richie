@@ -1,5 +1,6 @@
 import {
   ACTIVE_ORDER_STATES,
+  CANCELED_ORDER_STATES,
   ENROLLABLE_ORDER_STATES,
   NestedCourseOrder,
   Order,
@@ -92,6 +93,11 @@ export class OrderHelper {
   static isActive(order?: Order | NestedCourseOrder | OrderEnrollment) {
     if (!order) return false;
     return ACTIVE_ORDER_STATES.includes(order.state);
+  }
+
+  static isCanceled(order?: Order | NestedCourseOrder | OrderEnrollment) {
+    if (!order) return false;
+    return CANCELED_ORDER_STATES.includes(order.state);
   }
 
   static isPurchasable(order?: Order | NestedCourseOrder | OrderEnrollment) {

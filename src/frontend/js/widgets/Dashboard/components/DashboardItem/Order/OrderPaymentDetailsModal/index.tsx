@@ -11,7 +11,7 @@ import {
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useState, useEffect } from 'react';
 import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
-import { CreditCard, Order } from 'types/Joanie';
+import { ACTIVE_ORDER_STATES, CreditCard, Order, OrderState } from 'types/Joanie';
 import { CreditCardSelector } from 'components/CreditCardSelector';
 import { OrderPaymentRetryModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderPaymentRetryModal';
 import { Maybe } from 'types/utils';
@@ -54,14 +54,21 @@ export const OrderPaymentDetailsModal = ({ order, ...props }: PaymentModalProps)
   const intl = useIntl();
   const retryModal = useModal();
   const failedInstallment = PaymentScheduleHelper.getFailedInstallment(order.payment_schedule);
+  const showPaymentMethod = ACTIVE_ORDER_STATES.filter<OrderState>(
+    (state) => state !== OrderState.COMPLETED,
+  ).includes(order.state);
 
   return (
     <>
       <Modal {...props} size={ModalSize.MEDIUM} title={intl.formatMessage(messages.title)}>
-        <h3 className="order-payment-details__title mb-s">
-          <FormattedMessage {...messages.paymentMethodTitle} />
-        </h3>
-        <CreditCardSelectorWrapper selectedCreditCardId={order.credit_card_id} />
+        {showPaymentMethod && (
+          <>
+            <h3 className="order-payment-details__title mb-s">
+              <FormattedMessage {...messages.paymentMethodTitle} />
+            </h3>
+            <CreditCardSelectorWrapper selectedCreditCardId={order.credit_card_id} />
+          </>
+        )}
         <h3 className="order-payment-details__title mb-s mt-b">
           <FormattedMessage {...messages.scheduleTitle} />
         </h3>
