@@ -228,7 +228,13 @@ describe('<ProductCertificateFooter/>', () => {
   // From https://github.com/openfun/richie/issues/2237
   it('should hide purchase button after payment', async () => {
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=${PER_PAGE.useOrdersEnrollments}`,
+      'https://joanie.endpoint/api/v1.0/orders/' +
+        '?product_type=credential' +
+        '&state_exclude=canceled' +
+        '&state_exclude=refunding' +
+        '&state_exclude=refunded' +
+        '&page=1' +
+        `&page_size=${PER_PAGE.useOrdersEnrollments}`,
       {
         results: [],
         next: null,

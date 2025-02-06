@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { Enrollment, CredentialOrder, OrderState, ProductType } from 'types/Joanie';
+import { Enrollment, CredentialOrder, ProductType, CANCELED_ORDER_STATES } from 'types/Joanie';
 import { Maybe, Nullable } from 'types/utils';
 import { useOrdersEnrollments } from 'pages/DashboardCourses/useOrdersEnrollments';
 
@@ -23,7 +23,7 @@ const useLearnerCoursesSearch = () => {
     query,
     orderFilters: {
       product_type: [ProductType.CREDENTIAL],
-      state_exclude: [OrderState.CANCELED],
+      state_exclude: CANCELED_ORDER_STATES,
     },
   });
 

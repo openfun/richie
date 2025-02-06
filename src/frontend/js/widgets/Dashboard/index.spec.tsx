@@ -49,7 +49,13 @@ describe('<Dashboard />', () => {
       { count: 0, results: [] },
     );
     fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/orders/?product_type=credential&state_exclude=canceled&page=1&page_size=50',
+      'https://joanie.endpoint/api/v1.0/orders/' +
+        '?product_type=credential' +
+        '&state_exclude=canceled' +
+        '&state_exclude=refunding' +
+        '&state_exclude=refunded' +
+        '&page=1' +
+        '&page_size=50',
       {
         count: 0,
         results: [],
