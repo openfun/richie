@@ -99,6 +99,7 @@
         </div>
     {% endif %}
     {% endwith %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"program_teaser" or not current_page|is_empty_placeholder:"program_cover" %}
         <div class="subheader__teaser">
             {% placeholder "program_teaser" or %}
                 {% get_placeholder_plugins "program_cover" as plugins or %}
@@ -120,13 +121,18 @@
             {% endblockplugin %}
             {% endplaceholder %}
         </div>
+        {% endif %}
     </div>
 
+    {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"program_organizations" %}
     <div class="program-detail__aside">
         {% placeholder "program_organizations" or %}
-            <p class="empty">{% trans "No organizations for this program" %}</p>
+            {% if current_page.publisher_is_draft %}
+                <p class="empty">{% trans "No organizations for this program" %}</p>
+            {% endif %}
         {% endplaceholder %}
     </div>
+    {% endif %}
 
     </div>
 </div>
@@ -224,7 +230,9 @@
         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"program_information" %}
         <div class="program-detail__block">
             <div class="program-detail__row program-detail__information">
-                {% placeholder "program_information" %}
+                {% placeholder "program_information" page or %}
+                    <p class="program-detail__empty">{% trans 'No complementary information for this program' %}</p>
+                {% endplaceholder %}
             </div>
         </div>
         {% endif %}
