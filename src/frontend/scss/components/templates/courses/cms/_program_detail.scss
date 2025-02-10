@@ -35,10 +35,12 @@
       max-width: 100%;
     }
 
-    @include m-o-media_empty($width: 100%,
+    @include m-o-media_empty(
+      $width: 100%,
       $height: 30vh,
       $background: r-theme-val(program-detail, cover-empty-background),
-      $absolute: false);
+      $absolute: false
+    );
   }
 
   &__excerpt {

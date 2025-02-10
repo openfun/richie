@@ -428,7 +428,9 @@ def create_demo_site():
                 *random.sample(subjects, defaults.NB_OBJECTS["programs_categories"])
             ],
             fill_organizations=[
-                *random.sample(organizations, defaults.NB_OBJECTS["programs_organizations"])
+                *random.sample(
+                    organizations, defaults.NB_OBJECTS["programs_organizations"]
+                )
             ],
             fill_team=[
                 *random.sample(persons, defaults.NB_OBJECTS["programs_persons"])
