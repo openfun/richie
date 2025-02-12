@@ -21,7 +21,18 @@ from richie.apps.courses.serializers import SyncCourseRunSerializer
 
 # pylint: disable=too-many-public-methods
 @mock.patch.object(post_publish, "send", wraps=post_publish.send)
-@override_settings(RICHIE_COURSE_RUN_SYNC_SECRETS=["shared secret"])
+@override_settings(
+    RICHIE_COURSE_RUN_SYNC_SECRETS=["shared secret"],
+    RICHIE_LMS_BACKENDS=[
+        {
+            "BASE_URL": "http://localhost:8073",
+            "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
+            "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+            "JS_BACKEND": "dummy",
+            "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
+        }
+    ],
+)
 class SyncCourseRunApiTestCase(CMSTestCase):
     """Test calls to sync a course run via API endpoint."""
 
