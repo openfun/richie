@@ -190,7 +190,7 @@ const OpenedCourseRun = ({
             <dd>
               <FormattedMessage {...courseOfferMessage} />
               <br />
-              {`${enrollmentPrice}`}
+              {enrollmentPrice}
             </dd>
           </>
         )}
@@ -202,7 +202,7 @@ const OpenedCourseRun = ({
             <dd>
               <FormattedMessage {...certificationOfferMessage} />
               <br />
-              {`${certificatePrice}`}
+              {certificatePrice}
             </dd>
           </>
         )}

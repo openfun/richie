@@ -627,7 +627,13 @@ class CourseRunModelsTestCase(TestCase):
         )  # New random values to update our course run
 
         for field in fields:
-            if field in ["price_currency", "offer", "certificate_offer"]:
+            if field in [
+                "price",
+                "certificate_price",
+                "price_currency",
+                "offer",
+                "certificate_offer",
+            ]:
                 # Skip these fields since they are not mandatory fields to be changed
                 continue
 

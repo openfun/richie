@@ -45,17 +45,25 @@ export const CourseStateFutureOpenFactory = factory<CourseState>(() => {
   };
 });
 
+enum OfferType {
+  PAID = 'PAID',
+  FREE = 'FREE',
+  PARTIALLY_FREE = 'PARTIALLY_FREE',
+  SUBSCRIPTION = 'SUBSCRIPTION',
+}
+
 export const CourseRunFactory = factory<CourseRun>(() => {
-  let offers = ['PAID', 'FREE', 'PARTIALLY_FREE', 'SUBSCRIPTION'];
-  const offer = offers[Math.floor(Math.random() * offers.length)];
-  offers = ['PAID', 'FREE', 'SUBSCRIPTION'];
-  const certificateOffer = offers[Math.floor(Math.random() * offers.length)];
+  const offerValues = Object.values(OfferType);
+  const offer = offerValues[Math.floor(Math.random() * offerValues.length)];
+  const certificateOfferValues = [OfferType.PAID, OfferType.FREE, OfferType.SUBSCRIPTION];
+  const certificateOffer =
+    certificateOfferValues[Math.floor(Math.random() * certificateOfferValues.length)];
   const currency = faker.finance.currency().code;
-  const price = ['FREE', 'PARTIALLY_FREE'].includes(offer)
+  const price = [OfferType.FREE, OfferType.PARTIALLY_FREE].includes(offer)
     ? 0
     : parseFloat(faker.finance.amount({ min: 1, max: 100, symbol: currency, autoFormat: true }));
-  const cerficatePrice =
-    certificateOffer === 'FREE'
+  const certificatePrice =
+    certificateOffer === OfferType.FREE
       ? 0
       : parseFloat(faker.finance.amount({ min: 1, max: 100, symbol: currency, autoFormat: true }));
   return {
@@ -73,7 +81,7 @@ export const CourseRunFactory = factory<CourseRun>(() => {
     price,
     price_currency: currency,
     offer,
-    certificate_price: cerficatePrice,
+    certificate_price: certificatePrice,
     certificate_offer: certificateOffer,
   };
 });

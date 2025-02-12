@@ -1030,13 +1030,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'paid',
+      certificate_offer: 'paid',
+      price_currency: 'EUR',
+      price: 49.99,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = 'paid';
-    courseRun.certificate_offer = 'paid';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 49.99;
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1053,13 +1052,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'Subscription',
+      certificate_offer: 'Subscription',
+      price_currency: 'EUR',
+      price: 49.99,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = 'Subscription';
-    courseRun.certificate_offer = 'Subscription';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 49.99;
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1078,13 +1076,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'Partially free',
+      certificate_offer: 'paid',
+      price_currency: 'EUR',
+      price: 0,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = 'Partially free';
-    courseRun.certificate_offer = 'paid';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 0;
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1101,13 +1098,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'paid',
+      certificate_offer: 'free',
+      price_currency: 'EUR',
+      price: 49.99,
+      certificate_price: 0,
     }).one();
-
-    courseRun.offer = 'paid';
-    courseRun.certificate_offer = 'free';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 49.99;
-    courseRun.certificate_price = 0;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1124,12 +1120,11 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: undefined,
+      certificate_offer: undefined,
+      price: 59.99,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = undefined;
-    courseRun.certificate_offer = undefined;
-    courseRun.price = 59.99;
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1146,14 +1141,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      certificate_offer: 'paid',
+      price_currency: 'EUR',
+      offer: undefined,
+      price: 59.99,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.certificate_offer = 'paid';
-    courseRun.price_currency = 'EUR';
-    courseRun.offer = undefined;
-    courseRun.price = 59.99;
-    courseRun.certificate_offer = 'paid';
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1170,13 +1163,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      price_currency: 'EUR',
+      offer: 'paid',
+      price: 49.99,
+      certificate_offer: undefined,
+      certificate_price: undefined,
     }).one();
-
-    courseRun.price_currency = 'EUR';
-    courseRun.offer = 'paid';
-    courseRun.price = 49.99;
-    courseRun.certificate_offer = undefined;
-    courseRun.certificate_price = undefined;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1193,13 +1185,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'free',
+      certificate_offer: 'free',
+      price_currency: 'EUR',
+      price: undefined,
+      certificate_price: undefined,
     }).one();
-
-    courseRun.offer = 'free';
-    courseRun.certificate_offer = 'free';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = undefined;
-    courseRun.certificate_price = undefined;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1216,13 +1207,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'free',
+      certificate_offer: 'free',
+      price_currency: 'EUR',
+      price: 0,
+      certificate_price: 0,
     }).one();
-
-    courseRun.offer = 'free';
-    courseRun.certificate_offer = 'free';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 0;
-    courseRun.certificate_price = 0;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1239,13 +1229,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'invalid',
+      certificate_offer: 'invalid',
+      price_currency: 'EUR',
+      price: 59.99,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = 'invalid';
-    courseRun.certificate_offer = 'invalid';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 59.99;
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1263,13 +1252,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'paid',
+      certificate_offer: 'paid',
+      price_currency: 'EUR',
+      price: 49.99,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = 'paid';
-    courseRun.certificate_offer = 'paid';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 49.99;
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1286,13 +1274,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'Subscription',
+      certificate_offer: 'Subscription',
+      price_currency: 'EUR',
+      price: 49.99,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = 'Subscription';
-    courseRun.certificate_offer = 'Subscription';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 49.99;
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1311,13 +1298,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'Partially free',
+      certificate_offer: 'paid',
+      price_currency: 'EUR',
+      price: 0,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = 'Partially free';
-    courseRun.certificate_offer = 'paid';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 0;
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1334,13 +1320,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'paid',
+      certificate_offer: 'free',
+      price_currency: 'EUR',
+      price: 49.99,
+      certificate_price: 0,
     }).one();
-
-    courseRun.offer = 'paid';
-    courseRun.certificate_offer = 'free';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 49.99;
-    courseRun.certificate_price = 0;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1357,12 +1342,11 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: undefined,
+      certificate_offer: undefined,
+      price: 59.99,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = undefined;
-    courseRun.certificate_offer = undefined;
-    courseRun.price = 59.99;
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1379,13 +1363,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: undefined,
+      price: 59.99,
+      price_currency: 'EUR',
+      certificate_offer: 'paid',
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = undefined;
-    courseRun.price = 59.99;
-    courseRun.price_currency = 'EUR';
-    courseRun.certificate_offer = 'paid';
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1402,13 +1385,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      price_currency: 'EUR',
+      offer: 'paid',
+      price: 49.99,
+      certificate_offer: undefined,
+      certificate_price: undefined,
     }).one();
-
-    courseRun.price_currency = 'EUR';
-    courseRun.offer = 'paid';
-    courseRun.price = 49.99;
-    courseRun.certificate_offer = undefined;
-    courseRun.certificate_price = undefined;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1425,13 +1407,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'free',
+      certificate_offer: 'free',
+      price_currency: 'EUR',
+      price: undefined,
+      certificate_price: undefined,
     }).one();
-
-    courseRun.offer = 'free';
-    courseRun.certificate_offer = 'free';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = undefined;
-    courseRun.certificate_price = undefined;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1448,13 +1429,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'free',
+      certificate_offer: 'free',
+      price_currency: 'EUR',
+      price: 0,
+      certificate_price: 0,
     }).one();
-
-    courseRun.offer = 'free';
-    courseRun.certificate_offer = 'free';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 0;
-    courseRun.certificate_price = 0;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
@@ -1471,13 +1451,12 @@ describe('<SyllabusCourseRunsList/>', () => {
     const course = PacedCourseFactory().one();
     const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       languages: ['en'],
+      offer: 'invalid',
+      certificate_offer: 'invalid',
+      price_currency: 'EUR',
+      price: 59.99,
+      certificate_price: 59.99,
     }).one();
-
-    courseRun.offer = 'invalid';
-    courseRun.certificate_offer = 'invalid';
-    courseRun.price_currency = 'EUR';
-    courseRun.price = 59.99;
-    courseRun.certificate_price = 59.99;
 
     render(
       <div className="course-detail__row course-detail__runs course-detail__runs--open">
