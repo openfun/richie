@@ -174,7 +174,7 @@ const OpenedSelfPacedCourseRun = ({
             <dd>
               <FormattedMessage {...courseOfferMessage} />
               <br />
-              {`${enrollmentPrice}`}
+              {enrollmentPrice}
             </dd>
           </>
         )}
@@ -186,7 +186,7 @@ const OpenedSelfPacedCourseRun = ({
             <dd>
               <FormattedMessage {...certificationOfferMessage} />
               <br />
-              {`${certificatePrice}`}
+              {certificatePrice}
             </dd>
           </>
         )}

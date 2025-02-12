@@ -540,14 +540,14 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def offer(self):
         """
-        The offer of a course run is read from Django settings.
+        The offer of a course run is set according to its price.
         """
         return CourseRunOffer.FREE if self.price == 0.0 else CourseRunOffer.PAID
 
     @factory.lazy_attribute
     def certificate_offer(self):
         """
-        The offer of a course run is read from Django settings.
+        The certificate offer of a course run is set according to its price.
         """
         return (
             CertificateOffer.FREE
