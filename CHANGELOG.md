@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.34.0] - 2025-02-13
+
 ### Added
 
 - Add Additional Information section for a category and
@@ -16,15 +18,16 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add explicit error when a user tries to delete a credit card
   that is still in use
 
-### Fixed
-
-- Fix frontend translation of Enroll now for external LMS backend
-
 ### Changed
 
 - Change `SearchInput` to have a label, for accessibility purposes
 - Use new credit card promote endpoint
 - Allow user to remove a main credit card
+
+### Fixed
+
+- Fix frontend translation of Enroll now for external LMS backend
+
 
 ## [2.33.0] - 2024-12-02
 
@@ -2249,7 +2252,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.33.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.34.0...master
+[2.34.0]: https://github.com/openfun/richie/compare/v2.33.0...v2.34.0
 [2.33.0]: https://github.com/openfun/richie/compare/v2.32.0...v2.33.0
 [2.32.0]: https://github.com/openfun/richie/compare/v2.31.0...v2.32.0
 [2.31.0]: https://github.com/openfun/richie/compare/v2.30.0...v2.31.0

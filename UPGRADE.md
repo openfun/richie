@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.33.0 to 2.34.0
+
 - Header menu template has been modified to include features from `MainMenuEntry`
 - There is a new setting that can be used to define a list of color variant for the menu
   entry of a page:
