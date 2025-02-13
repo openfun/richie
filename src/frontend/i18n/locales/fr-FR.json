@@ -507,10 +507,6 @@
     "description": "Empty placeholder of the dashboard credit cards management block",
     "message": "Vous n'avez pas encore créé de carte de crédit."
   },
-  "components.DashboardCreditCardsManagement.errorCannotPromoteMain": {
-    "description": "Error shown if a user tries to promote a main credit card",
-    "message": "Vous ne pouvez pas promouvoir la carte de crédit par défaut."
-  },
   "components.DashboardCreditCardsManagement.header": {
     "description": "Title of the dashboard credit cards management block",
     "message": "Cartes de crédit"
@@ -627,6 +623,10 @@
     "description": "Status shown on the dashboard order item when order is pending for payment",
     "message": "En cours"
   },
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusRefunded": {
+    "description": "Status shown on the dashboard order item when order is refunded",
+    "message": "Remboursée"
+  },
   "components.DashboardItem.Order.OrderStateLearnerMessage.statusWaitingCounterSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
     "message": "En cours"
@@ -674,6 +674,10 @@
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusPendingPayment": {
     "description": "Status shown on the dashboard order item when order is validated with no certificate",
     "message": "En cours"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusRefunded": {
+    "description": "Status shown on the dashboard order item when order is refunded",
+    "message": "Remboursée"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusWaitingCounterSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
@@ -1187,6 +1191,14 @@
     "description": "Label for screen reader when a credit card is being tokenized.",
     "message": "Définition du moyen de paiement en cours."
   },
+  "components.PaymentScheduleGrid.state.canceled": {
+    "description": "Label displayed for canceled payment state",
+    "message": "Annulée"
+  },
+  "components.PaymentScheduleGrid.state.error": {
+    "description": "Label displayed for error payment state. For learner we assume to display `pending`.",
+    "message": "En attente"
+  },
   "components.PaymentScheduleGrid.state.paid": {
     "description": "Label displayed for paid payment state",
     "message": "Payée"
@@ -1194,6 +1206,10 @@
   "components.PaymentScheduleGrid.state.pending": {
     "description": "Label displayed for pending payment state",
     "message": "En attente"
+  },
+  "components.PaymentScheduleGrid.state.refunded": {
+    "description": "Label displayed for refunded payment state",
+    "message": "Remboursée"
   },
   "components.PaymentScheduleGrid.state.refused": {
     "description": "Label displayed for refused payment state",
@@ -1527,6 +1543,10 @@
     "description": "Accessibility text for the search button inside the Search input.",
     "message": "Recherche"
   },
+  "components.SearchInput.label": {
+    "description": "Accessibility text for the search input label.",
+    "message": "Rechercher"
+  },
   "components.SearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
     "message": "Recherche des cours, des établissements, des catégories"
@@ -1611,6 +1631,10 @@
     "description": "Course date of an opened course run block",
     "message": "Du {startDate} {endDate, select, undefined {} other {au {endDate}}}"
   },
+  "components.SyllabusCourseRun.enrollNow": {
+    "description": "CTA for users to enroll on ongoing of future open course.",
+    "message": "S’inscrire maintenant"
+  },
   "components.SyllabusCourseRun.enrollment": {
     "description": "Title of the enrollment dates section of an opened course run block",
     "message": "Inscription"
@@ -1623,9 +1647,17 @@
     "description": "Title of the languages section of an opened course run block",
     "message": "Langues"
   },
+  "components.SyllabusCourseRun.studyNow": {
+    "description": "CTA for users to enroll on archived course.",
+    "message": "S'inscrire maintenant"
+  },
   "components.SyllabusCourseRunCompacted.course": {
     "description": "Title of the course dates section of an opened course run block",
     "message": "Cours"
+  },
+  "components.SyllabusCourseRunCompacted.enrollNow": {
+    "description": "CTA for users to enroll on ongoing of future open course.",
+    "message": "S’inscrire maintenant"
   },
   "components.SyllabusCourseRunCompacted.languages": {
     "description": "Title of the languages section of an opened course run block",
@@ -1638,6 +1670,10 @@
   "components.SyllabusCourseRunCompacted.selfPaceNoEndDate": {
     "description": "Self paced course run block with no end date",
     "message": "Disponible"
+  },
+  "components.SyllabusCourseRunCompacted.studyNow": {
+    "description": "CTA for users to enroll on archived course.",
+    "message": "S'inscrire maintenant"
   },
   "components.SyllabusCourseRunsList.multipleOpenedCourseRuns": {
     "description": "Message displayed when there are multiple opened course runs on a syllabus",
@@ -1955,6 +1991,10 @@
     "description": "Error message shown to the user when course fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération du cours. Veuillez réessayer plus tard."
   },
+  "hooks.useCreditCards.errorCannotDelete": {
+    "description": "Error message shown to the user when trying to delete a credit card that is used to pay at least order.",
+    "message": "Impossible de supprimer la carte de crédit ••••• •• ••• {last_numbers} car elle est utilisée pour payer au moins une de vos commandes."
+  },
   "hooks.useCreditCards.errorDelete": {
     "description": "Error message shown to the user when credit card deletion request fails.",
     "message": "Une erreur s'est produite lors de la suppression de votre carte de crédit. Veuillez réessayer plus tard."
@@ -1962,6 +2002,10 @@
   "hooks.useCreditCards.errorNotFound": {
     "description": "Error message shown to the user when no credit cards matches.",
     "message": "Carte de crédit introuvable"
+  },
+  "hooks.useCreditCards.errorPromote": {
+    "description": "Error message shown to the user when promoting a credit card fails.",
+    "message": "Impossible d'utiliser cette carte de crédit par défaut"
   },
   "hooks.useCreditCards.errorSelect": {
     "description": "Error message shown to the user when credit cards fetch request fails.",
@@ -1978,10 +2022,6 @@
   "hooks.useCreditCardsManagement.deletionConfirmation": {
     "description": "Confirmation message shown to the user when he wants to delete a credit card",
     "message": "Êtes-vous sûr de vouloir supprimer cette carte de crédit ? ⚠️ Ce changement sera irréversible."
-  },
-  "hooks.useCreditCardsManagement.errorCannotRemoveMain": {
-    "description": "Error shown if a user tries to delete a main credit card",
-    "message": "Vous ne pouvez pas supprimer la carte de crédit principale."
   },
   "hooks.useDashboardAddressForm.isMainInputLabel": {
     "description": "Label of the \"is_main\" input",

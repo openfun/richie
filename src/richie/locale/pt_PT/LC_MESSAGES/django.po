@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-19 14:16+0000\n"
-"PO-Revision-Date: 2024-11-20 14:09\n"
+"POT-Creation-Date: 2024-12-03 16:33+0000\n"
+"PO-Revision-Date: 2025-02-13 10:47\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -278,11 +278,11 @@ msgstr "Ocorreu um erro. Por favor, tente novamente."
 msgid "Course could not be found."
 msgstr "O curso não foi encontrado."
 
-#: apps/courses/admin.py:306
+#: apps/courses/admin.py:321
 msgid "See user group"
 msgstr "Ver grupo de utilizadores"
 
-#: apps/courses/admin.py:307
+#: apps/courses/admin.py:322
 msgid "See filer folder"
 msgstr "Ver pasta do arquivador"
 
@@ -321,17 +321,21 @@ msgstr "Publicação"
 msgid "Program"
 msgstr "Programa"
 
-#: apps/courses/cms_toolbars.py:50
+#: apps/courses/cms_toolbars.py:51
 msgid "{!s} settings"
 msgstr "Definições de {!s}"
 
-#: apps/courses/cms_toolbars.py:105
+#: apps/courses/cms_toolbars.py:106
 msgid "Snapshot this page..."
 msgstr "Capturar esta página..."
 
-#: apps/courses/cms_toolbars.py:109
+#: apps/courses/cms_toolbars.py:110
 msgid "This will place a copy of this page as its child and move all its courseruns as children of its new copy."
 msgstr "Isto colocará uma cópia desta página como filho e moverá todos as edições do curso como filhos da sua nova cópia."
+
+#: apps/courses/cms_toolbars.py:179
+msgid "Main menu settings"
+msgstr "Definições do menu principal"
 
 #: apps/courses/cms_wizards.py:57
 msgid "New page"
@@ -485,45 +489,50 @@ msgstr "Cartão"
 msgid "Row"
 msgstr "Linha"
 
-#: apps/courses/defaults.py:370
+#: apps/courses/defaults.py:374
 msgid "minute"
 msgstr "minuto"
 
-#: apps/courses/defaults.py:370
+#: apps/courses/defaults.py:374
 msgid "minutes"
 msgstr "minutos"
 
-#: apps/courses/defaults.py:371
+#: apps/courses/defaults.py:375
 msgid "hour"
 msgstr "hora"
 
-#: apps/courses/defaults.py:371
+#: apps/courses/defaults.py:375
 msgid "hours"
 msgstr "horas"
 
-#: apps/courses/defaults.py:372
+#: apps/courses/defaults.py:376
 msgid "day"
 msgstr "dia"
 
-#: apps/courses/defaults.py:372
+#: apps/courses/defaults.py:376
 msgid "days"
 msgstr "dias"
 
-#: apps/courses/defaults.py:373
+#: apps/courses/defaults.py:377
 msgid "week"
 msgstr "semana"
 
-#: apps/courses/defaults.py:373
+#: apps/courses/defaults.py:377
 msgid "weeks"
 msgstr "semanas"
 
-#: apps/courses/defaults.py:374
+#: apps/courses/defaults.py:378
 msgid "month"
 msgstr "mês"
 
-#: apps/courses/defaults.py:374
+#: apps/courses/defaults.py:378
 msgid "months"
 msgstr "meses"
+
+#: apps/courses/defaults.py:395 plugins/section/defaults.py:29
+#: plugins/simple_text_ckeditor/defaults.py:12
+msgid "None"
+msgstr "Nenhum"
 
 #: apps/courses/factories.py:440
 msgid "Run {:d}"
@@ -757,7 +766,8 @@ msgstr "edição do curso"
 msgid "course runs"
 msgstr "edições do curso"
 
-#: apps/courses/models/course.py:973
+#: apps/courses/models/course.py:973 plugins/slider/models.py:17
+#: plugins/slider/models.py:77
 msgid "title"
 msgstr "título"
 
@@ -794,6 +804,7 @@ msgid "name"
 msgstr "nome"
 
 #: apps/courses/models/course.py:1070 apps/courses/models/course.py:1093
+#: plugins/slider/models.py:89
 msgid "content"
 msgstr "conteúdo"
 
@@ -824,6 +835,30 @@ msgstr "plugin da licença"
 #: apps/courses/models/course.py:1118
 msgid "licence plugins"
 msgstr "plugins de licença"
+
+#: apps/courses/models/menuentry.py:24
+msgid "main menu entry"
+msgstr "entrada do menu principal"
+
+#: apps/courses/models/menuentry.py:25
+msgid "main menu entries"
+msgstr "entradas do menu principal"
+
+#: apps/courses/models/menuentry.py:34
+msgid "Allow submenu"
+msgstr "Permitir submenu"
+
+#: apps/courses/models/menuentry.py:37
+msgid "If enabled the page entry in menu will be a dropdown for its possible children."
+msgstr "Se ativado, a entrada da página no menu será um menu pendente para os seus possíveis filhos."
+
+#: apps/courses/models/menuentry.py:42
+msgid "Color in menu"
+msgstr "Cor no menu"
+
+#: apps/courses/models/menuentry.py:47
+msgid "A color used to display page entry in menu."
+msgstr "Uma cor utilizada para apresentar a entrada da página no menu."
 
 #: apps/courses/models/organization.py:42
 msgid "organization"
@@ -1020,7 +1055,7 @@ msgstr "Cabeçalho estático"
 #: apps/courses/settings/__init__.py:116 apps/courses/settings/__init__.py:137
 #: apps/courses/settings/__init__.py:140 apps/courses/settings/__init__.py:150
 #: apps/courses/settings/__init__.py:157 apps/courses/settings/__init__.py:164
-#: apps/courses/settings/__init__.py:385
+#: apps/courses/settings/__init__.py:404
 msgid "Main content"
 msgstr "Conteúdo principal"
 
@@ -1033,8 +1068,8 @@ msgstr "Conteúdo secundário"
 msgid "Third content"
 msgstr "Conteúdo terciário"
 
-#: apps/courses/settings/__init__.py:171 apps/courses/settings/__init__.py:346
-#: apps/courses/settings/__init__.py:366
+#: apps/courses/settings/__init__.py:171 apps/courses/settings/__init__.py:365
+#: apps/courses/settings/__init__.py:385
 #: apps/courses/templates/courses/cms/blogpost_detail.html:89
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:10
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:42
@@ -1082,19 +1117,19 @@ msgid "Complementary information"
 msgstr "Informação complementar"
 
 #: apps/courses/settings/__init__.py:224
-#: apps/courses/templates/courses/cms/course_detail.html:483
+#: apps/courses/templates/courses/cms/course_detail.html:500
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:47
 msgid "License for the course content"
 msgstr "Licença para o conteúdo do curso"
 
 #: apps/courses/settings/__init__.py:229
-#: apps/courses/templates/courses/cms/course_detail.html:494
+#: apps/courses/templates/courses/cms/course_detail.html:511
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:56
 msgid "License for the content created by course participants"
 msgstr "Licença para o conteúdo criado pelos participantes do curso"
 
 #: apps/courses/settings/__init__.py:234 apps/courses/settings/__init__.py:270
-#: apps/courses/settings/__init__.py:310 apps/courses/settings/__init__.py:342
+#: apps/courses/settings/__init__.py:329 apps/courses/settings/__init__.py:361
 #: apps/courses/templates/courses/cms/blogpost_detail.html:45
 #: apps/courses/templates/courses/cms/blogpost_list.html:16
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:67
@@ -1108,7 +1143,7 @@ msgid "Icon"
 msgstr "Ícone"
 
 #: apps/courses/settings/__init__.py:243 apps/courses/settings/__init__.py:284
-#: apps/courses/settings/__init__.py:332
+#: apps/courses/settings/__init__.py:351
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:27
 #: apps/courses/templates/courses/cms/person_detail.html:112
 #: apps/search/defaults.py:109
@@ -1142,46 +1177,50 @@ msgstr "Logo"
 msgid "Description"
 msgstr "Descrição"
 
-#: apps/courses/settings/__init__.py:279 apps/courses/settings/__init__.py:351
-#: apps/courses/settings/__init__.py:371
+#: apps/courses/settings/__init__.py:279 apps/courses/settings/__init__.py:370
+#: apps/courses/settings/__init__.py:390
 #: apps/courses/templates/courses/cms/fragment_organization_glimpse.html:44
 msgid "Excerpt"
 msgstr "Excerto"
 
-#: apps/courses/settings/__init__.py:314
+#: apps/courses/settings/__init__.py:309
+msgid "Additional Information"
+msgstr "Informações adicionais"
+
+#: apps/courses/settings/__init__.py:333
 msgid "Portrait"
 msgstr "Retrato"
 
-#: apps/courses/settings/__init__.py:319
+#: apps/courses/settings/__init__.py:338
 msgid "Bio"
 msgstr "Bio"
 
-#: apps/courses/settings/__init__.py:324
+#: apps/courses/settings/__init__.py:343
 msgid "Main Content"
 msgstr "Conteúdo Principal"
 
-#: apps/courses/settings/__init__.py:337
+#: apps/courses/settings/__init__.py:356
 msgid "Author"
 msgstr "Autor"
 
-#: apps/courses/settings/__init__.py:356 apps/courses/settings/__init__.py:376
+#: apps/courses/settings/__init__.py:375 apps/courses/settings/__init__.py:395
 msgid "Body"
 msgstr "Conteúdo"
 
-#: apps/courses/settings/__init__.py:360
+#: apps/courses/settings/__init__.py:379
 msgid "Headline"
 msgstr "Título"
 
-#: apps/courses/settings/__init__.py:381
+#: apps/courses/settings/__init__.py:400
 #: apps/courses/templates/courses/cms/person_detail.html:130
 msgid "Courses"
 msgstr "Cursos"
 
-#: apps/courses/settings/__init__.py:507
+#: apps/courses/settings/__init__.py:526
 msgid "Button caesura"
 msgstr "Botão de quebra de secção"
 
-#: apps/courses/settings/__init__.py:509
+#: apps/courses/settings/__init__.py:528
 msgid "Full width"
 msgstr "Largura total"
 
@@ -1269,12 +1308,20 @@ msgstr "Publicações relacionadas"
 msgid "Related blogposts pagination"
 msgstr "Página de posts de blog relacionados"
 
-#: apps/courses/templates/courses/cms/category_detail.html:201
+#: apps/courses/templates/courses/cms/category_detail.html:198
+msgid "Configure this page id to show this additional information on all related course pages"
+msgstr "Configure esta id da página para mostrar esta informação adicional em todas as páginas relacionadas com a disciplina"
+
+#: apps/courses/templates/courses/cms/category_detail.html:202
+msgid "Enter additional information for this category"
+msgstr "Introduzir informações adicionais para esta categoria"
+
+#: apps/courses/templates/courses/cms/category_detail.html:214
 #: apps/courses/templates/courses/cms/organization_detail.html:171
 msgid "Related persons"
 msgstr "Pessoas relacionadas"
 
-#: apps/courses/templates/courses/cms/category_detail.html:206
+#: apps/courses/templates/courses/cms/category_detail.html:219
 #: apps/courses/templates/courses/cms/organization_detail.html:178
 msgid "Related persons pagination"
 msgstr "Paginação de pessoas relacionadas"
@@ -1459,17 +1506,17 @@ msgstr "Organizações"
 msgid "What are the organizations publishing this course?"
 msgstr "Quem são as organizações responsáveis por este curso?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:479
+#: apps/courses/templates/courses/cms/course_detail.html:496
 msgctxt "course_detail__title"
 msgid "License"
 msgstr "Licença"
 
-#: apps/courses/templates/courses/cms/course_detail.html:486
+#: apps/courses/templates/courses/cms/course_detail.html:503
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:50
 msgid "What is the license for the course content?"
 msgstr "Qual é a licença para o conteúdo do curso?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:497
+#: apps/courses/templates/courses/cms/course_detail.html:514
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:59
 msgid "What is the license for the content created by course participants?"
 msgstr "Qual é a licença para o conteúdo criado pelos participantes do curso?"
@@ -1508,7 +1555,7 @@ msgstr "\n"
 #: apps/courses/templates/courses/cms/fragment_organization_glimpse.html:8
 #, python-format
 msgid "Link to the organization page of %(title)s"
-msgstr ""
+msgstr "Ligação à página da organização de %(title)s"
 
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:8
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:9
@@ -1590,7 +1637,7 @@ msgstr "imagem de capa do programa"
 msgid "No associated programs"
 msgstr "Sem programas associados"
 
-#: apps/demo/management/commands/create_demo_site.py:387
+#: apps/demo/management/commands/create_demo_site.py:391
 #, python-brace-format
 msgid "Run {i:d}"
 msgstr "Executar {i:d}"
@@ -1719,7 +1766,7 @@ msgstr "Variante"
 msgid "Form factor variant"
 msgstr "Variante do formulário"
 
-#: plugins/glimpse/models.py:33
+#: plugins/glimpse/models.py:33 plugins/slider/models.py:83
 msgid "image"
 msgstr "imagem"
 
@@ -1949,10 +1996,6 @@ msgstr "Esquema setenário"
 msgid "Item tiles"
 msgstr "Blocos do item"
 
-#: plugins/section/defaults.py:29 plugins/simple_text_ckeditor/defaults.py:12
-msgid "None"
-msgstr "Nenhum"
-
 #: plugins/section/models.py:30
 msgid "Optional template for custom look."
 msgstr "Modelo opcional para aparência personalizada."
@@ -2015,4 +2058,40 @@ msgid "Ensure this text has at most %(limit_value)d character (it has %(show_val
 msgid_plural "Ensure this text has at most %(limit_value)d characters (it has %(show_value)d)."
 msgstr[0] "Certifique-se de que o texto tem no máximo %(limit_value)d caracter (está com %(show_value)d)."
 msgstr[1] "Certifique-se de que o texto tem no máximo %(limit_value)d caracteres (está com %(show_value)d)."
+
+#: plugins/slider/cms_plugins.py:24 plugins/slider/models.py:20
+msgid "Slider"
+msgstr "Controlo deslizante"
+
+#: plugins/slider/cms_plugins.py:50 plugins/slider/models.py:107
+msgid "Slide item"
+msgstr "Item do controlo deslizante"
+
+#: plugins/slider/cms_plugins.py:68
+msgid "Link"
+msgstr "Ligação"
+
+#: plugins/slider/models.py:21
+msgid "Sliders"
+msgstr "Controles deslizantes"
+
+#: plugins/slider/models.py:94
+msgid "link URL"
+msgstr "URL da ligação"
+
+#: plugins/slider/models.py:98
+msgid "Make the slide as a link with an URL."
+msgstr "Criar o diapositivo como uma ligação com um URL."
+
+#: plugins/slider/models.py:101
+msgid "open new window"
+msgstr "abrir nova janela"
+
+#: plugins/slider/models.py:103
+msgid "If checked the link will be open in a new window"
+msgstr "Se estiver selecionada, a ligação será aberta numa nova janela"
+
+#: plugins/slider/models.py:108
+msgid "Slide items"
+msgstr "Items do controlo deslizante"
 

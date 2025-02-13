@@ -1,6 +1,6 @@
 {
   "name": "richie-education",
-  "version": "2.33.0",
+  "version": "2.34.0",
   "description": "A CMS to build learning portals for Open Education",
   "main": "sandbox/manage.py",
   "scripts": {

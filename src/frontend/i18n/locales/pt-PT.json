@@ -507,10 +507,6 @@
     "description": "Empty placeholder of the dashboard credit cards management block",
     "message": "Ainda não criou nenhum cartão de crédito."
   },
-  "components.DashboardCreditCardsManagement.errorCannotPromoteMain": {
-    "description": "Error shown if a user tries to promote a main credit card",
-    "message": "Não é possível promover o cartão de crédito principal."
-  },
   "components.DashboardCreditCardsManagement.header": {
     "description": "Title of the dashboard credit cards management block",
     "message": "Cartões de crédito"
@@ -627,6 +623,10 @@
     "description": "Status shown on the dashboard order item when order is pending for payment",
     "message": "A decorrer"
   },
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusRefunded": {
+    "description": "Status shown on the dashboard order item when order is refunded",
+    "message": "Reembolsado"
+  },
   "components.DashboardItem.Order.OrderStateLearnerMessage.statusWaitingCounterSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
     "message": "A decorrer"
@@ -674,6 +674,10 @@
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusPendingPayment": {
     "description": "Status shown on the dashboard order item when order is validated with no certificate",
     "message": "A decorrer"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusRefunded": {
+    "description": "Status shown on the dashboard order item when order is refunded",
+    "message": "Reembolsado"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusWaitingCounterSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's organization signature missing.",
@@ -1187,6 +1191,14 @@
     "description": "Label for screen reader when a credit card is being tokenized.",
     "message": "Definição do método de pagamento em curso."
   },
+  "components.PaymentScheduleGrid.state.canceled": {
+    "description": "Label displayed for canceled payment state",
+    "message": "Cancelado"
+  },
+  "components.PaymentScheduleGrid.state.error": {
+    "description": "Label displayed for error payment state. For learner we assume to display `pending`.",
+    "message": "Pendente"
+  },
   "components.PaymentScheduleGrid.state.paid": {
     "description": "Label displayed for paid payment state",
     "message": "Pago"
@@ -1194,6 +1206,10 @@
   "components.PaymentScheduleGrid.state.pending": {
     "description": "Label displayed for pending payment state",
     "message": "Pendente"
+  },
+  "components.PaymentScheduleGrid.state.refunded": {
+    "description": "Label displayed for refunded payment state",
+    "message": "Reembolsado"
   },
   "components.PaymentScheduleGrid.state.refused": {
     "description": "Label displayed for refused payment state",
@@ -1357,31 +1373,31 @@
   },
   "components.SaleTunnel.WithdrawRightCheckbox.certificate .waiveCheckboxHelperClause2": {
     "description": "Second clause item for the waiver checkbox.",
-    "message": "I understand that if I access the exam during this period, I expressly waive my right of withdrawal."
+    "message": "Compreendo que, se aceder ao exame durante este período, renuncio expressamente ao meu direito de desistência."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiveCheckboxHelperClause1": {
     "description": "First clause item for the waiver checkbox.",
-    "message": "I acknowledge that I have been informed of my legal right of withdrawal, which allows me to cancel my registration within 14 days from the date of payment."
+    "message": "Reconheço que fui informado do meu direito legal de rescisão, que me permite anular a minha inscrição no prazo de 14 dias a contar da data de pagamento."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.certificate.waiverLabel": {
     "description": "Text to explain why the user has to waive to its withdrawal right.",
-    "message": "If you access the exam, you acknowledge waiving your 14-day withdrawal right, as provided for in Article L221-18 of the French Consumer Code."
+    "message": "Ao aceder ao exame, o utilizador reconhece que renuncia ao seu direito de retratação de 14 dias, tal como previsto no artigo L221-18 do Código do Consumo."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.credential.waiveCheckboxHelperClause1": {
     "description": "First clause item for the waiver checkbox.",
-    "message": "I acknowledge that I have expressly requested to begin the training before the expiration date of the withdrawal period."
+    "message": "Reconheço que solicitei expressamente o início da formação antes da data de expiração do prazo de retratação."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.credential.waiveCheckboxHelperClause2": {
     "description": "Second clause item for the waiver checkbox.",
-    "message": "I expressly waive my right of withdrawal in order to begin the training before the expiration of the withdrawal period."
+    "message": "Renuncio expressamente ao meu direito de retratação a fim de iniciar a formação antes do termo do prazo de retratação."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.credential.waiverLabel": {
     "description": "Text to explain why the user has to waive to its withdrawal right.",
-    "message": "The training program you wish to enroll in begins before the end of the 14-day withdrawal period mentioned in Article L221-18 of the French Consumer Code. You must check the box below to proceed with your registration."
+    "message": "O programa de formação em que pretende inscrever-se começa antes do fim do prazo de retratação de 14 dias mencionado no artigo L221-18 do Código do Consumidor francês. Deve assinalar a caixa abaixo para proceder à sua inscrição."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.waiveCheckboxLabel": {
     "description": "Label of the checkbox to waive the withdrawal right.",
-    "message": "By checking this box:"
+    "message": "Ao assinalar esta caixa:"
   },
   "components.SaleTunnel.callToActionDescription": {
     "description": "Additional description announced by screen readers when focusing the call to action buying button",
@@ -1527,6 +1543,10 @@
     "description": "Accessibility text for the search button inside the Search input.",
     "message": "Pesquisar"
   },
+  "components.SearchInput.label": {
+    "description": "Accessibility text for the search input label.",
+    "message": "Pesquisar"
+  },
   "components.SearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
     "message": "Pesquisar cursos, organizações, categorias"
@@ -1611,6 +1631,10 @@
     "description": "Course date of an opened course run block",
     "message": "De {startDate} {endDate, select, undefined {} other {até {endDate}}}"
   },
+  "components.SyllabusCourseRun.enrollNow": {
+    "description": "CTA for users to enroll on ongoing of future open course.",
+    "message": "Inscrever-se agora"
+  },
   "components.SyllabusCourseRun.enrollment": {
     "description": "Title of the enrollment dates section of an opened course run block",
     "message": "Inscrição"
@@ -1623,9 +1647,17 @@
     "description": "Title of the languages section of an opened course run block",
     "message": "Idiomas"
   },
+  "components.SyllabusCourseRun.studyNow": {
+    "description": "CTA for users to enroll on archived course.",
+    "message": "Estudar agora"
+  },
   "components.SyllabusCourseRunCompacted.course": {
     "description": "Title of the course dates section of an opened course run block",
     "message": "Curso"
+  },
+  "components.SyllabusCourseRunCompacted.enrollNow": {
+    "description": "CTA for users to enroll on ongoing of future open course.",
+    "message": "Inscrever-se agora"
   },
   "components.SyllabusCourseRunCompacted.languages": {
     "description": "Title of the languages section of an opened course run block",
@@ -1638,6 +1670,10 @@
   "components.SyllabusCourseRunCompacted.selfPaceNoEndDate": {
     "description": "Self paced course run block with no end date",
     "message": "Disponível"
+  },
+  "components.SyllabusCourseRunCompacted.studyNow": {
+    "description": "CTA for users to enroll on archived course.",
+    "message": "Estudar agora"
   },
   "components.SyllabusCourseRunsList.multipleOpenedCourseRuns": {
     "description": "Message displayed when there are multiple opened course runs on a syllabus",
@@ -1955,6 +1991,10 @@
     "description": "Error message shown to the user when course fetch request fails.",
     "message": "Ocorreu um erro durante a transferência do curso. Por favor, tente novamente mais tarde."
   },
+  "hooks.useCreditCards.errorCannotDelete": {
+    "description": "Error message shown to the user when trying to delete a credit card that is used to pay at least order.",
+    "message": "Não é possível eliminar o cartão de crédito •••• •••• •••• {last_numbers} porque é utilizado para pagar pelo menos uma das suas encomendas."
+  },
   "hooks.useCreditCards.errorDelete": {
     "description": "Error message shown to the user when credit card deletion request fails.",
     "message": "Ocorreu um erro na remoção de cartões de crédito. Por favor, tente mais tarde."
@@ -1962,6 +2002,10 @@
   "hooks.useCreditCards.errorNotFound": {
     "description": "Error message shown to the user when no credit cards matches.",
     "message": "Não foi possível encontrar o cartão de crédito"
+  },
+  "hooks.useCreditCards.errorPromote": {
+    "description": "Error message shown to the user when promoting a credit card fails.",
+    "message": "Não é possível definir o cartão de crédito como predefinido"
   },
   "hooks.useCreditCards.errorSelect": {
     "description": "Error message shown to the user when credit cards fetch request fails.",
@@ -1978,10 +2022,6 @@
   "hooks.useCreditCardsManagement.deletionConfirmation": {
     "description": "Confirmation message shown to the user when he wants to delete a credit card",
     "message": "Tem a certeza que pretende remover o cartão de crédito? ⚠️ Esta ação não pode ser desfeita."
-  },
-  "hooks.useCreditCardsManagement.errorCannotRemoveMain": {
-    "description": "Error shown if a user tries to delete a main credit card",
-    "message": "Não é possível remover o cartão de crédito principal."
   },
   "hooks.useDashboardAddressForm.isMainInputLabel": {
     "description": "Label of the \"is_main\" input",
