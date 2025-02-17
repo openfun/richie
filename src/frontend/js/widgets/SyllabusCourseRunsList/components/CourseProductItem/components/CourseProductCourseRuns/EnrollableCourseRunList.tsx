@@ -139,11 +139,12 @@ const EnrollableCourseRunList = ({ courseRuns, order }: Props) => {
         <ol className="course-runs-list">
           {Children.toArray(
             courseRuns.map((courseRun) => (
-              <li className="course-runs-item form-field">
+              <li key={`${order.id}|${courseRun.id}`} className="course-runs-item form-field">
                 <input
                   className="form-field__radio-input"
                   type="radio"
                   id={`${order.id}|${courseRun.id}`}
+                  data-testid={`radio-input-${order.id}-${courseRun.id}`}
                   name={order.id}
                   disabled={needsSignature}
                   aria-label={intl.formatMessage(messages.ariaSelectCourseRun, {

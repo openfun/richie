@@ -208,8 +208,9 @@ describe('useCreditCards', () => {
     await act(async () => {
       responseDeferred.resolve({});
     });
-
-    expect(result.current.states.updating).toBe(false);
+    await waitFor(() => {
+      expect(result.current.states.updating).toBe(false);
+    });
     expect(result.current.states.isPending).toBe(false);
     expect(result.current.states.error).toBe(undefined);
   });

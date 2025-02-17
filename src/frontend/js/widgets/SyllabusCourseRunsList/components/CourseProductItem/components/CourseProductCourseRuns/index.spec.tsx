@@ -166,11 +166,13 @@ describe('CourseProductCourseRuns', () => {
         );
 
         // - A radio input
-        screen.getByRole('radio', {
-          name: `Select course run from ${dateFormatter.format(
+        const $input = screen.getByTestId(`radio-input-${order.id}-${courseRun.id}`);
+        expect($input).toHaveAttribute('type', 'radio');
+        expect($input).toHaveAccessibleName(
+          `Select course run from ${dateFormatter.format(
             new Date(courseRun.start),
           )} to ${dateFormatter.format(new Date(courseRun.end))}.`,
-        });
+        );
       });
 
       // A call to action should be displayed
@@ -215,7 +217,7 @@ describe('CourseProductCourseRuns', () => {
       });
 
       // A spinner should be displayed
-      screen.getByRole('status', { name: 'Enrolling...' });
+      await screen.findByRole('status', { name: 'Enrolling...' });
 
       await act(async () => {
         enrollmentDeferred.resolve(HttpStatusCode.OK);
