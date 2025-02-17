@@ -181,7 +181,7 @@ describe('<DahsboardEditCreditCard/>', () => {
     await screen.findByText('Credit cards');
 
     // The title is correctly updated.
-    screen.getByRole('heading', {
+    await screen.findByRole('heading', {
       level: 6,
       name: creditCardUpdated.title,
     });

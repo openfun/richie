@@ -204,12 +204,10 @@ describe('<AbstractContractFrame />', () => {
     await user.click(button);
 
     // The dummy interface should be loading
-    screen.getByRole('heading', { name: 'Signing the contract ...' });
+    await screen.findByRole('heading', { name: 'Signing the contract ...' });
 
     // Then the signature check polling should be started
-    await waitFor(() => {
-      expect(screen.getByRole('heading', { name: 'Verifying signature ...' })).toBeInTheDocument();
-    });
+    await screen.findByRole('heading', { name: 'Verifying signature ...' });
     expect(
       screen.getByText(
         'We are waiting for the signature to be validated from our signature platform. It can take up to few minutes. Do not close this page.',
