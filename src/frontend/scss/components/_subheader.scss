@@ -170,6 +170,41 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
       position: relative;
       padding-bottom: 56.25%; // Aspect ratio 16/9
 
+      .video-player-image {
+        img {
+          filter: brightness(0.85);
+          object-fit: cover;
+        }
+        img,
+        span {
+          position: absolute;
+          width: 100%;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+        }
+        span {
+          text-align: center;
+          font: 48px/1.5 sans-serif;
+          fill: white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        span svg {
+          transition: 0.5s;
+          width: 85px;
+          height: 85px;
+        }
+        img:hover,
+        span:hover svg {
+          fill-opacity: 1;
+          filter: drop-shadow(3px 3px 30px rgb(0 0 0 / 0.65));
+        }
+        span svg {
+          filter: drop-shadow(3px 3px 12px rgb(0 0 0 / 0.25));
+        }
+      }
       iframe {
         height: 100%;
         position: absolute;
