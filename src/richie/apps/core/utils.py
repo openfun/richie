@@ -1,3 +1,7 @@
+"""
+This module contains utility function and the `Throttle` decorator used across the Richie project.
+"""
+
 import collections.abc
 from datetime import datetime, timedelta
 from functools import wraps
@@ -20,7 +24,7 @@ def merge_dict(base_dict, update_dict):
     return base_dict
 
 
-class throttle(object):
+class Throttle:
     """
     Throttle Decorator
 
@@ -47,8 +51,10 @@ class throttle(object):
             now = datetime.now()
             elapsed_since_last_call = now - self.time_of_last_call
 
-            if elapsed_since_last_call > self.throttle_interval:
-                self.time_of_last_call = now
-                return callback(*args, **kwargs)
+            if elapsed_since_last_call < self.throttle_interval:
+                return None
+
+            self.time_of_last_call = now
+            return callback(*args, **kwargs)
 
         return wrapper

@@ -27,6 +27,11 @@ $ make migrate
       environ_prefix=None,
   )
 ```
+- Removed storage and cache from site-factory and applied to Richie
+  in order to avoid repeating unnecessary and critical implementations
+  for each instance. If any customization is necessary, it is up to the
+  site-factory implementation. Otherwise, as expected, it keeps up to Richie.
+
 ## 2.33.0 to 2.34.0
 
 - Header menu template has been modified to include features from `MainMenuEntry`

@@ -6,8 +6,9 @@ from unittest import mock
 from django.core.cache.backends.dummy import DummyCache
 from django.test import TestCase, override_settings
 
-from base.cache import RedisCacheWithFallback
 from django_redis.cache import RedisCache
+
+from richie.apps.core.cache import RedisCacheWithFallback
 
 
 class RedisCacheWithFallbackTestCase(TestCase):
@@ -21,7 +22,7 @@ class RedisCacheWithFallbackTestCase(TestCase):
     @override_settings(
         CACHES={
             "default": {
-                "BACKEND": "base.cache.RedisCacheWithFallback",
+                "BACKEND": "apps.core.cache.RedisCacheWithFallback",
                 "LOCATION": "mymaster/redis-sentinel:26379,redis-sentinel:26379/0",
                 "OPTIONS": {
                     "CLIENT_CLASS": "richie.apps.core.cache.SentinelClient",
@@ -36,8 +37,8 @@ class RedisCacheWithFallbackTestCase(TestCase):
         """Test class instance of caches"""
         client = RedisCacheWithFallback(None, {})
         self.assertIs(type(client), RedisCacheWithFallback)
-        self.assertIs(type(client._redis_cache), RedisCache)
-        self.assertIs(type(client._fallback_cache), DummyCache)
+        self.assertIs(type(client.redis_cache), RedisCache)
+        self.assertIs(type(client.fallback_cache), DummyCache)
 
     @mock.patch.object(RedisCacheWithFallback, "_call_fallback_cache")
     @mock.patch.object(RedisCacheWithFallback, "_call_redis_cache")
@@ -49,7 +50,7 @@ class RedisCacheWithFallbackTestCase(TestCase):
         redis_cache_mock.assert_called_once()
         fallback_cache_mock.assert_not_called()
 
-    @mock.patch("base.cache.logger")
+    @mock.patch("apps.core.cache.logger")
     @mock.patch.object(RedisCacheWithFallback, "_call_fallback_cache")
     @mock.patch.object(RedisCacheWithFallback, "_call_redis_cache")
     def test_get_fallback_cache(
@@ -77,7 +78,7 @@ class RedisCacheWithFallbackTestCase(TestCase):
     @override_settings(
         CACHES={
             "default": {
-                "BACKEND": "base.cache.RedisCacheWithFallback",
+                "BACKEND": "apps.core.cache.RedisCacheWithFallback",
                 "LOCATION": "mymaster/redis-sentinel:26379,redis-sentinel:26379/0",
                 "OPTIONS": {
                     "CLIENT_CLASS": "richie.apps.core.cache.SentinelClient",
