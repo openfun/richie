@@ -93,6 +93,8 @@ ci = [
     "twine==6.1.0",
 ]
 sandbox = [
+    "boto3==1.28.9",
+    "django-storages==1.13.2",
     "django-configurations==2.5.1",
     "dockerflow==2024.4.2",
     "factory-boy==3.3.3",
