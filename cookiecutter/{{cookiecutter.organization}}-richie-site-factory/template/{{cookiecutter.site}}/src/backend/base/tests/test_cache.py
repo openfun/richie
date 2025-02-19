@@ -6,7 +6,7 @@ from unittest import mock
 from django.core.cache.backends.dummy import DummyCache
 from django.test import TestCase, override_settings
 
-from base.cache import RedisCacheWithFallback
+from richie.base.cache import RedisCacheWithFallback
 from django_redis.cache import RedisCache
 
 
@@ -21,7 +21,7 @@ class RedisCacheWithFallbackTestCase(TestCase):
     @override_settings(
         CACHES={
             "default": {
-                "BACKEND": "base.cache.RedisCacheWithFallback",
+                "BACKEND": "richie.base.cache.RedisCacheWithFallback",
                 "LOCATION": "mymaster/redis-sentinel:26379,redis-sentinel:26379/0",
                 "OPTIONS": {
                     "CLIENT_CLASS": "richie.apps.core.cache.SentinelClient",
@@ -49,7 +49,7 @@ class RedisCacheWithFallbackTestCase(TestCase):
         redis_cache_mock.assert_called_once()
         fallback_cache_mock.assert_not_called()
 
-    @mock.patch("base.cache.logger")
+    @mock.patch("richie.base.cache.logger")
     @mock.patch.object(RedisCacheWithFallback, "_call_fallback_cache")
     @mock.patch.object(RedisCacheWithFallback, "_call_redis_cache")
     def test_get_fallback_cache(
@@ -77,7 +77,7 @@ class RedisCacheWithFallbackTestCase(TestCase):
     @override_settings(
         CACHES={
             "default": {
-                "BACKEND": "base.cache.RedisCacheWithFallback",
+                "BACKEND": "richie.base.cache.RedisCacheWithFallback",
                 "LOCATION": "mymaster/redis-sentinel:26379,redis-sentinel:26379/0",
                 "OPTIONS": {
                     "CLIENT_CLASS": "richie.apps.core.cache.SentinelClient",
@@ -112,7 +112,7 @@ class RedisCacheWithFallbackTestCase(TestCase):
         # Another call to Redis cache 120 seconds later
         # should delete the fallback cache again
         read_time = now + datetime.timedelta(seconds=120)
-        with mock.patch("base.utils.datetime") as mock_datetime:
+        with mock.patch("richie.base.utils.datetime") as mock_datetime:
             mock_datetime.now.return_value = read_time
             client.get("round_2")
 
@@ -124,7 +124,7 @@ class RedisCacheWithFallbackTestCase(TestCase):
         # Another call to Redis cache 30 seconds later (<1 minute)
         # should not delete the fallback cache again
         read_time += datetime.timedelta(seconds=30)
-        with mock.patch("base.utils.datetime") as mock_datetime:
+        with mock.patch("richie.base.utils.datetime") as mock_datetime:
             mock_datetime.now.return_value = read_time
             client.get("round_3")
 
@@ -136,7 +136,7 @@ class RedisCacheWithFallbackTestCase(TestCase):
         # Another call to Redis cache exactly 1 minute after
         # the latest call should not delete the fallback cache again
         read_time += datetime.timedelta(seconds=30)
-        with mock.patch("base.utils.datetime") as mock_datetime:
+        with mock.patch("richie.base.utils.datetime") as mock_datetime:
             mock_datetime.now.return_value = read_time
             client.get("round_4")
 
@@ -148,7 +148,7 @@ class RedisCacheWithFallbackTestCase(TestCase):
         # Another call to Redis cache exactly 1 minute and 1 second after
         # the latest call should delete the fallback cache again
         read_time += datetime.timedelta(seconds=1)
-        with mock.patch("base.utils.datetime") as mock_datetime:
+        with mock.patch("richie.base.utils.datetime") as mock_datetime:
             mock_datetime.now.return_value = read_time
             client.get("round_5")
 
