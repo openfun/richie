@@ -11,6 +11,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - BREAKING CHANGE - Upgrade to React 19
+- Removed storage and cache from site-factory and applied to Richie
+  in order to avoid repeating unnecessary and critical implementations
+  for each instance. If any customization is necessary, it is up to the
+  site-factory implementation. Otherwise, as expected, it keeps up to Richie.
 
 ## [2.34.0] - 2025-02-13
 
