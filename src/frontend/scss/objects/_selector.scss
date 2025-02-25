@@ -1,5 +1,6 @@
 .selector {
   position: relative;
+  z-index: 200;
 
   &__button {
     appearance: none;
