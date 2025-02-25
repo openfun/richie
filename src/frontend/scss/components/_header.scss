@@ -168,6 +168,10 @@
       flex-wrap: nowrap;
     }
 
+    & > .topbar__list {
+      position: relative;
+    }
+
     // Aside menu variation
     &--aside {
       @include sv-flex(1, 0, auto);
@@ -197,6 +201,76 @@
   // Menu item element
   &__item {
     $item-selector: &;
+    &.dropdown {
+      display: block;
+      position: static;
+
+      & > button {
+        width: 100%;
+
+        & > .icon {
+          height: 1rem;
+          margin-left: 0.5rem;
+          width: 1rem;
+        }
+      }
+
+      & ul[role='menu'] {
+        padding-left: 0.5rem;
+      }
+    }
+
+    @include media-breakpoint-up($r-topbar-breakpoint) {
+      &.dropdown {
+        // See header_menu.html for the definition of the variables
+        --active-background-color: #{r-theme-val(topbar, dropdown-item-background-color)};
+        --active-text-color: #{r-theme-val(topbar, dropdown-item-text-color)};
+
+        & > button[aria-expanded='true'] {
+          background-color: r-theme-val(topbar, dropdown-background-color);
+        }
+
+        & > button[aria-expanded='true'] + .topbar__sublist {
+          display: block;
+        }
+
+        & > .topbar__sublist {
+          background: r-theme-val(topbar, dropdown-background-color);
+          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+          border-radius: r-theme-val(topbar, dropdown-border-radius);
+          display: none;
+          position: absolute;
+          transform: translateX(-8px);
+          max-width: 100%;
+
+          &--full-width {
+            left: 0;
+            transform: inherit;
+          }
+
+          & > ul[role='menu'] {
+            display: flex;
+            flex-wrap: wrap;
+            gap: r-theme-val(topbar, dropdown-gap);
+            padding: r-theme-val(topbar, dropdown-padding);
+          }
+
+          & .topbar__item > a {
+            background-color: #fff;
+            border-radius: r-theme-val(topbar, dropdown-item-border-radius);
+            padding: r-theme-val(topbar, dropdown-item-padding);
+            &::after {
+              display: none;
+            }
+
+            &:is(:focus, :hover) {
+              background-color: var(--active-background-color);
+              color: var(--active-text-color);
+            }
+          }
+        }
+      }
+    }
 
     @include sv-flex(1, 0, auto);
     display: flex;
@@ -213,15 +287,23 @@
       --r--menu--item--hover--color: #{r-theme-val(topbar, item-hover-color)};
     }
 
-    & > a {
+    & > button {
+      @include button-reset-style();
+      --radius: #{r-theme-val(topbar, dropdown-border-radius)};
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    & > a,
+    & > button {
       @include sv-flex(1, 0, 100%);
-      display: flex;
-      padding: 1rem 0.2rem 1rem 1rem;
-      flex-direction: row;
       align-items: center;
+      color: inherit;
+      display: flex;
+      flex-direction: row;
       font-family: inherit;
       font-weight: inherit;
-      color: inherit;
+      justify-content: space-between;
+      padding: 1rem 0.2rem 1rem 1rem;
 
       @include media-breakpoint-up($r-topbar-breakpoint) {
         padding: 1rem 1rem;
@@ -235,17 +317,21 @@
 
           // If there is no default hover color we assume there is also no variant
           @if r-theme-val(topbar, item-hover-color) {
-            &::after {
-              content: '';
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              right: 0;
-              height: 8px;
+            &:is(a)::after {
               background-color: var(--r--menu--item--hover--color);
               border-top-left-radius: 0.2rem;
               border-top-right-radius: 0.2rem;
+              bottom: 0;
+              content: '';
+              height: 8px;
+              left: 0;
+              position: absolute;
+              right: 0;
             }
+          }
+
+          &:is(button) {
+            background-color: r-theme-val(topbar, dropdown-background-color);
           }
         }
       }
@@ -257,8 +343,10 @@
 
     // Current page item or current ancestor
     &--selected,
-    &--ancestor {
-      & > a {
+    &--ancestor,
+    &:has(.topbar__sublist .topbar__item.topbar__item--selected) {
+      & > a,
+      & > button {
         position: relative;
         color: r-theme-val(topbar, item-active-color);
 
@@ -328,7 +416,8 @@
     }
 
     // Item divider
-    & + #{$item-selector} {
+    & + #{$item-selector},
+    & > .topbar__list #{$item-selector} {
       @if r-theme-val(topbar, item-divider-border) {
         border-top: $onepixel solid r-theme-val(topbar, item-divider-border);
       }

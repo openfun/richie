@@ -16,7 +16,6 @@ $ make migrate
 
 ## Unreleased
 
-
 - We upgrade our frontend to React 19, you have to update your dependencies
   and overriden components accordingly.
 - Added the new setting `RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY` which is used to offer prices (courses price and certificate prices).
@@ -31,7 +30,21 @@ $ make migrate
   in order to avoid repeating unnecessary and critical implementations
   for each instance. If any customization is necessary, it is up to the
   site-factory implementation. Otherwise, as expected, it keeps up to Richie.
-
+- New properties has been added to the `topbar` theme scheme that allow you
+  to customize topbar dropdown menu look and feel :
+  ```scss
+  topbar: (
+    ...
+    dropdown-border-radius: 8px,
+    dropdown-padding: 0.5rem,
+    dropdown-gap: 0.5rem,
+    dropdown-background-color: r-color('azure2'),
+    dropdown-item-background-color: r-color('indianred3'),
+    dropdown-item-text-color: r-color('white'),
+    dropdown-item-border-radius: 4px,
+    dropdown-item-padding: 0.5rem 1rem,
+  ),
+  ```
 ## 2.33.0 to 2.34.0
 
 - Header menu template has been modified to include features from `MainMenuEntry`

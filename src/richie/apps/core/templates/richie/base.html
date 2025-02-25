@@ -255,16 +255,158 @@
                 }
             }
 
+            /**
+             * Initialize listeners for navigation dropdown menu
+             * Add listeners for accessibility features and full-width styling
+             * see header_menu.html for the HTML structure
+             */
+            function initializeDropdownMenu() {
+                const $dropdowns = document.querySelectorAll('.topbar__item.dropdown .topbar__sublist');
+                const $dropdownButtons = document.querySelectorAll('.topbar__item.dropdown button');
+                const $topbar = document.querySelector('.topbar > .topbar__container');
+
+                /**
+                 * Apply full-width class to dropdown menu if it's wider than the topbar
+                 * To compute the width, we need to take into account the position of the menu button
+                 * and the width of the topbar
+                 */
+                function _updateDropdownWidth($dropdown) {
+                    const $menu = $dropdown.querySelector('ul[role="menu"]');
+                    const $menuButton = $dropdown.previousElementSibling;
+                    const topbarWidth = $topbar.getBoundingClientRect().width;
+                    const topbarLeft = $topbar.getBoundingClientRect().left;
+                    const menuButtonLeft = $menuButton.getBoundingClientRect().left;
+                    $dropdown.style.display = 'block';
+                    $menu.style.flexWrap = 'nowrap';
+                    const menuWidth = $menu.getBoundingClientRect().width;
+                    $dropdown.style = '';
+                    $menu.style = '';
+                    const menuRelativeOffsetX = menuButtonLeft - topbarLeft;
+
+                    
+                    if (menuWidth > (topbarWidth - menuRelativeOffsetX)) {
+                        $dropdown.classList.add('topbar__sublist--full-width');
+                    } else {
+                        $dropdown.classList.remove('topbar__sublist--full-width');
+                    }
+                }
+
+                function _closeDropdown($button) {
+                    $button.setAttribute('aria-expanded', 'false');
+                    // Remove focus trap and event listeners when closing
+                    const $dropdown = document.getElementById($button.getAttribute('aria-controls'));
+                    const $menuItems = $dropdown.querySelectorAll('a');
+                    $menuItems.forEach(item => {
+                        item.removeEventListener('keydown', _handleMenuItemKeydown);
+                    });
+                }
+
+                function _openDropdown($button) {
+                    $button.setAttribute('aria-expanded', 'true');
+                    // Set up focus trap and event listeners when opening
+                    const $dropdown = document.getElementById($button.getAttribute('aria-controls'));
+                    const $menuItems = $dropdown.querySelectorAll('a');
+                    $menuItems.forEach(item => {
+                        item.setAttribute('role', 'menuitem');
+                        item.addEventListener('keydown', _handleMenuItemKeydown);
+                    });
+                    // Focus first menu item
+                    if ($menuItems.length) $menuItems[0].focus();
+                }
+
+                /**
+                 * Allow navigation through dropdown menu items using keyboard
+                 */
+                function _handleMenuItemKeydown(event) {
+                    const $currentItem = event.target;
+                    const $dropdown = $currentItem.closest('.topbar__sublist');
+                    const $menuItems = Array.from($dropdown.querySelectorAll('a'));
+                    const currentIndex = $menuItems.indexOf($currentItem);
+                    const $button = document.querySelector(`[aria-controls="${$dropdown.id}"]`);
+
+                    switch (event.key) {
+                        case 'ArrowDown':
+                            event.preventDefault();
+                            const nextIndex = (currentIndex + 1) % $menuItems.length;
+                            $menuItems[nextIndex].focus();
+                            break;
+                        case 'ArrowUp':
+                            event.preventDefault();
+                            const prevIndex = (currentIndex - 1 + $menuItems.length) % $menuItems.length;
+                            $menuItems[prevIndex].focus();
+                            break;
+                        case 'Escape':
+                            event.preventDefault();
+                            _closeDropdown($button);
+                            $button.focus();
+                            break;
+                    }
+                }
+
+                $dropdowns.forEach(($dropdown, index) => {
+                    const $button = $dropdownButtons[index];
+
+                    // Initial width calculation
+                    _updateDropdownWidth($dropdown);
+
+                    // Handle button clicks
+                    $button.addEventListener('click', () => {
+                        const isExpanded = $button.getAttribute('aria-expanded') === 'true';
+                        if (isExpanded) {
+                            _closeDropdown($button);
+                        } else {
+                            // Close any other open dropdowns
+                            $dropdownButtons.forEach(btn => {
+                                if (btn !== $button && btn.getAttribute('aria-expanded') === 'true') {
+                                    _closeDropdown(btn);
+                                }
+                            });
+                            _openDropdown($button);
+                        }
+                    });
+
+                    // Handle button keyboard interactions
+                    $button.addEventListener('keydown', (event) => {
+                        if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            _openDropdown($button);
+                        }
+                    });
+
+                    // Close when clicking outside
+                    document.addEventListener('click', (event) => {
+                        if (!$button.contains(event.target) && !$dropdown.contains(event.target)) {
+                            _closeDropdown($button);
+                        }
+                    });
+
+                    // Close when element within dropdown focus is lost
+                    $dropdown.addEventListener('focusout', (event) => {
+                        const $focusedElement = event.relatedTarget;
+                        if (!$dropdown.contains($focusedElement)) {
+                            _closeDropdown($button);
+                        }
+                    });
+                });
+
+                // Handle window resize
+                let resizeTimeout;
+                const RESIZE_DEBOUNCE_DELAY = 250;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        $dropdowns.forEach($dropdown => {
+                            _updateDropdownWidth($dropdown);
+                        });
+                    }, RESIZE_DEBOUNCE_DELAY);
+                });
+            }
+
             document.addEventListener("DOMContentLoaded", function() {
                 initializeAccordions();
                 initializeHamburgerMenu();
+                initializeDropdownMenu();
             });
-
-            function toggleClass(elements, clazz) {
-                for (let element of elements) {
-                    element.classList.toggle(clazz);
-                }
-            }
         </script>
         {% if request.toolbar and request.toolbar.edit_mode_active %}
         {# When edit mode is active, we have to refresh js scripts after saving modifications #}
@@ -274,6 +416,7 @@
                 __RICHIE__.render();
                 initializeAccordions();
                 initializeHamburgerMenu();
+                initializeDropdownMenu();
             });
         </script>
         {% endif %}
