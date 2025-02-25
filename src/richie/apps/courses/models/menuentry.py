@@ -40,7 +40,7 @@ class MainMenuEntry(BasePageExtension):
     )
     menu_color = models.CharField(
         _("Color in menu"),
-        max_length=10,
+        max_length=50,
         default="",
         blank=True,
         choices=defaults.MENU_ENTRY_COLOR_CLASSES,

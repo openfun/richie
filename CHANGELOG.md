@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Topbar dropdown menu layout and accessibility interactions
+
 ### Changed
 
 - BREAKING CHANGE - Upgrade to React 19
