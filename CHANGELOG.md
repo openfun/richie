@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add two new section grid distributions to better accomodate for 
+  course cards
+
 ### Changed
 
 - BREAKING CHANGE - Upgrade to React 19

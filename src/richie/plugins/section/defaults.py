@@ -31,5 +31,7 @@ SECTION_GRID_COLUMNS = getattr(
         ("50x50", _("Two columns: (50% | 50%)")),
         ("25x75", _("Two columns: (25% | 75%)")),
         ("75x25", _("Two columns: (75% | 25%)")),
+        ("35x65", _("Two columns: (35% | 65%)")),
+        ("65x35", _("Two columns: (65% | 35%)")),
     ],
 )
