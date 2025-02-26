@@ -175,6 +175,8 @@ $r-section-grid-sizes: (
   '33x33x33': 1fr 1fr 1fr,
   '25x75': 25% 2fr,
   '75x25': 2fr 25%,
+  '35x65': 35% 2fr,
+  '65x35': 2fr 35%,
 );
 
 // Define gutter size to apply on Section grid
