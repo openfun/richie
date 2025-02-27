@@ -424,6 +424,17 @@ def create_demo_site():
             fill_cover=pick_image("cover"),
             fill_excerpt=True,
             fill_body=True,
+            fill_categories=[
+                *random.sample(subjects, defaults.NB_OBJECTS["programs_categories"])
+            ],
+            fill_organizations=[
+                *random.sample(
+                    organizations, defaults.NB_OBJECTS["programs_organizations"]
+                )
+            ],
+            fill_team=[
+                *random.sample(persons, defaults.NB_OBJECTS["programs_persons"])
+            ],
             fill_courses=[
                 *random.sample(courses, defaults.NB_OBJECTS["programs_courses"])
             ],

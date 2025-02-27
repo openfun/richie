@@ -33,6 +33,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Use new credit card promote endpoint
 - Allow user to remove a main credit card
 - Change `branding_topbar` to have and additonal layer in `branding_topbar_logo`
+- Update Programs page with new fields
 
 ### Fixed
 
