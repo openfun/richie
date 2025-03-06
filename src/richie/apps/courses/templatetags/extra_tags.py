@@ -346,6 +346,20 @@ def course_runs_list_widget_props(context):
     )
 
 
+@register.simple_tag(takes_context=True)
+def course_programs_count(context, page: Page):
+    """
+    Return a count of the number of courses in a program page
+    """
+    language = context["LANGUAGE_CODE"]
+
+    return len(
+        page.get_placeholders()
+        .get(slot="program_courses")
+        .get_plugins_list(language=language)
+    )
+
+
 @register.filter
 @stringfilter
 def trim(value):
