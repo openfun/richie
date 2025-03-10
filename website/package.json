@@ -27,10 +27,10 @@
     "@docusaurus/plugin-content-pages": "3.7.0",
     "@docusaurus/preset-classic": "3.7.0",
     "clsx": "2.1.1",
-    "prettier": "3.5.2",
+    "prettier": "3.5.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-markdown": "10.0.0"
+    "react-markdown": "10.1.0"
   },
   "volta": {
     "node": "20.11.0",
