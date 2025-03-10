@@ -301,7 +301,7 @@
                     });
                 }
 
-                function _openDropdown($button) {
+                function _openDropdown($button, focus = false) {
                     $button.setAttribute('aria-expanded', 'true');
                     // Set up focus trap and event listeners when opening
                     const $dropdown = document.getElementById($button.getAttribute('aria-controls'));
@@ -311,7 +311,7 @@
                         item.addEventListener('keydown', _handleMenuItemKeydown);
                     });
                     // Focus first menu item
-                    if ($menuItems.length) $menuItems[0].focus();
+                    if (focus && $menuItems.length) $menuItems[0].focus();
                 }
 
                 /**
@@ -369,7 +369,7 @@
                     $button.addEventListener('keydown', (event) => {
                         if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
                             event.preventDefault();
-                            _openDropdown($button);
+                            _openDropdown($button, true);
                         }
                     });
 
