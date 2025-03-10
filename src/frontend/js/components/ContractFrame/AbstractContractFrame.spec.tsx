@@ -27,7 +27,7 @@ jest.mock('settings', () => ({
   CONTRACT_SETTINGS: {
     ...jest.requireActual('settings').CONTRACT_SETTINGS,
     pollInterval: 10,
-    dummySignatureSignTimeout: 10,
+    dummySignatureSignTimeout: 50,
   },
 }));
 
