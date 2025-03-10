@@ -4,7 +4,7 @@
     {% with children_slug=child.get_menu_title|slugify menu_options=child.menu_extension %}
         <li class="topbar__item
             {% if menu_options.allow_submenu and child.children %}dropdown{% endif %}
-            {% if menu_options.allow_submenu and menu_options.menu_color %} topbar__item--{{ menu_options.menu_color }}{% endif %}"
+            {% if menu_options.allow_submenu and menu_options.menu_color %} topbar__item--{{ menu_options.menu_color }}{% endif %}
             {% if child.selected or child.attr.redirect_url == current_page.get_absolute_url %} topbar__item--selected{% endif %}
             {% if child.ancestor %} topbar__item--ancestor{% endif %}
             {% if child.sibling %} topbar__item--sibling{% endif %}
