@@ -182,6 +182,11 @@ class CoursesIndexer:
                     "enrollment_start": {"type": "date"},
                     "enrollment_end": {"type": "date"},
                     "languages": {"type": "keyword"},
+                    "offer": {"type": "keyword"},
+                    "price": {"type": "keyword"},
+                    "price_currency": {"type": "keyword"},
+                    "certificate_price": {"type": "keyword"},
+                    "certificate_offer": {"type": "keyword"},
                 },
             },
             # Keywords
@@ -454,6 +459,22 @@ class CoursesIndexer:
                     return ['priority': 7];
                 }
                 """,
+            },
+        },
+        "offers_field": {
+            "script": {
+                "lang": "painless",
+                "source": BEST_STATE_SCRIPT
+                + """
+                // No course runs or no matching course runs
+                return [
+                    'certificate_offer': params._source.course_runs[best_index]['certificate_offer'],
+                    'certificate_price': params._source.course_runs[best_index]['certificate_price'],
+                    'offer': params._source.course_runs[best_index]['offer'],
+                    'price': params._source.course_runs[best_index]['price'],
+                    'price_currency': params._source.course_runs[best_index]['price_currency']
+                ];
+                """,
             }
         },
     }
@@ -590,6 +611,23 @@ class CoursesIndexer:
         # computations that require looping on the course runs
         # Course runs with no start date or no start of enrollment date are ignored as
         # they are still to be scheduled.
+        course_runs_queryset = course.course_runs.filter(
+                start__isnull=False,
+                enrollment_start__isnull=False,
+                catalog_visibility=CourseRunCatalogVisibility.COURSE_AND_SEARCH,
+            ).order_by("-end").values(
+                "start",
+                "end",
+                "enrollment_start",
+                "enrollment_end",
+                "languages",
+                "price",
+                "price_currency",
+                "offer",
+                "certificate_price",
+                "certificate_offer",
+            )
+
         course_runs = [
             {
                 "start": cr["start"],
@@ -597,14 +635,13 @@ class CoursesIndexer:
                 "enrollment_start": cr["enrollment_start"],
                 "enrollment_end": cr["enrollment_end"] or cr["end"] or MAX_DATE,
                 "languages": cr["languages"],
+                "price": cr["price"],
+                "price_currency": cr["price_currency"],
+                "offer": cr["offer"],
+                "certificate_price": cr["certificate_price"],
+                "certificate_offer": cr["certificate_offer"],
             }
-            for cr in course.course_runs.filter(
-                start__isnull=False,
-                enrollment_start__isnull=False,
-                catalog_visibility=CourseRunCatalogVisibility.COURSE_AND_SEARCH,
-            )
-            .order_by("-end")
-            .values("start", "end", "enrollment_start", "enrollment_end", "languages")
+            for cr in course_runs_queryset
         ]
 
         licences = (
@@ -769,6 +806,7 @@ class CoursesIndexer:
                 ]
             },
             "id": es_course["_id"],
+            "offers": es_course['fields']['offers'][0],
             "categories": source["categories"],
             "code": source["code"],
             "course_runs": source["course_runs"],

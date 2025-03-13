@@ -1,6 +1,7 @@
 """Custom template tags for the courses application of Richie."""
 
 import json
+import babel.numbers
 
 from django import template
 from django.conf import settings
@@ -367,3 +368,25 @@ def trim(value):
     Remove whitespaces before and after a string.
     """
     return value.strip()
+
+@register.filter
+def currency(value: float, currency_code: str) -> str:
+    """
+    Format a number as a currency according to the current locale.
+    
+    Args:
+        value: The numeric value to format
+        currency_code: The currency code (default: EUR)
+        
+    Returns:
+        A properly formatted currency string with the appropriate symbol
+    """
+    try:
+        # Get the current language
+        language = translation.get_language() or settings.LANGUAGE_CODE
+        locale = language.replace('-', '_')
+        
+        # Format the currency according to the locale
+        return babel.numbers.format_currency(float(value), currency_code, locale=locale)
+    except (ValueError, AttributeError, TypeError):
+        return value
