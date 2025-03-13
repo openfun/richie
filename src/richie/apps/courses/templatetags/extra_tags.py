@@ -10,6 +10,7 @@ from django.template.defaultfilters import stringfilter
 from django.template.loader import render_to_string
 from django.utils import translation
 
+import babel.numbers
 from classytags.arguments import Argument, MultiValueArgument
 from classytags.core import Options, Tag
 from classytags.utils import flatten_context
@@ -367,3 +368,26 @@ def trim(value):
     Remove whitespaces before and after a string.
     """
     return value.strip()
+
+
+@register.filter
+def currency(value: float, currency_code: str) -> str:
+    """
+    Format a number as a currency according to the current locale.
+
+    Args:
+        value: The numeric value to format
+        currency_code: The currency code (default: EUR)
+
+    Returns:
+        A properly formatted currency string with the appropriate symbol
+    """
+    try:
+        # Get the current language
+        language = translation.get_language() or settings.LANGUAGE_CODE
+        locale = language.replace("-", "_")
+
+        # Format the currency according to the locale
+        return babel.numbers.format_currency(float(value), currency_code, locale=locale)
+    except (ValueError, AttributeError, TypeError):
+        return value

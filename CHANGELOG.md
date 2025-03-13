@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Added a new `above_header` block to the base template to allow for better
   header customization
 - Index course offers in Elasticsearch `CourseIndexer`
+- Add `currency` template tag
 
 ### Changed
 
