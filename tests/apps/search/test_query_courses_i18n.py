@@ -71,6 +71,9 @@ class CoursesI18nQueryTestCase(TestCase):
         ES_CLIENT.put_script(
             id="state_field", body=CoursesIndexer.scripts["state_field"]
         )
+        ES_CLIENT.put_script(
+            id="offer_fields", body=CoursesIndexer.scripts["offer_fields"]
+        )
 
     def test_indexable_filters_internationalization(self):
         """

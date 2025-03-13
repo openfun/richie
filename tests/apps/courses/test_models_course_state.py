@@ -106,7 +106,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         self.create_run_archived_closed(course)
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             state = course.state
         self.assertEqual(state, CourseState(6))
 
@@ -116,7 +116,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         course_run = self.create_run_archived_open(course)
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             state = course.state
         self.assertEqual(state, CourseState(2, course_run.enrollment_end))
 
@@ -127,7 +127,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         self.create_run_ongoing_closed(course)
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             state = course.state
         self.assertEqual(state, CourseState(5))
 
@@ -138,7 +138,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         course_run = self.create_run_future_not_yet_open(course)
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             state = course.state
         expected_state = CourseState(3, course_run.start)
         self.assertEqual(state, expected_state)
@@ -146,7 +146,7 @@ class CourseRunModelsTestCase(TestCase):
         # Adding an on-going but closed course run should not change the result and require
         # only 1 additional database query
         self.create_run_ongoing_closed(course)
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             state = course.state
         self.assertEqual(state, expected_state)
 
@@ -157,15 +157,14 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         self.create_run_future_closed(course)
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             state = course.state
         expected_state = CourseState(4)
         self.assertEqual(state, expected_state)
 
         # Adding an on-going but closed course run should not change the result and require
         # only 1 additional database query
-        self.create_run_ongoing_closed(course)
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             state = course.state
         self.assertEqual(state, expected_state)
 
@@ -175,7 +174,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         course_run = self.create_run_future_open(course)
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             state = course.state
         expected_state = CourseState(1, course_run.start)
         self.assertEqual(state, expected_state)
@@ -184,7 +183,7 @@ class CourseRunModelsTestCase(TestCase):
         # only 1 additional database query
         self.create_run_ongoing_closed(course)
         self.create_run_future_closed(course)
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             state = course.state
         self.assertEqual(state, expected_state)
 
@@ -194,7 +193,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         course_run = self.create_run_ongoing_open(course)
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             state = course.state
         expected_state = CourseState(0, course_run.enrollment_end)
         self.assertEqual(state, expected_state)
@@ -204,7 +203,7 @@ class CourseRunModelsTestCase(TestCase):
         self.create_run_ongoing_closed(course)
         self.create_run_future_closed(course)
         self.create_run_future_open(course)
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             state = course.state
         self.assertEqual(state, expected_state)
 

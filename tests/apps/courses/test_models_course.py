@@ -5,13 +5,14 @@ Unit tests for the Course model
 # pylint: disable=too-many-lines
 import functools
 import random
+from datetime import timedelta
 from unittest import mock
 
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.test.utils import override_settings
-from django.utils import translation
+from django.utils import timezone, translation
 
 from cms.api import add_plugin, create_page
 from cms.models import PagePermission, Title
@@ -1719,3 +1720,137 @@ class CourseModelsTestCase(TestCase):
         """
         course = factories.CourseFactory(duration=[7, "hour"], effort=[7, "hour"])
         self.assertIsNone(course.get_pace_display())
+
+    def test_models_course_get_price_currency(self):
+        """
+        The property `price_currency` should return the price currency of
+        according to related course runs.
+        """
+        course = factories.CourseFactory()
+        factories.CourseRunFactory(direct_course=course, price_currency="USD")
+
+        self.assertEqual(course.price_currency, "USD")
+
+    def test_models_course_get_price_currency_no_course_run(self):
+        """
+        The property `price_currency` should return None if there is no related course run.
+        """
+        course = factories.CourseFactory()
+
+        self.assertEqual(course.price_currency, None)
+
+    def test_models_course_get_offer(self):
+        """
+        The property `offer` should return the appropriate offer
+        based on the related course runs.
+        """
+        course = factories.CourseFactory()
+        factories.CourseRunFactory(direct_course=course, offer="partially_free")
+
+        self.assertEqual(course.offer, "partially_free")
+
+    def test_models_course_get_offer_no_course_run(self):
+        """
+        The property `offer` should return None if there is no related course run.
+        """
+        course = factories.CourseFactory()
+
+        self.assertEqual(course.offer, None)
+
+    def test_models_course_get_price(self):
+        """
+        The property `price` should return the price
+        based on the related course runs.
+        """
+        course = factories.CourseFactory()
+        factories.CourseRunFactory(direct_course=course, price=100)
+
+        self.assertEqual(course.price, 100)
+
+    def test_models_course_get_price_no_course_run(self):
+        """
+        The property `price` should return None if there is no related course run.
+        """
+        course = factories.CourseFactory()
+
+        self.assertEqual(course.price, None)
+
+    def test_models_course_get_certificate_offer(self):
+        """
+        The property `certificate_offer` should return the certificate offer
+        according to the related course runs.
+        """
+        course = factories.CourseFactory()
+        factories.CourseRunFactory(
+            direct_course=course, certificate_offer="subscription"
+        )
+
+        self.assertEqual(course.certificate_offer, "subscription")
+
+    def test_models_course_get_certificate_offer_no_course_run(self):
+        """
+        The property `certificate_offer` should return None if there is no related course run.
+        """
+        course = factories.CourseFactory()
+
+        self.assertEqual(course.certificate_offer, None)
+
+    def test_models_course_get_certificate_price(self):
+        """
+        The property `certificate_price` should return the certificate price of
+        according to related course runs.
+        """
+        course = factories.CourseFactory()
+        factories.CourseRunFactory(direct_course=course, certificate_price=50)
+
+        self.assertEqual(course.certificate_price, 50)
+
+    def test_models_course_get_certificate_price_no_course_run(self):
+        """
+        The property `certificate_price` should return None if there is no related course run.
+        """
+        course = factories.CourseFactory()
+
+        self.assertEqual(course.certificate_price, None)
+
+    def test_models_course_get_offer_details_from_best_course_run(self):
+        """
+        The property `offer` should return the offer of the best course run
+        (with the lowest priority).
+        """
+        course = factories.CourseFactory()
+        # Create a course run with a partially free offer
+        # Create an ongoing course run
+        run1 = factories.CourseRunFactory(
+            direct_course=course,
+            price_currency="EUR",
+            offer="partially_free",
+            price=1337.00,
+            certificate_offer="free",
+            certificate_price=None,
+            enrollment_end=timezone.now() + timedelta(days=365),
+            enrollment_start=timezone.now() - timedelta(days=365),
+            start=timezone.now() - timedelta(days=365),
+            end=timezone.now() + timedelta(days=365),
+        )
+        # Create a future not yet opened course run
+        run2 = factories.CourseRunFactory(
+            direct_course=course,
+            price_currency="USD",
+            offer="paid",
+            price=7331.00,
+            certificate_offer="paid",
+            certificate_price=99.00,
+            enrollment_start=timezone.now() + timedelta(days=15),
+            enrollment_end=timezone.now() + timedelta(days=365),
+            start=timezone.now() + timedelta(days=365),
+            end=timezone.now() + timedelta(days=365),
+        )
+
+        self.assertTrue(run1.state["priority"] < run2.state["priority"])
+        self.assertEqual(course.best_course_run, run1)
+        self.assertEqual(course.offer, run1.offer)
+        self.assertEqual(course.price, run1.price)
+        self.assertEqual(course.certificate_offer, run1.certificate_offer)
+        self.assertEqual(course.certificate_price, run1.certificate_price)
+        self.assertEqual(course.certificate_price, run1.certificate_price)

@@ -103,6 +103,9 @@ class FacetsCoursesQueryTestCase(TestCase):
         ES_CLIENT.put_script(
             id="state_field", body=CoursesIndexer.scripts["state_field"]
         )
+        ES_CLIENT.put_script(
+            id="offer_fields", body=CoursesIndexer.scripts["offer_fields"]
+        )
 
         # Create the subject category page. This is necessary to link the subjects
         # with the "subjects" filter.

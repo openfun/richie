@@ -446,10 +446,10 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
     display_mode = models.CourseRunDisplayMode.DETAILED
     price_currency = "EUR"
     price = factory.Faker(
-        "pydecimal", min_value=1, max_value=100, left_digits=5, right_digits=2
+        "pydecimal", min_value=150, max_value=2000, left_digits=5, right_digits=2
     )
     certificate_price = factory.Faker(
-        "pydecimal", min_value=1, max_value=100, left_digits=5, right_digits=2
+        "pydecimal", min_value=50, max_value=200, left_digits=5, right_digits=2
     )
 
     # pylint: disable=no-self-use

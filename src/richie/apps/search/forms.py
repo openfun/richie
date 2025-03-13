@@ -151,7 +151,17 @@ class CourseSearchForm(SearchForm):
                         "states": self.states,
                     },
                 }
-            }
+            },
+            "offer_fields": {
+                "script": {
+                    "id": "offer_fields",
+                    "params": {
+                        "languages": self.cleaned_data.get("languages") or None,
+                        "ms_since_epoch": arrow.utcnow().int_timestamp * 1000,
+                        "states": self.states,
+                    },
+                }
+            },
         }
 
     def get_queries(self):

@@ -103,6 +103,9 @@ class AutocompleteCoursesTestCase(TestCase):
         ES_CLIENT.put_script(
             id="state_field", body=CoursesIndexer.scripts["state_field"]
         )
+        ES_CLIENT.put_script(
+            id="offer_fields", body=CoursesIndexer.scripts["offer_fields"]
+        )
 
         # Actually insert our courses in the index
         actions = [
