@@ -29,6 +29,7 @@ classifiers = [
 requires-python = ">=3.8"
 dependencies = [
     "arrow<2",
+    "babel<3",
     "Django<5",
     "djangocms-file<4",
     "djangocms-googlemap<3",

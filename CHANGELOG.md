@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add two new section grid distributions to better accomodate for 
   course cards
 - Index course offers in Elasticsearch `CourseIndexer`
+- Add `currency` template tag
 
 ### Changed
 
