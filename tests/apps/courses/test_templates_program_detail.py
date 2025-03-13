@@ -203,7 +203,7 @@ class ProgramCMSTestCase(CMSTestCase):
             )
         self.assertContains(
             response,
-            '<div class="course-glimpse course-glimpse--draft">'
+            '<div class="course-glimpse__body">'
             '<div aria-hidden="true" class="course-glimpse__media">'
             f'<a tabindex="-1" href="{courses[2].extended_object.get_absolute_url():s}"',
         )

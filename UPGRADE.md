@@ -60,6 +60,28 @@ $ make migrate
   ```
 
   This will ensure that the checkmarks are displayed correctly.
+
+- The `CourseGlimpse` component (both react and django template) has been refactored to display
+  the course offer and certificate offer information recently added to the `CourseRun` model. If you
+  have overridden the `fragment_course_glimpse.html` template or a `CourseGlimpse*` React component
+  you may need to update it.
+
+  Furthermore, properties have been added to the `course-glimpse` theme so you may need to update
+  your `_theme.scss` file.
+
+  ```scss
+  course-glimpse: (
+    ...
+    footer-offer-paid: $indianred3-scheme,
+    footer-offer-subscription: $indianred3-scheme,
+    footer-offer-partially_free: $indianred3-scheme,
+    footer-offer-certificate: null,
+    offer-icon-visibility: visible,
+    offer-certificate-icon-visibility: visible,
+    offer-price-visibility: visible,
+  ),
+  ```
+
 ## 2.33.0 to 2.34.0
 
 - Header menu template has been modified to include features from `MainMenuEntry`

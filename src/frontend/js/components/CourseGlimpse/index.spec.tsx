@@ -1,9 +1,10 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { MemoryRouter } from 'react-router';
 import { CommonDataProps } from 'types/commonDataProps';
 import { RichieContextFactory } from 'utils/test/factories/richie';
 import { CourseStateTextEnum } from 'types';
+import { CourseCertificateOffer, CourseOffer } from 'types/Course';
 import { CourseGlimpse, CourseGlimpseCourse } from '.';
 
 const renderCourseGlimpse = ({
@@ -53,6 +54,11 @@ describe('widgets/Search/components/CourseGlimpse', () => {
       text: CourseStateTextEnum.STARTING_ON,
     },
     title: 'Course 42',
+    offer: CourseOffer.PAID,
+    price: 42.0,
+    certificate_offer: CourseCertificateOffer.FREE,
+    certificate_price: null,
+    price_currency: 'EUR',
   };
 
   const contextProps: CommonDataProps['context'] = RichieContextFactory().one();
@@ -62,6 +68,11 @@ describe('widgets/Search/components/CourseGlimpse', () => {
 
     // first text we encounter should be the title, so that screen reader users get it first
     expect(container.textContent?.indexOf('Course 42')).toBe(0);
+
+    // The course glimpse container should have the a variant class according to their offers
+    const containerElement = container.querySelector('.course-glimpse');
+    expect(containerElement).toHaveClass('course-glimpse--offer-paid');
+    expect(containerElement).toHaveClass('course-glimpse--offer-certificate');
 
     // The link that wraps the course glimpse should have no title as its content is explicit enough
     const link = container.querySelector('.course-glimpse__link');
@@ -73,9 +84,9 @@ describe('widgets/Search/components/CourseGlimpse', () => {
     screen.getByLabelText('Organization');
     screen.getByText('Some Organization');
     screen.getByText('Category');
-    // Matches on 'Starting on Mar 14, 2019', date is wrapped with intl <span>
+    // Matches on 'Starting on March 14, 2019', date is wrapped with intl <span>
     screen.getByLabelText('Course date');
-    screen.getByText('Starting on Mar 14, 2019');
+    screen.getByText('Starting on March 14, 2019');
 
     // Check course logo
     const courseGlipseMedia = container.getElementsByClassName('course-glimpse__media');
@@ -97,6 +108,17 @@ describe('widgets/Search/components/CourseGlimpse', () => {
     // The logo is rendered along with alt text "" as it is decorative and included in a link block
     expect(orgImg).toHaveAttribute('alt', '');
     expect(orgImg).toHaveAttribute('src', '/thumbs/org_small.png');
+
+    // Check certificate offer
+    within(container).getByRole('img', { name: 'The course offers a certification.' });
+
+    // Check offer information
+    const offerIcon = within(container).getByRole('img', { name: 'Course requires a payment.' });
+    const useElement = offerIcon.lastChild;
+    expect(useElement).toHaveAttribute('href', '#icon-offer-paid');
+
+    const offerPrice = offerIcon.nextSibling;
+    expect(offerPrice).toHaveTextContent('€42.00');
   });
 
   it('works when there is no call to action or datetime on the state (eg. an archived course)', () => {
@@ -115,8 +137,8 @@ describe('widgets/Search/components/CourseGlimpse', () => {
     // Make sure the component renders and shows the state
     screen.getByRole('heading', { name: 'Course 42', level: 3 });
     const dateFormatter = Intl.DateTimeFormat('en', {
-      day: '2-digit',
-      month: 'short',
+      day: 'numeric',
+      month: 'long',
       year: 'numeric',
     });
     const formatedDatetime = dateFormatter.format(new Date(course.state.datetime!));
@@ -144,5 +166,58 @@ describe('widgets/Search/components/CourseGlimpse', () => {
       'course-glimpse__metadata',
       'course-glimpse__metadata--code',
     );
+  });
+
+  it('does not show certificate offer if the course does not offer a certificate', () => {
+    const { container } = renderCourseGlimpse({
+      contextProps,
+      course: { ...course, certificate_offer: null },
+    });
+
+    const containerElement = container.querySelector('.course-glimpse');
+    expect(containerElement).not.toHaveClass('course-glimpse--offer-certificate');
+
+    const certificicateOfferIcon = within(container).queryByRole('img', {
+      name: 'The course offers a certification.',
+    });
+    expect(certificicateOfferIcon).not.toBeInTheDocument();
+  });
+
+  it('does show free course offer if the course has no offer', () => {
+    const { container } = renderCourseGlimpse({
+      contextProps,
+      course: { ...course, offer: null },
+    });
+
+    const containerElement = container.querySelector('.course-glimpse');
+    expect(containerElement).toHaveClass('course-glimpse--offer-free');
+
+    const offerIcon = within(container).getByRole('img', {
+      name: 'The entire course can be completed for free.',
+    });
+    const useElement = offerIcon.lastChild;
+    expect(useElement).toHaveAttribute('href', '#icon-offer-free');
+
+    // And no price is shown
+    expect(offerIcon.nextSibling).not.toBeInTheDocument();
+  });
+
+  it.each([
+    [CourseOffer.FREE, 'The entire course can be completed for free.'],
+    [CourseOffer.PARTIALLY_FREE, 'More than half of the course is for free.'],
+    [CourseOffer.PAID, 'Course requires a payment.'],
+    [CourseOffer.SUBSCRIPTION, 'Course requires to be a subscriber or a paid member.'],
+  ])('does show a specific course offer icon', (offer, altText) => {
+    const { container } = renderCourseGlimpse({
+      contextProps,
+      course: { ...course, offer },
+    });
+
+    const containerElement = container.querySelector('.course-glimpse');
+    expect(containerElement).toHaveClass(`course-glimpse--offer-${offer}`);
+
+    const offerIcon = within(container).getByRole('img', { name: altText });
+    const useElement = offerIcon.lastChild;
+    expect(useElement).toHaveAttribute('href', `#icon-offer-${offer}`);
   });
 });

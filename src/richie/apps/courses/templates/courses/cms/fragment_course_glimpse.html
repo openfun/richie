@@ -2,95 +2,126 @@
 {% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
 
 {% with course_page=course.extended_object course_state=course.state main_organization_title=course.get_main_organization.extended_object.get_menu_title main_organization=course.get_main_organization course_variant=course_variant|default:'glimpse' %}
-<div class="course-{{ course_variant }}{% if course_page.publisher_is_draft is True %} course-{{ course_variant }}--draft{% endif %}">
-    <div aria-hidden="true" class="course-{{ course_variant }}__media">
-        <a tabindex="-1" href="{{ course_page.get_absolute_url }}">
-            {% get_placeholder_plugins "course_cover" course_page as cover_plugins or %}
-                <p class="course-{{ course_variant }}--empty">{% trans "Cover" %}</p>
-            {% endget_placeholder_plugins %}
-            {% blockplugin cover_plugins.0 %}
-                <img src="{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
-                    srcset="
-                        {% thumbnail instance.picture 800x457 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
-                        {% if instance.picture.width >= 1600 %},{% thumbnail instance.picture 1600x914 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                        {% if instance.picture.width >= 2400 %},{% thumbnail instance.picture 2400x1371 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
-                    "
-                    sizes="300px"
-                    {# alt forced to empty string for a11y because the image does not carry more information than the course title #}
-                    alt=""
-                />
-            {% endblockplugin %}
-        </a>
-    </div>
-    <div class="course-{{ course_variant }}__content">
-        <div class="course-{{ course_variant }}__wrapper">
-            <h{{ header_level|default:3 }} class="course-{{ course_variant }}__title">
-                <a class="course-{{ course_variant }}__link" href="{{ course_page.get_absolute_url }}">
-                    <span class="course-{{ course_variant }}__title-text">{{ course_page.get_title }}</span>
-                </a>
-            </h{{ header_level|default:3 }}>
-            {% if main_organization %}
-                {% with organization_page=main_organization.extended_object %}
-                    {% get_placeholder_plugins "logo" organization_page as plugins or %}
-                    {% endget_placeholder_plugins %}
-                    {% blockplugin plugins.0 %}
-                        <div class="course-glimpse__organization-logo">
-                            <img src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
-                                srcset="
-                                    {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 200w
-                                    {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-                                    {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                                    {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
-                                "
-                                {# alt forced to empty string for a11y because the image does not carry more information than the course title #}
-                                alt=""
-                            />
-                        </div>
-                    {% endblockplugin %}
+<div class="
+    course-{{ course_variant }}
+    course-{{ course_variant }}--offer-{{course.offer|default:'free'}}
+    {% if course_page.publisher_is_draft is True %} course-{{ course_variant }}--draft{% endif %}
+    {% if course.certificate_offer %} course-{{ course_variant }}--offer-certificate {% endif %}
+    ">
+    <div class="course-{{ course_variant }}__body">
+        <div aria-hidden="true" class="course-{{ course_variant }}__media">
+            <a tabindex="-1" href="{{ course_page.get_absolute_url }}">
+                {% get_placeholder_plugins "course_cover" course_page as cover_plugins or %}
+                    <p class="course-{{ course_variant }}--empty">{% trans "Cover" %}</p>
+                {% endget_placeholder_plugins %}
+                {% blockplugin cover_plugins.0 %}
+                    <img src="{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}"
+                        srcset="
+                            {% thumbnail instance.picture 800x457 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 300w
+                            {% if instance.picture.width >= 1600 %},{% thumbnail instance.picture 1600x914 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                            {% if instance.picture.width >= 2400 %},{% thumbnail instance.picture 2400x1371 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+                        "
+                        sizes="300px"
+                        {# alt forced to empty string for a11y because the image does not carry more information than the course title #}
+                        alt=""
+                    />
+                {% endblockplugin %}
+            </a>
+        </div>
+        <div class="course-{{ course_variant }}__content">
+            <div class="course-{{ course_variant }}__wrapper">
+                <h{{ header_level|default:3 }} class="course-{{ course_variant }}__title">
+                    <a class="course-{{ course_variant }}__link" href="{{ course_page.get_absolute_url }}">
+                        <span class="course-{{ course_variant }}__title-text">{{ course_page.get_title }}</span>
+                    </a>
+                </h{{ header_level|default:3 }}>
+                {% if main_organization %}
+                    {% with organization_page=main_organization.extended_object %}
+                        {% get_placeholder_plugins "logo" organization_page as plugins or %}
+                        {% endget_placeholder_plugins %}
+                        {% blockplugin plugins.0 %}
+                            <div class="course-glimpse__organization-logo">
+                                <img src="{% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %}"
+                                    srcset="
+                                        {% thumbnail instance.picture 200x113 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 200w
+                                        {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                                        {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                        {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 replace_alpha='#FFFFFF' upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
+                                    "
+                                    {# alt forced to empty string for a11y because the image does not carry more information than the course title #}
+                                    alt=""
+                                />
+                            </div>
+                        {% endblockplugin %}
+                    {% endwith %}
+                {% endif %} 
+                {% if main_organization_title %}
+                <div class="course-{{ course_variant }}__metadata course-{{ course_variant }}__metadata--organization">
+                    <svg role="img" aria-label="{% trans "Organization" %}" class="icon icon--small">
+                        <title>{% trans "Organization" %}</title>
+                        <use href="#icon-org" />
+                    </svg>
+                    <span class="title">{{ main_organization_title }}</span>
+                </div>
+                {% endif %}
+                <div class="course-{{ course_variant }}__metadata course-{{ course_variant }}__metadata--code">
+                    <svg role="img" aria-label="{% trans "Course code" %}" class="icon icon--small">
+                        <title>{% trans "Course code" %}</title>
+                        <use href="#icon-barcode" />
+                    </svg>
+                    <span>{% if course.code %}{{ course.code }}{% else %}-{% endif %}</span>
+                </div>
+            </div>
+
+            {% get_placeholder_plugins "course_icons" course_page as icon_plugins %}
+            {% if icon_plugins %}
+            <div class="course-{{ course_variant }}__icon">
+                {% with category_variant="badge" has_link=False %}
+                    {% render_plugin icon_plugins.0 %}
                 {% endwith %}
-            {% endif %} 
-            {% if main_organization_title %}
-            <div class="course-{{ course_variant }}__metadata course-{{ course_variant }}__metadata--organization">
-                <svg role="img" aria-label="{% trans "Organization" %}" class="icon icon--small">
-                    <title>{% trans "Organization" %}</title>
-                    <use href="#icon-org" />
-                </svg>
-                <span class="title">{{ main_organization_title }}</span>
             </div>
             {% endif %}
-            <div class="course-{{ course_variant }}__metadata course-{{ course_variant }}__metadata--code">
-                <svg role="img" aria-label="{% trans "Course code" %}" class="icon icon--small">
-                    <title>{% trans "Course code" %}</title>
-                    <use href="#icon-barcode" />
-                </svg>
-                <span>{% if course.code %}{{ course.code }}{% else %}-{% endif %}</span>
-            </div>
         </div>
-
-        {% get_placeholder_plugins "course_icons" course_page as icon_plugins %}
-        {% if icon_plugins %}
-        <div class="course-{{ course_variant }}__icon">
-            {% with category_variant="badge" has_link=False %}
-                {% render_plugin icon_plugins.0 %}
-            {% endwith %}
-        </div>
-        {% endif %}
-
-        {% block course_glimpse_footer %}
+    </div>
+    {% block course_glimpse_footer %}
         <div class="course-{{ course_variant }}-footer">
-            <div class="course-{{ course_variant }}-footer__date">
-                <svg role="img" aria-label="{% trans "Course date" %}" class="icon icon--medium">
+            <div class="course-{{ course_variant }}-footer__column course-{{ course_variant }}-footer__date">
+                <svg role="img" aria-label="{% trans "Course date" %}" class="icon icon--small">
                     <title>{% trans "Course date" %}</title>
                     <use href="#icon-calendar" />
                 </svg>
-                {{ course_state.text|capfirst }}
-                {% if course_state.datetime %}
-                    {{ course_state.datetime|date:"DATE_FORMAT" }}
+                <span>
+                    {{ course_state.text|capfirst }}
+                    {% if course_state.datetime %}
+                        {{ course_state.datetime|date:"DATE_FORMAT" }}</span>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="course-{{ course_variant }}-footer__column course-{{ course_variant }}-footer__price">
+                {% if course.certificate_offer %}
+                    <svg role="img" aria-labelledby="offer-certificate-icon-title" class="offer-certificate__icon icon icon--medium">
+                        <title id="offer-certificate-icon-title">{% trans "This course offers a certification." %}</title>
+                        <use href="#icon-school" />
+                    </svg>
+                {% endif %}
+                <svg role="img" aria-labelledby="offer-icon-title" class="offer__icon icon icon--medium">
+                        {% if course.offer == 'paid' %}
+                            <title id="offer-icon-title">{% trans "Course requires a payment." %}</title>
+                        {% elif course.offer == 'subscription' %}
+                            <title id="offer-icon-title">{% trans "Course requires to be a subscriber or a paid member." %}</title>
+                        {% elif course.offer == 'partially_free' %}
+                            <title id="offer-icon-title">{% trans "More than half of the course is for free." %}</title>
+                        {% else %}
+                            <title id="offer-icon-title">{% trans "The entire course can be completed without cost." %}</title>
+                        {% endif %}
+                        <use href="#icon-offer-{{course.offer|default:'free'}}" />
+                </svg>
+                {% if course.offer != 'free' and course.price %}
+                    <span class="offer__price">{{ course.price|currency:course.price_currency }}</span>
                 {% endif %}
             </div>
         </div>
-        {% endblock course_glimpse_footer %}
-    </div>
+    {% endblock course_glimpse_footer %}
 </div>
 {% endwith %}
 {% endspaceless %}

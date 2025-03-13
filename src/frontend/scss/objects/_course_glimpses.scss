@@ -57,10 +57,8 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
 
   position: relative;
   margin: $r-course-glimpse-gutter;
-  border-radius: $border-radius-lg;
-  box-shadow: r-theme-val(course-glimpse, base-shadow);
+
   min-width: 16rem;
-  overflow: hidden;
 
   @include media-breakpoint-up(sm) {
     @include sv-flex(1, 0, calc(50% - #{$r-course-glimpse-gutter * 2}));
@@ -83,8 +81,16 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     pointer-events: auto;
   }
 
-  &:hover,
-  &:focus-within {
+  &__body {
+    box-shadow: r-theme-val(course-glimpse, base-shadow);
+    border-radius: $border-radius-lg;
+    overflow: hidden;
+    transition: box-shadow 0.5s $r-ease-out;
+    z-index: 1;
+  }
+
+  &:hover &__body,
+  &:focus-within &__body {
     color: inherit;
     text-decoration: none;
     border: 0;
@@ -149,6 +155,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
   &__content {
     font-size: 0.9rem;
     color: r-theme-val(course-glimpse, content-color);
+    background: map-get(r-theme-val(course-glimpse, footer), 'background');
   }
 
   &__wrapper {
@@ -156,6 +163,9 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     display: flex;
     flex-direction: column;
     position: relative;
+    color: r-theme-val(course-glimpse, card-background);
+    border-radius: 0 0 $border-radius-lg $border-radius-lg;
+    background-color: r-theme-val(course-glimpse, card-background);
   }
 
   &__title,
@@ -322,9 +332,26 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
   border-bottom-left-radius: $border-radius-lg;
   border-bottom-right-radius: $border-radius-lg;
   font-size: 0.7rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 0;
+  transition: transform 0.25s $r-ease-out;
 
-  &__date {
-    @include sv-flex(1, 0, auto);
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    top: -15px;
+    height: 30px;
+    left: 0;
+    right: 0;
+    @include r-button-colors(r-theme-val(course-glimpse, footer), $apply-border: true);
+    z-index: -1;
+  }
+
+  &__column {
+    @include sv-flex(0, 130px, auto);
     display: flex;
     margin: 0;
     padding: 0.45rem 0;
@@ -335,7 +362,54 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     .icon {
       margin-right: 0.5rem;
     }
+
+    span {
+      display: inline-block;
+      max-width: 15ch;
+      font-variant-numeric: tabular-nums;
+    }
   }
+
+  &__price {
+    .offer-certificate__icon {
+      $visibility: r-theme-val(course-glimpse, offer-certificate-icon-visibility);
+      @if $visibility == hidden {
+        display: none;
+      }
+      visibility: $visibility;
+    }
+    .offer__icon {
+      $visibility: r-theme-val(course-glimpse, offer-icon-visibility);
+      @if $visibility == hidden {
+        display: none;
+      }
+      visibility: $visibility;
+    }
+
+    .offer__icon {
+      margin-right: 0;
+      & + .offer__price {
+        margin-left: 0.25rem;
+      }
+    }
+
+    .offer__price {
+      $visibility: r-theme-val(course-glimpse, offer-price-visibility);
+      @if $visibility == hidden {
+        display: none;
+      }
+      visibility: $visibility;
+      // Align vertically the price with the icon
+      margin-top: calc(1ex - 1cap);
+    }
+  }
+}
+
+.course-glimpse:hover .course-glimpse-footer,
+.course-glimpse:hover .course-glimpse__large-footer,
+.course-glimpse:focus-within .course-glimpse-footer,
+.course-glimpse:focus-within .course-glimpse__large-footer {
+  transform: translateY(4px);
 }
 
 //
@@ -344,5 +418,27 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
 .course-glimpse__large {
   @include media-breakpoint-up(lg) {
     @include sv-flex(1, 0, calc(33.33333% - #{$r-course-glimpse-gutter * 2}));
+  }
+}
+
+// Course Glimpse Variant according to the offer
+$offer-schemes: (
+  certificate: r-theme-val(course-glimpse, footer-offer-certificate),
+  free: r-theme-val(course-glimpse, footer-offer-free),
+  paid: r-theme-val(course-glimpse, footer-offer-paid),
+  partially_free: r-theme-val(course-glimpse, footer-offer-partially_free),
+  subscription: r-theme-val(course-glimpse, footer-offer-subscription),
+);
+
+@each $offer, $scheme in $offer-schemes {
+  @if $scheme != null {
+    .course-glimpse--offer-#{$offer} {
+      .course-glimpse-footer {
+        @include r-button-colors($scheme, $apply-border: true);
+        &:after {
+          background: map-get($scheme, 'background');
+        }
+      }
+    }
   }
 }
