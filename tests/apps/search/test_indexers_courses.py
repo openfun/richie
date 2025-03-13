@@ -325,6 +325,11 @@ class CoursesIndexersTestCase(TestCase):
                     "enrollment_start": course_run.public_course_run.enrollment_start,
                     "enrollment_end": course_run.public_course_run.enrollment_end,
                     "languages": course_run.public_course_run.languages,
+                    "price_currency": course_run.public_course_run.price_currency,
+                    "offer": course_run.public_course_run.offer,
+                    "price": course_run.public_course_run.price,
+                    "certificate_offer": course_run.public_course_run.certificate_offer,
+                    "certificate_price": course_run.public_course_run.certificate_price,
                 }
                 for course_run in course.course_runs.order_by("-end")
             ],
@@ -799,7 +804,16 @@ class CoursesIndexersTestCase(TestCase):
             "fields": {
                 "state": [
                     {"priority": 0, "date_time": "2019-03-17T21:25:52.179667+00:00"}
-                ]
+                ],
+                "offer_fields": [
+                    {
+                        "offer": "paid",
+                        "price": 1337.00,
+                        "certificate_offer": "free",
+                        "certificate_price": None,
+                        "price_currency": "EUR",
+                    }
+                ],
             },
         }
         self.assertEqual(
@@ -822,6 +836,11 @@ class CoursesIndexersTestCase(TestCase):
                 "state": CourseState(
                     0, datetime(2019, 3, 17, 21, 25, 52, 179667, timezone.utc)
                 ),
+                "offer": "paid",
+                "price": 1337.00,
+                "certificate_offer": "free",
+                "certificate_price": None,
+                "price_currency": "EUR",
             },
         )
 
@@ -851,7 +870,16 @@ class CoursesIndexersTestCase(TestCase):
             "fields": {
                 "state": [
                     {"priority": 0, "date_time": "2019-03-17T21:25:52.179667+00:00"}
-                ]
+                ],
+                "offer_fields": [
+                    {
+                        "offer": "paid",
+                        "price": 1337.00,
+                        "certificate_offer": "free",
+                        "certificate_price": None,
+                        "price_currency": "EUR",
+                    }
+                ],
             },
         }
         self.assertEqual(
@@ -874,6 +902,11 @@ class CoursesIndexersTestCase(TestCase):
                 "state": CourseState(
                     0, datetime(2019, 3, 17, 21, 25, 52, 179667, timezone.utc)
                 ),
+                "offer": "paid",
+                "price": 1337.00,
+                "certificate_offer": "free",
+                "certificate_price": None,
+                "price_currency": "EUR",
             },
         )
 
@@ -902,7 +935,16 @@ class CoursesIndexersTestCase(TestCase):
             "fields": {
                 "state": [
                     {"priority": 0, "date_time": "2019-03-17T21:25:52.179667+00:00"}
-                ]
+                ],
+                "offer_fields": [
+                    {
+                        "offer": "paid",
+                        "price": 1337.00,
+                        "certificate_offer": "free",
+                        "certificate_price": None,
+                        "price_currency": "EUR",
+                    }
+                ],
             },
         }
         self.assertEqual(
@@ -925,6 +967,11 @@ class CoursesIndexersTestCase(TestCase):
                 "state": CourseState(
                     0, datetime(2019, 3, 17, 21, 25, 52, 179667, timezone.utc)
                 ),
+                "offer": "paid",
+                "price": 1337.00,
+                "certificate_offer": "free",
+                "certificate_price": None,
+                "price_currency": "EUR",
             },
         )
 
@@ -953,7 +1000,16 @@ class CoursesIndexersTestCase(TestCase):
             "fields": {
                 "state": [
                     {"priority": 0, "date_time": "2019-03-17T21:25:52.179667+00:00"}
-                ]
+                ],
+                "offer_fields": [
+                    {
+                        "offer": "paid",
+                        "price": 1337.00,
+                        "certificate_offer": "free",
+                        "certificate_price": None,
+                        "price_currency": "EUR",
+                    }
+                ],
             },
         }
         self.assertEqual(
@@ -976,6 +1032,11 @@ class CoursesIndexersTestCase(TestCase):
                 "state": CourseState(
                     0, datetime(2019, 3, 17, 21, 25, 52, 179667, timezone.utc)
                 ),
+                "offer": "paid",
+                "price": 1337.00,
+                "certificate_offer": "free",
+                "certificate_price": None,
+                "price_currency": "EUR",
             },
         )
 
@@ -998,7 +1059,16 @@ class CoursesIndexersTestCase(TestCase):
             "fields": {
                 "state": [
                     {"priority": 0, "date_time": "2019-03-17T21:25:52.179667+00:00"}
-                ]
+                ],
+                "offer_fields": [
+                    {
+                        "offer": "paid",
+                        "price": 1337.00,
+                        "certificate_offer": "free",
+                        "certificate_price": None,
+                        "price_currency": "EUR",
+                    }
+                ],
             },
         }
         self.assertEqual(

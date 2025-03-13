@@ -622,6 +622,26 @@ class Course(EsIdMixin, BasePageExtension):
         return self.get_reverse_related_page_extensions("program", language=language)
 
     @property
+    def best_course_run(self):
+        """
+        Returns the course run with the best state.
+        """
+        best_run = None
+        course_runs = self.course_runs.only(
+            "start", "end", "enrollment_start", "enrollment_end"
+        ).exclude(catalog_visibility=CourseRunCatalogVisibility.HIDDEN)
+
+        for course_run in course_runs:
+            state = course_run.state
+            if best_run is None or best_run.state["priority"] > state["priority"]:
+                best_run = course_run
+            if state["priority"] == CourseState.ONGOING_OPEN:
+                # We found the best state, don't waste more time
+                break
+
+        return best_run
+
+    @property
     def state(self):
         """
         The state of the course carrying information on what to display on a course glimpse.
@@ -631,15 +651,55 @@ class Course(EsIdMixin, BasePageExtension):
         # The default state is for a course that has no course runs
         best_state = CourseState(CourseState.TO_BE_SCHEDULED)
 
-        for course_run in self.course_runs.only(
-            "start", "end", "enrollment_start", "enrollment_end"
-        ).exclude(catalog_visibility=CourseRunCatalogVisibility.HIDDEN):
-            state = course_run.state
-            best_state = min(state, best_state)
-            if state["priority"] == CourseState.ONGOING_OPEN:
-                # We found the best state, don't waste more time
-                break
+        if self.best_course_run:
+            best_state = self.best_course_run.state
+
         return best_state
+
+    @property
+    def price_currency(self):
+        """
+        Returns the price currency of the course run with the best state.
+        """
+        if self.best_course_run:
+            return self.best_course_run.price_currency
+        return None
+
+    @property
+    def offer(self):
+        """
+        Returns the offer of the course run with the best state.
+        """
+        if self.best_course_run:
+            return self.best_course_run.offer
+        return None
+
+    @property
+    def price(self):
+        """
+        Returns the price of the course run with the best state.
+        """
+        if self.best_course_run:
+            return self.best_course_run.price
+        return None
+
+    @property
+    def certificate_offer(self):
+        """
+        Returns the certificate offer of the course run with the best state.
+        """
+        if self.best_course_run:
+            return self.best_course_run.certificate_offer
+        return None
+
+    @property
+    def certificate_price(self):
+        """
+        Returns the certificate price of the course run with the best state.
+        """
+        if self.best_course_run:
+            return self.best_course_run.certificate_price
+        return None
 
     def copy_relations(self, oldinstance, language=None):
         """

@@ -46,6 +46,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
     works as expected.
     """
 
+    maxDiff = None
+
     def setUp(self):
         """Reset indexable filters cache before each test so the context is as expected."""
         super().setUp()
@@ -373,6 +375,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "enrollment_start": now.shift(days=-15).datetime,
                 "enrollment_end": now.shift(days=+5).datetime,
                 "languages": ["fr"],
+                "offer": "paid",
+                "price": 1337.00,
+                "certificate_price": None,
+                "certificate_offer": "free",
+                "price_currency": "EUR",
             },
             "B": {
                 # B) ongoing course, can still be enrolled in for longer than A)
@@ -381,6 +388,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "enrollment_start": now.shift(days=-30).datetime,
                 "enrollment_end": now.shift(days=+15).datetime,
                 "languages": ["en"],
+                "offer": None,
+                "price": None,
+                "certificate_price": None,
+                "certificate_offer": None,
+                "price_currency": "EUR",
             },
             "C": {
                 # C) not started yet, first upcoming course to start
@@ -389,6 +401,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "enrollment_start": now.shift(days=-30).datetime,
                 "enrollment_end": now.shift(days=+30).datetime,
                 "languages": ["en"],
+                "offer": None,
+                "price": None,
+                "certificate_price": 42.00,
+                "certificate_offer": "paid",
+                "price_currency": "EUR",
             },
             "D": {
                 # D) already finished course but enrollment still open
@@ -397,6 +414,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "enrollment_start": now.shift(days=-100).datetime,
                 "enrollment_end": now.shift(days=+15).datetime,
                 "languages": ["en"],
+                "offer": "partially_free",
+                "price": 99.99,
+                "certificate_price": 42.00,
+                "certificate_offer": "paid",
+                "price_currency": "EUR",
             },
             "E": {
                 # E) not started yet, will start after the other upcoming course
@@ -405,6 +427,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "enrollment_start": now.shift(days=+30).datetime,
                 "enrollment_end": now.shift(days=+60).datetime,
                 "languages": ["fr", "de"],
+                "offer": None,
+                "price": None,
+                "certificate_price": None,
+                "certificate_offer": None,
+                "price_currency": "EUR",
             },
             "F": {
                 # F) ongoing course, most recent to end enrollment
@@ -413,6 +440,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "enrollment_start": now.shift(days=-120).datetime,
                 "enrollment_end": now.shift(days=-30).datetime,
                 "languages": ["en"],
+                "offer": None,
+                "price": None,
+                "certificate_price": None,
+                "certificate_offer": None,
+                "price_currency": "EUR",
             },
             "G": {
                 # G) ongoing course, enrollment has been over for the longest
@@ -421,6 +453,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "enrollment_start": now.shift(days=-100).datetime,
                 "enrollment_end": now.shift(days=-45).datetime,
                 "languages": ["fr"],
+                "offer": None,
+                "price": None,
+                "certificate_price": None,
+                "certificate_offer": None,
+                "price_currency": "EUR",
             },
             "H": {
                 # H) already finished course; it finished more recently than I)
@@ -429,6 +466,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "enrollment_start": now.shift(days=-100).datetime,
                 "enrollment_end": now.shift(days=-60).datetime,
                 "languages": ["en"],
+                "offer": None,
+                "price": None,
+                "certificate_price": None,
+                "certificate_offer": None,
+                "price_currency": "EUR",
             },
             "I": {
                 # I) the course that has been over for the longest
@@ -437,6 +479,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "enrollment_start": now.shift(days=-150).datetime,
                 "enrollment_end": now.shift(days=-90).datetime,
                 "languages": ["en", "de"],
+                "offer": None,
+                "price": None,
+                "certificate_price": None,
+                "certificate_offer": None,
+                "price_currency": "EUR",
             },
         }
 
@@ -496,6 +543,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         ES_CLIENT.put_script(id="score", body=CoursesIndexer.scripts["score"])
         ES_CLIENT.put_script(
             id="state_field", body=CoursesIndexer.scripts["state_field"]
+        )
+        ES_CLIENT.put_script(
+            id="offer_fields", body=CoursesIndexer.scripts["offer_fields"]
         )
 
         # Actually insert our courses in the index
@@ -607,6 +657,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                                 "enrollment_start": "2020-01-25T00:00:00+00:00",
                                 "languages": ["fr"],
                                 "start": "2020-02-04T00:00:00+00:00",
+                                "offer": "paid",
+                                "price": 1337.00,
+                                "certificate_price": None,
+                                "certificate_offer": "free",
+                                "price_currency": "EUR",
                             },
                             {
                                 "end": "2020-06-08T00:00:00+00:00",
@@ -614,8 +669,18 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                                 "enrollment_start": "2020-03-10T00:00:00+00:00",
                                 "languages": ["fr", "de"],
                                 "start": "2020-03-25T00:00:00+00:00",
+                                "offer": None,
+                                "price": None,
+                                "certificate_price": None,
+                                "certificate_offer": None,
+                                "price_currency": "EUR",
                             },
                         ],
+                        "offer": "paid",
+                        "price": 1337.00,
+                        "certificate_price": None,
+                        "certificate_offer": "free",
+                        "price_currency": "EUR",
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
@@ -659,6 +724,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                                 "enrollment_start": "2020-01-10T00:00:00+00:00",
                                 "languages": ["en"],
                                 "start": "2020-01-25T00:00:00+00:00",
+                                "offer": None,
+                                "price": None,
+                                "certificate_price": None,
+                                "certificate_offer": None,
+                                "price_currency": "EUR",
                             },
                             {
                                 "end": "2020-01-10T00:00:00+00:00",
@@ -666,8 +736,18 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                                 "enrollment_start": "2019-09-12T00:00:00+00:00",
                                 "languages": ["en", "de"],
                                 "start": "2019-10-12T00:00:00+00:00",
+                                "offer": None,
+                                "price": None,
+                                "certificate_price": None,
+                                "certificate_offer": None,
+                                "price_currency": "EUR",
                             },
                         ],
+                        "offer": None,
+                        "price": None,
+                        "certificate_price": None,
+                        "certificate_offer": None,
+                        "price_currency": "EUR",
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
@@ -711,6 +791,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                                 "enrollment_start": "2020-01-10T00:00:00+00:00",
                                 "languages": ["en"],
                                 "start": "2020-02-24T00:00:00+00:00",
+                                "offer": None,
+                                "price": None,
+                                "certificate_price": 42.00,
+                                "certificate_offer": "paid",
+                                "price_currency": "EUR",
                             },
                             {
                                 "end": "2020-02-24T00:00:00+00:00",
@@ -718,8 +803,18 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                                 "enrollment_start": "2019-10-12T00:00:00+00:00",
                                 "languages": ["en"],
                                 "start": "2019-11-11T00:00:00+00:00",
+                                "offer": None,
+                                "price": None,
+                                "certificate_price": None,
+                                "certificate_offer": None,
+                                "price_currency": "EUR",
                             },
                         ],
+                        "offer": None,
+                        "price": None,
+                        "certificate_price": 42.00,
+                        "certificate_offer": "paid",
+                        "price_currency": "EUR",
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
@@ -765,6 +860,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                                 "enrollment_start": "2019-11-01T00:00:00+00:00",
                                 "languages": ["fr"],
                                 "start": "2019-11-26T00:00:00+00:00",
+                                "offer": None,
+                                "price": None,
+                                "certificate_price": None,
+                                "certificate_offer": None,
+                                "price_currency": "EUR",
                             },
                             {
                                 "end": "2020-01-25T00:00:00+00:00",
@@ -772,8 +872,18 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                                 "enrollment_start": "2019-11-01T00:00:00+00:00",
                                 "languages": ["en"],
                                 "start": "2019-11-21T00:00:00+00:00",
+                                "offer": None,
+                                "price": None,
+                                "certificate_price": None,
+                                "certificate_offer": None,
+                                "price_currency": "EUR",
                             },
                         ],
+                        "offer": None,
+                        "price": None,
+                        "certificate_price": None,
+                        "certificate_offer": None,
+                        "price_currency": "EUR",
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",

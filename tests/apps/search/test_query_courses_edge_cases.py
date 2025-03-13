@@ -112,6 +112,9 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         ES_CLIENT.put_script(
             id="state_field", body=CoursesIndexer.scripts["state_field"]
         )
+        ES_CLIENT.put_script(
+            id="offer_fields", body=CoursesIndexer.scripts["offer_fields"]
+        )
 
         # Prepare actions to insert our courses and organizations in their indices
         actions = [
