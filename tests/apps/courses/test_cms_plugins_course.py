@@ -8,9 +8,11 @@ from unittest import mock
 
 from django import forms
 from django.conf import settings
+from django.core.cache import cache
 from django.test import TestCase
 from django.utils import timezone
 
+import lxml.html
 from cms.api import add_plugin, create_page
 
 from richie.apps.core.factories import UserFactory
@@ -19,9 +21,10 @@ from richie.apps.courses.cms_plugins import CoursePlugin
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
+    CourseRunFactory,
     OrganizationFactory,
 )
-from richie.apps.courses.models import CoursePluginModel
+from richie.apps.courses.models import CoursePluginModel, CourseRunOffer
 
 
 class CoursePluginTestCase(TestCase):
@@ -448,3 +451,140 @@ class CoursePluginTestCase(TestCase):
             organization.extended_object.get_title(),
             organization.extended_object.get_menu_title(),
         )
+
+    def test_cms_plugins_course_glimpse_offer(self):
+        """
+        The course glimpse should render the offer details (price and right icon)
+        """
+        course = CourseFactory()
+        course_page = course.extended_object
+        run = CourseRunFactory(
+            direct_course=course,
+            price=100.00,
+            price_currency="EUR",
+        )
+
+        # Define a page to display the Course Glimpse
+        page = create_i18n_page({"en": "A page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CoursePlugin, "en", **{"page": course_page})
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+
+        for offer in CourseRunOffer:
+            with self.subTest(offer=offer):
+                # Clear cache between each sub tests
+                cache.clear()
+                # Update the course run offer then publish the related course page
+                run.offer = offer
+                run.save()
+                self.assertTrue(course_page.publish("en"))
+
+                response = self.client.get(url)
+                html = lxml.html.fromstring(response.content.decode("utf-8"))
+                course_glimpse = html.cssselect(".course-glimpse")[0]
+
+                self.assertIn(
+                    f"course-glimpse--offer-{offer}", course_glimpse.get("class")
+                )
+
+                # Check the offer icon
+                icon = course_glimpse.cssselect(".offer__icon")[0]
+                icon_symbol = icon.cssselect("use")[0]
+                self.assertEqual(icon_symbol.get("href"), f"#icon-offer-{offer}")
+
+                # Check the offer price
+                if offer != CourseRunOffer.FREE:
+                    price = course_glimpse.cssselect(".offer__price")[0]
+                    self.assertEqual(price.text_content(), "€100.00")
+                else:
+                    self.assertCountEqual(course_glimpse.cssselect(".offer__price"), [])
+
+    def test_cms_plugins_course_glimpse_no_offer(self):
+        """
+        The course glimpse should render the offer free icon
+        when the course has no offer
+        """
+        course = CourseFactory()
+        course_page = course.extended_object
+        CourseRunFactory(direct_course=course, offer=None)
+
+        # Define a page to display the Course Glimpse
+        page = create_i18n_page({"en": "A page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CoursePlugin, "en", **{"page": course_page})
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        self.assertTrue(course_page.publish("en"))
+
+        response = self.client.get(url)
+        html = lxml.html.fromstring(response.content)
+        course_glimpse = html.cssselect(".course-glimpse")[0]
+
+        self.assertIn("course-glimpse--offer-free", course_glimpse.get("class"))
+        # Check the offer icon
+        icon = course_glimpse.cssselect(".offer__icon")[0]
+        icon_symbol = icon.cssselect("use")[0]
+        self.assertEqual(icon_symbol.get("href"), "#icon-offer-free")
+
+    def test_cms_plugins_course_glimpse_certificate_offer(self):
+        """
+        The course glimpse should display the certificate icon
+        when the course has a certificate offer
+        """
+        course = CourseFactory()
+        course_page = course.extended_object
+        CourseRunFactory(
+            direct_course=course,
+            price_currency="EUR",
+            certificate_offer="free",
+        )
+
+        # Define a page to display the Course Glimpse
+        page = create_i18n_page({"en": "A page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CoursePlugin, "en", **{"page": course_page})
+        page.publish("en")
+        self.assertTrue(course_page.publish("en"))
+
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        response = self.client.get(url)
+        html = lxml.html.fromstring(response.content)
+        course_glimpse = html.cssselect(".course-glimpse")[0]
+
+        # As there is a certificate offer, the certificate icon should be present
+        certificate_offer_icon = course_glimpse.cssselect(".offer-certificate__icon")[0]
+        icon_symbol = certificate_offer_icon.cssselect("use")[0]
+        self.assertEqual(icon_symbol.get("href"), "#icon-school")
+
+    def test_cms_plugins_course_glimpse_no_certificate_offer(self):
+        """
+        The course glimpse should not display the certificate icon
+        when the course has no certificate offer
+        """
+        course = CourseFactory()
+        course_page = course.extended_object
+        CourseRunFactory(
+            direct_course=course,
+            price_currency="EUR",
+            certificate_offer=None,
+        )
+
+        # Define a page to display the Course Glimpse
+        page = create_i18n_page({"en": "A page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CoursePlugin, "en", **{"page": course_page})
+        page.publish("en")
+        self.assertTrue(course_page.publish("en"))
+
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        response = self.client.get(url)
+        html = lxml.html.fromstring(response.content)
+        course_glimpse = html.cssselect(".course-glimpse")[0]
+
+        # As there is no certificate offer, the certificate icon should not be present
+        self.assertCountEqual(course_glimpse.cssselect(".offer-certificate__icon"), [])

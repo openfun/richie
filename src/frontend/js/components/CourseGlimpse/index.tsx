@@ -1,10 +1,12 @@
 import React, { memo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import c from 'classnames';
 
 import { Nullable } from 'types/utils';
 import { CommonDataProps } from 'types/commonDataProps';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { CourseState } from 'types';
+import { CourseCertificateOffer, CourseOffer } from 'types/Course';
 import { CourseGlimpseFooter } from './CourseGlimpseFooter';
 import CourseLink from './CourseLink';
 
@@ -40,6 +42,11 @@ export interface CourseGlimpseCourse {
   duration?: string;
   effort?: string;
   categories?: string[];
+  certificate_offer: Nullable<CourseCertificateOffer>;
+  offer: Nullable<CourseOffer>;
+  certificate_price: Nullable<number>;
+  price: Nullable<number>;
+  price_currency: string;
 }
 
 export interface CourseGlimpseProps {
@@ -71,91 +78,100 @@ const messages = defineMessages({
 
 const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataProps) => {
   const intl = useIntl();
+  const offer = course.offer ?? CourseOffer.FREE;
+  const hasCertificateOffer = course.certificate_offer !== null;
   return (
-    <div className="course-glimpse" data-testid="course-glimpse">
-      {/* the media link is only here for mouse users, so hide it for keyboard/screen reader users.
+    <div
+      className={c('course-glimpse', `course-glimpse--offer-${offer}`, {
+        'course-glimpse--offer-certificate': hasCertificateOffer,
+      })}
+      data-testid="course-glimpse"
+    >
+      <div className="course-glimpse__body">
+        {/* the media link is only here for mouse users, so hide it for keyboard/screen reader users.
       Keyboard/sr will focus the link on the title */}
-      <div aria-hidden="true" className="course-glimpse__media">
-        <CourseLink
-          tabIndex={-1}
-          className="course-glimpse__link"
-          href={course.course_url}
-          to={course.course_route}
-        >
-          {/* alt forced to empty string because it's a decorative image */}
-          {course.cover_image ? (
-            <img
-              alt=""
-              sizes={course.cover_image.sizes}
-              src={course.cover_image.src}
-              srcSet={course.cover_image.srcset}
-            />
-          ) : (
-            <div className="course-glimpse__media__empty">
-              <FormattedMessage {...messages.cover} />
-            </div>
-          )}
-        </CourseLink>
-      </div>
-      <div className="course-glimpse__content">
-        <div className="course-glimpse__wrapper">
-          <h3 className="course-glimpse__title">
-            <CourseLink
-              className="course-glimpse__link"
-              href={course.course_url}
-              to={course.course_route}
-            >
-              <span className="course-glimpse__title-text">{course.title}</span>
-            </CourseLink>
-          </h3>
-          {course.organization.image ? (
-            <div className="course-glimpse__organization-logo">
-              {/* alt forced to empty string because the organization name is rendered after */}
+        <div aria-hidden="true" className="course-glimpse__media">
+          <CourseLink
+            tabIndex={-1}
+            className="course-glimpse__link"
+            href={course.course_url}
+            to={course.course_route}
+          >
+            {/* alt forced to empty string because it's a decorative image */}
+            {course.cover_image ? (
               <img
                 alt=""
-                sizes={course.organization.image.sizes}
-                src={course.organization.image.src}
-                srcSet={course.organization.image.srcset}
+                sizes={course.cover_image.sizes}
+                src={course.cover_image.src}
+                srcSet={course.cover_image.srcset}
               />
+            ) : (
+              <div className="course-glimpse__media__empty">
+                <FormattedMessage {...messages.cover} />
+              </div>
+            )}
+          </CourseLink>
+        </div>
+        <div className="course-glimpse__content">
+          <div className="course-glimpse__wrapper">
+            <h3 className="course-glimpse__title">
+              <CourseLink
+                className="course-glimpse__link"
+                href={course.course_url}
+                to={course.course_route}
+              >
+                <span className="course-glimpse__title-text">{course.title}</span>
+              </CourseLink>
+            </h3>
+            {course.organization.image ? (
+              <div className="course-glimpse__organization-logo">
+                {/* alt forced to empty string because the organization name is rendered after */}
+                <img
+                  alt=""
+                  sizes={course.organization.image.sizes}
+                  src={course.organization.image.src}
+                  srcSet={course.organization.image.srcset}
+                />
+              </div>
+            ) : null}
+            <div className="course-glimpse__metadata course-glimpse__metadata--organization">
+              <Icon
+                name={IconTypeEnum.ORG}
+                title={intl.formatMessage(messages.organizationIconAlt)}
+                size="small"
+              />
+              <span className="title">{course.organization.title}</span>
+            </div>
+            <div className="course-glimpse__metadata course-glimpse__metadata--code">
+              <Icon
+                name={IconTypeEnum.BARCODE}
+                title={intl.formatMessage(messages.codeIconAlt)}
+                size="small"
+              />
+              <span>{course.code || '-'}</span>
+            </div>
+          </div>
+          {course.icon ? (
+            <div className="course-glimpse__icon">
+              <span className="category-badge">
+                {/* alt forced to empty string because it's a decorative image */}
+                <img
+                  alt=""
+                  className="category-badge__icon"
+                  sizes={course.icon.sizes}
+                  src={course.icon.src}
+                  srcSet={course.icon.srcset}
+                />
+                <span className="offscreen">
+                  <FormattedMessage {...messages.categoryLabel} />
+                </span>
+                <span className="category-badge__title">{course.icon.title}</span>
+              </span>
             </div>
           ) : null}
-          <div className="course-glimpse__metadata course-glimpse__metadata--organization">
-            <Icon
-              name={IconTypeEnum.ORG}
-              title={intl.formatMessage(messages.organizationIconAlt)}
-              size="small"
-            />
-            <span className="title">{course.organization.title}</span>
-          </div>
-          <div className="course-glimpse__metadata course-glimpse__metadata--code">
-            <Icon
-              name={IconTypeEnum.BARCODE}
-              title={intl.formatMessage(messages.codeIconAlt)}
-              size="small"
-            />
-            <span>{course.code || '-'}</span>
-          </div>
         </div>
-        {course.icon ? (
-          <div className="course-glimpse__icon">
-            <span className="category-badge">
-              {/* alt forced to empty string because it's a decorative image */}
-              <img
-                alt=""
-                className="category-badge__icon"
-                sizes={course.icon.sizes}
-                src={course.icon.src}
-                srcSet={course.icon.srcset}
-              />
-              <span className="offscreen">
-                <FormattedMessage {...messages.categoryLabel} />
-              </span>
-              <span className="category-badge__title">{course.icon.title}</span>
-            </span>
-          </div>
-        ) : null}
-        <CourseGlimpseFooter context={context} course={course} />
       </div>
+      <CourseGlimpseFooter context={context} course={course} />
     </div>
   );
 };

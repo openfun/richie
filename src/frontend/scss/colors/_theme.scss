@@ -217,8 +217,8 @@ $r-theme: (
   ),
   course-glimpse: (
     card-background: r-color('white'),
-    base-shadow: 0 0 6px r-color('light-grey'),
-    base-hover-shadow: 0 0 6px r-color('battleship-grey'),
+    base-shadow: 0 0 8px #00000033,
+    base-hover-shadow: 0 0 4px #00000055,
     cta-background: r-color('battleship-grey'),
     empty-color: r-color('slate-grey'),
     icon-shadow: (
@@ -232,8 +232,15 @@ $r-theme: (
     organization-color: r-color('firebrick6'),
     code-color: r-color('battleship-grey'),
     svg-icon-fill: r-color('white'),
-    footer: $battleship-grey-scheme,
     organization-shadow: 0 0 6px r-color('light-grey'),
+    footer: $battleship-grey-scheme,
+    footer-offer-paid: $indianred3-scheme,
+    footer-offer-subscription: $indianred3-scheme,
+    footer-offer-partially_free: $indianred3-scheme,
+    footer-offer-certificate: null,
+    offer-icon-visibility: visible,
+    offer-certificate-icon-visibility: visible,
+    offer-price-visibility: visible,
   ),
   category-badges: (
     primary-item: $indianred3-scheme,

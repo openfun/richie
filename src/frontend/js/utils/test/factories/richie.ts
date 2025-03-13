@@ -10,7 +10,7 @@ import {
   PacedCourse,
   Priority,
 } from 'types';
-import { Course } from 'types/Course';
+import { CourseCertificateOffer, Course, CourseOffer } from 'types/Course';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { factory } from './factories';
 
@@ -239,5 +239,10 @@ export const CourseLightFactory = factory<Course>(() => {
     },
     organizations: [organizationName],
     state: CourseStateFactory().one(),
+    certificate_offer: CourseCertificateOffer.FREE,
+    offer: CourseOffer.FREE,
+    certificate_price: null,
+    price: null,
+    price_currency: 'EUR',
   };
 });

@@ -1,10 +1,16 @@
 import { IntlShape } from 'react-intl';
 import { generatePath } from 'react-router';
-import { Course as RichieCourse, isRichieCourse } from 'types/Course';
+import {
+  CourseCertificateOffer,
+  CourseOffer,
+  Course as RichieCourse,
+  isRichieCourse,
+} from 'types/Course';
 import {
   CourseListItem as JoanieCourse,
   CourseProductRelationLight,
   isCourseProductRelation,
+  ProductType,
 } from 'types/Joanie';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { CourseGlimpseCourse } from '.';
@@ -40,6 +46,20 @@ const getCourseGlimpsePropsFromCourseProductRelation = (
     product_id: courseProductRelation.product.id,
     course_route: courseRoute,
     state: courseProductRelation.product.state,
+    certificate_offer:
+      courseProductRelation.product.type === ProductType.CERTIFICATE
+        ? CourseCertificateOffer.PAID
+        : null,
+    offer: courseProductRelation.product.type === ProductType.CREDENTIAL ? CourseOffer.PAID : null,
+    certificate_price:
+      courseProductRelation.product.type === ProductType.CERTIFICATE
+        ? courseProductRelation.product.price
+        : null,
+    price:
+      courseProductRelation.product.type === ProductType.CREDENTIAL
+        ? courseProductRelation.product.price
+        : null,
+    price_currency: courseProductRelation.product.price_currency,
   };
 };
 
@@ -59,6 +79,11 @@ const getCourseGlimpsePropsFromRichieCourse = (course: RichieCourse): CourseGlim
   effort: course.effort,
   categories: course.categories,
   organizations: course.organizations,
+  price: course.price,
+  price_currency: course.price_currency,
+  certificate_offer: course.certificate_offer,
+  offer: course.offer,
+  certificate_price: course.certificate_price,
 });
 
 const getCourseGlimpsePropsFromJoanieCourse = (
@@ -91,6 +116,11 @@ const getCourseGlimpsePropsFromJoanieCourse = (
     },
     state: course.state,
     nb_course_runs: course.course_run_ids.length,
+    price: null,
+    price_currency: 'EUR',
+    certificate_offer: null,
+    offer: null,
+    certificate_price: null,
   };
 };
 
