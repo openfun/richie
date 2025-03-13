@@ -13,6 +13,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Topbar dropdown menu layout and accessibility interactions
 - Add two new section grid distributions to better accomodate for 
   course cards
+- Index course offers in Elasticsearch `CourseIndexer`
 
 ### Changed
 
