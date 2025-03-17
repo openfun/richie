@@ -87,7 +87,7 @@ dev = [
     "pytest==8.3.5",
     "pytest-cov==6.0.0",
     "pytest-django==4.10.0",
-    "responses==0.25.6",
+    "responses==0.25.7",
 ]
 ci = [
     "twine==6.1.0",
