@@ -275,6 +275,7 @@
                     const $menuButton = $dropdown.previousElementSibling;
                     const topbarWidth = $topbar.getBoundingClientRect().width;
                     const topbarLeft = $topbar.getBoundingClientRect().left;
+                    const menuButtonWidth = $menuButton.getBoundingClientRect().width;
                     const menuButtonLeft = $menuButton.getBoundingClientRect().left;
                     $dropdown.style.display = 'block';
                     $menu.style.flexWrap = 'nowrap';
@@ -282,11 +283,21 @@
                     $dropdown.style = '';
                     $menu.style = '';
                     const menuRelativeOffsetX = menuButtonLeft - topbarLeft;
+                    const rightRemainingSpace = topbarWidth - menuRelativeOffsetX;
 
-                    
-                    if (menuWidth > (topbarWidth - menuRelativeOffsetX)) {
-                        $dropdown.classList.add('topbar__sublist--full-width');
-                    } else {
+                    if (menuWidth > rightRemainingSpace) {
+                        if (menuWidth < (menuRelativeOffsetX + menuButtonWidth)) {
+                            $dropdown.classList.add('topbar__sublist--position-right');
+                            $dropdown.style.setProperty('--button-width', `${menuButtonWidth}px`);
+                            $dropdown.classList.remove('topbar__sublist--full-width');
+                        }
+                        else {
+                            $dropdown.classList.add('topbar__sublist--full-width');
+                            $dropdown.classList.remove('topbar__sublist--position-right');
+                        }
+                    }
+                    else {
+                        $dropdown.classList.remove('topbar__sublist--position-right');
                         $dropdown.classList.remove('topbar__sublist--full-width');
                     }
                 }
