@@ -241,12 +241,8 @@
           display: none;
           position: absolute;
           transform: translateX(-8px);
+          width: max-content;
           max-width: 100%;
-
-          &--full-width {
-            left: 0;
-            transform: inherit;
-          }
 
           & > ul[role='menu'] {
             display: flex;
@@ -267,6 +263,15 @@
               background-color: var(--active-background-color);
               color: var(--active-text-color);
             }
+          }
+
+          &--full-width {
+            left: 0;
+            transform: inherit;
+          }
+
+          &--position-right {
+            transform: translateX(calc(-100% + (var(--button-width) + 8px)));
           }
         }
       }
