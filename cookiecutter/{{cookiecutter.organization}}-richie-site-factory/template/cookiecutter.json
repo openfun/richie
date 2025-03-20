@@ -1,5 +1,11 @@
 {
     "_organization": null,
+    "_org_dockerhub": null,
+    "_nginx_image_name": null,
+    "_nginx_image_tag": null,
+    "_elasticsearch_image_name": null,
     "site": null,
-    "domain": null
+    "domain": null,
+    "second_lang_code": "Enter the code of the second language",
+    "second_lang_name": "Enter in english the name of the second language"
 }
