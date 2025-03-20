@@ -184,7 +184,7 @@ describe('SaleTunnel', () => {
      */
     screen.getByText('Information');
 
-    const nameInput = screen.getByLabelText('Full name');
+    const nameInput = screen.getByLabelText('First name and last name');
     await user.type(nameInput, 'John Doe');
 
     /**
