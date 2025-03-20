@@ -15,7 +15,7 @@ import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { AppWrapperProps } from 'utils/test/wrappers/types';
-import { expectBannerError } from 'utils/test/expectBanner';
+import { expectAlertError, expectAlertWarning, expectNoAlertWarning } from 'utils/test/expectAlert';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -71,7 +71,7 @@ describe('OpenEdxFullNameForm', () => {
       wrapper: Wrapper,
     });
 
-    const $input = await screen.findByRole('textbox', { name: 'Full name' });
+    const $input = await screen.findByRole('textbox', { name: 'First name and last name' });
     expect($input).toHaveValue('');
   });
 
@@ -93,7 +93,7 @@ describe('OpenEdxFullNameForm', () => {
       wrapper: Wrapper,
     });
 
-    const $input = await screen.findByRole('textbox', { name: 'Full name' });
+    const $input = await screen.findByRole('textbox', { name: 'First name and last name' });
     expect($input).toHaveValue(user.full_name);
   });
 
@@ -119,8 +119,12 @@ describe('OpenEdxFullNameForm', () => {
 
     expect(submitCallbacks.hasOwnProperty('openEdxFullNameForm')).toBe(true);
 
-    const $input = await screen.findByRole('textbox', { name: 'Full name' });
+    const $input = await screen.findByRole('textbox', { name: 'First name and last name' });
     expect($input).toHaveValue('');
+
+    await expectAlertWarning(
+      'Please check that your first name and last name are correct. They will be used on official document (e.g: certificate, contract, etc.)',
+    );
 
     // Submit the form
     await act(async () => {
@@ -128,6 +132,12 @@ describe('OpenEdxFullNameForm', () => {
     });
 
     screen.getByText('This field is required.');
+    await expectNoAlertWarning(
+      'Please check that your first name and last name are correct. They will be used on official document (e.g: certificate, contract, etc.)',
+    );
+    await expectAlertError(
+      'Please check that your first name and last name are correct. They will be used on official document (e.g: certificate, contract, etc.)',
+    );
   });
 
   it('should require a value with at least 3 chars to submit the form', async () => {
@@ -152,7 +162,7 @@ describe('OpenEdxFullNameForm', () => {
 
     expect(submitCallbacks.hasOwnProperty('openEdxFullNameForm')).toBe(true);
 
-    const $input = await screen.findByRole('textbox', { name: 'Full name' });
+    const $input = await screen.findByRole('textbox', { name: 'First name and last name' });
     expect($input).toHaveValue('');
 
     const eventHandler = userEvent.setup();
@@ -189,7 +199,7 @@ describe('OpenEdxFullNameForm', () => {
 
     expect(submitCallbacks.hasOwnProperty('openEdxFullNameForm')).toBe(true);
 
-    const $input = await screen.findByRole('textbox', { name: 'Full name' });
+    const $input = await screen.findByRole('textbox', { name: 'First name and last name' });
     expect($input).toHaveValue('');
 
     const eventHandler = userEvent.setup();
@@ -224,6 +234,6 @@ describe('OpenEdxFullNameForm', () => {
       wrapper: Wrapper,
     });
 
-    await expectBannerError('An error occurred while fetching your profile. Please retry later.');
+    await expectAlertError('An error occurred while fetching your profile. Please retry later.');
   });
 });
