@@ -217,8 +217,8 @@ $r-theme: (
   ),
   course-glimpse: (
     card-background: r-color('white'),
-    base-shadow: 0 0 6px r-color('light-grey'),
-    base-hover-shadow: 0 0 6px r-color('battleship-grey'),
+    base-shadow: 0 0 8px #00000033,
+    base-hover-shadow: 0 0 4px #00000055,
     cta-background: r-color('battleship-grey'),
     empty-color: r-color('slate-grey'),
     icon-shadow: (

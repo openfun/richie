@@ -5,6 +5,7 @@ import {
   CourseListItem as JoanieCourse,
   CourseProductRelationLight,
   isCourseProductRelation,
+  ProductType,
 } from 'types/Joanie';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { CourseGlimpseCourse } from '.';
@@ -40,6 +41,20 @@ const getCourseGlimpsePropsFromCourseProductRelation = (
     product_id: courseProductRelation.product.id,
     course_route: courseRoute,
     state: courseProductRelation.product.state,
+    offers: {
+      certificate_offer:
+        courseProductRelation.product.type === ProductType.CERTIFICATE ? 'paid' : null,
+      offer: courseProductRelation.product.type === ProductType.CREDENTIAL ? 'paid' : null,
+      certificate_price:
+        courseProductRelation.product.type === ProductType.CERTIFICATE
+          ? courseProductRelation.product.price
+          : null,
+      price:
+        courseProductRelation.product.type === ProductType.CREDENTIAL
+          ? courseProductRelation.product.price
+          : null,
+      price_currency: courseProductRelation.product.price_currency,
+    },
   };
 };
 
@@ -59,6 +74,7 @@ const getCourseGlimpsePropsFromRichieCourse = (course: RichieCourse): CourseGlim
   effort: course.effort,
   categories: course.categories,
   organizations: course.organizations,
+  offers: course.offers,
 });
 
 const getCourseGlimpsePropsFromJoanieCourse = (
