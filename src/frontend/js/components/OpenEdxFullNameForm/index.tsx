@@ -1,4 +1,4 @@
-import { ButtonElement, Input } from '@openfun/cunningham-react';
+import { ButtonElement, Input, Alert, VariantType } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { FormProvider, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -8,7 +8,6 @@ import { useSession } from 'contexts/SessionContext';
 import useOpenEdxProfile from 'hooks/useOpenEdxProfile';
 import Form, { getLocalizedCunninghamErrorProp } from 'components/Form';
 import { Spinner } from 'components/Spinner';
-import Banner, { BannerType } from 'components/Banner';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 
 const messages = defineMessages({
@@ -19,14 +18,15 @@ const messages = defineMessages({
   },
   fullNameInputLabel: {
     id: 'components.OpenEdxFullNameForm.fullNameInputLabel',
-    description: 'Label of "fullName" field of the openEdx full name form',
-    defaultMessage: 'Full name',
+    description: 'Label of "First name and last name" field of the openEdx full name form',
+    defaultMessage: 'First name and last name',
   },
   fullNameInputDescription: {
     id: 'components.OpenEdxFullNameForm.fullNameInputDescription',
-    description: 'Descripiton on the "fullName" field of the openEdx full name form.',
+    description:
+      'Description about the "First name and last name" field of the openEdx full name form.',
     defaultMessage:
-      'Please check that your fullname is correct. It will be used on official document (e.g: certificate)',
+      'Please check that your first name and last name are correct. They will be used on official document (e.g: certificate, contract, etc.)',
   },
   submitButtonLabel: {
     id: 'components.OpenEdxFullNameForm.submitButtonLabel',
@@ -128,27 +128,24 @@ const OpenEdxFullNameForm = () => {
 
   if (error) {
     // display get error message
-    return <Banner type={BannerType.ERROR} message={error} />;
+    return <Alert type={VariantType.ERROR}>{error}</Alert>;
   }
 
   return (
     <FormProvider {...form}>
       <Form name="openedx-fullname-form" noValidate>
+        <Alert type={formState.errors.name?.message ? VariantType.ERROR : VariantType.WARNING}>
+          <FormattedMessage {...messages.fullNameInputDescription} />
+        </Alert>
         <Input
           {...register('name')}
-          className="form-field"
+          className="form-field mt-s"
           required
           fullWidth
           label={intl.formatMessage(messages.fullNameInputLabel)}
           value={formState.defaultValues?.name}
-          state={
-            error || (formState.errors.name && formState.errors.name.message) ? 'error' : 'default'
-          }
-          text={
-            error ||
-            getLocalizedCunninghamErrorProp(intl, formState.errors.name?.message).text ||
-            intl.formatMessage(messages.fullNameInputDescription)
-          }
+          state={error || formState.errors.name?.message ? 'error' : 'default'}
+          text={error || getLocalizedCunninghamErrorProp(intl, formState.errors.name?.message).text}
         />
       </Form>
     </FormProvider>
