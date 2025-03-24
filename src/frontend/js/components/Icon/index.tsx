@@ -65,6 +65,10 @@ export enum IconTypeEnum {
   UNIVERSITY = 'icon-univerity',
   WARNING = 'icon-warning',
   VIDEO_PLAY = 'icon-video-play',
+  OFFER_PAID = 'icon-offer-paid',
+  OFFER_FREE = 'icon-offer-free',
+  OFFER_PARTIALLY_FREE = 'icon-offer-partially_free',
+  OFFER_SUBSCRIPTION = 'icon-offer-subscription',
 }
 
 export const Icon = ({ name, title, className = '', size = 'medium', ...props }: Props) => {
