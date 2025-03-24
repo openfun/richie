@@ -82,7 +82,7 @@ dev = [
     "lxml==5.3.1",
     "msgpack==1.1.0",
     "mysqlclient==2.2.7",
-    "pylint==3.3.5",
+    "pylint==3.3.6",
     "pylint-django==2.6.1",
     "pytest==8.3.5",
     "pytest-cov==6.0.0",
@@ -100,7 +100,7 @@ sandbox = [
     "factory-boy==3.3.3",
     "gunicorn==23.0.0",
     "psycopg2-binary==2.9.10",
-    "sentry-sdk==2.22.0",
+    "sentry-sdk==2.24.1",
 ]
 
 [tool.flake8]
