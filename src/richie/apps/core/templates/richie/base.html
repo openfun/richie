@@ -88,6 +88,9 @@
         {# First link on a website should always be a skip to content #}
         {# Access key directive allows users to use keyboard shortcuts #}
         <a href="#site-content" class="offscreen-focusable skip-to-content" accesskey="c">{% trans "Skip to main content" %}</a>
+            
+            {# The above_header allows you to place content like notifications or navigation bars on the top of the page #}
+            {% block above_header %}{% endblock above_header %}
         
             {% block body_header %}
 
