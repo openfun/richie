@@ -15,10 +15,10 @@
 #
 
 # ---- Base image to inherit from ----
-FROM python:3.11-bookworm as base
+FROM python:3.11-bookworm AS base
 
 # ---- Front-end builder image ----
-FROM node:20.11 as front-builder
+FROM node:20.11 AS front-builder
 
 # Copy frontend app sources
 COPY ./src/frontend /builder/src/frontend
@@ -55,7 +55,7 @@ RUN --mount=type=bind,source=.git,target=/builder/.git \
     pip install --prefix=/install .[sandbox]
 
 # ---- Core application image ----
-FROM base as core
+FROM base AS core
 
 # Install gettext
 RUN apt-get update && \
@@ -89,7 +89,7 @@ USER ${DOCKER_USER}
 ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
 
 # ---- Development image ----
-FROM core as development
+FROM core AS development
 
 # Switch back to the root user to install development dependencies
 USER root:root
