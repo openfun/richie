@@ -13,6 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Topbar dropdown menu layout and accessibility interactions
 - Add two new section grid distributions to better accomodate for 
   course cards
+- Added a new `above_header` block to the base template to allow for better
+  header customization
 
 ### Changed
 
