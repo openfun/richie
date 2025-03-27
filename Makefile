@@ -80,6 +80,7 @@ bootstrap: \
   env.d/development/dev \
   env.d/development/dev-ssl \
   env.d/development/crowdin \
+  src/frontend/js/settings/settings.dev.ts \
   data/media/.keep \
   data/smedia/.keep \
   data/static/.keep \
@@ -343,6 +344,9 @@ env.d/development/dev-ssl:
 
 env.d/development/crowdin:
 	cp env.d/development/crowdin.dist env.d/development/crowdin
+
+src/frontend/js/settings/settings.dev.ts:
+	cp src/frontend/js/settings/settings.dev.dist.ts src/frontend/js/settings/settings.dev.ts
 
 data/media/.keep:
 	@echo 'Preparing media volume...'
