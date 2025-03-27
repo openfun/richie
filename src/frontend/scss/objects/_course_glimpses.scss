@@ -46,7 +46,6 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
   // Apply card styles for elements
   @include m-o-card(
     $border: 0,
-    $background: r-theme-val(course-glimpse, card-background),
     $media-margin: 0,
     $wrapper-padding: 1.7rem $course-glimpse-content-padding-sides 0.5rem,
     $foot-divider: null
