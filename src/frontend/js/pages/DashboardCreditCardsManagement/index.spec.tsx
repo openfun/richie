@@ -134,13 +134,14 @@ describe('<DashboardCreditCardsManagement/>', () => {
   });
 
   it('renders the correct label for an expiration date that will soon expire', async () => {
-    const refDate = new Date();
-    refDate.setMonth(refDate.getMonth() + 1);
-    refDate.setDate(1);
-    const futureLessThan3Months = faker.date.future({ years: 2.99 / 12, refDate });
+    const now = new Date();
+    const expirationDate = faker.date.between({
+      from: now,
+      to: new Date(now.getFullYear(), now.getMonth() + 4, 0, 23, 59, 59),
+    });
     const creditCard: CreditCard = CreditCardFactory({
-      expiration_month: futureLessThan3Months.getMonth() + 1,
-      expiration_year: futureLessThan3Months.getFullYear(),
+      expiration_month: expirationDate.getMonth() + 1,
+      expiration_year: expirationDate.getFullYear(),
     }).one();
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard]);
@@ -151,11 +152,11 @@ describe('<DashboardCreditCardsManagement/>', () => {
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
     const element = await screen.findByText(
       'Expires on ' +
-        (futureLessThan3Months.getMonth() + 1).toLocaleString(undefined, {
+        (expirationDate.getMonth() + 1).toLocaleString(undefined, {
           minimumIntegerDigits: 2,
         }) +
         '/' +
-        futureLessThan3Months.getFullYear(),
+        expirationDate.getFullYear(),
     );
     expect(element.classList).toContain('dashboard-credit-card__expiration');
     expect(element.classList).not.toContain('dashboard-credit-card__expiration--expired');
