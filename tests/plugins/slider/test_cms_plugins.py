@@ -111,7 +111,9 @@ class SliderCMSPluginsTestCase(CMSPluginTestCase):
 
         # Check expected slide property attributes
         element_pattern = (
-            '<div id="{container_id}" class="slider" data-props-source="#{payload_id}">'
+            '<div id="{container_id}"'
+            'class="richie-react richie-react--slider"'
+            'data-props-source="#{payload_id}">'
         )
         self.assertInHTML(
             element_pattern.format(

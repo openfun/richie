@@ -129,10 +129,12 @@ $ make migrate
 - Add new `slider` plugin theme scheme:
   ```scss
   slider-plugin: (
-    arrows-color: r-color('firebrick6'),
-    arrows-hover-color: r-color('firebrick6'),
-    index-color: r-color('firebrick6'),
-    index-hover-color: r-color('firebrick6'),
+    arrows-fill-color: r-color('white'),
+    arrows-stroke-color: r-color('black'),
+    arrows-stroke-width: 0.5px,
+    index-color: r-color('battleship-grey'),
+    index-hover-color: r-color('indianred3'),
+    index-active-color: r-color('firebrick6'),
   ),
   ```
 
