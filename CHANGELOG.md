@@ -29,6 +29,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   site-factory implementation. Otherwise, as expected, it keeps up to Richie.
 - Update Programs page with new fields
 - Explicit information asked from user on OpenEdxFullNameForm
+- Use basic ckeditor widget to set slider item content
 
 ## [2.34.0] - 2025-02-13
 

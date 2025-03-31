@@ -8,6 +8,8 @@ from djangocms_text_ckeditor.widgets import TextEditorWidget
 
 from .models import SlideItem, Slider
 
+CKEDITOR_CONFIGURATION_NAME = "CKEDITOR_BASIC_CONFIGURATION"
+
 
 class SliderForm(forms.ModelForm):
     """
@@ -36,5 +38,5 @@ class SlideItemForm(forms.ModelForm):
             "link_open_blank",
         ]
         widgets = {
-            "content": TextEditorWidget,
+            "content": TextEditorWidget(configuration=CKEDITOR_CONFIGURATION_NAME),
         }
