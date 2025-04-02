@@ -4,6 +4,7 @@
 
 // Course-glimpse-list related variables
 $r-course-glimpse-gutter: 0.8rem !default;
+$r-course-glimpse-title-line-height: 1.3em;
 
 .course-glimpse-list {
   @include make-container-max-widths();
@@ -174,7 +175,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     font-family: $r-font-family-montserrat;
     font-weight: $font-weight-boldest;
     flex: 1 0 1.3em * 3; // 3 lines;
-    line-height: 1.3em;
+    line-height: $r-course-glimpse-title-line-height;
     margin-bottom: 1rem;
   }
 
@@ -199,11 +200,14 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
   }
 
   &__title-text {
+    --max-lines: 3;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: var(--max-lines);
+    line-clamp: var(--max-lines);
     display: block;
     display: -webkit-box;
     overflow: hidden;
+    min-height: calc($r-course-glimpse-title-line-height * var(--max-lines));
   }
 
   &__link:focus &__title-text {
