@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.34.0 to v3.0.0-beta.0
+
 - We upgrade our frontend to React 19, you have to update your dependencies
   and overriden components accordingly.
 - Added the new setting `RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY` which is used to offer prices (courses price and certificate prices).
