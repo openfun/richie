@@ -175,9 +175,29 @@
     "description": "Organization logo alternative text for screen reader users",
     "message": "Organização"
   },
+  "components.CourseGlimpseFooter.certificateOfferIconAlt": {
+    "description": "Course certificate offer alternative text",
+    "message": "O curso oferece uma certificação."
+  },
   "components.CourseGlimpseFooter.dateIconAlt": {
     "description": "Course date logo alternative text for screen reader users",
     "message": "Data do curso"
+  },
+  "components.CourseGlimpseFooter.enrollmentOfferIconFreeAlt": {
+    "description": "Course offers free alternative text",
+    "message": "O curso completo pode ser concluído gratuitamente."
+  },
+  "components.CourseGlimpseFooter.enrollmentOfferIconPaidAlt": {
+    "description": "Course offers paid alternative text",
+    "message": "O curso requer um pagamento."
+  },
+  "components.CourseGlimpseFooter.enrollmentOfferIconPartiallyFreeAlt": {
+    "description": "Course offers partially free alternative text",
+    "message": "Mais de metade do curso é gratuito."
+  },
+  "components.CourseGlimpseFooter.enrollmentOfferIconSubscriptionAlt": {
+    "description": "Course offers subscription alternative text",
+    "message": "O curso requer que seja um subscritor ou um membro pago."
   },
   "components.CourseGlimpseList.courseCount": {
     "description": "Result count & pagination information for course search. Appears right above search results",
@@ -1136,12 +1156,12 @@
     "message": "Ocorreu um erro ao atualizar o seu nome completo. Por favor, tente novamente mais tarde."
   },
   "components.OpenEdxFullNameForm.fullNameInputDescription": {
-    "description": "Descripiton on the \"fullName\" field of the openEdx full name form.",
-    "message": "Verifique se o seu nome completo está correto. Este será utilizado num documento oficial (por exemplo, certificado)"
+    "description": "Description about the \"First name and last name\" field of the openEdx full name form.",
+    "message": "Por favor, verifique se o seu primeiro e último nomes estão corretos. Estes serão usados no documento oficial (ex.: certificado, contrato, etc.)"
   },
   "components.OpenEdxFullNameForm.fullNameInputLabel": {
-    "description": "Label of \"fullName\" field of the openEdx full name form",
-    "message": "Nome completo"
+    "description": "Label of \"First name and last name\" field of the openEdx full name form",
+    "message": "Primeiro e último nome"
   },
   "components.OpenEdxFullNameForm.loadingLabel": {
     "description": "Label of the loading profile spinner on openEdx full name form",
@@ -1623,13 +1643,49 @@
     "description": "Message displayed on syllabus when there are upcoming course runs",
     "message": "Brevemente"
   },
+  "components.SyllabusCourseRun.certificateFreeOffer": {
+    "description": "Message for the free certification offer of an opened course run block",
+    "message": "O processo de certificação é gratuito."
+  },
+  "components.SyllabusCourseRun.certificatePaidOffer": {
+    "description": "Messagge for the paid certification offer of an opened course run block",
+    "message": "O processo de certificação é pago."
+  },
+  "components.SyllabusCourseRun.certificateSubscriptionOffer": {
+    "description": "Message for the subscription certification offer of an opened course run block",
+    "message": "O processo de certificação é oferecido através de subscrição."
+  },
+  "components.SyllabusCourseRun.certificationPrice": {
+    "description": "Title of the certification price section of an opened course run block",
+    "message": "Preço da certificação"
+  },
   "components.SyllabusCourseRun.course": {
     "description": "Title of the course dates section of an opened course run block",
     "message": "Curso"
   },
+  "components.SyllabusCourseRun.courseFreeOffer": {
+    "description": "Message for the free course offer of an opened course run block",
+    "message": "O conteúdo do curso é gratuito."
+  },
+  "components.SyllabusCourseRun.coursePaidOffer": {
+    "description": "Message for the paid course offer of an opened course run block",
+    "message": "O conteúdo do curso é pago."
+  },
+  "components.SyllabusCourseRun.coursePartiallyFree": {
+    "description": "Message for the partially free course offer of an opened course run block",
+    "message": "O conteúdo do curso é gratuito."
+  },
   "components.SyllabusCourseRun.coursePeriod": {
     "description": "Course date of an opened course run block",
     "message": "De {startDate} {endDate, select, undefined {} other {até {endDate}}}"
+  },
+  "components.SyllabusCourseRun.coursePrice": {
+    "description": "Title of the course enrollment price section of an opened course run block",
+    "message": "Preço da inscrição"
+  },
+  "components.SyllabusCourseRun.courseSubscriptionOffer": {
+    "description": "Message for the subscription course offer of an opened course run block",
+    "message": "Inscreva-se para aceder ao conteúdo do curso."
   },
   "components.SyllabusCourseRun.enrollNow": {
     "description": "CTA for users to enroll on ongoing of future open course.",
@@ -1651,9 +1707,45 @@
     "description": "CTA for users to enroll on archived course.",
     "message": "Estudar agora"
   },
+  "components.SyllabusCourseRunCompacted.certificateFreeOffer": {
+    "description": "Message for the free certification offer of an opened course run block",
+    "message": "O processo de certificação é gratuito."
+  },
+  "components.SyllabusCourseRunCompacted.certificatePaidOffer": {
+    "description": "Messagge for the paid certification offer of an opened course run block",
+    "message": "O processo de certificação é pago."
+  },
+  "components.SyllabusCourseRunCompacted.certificateSubscriptionOffer": {
+    "description": "Message for the subscription certification offer of an opened course run block",
+    "message": "O processo de certificação é oferecido através de subscrição."
+  },
+  "components.SyllabusCourseRunCompacted.certificationPrice": {
+    "description": "Title of the certification price section of an opened course run block",
+    "message": "Preço da certificação"
+  },
   "components.SyllabusCourseRunCompacted.course": {
     "description": "Title of the course dates section of an opened course run block",
     "message": "Curso"
+  },
+  "components.SyllabusCourseRunCompacted.courseFreeOffer": {
+    "description": "Message for the free course offer of an opened course run block",
+    "message": "O conteúdo do curso é gratuito."
+  },
+  "components.SyllabusCourseRunCompacted.coursePaidOffer": {
+    "description": "Message for the paid course offer of an opened course run block",
+    "message": "O conteúdo do curso é pago."
+  },
+  "components.SyllabusCourseRunCompacted.coursePartiallyFree": {
+    "description": "Message for the partially free course offer of an opened course run block",
+    "message": "O conteúdo do curso é gratuito."
+  },
+  "components.SyllabusCourseRunCompacted.coursePrice": {
+    "description": "Title of the course enrollment price section of an opened course run block",
+    "message": "Preço da inscrição"
+  },
+  "components.SyllabusCourseRunCompacted.courseSubscriptionOffer": {
+    "description": "Message for the subscription course offer of an opened course run block",
+    "message": "Inscreva-se para aceder ao conteúdo do curso."
   },
   "components.SyllabusCourseRunCompacted.enrollNow": {
     "description": "CTA for users to enroll on ongoing of future open course.",
@@ -2290,5 +2382,25 @@
   "utils.joinAnd.and": {
     "description": "The and word",
     "message": "e"
+  },
+  "widgets.Slider.components.SlidePanel.goToSlide": {
+    "description": "Aria label for the bullet buttons to go to a given slide.",
+    "message": "Ir para o slide {slideIndex}"
+  },
+  "widgets.Slider.components.SlidePanel.slideAriaLabel": {
+    "description": "Aria label for the current slide.",
+    "message": "Slide {slideNumber}: {slideTitle}"
+  },
+  "widgets.Slider.components.Slideshow.nextSlide": {
+    "description": "Aria label to navigate to the next slide.",
+    "message": "Próximo slide"
+  },
+  "widgets.Slider.components.Slideshow.previousSlide": {
+    "description": "Aria label to navigate to the previous slide.",
+    "message": "Slide anterior"
+  },
+  "widgets.Slider.sliderSummary": {
+    "description": "Aria live label which summarizes the slider state.",
+    "message": "Slide {slideNumber} de {totalSlides}: {slideTitle}"
   }
 }
