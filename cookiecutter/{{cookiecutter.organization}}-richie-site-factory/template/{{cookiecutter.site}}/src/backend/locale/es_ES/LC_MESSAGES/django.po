@@ -1,0 +1,1428 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: richie\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-31 17:41+0100\n"
+"PO-Revision-Date: 2024-11-20 14:09\n"
+"Last-Translator: \n"
+"Language-Team: Spanish\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: richie\n"
+"X-Crowdin-Project-ID: 308578\n"
+"X-Crowdin-Language: es-ES\n"
+"X-Crowdin-File: backend.pot\n"
+"X-Crowdin-File-ID: 32\n"
+
+#: newsite/settings.py:250 newsite/settings.py:260
+msgid "Dashboard"
+msgstr ""
+
+#: newsite/settings.py:251
+msgid "{base_url:s}/dashboard/"
+msgstr ""
+
+#: newsite/settings.py:261
+msgid "/dashboard/"
+msgstr ""
+
+#: newsite/settings.py:264
+msgid "Teacher dashboard"
+msgstr ""
+
+#: newsite/settings.py:265
+msgid "/dashboard/teacher"
+msgstr ""
+
+#: newsite/settings.py:287
+msgid "Profile"
+msgstr ""
+
+#: newsite/settings.py:288
+msgid "{base_url:s}/u/(username)"
+msgstr ""
+
+#: newsite/settings.py:291
+#, fuzzy
+#| msgid "Accordion"
+msgid "Account"
+msgstr "Acordión"
+
+#: newsite/settings.py:292
+msgid "{base_url:s}/account/settings"
+msgstr ""
+
+#: newsite/settings.py:385
+msgid "Teaser"
+msgstr "Teaser"
+
+#: newsite/settings.py:476 newsite/settings.py:483
+msgid "English"
+msgstr ""
+
+#: newsite/settings.py:476 newsite/settings.py:483
+msgid "French"
+msgstr ""
+
+msgid "Richie Plugins"
+msgstr "Plugins de Richie"
+
+msgid "Define a duration as a number of time units"
+msgstr "Definir una duración como un número de unidades de tiempo"
+
+#, python-format
+msgid "%(value)s is not a valid choice for a time unit."
+msgstr "%(value)s no es una opción válida para una unidad de tiempo."
+
+msgid "A composite duration should be a pair: number and time unit."
+msgstr "Una duración compuesta debe ser un par: número y unidad de tiempo."
+
+msgid "A composite duration should be a round number of time units."
+msgstr ""
+"Una duración compuesta debe ser un número redondeado de unidades de "
+"tiempo."
+
+msgid "A composite duration should be positive."
+msgstr "Una duración compuesta debe ser positiva."
+
+msgid "Define an effort"
+msgstr "Definir un esfuerzo"
+
+msgid "An effort should be a triplet: number, time unit and reference unit."
+msgstr ""
+"El esfuerzo debe ser una tripleta: número, unidad de tiempo y unidad de "
+"referencia."
+
+msgid "An effort should be a round number of time units."
+msgstr "Un esfuerzo debe ser un número redondo de unidades de tiempo."
+
+msgid "An effort should be positive."
+msgstr "Un esfuerzo debería ser positivo."
+
+msgid "The effort time unit should be shorter than the reference unit."
+msgstr ""
+"La unidad de tiempo de esfuerzo debe ser más corta que la unidad de "
+"referencia."
+
+msgid "{:s} and {:s}"
+msgstr "{:s} y {:s}"
+
+msgid " and "
+msgstr " y "
+
+#, python-format
+msgid "You can only select up to %(limit_value)d choices."
+msgstr "Sólo puede seleccionar hasta %(limit_value)d opciones."
+
+#, python-format
+msgid "Multi select field (up to %(max_choices)s choices)"
+msgstr "Campo de selección múltiple (hasta %(max_choices)s opciones)"
+
+#, python-format
+msgid "Value %(value)s is not a valid choice."
+msgid_plural "Values %(value)s are not valid choices."
+msgstr[0] "El valor %(value)s no es una opción válida."
+msgstr[1] "Los valores %(value)s no son opciones válidas."
+
+msgid ""
+"Storing {:d} choices could require storing a CharField of up to {:d} "
+"characters. Please reduce 'max_choices' or increase 'max_length'."
+msgstr ""
+"Almacenar {:d} opciones podría requerir almacenar un CharField de hasta {:"
+"d} caracteres. Por favor, reduzca 'max_choices' o incremente 'max_length'."
+
+msgid "Your browser doesn't support this video format."
+msgstr "Su navegador no admite este formato de vídeo."
+
+msgid "You are here:"
+msgstr "Usted está aquí:"
+
+msgid "Skip to main content"
+msgstr "Saltar al contenido principal"
+
+msgid "Go to homepage"
+msgstr "Ir a la página de inicio"
+
+msgid "Contact us"
+msgstr "Contáctenos"
+
+msgid "Life-changing learning!"
+msgstr "¡Aprendizaje que cambia la vida!"
+
+msgid "Learn more"
+msgstr "Saber más"
+
+msgid "Powered by"
+msgstr "Impulsado por"
+
+msgid "This page has no child objects"
+msgstr "Esta página no tiene objetos secundarios"
+
+msgid "Back to home"
+msgstr "Volver al inicio"
+
+msgid "Pagination"
+msgstr "Paginación"
+
+#, python-format
+msgid "Currently reading last page %(page)s"
+msgstr "Leyendo la última página %(page)s"
+
+#, python-format
+msgid "Currently reading page %(page)s"
+msgstr "Actualmente leyendo la página %(page)s"
+
+#, python-format
+msgid "Page %(page)s"
+msgstr "Página %(page)s"
+
+#, python-format
+msgid "Previous page %(page)s"
+msgstr "Página anterior %(page)s"
+
+#, python-format
+msgid "Last page %(page)s"
+msgstr "Última página %(page)s"
+
+#, python-format
+msgid "Next page %(page)s"
+msgstr "Página siguiente %(page)s"
+
+#, python-format
+msgid "Richie news: %(title)s"
+msgstr "Noticias de Richie: %(title)s"
+
+#, python-format
+msgid "Richie news: %(title)s %(url)s"
+msgstr "Noticias de Richie: %(title)s %(url)s"
+
+msgid "Share on Facebook"
+msgstr "Compartir en Facebook"
+
+msgid "Share on Twitter"
+msgstr "Compartir en Twitter"
+
+msgid "Share on Linkedin"
+msgstr "Compartir en Linkedin"
+
+msgid "Share by Email"
+msgstr "Compartir por Email"
+
+msgid "Follow a course online with Richie"
+msgstr "Sigua un curso en línea con Richie"
+
+#, python-format
+msgid "I just enrolled to the course \"%(title)s\" on Richie: %(url)s"
+msgstr "Acabo de inscribirme al curso \"%(title)s\" en Richie: %(url)s"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "Twitter page"
+msgstr "Página de Twitter"
+
+msgid "Bad request"
+msgstr "Solicitud errónea"
+
+msgid ""
+"Your query seems to be malformed. Please check your data and try again."
+msgstr ""
+"Su consulta parece ser incorrecta. Por favor, compruebe sus datos e "
+"inténtelo de nuevo."
+
+msgid "Forbidden"
+msgstr "Prohibido"
+
+msgid "You do not have the required permissions to access this resource."
+msgstr "No tiene los permisos necesarios para acceder a este contenido."
+
+msgid "Page not found"
+msgstr "No se pudo encontrar la página"
+
+msgid "The requested resource does not exist."
+msgstr "El recurso solicitado no existe."
+
+msgid "Server bad request"
+msgstr "Solicitud errónea del servidor"
+
+msgid "Something went wrong. Please try again later."
+msgstr "Algo ha fallado. Por favor, inténtelo de nuevo más tarde."
+
+msgid "Course could not be found."
+msgstr "No se pudo encontrar el curso."
+
+msgid "See user group"
+msgstr "Ver grupo de usuarios"
+
+msgid "See filer folder"
+msgstr "Ver carpeta de archivos"
+
+msgid "Organization"
+msgstr "Organizaciones"
+
+msgid "Organization by Category"
+msgstr "Organización por categoría"
+
+msgid "Category"
+msgstr "Categoría"
+
+msgid "Course"
+msgstr "Curso"
+
+msgid "Person"
+msgstr "Persona"
+
+msgid "Licence"
+msgstr "Licencia"
+
+msgid "Post"
+msgstr "Publicar"
+
+msgid "Program"
+msgstr "Programa"
+
+msgid "{!s} settings"
+msgstr "{!s} configuración"
+
+msgid "Snapshot this page..."
+msgstr "Captura instantánea de esta página..."
+
+msgid ""
+"This will place a copy of this page as its child and move all its "
+"courseruns as children of its new copy."
+msgstr ""
+"Esto colocará una copia de esta página como su hijo y moverá a todos sus "
+"sesiones de curso como hijos de su nueva copia."
+
+msgid "New page"
+msgstr "Nueva página"
+
+msgid "Create a new page next to the current page."
+msgstr "Crear una nueva página junto a la página actual."
+
+msgid "New sub page"
+msgstr "Nueva subpágina"
+
+msgid "Create a page below the current page."
+msgstr "Crear una página debajo de la página actual."
+
+msgid "Page title"
+msgstr "Título de página"
+
+msgid "Title of the page in current language"
+msgstr "Título de la página en el idioma actual"
+
+msgid "Page slug"
+msgstr "Slug de página"
+
+msgid "Slug of the page in current language"
+msgstr "Slug de la página en el idioma actual"
+
+msgid ""
+"This slug is too long. The length of the path built by prepending the "
+"slug of the parent page would be {:d} characters long and it should be "
+"less than 255"
+msgstr ""
+"Este slug es demasiado largo. La longitud de la ruta construida que "
+"antecede el slug de la página padre sería {:d} caracteres de largo y "
+"debería ser menor de 255"
+
+msgid "This slug is already in use"
+msgstr "Este slug ya ha sido utilizado"
+
+msgid ""
+"You must first create a parent page and set its `reverse_id` to `{:s}`."
+msgstr ""
+"Primero debe crear una página padre y establecer su `reverse_id` a `{:s}`."
+
+msgid "Code"
+msgstr "Código"
+
+msgid "Unique reference for the course."
+msgstr "Referencia única para el curso."
+
+msgid "New course page"
+msgstr "Nueva página de curso"
+
+msgid "Create a new course page"
+msgstr "Crear una nueva página de curso"
+
+msgid "Unique reference for the organization."
+msgstr "Referencia única para la organización."
+
+msgid "New organization page"
+msgstr "Nueva página de organización"
+
+msgid "Create a new organization page"
+msgstr "Crear una nueva página de organización"
+
+msgid "New category page"
+msgstr "Nueva página de categoría"
+
+msgid "Create a new category page"
+msgstr "Crear una nueva página de categoría"
+
+msgid "New blog post"
+msgstr "Nueva entrada de blog"
+
+msgid "Create a new blog post"
+msgstr "Crear una nueva entrada de blog"
+
+msgid "New person page"
+msgstr "Nueva página persona"
+
+msgid "Create a new person page"
+msgstr "Crear una nueva página persona"
+
+msgid "New program"
+msgstr "Nuevo programa"
+
+msgid "Create a new program"
+msgstr "Crear un nuevo programa"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "Inherit"
+msgstr "Heredar"
+
+msgid "Default"
+msgstr "Por defecto"
+
+msgid "Mini"
+msgstr "Mini"
+
+msgid "Favorite"
+msgstr "Favorito"
+
+msgid "Badge"
+msgstr "Badge"
+
+msgid "Tag"
+msgstr "Etiqueta"
+
+msgid "Small"
+msgstr "Pequeño"
+
+msgid "Large"
+msgstr "Grande"
+
+msgid "Card"
+msgstr "Tarjeta"
+
+msgid "Row"
+msgstr "Fila"
+
+msgid "minute"
+msgstr "minuto"
+
+msgid "minutes"
+msgstr "minutos"
+
+msgid "hour"
+msgstr "hora"
+
+msgid "hours"
+msgstr "horas"
+
+msgid "day"
+msgstr "día"
+
+msgid "days"
+msgstr "dias"
+
+msgid "week"
+msgstr "semana"
+
+msgid "weeks"
+msgstr "semanas"
+
+msgid "month"
+msgstr "mes"
+
+msgid "months"
+msgstr "meses"
+
+msgid "Run {:d}"
+msgstr "Ejecutar {:d}"
+
+msgid "You can't snapshot a snapshot."
+msgstr "No puedes hacer una captura instantánea de una captura instantánea."
+
+msgid "You don't have sufficient permissions to snapshot this page."
+msgstr ""
+"No tiene permisos suficientes para hacer una captura instantánea en esta "
+"página."
+
+msgid "Archived on {now:%Y-%m-%d %H:%M:%S}"
+msgstr "Archivado el {ahora:%Y-%m-%d %H:%M:%S}"
+
+msgid "{title:s} ({version!s})"
+msgstr "{title:s} ({version!s})"
+
+msgid "blog post"
+msgstr "entrada de blog"
+
+msgid "blog posts"
+msgstr "entradas de blog"
+
+msgid "variant"
+msgstr "variante"
+
+msgid "Optional glimpse variant for a custom look."
+msgstr "Variante vista previa optional para un aspecto personalizado."
+
+msgid "blog post plugin"
+msgstr "plugin de entrada de blog"
+
+msgid "blog post plugins"
+msgstr "plugins de entrada de blog"
+
+msgid "category"
+msgstr "categoría"
+
+msgid "categories"
+msgstr "categorías"
+
+msgid "category plugin"
+msgstr "plugin de categoría"
+
+msgid "category plugins"
+msgstr "plugins de categoría"
+
+msgid "enroll now"
+msgstr "inscribirse ahora"
+
+msgid "study now"
+msgstr "estudiar ahora"
+
+msgid "starting on"
+msgstr "comenzando el"
+
+msgid "closing on"
+msgstr "cerrando en"
+
+msgid "enrollment closed"
+msgstr "fin de inscripción"
+
+msgid "on-going"
+msgstr "en curso"
+
+msgid "archived"
+msgstr "archivado"
+
+msgid "to be scheduled"
+msgstr "por ser programado"
+
+msgid "forever open"
+msgstr "siempre abierto"
+
+msgid "code"
+msgstr "código"
+
+msgid "The course time range."
+msgstr "El intervalo de tiempo del curso."
+
+msgid "Total amount of time to complete this course."
+msgstr "Cantidad total de tiempo para completar este curso."
+
+msgid "is listed"
+msgstr "está listado"
+
+msgid "Tick if you want the course to be visible on the search page."
+msgstr "Marque si desea que el curso sea visible en la página de búsqueda."
+
+msgid "is self paced"
+msgstr "es a su propio ritmo"
+
+msgid "Tick if the course pace is self paced."
+msgstr "Marque si el ritmo del curso es a ritmo propio."
+
+msgid "course"
+msgstr "curso"
+
+msgid "courses"
+msgstr "cursos"
+
+msgid "Self paced"
+msgstr "A ritmo propio"
+
+msgid "~{pace:d} {effort_unit!s}/{duration_unit!s}"
+msgstr "~{pace:d} {esfuerzo_unidad!s}/{duración_unidad!s}"
+
+msgid "~{pace_hours:d}h{pace_minutes:d}/{duration_unit!s}"
+msgstr "~{pace_hours:d}h{pace_minutes:d}/{duration_unit!s}"
+
+msgid "Manual"
+msgstr "Manual"
+
+msgid "Synchronization to draft page"
+msgstr "Sincronización a página de borrador"
+
+msgid "Synchronization to public page"
+msgstr "Sincronización a página pública"
+
+msgid ""
+"course_and_search - show on the course page and include in search results"
+msgstr ""
+"curse_and_search - mostrar en la página del curso e incluir en los "
+"resultados de búsqueda"
+
+msgid "course_only - show on the course page and hide from search results"
+msgstr ""
+"curso solo - mostrar en la página del curso y ocultar de los resultados "
+"de la búsqueda"
+
+msgid "hidden - hide on the course page and from search results"
+msgstr ""
+"oculto - ocultar en la página del curso y de los resultados de búsqueda"
+
+msgid "resource link"
+msgstr "enlace de recursos"
+
+msgid "course start"
+msgstr "inicio del curso"
+
+msgid "course end"
+msgstr "fin del curso"
+
+msgid "enrollment start"
+msgstr "inicio de inscripción"
+
+msgid "enrollment end"
+msgstr "fin de inscripción"
+
+msgid "The list of languages in which the course content is available."
+msgstr "Lista de idiomas en los que el contenido del curso está disponible."
+
+msgid "enrollment count"
+msgstr "número de inscripciones"
+
+msgid "The number of enrolled students"
+msgstr "El número de estudiantes inscritos"
+
+msgid "catalog visibility"
+msgstr "visibilidad del catálogo"
+
+msgid "course run"
+msgstr "sesión de curso"
+
+msgid "course runs"
+msgstr "sesión de curso"
+
+msgid "title"
+msgstr "título"
+
+msgid "Course run translation"
+msgstr "Traducción de la sesión de curso"
+
+msgid "Course run translations"
+msgstr "Traducciones de la sesión de curso"
+
+msgid "Empty title"
+msgstr "Sin título"
+
+msgid "course plugin"
+msgstr "plugin de curso"
+
+msgid "course plugins"
+msgstr "plugins de curso"
+
+msgid "logo"
+msgstr "logo"
+
+msgid "url"
+msgstr "url"
+
+msgid "name"
+msgstr "nombre"
+
+msgid "content"
+msgstr "contenido"
+
+msgid "licence"
+msgstr "licencia"
+
+msgid "licences"
+msgstr "licencias"
+
+msgid "Licence translation"
+msgstr "Traducción de la licencia"
+
+msgid "licence translations"
+msgstr "traducciones de licencias"
+
+msgid "description"
+msgstr "descripción"
+
+msgid "licence plugin"
+msgstr "plugin de licencia"
+
+msgid "licence plugins"
+msgstr "plugins de licencia"
+
+msgid "organization"
+msgstr "organización"
+
+msgid "organizations"
+msgstr "organizaciones"
+
+msgid "organization plugin"
+msgstr "plugin de la organización"
+
+msgid "organization plugins"
+msgstr "plugins de organización"
+
+msgid "organizations by category plugin"
+msgstr "organizaciones por plugin de categoría"
+
+msgid "organizations by category plugins"
+msgstr "organizaciones por plugins de categoría"
+
+msgid "person"
+msgstr "persona"
+
+msgid "persons"
+msgstr "personas"
+
+msgid "Custom bio"
+msgstr "Personalizar biografía"
+
+msgid ""
+"Optional: provide a custom bio (if you leave it empty, it will display "
+"the person's bio)."
+msgstr ""
+"Opcional: proporcionar una biografía personalizada (si la deja vacía, se "
+"mostrará la biografía de la persona)."
+
+msgid "person plugin"
+msgstr "plugin de persona"
+
+msgid "person plugins"
+msgstr "plugins de persona"
+
+msgid "program"
+msgstr "programa"
+
+msgid "programs"
+msgstr "programas"
+
+msgid "program plugin"
+msgstr "plugin del programa"
+
+msgid "program plugins"
+msgstr "plugins de programa"
+
+msgid "role"
+msgstr "rol"
+
+msgid ""
+"A role describes all the permissions that should be granted to the user "
+"group."
+msgstr ""
+"Un rol describe todos los permisos que deben concederse al grupo de "
+"usuarios."
+
+msgid "page"
+msgstr "página"
+
+msgid "Page to which this role grants permissions."
+msgstr "Página a la que este rol concede permisos."
+
+msgid "group"
+msgstr "grupo"
+
+msgid "User group that this role controls."
+msgstr "Grupo de usuarios que este rol controla."
+
+msgid "filer folder"
+msgstr "carpeta de archivos"
+
+msgid "Filer folder that this role controls."
+msgstr "Carpeta del archivador que este rol controla."
+
+msgid "page role"
+msgstr "rol de página"
+
+msgid "page roles"
+msgstr "roles de página"
+
+msgid "{:s} | {:s}"
+msgstr "{:s} | {:s}"
+
+msgid "Course page"
+msgstr "Página de curso"
+
+msgid "Organization list"
+msgstr "Lista de organizaciones"
+
+msgid "Organization page"
+msgstr "Página organización"
+
+msgid "Category list"
+msgstr "Lista de categorías"
+
+msgid "Category page"
+msgstr "Página de categoría"
+
+msgid "Blog post list"
+msgstr "Lista de entradas de blog"
+
+msgid "Blog post page"
+msgstr "Página de entrada de blog"
+
+msgid "Person page"
+msgstr "Página persona"
+
+msgid "Person list"
+msgstr "Lista de personas"
+
+msgid "Program page"
+msgstr "Página de programa"
+
+msgid "Program list"
+msgstr "Lista de programas"
+
+msgid "Search"
+msgstr "Buscar"
+
+msgid "List of child pages"
+msgstr "Lista de páginas hijas"
+
+msgid "Homepage"
+msgstr "Página principal"
+
+msgid "Single column"
+msgstr "Columna única"
+
+msgid "Three columns: (33% | 33% | 33%)"
+msgstr "Tres columnas: (33% | 33% | 33%)"
+
+msgid "Two columns: (50% | 50%)"
+msgstr "Dos columnas: (50% | 50%)"
+
+msgid "Two columns: (25% | 75%)"
+msgstr "Dos columnas: (25% | 75%)"
+
+msgid "Two columns: (75% | 25%)"
+msgstr "Dos columnas: (75% | 25%)"
+
+msgid "Footer"
+msgstr "Pie de página"
+
+msgid "Static headline"
+msgstr "Encabezado estático"
+
+msgid "Main content"
+msgstr "Contenido principal"
+
+msgid "Secondary content"
+msgstr "Contenido secundario"
+
+msgid "Third content"
+msgstr "Tercer contenido"
+
+msgid "Cover"
+msgstr "Portada"
+
+msgid "Catch phrase"
+msgstr "Eslogan"
+
+msgid "About the course"
+msgstr "Acerca del curso"
+
+msgid "What you will learn"
+msgstr "Lo que aprenderás"
+
+msgid "Format"
+msgstr "Formato"
+
+msgid "Prerequisites"
+msgstr "Prerrequisitos"
+
+msgid "Team"
+msgstr "Equipo"
+
+msgid "Plan"
+msgstr "Plan"
+
+msgid "Complementary information"
+msgstr "Información complementaria"
+
+msgid "License for the course content"
+msgstr "Licencia para el contenido del curso"
+
+msgid "License for the content created by course participants"
+msgstr "Licencia para el contenido creado por los participantes del curso"
+
+msgid "Categories"
+msgstr "Categorías"
+
+msgid "Icon"
+msgstr "Icono"
+
+msgid "Organizations"
+msgstr "Organizaciones"
+
+msgid "Assessment and Certification"
+msgstr "Evaluación y certificación"
+
+msgid "Banner"
+msgstr "Banner"
+
+msgid "Logo"
+msgstr "Logo"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "Excerpt"
+msgstr "Extracto"
+
+msgid "Portrait"
+msgstr "Retrato"
+
+msgid "Bio"
+msgstr "Biografía"
+
+msgid "Main Content"
+msgstr "Contenido principal"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "Body"
+msgstr "Cuerpo"
+
+msgid "Headline"
+msgstr "Encabezado"
+
+msgid "Courses"
+msgstr "Cursos"
+
+msgid "Button caesura"
+msgstr "Botón cesura"
+
+msgid "Full width"
+msgstr "Anchura total"
+
+msgid "No categories yet."
+msgstr "No hay categorías aún."
+
+msgid "Not published yet"
+msgstr "Sin publicar"
+
+msgid "No author yet"
+msgstr "No hay autor aún"
+
+msgid "No excerpt content"
+msgstr "No hay extracto de contenido"
+
+msgid "No body content"
+msgstr "No hay contenido en el cuerpo"
+
+msgid "Related posts"
+msgstr "Entradas relacionadas"
+
+msgid "No associated blogposts"
+msgstr "No hay entradas de blogs asociadas"
+
+msgid "Sub categories"
+msgstr "Subcategorías"
+
+msgid "Related courses"
+msgstr "Cursos relacionados"
+
+msgid "Courses pagination"
+msgstr "Paginación de cursos"
+
+msgid "See all courses"
+msgstr "Ver todos los cursos"
+
+msgid "Related organizations"
+msgstr "Organizaciones relacionadas"
+
+msgid "Related organizations pagination"
+msgstr "Paginación de organizaciones relacionadas"
+
+msgid "Related blogposts"
+msgstr "Entradas de blog relacionadas"
+
+msgid "Related blogposts pagination"
+msgstr "Paginación de entradas de blog relacionadas"
+
+msgid "Related persons"
+msgstr "Personas relacionadas"
+
+msgid "Related persons pagination"
+msgstr "Paginación de personas relacionadas"
+
+msgid "No categories"
+msgstr "Sin categorías"
+
+msgid "Ref. "
+msgstr "Ref. "
+
+msgid "No associated categories"
+msgstr "No hay categorías asociadas"
+
+msgid "Duration:"
+msgstr "Duración:"
+
+msgid "Effort:"
+msgstr "Esfuerzo:"
+
+msgid "Pace:"
+msgstr "Ritmo:"
+
+msgid ""
+"Add a teaser video or add a cover image below and it will be used as "
+"teaser image as well."
+msgstr ""
+"Añada un video de teaser o añada una imagen de portada a continuación y "
+"se utilizará como imagen de teaser."
+
+msgid "course cover image"
+msgstr "imagen de portada del curso"
+
+#, python-format
+msgid ""
+"\n"
+"                        Archived on %(creation_date)s\n"
+"                    "
+msgstr ""
+"\n"
+"                        Archivado el %(creation_date)s\n"
+"                    "
+
+msgid "Go to current version"
+msgstr "Ir a la sesión actual"
+
+msgid "Glimpse cover"
+msgstr "Vistazo de la cobertura"
+
+msgid "Add an image for course cover on its glimpse."
+msgstr "Agrega una imagen para la portada del curso en la vista previa."
+
+msgctxt "course_detail__title"
+msgid "What you will learn"
+msgstr "Lo que aprenderás"
+
+msgid "At the end of this course, you will be able to:"
+msgstr "Al final de este curso, podrá:"
+
+msgctxt "course_detail__title"
+msgid "Description"
+msgstr "Descripción"
+
+msgctxt "course_detail__title"
+msgid "Format"
+msgstr "Formato"
+
+msgid "How is the course structured?"
+msgstr "¿Cómo está estructurado el curso?"
+
+msgctxt "course_detail__title"
+msgid "Prerequisites"
+msgstr "Prerrequisitos"
+
+msgid "What are the prerequisites to follow this course?"
+msgstr "¿Cuáles son los perrequisitos para seguir este curso?"
+
+msgctxt "course_detail__title"
+msgid "Assessment and certification"
+msgstr "Evaluación y certificación"
+
+msgid "How is progress evaluated and/or certified?"
+msgstr "¿Cómo se evalúa y/o certifica el progreso?"
+
+msgctxt "course_detail__title"
+msgid "Course plan"
+msgstr "Plan del curso"
+
+msgid "Enter here the detailed course plan."
+msgstr "Ingrese aquí el plan detallado del curso."
+
+msgctxt "course_detail__title"
+msgid "Course team"
+msgstr "Equipo del curso"
+
+msgid "Who are the teachers in the course team?"
+msgstr "¿Quiénes son los profesores del equipo del curso?"
+
+msgctxt "course_detail__title"
+msgid "Organizations"
+msgstr "Organizaciones"
+
+msgid "What are the organizations publishing this course?"
+msgstr "¿Cuáles son las organizaciones que publican este curso?"
+
+msgctxt "course_detail__title"
+msgid "License"
+msgstr "Licencia"
+
+msgid "What is the license for the course content?"
+msgstr "¿Cuál es la licencia para el contenido del curso?"
+
+msgid "What is the license for the content created by course participants?"
+msgstr ""
+"¿Cuál es la licencia para el contenido creado por los participantes del "
+"curso?"
+
+msgid "Course team"
+msgstr "Equipo del curso"
+
+msgid "License"
+msgstr "Licencia"
+
+#, python-format
+msgid ""
+"\n"
+"        A %(model)s object is missing on this %(model)s page. Please "
+"select another page template.\n"
+"        <br />\n"
+"        If what you need is a %(model)s page, you need to create it via "
+"the wizard and choose \"New %(model)s page\".\n"
+"        "
+msgstr ""
+"\n"
+"        Falta un objeto %(model)s en esta página %(model)s. Por favor, "
+"seleccione otra plantilla de página.\n"
+"        <br />\n"
+"        Si lo que necesita es una página %(model)s, necesita crearlo a "
+"través del asistente y seleccione \"Nueva página %(model)s\".\n"
+"        "
+
+msgid "Main organization"
+msgstr "Organización principal"
+
+msgid "Related courses pagination"
+msgstr "Paginación de cursos relacionados"
+
+msgid "No organization yet"
+msgstr "Aún no hay organización"
+
+msgid "Enter your bio here..."
+msgstr "Introduzca su biografía aquí..."
+
+#, python-format
+msgid "%(title)s avatar"
+msgstr "%(title)s avatar"
+
+msgid "No associated organizations"
+msgstr "No hay organizaciones asociadas"
+
+msgid "Blogposts"
+msgstr "Artículos de blog"
+
+msgid "Blogposts pagination"
+msgstr "Paginación de entradas de blog"
+
+msgid "No persons"
+msgstr "No hay personas"
+
+msgid "program cover image"
+msgstr "imagen de portada del programa"
+
+msgid "No associated programs"
+msgstr "No hay programas asociados"
+
+#, python-brace-format
+msgid "Run {i:d}"
+msgstr "Ejecutar {i:d}"
+
+msgid "Regenerate search index..."
+msgstr "Regenerar índice de búsqueda..."
+
+msgid "New courses"
+msgstr "Nuevos cursos"
+
+msgid "First session"
+msgstr "Primera sesión"
+
+msgid "Availability"
+msgstr "Disponibilidad"
+
+msgid "Languages"
+msgstr "Idiomas"
+
+msgid "Subjects"
+msgstr "Temas"
+
+msgid "Levels"
+msgstr "Niveles"
+
+msgid "Persons"
+msgstr "Personas"
+
+msgid "Open for enrollment"
+msgstr "Inscripciones abiertas"
+
+msgid "Coming soon"
+msgstr "Próximamente"
+
+msgid "On-going"
+msgstr "En curso"
+
+msgid "Archived"
+msgstr "Archivado"
+
+msgid "Sort by configuration"
+msgstr "Ordenar por configuración"
+
+msgid "Sort by facet count"
+msgstr "Ordenar por número de facetas"
+
+msgid "Sort alphabetically"
+msgstr "Ordenar alfabéticamente"
+
+msgid "You are not allowed to manage the search index."
+msgstr "No está autorizado para administrar el índice de búsqueda."
+
+msgid "The search index was successfully bootstrapped"
+msgstr "El índice de búsqueda fue impulsado con éxito"
+
+msgid "Glimpse"
+msgstr "Vista previa"
+
+msgid "Link settings"
+msgstr "Configuración de enlace"
+
+msgid "Square card"
+msgstr "Tarjeta cuadrada"
+
+msgid "Quote"
+msgstr "Citación"
+
+msgid "Half row"
+msgstr "Media fila"
+
+msgid "Full row"
+msgstr "Fila completa"
+
+msgid "Variant"
+msgstr "Variante"
+
+msgid "Form factor variant"
+msgstr "Variante del factor de forma"
+
+msgid "image"
+msgstr "imagen"
+
+msgid "Content"
+msgstr "Contenido"
+
+msgid "External URL"
+msgstr "URL externa"
+
+msgid "Make the glimpse as a link with an external URL."
+msgstr "Configurar la vista previa como un enlace con una URL externa."
+
+msgid "Internal URL"
+msgstr "URL interna"
+
+msgid "Make the glimpse as a link with an internal (page) URL."
+msgstr ""
+"Configurar la vista previa como un enlace con una URL interna (página)."
+
+msgid "HTML Sitemap"
+msgstr "Mapa del sitio HTML"
+
+msgid ""
+"Press save to create a site map. You will then be able to add a child "
+"plugin for each subtree in your sitemap."
+msgstr ""
+"Haga clic en guardar para crear un mapa del sitio. Luego podrá añadir un "
+"plugin hijo para cada subárbol en su mapa del sitio."
+
+msgid "HTML sitemap page"
+msgstr "Página del mapa del sitio HTML"
+
+msgid "root page"
+msgstr "página raíz"
+
+msgid ""
+"This page will be at the root of your sitemap (or its children if the "
+"\"include root page\" flag is unticked)."
+msgstr ""
+"Esta página estará en la raíz del mapa del sitio (o sus hijos si la "
+"bandera \"incluir página raíz\" está desmarcada)."
+
+msgid "max depth"
+msgstr "profundidad máxima"
+
+msgid ""
+"Limit the level of nesting that your sitemap will contain below this "
+"page. An empty field or 0 equals to no limit."
+msgstr ""
+"Limite el nivel de anidación que su mapa del sitio contendrá debajo de "
+"esta página. Un campo vacío o 0 es igual a ningún límite."
+
+msgid "in navigation"
+msgstr "en navegación"
+
+msgid ""
+"Tick to exclude from sitemap the pages that are excluded from navigation."
+msgstr ""
+"Marque para excluir del mapa del sitio las páginas que están excluidas de "
+"la navegación."
+
+msgid "include root page"
+msgstr "incluir página raíz"
+
+msgid ""
+"Tick to include the root page and its descendants. Untick to include only "
+"its descendants."
+msgstr ""
+"Marque para incluir la página raíz y sus descendientes. Desmarque para "
+"incluir sólo sus descendientes."
+
+msgid "HTML Sitemaps"
+msgstr "Mapas de sitio HTML"
+
+msgid "Sitemap"
+msgstr "Mapa del sitio"
+
+msgid "Large Banner"
+msgstr "Gran banner"
+
+msgid "Medias"
+msgstr "Medias"
+
+msgid "Hero introduction"
+msgstr "Introducción"
+
+msgid "background image"
+msgstr "imagen de fondo"
+
+msgid "Template"
+msgstr "Plantilla"
+
+msgid "Choose template to render plugin."
+msgstr "Elija la plantilla para proveer el plugin."
+
+msgid "Explore our catalog"
+msgstr "Explore nuestro catálogo"
+
+msgid "Search in our courses"
+msgstr "Buscar en nuestros cursos"
+
+msgid "LTI consumer"
+msgstr "Consumidor LTI"
+
+msgid "Custom provider configuration"
+msgstr "Configuración de proveedor personalizado"
+
+msgid "shared secret"
+msgstr "secreto compartido"
+
+msgid ""
+"The url is not valid for this provider. It should be of the form \"{:s}\"."
+msgstr ""
+"La url no es válida para este proveedor. Debería comenzar con \"{:s}\"."
+
+msgid ""
+"The url is not valid for this provider. It should start with \"{:s}\"."
+msgstr ""
+"La url no es válida para este proveedor. Debería comenzar con \"{:s}\"."
+
+msgid "Please choose a predefined provider, or fill fields below"
+msgstr ""
+"Por favor, elija un proveedor predefinido, o rellene los campos a "
+"continuación"
+
+msgid "Please choose a predefined provider above, or fill this field"
+msgstr ""
+"Por favor, elija un proveedor predefinido arriba, o rellene este campo"
+
+msgid "Please fill this field"
+msgstr "Por favor, rellene este campo"
+
+msgid "LTI url"
+msgstr "url LTI"
+
+msgid ""
+"For a predefined provider, leave this field empty for uploading new "
+"content."
+msgstr ""
+"Para un proveedor predefinido, deje este campo vacío para cargar nuevo "
+"contenido."
+
+msgid "Predefined LTI provider"
+msgstr "Proveedor de LTI predefinido"
+
+msgid "Please choose a predefined provider or fill fields below."
+msgstr ""
+"Por favor, elija un proveedor predefinido, o rellene los campos a "
+"continuación."
+
+msgid "Nested item"
+msgstr "Artículo anidado"
+
+msgid "List"
+msgstr "Lista"
+
+msgid "Plain text"
+msgstr "Texto simple"
+
+msgid "plain text"
+msgstr "texto plano"
+
+msgid "Section"
+msgstr "Sección"
+
+msgid "Primary scheme"
+msgstr "Esquema primario"
+
+msgid "Secondary scheme"
+msgstr "Esquema secundario"
+
+msgid "Tertiary scheme"
+msgstr "Esquema terciario"
+
+msgid "Quaternary scheme"
+msgstr "Esquema cuaternario"
+
+msgid "Quinary scheme"
+msgstr "Esquema Quinario"
+
+msgid "Senary scheme"
+msgstr "Esquema senario"
+
+msgid "Septenary scheme"
+msgstr "Esquema septenario"
+
+msgid "Item tiles"
+msgstr "Mosaicos de objetos"
+
+msgid "Optional template for custom look."
+msgstr "Plantilla opcional para aspecto personalizado."
+
+msgid "Attributes"
+msgstr "Atributos"
+
+msgid "Image"
+msgstr "Imagen"
+
+msgid "Simple text"
+msgstr "Texto simple"
+
+msgid "body"
+msgstr "cuerpo"
+
+#, python-format
+msgid ""
+"Ensure this text has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this text has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+"Asegúrese de que este texto tiene como máximo %(limit_value)d caracter "
+"(tiene %(show_value)d)."
+msgstr[1] ""
+"Asegúrese de que este texto tiene como máximo %(limit_value)d caracteres "
+"(tiene %(show_value)d)."
