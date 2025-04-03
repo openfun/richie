@@ -177,7 +177,7 @@
   },
   "components.CourseGlimpseFooter.certificateOfferIconAlt": {
     "description": "Course certificate offer alternative text",
-    "message": "Le cours offre une certification."
+    "message": "Le cours propose un examen."
   },
   "components.CourseGlimpseFooter.dateIconAlt": {
     "description": "Course date logo alternative text for screen reader users",
