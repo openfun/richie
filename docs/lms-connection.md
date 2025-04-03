@@ -57,14 +57,12 @@ enrollment manager for Richie.
 Authentication in Joanie is done via JWT Tokens for maximum flexibility and decoupling in
 identity management.
 
-The project started early 2021, but over time, Joanie will handle:
+The project is used in production by France Université Numérique and it handles :
 
 - paid enrollments / certification
 - micro-credentials
 - user dashboard
-- cohorts management (academic or B2B)
 - multi-LMS catalogs
-- time based enrollment
 
 
 ## Development
@@ -85,6 +83,9 @@ docker compose.
 If you want to activate [seamless enrollment](#2-seamless-enrollment) locally for development,
 you will need to set up TLS domains for both Richie and OpenEdX. To do this, head over to our
 guide on [setting-up TLS connections for Richie and OpenEdX](tls-connection).
+
+Otherwise, you can also use tunneling tools like [localtunnel](https://github.com/localtunnel/localtunnel)
+to expose your local server to the internet through https.
 
 
 [Joanie]: https://github.com/openfun/joanie

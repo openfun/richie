@@ -55,7 +55,8 @@ When the component is rendered, it will be passed a `categories` prop with the r
 
 ## Built-in components
 
-Here are the React component that Richie comes with and uses out of the box.
+Here are the React component that Richie comes with and uses out of the box. All available 
+built-in components are available from `src/frontend/js/widgets` folder.
 
 ### &lt;RootSearchSuggestField /&gt;
 
@@ -99,6 +100,53 @@ Props:
 - `loginUrl` [required] — the URL where the user is sent when they click on "Log in";
 - `logoutUrl` [required] — a link that logs the user out and redirects them (can be the standard django logout URL);
 - `signupUrl` [required] — the URL where the user is sent when they click on "Sign up".
+
+### &lt;LanguageSelector /&gt;
+
+Renders a language selector component that allows the user to select their language.
+
+Props:
+
+- `currentLanguage` [required] — the current language of the page
+- `languages` [required] - an object containing all languages available
+
+### &lt;LtiConsumer /&gt;
+
+Renders an iframe through iframe-resizer that embeds a 
+[LTI](https://en.wikipedia.org/wiki/Learning_Tools_Interoperability) tool defined
+through the [`LtiConsumer` plugin](https://github.com/openfun/richie/blob/master/src/richie/plugins/lti_consumer).
+
+Props:
+
+- `id` [required] — the id of the `LtiConsumer` plugin instance
+
+### &lt;Slider /&gt;
+
+Renders a Carousel based on the [`Slider` plugin](https://github.com/openfun/richie/blob/master/src/richie/plugins/slider) .
+
+Props:
+
+- `title` [required] - the title of the slider (use for accessibility purpose)
+- `slides` [required] - an array of slides
+
+### &lt;SyllabusCourseRunsList /&gt;
+
+Renders a list of course runs for a given course. This component is used to display the list of course runs
+on the course syllabus page .
+
+Props:
+
+- `courseRuns` [required] — an array of course runs to render
+- `course` [required] — the course object
+- `maxArchivedCourseRuns` [required] — the maximum number of archived course runs to display. After this limit, a "View more" link is displayed to allow the user to view the remaining course runs.
+
+### &lt;Dashboard /&gt; (*require Joanie*)
+
+This is widget is more a SPA than a simple React component. It is used to renders
+learner and teacher dashboards when using the [Joanie](https://github.com/openfun/joanie)
+platform. It is a big stone of Richie to be multi-lms friendly. It allows
+ to aggregate learner enrollments from Joanie that under hood is linked to
+ several lms.
 
 ## Context
 

@@ -48,7 +48,9 @@ avoided by assigning your user to the `docker` group.
 
 The easiest way to start working on the project is to use our `Makefile`:
 
+```bash
     $ make bootstrap
+```
 
 This command builds the `app` container, installs front-end and back-end
 dependencies, builds the front-end application and styles, and performs
@@ -59,17 +61,23 @@ migration-related issues.
 Now that your `Docker` services are ready to be used, start the full CMS by
 running:
 
+```bash
     $ make run
+```
 
 ### Adding content
 
 Once the CMS is up and running, you can create a superuser account:
 
+```bash
     $ make superuser
+```
 
 You can create a basic demo site by running:
 
+```bash
     $ make demo-site
+```
 
 Note that if you don't create the demo site and start from a blank CMS, you
 will get some errors requesting you to create some required root pages. So it
