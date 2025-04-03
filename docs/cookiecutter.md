@@ -90,7 +90,15 @@ committing it and pushing it to a new git repository.
 
 ## Theming
 
-You probably want to change the default theme. The cookiecutter adds an extra scss frontend folder with a couple of templates that you can use to change the default styling of the site.
+You probably want to change the default theme. Design tokens (color, fonts, etc.) are managed
+through our fully customisable design system [Cunningham](https://github.com/openfun/cunningham).
+The cookiecutter adds a `cunningham.cjs` file in the `sites/<site>/src/frontend` folder to 
+allow you to customize the design tokens. Modify or add our design tokens in this file 
+then run `yarn build-theme` to generate sass and css files 
+into `sites/<site>/src/frontend/scss/vendors` folder.
+
+Furthermore the cookiecutter adds an extra scss frontend folder with a couple
+of templates that you can use to change the default styling of the site.
 * `sites/<site>/src/frontend/scss/extras/colors/_palette.scss`
 * `sites/<site>/src/frontend/scss/extras/colors/_theme.scss`
 

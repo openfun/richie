@@ -39,32 +39,44 @@ $ make watch-ts
 
 You can stop/start/restart a container:
 
+```bash
     $ docker compose [stop|start|restart] [app|postgresql|mysql|elasticsearch]
+```
 
 or stop/start/restart all containers in one command:
 
+```bash
     $ docker compose [stop|start|restart]
+```
 
 ## Debugging
 
 You can easily see the latest logs for a container:
 
+```bash
     $ docker compose logs [app|postgresql|mysql|elasticsearch]
+```
 
 Or follow the stream of logs:
 
+```bash
     $ docker compose logs --follow [app|postgresql|mysql|elasticsearch]
+```
 
 If you need to debug a running container, you can open a Linux shell with the
 `docker compose exec` command (we use a sugar script here, see next section):
 
+```bash
     $ bin/exec [app|postgresql|mysql|elasticsearch] bash
+```
 
 While developing on `Richie`, you will also need to run a `Django shell` and it
 has to be done in the `app` container (we use a sugar script here, see next
 section):
 
+```bash
     $ bin/run app python sandbox/manage.py shell
+```
 
 ## Using sugar scripts
 
@@ -91,8 +103,10 @@ If you work on the Docker configuration and make repeated modifications,
 remember to periodically clean the unused docker images and containers by
 running:
 
+```bash
     $ docker image prune
     $ docker container prune
+```
 
 ## Troubleshooting
 

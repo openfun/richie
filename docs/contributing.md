@@ -13,21 +13,29 @@ from our [handbook](https://openfun.gitbooks.io/handbook/content).
 
 We use strict flake8, pylint, isort and black linters to check the validity of our backend code:
 
+```bash
     $ make lint-back
+```
 
 We use strict eslint and prettier to check the validity of our frontend code:
 
+```bash
     $ make lint-front
+```
 
 ## Running tests
 
 On the backend, we use pytest to run our test suite:
 
+```bash
     $ make test-back
+```
 
 On the frontend, we use karma to run our test suite:
 
+```bash
     $ make test-front
+```
 
 ## Running migrations
 
@@ -35,20 +43,26 @@ The first time you start the project with `make bootstrap`, the `db` container a
 creates a fresh database named `richie` and performs database migrations. Each time a new
 **database migration** is added to the code, you can synchronize the database schema by running:
 
+```bash
     $ make migrate
+```
 
 ## Handling new dependencies
 
 Each time you add new front-end or back-end dependencies, you will need to rebuild the
 application. We recommend to use:
 
+```bash
     $ make bootstrap
+```
 
 ## Going further
 
 To see all available commands, run:
 
+```bash
     $ make
+```
 
 We also provide shortcuts for docker compose commands as sugar scripts in the
 `bin/` directory:

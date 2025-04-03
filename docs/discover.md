@@ -27,6 +27,7 @@ Among the features that `Richie` offers out of the box:
 - flexible custom pages for courses, organizations, categories, teachers, blog posts,
   programs (and their inter-relations),
 - Extensible with any third-party `DjangoCMS` plugin or any third-party `Django` application.
+- E-commerce capabilities through [Joanie](https://github.com/openfun/joanie).
 
 ## Quick preview
 
