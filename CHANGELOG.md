@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix building site from cookicutter
+
 ## [3.0.0] - 2025-04-03
 
 ### Changed
