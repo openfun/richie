@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Refactor Elasticsearch client initialization and add client custom settings
+
 ### Fixed
 
 - Fix building site from cookicutter
