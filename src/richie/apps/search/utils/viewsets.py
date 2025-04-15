@@ -7,7 +7,7 @@ from django.utils.translation import get_language_from_request
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .. import ES_CLIENT
+from ..apps import ES_CLIENT
 
 
 class ViewSetMetadata:

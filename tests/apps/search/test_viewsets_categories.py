@@ -9,7 +9,7 @@ from django.test.utils import override_settings
 
 from elasticsearch.exceptions import NotFoundError
 
-from richie.apps.search import ES_CLIENT
+from richie.apps.search.apps import ES_CLIENT
 
 
 class CategoriesViewsetsTestCase(TestCase):

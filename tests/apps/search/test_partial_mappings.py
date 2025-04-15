@@ -4,7 +4,7 @@ Test for our partial mappings
 
 from django.test import TestCase
 
-from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
+from richie.apps.search.apps import ES_CLIENT, ES_INDICES_CLIENT
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS, MULTILINGUAL_TEXT
 
 

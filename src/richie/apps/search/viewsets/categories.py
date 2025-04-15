@@ -11,7 +11,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from .. import ES_CLIENT
+from ..apps import ES_CLIENT
 from ..defaults import ES_PAGE_SIZE
 from ..indexers import ES_INDICES
 from ..utils.viewsets import ViewSetMetadata

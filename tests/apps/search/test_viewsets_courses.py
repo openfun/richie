@@ -11,7 +11,7 @@ from django.utils import timezone as django_timezone
 from cms.test_utils.testcases import CMSTestCase
 from elasticsearch.exceptions import NotFoundError
 
-from richie.apps.search import ES_CLIENT
+from richie.apps.search.apps import ES_CLIENT
 from richie.apps.search.indexers.courses import CoursesIndexer
 
 

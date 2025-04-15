@@ -7,7 +7,7 @@ from unittest import mock
 
 from django.test import TestCase
 
-from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
+from richie.apps.search.apps import ES_CLIENT, ES_INDICES_CLIENT
 from richie.apps.search.elasticsearch import bulk_compat
 from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS

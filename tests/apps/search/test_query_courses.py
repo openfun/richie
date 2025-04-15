@@ -16,7 +16,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     PersonFactory,
 )
-from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
+from richie.apps.search.apps import ES_CLIENT, ES_INDICES_CLIENT
 from richie.apps.search.elasticsearch import bulk_compat
 from richie.apps.search.filter_definitions import FILTERS
 from richie.apps.search.filter_definitions.courses import ALL_LANGUAGES_DICT

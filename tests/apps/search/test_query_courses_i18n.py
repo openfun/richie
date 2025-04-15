@@ -9,7 +9,7 @@ from richie.apps.courses.factories import (
     CourseFactory,
     OrganizationFactory,
 )
-from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
+from richie.apps.search.apps import ES_CLIENT, ES_INDICES_CLIENT
 from richie.apps.search.elasticsearch import bulk_compat
 from richie.apps.search.filter_definitions import FILTERS
 from richie.apps.search.indexers import ES_INDICES

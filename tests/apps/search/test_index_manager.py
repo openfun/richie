@@ -12,7 +12,7 @@ from django.utils import timezone as django_timezone
 from elasticsearch.exceptions import NotFoundError
 
 from richie.apps.courses.factories import CourseFactory
-from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
+from richie.apps.search.apps import ES_CLIENT, ES_INDICES_CLIENT
 from richie.apps.search.index_manager import (
     ES_INDICES,
     get_indices_by_alias,

@@ -15,7 +15,7 @@ from cms.api import Page
 
 from richie.apps.core.defaults import ALL_LANGUAGES_DICT
 
-from .. import ES_CLIENT
+from ..apps import ES_CLIENT
 from ..fields.array import ArrayField
 from ..indexers import ES_INDICES
 from ..utils.i18n import get_best_field_language
