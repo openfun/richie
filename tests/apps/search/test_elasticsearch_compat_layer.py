@@ -70,9 +70,9 @@ class ElasticSearchCompatLayerTestCase(TestCase):
         with mock.patch(
             "elasticsearch.Elasticsearch.info", wraps=es_client.info
         ) as mock_es_info:
-            with mock.patch("richie.apps.search.ES_CLIENT", es_client):
+            with mock.patch("richie.apps.search.apps.ES_CLIENT", es_client):
                 with mock.patch(
-                    "richie.apps.search.ES_INDICES_CLIENT", es_indices_client
+                    "richie.apps.search.apps.ES_INDICES_CLIENT", es_indices_client
                 ):
                     # Perform a bunch of ES actions, from index management all the way to searches
 

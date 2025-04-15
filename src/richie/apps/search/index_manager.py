@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from elasticsearch.exceptions import NotFoundError, RequestError
 
-from . import ES_CLIENT, ES_INDICES_CLIENT
+from .apps import ES_CLIENT, ES_INDICES_CLIENT
 from .defaults import ES_CHUNK_SIZE, ES_INDICES_PREFIX
 from .elasticsearch import bulk_compat
 from .indexers import ES_INDICES
