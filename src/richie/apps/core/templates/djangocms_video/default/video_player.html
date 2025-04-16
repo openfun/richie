@@ -17,7 +17,7 @@ on the browser and external video platform implementations.
     {# show iframe if embed_link is provided #}
     <div class="aspect-ratio">
         {% if RICHIE_VIDEO_PLUGIN_LAZY_LOADING %}
-            <a class="video-player-image" onclick="this.style.display='none'; this.nextSibling.style.display='block'; this.nextSibling.src=this.nextSibling.getAttribute('data-src');" href="javascript:void(0)">
+            <a class="video-player-image" onclick="this.style.display='none'; this.parentNode.getElementsByTagName('iframe')[0].style.display='block'; this.parentNode.getElementsByTagName('iframe')[0].src=this.parentNode.getElementsByTagName('iframe')[0].getAttribute('data-src');" href="javascript:void(0)">
                 {% if instance.poster %}
                     <img
                         src='{% thumbnail instance.poster.url 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.poster.subject_location %}'
@@ -31,6 +31,9 @@ on the browser and external video platform implementations.
                     />
                 {% else %}
                     {% placeholder_as_plugins "course_cover" as cover_plugins %}
+                    {% if cover_plugins|length == 0 %}
+                        {% placeholder_as_plugins "program_cover" as cover_plugins %}
+                    {% endif %}
                     {% blockplugin cover_plugins.0 %}
                         <img
                             src='{% thumbnail instance.picture 300x170 replace_alpha='#FFFFFF' crop upscale subject_location=instance.picture.subject_location %}'
