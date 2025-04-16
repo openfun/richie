@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix building site from cookicutter
+- Fix lazy load video player mode for programs
 
 ## [3.0.0] - 2025-04-03
 
