@@ -1,8 +1,8 @@
 # All these sections are optional, edit this file as you like.
 [general]
+regex-style-search=true
 # Ignore certain rules, you can reference them by their id or by their full name
 # ignore=title-trailing-punctuation, T3
-
 # verbosity should be a value between 1 and 3, the commandline -v flags take precedence over this
 # verbosity = 2
 
