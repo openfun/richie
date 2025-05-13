@@ -26,6 +26,12 @@
 # ==============================================================================
 # VARIABLES
 
+include env.d/development/localtunnel
+
+BOLD := \033[1m
+RESET := \033[0m
+GREEN := \033[1;32m
+
 # -- Database
 # Database engine switch: if the DB_HOST=mysql environment variable is defined,
 # we'll use the mysql docker compose service as a database backend instead of
@@ -79,6 +85,7 @@ bootstrap: \
   env.d/development/common \
   env.d/development/dev \
   env.d/development/dev-ssl \
+  env.d/development/localtunnel \
   env.d/development/crowdin \
   src/frontend/js/settings/settings.dev.ts \
   data/media/.keep \
@@ -121,6 +128,11 @@ status: ## an alias for "docker compose ps"
 stop: ## stop the development server
 	@$(COMPOSE) stop
 .PHONY: stop
+
+tunnel: ## run a proxy through localtunnel
+	@echo
+	npx localtunnel -s $(LOCALTUNNEL_SUBDOMAIN) -h $(LOCALTUNNEL_HOST) --port $(LOCALTUNNEL_PORT) --print-requests
+.PHONY: tunnel
 
 # -- Front-end
 build-front: ## build front-end application
@@ -341,6 +353,9 @@ env.d/development/dev:
 
 env.d/development/dev-ssl:
 	cp env.d/development/dev-ssl.dist env.d/development/dev-ssl
+
+env.d/development/localtunnel:
+	cp env.d/development/localtunnel.dist env.d/development/localtunnel
 
 env.d/development/crowdin:
 	cp env.d/development/crowdin.dist env.d/development/crowdin

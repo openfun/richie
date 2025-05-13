@@ -19,6 +19,7 @@ services:
     image: richie:development
     env_file:
       - env.d/development/common
+      - env.d/development/localtunnel
       - env.d/development/${DEV_ENV_FILE:-dev}
       - env.d/development/${DB_HOST:-postgresql}
     networks:
