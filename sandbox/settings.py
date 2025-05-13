@@ -671,6 +671,10 @@ class Development(Base):
 
     DEBUG = True
     ALLOWED_HOSTS = ["*"]
+    RICHIE_URL = values.Value(
+        "http://localhost:8070", environ_name="LOCALTUNNEL_URL", environ_prefix=None
+    )
+    CSRF_TRUSTED_ORIGINS = [RICHIE_URL]
     # Needed by LTI Consumer plugin
     # When we use a LTI provider on localhost domain, browser security needs to be lowered,
     # as crossdomain iframe posting is dangerous.
