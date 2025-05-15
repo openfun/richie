@@ -177,27 +177,27 @@
   },
   "components.CourseGlimpseFooter.certificateOfferIconAlt": {
     "description": "Course certificate offer alternative text",
-    "message": "The course offers a certification."
+    "message": "An exam is available"
   },
   "components.CourseGlimpseFooter.dateIconAlt": {
     "description": "Course date logo alternative text for screen reader users",
-    "message": "Course date"
+    "message": "Availability"
   },
   "components.CourseGlimpseFooter.enrollmentOfferIconFreeAlt": {
     "description": "Course offers free alternative text",
-    "message": "The entire course can be completed for free."
+    "message": "All content is available for free"
   },
   "components.CourseGlimpseFooter.enrollmentOfferIconPaidAlt": {
     "description": "Course offers paid alternative text",
-    "message": "Course requires a payment."
+    "message": "Access requires payment"
   },
   "components.CourseGlimpseFooter.enrollmentOfferIconPartiallyFreeAlt": {
     "description": "Course offers partially free alternative text",
-    "message": "More than half of the course is for free."
+    "message": "Most of the content is available for free"
   },
   "components.CourseGlimpseFooter.enrollmentOfferIconSubscriptionAlt": {
     "description": "Course offers subscription alternative text",
-    "message": "Course requires to be a subscriber or a paid member."
+    "message": "Access requires a subscription"
   },
   "components.CourseGlimpseList.courseCount": {
     "description": "Result count & pagination information for course search. Appears right above search results",
@@ -1645,19 +1645,19 @@
   },
   "components.SyllabusCourseRun.certificateFreeOffer": {
     "description": "Message for the free certification offer of an opened course run block",
-    "message": "The certification process is free."
+    "message": "Free certificate"
   },
   "components.SyllabusCourseRun.certificatePaidOffer": {
-    "description": "Messagge for the paid certification offer of an opened course run block",
-    "message": "The certification process is paid."
+    "description": "Message for the paid certification offer of an opened course run block",
+    "message": "Paid certificate"
   },
   "components.SyllabusCourseRun.certificateSubscriptionOffer": {
     "description": "Message for the subscription certification offer of an opened course run block",
-    "message": "The certification process is offered through subscription."
+    "message": "Offered certificate through subscription"
   },
   "components.SyllabusCourseRun.certificationPrice": {
     "description": "Title of the certification price section of an opened course run block",
-    "message": "Certification price"
+    "message": "Certificate enrollment fee (optional)"
   },
   "components.SyllabusCourseRun.course": {
     "description": "Title of the course dates section of an opened course run block",
@@ -1665,15 +1665,15 @@
   },
   "components.SyllabusCourseRun.courseFreeOffer": {
     "description": "Message for the free course offer of an opened course run block",
-    "message": "The course content is free."
+    "message": "Free access"
   },
   "components.SyllabusCourseRun.coursePaidOffer": {
     "description": "Message for the paid course offer of an opened course run block",
-    "message": "The course content is paid."
+    "message": "Paid access"
   },
   "components.SyllabusCourseRun.coursePartiallyFree": {
     "description": "Message for the partially free course offer of an opened course run block",
-    "message": "The course content is free."
+    "message": "Partially free access"
   },
   "components.SyllabusCourseRun.coursePeriod": {
     "description": "Course date of an opened course run block",
@@ -1685,7 +1685,7 @@
   },
   "components.SyllabusCourseRun.courseSubscriptionOffer": {
     "description": "Message for the subscription course offer of an opened course run block",
-    "message": "Subscribe to access the course content."
+    "message": "Subscribe to access the course content"
   },
   "components.SyllabusCourseRun.enrollNow": {
     "description": "CTA for users to enroll on ongoing of future open course.",
@@ -1709,19 +1709,19 @@
   },
   "components.SyllabusCourseRunCompacted.certificateFreeOffer": {
     "description": "Message for the free certification offer of an opened course run block",
-    "message": "The certification process is free."
+    "message": "Free certificate"
   },
   "components.SyllabusCourseRunCompacted.certificatePaidOffer": {
     "description": "Messagge for the paid certification offer of an opened course run block",
-    "message": "The certification process is paid."
+    "message": "Paid certificate"
   },
   "components.SyllabusCourseRunCompacted.certificateSubscriptionOffer": {
     "description": "Message for the subscription certification offer of an opened course run block",
-    "message": "The certification process is offered through subscription."
+    "message": "Offered certificate through subscription"
   },
   "components.SyllabusCourseRunCompacted.certificationPrice": {
     "description": "Title of the certification price section of an opened course run block",
-    "message": "Certification price"
+    "message": "Certificate enrollment fee (optional)"
   },
   "components.SyllabusCourseRunCompacted.course": {
     "description": "Title of the course dates section of an opened course run block",
@@ -1729,15 +1729,15 @@
   },
   "components.SyllabusCourseRunCompacted.courseFreeOffer": {
     "description": "Message for the free course offer of an opened course run block",
-    "message": "The course content is free."
+    "message": "Free access"
   },
   "components.SyllabusCourseRunCompacted.coursePaidOffer": {
     "description": "Message for the paid course offer of an opened course run block",
-    "message": "The course content is paid."
+    "message": "Paid access"
   },
   "components.SyllabusCourseRunCompacted.coursePartiallyFree": {
     "description": "Message for the partially free course offer of an opened course run block",
-    "message": "The course content is free."
+    "message": "Partially free access"
   },
   "components.SyllabusCourseRunCompacted.coursePrice": {
     "description": "Title of the course enrollment price section of an opened course run block",
@@ -1745,7 +1745,7 @@
   },
   "components.SyllabusCourseRunCompacted.courseSubscriptionOffer": {
     "description": "Message for the subscription course offer of an opened course run block",
-    "message": "Subscribe to access the course content."
+    "message": "Subscribe to access the course content"
   },
   "components.SyllabusCourseRunCompacted.enrollNow": {
     "description": "CTA for users to enroll on ongoing of future open course.",
