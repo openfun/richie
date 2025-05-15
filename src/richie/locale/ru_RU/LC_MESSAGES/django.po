@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-27 13:40+0000\n"
-"PO-Revision-Date: 2025-04-02 15:29\n"
+"POT-Creation-Date: 2025-04-29 12:56+0000\n"
+"PO-Revision-Date: 2025-05-15 15:41\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -97,19 +97,19 @@ msgstr "Хранение {:d} вариантов может потребоват
 msgid "Click to play the teaser for "
 msgstr ""
 
-#: apps/core/templates/djangocms_video/default/video_player.html:43
+#: apps/core/templates/djangocms_video/default/video_player.html:46
 #: apps/courses/templates/courses/cms/course_detail.html:163
 #: apps/courses/templates/courses/cms/course_detail.html:248
 #: apps/courses/templates/courses/cms/program_detail.html:163
 msgid "course cover image"
 msgstr "обложка курса"
 
-#: apps/core/templates/djangocms_video/default/video_player.html:54
-#: apps/core/templates/djangocms_video/default/video_player.html:63
+#: apps/core/templates/djangocms_video/default/video_player.html:57
+#: apps/core/templates/djangocms_video/default/video_player.html:66
 msgid "Video"
 msgstr "Видео"
 
-#: apps/core/templates/djangocms_video/default/video_player.html:82
+#: apps/core/templates/djangocms_video/default/video_player.html:85
 msgid "Your browser doesn't support this video format."
 msgstr "Ваш браузер не поддерживает этот формат видео."
 
