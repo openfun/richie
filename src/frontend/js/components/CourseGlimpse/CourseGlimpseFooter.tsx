@@ -6,32 +6,32 @@ import { CourseOffer } from 'types/Course';
 
 const messages = defineMessages({
   dateIconAlt: {
-    defaultMessage: 'Course date',
+    defaultMessage: 'Availability',
     description: 'Course date logo alternative text for screen reader users',
     id: 'components.CourseGlimpseFooter.dateIconAlt',
   },
   enrollmentOfferIconFreeAlt: {
-    defaultMessage: 'The entire course can be completed for free.',
+    defaultMessage: 'All content is available for free',
     description: 'Course offers free alternative text',
     id: 'components.CourseGlimpseFooter.enrollmentOfferIconFreeAlt',
   },
   enrollmentOfferIconPartiallyFreeAlt: {
-    defaultMessage: 'More than half of the course is for free.',
+    defaultMessage: 'Most of the content is available for free',
     description: 'Course offers partially free alternative text',
     id: 'components.CourseGlimpseFooter.enrollmentOfferIconPartiallyFreeAlt',
   },
   enrollmentOfferIconPaidAlt: {
-    defaultMessage: 'Course requires a payment.',
+    defaultMessage: 'Access requires payment',
     description: 'Course offers paid alternative text',
     id: 'components.CourseGlimpseFooter.enrollmentOfferIconPaidAlt',
   },
   enrollmentOfferIconSubscriptionAlt: {
-    defaultMessage: 'Course requires to be a subscriber or a paid member.',
+    defaultMessage: 'Access requires a subscription',
     description: 'Course offers subscription alternative text',
     id: 'components.CourseGlimpseFooter.enrollmentOfferIconSubscriptionAlt',
   },
   certificateOfferIconAlt: {
-    defaultMessage: 'The course offers a certification.',
+    defaultMessage: 'An exam is available',
     description: 'Course certificate offer alternative text',
     id: 'components.CourseGlimpseFooter.certificateOfferIconAlt',
   },

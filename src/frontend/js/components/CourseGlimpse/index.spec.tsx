@@ -85,7 +85,7 @@ describe('widgets/Search/components/CourseGlimpse', () => {
     screen.getByText('Some Organization');
     screen.getByText('Category');
     // Matches on 'Starting on March 14, 2019', date is wrapped with intl <span>
-    screen.getByLabelText('Course date');
+    screen.getByLabelText('Availability');
     screen.getByText('Starting on March 14, 2019');
 
     // Check course logo
@@ -110,10 +110,10 @@ describe('widgets/Search/components/CourseGlimpse', () => {
     expect(orgImg).toHaveAttribute('src', '/thumbs/org_small.png');
 
     // Check certificate offer
-    within(container).getByRole('img', { name: 'The course offers a certification.' });
+    within(container).getByRole('img', { name: 'An exam is available' });
 
     // Check offer information
-    const offerIcon = within(container).getByRole('img', { name: 'Course requires a payment.' });
+    const offerIcon = within(container).getByRole('img', { name: 'Access requires payment' });
     const useElement = offerIcon.lastChild;
     expect(useElement).toHaveAttribute('href', '#icon-offer-paid');
 
@@ -193,7 +193,7 @@ describe('widgets/Search/components/CourseGlimpse', () => {
     expect(containerElement).toHaveClass('course-glimpse--offer-free');
 
     const offerIcon = within(container).getByRole('img', {
-      name: 'The entire course can be completed for free.',
+      name: 'All content is available for free',
     });
     const useElement = offerIcon.lastChild;
     expect(useElement).toHaveAttribute('href', '#icon-offer-free');
@@ -203,10 +203,10 @@ describe('widgets/Search/components/CourseGlimpse', () => {
   });
 
   it.each([
-    [CourseOffer.FREE, 'The entire course can be completed for free.'],
-    [CourseOffer.PARTIALLY_FREE, 'More than half of the course is for free.'],
-    [CourseOffer.PAID, 'Course requires a payment.'],
-    [CourseOffer.SUBSCRIPTION, 'Course requires to be a subscriber or a paid member.'],
+    [CourseOffer.FREE, 'All content is available for free'],
+    [CourseOffer.PARTIALLY_FREE, 'Most of the content is available for free'],
+    [CourseOffer.PAID, 'Access requires payment'],
+    [CourseOffer.SUBSCRIPTION, 'Access requires a subscription'],
   ])('does show a specific course offer icon', (offer, altText) => {
     const { container } = renderCourseGlimpse({
       contextProps,

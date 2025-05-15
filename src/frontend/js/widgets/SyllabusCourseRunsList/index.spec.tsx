@@ -1044,8 +1044,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is paid.<br>€49.99</dd>');
-    expect(content).toContain('<dd>The certification process is paid.<br>€59.99</dd>');
+    expect(content).toContain('<dd>Paid access<br>€49.99</dd>');
+    expect(content).toContain('<dd>Paid certificate<br>€59.99</dd>');
   });
 
   it('renders price information as subscription on SyllabusCourseRunCompacted', async () => {
@@ -1066,10 +1066,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>Subscribe to access the course content.<br>€49.99</dd>');
-    expect(content).toContain(
-      '<dd>The certification process is offered through subscription.<br>€59.99</dd>',
-    );
+    expect(content).toContain('<dd>Subscribe to access the course content<br>€49.99</dd>');
+    expect(content).toContain('<dd>Offered certificate through subscription<br>€59.99</dd>');
   });
 
   it('renders price information as Partially free on SyllabusCourseRunCompacted', async () => {
@@ -1090,8 +1088,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is free.<br>€0.00</dd>');
-    expect(content).toContain('<dd>The certification process is paid.<br>€59.99</dd>');
+    expect(content).toContain('<dd>Partially free access<br>€0.00</dd>');
+    expect(content).toContain('<dd>Paid certificate<br>€59.99</dd>');
   });
 
   it('renders price information as paid and free on SyllabusCourseRunCompacted', async () => {
@@ -1112,8 +1110,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is paid.<br>€49.99</dd>');
-    expect(content).toContain('<dd>The certification process is free.<br>€0.00</dd>');
+    expect(content).toContain('<dd>Paid access<br>€49.99</dd>');
+    expect(content).toContain('<dd>Free certificate<br>€0.00</dd>');
   });
 
   it('does not render price information on SyllabusCourseRunCompacted', async () => {
@@ -1133,8 +1131,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).not.toContain('The course content is paid');
-    expect(content).not.toContain('The certification process is paid.');
+    expect(content).not.toContain('Paid access');
+    expect(content).not.toContain('Paid certificate');
   });
 
   it('does not render course price information on SyllabusCourseRunCompacted', async () => {
@@ -1155,8 +1153,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).not.toContain('The course content is paid.');
-    expect(content).toContain('<dd>The certification process is paid.<br>€59.99</dd>');
+    expect(content).not.toContain('Paid access');
+    expect(content).toContain('<dd>Paid certificate<br>€59.99</dd>');
   });
 
   it('does not render certificate price information on SyllabusCourseRunCompacted', async () => {
@@ -1177,8 +1175,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is paid.<br>€49.99</dd>');
-    expect(content).not.toContain('The certification process is paid.');
+    expect(content).toContain('<dd>Paid access<br>€49.99</dd>');
+    expect(content).not.toContain('Paid certificate');
   });
 
   it('does not render prices but only offers on SyllabusCourseRunCompacted', async () => {
@@ -1199,8 +1197,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is free.<br></dd>');
-    expect(content).toContain('<dd>The certification process is free.<br></dd>');
+    expect(content).toContain('<dd>Free access<br></dd>');
+    expect(content).toContain('<dd>Free certificate<br></dd>');
   });
 
   it('renders prices as zero on SyllabusCourseRunCompacted', async () => {
@@ -1221,8 +1219,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is free.<br>€0.00</dd>');
-    expect(content).toContain('<dd>The certification process is free.<br>€0.00</dd>');
+    expect(content).toContain('<dd>Free access<br>€0.00</dd>');
+    expect(content).toContain('<dd>Free certificate<br>€0.00</dd>');
   });
 
   it('does not render invalid offers on SyllabusCourseRunCompacted', async () => {
@@ -1266,8 +1264,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is paid.<br>€49.99</dd>');
-    expect(content).toContain('<dd>The certification process is paid.<br>€59.99</dd>');
+    expect(content).toContain('<dd>Paid access<br>€49.99</dd>');
+    expect(content).toContain('<dd>Paid certificate<br>€59.99</dd>');
   });
 
   it('renders price information as subscription on SyllabusCourseRun', async () => {
@@ -1288,10 +1286,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>Subscribe to access the course content.<br>€49.99</dd>');
-    expect(content).toContain(
-      '<dd>The certification process is offered through subscription.<br>€59.99</dd>',
-    );
+    expect(content).toContain('<dd>Subscribe to access the course content<br>€49.99</dd>');
+    expect(content).toContain('<dd>Offered certificate through subscription<br>€59.99</dd>');
   });
 
   it('renders price information as Partially free on SyllabusCourseRun', async () => {
@@ -1312,8 +1308,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is free.<br>€0.00</dd>');
-    expect(content).toContain('<dd>The certification process is paid.<br>€59.99</dd>');
+    expect(content).toContain('<dd>Partially free access<br>€0.00</dd>');
+    expect(content).toContain('<dd>Paid certificate<br>€59.99</dd>');
   });
 
   it('renders price information as paid and free on SyllabusCourseRun', async () => {
@@ -1334,8 +1330,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is paid.<br>€49.99</dd>');
-    expect(content).toContain('<dd>The certification process is free.<br>€0.00</dd>');
+    expect(content).toContain('<dd>Paid access<br>€49.99</dd>');
+    expect(content).toContain('<dd>Free certificate<br>€0.00</dd>');
   });
 
   it('does not render price information on SyllabusCourseRun', async () => {
@@ -1355,8 +1351,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).not.toContain('The course content is paid');
-    expect(content).not.toContain('The certification process is paid.');
+    expect(content).not.toContain('Paid access');
+    expect(content).not.toContain('Paid certificate');
   });
 
   it('does not render course price information on SyllabusCourseRun', async () => {
@@ -1377,8 +1373,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).not.toContain('The course content is paid.');
-    expect(content).toContain('<dd>The certification process is paid.<br>€59.99</dd>');
+    expect(content).not.toContain('Paid access');
+    expect(content).toContain('<dd>Paid certificate<br>€59.99</dd>');
   });
 
   it('does not render certificate price information on SyllabusCourseRun', async () => {
@@ -1399,8 +1395,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is paid.<br>€49.99</dd>');
-    expect(content).not.toContain('The certification process is paid.');
+    expect(content).toContain('<dd>Paid access<br>€49.99</dd>');
+    expect(content).not.toContain('Paid certificate');
   });
 
   it('does not render prices but only offers on SyllabusCourseRun', async () => {
@@ -1421,8 +1417,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is free.<br></dd>');
-    expect(content).toContain('<dd>The certification process is free.<br></dd>');
+    expect(content).toContain('<dd>Free access<br></dd>');
+    expect(content).toContain('<dd>Free certificate<br></dd>');
   });
 
   it('renders prices as zero on SyllabusCourseRun', async () => {
@@ -1443,8 +1439,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>The course content is free.<br>€0.00</dd>');
-    expect(content).toContain('<dd>The certification process is free.<br>€0.00</dd>');
+    expect(content).toContain('<dd>Free access<br>€0.00</dd>');
+    expect(content).toContain('<dd>Free certificate<br>€0.00</dd>');
   });
 
   it('does not render invalid offers on SyllabusCourseRun', async () => {
