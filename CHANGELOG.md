@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [3.1.0] - 2025-05-15
+
 ### Added
 
 - Refactor Elasticsearch client initialization and add client custom settings
@@ -2295,7 +2297,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v3.0.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v3.1.0...master
+[3.1.0]: https://github.com/openfun/richie/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/openfun/richie/compare/v3.0.0-beta.0...v3.0.0
 [3.0.0-beta.0]: https://github.com/openfun/richie/compare/v2.34.0...v3.0.0-beta.0
 [2.34.0]: https://github.com/openfun/richie/compare/v2.33.0...v2.34.0
