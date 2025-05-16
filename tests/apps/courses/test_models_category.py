@@ -167,6 +167,23 @@ class CategoryModelsTestCase(TestCase):
                     course.extended_object.prefetched_titles[0].title, "my title"
                 )
 
+    def test_models_category_get_courses_not_listed(self):
+        """
+        Not listed courses should not be returned by the get_courses method.
+        """
+        category = CategoryFactory(should_publish=True)
+        CourseFactory.create_batch(
+            3,
+            page_title="my title",
+            fill_categories=[category],
+            should_publish=True,
+            is_listed=False,
+        )
+        retrieved_courses = category.get_courses()
+
+        with self.assertNumQueries(1):
+            self.assertEqual(list(retrieved_courses), [])
+
     def test_models_category_get_courses_ordering(self):
         """The related courses should be sorted by their position in the pages tree."""
         category = CategoryFactory(should_publish=True)
