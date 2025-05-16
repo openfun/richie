@@ -147,7 +147,10 @@ class Organization(EsIdMixin, BasePageExtension):
         """
         return self.get_reverse_related_page_extensions(
             "course", language=language
-        ).filter(extended_object__node__parent__cms_pages__course__isnull=True)
+        ).filter(
+            extended_object__node__parent__cms_pages__course__isnull=True,
+            is_listed=True,
+        )
 
     def get_persons(self, language=None):
         """
