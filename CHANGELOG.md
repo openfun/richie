@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Hide courses that are not `is_listed` in public pages
+
 ## [3.1.2] - 2025-05-22
 
 ### Added

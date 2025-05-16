@@ -14,6 +14,7 @@ from ...core.fields.duration import CompositeDurationField
 from ...core.models import BasePageExtension
 from .. import defaults
 from .category import Category, CategoryPluginModel
+from .course import Course, CoursePluginModel
 from .organization import Organization, OrganizationPluginModel
 from .person import Person, PersonPluginModel
 
@@ -113,6 +114,19 @@ class Program(BasePageExtension):
         return self.get_direct_related_page_extensions(
             Person, PersonPluginModel, language=language
         )
+
+    def get_courses(self, language=None):
+        """
+        Return the courses linked to the program via a course plugin in any of the
+        placeholders on the program detail page, ranked by their `path` to respect
+        the order in the courses tree.
+        The courses are filtered to only include those that are listed and published.
+        """
+        courses = self.get_direct_related_page_extensions(
+            Course, CoursePluginModel, language=language
+        ).filter(is_listed=True)
+
+        return [course for course in courses if course.check_publication(language)]
 
     def save(self, *args, **kwargs):
         """
