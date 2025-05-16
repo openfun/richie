@@ -187,7 +187,7 @@ class ProgramCMSTestCase(CMSTestCase):
             response, '<h1 class="subheader__title">Preums</h1>', html=True
         )
 
-        # Draft and published courses should be present on the page
+        # Published courses should be present on the page
         for course in courses[:2]:
             self.assertContains(
                 response,
@@ -201,20 +201,9 @@ class ProgramCMSTestCase(CMSTestCase):
                 ),
                 html=True,
             )
-        self.assertContains(
-            response,
-            '<div class="course-glimpse__body">'
-            '<div aria-hidden="true" class="course-glimpse__media">'
-            f'<a tabindex="-1" href="{courses[2].extended_object.get_absolute_url():s}"',
-        )
 
-        self.assertContains(
-            response,
-            '<span class="course-glimpse__title-text">{0:s}</span>'.format(  # noqa pylint: disable=consider-using-f-string,line-too-long
-                courses[2].extended_object.get_title()
-            ),
-            html=True,
-        )
+        # The draft course should not be present on the page
+        self.assertNotContains(response, courses[2].extended_object.get_title())
         # The unpublished course should not be present on the page
         self.assertNotContains(response, courses[3].extended_object.get_title())
 
@@ -377,3 +366,63 @@ class ProgramCMSTestCase(CMSTestCase):
             response,
             '<meta name="description"',
         )
+
+    def test_templates_program_detail_course_is_listed(self):
+        """
+        The program detail page should hide the not listed courses on view mode but show them
+        on edit mode.
+        """
+        # create 3 courses, but only 2 are listed
+        courses = []
+        courses.append(CourseFactory(should_publish=True))
+        courses.append(
+            CourseFactory(
+                is_listed=False,
+                should_publish=True,
+            )
+        )
+        courses.append(CourseFactory(should_publish=True))
+
+        program = ProgramFactory(
+            page_title="Preums",
+            fill_cover=True,
+            fill_excerpt=True,
+            fill_body=True,
+            fill_courses=courses,
+        )
+        page = program.extended_object
+        page.publish("en")
+
+        url = program.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        # Assert the visible courses on programs detail page should be the ones listed
+        # Only published courses should be present on the page
+        for course in courses:
+            if course.is_listed:
+                self.assertContains(
+                    response,
+                    course.extended_object.get_title(),
+                    html=True,
+                )
+            else:
+                self.assertNotContains(
+                    response,
+                    course.extended_object.get_title(),
+                    html=True,
+                )
+
+        # The not listed courses should be visible on edit mode,
+        # so we assert all courses should all be visible
+        # when a super user is logged in
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+        url += "?edit"
+        response = self.client.get(url)
+        for course in courses:
+            self.assertContains(
+                response,
+                course.extended_object.get_title(),
+                html=True,
+            )

@@ -81,6 +81,23 @@ class PersonModelsTestCase(TestCase):
                     course.extended_object.prefetched_titles[0].title, "my title"
                 )
 
+    def test_models_person_get_courses_not_listed(self):
+        """
+        Not listed courses should not be returned by the get_courses method.
+        """
+        person = PersonFactory(should_publish=True)
+        CourseFactory.create_batch(
+            3,
+            page_title="my title",
+            fill_team=[person],
+            should_publish=True,
+            is_listed=False,
+        )
+        retrieved_courses = person.get_courses()
+
+        with self.assertNumQueries(1):
+            self.assertEqual(list(retrieved_courses), [])
+
     def test_models_person_get_courses_language_fallback_draft(self):
         """
         Validate that the reverse courses lookup works as expected with language fallback

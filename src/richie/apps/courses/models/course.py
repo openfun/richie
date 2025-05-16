@@ -180,7 +180,7 @@ class Course(EsIdMixin, BasePageExtension):
     is_listed = models.BooleanField(
         default=True,
         verbose_name=_("is listed"),
-        help_text=_("Tick if you want the course to be visible on the search page."),
+        help_text=_("Tick if you want the course to be visible."),
     )
 
     is_self_paced = models.BooleanField(

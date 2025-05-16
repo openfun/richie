@@ -191,7 +191,7 @@
     </div>
     {% endif %}
 
-    {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"program_courses" %}
+    {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"program_courses" or current_page.program.get_courses|length > 0 %}
         <div class="program-detail__courses program-detail__block">
             <div class="program-detail__row">
                 <section class="course-glimpse-list">
@@ -199,7 +199,13 @@
                         <h2 class="program-detail__title">{% trans "Related courses" %}</h2>
                     </div>
                     <div class="course-glimpse-list__content">
-                        {% placeholder "program_courses" %}
+                        {% if request.toolbar.edit_mode_active %}
+                            {% placeholder "program_courses" %}
+                        {% else %}
+                            {% for course in current_page.program.get_courses %}
+                                {% include "courses/cms/fragment_course_glimpse.html" with course=course header_level=3 %}
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </section>
             </div>
