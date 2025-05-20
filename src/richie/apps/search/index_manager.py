@@ -2,6 +2,7 @@
 ElasticSearch indices utilities.
 """
 
+import logging
 import re
 from functools import reduce
 
@@ -15,6 +16,8 @@ from .defaults import ES_CHUNK_SIZE, ES_INDICES_PREFIX
 from .elasticsearch import bulk_compat
 from .indexers import ES_INDICES
 from .text_indexing import ANALYSIS_SETTINGS
+
+logger = logging.getLogger(__name__)
 
 
 def richie_bulk(actions):
@@ -37,16 +40,16 @@ def get_indices_by_alias(existing_indices, alias):
             yield index, alias
 
 
-def perform_create_index(indexable, logger=None):
+def perform_create_index(indexable):
     """
     Create a new index in ElasticSearch from an indexable instance
     """
+    logger.info("Creating the index %s...", indexable.index_name)
     # Create a new index name, suffixing its name with a timestamp
     new_index = f"{indexable.index_name:s}_{timezone.now():%Y-%m-%d-%Hh%Mm%S.%fs}"
 
     # Create the new index
-    if logger:
-        logger.info(f'Creating a new Elasticsearch index "{new_index:s}"...')
+    logger.info("Creating a new Elasticsearch index %s...", new_index)
     ES_INDICES_CLIENT.create(index=new_index)
 
     # The index needs to be closed before we set an analyzer
@@ -63,11 +66,12 @@ def perform_create_index(indexable, logger=None):
     return new_index
 
 
-def regenerate_indices(logger):
+def regenerate_indices():
     """
     Create new indices for our indexables and replace possible existing indices with
     a new one only once it has successfully built it.
     """
+    logger.info("Regenerating ES indices...")
     # Get all existing indices once; we'll look up into this list many times
     try:
         existing_indices = ES_INDICES_CLIENT.get_alias("*")
@@ -75,11 +79,10 @@ def regenerate_indices(logger):
         # Provide a fallback empty list so we don't have to check for its existence later on
         existing_indices = []
 
+    logger.info("Creating new ES indices...")
     # Create a new index for each of those modules
     # NB: we're mapping perform_create_index which produces side-effects
-    indices_to_create = zip(
-        list(map(lambda ix: perform_create_index(ix, logger), ES_INDICES)), ES_INDICES
-    )
+    indices_to_create = [(perform_create_index(ix), ix) for ix in ES_INDICES]
 
     # Prepare to alias them so they can be swapped-in for the previous versions
     actions_to_create_aliases = [
@@ -152,13 +155,16 @@ def regenerate_indices(logger):
         ES_INDICES_CLIENT.delete(index=useless_index, ignore=[400, 404])
 
 
-def store_es_scripts(logger=None):
+def store_es_scripts():
     """
     Iterate over the indexers listed in the settings, import them, and store the scripts
     they define on their "scripts" key in ElasticSearch
     """
     for indexer in ES_INDICES:
         for script_id, script_body in indexer.scripts.items():
-            if logger:
-                logger.info(f'Storing script "{script_id:s}"...')
+            logger.info(
+                "Storing script %s for indexer %s...",
+                script_id,
+                indexer.__name__,
+            )
             ES_CLIENT.put_script(id=script_id, body=script_body)
