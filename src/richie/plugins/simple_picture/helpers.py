@@ -1,6 +1,10 @@
 """SimplePicture plugin for DjangoCMS."""
 
+import logging
+
 from .defaults import SIMPLEPICTURE_PRESETS
+
+logger = logging.getLogger(__name__)
 
 
 def get_picture_info(instance, preset_name):
@@ -43,15 +47,29 @@ def get_picture_info(instance, preset_name):
     # - src
     options = preset["src"].copy()
     options.update(location_dict)
-    picture_info["src"] = thumbnailer.get_thumbnail(options).url
+    try:
+        picture_info["src"] = thumbnailer.get_thumbnail(options).url
+    except ValueError as exc:
+        logger.error(
+            "Error while generating thumbnail for %s: %s",
+            options,
+            exc,
+        )
 
     # - srcset
     srcset = []
     for info in preset.get("srcset", []):
         options = info["options"].copy()
         options.update(location_dict)
-        url = thumbnailer.get_thumbnail(options).url
-        srcset.append(f"{url:s} {info['descriptor']:s}")
+        try:
+            url = thumbnailer.get_thumbnail(options).url
+            srcset.append(f"{url:s} {info['descriptor']:s}")
+        except ValueError as exc:
+            logger.error(
+                "Error while generating thumbnail for %s: %s",
+                options,
+                exc,
+            )
     picture_info["srcset"] = ", ".join(srcset) if srcset else None
 
     # - sizes
