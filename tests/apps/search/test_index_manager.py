@@ -130,10 +130,10 @@ class IndexManagerTestCase(TestCase):
         # Make sure our index is empty before we call the function
         self.assertEqual(ES_INDICES_CLIENT.get_alias("*"), {})
 
-        mock_logger = mock.Mock(spec=["info"])
-
-        with mock.patch.object(django_timezone, "now", return_value=now):
-            new_index = perform_create_index(indexable, mock_logger)
+        with mock.patch.object(
+            django_timezone, "now", return_value=now
+        ), self.assertLogs() as mock_logger:
+            new_index = perform_create_index(indexable)
         ES_INDICES_CLIENT.refresh()
 
         self.assertEqual(new_index, "richie_courses_2016-05-04-03h12m33.123456s")
@@ -151,7 +151,7 @@ class IndexManagerTestCase(TestCase):
                 }
             },
         )
-        mock_logger.info.assert_called()
+        self.assertNotEqual(mock_logger.records, [])
 
     @mock.patch.object(
         ES_INDICES.categories,
@@ -201,7 +201,7 @@ class IndexManagerTestCase(TestCase):
         creation1_datetime = datetime(2010, 1, 1, tzinfo=timezone.utc)
         creation1_string = creation1_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
         with mock.patch.object(django_timezone, "now", return_value=creation1_datetime):
-            regenerate_indices(None)
+            regenerate_indices()
 
         expected_indices = [
             "richie_test_categories",
@@ -223,7 +223,7 @@ class IndexManagerTestCase(TestCase):
         creation2_datetime = datetime(2011, 2, 2, tzinfo=timezone.utc)
         creation2_string = creation2_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
         with mock.patch.object(django_timezone, "now", return_value=creation2_datetime):
-            regenerate_indices(None)
+            regenerate_indices()
 
         # All indices were replaced and aliases updated
         for alias_name in expected_indices:
@@ -252,7 +252,7 @@ class IndexManagerTestCase(TestCase):
         creation3_datetime = datetime(2012, 3, 3, tzinfo=timezone.utc)
         creation3_string = creation3_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
         with mock.patch.object(django_timezone, "now", return_value=creation3_datetime):
-            regenerate_indices(None)
+            regenerate_indices()
 
         # All indices were replaced and had their aliases changed
         for index_name in expected_indices:
@@ -314,7 +314,7 @@ class IndexManagerTestCase(TestCase):
         creation_datetime = datetime(2010, 1, 1, tzinfo=timezone.utc)
         creation_string = creation_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
         with mock.patch.object(django_timezone, "now", return_value=creation_datetime):
-            regenerate_indices(None)
+            regenerate_indices()
 
         # No error was thrown, the courses index (like all others) was bootstrapped
         self.assertIsNotNone(
@@ -345,7 +345,7 @@ class IndexManagerTestCase(TestCase):
         Make sure store_es_scripts iterates over all indexers to store their scripts and
         does not choke when there are (0 | 1 | 2+) scripts on an indexer.
         """
-        store_es_scripts(None)
+        store_es_scripts()
         mock_put_script.assert_any_call(body="script body A", id="script_id_A")
         mock_put_script.assert_any_call(body="script body B", id="script_id_B")
         mock_put_script.assert_any_call(body="script body C", id="script_id_C")

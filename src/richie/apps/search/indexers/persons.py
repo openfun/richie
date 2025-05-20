@@ -2,6 +2,7 @@
 ElasticSearch person document management utilities
 """
 
+import logging
 from collections import defaultdict
 
 from django.conf import settings
@@ -19,6 +20,8 @@ from ..forms import ItemSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
+
+logger = logging.getLogger(__name__)
 
 
 class PersonsIndexer:
@@ -78,6 +81,11 @@ class PersonsIndexer:
         ):
             language = portrait.cmsplugin_ptr.language
             with translation.override(language):
+                logger.debug(
+                    "Indexing %s portrait for language %s",
+                    person.extended_object.get_absolute_url(language),
+                    language,
+                )
                 portrait_images[language] = get_picture_info(portrait, "portrait")
 
         # Get bio texts

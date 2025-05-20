@@ -27,7 +27,7 @@ class Command(BaseCommand):
 
         # Creates new indices each time, populates them, and atomically replaces
         # the old indices once the new ones are ready.
-        regenerate_indices(logger)
+        regenerate_indices()
 
         # Confirm operation success through a console log
         logger.info("ES indices regenerated.")
@@ -35,6 +35,6 @@ class Command(BaseCommand):
         logger.info("Starting to store ES scripts...")
 
         # Iterates over indexables to find all the necessary scripts and store them
-        store_es_scripts(logger)
+        store_es_scripts()
 
         logger.info("ES scripts stored.")
