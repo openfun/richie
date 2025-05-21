@@ -5,6 +5,6 @@ django-storages==1.13.2
 dockerflow==2022.8.0
 gunicorn==23.0.0
 psycopg2-binary==2.9.9
-richie==3.1.0
+richie==3.1.1
 unidecode==1.3.6 # required by django-check-seo
 sentry-sdk==2.11.0
