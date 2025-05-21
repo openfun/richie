@@ -44,7 +44,7 @@ dependencies = [
     "django-redis>=4.11.0,<6",
     "django-treebeard<5",
     "dj-pagination<3",
-    "easy_thumbnails[svg]>=2.8,<3",
+    "easy_thumbnails[svg]>=2.8,<2.10",
     "elasticsearch>=6.0.0,<7.0.0",
     "exrex<1",
     "importlib-metadata<9",
