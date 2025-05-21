@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Pin `fix-bootstrap-es` version to `2.9.0` to avoid save JPEG error
+
 ## [3.1.1] - 2025-05-21
 
 ### Fixed
