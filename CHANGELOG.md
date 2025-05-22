@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add an environment variable to set the logging level of Richie
+
 ### Fixed
 
 - Pin `fix-bootstrap-es` version to `2.9.0` to avoid save JPEG error
