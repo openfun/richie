@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [3.1.2] - 2025-05-22
+
 ### Added
 
 - Add an environment variable to set the logging level of Richie
@@ -2312,7 +2314,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v3.1.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v3.1.2...master
+[3.1.2]: https://github.com/openfun/richie/compare/v3.1.1...v3.1.2
 [3.1.1]: https://github.com/openfun/richie/compare/v3.1.0...v3.1.1
 [3.1.0]: https://github.com/openfun/richie/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/openfun/richie/compare/v3.0.0-beta.0...v3.0.0
