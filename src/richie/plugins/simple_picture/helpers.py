@@ -29,6 +29,11 @@ def get_picture_info(instance, preset_name):
     }
 
     """
+    logger.info(
+        "Generating picture info for %s with preset %s",
+        instance,
+        preset_name,
+    )
     # Bail out if the picture does not have an image as that's the object we use to get
     # all the information we need to return any picture info.
     if not instance.picture:
@@ -51,7 +56,8 @@ def get_picture_info(instance, preset_name):
         picture_info["src"] = thumbnailer.get_thumbnail(options).url
     except ValueError as exc:
         logger.error(
-            "Error while generating thumbnail for %s: %s",
+            "Error while generating thumbnail for %s with %s: %s",
+            instance.picture,
             options,
             exc,
         )
@@ -66,7 +72,8 @@ def get_picture_info(instance, preset_name):
             srcset.append(f"{url:s} {info['descriptor']:s}")
         except ValueError as exc:
             logger.error(
-                "Error while generating thumbnail for %s: %s",
+                "Error while generating thumbnail for %s with %s: %s",
+                instance.picture,
                 options,
                 exc,
             )
