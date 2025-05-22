@@ -81,7 +81,7 @@ class PersonsIndexer:
         ):
             language = portrait.cmsplugin_ptr.language
             with translation.override(language):
-                logger.debug(
+                logger.info(
                     "Indexing %s portrait for language %s",
                     person.extended_object.get_absolute_url(language),
                     language,
