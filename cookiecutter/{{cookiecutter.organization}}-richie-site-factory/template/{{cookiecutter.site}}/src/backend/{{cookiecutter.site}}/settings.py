@@ -545,7 +545,12 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 "level": "ERROR",
                 "handlers": ["console"],
                 "propagate": False,
-            }
+            },
+            "richie": {
+                "level": values.Value("ERROR", environ_name="RICHIE_LOGGING_LEVEL"),
+                "handlers": ["console"],
+                "propagate": False,
+            },
         },
     }
 
