@@ -38,7 +38,7 @@ const CourseRunList = ({ courseRuns }: Props) => {
       <ol className="course-runs-list">
         {Children.toArray(
           courseRuns.map((courseRun) => (
-            <li className="course-runs-item course-runs-item--inactive">
+            <li key={courseRun.id} className="course-runs-item course-runs-item--inactive">
               <strong className="course-runs-item__course-dates">
                 <span
                   className="offscreen"

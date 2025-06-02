@@ -22,7 +22,14 @@ const render = (args: CourseProductItemProps, options?: Maybe<{ order: Credentia
   fetchMock.get(`http://localhost:8071/api/v1.0/addresses/`, [], { overwriteRoutes: true });
   fetchMock.get(
     `http://localhost:8071/api/v1.0/courses/${args.course.code}/products/${args.productId}/`,
-    CourseProductRelationFactory({ product: CredentialProductFactory().one() }).one(),
+    CourseProductRelationFactory({
+      product: CredentialProductFactory({
+        price: 840,
+        price_currency: 'EUR',
+      }).one(),
+      discounted_price: 800,
+      discount_rate: 0.3,
+    }).one(),
     { overwriteRoutes: true },
   );
   fetchMock.get(

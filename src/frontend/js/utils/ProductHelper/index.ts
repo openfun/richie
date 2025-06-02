@@ -1,5 +1,5 @@
 import { IntlShape } from 'react-intl';
-import { CourseProductRelation, Product, TargetCourse } from 'types/Joanie';
+import { Product, TargetCourse } from 'types/Joanie';
 import { Maybe } from 'types/utils';
 import { IntlHelper } from 'utils/IntlHelper';
 import * as Joanie from 'types/Joanie';
@@ -42,10 +42,6 @@ export class ProductHelper {
     if (!humanized || !intl) return uniqueLanguages;
 
     return IntlHelper.getLocalizedLanguages(uniqueLanguages, intl);
-  }
-
-  static getActiveOrderGroups(courseProductRelation: CourseProductRelation) {
-    return courseProductRelation.order_groups?.filter((orderGroup) => orderGroup.is_active);
   }
 
   static hasRemainingSeats(product: Maybe<Product>) {

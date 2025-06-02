@@ -1,7 +1,7 @@
 import { Children, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import c from 'classnames';
-import { ProductType, Product, CredentialOrder } from 'types/Joanie';
+import { CourseProductRelation, CredentialOrder, Product, ProductType } from 'types/Joanie';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -38,6 +38,31 @@ const messages = defineMessages({
     description: 'Course run languages',
     id: 'components.CourseProductItem.availableIn',
   },
+  original_price: {
+    defaultMessage: 'Original price:',
+    description: 'Label for the original price of a product',
+    id: 'components.CourseProductItem.original_price',
+  },
+  discounted_price: {
+    defaultMessage: 'Discounted price:',
+    description: 'Label for the discounted price of a product',
+    id: 'components.CourseProductItem.discounted_price',
+  },
+  discount_rate: {
+    defaultMessage: '-{rate}%',
+    description: 'Discount rate information',
+    id: 'components.CourseProductItem.discount_rate',
+  },
+  from: {
+    defaultMessage: 'from {from}',
+    description: 'Discount start date information',
+    id: 'components.CourseProductItem.from',
+  },
+  to: {
+    defaultMessage: 'to {to}',
+    description: 'Discount end date information',
+    id: 'components.CourseProductItem.to',
+  },
 });
 
 export interface CourseProductItemProps {
@@ -52,8 +77,16 @@ type HeaderProps = {
   canPurchase: boolean;
   order: Maybe<CredentialOrder>;
   product: Product;
+  courseProductRelation: CourseProductRelation;
 };
-const Header = ({ product, order, hasPurchased, canPurchase, compact }: HeaderProps) => {
+const Header = ({
+  product,
+  order,
+  courseProductRelation,
+  hasPurchased,
+  canPurchase,
+  compact,
+}: HeaderProps) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
 
@@ -72,21 +105,90 @@ const Header = ({ product, order, hasPurchased, canPurchase, compact }: HeaderPr
     return ProductHelper.getLanguages(product, true, intl);
   }, [canShowMetadata, product, intl]);
 
-  return (
-    <header className="product-widget__header">
-      <div className="product-widget__header-main">
-        <h3 className="product-widget__title">{product.title}</h3>
-        <strong className="product-widget__price h6">
-          {hasPurchased && <FormattedMessage {...messages.purchased} />}
-          {canPurchase && (
+  const displayPrice = useMemo(() => {
+    if (!canPurchase) {
+      return null;
+    }
+
+    if (courseProductRelation.discounted_price) {
+      return (
+        <>
+          <span id="original-price" className="offscreen">
+            <FormattedMessage {...messages.original_price} />
+          </span>
+          <del aria-describedby="original-price" className="product-widget__price-discounted">
             <FormattedNumber
               currency={product.price_currency}
               value={product.price}
               style="currency"
             />
-          )}
-        </strong>
+          </del>
+          <span id="discount-price" className="offscreen">
+            <FormattedMessage {...messages.discounted_price} />
+          </span>
+          <ins aria-describedby="discount-price" className="product-widget__price-discount">
+            <FormattedNumber
+              currency={product.price_currency}
+              value={courseProductRelation.discounted_price}
+              style="currency"
+            />
+          </ins>
+        </>
+      );
+    }
+
+    return (
+      <FormattedNumber currency={product.price_currency} value={product.price} style="currency" />
+    );
+  }, [canPurchase, courseProductRelation.discounted_price, product.price]);
+
+  return (
+    <header className="product-widget__header">
+      <div className="product-widget__header-main">
+        <h3 className="product-widget__title">{product.title}</h3>
       </div>
+      <strong className="product-widget__price h6">
+        {hasPurchased && <FormattedMessage {...messages.purchased} />}
+        {displayPrice}
+      </strong>
+      {courseProductRelation?.description && (
+        <p className="product-widget__header-description">{courseProductRelation.description}</p>
+      )}
+      {courseProductRelation?.discounted_price && (
+        <p className="product-widget__header-discount">
+          {courseProductRelation.discount_rate ? (
+            <span className="product-widget__header-discount-rate">
+              <FormattedNumber value={-courseProductRelation.discount_rate} style="percent" />
+            </span>
+          ) : (
+            <span className="product-widget__header-discount-amount">
+              <FormattedNumber
+                currency={product.price_currency}
+                value={-courseProductRelation.discount_amount!}
+                style="currency"
+              />
+            </span>
+          )}
+          {courseProductRelation.discount_start && (
+            <span className="product-widget__header-discount-date">
+              &nbsp;
+              <FormattedMessage
+                {...messages.from}
+                values={{ from: formatDate(courseProductRelation.discount_start) }}
+              />
+            </span>
+          )}
+          {courseProductRelation.discount_end && (
+            <span className="product-widget__header-discount-date">
+              &nbsp;
+              <FormattedMessage
+                {...messages.to}
+                values={{ to: formatDate(courseProductRelation.discount_end) }}
+              />
+            </span>
+          )}
+        </p>
+      )}
       {canShowMetadata && (
         <>
           <p
@@ -131,7 +233,7 @@ const Content = ({ product, order }: { product: Product; order?: CredentialOrder
     <ol className="product-widget__content">
       {Children.toArray(
         targetCourses.map((target_course) => (
-          <CourseRunItem targetCourse={target_course} order={order} />
+          <CourseRunItem key={target_course.code} targetCourse={target_course} order={order} />
         )),
       )}
       {product.certificate_definition && (
@@ -179,13 +281,6 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
     return null;
   }
 
-  const orderGroups = courseProductRelation
-    ? ProductHelper.getActiveOrderGroups(courseProductRelation)
-    : [];
-  const orderGroupsAvailable = orderGroups.filter(
-    (orderGroup) => orderGroup.nb_available_seats > 0,
-  );
-
   return (
     <section
       className={c('product-widget', {
@@ -214,6 +309,7 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
           <Header
             product={product}
             order={order}
+            courseProductRelation={courseProductRelation}
             canPurchase={canPurchase}
             hasPurchased={hasPurchased}
             compact={compact}
@@ -223,8 +319,6 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
             <CourseProductItemFooter
               course={course}
               courseProductRelation={courseProductRelation}
-              orderGroups={orderGroups}
-              orderGroupsAvailable={orderGroupsAvailable}
               canPurchase={canPurchase}
             />
           </footer>

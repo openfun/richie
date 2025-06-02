@@ -183,8 +183,15 @@ export interface CourseProductRelationLight {
 }
 
 export interface CourseProductRelation extends CourseProductRelationLight {
-  order_groups: OrderGroup[];
   is_withdrawable: boolean;
+  discounted_price: Nullable<number>;
+  discount_rate: Nullable<number>;
+  discount_amount: Nullable<number>;
+  discount_start: Nullable<string>;
+  discount_end: Nullable<string>;
+  description: Nullable<string>;
+  nb_seats_available: Nullable<number>;
+  seats: Nullable<number>;
 }
 export function isCourseProductRelation(
   entity: CourseListItem | CourseProductRelationLight | RichieCourse,
@@ -325,7 +332,6 @@ export interface Order {
   enrollment: Nullable<EnrollmentLight>;
   organization_id: Organization['id'];
   organization: Organization;
-  order_group_id?: OrderGroup['id'];
   payment_schedule?: PaymentSchedule;
   credit_card_id?: CreditCard['id'];
 }
@@ -403,13 +409,6 @@ export interface CourseOrderResourceQuery extends PaginatedResourceQuery {
   product_id?: Product['id'];
 }
 
-export interface OrderGroup {
-  id: string;
-  is_active: boolean;
-  nb_seats: number;
-  nb_available_seats: number;
-}
-
 export enum CreditCardBrand {
   MASTERCARD = 'mastercard',
   MAESTRO = 'maestro',
@@ -481,7 +480,6 @@ export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> 
 
 interface AbstractOrderProductCreationPayload {
   product_id: Product['id'];
-  order_group_id?: OrderGroup['id'];
   billing_address: Omit<Address, 'id' | 'is_main'>;
   has_waived_withdrawal_right: boolean;
 }

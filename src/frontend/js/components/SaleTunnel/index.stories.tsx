@@ -15,7 +15,6 @@ export default {
       isWithdrawable: true,
       // enrollment?: Enrollment;
       // product: CredentialProduct | CertificateProduct;
-      // orderGroup?: OrderGroup;
       // onFinish?: (order: Order) => void;
     };
     return (
