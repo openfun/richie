@@ -1,5 +1,5 @@
 import fetchMock from 'fetch-mock';
-import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import queryString from 'query-string';
 import {
   RichieContextFactory as mockRichieContextFactory,
@@ -11,11 +11,9 @@ import {
   AddressFactory,
   CredentialOrderFactory,
   CredentialProductFactory,
-  OrderGroupFactory,
 } from 'utils/test/factories/joanie';
 import type * as Joanie from 'types/Joanie';
-import { Maybe } from 'types/utils';
-import { NOT_CANCELED_ORDER_STATES, OrderCredentialCreationPayload } from 'types/Joanie';
+import { NOT_CANCELED_ORDER_STATES } from 'types/Joanie';
 import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel/index';
 import { render } from 'utils/test/render';
 import { getAddressLabel } from 'components/SaleTunnel/AddressSelector';
@@ -83,11 +81,9 @@ describe('SaleTunnel / Credential', () => {
   it('should create an order with an order group', async () => {
     const course = PacedCourseFactory().one();
     const product = CredentialProductFactory().one();
-    const orderGroup = OrderGroupFactory().one();
     const billingAddress: Joanie.Address = AddressFactory({ is_main: true }).one();
 
-    let createOrderPayload: Maybe<OrderCredentialCreationPayload>;
-    const order = CredentialOrderFactory({ order_group_id: orderGroup.id }).one();
+    const order = CredentialOrderFactory().one();
     const orderQueryParameters = {
       course_code: course.code,
       product_id: product.id,
@@ -100,15 +96,12 @@ describe('SaleTunnel / Credential', () => {
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
         [],
       )
-      .post('https://joanie.endpoint/api/v1.0/orders/', (_, { body }) => {
-        createOrderPayload = JSON.parse(body as any);
-        return order;
-      })
+      .post('https://joanie.endpoint/api/v1.0/orders/', order)
       .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} course={course} orderGroup={orderGroup} />, {
+    render(<Wrapper product={product} course={course} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -121,12 +114,5 @@ describe('SaleTunnel / Credential', () => {
 
     // - Payment button should not be disabled.
     expect($button.disabled).toBe(false);
-
-    // - User clicks on pay button
-    await act(async () => {
-      fireEvent.click($button);
-    });
-
-    await waitFor(() => expect(createOrderPayload?.order_group_id).toEqual(orderGroup.id));
   });
 });

@@ -19,9 +19,7 @@ import {
   CredentialOrderFactory,
   CredentialProductFactory,
   CreditCardFactory,
-  DiscountFactory,
   EnrollmentFactory,
-  OrderGroupFactory,
   PaymentInstallmentFactory,
 } from 'utils/test/factories/joanie';
 import { render } from 'utils/test/render';
@@ -451,15 +449,8 @@ describe.each([
         price: 840,
         price_currency: 'EUR',
       }).one(),
-      order_groups: [
-        OrderGroupFactory({
-          discount: DiscountFactory({
-            amount: null,
-            rate: 0.3,
-          }).one(),
-        }).one(),
-      ],
       discounted_price: 800,
+      discount_rate: 0.3,
     }).one();
     const { product } = relation;
 

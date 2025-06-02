@@ -1,6 +1,6 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
-import { CourseProductRelation, CredentialProduct, OrderGroup } from 'types/Joanie';
+import { CourseProductRelation, CredentialProduct } from 'types/Joanie';
 import { PacedCourse } from 'types';
 
 const messages = defineMessages({
@@ -26,39 +26,25 @@ interface CourseProductItemFooterProps {
   course: PacedCourse;
   courseProductRelation: CourseProductRelation;
   canPurchase: boolean;
-  orderGroups: OrderGroup[];
-  orderGroupsAvailable: OrderGroup[];
 }
 
 const CourseProductItemFooter = ({
   course,
   courseProductRelation,
-  orderGroups,
-  orderGroupsAvailable,
   canPurchase,
 }: CourseProductItemFooterProps) => {
-  if (orderGroups.length === 0) {
-    return (
-      <PurchaseButton
-        course={course}
-        product={courseProductRelation.product as CredentialProduct}
-        courseProductRelation={courseProductRelation}
-        organizations={courseProductRelation.organizations}
-        isWithdrawable={courseProductRelation.is_withdrawable}
-        disabled={!canPurchase}
-        buttonProps={{ fullWidth: true }}
-      />
-    );
-  }
-  if (orderGroupsAvailable.length === 0) {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const { seats, nb_seats_available } = courseProductRelation;
+  const hasSeatsLimit = seats && nb_seats_available !== undefined;
+  const hasNoSeatsAvailable = hasSeatsLimit && nb_seats_available === 0;
+  if (hasNoSeatsAvailable)
     return (
       <p className="product-widget__footer__message">
         <FormattedMessage {...messages.noSeatsAvailable} />
       </p>
     );
-  }
-  return orderGroupsAvailable.map((orderGroup) => (
-    <div className="product-widget__footer__order-group" key={orderGroup.id}>
+  return (
+    <div className="product-widget__footer__order-group">
       <PurchaseButton
         course={course}
         product={courseProductRelation.product as CredentialProduct}
@@ -66,16 +52,17 @@ const CourseProductItemFooter = ({
         organizations={courseProductRelation.organizations}
         isWithdrawable={courseProductRelation.is_withdrawable}
         disabled={!canPurchase}
-        orderGroup={orderGroup}
         buttonProps={{ fullWidth: true }}
       />
-      <p className="product-widget__footer__message">
-        <FormattedMessage
-          {...messages.nbSeatsAvailable}
-          values={{ nb: orderGroup.nb_available_seats }}
-        />
-      </p>
+      {hasSeatsLimit && (
+        <p className="product-widget__footer__message">
+          <FormattedMessage
+            {...messages.nbSeatsAvailable}
+            values={{ nb: courseProductRelation.nb_seats_available }}
+          />
+        </p>
+      )}
     </div>
-  ));
+  );
 };
 export default CourseProductItemFooter;

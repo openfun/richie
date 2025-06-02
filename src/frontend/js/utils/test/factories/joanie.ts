@@ -28,7 +28,6 @@ import {
   NestedCredentialOrder,
   Order,
   OrderEnrollment,
-  OrderGroup,
   PaymentInstallment,
   OrderLite,
   OrderState,
@@ -197,7 +196,7 @@ export const CredentialProductFactory = factory((): CredentialProduct => {
     created_on: faker.date.past().toISOString(),
     title: FactoryHelper.sequence((counter) => `Certificate Product ${counter}`),
     type: ProductType.CREDENTIAL,
-    price: faker.number.int(),
+    price: faker.number.int({ min: 1, max: 1000, multipleOf: 10 }),
     price_currency: faker.finance.currencyCode(),
     call_to_action: faker.lorem.words(3),
     certificate_definition: CertificationDefinitionFactory().one(),
@@ -294,25 +293,6 @@ export const CourseLightFactory = factory((): CourseLight => {
   };
 });
 
-export const OrderGroupFactory = factory((): OrderGroup => {
-  const seats = faker.number.int({ min: 5, max: 100 });
-  return {
-    id: faker.string.uuid(),
-    is_active: true,
-    nb_seats: seats,
-    nb_available_seats: faker.number.int({ min: 2, max: seats }),
-  };
-});
-
-export const OrderGroupFullFactory = factory((): OrderGroup => {
-  return {
-    id: faker.string.uuid(),
-    is_active: true,
-    nb_seats: faker.number.int({ min: 5, max: 100 }),
-    nb_available_seats: 0,
-  };
-});
-
 export const NestedCourseOrderFactory = factory((): NestedCourseOrder => {
   return {
     id: faker.string.uuid(),
@@ -336,8 +316,15 @@ export const CourseProductRelationFactory = factory((): CourseProductRelation =>
     course: CourseFactory().one(),
     product: ProductFactory().one(),
     organizations: OrganizationFactory().many(1),
-    order_groups: [],
     is_withdrawable: true,
+    discounted_price: null,
+    discount_rate: null,
+    discount_amount: null,
+    discount_start: null,
+    discount_end: null,
+    description: null,
+    seats: null,
+    nb_seats_available: null,
   };
 });
 

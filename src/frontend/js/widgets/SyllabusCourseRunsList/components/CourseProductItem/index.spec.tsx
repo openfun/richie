@@ -10,8 +10,7 @@ import {
   EnrollmentFactory,
   CredentialOrderFactory,
   ProductFactory,
-  OrderGroupFullFactory,
-  OrderGroupFactory,
+  CredentialProductFactory,
 } from 'utils/test/factories/joanie';
 import {
   CourseRun,
@@ -149,6 +148,128 @@ describe('CourseProductItem', () => {
     screen.getByRole('button', { name: `Login to purchase "${product.title}"` });
     // - Does not render PurchaseButton cta
     expect(screen.queryByTestId('PurchaseButton__cta')).toBeNull();
+  });
+
+  it('renders discount rate for anonymous user', async () => {
+    const relation = CourseProductRelationFactory({
+      product: CredentialProductFactory({
+        price: 840,
+        price_currency: 'EUR',
+      }).one(),
+      discounted_price: 800,
+      discount_rate: 0.3,
+      description: 'Year 2023 discount',
+      discount_start: new Date('2023-01-01T00:00:00Z').toISOString(),
+      discount_end: new Date('2023-12-31T23:59:59Z').toISOString(),
+    }).one();
+    const { product } = relation;
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
+
+    render(
+      <CourseProductItem
+        course={PacedCourseFactory({ code: '00000' }).one()}
+        productId={product.id}
+      />,
+      { queryOptions: { client: createTestQueryClient({ user: null }) } },
+    );
+
+    await screen.findByRole('heading', { level: 3, name: product.title });
+
+    // - Render discount information
+    // Original price should be displayed as a del element
+    const originalPriceLabel = screen.getByText('Original price:');
+    expect(originalPriceLabel.classList.contains('offscreen')).toBe(true);
+    const originalPrice = screen.getByText(
+      priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+    );
+    expect(originalPrice.tagName).toBe('DEL');
+    expect(originalPrice.getAttribute('aria-describedby')).toEqual(originalPriceLabel.id);
+
+    // Discounted price should be displayed as an ins element
+    const discountedPriceLabel = screen.getByText('Discounted price:');
+    expect(discountedPriceLabel.classList.contains('offscreen')).toBe(true);
+    const discountedPrice = screen.getByText(
+      priceFormatter(product.price_currency, relation.discounted_price!).replace(
+        /(\u202F|\u00a0)/g,
+        ' ',
+      ),
+    );
+    expect(discountedPrice.tagName).toBe('INS');
+    expect(discountedPrice.getAttribute('aria-describedby')).toEqual(discountedPriceLabel.id);
+
+    // Discount description should be displayed
+    screen.getByText('Year 2023 discount');
+
+    // Discount rate should be displayed
+    screen.getByText('-30%');
+
+    // Discount date range should be displayed
+    screen.getByText('from Jan 01, 2023');
+    screen.getByText('to Dec 31, 2023');
+  });
+
+  it('renders discount amount for anonymous user', async () => {
+    const relation = CourseProductRelationFactory({
+      product: CredentialProductFactory({
+        price: 840,
+        price_currency: 'EUR',
+      }).one(),
+      discounted_price: 800,
+      discount_amount: 40,
+      description: 'Year 2023 discount',
+      discount_start: new Date('2023-01-01T00:00:00Z').toISOString(),
+      discount_end: new Date('2023-12-31T23:59:59Z').toISOString(),
+    }).one();
+    const { product } = relation;
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      relation,
+    );
+
+    render(
+      <CourseProductItem
+        course={PacedCourseFactory({ code: '00000' }).one()}
+        productId={product.id}
+      />,
+      { queryOptions: { client: createTestQueryClient({ user: null }) } },
+    );
+
+    await screen.findByRole('heading', { level: 3, name: product.title });
+
+    // - Render discount information
+    // Original price should be displayed as a del element
+    const originalPriceLabel = screen.getByText('Original price:');
+    expect(originalPriceLabel.classList.contains('offscreen')).toBe(true);
+    const originalPrice = screen.getByText(
+      priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+    );
+    expect(originalPrice.tagName).toBe('DEL');
+    expect(originalPrice.getAttribute('aria-describedby')).toEqual(originalPriceLabel.id);
+
+    // Discounted price should be displayed as an ins element
+    const discountedPriceLabel = screen.getByText('Discounted price:');
+    expect(discountedPriceLabel.classList.contains('offscreen')).toBe(true);
+    const discountedPrice = screen.getByText(
+      priceFormatter(product.price_currency, relation.discounted_price!).replace(
+        /(\u202F|\u00a0)/g,
+        ' ',
+      ),
+    );
+    expect(discountedPrice.tagName).toBe('INS');
+    expect(discountedPrice.getAttribute('aria-describedby')).toEqual(discountedPriceLabel.id);
+
+    // Discount description should be displayed
+    screen.getByText('Year 2023 discount');
+
+    // Discount rate should be displayed
+    screen.getByText(priceFormatter(product.price_currency, -40).replace(/(\u202F|\u00a0)/g, ' '));
+
+    // Discount date range should be displayed
+    screen.getByText('from Jan 01, 2023');
+    screen.getByText('to Dec 31, 2023');
   });
 
   it('does not render <CertificateItem /> if product do not have a certificate', async () => {
@@ -674,7 +795,8 @@ describe('CourseProductItem', () => {
 
   it('renders a warning message that tells that no seats are left', async () => {
     const relation = CourseProductRelationFactory({
-      order_groups: [OrderGroupFullFactory().one()],
+      seats: 2,
+      nb_seats_available: 0,
     }).one();
     const { product } = relation;
     const order = CredentialOrderFactory({
@@ -709,87 +831,5 @@ describe('CourseProductItem', () => {
 
     expect(screen.queryByRole('button', { name: product.call_to_action })).not.toBeInTheDocument();
     screen.getByText('Sorry, no seats available for now');
-  });
-
-  it('renders one payment button when one of two order groups is full', async () => {
-    const relation = CourseProductRelationFactory({
-      order_groups: [OrderGroupFullFactory().one(), OrderGroupFactory().one()],
-    }).one();
-    const { product } = relation;
-    const order = CredentialOrderFactory({
-      product_id: product.id,
-      course: PacedCourseFactory({ code: '00000' }).one(),
-      target_courses: product.target_courses,
-      state: OrderState.DRAFT,
-    }).one();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
-      relation,
-    );
-    const orderQueryParameters = {
-      product_id: order.product_id,
-      course_code: order.course?.code,
-      state: NOT_CANCELED_ORDER_STATES,
-    };
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
-      [order],
-    );
-
-    render(
-      <CourseProductItem
-        productId={product.id}
-        course={PacedCourseFactory({ code: '00000' }).one()}
-      />,
-    );
-
-    // wait for component to be fully loaded
-    await screen.findByRole('heading', { level: 3, name: product.title });
-
-    expect(screen.queryByText('Sorry, no seats available for now')).not.toBeInTheDocument();
-    screen.getByRole('button', { name: product.call_to_action });
-    screen.getByText(relation.order_groups[1].nb_available_seats + ' remaining seats');
-  });
-
-  it('renders mutliple payment button when there are multiple order groups', async () => {
-    const relation = CourseProductRelationFactory({
-      order_groups: [OrderGroupFactory().one(), OrderGroupFactory({ nb_available_seats: 1 }).one()],
-    }).one();
-    const { product } = relation;
-    const order = CredentialOrderFactory({
-      product_id: product.id,
-      course: PacedCourseFactory({ code: '00000' }).one(),
-      target_courses: product.target_courses,
-      state: OrderState.DRAFT,
-    }).one();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
-      relation,
-    );
-    const orderQueryParameters = {
-      product_id: order.product_id,
-      course_code: order.course?.code,
-      state: NOT_CANCELED_ORDER_STATES,
-    };
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
-      [order],
-    );
-
-    render(
-      <CourseProductItem
-        productId={product.id}
-        course={PacedCourseFactory({ code: '00000' }).one()}
-      />,
-    );
-
-    // wait for component to be fully loaded
-    await screen.findByRole('heading', { level: 3, name: product.title });
-
-    expect(screen.queryByText('Sorry, no seats available for now')).not.toBeInTheDocument();
-    expect(screen.getAllByTestId('PurchaseButton__cta')).toHaveLength(2);
-    expect(screen.getAllByRole('button', { name: product.call_to_action })).toHaveLength(2);
-    screen.getByText(relation.order_groups[0].nb_available_seats + ' remaining seats');
-    screen.getByText('Last remaining seat!');
   });
 });

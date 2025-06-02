@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Hide courses that are not `is_listed` in public pages
+- Replace order groups by computed properties coming from Joanie
 
 ### Fixed
 

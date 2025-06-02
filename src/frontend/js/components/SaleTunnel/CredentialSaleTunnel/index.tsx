@@ -19,9 +19,7 @@ export const CredentialSaleTunnel = (props: CredentialSaleTunnelProps) => {
   );
 };
 
-const CredentialPaymentButton = ({
-  course,
-}: Pick<CredentialSaleTunnelProps, 'course' | 'orderGroup'>) => {
+const CredentialPaymentButton = ({ course }: Pick<CredentialSaleTunnelProps, 'course'>) => {
   return (
     <SubscriptionButton
       buildOrderPayload={(payload) => ({

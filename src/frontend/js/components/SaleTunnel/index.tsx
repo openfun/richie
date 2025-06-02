@@ -6,7 +6,6 @@ import {
   CredentialProduct,
   Enrollment,
   Order,
-  OrderGroup,
   Organization,
   Product,
   ProductType,
@@ -22,7 +21,6 @@ export interface SaleTunnelProps extends Pick<ModalProps, 'isOpen' | 'onClose'> 
   isWithdrawable: boolean;
   course?: PacedCourse | CourseLight;
   enrollment?: Enrollment;
-  orderGroup?: OrderGroup;
   onFinish?: (order: Order) => void;
 }
 

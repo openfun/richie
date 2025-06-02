@@ -72,7 +72,7 @@ interface Props {
   buildOrderPayload: (
     payload: Pick<
       OrderCreationPayload,
-      'product_id' | 'billing_address' | 'order_group_id' | 'has_waived_withdrawal_right'
+      'product_id' | 'billing_address' | 'has_waived_withdrawal_right'
     >,
   ) => OrderCreationPayload;
 }
@@ -124,7 +124,6 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     const payload = buildOrderPayload({
       product_id: product.id,
       billing_address: billingAddress!,
-      order_group_id: saleTunnelProps.orderGroup?.id,
       has_waived_withdrawal_right: hasWaivedWithdrawalRight,
     });
 
