@@ -15,10 +15,13 @@ import {
   AddressFactory,
   CertificateOrderFactory,
   CertificateProductFactory,
+  CourseProductRelationFactory,
   CredentialOrderFactory,
   CredentialProductFactory,
   CreditCardFactory,
+  DiscountFactory,
   EnrollmentFactory,
+  OrderGroupFactory,
   PaymentInstallmentFactory,
 } from 'utils/test/factories/joanie';
 import { render } from 'utils/test/render';
@@ -432,6 +435,87 @@ describe.each([
         name: StringHelper.capitalizeFirst(installment.state.replace('_', ' '))!,
       });
     });
+
+    const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
+    expect($totalAmount).toHaveTextContent(
+      'Total' + formatPrice(product.price, product.price_currency).replace(/(\u202F|\u00a0)/g, ' '),
+    );
+  });
+
+  it('should show the product payment schedule with discounted price', async () => {
+    const intl = createIntl({ locale: 'en' });
+    const schedule = PaymentInstallmentFactory().many(2);
+
+    const relation = CourseProductRelationFactory({
+      product: ProductFactory({
+        price: 840,
+        price_currency: 'EUR',
+      }).one(),
+      order_groups: [
+        OrderGroupFactory({
+          discount: DiscountFactory({
+            amount: null,
+            rate: 0.3,
+          }).one(),
+        }).one(),
+      ],
+      discounted_price: 800,
+    }).one();
+    const { product } = relation;
+
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+        schedule,
+      );
+
+    render(<Wrapper product={product} courseProductRelation={relation} isWithdrawable={true} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    await screen.findByRole('heading', {
+      level: 4,
+      name: 'Payment schedule',
+    });
+
+    const scheduleTable = screen.getByRole('table');
+    const scheduleTableRows = within(scheduleTable).getAllByRole('row');
+    expect(scheduleTableRows).toHaveLength(schedule.length);
+
+    scheduleTableRows.forEach((row, index) => {
+      const installment = schedule[index];
+      // A first column should show the installment index
+      within(row).getByRole('cell', {
+        name: (index + 1).toString(),
+      });
+      // A 2nd column should show the installment amount
+      within(row).getByRole('cell', {
+        name: formatPrice(installment.amount, installment.currency),
+      });
+      // A 3rd column should show the installment withdraw date
+      within(row).getByRole('cell', {
+        name: `Withdrawn on ${intl.formatDate(installment.due_date, {
+          ...DEFAULT_DATE_FORMAT,
+        })}`,
+      });
+      // A 4th column should show the installment state
+      within(row).getByRole('cell', {
+        name: StringHelper.capitalizeFirst(installment.state.replace('_', ' '))!,
+      });
+    });
+
+    const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
+    expect($totalAmount).toHaveTextContent(
+      'Total' +
+        formatPrice(relation!.discounted_price!, product.price_currency).replace(
+          /(\u202F|\u00a0)/g,
+          ' ',
+        ),
+    );
   });
 
   it('should show a walkthrough to explain the subscription process', async () => {

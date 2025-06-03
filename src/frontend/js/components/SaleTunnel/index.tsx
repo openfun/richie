@@ -2,6 +2,7 @@ import { ModalProps } from '@openfun/cunningham-react';
 import {
   CertificateProduct,
   CourseLight,
+  CourseProductRelation,
   CredentialProduct,
   Enrollment,
   Order,
@@ -16,6 +17,7 @@ import { PacedCourse } from 'types';
 
 export interface SaleTunnelProps extends Pick<ModalProps, 'isOpen' | 'onClose'> {
   product: Product;
+  courseProductRelation?: CourseProductRelation;
   organizations?: Organization[];
   isWithdrawable: boolean;
   course?: PacedCourse | CourseLight;

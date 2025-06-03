@@ -42,6 +42,7 @@ const CourseProductItemFooter = ({
       <PurchaseButton
         course={course}
         product={courseProductRelation.product as CredentialProduct}
+        courseProductRelation={courseProductRelation}
         organizations={courseProductRelation.organizations}
         isWithdrawable={courseProductRelation.is_withdrawable}
         disabled={!canPurchase}
@@ -61,6 +62,7 @@ const CourseProductItemFooter = ({
       <PurchaseButton
         course={course}
         product={courseProductRelation.product as CredentialProduct}
+        courseProductRelation={courseProductRelation}
         organizations={courseProductRelation.organizations}
         isWithdrawable={courseProductRelation.is_withdrawable}
         disabled={!canPurchase}
