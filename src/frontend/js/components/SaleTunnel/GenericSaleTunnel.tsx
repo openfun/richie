@@ -10,7 +10,14 @@ import {
 } from 'react';
 import { SaleTunnelSponsors } from 'components/SaleTunnel/Sponsors/SaleTunnelSponsors';
 import { SaleTunnelProps } from 'components/SaleTunnel/index';
-import { Address, CreditCard, Order, OrderState, Product } from 'types/Joanie';
+import {
+  Address,
+  CourseProductRelation,
+  CreditCard,
+  Order,
+  OrderState,
+  Product,
+} from 'types/Joanie';
 import useProductOrder from 'hooks/useProductOrder';
 import { SaleTunnelSuccess } from 'components/SaleTunnel/SaleTunnelSuccess';
 import WebAnalyticsAPIHandler from 'api/web-analytics';
@@ -26,6 +33,7 @@ export interface SaleTunnelContextType {
   order?: Order;
   product: Product;
   webAnalyticsEventKey: string;
+  relation?: CourseProductRelation;
 
   // internal
   step: SaleTunnelStep;
@@ -113,6 +121,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       webAnalyticsEventKey: props.eventKey,
       order,
       product: props.product,
+      relation: props.courseProductRelation,
       props,
       billingAddress,
       setBillingAddress,
