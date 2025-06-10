@@ -1,7 +1,9 @@
 """Testing helpers for Richie's simple picture plugin."""
 
+import io
 from unittest import mock
 
+from django.core.files import File
 from django.test import TestCase
 
 from filer.utils.filer_easy_thumbnails import FilerThumbnailer
@@ -106,5 +108,15 @@ class SimplePictureHelpersTestCase(TestCase):
         a picture without an image.
         """
         simple_picture = PictureFactory(picture=None)
+        info = get_picture_info(simple_picture, "my-preset")
+        self.assertEqual(info, None)
+
+    def test_helpers_simplepicture_get_picture_info_bad_format_picture(self):
+        """
+        The `get_picture_info` method should not fail and raise an error if it encounters
+        a picture badly formatted.
+        """
+        simple_picture = PictureFactory()
+        simple_picture.picture.file = File(io.BytesIO())
         info = get_picture_info(simple_picture, "my-preset")
         self.assertEqual(info, None)
