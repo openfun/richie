@@ -54,13 +54,14 @@ def get_picture_info(instance, preset_name):
     options.update(location_dict)
     try:
         picture_info["src"] = thumbnailer.get_thumbnail(options).url
-    except ValueError as exc:
+    except Exception as exc:  # pylint: disable=broad-exception-caught
         logger.error(
             "Error while generating thumbnail for %s with %s: %s",
             instance.picture,
             options,
             exc,
         )
+        return None
 
     # - srcset
     srcset = []
@@ -70,7 +71,7 @@ def get_picture_info(instance, preset_name):
         try:
             url = thumbnailer.get_thumbnail(options).url
             srcset.append(f"{url:s} {info['descriptor']:s}")
-        except ValueError as exc:
+        except Exception as exc:  # pylint: disable=broad-exception-caught
             logger.error(
                 "Error while generating thumbnail for %s with %s: %s",
                 instance.picture,

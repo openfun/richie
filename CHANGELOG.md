@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Hide courses that are not `is_listed` in public pages
 
+### Fixed
+
+- Prevent indexation failure when any thumbnail generation fails
+
 ## [3.1.2] - 2025-05-22
 
 ### Added
