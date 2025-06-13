@@ -44,7 +44,7 @@ dependencies = [
     "django-redis>=4.11.0,<6",
     "django-treebeard<5",
     "dj-pagination<3",
-    "easy_thumbnails[svg]>=2.8,<2.10",
+    "easy_thumbnails[svg]>=2.10,<2.11",
     "elasticsearch>=6.0.0,<7.0.0",
     "exrex<1",
     "importlib-metadata<9",
@@ -78,16 +78,16 @@ dev = [
     "flake8-pyproject==1.2.3",
     "htmlmin==0.1.12",
     "ipdb==0.13.13",
-    "ipython==9.0.2",
+    "ipython==9.3.0",
     "isort==6.0.1",
-    "lxml==5.3.1",
-    "msgpack==1.1.0",
+    "lxml==5.4.0",
+    "msgpack==1.1.1",
     "mysqlclient==2.2.7",
-    "pylint==3.3.6",
+    "pylint==3.3.7",
     "pylint-django==2.6.1",
-    "pytest==8.3.5",
-    "pytest-cov==6.0.0",
-    "pytest-django==4.10.0",
+    "pytest==8.4.0",
+    "pytest-cov==6.2.1",
+    "pytest-django==4.11.1",
     "responses==0.25.7",
 ]
 ci = [
@@ -95,13 +95,13 @@ ci = [
 ]
 sandbox = [
     "boto3<1.36",
-    "django-storages==1.14.5",
+    "django-storages==1.14.6",
     "django-configurations==2.5.1",
     "dockerflow==2024.4.2",
     "factory-boy==3.3.3",
     "gunicorn==23.0.0",
     "psycopg2-binary==2.9.10",
-    "sentry-sdk==2.24.1",
+    "sentry-sdk==2.30.0",
 ]
 
 [tool.flake8]
