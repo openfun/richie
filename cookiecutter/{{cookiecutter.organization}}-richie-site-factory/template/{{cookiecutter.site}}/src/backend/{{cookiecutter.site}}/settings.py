@@ -786,14 +786,32 @@ class Production(Base):
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SESSION_COOKIE_SECURE = True
 
-    STORAGES = {
-        "default": {
-            "BACKEND": "richie.apps.core.storage.MediaStorage",
+    STORAGES = values.DictValue(
+        {
+            "default": {
+                "BACKEND": values.Value(
+                    "richie.apps.core.storage.MediaStorage",
+                    environ_name="STORAGES_DEFAULT_BACKEND",
+                ),
+                "OPTIONS": values.DictValue(
+                    {},
+                    environ_name="STORAGES_DEFAULT_OPTIONS",
+                ),
+            },
+            "staticfiles": {
+                "BACKEND": values.Value(
+                    "richie.apps.core.storage.CDNManifestStaticFilesStorage",
+                    environ_name="STORAGES_STATICFILES_BACKEND",
+                ),
+                "OPTIONS": values.DictValue(
+                    {},
+                    environ_name="STORAGES_STATICFILES_OPTIONS",
+                ),
+            },
         },
-        "staticfiles": {
-            "BACKEND": "richie.apps.core.storage.CDNManifestStaticFilesStorage",
-        },
-    }
+        environ_name="STORAGES",
+    )
+
     AWS_DEFAULT_ACL = None
     AWS_LOCATION = "media"
 
