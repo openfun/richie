@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Hide courses that are not `is_listed` in public pages
 - Replace order groups by computed properties coming from Joanie
+- Allow configuration of the `STORAGES` setting via environment variables
 
 ### Fixed
 
