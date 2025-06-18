@@ -1,6 +1,6 @@
 import { useParams, useSearchParams } from 'react-router';
 import { useOrganizations } from 'hooks/useOrganizations';
-import { CourseProductRelation, Organization } from 'types/Joanie';
+import { Offer, Organization } from 'types/Joanie';
 
 /**
  * return organization id with this priority:
@@ -9,17 +9,14 @@ import { CourseProductRelation, Organization } from 'types/Joanie';
  * * first organization of user's organizations
  */
 const useDefaultOrganizationId = () => {
-  const {
-    organizationId: routeOrganizationId,
-    courseProductRelationId: routeCourseProductRelationId,
-  } = useParams<{
+  const { organizationId: routeOrganizationId, offerId: routeOfferId } = useParams<{
     organizationId?: Organization['id'];
-    courseProductRelationId: CourseProductRelation['id'];
+    offerId: Offer['id'];
   }>();
   const [searchParams] = useSearchParams();
   const queryOrganizationId = searchParams.get('organization_id') || undefined;
   const { items: organizations } = useOrganizations(
-    { course_product_relation_id: routeCourseProductRelationId },
+    { offer_id: routeOfferId },
     {
       enabled: !routeOrganizationId && !queryOrganizationId,
     },

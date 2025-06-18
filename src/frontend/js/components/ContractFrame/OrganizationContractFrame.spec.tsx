@@ -6,14 +6,10 @@ import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { QueryStateFactory } from 'utils/test/factories/reactQuery';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import {
-  ContractFactory,
-  CourseProductRelationFactory,
-  OrganizationFactory,
-} from 'utils/test/factories/joanie';
+import { ContractFactory, OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { isCourseProductRelation } from 'types/Joanie';
+import { isOffer } from 'types/Joanie';
 import { Props } from './AbstractContractFrame';
 import { OrganizationContractFrame } from '.';
 
@@ -77,31 +73,28 @@ describe('OrganizationContractFrame', () => {
 
   it.each([
     {
-      label: 'contractList: undefined, courseProductRelation: undefined',
+      label: 'contractList: undefined, offer: undefined',
       contractList: undefined,
-      courseProductRelation: undefined,
+      offer: undefined,
     },
     {
-      label: 'contractList: 2 Contract, courseProductRelation: undefined',
+      label: 'contractList: 2 Contract, offer: undefined',
       contractList: ContractFactory().many(2),
-      courseProductRelation: undefined,
+      offer: undefined,
     },
     {
-      label: 'contractList: undefined, courseProductRelation: one CourseProductRelation',
+      label: 'contractList: undefined, offer: one Offer',
       contractList: undefined,
-      courseProductRelation: CourseProductRelationFactory().one(),
+      offer: OfferFactory().one(),
     },
   ])(
     'should implement AbstractContractFrame for organization and $label',
-    async ({ contractList, courseProductRelation }) => {
+    async ({ contractList, offer }) => {
       const organization = OrganizationFactory().one();
       const contracts = contractList || ContractFactory().many(2);
       const isOpen = faker.datatype.boolean();
 
-      const invitationLinkQueryString =
-        courseProductRelation && isCourseProductRelation(courseProductRelation)
-          ? `?course_product_relation_ids=${courseProductRelation.id}`
-          : '';
+      const invitationLinkQueryString = offer && isOffer(offer) ? `?offer_ids=${offer.id}` : '';
       const expectedUrls = {
         getInvitationLink: `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts-signature-link/${invitationLinkQueryString}`,
         checkSignature: `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?id=${contracts[0].id}&id=${contracts[1].id}`,
@@ -133,9 +126,7 @@ describe('OrganizationContractFrame', () => {
           <Wrapper client={client}>
             <OrganizationContractFrame
               organizationId={organization.id}
-              courseProductRelationIds={
-                courseProductRelation ? [courseProductRelation.id] : undefined
-              }
+              offerIds={offer ? [offer.id] : undefined}
               isOpen={isOpen}
               onDone={handleDone}
               onClose={handleClose}

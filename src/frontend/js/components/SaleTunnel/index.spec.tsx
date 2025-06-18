@@ -15,7 +15,7 @@ import {
   AddressFactory,
   CertificateOrderFactory,
   CertificateProductFactory,
-  CourseProductRelationFactory,
+  OfferFactory,
   CredentialOrderFactory,
   CredentialProductFactory,
   CreditCardFactory,
@@ -444,7 +444,7 @@ describe.each([
     const intl = createIntl({ locale: 'en' });
     const schedule = PaymentInstallmentFactory().many(2);
 
-    const relation = CourseProductRelationFactory({
+    const offer = OfferFactory({
       product: ProductFactory({
         price: 840,
         price_currency: 'EUR',
@@ -452,7 +452,7 @@ describe.each([
       discounted_price: 800,
       discount_rate: 0.3,
     }).one();
-    const { product } = relation;
+    const { product } = offer;
 
     fetchMock
       .get(
@@ -464,7 +464,7 @@ describe.each([
         schedule,
       );
 
-    render(<Wrapper product={product} courseProductRelation={relation} isWithdrawable={true} />, {
+    render(<Wrapper product={product} offer={offer} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -502,7 +502,7 @@ describe.each([
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
       'Total' +
-        formatPrice(relation!.discounted_price!, product.price_currency).replace(
+        formatPrice(offer!.discounted_price!, product.price_currency).replace(
           /(\u202F|\u00a0)/g,
           ' ',
         ),

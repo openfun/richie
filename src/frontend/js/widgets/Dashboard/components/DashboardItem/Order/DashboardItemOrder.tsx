@@ -67,15 +67,15 @@ export const DashboardItemOrder = ({
 }: DashboardItemOrderProps) => {
   const { course } = order;
   const intl = useIntl();
-  const { item: courseProductRelation } = useCourseProduct({
+  const { item: offer } = useCourseProduct({
     product_id: order.product_id,
     course_id: course.code,
   });
-  const { product } = courseProductRelation || {};
+  const { product } = offer || {};
   const needsSignature = OrderHelper.orderNeedsSignature(order);
   const needsPaymentMethod = order.state === OrderState.TO_SAVE_PAYMENT_METHOD;
   const isActive = OrderHelper.isActive(order);
-  const isProductPurchasable = ProductHelper.isPurchasable(courseProductRelation?.product);
+  const isProductPurchasable = ProductHelper.isPurchasable(offer?.product);
   const isNotResumable = !isActive && !isProductPurchasable;
   const canEnroll = OrderHelper.allowEnrollment(order);
 

@@ -15,7 +15,7 @@ import CourseProductItem from 'widgets/SyllabusCourseRunsList/components/CourseP
 import {
   AddressFactory,
   ContractFactory,
-  CourseProductRelationFactory,
+  OfferFactory,
   CredentialOrderFactory,
   CreditCardFactory,
   PaymentFactory,
@@ -99,7 +99,7 @@ describe('SaleTunnel', () => {
      */
     const course = PacedCourseFactory().one();
     const product = ProductFactory().one();
-    const relation = CourseProductRelationFactory({
+    const offer = OfferFactory({
       course,
       product,
       is_withdrawable: false,
@@ -108,7 +108,7 @@ describe('SaleTunnel', () => {
 
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
-      relation,
+      offer,
     );
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,

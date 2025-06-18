@@ -2,12 +2,12 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { generatePath, useParams } from 'react-router';
 import { useMemo } from 'react';
 import { capitalize } from 'lodash-es';
+import { useOffer } from 'hooks/useOffer';
 import { DashboardSidebar, MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';
 import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { useCourse } from 'hooks/useCourses';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
-import { useCourseProductRelation } from 'hooks/useCourseProductRelation';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import ContractNavLink from '../DashboardSidebar/components/ContractNavLink';
 import { getMenuRoutes } from './utils';
@@ -41,11 +41,11 @@ export const TeacherDashboardCourseSidebar = () => {
   const {
     organizationId: routeOrganizationId,
     courseId: routeCourseId,
-    courseProductRelationId: routeCourseProductRelationId = '',
+    offerId: routeofferId = '',
   } = useParams<{
     organizationId?: string;
     courseId: string;
-    courseProductRelationId: string;
+    offerId: string;
   }>();
 
   const {
@@ -54,38 +54,29 @@ export const TeacherDashboardCourseSidebar = () => {
   } = useCourse(
     routeCourseId,
     { organization_id: routeOrganizationId },
-    { enabled: !routeCourseProductRelationId },
+    { enabled: !routeofferId },
   );
 
   const {
-    item: courseProductRelation,
-    states: { fetching: courseProductRelationFetching },
-  } = useCourseProductRelation(
-    routeCourseProductRelationId,
+    item: offer,
+    states: { fetching: offerFetching },
+  } = useOffer(
+    routeofferId,
     {
       organization_id: routeOrganizationId,
     },
-    { enabled: !!routeCourseProductRelationId },
+    { enabled: !!routeofferId },
   );
 
-  const fetching = useMemo(
-    () => courseFetching || courseProductRelationFetching,
-    [courseFetching, courseProductRelationFetching],
-  );
-  const product = useMemo(
-    () => (courseProductRelation ? courseProductRelation.product : undefined),
-    [courseProductRelation],
-  );
-  const course = useMemo(
-    () => (courseProductRelation ? courseProductRelation.course : singleCourse),
-    [courseProductRelation, singleCourse],
-  );
+  const fetching = useMemo(() => courseFetching || offerFetching, [courseFetching, offerFetching]);
+  const product = useMemo(() => (offer ? offer.product : undefined), [offer]);
+  const course = useMemo(() => (offer ? offer.course : singleCourse), [offer, singleCourse]);
 
   const getMenuLinkFromPath = (basePath: TeacherDashboardPaths) => {
     const path = generatePath(basePath, {
       organizationId: routeOrganizationId ?? '',
       courseId: routeCourseId ?? '',
-      courseProductRelationId: routeCourseProductRelationId ?? '',
+      offerId: routeofferId ?? '',
     });
     const menuLink: MenuLink = {
       to: path,
@@ -102,7 +93,7 @@ export const TeacherDashboardCourseSidebar = () => {
         <ContractNavLink
           link={menuLink}
           organizationId={routeOrganizationId}
-          courseProductRelationId={routeCourseProductRelationId}
+          offerId={routeofferId}
         />
       );
     }
@@ -112,10 +103,10 @@ export const TeacherDashboardCourseSidebar = () => {
   const menuLinkList = useMemo(
     () =>
       getMenuRoutes({
-        courseProductRelationId: routeCourseProductRelationId,
+        offerId: routeofferId,
         organizationId: routeOrganizationId,
       }).map(getMenuLinkFromPath),
-    [routeOrganizationId, routeCourseProductRelationId],
+    [routeOrganizationId, routeofferId],
   );
 
   return (

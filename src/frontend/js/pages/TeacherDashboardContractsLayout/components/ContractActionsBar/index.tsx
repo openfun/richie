@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Organization, CourseProductRelation } from 'types/Joanie';
+import { Organization, Offer } from 'types/Joanie';
 import useTeacherContractsToSign from 'pages/TeacherDashboardContractsLayout/hooks/useTeacherContractsToSign';
 import useHasContractToDownload from 'pages/TeacherDashboardContractsLayout/hooks/useHasContractToDownload';
 import SignOrganizationContractButton from '../SignOrganizationContractButton';
@@ -7,18 +7,18 @@ import BulkDownloadContractButton from '../BulkDownloadContractButton';
 
 interface ContractActionsProps {
   organizationId: Organization['id'];
-  courseProductRelationId?: CourseProductRelation['id'];
+  offerId?: Offer['id'];
 }
 
-const ContractActionsBar = ({ organizationId, courseProductRelationId }: ContractActionsProps) => {
+const ContractActionsBar = ({ organizationId, offerId }: ContractActionsProps) => {
   const { canSignContracts, contractsToSignCount } = useTeacherContractsToSign({
     organizationId,
-    courseProductRelationId,
+    offerId,
   });
-  const hasContractToDownload = useHasContractToDownload(organizationId, courseProductRelationId);
+  const hasContractToDownload = useHasContractToDownload(organizationId, offerId);
 
   const nbAvailableActions = [canSignContracts, hasContractToDownload].filter((val) => val).length;
-  const courseProductRelationIds = courseProductRelationId ? [courseProductRelationId] : undefined;
+  const offerIds = offerId ? [offerId] : undefined;
   return (
     nbAvailableActions > 0 && (
       <div
@@ -31,17 +31,14 @@ const ContractActionsBar = ({ organizationId, courseProductRelationId }: Contrac
         {canSignContracts && (
           <div>
             <SignOrganizationContractButton
-              courseProductRelationIds={courseProductRelationIds}
+              offerIds={offerIds}
               organizationId={organizationId}
               contractToSignCount={contractsToSignCount}
             />
           </div>
         )}
         {hasContractToDownload && (
-          <BulkDownloadContractButton
-            organizationId={organizationId}
-            courseProductRelationId={courseProductRelationId}
-          />
+          <BulkDownloadContractButton organizationId={organizationId} offerId={offerId} />
         )}
       </div>
     )

@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
 import { OrganizationContractFrame } from 'components/ContractFrame';
 
-import { CourseProductRelation, Organization } from 'types/Joanie';
+import { Offer, Organization } from 'types/Joanie';
 
 const messages = defineMessages({
   signAllPendingContracts: {
@@ -14,7 +14,7 @@ const messages = defineMessages({
 });
 
 interface Props {
-  courseProductRelationIds?: CourseProductRelation['id'][];
+  offerIds?: Offer['id'][];
   organizationId: Organization['id'];
   contractToSignCount: number;
 }
@@ -22,7 +22,7 @@ interface Props {
 const SignOrganizationContractButton = ({
   organizationId,
   contractToSignCount,
-  courseProductRelationIds = [],
+  offerIds = [],
 }: Props) => {
   const [contractFrameOpened, setContractFrameOpened] = useState(false);
   const hasContractToSign = contractToSignCount > 0;
@@ -48,7 +48,7 @@ const SignOrganizationContractButton = ({
         </Button>
       )}
       <OrganizationContractFrame
-        courseProductRelationIds={courseProductRelationIds}
+        offerIds={offerIds}
         organizationId={organizationId}
         isOpen={contractFrameOpened}
         onClose={() => setContractFrameOpened(false)}

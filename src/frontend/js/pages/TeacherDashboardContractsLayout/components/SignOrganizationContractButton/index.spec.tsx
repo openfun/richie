@@ -70,19 +70,19 @@ describe('TeacherDashboardContractsLayout/SignOrganizationContractButton', () =>
     {
       label: "organization's contracts",
       organizationId: faker.string.uuid(),
-      courseProductRelationIds: undefined,
+      offerIds: undefined,
     },
     {
       label: "organization's training contracts",
       organizationId: faker.string.uuid(),
-      courseProductRelationIds: [faker.string.uuid()],
+      offerIds: [faker.string.uuid()],
     },
-  ])('should open $label frame on click', async ({ organizationId, courseProductRelationIds }) => {
+  ])('should open $label frame on click', async ({ organizationId, offerIds }) => {
     render(
       <Wrapper>
         <SignOrganizationContractButton
           organizationId={organizationId}
-          courseProductRelationIds={courseProductRelationIds}
+          offerIds={offerIds}
           contractToSignCount={12}
         />
       </Wrapper>,
@@ -92,8 +92,8 @@ describe('TeacherDashboardContractsLayout/SignOrganizationContractButton', () =>
     const user = userEvent.setup();
 
     let getInvitationLinkUrl = `https://joanie.test/api/v1.0/organizations/${organizationId}/contracts-signature-link/`;
-    if (courseProductRelationIds) {
-      getInvitationLinkUrl += `?course_product_relation_ids=${courseProductRelationIds[0]}`;
+    if (offerIds) {
+      getInvitationLinkUrl += `?offer_ids=${offerIds[0]}`;
     }
 
     fetchMock.get(getInvitationLinkUrl, {

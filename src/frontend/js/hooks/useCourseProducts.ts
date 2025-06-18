@@ -1,5 +1,5 @@
 import { defineMessages } from 'react-intl';
-import { API, CourseProductQueryFilters, CourseProductRelation, Product } from 'types/Joanie';
+import { API, CourseProductQueryFilters, Offer, Product } from 'types/Joanie';
 import { QueryOptions, useResourcesCustom, UseResourcesProps } from 'hooks/useResources';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 
@@ -19,11 +19,7 @@ export const messages = defineMessages({
 /**
  * Joanie Api hook to retrieve a product through its id and a course code.
  */
-const props: UseResourcesProps<
-  CourseProductRelation,
-  CourseProductQueryFilters,
-  API['courses']['products']
-> = {
+const props: UseResourcesProps<Offer, CourseProductQueryFilters, API['courses']['products']> = {
   queryKey: ['courses-products'],
   apiInterface: () => useJoanieApi().courses.products,
   messages,
@@ -31,11 +27,11 @@ const props: UseResourcesProps<
 
 export const useCourseProduct = (
   filters: Omit<CourseProductQueryFilters, 'id'> & { product_id: Product['id'] },
-  queryOptions?: QueryOptions<CourseProductRelation>,
+  queryOptions?: QueryOptions<Offer>,
 ) => {
   const { product_id: productId, ...queryfilters } = filters;
   const enabled = !!productId && !!queryfilters.course_id;
-  const resources = useResourcesCustom<CourseProductRelation, CourseProductQueryFilters>({
+  const resources = useResourcesCustom<Offer, CourseProductQueryFilters>({
     ...props,
     filters: { id: productId, ...queryfilters },
     queryOptions: { ...queryOptions, enabled },

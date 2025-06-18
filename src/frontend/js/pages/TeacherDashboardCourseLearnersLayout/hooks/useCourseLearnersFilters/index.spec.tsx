@@ -1,7 +1,7 @@
 import fetchMock from 'fetch-mock';
 import { renderHook, waitFor, act } from '@testing-library/react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CourseProductRelationFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { JoanieAppWrapper, setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import useCourseLearnersFilters from '.';
 
@@ -32,12 +32,12 @@ describe('useCourseLearnersFilters', () => {
       expect(result.current.initialFilters).toStrictEqual({
         organization_id: undefined,
         course_id: undefined,
-        course_product_relation_id: undefined,
+        offer_id: undefined,
       });
       expect(result.current.filters).toStrictEqual({
         organization_id: undefined,
         course_id: undefined,
-        course_product_relation_id: undefined,
+        offer_id: undefined,
       });
     });
   });
@@ -46,7 +46,7 @@ describe('useCourseLearnersFilters', () => {
     const defaultOrganization = OrganizationFactory().one();
     const filteredOrganization = OrganizationFactory({ id: 'filtered' }).one();
     const routeOrganization = OrganizationFactory({ id: 'route' }).one();
-    const routeCourseProductRelation = CourseProductRelationFactory().one();
+    const routeOffer = OfferFactory().one();
     // fetching user's organizations to initialize default organizationId.
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', [
       defaultOrganization,
@@ -56,9 +56,9 @@ describe('useCourseLearnersFilters', () => {
       wrapper: ({ children }) => (
         <JoanieAppWrapper
           routerOptions={{
-            path: '/:organizationId/:courseId/:courseProductRelationId',
+            path: '/:organizationId/:courseId/:offerId',
             initialEntries: [
-              `/${routeOrganization.id}/${routeCourseProductRelation.course.id}/${routeCourseProductRelation.id}?organization_id=${filteredOrganization.id}`,
+              `/${routeOrganization.id}/${routeOffer.course.id}/${routeOffer.id}?organization_id=${filteredOrganization.id}`,
             ],
           }}
         >
@@ -70,13 +70,13 @@ describe('useCourseLearnersFilters', () => {
     await waitFor(() => {
       expect(result.current.initialFilters).toStrictEqual({
         organization_id: routeOrganization.id,
-        course_id: routeCourseProductRelation.course.id,
-        course_product_relation_id: routeCourseProductRelation.id,
+        course_id: routeOffer.course.id,
+        offer_id: routeOffer.id,
       });
       expect(result.current.filters).toStrictEqual({
         organization_id: routeOrganization.id,
-        course_id: routeCourseProductRelation.course.id,
-        course_product_relation_id: routeCourseProductRelation.id,
+        course_id: routeOffer.course.id,
+        offer_id: routeOffer.id,
       });
     });
   });
@@ -84,7 +84,7 @@ describe('useCourseLearnersFilters', () => {
   it("should use organizationId from query parameters when it's not in route params", async () => {
     const defaultOrganization = OrganizationFactory().one();
     const filteredOrganization = OrganizationFactory({ id: 'filtered' }).one();
-    const routeCourseProductRelation = CourseProductRelationFactory({ id: 'route' }).one();
+    const routeOffer = OfferFactory({ id: 'route' }).one();
     // fetching user's organizations to initialize default organizationId.
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', [
       defaultOrganization,
@@ -94,9 +94,9 @@ describe('useCourseLearnersFilters', () => {
       wrapper: ({ children }) => (
         <JoanieAppWrapper
           routerOptions={{
-            path: '/:courseId/:courseProductRelationId',
+            path: '/:courseId/:offerId',
             initialEntries: [
-              `/${routeCourseProductRelation.course.id}/${routeCourseProductRelation.id}/?organization_id=${filteredOrganization.id}`,
+              `/${routeOffer.course.id}/${routeOffer.id}/?organization_id=${filteredOrganization.id}`,
             ],
           }}
         >
@@ -108,13 +108,13 @@ describe('useCourseLearnersFilters', () => {
     await waitFor(() => {
       expect(result.current.initialFilters).toStrictEqual({
         organization_id: filteredOrganization.id,
-        course_id: routeCourseProductRelation.course.id,
-        course_product_relation_id: routeCourseProductRelation.id,
+        course_id: routeOffer.course.id,
+        offer_id: routeOffer.id,
       });
       expect(result.current.filters).toStrictEqual({
         organization_id: filteredOrganization.id,
-        course_id: routeCourseProductRelation.course.id,
-        course_product_relation_id: routeCourseProductRelation.id,
+        course_id: routeOffer.course.id,
+        offer_id: routeOffer.id,
       });
     });
   });
@@ -122,7 +122,7 @@ describe('useCourseLearnersFilters', () => {
   it('setFilters should update filter state', async () => {
     const defaultOrganization = OrganizationFactory({ id: 'all' }).one();
     const routeOrganization = OrganizationFactory({ id: 'route' }).one();
-    const routeCourseProductRelation = CourseProductRelationFactory().one();
+    const routeOffer = OfferFactory().one();
     // fetching user's organizations to initialize default organizationId.
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', [defaultOrganization]);
     const { result } = renderHook(useCourseLearnersFilters, {
@@ -136,7 +136,7 @@ describe('useCourseLearnersFilters', () => {
     const expectedInitialFilters = {
       organization_id: defaultOrganization.id,
       course_id: undefined,
-      course_product_relation_id: undefined,
+      offer_id: undefined,
     };
     await waitFor(() => {
       expect(result.current.initialFilters).toStrictEqual(expectedInitialFilters);
@@ -144,8 +144,8 @@ describe('useCourseLearnersFilters', () => {
 
     const newFilters = {
       organization_id: routeOrganization.id,
-      course_id: routeCourseProductRelation.course.id,
-      course_product_relation_id: routeCourseProductRelation.id,
+      course_id: routeOffer.course.id,
+      offer_id: routeOffer.id,
     };
     act(() => {
       result.current.setFilters(newFilters);

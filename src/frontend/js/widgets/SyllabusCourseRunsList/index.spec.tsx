@@ -22,8 +22,8 @@ import {
 import SyllabusCourseRunsList from 'widgets/SyllabusCourseRunsList/index';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseRun, Priority } from 'types';
-import { CourseProductRelation } from 'types/Joanie';
-import { CourseProductRelationFactory } from 'utils/test/factories/joanie';
+import { Offer } from 'types/Joanie';
+import { OfferFactory } from 'utils/test/factories/joanie';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { StringHelper } from 'utils/StringHelper';
 import { computeStates } from 'utils/CourseRuns';
@@ -211,9 +211,9 @@ describe('<SyllabusCourseRunsList/>', () => {
     });
   };
 
-  const expectCourseProduct = async (container: HTMLElement, relation: CourseProductRelation) => {
+  const expectCourseProduct = async (container: HTMLElement, offer: Offer) => {
     const heading = await findByRole(container, 'heading', {
-      name: relation.product.title,
+      name: offer.product.title,
     });
     expect(Array.from(heading.classList)).toContain('product-widget__title');
   };
@@ -383,9 +383,9 @@ describe('<SyllabusCourseRunsList/>', () => {
 
   it('has one opened product', async () => {
     const course = PacedCourseFactory().one();
-    const relation = CourseProductRelationFactory().one();
-    const resourceLink = `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${relation.product.id}/`;
-    fetchMock.get(resourceLink, relation);
+    const offer = OfferFactory().one();
+    const resourceLink = `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${offer.product.id}/`;
+    fetchMock.get(resourceLink, offer);
 
     const courseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       resource_link: resourceLink,
@@ -406,7 +406,7 @@ describe('<SyllabusCourseRunsList/>', () => {
     expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
       1,
     );
-    await expectCourseProduct(getHeaderContainer(), relation);
+    await expectCourseProduct(getHeaderContainer(), offer);
 
     // Portal.
     expectEmptyPortalContainer();

@@ -2,17 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import useContractArchive from 'hooks/useContractArchive';
 import { CONTRACT_DOWNLOAD_SETTINGS } from 'settings';
 import { Nullable } from 'types/utils';
-import { CourseProductRelation, Organization } from 'types/Joanie';
+import { Offer, Organization } from 'types/Joanie';
 import { getStoredContractArchiveId } from '../useDownloadContractArchive/contractArchiveLocalStorage';
 
 export interface UseCheckContractArchiveExistsProps {
   organizationId?: Organization['id'];
-  courseProductRelationId?: CourseProductRelation['id'];
+  offerId?: Offer['id'];
   enable?: boolean;
 }
 
 const useCheckContractArchiveExist = (
-  { organizationId, courseProductRelationId, enable = true }: UseCheckContractArchiveExistsProps = {
+  { organizationId, offerId, enable = true }: UseCheckContractArchiveExistsProps = {
     enable: true,
   },
 ) => {
@@ -55,7 +55,7 @@ const useCheckContractArchiveExist = (
   useEffect(() => {
     const storedContractArchiveId = getStoredContractArchiveId({
       organizationId,
-      courseProductRelationId,
+      offerId,
     });
 
     if (enable && storedContractArchiveId) {
@@ -63,7 +63,7 @@ const useCheckContractArchiveExist = (
     } else {
       setIsContractArchiveExists(false);
     }
-  }, [enable, organizationId, courseProductRelationId]);
+  }, [enable, organizationId, offerId]);
 
   // Be sure to clear any timeout before unmouting the hook.
   useEffect(() => {

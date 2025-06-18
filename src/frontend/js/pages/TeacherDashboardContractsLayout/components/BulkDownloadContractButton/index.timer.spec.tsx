@@ -14,7 +14,7 @@ import {
   unstoreContractArchiveId,
 } from 'pages/TeacherDashboardContractsLayout/hooks/useDownloadContractArchive/contractArchiveLocalStorage';
 import { CONTRACT_DOWNLOAD_SETTINGS } from 'settings';
-import { CourseProductRelationFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import BulkDownloadContractButton from '.';
 
 jest.mock('utils/context', () => ({
@@ -45,26 +45,26 @@ describe.each([
   {
     testLabel: 'for all organization and all trainings',
     organization: undefined,
-    courseProductRelation: undefined,
+    offer: undefined,
   },
   {
     testLabel: 'for a training in an organization',
     organization: OrganizationFactory().one(),
-    courseProductRelation: CourseProductRelationFactory().one(),
+    offer: OfferFactory().one(),
   },
   {
     testLabel: 'for an organization',
     organization: OrganizationFactory().one(),
-    courseProductRelation: undefined,
+    offer: undefined,
   },
   {
     testLabel: 'for a training',
     organization: undefined,
-    courseProductRelation: CourseProductRelationFactory().one(),
+    offer: OfferFactory().one(),
   },
 ])(
   'TeacherDashboardContractsLayout/BulkDownloadContractButton with fake timer, $testLabel',
-  ({ organization, courseProductRelation }) => {
+  ({ organization, offer }) => {
     let localStorageArchiveFilters: LocalStorageArchiveFilters;
 
     const Wrapper = ({ children }: PropsWithChildren) => {
@@ -81,7 +81,7 @@ describe.each([
     beforeEach(() => {
       localStorageArchiveFilters = {
         organizationId: organization ? organization.id : undefined,
-        courseProductRelationId: courseProductRelation ? courseProductRelation.id : undefined,
+        offerId: offer ? offer.id : undefined,
       };
       mockHasContractToDownload = true;
 
@@ -102,7 +102,7 @@ describe.each([
       jest.clearAllMocks();
       unstoreContractArchiveId({
         organizationId: organization ? organization.id : undefined,
-        courseProductRelationId: courseProductRelation ? courseProductRelation.id : undefined,
+        offerId: offer ? offer.id : undefined,
       });
     });
 
@@ -114,7 +114,7 @@ describe.each([
         <Wrapper>
           <BulkDownloadContractButton
             organizationId={organization?.id ?? undefined}
-            courseProductRelationId={courseProductRelation?.id ?? undefined}
+            offerId={offer?.id ?? undefined}
           />
         </Wrapper>,
       );
@@ -151,10 +151,7 @@ describe.each([
 
       render(
         <Wrapper>
-          <BulkDownloadContractButton
-            organizationId={organization?.id}
-            courseProductRelationId={courseProductRelation?.id}
-          />
+          <BulkDownloadContractButton organizationId={organization?.id} offerId={offer?.id} />
         </Wrapper>,
       );
 

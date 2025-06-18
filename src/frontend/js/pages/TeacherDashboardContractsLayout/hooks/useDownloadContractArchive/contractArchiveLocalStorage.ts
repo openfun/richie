@@ -1,16 +1,13 @@
 import { CONTRACT_DOWNLOAD_SETTINGS } from 'settings';
-import { CourseProductRelation, Organization } from 'types/Joanie';
+import { Offer, Organization } from 'types/Joanie';
 
 export interface LocalStorageArchiveFilters {
   organizationId?: Organization['id'];
-  courseProductRelationId?: CourseProductRelation['id'];
+  offerId?: Offer['id'];
 }
 
-const generateLocalStorageKey = ({
-  organizationId,
-  courseProductRelationId,
-}: LocalStorageArchiveFilters = {}) => {
-  return `${CONTRACT_DOWNLOAD_SETTINGS.contractArchiveLocalStorageKey}::${organizationId ?? 'all'}::${courseProductRelationId ?? 'all'}`;
+const generateLocalStorageKey = ({ organizationId, offerId }: LocalStorageArchiveFilters = {}) => {
+  return `${CONTRACT_DOWNLOAD_SETTINGS.contractArchiveLocalStorageKey}::${organizationId ?? 'all'}::${offerId ?? 'all'}`;
 };
 
 const generateLocalStorageId = (contractArchiveId: string) => {
@@ -20,32 +17,27 @@ const generateLocalStorageId = (contractArchiveId: string) => {
 const storeContractArchiveId = ({
   contractArchiveId,
   organizationId,
-  courseProductRelationId,
+  offerId,
 }: {
   contractArchiveId: string;
   organizationId?: Organization['id'];
-  courseProductRelationId?: CourseProductRelation['id'];
+  offerId?: Offer['id'];
 }) => {
   localStorage.setItem(
-    generateLocalStorageKey({ organizationId, courseProductRelationId }),
+    generateLocalStorageKey({ organizationId, offerId }),
     generateLocalStorageId(contractArchiveId),
   );
 };
 
-const unstoreContractArchiveId = ({
-  organizationId,
-  courseProductRelationId,
-}: LocalStorageArchiveFilters = {}) => {
-  localStorage.removeItem(generateLocalStorageKey({ organizationId, courseProductRelationId }));
+const unstoreContractArchiveId = ({ organizationId, offerId }: LocalStorageArchiveFilters = {}) => {
+  localStorage.removeItem(generateLocalStorageKey({ organizationId, offerId }));
 };
 
 const getStoredContractArchiveId = ({
   organizationId,
-  courseProductRelationId,
+  offerId,
 }: LocalStorageArchiveFilters = {}) => {
-  const value = localStorage.getItem(
-    generateLocalStorageKey({ organizationId, courseProductRelationId }),
-  );
+  const value = localStorage.getItem(generateLocalStorageKey({ organizationId, offerId }));
   if (value === null) {
     return value;
   }
@@ -56,11 +48,9 @@ const getStoredContractArchiveId = ({
 
 const isStoredContractArchiveIdExpired = ({
   organizationId,
-  courseProductRelationId,
+  offerId,
 }: LocalStorageArchiveFilters = {}) => {
-  const value = localStorage.getItem(
-    generateLocalStorageKey({ organizationId, courseProductRelationId }),
-  );
+  const value = localStorage.getItem(generateLocalStorageKey({ organizationId, offerId }));
   if (value === null) {
     return false;
   }

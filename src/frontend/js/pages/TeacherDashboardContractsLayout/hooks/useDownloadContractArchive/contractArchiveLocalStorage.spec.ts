@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { CONTRACT_DOWNLOAD_SETTINGS } from 'settings';
-import { CourseProductRelationFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import {
   LocalStorageArchiveFilters,
   generateLocalStorageKey,
@@ -14,56 +14,56 @@ describe.each([
   {
     testLabel: 'for all organization and all trainings',
     organization: undefined,
-    courseProductRelation: undefined,
+    offer: undefined,
     existingOrganization: undefined,
-    existingCourseProductRelation: undefined,
+    existingOffer: undefined,
   },
   {
     testLabel: 'for a training in an organization',
     organization: OrganizationFactory().one(),
-    courseProductRelation: CourseProductRelationFactory().one(),
+    offer: OfferFactory().one(),
     existingOrganization: undefined,
-    existingCourseProductRelation: undefined,
+    existingOffer: undefined,
   },
   {
     testLabel: 'for an organization',
     organization: OrganizationFactory().one(),
-    courseProductRelation: undefined,
+    offer: undefined,
     existingOrganization: undefined,
-    existingCourseProductRelation: undefined,
+    existingOffer: undefined,
   },
   {
     testLabel: 'for a training',
     organization: undefined,
-    courseProductRelation: CourseProductRelationFactory().one(),
+    offer: OfferFactory().one(),
     existingOrganization: undefined,
-    existingCourseProductRelation: undefined,
+    existingOffer: undefined,
   },
   {
     testLabel: 'for all organization and all trainings, with a other id already stored',
     organization: undefined,
-    courseProductRelation: undefined,
+    offer: undefined,
     existingOrganization: OrganizationFactory().one(),
-    existingCourseProductRelation: CourseProductRelationFactory().one(),
+    existingOffer: OfferFactory().one(),
   },
   {
     testLabel: 'for a training in an organization, with a other id already stored',
     organization: OrganizationFactory().one(),
-    courseProductRelation: CourseProductRelationFactory().one(),
+    offer: OfferFactory().one(),
   },
   {
     testLabel: 'for an organization, with a other id already stored',
     organization: OrganizationFactory().one(),
-    courseProductRelation: undefined,
+    offer: undefined,
     existingOrganization: OrganizationFactory().one(),
-    existingCourseProductRelation: CourseProductRelationFactory().one(),
+    existingOffer: OfferFactory().one(),
   },
   {
     testLabel: 'for a training, with a other id already stored',
     organization: undefined,
-    courseProductRelation: CourseProductRelationFactory().one(),
+    offer: OfferFactory().one(),
     existingOrganization: OrganizationFactory().one(),
-    existingCourseProductRelation: CourseProductRelationFactory().one(),
+    existingOffer: OfferFactory().one(),
   },
 
   {
@@ -72,16 +72,11 @@ describe.each([
   {
     testLabel: 'Testing with a other id already stored',
     existingOrganization: OrganizationFactory().one(),
-    existingCourseProductRelation: CourseProductRelationFactory().one(),
+    existingOffer: OfferFactory().one(),
   },
 ])(
   'contractArchiveLocalStorage $testLabel',
-  ({
-    organization,
-    courseProductRelation,
-    existingOrganization,
-    existingCourseProductRelation,
-  }) => {
+  ({ organization, offer, existingOrganization, existingOffer }) => {
     let localStorageArchiveFilters: LocalStorageArchiveFilters;
     let localStorageExistingArchiveFilters: LocalStorageArchiveFilters;
     let exsitingContractId: string;
@@ -89,17 +84,15 @@ describe.each([
     beforeEach(() => {
       localStorageArchiveFilters = {
         organizationId: organization ? organization.id : undefined,
-        courseProductRelationId: courseProductRelation ? courseProductRelation.id : undefined,
+        offerId: offer ? offer.id : undefined,
       };
       localStorageExistingArchiveFilters = {
         organizationId: existingOrganization ? existingOrganization.id : undefined,
-        courseProductRelationId: existingCourseProductRelation
-          ? existingCourseProductRelation.id
-          : undefined,
+        offerId: existingOffer ? existingOffer.id : undefined,
       };
       exsitingContractId = faker.string.uuid();
 
-      if (existingCourseProductRelation && existingOrganization) {
+      if (existingOffer && existingOrganization) {
         // everything should work fine with multiple archive stored
         storeContractArchiveId({
           ...localStorageExistingArchiveFilters,

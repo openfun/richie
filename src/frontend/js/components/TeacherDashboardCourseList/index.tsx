@@ -6,7 +6,7 @@ import { CourseGlimpseList, getCourseGlimpseListProps } from 'components/CourseG
 import { Spinner } from 'components/Spinner';
 import context from 'utils/context';
 import { useIntersectionObserver } from 'hooks/useIntersectionObserver';
-import { CourseListItem, CourseProductRelationLight } from 'types/Joanie';
+import { CourseListItem, OfferLight } from 'types/Joanie';
 import Banner from 'components/Banner';
 
 const messages = defineMessages({
@@ -31,7 +31,7 @@ interface TeacherDashboardCourseListProps {
   titleTranslated?: string;
   organizationId?: string;
   loadMore: () => void;
-  courseAndProductList?: (CourseListItem | CourseProductRelationLight)[];
+  courseAndProductList?: (CourseListItem | OfferLight)[];
   isLoadingMore?: boolean;
   hasMore?: boolean;
   isNewSearchLoading?: boolean;

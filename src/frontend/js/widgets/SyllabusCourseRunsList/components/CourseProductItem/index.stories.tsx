@@ -3,7 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import fetchMock from 'fetch-mock';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import {
-  CourseProductRelationFactory,
+  OfferFactory,
   CourseRunFactory,
   CredentialOrderFactory,
   CredentialProductFactory,
@@ -22,7 +22,7 @@ const render = (args: CourseProductItemProps, options?: Maybe<{ order: Credentia
   fetchMock.get(`http://localhost:8071/api/v1.0/addresses/`, [], { overwriteRoutes: true });
   fetchMock.get(
     `http://localhost:8071/api/v1.0/courses/${args.course.code}/products/${args.productId}/`,
-    CourseProductRelationFactory({
+    OfferFactory({
       product: CredentialProductFactory({
         price: 840,
         price_currency: 'EUR',

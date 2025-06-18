@@ -11,7 +11,7 @@ import {
   UserFactory,
 } from 'utils/test/factories/richie';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { CourseProductRelationFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { DashboardBreadcrumbsProvider } from 'widgets/Dashboard/contexts/DashboardBreadcrumbsContext';
@@ -46,15 +46,9 @@ describe('components/TeacherDashboardTrainingLoader', () => {
   });
 
   it('should render TeacherDashboardTrainingLoader page', async () => {
-    const courseProductRelation = CourseProductRelationFactory().one();
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/?course_product_relation_id=${courseProductRelation.id}`,
-      [],
-    );
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/${courseProductRelation.id}/`,
-      courseProductRelation,
-    );
+    const offer = OfferFactory().one();
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/?offer_id=${offer.id}`, []);
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/offers/${offer.id}/`, offer);
 
     const user = UserFactory().one();
     render(
@@ -67,12 +61,12 @@ describe('components/TeacherDashboardTrainingLoader', () => {
                   router={createMemoryRouter(
                     [
                       {
-                        path: ':courseProductRelationId',
+                        path: ':offerId',
                         element: <TeacherDashboardTrainingLoader />,
                       },
                     ],
                     {
-                      initialEntries: [`/${courseProductRelation.id}`],
+                      initialEntries: [`/${offer.id}`],
                     },
                   )}
                 />
@@ -88,12 +82,10 @@ describe('components/TeacherDashboardTrainingLoader', () => {
     await expectNoSpinner('Loading course...');
 
     nbApiCalls += 1; // organizations api call
-    nbApiCalls += 1; // course-product-relations api call
+    nbApiCalls += 1; // offers api call
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
-    expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/course-product-relations/${courseProductRelation.id}/`,
-    );
+    expect(calledUrls).toContain(`https://joanie.endpoint/api/v1.0/offers/${offer.id}/`);
 
     // main titles
     expect(
@@ -102,28 +94,28 @@ describe('components/TeacherDashboardTrainingLoader', () => {
       }),
     ).toBeInTheDocument();
 
-    expect(
-      screen.getAllByRole('heading', { name: capitalize(courseProductRelation.product.title) }),
-    ).toHaveLength(2);
+    expect(screen.getAllByRole('heading', { name: capitalize(offer.product.title) })).toHaveLength(
+      2,
+    );
 
-    const nbCourseRun = courseProductRelation.product.target_courses.reduce(
+    const nbCourseRun = offer.product.target_courses.reduce(
       (acc, course) => acc + course.course_runs.length,
       0,
     );
     expect(screen.getAllByRole('link', { name: 'Go to course area' })).toHaveLength(nbCourseRun);
   });
 
-  it('should fetch course product relation with organization id if there is one in the path', async () => {
+  it('should fetch offer with organization id if there is one in the path', async () => {
     const organization = OrganizationFactory().one();
-    const courseProductRelation = CourseProductRelationFactory({
+    const offer = OfferFactory({
       organizations: [organization],
     }).one();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/${courseProductRelation.id}/`,
-      courseProductRelation,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offers/${offer.id}/`,
+      offer,
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?course_product_relation_id=${courseProductRelation.id}&signature_state=half_signed&page=1&page_size=25`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?offer_id=${offer.id}&signature_state=half_signed&page=1&page_size=25`,
       [],
     );
 
@@ -138,12 +130,12 @@ describe('components/TeacherDashboardTrainingLoader', () => {
                   router={createMemoryRouter(
                     [
                       {
-                        path: '/:organizationId/:courseProductRelationId',
+                        path: '/:organizationId/:offerId',
                         element: <TeacherDashboardTrainingLoader />,
                       },
                     ],
                     {
-                      initialEntries: [`/${organization.id}/${courseProductRelation.id}`],
+                      initialEntries: [`/${organization.id}/${offer.id}`],
                     },
                   )}
                 />
@@ -159,11 +151,11 @@ describe('components/TeacherDashboardTrainingLoader', () => {
     await expectNoSpinner('Loading course...');
 
     nbApiCalls += 1; // contracts api call
-    nbApiCalls += 1; // course-product-relations api call
+    nbApiCalls += 1; // offers api call
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
     expect(calledUrls).toContain(
-      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/${courseProductRelation.id}/`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offers/${offer.id}/`,
     );
 
     // main titles
@@ -173,11 +165,11 @@ describe('components/TeacherDashboardTrainingLoader', () => {
       }),
     ).toBeInTheDocument();
 
-    expect(
-      screen.getAllByRole('heading', { name: capitalize(courseProductRelation.product.title) }),
-    ).toHaveLength(2);
+    expect(screen.getAllByRole('heading', { name: capitalize(offer.product.title) })).toHaveLength(
+      2,
+    );
 
-    const nbCourseRun = courseProductRelation.product.target_courses.reduce(
+    const nbCourseRun = offer.product.target_courses.reduce(
       (acc, course) => acc + course.course_runs.length,
       0,
     );

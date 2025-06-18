@@ -1,10 +1,10 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useParams } from 'react-router';
 
+import { useOffer } from 'hooks/useOffer';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { TeacherDashboardCourseSidebar } from 'widgets/Dashboard/components/TeacherDashboardCourseSidebar';
 import { Spinner } from 'components/Spinner';
-import { useCourseProductRelation } from 'hooks/useCourseProductRelation';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
 import { TeacherDashboardTraining } from '.';
 
@@ -22,17 +22,17 @@ const messages = defineMessages({
 });
 
 export const TeacherDashboardTrainingLoader = () => {
-  const { courseProductRelationId, organizationId } = useParams<{
-    courseProductRelationId: string;
+  const { offerId, organizationId } = useParams<{
+    offerId: string;
     organizationId?: string;
   }>();
 
   const {
-    item: courseProductRelation,
+    item: offer,
     states: { fetching },
-  } = useCourseProductRelation(courseProductRelationId, { organization_id: organizationId });
+  } = useOffer(offerId, { organization_id: organizationId });
   useBreadcrumbsPlaceholders({
-    courseTitle: courseProductRelation?.product.title ?? '',
+    courseTitle: offer?.product.title ?? '',
   });
   return (
     <DashboardLayout sidebar={<TeacherDashboardCourseSidebar />}>
@@ -48,7 +48,7 @@ export const TeacherDashboardTrainingLoader = () => {
           </span>
         </Spinner>
       ) : (
-        <TeacherDashboardTraining courseProductRelation={courseProductRelation} />
+        <TeacherDashboardTraining offer={offer} />
       )}
     </DashboardLayout>
   );

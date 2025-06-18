@@ -42,20 +42,15 @@ const TeacherDashboardContracts = () => {
     defaultPage: page ? parseInt(page, 10) : 1,
     pageSize: PER_PAGE.teacherContractList,
   });
-  const {
-    organizationId: routeOrganizationId,
-    courseProductRelationId: routeCourseProductRelationId,
-  } = useParams<TeacherDashboardContractsParams>();
+  const { organizationId: routeOrganizationId, offerId: routeofferId } =
+    useParams<TeacherDashboardContractsParams>();
   // organization list is used to show/hide organization filter.
   // when organizationId is in route's params this filter is always hidden.
   // therefore we don't need to enable this query.
   const {
     items: organizationList,
     states: { isFetched: isOrganizationListFetched },
-  } = useOrganizations(
-    { course_product_relation_id: routeCourseProductRelationId },
-    { enabled: !routeOrganizationId },
-  );
+  } = useOrganizations({ offer_id: routeofferId }, { enabled: !routeOrganizationId });
   const hasMultipleOrganizations = isOrganizationListFetched && organizationList.length > 1;
   const { initialFilters, filters, setFilters } = useTeacherContractFilters();
   const {
@@ -96,10 +91,7 @@ const TeacherDashboardContracts = () => {
   return (
     <div className="teacher-contract-page">
       <div className="dashboard__page__actions">
-        <ContractActionsBar
-          organizationId={filters.organization_id!}
-          courseProductRelationId={filters.course_product_relation_id}
-        />
+        <ContractActionsBar organizationId={filters.organization_id!} offerId={filters.offer_id} />
         <ContractFiltersBar
           defaultValues={initialFilters}
           onFiltersChange={handleFiltersChange}

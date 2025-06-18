@@ -1,6 +1,6 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
-import { CourseProductRelation, CredentialProduct } from 'types/Joanie';
+import { Offer, CredentialProduct } from 'types/Joanie';
 import { PacedCourse } from 'types';
 
 const messages = defineMessages({
@@ -24,17 +24,13 @@ other {# remaining seats}
 
 interface CourseProductItemFooterProps {
   course: PacedCourse;
-  courseProductRelation: CourseProductRelation;
+  offer: Offer;
   canPurchase: boolean;
 }
 
-const CourseProductItemFooter = ({
-  course,
-  courseProductRelation,
-  canPurchase,
-}: CourseProductItemFooterProps) => {
+const CourseProductItemFooter = ({ course, offer, canPurchase }: CourseProductItemFooterProps) => {
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { seats, nb_seats_available } = courseProductRelation;
+  const { seats, nb_seats_available } = offer;
   const hasSeatsLimit = seats && nb_seats_available !== undefined;
   const hasNoSeatsAvailable = hasSeatsLimit && nb_seats_available === 0;
   if (hasNoSeatsAvailable)
@@ -47,10 +43,10 @@ const CourseProductItemFooter = ({
     <div className="product-widget__footer__order-group">
       <PurchaseButton
         course={course}
-        product={courseProductRelation.product as CredentialProduct}
-        courseProductRelation={courseProductRelation}
-        organizations={courseProductRelation.organizations}
-        isWithdrawable={courseProductRelation.is_withdrawable}
+        product={offer.product as CredentialProduct}
+        offer={offer}
+        organizations={offer.organizations}
+        isWithdrawable={offer.is_withdrawable}
         disabled={!canPurchase}
         buttonProps={{ fullWidth: true }}
       />
@@ -58,7 +54,7 @@ const CourseProductItemFooter = ({
         <p className="product-widget__footer__message">
           <FormattedMessage
             {...messages.nbSeatsAvailable}
-            values={{ nb: courseProductRelation.nb_seats_available }}
+            values={{ nb: offer.nb_seats_available }}
           />
         </p>
       )}

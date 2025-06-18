@@ -127,8 +127,8 @@ export const getRoutes = () => {
     },
     organizations: {
       get: `${baseUrl}/organizations/:id/`,
-      courseProductRelations: {
-        get: `${baseUrl}/organizations/:organization_id/course-product-relations/:id/`,
+      offers: {
+        get: `${baseUrl}/organizations/:organization_id/offers/:id/`,
       },
       courses: {
         get: `${baseUrl}/organizations/:organization_id/courses/:id/`,
@@ -156,8 +156,8 @@ export const getRoutes = () => {
     courseRuns: {
       get: `${baseUrl}/course-runs/:id/`,
     },
-    courseProductRelations: {
-      get: `${baseUrl}/course-product-relations/:id/`,
+    offers: {
+      get: `${baseUrl}/offers/:id/`,
     },
     contractDefinitions: {
       previewTemplate: `${baseUrl}/contract_definitions/:id/preview_template/`,
@@ -470,12 +470,12 @@ const API = (): Joanie.API => {
         ).then(checkStatus);
       },
     },
-    courseProductRelations: {
-      get: (filters?: Joanie.CourseProductRelationQueryFilters) => {
+    offers: {
+      get: (filters?: Joanie.OfferQueryFilters) => {
         return fetchWithJWT(
           filters?.organization_id
-            ? buildApiUrl(ROUTES.organizations.courseProductRelations.get, filters)
-            : buildApiUrl(ROUTES.courseProductRelations.get, filters),
+            ? buildApiUrl(ROUTES.organizations.offers.get, filters)
+            : buildApiUrl(ROUTES.offers.get, filters),
         ).then(checkStatus);
       },
     },
