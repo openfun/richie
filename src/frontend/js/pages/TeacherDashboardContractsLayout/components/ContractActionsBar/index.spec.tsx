@@ -97,38 +97,30 @@ describe('TeacherDashboardContractsLayout/ContractActionsBar', () => {
     {
       label: "doesn't have contract to download",
       hasContractToDownload: false,
-      courseProductRelationId: undefined,
+      offerId: undefined,
     },
     {
-      label: "doesn't have contract to download  and courseProductRelationId",
+      label: "doesn't have contract to download  and offerId",
       hasContractToDownload: false,
-      courseProductRelationId: faker.string.uuid(),
+      offerId: faker.string.uuid(),
     },
-  ])(
-    'should only display sign button when $label',
-    ({ hasContractToDownload, courseProductRelationId }) => {
-      mockHasContractToDownload = hasContractToDownload;
-      mockCanSignContracts = true;
-      mockContractsToSignCount = 1;
+  ])('should only display sign button when $label', ({ hasContractToDownload, offerId }) => {
+    mockHasContractToDownload = hasContractToDownload;
+    mockCanSignContracts = true;
+    mockContractsToSignCount = 1;
 
-      render(
-        <Wrapper>
-          <ContractActionsBar
-            courseProductRelationId={courseProductRelationId}
-            organizationId={faker.string.uuid()}
-          />
-        </Wrapper>,
-      );
+    render(
+      <Wrapper>
+        <ContractActionsBar offerId={offerId} organizationId={faker.string.uuid()} />
+      </Wrapper>,
+    );
 
-      expect(screen.getByTestId('teacher-contracts-list-actionsBar')).toBeInTheDocument();
-      expect(
-        screen.getByRole('button', { name: /Sign all pending contracts/ }),
-      ).toBeInTheDocument();
-      expect(
-        screen.queryByRole('button', { name: /Request contracts archive/ }),
-      ).not.toBeInTheDocument();
-    },
-  );
+    expect(screen.getByTestId('teacher-contracts-list-actionsBar')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Sign all pending contracts/ })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /Request contracts archive/ }),
+    ).not.toBeInTheDocument();
+  });
 
   it("shouldn't only display download button", () => {
     mockHasContractToDownload = true;

@@ -99,7 +99,7 @@ const Email = () => {
 };
 
 const Total = () => {
-  const { product, relation } = useSaleTunnelContext();
+  const { product, offer } = useSaleTunnelContext();
   return (
     <div className="sale-tunnel__total">
       <div className="sale-tunnel__total__amount mt-t" data-testid="sale-tunnel__total__amount">
@@ -108,7 +108,7 @@ const Total = () => {
         </div>
         <div className="block-title">
           <FormattedNumber
-            value={relation?.discounted_price || product.price}
+            value={offer?.discounted_price || product.price}
             style="currency"
             currency={product.price_currency}
           />

@@ -1,7 +1,7 @@
 import { Children, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import c from 'classnames';
-import { CourseProductRelation, CredentialOrder, Product, ProductType } from 'types/Joanie';
+import { Offer, CredentialOrder, Product, ProductType } from 'types/Joanie';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -77,16 +77,9 @@ type HeaderProps = {
   canPurchase: boolean;
   order: Maybe<CredentialOrder>;
   product: Product;
-  courseProductRelation: CourseProductRelation;
+  offer: Offer;
 };
-const Header = ({
-  product,
-  order,
-  courseProductRelation,
-  hasPurchased,
-  canPurchase,
-  compact,
-}: HeaderProps) => {
+const Header = ({ product, order, offer, hasPurchased, canPurchase, compact }: HeaderProps) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
 
@@ -110,7 +103,7 @@ const Header = ({
       return null;
     }
 
-    if (courseProductRelation.discounted_price) {
+    if (offer.discounted_price) {
       return (
         <>
           <span id="original-price" className="offscreen">
@@ -129,7 +122,7 @@ const Header = ({
           <ins aria-describedby="discount-price" className="product-widget__price-discount">
             <FormattedNumber
               currency={product.price_currency}
-              value={courseProductRelation.discounted_price}
+              value={offer.discounted_price}
               style="currency"
             />
           </ins>
@@ -140,7 +133,7 @@ const Header = ({
     return (
       <FormattedNumber currency={product.price_currency} value={product.price} style="currency" />
     );
-  }, [canPurchase, courseProductRelation.discounted_price, product.price]);
+  }, [canPurchase, offer.discounted_price, product.price]);
 
   return (
     <header className="product-widget__header">
@@ -151,40 +144,37 @@ const Header = ({
         {hasPurchased && <FormattedMessage {...messages.purchased} />}
         {displayPrice}
       </strong>
-      {courseProductRelation?.description && (
-        <p className="product-widget__header-description">{courseProductRelation.description}</p>
+      {offer?.description && (
+        <p className="product-widget__header-description">{offer.description}</p>
       )}
-      {courseProductRelation?.discounted_price && (
+      {offer?.discounted_price && (
         <p className="product-widget__header-discount">
-          {courseProductRelation.discount_rate ? (
+          {offer.discount_rate ? (
             <span className="product-widget__header-discount-rate">
-              <FormattedNumber value={-courseProductRelation.discount_rate} style="percent" />
+              <FormattedNumber value={-offer.discount_rate} style="percent" />
             </span>
           ) : (
             <span className="product-widget__header-discount-amount">
               <FormattedNumber
                 currency={product.price_currency}
-                value={-courseProductRelation.discount_amount!}
+                value={-offer.discount_amount!}
                 style="currency"
               />
             </span>
           )}
-          {courseProductRelation.discount_start && (
+          {offer.discount_start && (
             <span className="product-widget__header-discount-date">
               &nbsp;
               <FormattedMessage
                 {...messages.from}
-                values={{ from: formatDate(courseProductRelation.discount_start) }}
+                values={{ from: formatDate(offer.discount_start) }}
               />
             </span>
           )}
-          {courseProductRelation.discount_end && (
+          {offer.discount_end && (
             <span className="product-widget__header-discount-date">
               &nbsp;
-              <FormattedMessage
-                {...messages.to}
-                values={{ to: formatDate(courseProductRelation.discount_end) }}
-              />
+              <FormattedMessage {...messages.to} values={{ to: formatDate(offer.discount_end) }} />
             </span>
           )}
         </p>
@@ -246,12 +236,12 @@ const Content = ({ product, order }: { product: Product; order?: CredentialOrder
 const CourseProductItem = ({ productId, course, compact = false }: CourseProductItemProps) => {
   // FIXME(rlecellier): useCourseProduct need's a filter on product.type that only return
   // CredentialOrder
-  const { item: courseProductRelation, states: productQueryStates } = useCourseProduct({
+  const { item: offer, states: productQueryStates } = useCourseProduct({
     product_id: productId,
     course_id: course.code,
   });
 
-  const product = courseProductRelation?.product;
+  const product = offer?.product;
   const { item: productOrder, states: orderQueryStates } = useProductOrder({
     productId,
     courseCode: course.code,
@@ -309,18 +299,14 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
           <Header
             product={product}
             order={order}
-            courseProductRelation={courseProductRelation}
+            offer={offer}
             canPurchase={canPurchase}
             hasPurchased={hasPurchased}
             compact={compact}
           />
           {canShowContent && <Content product={product} order={order} />}
           <footer className="product-widget__footer">
-            <CourseProductItemFooter
-              course={course}
-              courseProductRelation={courseProductRelation}
-              canPurchase={canPurchase}
-            />
+            <CourseProductItemFooter course={course} offer={offer} canPurchase={canPurchase} />
           </footer>
         </>
       )}

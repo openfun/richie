@@ -4,11 +4,7 @@ import { createIntl } from 'react-intl';
 import { generatePath } from 'react-router';
 import { CourseListItem } from 'types/Joanie';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import {
-  CourseFactory,
-  CourseProductRelationFactory,
-  OrganizationFactory,
-} from 'utils/test/factories/joanie';
+import { CourseFactory, OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { render } from 'utils/test/render';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
@@ -65,14 +61,14 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
       label: 'course',
       course: CourseFactory().one(),
       organization: undefined,
-      courseProductRelation: undefined,
+      offer: undefined,
       expectedRoutes: [TeacherDashboardPaths.COURSE_GENERAL_INFORMATION],
     },
     {
       label: 'training',
       course: CourseFactory().one(),
       organization: undefined,
-      courseProductRelation: CourseProductRelationFactory().one(),
+      offer: OfferFactory().one(),
       expectedRoutes: [
         TeacherDashboardPaths.COURSE_PRODUCT,
         TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS,
@@ -83,14 +79,14 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
       label: "organization's course",
       course: CourseFactory().one(),
       organization: OrganizationFactory().one(),
-      courseProductRelation: undefined,
+      offer: undefined,
       expectedRoutes: [TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION],
     },
     {
       label: "organization's training",
       course: CourseFactory().one(),
       organization: OrganizationFactory().one(),
-      courseProductRelation: CourseProductRelationFactory().one(),
+      offer: OfferFactory().one(),
       expectedRoutes: [
         TeacherDashboardPaths.ORGANIZATION_PRODUCT,
         TeacherDashboardPaths.ORGANIZATION_PRODUCT_CONTRACTS,
@@ -99,20 +95,20 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
     },
   ])(
     'should display menu items for "$label" route',
-    async ({ course, organization, courseProductRelation, expectedRoutes }) => {
+    async ({ course, organization, offer, expectedRoutes }) => {
       // mock api for organization's training
-      if (organization && courseProductRelation) {
+      if (organization && offer) {
         // fetching training's contracts
         nbApiRequest += 1;
         fetchMock.get(
-          `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?course_product_relation_id=${courseProductRelation.id}&signature_state=half_signed&page=1&page_size=25`,
+          `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?offer_id=${offer.id}&signature_state=half_signed&page=1&page_size=25`,
           [],
         );
         // fetching organization's training
         nbApiRequest += 1;
         fetchMock.get(
-          `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/course-product-relations/${courseProductRelation.id}/`,
-          courseProductRelation,
+          `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offers/${offer.id}/`,
+          offer,
         );
       } else if (organization) {
         // fetching organization's course
@@ -121,18 +117,12 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
           `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/courses/${course.id}/`,
           course,
         );
-      } else if (courseProductRelation) {
+      } else if (offer) {
         // fetching training
         nbApiRequest += 1;
-        fetchMock.get(
-          `https://joanie.endpoint/api/v1.0/course-product-relations/${courseProductRelation.id}/`,
-          courseProductRelation,
-        );
+        fetchMock.get(`https://joanie.endpoint/api/v1.0/offers/${offer.id}/`, offer);
         nbApiRequest += 1;
-        fetchMock.get(
-          `https://joanie.endpoint/api/v1.0/organizations/?course_product_relation_id=${courseProductRelation.id}`,
-          [],
-        );
+        fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/?offer_id=${offer.id}`, []);
       } else {
         // mock api for course
         nbApiRequest += 1;
@@ -142,9 +132,9 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
       let routePath = '/:courseId';
       let initialEntry = `/${course.id}`;
 
-      if (courseProductRelation) {
-        routePath += '/:courseProductRelationId';
-        initialEntry += `/${courseProductRelation.id}`;
+      if (offer) {
+        routePath += '/:offerId';
+        initialEntry += `/${offer.id}`;
       }
       if (organization) {
         routePath = '/:organizationId' + routePath;
@@ -168,7 +158,7 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
           generatePath(expectedRoute, {
             organizationId: organization ? organization.id : null,
             courseId: course.id,
-            courseProductRelationId: courseProductRelation ? courseProductRelation.id : null,
+            offerId: offer ? offer.id : null,
           }),
         );
       });

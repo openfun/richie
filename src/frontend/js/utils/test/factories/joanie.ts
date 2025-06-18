@@ -12,7 +12,7 @@ import {
   CourseLight,
   CourseListItem,
   CourseProduct,
-  CourseProductRelation,
+  Offer,
   CourseRun,
   CredentialOrder,
   CredentialProduct,
@@ -89,7 +89,7 @@ export const EnrollmentFactory = factory((): Enrollment => {
     id: faker.string.uuid(),
     course_run: CourseRunWithCourseFactory().one(),
     is_active: true,
-    product_relations: CourseProductRelationFactory().many(1),
+    offers: OfferFactory().many(1),
     state: EnrollmentState.SET,
     was_created_by_order: false,
     created_on: faker.date.past({ years: 1 }).toISOString(),
@@ -309,7 +309,7 @@ export const NestedCourseOrderFactory = factory((): NestedCourseOrder => {
   };
 });
 
-export const CourseProductRelationFactory = factory((): CourseProductRelation => {
+export const OfferFactory = factory((): Offer => {
   return {
     id: faker.string.uuid(),
     created_on: faker.date.past().toISOString(),

@@ -1,19 +1,19 @@
 import { useOrganizationContracts } from 'hooks/useContracts';
 import { PER_PAGE } from 'settings';
-import { ContractState, CourseProductRelation, Organization } from 'types/Joanie';
+import { ContractState, Offer, Organization } from 'types/Joanie';
 
 interface UseTeacherPendingContractsCountProps {
   organizationId?: Organization['id'];
-  courseProductRelationId?: CourseProductRelation['id'];
+  offerId?: Offer['id'];
 }
 
 const useTeacherPendingContractsCount = ({
   organizationId,
-  courseProductRelationId,
+  offerId,
 }: UseTeacherPendingContractsCountProps) => {
   const { items: contracts, meta } = useOrganizationContracts({
     organization_id: organizationId,
-    course_product_relation_id: courseProductRelationId,
+    offer_id: offerId,
     signature_state: ContractState.LEARNER_SIGNED,
     page: 1,
     page_size: PER_PAGE.teacherContractList,

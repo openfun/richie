@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 import { PropsWithChildren } from 'react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
-import { CourseProductRelationFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import {
   LocalStorageArchiveFilters,
   storeContractArchiveId,
@@ -41,24 +41,24 @@ describe.each([
   {
     testLabel: 'for all organization and all trainings',
     organization: undefined,
-    courseProductRelation: undefined,
+    offer: undefined,
   },
   {
     testLabel: 'for a training in an organization',
     organization: OrganizationFactory().one(),
-    courseProductRelation: CourseProductRelationFactory().one(),
+    offer: OfferFactory().one(),
   },
   {
     testLabel: 'for an organization',
     organization: OrganizationFactory().one(),
-    courseProductRelation: undefined,
+    offer: undefined,
   },
   {
     testLabel: 'for a training',
     organization: undefined,
-    courseProductRelation: CourseProductRelationFactory().one(),
+    offer: OfferFactory().one(),
   },
-])('useCheckContractArchiveExists $testLabel', ({ organization, courseProductRelation }) => {
+])('useCheckContractArchiveExists $testLabel', ({ organization, offer }) => {
   const Wrapper = ({ children }: PropsWithChildren) => {
     return (
       <IntlProvider locale="en">
@@ -71,7 +71,7 @@ describe.each([
   beforeEach(() => {
     localStorageArchiveFilters = {
       organizationId: organization ? organization.id : undefined,
-      courseProductRelationId: courseProductRelation ? courseProductRelation.id : undefined,
+      offerId: offer ? offer.id : undefined,
     };
 
     // Joanie providers calls

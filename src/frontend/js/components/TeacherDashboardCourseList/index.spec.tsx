@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CourseListItemFactory, CourseProductRelationFactory } from 'utils/test/factories/joanie';
+import { CourseListItemFactory, OfferFactory } from 'utils/test/factories/joanie';
 import { render } from 'utils/test/render';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
@@ -35,7 +35,7 @@ describe('components/TeacherDashboardCourseList', () => {
   });
 
   it('should render loading more state', async () => {
-    const trainings = CourseProductRelationFactory().many(2);
+    const trainings = OfferFactory().many(2);
     const courses = CourseListItemFactory().many(2);
     const courseAndProductList = [...courses, ...trainings];
 
@@ -60,7 +60,7 @@ describe('components/TeacherDashboardCourseList', () => {
   });
 
   it('should render courses and products list', async () => {
-    const trainings = CourseProductRelationFactory().many(2);
+    const trainings = OfferFactory().many(2);
     const courses = CourseListItemFactory().many(2);
     const courseAndProductList = [...courses, ...trainings];
 

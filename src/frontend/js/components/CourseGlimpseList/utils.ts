@@ -1,10 +1,10 @@
 import { IntlShape } from 'react-intl';
-import { CourseProductRelationLight, CourseListItem as JoanieCourse } from 'types/Joanie';
+import { OfferLight, CourseListItem as JoanieCourse } from 'types/Joanie';
 import { Course as RichieCourse } from 'types/Course';
 import { CourseGlimpseCourse, getCourseGlimpseProps } from 'components/CourseGlimpse';
 
 export const getCourseGlimpseListProps = (
-  courses: RichieCourse[] | (JoanieCourse | CourseProductRelationLight)[],
+  courses: RichieCourse[] | (JoanieCourse | OfferLight)[],
   intl?: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse[] => {

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import useContractArchive from 'hooks/useContractArchive';
-import { CourseProductRelation, Organization } from 'types/Joanie';
+import { Offer, Organization } from 'types/Joanie';
 import useCheckContractArchiveExists from '../useCheckContractArchiveExists';
 import useHasContractToDownload from '../useHasContractToDownload';
 import {
@@ -19,16 +19,16 @@ export enum ContractDownloadStatus {
 
 interface UseTeacherContractsBulkDownloadProps {
   organizationId?: Organization['id'];
-  courseProductRelationId?: CourseProductRelation['id'];
+  offerId?: Offer['id'];
 }
 
 const useDownloadContractArchive = ({
   organizationId,
-  courseProductRelationId,
+  offerId,
 }: UseTeacherContractsBulkDownloadProps) => {
   const localstorageArchiveFilters = {
     organizationId,
-    courseProductRelationId,
+    offerId,
   };
 
   // Contract's archive api interface
@@ -37,7 +37,7 @@ const useDownloadContractArchive = ({
   } = useContractArchive();
 
   // Simple hook that verifiy if current user have some fully signed contracts to download.
-  const hasContractToDownload = useHasContractToDownload(organizationId, courseProductRelationId);
+  const hasContractToDownload = useHasContractToDownload(organizationId, offerId);
 
   // Component state of the localstorage contract's archive id
   const [contractArchiveId, setContractArchiveId] = useState<string | null>(
@@ -116,7 +116,7 @@ const useDownloadContractArchive = ({
   const createContractArchive = async () => {
     let newContractArchiveId;
     if (contractArchiveId === null) {
-      newContractArchiveId = await createArchive(organizationId, courseProductRelationId);
+      newContractArchiveId = await createArchive(organizationId, offerId);
       setContractArchiveId(newContractArchiveId);
       storeContractArchiveId({
         ...localstorageArchiveFilters,

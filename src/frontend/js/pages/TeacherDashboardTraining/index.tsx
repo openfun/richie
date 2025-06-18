@@ -6,37 +6,33 @@ import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import Banner, { BannerType } from 'components/Banner';
-import { CourseProductRelation } from 'types/Joanie';
+import { Offer } from 'types/Joanie';
 
 const messages = defineMessages({
-  errorNoCourseProductRelation: {
+  errorNoOffer: {
     defaultMessage: "This product doesn't exist",
-    description: 'Message displayed when requested course product relation is not found',
-    id: 'components.TeacherDashboardTraining.errorNoCourseProductRelation',
+    description: 'Message displayed when requested offer is not found',
+    id: 'components.TeacherDashboardTraining.errorNoOffer',
   },
 });
 
 interface TeacherDashboardTrainingProps {
-  courseProductRelation: CourseProductRelation;
+  offer: Offer;
 }
 
-export const TeacherDashboardTraining = ({
-  courseProductRelation,
-}: TeacherDashboardTrainingProps) => {
+export const TeacherDashboardTraining = ({ offer }: TeacherDashboardTrainingProps) => {
   const intl = useIntl();
-  return courseProductRelation ? (
+  return offer ? (
     <div className="teacher-course-page">
       <DashboardCard
         className="icon-arrow-right-rounded"
         header={
           <div>
             <div className="dashboard__title_container--small">
-              <h2 className="dashboard__title--large">
-                {capitalize(courseProductRelation.product.title)}
-              </h2>
+              <h2 className="dashboard__title--large">{capitalize(offer.product.title)}</h2>
             </div>
-            {courseProductRelation.product.description && (
-              <div className="dashboard__quote">{courseProductRelation.product.description}</div>
+            {offer.product.description && (
+              <div className="dashboard__quote">{offer.product.description}</div>
             )}
           </div>
         }
@@ -44,7 +40,7 @@ export const TeacherDashboardTraining = ({
         fullWidth
       />
       <DashboardLayout.NestedSection>
-        {courseProductRelation.product.target_courses.map((course) => (
+        {offer.product.target_courses.map((course) => (
           <DashboardLayout.Section key={`course_target_${course.code}`}>
             <DashboardCard
               className="icon-arrow-right-rounded"
@@ -66,11 +62,7 @@ export const TeacherDashboardTraining = ({
       </DashboardLayout.NestedSection>
     </div>
   ) : (
-    <Banner
-      message={intl.formatMessage(messages.errorNoCourseProductRelation)}
-      type={BannerType.ERROR}
-      rounded
-    />
+    <Banner message={intl.formatMessage(messages.errorNoOffer)} type={BannerType.ERROR} rounded />
   );
 };
 
