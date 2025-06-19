@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Replace order groups by computed properties coming from Joanie
 - Allow configuration of the `STORAGES` setting via environment variables
 - Rename `CourseProductRelation` to `Offer`
+- Only display payment schedule for credential products
 
 ### Fixed
 

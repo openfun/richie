@@ -182,7 +182,9 @@ describe.each([
     nbApiCalls += 1; // useProductOrder call.
     nbApiCalls += 1; // get user account call.
     nbApiCalls += 1; // get user preferences call.
-    nbApiCalls += 1; // product payment-schedule call
+    if (product.type === ProductType.CREDENTIAL) {
+      nbApiCalls += 1; // product payment-schedule call
+    }
     await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
     const user = userEvent.setup({ delay: null });
@@ -269,7 +271,9 @@ describe.each([
     nbApiCalls += 1; // useProductOrder get order with filters
     nbApiCalls += 1; // get user account call.
     nbApiCalls += 1; // get user preferences call.
-    nbApiCalls += 1; // get product payment schedule.
+    if (product.type === ProductType.CREDENTIAL) {
+      nbApiCalls += 1; // get product payment schedule.
+    }
     await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
     const user = userEvent.setup({ delay: null });
@@ -403,36 +407,41 @@ describe.each([
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
-    await screen.findByRole('heading', {
-      level: 4,
-      name: 'Payment schedule',
-    });
+    if (product.type === ProductType.CREDENTIAL) {
+      await screen.findByRole('heading', {
+        level: 4,
+        name: 'Payment schedule',
+      });
 
-    const scheduleTable = screen.getByRole('table');
-    const scheduleTableRows = within(scheduleTable).getAllByRole('row');
-    expect(scheduleTableRows).toHaveLength(schedule.length);
+      const scheduleTable = screen.getByRole('table');
+      const scheduleTableRows = within(scheduleTable).getAllByRole('row');
+      expect(scheduleTableRows).toHaveLength(schedule.length);
 
-    scheduleTableRows.forEach((row, index) => {
-      const installment = schedule[index];
-      // A first column should show the installment index
-      within(row).getByRole('cell', {
-        name: (index + 1).toString(),
+      scheduleTableRows.forEach((row, index) => {
+        const installment = schedule[index];
+        // A first column should show the installment index
+        within(row).getByRole('cell', {
+          name: (index + 1).toString(),
+        });
+        // A 2nd column should show the installment amount
+        within(row).getByRole('cell', {
+          name: formatPrice(installment.amount, installment.currency),
+        });
+        // A 3rd column should show the installment withdraw date
+        within(row).getByRole('cell', {
+          name: `Withdrawn on ${intl.formatDate(installment.due_date, {
+            ...DEFAULT_DATE_FORMAT,
+          })}`,
+        });
+        // A 4th column should show the installment state
+        within(row).getByRole('cell', {
+          name: StringHelper.capitalizeFirst(installment.state.replace('_', ' '))!,
+        });
       });
-      // A 2nd column should show the installment amount
-      within(row).getByRole('cell', {
-        name: formatPrice(installment.amount, installment.currency),
-      });
-      // A 3rd column should show the installment withdraw date
-      within(row).getByRole('cell', {
-        name: `Withdrawn on ${intl.formatDate(installment.due_date, {
-          ...DEFAULT_DATE_FORMAT,
-        })}`,
-      });
-      // A 4th column should show the installment state
-      within(row).getByRole('cell', {
-        name: StringHelper.capitalizeFirst(installment.state.replace('_', ' '))!,
-      });
-    });
+    } else {
+      expect(screen.queryByRole('heading', { level: 4, name: 'Payment schedule' })).toBeNull();
+      expect(screen.queryByRole('table')).toBeNull();
+    }
 
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
@@ -468,36 +477,38 @@ describe.each([
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
-    await screen.findByRole('heading', {
-      level: 4,
-      name: 'Payment schedule',
-    });
+    if (product.type === ProductType.CREDENTIAL) {
+      await screen.findByRole('heading', { level: 4, name: 'Payment schedule' });
 
-    const scheduleTable = screen.getByRole('table');
-    const scheduleTableRows = within(scheduleTable).getAllByRole('row');
-    expect(scheduleTableRows).toHaveLength(schedule.length);
+      const scheduleTable = screen.getByRole('table');
+      const scheduleTableRows = within(scheduleTable).getAllByRole('row');
+      expect(scheduleTableRows).toHaveLength(schedule.length);
 
-    scheduleTableRows.forEach((row, index) => {
-      const installment = schedule[index];
-      // A first column should show the installment index
-      within(row).getByRole('cell', {
-        name: (index + 1).toString(),
+      scheduleTableRows.forEach((row, index) => {
+        const installment = schedule[index];
+        // A first column should show the installment index
+        within(row).getByRole('cell', {
+          name: (index + 1).toString(),
+        });
+        // A 2nd column should show the installment amount
+        within(row).getByRole('cell', {
+          name: formatPrice(installment.amount, installment.currency),
+        });
+        // A 3rd column should show the installment withdraw date
+        within(row).getByRole('cell', {
+          name: `Withdrawn on ${intl.formatDate(installment.due_date, {
+            ...DEFAULT_DATE_FORMAT,
+          })}`,
+        });
+        // A 4th column should show the installment state
+        within(row).getByRole('cell', {
+          name: StringHelper.capitalizeFirst(installment.state.replace('_', ' '))!,
+        });
       });
-      // A 2nd column should show the installment amount
-      within(row).getByRole('cell', {
-        name: formatPrice(installment.amount, installment.currency),
-      });
-      // A 3rd column should show the installment withdraw date
-      within(row).getByRole('cell', {
-        name: `Withdrawn on ${intl.formatDate(installment.due_date, {
-          ...DEFAULT_DATE_FORMAT,
-        })}`,
-      });
-      // A 4th column should show the installment state
-      within(row).getByRole('cell', {
-        name: StringHelper.capitalizeFirst(installment.state.replace('_', ' '))!,
-      });
-    });
+    } else {
+      expect(screen.queryByRole('heading', { level: 4, name: 'Payment schedule' })).toBeNull();
+      expect(screen.queryByRole('table')).toBeNull();
+    }
 
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
