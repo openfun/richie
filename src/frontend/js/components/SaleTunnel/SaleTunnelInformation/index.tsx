@@ -8,6 +8,7 @@ import useOpenEdxProfile from 'hooks/useOpenEdxProfile';
 import { usePaymentSchedule } from 'hooks/usePaymentSchedule';
 import { Spinner } from 'components/Spinner';
 import WithdrawRightCheckbox from 'components/SaleTunnel/WithdrawRightCheckbox';
+import { ProductType } from 'types/Joanie';
 
 const messages = defineMessages({
   title: {
@@ -54,6 +55,7 @@ const messages = defineMessages({
 });
 
 export const SaleTunnelInformation = () => {
+  const { product } = useSaleTunnelContext();
   return (
     <div className="sale-tunnel__main__column sale-tunnel__information">
       <div>
@@ -70,7 +72,7 @@ export const SaleTunnelInformation = () => {
         </div>
       </div>
       <div>
-        <PaymentScheduleBlock />
+        {product.type === ProductType.CREDENTIAL && <PaymentScheduleBlock />}
         <Total />
         <WithdrawRightCheckbox />
       </div>
