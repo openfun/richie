@@ -1,5 +1,5 @@
 include:
-  - docker-compose-${ACTIVATED_DB}.yml
+  - docker-compose-${ACTIVATED_DB:-postgres}.yml
 services:
   elasticsearch:
     image: {{cookiecutter.elasticsearch_image_name}}
@@ -7,7 +7,7 @@ services:
       - discovery.type=single-node
     env_file:
       - "env.d/development"
-      - "env.d/${ACTIVATED_DB}"
+      - "env.d/${ACTIVATED_DB:-postgres}"
     ports:
       - "9220:9200"
     healthcheck:
@@ -30,7 +30,7 @@ services:
     env_file:
       - ".env"
       - "env.d/development"
-      - "env.d/${ACTIVATED_DB}"
+      - "env.d/${ACTIVATED_DB:-postgres}"
     networks:
       - default
       - lms_outside
@@ -40,7 +40,7 @@ services:
       - "./sites/${RICHIE_SITE:?}/src/backend:/app"
       - "./data/media/${RICHIE_SITE:?}:/data/media"
     depends_on:
-      - "${ACTIVATED_DB}"
+      - "${ACTIVATED_DB:-postgres}"
       - "elasticsearch"
       - "redis-sentinel"
     user: ${DOCKER_USER:-1000}
@@ -62,14 +62,14 @@ services:
     env_file:
       - ".env"
       - "env.d/development"
-      - "env.d/${ACTIVATED_DB}"
+      - "env.d/${ACTIVATED_DB:-postgres}"
     networks:
       - default
       - lms_outside
     volumes:
       - ./data/media/${RICHIE_SITE:?}:/data/media
     depends_on:
-      - "${ACTIVATED_DB}"
+      - "${ACTIVATED_DB:-postgres}"
       - "elasticsearch"
       - "redis-sentinel"
     user: ${DOCKER_USER:-1000}
