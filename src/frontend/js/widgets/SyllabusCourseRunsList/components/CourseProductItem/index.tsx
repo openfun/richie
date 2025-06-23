@@ -103,7 +103,7 @@ const Header = ({ product, order, offer, hasPurchased, canPurchase, compact }: H
       return null;
     }
 
-    if (offer.discounted_price) {
+    if (offer.rules.discounted_price != null) {
       return (
         <>
           <span id="original-price" className="offscreen">
@@ -122,7 +122,7 @@ const Header = ({ product, order, offer, hasPurchased, canPurchase, compact }: H
           <ins aria-describedby="discount-price" className="product-widget__price-discount">
             <FormattedNumber
               currency={product.price_currency}
-              value={offer.discounted_price}
+              value={offer.rules.discounted_price}
               style="currency"
             />
           </ins>
@@ -133,7 +133,7 @@ const Header = ({ product, order, offer, hasPurchased, canPurchase, compact }: H
     return (
       <FormattedNumber currency={product.price_currency} value={product.price} style="currency" />
     );
-  }, [canPurchase, offer.discounted_price, product.price]);
+  }, [canPurchase, offer.rules.discounted_price, product.price]);
 
   return (
     <header className="product-widget__header">
@@ -144,37 +144,40 @@ const Header = ({ product, order, offer, hasPurchased, canPurchase, compact }: H
         {hasPurchased && <FormattedMessage {...messages.purchased} />}
         {displayPrice}
       </strong>
-      {offer?.description && (
-        <p className="product-widget__header-description">{offer.description}</p>
+      {offer?.rules.description && (
+        <p className="product-widget__header-description">{offer.rules.description}</p>
       )}
-      {offer?.discounted_price && (
+      {offer?.rules.discounted_price && (
         <p className="product-widget__header-discount">
-          {offer.discount_rate ? (
+          {offer.rules.discount_rate ? (
             <span className="product-widget__header-discount-rate">
-              <FormattedNumber value={-offer.discount_rate} style="percent" />
+              <FormattedNumber value={-offer.rules.discount_rate} style="percent" />
             </span>
           ) : (
             <span className="product-widget__header-discount-amount">
               <FormattedNumber
                 currency={product.price_currency}
-                value={-offer.discount_amount!}
+                value={-offer.rules.discount_amount!}
                 style="currency"
               />
             </span>
           )}
-          {offer.discount_start && (
+          {offer.rules.discount_start && (
             <span className="product-widget__header-discount-date">
               &nbsp;
               <FormattedMessage
                 {...messages.from}
-                values={{ from: formatDate(offer.discount_start) }}
+                values={{ from: formatDate(offer.rules.discount_start) }}
               />
             </span>
           )}
-          {offer.discount_end && (
+          {offer.rules.discount_end && (
             <span className="product-widget__header-discount-date">
               &nbsp;
-              <FormattedMessage {...messages.to} values={{ to: formatDate(offer.discount_end) }} />
+              <FormattedMessage
+                {...messages.to}
+                values={{ to: formatDate(offer.rules.discount_end) }}
+              />
             </span>
           )}
         </p>

@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic
 Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unrealeased]
+## [Unreleased]
 
 ### Changed
 
@@ -16,6 +16,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Rename `CourseProductRelation` to `Offer`
 - Only display payment schedule for credential products
 - Provide postgres as default value for `ACTIVATED_DB` variable.
+- Update Offer type with rules property which contains all applicable 
+  offer rules
 
 ### Fixed
 

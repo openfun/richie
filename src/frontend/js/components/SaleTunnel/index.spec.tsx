@@ -458,8 +458,10 @@ describe.each([
         price: 840,
         price_currency: 'EUR',
       }).one(),
-      discounted_price: 800,
-      discount_rate: 0.3,
+      rules: {
+        discounted_price: 800,
+        discount_rate: 0.3,
+      },
     }).one();
     const { product } = offer;
 
@@ -513,7 +515,7 @@ describe.each([
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
       'Total' +
-        formatPrice(offer!.discounted_price!, product.price_currency).replace(
+        formatPrice(offer!.rules.discounted_price!, product.price_currency).replace(
           /(\u202F|\u00a0)/g,
           ' ',
         ),

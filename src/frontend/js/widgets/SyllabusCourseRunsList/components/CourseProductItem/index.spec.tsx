@@ -153,11 +153,13 @@ describe('CourseProductItem', () => {
         price: 840,
         price_currency: 'EUR',
       }).one(),
-      discounted_price: 800,
-      discount_rate: 0.3,
-      description: 'Year 2023 discount',
-      discount_start: new Date('2023-01-01T00:00:00Z').toISOString(),
-      discount_end: new Date('2023-12-31T23:59:59Z').toISOString(),
+      rules: {
+        discounted_price: 800,
+        discount_rate: 0.3,
+        description: 'Year 2023 discount',
+        discount_start: new Date('2023-01-01T00:00:00Z').toISOString(),
+        discount_end: new Date('2023-12-31T23:59:59Z').toISOString(),
+      },
     }).one();
     const { product } = offer;
     fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`, offer);
@@ -186,7 +188,7 @@ describe('CourseProductItem', () => {
     const discountedPriceLabel = screen.getByText('Discounted price:');
     expect(discountedPriceLabel.classList.contains('offscreen')).toBe(true);
     const discountedPrice = screen.getByText(
-      priceFormatter(product.price_currency, offer.discounted_price!).replace(
+      priceFormatter(product.price_currency, offer.rules.discounted_price!).replace(
         /(\u202F|\u00a0)/g,
         ' ',
       ),
@@ -211,11 +213,13 @@ describe('CourseProductItem', () => {
         price: 840,
         price_currency: 'EUR',
       }).one(),
-      discounted_price: 800,
-      discount_amount: 40,
-      description: 'Year 2023 discount',
-      discount_start: new Date('2023-01-01T00:00:00Z').toISOString(),
-      discount_end: new Date('2023-12-31T23:59:59Z').toISOString(),
+      rules: {
+        discounted_price: 800,
+        discount_amount: 40,
+        description: 'Year 2023 discount',
+        discount_start: new Date('2023-01-01T00:00:00Z').toISOString(),
+        discount_end: new Date('2023-12-31T23:59:59Z').toISOString(),
+      },
     }).one();
     const { product } = offer;
     fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`, offer);
@@ -244,7 +248,7 @@ describe('CourseProductItem', () => {
     const discountedPriceLabel = screen.getByText('Discounted price:');
     expect(discountedPriceLabel.classList.contains('offscreen')).toBe(true);
     const discountedPrice = screen.getByText(
-      priceFormatter(product.price_currency, offer.discounted_price!).replace(
+      priceFormatter(product.price_currency, offer.rules.discounted_price!).replace(
         /(\u202F|\u00a0)/g,
         ' ',
       ),
@@ -774,8 +778,10 @@ describe('CourseProductItem', () => {
 
   it('renders a warning message that tells that no seats are left', async () => {
     const offer = OfferFactory({
-      seats: 2,
-      nb_seats_available: 0,
+      rules: {
+        nb_available_seats: 0,
+        has_seats_left: false,
+      },
     }).one();
     const { product } = offer;
     const order = CredentialOrderFactory({

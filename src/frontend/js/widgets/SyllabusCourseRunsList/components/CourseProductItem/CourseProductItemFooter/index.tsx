@@ -29,11 +29,7 @@ interface CourseProductItemFooterProps {
 }
 
 const CourseProductItemFooter = ({ course, offer, canPurchase }: CourseProductItemFooterProps) => {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { seats, nb_seats_available } = offer;
-  const hasSeatsLimit = seats && nb_seats_available !== undefined;
-  const hasNoSeatsAvailable = hasSeatsLimit && nb_seats_available === 0;
-  if (hasNoSeatsAvailable)
+  if (!offer.rules.has_seats_left)
     return (
       <p className="product-widget__footer__message">
         <FormattedMessage {...messages.noSeatsAvailable} />
@@ -50,11 +46,11 @@ const CourseProductItemFooter = ({ course, offer, canPurchase }: CourseProductIt
         disabled={!canPurchase}
         buttonProps={{ fullWidth: true }}
       />
-      {hasSeatsLimit && (
+      {offer.rules.has_seat_limit && (
         <p className="product-widget__footer__message">
           <FormattedMessage
             {...messages.nbSeatsAvailable}
-            values={{ nb: offer.nb_seats_available }}
+            values={{ nb: offer.rules.nb_available_seats }}
           />
         </p>
       )}
