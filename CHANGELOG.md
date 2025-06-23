@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Allow configuration of the `STORAGES` setting via environment variables
 - Rename `CourseProductRelation` to `Offer`
 - Only display payment schedule for credential products
+- Provide postgres as default value for `ACTIVATED_DB` variable.
 
 ### Fixed
 
