@@ -182,16 +182,21 @@ export interface OfferLight {
   created_on: string;
 }
 
-export interface Offer extends OfferLight {
-  is_withdrawable: boolean;
+export interface OfferRule {
   discounted_price: Nullable<number>;
   discount_rate: Nullable<number>;
   discount_amount: Nullable<number>;
   discount_start: Nullable<string>;
   discount_end: Nullable<string>;
   description: Nullable<string>;
-  nb_seats_available: Nullable<number>;
-  seats: Nullable<number>;
+  nb_available_seats: Nullable<number>;
+  has_seat_limit: boolean;
+  has_seats_left: boolean;
+}
+
+export interface Offer extends OfferLight {
+  is_withdrawable: boolean;
+  rules: OfferRule;
 }
 export function isOffer(entity: CourseListItem | OfferLight | RichieCourse): entity is OfferLight {
   return 'course' in entity && 'product' in entity;

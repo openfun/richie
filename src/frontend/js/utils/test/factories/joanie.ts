@@ -317,14 +317,17 @@ export const OfferFactory = factory((): Offer => {
     product: ProductFactory().one(),
     organizations: OrganizationFactory().many(1),
     is_withdrawable: true,
-    discounted_price: null,
-    discount_rate: null,
-    discount_amount: null,
-    discount_start: null,
-    discount_end: null,
-    description: null,
-    seats: null,
-    nb_seats_available: null,
+    rules: {
+      discounted_price: null,
+      discount_rate: null,
+      discount_amount: null,
+      discount_start: null,
+      discount_end: null,
+      description: null,
+      nb_available_seats: null,
+      has_seat_limit: false,
+      has_seats_left: true,
+    },
   };
 });
 

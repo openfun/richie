@@ -27,8 +27,10 @@ const render = (args: CourseProductItemProps, options?: Maybe<{ order: Credentia
         price: 840,
         price_currency: 'EUR',
       }).one(),
-      discounted_price: 800,
-      discount_rate: 0.3,
+      rules: {
+        discounted_price: 800,
+        discount_rate: 0.3,
+      },
     }).one(),
     { overwriteRoutes: true },
   );

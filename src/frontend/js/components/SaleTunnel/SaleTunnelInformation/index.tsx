@@ -110,7 +110,7 @@ const Total = () => {
         </div>
         <div className="block-title">
           <FormattedNumber
-            value={offer?.discounted_price || product.price}
+            value={offer?.rules.discounted_price || product.price}
             style="currency"
             currency={product.price_currency}
           />
