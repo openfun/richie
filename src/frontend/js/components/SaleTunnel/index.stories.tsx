@@ -1,6 +1,11 @@
 import { StoryObj, Meta } from '@storybook/react';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
-import { ProductFactory } from 'utils/test/factories/joanie';
+import {
+  CertificateProductFactory,
+  EnrollmentFactory,
+  OfferingFactory,
+  ProductFactory,
+} from 'utils/test/factories/joanie';
 import { PacedCourseFactory } from 'utils/test/factories/richie';
 import { SaleTunnel, SaleTunnelProps } from './index';
 
@@ -28,6 +33,16 @@ export default {
 
 type Story = StoryObj<typeof SaleTunnel>;
 
-export const Default: Story = {
+export const Credential: Story = {
   args: {},
+};
+
+export const CertificateDiscount: Story = {
+  args: {
+    product: CertificateProductFactory({ price: 100, price_currency: 'EUR' }).one(),
+    course: PacedCourseFactory().one(),
+    enrollment: EnrollmentFactory({
+      offerings: OfferingFactory({ rules: { discounted_price: 80 } }).many(1),
+    }).one(),
+  },
 };

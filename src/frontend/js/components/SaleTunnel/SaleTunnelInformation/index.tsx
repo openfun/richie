@@ -101,7 +101,11 @@ const Email = () => {
 };
 
 const Total = () => {
-  const { product, offering } = useSaleTunnelContext();
+  const { product, offering, enrollment } = useSaleTunnelContext();
+  const totalPrice =
+    enrollment?.offerings?.[0]?.rules?.discounted_price ??
+    offering?.rules.discounted_price ??
+    product.price;
   return (
     <div className="sale-tunnel__total">
       <div className="sale-tunnel__total__amount mt-t" data-testid="sale-tunnel__total__amount">
@@ -109,11 +113,7 @@ const Total = () => {
           <FormattedMessage {...messages.totalLabel} />
         </div>
         <div className="block-title">
-          <FormattedNumber
-            value={offering?.rules.discounted_price || product.price}
-            style="currency"
-            currency={product.price_currency}
-          />
+          <FormattedNumber value={totalPrice} style="currency" currency={product.price_currency} />
         </div>
       </div>
     </div>
