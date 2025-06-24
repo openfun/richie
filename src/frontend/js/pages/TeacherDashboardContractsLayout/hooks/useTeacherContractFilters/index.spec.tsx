@@ -7,7 +7,7 @@ import { MemoryRouter, Route, Routes } from 'react-router';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { OfferingFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { ContractState } from 'types/Joanie';
 import useTeacherContractFilters from '.';
 
@@ -67,13 +67,13 @@ describe('useTeacherContractFilters', () => {
       expect(result.current.initialFilters).toStrictEqual({
         contract_ids: [],
         organization_id: defaultOrganization.id,
-        offer_id: undefined,
+        offering_id: undefined,
         signature_state: ContractState.SIGNED,
       });
       expect(result.current.filters).toStrictEqual({
         contract_ids: [],
         organization_id: defaultOrganization.id,
-        offer_id: undefined,
+        offering_id: undefined,
         signature_state: ContractState.SIGNED,
       });
     });
@@ -83,7 +83,7 @@ describe('useTeacherContractFilters', () => {
     const defaultOrganization = OrganizationFactory({ id: 'default' }).one();
     const filteredOrganization = OrganizationFactory({ id: 'filtered' }).one();
     const routeOrganization = OrganizationFactory({ id: 'route' }).one();
-    const routeOffer = OfferFactory().one();
+    const routeOffering = OfferingFactory().one();
     // fetching user's organizations to initialize default organizationId.
     fetchMock.get('https://joanie.test/api/v1.0/organizations/', [
       defaultOrganization,
@@ -92,8 +92,8 @@ describe('useTeacherContractFilters', () => {
     const { result } = renderHook(useTeacherContractFilters, {
       wrapper: ({ children }) => (
         <Wrapper
-          routePath="/:organizationId/:offerId"
-          initialEntry={`/${routeOrganization.id}/${routeOffer.id}?organization_id=${filteredOrganization.id}&signature_state=${ContractState?.UNSIGNED}&contract_ids=1&contract_ids=2`}
+          routePath="/:organizationId/:offeringId"
+          initialEntry={`/${routeOrganization.id}/${routeOffering.id}?organization_id=${filteredOrganization.id}&signature_state=${ContractState?.UNSIGNED}&contract_ids=1&contract_ids=2`}
         >
           {children}
         </Wrapper>
@@ -104,13 +104,13 @@ describe('useTeacherContractFilters', () => {
       expect(result.current.initialFilters).toStrictEqual({
         contract_ids: ['1', '2'],
         organization_id: routeOrganization.id,
-        offer_id: routeOffer.id,
+        offering_id: routeOffering.id,
         signature_state: ContractState.UNSIGNED,
       });
       expect(result.current.filters).toStrictEqual({
         contract_ids: ['1', '2'],
         organization_id: routeOrganization.id,
-        offer_id: routeOffer.id,
+        offering_id: routeOffering.id,
         signature_state: ContractState.UNSIGNED,
       });
     });
@@ -119,7 +119,7 @@ describe('useTeacherContractFilters', () => {
   it("should use organizationId from query parameters when it's not in route params", async () => {
     const defaultOrganization = OrganizationFactory({ id: 'default' }).one();
     const filteredOrganization = OrganizationFactory({ id: 'filtered' }).one();
-    const routeOffer = OfferFactory({ id: 'route' }).one();
+    const routeOffering = OfferingFactory({ id: 'route' }).one();
     // fetching user's organizations to initialize default organizationId.
     fetchMock.get('https://joanie.test/api/v1.0/organizations/', [
       defaultOrganization,
@@ -128,8 +128,8 @@ describe('useTeacherContractFilters', () => {
     const { result } = renderHook(useTeacherContractFilters, {
       wrapper: ({ children }) => (
         <Wrapper
-          routePath="/:offerId"
-          initialEntry={`/${routeOffer.id}/?organization_id=${filteredOrganization.id}&signature_state=${ContractState?.UNSIGNED}&contract_ids=1&contract_ids=2`}
+          routePath="/:offeringId"
+          initialEntry={`/${routeOffering.id}/?organization_id=${filteredOrganization.id}&signature_state=${ContractState?.UNSIGNED}&contract_ids=1&contract_ids=2`}
         >
           {children}
         </Wrapper>
@@ -140,13 +140,13 @@ describe('useTeacherContractFilters', () => {
       expect(result.current.initialFilters).toStrictEqual({
         contract_ids: ['1', '2'],
         organization_id: filteredOrganization.id,
-        offer_id: routeOffer.id,
+        offering_id: routeOffering.id,
         signature_state: ContractState.UNSIGNED,
       });
       expect(result.current.filters).toStrictEqual({
         contract_ids: ['1', '2'],
         organization_id: filteredOrganization.id,
-        offer_id: routeOffer.id,
+        offering_id: routeOffering.id,
         signature_state: ContractState.UNSIGNED,
       });
     });
@@ -155,7 +155,7 @@ describe('useTeacherContractFilters', () => {
   it('setFilters should update filter state', async () => {
     const defaultOrganization = OrganizationFactory({ id: 'default' }).one();
     const routeOrganization = OrganizationFactory({ id: 'route' }).one();
-    const routeOffer = OfferFactory().one();
+    const routeOffering = OfferingFactory().one();
     // fetching user's organizations to initialize default organizationId.
     fetchMock.get('https://joanie.test/api/v1.0/organizations/', [defaultOrganization]);
     const { result } = renderHook(useTeacherContractFilters, {
@@ -169,7 +169,7 @@ describe('useTeacherContractFilters', () => {
     const expectedInitialFilters = {
       contract_ids: [],
       organization_id: defaultOrganization.id,
-      offer_id: undefined,
+      offering_id: undefined,
       signature_state: ContractState.SIGNED,
     };
     await waitFor(() => {
@@ -179,7 +179,7 @@ describe('useTeacherContractFilters', () => {
     const newFilters = {
       contract_ids: ['1', '2'],
       organization_id: routeOrganization.id,
-      offer_id: routeOffer.id,
+      offering_id: routeOffering.id,
       signature_state: ContractState.UNSIGNED,
     };
     act(() => {

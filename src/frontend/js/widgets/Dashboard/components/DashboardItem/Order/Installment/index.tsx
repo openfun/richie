@@ -94,7 +94,7 @@ const Installment = ({ order }: Props) => {
 
 const PaymentMethodManager = ({ order }: Props) => {
   const needsPaymentMethod = order.state === OrderState.TO_SAVE_PAYMENT_METHOD;
-  const { item: offer, states } = useCourseProduct({
+  const { item: offering, states } = useCourseProduct({
     course_id: order.course.code,
     product_id: order.product_id,
   });
@@ -118,9 +118,9 @@ const PaymentMethodManager = ({ order }: Props) => {
       )}
       <SaleTunnel
         {...modal}
-        product={offer.product as CredentialProduct}
-        course={offer.course}
-        isWithdrawable={offer.is_withdrawable}
+        product={offering.product as CredentialProduct}
+        course={offering.course}
+        isWithdrawable={offering.is_withdrawable}
       />
     </>
   );

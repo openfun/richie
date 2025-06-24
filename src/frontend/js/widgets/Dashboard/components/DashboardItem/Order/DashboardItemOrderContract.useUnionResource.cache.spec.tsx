@@ -57,7 +57,7 @@ describe('<DashboardItemOrder/> Contract', () => {
         contract: ContractFactory({ student_signed_on: null }).one(),
       }).one();
 
-      // learner dashboard course page do one call to offer per order
+      // learner dashboard course page do one call to offering per order
       const { product } = mockCourseProductWithOrder(order);
 
       // overwrite useOmniscientOrders call

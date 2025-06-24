@@ -97,21 +97,21 @@ describe('TeacherDashboardContractsLayout/ContractActionsBar', () => {
     {
       label: "doesn't have contract to download",
       hasContractToDownload: false,
-      offerId: undefined,
+      offeringId: undefined,
     },
     {
-      label: "doesn't have contract to download  and offerId",
+      label: "doesn't have contract to download and offeringId",
       hasContractToDownload: false,
-      offerId: faker.string.uuid(),
+      offeringId: faker.string.uuid(),
     },
-  ])('should only display sign button when $label', ({ hasContractToDownload, offerId }) => {
+  ])('should only display sign button when $label', ({ hasContractToDownload, offeringId }) => {
     mockHasContractToDownload = hasContractToDownload;
     mockCanSignContracts = true;
     mockContractsToSignCount = 1;
 
     render(
       <Wrapper>
-        <ContractActionsBar offerId={offerId} organizationId={faker.string.uuid()} />
+        <ContractActionsBar offeringId={offeringId} organizationId={faker.string.uuid()} />
       </Wrapper>,
     );
 

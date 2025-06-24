@@ -5,7 +5,7 @@ import { IntlProvider } from 'react-intl';
 import { PropsWithChildren } from 'react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
-import { OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { OfferingFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import {
   LocalStorageArchiveFilters,
   storeContractArchiveId,
@@ -41,24 +41,24 @@ describe.each([
   {
     testLabel: 'for all organization and all trainings',
     organization: undefined,
-    offer: undefined,
+    offering: undefined,
   },
   {
     testLabel: 'for a training in an organization',
     organization: OrganizationFactory().one(),
-    offer: OfferFactory().one(),
+    offering: OfferingFactory().one(),
   },
   {
     testLabel: 'for an organization',
     organization: OrganizationFactory().one(),
-    offer: undefined,
+    offering: undefined,
   },
   {
     testLabel: 'for a training',
     organization: undefined,
-    offer: OfferFactory().one(),
+    offering: OfferingFactory().one(),
   },
-])('useCheckContractArchiveExists $testLabel', ({ organization, offer }) => {
+])('useCheckContractArchiveExists $testLabel', ({ organization, offering }) => {
   const Wrapper = ({ children }: PropsWithChildren) => {
     return (
       <IntlProvider locale="en">
@@ -71,7 +71,7 @@ describe.each([
   beforeEach(() => {
     localStorageArchiveFilters = {
       organizationId: organization ? organization.id : undefined,
-      offerId: offer ? offer.id : undefined,
+      offeringId: offering ? offering.id : undefined,
     };
 
     // Joanie providers calls

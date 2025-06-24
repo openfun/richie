@@ -1,7 +1,7 @@
 import { Children, useEffect, useMemo } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import c from 'classnames';
-import { Offer, CredentialOrder, Product, ProductType } from 'types/Joanie';
+import { Offering, CredentialOrder, Product, ProductType } from 'types/Joanie';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { Spinner } from 'components/Spinner';
 import { Icon, IconTypeEnum } from 'components/Icon';
@@ -77,9 +77,9 @@ type HeaderProps = {
   canPurchase: boolean;
   order: Maybe<CredentialOrder>;
   product: Product;
-  offer: Offer;
+  offering: Offering;
 };
-const Header = ({ product, order, offer, hasPurchased, canPurchase, compact }: HeaderProps) => {
+const Header = ({ product, order, offering, hasPurchased, canPurchase, compact }: HeaderProps) => {
   const intl = useIntl();
   const formatDate = useDateFormat();
 
@@ -103,7 +103,7 @@ const Header = ({ product, order, offer, hasPurchased, canPurchase, compact }: H
       return null;
     }
 
-    if (offer.rules.discounted_price != null) {
+    if (offering.rules.discounted_price != null) {
       return (
         <>
           <span id="original-price" className="offscreen">
@@ -122,7 +122,7 @@ const Header = ({ product, order, offer, hasPurchased, canPurchase, compact }: H
           <ins aria-describedby="discount-price" className="product-widget__price-discount">
             <FormattedNumber
               currency={product.price_currency}
-              value={offer.rules.discounted_price}
+              value={offering.rules.discounted_price}
               style="currency"
             />
           </ins>
@@ -133,7 +133,7 @@ const Header = ({ product, order, offer, hasPurchased, canPurchase, compact }: H
     return (
       <FormattedNumber currency={product.price_currency} value={product.price} style="currency" />
     );
-  }, [canPurchase, offer.rules.discounted_price, product.price]);
+  }, [canPurchase, offering.rules.discounted_price, product.price]);
 
   return (
     <header className="product-widget__header">
@@ -144,39 +144,39 @@ const Header = ({ product, order, offer, hasPurchased, canPurchase, compact }: H
         {hasPurchased && <FormattedMessage {...messages.purchased} />}
         {displayPrice}
       </strong>
-      {offer?.rules.description && (
-        <p className="product-widget__header-description">{offer.rules.description}</p>
+      {offering?.rules.description && (
+        <p className="product-widget__header-description">{offering.rules.description}</p>
       )}
-      {offer?.rules.discounted_price && (
+      {offering?.rules.discounted_price && (
         <p className="product-widget__header-discount">
-          {offer.rules.discount_rate ? (
+          {offering.rules.discount_rate ? (
             <span className="product-widget__header-discount-rate">
-              <FormattedNumber value={-offer.rules.discount_rate} style="percent" />
+              <FormattedNumber value={-offering.rules.discount_rate} style="percent" />
             </span>
           ) : (
             <span className="product-widget__header-discount-amount">
               <FormattedNumber
                 currency={product.price_currency}
-                value={-offer.rules.discount_amount!}
+                value={-offering.rules.discount_amount!}
                 style="currency"
               />
             </span>
           )}
-          {offer.rules.discount_start && (
+          {offering.rules.discount_start && (
             <span className="product-widget__header-discount-date">
               &nbsp;
               <FormattedMessage
                 {...messages.from}
-                values={{ from: formatDate(offer.rules.discount_start) }}
+                values={{ from: formatDate(offering.rules.discount_start) }}
               />
             </span>
           )}
-          {offer.rules.discount_end && (
+          {offering.rules.discount_end && (
             <span className="product-widget__header-discount-date">
               &nbsp;
               <FormattedMessage
                 {...messages.to}
-                values={{ to: formatDate(offer.rules.discount_end) }}
+                values={{ to: formatDate(offering.rules.discount_end) }}
               />
             </span>
           )}
@@ -239,12 +239,12 @@ const Content = ({ product, order }: { product: Product; order?: CredentialOrder
 const CourseProductItem = ({ productId, course, compact = false }: CourseProductItemProps) => {
   // FIXME(rlecellier): useCourseProduct need's a filter on product.type that only return
   // CredentialOrder
-  const { item: offer, states: productQueryStates } = useCourseProduct({
+  const { item: offering, states: productQueryStates } = useCourseProduct({
     product_id: productId,
     course_id: course.code,
   });
 
-  const product = offer?.product;
+  const product = offering?.product;
   const { item: productOrder, states: orderQueryStates } = useProductOrder({
     productId,
     courseCode: course.code,
@@ -302,14 +302,18 @@ const CourseProductItem = ({ productId, course, compact = false }: CourseProduct
           <Header
             product={product}
             order={order}
-            offer={offer}
+            offering={offering}
             canPurchase={canPurchase}
             hasPurchased={hasPurchased}
             compact={compact}
           />
           {canShowContent && <Content product={product} order={order} />}
           <footer className="product-widget__footer">
-            <CourseProductItemFooter course={course} offer={offer} canPurchase={canPurchase} />
+            <CourseProductItemFooter
+              course={course}
+              offering={offering}
+              canPurchase={canPurchase}
+            />
           </footer>
         </>
       )}

@@ -65,7 +65,7 @@ export const TeacherDashboardCourseLearnersLayout = () => {
   const {
     items: organizations,
     states: { isFetched: isOrganizationFetched },
-  } = useOrganizations({ offer_id: filters.offer_id });
+  } = useOrganizations({ offering_id: filters.offering_id });
   const {
     items: courseOrders,
     meta,

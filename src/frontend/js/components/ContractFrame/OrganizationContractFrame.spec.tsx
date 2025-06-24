@@ -6,10 +6,10 @@ import { IntlProvider } from 'react-intl';
 import fetchMock from 'fetch-mock';
 import { QueryStateFactory } from 'utils/test/factories/reactQuery';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { ContractFactory, OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { ContractFactory, OfferingFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import JoanieSessionProvider from 'contexts/SessionContext/JoanieSessionProvider';
-import { isOffer } from 'types/Joanie';
+import { isOffering } from 'types/Joanie';
 import { Props } from './AbstractContractFrame';
 import { OrganizationContractFrame } from '.';
 
@@ -73,28 +73,29 @@ describe('OrganizationContractFrame', () => {
 
   it.each([
     {
-      label: 'contractList: undefined, offer: undefined',
+      label: 'contractList: undefined, offering: undefined',
       contractList: undefined,
-      offer: undefined,
+      offering: undefined,
     },
     {
-      label: 'contractList: 2 Contract, offer: undefined',
+      label: 'contractList: 2 Contract, offering: undefined',
       contractList: ContractFactory().many(2),
-      offer: undefined,
+      offering: undefined,
     },
     {
-      label: 'contractList: undefined, offer: one Offer',
+      label: 'contractList: undefined, offering: one Offering',
       contractList: undefined,
-      offer: OfferFactory().one(),
+      offering: OfferingFactory().one(),
     },
   ])(
     'should implement AbstractContractFrame for organization and $label',
-    async ({ contractList, offer }) => {
+    async ({ contractList, offering }) => {
       const organization = OrganizationFactory().one();
       const contracts = contractList || ContractFactory().many(2);
       const isOpen = faker.datatype.boolean();
 
-      const invitationLinkQueryString = offer && isOffer(offer) ? `?offer_ids=${offer.id}` : '';
+      const invitationLinkQueryString =
+        offering && isOffering(offering) ? `?offering_ids=${offering.id}` : '';
       const expectedUrls = {
         getInvitationLink: `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts-signature-link/${invitationLinkQueryString}`,
         checkSignature: `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?id=${contracts[0].id}&id=${contracts[1].id}`,
@@ -126,7 +127,7 @@ describe('OrganizationContractFrame', () => {
           <Wrapper client={client}>
             <OrganizationContractFrame
               organizationId={organization.id}
-              offerIds={offer ? [offer.id] : undefined}
+              offeringIds={offering ? [offering.id] : undefined}
               isOpen={isOpen}
               onDone={handleDone}
               onClose={handleClose}

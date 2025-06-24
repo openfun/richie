@@ -1,22 +1,22 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router';
 import useDefaultOrganizationId from 'hooks/useDefaultOrganizationId';
-import { CourseListItem, CourseOrderResourceQuery, Offer, Organization } from 'types/Joanie';
+import { CourseListItem, CourseOrderResourceQuery, Offering, Organization } from 'types/Joanie';
 
 export type CourseLearnersParams = {
   courseId: CourseListItem['id'];
-  offerId?: Offer['id'];
+  offeringId?: Offering['id'];
   organizationId?: Organization['id'];
 };
 
 const useCourseLearnersFilters = () => {
-  const { courseId, offerId } = useParams<CourseLearnersParams>();
+  const { courseId, offeringId } = useParams<CourseLearnersParams>();
   const [searchParams] = useSearchParams();
   const searchFilters: CourseOrderResourceQuery = useMemo(() => {
     return {
       course_id: courseId,
       organization_id: searchParams.get('organization_id') || undefined,
-      offer_id: searchParams.get('offer_id') || undefined,
+      offering_id: searchParams.get('offering_id') || undefined,
     };
   }, Array.from(searchParams.entries()));
 
@@ -27,7 +27,7 @@ const useCourseLearnersFilters = () => {
     return {
       ...searchFilters,
       organization_id: defaultOrganizationId,
-      offer_id: offerId,
+      offering_id: offeringId,
     };
   }, [defaultOrganizationId]);
   const [filters, setFilters] = useState<CourseOrderResourceQuery>(initialFilters);

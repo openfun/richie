@@ -24,9 +24,9 @@ const messages = defineMessages({
 export const TeacherDashboardOrganizationSidebar = () => {
   const intl = useIntl();
   const getRouteLabel = getDashboardRouteLabel(intl);
-  const { organizationId, offerId } = useParams<{
+  const { organizationId, offeringId } = useParams<{
     organizationId: string;
-    offerId?: string;
+    offeringId?: string;
   }>();
   const {
     item: organization,
@@ -43,7 +43,7 @@ export const TeacherDashboardOrganizationSidebar = () => {
 
     if (basePath === TeacherDashboardPaths.ORGANIZATION_CONTRACTS) {
       menuLink.component = (
-        <ContractNavLink link={menuLink} organizationId={organizationId} offerId={offerId} />
+        <ContractNavLink link={menuLink} organizationId={organizationId} offeringId={offeringId} />
       );
     }
 

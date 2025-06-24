@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Provide postgres as default value for `ACTIVATED_DB` variable.
 - Update Offer type with rules property which contains all applicable 
   offer rules
+- Rename again `CourseProductRelation` to `Offering`
 
 ### Fixed
 

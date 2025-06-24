@@ -33,7 +33,7 @@ export const DashboardItemEnrollment = ({ enrollment }: DashboardItemCourseRunPr
         </div>
       </div>,
     ];
-    enrollment.offers.forEach(({ product, is_withdrawable }) => {
+    enrollment.offerings.forEach(({ product, is_withdrawable }) => {
       if (isCertificateProduct(product)) {
         partialFooterList.push(
           <ProductCertificateFooter

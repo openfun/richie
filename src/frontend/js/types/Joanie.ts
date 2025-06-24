@@ -38,7 +38,7 @@ export interface Organization {
 }
 
 export interface OrganizationResourceQuery extends ResourcesQuery {
-  offer_id?: Offer['id'];
+  offering_id?: Offering['id'];
 }
 
 export interface ContractDefinition {
@@ -174,7 +174,7 @@ export interface DefinitionResourcesProduct {
   contract_definition_id: Nullable<ContractDefinition['id']>;
 }
 
-export interface OfferLight {
+export interface OfferingLight {
   id: string;
   course: CourseLight;
   organizations: Organization[];
@@ -182,7 +182,7 @@ export interface OfferLight {
   created_on: string;
 }
 
-export interface OfferRule {
+export interface OfferingRule {
   discounted_price: Nullable<number>;
   discount_rate: Nullable<number>;
   discount_amount: Nullable<number>;
@@ -194,11 +194,13 @@ export interface OfferRule {
   has_seats_left: boolean;
 }
 
-export interface Offer extends OfferLight {
+export interface Offering extends OfferingLight {
   is_withdrawable: boolean;
-  rules: OfferRule;
+  rules: OfferingRule;
 }
-export function isOffer(entity: CourseListItem | OfferLight | RichieCourse): entity is OfferLight {
+export function isOffering(
+  entity: CourseListItem | OfferingLight | RichieCourse,
+): entity is OfferingLight {
   return 'course' in entity && 'product' in entity;
 }
 
@@ -243,7 +245,7 @@ export interface Enrollment {
   was_created_by_order: boolean;
   created_on: string;
   orders: OrderEnrollment[];
-  offers: Offer[];
+  offerings: Offering[];
   certificate_id: Nullable<string>;
 }
 export const isEnrollment = (obj: unknown | Enrollment | OpenEdXEnrollment): obj is Enrollment => {
@@ -257,7 +259,7 @@ export const isEnrollment = (obj: unknown | Enrollment | OpenEdXEnrollment): obj
     'was_created_by_order' in obj &&
     'created_on' in obj &&
     'orders' in obj &&
-    'offers' in obj &&
+    'offerings' in obj &&
     'certificate_id' in obj
   );
 };
@@ -407,7 +409,7 @@ export interface NestedCourseOrder {
 
 export interface CourseOrderResourceQuery extends PaginatedResourceQuery {
   course_id?: CourseListItem['id'];
-  offer_id?: Offer['id'];
+  offering_id?: Offering['id'];
   organization_id?: Organization['id'];
   product_id?: Product['id'];
 }
@@ -542,8 +544,8 @@ export interface CourseProductQueryFilters extends ResourcesQuery {
   id?: Product['id'];
   course_id?: CourseListItem['id'];
 }
-export interface OfferQueryFilters extends PaginatedResourceQuery {
-  id?: Offer['id'];
+export interface OfferingQueryFilters extends PaginatedResourceQuery {
+  id?: Offering['id'];
   organization_id?: Organization['id'];
   product_type?: ProductType;
   query?: string;
@@ -556,7 +558,7 @@ export enum ContractState {
 }
 export interface ContractResourceQuery extends PaginatedResourceQuery {
   organization_id?: Organization['id'];
-  offer_id?: Offer['id'];
+  offering_id?: Offering['id'];
   contract_ids?: Contract['id'][];
   signature_state?: ContractState;
 }
@@ -564,7 +566,7 @@ export interface ContractResourceQuery extends PaginatedResourceQuery {
 export interface OrganizationContractSignatureLinksFilters {
   contracts_ids?: string[];
   organization_id: Organization['id'];
-  offer_ids?: Offer['id'][];
+  offering_ids?: Offering['id'][];
 }
 
 export interface ContractInvitationLinkResponse {
@@ -658,10 +660,10 @@ interface APIUser {
       check: (id: string) => Promise<Response>;
       create: ({
         organization_id,
-        offer_id,
+        offering_id,
       }: {
         organization_id?: Organization['id'];
-        offer_id?: Offer['id'];
+        offering_id?: Offering['id'];
       }) => Promise<{ url: string }>;
       get: (id: string) => Promise<File>;
     };
@@ -677,7 +679,7 @@ export interface API {
       ? Promise<Nullable<CourseListItem>>
       : Promise<PaginatedResponse<CourseListItem>>;
     products: {
-      get(filters?: CourseProductQueryFilters): Promise<Nullable<Offer>>;
+      get(filters?: CourseProductQueryFilters): Promise<Nullable<Offering>>;
       paymentSchedule: {
         get(filters?: CourseProductQueryFilters): Promise<Nullable<PaymentSchedule>>;
       };
@@ -710,12 +712,12 @@ export interface API {
       filters?: CourseRunFilters,
     ): CourseRunFilters extends { id: string } ? Promise<Nullable<CourseRun>> : Promise<CourseRun>;
   };
-  offers: {
+  offerings: {
     get<Filters extends PaginatedResourceQuery = PaginatedResourceQuery>(
       filters?: Filters,
     ): Filters extends { id: string }
-      ? Promise<Nullable<Offer>>
-      : Promise<PaginatedResponse<OfferLight>>;
+      ? Promise<Nullable<Offering>>
+      : Promise<PaginatedResponse<OfferingLight>>;
   };
   contractDefinitions: {
     previewTemplate(id: string): Promise<File>;

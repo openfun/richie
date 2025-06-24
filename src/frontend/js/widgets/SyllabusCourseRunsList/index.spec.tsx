@@ -22,8 +22,8 @@ import {
 import SyllabusCourseRunsList from 'widgets/SyllabusCourseRunsList/index';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { CourseRun, Priority } from 'types';
-import { Offer } from 'types/Joanie';
-import { OfferFactory } from 'utils/test/factories/joanie';
+import { Offering } from 'types/Joanie';
+import { OfferingFactory } from 'utils/test/factories/joanie';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
 import { StringHelper } from 'utils/StringHelper';
 import { computeStates } from 'utils/CourseRuns';
@@ -211,9 +211,9 @@ describe('<SyllabusCourseRunsList/>', () => {
     });
   };
 
-  const expectCourseProduct = async (container: HTMLElement, offer: Offer) => {
+  const expectCourseProduct = async (container: HTMLElement, offering: Offering) => {
     const heading = await findByRole(container, 'heading', {
-      name: offer.product.title,
+      name: offering.product.title,
     });
     expect(Array.from(heading.classList)).toContain('product-widget__title');
   };
@@ -383,9 +383,9 @@ describe('<SyllabusCourseRunsList/>', () => {
 
   it('has one opened product', async () => {
     const course = PacedCourseFactory().one();
-    const offer = OfferFactory().one();
-    const resourceLink = `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${offer.product.id}/`;
-    fetchMock.get(resourceLink, offer);
+    const offering = OfferingFactory().one();
+    const resourceLink = `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${offering.product.id}/`;
+    fetchMock.get(resourceLink, offering);
 
     const courseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       resource_link: resourceLink,
@@ -406,7 +406,7 @@ describe('<SyllabusCourseRunsList/>', () => {
     expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
       1,
     );
-    await expectCourseProduct(getHeaderContainer(), offer);
+    await expectCourseProduct(getHeaderContainer(), offering);
 
     // Portal.
     expectEmptyPortalContainer();

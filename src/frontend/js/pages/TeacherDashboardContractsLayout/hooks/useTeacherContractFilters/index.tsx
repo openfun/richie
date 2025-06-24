@@ -5,16 +5,16 @@ import { ContractResourceQuery, ContractState } from 'types/Joanie';
 
 export type TeacherDashboardContractsParams = {
   organizationId?: string;
-  offerId?: string;
+  offeringId?: string;
 };
 
 const useTeacherContractFilters = () => {
-  const { offerId } = useParams<TeacherDashboardContractsParams>();
+  const { offeringId } = useParams<TeacherDashboardContractsParams>();
   const [searchParams] = useSearchParams();
   const searchFilters: ContractResourceQuery = useMemo(() => {
     return {
       organization_id: searchParams.get('organization_id') || undefined,
-      offer_id: searchParams.get('offer_id') || undefined,
+      offering_id: searchParams.get('offering_id') || undefined,
       contract_ids: searchParams.getAll('contract_ids') || undefined,
       signature_state:
         (searchParams.get('signature_state') as ContractState) || ContractState.SIGNED,
@@ -28,7 +28,7 @@ const useTeacherContractFilters = () => {
     return {
       ...searchFilters,
       organization_id: defaultOrganizationId,
-      offer_id: offerId,
+      offering_id: offeringId,
     };
   }, [defaultOrganizationId]);
   const [filters, setFilters] = useState<ContractResourceQuery>(initialFilters);

@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router';
 import { useCourseProductUnion } from 'hooks/useCourseProductUnion';
-import { CourseListItem, OfferLight, ProductType } from 'types/Joanie';
+import { CourseListItem, OfferingLight, ProductType } from 'types/Joanie';
 import { Maybe, Nullable } from 'types/utils';
 
 const useTeacherCoursesSearch = () => {
   const { organizationId } = useParams<{ organizationId: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
   const [count, setCount] = useState<Maybe<number>>(0);
-  const [courseAndProductList, setCourseAndProductList] = useState<(CourseListItem | OfferLight)[]>(
-    [],
-  );
+  const [courseAndProductList, setCourseAndProductList] = useState<
+    (CourseListItem | OfferingLight)[]
+  >([]);
   const [isNewSearchLoading, setIsNewSearchLoading] = useState(false);
   const query = searchParams.get('query') || undefined;
   const {

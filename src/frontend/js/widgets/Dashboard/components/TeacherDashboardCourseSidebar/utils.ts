@@ -1,13 +1,13 @@
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 
 interface GetMenuRoutesArgs {
-  offerId?: string;
+  offeringId?: string;
   organizationId?: string;
 }
 
-export const getMenuRoutes = ({ offerId, organizationId }: GetMenuRoutesArgs) => {
+export const getMenuRoutes = ({ offeringId, organizationId }: GetMenuRoutesArgs) => {
   if (organizationId) {
-    if (offerId) {
+    if (offeringId) {
       return [
         TeacherDashboardPaths.ORGANIZATION_PRODUCT,
         TeacherDashboardPaths.ORGANIZATION_PRODUCT_CONTRACTS,
@@ -17,7 +17,7 @@ export const getMenuRoutes = ({ offerId, organizationId }: GetMenuRoutesArgs) =>
     return [TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION];
   }
 
-  if (offerId) {
+  if (offeringId) {
     return [
       TeacherDashboardPaths.COURSE_PRODUCT,
       TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS,
