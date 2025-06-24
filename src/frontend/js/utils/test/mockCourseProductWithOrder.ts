@@ -3,14 +3,14 @@ import { CredentialOrder } from 'types/Joanie';
 import {
   ContractDefinitionFactory,
   CourseFactory,
-  OfferFactory,
+  OfferingFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
 
 export const mockCourseProductWithOrder = (order: CredentialOrder) => {
   const courseCode = order.course.code;
   const productId = order.product_id;
-  const offer = OfferFactory({
+  const offering = OfferingFactory({
     product: ProductFactory({
       id: order.product_id,
       contract_definition: order.contract ? ContractDefinitionFactory().one() : undefined,
@@ -22,7 +22,7 @@ export const mockCourseProductWithOrder = (order: CredentialOrder) => {
 
   fetchMock.get(
     `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${productId}/`,
-    offer,
+    offering,
   );
-  return offer;
+  return offering;
 };

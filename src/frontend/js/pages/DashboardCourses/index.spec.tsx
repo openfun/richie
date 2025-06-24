@@ -5,12 +5,12 @@ import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import {
-  OfferFactory,
+  OfferingFactory,
   EnrollmentFactory,
   CredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { CourseLight, Offer, Enrollment, CredentialOrder } from 'types/Joanie';
+import { CourseLight, Offering, Enrollment, CredentialOrder } from 'types/Joanie';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError, expectBannerInfo, expectNoBannerInfo } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
@@ -54,15 +54,15 @@ describe('<DashboardCourses/>', () => {
   const perPage = PER_PAGE.useOrdersEnrollments;
 
   const mockOrders = (orders: CredentialOrder[], client?: QueryClient) => {
-    const offers: Record<string, Offer> = {};
+    const offerings: Record<string, Offering> = {};
     orders.forEach((order) => {
       const productId = order.product_id;
       const courseCode = (order.course as CourseLight).code;
-      const offer = OfferFactory().one();
+      const offering = OfferingFactory().one();
 
       fetchMock.get(
         `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${productId}/`,
-        offer,
+        offering,
       );
 
       // Allowing this option boosts the test performances. Without it, the tests case with 200+
@@ -70,28 +70,28 @@ describe('<DashboardCourses/>', () => {
       if (client) {
         client.setQueryData(
           ['courses-products', JSON.stringify({ id: courseCode, productId })],
-          offer,
+          offering,
         );
       }
-      offers[order.id] = offer;
+      offerings[order.id] = offering;
     });
     orders.sort((a, b) => {
       const aDate = new Date(a.created_on);
       const bDate = new Date(b.created_on);
       return bDate.getTime() - aDate.getTime();
     });
-    return { orders, offers };
+    return { orders, offerings };
   };
 
   const expectList = (
     entities: (CredentialOrder | Enrollment)[],
-    offers: Record<string, Offer>,
+    offerings: Record<string, Offering>,
   ) => {
     const itemElements = document.querySelectorAll<HTMLElement>('.dashboard__courses__list__item');
     expect(itemElements.length).toBe(entities.length);
     entities.forEach((entity, i) => {
       const title = isOrder(entity)
-        ? offers[entity.id].product.title
+        ? offerings[entity.id].product.title
         : entity.course_run.course?.title;
       getByRole(itemElements[i], 'heading', {
         name: title,
@@ -146,7 +146,10 @@ describe('<DashboardCourses/>', () => {
 
   it('should render the list of entities', async () => {
     const client = createTestQueryClient({ user: true });
-    const { orders, offers } = mockOrders(CredentialOrderFactory().many(perPage * 2 + 1), client);
+    const { orders, offerings } = mockOrders(
+      CredentialOrderFactory().many(perPage * 2 + 1),
+      client,
+    );
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
@@ -252,18 +255,18 @@ describe('<DashboardCourses/>', () => {
     await expectNoBannerInfo('You have no enrollments nor orders yet');
     let loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
-    await waitFor(() => expectList(entities.slice(0, perPage), offers), { interval: 200 });
+    await waitFor(() => expectList(entities.slice(0, perPage), offerings), { interval: 200 });
 
     // Click on load more button to load slice 2.
     await act(async () => userEvent.click(loadMoreButton));
-    await waitFor(() => expectList(entities.slice(0, perPage * 2), offers));
+    await waitFor(() => expectList(entities.slice(0, perPage * 2), offerings));
     loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
 
     // Activate intersection observe to load slice 3.
     const { onIntersect } = (globalThis as any).__intersection_observer_props__;
     await waitFor(async () => onIntersect());
-    await waitFor(() => expectList(entities.slice(0, perPage * 3), offers), { timeout: 30000 });
+    await waitFor(() => expectList(entities.slice(0, perPage * 3), offerings), { timeout: 30000 });
     loadMoreButton = await screen.findByRole('button', { name: 'Load more' });
     expect(loadMoreButton).toBeEnabled();
   }, 15000);

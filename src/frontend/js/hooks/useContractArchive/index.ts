@@ -1,5 +1,5 @@
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { Offer, Organization } from 'types/Joanie';
+import { Offering, Organization } from 'types/Joanie';
 import { browserDownloadFromBlob } from 'utils/download';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { handle } from 'utils/errors/handle';
@@ -53,11 +53,11 @@ const useContractArchive = () => {
       },
       create: async (
         organizationId?: Organization['id'],
-        offerId?: Offer['id'],
+        offeringId?: Offering['id'],
       ): Promise<string> => {
         const response = await api.user.contracts.zip_archive.create({
           organization_id: organizationId,
-          offer_id: offerId,
+          offering_id: offeringId,
         });
 
         return extractArchiveId(response.url);

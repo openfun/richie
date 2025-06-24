@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Organization, Offer } from 'types/Joanie';
+import { Organization, Offering } from 'types/Joanie';
 import useTeacherContractsToSign from 'pages/TeacherDashboardContractsLayout/hooks/useTeacherContractsToSign';
 import useHasContractToDownload from 'pages/TeacherDashboardContractsLayout/hooks/useHasContractToDownload';
 import SignOrganizationContractButton from '../SignOrganizationContractButton';
@@ -7,18 +7,18 @@ import BulkDownloadContractButton from '../BulkDownloadContractButton';
 
 interface ContractActionsProps {
   organizationId: Organization['id'];
-  offerId?: Offer['id'];
+  offeringId?: Offering['id'];
 }
 
-const ContractActionsBar = ({ organizationId, offerId }: ContractActionsProps) => {
+const ContractActionsBar = ({ organizationId, offeringId }: ContractActionsProps) => {
   const { canSignContracts, contractsToSignCount } = useTeacherContractsToSign({
     organizationId,
-    offerId,
+    offeringId,
   });
-  const hasContractToDownload = useHasContractToDownload(organizationId, offerId);
+  const hasContractToDownload = useHasContractToDownload(organizationId, offeringId);
 
   const nbAvailableActions = [canSignContracts, hasContractToDownload].filter((val) => val).length;
-  const offerIds = offerId ? [offerId] : undefined;
+  const offeringIds = offeringId ? [offeringId] : undefined;
   return (
     nbAvailableActions > 0 && (
       <div
@@ -31,14 +31,14 @@ const ContractActionsBar = ({ organizationId, offerId }: ContractActionsProps) =
         {canSignContracts && (
           <div>
             <SignOrganizationContractButton
-              offerIds={offerIds}
+              offeringIds={offeringIds}
               organizationId={organizationId}
               contractToSignCount={contractsToSignCount}
             />
           </div>
         )}
         {hasContractToDownload && (
-          <BulkDownloadContractButton organizationId={organizationId} offerId={offerId} />
+          <BulkDownloadContractButton organizationId={organizationId} offeringId={offeringId} />
         )}
       </div>
     )

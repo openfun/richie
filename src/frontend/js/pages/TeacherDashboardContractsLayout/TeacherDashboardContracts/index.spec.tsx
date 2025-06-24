@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import { getAllByRole } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { ContractFactory, OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { ContractFactory, OfferingFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError } from 'utils/test/expectBanner';
 import { HttpStatusCode } from 'utils/errors/HttpError';
@@ -33,8 +33,8 @@ jest.mock('components/ContractFrame', () => ({
 describe('pages/TeacherDashboardContracts', () => {
   setupJoanieSession();
 
-  it('should render a list of contracts for a offer', async () => {
-    const offer = OfferFactory().one();
+  it('should render a list of contracts for an offering', async () => {
+    const offering = OfferingFactory().one();
     const contracts = ContractFactory({
       student_signed_on: Date.toString(),
       organization_signed_on: Date.toString(),
@@ -44,29 +44,32 @@ describe('pages/TeacherDashboardContracts', () => {
 
     // OrganizationContractFilter request all organizations forwho the user have access
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/?offer_id=${offer.id}`,
+      `https://joanie.endpoint/api/v1.0/organizations/?offering_id=${offering.id}`,
       organizations,
     );
     // TeacherDashboardContracts request a paginated list of contracts to display
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?offer_id=${offer.id}&signature_state=signed&page=1&page_size=25`,
+      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/` +
+        `contracts/?offering_id=${offering.id}&signature_state=signed&page=1&page_size=25`,
       { results: contracts, count: 0, previous: null, next: null },
     );
     // useTeacherContractsToSign request all contract to sign, without pagination
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?signature_state=half_signed&offer_id=${offer.id}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/` +
+        `contracts/?signature_state=half_signed&offering_id=${offering.id}`,
       { results: [], count: 0, previous: null, next: null },
     );
 
     render(<TeacherDashboardContracts />, {
       routerOptions: {
-        path: '/courses/:courseId/products/:offerId/contracts',
-        initialEntries: [`/courses/${offer.course.id}/products/${offer.id}/contracts`],
+        path: '/courses/:courseId/products/:offeringId/contracts',
+        initialEntries: [`/courses/${offering.course.id}/products/${offering.id}/contracts`],
       },
     });
 
     await expectNoSpinner();
 
+    // screen.logTestingPlaygroundURL();
     // Organization filter should have been rendered
     const organizationFilter: HTMLInputElement = await screen.findByRole('combobox', {
       name: 'Organization',

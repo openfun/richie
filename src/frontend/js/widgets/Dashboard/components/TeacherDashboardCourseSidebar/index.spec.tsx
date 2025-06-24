@@ -4,7 +4,7 @@ import { createIntl } from 'react-intl';
 import { generatePath } from 'react-router';
 import { CourseListItem } from 'types/Joanie';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CourseFactory, OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { CourseFactory, OfferingFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { render } from 'utils/test/render';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
@@ -61,14 +61,14 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
       label: 'course',
       course: CourseFactory().one(),
       organization: undefined,
-      offer: undefined,
+      offering: undefined,
       expectedRoutes: [TeacherDashboardPaths.COURSE_GENERAL_INFORMATION],
     },
     {
       label: 'training',
       course: CourseFactory().one(),
       organization: undefined,
-      offer: OfferFactory().one(),
+      offering: OfferingFactory().one(),
       expectedRoutes: [
         TeacherDashboardPaths.COURSE_PRODUCT,
         TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS,
@@ -79,14 +79,14 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
       label: "organization's course",
       course: CourseFactory().one(),
       organization: OrganizationFactory().one(),
-      offer: undefined,
+      offering: undefined,
       expectedRoutes: [TeacherDashboardPaths.ORGANIZATION_COURSE_GENERAL_INFORMATION],
     },
     {
       label: "organization's training",
       course: CourseFactory().one(),
       organization: OrganizationFactory().one(),
-      offer: OfferFactory().one(),
+      offering: OfferingFactory().one(),
       expectedRoutes: [
         TeacherDashboardPaths.ORGANIZATION_PRODUCT,
         TeacherDashboardPaths.ORGANIZATION_PRODUCT_CONTRACTS,
@@ -95,20 +95,20 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
     },
   ])(
     'should display menu items for "$label" route',
-    async ({ course, organization, offer, expectedRoutes }) => {
+    async ({ course, organization, offering, expectedRoutes }) => {
       // mock api for organization's training
-      if (organization && offer) {
+      if (organization && offering) {
         // fetching training's contracts
         nbApiRequest += 1;
         fetchMock.get(
-          `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?offer_id=${offer.id}&signature_state=half_signed&page=1&page_size=25`,
+          `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?offering_id=${offering.id}&signature_state=half_signed&page=1&page_size=25`,
           [],
         );
         // fetching organization's training
         nbApiRequest += 1;
         fetchMock.get(
-          `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offers/${offer.id}/`,
-          offer,
+          `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offerings/${offering.id}/`,
+          offering,
         );
       } else if (organization) {
         // fetching organization's course
@@ -117,12 +117,15 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
           `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/courses/${course.id}/`,
           course,
         );
-      } else if (offer) {
+      } else if (offering) {
         // fetching training
         nbApiRequest += 1;
-        fetchMock.get(`https://joanie.endpoint/api/v1.0/offers/${offer.id}/`, offer);
+        fetchMock.get(`https://joanie.endpoint/api/v1.0/offerings/${offering.id}/`, offering);
         nbApiRequest += 1;
-        fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/?offer_id=${offer.id}`, []);
+        fetchMock.get(
+          `https://joanie.endpoint/api/v1.0/organizations/?offering_id=${offering.id}`,
+          [],
+        );
       } else {
         // mock api for course
         nbApiRequest += 1;
@@ -132,9 +135,9 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
       let routePath = '/:courseId';
       let initialEntry = `/${course.id}`;
 
-      if (offer) {
-        routePath += '/:offerId';
-        initialEntry += `/${offer.id}`;
+      if (offering) {
+        routePath += '/:offeringId';
+        initialEntry += `/${offering.id}`;
       }
       if (organization) {
         routePath = '/:organizationId' + routePath;
@@ -158,7 +161,7 @@ describe('<TeacherDashboardCourseSidebar/>', () => {
           generatePath(expectedRoute, {
             organizationId: organization ? organization.id : null,
             courseId: course.id,
-            offerId: offer ? offer.id : null,
+            offeringId: offering ? offering.id : null,
           }),
         );
       });

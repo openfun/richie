@@ -6,18 +6,23 @@ import {
   Course as RichieCourse,
   isRichieCourse,
 } from 'types/Course';
-import { CourseListItem as JoanieCourse, OfferLight, isOffer, ProductType } from 'types/Joanie';
+import {
+  CourseListItem as JoanieCourse,
+  OfferingLight,
+  isOffering,
+  ProductType,
+} from 'types/Joanie';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { CourseGlimpseCourse } from '.';
 
-const getCourseGlimpsePropsFromOffer = (
-  offer: OfferLight,
+const getCourseGlimpsePropsFromOffering = (
+  offering: OfferingLight,
   intl: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {
   const courseRouteParams = {
-    courseId: offer.course.id,
-    offerId: offer.id,
+    courseId: offering.course.id,
+    offeringId: offering.id,
   };
   const courseRoute = organizationId
     ? generatePath(TeacherDashboardPaths.ORGANIZATION_PRODUCT, {
@@ -26,27 +31,28 @@ const getCourseGlimpsePropsFromOffer = (
       })
     : generatePath(TeacherDashboardPaths.COURSE_PRODUCT, courseRouteParams);
   return {
-    id: offer.id,
-    code: offer.course.code,
-    title: offer.product.title,
-    cover_image: offer.course.cover
+    id: offering.id,
+    code: offering.course.code,
+    title: offering.product.title,
+    cover_image: offering.course.cover
       ? {
-          src: offer.course.cover.src,
+          src: offering.course.cover.src,
         }
       : null,
     organization: {
-      title: offer.organizations[0].title,
-      image: offer.organizations[0].logo || null,
+      title: offering.organizations[0].title,
+      image: offering.organizations[0].logo || null,
     },
-    product_id: offer.product.id,
+    product_id: offering.product.id,
     course_route: courseRoute,
-    state: offer.product.state,
+    state: offering.product.state,
     certificate_offer:
-      offer.product.type === ProductType.CERTIFICATE ? CourseCertificateOffer.PAID : null,
-    offer: offer.product.type === ProductType.CREDENTIAL ? CourseOffer.PAID : null,
-    certificate_price: offer.product.type === ProductType.CERTIFICATE ? offer.product.price : null,
-    price: offer.product.type === ProductType.CREDENTIAL ? offer.product.price : null,
-    price_currency: offer.product.price_currency,
+      offering.product.type === ProductType.CERTIFICATE ? CourseCertificateOffer.PAID : null,
+    offer: offering.product.type === ProductType.CREDENTIAL ? CourseOffer.PAID : null,
+    certificate_price:
+      offering.product.type === ProductType.CERTIFICATE ? offering.product.price : null,
+    price: offering.product.type === ProductType.CREDENTIAL ? offering.product.price : null,
+    price_currency: offering.product.price_currency,
   };
 };
 
@@ -112,12 +118,12 @@ const getCourseGlimpsePropsFromJoanieCourse = (
 };
 
 export const getCourseGlimpseProps = (
-  course: RichieCourse | (JoanieCourse | OfferLight),
+  course: RichieCourse | (JoanieCourse | OfferingLight),
   intl?: IntlShape,
   organizationId?: string,
 ): CourseGlimpseCourse => {
-  if (isOffer(course)) {
-    return getCourseGlimpsePropsFromOffer(course, intl!, organizationId);
+  if (isOffering(course)) {
+    return getCourseGlimpsePropsFromOffering(course, intl!, organizationId);
   }
 
   if (isRichieCourse(course)) {

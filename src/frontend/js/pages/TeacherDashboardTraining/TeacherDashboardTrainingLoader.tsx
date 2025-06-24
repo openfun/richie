@@ -1,7 +1,7 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useParams } from 'react-router';
 
-import { useOffer } from 'hooks/useOffer';
+import { useOffering } from 'hooks/useOffering';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { TeacherDashboardCourseSidebar } from 'widgets/Dashboard/components/TeacherDashboardCourseSidebar';
 import { Spinner } from 'components/Spinner';
@@ -22,17 +22,17 @@ const messages = defineMessages({
 });
 
 export const TeacherDashboardTrainingLoader = () => {
-  const { offerId, organizationId } = useParams<{
-    offerId: string;
+  const { offeringId, organizationId } = useParams<{
+    offeringId: string;
     organizationId?: string;
   }>();
 
   const {
-    item: offer,
+    item: offering,
     states: { fetching },
-  } = useOffer(offerId, { organization_id: organizationId });
+  } = useOffering(offeringId, { organization_id: organizationId });
   useBreadcrumbsPlaceholders({
-    courseTitle: offer?.product.title ?? '',
+    courseTitle: offering?.product.title ?? '',
   });
   return (
     <DashboardLayout sidebar={<TeacherDashboardCourseSidebar />}>
@@ -48,7 +48,7 @@ export const TeacherDashboardTrainingLoader = () => {
           </span>
         </Spinner>
       ) : (
-        <TeacherDashboardTraining offer={offer} />
+        <TeacherDashboardTraining offering={offering} />
       )}
     </DashboardLayout>
   );

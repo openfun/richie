@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import JoanieApiProvider from 'contexts/JoanieApiContext';
 import { CONTRACT_DOWNLOAD_SETTINGS } from 'settings';
-import { OfferFactory, OrganizationFactory } from 'utils/test/factories/joanie';
+import { OfferingFactory, OrganizationFactory } from 'utils/test/factories/joanie';
 import {
   LocalStorageArchiveFilters,
   getStoredContractArchiveId,
@@ -50,30 +50,30 @@ describe.each([
   {
     testLabel: 'for all organization and all trainings',
     organization: undefined,
-    offer: undefined,
+    offering: undefined,
   },
   {
     testLabel: 'for a training in an organization',
     organization: OrganizationFactory().one(),
-    offer: OfferFactory().one(),
+    offering: OfferingFactory().one(),
   },
   {
     testLabel: 'for an organization',
     organization: OrganizationFactory().one(),
-    offer: undefined,
+    offering: undefined,
   },
   {
     testLabel: 'for a training',
     organization: undefined,
-    offer: OfferFactory().one(),
+    offering: OfferingFactory().one(),
   },
-])('useDownloadContractArchive $testLabel', ({ organization, offer }) => {
+])('useDownloadContractArchive $testLabel', ({ organization, offering }) => {
   let localStorageArchiveFilters: LocalStorageArchiveFilters;
 
   beforeEach(() => {
     localStorageArchiveFilters = {
       organizationId: organization ? organization.id : undefined,
-      offerId: offer ? offer.id : undefined,
+      offeringId: offering ? offering.id : undefined,
     };
   });
 
@@ -97,20 +97,20 @@ describe.each([
     {
       testLabel: 'Testing with a other id already stored',
       existingOrganization: OrganizationFactory().one(),
-      existingOffer: OfferFactory().one(),
+      existingOffering: OfferingFactory().one(),
     },
-  ])('$testLabel', ({ existingOrganization, existingOffer }) => {
+  ])('$testLabel', ({ existingOrganization, existingOffering }) => {
     let localStorageExistingArchiveFilters: LocalStorageArchiveFilters;
     let exsitingContractId: string;
 
     beforeEach(() => {
       localStorageExistingArchiveFilters = {
         organizationId: existingOrganization ? existingOrganization.id : undefined,
-        offerId: existingOffer ? existingOffer.id : undefined,
+        offeringId: existingOffering ? existingOffering.id : undefined,
       };
       exsitingContractId = faker.string.uuid();
 
-      if (existingOffer && existingOrganization) {
+      if (existingOffering && existingOrganization) {
         // everything should work fine with multiple archive stored
         storeContractArchiveId({
           ...localStorageExistingArchiveFilters,

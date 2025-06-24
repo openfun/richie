@@ -6,7 +6,7 @@ import {
   PacedCourseFactory,
 } from 'utils/test/factories/richie';
 import {
-  OfferFactory,
+  OfferingFactory,
   EnrollmentFactory,
   CredentialOrderFactory,
   ProductFactory,
@@ -74,8 +74,8 @@ describe('CourseProductItem', () => {
     }).format(price);
 
   it('should display a loader until product is loaded', async () => {
-    const offer = OfferFactory().one();
-    const { product } = offer;
+    const offering = OfferingFactory().one();
+    const { product } = offering;
     const productDeferred = new Deferred();
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
@@ -92,14 +92,17 @@ describe('CourseProductItem', () => {
 
     // - A loader should be displayed while product information are fetching
     await expectSpinner('Loading product information...');
-    productDeferred.resolve(offer);
+    productDeferred.resolve(offering);
     await expectNoSpinner('Loading product information...');
   });
 
   it('renders product information for anonymous user', async () => {
-    const offer = OfferFactory().one();
-    const { product } = offer;
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`, offer);
+    const offering = OfferingFactory().one();
+    const { product } = offering;
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      offering,
+    );
 
     render(
       <CourseProductItem
@@ -128,7 +131,7 @@ describe('CourseProductItem', () => {
     ).not.toBeInTheDocument();
 
     // - Render all target courses information
-    offer.product.target_courses.forEach((course) => {
+    offering.product.target_courses.forEach((course) => {
       const $item = screen.getByTestId(`course-item-${course.code}`);
       // the course title shouldn't be a heading to prevent misdirection for screen reader users,
       // but we want to it to visually look like a h5
@@ -148,7 +151,7 @@ describe('CourseProductItem', () => {
   });
 
   it('renders discount rate for anonymous user', async () => {
-    const offer = OfferFactory({
+    const offering = OfferingFactory({
       product: CredentialProductFactory({
         price: 840,
         price_currency: 'EUR',
@@ -161,8 +164,11 @@ describe('CourseProductItem', () => {
         discount_end: new Date('2023-12-31T23:59:59Z').toISOString(),
       },
     }).one();
-    const { product } = offer;
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`, offer);
+    const { product } = offering;
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      offering,
+    );
 
     render(
       <CourseProductItem
@@ -188,7 +194,7 @@ describe('CourseProductItem', () => {
     const discountedPriceLabel = screen.getByText('Discounted price:');
     expect(discountedPriceLabel.classList.contains('offscreen')).toBe(true);
     const discountedPrice = screen.getByText(
-      priceFormatter(product.price_currency, offer.rules.discounted_price!).replace(
+      priceFormatter(product.price_currency, offering.rules.discounted_price!).replace(
         /(\u202F|\u00a0)/g,
         ' ',
       ),
@@ -208,7 +214,7 @@ describe('CourseProductItem', () => {
   });
 
   it('renders discount amount for anonymous user', async () => {
-    const offer = OfferFactory({
+    const offering = OfferingFactory({
       product: CredentialProductFactory({
         price: 840,
         price_currency: 'EUR',
@@ -221,8 +227,11 @@ describe('CourseProductItem', () => {
         discount_end: new Date('2023-12-31T23:59:59Z').toISOString(),
       },
     }).one();
-    const { product } = offer;
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`, offer);
+    const { product } = offering;
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      offering,
+    );
 
     render(
       <CourseProductItem
@@ -248,7 +257,7 @@ describe('CourseProductItem', () => {
     const discountedPriceLabel = screen.getByText('Discounted price:');
     expect(discountedPriceLabel.classList.contains('offscreen')).toBe(true);
     const discountedPrice = screen.getByText(
-      priceFormatter(product.price_currency, offer.rules.discounted_price!).replace(
+      priceFormatter(product.price_currency, offering.rules.discounted_price!).replace(
         /(\u202F|\u00a0)/g,
         ' ',
       ),
@@ -268,13 +277,16 @@ describe('CourseProductItem', () => {
   });
 
   it('does not render <CertificateItem /> if product do not have a certificate', async () => {
-    const offer = OfferFactory({
+    const offering = OfferingFactory({
       product: ProductFactory({
         certificate_definition: undefined,
       }).one(),
     }).one();
-    const { product } = offer;
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`, offer);
+    const { product } = offering;
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      offering,
+    );
 
     render(
       <CourseProductItem
@@ -292,16 +304,16 @@ describe('CourseProductItem', () => {
   });
 
   it('renders product information in compact mode', async () => {
-    const offer = OfferFactory().one();
+    const offering = OfferingFactory().one();
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/00000/products/${offer.product.id}/`,
-      offer,
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${offering.product.id}/`,
+      offering,
     );
 
     const { container } = render(
       <CourseProductItem
         course={PacedCourseFactory({ code: '00000' }).one()}
-        productId={offer.product.id}
+        productId={offering.product.id}
         compact
       />,
       { queryOptions: { client: createTestQueryClient({ user: null }) } },
@@ -309,14 +321,14 @@ describe('CourseProductItem', () => {
 
     // In the header, we should display the product title, the product price
     // and product date range and languages
-    await screen.findByRole('heading', { level: 3, name: offer.product.title });
+    await screen.findByRole('heading', { level: 3, name: offering.product.title });
     // the price shouldn't be a heading to prevent misdirection for screen reader users,
     // but we want to it to visually look like a h6
 
     const $price = screen.getByText(
       // the price formatter generates non-breaking spaces and getByText doesn't seem to handle that well, replace it
       // with a regular space. We replace NNBSP (\u202F) and NBSP (\u00a0) with a regular space
-      priceFormatter(offer.product.price_currency, offer.product.price).replace(
+      priceFormatter(offering.product.price_currency, offering.product.price).replace(
         /(\u202F|\u00a0)/g,
         ' ',
       ),
@@ -332,7 +344,7 @@ describe('CourseProductItem', () => {
     expect($productWidgetContent).not.toBeInTheDocument();
 
     // - Any target courses information should be displayed
-    offer.product.target_courses.forEach((course) => {
+    offering.product.target_courses.forEach((course) => {
       const $item = screen.queryByTestId(`course-item-${course.code}`);
       expect($item).not.toBeInTheDocument();
     });
@@ -341,7 +353,7 @@ describe('CourseProductItem', () => {
     expect(screen.queryByTestId('CertificateItem')).not.toBeInTheDocument();
 
     // - Render a login button
-    screen.getByRole('button', { name: `Login to purchase "${offer.product.title}"` });
+    screen.getByRole('button', { name: `Login to purchase "${offering.product.title}"` });
     // - Does not render PurchaseButton cta
     expect(screen.queryByTestId('PurchaseButton__cta')).not.toBeInTheDocument();
   });
@@ -349,8 +361,8 @@ describe('CourseProductItem', () => {
   it.each([OrderState.PENDING, OrderState.NO_PAYMENT])(
     'renders product informations for %s order',
     async (state) => {
-      const offer = OfferFactory().one();
-      const { product } = offer;
+      const offering = OfferingFactory().one();
+      const { product } = offering;
       const order = CredentialOrderFactory({
         product_id: product.id,
         course: PacedCourseFactory({ code: '00000' }).one(),
@@ -360,7 +372,7 @@ describe('CourseProductItem', () => {
 
       fetchMock.get(
         `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
-        offer,
+        offering,
       );
       const orderQueryParameters = {
         course_code: order.course.code,
@@ -374,13 +386,13 @@ describe('CourseProductItem', () => {
       render(
         <CourseProductItem
           course={PacedCourseFactory({ code: '00000' }).one()}
-          productId={offer.product.id}
+          productId={offering.product.id}
         />,
       );
 
       // In the header, we should display the product title, the product price
       // and product date range and languages
-      await screen.findByRole('heading', { level: 3, name: offer.product.title });
+      await screen.findByRole('heading', { level: 3, name: offering.product.title });
       // the price shouldn't be a heading to prevent misdirection for screen reader users,
       // but we want to it to visually look like a h6
 
@@ -410,8 +422,8 @@ describe('CourseProductItem', () => {
   it.each([OrderState.PENDING, OrderState.NO_PAYMENT])(
     'renders product informations for %s order in compact mode',
     async (state) => {
-      const offer = OfferFactory().one();
-      const { product } = offer;
+      const offering = OfferingFactory().one();
+      const { product } = offering;
       const order = CredentialOrderFactory({
         product_id: product.id,
         course: PacedCourseFactory({ code: '00000' }).one(),
@@ -421,7 +433,7 @@ describe('CourseProductItem', () => {
 
       fetchMock.get(
         `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
-        offer,
+        offering,
       );
       const orderQueryParameters = {
         course_code: order.course.code,
@@ -435,14 +447,14 @@ describe('CourseProductItem', () => {
       render(
         <CourseProductItem
           course={PacedCourseFactory({ code: '00000' }).one()}
-          productId={offer.product.id}
+          productId={offering.product.id}
           compact
         />,
       );
 
       // In the header, we should display the product title, the product price
       // and product date range and languages
-      await screen.findByRole('heading', { level: 3, name: offer.product.title });
+      await screen.findByRole('heading', { level: 3, name: offering.product.title });
       // the price shouldn't be a heading to prevent misdirection for screen reader users,
       // but we want to it to visually look like a h6
 
@@ -452,7 +464,7 @@ describe('CourseProductItem', () => {
       expect($enrolledInfo.classList.contains('h6')).toBe(true);
 
       // - Any target courses information should be displayed
-      offer.product.target_courses.forEach((course) => {
+      offering.product.target_courses.forEach((course) => {
         const $item = screen.queryByTestId(`course-item-${course.code}`);
         expect($item).not.toBeInTheDocument();
       });
@@ -463,8 +475,8 @@ describe('CourseProductItem', () => {
   );
 
   it.each(ENROLLABLE_ORDER_STATES)('renders product information for a %s order', async (state) => {
-    const offer = OfferFactory().one();
-    const { product } = offer;
+    const offering = OfferingFactory().one();
+    const { product } = offering;
     const order = CredentialOrderFactory({
       product_id: product.id,
       course: PacedCourseFactory({ code: '00000' }).one(),
@@ -472,7 +484,10 @@ describe('CourseProductItem', () => {
       state,
     }).one();
 
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`, offer);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      offering,
+    );
     const orderQueryParameters = {
       course_code: order.course.code,
       product_id: order.product_id,
@@ -522,17 +537,17 @@ describe('CourseProductItem', () => {
   it.each(ENROLLABLE_ORDER_STATES)(
     'renders product informations for a %s order in compact mode',
     async (state) => {
-      const offer = OfferFactory().one();
+      const offering = OfferingFactory().one();
       const order: CredentialOrder = CredentialOrderFactory({
-        product_id: offer.product.id,
+        product_id: offering.product.id,
         course: PacedCourseFactory({ code: '00000' }).one(),
-        target_courses: offer.product.target_courses,
+        target_courses: offering.product.target_courses,
         state,
       }).one();
 
       fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/courses/00000/products/${offer.product.id}/`,
-        offer,
+        `https://joanie.endpoint/api/v1.0/courses/00000/products/${offering.product.id}/`,
+        offering,
       );
       const orderQueryParameters = {
         product_id: order.product_id,
@@ -546,14 +561,14 @@ describe('CourseProductItem', () => {
 
       render(
         <CourseProductItem
-          productId={offer.product.id}
+          productId={offering.product.id}
           course={PacedCourseFactory({ code: '00000' }).one()}
           compact
         />,
       );
 
       // Wait for product information to be fetched
-      await screen.findByRole('heading', { level: 3, name: offer.product.title });
+      await screen.findByRole('heading', { level: 3, name: offering.product.title });
 
       // - In place of product price, a label should be displayed
       const $enrolledInfo = await screen.findByText('Purchased');
@@ -590,8 +605,8 @@ describe('CourseProductItem', () => {
   );
 
   it('renders enrollment information when user is enrolled to a course run', async () => {
-    const offer = OfferFactory().one();
-    const { product } = offer;
+    const offering = OfferingFactory().one();
+    const { product } = offering;
     // - Create an order with an active enrollment
     const enrollment: Enrollment = EnrollmentFactory({
       course_run: product.target_courses[0]!.course_runs[0]! as CourseRun,
@@ -603,7 +618,10 @@ describe('CourseProductItem', () => {
       target_enrollments: [enrollment],
     }).one();
 
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`, offer);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      offering,
+    );
     const orderQueryParameters = {
       product_id: order.product_id,
       course_code: order.course?.code,
@@ -654,8 +672,8 @@ describe('CourseProductItem', () => {
   it.each(PURCHASABLE_ORDER_STATES)(
     'renders sale tunnel button if user already has a %s order',
     async (state) => {
-      const offer = OfferFactory().one();
-      const { product } = offer;
+      const offering = OfferingFactory().one();
+      const { product } = offering;
       const order = CredentialOrderFactory({
         product_id: product.id,
         course: PacedCourseFactory({ code: '00000' }).one(),
@@ -664,7 +682,7 @@ describe('CourseProductItem', () => {
       }).one();
       fetchMock.get(
         `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
-        offer,
+        offering,
       );
       const orderQueryParameters = {
         product_id: order.product_id,
@@ -695,7 +713,7 @@ describe('CourseProductItem', () => {
       expect($price.classList.contains('h6')).toBe(true);
 
       // - Render all target courses information
-      offer.product.target_courses.forEach((course) => {
+      offering.product.target_courses.forEach((course) => {
         const $item = screen.getByTestId(`course-item-${course.code}`);
         // the course title shouldn't be a heading to prevent misdirection for screen reader users,
         // but we want to it to visually look like a h5
@@ -710,9 +728,12 @@ describe('CourseProductItem', () => {
   );
 
   it('renders sale tunnel button if user already has a canceled order', async () => {
-    const offer = OfferFactory().one();
-    const { product } = offer;
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`, offer);
+    const offering = OfferingFactory().one();
+    const { product } = offering;
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      offering,
+    );
     const orderQueryParameters = {
       product_id: product.id,
       course_code: '00000',
@@ -742,7 +763,7 @@ describe('CourseProductItem', () => {
     expect($price.classList.contains('h6')).toBe(true);
 
     // - Render all target courses information
-    offer.product.target_courses.forEach((course) => {
+    offering.product.target_courses.forEach((course) => {
       const $item = screen.getByTestId(`course-item-${course.code}`);
       // the course title shouldn't be a heading to prevent misdirection for screen reader users,
       // but we want to it to visually look like a h5
@@ -756,7 +777,7 @@ describe('CourseProductItem', () => {
   });
 
   it('renders error message when product fetching has failed', async () => {
-    const { product } = OfferFactory().one();
+    const { product } = OfferingFactory().one();
 
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
@@ -777,20 +798,23 @@ describe('CourseProductItem', () => {
   });
 
   it('renders a warning message that tells that no seats are left', async () => {
-    const offer = OfferFactory({
+    const offering = OfferingFactory({
       rules: {
         nb_available_seats: 0,
         has_seats_left: false,
       },
     }).one();
-    const { product } = offer;
+    const { product } = offering;
     const order = CredentialOrderFactory({
       product_id: product.id,
       course: PacedCourseFactory({ code: '00000' }).one(),
       target_courses: product.target_courses,
       state: OrderState.DRAFT,
     }).one();
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`, offer);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      offering,
+    );
     const orderQueryParameters = {
       product_id: order.product_id,
       course_code: order.course?.code,

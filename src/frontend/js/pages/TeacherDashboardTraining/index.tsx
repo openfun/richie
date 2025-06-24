@@ -6,33 +6,33 @@ import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import Banner, { BannerType } from 'components/Banner';
-import { Offer } from 'types/Joanie';
+import { Offering } from 'types/Joanie';
 
 const messages = defineMessages({
-  errorNoOffer: {
+  errorNoOffering: {
     defaultMessage: "This product doesn't exist",
-    description: 'Message displayed when requested offer is not found',
-    id: 'components.TeacherDashboardTraining.errorNoOffer',
+    description: 'Message displayed when requested offering is not found',
+    id: 'components.TeacherDashboardTraining.errorNoOffering',
   },
 });
 
 interface TeacherDashboardTrainingProps {
-  offer: Offer;
+  offering: Offering;
 }
 
-export const TeacherDashboardTraining = ({ offer }: TeacherDashboardTrainingProps) => {
+export const TeacherDashboardTraining = ({ offering }: TeacherDashboardTrainingProps) => {
   const intl = useIntl();
-  return offer ? (
+  return offering ? (
     <div className="teacher-course-page">
       <DashboardCard
         className="icon-arrow-right-rounded"
         header={
           <div>
             <div className="dashboard__title_container--small">
-              <h2 className="dashboard__title--large">{capitalize(offer.product.title)}</h2>
+              <h2 className="dashboard__title--large">{capitalize(offering.product.title)}</h2>
             </div>
-            {offer.product.description && (
-              <div className="dashboard__quote">{offer.product.description}</div>
+            {offering.product.description && (
+              <div className="dashboard__quote">{offering.product.description}</div>
             )}
           </div>
         }
@@ -40,7 +40,7 @@ export const TeacherDashboardTraining = ({ offer }: TeacherDashboardTrainingProp
         fullWidth
       />
       <DashboardLayout.NestedSection>
-        {offer.product.target_courses.map((course) => (
+        {offering.product.target_courses.map((course) => (
           <DashboardLayout.Section key={`course_target_${course.code}`}>
             <DashboardCard
               className="icon-arrow-right-rounded"
@@ -62,7 +62,11 @@ export const TeacherDashboardTraining = ({ offer }: TeacherDashboardTrainingProp
       </DashboardLayout.NestedSection>
     </div>
   ) : (
-    <Banner message={intl.formatMessage(messages.errorNoOffer)} type={BannerType.ERROR} rounded />
+    <Banner
+      message={intl.formatMessage(messages.errorNoOffering)}
+      type={BannerType.ERROR}
+      rounded
+    />
   );
 };
 

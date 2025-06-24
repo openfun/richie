@@ -1,7 +1,7 @@
 import { createSearchParams } from 'react-router';
 import { useMemo } from 'react';
 import { MenuLink } from 'widgets/Dashboard/components/DashboardSidebar';
-import { ContractState, Offer, Organization } from 'types/Joanie';
+import { ContractState, Offering, Organization } from 'types/Joanie';
 import useTeacherPendingContractsCount from 'hooks/useTeacherPendingContractsCount';
 import { ContractActions } from 'utils/AbilitiesHelper/types';
 import useContractAbilities from 'hooks/useContractAbilities';
@@ -11,14 +11,14 @@ import MenuNavLink from '../MenuNavLink';
 interface ContractNavLinkProps {
   link: MenuLink;
   organizationId?: Organization['id'];
-  offerId?: Offer['id'];
+  offeringId?: Offering['id'];
 }
 
-const ContractNavLink = ({ link, organizationId, offerId }: ContractNavLinkProps) => {
+const ContractNavLink = ({ link, organizationId, offeringId }: ContractNavLinkProps) => {
   const defaultOrganizationId = useDefaultOrganizationId();
   const { contracts: pendingContracts, pendingContractCount } = useTeacherPendingContractsCount({
     organizationId: organizationId || defaultOrganizationId,
-    offerId,
+    offeringId,
   });
   const contractAbilities = useContractAbilities(pendingContracts);
   const canSignContracts = contractAbilities.can(ContractActions.SIGN);

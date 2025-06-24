@@ -42,7 +42,7 @@ const messages = defineMessages({
 
 interface PurchaseButtonPropsBase {
   product: Joanie.CredentialProduct | Joanie.CertificateProduct;
-  offer?: Joanie.Offer;
+  offering?: Joanie.Offering;
   isWithdrawable: boolean;
   disabled?: boolean;
   className?: string;
@@ -66,7 +66,7 @@ interface CertificatePurchaseButtonProps extends PurchaseButtonPropsBase {
 const PurchaseButton = ({
   product,
   course,
-  offer,
+  offering,
   enrollment,
   isWithdrawable,
   organizations,
@@ -140,7 +140,7 @@ const PurchaseButton = ({
         {...saleTunnelModal}
         product={product}
         organizations={organizations}
-        offer={offer}
+        offering={offering}
         enrollment={enrollment}
         course={course}
         isWithdrawable={isWithdrawable}

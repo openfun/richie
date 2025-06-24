@@ -28,7 +28,7 @@ describe('<ContractNavLink />', () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', []);
   });
 
-  it('should render a ContractNavLink with route and label when neither organizationId and offerId are given', () => {
+  it('should render a ContractNavLink with route and label when neither organizationId and offeringId are given', () => {
     const link: MenuLink = {
       to: '/dummy/url/',
       label: 'My contract navigation link',
@@ -45,31 +45,31 @@ describe('<ContractNavLink />', () => {
     it.each([
       {
         organizationId: faker.string.uuid(),
-        offerId: undefined,
+        offeringId: undefined,
       },
       {
         organizationId: faker.string.uuid(),
-        offerId: faker.string.uuid(),
+        offeringId: faker.string.uuid(),
       },
       {
         organizationId: undefined,
-        offerId: faker.string.uuid(),
+        offeringId: faker.string.uuid(),
       },
       {
         organizationId: undefined,
-        offerId: undefined,
+        offeringId: undefined,
       },
     ])(
-      'should never render Badge for organizationId: $organizationId and courseProductId: $offerId',
-      async ({ organizationId, offerId }) => {
+      'should never render Badge for organizationId: $organizationId and courseProductId: $offeringId',
+      async ({ organizationId, offeringId }) => {
         let contractQueryParams: ContractResourceQuery = {
           signature_state: ContractState.LEARNER_SIGNED,
           page: 1,
           page_size: PER_PAGE.teacherContractList,
         };
-        if (offerId) {
+        if (offeringId) {
           contractQueryParams = {
-            offer_id: offerId,
+            offering_id: offeringId,
             ...contractQueryParams,
           };
         }
@@ -94,7 +94,7 @@ describe('<ContractNavLink />', () => {
               label: 'My contract navigation link',
             }}
             organizationId={organizationId}
-            offerId={offerId}
+            offeringId={offeringId}
           />,
         );
 
@@ -112,25 +112,25 @@ describe('<ContractNavLink />', () => {
       // with 1 contracts to sign
       {
         organizationId: faker.string.uuid(),
-        offerId: undefined,
+        offeringId: undefined,
         nbContractsToSign: 1,
         expectedBadgeCount: 1,
       },
       {
         organizationId: faker.string.uuid(),
-        offerId: faker.string.uuid(),
+        offeringId: faker.string.uuid(),
         nbContractsToSign: 1,
         expectedBadgeCount: 1,
       },
       {
         organizationId: undefined,
-        offerId: faker.string.uuid(),
+        offeringId: faker.string.uuid(),
         nbContractsToSign: 1,
         expectedBadgeCount: undefined,
       },
       {
         organizationId: undefined,
-        offerId: undefined,
+        offeringId: undefined,
         nbContractsToSign: 1,
         expectedBadgeCount: undefined,
       },
@@ -138,39 +138,39 @@ describe('<ContractNavLink />', () => {
       // with 0 contracts to sign
       {
         organizationId: faker.string.uuid(),
-        offerId: undefined,
+        offeringId: undefined,
         nbContractsToSign: 0,
         expectedBadgeCount: undefined,
       },
       {
         organizationId: faker.string.uuid(),
-        offerId: faker.string.uuid(),
+        offeringId: faker.string.uuid(),
         nbContractsToSign: 0,
         expectedBadgeCount: undefined,
       },
       {
         organizationId: undefined,
-        offerId: faker.string.uuid(),
+        offeringId: faker.string.uuid(),
         nbContractsToSign: 0,
         expectedBadgeCount: undefined,
       },
       {
         organizationId: undefined,
-        offerId: undefined,
+        offeringId: undefined,
         nbContractsToSign: 0,
         expectedBadgeCount: undefined,
       },
     ])(
-      'should render Badge (count: $expectedBadgeCount) for nb contracts to sign: $nbContractsToSign, organizationId: $organizationId and courseProductId: $offerId',
-      async ({ nbContractsToSign, organizationId, offerId, expectedBadgeCount }) => {
+      'should render Badge (count: $expectedBadgeCount) for nb contracts to sign: $nbContractsToSign, organizationId: $organizationId and courseProductId: $offeringId',
+      async ({ nbContractsToSign, organizationId, offeringId, expectedBadgeCount }) => {
         let contractQueryParams: ContractResourceQuery = {
           signature_state: ContractState.LEARNER_SIGNED,
           page: 1,
           page_size: PER_PAGE.teacherContractList,
         };
-        if (offerId) {
+        if (offeringId) {
           contractQueryParams = {
-            offer_id: offerId,
+            offering_id: offeringId,
             ...contractQueryParams,
           };
         }
@@ -194,7 +194,7 @@ describe('<ContractNavLink />', () => {
               label: 'My contract navigation link',
             }}
             organizationId={organizationId}
-            offerId={offerId}
+            offeringId={offeringId}
           />,
         );
 

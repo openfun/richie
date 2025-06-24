@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import queryString from 'query-string';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import {
-  OfferFactory,
+  OfferingFactory,
   NestedCourseOrderFactory,
   OrganizationFactory,
 } from 'utils/test/factories/joanie';
@@ -49,44 +49,44 @@ describe('pages/TeacherDashboardCourseLearnersLayout', () => {
       organizationFilterShouldBeDisplayed: true,
     },
   ])('$expectedLabel', async ({ nbOrganization, organizationFilterShouldBeDisplayed }) => {
-    const offer = OfferFactory().one();
+    const offering = OfferingFactory().one();
     const organizationList = OrganizationFactory().many(nbOrganization);
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/?offer_id=${offer.id}`,
+      `https://joanie.endpoint/api/v1.0/organizations/?offering_id=${offering.id}`,
       organizationList,
     );
 
     // Course sidebar query
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/offers/${offer.id}/`, {});
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/offerings/${offering.id}/`, {});
 
     // First request before finding default organizationId
     const courseOrderListQueryParams = {
-      offer_id: offer.id,
+      offering_id: offering.id,
       page: 1,
       page_size: PER_PAGE.courseLearnerList,
     };
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
+      `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
       [],
     );
 
     if (organizationList.length > 0) {
       // Course sidebar query
       fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/organizations/${organizationList[0].id}/contracts/?offer_id=${offer.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
+        `https://joanie.endpoint/api/v1.0/organizations/${organizationList[0].id}/contracts/?offering_id=${offering.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
         [],
       );
 
       // Second request when default organizationId is fetched
       fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify({ organization_id: organizationList[0].id, ...courseOrderListQueryParams }, { sort: false })}`,
+        `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify({ organization_id: organizationList[0].id, ...courseOrderListQueryParams }, { sort: false })}`,
         [],
       );
     }
     render(<TeacherDashboardCourseLearnersLayout />, {
       routerOptions: {
-        path: '/:courseId/:offerId',
-        initialEntries: [`/${offer.course.id}/${offer.id}`],
+        path: '/:courseId/:offeringId',
+        initialEntries: [`/${offering.course.id}/${offering.id}`],
       },
     });
 
@@ -109,42 +109,42 @@ describe('pages/TeacherDashboardCourseLearnersLayout', () => {
   });
 
   it('should call onFiltersChange on organization filter change', async () => {
-    const offer = OfferFactory().one();
+    const offering = OfferingFactory().one();
     const defaultOrganization = OrganizationFactory().one();
     const otherOrganization = OrganizationFactory().one();
     const organizationList = [defaultOrganization, otherOrganization];
 
     // Course sidebar queries
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?offer_id=${offer.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?offering_id=${offering.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
       [],
     );
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/offers/${offer.id}/`, {});
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/offerings/${offering.id}/`, {});
 
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/?offer_id=${offer.id}`,
+      `https://joanie.endpoint/api/v1.0/organizations/?offering_id=${offering.id}`,
       organizationList,
     );
     // First request before finding default organizationId
     const courseOrderListQueryParams = {
-      offer_id: offer.id,
+      offering_id: offering.id,
       page: 1,
       page_size: PER_PAGE.courseLearnerList,
     };
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
+      `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
       [],
     );
     // Second request when default organizationId is fetched
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify({ organization_id: defaultOrganization.id, ...courseOrderListQueryParams }, { sort: false })}`,
+      `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify({ organization_id: defaultOrganization.id, ...courseOrderListQueryParams }, { sort: false })}`,
       [],
     );
 
     render(<TeacherDashboardCourseLearnersLayout />, {
       routerOptions: {
-        path: '/:courseId/:offerId',
-        initialEntries: [`/${offer.course.id}/${offer.id}`],
+        path: '/:courseId/:offeringId',
+        initialEntries: [`/${offering.course.id}/${offering.id}`],
       },
     });
 
@@ -158,57 +158,57 @@ describe('pages/TeacherDashboardCourseLearnersLayout', () => {
     const optionToSelect = screen.getByRole('option', { name: organizationList[1].title });
 
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify({ organization_id: otherOrganization.id, ...courseOrderListQueryParams }, { sort: false })}`,
+      `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify({ organization_id: otherOrganization.id, ...courseOrderListQueryParams }, { sort: false })}`,
       [],
     );
     await user.click(optionToSelect);
     // onload default value is undefine and is onFiltersChange called once
     expect(
       fetchMock.called(
-        `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify({ organization_id: otherOrganization.id, ...courseOrderListQueryParams }, { sort: false })}`,
+        `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify({ organization_id: otherOrganization.id, ...courseOrderListQueryParams }, { sort: false })}`,
       ),
     ).toBe(true);
   });
 
-  it('should render a list of course learners for a offer', async () => {
+  it('should render a list of course learners for an offering', async () => {
     const defaultOrganization = OrganizationFactory().one();
     const otherOrganization = OrganizationFactory().one();
     const organizationList = [defaultOrganization, otherOrganization];
-    const offer = OfferFactory().one();
+    const offering = OfferingFactory().one();
     const courseOrderList = NestedCourseOrderFactory().many(3);
 
     // Course sidebar queries
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?offer_id=${offer.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${defaultOrganization.id}/contracts/?offering_id=${offering.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
       [],
     );
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/offers/${offer.id}/`, {});
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/offerings/${offering.id}/`, {});
 
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/?offer_id=${offer.id}`,
+      `https://joanie.endpoint/api/v1.0/organizations/?offering_id=${offering.id}`,
       organizationList,
     );
 
     // First request before finding default organizationId
     const courseOrderListQueryParams = {
-      offer_id: offer.id,
+      offering_id: offering.id,
       page: 1,
       page_size: PER_PAGE.courseLearnerList,
     };
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
+      `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
       courseOrderList,
     );
     // Second request when default organizationId is fetched
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify({ organization_id: defaultOrganization.id, ...courseOrderListQueryParams }, { sort: false })}`,
+      `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify({ organization_id: defaultOrganization.id, ...courseOrderListQueryParams }, { sort: false })}`,
       courseOrderList,
     );
 
     render(<TeacherDashboardCourseLearnersLayout />, {
       routerOptions: {
-        path: '/:courseId/:offerId',
-        initialEntries: [`/${offer.course.id}/${offer.id}`],
+        path: '/:courseId/:offeringId',
+        initialEntries: [`/${offering.course.id}/${offering.id}`],
       },
     });
 
@@ -230,39 +230,39 @@ describe('pages/TeacherDashboardCourseLearnersLayout', () => {
 
   it('should render a list of course learners for an organization', async () => {
     const organization = OrganizationFactory().one();
-    const offer = OfferFactory().one();
+    const offering = OfferingFactory().one();
     const courseOrderList = NestedCourseOrderFactory().many(3);
 
     // Course sidebar queries
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?offer_id=${offer.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?offering_id=${offering.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
       [],
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offers/${offer.id}/`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offerings/${offering.id}/`,
       {},
     );
 
     // before default organization's fetched, we query all organization to decide if we should display organization filter or not.
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/?offer_id=${offer.id}`, [
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/?offering_id=${offering.id}`, [
       organization,
     ]);
 
     const courseOrderListQueryParams = {
       organization_id: organization.id,
-      offer_id: offer.id,
+      offering_id: offering.id,
       page: 1,
       page_size: PER_PAGE.courseLearnerList,
     };
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
+      `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
       courseOrderList,
     );
 
     render(<TeacherDashboardCourseLearnersLayout />, {
       routerOptions: {
-        path: '/:organizationId/:courseId/:offerId',
-        initialEntries: [`/${organization.id}/${offer.course.id}/${offer.id}`],
+        path: '/:organizationId/:courseId/:offeringId',
+        initialEntries: [`/${organization.id}/${offering.course.id}/${offering.id}`],
       },
     });
 
@@ -282,38 +282,38 @@ describe('pages/TeacherDashboardCourseLearnersLayout', () => {
 
   it('should render an empty table if there are no course learners', async () => {
     const organization = OrganizationFactory().one();
-    const offer = OfferFactory().one();
+    const offering = OfferingFactory().one();
 
     // Course sidebar queries
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?offer_id=${offer.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?offering_id=${offering.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
       [],
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offers/${offer.id}/`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offerings/${offering.id}/`,
       {},
     );
 
     // before default organization's fetched, we query all organization to decide if we should display organization filter or not.
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/?offer_id=${offer.id}`, [
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/?offering_id=${offering.id}`, [
       organization,
     ]);
 
     const courseOrderListQueryParams = {
       organization_id: organization.id,
-      offer_id: offer.id,
+      offering_id: offering.id,
       page: 1,
       page_size: PER_PAGE.courseLearnerList,
     };
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
+      `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
       [],
     );
 
     render(<TeacherDashboardCourseLearnersLayout />, {
       routerOptions: {
-        path: '/:organizationId/:courseId/:offerId',
-        initialEntries: [`/${organization.id}/${offer.course.id}/${offer.id}`],
+        path: '/:organizationId/:courseId/:offeringId',
+        initialEntries: [`/${organization.id}/${offering.course.id}/${offering.id}`],
       },
     });
 
@@ -326,38 +326,38 @@ describe('pages/TeacherDashboardCourseLearnersLayout', () => {
 
   it('should render an error banner if an error occured during course learners fetching', async () => {
     const organization = OrganizationFactory().one();
-    const offer = OfferFactory().one();
+    const offering = OfferingFactory().one();
 
     // Course sidebar queries
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?offer_id=${offer.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?offering_id=${offering.id}&signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
       [],
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offers/${offer.id}/`,
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/offerings/${offering.id}/`,
       {},
     );
 
     // before default organization's fetched, we query all organization to decide if we should display organization filter or not.
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/?offer_id=${offer.id}`, [
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/?offering_id=${offering.id}`, [
       organization,
     ]);
 
     const courseOrderListQueryParams = {
       organization_id: organization.id,
-      offer_id: offer.id,
+      offering_id: offering.id,
       page: 1,
       page_size: PER_PAGE.courseLearnerList,
     };
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${offer.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
+      `https://joanie.endpoint/api/v1.0/courses/${offering.course.id}/orders/?${queryString.stringify(courseOrderListQueryParams, { sort: false })}`,
       new Response('', { status: HttpStatusCode.NOT_FOUND }),
     );
 
     render(<TeacherDashboardCourseLearnersLayout />, {
       routerOptions: {
-        path: '/:organizationId/:courseId/:offerId',
-        initialEntries: [`/${organization.id}/${offer.course.id}/${offer.id}`],
+        path: '/:organizationId/:courseId/:offeringId',
+        initialEntries: [`/${organization.id}/${offering.course.id}/${offering.id}`],
       },
     });
 

@@ -1,6 +1,6 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
 import PurchaseButton from 'components/PurchaseButton';
-import { Offer, CredentialProduct } from 'types/Joanie';
+import { Offering, CredentialProduct } from 'types/Joanie';
 import { PacedCourse } from 'types';
 
 const messages = defineMessages({
@@ -24,12 +24,16 @@ other {# remaining seats}
 
 interface CourseProductItemFooterProps {
   course: PacedCourse;
-  offer: Offer;
+  offering: Offering;
   canPurchase: boolean;
 }
 
-const CourseProductItemFooter = ({ course, offer, canPurchase }: CourseProductItemFooterProps) => {
-  if (!offer.rules.has_seats_left)
+const CourseProductItemFooter = ({
+  course,
+  offering,
+  canPurchase,
+}: CourseProductItemFooterProps) => {
+  if (!offering.rules.has_seats_left)
     return (
       <p className="product-widget__footer__message">
         <FormattedMessage {...messages.noSeatsAvailable} />
@@ -39,18 +43,18 @@ const CourseProductItemFooter = ({ course, offer, canPurchase }: CourseProductIt
     <div className="product-widget__footer__order-group">
       <PurchaseButton
         course={course}
-        product={offer.product as CredentialProduct}
-        offer={offer}
-        organizations={offer.organizations}
-        isWithdrawable={offer.is_withdrawable}
+        product={offering.product as CredentialProduct}
+        offering={offering}
+        organizations={offering.organizations}
+        isWithdrawable={offering.is_withdrawable}
         disabled={!canPurchase}
         buttonProps={{ fullWidth: true }}
       />
-      {offer.rules.has_seat_limit && (
+      {offering.rules.has_seat_limit && (
         <p className="product-widget__footer__message">
           <FormattedMessage
             {...messages.nbSeatsAvailable}
-            values={{ nb: offer.rules.nb_available_seats }}
+            values={{ nb: offering.rules.nb_available_seats }}
           />
         </p>
       )}
