@@ -13,3 +13,7 @@ let context = {
 (window as any).__richie_frontend_context__ = {
   context: RichieContextFactory(context).one(),
 };
+
+(window as any).jest = {
+    fn: ((fnc: any) => fnc) as any,
+};
