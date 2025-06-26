@@ -3,8 +3,10 @@ Tests for CourseRun API endpoints in the courses app with EDX LMS.
 """
 
 # pylint: disable=too-many-lines
+from decimal import Decimal
 from unittest import mock
 
+from django.conf import settings
 from django.test import override_settings
 
 from cms.constants import PUBLISHER_STATE_DEFAULT
@@ -14,6 +16,7 @@ from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.courses.factories import CourseFactory
 from richie.apps.courses.models import CourseRun
+from richie.apps.courses.utils import get_signature
 
 
 # pylint: disable=too-many-public-methods
@@ -31,6 +34,19 @@ from richie.apps.courses.models import CourseRun
 )
 class JoanieSyncCourseRunApiTestCase(CMSTestCase):
     """Test calls to sync a course run from Joanie via API endpoint."""
+
+    maxDiff = None
+
+    def authorize(self, data):
+        """
+        Build the authorization header for the request.
+        This is a helper method to avoid repeating the signature calculation in each test.
+        """
+        return get_signature(
+            # pylint: disable=protected-access
+            self.client._encode_json(data, "application/json"),
+            settings.RICHIE_COURSE_RUN_SYNC_SECRETS[0],
+        )
 
     # To update the http authorizations add this next statements before the first assert
     # from richie.apps.courses.utils import get_signature
@@ -50,6 +66,13 @@ class JoanieSyncCourseRunApiTestCase(CMSTestCase):
             "enrollment_end": "2020-12-24T09:31:59.417972Z",
             "languages": ["en", "fr"],
             "course": "DemoX",
+            "price": "59.99",
+            "price_currency": "EUR",
+            "offer": "paid",
+            "certificate_price": "19.99",
+            "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
         }
         mock_signal.reset_mock()
 
@@ -58,17 +81,25 @@ class JoanieSyncCourseRunApiTestCase(CMSTestCase):
             PUBLISHER_STATE_DEFAULT,
         )
 
-        authorization = (
-            "SIG-HMAC-SHA256 "
-            "98ee25a1f289f4bb1e2887455b02ff32bf1e45d64a72ac6c6f4e6feff80df0f2"
-        )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=authorization,
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
         self.assertEqual(CourseRun.objects.count(), 1)
+
+        course_run = CourseRun.objects.first()
+        self.assertEqual(course_run.resource_link, data["resource_link"])
+        self.assertEqual(course_run.price, Decimal(data["price"]))
+        self.assertEqual(course_run.price_currency, data["price_currency"])
+        self.assertEqual(course_run.offer, data["offer"])
+        self.assertEqual(
+            course_run.certificate_price, Decimal(data["certificate_price"])
+        )
+        self.assertEqual(course_run.certificate_offer, data["certificate_offer"])
+        self.assertEqual(course_run.discounted_price, Decimal(data["discounted_price"]))
+        self.assertEqual(course_run.discount, data["discount"])

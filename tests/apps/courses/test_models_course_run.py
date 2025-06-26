@@ -633,6 +633,10 @@ class CourseRunModelsTestCase(TestCase):
                 "price_currency",
                 "offer",
                 "certificate_offer",
+                "discounted_price",
+                "discount",
+                "certificate_discounted_price",
+                "certificate_discount",
             ]:
                 # Skip these fields since they are not mandatory fields to be changed
                 continue

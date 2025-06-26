@@ -21,6 +21,8 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
     Unit test suite to validate the behavior of the `course_runs_list_widget_props` tag.
     """
 
+    maxDiff = None
+
     @override_settings(TIME_ZONE="UTC")
     def test_templatetags_course_runs_list_widget_props_tag(self):
         """
@@ -34,6 +36,10 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
             price="59.99",
             certificate_offer="paid",
             certificate_price="29.99",
+            discounted_price="19.99",
+            discount="-10 €",
+            certificate_discounted_price="27.98",
+            certificate_discount="-30%",
         )
 
         # Create a hidden course run
@@ -99,6 +105,10 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             "offer": "paid",
                             "certificate_price": "29.99",
                             "certificate_offer": "paid",
+                            "discounted_price": "19.99",
+                            "discount": "-10 €",
+                            "certificate_discounted_price": "27.98",
+                            "certificate_discount": "-30%",
                         }
                     ],
                     "maxArchivedCourseRuns": 10,
@@ -120,6 +130,10 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
             price="59.99",
             certificate_offer="paid",
             certificate_price="29.99",
+            discounted_price="19.99",
+            discount="-10 €",
+            certificate_discounted_price="27.98",
+            certificate_discount="-30%",
         )
 
         request = RequestFactory().get("/")
@@ -174,6 +188,10 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             "offer": "paid",
                             "certificate_price": "29.99",
                             "certificate_offer": "paid",
+                            "discounted_price": "19.99",
+                            "discount": "-10 €",
+                            "certificate_discounted_price": "27.98",
+                            "certificate_discount": "-30%",
                         }
                     ],
                     "maxArchivedCourseRuns": 10,
@@ -197,6 +215,10 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
             price="59.99",
             certificate_offer="paid",
             certificate_price="29.99",
+            discounted_price="19.99",
+            discount="-10 €",
+            certificate_discounted_price="27.98",
+            certificate_discount="-30%",
         )
         # Create a hidden course run
         factories.CourseRunFactory(
@@ -206,6 +228,10 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
             price="59.99",
             certificate_offer="paid",
             certificate_price="29.99",
+            discounted_price="19.99",
+            discount="-10 €",
+            certificate_discounted_price="27.98",
+            certificate_discount="-30%",
         )
         # Create a "to be scheduled" course run
         factories.CourseRunFactory(
@@ -215,6 +241,10 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
             price="59.99",
             certificate_offer="paid",
             certificate_price="29.99",
+            discounted_price="19.99",
+            discount="-10 €",
+            certificate_discounted_price="27.98",
+            certificate_discount="-30%",
         )
 
         page = course.extended_object
@@ -275,6 +305,10 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             "offer": "paid",
                             "certificate_price": "29.99",
                             "certificate_offer": "paid",
+                            "discounted_price": "19.99",
+                            "discount": "-10 €",
+                            "certificate_discounted_price": "27.98",
+                            "certificate_discount": "-30%",
                         }
                         for course_run in course.course_runs.all()
                     ],
