@@ -60,8 +60,12 @@ class CourseRunAdminForm(TranslatableModelForm):
             "price_currency",
             "offer",
             "price",
+            "discounted_price",
+            "discount",
             "certificate_offer",
             "certificate_price",
+            "certificate_discounted_price",
+            "certificate_discount",
             "sync_mode",
             "display_mode",
         ]
@@ -158,8 +162,12 @@ class CourseRunAdmin(FrontendEditableAdminMixin, TranslatableAdmin):
         "price_currency",
         "offer",
         "price",
+        "discounted_price",
+        "discount",
         "certificate_offer",
         "certificate_price",
+        "certificate_discounted_price",
+        "certificate_discount",
         "sync_mode",
     )
     list_display = ["id"]

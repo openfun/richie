@@ -38,6 +38,8 @@ from richie.apps.courses.utils import get_signature
 class SyncCourseRunApiTestCase(CMSTestCase):
     """Test calls to sync a course run via API endpoint."""
 
+    maxDiff = None
+
     def authorize(self, data):
         """
         Build the authorization header for the request.
@@ -223,6 +225,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         self.assertEqual(
@@ -279,6 +285,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
         self.assertEqual(
             course.extended_object.title_set.first().publisher_state,
@@ -339,6 +349,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
         self.assertEqual(
             course.extended_object.title_set.first().publisher_state,
@@ -420,6 +434,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         self.assertEqual(
@@ -595,6 +613,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
@@ -660,6 +682,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
@@ -719,6 +745,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
@@ -786,6 +816,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
@@ -848,6 +882,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
@@ -966,6 +1004,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
@@ -1081,6 +1123,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "offer": "paid",
                 "certificate_price": "19.99",
                 "certificate_offer": "paid",
+                "discounted_price": "53.99",
+                "discount": "-10%",
+                "certificate_discounted_price": "27.98",
+                "certificate_discount": "-30%",
             },
             {
                 "resource_link": resource_link2,
@@ -1096,6 +1142,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "offer": "paid",
                 "certificate_price": "19.99",
                 "certificate_offer": "paid",
+                "discounted_price": "53.99",
+                "discount": "-10%",
+                "certificate_discounted_price": "27.98",
+                "certificate_discount": "-30%",
             },
         ]
 
@@ -1202,6 +1252,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "offer": "paid",
                 "certificate_price": "19.99",
                 "certificate_offer": "paid",
+                "discounted_price": "53.99",
+                "discount": "-10%",
+                "certificate_discounted_price": "27.98",
+                "certificate_discount": "-30%",
             },
             {
                 "resource_link": resource_link2,
@@ -1217,6 +1271,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "offer": "paid",
                 "certificate_price": "19.99",
                 "certificate_offer": "paid",
+                "discounted_price": "53.99",
+                "discount": "-10%",
+                "certificate_discounted_price": "27.98",
+                "certificate_discount": "-30%",
             },
         ]
 
@@ -1249,7 +1307,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         # Check that the draft course run of the valid item was updated
         draft_course_run = CourseRun.objects.get(direct_course=course)
         draft_serializer = SyncCourseRunSerializer(instance=draft_course_run)
-        self.assertEqual(draft_serializer.data, data[1])
+        self.assertDictEqual(draft_serializer.data, data[1])
 
         # Check that a new public course run of the valid item was created
         public_course_run = CourseRun.objects.get(direct_course=course.public_extension)
