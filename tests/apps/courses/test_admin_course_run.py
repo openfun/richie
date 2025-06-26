@@ -353,6 +353,10 @@ class CourseRunAdminTestCase(CMSTestCase):
             "certificate_price": 59.98,
             "sync_mode": "manual",
             "display_mode": "detailed",
+            "discounted_price": 39.98,
+            "discount": "-20 €",
+            "certificate_discounted_price": 27.98,
+            "certificate_discount": "-30%",
         }
         with django_timezone.override(timezone.utc):
             response = self.client.post(url, data, follow=True)
@@ -463,6 +467,10 @@ class CourseRunAdminTestCase(CMSTestCase):
             "certificate_price": "29.98",
             "sync_mode": "manual",
             "display_mode": "detailed",
+            "discounted_price": "39.98",
+            "discount": "-30 €",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
         with django_timezone.override(timezone.utc):
             response = self.client.post(url, data, follow=True)
@@ -494,6 +502,12 @@ class CourseRunAdminTestCase(CMSTestCase):
         check_method(float(course_run.price), 59.98)
         check_method(course_run.certificate_offer, "paid")
         check_method(float(course_run.certificate_price), 29.98)
+        if course_run.discounted_price:
+            check_method(float(course_run.discounted_price), 39.98)
+        check_method(course_run.discount, "-30 €")
+        if course_run.certificate_discounted_price:
+            check_method(float(course_run.certificate_discounted_price), 27.98)
+        check_method(course_run.certificate_discount, "-30%")
 
         return response
 
