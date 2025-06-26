@@ -869,6 +869,21 @@ class CourseRun(TranslatableModel):
         max_length=7,
         default=getattr(settings, "RICHIE_DEFAULT_COURSE_RUN_PRICE_CURRENCY", "EUR"),
     )
+    discounted_price = models.DecimalField(
+        _("discounted price"),
+        max_digits=9,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text=_("The discounted price of the course run"),
+    )
+    discount = models.CharField(
+        _("discount"),
+        max_length=20,
+        null=True,
+        blank=True,
+        help_text=_("The discount applied to the course run"),
+    )
     offer = models.CharField(
         _("offer"),
         choices=lazy(lambda: CourseRunOffer.choices, tuple)(),
@@ -883,6 +898,21 @@ class CourseRun(TranslatableModel):
         null=True,
         blank=True,
         help_text=_("The price of the certificate"),
+    )
+    certificate_discounted_price = models.DecimalField(
+        _("certificate discounted price"),
+        max_digits=9,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text=_("The discounted price of the certificate"),
+    )
+    certificate_discount = models.CharField(
+        _("certificate discount"),
+        max_length=20,
+        null=True,
+        blank=True,
+        help_text=_("The discount applied to the certificate"),
     )
     certificate_offer = models.CharField(
         _("certificate offer"),
