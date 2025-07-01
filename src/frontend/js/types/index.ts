@@ -35,11 +35,13 @@ export interface CourseRun {
   title?: string;
   snapshot?: string;
   display_mode: CourseRunDisplayMode;
-  price?: number;
+  price?: Nullable<number>;
   price_currency?: string;
   offer?: string;
-  certificate_price?: number;
+  certificate_price?: Nullable<number>;
   certificate_offer?: string;
+  discounted_price: Nullable<number>;
+  discount: Nullable<string>;
 }
 
 export enum Priority {
