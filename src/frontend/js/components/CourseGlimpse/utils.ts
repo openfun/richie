@@ -53,6 +53,8 @@ const getCourseGlimpsePropsFromOffering = (
       offering.product.type === ProductType.CERTIFICATE ? offering.product.price : null,
     price: offering.product.type === ProductType.CREDENTIAL ? offering.product.price : null,
     price_currency: offering.product.price_currency,
+    discounted_price: offering.product.discounted_price || null,
+    discount: offering.product.discount || null,
   };
 };
 
@@ -77,6 +79,8 @@ const getCourseGlimpsePropsFromRichieCourse = (course: RichieCourse): CourseGlim
   certificate_offer: course.certificate_offer,
   offer: course.offer,
   certificate_price: course.certificate_price,
+  discounted_price: course.discounted_price,
+  discount: course.discount,
 });
 
 const getCourseGlimpsePropsFromJoanieCourse = (
@@ -114,6 +118,8 @@ const getCourseGlimpsePropsFromJoanieCourse = (
     certificate_offer: null,
     offer: null,
     certificate_price: null,
+    discounted_price: null,
+    discount: null,
   };
 };
 
