@@ -60,11 +60,11 @@ export const CourseRunFactory = factory<CourseRun>(() => {
     certificateOfferValues[Math.floor(Math.random() * certificateOfferValues.length)];
   const currency = faker.finance.currency().code;
   const price = [OfferType.FREE, OfferType.PARTIALLY_FREE].includes(offer)
-    ? 0
+    ? null
     : parseFloat(faker.finance.amount({ min: 1, max: 100, symbol: currency, autoFormat: true }));
   const certificatePrice =
     certificateOffer === OfferType.FREE
-      ? 0
+      ? null
       : parseFloat(faker.finance.amount({ min: 1, max: 100, symbol: currency, autoFormat: true }));
   return {
     id: faker.number.int(),
@@ -83,6 +83,8 @@ export const CourseRunFactory = factory<CourseRun>(() => {
     offer,
     certificate_price: certificatePrice,
     certificate_offer: certificateOffer,
+    discounted_price: null,
+    discount: null,
   };
 });
 
@@ -244,5 +246,7 @@ export const CourseLightFactory = factory<Course>(() => {
     certificate_price: null,
     price: null,
     price_currency: 'EUR',
+    discounted_price: null,
+    discount: null,
   };
 });
