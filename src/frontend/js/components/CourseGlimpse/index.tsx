@@ -47,6 +47,8 @@ export interface CourseGlimpseCourse {
   certificate_price: Nullable<number>;
   price: Nullable<number>;
   price_currency: string;
+  discounted_price: Nullable<number>;
+  discount: Nullable<string>;
 }
 
 export interface CourseGlimpseProps {

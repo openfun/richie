@@ -149,6 +149,8 @@ export interface Product {
   state: CourseState;
   instructions: Nullable<string>;
   contract_definition?: ContractDefinition;
+  discounted_price: Nullable<number>;
+  discount: Nullable<string>;
 }
 
 export interface CredentialProduct extends Product {
