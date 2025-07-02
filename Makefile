@@ -207,6 +207,18 @@ demo-site: ## create a demo site if app container is running
 	@${MAKE} superuser
 .PHONY: demo-site
 
+dev-data: ## create dev data if app container is running
+	@echo "Check app container is running..."
+	@if [ $(shell docker container inspect -f '{{.State.Running}}' "$(shell $(COMPOSE) ps -q app)") = "false" ] ; then\
+		echo "❌ App must be up and running to create dev data.";\
+		exit 1;\
+	fi
+	@$(MANAGE) flush --no-input
+	@$(COMPOSE_EXEC_APP) python sandbox/manage.py create_dev_data
+	@${MAKE} search-index
+	@${MAKE} superuser
+.PHONY: dev-data
+
 # Nota bene: Black should come after isort just in case they don't agree...
 lint-back: ## lint back-end python sources
 lint-back: \
