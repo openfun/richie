@@ -65,6 +65,35 @@ export const CourseGlimpseFooter: React.FC<{ course: CourseGlimpseCourse } & Com
   const offerIcon = `icon-offer-${offer}` as OfferIconType;
   const offerCertificateIcon = hasCertificateOffer && IconTypeEnum.SCHOOL;
   const offerPrice = hasEnrollmentOffer && course.price;
+  const discountedPrice = course.discounted_price ?? null;
+  const hasDiscount = discountedPrice !== null;
+
+  let $price = null;
+
+  if (offerPrice) {
+    if (hasDiscount) {
+      $price = (
+        <div className="offer_prices">
+          <span className="offer__price offer__price--striked">
+            <FormattedNumber value={offerPrice} currency={course.price_currency} style="currency" />
+          </span>
+          <span className="offer__price offer__price--discounted">
+            <FormattedNumber
+              value={discountedPrice}
+              currency={course.price_currency}
+              style="currency"
+            />
+          </span>
+        </div>
+      );
+    } else {
+      $price = (
+        <span className="offer__price">
+          <FormattedNumber value={offerPrice} currency={course.price_currency} style="currency" />
+        </span>
+      );
+    }
+  }
 
   return (
     <div className="course-glimpse-footer">
@@ -99,11 +128,7 @@ export const CourseGlimpseFooter: React.FC<{ course: CourseGlimpseCourse } & Com
           name={offerIcon}
           title={intl.formatMessage(courseOfferMessages[offer])}
         />
-        {offerPrice && (
-          <span className="offer__price">
-            <FormattedNumber value={offerPrice} currency={course.price_currency} style="currency" />
-          </span>
-        )}
+        {$price}
       </div>
     </div>
   );

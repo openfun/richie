@@ -42,6 +42,8 @@ export interface CourseRun {
   certificate_offer?: string;
   discounted_price: Nullable<number>;
   discount: Nullable<string>;
+  certificate_discounted_price: Nullable<number>;
+  certificate_discount: Nullable<string>;
 }
 
 export enum Priority {
