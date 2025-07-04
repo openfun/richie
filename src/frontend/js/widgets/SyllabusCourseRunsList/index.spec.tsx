@@ -1465,4 +1465,50 @@ describe('<SyllabusCourseRunsList/>', () => {
     expect(content).not.toContain('The certification process is');
     expect(content).not.toContain('<br>€59.99');
   });
+
+  it('renders price discount on SyllabusCourseRun', async () => {
+    const course = PacedCourseFactory().one();
+    const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+      languages: ['en'],
+      price_currency: 'EUR',
+      offer: 'paid',
+      price: 49.99,
+      certificate_offer: undefined,
+      certificate_price: undefined,
+      discounted_price: 30.0,
+      discount: '-20%',
+    }).one();
+
+    render(
+      <div className="course-detail__row course-detail__runs course-detail__runs--open">
+        <SyllabusCourseRunCompacted courseRun={courseRun} course={course} showLanguages={false} />
+      </div>,
+    );
+
+    const content = getHeaderContainer().innerHTML;
+    expect(content).toContain('<dd>Paid access<br>€30.00</dd>');
+  });
+
+  it('renders certificate discount on SyllabusCourseRun', async () => {
+    const course = PacedCourseFactory().one();
+    const courseRun: CourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+      languages: ['en'],
+      price_currency: 'EUR',
+      offer: 'free',
+      price: undefined,
+      certificate_offer: 'paid',
+      certificate_price: 100.0,
+      certificate_discounted_price: 70.0,
+      certificate_discount: '-30%',
+    }).one();
+
+    render(
+      <div className="course-detail__row course-detail__runs course-detail__runs--open">
+        <SyllabusCourseRunCompacted courseRun={courseRun} course={course} showLanguages={false} />
+      </div>,
+    );
+
+    const content = getHeaderContainer().innerHTML;
+    expect(content).toContain('<dd>Paid certificate<br>€70.00</dd>');
+  });
 });

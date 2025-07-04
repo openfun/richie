@@ -119,6 +119,13 @@ const OpenedSelfPacedCourseRun = ({
         currency: courseRun.price_currency,
       });
     }
+
+    if ((courseRun.discounted_price ?? -1) >= 0) {
+      enrollmentPrice = intl.formatNumber(courseRun.discounted_price!, {
+        style: 'currency',
+        currency: courseRun.price_currency,
+      });
+    }
   }
 
   if (courseRun.certificate_offer) {
@@ -131,6 +138,13 @@ const OpenedSelfPacedCourseRun = ({
 
     if ((courseRun.certificate_price ?? -1) >= 0) {
       certificatePrice = intl.formatNumber(courseRun.certificate_price!, {
+        style: 'currency',
+        currency: courseRun.price_currency,
+      });
+    }
+
+    if ((courseRun.certificate_discounted_price ?? -1) >= 0) {
+      certificatePrice = intl.formatNumber(courseRun.certificate_discounted_price!, {
         style: 'currency',
         currency: courseRun.price_currency,
       });
