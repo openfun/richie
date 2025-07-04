@@ -151,6 +151,8 @@ export interface Product {
   contract_definition?: ContractDefinition;
   discounted_price: Nullable<number>;
   discount: Nullable<string>;
+  certificate_discounted_price: Nullable<number>;
+  certificate_discount: Nullable<string>;
 }
 
 export interface CredentialProduct extends Product {
