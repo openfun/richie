@@ -205,6 +205,8 @@ export const CredentialProductFactory = factory((): CredentialProduct => {
     remaining_order_count: faker.number.int({ min: 1, max: 100 }),
     state: CourseStateFactory().one(),
     instructions: null,
+    discounted_price: null,
+    discount: null,
   };
 });
 

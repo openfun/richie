@@ -33,6 +33,7 @@ htmlcov/
 .pytest_cache
 nosetests.xml
 coverage.xml
+.pylint.d
 
 # Vagrant
 .vagrant

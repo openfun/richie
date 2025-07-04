@@ -17,6 +17,7 @@ from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 from richie.apps.courses.models import Course, CourseRun
 from richie.apps.courses.serializers import SyncCourseRunSerializer
+from richie.apps.courses.utils import get_signature
 
 
 # pylint: disable=too-many-public-methods
@@ -36,6 +37,19 @@ from richie.apps.courses.serializers import SyncCourseRunSerializer
 )
 class SyncCourseRunApiTestCase(CMSTestCase):
     """Test calls to sync a course run via API endpoint."""
+
+    maxDiff = None
+
+    def authorize(self, data):
+        """
+        Build the authorization header for the request.
+        This is a helper method to avoid repeating the signature calculation in each test.
+        """
+        return get_signature(
+            # pylint: disable=protected-access
+            self.client._encode_json(data, "application/json"),
+            settings.RICHIE_COURSE_RUN_SYNC_SECRETS[0],
+        )
 
     # To update the http authorizations add this next statements before the first assert
     # from richie.apps.courses.utils import get_signature
@@ -106,9 +120,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 acee4804ff21eabe366ff6e04495591dfe32dffa7f1cd2d48c0f44beb9d5aa0d"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 400)
@@ -139,9 +151,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 38af01f97c1b6d078662de52a4785df7c09a16b426659af56f722f68c2035f95"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 400)
@@ -179,9 +189,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 338f7c262254e8220fea54467526f8f1f4562ee3adf1e3a71abaf23a20b739e4"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 400)
@@ -217,6 +225,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         self.assertEqual(
@@ -225,15 +237,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         mock_signal.reset_mock()
 
-        authorization = (
-            "SIG-HMAC-SHA256 "
-            "8c70578af0fd658c5d2c55b1e47f1266060a1897e8fb15a690e25d7af0061c6e"
-        )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=authorization,
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -277,6 +285,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
         self.assertEqual(
             course.extended_object.title_set.first().publisher_state,
@@ -288,9 +300,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 41ee852433729021123b84d25a0c6124b5a3ecab6a1739bce0709325bfa54c77"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -339,6 +349,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
         self.assertEqual(
             course.extended_object.title_set.first().publisher_state,
@@ -350,9 +364,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 06c4ac99d2c51bfd395247564fdca4bce30eab7fb7e5abfe5a1e6250172bbf8f"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -391,9 +403,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 1de9b46133a91eec3515d0df40f586b642cff16b79aa9d5fe4f7679a33767967"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 400)
@@ -424,6 +434,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         self.assertEqual(
@@ -436,9 +450,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 7bcb01fbbaac9d5bb2189d1dda76f77dbc4776e471f8660f11b47c75ac41e530"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -491,9 +503,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 338f7c262254e8220fea54467526f8f1f4562ee3adf1e3a71abaf23a20b739e4"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -548,9 +558,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 338f7c262254e8220fea54467526f8f1f4562ee3adf1e3a71abaf23a20b739e4"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -605,15 +613,17 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 380334d89f9937a4e4d5a396bdf11dae92aad007c19584b6a30fe7d16dec7f0e"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -672,15 +682,17 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 6498774003a35f135813cd6189e4d3661f9552dc46127734bf5def851caf1a03"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -733,15 +745,17 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 22ea488f43f4ff56eedbc16aa49acc63365185c082ac6357187f0d6bca5c4d75"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -802,15 +816,17 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 87245828104eec056bc7c8f6faf9183576bf4e7130202ada838b0035614e431b"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -866,15 +882,17 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 be70df8c3b07c60be7b3d4551ac385c5cd6fd5e994e4eac4cb92f83ae05dabf3"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -918,9 +936,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 1de9b46133a91eec3515d0df40f586b642cff16b79aa9d5fe4f7679a33767967"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
@@ -988,15 +1004,17 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "offer": "paid",
             "certificate_price": "19.99",
             "certificate_offer": "paid",
+            "discounted_price": "53.99",
+            "discount": "-10%",
+            "certificate_discounted_price": "27.98",
+            "certificate_discount": "-30%",
         }
 
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 12b922f6065af2c46c8eda92bc9e3842cbf001e921356cedc30afcdb3566687d"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
@@ -1059,9 +1077,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 13433eb9159326b7d0f38ea86ab1ef8510ac4bc643d997d2ad01e349bee15570"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
@@ -1107,6 +1123,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "offer": "paid",
                 "certificate_price": "19.99",
                 "certificate_offer": "paid",
+                "discounted_price": "53.99",
+                "discount": "-10%",
+                "certificate_discounted_price": "27.98",
+                "certificate_discount": "-30%",
             },
             {
                 "resource_link": resource_link2,
@@ -1122,20 +1142,20 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "offer": "paid",
                 "certificate_price": "19.99",
                 "certificate_offer": "paid",
+                "discounted_price": "53.99",
+                "discount": "-10%",
+                "certificate_discounted_price": "27.98",
+                "certificate_discount": "-30%",
             },
         ]
 
         mock_signal.reset_mock()
 
-        authorization = (
-            "SIG-HMAC-SHA256 "
-            "6b62d01d2d7708fc8757bdc52b1e6bbc11ab93503a7238f8e69ec28b20f60ab6"
-        )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=authorization,
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -1191,15 +1211,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             },
         ]
 
-        authorization = (
-            "SIG-HMAC-SHA256 "
-            "f56ad4bbb70eae7aa8fc979b82e86d20b0aa2151fafc63f5246dbb6c44813da1"
-        )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=authorization,
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 400)
@@ -1236,6 +1252,10 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "offer": "paid",
                 "certificate_price": "19.99",
                 "certificate_offer": "paid",
+                "discounted_price": "53.99",
+                "discount": "-10%",
+                "certificate_discounted_price": "27.98",
+                "certificate_discount": "-30%",
             },
             {
                 "resource_link": resource_link2,
@@ -1251,20 +1271,20 @@ class SyncCourseRunApiTestCase(CMSTestCase):
                 "offer": "paid",
                 "certificate_price": "19.99",
                 "certificate_offer": "paid",
+                "discounted_price": "53.99",
+                "discount": "-10%",
+                "certificate_discounted_price": "27.98",
+                "certificate_discount": "-30%",
             },
         ]
 
         mock_signal.reset_mock()
 
-        authorization = (
-            "SIG-HMAC-SHA256 "
-            "6443aa9d7549a40eaa190c06317fa74354ce525659089aaeb3a8354ed325e27e"
-        )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=authorization,
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 400)
@@ -1287,7 +1307,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         # Check that the draft course run of the valid item was updated
         draft_course_run = CourseRun.objects.get(direct_course=course)
         draft_serializer = SyncCourseRunSerializer(instance=draft_course_run)
-        self.assertEqual(draft_serializer.data, data[1])
+        self.assertDictEqual(draft_serializer.data, data[1])
 
         # Check that a new public course run of the valid item was created
         public_course_run = CourseRun.objects.get(direct_course=course.public_extension)
@@ -1329,15 +1349,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
 
         mock_signal.reset_mock()
 
-        authorization = (
-            "SIG-HMAC-SHA256 "
-            "5bdfb326b35fccaef9961e03cf617c359c86ffbb6c64e0f7e074aa011e8af9d6"
-        )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=authorization,
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -1371,15 +1387,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
 
         mock_signal.reset_mock()
 
-        authorization = (
-            "SIG-HMAC-SHA256 "
-            "5bdfb326b35fccaef9961e03cf617c359c86ffbb6c64e0f7e074aa011e8af9d6"
-        )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=authorization,
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -1409,15 +1421,11 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "catalog_visibility": "course_and_search",
         }
 
-        authorization = (
-            "SIG-HMAC-SHA256 "
-            "5bdfb326b35fccaef9961e03cf617c359c86ffbb6c64e0f7e074aa011e8af9d6"
-        )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=authorization,
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)
@@ -1458,9 +1466,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync",
             data,
             content_type="application/json",
-            HTTP_AUTHORIZATION=(
-                "SIG-HMAC-SHA256 25de22f3674a207a2bd3923dcc5e302a21c9aac8eee7c835f084349da69d0472"
-            ),
+            HTTP_AUTHORIZATION=self.authorize(data),
         )
 
         self.assertEqual(response.status_code, 200)

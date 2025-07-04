@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add `discounted_price`, `discount`, `certificate_discounted_price` and
+  `certificate_discount` fields to `CourseRun` model
+
 ### Changed
 
 - Hide courses that are not `is_listed` in public pages
