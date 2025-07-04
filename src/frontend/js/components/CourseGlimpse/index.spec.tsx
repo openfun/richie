@@ -170,6 +170,20 @@ describe('widgets/Search/components/CourseGlimpse', () => {
     );
   });
 
+  it('renders a course glimpse with a discount', () => {
+    const { container } = renderCourseGlimpse({
+      contextProps,
+      course: { ...course, price: 100.0, discount: '30%', discounted_price: 70.0 },
+    });
+
+    const prices = container.getElementsByClassName('offer_prices');
+    expect(prices.length).toBe(1);
+    expect(prices[0].children.length).toBe(2);
+    const discountedPrice = container.getElementsByClassName('offer__price--discounted');
+    expect(discountedPrice.length).toBe(1);
+    expect(discountedPrice[0]).toHaveTextContent('€70.00');
+  });
+
   it('does not show certificate offer if the course does not offer a certificate', () => {
     const { container } = renderCourseGlimpse({
       contextProps,
