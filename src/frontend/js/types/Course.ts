@@ -49,6 +49,8 @@ export interface Course extends Resource {
   price_currency: string;
   discounted_price: Nullable<number>;
   discount: Nullable<string>;
+  certificate_discounted_price: Nullable<number>;
+  certificate_discount: Nullable<string>;
 }
 
 export function isRichieCourse(course: Course | JoanieCourse): course is Course {

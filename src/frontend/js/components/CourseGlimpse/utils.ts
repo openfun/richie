@@ -55,6 +55,8 @@ const getCourseGlimpsePropsFromOffering = (
     price_currency: offering.product.price_currency,
     discounted_price: offering.product.discounted_price || null,
     discount: offering.product.discount || null,
+    certificate_discounted_price: offering.product.certificate_discounted_price || null,
+    certificate_discount: offering.product.certificate_discount || null,
   };
 };
 
@@ -79,6 +81,8 @@ const getCourseGlimpsePropsFromRichieCourse = (course: RichieCourse): CourseGlim
   certificate_offer: course.certificate_offer,
   offer: course.offer,
   certificate_price: course.certificate_price,
+  certificate_discounted_price: course.certificate_discounted_price,
+  certificate_discount: course.certificate_discount,
   discounted_price: course.discounted_price,
   discount: course.discount,
 });
@@ -120,6 +124,8 @@ const getCourseGlimpsePropsFromJoanieCourse = (
     certificate_price: null,
     discounted_price: null,
     discount: null,
+    certificate_discounted_price: null,
+    certificate_discount: null,
   };
 };
 
