@@ -25,6 +25,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   offer rules
 - Rename again `CourseProductRelation` to `Offering`
 - Improve product display styling on course detail pages
+- Display discounted prices in catalog and course detail pages
 
 ### Fixed
 

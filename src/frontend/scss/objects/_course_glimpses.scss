@@ -396,6 +396,11 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
       }
     }
 
+    .offer_prices {
+      display: flex;
+      flex-direction: column;
+    }
+
     .offer__price {
       $visibility: r-theme-val(course-glimpse, offer-price-visibility);
       @if $visibility == hidden {
@@ -404,6 +409,16 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
       visibility: $visibility;
       // Align vertically the price with the icon
       margin-top: calc(1ex - 1cap);
+
+      &--striked,
+      &--discounted {
+        display: inline-block;
+      }
+
+      &--striked {
+        text-decoration: line-through;
+        opacity: 0.5;
+      }
     }
   }
 }
