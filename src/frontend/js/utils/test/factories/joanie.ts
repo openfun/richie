@@ -207,6 +207,8 @@ export const CredentialProductFactory = factory((): CredentialProduct => {
     instructions: null,
     discounted_price: null,
     discount: null,
+    certificate_discounted_price: null,
+    certificate_discount: null,
   };
 });
 

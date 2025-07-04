@@ -85,6 +85,8 @@ export const CourseRunFactory = factory<CourseRun>(() => {
     certificate_offer: certificateOffer,
     discounted_price: null,
     discount: null,
+    certificate_discounted_price: null,
+    certificate_discount: null,
   };
 });
 
@@ -248,5 +250,7 @@ export const CourseLightFactory = factory<Course>(() => {
     price_currency: 'EUR',
     discounted_price: null,
     discount: null,
+    certificate_discounted_price: null,
+    certificate_discount: null,
   };
 });

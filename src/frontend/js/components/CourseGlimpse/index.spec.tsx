@@ -61,6 +61,8 @@ describe('widgets/Search/components/CourseGlimpse', () => {
     price_currency: 'EUR',
     discounted_price: null,
     discount: null,
+    certificate_discounted_price: null,
+    certificate_discount: null,
   };
 
   const contextProps: CommonDataProps['context'] = RichieContextFactory().one();
