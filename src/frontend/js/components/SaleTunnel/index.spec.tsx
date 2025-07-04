@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { OrderState, Product, ProductType, NOT_CANCELED_ORDER_STATES } from 'types/Joanie';
 import {
   RichieContextFactory as mockRichieContextFactory,
+  CourseStateFactory,
   UserFactory,
   PacedCourseFactory,
 } from 'utils/test/factories/richie';
@@ -16,12 +17,14 @@ import {
   CertificateOrderFactory,
   CertificateProductFactory,
   OfferingFactory,
+  CourseRunFactory,
   CredentialOrderFactory,
   CredentialProductFactory,
   CreditCardFactory,
   EnrollmentFactory,
   PaymentInstallmentFactory,
 } from 'utils/test/factories/joanie';
+import { Priority } from 'types';
 import { render } from 'utils/test/render';
 import { SaleTunnel, SaleTunnelProps } from 'components/SaleTunnel/index';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
@@ -97,7 +100,7 @@ describe.each([
     return (
       <SaleTunnel
         {...props}
-        enrollment={enrollment}
+        enrollment={props.enrollment ?? enrollment}
         course={productType === ProductType.CREDENTIAL ? course : undefined}
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -447,6 +450,57 @@ describe.each([
     expect($totalAmount).toHaveTextContent(
       'Total' + formatPrice(product.price, product.price_currency).replace(/(\u202F|\u00a0)/g, ' '),
     );
+  });
+
+  // Fixes the issue : https://github.com/openfun/richie/issues/2645
+  it('should show the certificate product total with discounted price', async () => {
+    const product = ProductFactory({
+      price: 600,
+      target_courses: [course],
+    }).one();
+    const enrollmentDiscounted = EnrollmentFactory({
+      course_run: CourseRunFactory({
+        state: CourseStateFactory({ priority: Priority.ONGOING_OPEN }).one(),
+        course,
+      }).one(),
+      offerings: [
+        OfferingFactory({
+          product,
+          rules: {
+            discounted_price: 540,
+            discount_rate: 0.1,
+          },
+        }).one(),
+      ],
+    }).one();
+
+    if (product.type === ProductType.CERTIFICATE) {
+      enrollmentDiscounted.offerings[0].product = product;
+
+      fetchMock.get(
+        `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollmentDiscounted.id}&product_id=${product.id}&state=pending&state=pending_payment&state=no_payment&state=failed_payment&state=completed&state=draft&state=assigned&state=to_sign&state=signing&state=to_save_payment_method`,
+        {
+          results: [],
+          next: null,
+          previous: null,
+          count: 0,
+        },
+      );
+
+      render(
+        <Wrapper product={product} enrollment={enrollmentDiscounted} isWithdrawable={true} />,
+        { queryOptions: { client: createTestQueryClient({ user: richieUser }) } },
+      );
+
+      const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
+      expect($totalAmount).toHaveTextContent(
+        'Total' +
+          formatPrice(
+            enrollmentDiscounted.offerings[0].rules.discounted_price!,
+            product.price_currency,
+          ).replace(/(\u202F|\u00a0)/g, ' '),
+      );
+    }
   });
 
   it('should show the product payment schedule with discounted price', async () => {
