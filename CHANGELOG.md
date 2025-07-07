@@ -19,6 +19,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update Offer type with rules property which contains all applicable 
   offer rules
 - Rename again `CourseProductRelation` to `Offering`
+- Improve product display styling on course detail pages
 
 ### Fixed
 

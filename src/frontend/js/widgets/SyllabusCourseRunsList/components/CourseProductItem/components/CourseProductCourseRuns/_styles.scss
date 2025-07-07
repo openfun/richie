@@ -113,6 +113,15 @@
       line-height: 1.4em;
     }
 
+    &__enrollment-date {
+      font-weight: bold;
+      color: #03317f;
+    }
+
+    &__languages {
+      font-weight: bold;
+    }
+
     &__feedback {
       color: r-theme-val(product-item, feedback-color);
     }
