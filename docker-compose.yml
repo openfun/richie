@@ -17,6 +17,8 @@ services:
       args:
         DOCKER_USER: ${DOCKER_USER:-1000}
     image: richie:development
+    environment:
+      - PYLINTHOME=./.pylint.d
     env_file:
       - env.d/development/common
       - env.d/development/localtunnel
@@ -67,6 +69,7 @@ services:
     command: npm run storybook
     environment:
       - HOME=/tmp
+      - BROWSER=true
     user: "${DOCKER_USER:-1000}"
     volumes:
       - .:/app

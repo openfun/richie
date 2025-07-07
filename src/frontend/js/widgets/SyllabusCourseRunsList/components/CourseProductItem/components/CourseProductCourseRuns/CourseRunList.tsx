@@ -68,7 +68,7 @@ const CourseRunList = ({ courseRuns }: Props) => {
               </strong>
               <span
                 data-testid={`course-run-${courseRun.id}-enrollment-dates`}
-                className="course-runs-item__metadata"
+                className="course-runs-item__metadata course-runs-item__enrollment-date"
               >
                 <EnrollmentDate
                   enrollment_start={courseRun.enrollment_start}
@@ -77,7 +77,7 @@ const CourseRunList = ({ courseRuns }: Props) => {
               </span>
               <span
                 data-testid={`course-run-${courseRun.id}-languages`}
-                className="course-runs-item__metadata"
+                className="course-runs-item__metadata course-runs-item__languages"
               >
                 <FormattedMessage
                   {...sharedMessages.language}
