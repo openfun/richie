@@ -166,6 +166,9 @@ $r-theme: (
     index-color: r-color('battleship-grey'),
     index-hover-color: r-color('indianred3'),
     index-active-color: r-color('firebrick6'),
+    autoplay-color: r-color('white'),
+    autoplay-background-color: r-color('battleship-grey'),
+    autoplay-background-hover-color: r-color('charcoal'),
   ),
   blogpost-glimpse: (
     card-background: r-color('white'),
