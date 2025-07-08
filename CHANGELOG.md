@@ -29,6 +29,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Improve product display styling on course detail pages
 - Display discounted prices in catalog and course detail pages
 - Display certificate and normal discount prices for Syllabus Course Run
+- Add autoplay for carousel slides
 
 ### Fixed
 
