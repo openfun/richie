@@ -155,6 +155,25 @@ $r-slider-content-line-clamp: 4 !default;
   }
 }
 
+.slider__autoplay {
+  display: flex;
+  justify-content: flex-end;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  button {
+    cursor: pointer;
+    border-radius: 50px;
+    padding: 0.25rem 0.5rem;
+    border: none;
+    color: r-theme-val(slider-plugin, autoplay-color);
+    background-color: r-theme-val(slider-plugin, autoplay-background-color);
+    &:hover,
+    &:focus {
+      background-color: r-theme-val(slider-plugin, autoplay-background-hover-color);
+    }
+  }
+}
+
 .slide__content {
   max-width: 680px;
 

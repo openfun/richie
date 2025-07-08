@@ -90,6 +90,7 @@
     "cljs-merge": "1.1.1",
     "core-js": "3.41.0",
     "downshift": "9.0.9",
+    "embla-carousel-autoplay": "8.6.0",
     "embla-carousel-react": "8.5.2",
     "embla-carousel-wheel-gestures": "8.0.1",
     "eslint": ">=8.57.0 <9",

@@ -20,6 +20,8 @@ type SlidePanelProps = {
   activeSlideIndex: number;
   isTransitioning: boolean;
   onBulletClick: (index: number) => void;
+  toggleAutoplay: () => void;
+  isAutoplaying: boolean;
 };
 
 /**
@@ -31,6 +33,8 @@ const SlidePanel = ({
   activeSlideIndex,
   onBulletClick,
   isTransitioning,
+  toggleAutoplay,
+  isAutoplaying,
 }: SlidePanelProps) => {
   const intl = useIntl();
   const hasSlideContent = slides.some((slide) => slide.content);
@@ -75,6 +79,11 @@ const SlidePanel = ({
             </span>
           </button>
         ))}
+        <div className="slider__autoplay">
+          <button type="button" onClick={toggleAutoplay}>
+            {isAutoplaying ? '⏸' : '⏵'}
+          </button>
+        </div>
       </div>
     </section>
   );
