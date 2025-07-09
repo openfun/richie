@@ -399,6 +399,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     .offer_prices {
       display: flex;
       flex-direction: column;
+      align-items: flex-end;
     }
 
     .offer__price {
