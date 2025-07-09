@@ -451,6 +451,12 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
     certificate_price = factory.Faker(
         "pydecimal", min_value=50, max_value=200, left_digits=5, right_digits=2
     )
+    discounted_price = factory.Faker(
+        "pydecimal", min_value=10, max_value=100, left_digits=5, right_digits=2
+    )
+    certificate_discounted_price = factory.Faker(
+        "pydecimal", min_value=10, max_value=40, left_digits=5, right_digits=2
+    )
 
     # pylint: disable=no-self-use
     @factory.lazy_attribute

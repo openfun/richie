@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add `discounted_price`, `discount`, `certificate_discounted_price` and
   `certificate_discount` fields to `CourseRun` model
+- Add search indexation for new `CourseRun` model fields
 
 ### Changed
 
