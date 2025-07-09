@@ -185,8 +185,12 @@ class CoursesIndexer:
                     "offer": {"type": "keyword"},
                     "price": {"type": "keyword"},
                     "price_currency": {"type": "keyword"},
+                    "discounted_price": {"type": "keyword"},
+                    "discount": {"type": "keyword"},
                     "certificate_price": {"type": "keyword"},
                     "certificate_offer": {"type": "keyword"},
+                    "certificate_discounted_price": {"type": "keyword"},
+                    "certificate_discount": {"type": "keyword"},
                 },
             },
             # Keywords
@@ -475,7 +479,14 @@ class CoursesIndexer:
                             params._source.course_runs[best_index]['certificate_price'],
                         'offer': params._source.course_runs[best_index]['offer'],
                         'price': params._source.course_runs[best_index]['price'],
-                        'price_currency': params._source.course_runs[best_index]['price_currency']
+                        'price_currency': params._source.course_runs[best_index]['price_currency'],
+                        'discounted_price':
+                            params._source.course_runs[best_index]['discounted_price'],
+                        'discount': params._source.course_runs[best_index]['discount'],
+                        'certificate_discounted_price':
+                            params._source.course_runs[best_index]['certificate_discounted_price'],
+                        'certificate_discount':
+                            params._source.course_runs[best_index]['certificate_discount']
                     ];
                 } else {
                     return [
@@ -483,7 +494,11 @@ class CoursesIndexer:
                         'certificate_price': null,
                         'offer': null,
                         'price': null,
-                        'price_currency': null
+                        'price_currency': null,
+                        'discounted_price': null,
+                        'discount': null,
+                        'certificate_discounted_price': null,
+                        'certificate_discount': null
                     ];
                 }
                 """,
@@ -639,8 +654,12 @@ class CoursesIndexer:
                 "price",
                 "price_currency",
                 "offer",
+                "discounted_price",
+                "discount",
                 "certificate_price",
                 "certificate_offer",
+                "certificate_discounted_price",
+                "certificate_discount",
             )
         )
 
@@ -654,8 +673,12 @@ class CoursesIndexer:
                 "price": cr["price"],
                 "price_currency": cr["price_currency"],
                 "offer": cr["offer"],
+                "discounted_price": cr["discounted_price"],
+                "discount": cr["discount"],
                 "certificate_price": cr["certificate_price"],
                 "certificate_offer": cr["certificate_offer"],
+                "certificate_discounted_price": cr["certificate_discounted_price"],
+                "certificate_discount": cr["certificate_discount"],
             }
             for cr in course_runs_queryset
         ]

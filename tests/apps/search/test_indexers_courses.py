@@ -328,8 +328,14 @@ class CoursesIndexersTestCase(TestCase):
                     "price_currency": course_run.public_course_run.price_currency,
                     "offer": course_run.public_course_run.offer,
                     "price": course_run.public_course_run.price,
+                    "discounted_price": course_run.public_course_run.discounted_price,
+                    "discount": course_run.public_course_run.discount,
                     "certificate_offer": course_run.public_course_run.certificate_offer,
                     "certificate_price": course_run.public_course_run.certificate_price,
+                    "certificate_discounted_price": (
+                        course_run.public_course_run.certificate_discounted_price
+                    ),
+                    "certificate_discount": course_run.public_course_run.certificate_discount,
                 }
                 for course_run in course.course_runs.order_by("-end")
             ],
@@ -812,6 +818,8 @@ class CoursesIndexersTestCase(TestCase):
                         "certificate_offer": "free",
                         "certificate_price": None,
                         "price_currency": "EUR",
+                        "certificate_discounted_price": None,
+                        "certificate_discount": None,
                     }
                 ],
             },
@@ -841,6 +849,8 @@ class CoursesIndexersTestCase(TestCase):
                 "certificate_offer": "free",
                 "certificate_price": None,
                 "price_currency": "EUR",
+                "certificate_discounted_price": None,
+                "certificate_discount": None,
             },
         )
 
@@ -878,6 +888,8 @@ class CoursesIndexersTestCase(TestCase):
                         "certificate_offer": "free",
                         "certificate_price": None,
                         "price_currency": "EUR",
+                        "certificate_discounted_price": None,
+                        "certificate_discount": None,
                     }
                 ],
             },
@@ -907,6 +919,8 @@ class CoursesIndexersTestCase(TestCase):
                 "certificate_offer": "free",
                 "certificate_price": None,
                 "price_currency": "EUR",
+                "certificate_discounted_price": None,
+                "certificate_discount": None,
             },
         )
 
@@ -943,6 +957,8 @@ class CoursesIndexersTestCase(TestCase):
                         "certificate_offer": "free",
                         "certificate_price": None,
                         "price_currency": "EUR",
+                        "certificate_discounted_price": None,
+                        "certificate_discount": None,
                     }
                 ],
             },
@@ -972,6 +988,8 @@ class CoursesIndexersTestCase(TestCase):
                 "certificate_offer": "free",
                 "certificate_price": None,
                 "price_currency": "EUR",
+                "certificate_discounted_price": None,
+                "certificate_discount": None,
             },
         )
 
@@ -1008,6 +1026,8 @@ class CoursesIndexersTestCase(TestCase):
                         "certificate_offer": "free",
                         "certificate_price": None,
                         "price_currency": "EUR",
+                        "certificate_discounted_price": None,
+                        "certificate_discount": None,
                     }
                 ],
             },
@@ -1037,6 +1057,8 @@ class CoursesIndexersTestCase(TestCase):
                 "certificate_offer": "free",
                 "certificate_price": None,
                 "price_currency": "EUR",
+                "certificate_discounted_price": None,
+                "certificate_discount": None,
             },
         )
 
@@ -1067,6 +1089,8 @@ class CoursesIndexersTestCase(TestCase):
                         "certificate_offer": "free",
                         "certificate_price": None,
                         "price_currency": "EUR",
+                        "certificate_discounted_price": None,
+                        "certificate_discount": None,
                     }
                 ],
             },
