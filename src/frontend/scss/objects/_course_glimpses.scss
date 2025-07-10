@@ -452,6 +452,11 @@ $offer-schemes: (
 @each $offer, $scheme in $offer-schemes {
   @if $scheme != null {
     .course-glimpse--offer-#{$offer} {
+      .course-glimpse__icon {
+        background: map-get($scheme, 'background');
+        color: map-get($scheme, 'font-color');
+      }
+
       .course-glimpse-footer {
         @include r-button-colors($scheme, $apply-border: true);
         &:after {
