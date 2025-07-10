@@ -117,7 +117,14 @@
                         <use href="#icon-offer-{{course.offer|default:'free'}}" />
                 </svg>
                 {% if course.offer != 'free' and course.price %}
-                    <span class="offer__price">{{ course.price|currency:course.price_currency }}</span>
+                    {% if course.discounted_price %}
+                        <div class="offer_prices">
+                            <span class="offer__price offer__price--striked">{{ course.price|currency:course.price_currency }}</span>
+                            <span class="offer__price offer__price--discounted">{{ course.discounted_price|currency:course.price_currency }}</span>
+                        </div>
+                    {% else %}
+                        <span class="offer__price">{{ course.price|currency:course.price_currency }}</span>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
