@@ -462,6 +462,7 @@ class CoursePluginTestCase(TestCase):
             direct_course=course,
             price=100.00,
             price_currency="EUR",
+            discounted_price=None,
         )
 
         # Define a page to display the Course Glimpse
@@ -497,6 +498,60 @@ class CoursePluginTestCase(TestCase):
                 if offer != CourseRunOffer.FREE:
                     price = course_glimpse.cssselect(".offer__price")[0]
                     self.assertEqual(price.text_content(), "€100.00")
+                else:
+                    self.assertCountEqual(course_glimpse.cssselect(".offer__price"), [])
+
+    def test_cms_plugins_course_glimpse_offer_discount(self):
+        """
+        The course glimpse should render the discounted offer details
+        (price ,discounted_price and right icon)
+        """
+        course = CourseFactory()
+        course_page = course.extended_object
+        run = CourseRunFactory(
+            direct_course=course,
+            price=100.00,
+            price_currency="EUR",
+            discounted_price=80.00,
+        )
+
+        # Define a page to display the Course Glimpse
+        page = create_i18n_page({"en": "A page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CoursePlugin, "en", **{"page": course_page})
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+
+        for offer in CourseRunOffer:
+            with self.subTest(offer=offer):
+                # Clear cache between each sub tests
+                cache.clear()
+                # Update the course run offer then publish the related course page
+                run.offer = offer
+                run.save()
+                self.assertTrue(course_page.publish("en"))
+
+                response = self.client.get(url)
+                html = lxml.html.fromstring(response.content.decode("utf-8"))
+                course_glimpse = html.cssselect(".course-glimpse")[0]
+
+                self.assertIn(
+                    f"course-glimpse--offer-{offer}", course_glimpse.get("class")
+                )
+
+                # Check the offer icon
+                icon = course_glimpse.cssselect(".offer__icon")[0]
+                icon_symbol = icon.cssselect("use")[0]
+                self.assertEqual(icon_symbol.get("href"), f"#icon-offer-{offer}")
+
+                # Check the offer price
+                if offer != CourseRunOffer.FREE:
+                    price = course_glimpse.cssselect(".offer__price--striked")[0]
+                    self.assertEqual(price.text_content(), "€100.00")
+                    discounted_price = course_glimpse.cssselect(
+                        ".offer__price--discounted"
+                    )[0]
+                    self.assertEqual(discounted_price.text_content(), "€80.00")
                 else:
                     self.assertCountEqual(course_glimpse.cssselect(".offer__price"), [])
 

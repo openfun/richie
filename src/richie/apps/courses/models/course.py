@@ -684,6 +684,15 @@ class Course(EsIdMixin, BasePageExtension):
         return None
 
     @property
+    def discounted_price(self):
+        """
+        Returns the discounted price of the course run with the best state.
+        """
+        if self.best_course_run:
+            return self.best_course_run.discounted_price
+        return None
+
+    @property
     def certificate_offer(self):
         """
         Returns the certificate offer of the course run with the best state.
@@ -699,6 +708,15 @@ class Course(EsIdMixin, BasePageExtension):
         """
         if self.best_course_run:
             return self.best_course_run.certificate_price
+        return None
+
+    @property
+    def discounted_certificate_price(self):
+        """
+        Returns the discounted certificate price of the course run with the best state.
+        """
+        if self.best_course_run:
+            return self.best_course_run.discounted_certificate_price
         return None
 
     def copy_relations(self, oldinstance, language=None):
