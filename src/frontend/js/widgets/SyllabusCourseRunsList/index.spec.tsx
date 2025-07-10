@@ -1486,7 +1486,9 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>Paid access<br>€30.00</dd>');
+    expect(content).toContain(
+      '<dd>Paid access<br><del>€49.99</del><span>&nbsp;(-20%)</span><br><strong>€30.00</strong></dd>',
+    );
   });
 
   it('renders certificate discount on SyllabusCourseRun', async () => {
@@ -1509,6 +1511,8 @@ describe('<SyllabusCourseRunsList/>', () => {
     );
 
     const content = getHeaderContainer().innerHTML;
-    expect(content).toContain('<dd>Paid certificate<br>€70.00</dd>');
+    expect(content).toContain(
+      '<dd>Paid certificate<br><del>€100.00</del><span>&nbsp;(-30%)</span><br><strong>€70.00</strong></dd>',
+    );
   });
 });

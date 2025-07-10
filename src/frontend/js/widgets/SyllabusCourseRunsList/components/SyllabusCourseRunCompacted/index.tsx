@@ -102,7 +102,9 @@ const OpenedSelfPacedCourseRun = ({
   let courseOfferMessage = null;
   let certificationOfferMessage = null;
   let enrollmentPrice = '';
+  let enrollmentDiscountedPrice = '';
   let certificatePrice = '';
+  let certificateDiscountedPrice = '';
 
   if (courseRun.offer) {
     const offer = courseRun.offer.toUpperCase().replaceAll(' ', '_');
@@ -121,7 +123,7 @@ const OpenedSelfPacedCourseRun = ({
     }
 
     if ((courseRun.discounted_price ?? -1) >= 0) {
-      enrollmentPrice = intl.formatNumber(courseRun.discounted_price!, {
+      enrollmentDiscountedPrice = intl.formatNumber(courseRun.discounted_price!, {
         style: 'currency',
         currency: courseRun.price_currency,
       });
@@ -144,7 +146,7 @@ const OpenedSelfPacedCourseRun = ({
     }
 
     if ((courseRun.certificate_discounted_price ?? -1) >= 0) {
-      certificatePrice = intl.formatNumber(courseRun.certificate_discounted_price!, {
+      certificateDiscountedPrice = intl.formatNumber(courseRun.certificate_discounted_price!, {
         style: 'currency',
         currency: courseRun.price_currency,
       });
@@ -188,7 +190,16 @@ const OpenedSelfPacedCourseRun = ({
             <dd>
               <FormattedMessage {...courseOfferMessage} />
               <br />
-              {enrollmentPrice}
+              {enrollmentDiscountedPrice ? (
+                <>
+                  <del>{enrollmentPrice}</del>
+                  <span>&nbsp;({courseRun.discount})</span>
+                  <br />
+                  <strong>{enrollmentDiscountedPrice}</strong>
+                </>
+              ) : (
+                enrollmentPrice
+              )}
             </dd>
           </>
         )}
@@ -200,7 +211,16 @@ const OpenedSelfPacedCourseRun = ({
             <dd>
               <FormattedMessage {...certificationOfferMessage} />
               <br />
-              {certificatePrice}
+              {certificateDiscountedPrice ? (
+                <>
+                  <del>{certificatePrice}</del>
+                  <span>&nbsp;({courseRun.certificate_discount})</span>
+                  <br />
+                  <strong>{certificateDiscountedPrice}</strong>
+                </>
+              ) : (
+                certificatePrice
+              )}
             </dd>
           </>
         )}
