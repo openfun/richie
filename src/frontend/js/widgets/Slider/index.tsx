@@ -1,6 +1,7 @@
 import useEmblaCarousel from 'embla-carousel-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
+import Autoplay from 'embla-carousel-autoplay';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Slide as SlideType } from './types';
 import SlidePanel from './components/SlidePanel';
@@ -22,9 +23,25 @@ type SliderProps = {
 };
 
 const Slider = ({ slides, title }: SliderProps) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [WheelGesturesPlugin()]);
+  const autoplay = useRef(Autoplay({ delay: 3000 }));
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+    WheelGesturesPlugin(),
+    autoplay.current,
+  ]);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isAutoplaying, setIsAutoplaying] = useState(true);
+
+  const toggleAutoplay = () => {
+    if (!autoplay.current) return;
+    if (isAutoplaying) {
+      autoplay.current.stop();
+      setIsAutoplaying(false);
+    } else {
+      autoplay.current.play();
+      setIsAutoplaying(true);
+    }
+  };
 
   const handleBulletClick = useCallback(
     (index: number) => {
@@ -101,6 +118,8 @@ const Slider = ({ slides, title }: SliderProps) => {
         activeSlideIndex={activeSlideIndex}
         onBulletClick={handleBulletClick}
         isTransitioning={isTransitioning}
+        toggleAutoplay={toggleAutoplay}
+        isAutoplaying={isAutoplaying}
       />
       <span className="offscreen" role="presentation" aria-live="polite" aria-atomic="true">
         <FormattedMessage
