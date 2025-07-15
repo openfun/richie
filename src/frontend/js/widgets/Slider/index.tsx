@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
 import Autoplay from 'embla-carousel-autoplay';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { SLIDER_SETTINGS } from 'settings';
 import { Slide as SlideType } from './types';
 import SlidePanel from './components/SlidePanel';
 import Slideshow from './components/Slideshow';
@@ -23,7 +24,7 @@ type SliderProps = {
 };
 
 const Slider = ({ slides, title }: SliderProps) => {
-  const autoplay = useRef(Autoplay({ delay: 3000 }));
+  const autoplay = useRef(Autoplay({ delay: SLIDER_SETTINGS.autoplayDelay }));
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     WheelGesturesPlugin(),
     autoplay.current,

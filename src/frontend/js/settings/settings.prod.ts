@@ -61,3 +61,4 @@ export const PER_PAGE = {
 
 export const MOCK_SERVICE_WORKER_ENABLED = false;
 export const DEBUG_UNION_RESOURCES_HOOK = false;
+export const SLIDER_SETTINGS = { autoplayDelay: 3000 };
