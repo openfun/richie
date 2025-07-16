@@ -55,6 +55,11 @@ $glimpse-gutter: 0.6rem;
       align-self: flex-end;
     }
   }
+  .section__grid--33x33x33 > &:nth-child(0n + 2) {
+    @include media-breakpoint-up(lg) {
+      align-self: unset;
+    }
+  }
 
   // Apply card styles for elements
   @include m-o-card(
