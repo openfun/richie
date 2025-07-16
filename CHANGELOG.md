@@ -190,6 +190,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix logic to know if user is enrolled to a ongoing product
 - Normalize credit card brand on CreditCardBrandLogo component
 - Display SyllabusCourseRunCompacted only for self-paced ongoing opened runs
+- Alignment of blogpost glimpses in column sections
 
 ## [2.29.2] - 2024-09-23
 
