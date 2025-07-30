@@ -82,6 +82,40 @@
       font-size: 0.75rem;
     }
   }
+
+  .sale-tunnel__voucher {
+    margin-top: 1rem;
+    & > .form {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-top: 0.75rem;
+      & > .mt-s {
+        margin-top: 0;
+      }
+      & > button {
+        margin-left: 0.5rem;
+      }
+    }
+    & > .voucher-tag {
+      margin-top: 0.75rem;
+      border-radius: 0.25rem;
+      padding: 0.5rem;
+      width: fit-content;
+      color: black;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      border: none;
+      background-color: lightgray;
+      & > span {
+        margin-left: 0.75rem;
+      }
+      &:hover {
+        background-color: gray;
+      }
+    }
+  }
 }
 
 .description {

@@ -492,5 +492,6 @@ export const SaleTunnelContextFactory = factory(
     unregisterSubmitCallback: noop,
     runSubmitCallbacks: () => new Promise((resolve) => resolve()),
     nextStep: noop,
+    setVoucherCode: noop,
   }),
 );

@@ -65,6 +65,7 @@ describe('AddressSelector', () => {
           nextStep: jest.fn(),
           hasWaivedWithdrawalRight: false,
           setHasWaivedWithdrawalRight: jest.fn(),
+          setVoucherCode: jest.fn(),
         }),
         [billingAddress],
       );

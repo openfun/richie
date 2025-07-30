@@ -72,7 +72,7 @@ interface Props {
   buildOrderPayload: (
     payload: Pick<
       OrderCreationPayload,
-      'product_id' | 'billing_address' | 'has_waived_withdrawal_right'
+      'product_id' | 'billing_address' | 'has_waived_withdrawal_right' | 'voucher_code'
     >,
   ) => OrderCreationPayload;
 }
@@ -82,6 +82,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     order,
     creditCard,
     billingAddress,
+    voucherCode,
     hasWaivedWithdrawalRight,
     product,
     nextStep,
@@ -125,6 +126,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       product_id: product.id,
       billing_address: billingAddress!,
       has_waived_withdrawal_right: hasWaivedWithdrawalRight,
+      voucher_code: voucherCode,
     });
 
     orderMethods.create(payload, {

@@ -43,6 +43,8 @@ export interface SaleTunnelContextType {
   // meta
   billingAddress?: Address;
   setBillingAddress: (address?: Address) => void;
+  voucherCode?: string;
+  setVoucherCode: (code?: string) => void;
   creditCard?: CreditCard;
   setCreditCard: (creditCard?: CreditCard) => void;
   hasWaivedWithdrawalRight: boolean;
@@ -87,6 +89,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
     productId: props.product.id,
   });
   const [billingAddress, setBillingAddress] = useState<Address>();
+  const [voucherCode, setVoucherCode] = useState<string>();
   const [creditCard, setCreditCard] = useState<CreditCard>();
   const [hasWaivedWithdrawalRight, setHasWaivedWithdrawalRight] = useState(false);
   const [step, setStep] = useState<SaleTunnelStep>(SaleTunnelStep.IDLE);
@@ -128,6 +131,8 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       props,
       billingAddress,
       setBillingAddress,
+      voucherCode,
+      setVoucherCode,
       creditCard,
       setCreditCard,
       hasWaivedWithdrawalRight,
@@ -148,7 +153,16 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
         await Promise.all(Array.from(submitCallbacks.values()).map((cb) => cb()));
       },
     }),
-    [props, order, billingAddress, creditCard, step, submitCallbacks, hasWaivedWithdrawalRight],
+    [
+      props,
+      order,
+      billingAddress,
+      creditCard,
+      step,
+      submitCallbacks,
+      hasWaivedWithdrawalRight,
+      voucherCode,
+    ],
   );
 
   return (

@@ -16,7 +16,7 @@ import { JOANIE_API_VERSION } from 'settings';
 import { ResourcesQuery } from 'hooks/useResources';
 import { ObjectHelper } from 'utils/ObjectHelper';
 import { Maybe, Nullable } from 'types/utils';
-import { PaymentSchedule } from 'types/Joanie';
+import { PaymentSchedulePrice } from 'types/Joanie';
 import { checkStatus, getFileFromResponse } from './utils';
 
 /*
@@ -433,7 +433,7 @@ const API = (): Joanie.API => {
         paymentSchedule: {
           get: async (
             filters?: Joanie.CourseProductQueryFilters,
-          ): Promise<Nullable<PaymentSchedule>> => {
+          ): Promise<Nullable<PaymentSchedulePrice>> => {
             if (!filters) {
               throw new Error(
                 'A course code and a product id are required to fetch a course product',

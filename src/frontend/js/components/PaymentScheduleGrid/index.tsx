@@ -5,7 +5,7 @@ import { PaymentSchedule, PaymentScheduleState } from 'types/Joanie';
 import useDateFormat from 'hooks/useDateFormat';
 
 type Props = {
-  schedule: PaymentSchedule;
+  schedule?: PaymentSchedule;
 };
 
 const messages = defineMessages({
@@ -56,42 +56,44 @@ export const PaymentScheduleGrid = ({ schedule }: Props) => {
 
   return (
     <div className="payment-schedule__grid">
-      <DataGrid
-        displayHeader={false}
-        columns={[
-          { field: 'index', size: 10 },
-          { field: 'amount', size: 90 },
-          {
-            field: 'date',
-            renderCell: ({ row }) => (
-              <span className="payment-schedule__cell--wrapped">
-                <FormattedMessage {...messages.withdrawnAt} values={{ date: row.date }} />
-              </span>
-            ),
-          },
-          {
-            id: 'state',
-            renderCell: ({ row }) =>
-              row.state ? (
-                <div className="payment-schedule__cell--alignRight">
-                  <StatusPill state={row.state} />
-                </div>
-              ) : (
-                ''
+      {schedule && (
+        <DataGrid
+          displayHeader={false}
+          columns={[
+            { field: 'index', size: 10 },
+            { field: 'amount', size: 90 },
+            {
+              field: 'date',
+              renderCell: ({ row }) => (
+                <span className="payment-schedule__cell--wrapped">
+                  <FormattedMessage {...messages.withdrawnAt} values={{ date: row.date }} />
+                </span>
               ),
-          },
-        ]}
-        rows={schedule.map((installment, index) => ({
-          id: installment.id,
-          index: index + 1,
-          date: formatDate(installment.due_date),
-          amount: intl.formatNumber(installment.amount, {
-            style: 'currency',
-            currency: installment.currency,
-          }),
-          state: installment.state,
-        }))}
-      />
+            },
+            {
+              id: 'state',
+              renderCell: ({ row }) =>
+                row.state ? (
+                  <div className="payment-schedule__cell--alignRight">
+                    <StatusPill state={row.state} />
+                  </div>
+                ) : (
+                  ''
+                ),
+            },
+          ]}
+          rows={schedule.map((installment, index) => ({
+            id: installment.id,
+            index: index + 1,
+            date: formatDate(installment.due_date),
+            amount: intl.formatNumber(installment.amount, {
+              style: 'currency',
+              currency: installment.currency,
+            }),
+            state: installment.state,
+          }))}
+        />
+      )}
     </div>
   );
 };
