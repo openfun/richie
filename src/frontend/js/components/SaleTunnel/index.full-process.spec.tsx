@@ -19,8 +19,8 @@ import {
   CredentialOrderFactory,
   CreditCardFactory,
   PaymentFactory,
-  PaymentInstallmentFactory,
   ProductFactory,
+  PaymentSchedulePriceFactory,
 } from 'utils/test/factories/joanie';
 import { CourseRun, NOT_CANCELED_ORDER_STATES, OrderState } from 'types/Joanie';
 import { Priority } from 'types';
@@ -104,7 +104,7 @@ describe('SaleTunnel', () => {
       product,
       is_withdrawable: false,
     }).one();
-    const paymentSchedule = PaymentInstallmentFactory().many(2);
+    const paymentSchedulePrice = PaymentSchedulePriceFactory().one();
 
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
@@ -112,7 +112,7 @@ describe('SaleTunnel', () => {
     );
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-      paymentSchedule,
+      paymentSchedulePrice,
     );
     fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
     const orderQueryParameters = {
@@ -250,7 +250,7 @@ describe('SaleTunnel', () => {
      * Make sure the payment schedule is displayed.
      */
     screen.getByRole('heading', { name: 'Payment schedule' });
-    paymentSchedule.forEach((installment, index) => {
+    paymentSchedulePrice.payment_schedule.forEach((installment, index) => {
       const row = screen.getByTestId(installment.id);
       const cells = getAllByRole(row, 'cell');
       expect(cells).toHaveLength(4);
@@ -267,7 +267,10 @@ describe('SaleTunnel', () => {
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
       'Total' +
-        priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+        priceFormatter(product.price_currency, paymentSchedulePrice.price).replace(
+          /(\u202F|\u00a0)/g,
+          ' ',
+        ),
     );
 
     /**

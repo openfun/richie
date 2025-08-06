@@ -37,6 +37,7 @@ import {
   ProductType,
   TargetCourse,
   UserLight,
+  PaymentSchedulePrice,
 } from 'types/Joanie';
 import { Payment, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
@@ -357,6 +358,28 @@ export const PaymentInstallmentFactory = factory((): PaymentInstallment => {
     amount: faker.number.int(),
     due_date: faker.date.future().toISOString(),
     state: PaymentScheduleState.PAID,
+  };
+});
+
+export const PaymentSchedulePriceFactory = factory((): PaymentSchedulePrice => {
+  return {
+    payment_schedule: [
+      {
+        id: faker.string.uuid(),
+        currency: faker.finance.currencyCode(),
+        amount: faker.number.int(),
+        due_date: faker.date.future().toISOString(),
+        state: PaymentScheduleState.PAID,
+      },
+      {
+        id: faker.string.uuid(),
+        currency: faker.finance.currencyCode(),
+        amount: faker.number.int(),
+        due_date: faker.date.future().toISOString(),
+        state: PaymentScheduleState.PAID,
+      },
+    ],
+    price: faker.number.int(),
   };
 });
 
