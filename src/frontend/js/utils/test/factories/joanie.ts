@@ -379,7 +379,7 @@ export const PaymentSchedulePriceFactory = factory((): PaymentSchedulePrice => {
         state: PaymentScheduleState.PAID,
       },
     ],
-    price: faker.number.int(),
+    price: faker.number.int({ min: 1, max: 1000, multipleOf: 10 }),
   };
 });
 

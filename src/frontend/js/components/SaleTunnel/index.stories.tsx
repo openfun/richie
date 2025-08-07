@@ -2,8 +2,10 @@ import { StoryObj, Meta } from '@storybook/react';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import {
   CertificateProductFactory,
+  CredentialProductFactory,
   EnrollmentFactory,
   OfferingFactory,
+  PaymentSchedulePriceFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
 import { PacedCourseFactory } from 'utils/test/factories/richie';
@@ -34,7 +36,12 @@ export default {
 type Story = StoryObj<typeof SaleTunnel>;
 
 export const Credential: Story = {
-  args: {},
+  args: {
+    product: CredentialProductFactory({ price: 100, price_currency: 'EUR' }).one(),
+    course: PacedCourseFactory().one(),
+    enrollment: EnrollmentFactory().one(),
+    schedulePrice: PaymentSchedulePriceFactory().one(),
+  },
 };
 
 export const CertificateDiscount: Story = {
@@ -44,5 +51,6 @@ export const CertificateDiscount: Story = {
     enrollment: EnrollmentFactory({
       offerings: OfferingFactory({ rules: { discounted_price: 80 } }).many(1),
     }).one(),
+    schedulePrice: PaymentSchedulePriceFactory().one(),
   },
 };

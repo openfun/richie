@@ -10,6 +10,7 @@ import useOpenEdxProfile from 'hooks/useOpenEdxProfile';
 import { usePaymentSchedule } from 'hooks/usePaymentSchedule';
 import WithdrawRightCheckbox from 'components/SaleTunnel/WithdrawRightCheckbox';
 import { PaymentSchedule, ProductType } from 'types/Joanie';
+import { Spinner } from 'components/Spinner';
 
 const messages = defineMessages({
   title: {
@@ -88,7 +89,7 @@ export const SaleTunnelInformation = () => {
     ...(voucherCode ? { voucher_code: voucherCode } : {}),
   });
 
-  const schedule = query.data?.payment_schedule;
+  const paymentSchedule = query.data?.payment_schedule;
   const price = query.data?.price;
 
   return (
@@ -107,23 +108,12 @@ export const SaleTunnelInformation = () => {
         </div>
       </div>
       <div>
-        {query.error ? (
-          <>
-            <Voucher />
-            <Alert type={VariantType.ERROR} className="mt-s">
-              <FormattedMessage {...messages.voucherError} />
-            </Alert>
-          </>
-        ) : (
-          <>
-            {product.type === ProductType.CREDENTIAL && (
-              <PaymentScheduleBlock schedule={schedule} />
-            )}
-            <Voucher />
-            <Total price={price} />
-            <WithdrawRightCheckbox />
-          </>
+        {product.type === ProductType.CREDENTIAL && (
+          <PaymentScheduleBlock paymentSchedule={paymentSchedule} />
         )}
+        <Voucher />
+        <Total price={price} />
+        <WithdrawRightCheckbox />
       </div>
     </div>
   );
@@ -150,8 +140,12 @@ const Email = () => {
 };
 
 const Total = ({ price }: { price?: number }) => {
-  const { product } = useSaleTunnelContext();
-  const totalPrice = price;
+  const { product, offering, enrollment } = useSaleTunnelContext();
+  const totalPrice =
+    price ??
+    enrollment?.offerings?.[0]?.rules?.discounted_price ??
+    offering?.rules.discounted_price ??
+    product.price;
 
   return (
     <div className="sale-tunnel__total">
@@ -227,7 +221,12 @@ const Voucher = () => {
   );
 };
 
-const PaymentScheduleBlock = ({ schedule }: { schedule?: PaymentSchedule }) => {
+const PaymentScheduleBlock = ({ paymentSchedule }: { paymentSchedule?: PaymentSchedule }) => {
+  const { props } = useSaleTunnelContext();
+  const schedule = paymentSchedule ?? props.schedulePrice?.payment_schedule;
+  if (!schedule) {
+    return <Spinner size="large" />;
+  }
   return (
     <div className="payment-schedule">
       <h4 className="block-title mb-t">

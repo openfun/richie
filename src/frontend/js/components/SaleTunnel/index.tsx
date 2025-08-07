@@ -9,6 +9,7 @@ import {
   Organization,
   Product,
   ProductType,
+  PaymentSchedulePrice,
 } from 'types/Joanie';
 import { CredentialSaleTunnel } from 'components/SaleTunnel/CredentialSaleTunnel';
 import { CertificateSaleTunnel } from 'components/SaleTunnel/CertificateSaleTunnel';
@@ -21,6 +22,7 @@ export interface SaleTunnelProps extends Pick<ModalProps, 'isOpen' | 'onClose'> 
   isWithdrawable: boolean;
   course?: PacedCourse | CourseLight;
   enrollment?: Enrollment;
+  schedulePrice?: PaymentSchedulePrice;
   onFinish?: (order: Order) => void;
 }
 
