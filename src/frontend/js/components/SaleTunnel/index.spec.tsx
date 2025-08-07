@@ -22,7 +22,7 @@ import {
   CredentialProductFactory,
   CreditCardFactory,
   EnrollmentFactory,
-  PaymentInstallmentFactory,
+  PaymentSchedulePriceFactory,
 } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
 import { render } from 'utils/test/render';
@@ -163,7 +163,7 @@ describe.each([
       is_main: true,
     }).one();
     const order = OrderFactory({ state: OrderState.TO_SAVE_PAYMENT_METHOD }).one();
-
+    const schedulePrice = PaymentSchedulePriceFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
@@ -171,7 +171,7 @@ describe.each([
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        [],
+        [schedulePrice],
       )
       .post('https://joanie.endpoint/api/v1.0/orders/', order)
       .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, order)
@@ -179,7 +179,7 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} schedulePrice={schedulePrice} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     nbApiCalls += 1; // useProductOrder call.
@@ -252,6 +252,7 @@ describe.each([
     const billingAddress = AddressFactory({
       is_main: true,
     }).one();
+    const schedulePrice = PaymentSchedulePriceFactory().one();
     const deferred = new Deferred();
 
     fetchMock
@@ -261,14 +262,14 @@ describe.each([
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        [],
+        [schedulePrice],
       )
       .post('https://joanie.endpoint/api/v1.0/orders/', deferred.promise)
       .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} schedulePrice={schedulePrice} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     nbApiCalls += 1; // useProductOrder get order with filters
@@ -328,6 +329,7 @@ describe.each([
     }).one();
     const creditCard = CreditCardFactory().one();
     const order = OrderFactory({ state: OrderState.TO_SAVE_PAYMENT_METHOD }).one();
+    const schedulePrice = PaymentSchedulePriceFactory().one();
 
     fetchMock
       .get(
@@ -336,7 +338,7 @@ describe.each([
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        [],
+        [schedulePrice],
       )
       .get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard], {
         overwriteRoutes: true,
@@ -345,7 +347,7 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} schedulePrice={schedulePrice} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -364,6 +366,7 @@ describe.each([
       }).one();
       const creditCard = CreditCardFactory().one();
       const order = OrderFactory({ state }).one();
+      const schedulePrice = PaymentSchedulePriceFactory().one();
 
       fetchMock
         .get(
@@ -372,7 +375,7 @@ describe.each([
         )
         .get(
           `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-          [],
+          schedulePrice,
         )
         .get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard], {
           overwriteRoutes: true,
@@ -381,7 +384,7 @@ describe.each([
           overwriteRoutes: true,
         });
 
-      render(<Wrapper product={product} isWithdrawable={true} />, {
+      render(<Wrapper product={product} isWithdrawable={true} schedulePrice={schedulePrice} />, {
         queryOptions: { client: createTestQueryClient({ user: richieUser }) },
       });
 
@@ -395,7 +398,8 @@ describe.each([
   it('should show the product payment schedule', async () => {
     const intl = createIntl({ locale: 'en' });
     const product = ProductFactory().one();
-    const schedule = PaymentInstallmentFactory().many(2);
+    const schedulePrice = PaymentSchedulePriceFactory().one();
+    const schedule = schedulePrice.payment_schedule;
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
@@ -403,10 +407,10 @@ describe.each([
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        [schedulePrice],
       );
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} schedulePrice={schedulePrice} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -505,7 +509,8 @@ describe.each([
 
   it('should show the product payment schedule with discounted price', async () => {
     const intl = createIntl({ locale: 'en' });
-    const schedule = PaymentInstallmentFactory().many(2);
+    const schedulePrice = PaymentSchedulePriceFactory().one();
+    const schedule = schedulePrice.payment_schedule;
 
     const offering = OfferingFactory({
       product: ProductFactory({
@@ -526,12 +531,20 @@ describe.each([
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        [schedulePrice],
       );
 
-    render(<Wrapper product={product} offering={offering} isWithdrawable={true} />, {
-      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
-    });
+    render(
+      <Wrapper
+        product={product}
+        offering={offering}
+        isWithdrawable={true}
+        schedulePrice={schedulePrice}
+      />,
+      {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      },
+    );
 
     if (product.type === ProductType.CREDENTIAL) {
       await screen.findByRole('heading', { level: 4, name: 'Payment schedule' });
@@ -578,7 +591,8 @@ describe.each([
 
   it('should show a walkthrough to explain the subscription process', async () => {
     const product = ProductFactory().one();
-    const schedule = PaymentInstallmentFactory().many(2);
+    const schedulePrice = PaymentSchedulePriceFactory().one();
+
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
@@ -586,10 +600,10 @@ describe.each([
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        [schedulePrice],
       );
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} schedulePrice={schedulePrice} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -598,7 +612,7 @@ describe.each([
 
   it('should show a checkbox to waive withdrawal right if the product is not withdrawable', async () => {
     const product = ProductFactory().one();
-    const schedule = PaymentInstallmentFactory().many(2);
+    const schedulePrice = PaymentSchedulePriceFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
@@ -606,10 +620,10 @@ describe.each([
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        [schedulePrice],
       );
 
-    render(<Wrapper product={product} isWithdrawable={false} />, {
+    render(<Wrapper product={product} isWithdrawable={false} schedulePrice={schedulePrice} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -618,7 +632,7 @@ describe.each([
 
   it('should not show a checkbox to waive withdrawal right if the product is withdrawable', async () => {
     const product = ProductFactory().one();
-    const schedule = PaymentInstallmentFactory().many(2);
+    const schedulePrice = PaymentSchedulePriceFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
@@ -626,10 +640,10 @@ describe.each([
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        [schedulePrice],
       );
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} schedulePrice={schedulePrice} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -638,7 +652,7 @@ describe.each([
 
   it('should show a specific checkbox to waive withdrawal right according to the product type', async () => {
     const product = ProductFactory().one();
-    const schedule = PaymentInstallmentFactory().many(2);
+    const schedulePrice = PaymentSchedulePriceFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
@@ -646,10 +660,10 @@ describe.each([
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        [schedulePrice],
       );
 
-    render(<Wrapper product={product} isWithdrawable={false} />, {
+    render(<Wrapper product={product} isWithdrawable={false} schedulePrice={schedulePrice} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
