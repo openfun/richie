@@ -21,6 +21,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add search indexation for new `CourseRun` model fields
 - Add `discounted_price` to the course glimpse template
 - Add autoplay for carousel slides
+- Add voucher code handle in sale tunnel
 
 ### Changed
 
