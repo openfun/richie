@@ -179,15 +179,13 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     nbApiCalls += 1; // useProductOrder call.
     nbApiCalls += 1; // get user account call.
     nbApiCalls += 1; // get user preferences call.
-    if (product.type === ProductType.CREDENTIAL) {
-      nbApiCalls += 1; // product payment-schedule call
-    }
+    nbApiCalls += 1; // product payment-schedule call
     await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
     const user = userEvent.setup({ delay: null });
@@ -268,15 +266,13 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     nbApiCalls += 1; // useProductOrder get order with filters
     nbApiCalls += 1; // get user account call.
     nbApiCalls += 1; // get user preferences call.
-    if (product.type === ProductType.CREDENTIAL) {
-      nbApiCalls += 1; // get product payment schedule.
-    }
+    nbApiCalls += 1; // get paymentPlan call.
     await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
     const user = userEvent.setup({ delay: null });
@@ -345,7 +341,7 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -381,7 +377,7 @@ describe.each([
           overwriteRoutes: true,
         });
 
-      render(<Wrapper product={product} isWithdrawable={true} />, {
+      render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
         queryOptions: { client: createTestQueryClient({ user: richieUser }) },
       });
 
@@ -407,7 +403,7 @@ describe.each([
         paymentPlan,
       );
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -449,7 +445,8 @@ describe.each([
 
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
-      'Total' + formatPrice(product.price, product.price_currency).replace(/(\u202F|\u00a0)/g, ' '),
+      'Total' +
+        formatPrice(paymentPlan.price, product.price_currency).replace(/(\u202F|\u00a0)/g, ' '),
     );
   });
 
@@ -479,31 +476,36 @@ describe.each([
       enrollmentDiscounted.offerings[0].product = product;
       fetchMock
         .get(
-        `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollmentDiscounted.id}&product_id=${product.id}&state=pending&state=pending_payment&state=no_payment&state=failed_payment&state=completed&state=draft&state=assigned&state=to_sign&state=signing&state=to_save_payment_method`,
-        {
-          results: [],
-          next: null,
-          previous: null,
-          count: 0,
-        },
+          `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollmentDiscounted.id}&product_id=${product.id}&state=pending&state=pending_payment&state=no_payment&state=failed_payment&state=completed&state=draft&state=assigned&state=to_sign&state=signing&state=to_save_payment_method`,
+          {
+            results: [],
+            next: null,
+            previous: null,
+            count: 0,
+          },
         )
         .get(
           `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
           paymentPlan,
-      );
-
+        );
       render(
-        <Wrapper product={product} enrollment={enrollmentDiscounted} isWithdrawable={true} />,
+        <Wrapper
+          product={product}
+          enrollment={enrollmentDiscounted}
+          isWithdrawable={true}
+          paymentPlan={paymentPlan}
+        />,
         { queryOptions: { client: createTestQueryClient({ user: richieUser }) } },
       );
 
       const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
       expect($totalAmount).toHaveTextContent(
         'Total' +
-          formatPrice(
-            enrollmentDiscounted.offerings[0].rules?.discounted_price!,
-            product.price_currency,
-          ).replace(/(\u202F|\u00a0)/g, ' '),
+          formatPrice(paymentPlan.price!, product.price_currency).replace(/(\u202F|\u00a0)/g, ' ') +
+          formatPrice(paymentPlan.discounted_price!, product.price_currency).replace(
+            /(\u202F|\u00a0)/g,
+            ' ',
+          ),
       );
     }
   });
@@ -535,9 +537,17 @@ describe.each([
         paymentPlan,
       );
 
-    render(<Wrapper product={product} offering={offering} isWithdrawable={true} />, {
-      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
-    });
+    render(
+      <Wrapper
+        paymentPlan={paymentPlan}
+        product={product}
+        offering={offering}
+        isWithdrawable={true}
+      />,
+      {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      },
+    );
 
     if (product.type === ProductType.CREDENTIAL) {
       await screen.findByRole('heading', { level: 4, name: 'Payment schedule' });
@@ -575,7 +585,8 @@ describe.each([
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
       'Total' +
-        formatPrice(offering!.rules!.discounted_price!, product.price_currency).replace(
+        formatPrice(paymentPlan.price!, product.price_currency).replace(/(\u202F|\u00a0)/g, ' ') +
+        formatPrice(paymentPlan.discounted_price!, product.price_currency).replace(
           /(\u202F|\u00a0)/g,
           ' ',
         ),
@@ -595,7 +606,7 @@ describe.each([
         paymentPlan,
       );
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -615,7 +626,7 @@ describe.each([
         paymentPlan,
       );
 
-    render(<Wrapper product={product} isWithdrawable={false} />, {
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={false} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -635,7 +646,7 @@ describe.each([
         paymentPlan,
       );
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -655,7 +666,7 @@ describe.each([
         paymentPlan,
       );
 
-    render(<Wrapper product={product} isWithdrawable={false} />, {
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={false} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -677,5 +688,36 @@ describe.each([
     expectedMessages.forEach((message) => {
       screen.getByText(message);
     });
+  });
+
+  it('should show an error when submit an invalid voucher', async () => {
+    const user = userEvent.setup({ delay: null });
+    const paymentPlan = PaymentPlanFactory().one();
+    const product = ProductFactory().one();
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT30`,
+        {
+          status: 404,
+          body: {
+            detail: 'No Voucher matches the given query.',
+          },
+        },
+      );
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+    expect(screen.getByLabelText('Voucher code'));
+    await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT30');
+    await user.click(screen.getByRole('button', { name: 'Validate' }));
+    expect(await screen.findByText('The submitted voucher code is not valid.')).toBeInTheDocument();
   });
 });

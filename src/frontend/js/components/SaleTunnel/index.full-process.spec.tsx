@@ -267,7 +267,36 @@ describe('SaleTunnel', () => {
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
       'Total' +
-        priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+        priceFormatter(product.price_currency, paymentPlan.price).replace(/(\u202F|\u00a0)/g, ' '),
+    );
+
+    /**
+     * Submit voucher and check price
+     */
+    const paymentPlanVoucher = PaymentPlanFactory({
+      discounted_price: 70,
+      discount: '-30%',
+    }).one();
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT30`,
+      paymentPlanVoucher,
+      { overwriteRoutes: true },
+    );
+    await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT30');
+    await user.click(screen.getByRole('button', { name: 'Validate' }));
+    screen.getByRole('heading', { name: 'Payment schedule' });
+    await screen.findByTestId('sale-tunnel__total__amount');
+    const $totalAmountVoucher = screen.getByTestId('sale-tunnel__total__amount');
+    expect($totalAmountVoucher).toHaveTextContent(
+      'Total' +
+        priceFormatter(product.price_currency, paymentPlanVoucher.price!).replace(
+          /(\u202F|\u00a0)/g,
+          ' ',
+        ) +
+        priceFormatter(product.price_currency, paymentPlanVoucher.discounted_price!).replace(
+          /(\u202F|\u00a0)/g,
+          ' ',
+        ),
     );
 
     /**

@@ -4,6 +4,7 @@ import {
   CertificateProductFactory,
   EnrollmentFactory,
   OfferingFactory,
+  PaymentPlanFactory,
   ProductFactory,
 } from 'utils/test/factories/joanie';
 import { PacedCourseFactory } from 'utils/test/factories/richie';
@@ -34,7 +35,9 @@ export default {
 type Story = StoryObj<typeof SaleTunnel>;
 
 export const Credential: Story = {
-  args: {},
+  args: {
+    paymentPlan: PaymentPlanFactory().one(),
+  },
 };
 
 export const CertificateDiscount: Story = {
@@ -44,5 +47,6 @@ export const CertificateDiscount: Story = {
     enrollment: EnrollmentFactory({
       offerings: OfferingFactory({ rules: { discounted_price: 80 } }).many(1),
     }).one(),
+    paymentPlan: PaymentPlanFactory({ discounted_price: 80 }).one(),
   },
 };
