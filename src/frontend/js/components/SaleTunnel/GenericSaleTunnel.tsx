@@ -51,6 +51,8 @@ export interface SaleTunnelContextType {
   unregisterSubmitCallback: (key: string) => void;
   runSubmitCallbacks: () => Promise<void>;
   nextStep: () => void;
+  voucherCode?: string;
+  setVoucherCode: (code?: string) => void;
 }
 
 export const SaleTunnelContext = createContext<SaleTunnelContextType>({} as any);
@@ -93,6 +95,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
   const [submitCallbacks, setSubmitCallbacks] = useState<Map<string, () => Promise<void>>>(
     new Map(),
   );
+  const [voucherCode, setVoucherCode] = useState<string>();
 
   const nextStep = useCallback(() => {
     if (order)
@@ -147,8 +150,19 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       runSubmitCallbacks: async () => {
         await Promise.all(Array.from(submitCallbacks.values()).map((cb) => cb()));
       },
+      voucherCode,
+      setVoucherCode,
     }),
-    [props, order, billingAddress, creditCard, step, submitCallbacks, hasWaivedWithdrawalRight],
+    [
+      props,
+      order,
+      billingAddress,
+      creditCard,
+      step,
+      submitCallbacks,
+      hasWaivedWithdrawalRight,
+      voucherCode,
+    ],
   );
 
   return (
