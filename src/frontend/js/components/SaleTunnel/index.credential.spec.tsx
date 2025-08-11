@@ -93,7 +93,7 @@ describe('SaleTunnel / Credential', () => {
     fetchMock
       .get(url, [])
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         [],
       )
       .post('https://joanie.endpoint/api/v1.0/orders/', order)
