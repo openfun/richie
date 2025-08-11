@@ -49,6 +49,7 @@ describe('AddressSelector', () => {
 
     const Wrapper = () => {
       const [billingAddress, setBillingAddress] = useState<Address>();
+      const [voucherCode, setVoucherCode] = useState<string>();
       const context: SaleTunnelContextType = useMemo(
         () => ({
           webAnalyticsEventKey: 'eventKey',
@@ -65,8 +66,9 @@ describe('AddressSelector', () => {
           nextStep: jest.fn(),
           hasWaivedWithdrawalRight: false,
           setHasWaivedWithdrawalRight: jest.fn(),
+          setVoucherCode,
         }),
-        [billingAddress],
+        [billingAddress, voucherCode],
       );
       contextRef.current = context;
 
