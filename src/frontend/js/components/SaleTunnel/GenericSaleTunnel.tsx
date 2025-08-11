@@ -105,6 +105,8 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
             setStep(SaleTunnelStep.SIGN);
           } else if (order.state === OrderState.TO_SAVE_PAYMENT_METHOD) {
             setStep(SaleTunnelStep.SAVE_PAYMENT);
+          } else if (order.state === OrderState.COMPLETED) {
+            setStep(SaleTunnelStep.SUCCESS);
           }
           break;
         case SaleTunnelStep.SIGN:
