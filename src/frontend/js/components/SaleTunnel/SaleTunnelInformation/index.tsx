@@ -1,4 +1,4 @@
-import { defineMessages, FormattedMessage, FormattedNumber } from 'react-intl';
+import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 import { AddressSelector } from 'components/SaleTunnel/AddressSelector';
 import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
@@ -9,6 +9,8 @@ import { usePaymentSchedule } from 'hooks/usePaymentSchedule';
 import { Spinner } from 'components/Spinner';
 import WithdrawRightCheckbox from 'components/SaleTunnel/WithdrawRightCheckbox';
 import { ProductType } from 'types/Joanie';
+import { Select } from '@openfun/cunningham-react';
+import { useState } from 'react';
 
 const messages = defineMessages({
   title: {
@@ -52,12 +54,54 @@ const messages = defineMessages({
     defaultMessage:
       'This email will be used to send you confirmation mails, it is the one you created your account with.',
   },
+  purchaseTypeTitle: {
+    id: 'components.SaleTunnel.Information.purchaseTypeTitle',
+    description: 'Title for purchase type',
+    defaultMessage: 'Select purchase type',
+  },
+  purchaseTypeSelect: {
+    id: 'components.SaleTunnel.Information.purchaseTypeSelect',
+    description: 'Label for purchase type select',
+    defaultMessage: 'Purchase type',
+  },
+  purchaseTypeOptionSingle: {
+    id: 'components.SaleTunnel.Information.purchaseTypeOptionSingle',
+    description: 'Label for B2C option',
+    defaultMessage: 'Single purchase (B2C)',
+  },
+  purchaseTypeOptionGroup: {
+    id: 'components.SaleTunnel.Information.purchaseTypeOptionGroup',
+    description: 'Label for B2C option',
+    defaultMessage: 'Group purchase (B2B)',
+  },
 });
 
 export const SaleTunnelInformation = () => {
   const { product } = useSaleTunnelContext();
+  const intl = useIntl();
+  const options = [
+    { label: intl.formatMessage(messages.purchaseTypeOptionSingle), value: 'b2c' },
+    { label: intl.formatMessage(messages.purchaseTypeOptionGroup), value: 'b2b' },
+  ];
+  const [purchaseType, setPurchaseType] = useState();
+
   return (
     <div className="sale-tunnel__main__column sale-tunnel__information">
+      <div>
+        <h3 className="block-title mb-t">
+          <FormattedMessage {...messages.purchaseTypeTitle} />
+        </h3>
+        <Select
+          label={intl.formatMessage(messages.purchaseTypeSelect)}
+          options={options}
+          fullWidth
+          value={'b2b'}
+          onChange={(e) => {
+            setPurchaseType(e.target.value);
+          }}
+        />
+      </div>
+      {}
       <div>
         <h3 className="block-title mb-t">
           <FormattedMessage {...messages.title} />
