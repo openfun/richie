@@ -82,6 +82,28 @@
       font-size: 0.75rem;
     }
   }
+
+  &__group-buy-form {
+    & > div {
+      margin: 1rem 0;
+    }
+    & > .step-content {
+      & > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        & > div {
+          width: 90%;
+          margin: 0.25rem;
+        }
+      }
+    }
+    & > .step-button {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
 }
 
 .description {
