@@ -113,9 +113,15 @@ const messages = defineMessages({
   bankTransfer: { id: 'groupBuy.bankTransfer', defaultMessage: 'Payment by bank transfer' },
   withOrderForm: { id: 'groupBuy.withOrderForm', defaultMessage: 'With order form' },
   withoutOrderForm: { id: 'groupBuy.withoutOrderForm', defaultMessage: 'Without order form' },
+  opco: { id: 'groupBuy.opc', defaultMessage: 'OPCO' },
   opcoName: { id: 'groupBuy.opcName', defaultMessage: 'OPCO name' },
   opcoAmount: { id: 'groupBuy.opcoAmount', defaultMessage: 'OPCO - Amount covered' },
-  jobCenterAmount: { id: 'groupBuy.jobCenter', defaultMessage: 'Pôle emploi - Amount covered' },
+  jobCenter: { id: 'groupBuy.jobCenter', defaultMessage: 'Pôle emploi' },
+  jobCenterAmount: {
+    id: 'groupBuy.jobCenterAmount',
+    defaultMessage: 'Pôle emploi - Amount covered',
+  },
+  other: { id: 'groupBuy.other', defaultMessage: 'Other' },
   otherSpecify: { id: 'groupBuy.otherSpecify', defaultMessage: 'Other - specify' },
   participatingUniversities: {
     id: 'groupBuy.participatingUniversities',
@@ -264,6 +270,9 @@ const GroupBuyForm = () => {
     intl.formatMessage(messages.stepFinancing),
   ];
 
+  const [selectedPayment, setSelectedPayment] = useState('card');
+  const [selectedOrganism, setSelectedOrganism] = useState('opco');
+
   const renderStepContent = (step: number) => {
     switch (step) {
       case 0:
@@ -321,19 +330,54 @@ const GroupBuyForm = () => {
       case 4:
         return (
           <div className="plan">
-            <RadioGroup className="radio-group-payment">
-              <Radio label={intl.formatMessage(messages.cardPayment)} />
-              <div>
-                <Radio label={intl.formatMessage(messages.bankTransfer)} />
-                <Checkbox label={intl.formatMessage(messages.withOrderForm)} />
+            <div className="payment-block" style={{ marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+                <Radio
+                  label={intl.formatMessage(messages.cardPayment)}
+                  onChange={() => setSelectedPayment('card')}
+                  checked={selectedPayment === 'card'}
+                />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <Radio
+                    label={intl.formatMessage(messages.bankTransfer)}
+                    onChange={() => setSelectedPayment('bank')}
+                    checked={selectedPayment === 'bank'}
+                  />
+                  <Checkbox
+                    label={intl.formatMessage(messages.withOrderForm)}
+                    disabled={selectedPayment !== 'bank'}
+                  />
+                </div>
               </div>
-            </RadioGroup>
-            <div>
-              <Input label={intl.formatMessage(messages.opcoName)} />
-              <Input label={intl.formatMessage(messages.opcoAmount)} />
             </div>
-            <Input label={intl.formatMessage(messages.jobCenterAmount)} />
-            <Input label={intl.formatMessage(messages.otherSpecify)} />
+            <div
+              className="organism-block"
+              style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+            >
+              <Select
+                label={intl.formatMessage(messages.withOrderForm)}
+                value={selectedOrganism}
+                onChange={(e) => setSelectedOrganism(e.target.value as string)}
+                options={[
+                  { label: intl.formatMessage(messages.opco), value: 'opco' },
+                  { label: intl.formatMessage(messages.jobCenter), value: 'jobCenter' },
+                  { label: intl.formatMessage(messages.other), value: 'other' },
+                ]}
+                clearable={false}
+              />
+              {selectedOrganism === 'opco' && (
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <Input label={intl.formatMessage(messages.opcoName)} />
+                  <Input label={intl.formatMessage(messages.opcoAmount)} />
+                </div>
+              )}
+              {selectedOrganism === 'jobCenter' && (
+                <Input label={intl.formatMessage(messages.jobCenterAmount)} />
+              )}
+              {selectedOrganism === 'other' && (
+                <Input label={intl.formatMessage(messages.otherSpecify)} />
+              )}
+            </div>
             <Select
               label={intl.formatMessage(messages.participatingUniversities)}
               value="rennes1"
