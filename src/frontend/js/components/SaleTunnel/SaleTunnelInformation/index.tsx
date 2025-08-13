@@ -9,7 +9,8 @@ import { usePaymentSchedule } from 'hooks/usePaymentSchedule';
 import { Spinner } from 'components/Spinner';
 import WithdrawRightCheckbox from 'components/SaleTunnel/WithdrawRightCheckbox';
 import { ProductType } from 'types/Joanie';
-import { Select } from '@openfun/cunningham-react';
+import { Button, Input, Radio, Select, Checkbox, RadioGroup } from '@openfun/cunningham-react';
+import { Stepper, Step, StepLabel } from '@mui/material';
 import { useState } from 'react';
 
 const messages = defineMessages({
@@ -74,6 +75,52 @@ const messages = defineMessages({
     description: 'Label for B2C option',
     defaultMessage: 'Group purchase (B2B)',
   },
+  stepCompany: {
+    id: 'components.SaleTunnel.GroupBuyForm.stepCompany',
+    defaultMessage: 'Company / Organization',
+  },
+  stepAdmin: {
+    id: 'components.SaleTunnel.GroupBuyForm.stepAdmin',
+    defaultMessage: 'Administrative follow-up',
+  },
+  stepBilling: {
+    id: 'components.SaleTunnel.GroupBuyForm.stepBilling',
+    defaultMessage: 'Billing',
+  },
+  stepParticipants: {
+    id: 'components.SaleTunnel.GroupBuyForm.stepParticipants',
+    defaultMessage: 'Participants',
+  },
+  stepFinancing: {
+    id: 'components.SaleTunnel.GroupBuyForm.stepFinancing',
+    defaultMessage: 'Financing',
+  },
+  companyName: { id: 'groupBuy.companyName', defaultMessage: 'Company name' },
+  siret: { id: 'groupBuy.siret', defaultMessage: 'SIRET number' },
+  vatNumber: { id: 'groupBuy.vatNumber', defaultMessage: 'VAT number' },
+  address: { id: 'groupBuy.address', defaultMessage: 'Address' },
+  postalCode: { id: 'groupBuy.postalCode', defaultMessage: 'Postal code' },
+  city: { id: 'groupBuy.city', defaultMessage: 'City' },
+  country: { id: 'groupBuy.country', defaultMessage: 'Country' },
+  firstName: { id: 'groupBuy.firstName', defaultMessage: 'First name' },
+  lastName: { id: 'groupBuy.lastName', defaultMessage: 'Last name' },
+  role: { id: 'groupBuy.role', defaultMessage: 'Role' },
+  email: { id: 'groupBuy.email', defaultMessage: 'Email' },
+  phone: { id: 'groupBuy.phone', defaultMessage: 'Phone' },
+  birthDate: { id: 'groupBuy.birthDate', defaultMessage: 'Birth date' },
+  addParticipant: { id: 'groupBuy.addParticipant', defaultMessage: 'Add participant' },
+  cardPayment: { id: 'groupBuy.cardPayment', defaultMessage: 'Payment by credit card' },
+  bankTransfer: { id: 'groupBuy.bankTransfer', defaultMessage: 'Payment by bank transfer' },
+  withOrderForm: { id: 'groupBuy.withOrderForm', defaultMessage: 'With order form' },
+  withoutOrderForm: { id: 'groupBuy.withoutOrderForm', defaultMessage: 'Without order form' },
+  opcoName: { id: 'groupBuy.opcName', defaultMessage: 'OPCO name' },
+  opcoAmount: { id: 'groupBuy.opcoAmount', defaultMessage: 'OPCO - Amount covered' },
+  jobCenterAmount: { id: 'groupBuy.jobCenter', defaultMessage: 'Pôle emploi - Amount covered' },
+  otherSpecify: { id: 'groupBuy.otherSpecify', defaultMessage: 'Other - specify' },
+  participatingUniversities: {
+    id: 'groupBuy.participatingUniversities',
+    defaultMessage: 'Participating universities',
+  },
 });
 
 export const SaleTunnelInformation = () => {
@@ -83,7 +130,7 @@ export const SaleTunnelInformation = () => {
     { label: intl.formatMessage(messages.purchaseTypeOptionSingle), value: 'b2c' },
     { label: intl.formatMessage(messages.purchaseTypeOptionGroup), value: 'b2b' },
   ];
-  const [purchaseType, setPurchaseType] = useState();
+  const [purchaseType, setPurchaseType] = useState('b2b');
 
   return (
     <div className="sale-tunnel__main__column sale-tunnel__information">
@@ -95,31 +142,48 @@ export const SaleTunnelInformation = () => {
           label={intl.formatMessage(messages.purchaseTypeSelect)}
           options={options}
           fullWidth
-          value={'b2b'}
+          value={purchaseType}
+          clearable={false}
           onChange={(e) => {
-            setPurchaseType(e.target.value);
+            setPurchaseType(e.target.value as string);
           }}
         />
       </div>
-      {}
-      <div>
-        <h3 className="block-title mb-t">
-          <FormattedMessage {...messages.title} />
-        </h3>
-        <div className="description mb-s">
-          <FormattedMessage {...messages.description} />
-        </div>
-        <OpenEdxFullNameForm />
-        <AddressSelector />
-        <div className="mt-s">
-          <Email />
-        </div>
-      </div>
-      <div>
-        {product.type === ProductType.CREDENTIAL && <PaymentScheduleBlock />}
-        <Total />
-        <WithdrawRightCheckbox />
-      </div>
+      {purchaseType === 'b2c' && (
+        <>
+          <div>
+            <h3 className="block-title mb-t">
+              <FormattedMessage {...messages.title} />
+            </h3>
+            <div className="description mb-s">
+              <FormattedMessage {...messages.description} />
+            </div>
+            <OpenEdxFullNameForm />
+            <AddressSelector />
+            <div className="mt-s">
+              <Email />
+            </div>
+          </div>
+          <div>
+            {product.type === ProductType.CREDENTIAL && <PaymentScheduleBlock />}
+            <Total />
+            <WithdrawRightCheckbox />
+          </div>
+        </>
+      )}
+      {purchaseType === 'b2b' && (
+        <>
+          <div>
+            <h3 className="block-title mb-t">
+              <FormattedMessage {...messages.title} />
+            </h3>
+            <div className="description mb-s">
+              <FormattedMessage {...messages.description} />
+            </div>
+          </div>
+          <GroupBuyForm />
+        </>
+      )}
     </div>
   );
 };
@@ -183,6 +247,119 @@ const PaymentScheduleBlock = () => {
       <div className="mt-t">
         <PaymentScheduleGrid schedule={query.data} />
       </div>
+    </div>
+  );
+};
+
+const GroupBuyForm = () => {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const intl = useIntl();
+
+  const steps = [
+    intl.formatMessage(messages.stepCompany),
+    intl.formatMessage(messages.stepAdmin),
+    intl.formatMessage(messages.stepBilling),
+    intl.formatMessage(messages.stepParticipants),
+    intl.formatMessage(messages.stepFinancing),
+  ];
+
+  const renderStepContent = (step: number) => {
+    switch (step) {
+      case 0:
+        return (
+          <div className="company">
+            <Input label={intl.formatMessage(messages.companyName)} required />
+            <Input label={intl.formatMessage(messages.siret)} />
+            <Input label={intl.formatMessage(messages.vatNumber)} />
+            <Input label={intl.formatMessage(messages.address)} required />
+            <Input label={intl.formatMessage(messages.postalCode)} required />
+            <Input label={intl.formatMessage(messages.city)} required />
+            <Input label={intl.formatMessage(messages.country)} required />
+          </div>
+        );
+      case 1:
+        return (
+          <div className="admin">
+            <Input label={intl.formatMessage(messages.lastName)} />
+            <Input label={intl.formatMessage(messages.firstName)} />
+            <Input label={intl.formatMessage(messages.role)} />
+            <Input label={intl.formatMessage(messages.email)} />
+            <Input label={intl.formatMessage(messages.phone)} />
+          </div>
+        );
+      case 2:
+        return (
+          <div className="payment">
+            <Input label={intl.formatMessage(messages.companyName)} />
+            <Input label={intl.formatMessage(messages.siret)} />
+            <Input label={intl.formatMessage(messages.address)} />
+            <Input label={intl.formatMessage(messages.postalCode)} />
+            <Input label={intl.formatMessage(messages.city)} />
+            <Input label={intl.formatMessage(messages.country)} />
+            <Input label={intl.formatMessage(messages.lastName)} />
+            <Input label={intl.formatMessage(messages.email)} />
+          </div>
+        );
+      case 3:
+        return (
+          <div className="student">
+            <Input label={intl.formatMessage(messages.lastName)} />
+            <Input label={intl.formatMessage(messages.firstName)} />
+            <Input label={intl.formatMessage(messages.birthDate)} />
+            <Input label={intl.formatMessage(messages.address)} />
+            <Input label={intl.formatMessage(messages.postalCode)} />
+            <Input label={intl.formatMessage(messages.city)} />
+            <Input label={intl.formatMessage(messages.country)} />
+            <Input label={intl.formatMessage(messages.email)} />
+            <Input label={intl.formatMessage(messages.phone)} />
+            <Button size="small" color="primary">
+              <FormattedMessage {...messages.addParticipant} />
+            </Button>
+          </div>
+        );
+      case 4:
+        return (
+          <div className="plan">
+            <RadioGroup className="radio-group-payment">
+              <Radio label={intl.formatMessage(messages.cardPayment)} />
+              <div>
+                <Radio label={intl.formatMessage(messages.bankTransfer)} />
+                <Checkbox label={intl.formatMessage(messages.withOrderForm)} />
+              </div>
+            </RadioGroup>
+            <div>
+              <Input label={intl.formatMessage(messages.opcoName)} />
+              <Input label={intl.formatMessage(messages.opcoAmount)} />
+            </div>
+            <Input label={intl.formatMessage(messages.jobCenterAmount)} />
+            <Input label={intl.formatMessage(messages.otherSpecify)} />
+            <Select
+              label={intl.formatMessage(messages.participatingUniversities)}
+              value="rennes1"
+              clearable={false}
+              options={[
+                { label: 'Rennes 1', value: 'rennes1' },
+                { label: 'Rennes 2', value: 'rennes2' },
+              ]}
+            />
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="sale-tunnel__group-buy-form">
+      <Stepper activeStep={activeStep} alternativeLabel>
+        {steps.map((label, index) => (
+          <Step key={label} onClick={() => setActiveStep(index)} style={{ cursor: 'pointer' }}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      <div className="step-content">{renderStepContent(activeStep)}</div>
     </div>
   );
 };
