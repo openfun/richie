@@ -9,7 +9,7 @@ import { usePaymentSchedule } from 'hooks/usePaymentSchedule';
 import { Spinner } from 'components/Spinner';
 import WithdrawRightCheckbox from 'components/SaleTunnel/WithdrawRightCheckbox';
 import { ProductType } from 'types/Joanie';
-import { Button, Input, Radio, Select, Checkbox, RadioGroup } from '@openfun/cunningham-react';
+import { Input, Radio, Select, Checkbox } from '@openfun/cunningham-react';
 import { Stepper, Step, StepLabel } from '@mui/material';
 import { useState } from 'react';
 
@@ -108,6 +108,7 @@ const messages = defineMessages({
   email: { id: 'groupBuy.email', defaultMessage: 'Email' },
   phone: { id: 'groupBuy.phone', defaultMessage: 'Phone' },
   birthDate: { id: 'groupBuy.birthDate', defaultMessage: 'Birth date' },
+  participantNumber: { id: 'groupBuy.particpantNumber', defaultMessage: 'How many participants ?' },
   addParticipant: { id: 'groupBuy.addParticipant', defaultMessage: 'Add participant' },
   cardPayment: { id: 'groupBuy.cardPayment', defaultMessage: 'Payment by credit card' },
   bankTransfer: { id: 'groupBuy.bankTransfer', defaultMessage: 'Payment by bank transfer' },
@@ -272,88 +273,191 @@ const GroupBuyForm = () => {
 
   const [selectedPayment, setSelectedPayment] = useState('card');
   const [selectedOrganism, setSelectedOrganism] = useState('opco');
+  const [studentCount, setStudentCount] = useState(1);
+  const [students, setStudents] = useState(
+    Array.from({ length: studentCount }, () => ({
+      lastName: '',
+      firstName: '',
+      birthDate: '',
+      address: '',
+      postalCode: '',
+      city: '',
+      country: '',
+      email: '',
+      phone: '',
+    })),
+  );
+
+  const updateStudent = (index: number, field: string, value: string) => {
+    const newStudents = [...students];
+    (newStudents[index] as any)[field] = value;
+    setStudents(newStudents);
+  };
+
+  const handleStudentCountChange = (value: number) => {
+    setStudentCount(value);
+    if (value > students.length) {
+      setStudents((prev) => [
+        ...prev,
+        ...Array.from({ length: value - prev.length }, () => ({
+          lastName: '',
+          firstName: '',
+          birthDate: '',
+          address: '',
+          postalCode: '',
+          city: '',
+          country: '',
+          email: '',
+          phone: '',
+        })),
+      ]);
+    } else if (value < students.length) {
+      setStudents((prev) => prev.slice(0, value));
+    }
+  };
 
   const renderStepContent = (step: number) => {
     switch (step) {
       case 0:
         return (
-          <div className="company">
-            <Input label={intl.formatMessage(messages.companyName)} required />
-            <Input label={intl.formatMessage(messages.siret)} />
-            <Input label={intl.formatMessage(messages.vatNumber)} />
-            <Input label={intl.formatMessage(messages.address)} required />
-            <Input label={intl.formatMessage(messages.postalCode)} required />
-            <Input label={intl.formatMessage(messages.city)} required />
-            <Input label={intl.formatMessage(messages.country)} required />
+          <div className="step company">
+            <Input className="field" label={intl.formatMessage(messages.companyName)} required />
+            <Input className="field" label={intl.formatMessage(messages.siret)} />
+            <Input className="field" label={intl.formatMessage(messages.vatNumber)} />
+            <Input className="field" label={intl.formatMessage(messages.address)} required />
+            <Input className="field" label={intl.formatMessage(messages.postalCode)} required />
+            <Input className="field" label={intl.formatMessage(messages.city)} required />
+            <Input className="field" label={intl.formatMessage(messages.country)} required />
           </div>
         );
       case 1:
         return (
-          <div className="admin">
-            <Input label={intl.formatMessage(messages.lastName)} />
-            <Input label={intl.formatMessage(messages.firstName)} />
-            <Input label={intl.formatMessage(messages.role)} />
-            <Input label={intl.formatMessage(messages.email)} />
-            <Input label={intl.formatMessage(messages.phone)} />
+          <div className="step admin">
+            <Input className="field" label={intl.formatMessage(messages.lastName)} />
+            <Input className="field" label={intl.formatMessage(messages.firstName)} />
+            <Input className="field" label={intl.formatMessage(messages.role)} />
+            <Input className="field" label={intl.formatMessage(messages.email)} />
+            <Input className="field" label={intl.formatMessage(messages.phone)} />
           </div>
         );
       case 2:
         return (
-          <div className="payment">
-            <Input label={intl.formatMessage(messages.companyName)} />
-            <Input label={intl.formatMessage(messages.siret)} />
-            <Input label={intl.formatMessage(messages.address)} />
-            <Input label={intl.formatMessage(messages.postalCode)} />
-            <Input label={intl.formatMessage(messages.city)} />
-            <Input label={intl.formatMessage(messages.country)} />
-            <Input label={intl.formatMessage(messages.lastName)} />
-            <Input label={intl.formatMessage(messages.email)} />
+          <div className="step payment">
+            <Input className="field" label={intl.formatMessage(messages.companyName)} />
+            <Input className="field" label={intl.formatMessage(messages.siret)} />
+            <Input className="field" label={intl.formatMessage(messages.address)} />
+            <Input className="field" label={intl.formatMessage(messages.postalCode)} />
+            <Input className="field" label={intl.formatMessage(messages.city)} />
+            <Input className="field" label={intl.formatMessage(messages.country)} />
+            <Input className="field" label={intl.formatMessage(messages.lastName)} />
+            <Input className="field" label={intl.formatMessage(messages.email)} />
           </div>
         );
-      case 3:
+      case 3: {
         return (
-          <div className="student">
-            <Input label={intl.formatMessage(messages.lastName)} />
-            <Input label={intl.formatMessage(messages.firstName)} />
-            <Input label={intl.formatMessage(messages.birthDate)} />
-            <Input label={intl.formatMessage(messages.address)} />
-            <Input label={intl.formatMessage(messages.postalCode)} />
-            <Input label={intl.formatMessage(messages.city)} />
-            <Input label={intl.formatMessage(messages.country)} />
-            <Input label={intl.formatMessage(messages.email)} />
-            <Input label={intl.formatMessage(messages.phone)} />
-            <Button size="small" color="primary">
-              <FormattedMessage {...messages.addParticipant} />
-            </Button>
+          <div className="step student">
+            <Input
+              className="field"
+              type="number"
+              label={intl.formatMessage(messages.participantNumber)}
+              value={studentCount}
+              onChange={(e) => handleStudentCountChange(Number(e.target.value))}
+              min={1}
+            />
+
+            {students.map((student, index) => (
+              <div
+                key={index}
+                className="student-card"
+                style={{
+                  border: '1px solid #ccc',
+                  borderRadius: '0.5rem',
+                  padding: '1rem',
+                  marginTop: '1rem',
+                }}
+              >
+                <h4>Participant {index + 1}</h4>
+                <Input
+                  className="field"
+                  label={intl.formatMessage(messages.lastName)}
+                  value={student.lastName}
+                  onChange={(e) => updateStudent(index, 'lastName', e.target.value)}
+                />
+                <Input
+                  className="field"
+                  label={intl.formatMessage(messages.firstName)}
+                  value={student.firstName}
+                  onChange={(e) => updateStudent(index, 'firstName', e.target.value)}
+                />
+                <Input
+                  className="field"
+                  label={intl.formatMessage(messages.birthDate)}
+                  value={student.birthDate}
+                  onChange={(e) => updateStudent(index, 'birthDate', e.target.value)}
+                />
+                <Input
+                  className="field"
+                  label={intl.formatMessage(messages.address)}
+                  value={student.address}
+                  onChange={(e) => updateStudent(index, 'address', e.target.value)}
+                />
+                <Input
+                  className="field"
+                  label={intl.formatMessage(messages.postalCode)}
+                  value={student.postalCode}
+                  onChange={(e) => updateStudent(index, 'postalCode', e.target.value)}
+                />
+                <Input
+                  className="field"
+                  label={intl.formatMessage(messages.city)}
+                  value={student.city}
+                  onChange={(e) => updateStudent(index, 'city', e.target.value)}
+                />
+                <Input
+                  className="field"
+                  label={intl.formatMessage(messages.country)}
+                  value={student.country}
+                  onChange={(e) => updateStudent(index, 'country', e.target.value)}
+                />
+                <Input
+                  className="field"
+                  label={intl.formatMessage(messages.email)}
+                  value={student.email}
+                  onChange={(e) => updateStudent(index, 'email', e.target.value)}
+                />
+                <Input
+                  className="field"
+                  label={intl.formatMessage(messages.phone)}
+                  value={student.phone}
+                  onChange={(e) => updateStudent(index, 'phone', e.target.value)}
+                />
+              </div>
+            ))}
           </div>
         );
+      }
       case 4:
         return (
-          <div className="plan">
-            <div className="payment-block" style={{ marginBottom: '2rem' }}>
-              <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+          <div className="step plan">
+            <div className="payment-block">
+              <Radio
+                label={intl.formatMessage(messages.cardPayment)}
+                onChange={() => setSelectedPayment('card')}
+                checked={selectedPayment === 'card'}
+              />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <Radio
-                  label={intl.formatMessage(messages.cardPayment)}
-                  onChange={() => setSelectedPayment('card')}
-                  checked={selectedPayment === 'card'}
+                  label={intl.formatMessage(messages.bankTransfer)}
+                  onChange={() => setSelectedPayment('bank')}
+                  checked={selectedPayment === 'bank'}
                 />
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <Radio
-                    label={intl.formatMessage(messages.bankTransfer)}
-                    onChange={() => setSelectedPayment('bank')}
-                    checked={selectedPayment === 'bank'}
-                  />
-                  <Checkbox
-                    label={intl.formatMessage(messages.withOrderForm)}
-                    disabled={selectedPayment !== 'bank'}
-                  />
-                </div>
+                <Checkbox
+                  label={intl.formatMessage(messages.withOrderForm)}
+                  disabled={selectedPayment !== 'bank'}
+                />
               </div>
             </div>
-            <div
-              className="organism-block"
-              style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-            >
+            <div className="organism-block">
               <Select
                 label={intl.formatMessage(messages.withOrderForm)}
                 value={selectedOrganism}
@@ -364,18 +468,19 @@ const GroupBuyForm = () => {
                   { label: intl.formatMessage(messages.other), value: 'other' },
                 ]}
                 clearable={false}
+                fullWidth
               />
               {selectedOrganism === 'opco' && (
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <Input label={intl.formatMessage(messages.opcoName)} />
-                  <Input label={intl.formatMessage(messages.opcoAmount)} />
+                <div>
+                  <Input className="field" label={intl.formatMessage(messages.opcoName)} />
+                  <Input className="field" label={intl.formatMessage(messages.opcoAmount)} />
                 </div>
               )}
               {selectedOrganism === 'jobCenter' && (
-                <Input label={intl.formatMessage(messages.jobCenterAmount)} />
+                <Input className="field" label={intl.formatMessage(messages.jobCenterAmount)} />
               )}
               {selectedOrganism === 'other' && (
-                <Input label={intl.formatMessage(messages.otherSpecify)} />
+                <Input className="field" label={intl.formatMessage(messages.otherSpecify)} />
               )}
             </div>
             <Select
