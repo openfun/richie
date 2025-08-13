@@ -84,17 +84,30 @@
   }
 
   &__group-buy-form {
-    & > div {
-      margin: 1rem 0;
-    }
     & > .step-content {
-      & > div {
+      & > .step {
         display: flex;
         flex-direction: column;
         align-items: center;
-        & > div {
+        margin: 1rem 0;
+        gap: 0.5rem;
+        & > .field {
           width: 90%;
-          margin: 0.25rem;
+        }
+        & > .payment-block {
+          margin: 0.5rem 0;
+          display: flex;
+          margin: 1rem 0;
+          align-items: center;
+          gap: 0.25rem;
+        }
+        & > .organism-block {
+          display: flex;
+          flex-direction: column;
+          & > div {
+            display: flex;
+            flex-direction: row;
+          }
         }
       }
     }
