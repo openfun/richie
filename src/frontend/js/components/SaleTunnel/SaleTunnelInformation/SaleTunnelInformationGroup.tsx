@@ -143,53 +143,12 @@ const GroupBuyForm = () => {
   const [selectedPayment, setSelectedPayment] = useState('card');
   const [selectedOrganism, setSelectedOrganism] = useState('opco');
   const [studentCount, setStudentCount] = useState(1);
-  const [students, setStudents] = useState(
-    Array.from({ length: studentCount }, () => ({
-      lastName: '',
-      firstName: '',
-      birthDate: '',
-      address: '',
-      postalCode: '',
-      city: '',
-      country: '',
-      email: '',
-      phone: '',
-    })),
-  );
-
-  const updateStudent = (index: number, field: string, value: string) => {
-    const newStudents = [...students];
-    (newStudents[index] as any)[field] = value;
-    setStudents(newStudents);
-  };
-
-  const handleStudentCountChange = (value: number) => {
-    setStudentCount(value);
-    if (value > students.length) {
-      setStudents((prev) => [
-        ...prev,
-        ...Array.from({ length: value - prev.length }, () => ({
-          lastName: '',
-          firstName: '',
-          birthDate: '',
-          address: '',
-          postalCode: '',
-          city: '',
-          country: '',
-          email: '',
-          phone: '',
-        })),
-      ]);
-    } else if (value < students.length) {
-      setStudents((prev) => prev.slice(0, value));
-    }
-  };
 
   const renderStepContent = (step: number) => {
     switch (step) {
       case 0:
         return (
-          <div className="step company">
+          <div className="step organization">
             <FormattedMessage {...messages.stepCompanyTitle} />
             <Input className="field" label={intl.formatMessage(messages.companyName)} required />
             <Input className="field" label={intl.formatMessage(messages.siret)} />
@@ -213,7 +172,7 @@ const GroupBuyForm = () => {
         );
       case 2:
         return (
-          <div className="step payment">
+          <div className="step billing">
             <FormattedMessage {...messages.stepBillingTitle} />
             <Input className="field" label={intl.formatMessage(messages.companyName)} />
             <Input className="field" label={intl.formatMessage(messages.siret)} />
@@ -234,84 +193,15 @@ const GroupBuyForm = () => {
               type="number"
               label={intl.formatMessage(messages.participantNumber)}
               value={studentCount}
-              onChange={(e) => handleStudentCountChange(Number(e.target.value))}
+              onChange={(e) => setStudentCount(Number(e.target.value))}
               min={1}
             />
-
-            {students.map((student, index) => (
-              <div
-                key={index}
-                className="student-card"
-                style={{
-                  border: '1px solid #ccc',
-                  borderRadius: '0.5rem',
-                  padding: '1rem',
-                  marginTop: '1rem',
-                }}
-              >
-                <h4>Participant {index + 1}</h4>
-                <Input
-                  className="field"
-                  label={intl.formatMessage(messages.lastName)}
-                  value={student.lastName}
-                  onChange={(e) => updateStudent(index, 'lastName', e.target.value)}
-                />
-                <Input
-                  className="field"
-                  label={intl.formatMessage(messages.firstName)}
-                  value={student.firstName}
-                  onChange={(e) => updateStudent(index, 'firstName', e.target.value)}
-                />
-                <Input
-                  className="field"
-                  label={intl.formatMessage(messages.birthDate)}
-                  value={student.birthDate}
-                  onChange={(e) => updateStudent(index, 'birthDate', e.target.value)}
-                />
-                <Input
-                  className="field"
-                  label={intl.formatMessage(messages.address)}
-                  value={student.address}
-                  onChange={(e) => updateStudent(index, 'address', e.target.value)}
-                />
-                <Input
-                  className="field"
-                  label={intl.formatMessage(messages.postalCode)}
-                  value={student.postalCode}
-                  onChange={(e) => updateStudent(index, 'postalCode', e.target.value)}
-                />
-                <Input
-                  className="field"
-                  label={intl.formatMessage(messages.city)}
-                  value={student.city}
-                  onChange={(e) => updateStudent(index, 'city', e.target.value)}
-                />
-                <Input
-                  className="field"
-                  label={intl.formatMessage(messages.country)}
-                  value={student.country}
-                  onChange={(e) => updateStudent(index, 'country', e.target.value)}
-                />
-                <Input
-                  className="field"
-                  label={intl.formatMessage(messages.email)}
-                  value={student.email}
-                  onChange={(e) => updateStudent(index, 'email', e.target.value)}
-                />
-                <Input
-                  className="field"
-                  label={intl.formatMessage(messages.phone)}
-                  value={student.phone}
-                  onChange={(e) => updateStudent(index, 'phone', e.target.value)}
-                />
-              </div>
-            ))}
           </div>
         );
       }
       case 4:
         return (
-          <div className="step plan">
+          <div className="step financing">
             <FormattedMessage {...messages.stepFinancingTitle} />
             <div className="payment-block">
               <Radio
@@ -371,8 +261,6 @@ const GroupBuyForm = () => {
             />
           </div>
         );
-      default:
-        return null;
     }
   };
 
