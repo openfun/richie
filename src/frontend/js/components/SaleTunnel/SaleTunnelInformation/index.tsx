@@ -77,11 +77,11 @@ const messages = defineMessages({
   },
   stepCompany: {
     id: 'components.SaleTunnel.GroupBuyForm.stepCompany',
-    defaultMessage: 'Company / Organization',
+    defaultMessage: 'Organization',
   },
   stepAdmin: {
     id: 'components.SaleTunnel.GroupBuyForm.stepAdmin',
-    defaultMessage: 'Administrative follow-up',
+    defaultMessage: 'Follow-up',
   },
   stepBilling: {
     id: 'components.SaleTunnel.GroupBuyForm.stepBilling',
@@ -94,6 +94,26 @@ const messages = defineMessages({
   stepFinancing: {
     id: 'components.SaleTunnel.GroupBuyForm.stepFinancing',
     defaultMessage: 'Financing',
+  },
+  stepCompanyTitle: {
+    id: 'components.SaleTunnel.GroupBuyForm.stepCompanyTitle',
+    defaultMessage: 'Information about your company / organisation',
+  },
+  stepAdminTitle: {
+    id: 'components.SaleTunnel.GroupBuyForm.stepAdminTitle',
+    defaultMessage: 'Responsible for the administrative follow-up',
+  },
+  stepBillingTitle: {
+    id: 'components.SaleTunnel.GroupBuyForm.stepBillingTitle',
+    defaultMessage: 'Needed if it does not concerns the initial company OR if OPCO',
+  },
+  stepParticipantsTitle: {
+    id: 'components.SaleTunnel.GroupBuyForm.stepParticipantsTitle',
+    defaultMessage: 'How many registrations ?',
+  },
+  stepFinancingTitle: {
+    id: 'components.SaleTunnel.GroupBuyForm.stepFinancingTitle',
+    defaultMessage: 'Payment plan of the course',
   },
   companyName: { id: 'groupBuy.companyName', defaultMessage: 'Company name' },
   siret: { id: 'groupBuy.siret', defaultMessage: 'SIRET number' },
@@ -124,6 +144,11 @@ const messages = defineMessages({
   },
   other: { id: 'groupBuy.other', defaultMessage: 'Other' },
   otherSpecify: { id: 'groupBuy.otherSpecify', defaultMessage: 'Other - specify' },
+  organism: { id: 'groupBuy.organisme', defaultMessage: 'Funding organism' },
+  recommandation: {
+    id: 'groupBuy.recommandation',
+    defaultMessage: 'This course was recommended to me by',
+  },
   participatingUniversities: {
     id: 'groupBuy.participatingUniversities',
     defaultMessage: 'Participating universities',
@@ -321,6 +346,7 @@ const GroupBuyForm = () => {
       case 0:
         return (
           <div className="step company">
+            <FormattedMessage {...messages.stepCompanyTitle} />
             <Input className="field" label={intl.formatMessage(messages.companyName)} required />
             <Input className="field" label={intl.formatMessage(messages.siret)} />
             <Input className="field" label={intl.formatMessage(messages.vatNumber)} />
@@ -333,6 +359,7 @@ const GroupBuyForm = () => {
       case 1:
         return (
           <div className="step admin">
+            <FormattedMessage {...messages.stepAdminTitle} />
             <Input className="field" label={intl.formatMessage(messages.lastName)} />
             <Input className="field" label={intl.formatMessage(messages.firstName)} />
             <Input className="field" label={intl.formatMessage(messages.role)} />
@@ -343,6 +370,7 @@ const GroupBuyForm = () => {
       case 2:
         return (
           <div className="step payment">
+            <FormattedMessage {...messages.stepBillingTitle} />
             <Input className="field" label={intl.formatMessage(messages.companyName)} />
             <Input className="field" label={intl.formatMessage(messages.siret)} />
             <Input className="field" label={intl.formatMessage(messages.address)} />
@@ -356,6 +384,7 @@ const GroupBuyForm = () => {
       case 3: {
         return (
           <div className="step student">
+            <FormattedMessage {...messages.stepParticipantsTitle} />
             <Input
               className="field"
               type="number"
@@ -439,6 +468,7 @@ const GroupBuyForm = () => {
       case 4:
         return (
           <div className="step plan">
+            <FormattedMessage {...messages.stepFinancingTitle} />
             <div className="payment-block">
               <Radio
                 label={intl.formatMessage(messages.cardPayment)}
@@ -457,6 +487,7 @@ const GroupBuyForm = () => {
                 />
               </div>
             </div>
+            <FormattedMessage {...messages.organism} />
             <div className="organism-block">
               <Select
                 label={intl.formatMessage(messages.withOrderForm)}
@@ -471,19 +502,21 @@ const GroupBuyForm = () => {
                 fullWidth
               />
               {selectedOrganism === 'opco' && (
-                <div>
-                  <Input className="field" label={intl.formatMessage(messages.opcoName)} />
-                  <Input className="field" label={intl.formatMessage(messages.opcoAmount)} />
+                <div className="opco-order">
+                  <Input label={intl.formatMessage(messages.opcoName)} />
+                  <Input label={intl.formatMessage(messages.opcoAmount)} />
                 </div>
               )}
               {selectedOrganism === 'jobCenter' && (
-                <Input className="field" label={intl.formatMessage(messages.jobCenterAmount)} />
+                <Input label={intl.formatMessage(messages.jobCenterAmount)} />
               )}
               {selectedOrganism === 'other' && (
-                <Input className="field" label={intl.formatMessage(messages.otherSpecify)} />
+                <Input label={intl.formatMessage(messages.otherSpecify)} />
               )}
             </div>
+            <FormattedMessage {...messages.recommandation} />
             <Select
+              className="university"
               label={intl.formatMessage(messages.participatingUniversities)}
               value="rennes1"
               clearable={false}
