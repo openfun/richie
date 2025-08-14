@@ -95,19 +95,28 @@
           width: 90%;
         }
         & > .payment-block {
-          margin: 0.5rem 0;
           display: flex;
-          margin: 1rem 0;
           align-items: center;
-          gap: 0.25rem;
+          margin: 1rem 0;
         }
         & > .organism-block {
+          width: 100%;
+
           display: flex;
           flex-direction: column;
-          & > div {
+          gap: 0.25rem;
+          margin-bottom: 1rem;
+          & > .opco-order {
             display: flex;
             flex-direction: row;
+            gap: 0.25rem;
+            & > div {
+              width: 100%;
+            }
           }
+        }
+        & > .university {
+          width: 100%;
         }
       }
     }
