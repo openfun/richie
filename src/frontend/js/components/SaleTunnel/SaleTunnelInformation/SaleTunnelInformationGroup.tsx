@@ -235,7 +235,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const { handleSubmit, reset } = form;
+  const { handleSubmit, reset, register } = form;
 
   useEffect(() => {
     console.log('logging groupbuy', groupBuy);
@@ -262,27 +262,39 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
             <FormattedMessage {...messages.stepCompanyTitle} />
             <Input
               className="field"
-              name="company_name"
               label={intl.formatMessage(messages.companyName)}
+              {...register('company_name')}
             />
             <Input
               className="field"
-              name="identification_number"
+              {...register('identification_number')}
               label={intl.formatMessage(messages.identificationNumber)}
             />
             <Input
               className="field"
-              name="vat_number"
+              {...register('vat_number')}
               label={intl.formatMessage(messages.vatNumber)}
             />
-            <Input className="field" name="address" label={intl.formatMessage(messages.address)} />
             <Input
               className="field"
-              name="postcode"
+              {...register('address')}
+              label={intl.formatMessage(messages.address)}
+            />
+            <Input
+              className="field"
+              {...register('postcode')}
               label={intl.formatMessage(messages.postCode)}
             />
-            <Input className="field" name="city" label={intl.formatMessage(messages.city)} />
-            <Input className="field" name="country" label={intl.formatMessage(messages.country)} />
+            <Input
+              className="field"
+              {...register('city')}
+              label={intl.formatMessage(messages.city)}
+            />
+            <Input
+              className="field"
+              {...register('country')}
+              label={intl.formatMessage(messages.country)}
+            />
           </div>
         );
       case 1:
@@ -291,19 +303,27 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
             <FormattedMessage {...messages.stepAdminTitle} />
             <Input
               className="field"
-              name="admin.last_name"
+              {...register('admin.last_name')}
               label={intl.formatMessage(messages.lastName)}
             />
             <Input
               className="field"
-              name="admin.first_name"
+              {...register('admin.first_name')}
               label={intl.formatMessage(messages.firstName)}
             />
-            <Input className="field" name="admin.role" label={intl.formatMessage(messages.role)} />
-            <Input className="field" name="admin.mail" label={intl.formatMessage(messages.email)} />
             <Input
               className="field"
-              name="admin.phone"
+              {...register('admin.role')}
+              label={intl.formatMessage(messages.role)}
+            />
+            <Input
+              className="field"
+              {...register('admin.mail')}
+              label={intl.formatMessage(messages.email)}
+            />
+            <Input
+              className="field"
+              {...register('admin.phone')}
               label={intl.formatMessage(messages.phone)}
             />
           </div>
@@ -314,42 +334,42 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
             <FormattedMessage {...messages.stepBillingTitle} />
             <Input
               className="field"
-              name="billing.company_name"
+              {...register('billing.company_name')}
               label={intl.formatMessage(messages.companyName)}
             />
             <Input
               className="field"
-              name="billing.identification_number"
+              {...register('billing.identification_number')}
               label={intl.formatMessage(messages.identificationNumber)}
             />
             <Input
               className="field"
-              name="billing.address"
+              {...register('billing.address')}
               label={intl.formatMessage(messages.address)}
             />
             <Input
               className="field"
-              name="billing.postcode"
+              {...register('billing.postcode')}
               label={intl.formatMessage(messages.postCode)}
             />
             <Input
               className="field"
-              name="billing.city"
+              {...register('billing.city')}
               label={intl.formatMessage(messages.city)}
             />
             <Input
               className="field"
-              name="billing.country"
+              {...register('billing.country')}
               label={intl.formatMessage(messages.country)}
             />
             <Input
               className="field"
-              name="billing.contact_name"
+              {...register('billing.contact_name')}
               label={intl.formatMessage(messages.lastName)}
             />
             <Input
               className="field"
-              name="billing.contact_mail"
+              {...register('billing.contact_mail')}
               label={intl.formatMessage(messages.email)}
             />
           </div>
@@ -362,7 +382,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
               className="field"
               type="number"
               min={1}
-              name="trainees"
+              {...register('trainees')}
               label={intl.formatMessage(messages.traineeNumber)}
             />
           </div>
@@ -373,16 +393,19 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
             <FormattedMessage {...messages.stepFinancingTitle} />
             <div className="payment-block">
               <Radio
-                name="payment_type"
+                {...register('payment_type')}
                 value="card"
                 label={intl.formatMessage(messages.cardPayment)}
               />
               <Radio
-                name="payment_type"
+                {...register('payment_type')}
                 value="bank"
                 label={intl.formatMessage(messages.bankTransfer)}
               />
-              <Checkbox name="order_form" label={intl.formatMessage(messages.withOrderForm)} />
+              <Checkbox
+                {...register('order_form')}
+                label={intl.formatMessage(messages.withOrderForm)}
+              />
             </div>
             <FormattedMessage {...messages.organism} />
             <div className="organism-block">
@@ -400,20 +423,29 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
               />
               {selectedOrganism === 'opco' && (
                 <div className="opco-order">
-                  <Input name="organism" label={intl.formatMessage(messages.opcoName)} />
-                  <Input name="organism_amount" label={intl.formatMessage(messages.opcoAmount)} />
+                  <Input {...register('organism')} label={intl.formatMessage(messages.opcoName)} />
+                  <Input
+                    {...register('organism_amount')}
+                    label={intl.formatMessage(messages.opcoAmount)}
+                  />
                 </div>
               )}
               {selectedOrganism === 'jobCenter' && (
-                <Input label={intl.formatMessage(messages.jobCenterAmount)} />
+                <Input
+                  {...register('organism_amount')}
+                  label={intl.formatMessage(messages.jobCenterAmount)}
+                />
               )}
               {selectedOrganism === 'other' && (
-                <Input name="organism" label={intl.formatMessage(messages.otherSpecify)} />
+                <Input
+                  {...register('organism')}
+                  label={intl.formatMessage(messages.otherSpecify)}
+                />
               )}
             </div>
             <FormattedMessage {...messages.recommandation} />
             <Select
-              name="recommandation"
+              {...register('recommandation')}
               label={intl.formatMessage(messages.participatingUniversities)}
               value="rennes1"
               clearable={false}
@@ -438,7 +470,13 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
             </Step>
           ))}
         </Stepper>
-        <div className="step-content">{renderStepContent(activeStep)}</div>
+        <div className="step-content">
+          <div hidden={activeStep !== 0}>{renderStepContent(0)}</div>
+          <div hidden={activeStep !== 1}>{renderStepContent(1)}</div>
+          <div hidden={activeStep !== 2}>{renderStepContent(2)}</div>
+          <div hidden={activeStep !== 3}>{renderStepContent(3)}</div>
+          <div hidden={activeStep !== 4}>{renderStepContent(4)}</div>
+        </div>
         <pre style={{ marginTop: '2rem', background: '#eee', padding: '1rem' }}>
           {JSON.stringify(form.watch(), null, 2)}
         </pre>
