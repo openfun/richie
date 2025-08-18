@@ -83,40 +83,38 @@
     }
   }
 
-  &__group-buy-form {
-    & > .step-content {
-      & > .step {
+  .step-content {
+    & > .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 1rem 0;
+      gap: 0.5rem;
+      .field {
+        width: 90%;
+      }
+      & > .payment-block {
         display: flex;
-        flex-direction: column;
         align-items: center;
         margin: 1rem 0;
-        gap: 0.5rem;
-        & > .field {
-          width: 90%;
-        }
-        & > .payment-block {
+      }
+      & > .organism-block {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin-bottom: 1rem;
+        & > .opco-order {
           display: flex;
-          align-items: center;
-          margin: 1rem 0;
-        }
-        & > .organism-block {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
+          flex-direction: row;
           gap: 0.25rem;
-          margin-bottom: 1rem;
-          & > .opco-order {
-            display: flex;
-            flex-direction: row;
-            gap: 0.25rem;
-            & > div {
-              width: 100%;
-            }
+          & > div {
+            width: 100%;
           }
         }
-        & > .university {
-          width: 100%;
-        }
+      }
+      & > .recommandation {
+        width: 100%;
       }
     }
   }

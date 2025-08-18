@@ -1,7 +1,13 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, StepLabel, Stepper } from '@mui/material';
 import { Checkbox, Input, Radio, Select } from '@openfun/cunningham-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { GroupBuy } from 'types/Joanie';
+import * as Yup from 'yup';
+import Form from 'components/Form';
+import { Maybe } from 'types/utils';
 
 const messages = defineMessages({
   title: {
@@ -75,10 +81,10 @@ const messages = defineMessages({
     defaultMessage: 'Payment plan of the course',
   },
   companyName: { id: 'groupBuy.companyName', defaultMessage: 'Company name' },
-  siret: { id: 'groupBuy.siret', defaultMessage: 'SIRET number' },
+  identificationNumber: { id: 'groupBuy.identificationNumber', defaultMessage: 'SIRET number' },
   vatNumber: { id: 'groupBuy.vatNumber', defaultMessage: 'VAT number' },
   address: { id: 'groupBuy.address', defaultMessage: 'Address' },
-  postalCode: { id: 'groupBuy.postalCode', defaultMessage: 'Postal code' },
+  postCode: { id: 'groupBuy.postCode', defaultMessage: 'Post code' },
   city: { id: 'groupBuy.city', defaultMessage: 'City' },
   country: { id: 'groupBuy.country', defaultMessage: 'Country' },
   firstName: { id: 'groupBuy.firstName', defaultMessage: 'First name' },
@@ -87,8 +93,8 @@ const messages = defineMessages({
   email: { id: 'groupBuy.email', defaultMessage: 'Email' },
   phone: { id: 'groupBuy.phone', defaultMessage: 'Phone' },
   birthDate: { id: 'groupBuy.birthDate', defaultMessage: 'Birth date' },
-  participantNumber: { id: 'groupBuy.particpantNumber', defaultMessage: 'How many participants ?' },
-  addParticipant: { id: 'groupBuy.addParticipant', defaultMessage: 'Add participant' },
+  traineeNumber: { id: 'groupBuy.traineeNumber', defaultMessage: 'How many participants ?' },
+  addTrainee: { id: 'groupBuy.addTrainee', defaultMessage: 'Add participant' },
   cardPayment: { id: 'groupBuy.cardPayment', defaultMessage: 'Payment by credit card' },
   bankTransfer: { id: 'groupBuy.bankTransfer', defaultMessage: 'Payment by bank transfer' },
   withOrderForm: { id: 'groupBuy.withOrderForm', defaultMessage: 'With order form' },
@@ -114,7 +120,25 @@ const messages = defineMessages({
   },
 });
 
+interface Props {
+  groupBuy?: GroupBuy;
+  onSubmit: (values: GroupBuy) => Promise<void>;
+  handleReset: () => void;
+}
+
 export const SaleTunnelInformationGroup = () => {
+  const [groupBuy, setGroupBuy] = useState<Maybe<GroupBuy>>();
+  const handleGroupBuySubmit = async (values: GroupBuy) => {
+    try {
+      console.log('Formulaire envoyé avec succès', values);
+    } catch (error) {
+      console.error('Erreur lors de l’envoi du formulaire', error);
+    }
+  };
+  const handleResetGroupBuy = () => {
+    setGroupBuy(undefined);
+  };
+
   return (
     <>
       <div>
@@ -125,14 +149,103 @@ export const SaleTunnelInformationGroup = () => {
           <FormattedMessage {...messages.description} />
         </div>
       </div>
-      <GroupBuyForm />
+      <GroupBuyForm
+        onSubmit={handleGroupBuySubmit}
+        handleReset={handleResetGroupBuy}
+        groupBuy={groupBuy}
+      />
     </>
   );
 };
 
-const GroupBuyForm = () => {
+const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
+  const validationSchema = Yup.object().shape({
+    relation_id: Yup.string().required(),
+    company_name: Yup.string().required(),
+    identification_number: Yup.string().required(),
+    vat_number: Yup.string().required(),
+    address: Yup.string().required(),
+    postcode: Yup.string().required(),
+    city: Yup.string().required(),
+    country: Yup.string().required(),
+    admin: Yup.object().shape({
+      last_name: Yup.string().required(),
+      first_name: Yup.string().required(),
+      role: Yup.string().required(),
+      mail: Yup.string().email().required(),
+      phone: Yup.string().required(),
+    }),
+    billing: Yup.object().shape({
+      company_name: Yup.string().required(),
+      identification_number: Yup.string().required(),
+      vat_number: Yup.string().required(),
+      address: Yup.string().required(),
+      postcode: Yup.string().required(),
+      city: Yup.string().required(),
+      country: Yup.string().required(),
+      contact_name: Yup.string().required(),
+      contact_mail: Yup.string().email().required(),
+    }),
+    trainees: Yup.number().required().min(0),
+    payment_type: Yup.string().required(),
+    order_form: Yup.boolean().required(),
+    organism: Yup.string().required(),
+    organism_amount: Yup.string().required(),
+    recommandation: Yup.string().required(),
+  });
+
+  const defaultValues = {
+    relation_id: '',
+    company_name: '',
+    identification_number: '',
+    vat_number: '',
+    address: '',
+    postcode: '',
+    city: '',
+    country: '',
+    admin: {
+      last_name: '',
+      first_name: '',
+      role: '',
+      mail: '',
+      phone: '',
+    },
+    billing: {
+      company_name: '',
+      identification_number: '',
+      vat_number: '',
+      address: '',
+      postcode: '',
+      city: '',
+      country: '',
+      contact_name: '',
+      contact_mail: '',
+    },
+    trainees: 0,
+    payment_type: '',
+    order_form: false,
+    organism: '',
+    organism_amount: '',
+    recommandation: '',
+  } as GroupBuy;
+
+  const form = useForm<GroupBuy>({
+    defaultValues: groupBuy || defaultValues,
+    mode: 'onBlur',
+    resolver: yupResolver(validationSchema),
+  });
+
+  const { handleSubmit, reset } = form;
+
+  useEffect(() => {
+    console.log('logging groupbuy', groupBuy);
+    reset(groupBuy ?? defaultValues);
+  }, [groupBuy]);
+
   const [activeStep, setActiveStep] = useState(0);
   const intl = useIntl();
+  const [selectedOrganism, setSelectedOrganism] = useState('opco');
+
   const steps = [
     intl.formatMessage(messages.stepCompany),
     intl.formatMessage(messages.stepAdmin),
@@ -140,9 +253,6 @@ const GroupBuyForm = () => {
     intl.formatMessage(messages.stepParticipants),
     intl.formatMessage(messages.stepFinancing),
   ];
-  const [selectedPayment, setSelectedPayment] = useState('card');
-  const [selectedOrganism, setSelectedOrganism] = useState('opco');
-  const [studentCount, setStudentCount] = useState(1);
 
   const renderStepContent = (step: number) => {
     switch (step) {
@@ -150,81 +260,134 @@ const GroupBuyForm = () => {
         return (
           <div className="step organization">
             <FormattedMessage {...messages.stepCompanyTitle} />
-            <Input className="field" label={intl.formatMessage(messages.companyName)} required />
-            <Input className="field" label={intl.formatMessage(messages.siret)} />
-            <Input className="field" label={intl.formatMessage(messages.vatNumber)} />
-            <Input className="field" label={intl.formatMessage(messages.address)} required />
-            <Input className="field" label={intl.formatMessage(messages.postalCode)} required />
-            <Input className="field" label={intl.formatMessage(messages.city)} required />
-            <Input className="field" label={intl.formatMessage(messages.country)} required />
+            <Input
+              className="field"
+              name="company_name"
+              label={intl.formatMessage(messages.companyName)}
+            />
+            <Input
+              className="field"
+              name="identification_number"
+              label={intl.formatMessage(messages.identificationNumber)}
+            />
+            <Input
+              className="field"
+              name="vat_number"
+              label={intl.formatMessage(messages.vatNumber)}
+            />
+            <Input className="field" name="address" label={intl.formatMessage(messages.address)} />
+            <Input
+              className="field"
+              name="postcode"
+              label={intl.formatMessage(messages.postCode)}
+            />
+            <Input className="field" name="city" label={intl.formatMessage(messages.city)} />
+            <Input className="field" name="country" label={intl.formatMessage(messages.country)} />
           </div>
         );
       case 1:
         return (
           <div className="step admin">
             <FormattedMessage {...messages.stepAdminTitle} />
-            <Input className="field" label={intl.formatMessage(messages.lastName)} />
-            <Input className="field" label={intl.formatMessage(messages.firstName)} />
-            <Input className="field" label={intl.formatMessage(messages.role)} />
-            <Input className="field" label={intl.formatMessage(messages.email)} />
-            <Input className="field" label={intl.formatMessage(messages.phone)} />
+            <Input
+              className="field"
+              name="admin.last_name"
+              label={intl.formatMessage(messages.lastName)}
+            />
+            <Input
+              className="field"
+              name="admin.first_name"
+              label={intl.formatMessage(messages.firstName)}
+            />
+            <Input className="field" name="admin.role" label={intl.formatMessage(messages.role)} />
+            <Input className="field" name="admin.mail" label={intl.formatMessage(messages.email)} />
+            <Input
+              className="field"
+              name="admin.phone"
+              label={intl.formatMessage(messages.phone)}
+            />
           </div>
         );
       case 2:
         return (
           <div className="step billing">
             <FormattedMessage {...messages.stepBillingTitle} />
-            <Input className="field" label={intl.formatMessage(messages.companyName)} />
-            <Input className="field" label={intl.formatMessage(messages.siret)} />
-            <Input className="field" label={intl.formatMessage(messages.address)} />
-            <Input className="field" label={intl.formatMessage(messages.postalCode)} />
-            <Input className="field" label={intl.formatMessage(messages.city)} />
-            <Input className="field" label={intl.formatMessage(messages.country)} />
-            <Input className="field" label={intl.formatMessage(messages.lastName)} />
-            <Input className="field" label={intl.formatMessage(messages.email)} />
+            <Input
+              className="field"
+              name="billing.company_name"
+              label={intl.formatMessage(messages.companyName)}
+            />
+            <Input
+              className="field"
+              name="billing.identification_number"
+              label={intl.formatMessage(messages.identificationNumber)}
+            />
+            <Input
+              className="field"
+              name="billing.address"
+              label={intl.formatMessage(messages.address)}
+            />
+            <Input
+              className="field"
+              name="billing.postcode"
+              label={intl.formatMessage(messages.postCode)}
+            />
+            <Input
+              className="field"
+              name="billing.city"
+              label={intl.formatMessage(messages.city)}
+            />
+            <Input
+              className="field"
+              name="billing.country"
+              label={intl.formatMessage(messages.country)}
+            />
+            <Input
+              className="field"
+              name="billing.contact_name"
+              label={intl.formatMessage(messages.lastName)}
+            />
+            <Input
+              className="field"
+              name="billing.contact_mail"
+              label={intl.formatMessage(messages.email)}
+            />
           </div>
         );
-      case 3: {
+      case 3:
         return (
           <div className="step student">
             <FormattedMessage {...messages.stepParticipantsTitle} />
             <Input
               className="field"
               type="number"
-              label={intl.formatMessage(messages.participantNumber)}
-              value={studentCount}
-              onChange={(e) => setStudentCount(Number(e.target.value))}
               min={1}
+              name="trainees"
+              label={intl.formatMessage(messages.traineeNumber)}
             />
           </div>
         );
-      }
       case 4:
         return (
           <div className="step financing">
             <FormattedMessage {...messages.stepFinancingTitle} />
             <div className="payment-block">
               <Radio
+                name="payment_type"
+                value="card"
                 label={intl.formatMessage(messages.cardPayment)}
-                onChange={() => setSelectedPayment('card')}
-                checked={selectedPayment === 'card'}
               />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <Radio
-                  label={intl.formatMessage(messages.bankTransfer)}
-                  onChange={() => setSelectedPayment('bank')}
-                  checked={selectedPayment === 'bank'}
-                />
-                <Checkbox
-                  label={intl.formatMessage(messages.withOrderForm)}
-                  disabled={selectedPayment !== 'bank'}
-                />
-              </div>
+              <Radio
+                name="payment_type"
+                value="bank"
+                label={intl.formatMessage(messages.bankTransfer)}
+              />
+              <Checkbox name="order_form" label={intl.formatMessage(messages.withOrderForm)} />
             </div>
             <FormattedMessage {...messages.organism} />
             <div className="organism-block">
               <Select
-                label={intl.formatMessage(messages.withOrderForm)}
+                label={intl.formatMessage(messages.organism)}
                 value={selectedOrganism}
                 onChange={(e) => setSelectedOrganism(e.target.value as string)}
                 options={[
@@ -237,20 +400,20 @@ const GroupBuyForm = () => {
               />
               {selectedOrganism === 'opco' && (
                 <div className="opco-order">
-                  <Input label={intl.formatMessage(messages.opcoName)} />
-                  <Input label={intl.formatMessage(messages.opcoAmount)} />
+                  <Input name="organism" label={intl.formatMessage(messages.opcoName)} />
+                  <Input name="organism_amount" label={intl.formatMessage(messages.opcoAmount)} />
                 </div>
               )}
               {selectedOrganism === 'jobCenter' && (
                 <Input label={intl.formatMessage(messages.jobCenterAmount)} />
               )}
               {selectedOrganism === 'other' && (
-                <Input label={intl.formatMessage(messages.otherSpecify)} />
+                <Input name="organism" label={intl.formatMessage(messages.otherSpecify)} />
               )}
             </div>
             <FormattedMessage {...messages.recommandation} />
             <Select
-              className="university"
+              name="recommandation"
               label={intl.formatMessage(messages.participatingUniversities)}
               value="rennes1"
               clearable={false}
@@ -258,6 +421,7 @@ const GroupBuyForm = () => {
                 { label: 'Rennes 1', value: 'rennes1' },
                 { label: 'Rennes 2', value: 'rennes2' },
               ]}
+              className="recommandation"
             />
           </div>
         );
@@ -265,15 +429,20 @@ const GroupBuyForm = () => {
   };
 
   return (
-    <div className="sale-tunnel__group-buy-form">
-      <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map((label, index) => (
-          <Step key={label} onClick={() => setActiveStep(index)} style={{ cursor: 'pointer' }}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      <div className="step-content">{renderStepContent(activeStep)}</div>
-    </div>
+    <FormProvider {...form}>
+      <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+        <Stepper activeStep={activeStep} alternativeLabel>
+          {steps.map((label, index) => (
+            <Step key={label} onClick={() => setActiveStep(index)} style={{ cursor: 'pointer' }}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        <div className="step-content">{renderStepContent(activeStep)}</div>
+        <pre style={{ marginTop: '2rem', background: '#eee', padding: '1rem' }}>
+          {JSON.stringify(form.watch(), null, 2)}
+        </pre>
+      </Form>
+    </FormProvider>
   );
 };
