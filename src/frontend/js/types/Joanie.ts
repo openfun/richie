@@ -449,6 +449,47 @@ export interface Address {
   title: string;
 }
 
+// GroupBuy
+
+export interface Admin {
+  last_name: string;
+  first_name: string;
+  role: string;
+  mail: string;
+  phone: string;
+}
+
+export interface Billing {
+  company_name: string;
+  identification_number: string;
+  vat_number: string;
+  address: string;
+  postcode: string;
+  city: string;
+  country: string;
+  contact_name: string;
+  contact_mail: string;
+}
+
+export interface GroupBuy {
+  relation_id: string;
+  company_name: string;
+  identification_number: string;
+  vat_number: string;
+  address: string;
+  postcode: string;
+  city: string;
+  country: string;
+  admin: Admin;
+  billing: Billing;
+  trainees: number;
+  payment_type: string;
+  order_form: boolean;
+  organism: string;
+  organism_amount: string;
+  recommandation: string;
+}
+
 // Wishlist
 export interface CourseWish extends Resource {
   status: boolean;
