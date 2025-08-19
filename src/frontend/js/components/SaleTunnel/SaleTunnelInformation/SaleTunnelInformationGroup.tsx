@@ -150,8 +150,8 @@ const BatchOrderForm = ({ onSubmit, batchOrder }: Props) => {
   const validationSchema = Yup.object().shape({
     offering_id: Yup.string().required(),
     company_name: Yup.string().required(),
-    identification_number: Yup.string().required(),
-    vat_number: Yup.string().required(),
+    identification_number: Yup.string(),
+    vat_number: Yup.string(),
     address: Yup.string().required(),
     postcode: Yup.string().required(),
     city: Yup.string().required(),
@@ -163,22 +163,24 @@ const BatchOrderForm = ({ onSubmit, batchOrder }: Props) => {
       mail: Yup.string().email().required(),
       phone: Yup.string().required(),
     }),
-    billing: Yup.object().shape({
-      company_name: Yup.string().required(),
-      identification_number: Yup.string().required(),
-      vat_number: Yup.string().required(),
-      address: Yup.string().required(),
-      postcode: Yup.string().required(),
-      city: Yup.string().required(),
-      country: Yup.string().required(),
-      contact_name: Yup.string().required(),
-      contact_mail: Yup.string().email().required(),
-    }),
+    billing: Yup.object()
+      .shape({
+        company_name: Yup.string(),
+        identification_number: Yup.string(),
+        vat_number: Yup.string(),
+        address: Yup.string(),
+        postcode: Yup.string(),
+        city: Yup.string(),
+        country: Yup.string(),
+        contact_name: Yup.string(),
+        contact_mail: Yup.string().email(),
+      })
+      .optional(),
     nb_seats: Yup.number().required().min(1),
     payment_method: Yup.string().required(),
     organism: Yup.string().required(),
-    organism_amount: Yup.number().required(),
-    recommandation: Yup.string().required(),
+    organism_amount: Yup.number(),
+    recommandation: Yup.string(),
   });
 
   const defaultValues = {
@@ -411,7 +413,6 @@ const BatchOrderForm = ({ onSubmit, batchOrder }: Props) => {
               {...register('payment_method')}
               value="card_payment"
               label={intl.formatMessage(messages.cardPayment)}
-              checked
               required
               state={formState.errors.payment_method?.message ? 'error' : 'default'}
               text={
