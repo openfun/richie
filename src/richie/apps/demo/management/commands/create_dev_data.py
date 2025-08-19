@@ -13,6 +13,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.test.utils import override_settings
 
 import factory
+from beaupy import select_multiple
 from cms.api import add_plugin
 from cms.models import StaticPlaceholder
 
@@ -697,6 +698,7 @@ def create_courses(
     pages_created,
     persons_for_organization,
     subjects,
+    code,
     title=None,
     price=None,
     certificate_price=None,
@@ -731,6 +733,7 @@ def create_courses(
     )
 
     course = factories.CourseFactory(
+        code=code,
         page_title=title,
         page_in_navigation=True,
         page_languages=languages,
@@ -1083,72 +1086,92 @@ def create_dev_data(log=lambda x: None):
 
     # Create courses under the `Course` page with categories and organizations
     # relations
+
+    product_options = [
+        "Certificate product",
+        "Certificate product with discount",
+        "Credential product",
+        "Credential product with discount",
+    ]
+    products = select_multiple(product_options)
+
     log(f"Creating {NB_OBJECTS['courses']} courses...")
     courses = []
-    course = create_courses(
-        icons,
-        languages,
-        levels,
-        licences,
-        lms_endpoint,
-        organizations,
-        pages_created,
-        persons_for_organization,
-        subjects,
-        title="Certificate product",
-        price=0,
-        certificate_price=100,
-    )
-    courses.append(course)
-    course = create_courses(
-        icons,
-        languages,
-        levels,
-        licences,
-        lms_endpoint,
-        organizations,
-        pages_created,
-        persons_for_organization,
-        subjects,
-        title="Certificate product discount",
-        price=0,
-        certificate_price=100,
-        discount="-20 €",
-        discounted_price=80,
-    )
-    courses.append(course)
-    course = create_courses(
-        icons,
-        languages,
-        levels,
-        licences,
-        lms_endpoint,
-        organizations,
-        pages_created,
-        persons_for_organization,
-        subjects,
-        title="Credential product",
-        price=100,
-        certificate_price=0,
-    )
-    courses.append(course)
-    course = create_courses(
-        icons,
-        languages,
-        levels,
-        licences,
-        lms_endpoint,
-        organizations,
-        pages_created,
-        persons_for_organization,
-        subjects,
-        title="Credential product discount",
-        price=100,
-        certificate_price=0,
-        discount="-20 €",
-        discounted_price=80,
-    )
-    courses.append(course)
+    if "Certificate product" in products:
+        course = create_courses(
+            icons,
+            languages,
+            levels,
+            licences,
+            lms_endpoint,
+            organizations,
+            pages_created,
+            persons_for_organization,
+            subjects,
+            code="00000",
+            title="Certificate product",
+            price=0,
+            certificate_price=100,
+        )
+        courses.append(course)
+
+    if "Certificate product with discount" in products:
+        course = create_courses(
+            icons,
+            languages,
+            levels,
+            licences,
+            lms_endpoint,
+            organizations,
+            pages_created,
+            persons_for_organization,
+            subjects,
+            code="00001",
+            title="Certificate product discount",
+            price=0,
+            certificate_price=100,
+            discount="-20 €",
+            discounted_price=80,
+        )
+        courses.append(course)
+
+    if "Credential product" in products:
+        course = create_courses(
+            icons,
+            languages,
+            levels,
+            licences,
+            lms_endpoint,
+            organizations,
+            pages_created,
+            persons_for_organization,
+            subjects,
+            code="00002",
+            title="Credential product",
+            price=100,
+            certificate_price=0,
+        )
+        courses.append(course)
+
+    if "Credential product with discount" in products:
+        course = create_courses(
+            icons,
+            languages,
+            levels,
+            licences,
+            lms_endpoint,
+            organizations,
+            pages_created,
+            persons_for_organization,
+            subjects,
+            code="00003",
+            title="Credential product discount",
+            price=100,
+            certificate_price=0,
+            discount="-20 €",
+            discounted_price=80,
+        )
+        courses.append(course)
 
     # Create blog posts under the `News` page
     log(f"Creating {NB_OBJECTS['blogposts']} blog posts...")
