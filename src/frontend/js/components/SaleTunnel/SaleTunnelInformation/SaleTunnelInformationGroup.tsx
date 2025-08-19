@@ -4,7 +4,7 @@ import { Button, Input, Radio, Select } from '@openfun/cunningham-react';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { GroupBuy } from 'types/Joanie';
+import { BatchOrder } from 'types/Joanie';
 import * as Yup from 'yup';
 import Form, { CountrySelectField, getLocalizedCunninghamErrorProp } from 'components/Form';
 import { Maybe } from 'types/utils';
@@ -41,98 +41,94 @@ const messages = defineMessages({
     defaultMessage: 'Group purchase (B2B)',
   },
   stepCompany: {
-    id: 'components.SaleTunnel.GroupBuyForm.stepCompany',
+    id: 'components.SaleTunnel.BatchOrderForm.stepCompany',
     defaultMessage: 'Organization',
   },
   stepAdmin: {
-    id: 'components.SaleTunnel.GroupBuyForm.stepAdmin',
+    id: 'components.SaleTunnel.BatchOrderForm.stepAdmin',
     defaultMessage: 'Follow-up',
   },
   stepBilling: {
-    id: 'components.SaleTunnel.GroupBuyForm.stepBilling',
+    id: 'components.SaleTunnel.BatchOrderForm.stepBilling',
     defaultMessage: 'Billing',
   },
   stepParticipants: {
-    id: 'components.SaleTunnel.GroupBuyForm.stepParticipants',
+    id: 'components.SaleTunnel.BatchOrderForm.stepParticipants',
     defaultMessage: 'Participants',
   },
   stepFinancing: {
-    id: 'components.SaleTunnel.GroupBuyForm.stepFinancing',
+    id: 'components.SaleTunnel.BatchOrderForm.stepFinancing',
     defaultMessage: 'Financing',
   },
   stepCompanyTitle: {
-    id: 'components.SaleTunnel.GroupBuyForm.stepCompanyTitle',
+    id: 'components.SaleTunnel.BatchOrderForm.stepCompanyTitle',
     defaultMessage: 'Information about your company / organisation',
   },
   stepAdminTitle: {
-    id: 'components.SaleTunnel.GroupBuyForm.stepAdminTitle',
+    id: 'components.SaleTunnel.BatchOrderForm.stepAdminTitle',
     defaultMessage: 'Responsible for the administrative follow-up',
   },
   stepBillingTitle: {
-    id: 'components.SaleTunnel.GroupBuyForm.stepBillingTitle',
+    id: 'components.SaleTunnel.BatchOrderForm.stepBillingTitle',
     defaultMessage: 'Needed if it does not concerns the initial company OR if OPCO',
   },
   stepParticipantsTitle: {
-    id: 'components.SaleTunnel.GroupBuyForm.stepParticipantsTitle',
+    id: 'components.SaleTunnel.BatchOrderForm.stepParticipantsTitle',
     defaultMessage: 'How many registrations ?',
   },
   stepFinancingTitle: {
-    id: 'components.SaleTunnel.GroupBuyForm.stepFinancingTitle',
+    id: 'components.SaleTunnel.BatchOrderForm.stepFinancingTitle',
     defaultMessage: 'Payment plan of the course',
   },
-  companyName: { id: 'groupBuy.companyName', defaultMessage: 'Company name' },
+  companyName: { id: 'batchOrder.companyName', defaultMessage: 'Company name' },
   identificationNumber: {
-    id: 'groupBuy.identificationNumber',
+    id: 'batchOrder.identificationNumber',
     defaultMessage: 'Identification number (SIRET for french company)',
   },
-  vatNumber: { id: 'groupBuy.vatNumber', defaultMessage: 'VAT number' },
-  address: { id: 'groupBuy.address', defaultMessage: 'Address' },
-  postCode: { id: 'groupBuy.postCode', defaultMessage: 'Post code' },
-  city: { id: 'groupBuy.city', defaultMessage: 'City' },
-  country: { id: 'groupBuy.country', defaultMessage: 'Country' },
-  firstName: { id: 'groupBuy.firstName', defaultMessage: 'First name' },
-  lastName: { id: 'groupBuy.lastName', defaultMessage: 'Last name' },
-  role: { id: 'groupBuy.role', defaultMessage: 'Role' },
-  email: { id: 'groupBuy.email', defaultMessage: 'Email' },
-  phone: { id: 'groupBuy.phone', defaultMessage: 'Phone' },
-  birthDate: { id: 'groupBuy.birthDate', defaultMessage: 'Birth date' },
-  traineeNumber: { id: 'groupBuy.traineeNumber', defaultMessage: 'How many participants ?' },
-  addTrainee: { id: 'groupBuy.addTrainee', defaultMessage: 'Add participant' },
-  cardPayment: { id: 'groupBuy.cardPayment', defaultMessage: 'Payment by credit card' },
-  bankTransfer: { id: 'groupBuy.bankTransfer', defaultMessage: 'Payment by bank transfer' },
-  purchaseOrder: { id: 'groupBuy.purchaseOrder', defaultMessage: 'Payment with purchase order' },
-  withoutOrderForm: { id: 'groupBuy.withoutOrderForm', defaultMessage: 'Without order form' },
-  opco: { id: 'groupBuy.opc', defaultMessage: 'OPCO' },
-  organization: { id: 'groupBuy.organization', defaultMessage: 'Funding organization' },
-  organizationName: { id: 'groupBuy.organizationName', defaultMessage: 'Organization name' },
-  organizationAmount: { id: 'groupBuy.opcoAmount', defaultMessage: 'Amount covered' },
+  vatNumber: { id: 'batchOrder.vatNumber', defaultMessage: 'VAT number' },
+  address: { id: 'batchOrder.address', defaultMessage: 'Address' },
+  postCode: { id: 'batchOrder.postCode', defaultMessage: 'Post code' },
+  city: { id: 'batchOrder.city', defaultMessage: 'City' },
+  country: { id: 'batchOrder.country', defaultMessage: 'Country' },
+  firstName: { id: 'batchOrder.firstName', defaultMessage: 'First name' },
+  lastName: { id: 'batchOrder.lastName', defaultMessage: 'Last name' },
+  role: { id: 'batchOrder.role', defaultMessage: 'Role' },
+  email: { id: 'batchOrder.email', defaultMessage: 'Email' },
+  phone: { id: 'batchOrder.phone', defaultMessage: 'Phone' },
+  birthDate: { id: 'batchOrder.birthDate', defaultMessage: 'Birth date' },
+  traineeNumber: { id: 'batchOrder.traineeNumber', defaultMessage: 'How many participants ?' },
+  addTrainee: { id: 'batchOrder.addTrainee', defaultMessage: 'Add participant' },
+  cardPayment: { id: 'batchOrder.cardPayment', defaultMessage: 'Payment by credit card' },
+  bankTransfer: { id: 'batchOrder.bankTransfer', defaultMessage: 'Payment by bank transfer' },
+  purchaseOrder: { id: 'batchOrder.purchaseOrder', defaultMessage: 'Payment with purchase order' },
+  withoutOrderForm: { id: 'batchOrder.withoutOrderForm', defaultMessage: 'Without order form' },
+  opco: { id: 'batchOrder.opc', defaultMessage: 'OPCO' },
+  organization: { id: 'batchOrder.organization', defaultMessage: 'Funding organization' },
+  organizationName: { id: 'batchOrder.organizationName', defaultMessage: 'Organization name' },
+  organizationAmount: { id: 'batchOrder.opcoAmount', defaultMessage: 'Amount covered' },
   recommandation: {
-    id: 'groupBuy.recommandation',
+    id: 'batchOrder.recommandation',
     defaultMessage: 'This course was recommended to me by',
   },
   participatingUniversities: {
-    id: 'groupBuy.participatingUniversities',
+    id: 'batchOrder.participatingUniversities',
     defaultMessage: 'Participating universities',
   },
   formError: {
-    id: 'groupBuy.formError',
+    id: 'batchOrder.formError',
     defaultMessage: 'Missing fields in form',
   },
 });
 
 interface Props {
-  groupBuy?: GroupBuy;
-  onSubmit: (values: GroupBuy) => Promise<void>;
+  batchOrder?: BatchOrder;
+  onSubmit: (values: BatchOrder) => Promise<void>;
 }
 
 export const SaleTunnelInformationGroup = () => {
-  const [groupBuy, setGroupBuy] = useState<Maybe<GroupBuy>>();
-  const handleGroupBuySubmit = async (values: GroupBuy) => {
-    try {
-      console.log('Formulaire envoyé avec succès', values);
-    } catch (error) {
-      console.error('Erreur lors de l’envoi du formulaire', error);
-    }
+  const [batchOrder, setBatchOrder] = useState<Maybe<BatchOrder>>();
+  const handleBatchOrderSubmit = async (values: BatchOrder) => {
+    console.log('Formulaire envoyé avec succès', values);
   };
 
   return (
@@ -145,12 +141,12 @@ export const SaleTunnelInformationGroup = () => {
           <FormattedMessage {...messages.description} />
         </div>
       </div>
-      <GroupBuyForm onSubmit={handleGroupBuySubmit} groupBuy={groupBuy} />
+      <BatchOrderForm onSubmit={handleBatchOrderSubmit} batchOrder={batchOrder} />
     </>
   );
 };
 
-const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
+const BatchOrderForm = ({ onSubmit, batchOrder }: Props) => {
   const validationSchema = Yup.object().shape({
     offering_id: Yup.string().required(),
     company_name: Yup.string().required(),
@@ -217,10 +213,10 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
     organism: '',
     organism_amount: 0,
     recommandation: '',
-  } as GroupBuy;
+  } as BatchOrder;
 
-  const form = useForm<GroupBuy>({
-    defaultValues: groupBuy || defaultValues,
+  const form = useForm<BatchOrder>({
+    defaultValues: batchOrder || defaultValues,
     mode: 'onBlur',
     resolver: yupResolver(validationSchema),
   });
@@ -228,8 +224,8 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
   const { handleSubmit, reset, register, formState } = form;
 
   useEffect(() => {
-    reset(groupBuy ?? defaultValues);
-  }, [groupBuy]);
+    reset(batchOrder ?? defaultValues);
+  }, [batchOrder]);
 
   const [activeStep, setActiveStep] = useState(0);
   const intl = useIntl();
@@ -251,7 +247,6 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
             className="field"
             label={intl.formatMessage(messages.companyName)}
             {...register('company_name')}
-            value={formState.defaultValues?.company_name}
             required
             state={formState.errors.company_name?.message ? 'error' : 'default'}
             text={
@@ -483,7 +478,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
 
   return (
     <FormProvider {...form}>
-      <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stepper activeStep={activeStep} alternativeLabel className="stepper">
           {steps.map((label, index) => (
             <Step key={label} onClick={() => setActiveStep(index)} style={{ cursor: 'pointer' }}>
