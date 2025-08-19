@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { GroupBuy } from 'types/Joanie';
 import * as Yup from 'yup';
-import Form from 'components/Form';
+import Form, { CountrySelectField } from 'components/Form';
 import { Maybe } from 'types/utils';
 
 const messages = defineMessages({
@@ -271,7 +271,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
             {...register('city')}
             label={intl.formatMessage(messages.city)}
           />
-          <Input
+          <CountrySelectField
             className="field"
             {...register('country')}
             label={intl.formatMessage(messages.country)}
@@ -332,7 +332,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
             {...register('billing.city')}
             label={intl.formatMessage(messages.city)}
           />
-          <Input
+          <CountrySelectField
             className="field"
             {...register('billing.country')}
             label={intl.formatMessage(messages.country)}
