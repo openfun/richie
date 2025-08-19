@@ -449,7 +449,7 @@ export interface Address {
   title: string;
 }
 
-// GroupBuy
+// BatchOrder
 
 export interface Admin {
   last_name: string;
@@ -471,7 +471,7 @@ export interface Billing {
   contact_mail: string;
 }
 
-export interface GroupBuy {
+export interface BatchOrder {
   offering_id: string;
   company_name: string;
   identification_number: string;
