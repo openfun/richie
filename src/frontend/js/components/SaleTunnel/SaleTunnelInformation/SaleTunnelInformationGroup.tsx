@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, StepLabel, Stepper } from '@mui/material';
-import { Alert, Checkbox, Input, Radio, Select, VariantType } from '@openfun/cunningham-react';
+import { Button, Input, Radio, Select } from '@openfun/cunningham-react';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -178,7 +178,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
       contact_name: Yup.string().required(),
       contact_mail: Yup.string().email().required(),
     }),
-    nb_seats: Yup.number().required().min(0),
+    nb_seats: Yup.number().required().min(1),
     payment_method: Yup.string().required(),
     organism: Yup.string().required(),
     organism_amount: Yup.number().required(),
@@ -251,8 +251,8 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
             className="field"
             label={intl.formatMessage(messages.companyName)}
             {...register('company_name')}
-            required
             value={formState.defaultValues?.company_name}
+            required
             state={formState.errors.company_name?.message ? 'error' : 'default'}
             text={
               getLocalizedCunninghamErrorProp(intl, formState.errors.company_name?.message).text
@@ -272,23 +272,34 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
             className="field"
             {...register('address')}
             label={intl.formatMessage(messages.address)}
+            required
+            state={formState.errors.address?.message ? 'error' : 'default'}
+            text={getLocalizedCunninghamErrorProp(intl, formState.errors.address?.message).text}
           />
           <div className="city-fields">
             <Input
               className="field"
               {...register('postcode')}
               label={intl.formatMessage(messages.postCode)}
+              required
+              state={formState.errors.postcode?.message ? 'error' : 'default'}
+              text={getLocalizedCunninghamErrorProp(intl, formState.errors.postcode?.message).text}
             />
             <Input
               className="field"
               {...register('city')}
               label={intl.formatMessage(messages.city)}
+              required
+              state={formState.errors.city?.message ? 'error' : 'default'}
+              text={getLocalizedCunninghamErrorProp(intl, formState.errors.city?.message).text}
             />
           </div>
           <CountrySelectField
             className="field"
             {...register('country')}
             label={intl.formatMessage(messages.country)}
+            state={formState.errors.country?.message ? 'error' : 'default'}
+            text={getLocalizedCunninghamErrorProp(intl, formState.errors.country?.message).text}
           />
         </div>
         <div className="step admin" hidden={activeStep !== 1}>
@@ -297,26 +308,48 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
             className="field"
             {...register('admin.last_name')}
             label={intl.formatMessage(messages.lastName)}
+            required
+            state={formState.errors.admin?.last_name?.message ? 'error' : 'default'}
+            text={
+              getLocalizedCunninghamErrorProp(intl, formState.errors.admin?.last_name?.message).text
+            }
           />
           <Input
             className="field"
             {...register('admin.first_name')}
             label={intl.formatMessage(messages.firstName)}
+            required
+            state={formState.errors.admin?.first_name?.message ? 'error' : 'default'}
+            text={
+              getLocalizedCunninghamErrorProp(intl, formState.errors.admin?.first_name?.message)
+                .text
+            }
           />
           <Input
             className="field"
             {...register('admin.role')}
             label={intl.formatMessage(messages.role)}
+            required
+            state={formState.errors.admin?.role?.message ? 'error' : 'default'}
+            text={getLocalizedCunninghamErrorProp(intl, formState.errors.admin?.role?.message).text}
           />
           <Input
             className="field"
             {...register('admin.mail')}
             label={intl.formatMessage(messages.email)}
+            required
+            state={formState.errors.admin?.mail?.message ? 'error' : 'default'}
+            text={getLocalizedCunninghamErrorProp(intl, formState.errors.admin?.mail?.message).text}
           />
           <Input
             className="field"
             {...register('admin.phone')}
             label={intl.formatMessage(messages.phone)}
+            required
+            state={formState.errors.admin?.phone?.message ? 'error' : 'default'}
+            text={
+              getLocalizedCunninghamErrorProp(intl, formState.errors.admin?.phone?.message).text
+            }
           />
         </div>
         <div className="step billing" hidden={activeStep !== 2}>
@@ -369,9 +402,11 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
           <Input
             className="field"
             type="number"
-            min={1}
             {...register('nb_seats')}
             label={intl.formatMessage(messages.traineeNumber)}
+            required
+            state={formState.errors.nb_seats?.message ? 'error' : 'default'}
+            text={getLocalizedCunninghamErrorProp(intl, formState.errors.nb_seats?.message).text}
           />
         </div>
         <div className="step financing" hidden={activeStep !== 4}>
@@ -382,16 +417,31 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
               value="card_payment"
               label={intl.formatMessage(messages.cardPayment)}
               checked
+              required
+              state={formState.errors.payment_method?.message ? 'error' : 'default'}
+              text={
+                getLocalizedCunninghamErrorProp(intl, formState.errors.payment_method?.message).text
+              }
             />
             <Radio
               {...register('payment_method')}
               value="bank_transfer"
               label={intl.formatMessage(messages.bankTransfer)}
+              required
+              state={formState.errors.payment_method?.message ? 'error' : 'default'}
+              text={
+                getLocalizedCunninghamErrorProp(intl, formState.errors.payment_method?.message).text
+              }
             />
             <Radio
               {...register('payment_method')}
               value="purchase_order"
               label={intl.formatMessage(messages.purchaseOrder)}
+              required
+              state={formState.errors.payment_method?.message ? 'error' : 'default'}
+              text={
+                getLocalizedCunninghamErrorProp(intl, formState.errors.payment_method?.message).text
+              }
             />
           </div>
           <FormattedMessage {...messages.organization} />
@@ -399,11 +449,20 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
             <Input
               {...register('organism')}
               label={intl.formatMessage(messages.organizationName)}
+              required
+              state={formState.errors.organism?.message ? 'error' : 'default'}
+              text={getLocalizedCunninghamErrorProp(intl, formState.errors.organism?.message).text}
             />
             <Input
               {...register('organism_amount')}
               type="number"
               label={intl.formatMessage(messages.organizationAmount)}
+              required
+              state={formState.errors.organism_amount?.message ? 'error' : 'default'}
+              text={
+                getLocalizedCunninghamErrorProp(intl, formState.errors.organism_amount?.message)
+                  .text
+              }
             />
           </div>
           <FormattedMessage {...messages.recommandation} />
@@ -433,6 +492,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
           ))}
         </Stepper>
         {renderStepContent()}
+        <Button type="submit">Validate</Button>
       </Form>
     </FormProvider>
   );
