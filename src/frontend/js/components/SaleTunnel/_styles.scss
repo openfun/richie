@@ -98,6 +98,13 @@
       .field {
         width: 90%;
       }
+      .city-fields {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 0.25rem;
+        width: 90%;
+      }
       & > .payment-block {
         display: flex;
         align-items: center;
