@@ -472,7 +472,7 @@ export interface Billing {
 }
 
 export interface GroupBuy {
-  relation_id: string;
+  offering_id: string;
   company_name: string;
   identification_number: string;
   vat_number: string;
@@ -482,9 +482,8 @@ export interface GroupBuy {
   country: string;
   admin: Admin;
   billing: Billing;
-  trainees: number;
-  payment_type: string;
-  order_form: boolean;
+  nb_seats: number;
+  payment_method: string;
   organism: string;
   organism_amount: string;
   recommandation: string;

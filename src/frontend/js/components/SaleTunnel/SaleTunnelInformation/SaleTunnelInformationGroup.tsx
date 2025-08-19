@@ -160,7 +160,7 @@ export const SaleTunnelInformationGroup = () => {
 
 const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
   const validationSchema = Yup.object().shape({
-    relation_id: Yup.string().required(),
+    offering_id: Yup.string().required(),
     company_name: Yup.string().required(),
     identification_number: Yup.string().required(),
     vat_number: Yup.string().required(),
@@ -186,16 +186,15 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
       contact_name: Yup.string().required(),
       contact_mail: Yup.string().email().required(),
     }),
-    trainees: Yup.number().required().min(0),
-    payment_type: Yup.string().required(),
-    order_form: Yup.boolean().required(),
+    nb_seats: Yup.number().required().min(0),
+    payment_method: Yup.string().required(),
     organism: Yup.string().required(),
     organism_amount: Yup.string().required(),
     recommandation: Yup.string().required(),
   });
 
   const defaultValues = {
-    relation_id: '',
+    offering_id: '',
     company_name: '',
     identification_number: '',
     vat_number: '',
@@ -221,9 +220,8 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
       contact_name: '',
       contact_mail: '',
     },
-    trainees: 0,
-    payment_type: '',
-    order_form: false,
+    nb_seats: 0,
+    payment_method: '',
     organism: '',
     organism_amount: '',
     recommandation: '',
@@ -238,7 +236,6 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
   const { handleSubmit, reset, register } = form;
 
   useEffect(() => {
-    console.log('logging groupbuy', groupBuy);
     reset(groupBuy ?? defaultValues);
   }, [groupBuy]);
 
@@ -254,210 +251,195 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
     intl.formatMessage(messages.stepFinancing),
   ];
 
-  const renderStepContent = (step: number) => {
-    switch (step) {
-      case 0:
-        return (
-          <div className="step organization">
-            <FormattedMessage {...messages.stepCompanyTitle} />
-            <Input
-              className="field"
-              label={intl.formatMessage(messages.companyName)}
-              {...register('company_name')}
+  const renderStepContent = () => {
+    return (
+      <div className="step-content">
+        <div className="step organization" hidden={activeStep !== 0}>
+          <FormattedMessage {...messages.stepCompanyTitle} />
+          <Input
+            className="field"
+            label={intl.formatMessage(messages.companyName)}
+            {...register('company_name')}
+          />
+          <Input
+            className="field"
+            {...register('identification_number')}
+            label={intl.formatMessage(messages.identificationNumber)}
+          />
+          <Input
+            className="field"
+            {...register('vat_number')}
+            label={intl.formatMessage(messages.vatNumber)}
+          />
+          <Input
+            className="field"
+            {...register('address')}
+            label={intl.formatMessage(messages.address)}
+          />
+          <Input
+            className="field"
+            {...register('postcode')}
+            label={intl.formatMessage(messages.postCode)}
+          />
+          <Input
+            className="field"
+            {...register('city')}
+            label={intl.formatMessage(messages.city)}
+          />
+          <Input
+            className="field"
+            {...register('country')}
+            label={intl.formatMessage(messages.country)}
+          />
+        </div>
+        <div className="step admin" hidden={activeStep !== 1}>
+          <FormattedMessage {...messages.stepAdminTitle} />
+          <Input
+            className="field"
+            {...register('admin.last_name')}
+            label={intl.formatMessage(messages.lastName)}
+          />
+          <Input
+            className="field"
+            {...register('admin.first_name')}
+            label={intl.formatMessage(messages.firstName)}
+          />
+          <Input
+            className="field"
+            {...register('admin.role')}
+            label={intl.formatMessage(messages.role)}
+          />
+          <Input
+            className="field"
+            {...register('admin.mail')}
+            label={intl.formatMessage(messages.email)}
+          />
+          <Input
+            className="field"
+            {...register('admin.phone')}
+            label={intl.formatMessage(messages.phone)}
+          />
+        </div>
+        <div className="step billing" hidden={activeStep !== 2}>
+          <FormattedMessage {...messages.stepBillingTitle} />
+          <Input
+            className="field"
+            {...register('billing.company_name')}
+            label={intl.formatMessage(messages.companyName)}
+          />
+          <Input
+            className="field"
+            {...register('billing.identification_number')}
+            label={intl.formatMessage(messages.identificationNumber)}
+          />
+          <Input
+            className="field"
+            {...register('billing.address')}
+            label={intl.formatMessage(messages.address)}
+          />
+          <Input
+            className="field"
+            {...register('billing.postcode')}
+            label={intl.formatMessage(messages.postCode)}
+          />
+          <Input
+            className="field"
+            {...register('billing.city')}
+            label={intl.formatMessage(messages.city)}
+          />
+          <Input
+            className="field"
+            {...register('billing.country')}
+            label={intl.formatMessage(messages.country)}
+          />
+          <Input
+            className="field"
+            {...register('billing.contact_name')}
+            label={intl.formatMessage(messages.lastName)}
+          />
+          <Input
+            className="field"
+            {...register('billing.contact_mail')}
+            label={intl.formatMessage(messages.email)}
+          />
+        </div>
+        <div className="step student" hidden={activeStep !== 3}>
+          <FormattedMessage {...messages.stepParticipantsTitle} />
+          <Input
+            className="field"
+            type="number"
+            min={1}
+            {...register('nb_seats')}
+            label={intl.formatMessage(messages.traineeNumber)}
+          />
+        </div>
+        <div className="step financing" hidden={activeStep !== 4}>
+          <FormattedMessage {...messages.stepFinancingTitle} />
+          <div className="payment-block">
+            <Radio
+              {...register('payment_method')}
+              value="card_payment"
+              label={intl.formatMessage(messages.cardPayment)}
             />
-            <Input
-              className="field"
-              {...register('identification_number')}
-              label={intl.formatMessage(messages.identificationNumber)}
+            <Radio
+              {...register('payment_method')}
+              value="bank_transfer"
+              label={intl.formatMessage(messages.bankTransfer)}
             />
-            <Input
-              className="field"
-              {...register('vat_number')}
-              label={intl.formatMessage(messages.vatNumber)}
-            />
-            <Input
-              className="field"
-              {...register('address')}
-              label={intl.formatMessage(messages.address)}
-            />
-            <Input
-              className="field"
-              {...register('postcode')}
-              label={intl.formatMessage(messages.postCode)}
-            />
-            <Input
-              className="field"
-              {...register('city')}
-              label={intl.formatMessage(messages.city)}
-            />
-            <Input
-              className="field"
-              {...register('country')}
-              label={intl.formatMessage(messages.country)}
+            <Radio
+              {...register('payment_method')}
+              value="purchase_order"
+              label={intl.formatMessage(messages.withOrderForm)}
             />
           </div>
-        );
-      case 1:
-        return (
-          <div className="step admin">
-            <FormattedMessage {...messages.stepAdminTitle} />
-            <Input
-              className="field"
-              {...register('admin.last_name')}
-              label={intl.formatMessage(messages.lastName)}
+          <FormattedMessage {...messages.organism} />
+          <div className="organism-block">
+            <Select
+              label={intl.formatMessage(messages.organism)}
+              value={selectedOrganism}
+              onChange={(e) => setSelectedOrganism(e.target.value as string)}
+              options={[
+                { label: intl.formatMessage(messages.opco), value: 'opco' },
+                { label: intl.formatMessage(messages.jobCenter), value: 'jobCenter' },
+                { label: intl.formatMessage(messages.other), value: 'other' },
+              ]}
+              clearable={false}
+              fullWidth
             />
-            <Input
-              className="field"
-              {...register('admin.first_name')}
-              label={intl.formatMessage(messages.firstName)}
-            />
-            <Input
-              className="field"
-              {...register('admin.role')}
-              label={intl.formatMessage(messages.role)}
-            />
-            <Input
-              className="field"
-              {...register('admin.mail')}
-              label={intl.formatMessage(messages.email)}
-            />
-            <Input
-              className="field"
-              {...register('admin.phone')}
-              label={intl.formatMessage(messages.phone)}
-            />
-          </div>
-        );
-      case 2:
-        return (
-          <div className="step billing">
-            <FormattedMessage {...messages.stepBillingTitle} />
-            <Input
-              className="field"
-              {...register('billing.company_name')}
-              label={intl.formatMessage(messages.companyName)}
-            />
-            <Input
-              className="field"
-              {...register('billing.identification_number')}
-              label={intl.formatMessage(messages.identificationNumber)}
-            />
-            <Input
-              className="field"
-              {...register('billing.address')}
-              label={intl.formatMessage(messages.address)}
-            />
-            <Input
-              className="field"
-              {...register('billing.postcode')}
-              label={intl.formatMessage(messages.postCode)}
-            />
-            <Input
-              className="field"
-              {...register('billing.city')}
-              label={intl.formatMessage(messages.city)}
-            />
-            <Input
-              className="field"
-              {...register('billing.country')}
-              label={intl.formatMessage(messages.country)}
-            />
-            <Input
-              className="field"
-              {...register('billing.contact_name')}
-              label={intl.formatMessage(messages.lastName)}
-            />
-            <Input
-              className="field"
-              {...register('billing.contact_mail')}
-              label={intl.formatMessage(messages.email)}
-            />
-          </div>
-        );
-      case 3:
-        return (
-          <div className="step student">
-            <FormattedMessage {...messages.stepParticipantsTitle} />
-            <Input
-              className="field"
-              type="number"
-              min={1}
-              {...register('trainees')}
-              label={intl.formatMessage(messages.traineeNumber)}
-            />
-          </div>
-        );
-      case 4:
-        return (
-          <div className="step financing">
-            <FormattedMessage {...messages.stepFinancingTitle} />
-            <div className="payment-block">
-              <Radio
-                {...register('payment_type')}
-                value="card"
-                label={intl.formatMessage(messages.cardPayment)}
-              />
-              <Radio
-                {...register('payment_type')}
-                value="bank"
-                label={intl.formatMessage(messages.bankTransfer)}
-              />
-              <Checkbox
-                {...register('order_form')}
-                label={intl.formatMessage(messages.withOrderForm)}
-              />
-            </div>
-            <FormattedMessage {...messages.organism} />
-            <div className="organism-block">
-              <Select
-                label={intl.formatMessage(messages.organism)}
-                value={selectedOrganism}
-                onChange={(e) => setSelectedOrganism(e.target.value as string)}
-                options={[
-                  { label: intl.formatMessage(messages.opco), value: 'opco' },
-                  { label: intl.formatMessage(messages.jobCenter), value: 'jobCenter' },
-                  { label: intl.formatMessage(messages.other), value: 'other' },
-                ]}
-                clearable={false}
-                fullWidth
-              />
-              {selectedOrganism === 'opco' && (
-                <div className="opco-order">
-                  <Input {...register('organism')} label={intl.formatMessage(messages.opcoName)} />
-                  <Input
-                    {...register('organism_amount')}
-                    label={intl.formatMessage(messages.opcoAmount)}
-                  />
-                </div>
-              )}
-              {selectedOrganism === 'jobCenter' && (
+            {selectedOrganism === 'opco' && (
+              <div className="opco-order">
+                <Input {...register('organism')} label={intl.formatMessage(messages.opcoName)} />
                 <Input
                   {...register('organism_amount')}
-                  label={intl.formatMessage(messages.jobCenterAmount)}
+                  label={intl.formatMessage(messages.opcoAmount)}
                 />
-              )}
-              {selectedOrganism === 'other' && (
-                <Input
-                  {...register('organism')}
-                  label={intl.formatMessage(messages.otherSpecify)}
-                />
-              )}
-            </div>
-            <FormattedMessage {...messages.recommandation} />
-            <Select
-              {...register('recommandation')}
-              label={intl.formatMessage(messages.participatingUniversities)}
-              value="rennes1"
-              clearable={false}
-              options={[
-                { label: 'Rennes 1', value: 'rennes1' },
-                { label: 'Rennes 2', value: 'rennes2' },
-              ]}
-              className="recommandation"
-            />
+              </div>
+            )}
+            {selectedOrganism === 'jobCenter' && (
+              <Input
+                {...register('organism_amount')}
+                label={intl.formatMessage(messages.jobCenterAmount)}
+              />
+            )}
+            {selectedOrganism === 'other' && (
+              <Input {...register('organism')} label={intl.formatMessage(messages.otherSpecify)} />
+            )}
           </div>
-        );
-    }
+          <FormattedMessage {...messages.recommandation} />
+          <Select
+            {...register('recommandation')}
+            label={intl.formatMessage(messages.participatingUniversities)}
+            value="rennes1"
+            clearable={false}
+            options={[
+              { label: 'Rennes 1', value: 'rennes1' },
+              { label: 'Rennes 2', value: 'rennes2' },
+            ]}
+            className="recommandation"
+          />
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -470,13 +452,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
             </Step>
           ))}
         </Stepper>
-        <div className="step-content">
-          <div hidden={activeStep !== 0}>{renderStepContent(0)}</div>
-          <div hidden={activeStep !== 1}>{renderStepContent(1)}</div>
-          <div hidden={activeStep !== 2}>{renderStepContent(2)}</div>
-          <div hidden={activeStep !== 3}>{renderStepContent(3)}</div>
-          <div hidden={activeStep !== 4}>{renderStepContent(4)}</div>
-        </div>
+        {renderStepContent()}
         <pre style={{ marginTop: '2rem', background: '#eee', padding: '1rem' }}>
           {JSON.stringify(form.watch(), null, 2)}
         </pre>
