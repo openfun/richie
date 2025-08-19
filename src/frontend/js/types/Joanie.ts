@@ -460,33 +460,33 @@ export interface Admin {
 }
 
 export interface Billing {
-  company_name: string;
-  identification_number: string;
-  vat_number: string;
-  address: string;
-  postcode: string;
-  city: string;
-  country: string;
-  contact_name: string;
-  contact_mail: string;
+  company_name?: string;
+  identification_number?: string;
+  vat_number?: string;
+  address?: string;
+  postcode?: string;
+  city?: string;
+  country?: string;
+  contact_name?: string;
+  contact_mail?: string;
 }
 
 export interface BatchOrder {
   offering_id: string;
   company_name: string;
-  identification_number: string;
-  vat_number: string;
+  identification_number?: string;
+  vat_number?: string;
   address: string;
   postcode: string;
   city: string;
   country: string;
   admin: Admin;
-  billing: Billing;
+  billing?: Billing;
   nb_seats: number;
   payment_method: string;
   organism: string;
-  organism_amount: number;
-  recommandation: string;
+  organism_amount?: number;
+  recommandation?: string;
 }
 
 // Wishlist
