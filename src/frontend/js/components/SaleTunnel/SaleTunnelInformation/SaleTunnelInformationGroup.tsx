@@ -261,16 +261,18 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
             {...register('address')}
             label={intl.formatMessage(messages.address)}
           />
-          <Input
-            className="field"
-            {...register('postcode')}
-            label={intl.formatMessage(messages.postCode)}
-          />
-          <Input
-            className="field"
-            {...register('city')}
-            label={intl.formatMessage(messages.city)}
-          />
+          <div className="city-fields">
+            <Input
+              className="field"
+              {...register('postcode')}
+              label={intl.formatMessage(messages.postCode)}
+            />
+            <Input
+              className="field"
+              {...register('city')}
+              label={intl.formatMessage(messages.city)}
+            />
+          </div>
           <CountrySelectField
             className="field"
             {...register('country')}
@@ -322,16 +324,18 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
             {...register('billing.address')}
             label={intl.formatMessage(messages.address)}
           />
-          <Input
-            className="field"
-            {...register('billing.postcode')}
-            label={intl.formatMessage(messages.postCode)}
-          />
-          <Input
-            className="field"
-            {...register('billing.city')}
-            label={intl.formatMessage(messages.city)}
-          />
+          <div className="city-fields">
+            <Input
+              className="field"
+              {...register('billing.postcode')}
+              label={intl.formatMessage(messages.postCode)}
+            />
+            <Input
+              className="field"
+              {...register('billing.city')}
+              label={intl.formatMessage(messages.city)}
+            />
+          </div>
           <CountrySelectField
             className="field"
             {...register('billing.country')}
@@ -409,7 +413,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
   return (
     <FormProvider {...form}>
       <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-        <Stepper activeStep={activeStep} className="stepper">
+        <Stepper activeStep={activeStep} alternativeLabel className="stepper">
           {steps.map((label, index) => (
             <Step key={label} onClick={() => setActiveStep(index)} style={{ cursor: 'pointer' }}>
               <StepLabel>{label}</StepLabel>
