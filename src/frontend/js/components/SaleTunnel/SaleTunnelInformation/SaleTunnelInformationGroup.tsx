@@ -1,12 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, StepLabel, Stepper } from '@mui/material';
-import { Checkbox, Input, Radio, Select } from '@openfun/cunningham-react';
+import { Alert, Checkbox, Input, Radio, Select, VariantType } from '@openfun/cunningham-react';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { GroupBuy } from 'types/Joanie';
 import * as Yup from 'yup';
-import Form, { CountrySelectField } from 'components/Form';
+import Form, { CountrySelectField, getLocalizedCunninghamErrorProp } from 'components/Form';
 import { Maybe } from 'types/utils';
 
 const messages = defineMessages({
@@ -81,7 +81,10 @@ const messages = defineMessages({
     defaultMessage: 'Payment plan of the course',
   },
   companyName: { id: 'groupBuy.companyName', defaultMessage: 'Company name' },
-  identificationNumber: { id: 'groupBuy.identificationNumber', defaultMessage: 'SIRET number' },
+  identificationNumber: {
+    id: 'groupBuy.identificationNumber',
+    defaultMessage: 'Identification number (SIRET for french company)',
+  },
   vatNumber: { id: 'groupBuy.vatNumber', defaultMessage: 'VAT number' },
   address: { id: 'groupBuy.address', defaultMessage: 'Address' },
   postCode: { id: 'groupBuy.postCode', defaultMessage: 'Post code' },
@@ -110,6 +113,10 @@ const messages = defineMessages({
   participatingUniversities: {
     id: 'groupBuy.participatingUniversities',
     defaultMessage: 'Participating universities',
+  },
+  formError: {
+    id: 'groupBuy.formError',
+    defaultMessage: 'Missing fields in form',
   },
 });
 
@@ -218,7 +225,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const { handleSubmit, reset, register } = form;
+  const { handleSubmit, reset, register, formState } = form;
 
   useEffect(() => {
     reset(groupBuy ?? defaultValues);
@@ -226,7 +233,6 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
 
   const [activeStep, setActiveStep] = useState(0);
   const intl = useIntl();
-  const [selectedOrganism, setSelectedOrganism] = useState('opco');
 
   const steps = [
     intl.formatMessage(messages.stepCompany),
@@ -245,6 +251,12 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
             className="field"
             label={intl.formatMessage(messages.companyName)}
             {...register('company_name')}
+            required
+            value={formState.defaultValues?.company_name}
+            state={formState.errors.company_name?.message ? 'error' : 'default'}
+            text={
+              getLocalizedCunninghamErrorProp(intl, formState.errors.company_name?.message).text
+            }
           />
           <Input
             className="field"
@@ -421,9 +433,6 @@ const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
           ))}
         </Stepper>
         {renderStepContent()}
-        <pre style={{ marginTop: '2rem', background: '#eee', padding: '1rem' }}>
-          {JSON.stringify(form.watch(), null, 2)}
-        </pre>
       </Form>
     </FormProvider>
   );
