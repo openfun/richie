@@ -485,7 +485,7 @@ export interface GroupBuy {
   nb_seats: number;
   payment_method: string;
   organism: string;
-  organism_amount: string;
+  organism_amount: number;
   recommandation: string;
 }
 
