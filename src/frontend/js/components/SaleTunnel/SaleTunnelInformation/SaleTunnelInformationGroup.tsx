@@ -97,19 +97,12 @@ const messages = defineMessages({
   addTrainee: { id: 'groupBuy.addTrainee', defaultMessage: 'Add participant' },
   cardPayment: { id: 'groupBuy.cardPayment', defaultMessage: 'Payment by credit card' },
   bankTransfer: { id: 'groupBuy.bankTransfer', defaultMessage: 'Payment by bank transfer' },
-  withOrderForm: { id: 'groupBuy.withOrderForm', defaultMessage: 'With order form' },
+  purchaseOrder: { id: 'groupBuy.purchaseOrder', defaultMessage: 'Payment with purchase order' },
   withoutOrderForm: { id: 'groupBuy.withoutOrderForm', defaultMessage: 'Without order form' },
   opco: { id: 'groupBuy.opc', defaultMessage: 'OPCO' },
-  opcoName: { id: 'groupBuy.opcName', defaultMessage: 'OPCO name' },
-  opcoAmount: { id: 'groupBuy.opcoAmount', defaultMessage: 'OPCO - Amount covered' },
-  jobCenter: { id: 'groupBuy.jobCenter', defaultMessage: 'Pôle emploi' },
-  jobCenterAmount: {
-    id: 'groupBuy.jobCenterAmount',
-    defaultMessage: 'Pôle emploi - Amount covered',
-  },
-  other: { id: 'groupBuy.other', defaultMessage: 'Other' },
-  otherSpecify: { id: 'groupBuy.otherSpecify', defaultMessage: 'Other - specify' },
-  organism: { id: 'groupBuy.organisme', defaultMessage: 'Funding organism' },
+  organization: { id: 'groupBuy.organization', defaultMessage: 'Funding organization' },
+  organizationName: { id: 'groupBuy.organizationName', defaultMessage: 'Organization name' },
+  organizationAmount: { id: 'groupBuy.opcoAmount', defaultMessage: 'Amount covered' },
   recommandation: {
     id: 'groupBuy.recommandation',
     defaultMessage: 'This course was recommended to me by',
@@ -123,7 +116,6 @@ const messages = defineMessages({
 interface Props {
   groupBuy?: GroupBuy;
   onSubmit: (values: GroupBuy) => Promise<void>;
-  handleReset: () => void;
 }
 
 export const SaleTunnelInformationGroup = () => {
@@ -134,9 +126,6 @@ export const SaleTunnelInformationGroup = () => {
     } catch (error) {
       console.error('Erreur lors de l’envoi du formulaire', error);
     }
-  };
-  const handleResetGroupBuy = () => {
-    setGroupBuy(undefined);
   };
 
   return (
@@ -149,16 +138,12 @@ export const SaleTunnelInformationGroup = () => {
           <FormattedMessage {...messages.description} />
         </div>
       </div>
-      <GroupBuyForm
-        onSubmit={handleGroupBuySubmit}
-        handleReset={handleResetGroupBuy}
-        groupBuy={groupBuy}
-      />
+      <GroupBuyForm onSubmit={handleGroupBuySubmit} groupBuy={groupBuy} />
     </>
   );
 };
 
-const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
+const GroupBuyForm = ({ onSubmit, groupBuy }: Props) => {
   const validationSchema = Yup.object().shape({
     offering_id: Yup.string().required(),
     company_name: Yup.string().required(),
@@ -189,7 +174,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
     nb_seats: Yup.number().required().min(0),
     payment_method: Yup.string().required(),
     organism: Yup.string().required(),
-    organism_amount: Yup.string().required(),
+    organism_amount: Yup.number().required(),
     recommandation: Yup.string().required(),
   });
 
@@ -223,7 +208,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
     nb_seats: 0,
     payment_method: '',
     organism: '',
-    organism_amount: '',
+    organism_amount: 0,
     recommandation: '',
   } as GroupBuy;
 
@@ -380,6 +365,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
               {...register('payment_method')}
               value="card_payment"
               label={intl.formatMessage(messages.cardPayment)}
+              checked
             />
             <Radio
               {...register('payment_method')}
@@ -389,47 +375,25 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
             <Radio
               {...register('payment_method')}
               value="purchase_order"
-              label={intl.formatMessage(messages.withOrderForm)}
+              label={intl.formatMessage(messages.purchaseOrder)}
             />
           </div>
-          <FormattedMessage {...messages.organism} />
+          <FormattedMessage {...messages.organization} />
           <div className="organism-block">
-            <Select
-              label={intl.formatMessage(messages.organism)}
-              value={selectedOrganism}
-              onChange={(e) => setSelectedOrganism(e.target.value as string)}
-              options={[
-                { label: intl.formatMessage(messages.opco), value: 'opco' },
-                { label: intl.formatMessage(messages.jobCenter), value: 'jobCenter' },
-                { label: intl.formatMessage(messages.other), value: 'other' },
-              ]}
-              clearable={false}
-              fullWidth
+            <Input
+              {...register('organism')}
+              label={intl.formatMessage(messages.organizationName)}
             />
-            {selectedOrganism === 'opco' && (
-              <div className="opco-order">
-                <Input {...register('organism')} label={intl.formatMessage(messages.opcoName)} />
-                <Input
-                  {...register('organism_amount')}
-                  label={intl.formatMessage(messages.opcoAmount)}
-                />
-              </div>
-            )}
-            {selectedOrganism === 'jobCenter' && (
-              <Input
-                {...register('organism_amount')}
-                label={intl.formatMessage(messages.jobCenterAmount)}
-              />
-            )}
-            {selectedOrganism === 'other' && (
-              <Input {...register('organism')} label={intl.formatMessage(messages.otherSpecify)} />
-            )}
+            <Input
+              {...register('organism_amount')}
+              type="number"
+              label={intl.formatMessage(messages.organizationAmount)}
+            />
           </div>
           <FormattedMessage {...messages.recommandation} />
           <Select
             {...register('recommandation')}
             label={intl.formatMessage(messages.participatingUniversities)}
-            value="rennes1"
             clearable={false}
             options={[
               { label: 'Rennes 1', value: 'rennes1' },
@@ -445,7 +409,7 @@ const GroupBuyForm = ({ onSubmit, groupBuy, handleReset }: Props) => {
   return (
     <FormProvider {...form}>
       <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-        <Stepper activeStep={activeStep} alternativeLabel>
+        <Stepper activeStep={activeStep} className="stepper">
           {steps.map((label, index) => (
             <Step key={label} onClick={() => setActiveStep(index)} style={{ cursor: 'pointer' }}>
               <StepLabel>{label}</StepLabel>

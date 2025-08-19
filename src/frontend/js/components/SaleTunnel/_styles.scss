@@ -83,6 +83,11 @@
     }
   }
 
+  .stepper {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
   .step-content {
     & > .step {
       display: flex;
