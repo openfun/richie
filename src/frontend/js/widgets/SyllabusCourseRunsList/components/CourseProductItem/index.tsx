@@ -239,10 +239,16 @@ const Content = ({ product, order }: { product: Product; order?: CredentialOrder
 const CourseProductItem = ({ productId, course, compact = false }: CourseProductItemProps) => {
   // FIXME(rlecellier): useCourseProduct need's a filter on product.type that only return
   // CredentialOrder
-  const { item: offering, states: productQueryStates } = useCourseProduct({
-    product_id: productId,
-    course_id: course.code,
-  });
+  const { item: offering, states: productQueryStates } = useCourseProduct(
+    {
+      product_id: productId,
+      course_id: course.code,
+    },
+    {
+      refetchOnMount: 'always',
+      refetchOnWindowFocus: 'always',
+    },
+  );
 
   const product = offering?.product;
   const { item: productOrder, states: orderQueryStates } = useProductOrder({
