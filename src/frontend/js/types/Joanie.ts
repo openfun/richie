@@ -669,6 +669,9 @@ interface APIUser {
     ): Promise<Payment>;
     set_payment_method(payload: OrderSetPaymentMethodPayload): Promise<void>;
   };
+  batchOrders: {
+    submit(payload: BatchOrder): Promise<BatchOrder>;
+  };
   certificates: {
     download(id: string): Promise<File>;
     get<Filters extends CertificateResourcesQuery = CertificateResourcesQuery>(
