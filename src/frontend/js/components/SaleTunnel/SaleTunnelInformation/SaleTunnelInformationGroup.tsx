@@ -7,7 +7,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { BatchOrder } from 'types/Joanie';
 import * as Yup from 'yup';
 import Form, { CountrySelectField, getLocalizedCunninghamErrorProp } from 'components/Form';
-import { Maybe } from 'types/utils';
+import { useSaleTunnelContext } from '../GenericSaleTunnel';
+import { useJoanieApi } from 'contexts/JoanieApiContext';
 
 const messages = defineMessages({
   title: {
@@ -120,17 +121,7 @@ const messages = defineMessages({
   },
 });
 
-interface Props {
-  batchOrder?: BatchOrder;
-  onSubmit: (values: BatchOrder) => Promise<void>;
-}
-
 export const SaleTunnelInformationGroup = () => {
-  const [batchOrder, setBatchOrder] = useState<Maybe<BatchOrder>>();
-  const handleBatchOrderSubmit = async (values: BatchOrder) => {
-    console.log('Formulaire envoyé avec succès', values);
-  };
-
   return (
     <>
       <div>
@@ -141,12 +132,14 @@ export const SaleTunnelInformationGroup = () => {
           <FormattedMessage {...messages.description} />
         </div>
       </div>
-      <BatchOrderForm onSubmit={handleBatchOrderSubmit} batchOrder={batchOrder} />
+      <BatchOrderForm />
     </>
   );
 };
 
-const BatchOrderForm = ({ onSubmit, batchOrder }: Props) => {
+const BatchOrderForm = () => {
+  const [batchOrder, setBatchOrder] = useState<BatchOrder>();
+  const { offering } = useSaleTunnelContext();
   const validationSchema = Yup.object().shape({
     offering_id: Yup.string().required(),
     company_name: Yup.string().required(),
@@ -184,20 +177,20 @@ const BatchOrderForm = ({ onSubmit, batchOrder }: Props) => {
   });
 
   const defaultValues = {
-    offering_id: '',
-    company_name: '',
-    identification_number: '',
-    vat_number: '',
-    address: '',
-    postcode: '',
-    city: '',
-    country: '',
+    offering_id: offering?.id,
+    company_name: 'dzq',
+    identification_number: 'dzq',
+    vat_number: 'dzq',
+    address: 'dzq',
+    postcode: 'dzq',
+    city: 'dzq',
+    country: 'dzq',
     admin: {
-      last_name: '',
-      first_name: '',
-      role: '',
-      mail: '',
-      phone: '',
+      last_name: 'zzzz',
+      first_name: 'wwwwwww',
+      role: 'www',
+      mail: 'test@mail.fr',
+      phone: 'xxxx',
     },
     billing: {
       company_name: '',
@@ -210,9 +203,9 @@ const BatchOrderForm = ({ onSubmit, batchOrder }: Props) => {
       contact_name: '',
       contact_mail: '',
     },
-    nb_seats: 0,
-    payment_method: '',
-    organism: '',
+    nb_seats: 23,
+    payment_method: 'card_payment',
+    organism: 'opco',
     organism_amount: 0,
     recommandation: '',
   } as BatchOrder;
@@ -239,6 +232,16 @@ const BatchOrderForm = ({ onSubmit, batchOrder }: Props) => {
     intl.formatMessage(messages.stepParticipants),
     intl.formatMessage(messages.stepFinancing),
   ];
+
+  const submitBatchOrder = async (data: BatchOrder) => {
+    try {
+      const api = useJoanieApi();
+      const response = await api.user.batchOrders.submit(data);
+      console.log('Réponse serveur:', response);
+    } catch (err: any) {
+      console.error('Erreur serveur:', err);
+    }
+  };
 
   const renderStepContent = () => {
     return (
@@ -479,7 +482,7 @@ const BatchOrderForm = ({ onSubmit, batchOrder }: Props) => {
 
   return (
     <FormProvider {...form}>
-      <Form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <Form onSubmit={handleSubmit(submitBatchOrder)} noValidate>
         <Stepper activeStep={activeStep} alternativeLabel className="stepper">
           {steps.map((label, index) => (
             <Step key={label} onClick={() => setActiveStep(index)} style={{ cursor: 'pointer' }}>
