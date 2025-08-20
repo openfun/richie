@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, StepLabel, Stepper } from '@mui/material';
-import { Button, Input, Radio, Select } from '@openfun/cunningham-react';
+import { Button, Input, Radio, RadioGroup, Select } from '@openfun/cunningham-react';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -411,7 +411,7 @@ const BatchOrderForm = () => {
         </div>
         <div className="step financing" hidden={activeStep !== 4}>
           <FormattedMessage {...messages.stepFinancingTitle} />
-          <div className="payment-block">
+          <RadioGroup fullWidth={true} className="payment-block">
             <Radio
               {...register('payment_method')}
               value="card_payment"
@@ -442,7 +442,7 @@ const BatchOrderForm = () => {
                 getLocalizedCunninghamErrorProp(intl, formState.errors.payment_method?.message).text
               }
             />
-          </div>
+          </RadioGroup>
           <FormattedMessage {...messages.organization} />
           <div className="organism-block">
             <Input

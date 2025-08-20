@@ -106,9 +106,12 @@
         width: 90%;
       }
       & > .payment-block {
-        display: flex;
-        align-items: center;
-        margin: 1rem 0;
+        & > div {
+          display: flex;
+          align-items: center;
+          flex-direction: row;
+          margin: 1rem 0;
+        }
       }
       & > .organism-block {
         width: 100%;
