@@ -22,7 +22,7 @@ import {
   CredentialProductFactory,
   CreditCardFactory,
   EnrollmentFactory,
-  PaymentInstallmentFactory,
+  PaymentPlanFactory,
 } from 'utils/test/factories/joanie';
 import { Priority } from 'types';
 import { render } from 'utils/test/render';
@@ -163,15 +163,15 @@ describe.each([
       is_main: true,
     }).one();
     const order = OrderFactory({ state: OrderState.TO_SAVE_PAYMENT_METHOD }).one();
-
+    const paymentPlan = PaymentPlanFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
         [],
       )
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        [],
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
       )
       .post('https://joanie.endpoint/api/v1.0/orders/', order)
       .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, order)
@@ -179,15 +179,13 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     nbApiCalls += 1; // useProductOrder call.
     nbApiCalls += 1; // get user account call.
     nbApiCalls += 1; // get user preferences call.
-    if (product.type === ProductType.CREDENTIAL) {
-      nbApiCalls += 1; // product payment-schedule call
-    }
+    nbApiCalls += 1; // product payment-schedule call
     await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
     const user = userEvent.setup({ delay: null });
@@ -253,30 +251,28 @@ describe.each([
       is_main: true,
     }).one();
     const deferred = new Deferred();
-
+    const paymentPlan = PaymentPlanFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
         [],
       )
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        [],
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
       )
       .post('https://joanie.endpoint/api/v1.0/orders/', deferred.promise)
       .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     nbApiCalls += 1; // useProductOrder get order with filters
     nbApiCalls += 1; // get user account call.
     nbApiCalls += 1; // get user preferences call.
-    if (product.type === ProductType.CREDENTIAL) {
-      nbApiCalls += 1; // get product payment schedule.
-    }
+    nbApiCalls += 1; // get paymentPlan call.
     await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
     const user = userEvent.setup({ delay: null });
@@ -328,15 +324,15 @@ describe.each([
     }).one();
     const creditCard = CreditCardFactory().one();
     const order = OrderFactory({ state: OrderState.TO_SAVE_PAYMENT_METHOD }).one();
-
+    const paymentPlan = PaymentPlanFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
         [order],
       )
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        [],
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
       )
       .get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard], {
         overwriteRoutes: true,
@@ -345,7 +341,7 @@ describe.each([
         overwriteRoutes: true,
       });
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -364,15 +360,15 @@ describe.each([
       }).one();
       const creditCard = CreditCardFactory().one();
       const order = OrderFactory({ state }).one();
-
+      const paymentPlan = PaymentPlanFactory().one();
       fetchMock
         .get(
           `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
           [order],
         )
         .get(
-          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-          [],
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+          paymentPlan,
         )
         .get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard], {
           overwriteRoutes: true,
@@ -381,7 +377,7 @@ describe.each([
           overwriteRoutes: true,
         });
 
-      render(<Wrapper product={product} isWithdrawable={true} />, {
+      render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
         queryOptions: { client: createTestQueryClient({ user: richieUser }) },
       });
 
@@ -395,18 +391,19 @@ describe.each([
   it('should show the product payment schedule', async () => {
     const intl = createIntl({ locale: 'en' });
     const product = ProductFactory().one();
-    const schedule = PaymentInstallmentFactory().many(2);
+    const paymentPlan = PaymentPlanFactory().one();
+    const schedule = paymentPlan.payment_schedule;
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
         [],
       )
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
       );
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -448,7 +445,8 @@ describe.each([
 
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
-      'Total' + formatPrice(product.price, product.price_currency).replace(/(\u202F|\u00a0)/g, ' '),
+      'Total' +
+        formatPrice(paymentPlan.price, product.price_currency).replace(/(\u202F|\u00a0)/g, ' '),
     );
   });
 
@@ -473,39 +471,49 @@ describe.each([
         }).one(),
       ],
     }).one();
-
+    const paymentPlan = PaymentPlanFactory({ discounted_price: 80 }).one();
     if (product.type === ProductType.CERTIFICATE) {
       enrollmentDiscounted.offerings[0].product = product;
-
-      fetchMock.get(
-        `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollmentDiscounted.id}&product_id=${product.id}&state=pending&state=pending_payment&state=no_payment&state=failed_payment&state=completed&state=draft&state=assigned&state=to_sign&state=signing&state=to_save_payment_method`,
-        {
-          results: [],
-          next: null,
-          previous: null,
-          count: 0,
-        },
-      );
-
+      fetchMock
+        .get(
+          `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollmentDiscounted.id}&product_id=${product.id}&state=pending&state=pending_payment&state=no_payment&state=failed_payment&state=completed&state=draft&state=assigned&state=to_sign&state=signing&state=to_save_payment_method`,
+          {
+            results: [],
+            next: null,
+            previous: null,
+            count: 0,
+          },
+        )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+          paymentPlan,
+        );
       render(
-        <Wrapper product={product} enrollment={enrollmentDiscounted} isWithdrawable={true} />,
+        <Wrapper
+          product={product}
+          enrollment={enrollmentDiscounted}
+          isWithdrawable={true}
+          paymentPlan={paymentPlan}
+        />,
         { queryOptions: { client: createTestQueryClient({ user: richieUser }) } },
       );
 
       const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
       expect($totalAmount).toHaveTextContent(
         'Total' +
-          formatPrice(
-            enrollmentDiscounted.offerings[0].rules.discounted_price!,
-            product.price_currency,
-          ).replace(/(\u202F|\u00a0)/g, ' '),
+          formatPrice(paymentPlan.price!, product.price_currency).replace(/(\u202F|\u00a0)/g, ' ') +
+          formatPrice(paymentPlan.discounted_price!, product.price_currency).replace(
+            /(\u202F|\u00a0)/g,
+            ' ',
+          ),
       );
     }
   });
 
   it('should show the product payment schedule with discounted price', async () => {
     const intl = createIntl({ locale: 'en' });
-    const schedule = PaymentInstallmentFactory().many(2);
+    const paymentPlan = PaymentPlanFactory({ discounted_price: 80 }).one();
+    const schedule = paymentPlan.payment_schedule;
 
     const offering = OfferingFactory({
       product: ProductFactory({
@@ -525,13 +533,21 @@ describe.each([
         [],
       )
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
       );
 
-    render(<Wrapper product={product} offering={offering} isWithdrawable={true} />, {
-      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
-    });
+    render(
+      <Wrapper
+        paymentPlan={paymentPlan}
+        product={product}
+        offering={offering}
+        isWithdrawable={true}
+      />,
+      {
+        queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+      },
+    );
 
     if (product.type === ProductType.CREDENTIAL) {
       await screen.findByRole('heading', { level: 4, name: 'Payment schedule' });
@@ -569,7 +585,8 @@ describe.each([
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
       'Total' +
-        formatPrice(offering!.rules.discounted_price!, product.price_currency).replace(
+        formatPrice(paymentPlan.price!, product.price_currency).replace(/(\u202F|\u00a0)/g, ' ') +
+        formatPrice(paymentPlan.discounted_price!, product.price_currency).replace(
           /(\u202F|\u00a0)/g,
           ' ',
         ),
@@ -578,18 +595,18 @@ describe.each([
 
   it('should show a walkthrough to explain the subscription process', async () => {
     const product = ProductFactory().one();
-    const schedule = PaymentInstallmentFactory().many(2);
+    const paymentPlan = PaymentPlanFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
         [],
       )
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
       );
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -598,18 +615,18 @@ describe.each([
 
   it('should show a checkbox to waive withdrawal right if the product is not withdrawable', async () => {
     const product = ProductFactory().one();
-    const schedule = PaymentInstallmentFactory().many(2);
+    const paymentPlan = PaymentPlanFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
         [],
       )
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
       );
 
-    render(<Wrapper product={product} isWithdrawable={false} />, {
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={false} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -618,18 +635,18 @@ describe.each([
 
   it('should not show a checkbox to waive withdrawal right if the product is withdrawable', async () => {
     const product = ProductFactory().one();
-    const schedule = PaymentInstallmentFactory().many(2);
+    const paymentPlan = PaymentPlanFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
         [],
       )
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
       );
 
-    render(<Wrapper product={product} isWithdrawable={true} />, {
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -638,18 +655,18 @@ describe.each([
 
   it('should show a specific checkbox to waive withdrawal right according to the product type', async () => {
     const product = ProductFactory().one();
-    const schedule = PaymentInstallmentFactory().many(2);
+    const paymentPlan = PaymentPlanFactory().one();
     fetchMock
       .get(
         `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
         [],
       )
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-        schedule,
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
       );
 
-    render(<Wrapper product={product} isWithdrawable={false} />, {
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={false} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
@@ -671,5 +688,36 @@ describe.each([
     expectedMessages.forEach((message) => {
       screen.getByText(message);
     });
+  });
+
+  it('should show an error when submit an invalid voucher', async () => {
+    const user = userEvent.setup({ delay: null });
+    const paymentPlan = PaymentPlanFactory().one();
+    const product = ProductFactory().one();
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT30`,
+        {
+          status: 404,
+          body: {
+            detail: 'No Voucher matches the given query.',
+          },
+        },
+      );
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+    expect(screen.getByLabelText('Voucher code'));
+    await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT30');
+    await user.click(screen.getByRole('button', { name: 'Validate' }));
+    expect(await screen.findByText('The submitted voucher code is not valid.')).toBeInTheDocument();
   });
 });

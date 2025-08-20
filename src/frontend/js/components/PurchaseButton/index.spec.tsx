@@ -113,7 +113,7 @@ describe('PurchaseButton', () => {
     fetchMock
       .get(url, {})
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-schedule/`,
+        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-plan/`,
         [],
       );
 
@@ -157,7 +157,7 @@ describe('PurchaseButton', () => {
     fetchMock
       .get(url, {})
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-schedule/`,
+        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-plan/`,
         [],
       );
     render(
@@ -199,7 +199,7 @@ describe('PurchaseButton', () => {
     fetchMock
       .get(url, {})
       .get(
-        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-schedule/`,
+        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-plan/`,
         [],
       );
     delete product.remaining_order_count;
