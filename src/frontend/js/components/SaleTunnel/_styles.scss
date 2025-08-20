@@ -89,7 +89,7 @@
   }
 
   .step-content {
-    & > .step {
+    .step {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -105,21 +105,19 @@
         gap: 0.25rem;
         width: 90%;
       }
-      & > .payment-block {
+      .payment-block {
         & > div {
-          display: flex;
-          align-items: center;
-          flex-direction: row;
           margin: 1rem 0;
+          flex-direction: row;
         }
       }
-      & > .organism-block {
+      .organism-block {
         width: 100%;
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
         margin-bottom: 1rem;
-        & > .opco-order {
+        .opco-order {
           display: flex;
           flex-direction: row;
           gap: 0.25rem;
@@ -128,7 +126,7 @@
           }
         }
       }
-      & > .recommandation {
+      .recommandation {
         width: 100%;
       }
     }

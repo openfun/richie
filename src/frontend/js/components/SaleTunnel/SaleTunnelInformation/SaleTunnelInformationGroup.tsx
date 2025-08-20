@@ -8,7 +8,7 @@ import { BatchOrder } from 'types/Joanie';
 import * as Yup from 'yup';
 import Form, { CountrySelectField, getLocalizedCunninghamErrorProp } from 'components/Form';
 import { useSaleTunnelContext } from '../GenericSaleTunnel';
-import { useJoanieApi } from 'contexts/JoanieApiContext';
+import API from 'api/joanie';
 
 const messages = defineMessages({
   title: {
@@ -235,8 +235,7 @@ const BatchOrderForm = () => {
 
   const submitBatchOrder = async (data: BatchOrder) => {
     try {
-      const api = useJoanieApi();
-      const response = await api.user.batchOrders.submit(data);
+      const response = await API().user.batchOrders.submit(data);
       console.log('Réponse serveur:', response);
     } catch (err: any) {
       console.error('Erreur serveur:', err);
