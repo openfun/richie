@@ -18,6 +18,7 @@ import {
   Order,
   OrderState,
   Product,
+  BatchOrder,
 } from 'types/Joanie';
 import useProductOrder from 'hooks/useProductOrder';
 import { SaleTunnelSuccess } from 'components/SaleTunnel/SaleTunnelSuccess';
@@ -43,6 +44,8 @@ export interface SaleTunnelContextType {
   // meta
   billingAddress?: Address;
   setBillingAddress: (address?: Address) => void;
+  batchOrder?: BatchOrder;
+  setBatchOrder: (batchOrder?: BatchOrder) => void;
   creditCard?: CreditCard;
   setCreditCard: (creditCard?: CreditCard) => void;
   hasWaivedWithdrawalRight: boolean;
@@ -87,6 +90,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
     productId: props.product.id,
   });
   const [billingAddress, setBillingAddress] = useState<Address>();
+  const [batchOrder, setBatchOrder] = useState<BatchOrder>();
   const [creditCard, setCreditCard] = useState<CreditCard>();
   const [hasWaivedWithdrawalRight, setHasWaivedWithdrawalRight] = useState(false);
   const [step, setStep] = useState<SaleTunnelStep>(SaleTunnelStep.IDLE);
@@ -128,6 +132,8 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       props,
       billingAddress,
       setBillingAddress,
+      batchOrder,
+      setBatchOrder,
       creditCard,
       setCreditCard,
       hasWaivedWithdrawalRight,
@@ -148,7 +154,16 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
         await Promise.all(Array.from(submitCallbacks.values()).map((cb) => cb()));
       },
     }),
-    [props, order, billingAddress, creditCard, step, submitCallbacks, hasWaivedWithdrawalRight],
+    [
+      props,
+      order,
+      billingAddress,
+      batchOrder,
+      creditCard,
+      step,
+      submitCallbacks,
+      hasWaivedWithdrawalRight,
+    ],
   );
 
   return (

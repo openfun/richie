@@ -138,8 +138,7 @@ export const SaleTunnelInformationGroup = () => {
 };
 
 const BatchOrderForm = () => {
-  const [batchOrder, setBatchOrder] = useState<BatchOrder>();
-  const { offering } = useSaleTunnelContext();
+  const { offering, batchOrder, setBatchOrder } = useSaleTunnelContext();
   const validationSchema = Yup.object().shape({
     offering_id: Yup.string().required(),
     company_name: Yup.string().required(),
@@ -234,12 +233,7 @@ const BatchOrderForm = () => {
   ];
 
   const submitBatchOrder = async (data: BatchOrder) => {
-    try {
-      const response = await API().user.batchOrders.submit(data);
-      console.log('Réponse serveur:', response);
-    } catch (err: any) {
-      console.error('Erreur serveur:', err);
-    }
+    setBatchOrder(data);
   };
 
   const renderStepContent = () => {
