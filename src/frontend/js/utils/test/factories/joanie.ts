@@ -484,6 +484,8 @@ export const SaleTunnelContextFactory = factory(
     props: {} as SaleTunnelProps,
     billingAddress: undefined,
     setBillingAddress: noop,
+    batchOrder: undefined,
+    setBatchOrder: noop,
     setCreditCard: noop,
     setHasWaivedWithdrawalRight: noop,
     hasWaivedWithdrawalRight: false,

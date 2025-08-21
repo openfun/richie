@@ -3,11 +3,12 @@ import { Alert, Button, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { useOrders } from 'hooks/useOrders';
-import { OrderCreationPayload } from 'types/Joanie';
+import { BatchOrder, OrderCreationPayload } from 'types/Joanie';
 import { useMatchMediaLg } from 'hooks/useMatchMedia';
 import { SubscriptionErrorMessageId } from 'components/PaymentInterfaces/types';
 import { HttpError } from 'utils/errors/HttpError';
 import { Spinner } from 'components/Spinner';
+import API from 'api/joanie';
 
 const messages = defineMessages({
   subscribe: {
@@ -75,6 +76,7 @@ interface Props {
       'product_id' | 'billing_address' | 'has_waived_withdrawal_right'
     >,
   ) => OrderCreationPayload;
+  buildBatchOrderPayload: (payload: BatchOrder) => BatchOrder;
 }
 
 const SubscriptionButton = ({ buildOrderPayload }: Props) => {
@@ -82,6 +84,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     order,
     creditCard,
     billingAddress,
+    batchOrder,
     hasWaivedWithdrawalRight,
     product,
     nextStep,
@@ -92,7 +95,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<SubscriptionErrorMessageId | string>();
   const isMobile = useMatchMediaLg();
-
+  console.log('batchOrder on sub button', batchOrder);
   const handleError = (
     messageId: SubscriptionErrorMessageId | string = SubscriptionErrorMessageId.ERROR_DEFAULT,
   ) => {
@@ -108,6 +111,12 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_error) {
       setState(ComponentStates.IDLE);
+      return;
+    }
+
+    if (batchOrder) {
+      const response = await API().user.batchOrders.submit(batchOrder);
+      console.log('Réponse serveur:', response);
       return;
     }
 
