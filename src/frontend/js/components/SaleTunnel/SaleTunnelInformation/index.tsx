@@ -78,7 +78,7 @@ const messages = defineMessages({
 });
 
 export const SaleTunnelInformation = () => {
-  const { product } = useSaleTunnelContext();
+  const { product, setBatchOrder } = useSaleTunnelContext();
   const intl = useIntl();
   const options = [
     { label: intl.formatMessage(messages.purchaseTypeOptionSingle), value: 'b2c' },
@@ -100,6 +100,7 @@ export const SaleTunnelInformation = () => {
           clearable={false}
           onChange={(e) => {
             setPurchaseType(e.target.value as string);
+            setBatchOrder(undefined);
           }}
         />
       </div>
