@@ -8,7 +8,6 @@ import { BatchOrder } from 'types/Joanie';
 import * as Yup from 'yup';
 import Form, { CountrySelectField, getLocalizedCunninghamErrorProp } from 'components/Form';
 import { useSaleTunnelContext } from '../GenericSaleTunnel';
-import API from 'api/joanie';
 
 const messages = defineMessages({
   title: {
@@ -96,24 +95,24 @@ const messages = defineMessages({
   role: { id: 'batchOrder.role', defaultMessage: 'Role' },
   email: { id: 'batchOrder.email', defaultMessage: 'Email' },
   phone: { id: 'batchOrder.phone', defaultMessage: 'Phone' },
-  birthDate: { id: 'batchOrder.birthDate', defaultMessage: 'Birth date' },
-  traineeNumber: { id: 'batchOrder.traineeNumber', defaultMessage: 'How many participants ?' },
-  addTrainee: { id: 'batchOrder.addTrainee', defaultMessage: 'Add participant' },
+  contactName: { id: 'batchOrder.contactName', defaultMessage: 'Name of the contact' },
+  contactEmail: { id: 'batchOrder.contactEmail', defaultMessage: 'Email of the contact' },
+  nbSeats: { id: 'batchOrder.nbSeats', defaultMessage: 'How many participants ?' },
   cardPayment: { id: 'batchOrder.cardPayment', defaultMessage: 'Payment by credit card' },
   bankTransfer: { id: 'batchOrder.bankTransfer', defaultMessage: 'Payment by bank transfer' },
   purchaseOrder: { id: 'batchOrder.purchaseOrder', defaultMessage: 'Payment with purchase order' },
   withoutOrderForm: { id: 'batchOrder.withoutOrderForm', defaultMessage: 'Without order form' },
   opco: { id: 'batchOrder.opc', defaultMessage: 'OPCO' },
-  organization: { id: 'batchOrder.organization', defaultMessage: 'Funding organization' },
-  organizationName: { id: 'batchOrder.organizationName', defaultMessage: 'Organization name' },
-  organizationAmount: { id: 'batchOrder.opcoAmount', defaultMessage: 'Amount covered' },
+  fundingEntity: { id: 'batchOrder.fundingEntity', defaultMessage: 'Funding entity' },
+  fundingEntityName: { id: 'batchOrder.fundingEntityName', defaultMessage: 'Entity name' },
+  fundingEntityAmount: { id: 'batchOrder.fundingEntityAmount', defaultMessage: 'Amount covered' },
   recommandation: {
     id: 'batchOrder.recommandation',
     defaultMessage: 'This course was recommended to me by',
   },
-  participatingUniversities: {
-    id: 'batchOrder.participatingUniversities',
-    defaultMessage: 'Participating universities',
+  participatingOrganisations: {
+    id: 'batchOrder.participatingOrganisations',
+    defaultMessage: 'Participating organisations',
   },
   formError: {
     id: 'batchOrder.formError',
@@ -143,71 +142,63 @@ const BatchOrderForm = () => {
     offering_id: Yup.string().required(),
     company_name: Yup.string().required(),
     identification_number: Yup.string(),
-    vat_number: Yup.string(),
+    vat_registration: Yup.string(),
     address: Yup.string().required(),
     postcode: Yup.string().required(),
     city: Yup.string().required(),
     country: Yup.string().required(),
-    admin: Yup.object().shape({
-      last_name: Yup.string().required(),
-      first_name: Yup.string().required(),
-      role: Yup.string().required(),
-      mail: Yup.string().email().required(),
-      phone: Yup.string().required(),
+    administrative_last_name: Yup.string().required(),
+    administrative_first_name: Yup.string().required(),
+    administrative_profession: Yup.string().required(),
+    administrative_email: Yup.string().required(),
+    administrative_telephone: Yup.string().required(),
+    billing: Yup.object().shape({
+      company_name: Yup.string(),
+      identification_number: Yup.string(),
+      contact_name: Yup.string(),
+      contact_email: Yup.string().email(),
+      address: Yup.string(),
+      postcode: Yup.string(),
+      city: Yup.string(),
+      country: Yup.string(),
     }),
-    billing: Yup.object()
-      .shape({
-        company_name: Yup.string(),
-        identification_number: Yup.string(),
-        vat_number: Yup.string(),
-        address: Yup.string(),
-        postcode: Yup.string(),
-        city: Yup.string(),
-        country: Yup.string(),
-        contact_name: Yup.string(),
-        contact_mail: Yup.string().email(),
-      })
-      .optional(),
     nb_seats: Yup.number().required().min(1),
     payment_method: Yup.string().required(),
-    organism: Yup.string().required(),
-    organism_amount: Yup.number(),
-    recommandation: Yup.string(),
+    funding_entity: Yup.string(),
+    funding_amount: Yup.number(),
+    organization_id: Yup.string(),
   });
 
-  const defaultValues = {
-    offering_id: offering?.id,
+  const defaultValues: BatchOrder = {
+    offering_id: offering?.id ?? '',
     company_name: 'Company',
-    identification_number: 'ID number',
-    vat_number: 'Vat number',
+    identification_number: 'ID-123456',
+    vat_registration: 'FR123456789',
     address: '61 Bis rue de la Glacière',
-    postcode: '76012',
+    postcode: '75012',
     city: 'Paris',
-    country: 'DZ',
-    admin: {
-      last_name: 'Admin',
-      first_name: 'Admin',
-      role: 'Admin',
-      mail: 'admin@mail.fr',
-      phone: '0921986354',
-    },
+    country: 'FR',
+    administrative_last_name: 'Dupont',
+    administrative_first_name: 'Jean',
+    administrative_profession: 'Responsable administratif',
+    administrative_email: 'jean.dupont@mail.fr',
+    administrative_telephone: '+33123456789',
     billing: {
-      company_name: '',
-      identification_number: '',
-      vat_number: '',
-      address: '',
-      postcode: '',
-      city: '',
-      country: '',
-      contact_name: '',
-      contact_mail: '',
+      company_name: 'Company Billing',
+      identification_number: 'BILL-98765',
+      contact_name: 'Marie Curie',
+      contact_email: 'marie.curie@mail.fr',
+      address: '10 Rue de la Facturation',
+      postcode: '69000',
+      city: 'Lyon',
+      country: 'FR',
     },
     nb_seats: 100,
     payment_method: 'card_payment',
-    organism: 'opco',
-    organism_amount: 0,
-    recommandation: '',
-  } as BatchOrder;
+    funding_entity: 'opco',
+    funding_amount: 0,
+    organization_id: 'Par un partenaire',
+  };
 
   const form = useForm<BatchOrder>({
     defaultValues: batchOrder || defaultValues,
@@ -258,7 +249,7 @@ const BatchOrderForm = () => {
           />
           <Input
             className="field"
-            {...register('vat_number')}
+            {...register('vat_registration')}
             label={intl.formatMessage(messages.vatNumber)}
           />
           <Input
@@ -299,49 +290,65 @@ const BatchOrderForm = () => {
           <FormattedMessage {...messages.stepAdminTitle} />
           <Input
             className="field"
-            {...register('admin.last_name')}
+            {...register('administrative_last_name')}
             label={intl.formatMessage(messages.lastName)}
             required
-            state={formState.errors.admin?.last_name?.message ? 'error' : 'default'}
+            state={formState.errors.administrative_last_name?.message ? 'error' : 'default'}
             text={
-              getLocalizedCunninghamErrorProp(intl, formState.errors.admin?.last_name?.message).text
+              getLocalizedCunninghamErrorProp(
+                intl,
+                formState.errors.administrative_last_name?.message,
+              ).text
             }
           />
           <Input
             className="field"
-            {...register('admin.first_name')}
+            {...register('administrative_first_name')}
             label={intl.formatMessage(messages.firstName)}
             required
-            state={formState.errors.admin?.first_name?.message ? 'error' : 'default'}
+            state={formState.errors.administrative_first_name?.message ? 'error' : 'default'}
             text={
-              getLocalizedCunninghamErrorProp(intl, formState.errors.admin?.first_name?.message)
+              getLocalizedCunninghamErrorProp(
+                intl,
+                formState.errors.administrative_first_name?.message,
+              ).text
+            }
+          />
+          <Input
+            className="field"
+            {...register('administrative_profession')}
+            label={intl.formatMessage(messages.role)}
+            required
+            state={formState.errors.administrative_profession?.message ? 'error' : 'default'}
+            text={
+              getLocalizedCunninghamErrorProp(
+                intl,
+                formState.errors.administrative_profession?.message,
+              ).text
+            }
+          />
+          <Input
+            className="field"
+            {...register('administrative_email')}
+            label={intl.formatMessage(messages.email)}
+            required
+            state={formState.errors.administrative_email?.message ? 'error' : 'default'}
+            text={
+              getLocalizedCunninghamErrorProp(intl, formState.errors.administrative_email?.message)
                 .text
             }
           />
           <Input
             className="field"
-            {...register('admin.role')}
-            label={intl.formatMessage(messages.role)}
-            required
-            state={formState.errors.admin?.role?.message ? 'error' : 'default'}
-            text={getLocalizedCunninghamErrorProp(intl, formState.errors.admin?.role?.message).text}
-          />
-          <Input
-            className="field"
-            {...register('admin.mail')}
-            label={intl.formatMessage(messages.email)}
-            required
-            state={formState.errors.admin?.mail?.message ? 'error' : 'default'}
-            text={getLocalizedCunninghamErrorProp(intl, formState.errors.admin?.mail?.message).text}
-          />
-          <Input
-            className="field"
-            {...register('admin.phone')}
+            {...register('administrative_telephone')}
             label={intl.formatMessage(messages.phone)}
             required
-            state={formState.errors.admin?.phone?.message ? 'error' : 'default'}
+            state={formState.errors.administrative_telephone?.message ? 'error' : 'default'}
             text={
-              getLocalizedCunninghamErrorProp(intl, formState.errors.admin?.phone?.message).text
+              getLocalizedCunninghamErrorProp(
+                intl,
+                formState.errors.administrative_telephone?.message,
+              ).text
             }
           />
         </div>
@@ -382,21 +389,21 @@ const BatchOrderForm = () => {
           <Input
             className="field"
             {...register('billing.contact_name')}
-            label={intl.formatMessage(messages.lastName)}
+            label={intl.formatMessage(messages.contactName)}
           />
           <Input
             className="field"
-            {...register('billing.contact_mail')}
-            label={intl.formatMessage(messages.email)}
+            {...register('billing.contact_email')}
+            label={intl.formatMessage(messages.contactEmail)}
           />
         </div>
-        <div className="step student" hidden={activeStep !== 3}>
+        <div className="step seats" hidden={activeStep !== 3}>
           <FormattedMessage {...messages.stepParticipantsTitle} />
           <Input
             className="field"
             type="number"
             {...register('nb_seats')}
-            label={intl.formatMessage(messages.traineeNumber)}
+            label={intl.formatMessage(messages.nbSeats)}
             required
             state={formState.errors.nb_seats?.message ? 'error' : 'default'}
             text={getLocalizedCunninghamErrorProp(intl, formState.errors.nb_seats?.message).text}
@@ -436,31 +443,32 @@ const BatchOrderForm = () => {
               }
             />
           </RadioGroup>
-          <FormattedMessage {...messages.organization} />
+          <FormattedMessage {...messages.fundingEntity} />
           <div className="organism-block">
             <Input
-              {...register('organism')}
-              label={intl.formatMessage(messages.organizationName)}
+              {...register('funding_entity')}
+              label={intl.formatMessage(messages.fundingEntityName)}
               required
-              state={formState.errors.organism?.message ? 'error' : 'default'}
-              text={getLocalizedCunninghamErrorProp(intl, formState.errors.organism?.message).text}
+              state={formState.errors.funding_entity?.message ? 'error' : 'default'}
+              text={
+                getLocalizedCunninghamErrorProp(intl, formState.errors.funding_entity?.message).text
+              }
             />
             <Input
-              {...register('organism_amount')}
+              {...register('funding_amount')}
               type="number"
-              label={intl.formatMessage(messages.organizationAmount)}
+              label={intl.formatMessage(messages.fundingEntityAmount)}
               required
-              state={formState.errors.organism_amount?.message ? 'error' : 'default'}
+              state={formState.errors.funding_amount?.message ? 'error' : 'default'}
               text={
-                getLocalizedCunninghamErrorProp(intl, formState.errors.organism_amount?.message)
-                  .text
+                getLocalizedCunninghamErrorProp(intl, formState.errors.funding_amount?.message).text
               }
             />
           </div>
           <FormattedMessage {...messages.recommandation} />
           <Select
-            {...register('recommandation')}
-            label={intl.formatMessage(messages.participatingUniversities)}
+            {...register('organization_id')}
+            label={intl.formatMessage(messages.participatingOrganisations)}
             clearable={false}
             options={[
               { label: 'Rennes 1', value: 'rennes1' },

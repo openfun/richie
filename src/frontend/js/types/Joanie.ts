@@ -451,42 +451,37 @@ export interface Address {
 
 // BatchOrder
 
-export interface Admin {
-  last_name: string;
-  first_name: string;
-  role: string;
-  mail: string;
-  phone: string;
-}
-
 export interface Billing {
   company_name?: string;
   identification_number?: string;
-  vat_number?: string;
+  contact_name?: string;
+  contact_email?: string;
   address?: string;
   postcode?: string;
   city?: string;
   country?: string;
-  contact_name?: string;
-  contact_mail?: string;
 }
 
 export interface BatchOrder {
   offering_id: string;
   company_name: string;
   identification_number?: string;
-  vat_number?: string;
+  vat_registration?: string;
   address: string;
   postcode: string;
   city: string;
   country: string;
-  admin: Admin;
-  billing?: Billing;
+  administrative_last_name: string;
+  administrative_first_name: string;
+  administrative_profession: string;
+  administrative_email: string;
+  administrative_telephone: string;
+  billing: Billing;
   nb_seats: number;
   payment_method: string;
-  organism: string;
-  organism_amount?: number;
-  recommandation?: string;
+  funding_entity?: string;
+  funding_amount?:number;
+  organization_id?: string;
 }
 
 // Wishlist
