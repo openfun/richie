@@ -57,6 +57,7 @@ describe('AddressSelector', () => {
           props: {} as SaleTunnelProps,
           billingAddress,
           setBillingAddress,
+          setBatchOrder: jest.fn(),
           setCreditCard: jest.fn(),
           step: SaleTunnelStep.IDLE,
           registerSubmitCallback: jest.fn(),
