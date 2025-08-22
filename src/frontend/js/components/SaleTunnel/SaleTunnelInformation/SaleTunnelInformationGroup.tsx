@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, StepLabel, Stepper } from '@mui/material';
 import { Button, Input, Radio, RadioGroup, Select } from '@openfun/cunningham-react';
 import { useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { BatchOrder } from 'types/Joanie';
 import * as Yup from 'yup';
@@ -206,7 +206,16 @@ const BatchOrderForm = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const { handleSubmit, reset, register, formState } = form;
+  const { reset, register, formState, watch } = form;
+
+  const values = watch();
+
+  useEffect(() => {
+    if (JSON.stringify(values) !== JSON.stringify(batchOrder)) {
+      console.log('Correct set batchOrder');
+      setBatchOrder(values);
+    }
+  }, [values, formState.isValid, batchOrder, setBatchOrder]);
 
   useEffect(() => {
     reset(batchOrder ?? defaultValues);
@@ -222,10 +231,6 @@ const BatchOrderForm = () => {
     intl.formatMessage(messages.stepParticipants),
     intl.formatMessage(messages.stepFinancing),
   ];
-
-  const submitBatchOrder = async (data: BatchOrder) => {
-    setBatchOrder(data);
-  };
 
   const renderStepContent = () => {
     return (
@@ -483,7 +488,7 @@ const BatchOrderForm = () => {
 
   return (
     <FormProvider {...form}>
-      <Form onSubmit={handleSubmit(submitBatchOrder)} noValidate>
+      <Form noValidate>
         <Stepper activeStep={activeStep} alternativeLabel className="stepper">
           {steps.map((label, index) => (
             <Step key={label} onClick={() => setActiveStep(index)} style={{ cursor: 'pointer' }}>
@@ -492,7 +497,6 @@ const BatchOrderForm = () => {
           ))}
         </Stepper>
         {renderStepContent()}
-        <Button type="submit">Validate</Button>
       </Form>
     </FormProvider>
   );

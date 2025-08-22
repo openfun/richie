@@ -94,7 +94,6 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<SubscriptionErrorMessageId | string>();
   const isMobile = useMatchMediaLg();
-  console.log('batchOrder on sub button', batchOrder);
   const handleError = (
     messageId: SubscriptionErrorMessageId | string = SubscriptionErrorMessageId.ERROR_DEFAULT,
   ) => {
