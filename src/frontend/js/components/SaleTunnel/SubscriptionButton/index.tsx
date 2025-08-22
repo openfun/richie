@@ -76,7 +76,6 @@ interface Props {
       'product_id' | 'billing_address' | 'has_waived_withdrawal_right'
     >,
   ) => OrderCreationPayload;
-  buildBatchOrderPayload?: (payload: BatchOrder) => BatchOrder;
 }
 
 const SubscriptionButton = ({ buildOrderPayload }: Props) => {
