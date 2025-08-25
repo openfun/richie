@@ -3,12 +3,12 @@ import { Alert, Button, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { useOrders } from 'hooks/useOrders';
-import { BatchOrder, OrderCreationPayload } from 'types/Joanie';
+import { useBatchOrder } from 'hooks/useBatchOrders/useBatchOrder';
+import { OrderCreationPayload } from 'types/Joanie';
 import { useMatchMediaLg } from 'hooks/useMatchMedia';
 import { SubscriptionErrorMessageId } from 'components/PaymentInterfaces/types';
 import { HttpError } from 'utils/errors/HttpError';
 import { Spinner } from 'components/Spinner';
-import API from 'api/joanie';
 
 const messages = defineMessages({
   subscribe: {
@@ -91,6 +91,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     props: saleTunnelProps,
   } = useSaleTunnelContext();
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
+  const { methods: batchOrderMethods } = useBatchOrder();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<SubscriptionErrorMessageId | string>();
   const isMobile = useMatchMediaLg();
@@ -109,12 +110,6 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_error) {
       setState(ComponentStates.IDLE);
-      return;
-    }
-
-    if (batchOrder) {
-      const response = await API().user.batchOrders.submit(batchOrder);
-      console.log('Réponse serveur:', response);
       return;
     }
 
@@ -142,6 +137,16 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
             handleError(SubscriptionErrorMessageId.ERROR_FULL_PRODUCT);
           }
         }
+        handleError();
+      },
+    });
+  };
+
+  const createBatchOrder = async () => {
+    if (!batchOrder) return;
+    setState(ComponentStates.LOADING);
+    batchOrderMethods.create(batchOrder, {
+      onError: async () => {
         handleError();
       },
     });
@@ -183,7 +188,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
         )}
       </div>
       <Button
-        onClick={createOrder}
+        onClick={batchOrder ? createBatchOrder : createOrder}
         fullWidth={isMobile}
         disabled={state === ComponentStates.LOADING}
         {...(state === ComponentStates.ERROR && {

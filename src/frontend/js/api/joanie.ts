@@ -103,7 +103,7 @@ export const getRoutes = () => {
         set_payment_method: `${baseUrl}/orders/:id/payment-method/`,
       },
       batchOrders: {
-        submit: `${baseUrl}/batch-orders/`
+        create: `${baseUrl}/batch-orders/`
       },
       certificates: {
         download: `${baseUrl}/certificates/:id/download/`,
@@ -308,8 +308,8 @@ const API = (): Joanie.API => {
           }).then(checkStatus),
       },
       batchOrders: {
-        submit: async (payload) =>
-          fetchWithJWT(ROUTES.user.batchOrders.submit, {
+        create: async (payload) =>
+          fetchWithJWT(ROUTES.user.batchOrders.create, {
             method: 'POST',
             body: JSON.stringify(payload),
           }).then(checkStatus),
