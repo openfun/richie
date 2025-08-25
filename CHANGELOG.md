@@ -36,6 +36,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Prevent indexation failure when any thumbnail generation fails
 - Display discounted price for the purchase of a certificate product
   from student dashboard in sale tunnel informations
+- Clear the page and search caches when syncing a course run
 
 ## [3.1.2] - 2025-05-22
 

@@ -6,6 +6,7 @@ Tests for CourseRun API endpoints in the courses app.
 from unittest import mock
 
 from django.conf import settings
+from django.core.cache import caches
 from django.test import override_settings
 
 from cms.constants import PUBLISHER_STATE_DEFAULT, PUBLISHER_STATE_DIRTY
@@ -296,12 +297,16 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         mock_signal.reset_mock()
 
-        response = self.client.post(
-            "/api/v1.0/course-runs-sync",
-            data,
-            content_type="application/json",
-            HTTP_AUTHORIZATION=self.authorize(data),
-        )
+        with (
+            mock.patch.object(caches["search"], "clear") as mock_search_clear,
+            mock.patch.object(Page, "clear_cache") as mock_page_clear,
+        ):
+            response = self.client.post(
+                "/api/v1.0/course-runs-sync",
+                data,
+                content_type="application/json",
+                HTTP_AUTHORIZATION=self.authorize(data),
+            )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
@@ -324,6 +329,8 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         mock_signal.assert_called_once_with(
             sender=Page, instance=course.extended_object, language=None
         )
+        mock_page_clear.assert_called_once()
+        mock_search_clear.assert_called_once()
 
     @override_settings(
         RICHIE_DEFAULT_COURSE_RUN_SYNC_MODE="sync_to_draft", TIME_ZONE="UTC"
@@ -618,13 +625,16 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "certificate_discounted_price": "27.98",
             "certificate_discount": "-30%",
         }
-
-        response = self.client.post(
-            "/api/v1.0/course-runs-sync",
-            data,
-            content_type="application/json",
-            HTTP_AUTHORIZATION=self.authorize(data),
-        )
+        with (
+            mock.patch.object(caches["search"], "clear") as mock_search_clear,
+            mock.patch.object(Page, "clear_cache") as mock_page_clear,
+        ):
+            response = self.client.post(
+                "/api/v1.0/course-runs-sync",
+                data,
+                content_type="application/json",
+                HTTP_AUTHORIZATION=self.authorize(data),
+            )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
@@ -647,6 +657,8 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         mock_signal.assert_called_once_with(
             sender=Page, instance=course.extended_object, language=None
         )
+        mock_page_clear.assert_called_once()
+        mock_search_clear.assert_called_once()
 
     @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_existing_draft_sync_to_public(self, mock_signal):
@@ -751,12 +763,16 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "certificate_discount": "-30%",
         }
 
-        response = self.client.post(
-            "/api/v1.0/course-runs-sync",
-            data,
-            content_type="application/json",
-            HTTP_AUTHORIZATION=self.authorize(data),
-        )
+        with (
+            mock.patch.object(caches["search"], "clear") as mock_search_clear,
+            mock.patch.object(Page, "clear_cache") as mock_page_clear,
+        ):
+            response = self.client.post(
+                "/api/v1.0/course-runs-sync",
+                data,
+                content_type="application/json",
+                HTTP_AUTHORIZATION=self.authorize(data),
+            )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
@@ -779,6 +795,8 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         mock_signal.assert_called_once_with(
             sender=Page, instance=course.extended_object, language=None
         )
+        mock_page_clear.assert_called_once()
+        mock_search_clear.assert_called_once()
 
     @override_settings(TIME_ZONE="UTC")
     def test_api_course_run_sync_existing_published_sync_to_draft(self, mock_signal):
@@ -1462,12 +1480,16 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "catalog_visibility": "course_and_search",
         }
 
-        response = self.client.post(
-            "/api/v1.0/course-runs-sync",
-            data,
-            content_type="application/json",
-            HTTP_AUTHORIZATION=self.authorize(data),
-        )
+        with (
+            mock.patch.object(caches["search"], "clear") as mock_search_clear,
+            mock.patch.object(Page, "clear_cache") as mock_page_clear,
+        ):
+            response = self.client.post(
+                "/api/v1.0/course-runs-sync",
+                data,
+                content_type="application/json",
+                HTTP_AUTHORIZATION=self.authorize(data),
+            )
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"success": True})
@@ -1498,3 +1520,5 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         mock_signal.assert_called_once_with(
             sender=Page, instance=course.extended_object, language=None
         )
+        mock_page_clear.assert_called_once()
+        mock_search_clear.assert_called_once()
