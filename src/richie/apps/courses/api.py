@@ -3,6 +3,7 @@ API endpoints for the courses app.
 """
 
 from django.conf import settings
+from django.core.cache import caches
 from django.db.models import Q
 
 from cms import signals as cms_signals
@@ -147,6 +148,10 @@ def sync_course_run(data):
                         instance=course_run.direct_course.extended_object,
                         language=None,
                     )
+                    # We also need to clear the cache of the public course page
+                    # and the search index (catalog)
+                    course_run.direct_course.extended_object.clear_cache()
+                    caches["search"].clear()
             else:
                 course_run.refresh_from_db()
                 course_run.mark_course_dirty()
@@ -196,6 +201,10 @@ def sync_course_run(data):
             cms_signals.post_publish.send(
                 sender=Page, instance=course.extended_object, language=None
             )
+            # We also need to clear the cache of the public course page
+            # and the search index (catalog)
+            course.extended_object.clear_cache()
+            caches["search"].clear()
     else:
         # Save the draft course run marking the course page dirty
         draft_course_run.save()
