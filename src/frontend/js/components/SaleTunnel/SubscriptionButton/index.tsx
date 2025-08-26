@@ -84,6 +84,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     creditCard,
     billingAddress,
     batchOrder,
+    batchOrderFormMethods,
     hasWaivedWithdrawalRight,
     product,
     nextStep,
@@ -144,6 +145,11 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
 
   const createBatchOrder = async () => {
     if (!batchOrder) return;
+    const isFormValid = await batchOrderFormMethods?.trigger();
+    if (!isFormValid) {
+      handleError();
+      return;
+    }
     setState(ComponentStates.LOADING);
     batchOrderMethods.create(batchOrder, {
       onError: async () => {

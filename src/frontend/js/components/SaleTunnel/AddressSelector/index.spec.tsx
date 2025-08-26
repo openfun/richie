@@ -58,6 +58,7 @@ describe('AddressSelector', () => {
           billingAddress,
           setBillingAddress,
           setBatchOrder: jest.fn(),
+          setBatchOrderFormMethods: jest.fn(),
           setCreditCard: jest.fn(),
           step: SaleTunnelStep.IDLE,
           registerSubmitCallback: jest.fn(),

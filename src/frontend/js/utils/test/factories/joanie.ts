@@ -486,6 +486,8 @@ export const SaleTunnelContextFactory = factory(
     setBillingAddress: noop,
     batchOrder: undefined,
     setBatchOrder: noop,
+    batchOrderFormMethods: undefined,
+    setBatchOrderFormMethods: noop,
     setCreditCard: noop,
     setHasWaivedWithdrawalRight: noop,
     hasWaivedWithdrawalRight: false,

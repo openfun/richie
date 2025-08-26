@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, StepLabel, Stepper } from '@mui/material';
-import { Button, Input, Radio, RadioGroup, Select } from '@openfun/cunningham-react';
+import { Input, Radio, RadioGroup, Select } from '@openfun/cunningham-react';
 import { useEffect, useState } from 'react';
-import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { BatchOrder } from 'types/Joanie';
 import * as Yup from 'yup';
@@ -137,7 +137,7 @@ export const SaleTunnelInformationGroup = () => {
 };
 
 const BatchOrderForm = () => {
-  const { offering, batchOrder, setBatchOrder } = useSaleTunnelContext();
+  const { offering, batchOrder, setBatchOrder, setBatchOrderFormMethods } = useSaleTunnelContext();
   const validationSchema = Yup.object().shape({
     offering_id: Yup.string().required(),
     company_name: Yup.string().required(),
@@ -220,6 +220,10 @@ const BatchOrderForm = () => {
   useEffect(() => {
     reset(batchOrder ?? defaultValues);
   }, [batchOrder]);
+
+  useEffect(() => {
+    setBatchOrderFormMethods(form);
+  }, [form]);
 
   const [activeStep, setActiveStep] = useState(0);
   const intl = useIntl();

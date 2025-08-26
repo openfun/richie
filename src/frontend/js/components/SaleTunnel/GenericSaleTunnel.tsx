@@ -29,6 +29,7 @@ import { SaleTunnelInformation } from 'components/SaleTunnel/SaleTunnelInformati
 import { useEnrollments } from 'hooks/useEnrollments';
 import SaleTunnelSavePaymentMethod from 'components/SaleTunnel/SaleTunnelSavePaymentMethod';
 import { LearnerContractFrame } from 'components/ContractFrame';
+import { UseFormReturn } from 'react-hook-form';
 
 export interface SaleTunnelContextType {
   props: SaleTunnelProps;
@@ -46,6 +47,8 @@ export interface SaleTunnelContextType {
   setBillingAddress: (address?: Address) => void;
   batchOrder?: BatchOrder;
   setBatchOrder: (batchOrder?: BatchOrder) => void;
+  batchOrderFormMethods?: UseFormReturn<BatchOrder>;
+  setBatchOrderFormMethods: (methods?: UseFormReturn<BatchOrder>) => void;
   creditCard?: CreditCard;
   setCreditCard: (creditCard?: CreditCard) => void;
   hasWaivedWithdrawalRight: boolean;
@@ -91,6 +94,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
   });
   const [billingAddress, setBillingAddress] = useState<Address>();
   const [batchOrder, setBatchOrder] = useState<BatchOrder>();
+  const [batchOrderFormMethods, setBatchOrderFormMethods] = useState<UseFormReturn<BatchOrder>>();
   const [creditCard, setCreditCard] = useState<CreditCard>();
   const [hasWaivedWithdrawalRight, setHasWaivedWithdrawalRight] = useState(false);
   const [step, setStep] = useState<SaleTunnelStep>(SaleTunnelStep.IDLE);
@@ -134,6 +138,8 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       setBillingAddress,
       batchOrder,
       setBatchOrder,
+      batchOrderFormMethods,
+      setBatchOrderFormMethods,
       creditCard,
       setCreditCard,
       hasWaivedWithdrawalRight,
@@ -159,6 +165,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       order,
       billingAddress,
       batchOrder,
+      batchOrderFormMethods,
       creditCard,
       step,
       submitCallbacks,
