@@ -9,6 +9,7 @@ export enum SubscriptionErrorMessageId {
   ERROR_DEFAULT = 'errorDefault',
   ERROR_FULL_PRODUCT = 'errorFullProduct',
   ERROR_WITHDRAWAL_RIGHT = 'errorWithdrawalRight',
+  ERROR_BATCH_ORDER_FORM_INVALID = 'batchOrderFormInvalid',
 }
 
 export enum PaymentProviders {

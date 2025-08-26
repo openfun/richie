@@ -61,6 +61,11 @@ const messages = defineMessages({
     description: 'Label for screen reader when an order creation is in progress.',
     id: 'components.SubscriptionButton.orderCreationInProgress',
   },
+  batchOrderFormInvalid: {
+    id: 'components.SubscriptionButton.batchOrderFormInvalid',
+    defaultMessage: 'Some required fields are missing in the form.',
+    description: 'Some required fields are missing in the form.',
+  },
 });
 
 enum ComponentStates {
@@ -147,13 +152,23 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     if (!batchOrder) return;
     const isFormValid = await batchOrderFormMethods?.trigger();
     if (!isFormValid) {
-      handleError();
+      handleError(SubscriptionErrorMessageId.ERROR_BATCH_ORDER_FORM_INVALID);
+      return;
+    }
+    try {
+      await runSubmitCallbacks();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
+      setState(ComponentStates.IDLE);
       return;
     }
     setState(ComponentStates.LOADING);
     batchOrderMethods.create(batchOrder, {
       onError: async () => {
         handleError();
+      },
+      onSuccess: async () => {
+        nextStep();
       },
     });
   };
