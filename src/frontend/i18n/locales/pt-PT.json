@@ -227,6 +227,18 @@
     "description": "Course run languages",
     "message": "Disponível em {languages}"
   },
+  "components.CourseProductItem.discount_rate": {
+    "description": "Discount rate information",
+    "message": "-{rate}%"
+  },
+  "components.CourseProductItem.discounted_price": {
+    "description": "Label for the discounted price of a product",
+    "message": "Preço com desconto:"
+  },
+  "components.CourseProductItem.from": {
+    "description": "Discount start date information",
+    "message": "de {from}"
+  },
   "components.CourseProductItem.fromTo": {
     "description": "Course run date range",
     "message": "De {from} {to, select, undefined {} other {para {to}}}"
@@ -243,9 +255,17 @@
     "description": "Message displayed when no seats are available for the product",
     "message": "Não existem vagas disponíveis por agora. Pedimos desculpa"
   },
+  "components.CourseProductItem.original_price": {
+    "description": "Label for the original price of a product",
+    "message": "Preço original:"
+  },
   "components.CourseProductItem.purchased": {
     "description": "Message displayed when authenticated user owned the product",
     "message": "Comprado"
+  },
+  "components.CourseProductItem.to": {
+    "description": "Discount end date information",
+    "message": "para {to}"
   },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
@@ -1927,8 +1947,8 @@
     "description": "Sub title of the dashboard sidebar",
     "message": "Está no seu painel de controlo do professor"
   },
-  "components.TeacherDashboardTraining.errorNoCourseProductRelation": {
-    "description": "Message displayed when requested course product relation is not found",
+  "components.TeacherDashboardTraining.errorNoOffering": {
+    "description": "Message displayed when requested offering is not found",
     "message": "Este produto não existe"
   },
   "components.TeacherDashboardTrainingLoader.loading": {
@@ -2047,14 +2067,6 @@
     "description": "Error message shown to the user when orders fetch request fails.",
     "message": "Ocorreu um erro durante a pesquisa de encomendas. Por favor, tente novamente mais tarde."
   },
-  "hooks.useCourseProductRelations.errorGet": {
-    "description": "Error message shown to the user when course product relation fetch request fails.",
-    "message": "Ocorreu um erro durante o carregamento das formações. Por favor, tente mais tarde."
-  },
-  "hooks.useCourseProductRelations.errorNotFound": {
-    "description": "Error message shown to the user when no course product relation matches.",
-    "message": "Não foi possível encontrar a formação."
-  },
   "hooks.useCourseProductUnion.errorGet": {
     "description": "Error message shown to the user when trainings fetch request fails.",
     "message": "Ocorreu um erro durante o processamento de formações. Por favor, tente mais tarde."
@@ -2146,6 +2158,14 @@
   "hooks.useJoanieUserProfile.errorNotFound": {
     "description": "Error message shown to the user when it isn't logged.",
     "message": "Não tem sessão iniciada."
+  },
+  "hooks.useOfferings.errorGet": {
+    "description": "Error message shown to the user when offering fetch request fails.",
+    "message": "Ocorreu um erro ao procurar formações. Por favor, tente novamente mais tarde."
+  },
+  "hooks.useOfferings.errorNotFound": {
+    "description": "Error message shown to the user when no offering matches.",
+    "message": "Não consigo encontrar a formação."
   },
   "hooks.useOpenEdxProfile.errorGet": {
     "description": "Error message shown to the user when openEdx profile fetch request fails.",

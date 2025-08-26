@@ -227,6 +227,18 @@
     "description": "Course run languages",
     "message": "Available in {languages}"
   },
+  "components.CourseProductItem.discount_rate": {
+    "description": "Discount rate information",
+    "message": "-{rate}%"
+  },
+  "components.CourseProductItem.discounted_price": {
+    "description": "Label for the discounted price of a product",
+    "message": "Discounted price:"
+  },
+  "components.CourseProductItem.from": {
+    "description": "Discount start date information",
+    "message": "from {from}"
+  },
   "components.CourseProductItem.fromTo": {
     "description": "Course run date range",
     "message": "From {from} {to, select, undefined {} other {to {to}}}"
@@ -243,9 +255,17 @@
     "description": "Message displayed when no seats are available for the product",
     "message": "Sorry, no seats available for now"
   },
+  "components.CourseProductItem.original_price": {
+    "description": "Label for the original price of a product",
+    "message": "Original price:"
+  },
   "components.CourseProductItem.purchased": {
     "description": "Message displayed when authenticated user owned the product",
     "message": "Purchased"
+  },
+  "components.CourseProductItem.to": {
+    "description": "Discount end date information",
+    "message": "to {to}"
   },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
@@ -1927,8 +1947,8 @@
     "description": "Sub title of the dashboard sidebar",
     "message": "You are on your teacher dashboard"
   },
-  "components.TeacherDashboardTraining.errorNoCourseProductRelation": {
-    "description": "Message displayed when requested course product relation is not found",
+  "components.TeacherDashboardTraining.errorNoOffering": {
+    "description": "Message displayed when requested offering is not found",
     "message": "This product doesn't exist"
   },
   "components.TeacherDashboardTrainingLoader.loading": {
@@ -2047,14 +2067,6 @@
     "description": "Error message shown to the user when orders fetch request fails.",
     "message": "An error occurred while fetching orders. Please retry later."
   },
-  "hooks.useCourseProductRelations.errorGet": {
-    "description": "Error message shown to the user when course product relation fetch request fails.",
-    "message": "An error occurred while fetching trainings. Please retry later."
-  },
-  "hooks.useCourseProductRelations.errorNotFound": {
-    "description": "Error message shown to the user when no course product relation matches.",
-    "message": "Cannot find the training."
-  },
   "hooks.useCourseProductUnion.errorGet": {
     "description": "Error message shown to the user when trainings fetch request fails.",
     "message": "An error occurred while fetching trainings. Please retry later."
@@ -2146,6 +2158,14 @@
   "hooks.useJoanieUserProfile.errorNotFound": {
     "description": "Error message shown to the user when it isn't logged.",
     "message": "You aren't logged in."
+  },
+  "hooks.useOfferings.errorGet": {
+    "description": "Error message shown to the user when offering fetch request fails.",
+    "message": "An error occurred while fetching trainings. Please retry later."
+  },
+  "hooks.useOfferings.errorNotFound": {
+    "description": "Error message shown to the user when no offering matches.",
+    "message": "Cannot find the training."
   },
   "hooks.useOpenEdxProfile.errorGet": {
     "description": "Error message shown to the user when openEdx profile fetch request fails.",
