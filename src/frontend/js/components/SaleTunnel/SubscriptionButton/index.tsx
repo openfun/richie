@@ -3,7 +3,7 @@ import { Alert, Button, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { useOrders } from 'hooks/useOrders';
-import { useBatchOrder } from 'hooks/useBatchOrders/useBatchOrder';
+import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
 import { OrderCreationPayload } from 'types/Joanie';
 import { useMatchMediaLg } from 'hooks/useMatchMedia';
 import { SubscriptionErrorMessageId } from 'components/PaymentInterfaces/types';
