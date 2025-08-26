@@ -227,6 +227,18 @@
     "description": "Course run languages",
     "message": "Disponible en {languages}"
   },
+  "components.CourseProductItem.discount_rate": {
+    "description": "Discount rate information",
+    "message": "-{rate}%"
+  },
+  "components.CourseProductItem.discounted_price": {
+    "description": "Label for the discounted price of a product",
+    "message": "Prix réduit :"
+  },
+  "components.CourseProductItem.from": {
+    "description": "Discount start date information",
+    "message": "à partir du {from}"
+  },
   "components.CourseProductItem.fromTo": {
     "description": "Course run date range",
     "message": "À partir du {from} {to, select, undefined {} other {jusqu'au {to}}}"
@@ -237,15 +249,23 @@
   },
   "components.CourseProductItem.nbSeatsAvailable": {
     "description": "Message displayed when seats are available for the product",
-    "message": "{ nb, plural, =0 {Aucune place restante} one {Dernière place restante!} other {# places restantes} }"
+    "message": "{ nb, plural, =0 {Aucune place restante} one {Dernière place restante !} other {# places restantes} }"
   },
   "components.CourseProductItem.noSeatsAvailable": {
     "description": "Message displayed when no seats are available for the product",
     "message": "Désolé, aucune place disponible pour le moment"
   },
+  "components.CourseProductItem.original_price": {
+    "description": "Label for the original price of a product",
+    "message": "Prix initial :"
+  },
   "components.CourseProductItem.purchased": {
     "description": "Message displayed when authenticated user owned the product",
     "message": "Acheté"
+  },
+  "components.CourseProductItem.to": {
+    "description": "Discount end date information",
+    "message": "jusqu'au {to}"
   },
   "components.CourseProductsList.end": {
     "description": "End label displayed in the header of course run dates section",
@@ -1445,7 +1465,7 @@
   },
   "components.SaleTunnelSavePaymentMethod.description": {
     "description": "Text to explain what the user has to do in the 'save payment method' step",
-    "message": "Il s'agit de la dernière étape pour valider votre souscription, vous devez définir un moyen de paiement. Celui-ci sera utilisé pour prélever les échéances dues. Aucun prélèvement ne sera effectué durant cette étape. Sélectionnez un moyen de paiement existant ou ajoutez-en un nouveau."
+    "message": "Il s'agit de la dernière étape pour valider votre souscription, vous devez définir un moyen de paiement. Celui-ci sera utilisé pour prélever les échéances dues. Sélectionnez un moyen de paiement existant ou ajoutez-en un nouveau."
   },
   "components.SaleTunnelSavePaymentMethod.title": {
     "description": "Content title",
@@ -1927,8 +1947,8 @@
     "description": "Sub title of the dashboard sidebar",
     "message": "Vous êtes sur votre tableau de bord enseignant"
   },
-  "components.TeacherDashboardTraining.errorNoCourseProductRelation": {
-    "description": "Message displayed when requested course product relation is not found",
+  "components.TeacherDashboardTraining.errorNoOffering": {
+    "description": "Message displayed when requested offering is not found",
     "message": "Ce produit n’existe pas"
   },
   "components.TeacherDashboardTrainingLoader.loading": {
@@ -2047,14 +2067,6 @@
     "description": "Error message shown to the user when orders fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération des commandes. Veuillez réessayer plus tard."
   },
-  "hooks.useCourseProductRelations.errorGet": {
-    "description": "Error message shown to the user when course product relation fetch request fails.",
-    "message": "Une erreur s'est produite lors de la récupération des formations. Veuillez réessayer plus tard."
-  },
-  "hooks.useCourseProductRelations.errorNotFound": {
-    "description": "Error message shown to the user when no course product relation matches.",
-    "message": "Formation introuvable."
-  },
   "hooks.useCourseProductUnion.errorGet": {
     "description": "Error message shown to the user when trainings fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération des formations. Veuillez réessayer plus tard."
@@ -2146,6 +2158,14 @@
   "hooks.useJoanieUserProfile.errorNotFound": {
     "description": "Error message shown to the user when it isn't logged.",
     "message": "Vous n'êtes pas connecté."
+  },
+  "hooks.useOfferings.errorGet": {
+    "description": "Error message shown to the user when offering fetch request fails.",
+    "message": "Une erreur s'est produite lors de la récupération des formations. Veuillez réessayer plus tard."
+  },
+  "hooks.useOfferings.errorNotFound": {
+    "description": "Error message shown to the user when no offering matches.",
+    "message": "Formation introuvable."
   },
   "hooks.useOpenEdxProfile.errorGet": {
     "description": "Error message shown to the user when openEdx profile fetch request fails.",
