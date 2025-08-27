@@ -482,6 +482,13 @@ export interface PaymentInstallment {
 
 export type PaymentSchedule = readonly PaymentInstallment[];
 
+export interface PaymentPlan {
+  price: number;
+  discount?: string;
+  discounted_price?: number;
+  payment_schedule: PaymentSchedule;
+}
+
 // - API
 export interface AddressCreationPayload extends Omit<Address, 'id' | 'is_main'> {
   is_main?: boolean;
@@ -491,6 +498,7 @@ interface AbstractOrderProductCreationPayload {
   product_id: Product['id'];
   billing_address: Omit<Address, 'id' | 'is_main'>;
   has_waived_withdrawal_right: boolean;
+  voucher_code?: string;
 }
 
 interface OrderCertificateCreationPayload extends AbstractOrderProductCreationPayload {
@@ -547,6 +555,7 @@ export interface CourseQueryFilters extends ResourcesQuery {
 export interface CourseProductQueryFilters extends ResourcesQuery {
   id?: Product['id'];
   course_id?: CourseListItem['id'];
+  voucher_code?: string;
 }
 export interface OfferingQueryFilters extends PaginatedResourceQuery {
   id?: Offering['id'];
@@ -684,8 +693,8 @@ export interface API {
       : Promise<PaginatedResponse<CourseListItem>>;
     products: {
       get(filters?: CourseProductQueryFilters): Promise<Nullable<Offering>>;
-      paymentSchedule: {
-        get(filters?: CourseProductQueryFilters): Promise<Nullable<PaymentSchedule>>;
+      paymentPlan: {
+        get(filters?: CourseProductQueryFilters): Promise<Nullable<PaymentPlan>>;
       };
     };
     orders: {
