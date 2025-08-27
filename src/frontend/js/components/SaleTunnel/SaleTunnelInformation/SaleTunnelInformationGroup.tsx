@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Step, StepLabel, Stepper } from '@mui/material';
-import { Input, Radio, RadioGroup, Select } from '@openfun/cunningham-react';
+import { Checkbox, Input, Radio, RadioGroup, Select } from '@openfun/cunningham-react';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -49,10 +49,6 @@ const messages = defineMessages({
     id: 'components.SaleTunnel.BatchOrderForm.stepAdmin',
     defaultMessage: 'Follow-up',
   },
-  stepBilling: {
-    id: 'components.SaleTunnel.BatchOrderForm.stepBilling',
-    defaultMessage: 'Billing',
-  },
   stepParticipants: {
     id: 'components.SaleTunnel.BatchOrderForm.stepParticipants',
     defaultMessage: 'Participants',
@@ -71,7 +67,7 @@ const messages = defineMessages({
   },
   stepBillingTitle: {
     id: 'components.SaleTunnel.BatchOrderForm.stepBillingTitle',
-    defaultMessage: 'Needed if it does not concerns the initial company OR if OPCO',
+    defaultMessage: 'Billing informations',
   },
   stepParticipantsTitle: {
     id: 'components.SaleTunnel.BatchOrderForm.stepParticipantsTitle',
@@ -96,6 +92,10 @@ const messages = defineMessages({
   role: { id: 'batchOrder.role', defaultMessage: 'Role' },
   email: { id: 'batchOrder.email', defaultMessage: 'Email' },
   phone: { id: 'batchOrder.phone', defaultMessage: 'Phone' },
+  checkBilling: {
+    id: 'components.SaleTunnel.BatchOrderForm.checkBilling',
+    defaultMessage: 'Use other informations for billing',
+  },
   contactName: { id: 'batchOrder.contactName', defaultMessage: 'Name of the contact' },
   contactEmail: { id: 'batchOrder.contactEmail', defaultMessage: 'Email of the contact' },
   nbSeats: { id: 'batchOrder.nbSeats', defaultMessage: 'How many participants ?' },
@@ -227,7 +227,6 @@ const BatchOrderForm = () => {
   const steps = [
     intl.formatMessage(messages.stepCompany),
     intl.formatMessage(messages.stepAdmin),
-    intl.formatMessage(messages.stepBilling),
     intl.formatMessage(messages.stepParticipants),
     intl.formatMessage(messages.stepFinancing),
   ];
@@ -237,6 +236,8 @@ const BatchOrderForm = () => {
     label: organization.title,
     value: organization.code,
   }));
+
+  const [otherBillingAddress, setOtherBillingAddress] = useState(false);
 
   const renderStepContent = () => {
     return (
@@ -256,6 +257,12 @@ const BatchOrderForm = () => {
           <Input
             className="field"
             {...register('identification_number')}
+            required
+            state={formState.errors.identification_number?.message ? 'error' : 'default'}
+            text={
+              getLocalizedCunninghamErrorProp(intl, formState.errors.identification_number?.message)
+                .text
+            }
             label={intl.formatMessage(messages.identificationNumber)}
           />
           <Input
@@ -296,6 +303,47 @@ const BatchOrderForm = () => {
             state={formState.errors.country?.message ? 'error' : 'default'}
             text={getLocalizedCunninghamErrorProp(intl, formState.errors.country?.message).text}
           />
+          <Checkbox
+            label={intl.formatMessage(messages.checkBilling)}
+            onChange={() => setOtherBillingAddress(!otherBillingAddress)}
+            checked={otherBillingAddress}
+          />
+          {otherBillingAddress && (
+            <div className="billing">
+              <FormattedMessage {...messages.stepBillingTitle} />
+              <Input
+                {...register('billing.company_name')}
+                label={intl.formatMessage(messages.companyName)}
+              />
+              <Input
+                {...register('billing.identification_number')}
+                label={intl.formatMessage(messages.identificationNumber)}
+              />
+              <Input
+                {...register('billing.address')}
+                label={intl.formatMessage(messages.address)}
+              />
+              <div className="city-fields">
+                <Input
+                  {...register('billing.postcode')}
+                  label={intl.formatMessage(messages.postCode)}
+                />
+                <Input {...register('billing.city')} label={intl.formatMessage(messages.city)} />
+              </div>
+              <CountrySelectField
+                {...register('billing.country')}
+                label={intl.formatMessage(messages.country)}
+              />
+              <Input
+                {...register('billing.contact_name')}
+                label={intl.formatMessage(messages.contactName)}
+              />
+              <Input
+                {...register('billing.contact_email')}
+                label={intl.formatMessage(messages.contactEmail)}
+              />
+            </div>
+          )}
         </div>
         <div className="step admin" hidden={activeStep !== 1}>
           <FormattedMessage {...messages.stepAdminTitle} />
@@ -363,52 +411,7 @@ const BatchOrderForm = () => {
             }
           />
         </div>
-        <div className="step billing" hidden={activeStep !== 2}>
-          <FormattedMessage {...messages.stepBillingTitle} />
-          <Input
-            className="field"
-            {...register('billing.company_name')}
-            label={intl.formatMessage(messages.companyName)}
-          />
-          <Input
-            className="field"
-            {...register('billing.identification_number')}
-            label={intl.formatMessage(messages.identificationNumber)}
-          />
-          <Input
-            className="field"
-            {...register('billing.address')}
-            label={intl.formatMessage(messages.address)}
-          />
-          <div className="city-fields">
-            <Input
-              className="field"
-              {...register('billing.postcode')}
-              label={intl.formatMessage(messages.postCode)}
-            />
-            <Input
-              className="field"
-              {...register('billing.city')}
-              label={intl.formatMessage(messages.city)}
-            />
-          </div>
-          <CountrySelectField
-            className="field"
-            {...register('billing.country')}
-            label={intl.formatMessage(messages.country)}
-          />
-          <Input
-            className="field"
-            {...register('billing.contact_name')}
-            label={intl.formatMessage(messages.contactName)}
-          />
-          <Input
-            className="field"
-            {...register('billing.contact_email')}
-            label={intl.formatMessage(messages.contactEmail)}
-          />
-        </div>
-        <div className="step seats" hidden={activeStep !== 3}>
+        <div className="step seats" hidden={activeStep !== 2}>
           <FormattedMessage {...messages.stepParticipantsTitle} />
           <Input
             className="field"
@@ -420,7 +423,7 @@ const BatchOrderForm = () => {
             text={getLocalizedCunninghamErrorProp(intl, formState.errors.nb_seats?.message).text}
           />
         </div>
-        <div className="step financing" hidden={activeStep !== 4}>
+        <div className="step financing" hidden={activeStep !== 3}>
           <FormattedMessage {...messages.stepFinancingTitle} />
           <RadioGroup fullWidth={true} className="payment-block">
             <Radio
