@@ -142,8 +142,8 @@ const BatchOrderForm = () => {
   const validationSchema = Yup.object().shape({
     offering_id: Yup.string().required(),
     company_name: Yup.string().required(),
-    identification_number: Yup.string(),
-    vat_registration: Yup.string(),
+    identification_number: Yup.string().required(),
+    vat_registration: Yup.string().optional(),
     address: Yup.string().required(),
     postcode: Yup.string().required(),
     city: Yup.string().required(),
@@ -151,30 +151,29 @@ const BatchOrderForm = () => {
     administrative_lastname: Yup.string().required(),
     administrative_firstname: Yup.string().required(),
     administrative_profession: Yup.string().required(),
-    administrative_email: Yup.string().required(),
+    administrative_email: Yup.string().email().required(),
     administrative_telephone: Yup.string().required(),
     billing: Yup.object().optional().shape({
-      company_name: Yup.string(),
-      identification_number: Yup.string(),
-      contact_name: Yup.string(),
-      contact_email: Yup.string().email(),
-      address: Yup.string(),
-      postcode: Yup.string(),
-      city: Yup.string(),
-      country: Yup.string(),
+      company_name: Yup.string().optional(),
+      identification_number: Yup.string().optional(),
+      contact_name: Yup.string().optional(),
+      contact_email: Yup.string().email().optional(),
+      address: Yup.string().optional(),
+      postcode: Yup.string().optional(),
+      city: Yup.string().optional(),
+      country: Yup.string().optional(),
     }),
-    nb_seats: Yup.number().required().min(1),
+    nb_seats: Yup.number().required().min(0),
     payment_method: Yup.string().required(),
-    funding_entity: Yup.string(),
-    funding_amount: Yup.number(),
-    organization_id: Yup.string(),
+    funding_entity: Yup.string().optional(),
+    funding_amount: Yup.number().optional(),
+    organization_id: Yup.string().optional(),
   });
 
   const defaultValues: BatchOrder = {
     offering_id: offering?.id ?? '',
     company_name: '',
-    identification_number: undefined,
-    vat_registration: undefined,
+    identification_number: '',
     address: '',
     postcode: '',
     city: '',
@@ -184,21 +183,9 @@ const BatchOrderForm = () => {
     administrative_profession: '',
     administrative_email: '',
     administrative_telephone: '',
-    billing: {
-      company_name: undefined,
-      identification_number: undefined,
-      contact_name: undefined,
-      contact_email: undefined,
-      address: undefined,
-      postcode: undefined,
-      city: undefined,
-      country: undefined,
-    },
     nb_seats: 0,
     payment_method: '',
-    funding_entity: undefined,
     funding_amount: 0,
-    organization_id: '',
   };
 
   const form = useForm<BatchOrder>({
@@ -206,6 +193,18 @@ const BatchOrderForm = () => {
     mode: 'onBlur',
     resolver: yupResolver(validationSchema),
   });
+
+  function removeEmpty(obj: any): any {
+    if (Array.isArray(obj)) {
+      return obj.map(removeEmpty).filter((v) => v !== undefined);
+    } else if (obj && typeof obj === 'object') {
+      const cleaned = Object.entries(obj)
+        .map(([k, v]) => [k, removeEmpty(v)])
+        .filter(([_, v]) => v !== undefined && v !== '' && v !== null && v !== 0);
+      return cleaned.length > 0 ? Object.fromEntries(cleaned) : undefined;
+    }
+    return obj;
+  }
 
   useEffect(() => {
     setBatchOrderFormMethods(form);
@@ -216,8 +215,9 @@ const BatchOrderForm = () => {
   const values = watch();
 
   useEffect(() => {
-    if (JSON.stringify(values) !== JSON.stringify(batchOrder)) {
-      setBatchOrder(values);
+    const cleanedValues = removeEmpty(values);
+    if (JSON.stringify(cleanedValues) !== JSON.stringify(batchOrder)) {
+      setBatchOrder(cleanedValues);
     }
   }, [values, batchOrder, setBatchOrder]);
 
