@@ -8,6 +8,7 @@ import { BatchOrder } from 'types/Joanie';
 import * as Yup from 'yup';
 import Form, { CountrySelectField, getLocalizedCunninghamErrorProp } from 'components/Form';
 import { useSaleTunnelContext } from '../GenericSaleTunnel';
+import { useOfferingOrganizations } from 'hooks/useOfferingOrganizations';
 
 const messages = defineMessages({
   title: {
@@ -212,7 +213,6 @@ const BatchOrderForm = () => {
 
   useEffect(() => {
     if (JSON.stringify(values) !== JSON.stringify(batchOrder)) {
-      console.log('Correct set batchOrder');
       setBatchOrder(values);
     }
   }, [values, formState.isValid, batchOrder, setBatchOrder]);
@@ -235,6 +235,12 @@ const BatchOrderForm = () => {
     intl.formatMessage(messages.stepParticipants),
     intl.formatMessage(messages.stepFinancing),
   ];
+
+  const { items: organizations } = useOfferingOrganizations({ id: offering?.id });
+  const orgOptions = organizations.map((organization) => ({
+    label: organization.title,
+    value: organization.code,
+  }));
 
   const renderStepContent = () => {
     return (
@@ -479,10 +485,7 @@ const BatchOrderForm = () => {
             {...register('organization_id')}
             label={intl.formatMessage(messages.participatingOrganisations)}
             clearable={false}
-            options={[
-              { label: 'Rennes 1', value: 'rennes1' },
-              { label: 'Rennes 2', value: 'rennes2' },
-            ]}
+            options={orgOptions}
             className="recommandation"
           />
         </div>

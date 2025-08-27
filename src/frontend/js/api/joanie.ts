@@ -161,6 +161,9 @@ export const getRoutes = () => {
     },
     offerings: {
       get: `${baseUrl}/offerings/:id/`,
+      organizations: {
+        get: `${baseUrl}/offerings/:id/get-organizations`,
+      }
     },
     contractDefinitions: {
       previewTemplate: `${baseUrl}/contract_definitions/:id/preview_template/`,
@@ -488,6 +491,13 @@ const API = (): Joanie.API => {
             : buildApiUrl(ROUTES.offerings.get, filters),
         ).then(checkStatus);
       },
+      organizations: {
+        get: async (filters) => {
+          return fetchWithJWT(buildApiUrl(ROUTES.offerings.organizations.get, filters), {
+            method: 'GET',
+          }).then(checkStatus);
+      },
+      }
     },
     contractDefinitions: {
       previewTemplate(id: string): Promise<File> {
