@@ -163,7 +163,7 @@ const BatchOrderForm = () => {
       city: Yup.string().optional(),
       country: Yup.string().optional(),
     }),
-    nb_seats: Yup.number().required().min(0),
+    nb_seats: Yup.number().required().min(1),
     payment_method: Yup.string().required(),
     funding_entity: Yup.string().optional(),
     funding_amount: Yup.number().optional(),
