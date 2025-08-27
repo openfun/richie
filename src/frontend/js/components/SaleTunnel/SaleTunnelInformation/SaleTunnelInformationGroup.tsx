@@ -207,7 +207,9 @@ const BatchOrderForm = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  setBatchOrderFormMethods(form);
+  useEffect(() => {
+    setBatchOrderFormMethods(form);
+  }, [form]);
 
   const { register, formState, watch } = form;
 
