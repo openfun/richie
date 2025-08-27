@@ -148,12 +148,12 @@ const BatchOrderForm = () => {
     postcode: Yup.string().required(),
     city: Yup.string().required(),
     country: Yup.string().required(),
-    administrative_last_name: Yup.string().required(),
-    administrative_first_name: Yup.string().required(),
+    administrative_lastname: Yup.string().required(),
+    administrative_firstname: Yup.string().required(),
     administrative_profession: Yup.string().required(),
     administrative_email: Yup.string().required(),
     administrative_telephone: Yup.string().required(),
-    billing: Yup.object().shape({
+    billing: Yup.object().optional().shape({
       company_name: Yup.string(),
       identification_number: Yup.string(),
       contact_name: Yup.string(),
@@ -173,30 +173,30 @@ const BatchOrderForm = () => {
   const defaultValues: BatchOrder = {
     offering_id: offering?.id ?? '',
     company_name: '',
-    identification_number: '',
-    vat_registration: '',
+    identification_number: undefined,
+    vat_registration: undefined,
     address: '',
     postcode: '',
     city: '',
     country: '',
-    administrative_last_name: '',
-    administrative_first_name: '',
+    administrative_lastname: '',
+    administrative_firstname: '',
     administrative_profession: '',
     administrative_email: '',
     administrative_telephone: '',
     billing: {
-      company_name: '',
-      identification_number: '',
-      contact_name: '',
-      contact_email: '',
-      address: '',
-      postcode: '',
-      city: '',
-      country: '',
+      company_name: undefined,
+      identification_number: undefined,
+      contact_name: undefined,
+      contact_email: undefined,
+      address: undefined,
+      postcode: undefined,
+      city: undefined,
+      country: undefined,
     },
     nb_seats: 0,
     payment_method: '',
-    funding_entity: '',
+    funding_entity: undefined,
     funding_amount: 0,
     organization_id: '',
   };
@@ -207,7 +207,9 @@ const BatchOrderForm = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  const { reset, register, formState, watch } = form;
+  setBatchOrderFormMethods(form);
+
+  const { register, formState, watch } = form;
 
   const values = watch();
 
@@ -215,15 +217,7 @@ const BatchOrderForm = () => {
     if (JSON.stringify(values) !== JSON.stringify(batchOrder)) {
       setBatchOrder(values);
     }
-  }, [values, formState.isValid, batchOrder, setBatchOrder]);
-
-  useEffect(() => {
-    reset(batchOrder ?? defaultValues);
-  }, [batchOrder]);
-
-  useEffect(() => {
-    setBatchOrderFormMethods(form);
-  }, [form]);
+  }, [values, batchOrder, setBatchOrder]);
 
   const [activeStep, setActiveStep] = useState(0);
   const intl = useIntl();
@@ -305,27 +299,27 @@ const BatchOrderForm = () => {
           <FormattedMessage {...messages.stepAdminTitle} />
           <Input
             className="field"
-            {...register('administrative_last_name')}
+            {...register('administrative_lastname')}
             label={intl.formatMessage(messages.lastName)}
             required
-            state={formState.errors.administrative_last_name?.message ? 'error' : 'default'}
+            state={formState.errors.administrative_lastname?.message ? 'error' : 'default'}
             text={
               getLocalizedCunninghamErrorProp(
                 intl,
-                formState.errors.administrative_last_name?.message,
+                formState.errors.administrative_lastname?.message,
               ).text
             }
           />
           <Input
             className="field"
-            {...register('administrative_first_name')}
+            {...register('administrative_firstname')}
             label={intl.formatMessage(messages.firstName)}
             required
-            state={formState.errors.administrative_first_name?.message ? 'error' : 'default'}
+            state={formState.errors.administrative_firstname?.message ? 'error' : 'default'}
             text={
               getLocalizedCunninghamErrorProp(
                 intl,
-                formState.errors.administrative_first_name?.message,
+                formState.errors.administrative_firstname?.message,
               ).text
             }
           />

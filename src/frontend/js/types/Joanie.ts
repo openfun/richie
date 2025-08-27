@@ -471,12 +471,12 @@ export interface BatchOrder {
   postcode: string;
   city: string;
   country: string;
-  administrative_last_name: string;
-  administrative_first_name: string;
+  administrative_lastname: string;
+  administrative_firstname: string;
   administrative_profession: string;
   administrative_email: string;
   administrative_telephone: string;
-  billing: Billing;
+  billing?: Billing;
   nb_seats: number;
   payment_method: string;
   funding_entity?: string;
