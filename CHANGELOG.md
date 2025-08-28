@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Handle null offering rules on CourseProduct item
+
 ## [3.2.0] - 2025-08-26
 
 ### Added
