@@ -104,7 +104,7 @@ const Total = () => {
   const { product, offering, enrollment } = useSaleTunnelContext();
   const totalPrice =
     enrollment?.offerings?.[0]?.rules?.discounted_price ??
-    offering?.rules.discounted_price ??
+    offering?.rules?.discounted_price ??
     product.price;
   return (
     <div className="sale-tunnel__total">

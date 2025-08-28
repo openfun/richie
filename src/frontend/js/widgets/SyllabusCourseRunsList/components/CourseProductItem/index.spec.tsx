@@ -194,7 +194,7 @@ describe('CourseProductItem', () => {
     const discountedPriceLabel = screen.getByText('Discounted price:');
     expect(discountedPriceLabel.classList.contains('offscreen')).toBe(true);
     const discountedPrice = screen.getByText(
-      priceFormatter(product.price_currency, offering.rules.discounted_price!).replace(
+      priceFormatter(product.price_currency, offering.rules!.discounted_price!).replace(
         /(\u202F|\u00a0)/g,
         ' ',
       ),
@@ -257,7 +257,7 @@ describe('CourseProductItem', () => {
     const discountedPriceLabel = screen.getByText('Discounted price:');
     expect(discountedPriceLabel.classList.contains('offscreen')).toBe(true);
     const discountedPrice = screen.getByText(
-      priceFormatter(product.price_currency, offering.rules.discounted_price!).replace(
+      priceFormatter(product.price_currency, offering.rules!.discounted_price!).replace(
         /(\u202F|\u00a0)/g,
         ' ',
       ),
@@ -837,5 +837,40 @@ describe('CourseProductItem', () => {
 
     expect(screen.queryByRole('button', { name: product.call_to_action })).not.toBeInTheDocument();
     screen.getByText('Sorry, no seats available for now');
+  });
+
+  it('renders product information without rules in offering', async () => {
+    const offering = OfferingFactory({
+      product: CredentialProductFactory({
+        price: 840,
+        price_currency: 'EUR',
+      }).one(),
+      rules: undefined,
+    }).one();
+    const { product } = offering;
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/00000/products/${product.id}/`,
+      offering,
+    );
+
+    render(
+      <CourseProductItem
+        course={PacedCourseFactory({ code: '00000' }).one()}
+        productId={product.id}
+      />,
+      { queryOptions: { client: createTestQueryClient({ user: null }) } },
+    );
+
+    // Wait for product information to be fetched
+    await screen.findByRole('heading', { level: 3, name: product.title });
+
+    // Expect to render the component without rules information
+    expect(
+      screen.getByText(
+        priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+      ),
+    ).toBeInTheDocument();
+    expect(document.querySelector('.product-widget__price-discounted')).not.toBeInTheDocument();
+    expect(screen.getByText('Sorry, no seats available for now')).toBeInTheDocument();
   });
 });
