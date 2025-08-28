@@ -496,7 +496,7 @@ describe.each([
       expect($totalAmount).toHaveTextContent(
         'Total' +
           formatPrice(
-            enrollmentDiscounted.offerings[0].rules.discounted_price!,
+            enrollmentDiscounted.offerings[0].rules?.discounted_price!,
             product.price_currency,
           ).replace(/(\u202F|\u00a0)/g, ' '),
       );
@@ -569,7 +569,7 @@ describe.each([
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
       'Total' +
-        formatPrice(offering!.rules.discounted_price!, product.price_currency).replace(
+        formatPrice(offering!.rules!.discounted_price!, product.price_currency).replace(
           /(\u202F|\u00a0)/g,
           ' ',
         ),
