@@ -8,6 +8,7 @@ import {
   useState,
   useCallback,
 } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 import { SaleTunnelSponsors } from 'components/SaleTunnel/Sponsors/SaleTunnelSponsors';
 import { SaleTunnelProps } from 'components/SaleTunnel/index';
 import {
@@ -29,7 +30,6 @@ import { SaleTunnelInformation } from 'components/SaleTunnel/SaleTunnelInformati
 import { useEnrollments } from 'hooks/useEnrollments';
 import SaleTunnelSavePaymentMethod from 'components/SaleTunnel/SaleTunnelSavePaymentMethod';
 import { LearnerContractFrame } from 'components/ContractFrame';
-import { UseFormReturn } from 'react-hook-form';
 
 export interface SaleTunnelContextType {
   props: SaleTunnelProps;

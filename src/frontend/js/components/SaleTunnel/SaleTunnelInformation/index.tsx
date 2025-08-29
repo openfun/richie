@@ -1,9 +1,9 @@
-import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
-import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
-import { Select } from '@openfun/cunningham-react';
 import { useState } from 'react';
-import { SaleTunnelInformationGroup } from './SaleTunnelInformationGroup';
-import { SaleTunnelInformationSingular } from './SaleTunnelInformationSingular';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { Select } from '@openfun/cunningham-react';
+import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
+import { SaleTunnelInformationGroup } from 'components/SaleTunnel/SaleTunnelInformation/SaleTunnelInformationGroup';
+import { SaleTunnelInformationSingular } from 'components/SaleTunnel/SaleTunnelInformation/SaleTunnelInformationSingular';
 
 const messages = defineMessages({
   purchaseTypeTitle: {
