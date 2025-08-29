@@ -1,123 +1,65 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Step, StepLabel, Stepper } from '@mui/material';
-import { Checkbox, Input, Radio, RadioGroup, Select } from '@openfun/cunningham-react';
 import { useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { BatchOrder } from 'types/Joanie';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import Form, { CountrySelectField, getLocalizedCunninghamErrorProp } from 'components/Form';
-import { useSaleTunnelContext } from '../GenericSaleTunnel';
-import { useOfferingOrganizations } from 'hooks/useOfferingOrganizations';
+import { Step, StepLabel, Stepper } from '@mui/material';
+import { BatchOrder } from 'types/Joanie';
+import Form from 'components/Form';
+import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
+import { StepContent } from 'components/SaleTunnel/SaleTunnelInformation/StepContent';
+import { ObjectHelper } from 'utils/ObjectHelper';
 
 const messages = defineMessages({
   title: {
     id: 'components.SaleTunnel.Information.title',
-    description: 'Title for the information section',
+    description: 'Title for the section containing purchase/billing information',
     defaultMessage: 'Information',
   },
   description: {
     id: 'components.SaleTunnel.Information.description',
-    description: 'Description of the information section',
+    description: 'Helper text explaining that the information will be used for billing',
     defaultMessage: 'Those information will be used for billing',
   },
   purchaseTypeTitle: {
     id: 'components.SaleTunnel.Information.purchaseTypeTitle',
-    description: 'Title for purchase type',
+    description: 'Title of the section where the user selects the purchase type',
     defaultMessage: 'Select purchase type',
   },
   purchaseTypeSelect: {
     id: 'components.SaleTunnel.Information.purchaseTypeSelect',
-    description: 'Label for purchase type select',
+    description: 'Label for the select field used to choose the purchase type',
     defaultMessage: 'Purchase type',
   },
   purchaseTypeOptionSingle: {
     id: 'components.SaleTunnel.Information.purchaseTypeOptionSingle',
-    description: 'Label for B2C option',
+    description: 'Option label for selecting a single purchase (B2C)',
     defaultMessage: 'Single purchase (B2C)',
   },
   purchaseTypeOptionGroup: {
     id: 'components.SaleTunnel.Information.purchaseTypeOptionGroup',
-    description: 'Label for B2C option',
+    description: 'Option label for selecting a group purchase (B2B)',
     defaultMessage: 'Group purchase (B2B)',
   },
   stepCompany: {
     id: 'components.SaleTunnel.BatchOrderForm.stepCompany',
+    description: 'Step label for company information in the batch order form',
     defaultMessage: 'Organization',
   },
   stepAdmin: {
     id: 'components.SaleTunnel.BatchOrderForm.stepAdmin',
+    description: 'Step label for administrative follow-up in the batch order form',
     defaultMessage: 'Follow-up',
   },
   stepParticipants: {
     id: 'components.SaleTunnel.BatchOrderForm.stepParticipants',
+    description: 'Step label for participants information in the batch order form',
     defaultMessage: 'Participants',
   },
   stepFinancing: {
     id: 'components.SaleTunnel.BatchOrderForm.stepFinancing',
+    description: 'Step label for financing/payment in the batch order form',
     defaultMessage: 'Financing',
-  },
-  stepCompanyTitle: {
-    id: 'components.SaleTunnel.BatchOrderForm.stepCompanyTitle',
-    defaultMessage: 'Information about your company / organisation',
-  },
-  stepAdminTitle: {
-    id: 'components.SaleTunnel.BatchOrderForm.stepAdminTitle',
-    defaultMessage: 'Responsible for the administrative follow-up',
-  },
-  stepBillingTitle: {
-    id: 'components.SaleTunnel.BatchOrderForm.stepBillingTitle',
-    defaultMessage: 'Billing informations',
-  },
-  stepParticipantsTitle: {
-    id: 'components.SaleTunnel.BatchOrderForm.stepParticipantsTitle',
-    defaultMessage: 'How many registrations ?',
-  },
-  stepFinancingTitle: {
-    id: 'components.SaleTunnel.BatchOrderForm.stepFinancingTitle',
-    defaultMessage: 'Payment plan of the course',
-  },
-  companyName: { id: 'batchOrder.companyName', defaultMessage: 'Company name' },
-  identificationNumber: {
-    id: 'batchOrder.identificationNumber',
-    defaultMessage: 'Identification number (SIRET for french company)',
-  },
-  vatNumber: { id: 'batchOrder.vatNumber', defaultMessage: 'VAT number' },
-  address: { id: 'batchOrder.address', defaultMessage: 'Address' },
-  postCode: { id: 'batchOrder.postCode', defaultMessage: 'Post code' },
-  city: { id: 'batchOrder.city', defaultMessage: 'City' },
-  country: { id: 'batchOrder.country', defaultMessage: 'Country' },
-  firstName: { id: 'batchOrder.firstName', defaultMessage: 'First name' },
-  lastName: { id: 'batchOrder.lastName', defaultMessage: 'Last name' },
-  role: { id: 'batchOrder.role', defaultMessage: 'Role' },
-  email: { id: 'batchOrder.email', defaultMessage: 'Email' },
-  phone: { id: 'batchOrder.phone', defaultMessage: 'Phone' },
-  checkBilling: {
-    id: 'components.SaleTunnel.BatchOrderForm.checkBilling',
-    defaultMessage: 'Use other informations for billing',
-  },
-  contactName: { id: 'batchOrder.contactName', defaultMessage: 'Name of the contact' },
-  contactEmail: { id: 'batchOrder.contactEmail', defaultMessage: 'Email of the contact' },
-  nbSeats: { id: 'batchOrder.nbSeats', defaultMessage: 'How many participants ?' },
-  cardPayment: { id: 'batchOrder.cardPayment', defaultMessage: 'Payment by credit card' },
-  bankTransfer: { id: 'batchOrder.bankTransfer', defaultMessage: 'Payment by bank transfer' },
-  purchaseOrder: { id: 'batchOrder.purchaseOrder', defaultMessage: 'Payment with purchase order' },
-  withoutOrderForm: { id: 'batchOrder.withoutOrderForm', defaultMessage: 'Without order form' },
-  opco: { id: 'batchOrder.opc', defaultMessage: 'OPCO' },
-  fundingEntity: { id: 'batchOrder.fundingEntity', defaultMessage: 'Funding entity' },
-  fundingEntityName: { id: 'batchOrder.fundingEntityName', defaultMessage: 'Entity name' },
-  fundingEntityAmount: { id: 'batchOrder.fundingEntityAmount', defaultMessage: 'Amount covered' },
-  recommandation: {
-    id: 'batchOrder.recommandation',
-    defaultMessage: 'This course was recommended to me by',
-  },
-  participatingOrganisations: {
-    id: 'batchOrder.participatingOrganisations',
-    defaultMessage: 'Participating organisations',
-  },
-  formError: {
-    id: 'batchOrder.formError',
-    defaultMessage: 'Missing fields in form',
   },
 });
 
@@ -137,39 +79,40 @@ export const SaleTunnelInformationGroup = () => {
   );
 };
 
-const BatchOrderForm = () => {
-  const { offering, batchOrder, setBatchOrder, setBatchOrderFormMethods } = useSaleTunnelContext();
-  const validationSchema = Yup.object().shape({
-    offering_id: Yup.string().required(),
-    company_name: Yup.string().required(),
-    identification_number: Yup.string().required(),
-    vat_registration: Yup.string().optional(),
-    address: Yup.string().required(),
-    postcode: Yup.string().required(),
-    city: Yup.string().required(),
-    country: Yup.string().required(),
-    administrative_lastname: Yup.string().required(),
-    administrative_firstname: Yup.string().required(),
-    administrative_profession: Yup.string().required(),
-    administrative_email: Yup.string().email().required(),
-    administrative_telephone: Yup.string().required(),
-    billing: Yup.object().optional().shape({
-      company_name: Yup.string().optional(),
-      identification_number: Yup.string().optional(),
-      contact_name: Yup.string().optional(),
-      contact_email: Yup.string().email().optional(),
-      address: Yup.string().optional(),
-      postcode: Yup.string().optional(),
-      city: Yup.string().optional(),
-      country: Yup.string().optional(),
-    }),
-    nb_seats: Yup.number().required().min(1),
-    payment_method: Yup.string().required(),
-    funding_entity: Yup.string().optional(),
-    funding_amount: Yup.number().optional(),
-    organization_id: Yup.string().optional(),
-  });
+const validationSchema = Yup.object().shape({
+  offering_id: Yup.string().required(),
+  company_name: Yup.string().required(),
+  identification_number: Yup.string().required(),
+  vat_registration: Yup.string().optional(),
+  address: Yup.string().required(),
+  postcode: Yup.string().required(),
+  city: Yup.string().required(),
+  country: Yup.string().required(),
+  administrative_lastname: Yup.string().required(),
+  administrative_firstname: Yup.string().required(),
+  administrative_profession: Yup.string().required(),
+  administrative_email: Yup.string().email().required(),
+  administrative_telephone: Yup.string().required(),
+  billing: Yup.object().optional().shape({
+    company_name: Yup.string().optional(),
+    identification_number: Yup.string().optional(),
+    contact_name: Yup.string().optional(),
+    contact_email: Yup.string().email().optional(),
+    address: Yup.string().optional(),
+    postcode: Yup.string().optional(),
+    city: Yup.string().optional(),
+    country: Yup.string().optional(),
+  }),
+  nb_seats: Yup.number().required().min(1),
+  payment_method: Yup.string().required(),
+  funding_entity: Yup.string().optional(),
+  funding_amount: Yup.number().optional(),
+  organization_id: Yup.string().optional(),
+});
 
+const BatchOrderForm = () => {
+  const intl = useIntl();
+  const { offering, batchOrder, setBatchOrder, setBatchOrderFormMethods } = useSaleTunnelContext();
   const defaultValues: BatchOrder = {
     offering_id: offering?.id ?? '',
     company_name: '',
@@ -188,42 +131,7 @@ const BatchOrderForm = () => {
     funding_amount: 0,
   };
 
-  const form = useForm<BatchOrder>({
-    defaultValues: batchOrder || defaultValues,
-    mode: 'onBlur',
-    resolver: yupResolver(validationSchema),
-  });
-
-  function removeEmpty(obj: any): any {
-    if (Array.isArray(obj)) {
-      return obj.map(removeEmpty).filter((v) => v !== undefined);
-    } else if (obj && typeof obj === 'object') {
-      const cleaned = Object.entries(obj)
-        .map(([k, v]) => [k, removeEmpty(v)])
-        .filter(([_, v]) => v !== undefined && v !== '' && v !== null && v !== 0);
-      return cleaned.length > 0 ? Object.fromEntries(cleaned) : undefined;
-    }
-    return obj;
-  }
-
-  useEffect(() => {
-    setBatchOrderFormMethods(form);
-  }, [form]);
-
-  const { register, formState, watch } = form;
-
-  const values = watch();
-
-  useEffect(() => {
-    const cleanedValues = removeEmpty(values);
-    if (JSON.stringify(cleanedValues) !== JSON.stringify(batchOrder)) {
-      setBatchOrder(cleanedValues);
-    }
-  }, [values, batchOrder, setBatchOrder]);
-
   const [activeStep, setActiveStep] = useState(0);
-  const intl = useIntl();
-
   const steps = [
     intl.formatMessage(messages.stepCompany),
     intl.formatMessage(messages.stepAdmin),
@@ -231,266 +139,24 @@ const BatchOrderForm = () => {
     intl.formatMessage(messages.stepFinancing),
   ];
 
-  const { items: organizations } = useOfferingOrganizations({ id: offering?.id });
-  const orgOptions = organizations.map((organization) => ({
-    label: organization.title,
-    value: organization.code,
-  }));
+  const form = useForm<BatchOrder>({
+    defaultValues: batchOrder || defaultValues,
+    mode: 'onBlur',
+    resolver: yupResolver(validationSchema),
+  });
+  const { watch } = form;
+  const values = watch();
 
-  const [otherBillingAddress, setOtherBillingAddress] = useState(false);
+  useEffect(() => {
+    setBatchOrderFormMethods(form);
+  }, [form]);
 
-  const renderStepContent = () => {
-    return (
-      <div className="step-content">
-        <div className="step organization" hidden={activeStep !== 0}>
-          <FormattedMessage {...messages.stepCompanyTitle} />
-          <Input
-            className="field"
-            label={intl.formatMessage(messages.companyName)}
-            {...register('company_name')}
-            required
-            state={formState.errors.company_name?.message ? 'error' : 'default'}
-            text={
-              getLocalizedCunninghamErrorProp(intl, formState.errors.company_name?.message).text
-            }
-          />
-          <Input
-            className="field"
-            {...register('identification_number')}
-            required
-            state={formState.errors.identification_number?.message ? 'error' : 'default'}
-            text={
-              getLocalizedCunninghamErrorProp(intl, formState.errors.identification_number?.message)
-                .text
-            }
-            label={intl.formatMessage(messages.identificationNumber)}
-          />
-          <Input
-            className="field"
-            {...register('vat_registration')}
-            label={intl.formatMessage(messages.vatNumber)}
-          />
-          <Input
-            className="field"
-            {...register('address')}
-            label={intl.formatMessage(messages.address)}
-            required
-            state={formState.errors.address?.message ? 'error' : 'default'}
-            text={getLocalizedCunninghamErrorProp(intl, formState.errors.address?.message).text}
-          />
-          <div className="city-fields">
-            <Input
-              className="field"
-              {...register('postcode')}
-              label={intl.formatMessage(messages.postCode)}
-              required
-              state={formState.errors.postcode?.message ? 'error' : 'default'}
-              text={getLocalizedCunninghamErrorProp(intl, formState.errors.postcode?.message).text}
-            />
-            <Input
-              className="field"
-              {...register('city')}
-              label={intl.formatMessage(messages.city)}
-              required
-              state={formState.errors.city?.message ? 'error' : 'default'}
-              text={getLocalizedCunninghamErrorProp(intl, formState.errors.city?.message).text}
-            />
-          </div>
-          <CountrySelectField
-            className="field"
-            {...register('country')}
-            label={intl.formatMessage(messages.country)}
-            state={formState.errors.country?.message ? 'error' : 'default'}
-            text={getLocalizedCunninghamErrorProp(intl, formState.errors.country?.message).text}
-          />
-          <Checkbox
-            label={intl.formatMessage(messages.checkBilling)}
-            onChange={() => setOtherBillingAddress(!otherBillingAddress)}
-            checked={otherBillingAddress}
-          />
-          {otherBillingAddress && (
-            <div className="billing">
-              <FormattedMessage {...messages.stepBillingTitle} />
-              <Input
-                {...register('billing.company_name')}
-                label={intl.formatMessage(messages.companyName)}
-              />
-              <Input
-                {...register('billing.identification_number')}
-                label={intl.formatMessage(messages.identificationNumber)}
-              />
-              <Input
-                {...register('billing.address')}
-                label={intl.formatMessage(messages.address)}
-              />
-              <div className="city-fields">
-                <Input
-                  {...register('billing.postcode')}
-                  label={intl.formatMessage(messages.postCode)}
-                />
-                <Input {...register('billing.city')} label={intl.formatMessage(messages.city)} />
-              </div>
-              <CountrySelectField
-                {...register('billing.country')}
-                label={intl.formatMessage(messages.country)}
-              />
-              <Input
-                {...register('billing.contact_name')}
-                label={intl.formatMessage(messages.contactName)}
-              />
-              <Input
-                {...register('billing.contact_email')}
-                label={intl.formatMessage(messages.contactEmail)}
-              />
-            </div>
-          )}
-        </div>
-        <div className="step admin" hidden={activeStep !== 1}>
-          <FormattedMessage {...messages.stepAdminTitle} />
-          <Input
-            className="field"
-            {...register('administrative_lastname')}
-            label={intl.formatMessage(messages.lastName)}
-            required
-            state={formState.errors.administrative_lastname?.message ? 'error' : 'default'}
-            text={
-              getLocalizedCunninghamErrorProp(
-                intl,
-                formState.errors.administrative_lastname?.message,
-              ).text
-            }
-          />
-          <Input
-            className="field"
-            {...register('administrative_firstname')}
-            label={intl.formatMessage(messages.firstName)}
-            required
-            state={formState.errors.administrative_firstname?.message ? 'error' : 'default'}
-            text={
-              getLocalizedCunninghamErrorProp(
-                intl,
-                formState.errors.administrative_firstname?.message,
-              ).text
-            }
-          />
-          <Input
-            className="field"
-            {...register('administrative_profession')}
-            label={intl.formatMessage(messages.role)}
-            required
-            state={formState.errors.administrative_profession?.message ? 'error' : 'default'}
-            text={
-              getLocalizedCunninghamErrorProp(
-                intl,
-                formState.errors.administrative_profession?.message,
-              ).text
-            }
-          />
-          <Input
-            className="field"
-            {...register('administrative_email')}
-            label={intl.formatMessage(messages.email)}
-            required
-            state={formState.errors.administrative_email?.message ? 'error' : 'default'}
-            text={
-              getLocalizedCunninghamErrorProp(intl, formState.errors.administrative_email?.message)
-                .text
-            }
-          />
-          <Input
-            className="field"
-            {...register('administrative_telephone')}
-            label={intl.formatMessage(messages.phone)}
-            required
-            state={formState.errors.administrative_telephone?.message ? 'error' : 'default'}
-            text={
-              getLocalizedCunninghamErrorProp(
-                intl,
-                formState.errors.administrative_telephone?.message,
-              ).text
-            }
-          />
-        </div>
-        <div className="step seats" hidden={activeStep !== 2}>
-          <FormattedMessage {...messages.stepParticipantsTitle} />
-          <Input
-            className="field"
-            type="number"
-            {...register('nb_seats')}
-            label={intl.formatMessage(messages.nbSeats)}
-            required
-            state={formState.errors.nb_seats?.message ? 'error' : 'default'}
-            text={getLocalizedCunninghamErrorProp(intl, formState.errors.nb_seats?.message).text}
-          />
-        </div>
-        <div className="step financing" hidden={activeStep !== 3}>
-          <FormattedMessage {...messages.stepFinancingTitle} />
-          <RadioGroup fullWidth={true} className="payment-block">
-            <Radio
-              {...register('payment_method')}
-              value="card_payment"
-              label={intl.formatMessage(messages.cardPayment)}
-              required
-              state={formState.errors.payment_method?.message ? 'error' : 'default'}
-              text={
-                getLocalizedCunninghamErrorProp(intl, formState.errors.payment_method?.message).text
-              }
-            />
-            <Radio
-              {...register('payment_method')}
-              value="bank_transfer"
-              label={intl.formatMessage(messages.bankTransfer)}
-              required
-              state={formState.errors.payment_method?.message ? 'error' : 'default'}
-              text={
-                getLocalizedCunninghamErrorProp(intl, formState.errors.payment_method?.message).text
-              }
-            />
-            <Radio
-              {...register('payment_method')}
-              value="purchase_order"
-              label={intl.formatMessage(messages.purchaseOrder)}
-              required
-              state={formState.errors.payment_method?.message ? 'error' : 'default'}
-              text={
-                getLocalizedCunninghamErrorProp(intl, formState.errors.payment_method?.message).text
-              }
-            />
-          </RadioGroup>
-          <FormattedMessage {...messages.fundingEntity} />
-          <div className="organism-block">
-            <Input
-              {...register('funding_entity')}
-              label={intl.formatMessage(messages.fundingEntityName)}
-              required
-              state={formState.errors.funding_entity?.message ? 'error' : 'default'}
-              text={
-                getLocalizedCunninghamErrorProp(intl, formState.errors.funding_entity?.message).text
-              }
-            />
-            <Input
-              {...register('funding_amount')}
-              type="number"
-              label={intl.formatMessage(messages.fundingEntityAmount)}
-              required
-              state={formState.errors.funding_amount?.message ? 'error' : 'default'}
-              text={
-                getLocalizedCunninghamErrorProp(intl, formState.errors.funding_amount?.message).text
-              }
-            />
-          </div>
-          <FormattedMessage {...messages.recommandation} />
-          <Select
-            {...register('organization_id')}
-            label={intl.formatMessage(messages.participatingOrganisations)}
-            clearable={false}
-            options={orgOptions}
-            className="recommandation"
-          />
-        </div>
-      </div>
-    );
-  };
+  useEffect(() => {
+    const cleanedValues = ObjectHelper.removeEmptyFields(values);
+    if (JSON.stringify(cleanedValues) !== JSON.stringify(batchOrder)) {
+      setBatchOrder(cleanedValues);
+    }
+  }, [values, batchOrder, setBatchOrder]);
 
   return (
     <FormProvider {...form}>
@@ -502,7 +168,7 @@ const BatchOrderForm = () => {
             </Step>
           ))}
         </Stepper>
-        {renderStepContent()}
+        <StepContent activeStep={activeStep} form={form} />
       </Form>
     </FormProvider>
   );

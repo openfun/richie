@@ -103,7 +103,7 @@ export const getRoutes = () => {
         set_payment_method: `${baseUrl}/orders/:id/payment-method/`,
       },
       batchOrders: {
-        create: `${baseUrl}/batch-orders/`
+        create: `${baseUrl}/batch-orders/`,
       },
       certificates: {
         download: `${baseUrl}/certificates/:id/download/`,
@@ -163,7 +163,7 @@ export const getRoutes = () => {
       get: `${baseUrl}/offerings/:id/`,
       organizations: {
         get: `${baseUrl}/offerings/:id/get-organizations`,
-      }
+      },
     },
     contractDefinitions: {
       previewTemplate: `${baseUrl}/contract_definitions/:id/preview_template/`,
@@ -496,8 +496,8 @@ const API = (): Joanie.API => {
           return fetchWithJWT(buildApiUrl(ROUTES.offerings.organizations.get, filters), {
             method: 'GET',
           }).then(checkStatus);
+        },
       },
-      }
     },
     contractDefinitions: {
       previewTemplate(id: string): Promise<File> {

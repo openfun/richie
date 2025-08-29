@@ -480,7 +480,7 @@ export interface BatchOrder {
   nb_seats: number;
   payment_method: string;
   funding_entity?: string;
-  funding_amount?:number;
+  funding_amount?: number;
   organization_id?: string;
 }
 
@@ -760,11 +760,11 @@ export interface API {
     ): Filters extends { id: string }
       ? Promise<Nullable<Offering>>
       : Promise<PaginatedResponse<OfferingLight>>;
-      organizations:{
-       get<Filters extends ResourcesQuery = ResourcesQuery>(
-      filters?: Filters,
-    ): Filters extends { id: string } ? Promise<Nullable<Organization>> : Promise<Organization[]>;
-      }
+    organizations: {
+      get<Filters extends ResourcesQuery = ResourcesQuery>(
+        filters?: Filters,
+      ): Filters extends { id: string } ? Promise<Nullable<Organization>> : Promise<Organization[]>;
+    };
   };
   contractDefinitions: {
     previewTemplate(id: string): Promise<File>;

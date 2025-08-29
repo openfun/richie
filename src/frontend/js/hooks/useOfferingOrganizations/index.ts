@@ -21,12 +21,18 @@ const messages = defineMessages({
  * Joanie Api hook to retrieve organizations
  * owned by the authenticated user.
  */
-const props: UseResourcesProps<Organization, OrganizationResourceQuery, API['offerings']['organizations']> = {
+const props: UseResourcesProps<
+  Organization,
+  OrganizationResourceQuery,
+  API['offerings']['organizations']
+> = {
   queryKey: ['offeringOrganizations'],
   apiInterface: () => useJoanieApi().offerings.organizations,
   session: true,
   messages,
 };
 
-export const useOfferingOrganizations = useResources<Organization, OrganizationResourceQuery>(props);
+export const useOfferingOrganizations = useResources<Organization, OrganizationResourceQuery>(
+  props,
+);
 export const useOfferingOrganization = useResource<Organization, OrganizationResourceQuery>(props);
