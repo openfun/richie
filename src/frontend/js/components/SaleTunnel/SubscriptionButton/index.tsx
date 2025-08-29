@@ -149,12 +149,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
   };
 
   const createBatchOrder = async () => {
-    if (!batchOrder) return;
-    const isFormValid = await batchOrderFormMethods?.trigger();
-    if (!isFormValid) {
-      handleError(SubscriptionErrorMessageId.ERROR_BATCH_ORDER_FORM_INVALID);
-      return;
-    }
+    setState(ComponentStates.LOADING);
     try {
       await runSubmitCallbacks();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -162,7 +157,12 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       setState(ComponentStates.IDLE);
       return;
     }
-    setState(ComponentStates.LOADING);
+    if (!batchOrder) return;
+    const isFormValid = await batchOrderFormMethods?.trigger();
+    if (!isFormValid) {
+      handleError(SubscriptionErrorMessageId.ERROR_BATCH_ORDER_FORM_INVALID);
+      return;
+    }
     batchOrderMethods.create(batchOrder, {
       onError: async () => {
         handleError();
