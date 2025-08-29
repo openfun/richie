@@ -200,7 +200,7 @@ export interface OfferingRule {
 
 export interface Offering extends OfferingLight {
   is_withdrawable: boolean;
-  rules: OfferingRule;
+  rules?: OfferingRule;
 }
 export function isOffering(
   entity: CourseListItem | OfferingLight | RichieCourse,

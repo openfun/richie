@@ -194,7 +194,7 @@ describe('CourseProductItem', () => {
     const discountedPriceLabel = screen.getByText('Discounted price:');
     expect(discountedPriceLabel.classList.contains('offscreen')).toBe(true);
     const discountedPrice = screen.getByText(
-      priceFormatter(product.price_currency, offering.rules.discounted_price!).replace(
+      priceFormatter(product.price_currency, offering.rules!.discounted_price!).replace(
         /(\u202F|\u00a0)/g,
         ' ',
       ),
@@ -257,7 +257,7 @@ describe('CourseProductItem', () => {
     const discountedPriceLabel = screen.getByText('Discounted price:');
     expect(discountedPriceLabel.classList.contains('offscreen')).toBe(true);
     const discountedPrice = screen.getByText(
-      priceFormatter(product.price_currency, offering.rules.discounted_price!).replace(
+      priceFormatter(product.price_currency, offering.rules!.discounted_price!).replace(
         /(\u202F|\u00a0)/g,
         ' ',
       ),
