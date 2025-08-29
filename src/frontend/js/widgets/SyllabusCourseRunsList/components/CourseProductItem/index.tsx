@@ -103,7 +103,7 @@ const Header = ({ product, order, offering, hasPurchased, canPurchase, compact }
       return null;
     }
 
-    if (offering.rules.discounted_price != null) {
+    if (offering?.rules?.discounted_price != null) {
       return (
         <>
           <span id="original-price" className="offscreen">
@@ -133,7 +133,7 @@ const Header = ({ product, order, offering, hasPurchased, canPurchase, compact }
     return (
       <FormattedNumber currency={product.price_currency} value={product.price} style="currency" />
     );
-  }, [canPurchase, offering.rules.discounted_price, product.price]);
+  }, [canPurchase, offering?.rules?.discounted_price, product.price]);
 
   return (
     <header className="product-widget__header">
@@ -144,10 +144,10 @@ const Header = ({ product, order, offering, hasPurchased, canPurchase, compact }
         {hasPurchased && <FormattedMessage {...messages.purchased} />}
         {displayPrice}
       </strong>
-      {offering?.rules.description && (
+      {offering?.rules?.description && (
         <p className="product-widget__header-description">{offering.rules.description}</p>
       )}
-      {offering?.rules.discounted_price && (
+      {offering?.rules?.discounted_price && (
         <p className="product-widget__header-discount">
           {offering.rules.discount_rate ? (
             <span className="product-widget__header-discount-rate">

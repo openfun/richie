@@ -33,7 +33,7 @@ const CourseProductItemFooter = ({
   offering,
   canPurchase,
 }: CourseProductItemFooterProps) => {
-  if (!offering.rules.has_seats_left)
+  if (!offering?.rules?.has_seats_left)
     return (
       <p className="product-widget__footer__message">
         <FormattedMessage {...messages.noSeatsAvailable} />
@@ -50,7 +50,7 @@ const CourseProductItemFooter = ({
         disabled={!canPurchase}
         buttonProps={{ fullWidth: true }}
       />
-      {offering.rules.has_seat_limit && (
+      {offering?.rules?.has_seat_limit && (
         <p className="product-widget__footer__message">
           <FormattedMessage
             {...messages.nbSeatsAvailable}
