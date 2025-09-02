@@ -34,6 +34,7 @@ export const LearnerDashboardSidebar = (props: Partial<DashboardSidebarProps>) =
     () =>
       [
         LearnerDashboardPaths.COURSES,
+        LearnerDashboardPaths.BATCH_ORDERS,
         LearnerDashboardPaths.CERTIFICATES,
         LearnerDashboardPaths.CONTRACTS,
         LearnerDashboardPaths.PREFERENCES,
