@@ -18,6 +18,13 @@ export enum PaymentProviders {
   LYRA = 'lyra',
 }
 
+export enum PaymentMethod {
+  CARD_PAYMENT = 'card_payment',
+  BANK_TRANSFER = 'bank_transfer',
+  PURCHASE_ORDER = 'purchase_order',
+}
+
+
 export interface PaymentWithId {
   payment_id: string;
 }

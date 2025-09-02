@@ -6,6 +6,7 @@ import { useOfferingOrganizations } from 'hooks/useOfferingOrganizations';
 import { BatchOrder } from 'types/Joanie';
 import { CountrySelectField, getLocalizedCunninghamErrorProp } from 'components/Form';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
+import { PaymentMethod } from 'components/PaymentInterfaces/types';
 
 const messages = defineMessages({
   stepCompany: {
@@ -386,7 +387,7 @@ export const StepContent = ({
         <RadioGroup fullWidth={true} className="payment-block">
           <Radio
             {...register('payment_method')}
-            value="card_payment"
+            value={PaymentMethod.CARD_PAYMENT}
             label={intl.formatMessage(messages.cardPayment)}
             required
             state={formState.errors.payment_method?.message ? 'error' : 'default'}
@@ -396,7 +397,7 @@ export const StepContent = ({
           />
           <Radio
             {...register('payment_method')}
-            value="bank_transfer"
+            value={PaymentMethod.BANK_TRANSFER}
             label={intl.formatMessage(messages.bankTransfer)}
             required
             state={formState.errors.payment_method?.message ? 'error' : 'default'}
@@ -406,7 +407,7 @@ export const StepContent = ({
           />
           <Radio
             {...register('payment_method')}
-            value="purchase_order"
+            value={PaymentMethod.PURCHASE_ORDER}
             label={intl.formatMessage(messages.purchaseOrder)}
             required
             state={formState.errors.payment_method?.message ? 'error' : 'default'}
