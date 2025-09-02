@@ -6,6 +6,7 @@ import { defineMessages } from 'react-intl';
 export enum LearnerDashboardPaths {
   COURSES = '/courses',
   ORDER = `${COURSES}/orders/:orderId`,
+  BATCH_ORDER = `${COURSES}/batch-orders/:batchOrderId`,
   ORDER_RUNS = `${ORDER}/runs`,
   COURSE = `${COURSES}/:code`,
   CERTIFICATES = '/certificates',
@@ -28,6 +29,11 @@ export const LEARNER_DASHBOARD_ROUTE_LABELS = defineMessages<LearnerDashboardPat
     id: 'components.Dashboard.DashboardRoutes.order.label',
     description: 'Label of the order view used in navigation components.',
     defaultMessage: '{orderTitle}',
+  },
+  [LearnerDashboardPaths.BATCH_ORDER]: {
+    id: 'components.Dashboard.DashboardRoutes.batchOrder.label',
+    description: 'Label of the order view used in navigation components.',
+    defaultMessage: '{batchOrderTitle}',
   },
   [LearnerDashboardPaths.ORDER_RUNS]: {
     id: 'components.Dashboard.DashboardRoutes.order.runs.label',

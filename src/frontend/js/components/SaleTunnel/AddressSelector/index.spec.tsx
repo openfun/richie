@@ -65,6 +65,7 @@ describe('AddressSelector', () => {
           unregisterSubmitCallback: jest.fn(),
           runSubmitCallbacks: jest.fn(),
           nextStep: jest.fn(),
+          validateBatchOrder: jest.fn(),
           hasWaivedWithdrawalRight: false,
           setHasWaivedWithdrawalRight: jest.fn(),
         }),

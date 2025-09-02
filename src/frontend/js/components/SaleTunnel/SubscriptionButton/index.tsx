@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { useOrders } from 'hooks/useOrders';
 import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
-import { OrderCreationPayload } from 'types/Joanie';
+import { BatchOrder, OrderCreationPayload } from 'types/Joanie';
 import { useMatchMediaLg } from 'hooks/useMatchMedia';
 import { SubscriptionErrorMessageId } from 'components/PaymentInterfaces/types';
 import { HttpError } from 'utils/errors/HttpError';
@@ -89,10 +89,12 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     creditCard,
     billingAddress,
     batchOrder,
+    setBatchOrder,
     batchOrderFormMethods,
     hasWaivedWithdrawalRight,
     product,
     nextStep,
+    validateBatchOrder,
     runSubmitCallbacks,
     props: saleTunnelProps,
   } = useSaleTunnelContext();
@@ -167,8 +169,11 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       onError: async () => {
         handleError();
       },
-      onSuccess: async () => {
-        nextStep();
+      onSuccess: async (createdBatchOrder: BatchOrder) => {
+        setBatchOrder(createdBatchOrder);
+        if (batchOrder.id) {
+          validateBatchOrder();
+        }
       },
     });
   };

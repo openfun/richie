@@ -103,6 +103,7 @@ export const getRoutes = () => {
         set_payment_method: `${baseUrl}/orders/:id/payment-method/`,
       },
       batchOrders: {
+        get: `${baseUrl}/batch-orders/:id/`,
         create: `${baseUrl}/batch-orders/`,
       },
       certificates: {

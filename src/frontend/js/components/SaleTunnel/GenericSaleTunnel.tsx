@@ -57,6 +57,7 @@ export interface SaleTunnelContextType {
   unregisterSubmitCallback: (key: string) => void;
   runSubmitCallbacks: () => Promise<void>;
   nextStep: () => void;
+  validateBatchOrder: () => void;
 }
 
 export const SaleTunnelContext = createContext<SaleTunnelContextType>({} as any);
@@ -126,6 +127,10 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       }
   }, [order, step]);
 
+  const validateBatchOrder = useCallback(() => {
+    if (batchOrder && step === SaleTunnelStep.IDLE) setStep(SaleTunnelStep.SUCCESS);
+  }, [batchOrder]);
+
   const context: SaleTunnelContextType = useMemo(
     () => ({
       webAnalyticsEventKey: props.eventKey,
@@ -146,6 +151,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       setHasWaivedWithdrawalRight,
       nextStep,
       step,
+      validateBatchOrder,
       registerSubmitCallback: (key, callback) => {
         setSubmitCallbacks((prev) => new Map(prev).set(key, callback));
       },

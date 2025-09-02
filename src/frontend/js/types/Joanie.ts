@@ -463,6 +463,7 @@ export interface Billing {
 }
 
 export interface BatchOrder {
+  id?: string;
   offering_id: string;
   company_name: string;
   identification_number: string;
