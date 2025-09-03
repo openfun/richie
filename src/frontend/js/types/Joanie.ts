@@ -667,6 +667,9 @@ interface APIUser {
   };
   batchOrders: {
     create(payload: BatchOrder): Promise<any>;
+    get(filters?: ResourcesQuery): ResourcesQuery extends { id: string }
+      ? Promise<Nullable<BatchOrder>>
+      : Promise<PaginatedResponse<BatchOrder>>;
   };
   certificates: {
     download(id: string): Promise<File>;

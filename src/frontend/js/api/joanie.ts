@@ -317,6 +317,15 @@ const API = (): Joanie.API => {
             method: 'POST',
             body: JSON.stringify(payload),
           }).then(checkStatus),
+        get: async (filters) => {
+          const { id = '', ...parsedFilters } = filters || {};
+          let url: string;
+          if (id) url = ROUTES.user.batchOrders.get.replace(':id/', id);
+          else url = ROUTES.user.batchOrders.get.replace(':id/', '');
+          return fetchWithJWT(buildApiUrl(url, parsedFilters), {
+            method: 'GET',
+          }).then(checkStatus);
+        },
       },
       enrollments: {
         create: async (payload) =>

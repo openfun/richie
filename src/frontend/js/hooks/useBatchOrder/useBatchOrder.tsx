@@ -1,7 +1,8 @@
 import { useIntl, defineMessages } from 'react-intl';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
+import { ResourcesQuery } from 'hooks/useResources';
 
 const messages = defineMessages({
   errorCreate: {
@@ -26,9 +27,16 @@ export const useBatchOrder = () => {
     },
   });
 
+  const get = (filters?: ResourcesQuery) =>
+    useQuery({
+      queryKey: ['batchOrders', filters || {}],
+      queryFn: () => api.user.batchOrders.get(filters),
+    });
+
   return {
     methods: {
       create: createHandler.mutateAsync,
+      get,
     },
     states: {
       isPending: createHandler.isPending,
