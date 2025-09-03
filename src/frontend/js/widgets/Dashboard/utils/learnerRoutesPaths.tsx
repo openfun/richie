@@ -39,7 +39,7 @@ export const LEARNER_DASHBOARD_ROUTE_LABELS = defineMessages<LearnerDashboardPat
   [LearnerDashboardPaths.BATCH_ORDERS]: {
     id: 'components.Dashboard.DashboardRoutes.batchOrders.label',
     description: 'Label of the order view used in navigation components.',
-    defaultMessage: 'My group orders',
+    defaultMessage: 'My batch orders',
   },
   [LearnerDashboardPaths.ORDER_RUNS]: {
     id: 'components.Dashboard.DashboardRoutes.order.runs.label',
