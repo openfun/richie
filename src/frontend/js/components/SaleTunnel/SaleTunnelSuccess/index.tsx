@@ -68,20 +68,14 @@ export const SaleTunnelSuccess = ({ closeModal }: { closeModal: () => void }) =>
       )}
       {batchOrder?.id && (
         <footer className="sale-tunnel-step__footer">
-          {product.type === ProductType.CREDENTIAL ? (
-            <Button
-              href={
-                getDashboardBasename(intl.locale) +
-                generatePath(LearnerDashboardPaths.BATCH_ORDER, { batchOrderId: batchOrder!.id })
-              }
-            >
-              <FormattedMessage {...messages.cta} />
-            </Button>
-          ) : (
-            <Button onClick={closeModal}>
-              <FormattedMessage {...messages.cta} />
-            </Button>
-          )}
+          <Button
+            href={
+              getDashboardBasename(intl.locale) +
+              generatePath(LearnerDashboardPaths.BATCH_ORDER, { batchOrderId: batchOrder!.id })
+            }
+          >
+            <FormattedMessage {...messages.cta} />
+          </Button>
         </footer>
       )}
     </section>
