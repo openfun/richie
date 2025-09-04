@@ -5,6 +5,7 @@ import SearchBar from 'widgets/Dashboard/components/SearchBar';
 import SearchResultsCount from 'widgets/Dashboard/components/SearchResultsCount';
 import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
 import { DashboardItemBatchOrder } from 'widgets/Dashboard/components/DashboardItem/BatchOrder';
+import { BatchOrder } from 'types/Joanie';
 
 const messages = defineMessages({
   loading: {
@@ -27,7 +28,7 @@ const messages = defineMessages({
 export const DashboardBatchOrders = () => {
   const { methods } = useBatchOrder();
   const { data, isLoading } = methods.get();
-  const batchOrders = data?.results;
+  const batchOrders = data?.results.filter((value: BatchOrder) => value.state !== 'canceled');
 
   if (!batchOrders) {
     if (isLoading) return <Spinner size="large" />;

@@ -17,6 +17,8 @@ import {
 } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { CertificateType } from 'types/Joanie';
 import { DashboardBatchOrders } from 'pages/DashboardBatchOrders';
+import { DashboardBatchOrderLayout } from 'pages/DashboardBatchOrderLayout';
+import { DashboardBatchOrderLoader } from '../components/DashboardBatchOrderLoader';
 
 export interface DashboardRouteHandle {
   crumbLabel?: MessageDescriptor;
@@ -67,7 +69,7 @@ export function getLearnerDashboardRoutes() {
         },
         {
           path: LearnerDashboardPaths.BATCH_ORDER,
-          element: <DashboardOrderLayout />,
+          element: <DashboardBatchOrderLayout />,
           handle: {
             renderLayout: true,
             crumbLabel: LEARNER_DASHBOARD_ROUTE_LABELS[LearnerDashboardPaths.BATCH_ORDER],
@@ -75,7 +77,7 @@ export function getLearnerDashboardRoutes() {
           children: [
             {
               index: true,
-              element: <DashboardOrderLoader />,
+              element: <DashboardBatchOrderLoader />,
             },
           ],
         },

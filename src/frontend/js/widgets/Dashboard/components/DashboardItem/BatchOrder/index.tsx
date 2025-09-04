@@ -1,6 +1,9 @@
 import { BatchOrder } from 'types/Joanie';
 import { DashboardItem } from '../index';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { RouterButton } from '../../RouterButton';
+import { generatePath } from 'react-router';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 
 interface DashboardItemBatchOrderProps {
   batchOrder: BatchOrder;
@@ -15,25 +18,36 @@ const messages = defineMessages({
 });
 
 export const DashboardItemBatchOrder = ({ batchOrder }: DashboardItemBatchOrderProps) => {
+  const offering = batchOrder.offering;
   return (
     <div className="dashboard-item-order">
       <DashboardItem
         data-testid={`dashboard-item-batchorder-${batchOrder.id}`}
-        title={`Batch order`}
+        title={`Course`}
         code={'Ref. ' + batchOrder.id}
-        more={
-          <li>
-            <a className="selector__list__link" href={`/redirects/batch-orders/${batchOrder.id}`}>
-              <FormattedMessage {...messages.syllabusLinkLabel} />
-            </a>
-          </li>
-        }
         footer={
-          <div className="dashboard-item-order__footer">
-            <span>Number of seats : {batchOrder.nb_seats}</span>
-            <span>Payment method : {batchOrder.payment_method}</span>
-            <span>Offering : {batchOrder.offering_id}</span>
-          </div>
+          <>
+            <div className="dashboard-contract__body">
+              toto
+              <span>Number of seats : {batchOrder.nb_seats}</span>
+            </div>
+            <div className="dashboard-contract__footer">
+              <span className="dashboard-contract__footer__status">
+                Current state :{batchOrder.state}
+              </span>
+              <div>
+                <RouterButton
+                  size="small"
+                  href={generatePath(LearnerDashboardPaths.BATCH_ORDER, {
+                    batchOrderId: batchOrder.id!,
+                  })}
+                  className="dashboard-item__button"
+                >
+                  <FormattedMessage {...messages.syllabusLinkLabel} />
+                </RouterButton>
+              </div>
+            </div>
+          </>
         }
       />
     </div>

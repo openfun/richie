@@ -472,6 +472,8 @@ export interface BatchOrder {
   postcode: string;
   city: string;
   country: string;
+  offering?: OfferingLight;
+  state?: string;
   administrative_lastname: string;
   administrative_firstname: string;
   administrative_profession: string;
