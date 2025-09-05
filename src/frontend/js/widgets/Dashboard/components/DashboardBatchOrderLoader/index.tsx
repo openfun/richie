@@ -17,7 +17,6 @@ export const DashboardBatchOrderLoader = () => {
   const params = useParams<{ batchOrderId: string }>();
   const { methods, states } = useBatchOrder();
   const { data } = methods.get();
-  console.log(data?.results.find((value: BatchOrder) => value.id === params.batchOrderId));
   const batchOrder = data?.results.find((value: BatchOrder) => value.id === params.batchOrderId);
   const fetching = states.isPending;
 

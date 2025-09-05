@@ -1,8 +1,6 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import classNames from 'classnames';
 import { Spinner } from 'components/Spinner';
-import SearchBar from 'widgets/Dashboard/components/SearchBar';
-import SearchResultsCount from 'widgets/Dashboard/components/SearchResultsCount';
 import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
 import { DashboardItemBatchOrder } from 'widgets/Dashboard/components/DashboardItem/BatchOrder';
 import { BatchOrder } from 'types/Joanie';
@@ -37,9 +35,6 @@ export const DashboardBatchOrders = () => {
 
   return (
     <div className="dashboard__courses">
-      <SearchBar.Container>
-        <SearchResultsCount nbResults={batchOrders.length} />
-      </SearchBar.Container>
       <div className={classNames('dashboard__courses__list')}>
         {batchOrders.map((batchOrder) => (
           <div

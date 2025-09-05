@@ -62,6 +62,24 @@
       @include media-breakpoint-down(sm) {
         margin-bottom: 0.5rem;
       }
+
+      &__badge {
+        padding: 0.25rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    &__information {
+      display: flex;
+      flex-direction: row;
+      gap: 0.25rem;
+      margin: 0 0.5rem;
+      text-align: center;
+      align-items: center;
+      align-content: center;
+      justify-content: center;
     }
   }
 

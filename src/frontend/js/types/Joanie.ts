@@ -3,7 +3,7 @@ import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 import { Course as RichieCourse } from 'types/Course';
-import { Payment } from 'components/PaymentInterfaces/types';
+import { Payment, PaymentMethod } from 'components/PaymentInterfaces/types';
 import { JoanieUserProfile } from './User';
 
 // - Generic
@@ -462,6 +462,24 @@ export interface Billing {
   country?: string;
 }
 
+export interface OfferingBatchOrder {
+  product_id:string;
+  product_title:string;
+  course:CourseListItem;
+}
+
+export enum BatchOrderState {
+  DRAFT = "draft",
+  ASSIGNED = "assigned",
+  QUOTED = "quoted",
+  TO_SIGN = "to_sign",
+  SIGNING = "signing",
+  PENDING = "pending",
+  FAILED_PAYMENT = "failed_payment",
+  CANCELED = "canceled",
+  COMPLETED = "completed",
+}
+
 export interface BatchOrder {
   id?: string;
   offering_id: string;
@@ -472,8 +490,8 @@ export interface BatchOrder {
   postcode: string;
   city: string;
   country: string;
-  offering?: OfferingLight;
-  state?: string;
+  offering?: OfferingBatchOrder;
+  state?: BatchOrderState;
   administrative_lastname: string;
   administrative_firstname: string;
   administrative_profession: string;
@@ -481,11 +499,12 @@ export interface BatchOrder {
   administrative_telephone: string;
   billing?: Billing;
   nb_seats: number;
-  payment_method: string;
+  payment_method: PaymentMethod;
   funding_entity?: string;
   funding_amount?: number;
   organization_id?: string;
 }
+
 
 // Wishlist
 export interface CourseWish extends Resource {
