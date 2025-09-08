@@ -1,19 +1,44 @@
-import { BatchOrder, BatchOrderState } from 'types/Joanie';
-import { DashboardItem } from '../index';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { RouterButton } from '../../RouterButton';
 import { generatePath } from 'react-router';
-import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { BatchOrder, BatchOrderState } from 'types/Joanie';
 import { Icon, IconTypeEnum } from 'components/Icon';
+import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
+import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
+import { DashboardSubItemsList } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItemsList';
+import { DashboardItem } from '../index';
 import Badge from 'components/Badge';
 import { PaymentMethod } from 'components/PaymentInterfaces/types';
 
-interface DashboardItemBatchOrderProps {
-  batchOrder: BatchOrder;
-  showDetails?: boolean;
-}
-
 const messages = defineMessages({
+  accessBatchOrder: {
+    id: 'components.DashboardItemBatchOrder.access',
+    defaultMessage: 'View details',
+  },
+  seats: {
+    id: 'components.DashboardItemBatchOrder.seats',
+    defaultMessage: 'seats',
+  },
+  stepCompanyTitle: {
+    id: 'batchOrder.step.company',
+    defaultMessage: 'Organization',
+  },
+  stepAdminTitle: {
+    id: 'batchOrder.step.admin',
+    defaultMessage: 'Follow-up',
+  },
+  stepParticipantsTitle: {
+    id: 'batchOrder.step.participants',
+    defaultMessage: 'Participants',
+  },
+  stepFinancingTitle: {
+    id: 'batchOrder.step.financing',
+    defaultMessage: 'Financing',
+  },
+  stepBillingTitle: {
+    id: 'batchOrder.step.billing',
+    defaultMessage: 'Billing',
+  },
   [BatchOrderState.DRAFT]: { id: 'batchOrder.status.draft', defaultMessage: 'Draft' },
   [BatchOrderState.ASSIGNED]: { id: 'batchOrder.status.assigned', defaultMessage: 'Assigned' },
   [BatchOrderState.QUOTED]: { id: 'batchOrder.status.quoted', defaultMessage: 'Quoted' },
@@ -35,23 +60,23 @@ const messages = defineMessages({
     id: 'batchOrder.payment.order',
     defaultMessage: 'Purchase order',
   },
-  accessBatchOrder: {
-    id: 'batchOrder.action.view',
-    defaultMessage: 'View details',
-  },
-  seats: {
-    id: 'batchOrder.seats',
-    defaultMessage: 'seats',
-  },
 });
 
-export const DashboardItemBatchOrder = ({ batchOrder }: DashboardItemBatchOrderProps) => {
+interface DashboardItemBatchOrderProps {
+  batchOrder: BatchOrder;
+  showDetailsButton?: boolean;
+}
+
+export const DashboardItemBatchOrder = ({
+  batchOrder,
+  showDetailsButton = false,
+}: DashboardItemBatchOrderProps) => {
   const intl = useIntl();
 
   return (
     <div className="dashboard-item-order">
       <DashboardItem
-        data-testid={`dashboard-item-order-${batchOrder.id}`}
+        data-testid={`dashboard-item-batch-order-${batchOrder.id}`}
         title={batchOrder.offering?.product_title}
         code={'Ref. ' + batchOrder.id}
         imageUrl={batchOrder.offering?.course.cover?.src}
@@ -79,19 +104,84 @@ export const DashboardItemBatchOrder = ({ batchOrder }: DashboardItemBatchOrderP
                 </div>
               )}
             </div>
-            <RouterButton
-              size="small"
-              className="dashboard-item__button"
-              href={generatePath(LearnerDashboardPaths.BATCH_ORDER, {
-                batchOrderId: batchOrder.id!,
-              })}
-              data-testid="dashboard-item-order__button"
-            >
-              {intl.formatMessage(messages.accessBatchOrder)}
-            </RouterButton>
+            {!showDetailsButton && (
+              <RouterButton
+                size="small"
+                className="dashboard-item__button"
+                href={generatePath(LearnerDashboardPaths.BATCH_ORDER, {
+                  batchOrderId: batchOrder.id!,
+                })}
+                data-testid="dashboard-item-batch-order__button"
+              >
+                {intl.formatMessage(messages.accessBatchOrder)}
+              </RouterButton>
+            )}
           </div>
         }
-      />
+      >
+        {showDetailsButton && (
+          <DashboardSubItemsList
+            subItems={[
+              <DashboardSubItem
+                title="Company"
+                footer={
+                  <div className="dashboard-item-order__footer">
+                    <div>{batchOrder.company_name}</div>
+                    <div>{batchOrder.identification_number}</div>
+                    <div>{batchOrder.address}</div>
+                    <div>
+                      {batchOrder.postcode} {batchOrder.city} {batchOrder.country}
+                    </div>
+                  </div>
+                }
+              />,
+              <DashboardSubItem
+                title="Administrative contact"
+                footer={
+                  <div className="dashboard-item-order__footer">
+                    <div>
+                      {batchOrder.administrative_firstname} {batchOrder.administrative_lastname}
+                    </div>
+                    <div>{batchOrder.administrative_profession}</div>
+                    <div>{batchOrder.administrative_email}</div>
+                    <div>{batchOrder.administrative_telephone}</div>
+                  </div>
+                }
+              />,
+              <DashboardSubItem
+                title="Participants"
+                footer={<div className="dashboard-item-order__footer">{batchOrder.nb_seats}</div>}
+              />,
+              <DashboardSubItem
+                title="Payment"
+                footer={
+                  <div className="dashboard-item-order__footer">
+                    {batchOrder.payment_method && (
+                      <div>
+                        <FormattedMessage {...messages[batchOrder.payment_method]} />
+                      </div>
+                    )}
+                    <div>{batchOrder.funding_entity}</div>
+                    <div>{batchOrder.funding_amount}</div>
+                  </div>
+                }
+              />,
+              <DashboardSubItem
+                title="Billing"
+                footer={
+                  <div className="dashboard-item__block__status">
+                    <div>{batchOrder.billing?.address}</div>
+                    <div>
+                      {batchOrder.billing?.postcode} {batchOrder.billing?.city}
+                      {batchOrder.billing?.country}
+                    </div>
+                  </div>
+                }
+              />,
+            ]}
+          />
+        )}
+      </DashboardItem>
     </div>
   );
 };
