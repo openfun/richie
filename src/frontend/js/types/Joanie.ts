@@ -503,6 +503,7 @@ export interface BatchOrder {
   funding_entity?: string;
   funding_amount?: number;
   organization_id?: string;
+  organization?: Organization;
 }
 
 

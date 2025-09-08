@@ -9,6 +9,7 @@ import Form from 'components/Form';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { StepContent } from 'components/SaleTunnel/SaleTunnelInformation/StepContent';
 import { ObjectHelper } from 'utils/ObjectHelper';
+import { PaymentMethod } from 'components/PaymentInterfaces/types';
 
 const messages = defineMessages({
   title: {
@@ -104,7 +105,7 @@ const validationSchema = Yup.object().shape({
     country: Yup.string().optional(),
   }),
   nb_seats: Yup.number().required().min(1),
-  payment_method: Yup.string().required(),
+  payment_method: Yup.mixed<PaymentMethod>().oneOf(Object.values(PaymentMethod)).required(),
   funding_entity: Yup.string().optional(),
   funding_amount: Yup.number().optional(),
   organization_id: Yup.string().optional(),
@@ -127,7 +128,7 @@ const BatchOrderForm = () => {
     administrative_email: '',
     administrative_telephone: '',
     nb_seats: 0,
-    payment_method: '',
+    payment_method: PaymentMethod.PURCHASE_ORDER,
     funding_amount: 0,
   };
 

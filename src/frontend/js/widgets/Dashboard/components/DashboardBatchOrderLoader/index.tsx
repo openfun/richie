@@ -29,7 +29,7 @@ export const DashboardBatchOrderLoader = () => {
           </span>
         </Spinner>
       )}
-      {batchOrder && <DashboardItemBatchOrder batchOrder={batchOrder} />}
+      {batchOrder && <DashboardItemBatchOrder batchOrder={batchOrder} showDetails />}
     </>
   );
 };
