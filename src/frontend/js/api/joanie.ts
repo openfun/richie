@@ -16,7 +16,6 @@ import { JOANIE_API_VERSION } from 'settings';
 import { ResourcesQuery } from 'hooks/useResources';
 import { ObjectHelper } from 'utils/ObjectHelper';
 import { Maybe, Nullable } from 'types/utils';
-import { PaymentSchedule } from 'types/Joanie';
 import { checkStatus, getFileFromResponse } from './utils';
 
 /*
@@ -145,8 +144,8 @@ export const getRoutes = () => {
       },
       products: {
         get: `${baseUrl}/courses/:course_id/products/:id/`,
-        paymentSchedule: {
-          get: `${baseUrl}/courses/:course_id/products/:id/payment-schedule/`,
+        paymentPlan: {
+          get: `${baseUrl}/courses/:course_id/products/:id/payment-plan/`,
         },
       },
       orders: {
@@ -430,10 +429,10 @@ const API = (): Joanie.API => {
 
           return fetchWithJWT(buildApiUrl(ROUTES.courses.products.get, filters)).then(checkStatus);
         },
-        paymentSchedule: {
+        paymentPlan: {
           get: async (
             filters?: Joanie.CourseProductQueryFilters,
-          ): Promise<Nullable<PaymentSchedule>> => {
+          ): Promise<Nullable<Joanie.PaymentPlan>> => {
             if (!filters) {
               throw new Error(
                 'A course code and a product id are required to fetch a course product',
@@ -444,9 +443,9 @@ const API = (): Joanie.API => {
               throw new Error('A product id is required to fetch a course product');
             }
 
-            return fetchWithJWT(
-              buildApiUrl(ROUTES.courses.products.paymentSchedule.get, filters),
-            ).then(checkStatus);
+            return fetchWithJWT(buildApiUrl(ROUTES.courses.products.paymentPlan.get, filters)).then(
+              checkStatus,
+            );
           },
         },
       },
