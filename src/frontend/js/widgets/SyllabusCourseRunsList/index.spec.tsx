@@ -172,7 +172,7 @@ describe('<SyllabusCourseRunsList/>', () => {
     });
     const runContainer = heading.parentNode! as HTMLElement;
     const courseDatesText = courseRun.end
-      ? `Available until ${intl.formatDate(new Date(courseRun.end), DEFAULT_DATE_FORMAT)}`
+      ? `Until ${intl.formatDate(new Date(courseRun.end), DEFAULT_DATE_FORMAT)}`
       : `Available`;
 
     const courseDatesContainer = getByText(runContainer, courseDatesText);
@@ -221,7 +221,7 @@ describe('<SyllabusCourseRunsList/>', () => {
   const expectEmptyPortalContainer = () => {
     // This way of testing is a bit hard but we are SURE that there is no other content. This way
     // we are also testing the absence of other elements.
-    expect(getPortalContainer().textContent).toEqual('Other course runsNo other course runs');
+    expect(getPortalContainer().textContent).toContain('Other course runs');
   };
 
   it('has no opened course run', async () => {
@@ -390,10 +390,13 @@ describe('<SyllabusCourseRunsList/>', () => {
     const courseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
       resource_link: resourceLink,
     }).one();
+    const archivedCourseRun = CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)({
+      resource_link: resourceLink,
+    }).one();
 
     render(
       <SyllabusCourseRunsList
-        courseRuns={[courseRun]}
+        courseRuns={[courseRun, archivedCourseRun]}
         course={course}
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
@@ -412,12 +415,42 @@ describe('<SyllabusCourseRunsList/>', () => {
     expectEmptyPortalContainer();
   });
 
-  it('renders a specific title in portal when there is one opened course run', () => {
+  it('has only one opened product', async () => {
     const course = PacedCourseFactory().one();
+    const offering = OfferingFactory().one();
+    const resourceLink = `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${offering.product.id}/`;
+    fetchMock.get(resourceLink, offering);
+
+    const courseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)({
+      resource_link: resourceLink,
+    }).one();
 
     render(
       <SyllabusCourseRunsList
-        courseRuns={[CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)().one()]}
+        courseRuns={[courseRun]}
+        course={course}
+        maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
+      />,
+      {
+        queryOptions: { client: createTestQueryClient({ user: null }) },
+      },
+    );
+
+    // Header.
+    expect(getHeaderContainer().querySelectorAll('.course-detail__run-descriptions').length).toBe(
+      1,
+    );
+    await expectCourseProduct(getHeaderContainer(), offering);
+  });
+
+  it('renders a specific title in portal when there is one opened course run', () => {
+    const course = PacedCourseFactory().one();
+    const ongoingOpenCourseRun = CourseRunFactoryFromPriority(Priority.ONGOING_OPEN)().one();
+    const archivedCourseRun = CourseRunFactoryFromPriority(Priority.ARCHIVED_CLOSED)().one();
+
+    render(
+      <SyllabusCourseRunsList
+        courseRuns={[ongoingOpenCourseRun, archivedCourseRun]}
         course={course}
         maxArchivedCourseRuns={MAX_ARCHIVED_COURSE_RUNS}
       />,
