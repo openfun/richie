@@ -15,6 +15,10 @@ const messages = defineMessages({
     id: 'components.DashboardItemBatchOrder.access',
     defaultMessage: 'View details',
   },
+  accessBatchOrders: {
+    id: 'components.DashboardItemBatchOrder.accessAll',
+    defaultMessage: 'View all batch orders',
+  },
   seats: {
     id: 'components.DashboardItemBatchOrder.seats',
     defaultMessage: 'seats',
@@ -64,12 +68,12 @@ const messages = defineMessages({
 
 interface DashboardItemBatchOrderProps {
   batchOrder: BatchOrder;
-  showDetailsButton?: boolean;
+  showDetails?: boolean;
 }
 
 export const DashboardItemBatchOrder = ({
   batchOrder,
-  showDetailsButton = false,
+  showDetails = false,
 }: DashboardItemBatchOrderProps) => {
   const intl = useIntl();
 
@@ -104,7 +108,18 @@ export const DashboardItemBatchOrder = ({
                 </div>
               )}
             </div>
-            {!showDetailsButton && (
+            {showDetails ? (
+              <RouterButton
+                size="small"
+                className="dashboard-item__button"
+                href={generatePath(LearnerDashboardPaths.BATCH_ORDER, {
+                  batchOrderId: batchOrder.id!,
+                })}
+                data-testid="dashboard-item-batch-order__button"
+              >
+                {intl.formatMessage(messages.accessBatchOrders)}
+              </RouterButton>
+            ) : (
               <RouterButton
                 size="small"
                 className="dashboard-item__button"
@@ -119,13 +134,13 @@ export const DashboardItemBatchOrder = ({
           </div>
         }
       >
-        {showDetailsButton && (
+        {showDetails && (
           <DashboardSubItemsList
             subItems={[
               <DashboardSubItem
                 title="Company"
                 footer={
-                  <div className="dashboard-item-order__footer">
+                  <div>
                     <div>{batchOrder.company_name}</div>
                     <div>{batchOrder.identification_number}</div>
                     <div>{batchOrder.address}</div>
@@ -138,7 +153,7 @@ export const DashboardItemBatchOrder = ({
               <DashboardSubItem
                 title="Administrative contact"
                 footer={
-                  <div className="dashboard-item-order__footer">
+                  <div>
                     <div>
                       {batchOrder.administrative_firstname} {batchOrder.administrative_lastname}
                     </div>
@@ -148,14 +163,11 @@ export const DashboardItemBatchOrder = ({
                   </div>
                 }
               />,
-              <DashboardSubItem
-                title="Participants"
-                footer={<div className="dashboard-item-order__footer">{batchOrder.nb_seats}</div>}
-              />,
+              <DashboardSubItem title="Participants" footer={<div>{batchOrder.nb_seats}</div>} />,
               <DashboardSubItem
                 title="Payment"
                 footer={
-                  <div className="dashboard-item-order__footer">
+                  <div>
                     {batchOrder.payment_method && (
                       <div>
                         <FormattedMessage {...messages[batchOrder.payment_method]} />
@@ -169,7 +181,7 @@ export const DashboardItemBatchOrder = ({
               <DashboardSubItem
                 title="Billing"
                 footer={
-                  <div className="dashboard-item__block__status">
+                  <div>
                     <div>{batchOrder.billing?.address}</div>
                     <div>
                       {batchOrder.billing?.postcode} {batchOrder.billing?.city}
