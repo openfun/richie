@@ -108,28 +108,20 @@ export const SyllabusAsideList = ({
 
   const showLanguages = CourseRunHelper.IsAllCourseRunsWithSameLanguages(courseRuns);
 
+  // If there are no runs to display at all, don't render anything
+  if (openedRuns.length <= 1 && otherRuns.length === 0) {
+    return null;
+  }
+
   return (
     <>
       <h2 className="course-detail__title">
-        {openedRuns.length === 1 ? (
-          <FormattedMessage {...messages.otherCourseRuns} />
-        ) : (
+        {openedRuns.length > 1 ? (
           <FormattedMessage {...messages.courseRunsTitle} />
+        ) : (
+          <FormattedMessage {...messages.otherCourseRuns} />
         )}
       </h2>
-      {openedRuns.length <= 1 && otherRuns.length === 0 && (
-        <div className="course-detail__row course-detail__no-runs">
-          {openedRuns.length === 0 ? (
-            <p>
-              <FormattedMessage {...messages.noCourseRuns} />
-            </p>
-          ) : (
-            <p>
-              <FormattedMessage {...messages.noOtherCourseRuns} />
-            </p>
-          )}
-        </div>
-      )}
       {openedRuns.length > 1 && (
         <div
           id="courseDetailsRunsOpen"
