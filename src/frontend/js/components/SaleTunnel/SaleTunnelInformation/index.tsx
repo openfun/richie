@@ -89,14 +89,14 @@ export const SaleTunnelInformation = () => {
   const { props, product, voucherCode, setVoucherCode } = useSaleTunnelContext();
   const [voucherError, setVoucherError] = useState(false);
   const query = usePaymentPlan({
-    course_code: props.course?.code || props.enrollment!.course_run.course.code,
+    course_code: props.course?.code ?? props.enrollment!.course_run.course.code,
     product_id: props.product.id,
     ...(voucherCode ? { voucher_code: voucherCode } : {}),
   });
-  const schedule = query.data?.payment_schedule || props.paymentPlan?.payment_schedule;
-  const price = query.data?.price || props.paymentPlan?.price;
-  const discountedPrice = query.data?.discounted_price || props.paymentPlan?.discounted_price;
-  const discount = query.data?.discount || props.paymentPlan?.discount;
+  const schedule = query.data?.payment_schedule ?? props.paymentPlan?.payment_schedule;
+  const price = query.data?.price ?? props.paymentPlan?.price;
+  const discountedPrice = query.data?.discounted_price ?? props.paymentPlan?.discounted_price;
+  const discount = query.data?.discount ?? props.paymentPlan?.discount;
 
   useEffect(() => {
     if (query.error && voucherCode) {
@@ -121,7 +121,9 @@ export const SaleTunnelInformation = () => {
         </div>
       </div>
       <div>
-        {product.type === ProductType.CREDENTIAL && <PaymentScheduleBlock schedule={schedule} />}
+        {product.type === ProductType.CREDENTIAL && schedule && (
+          <PaymentScheduleBlock schedule={schedule} />
+        )}
         <Voucher
           discount={discount}
           voucherError={voucherError}
@@ -229,8 +231,9 @@ const Voucher = ({
           value={voucher}
           onChange={handleVoucher}
           label={intl.formatMessage(messages.voucherTitle)}
+          disabled={!!voucherCode}
         />
-        <Button size="small" color="primary" onClick={submitVoucher}>
+        <Button size="small" color="primary" onClick={submitVoucher} disabled={!!voucherCode}>
           <FormattedMessage {...messages.voucherValidate} />
         </Button>
       </div>
@@ -262,19 +265,15 @@ const Voucher = ({
   );
 };
 
-const PaymentScheduleBlock = ({ schedule }: { schedule?: PaymentSchedule }) => {
+const PaymentScheduleBlock = ({ schedule }: { schedule: PaymentSchedule }) => {
   return (
     <div className="payment-schedule">
-      {schedule && (
-        <>
-          <h4 className="block-title mb-t">
-            <FormattedMessage {...messages.paymentSchedule} />
-          </h4>
-          <div className="mt-t">
-            <PaymentScheduleGrid schedule={schedule} />
-          </div>
-        </>
-      )}
+      <h4 className="block-title mb-t">
+        <FormattedMessage {...messages.paymentSchedule} />
+      </h4>
+      <div className="mt-t">
+        <PaymentScheduleGrid schedule={schedule} />
+      </div>
     </div>
   );
 };

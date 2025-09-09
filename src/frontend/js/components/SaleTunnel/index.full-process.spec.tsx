@@ -70,7 +70,9 @@ describe('SaleTunnel', () => {
     new Intl.NumberFormat('en', {
       currency,
       style: 'currency',
-    }).format(price);
+    })
+      .format(price)
+      .replace(/(\u202F|\u00a0)/g, ' ');
 
   beforeEach(() => {
     richieUser = UserFactory().one();
@@ -135,7 +137,7 @@ describe('SaleTunnel', () => {
     screen.getByText(
       // the price formatter generates non-breaking spaces and getByText doesn't seem to handle that well, replace it
       // with a regular space. We replace NNBSP (\u202F) and NBSP (\u00a0) with a regular space
-      priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+      priceFormatter(product.price_currency, product.price),
     );
     expect(screen.queryByText('Purchased')).not.toBeInTheDocument();
 
@@ -255,9 +257,7 @@ describe('SaleTunnel', () => {
       const cells = getAllByRole(row, 'cell');
       expect(cells).toHaveLength(4);
       expect(cells[0]).toHaveTextContent((index + 1).toString());
-      expect(cells[1]).toHaveTextContent(
-        priceFormatter(installment.currency, installment.amount).replace(/(\u202F|\u00a0)/g, ' '),
-      );
+      expect(cells[1]).toHaveTextContent(priceFormatter(installment.currency, installment.amount));
       expect(cells[2]).toHaveTextContent(
         `Withdrawn on ${dateFormatter.format(new Date(installment.due_date))}`,
       );
@@ -266,8 +266,7 @@ describe('SaleTunnel', () => {
 
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
-      'Total' +
-        priceFormatter(product.price_currency, paymentPlan.price).replace(/(\u202F|\u00a0)/g, ' '),
+      'Total' + priceFormatter(product.price_currency, paymentPlan.price),
     );
 
     /**
@@ -289,14 +288,8 @@ describe('SaleTunnel', () => {
     const $totalAmountVoucher = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmountVoucher).toHaveTextContent(
       'Total' +
-        priceFormatter(product.price_currency, paymentPlanVoucher.price!).replace(
-          /(\u202F|\u00a0)/g,
-          ' ',
-        ) +
-        priceFormatter(product.price_currency, paymentPlanVoucher.discounted_price!).replace(
-          /(\u202F|\u00a0)/g,
-          ' ',
-        ),
+        priceFormatter(product.price_currency, paymentPlanVoucher.price!) +
+        priceFormatter(product.price_currency, paymentPlanVoucher.discounted_price!),
     );
 
     /**
