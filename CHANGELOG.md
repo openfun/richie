@@ -13,6 +13,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix Keycloak race condition causing users to appear unauthenticated
 - Hide payment plan block for certificates
 
+### Changed
+
+- Changed self paced course availability presentation
+- Remove the entire run component if other runs list is empty
+
 ## [3.3.0] - 2026-02-25
 
 ### Added
