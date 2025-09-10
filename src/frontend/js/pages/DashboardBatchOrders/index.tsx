@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { Spinner } from 'components/Spinner';
 import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
 import { DashboardItemBatchOrder } from 'widgets/Dashboard/components/DashboardItem/BatchOrder';
-import { BatchOrder } from 'types/Joanie';
+import { BatchOrder, BatchOrderRead } from 'types/Joanie';
 
 const messages = defineMessages({
   loading: {
@@ -26,7 +26,7 @@ const messages = defineMessages({
 export const DashboardBatchOrders = () => {
   const { methods } = useBatchOrder();
   const { data, isLoading } = methods.get();
-  const batchOrders = data?.results.filter((value: BatchOrder) => value.state !== 'canceled');
+  const batchOrders = data?.results.filter((value: BatchOrderRead) => value.state !== 'canceled');
 
   if (!batchOrders) {
     if (isLoading) return <Spinner size="large" />;

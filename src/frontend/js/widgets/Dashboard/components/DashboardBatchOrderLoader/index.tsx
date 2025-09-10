@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Spinner } from 'components/Spinner';
 import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
 import { DashboardItemBatchOrder } from '../DashboardItem/BatchOrder';
-import { BatchOrder } from 'types/Joanie';
+import { BatchOrder, BatchOrderRead } from 'types/Joanie';
 
 const messages = defineMessages({
   loading: {
@@ -16,8 +16,8 @@ const messages = defineMessages({
 export const DashboardBatchOrderLoader = () => {
   const params = useParams<{ batchOrderId: string }>();
   const { methods, states } = useBatchOrder();
-  const { data } = methods.get();
-  const batchOrder = data?.results.find((value: BatchOrder) => value.id === params.batchOrderId);
+  const { data } = methods.get({ id: params.batchOrderId });
+  const batchOrder = data as BatchOrderRead;
   const fetching = states.isPending;
 
   return (

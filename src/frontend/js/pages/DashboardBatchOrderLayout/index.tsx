@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
-import { BatchOrder } from 'types/Joanie';
+import { BatchOrder, BatchOrderRead } from 'types/Joanie';
 import { LearnerDashboardSidebar } from 'widgets/Dashboard/components/LearnerDashboardSidebar';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
@@ -39,7 +39,7 @@ export const DashboardBatchOrderLayout = () => {
   );
 };
 
-const DashboardBatchOrderLayoutContent = ({ batchOrder }: { batchOrder?: BatchOrder }) => {
+const DashboardBatchOrderLayoutContent = ({ batchOrder }: { batchOrder?: BatchOrderRead }) => {
   useBreadcrumbsPlaceholders({
     orderTitle: batchOrder?.id ?? '',
   });

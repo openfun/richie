@@ -490,8 +490,6 @@ export interface BatchOrder {
   postcode: string;
   city: string;
   country: string;
-  offering?: OfferingBatchOrder;
-  state?: BatchOrderState;
   administrative_lastname: string;
   administrative_firstname: string;
   administrative_profession: string;
@@ -503,7 +501,34 @@ export interface BatchOrder {
   funding_entity?: string;
   funding_amount?: number;
   organization_id?: string;
-  organization?: Organization;
+}
+
+export interface BatchOrderRead {
+  id: string;
+  owner: string;
+  total:number;
+  organization:Organization;
+  main_invoice_reference?:string;
+  contract_id?:string;
+  company_name:string;
+  identification_number:string;
+  vat_number?:string;
+  address:string;
+  postcode:string;
+  city:string;
+  country:string;
+  nb_seats:number;
+  payment_method: PaymentMethod;
+  state: BatchOrderState;
+  administrative_lastname: string;
+  administrative_firstname: string;
+  administrative_profession: string;
+  administrative_email: string;
+  administrative_telephone: string;
+  billing?: Billing;
+  funding_entity?: string;
+  funding_amount?: number;
+  offering: OfferingBatchOrder;
 }
 
 
@@ -690,8 +715,8 @@ interface APIUser {
   batchOrders: {
     create(payload: BatchOrder): Promise<any>;
     get(filters?: ResourcesQuery): ResourcesQuery extends { id: string }
-      ? Promise<Nullable<BatchOrder>>
-      : Promise<PaginatedResponse<BatchOrder>>;
+      ? Promise<Nullable<BatchOrderRead>>
+      : Promise<PaginatedResponse<BatchOrderRead>>;
   };
   certificates: {
     download(id: string): Promise<File>;

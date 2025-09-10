@@ -97,6 +97,11 @@
     justify-content: center;
     min-width: rem-calc(140px);
   }
+
+  &__label {
+    font-weight: bold;
+    margin-right: 0.25rem;
+  }
 }
 
 .dashboard-sub-item-list {
@@ -136,7 +141,6 @@
   color: r-theme-val(dashboard-item, base-color);
   margin-top: 10px;
   background: r-theme-val(dashboard-item, background-color);
-
   &__header {
     align-items: center;
     display: flex;
@@ -149,6 +153,12 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+    }
+  }
+  &__footer {
+    .content {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
     }
   }
 }
