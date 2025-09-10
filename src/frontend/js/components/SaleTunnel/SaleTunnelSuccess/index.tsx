@@ -70,7 +70,8 @@ export const SaleTunnelSuccess = ({ closeModal }: { closeModal: () => void }) =>
         <footer className="sale-tunnel-step__footer">
           <Button
             href={
-              getDashboardBasename(intl.locale) + generatePath(LearnerDashboardPaths.BATCH_ORDERS)
+              getDashboardBasename(intl.locale) +
+              generatePath(LearnerDashboardPaths.BATCH_ORDER, { batchOrderId: batchOrder.id })
             }
           >
             <FormattedMessage {...messages.cta} />

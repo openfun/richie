@@ -512,7 +512,7 @@ export interface BatchOrderRead {
   contract_id?:string;
   company_name:string;
   identification_number:string;
-  vat_number?:string;
+  vat_registration?:string;
   address:string;
   postcode:string;
   city:string;
