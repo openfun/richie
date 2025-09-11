@@ -463,21 +463,21 @@ export interface Billing {
 }
 
 export interface OfferingBatchOrder {
-  product_id:string;
-  product_title:string;
-  course:CourseListItem;
+  product_id: string;
+  product_title: string;
+  course: CourseListItem;
 }
 
 export enum BatchOrderState {
-  DRAFT = "draft",
-  ASSIGNED = "assigned",
-  QUOTED = "quoted",
-  TO_SIGN = "to_sign",
-  SIGNING = "signing",
-  PENDING = "pending",
-  FAILED_PAYMENT = "failed_payment",
-  CANCELED = "canceled",
-  COMPLETED = "completed",
+  DRAFT = 'draft',
+  ASSIGNED = 'assigned',
+  QUOTED = 'quoted',
+  TO_SIGN = 'to_sign',
+  SIGNING = 'signing',
+  PENDING = 'pending',
+  FAILED_PAYMENT = 'failed_payment',
+  CANCELED = 'canceled',
+  COMPLETED = 'completed',
 }
 
 export interface BatchOrder {
@@ -506,18 +506,18 @@ export interface BatchOrder {
 export interface BatchOrderRead {
   id: string;
   owner: string;
-  total:number;
-  organization:Organization;
-  main_invoice_reference?:string;
-  contract_id?:string;
-  company_name:string;
-  identification_number:string;
-  vat_registration?:string;
-  address:string;
-  postcode:string;
-  city:string;
-  country:string;
-  nb_seats:number;
+  total: number;
+  organization: Organization;
+  main_invoice_reference?: string;
+  contract_id?: string;
+  company_name: string;
+  identification_number: string;
+  vat_registration?: string;
+  address: string;
+  postcode: string;
+  city: string;
+  country: string;
+  nb_seats: number;
   payment_method: PaymentMethod;
   state: BatchOrderState;
   administrative_lastname: string;
@@ -530,7 +530,6 @@ export interface BatchOrderRead {
   funding_amount?: number;
   offering: OfferingBatchOrder;
 }
-
 
 // Wishlist
 export interface CourseWish extends Resource {

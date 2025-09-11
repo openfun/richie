@@ -24,7 +24,6 @@ export enum PaymentMethod {
   PURCHASE_ORDER = 'purchase_order',
 }
 
-
 export interface PaymentWithId {
   payment_id: string;
 }

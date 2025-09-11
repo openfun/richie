@@ -318,7 +318,7 @@ const API = (): Joanie.API => {
             body: JSON.stringify(payload),
           }).then(checkStatus),
         get: async (id?: string) => {
-          let url:string;
+          let url: string;
           if (id) url = buildApiUrl(ROUTES.user.batchOrders.get.replace(':id', id));
           else url = buildApiUrl(ROUTES.user.batchOrders.get);
           return fetchWithJWT(url).then(checkStatus);
