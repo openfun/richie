@@ -27,11 +27,16 @@ export const useBatchOrder = () => {
     },
   });
 
-  const get = (filters?: ResourcesQuery) =>
-    useQuery({
-      queryKey: ['batchOrders', filters || {}],
-      queryFn: () => api.user.batchOrders.get(filters),
-    });
+  const get = (id?: string) =>
+    id
+      ? useQuery({
+          queryKey: ['batchOrders', id],
+          queryFn: () => api.user.batchOrders.get(id),
+        })
+      : useQuery({
+          queryKey: ['batchOrders'],
+          queryFn: () => api.user.batchOrders.get(),
+        });
 
   return {
     methods: {

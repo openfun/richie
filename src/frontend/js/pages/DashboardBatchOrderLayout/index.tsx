@@ -11,13 +11,12 @@ import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPath
 import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
 
 export const DashboardBatchOrderLayout = () => {
-  const params = useParams<{ batchOrderId: string }>();
-  const { methods } = useBatchOrder();
-  const { data } = methods.get({ id: params.batchOrderId });
-
-  console.log('data', data);
   const intl = useIntl();
   const getRouteLabel = getDashboardRouteLabel(intl);
+  const params = useParams<{ batchOrderId: string }>();
+  const { methods } = useBatchOrder();
+  const { data } = methods.get(params.batchOrderId);
+  const batchOrder = data as BatchOrderRead;
 
   const links = useMemo(
     () => [
@@ -34,7 +33,7 @@ export const DashboardBatchOrderLayout = () => {
       className="dashboard-order-layout"
       sidebar={<LearnerDashboardSidebar menuLinks={links} title="toto" />}
     >
-      <DashboardBatchOrderLayoutContent batchOrder={undefined} />
+      <DashboardBatchOrderLayoutContent batchOrder={batchOrder} />
     </DashboardLayout>
   );
 };

@@ -16,7 +16,7 @@ const messages = defineMessages({
 export const DashboardBatchOrderLoader = () => {
   const params = useParams<{ batchOrderId: string }>();
   const { methods, states } = useBatchOrder();
-  const { data } = methods.get({ id: params.batchOrderId });
+  const { data } = methods.get(params.batchOrderId);
   const batchOrder = data as BatchOrderRead;
   const fetching = states.isPending;
 
