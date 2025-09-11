@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import { Spinner } from 'components/Spinner';
 import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
 import { DashboardItemBatchOrder } from 'widgets/Dashboard/components/DashboardItem/BatchOrder';
-import { BatchOrder, BatchOrderRead, PaginatedResponse } from 'types/Joanie';
+import { BatchOrderRead, PaginatedResponse } from 'types/Joanie';
+import Banner from 'components/Banner';
 
 const messages = defineMessages({
   loading: {
@@ -19,11 +20,12 @@ const messages = defineMessages({
   emptyList: {
     id: 'components.DashboardBatchOrders.emptyList',
     description: "Empty placeholder of the dashboard's list of orders and enrollments",
-    defaultMessage: 'You have no enrollments nor orders yet.',
+    defaultMessage: 'You have no batch orders yet.',
   },
 });
 
 export const DashboardBatchOrders = () => {
+  const intl = useIntl();
   const { methods } = useBatchOrder();
   const { data, isLoading } = methods.get();
   const batchOrders = (data as PaginatedResponse<BatchOrderRead>)?.results.filter(
@@ -31,13 +33,24 @@ export const DashboardBatchOrders = () => {
   );
 
   if (!batchOrders) {
-    if (isLoading) return <Spinner size="large" />;
-    else return <div>No batch orders</div>;
+    if (isLoading)
+      return (
+        <Spinner aria-labelledby="loading-courses-data">
+          <span id="loading-courses-data">
+            <FormattedMessage {...messages.loading} />
+          </span>
+        </Spinner>
+      );
   }
 
   return (
     <div className="dashboard__courses">
       <div className={classNames('dashboard__courses__list')}>
+        {batchOrders.length === 0 && (
+          <div className="dashboard__courses__empty">
+            <Banner message={intl.formatMessage(messages.emptyList)} />
+          </div>
+        )}
         {batchOrders.map((batchOrder) => (
           <div
             key={batchOrder.id}
