@@ -1,21 +1,17 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import classNames from 'classnames';
 import { Spinner } from 'components/Spinner';
-import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
+import { useBatchOrders } from 'hooks/useBatchOrder/useBatchOrder';
 import { DashboardItemBatchOrder } from 'widgets/Dashboard/components/DashboardItem/BatchOrder';
-import { BatchOrderRead, PaginatedResponse } from 'types/Joanie';
-import Banner from 'components/Banner';
+import Banner, { BannerType } from 'components/Banner';
+import { usePagination, Pagination } from 'components/Pagination';
+import { useEffect } from 'react';
 
 const messages = defineMessages({
   loading: {
     defaultMessage: 'Loading orders and enrollments...',
     description: 'Message displayed while loading orders and enrollments',
     id: 'components.DashboardBatchOrders.loading',
-  },
-  loadMore: {
-    defaultMessage: 'Load more',
-    description: 'Button to manually load more orders and enrollments',
-    id: 'components.DashboardBatchOrders.loadMoreResults',
   },
   emptyList: {
     id: 'components.DashboardBatchOrders.emptyList',
@@ -26,41 +22,61 @@ const messages = defineMessages({
 
 export const DashboardBatchOrders = () => {
   const intl = useIntl();
-  const { methods } = useBatchOrder();
-  const { data, isLoading } = methods.get();
-  const batchOrders = (data as PaginatedResponse<BatchOrderRead>)?.results.filter(
-    (value: BatchOrderRead) => value.state !== 'canceled',
-  );
+  const pagination = usePagination({ itemsPerPage: 10 });
 
-  if (!batchOrders) {
-    if (isLoading)
-      return (
-        <Spinner aria-labelledby="loading-courses-data">
-          <span id="loading-courses-data">
-            <FormattedMessage {...messages.loading} />
-          </span>
-        </Spinner>
-      );
+  const batchOrdersQuery = useBatchOrders({
+    page: pagination.currentPage,
+    page_size: pagination.itemsPerPage,
+  });
+
+  useEffect(() => {
+    if (batchOrdersQuery.meta?.pagination?.count) {
+      pagination.setItemsCount(batchOrdersQuery.meta.pagination.count);
+    }
+  }, [batchOrdersQuery.meta?.pagination?.count]);
+
+  if (batchOrdersQuery.states.error) {
+    return <Banner message={batchOrdersQuery.states.error} type={BannerType.ERROR} />;
+  }
+
+  if (!batchOrdersQuery.items.length && batchOrdersQuery.states.isPending) {
+    return (
+      <Spinner aria-labelledby="loading-courses-data">
+        <span id="loading-courses-data">
+          <FormattedMessage {...messages.loading} />
+        </span>
+      </Spinner>
+    );
   }
 
   return (
     <div className="dashboard__courses">
-      <div className={classNames('dashboard__courses__list')}>
-        {batchOrders.length === 0 && (
-          <div className="dashboard__courses__empty">
-            <Banner message={intl.formatMessage(messages.emptyList)} />
-          </div>
-        )}
-        {batchOrders.map((batchOrder) => (
+      {batchOrdersQuery.items.length === 0 && (
+        <div className="dashboard__courses__empty">
+          <Banner message={intl.formatMessage(messages.emptyList)} />
+        </div>
+      )}
+
+      {batchOrdersQuery.items.length > 0 && (
+        <>
           <div
-            key={batchOrder.id}
-            className="dashboard__courses__list__item"
-            data-testid="order-enrollment-list-item"
+            className={classNames('dashboard__courses__list', {
+              'dashboard__list--loading': batchOrdersQuery.states.isPending,
+            })}
           >
-            <DashboardItemBatchOrder batchOrder={batchOrder} />
+            {batchOrdersQuery.items.map((batchOrder) => (
+              <div
+                key={batchOrder.id}
+                className="dashboard__courses__list__item"
+                data-testid="order-enrollment-list-item"
+              >
+                <DashboardItemBatchOrder batchOrder={batchOrder} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+          <Pagination {...pagination} />
+        </>
+      )}
     </div>
   );
 };

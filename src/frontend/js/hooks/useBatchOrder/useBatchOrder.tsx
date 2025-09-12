@@ -1,8 +1,7 @@
-import { useIntl, defineMessages } from 'react-intl';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { useSessionMutation } from 'utils/react-query/useSessionMutation';
-import { ResourcesQuery } from 'hooks/useResources';
+import { useResource, useResources, UseResourcesProps } from 'hooks/useResources';
+import { API, BatchOrderQueryFilters, BatchOrderRead } from 'types/Joanie';
 
 const messages = defineMessages({
   errorCreate: {
@@ -12,39 +11,13 @@ const messages = defineMessages({
   },
 });
 
-export const useBatchOrder = () => {
-  const api = useJoanieApi();
-  const intl = useIntl();
-  const queryClient = useQueryClient();
-
-  const createHandler = useSessionMutation({
-    mutationFn: api.user.batchOrders.create,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['batchOrders'] });
-    },
-    onError: () => {
-      throw new Error(intl.formatMessage(messages.errorCreate));
-    },
-  });
-
-  const get = (id?: string) =>
-    id
-      ? useQuery({
-          queryKey: ['batchOrders', id],
-          queryFn: () => api.user.batchOrders.get(id),
-        })
-      : useQuery({
-          queryKey: ['batchOrders'],
-          queryFn: () => api.user.batchOrders.get(),
-        });
-
-  return {
-    methods: {
-      create: createHandler.mutateAsync,
-      get,
-    },
-    states: {
-      isPending: createHandler.isPending,
-    },
+const props: UseResourcesProps<BatchOrderRead, BatchOrderQueryFilters, API['user']['batchOrders']> =
+  {
+    queryKey: ['batchOrders'],
+    apiInterface: () => useJoanieApi().user.batchOrders,
+    session: true,
+    messages,
   };
-};
+
+export const useBatchOrders = useResources<BatchOrderRead, BatchOrderQueryFilters>(props);
+export const useBatchOrder = useResource<BatchOrderRead, BatchOrderQueryFilters>(props);

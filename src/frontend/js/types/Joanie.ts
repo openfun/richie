@@ -637,6 +637,10 @@ export interface OfferingQueryFilters extends PaginatedResourceQuery {
   query?: string;
 }
 
+export interface BatchOrderQueryFilters extends PaginatedResourceQuery {
+  id?: BatchOrderRead['id'];
+}
+
 export enum ContractState {
   UNSIGNED = 'unsigned',
   LEARNER_SIGNED = 'half_signed',
@@ -712,9 +716,12 @@ interface APIUser {
     set_payment_method(payload: OrderSetPaymentMethodPayload): Promise<void>;
   };
   batchOrders: {
-    create(payload: BatchOrder): Promise<any>;
-    get(id: string): Promise<BatchOrderRead>;
-    get(): Promise<PaginatedResponse<BatchOrderRead>>;
+    create(payload: BatchOrder): Promise<BatchOrderRead>;
+    get<Filters extends PaginatedResourceQuery = PaginatedResourceQuery>(
+      filters?: Filters,
+    ): Filters extends { id: string }
+      ? Promise<Nullable<BatchOrderRead>>
+      : Promise<PaginatedResponse<BatchOrderRead>>;
   };
   certificates: {
     download(id: string): Promise<File>;

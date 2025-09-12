@@ -14,9 +14,7 @@ export const DashboardBatchOrderLayout = () => {
   const intl = useIntl();
   const getRouteLabel = getDashboardRouteLabel(intl);
   const params = useParams<{ batchOrderId: string }>();
-  const { methods } = useBatchOrder();
-  const { data } = methods.get(params.batchOrderId);
-  const batchOrder = data as BatchOrderRead;
+  const { item: batchOrder } = useBatchOrder(params.batchOrderId);
 
   const links = useMemo(
     () => [

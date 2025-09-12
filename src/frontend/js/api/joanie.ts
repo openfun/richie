@@ -317,12 +317,11 @@ const API = (): Joanie.API => {
             method: 'POST',
             body: JSON.stringify(payload),
           }).then(checkStatus),
-        get: async (id?: string) => {
-          let url: string;
-          if (id) url = buildApiUrl(ROUTES.user.batchOrders.get.replace(':id', id));
-          else url = buildApiUrl(ROUTES.user.batchOrders.get);
-          return fetchWithJWT(url).then(checkStatus);
-        },
+        get: async (filters?: Joanie.BatchOrderQueryFilters) => {
+        return fetchWithJWT(
+             buildApiUrl(ROUTES.user.batchOrders.get, filters),
+        ).then(checkStatus);
+      },
       },
       enrollments: {
         create: async (payload) =>

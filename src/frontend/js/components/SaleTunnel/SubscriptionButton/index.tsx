@@ -169,7 +169,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       onError: async () => {
         handleError();
       },
-      onSuccess: async (createdBatchOrder: BatchOrder) => {
+      onSuccess: async (createdBatchOrder: any) => {
         if (createdBatchOrder.id) {
           setBatchOrder(createdBatchOrder);
           validateBatchOrder();
