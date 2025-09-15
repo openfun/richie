@@ -24,22 +24,22 @@ export const DashboardBatchOrders = () => {
   const intl = useIntl();
   const pagination = usePagination({ itemsPerPage: 10 });
 
-  const batchOrdersQuery = useBatchOrders({
+  const { items, meta, states } = useBatchOrders({
     page: pagination.currentPage,
     page_size: pagination.itemsPerPage,
   });
 
   useEffect(() => {
-    if (batchOrdersQuery.meta?.pagination?.count) {
-      pagination.setItemsCount(batchOrdersQuery.meta.pagination.count);
+    if (meta?.pagination?.count) {
+      pagination.setItemsCount(meta.pagination.count);
     }
-  }, [batchOrdersQuery.meta?.pagination?.count]);
+  }, [meta?.pagination?.count]);
 
-  if (batchOrdersQuery.states.error) {
-    return <Banner message={batchOrdersQuery.states.error} type={BannerType.ERROR} />;
+  if (states.error) {
+    return <Banner message={states.error} type={BannerType.ERROR} />;
   }
 
-  if (!batchOrdersQuery.items.length && batchOrdersQuery.states.isPending) {
+  if (items?.length && states?.isPending) {
     return (
       <Spinner aria-labelledby="loading-courses-data">
         <span id="loading-courses-data">
@@ -51,20 +51,19 @@ export const DashboardBatchOrders = () => {
 
   return (
     <div className="dashboard__courses">
-      {batchOrdersQuery.items.length === 0 && (
+      {items?.length === 0 && (
         <div className="dashboard__courses__empty">
           <Banner message={intl.formatMessage(messages.emptyList)} />
         </div>
       )}
-
-      {batchOrdersQuery.items.length > 0 && (
+      {items?.length > 0 && (
         <>
           <div
             className={classNames('dashboard__courses__list', {
-              'dashboard__list--loading': batchOrdersQuery.states.isPending,
+              'dashboard__list--loading': states?.isPending,
             })}
           >
-            {batchOrdersQuery.items.map((batchOrder) => (
+            {items?.map((batchOrder) => (
               <div
                 key={batchOrder.id}
                 className="dashboard__courses__list__item"
