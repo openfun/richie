@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import classNames from 'classnames';
 import { Spinner } from 'components/Spinner';
@@ -5,7 +6,6 @@ import { useBatchOrders } from 'hooks/useBatchOrder/useBatchOrder';
 import { DashboardItemBatchOrder } from 'widgets/Dashboard/components/DashboardItem/BatchOrder';
 import Banner, { BannerType } from 'components/Banner';
 import { usePagination, Pagination } from 'components/Pagination';
-import { useEffect } from 'react';
 import { BatchOrderState } from 'types/Joanie';
 
 const messages = defineMessages({

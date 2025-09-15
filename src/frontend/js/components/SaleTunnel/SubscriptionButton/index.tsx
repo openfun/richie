@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { useOrders } from 'hooks/useOrders';
 import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
-import { BatchOrder, OrderCreationPayload } from 'types/Joanie';
+import { OrderCreationPayload } from 'types/Joanie';
 import { useMatchMediaLg } from 'hooks/useMatchMedia';
 import { SubscriptionErrorMessageId } from 'components/PaymentInterfaces/types';
 import { HttpError } from 'utils/errors/HttpError';

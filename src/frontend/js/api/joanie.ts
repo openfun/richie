@@ -318,10 +318,8 @@ const API = (): Joanie.API => {
             body: JSON.stringify(payload),
           }).then(checkStatus),
         get: async (filters?: Joanie.BatchOrderQueryFilters) => {
-        return fetchWithJWT(
-             buildApiUrl(ROUTES.user.batchOrders.get, filters),
-        ).then(checkStatus);
-      },
+          return fetchWithJWT(buildApiUrl(ROUTES.user.batchOrders.get, filters)).then(checkStatus);
+        },
       },
       enrollments: {
         create: async (payload) =>

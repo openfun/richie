@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import { useBreadcrumbsPlaceholders } from 'hooks/useBreadcrumbsPlaceholders';
-import { BatchOrder, BatchOrderRead } from 'types/Joanie';
+import { BatchOrderRead } from 'types/Joanie';
 import { LearnerDashboardSidebar } from 'widgets/Dashboard/components/LearnerDashboardSidebar';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';

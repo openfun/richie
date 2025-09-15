@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Spinner } from 'components/Spinner';
 import { useBatchOrder } from 'hooks/useBatchOrder/useBatchOrder';
 import { DashboardItemBatchOrder } from '../DashboardItem/BatchOrder';

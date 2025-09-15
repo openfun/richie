@@ -1,48 +1,154 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { BatchOrder, BatchOrderRead, BatchOrderState, Billing } from 'types/Joanie';
+import { generatePath } from 'react-router';
+import { BatchOrderRead, BatchOrderState, Billing } from 'types/Joanie';
 import { PaymentMethod } from 'components/PaymentInterfaces/types';
-import { DashboardItem } from '../index';
+import Badge from 'components/Badge';
+import { DashboardItem } from 'widgets/Dashboard/components/DashboardItem/index';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
 import { DashboardSubItemsList } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItemsList';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
-import { generatePath } from 'react-router';
-import Badge from 'components/Badge';
 
 const messages = defineMessages({
-  seats: { id: 'batchOrder.seats', defaultMessage: 'Seats' },
-  labelName: { id: 'batchOrder.label.name', defaultMessage: 'Name' },
-  labelProfession: { id: 'batchOrder.label.profession', defaultMessage: 'Profession' },
-  labelEmail: { id: 'batchOrder.label.email', defaultMessage: 'Email' },
-  labelPhone: { id: 'batchOrder.label.phone', defaultMessage: 'Phone' },
-  labelMethod: { id: 'batchOrder.label.method', defaultMessage: 'Method' },
-  labelEntity: { id: 'batchOrder.label.entity', defaultMessage: 'Entity' },
-  labelAmount: { id: 'batchOrder.label.amount', defaultMessage: 'Amount' },
-  labelCompany: { id: 'batchOrder.label.company', defaultMessage: 'Company' },
-  labelSiret: { id: 'batchOrder.label.siret', defaultMessage: 'SIRET' },
-  labelVAT: { id: 'batchOrder.label.vat', defaultMessage: 'VAT' },
-  labelAddress: { id: 'batchOrder.label.address', defaultMessage: 'Address' },
-  labelPostcode: { id: 'batchOrder.label.postcode', defaultMessage: 'Postcode' },
-  labelCity: { id: 'batchOrder.label.city', defaultMessage: 'City' },
-  labelCountry: { id: 'batchOrder.label.country', defaultMessage: 'Country' },
-  labelBilling: { id: 'batchOrder.label.billing', defaultMessage: 'Billing' },
-  [BatchOrderState.DRAFT]: { id: 'batchOrder.status.draft', defaultMessage: 'Draft' },
-  [BatchOrderState.ASSIGNED]: { id: 'batchOrder.status.assigned', defaultMessage: 'Assigned' },
-  [BatchOrderState.QUOTED]: { id: 'batchOrder.status.quoted', defaultMessage: 'Quoted' },
-  [BatchOrderState.TO_SIGN]: { id: 'batchOrder.status.to_sign', defaultMessage: 'To sign' },
-  [BatchOrderState.SIGNING]: { id: 'batchOrder.status.signing', defaultMessage: 'Signing' },
-  [BatchOrderState.PENDING]: { id: 'batchOrder.status.pending', defaultMessage: 'Pending' },
+  seats: {
+    id: 'batchOrder.seats',
+    description: 'Text displayed for seats value in batch order',
+    defaultMessage: 'Seats',
+  },
+  labelName: {
+    id: 'batchOrder.label.name',
+    description: 'Label displayed for the name field in batch order form',
+    defaultMessage: 'Name',
+  },
+  labelProfession: {
+    id: 'batchOrder.label.profession',
+    description: 'Label displayed for the profession field in batch order form',
+    defaultMessage: 'Profession',
+  },
+  labelEmail: {
+    id: 'batchOrder.label.email',
+    description: 'Label displayed for the email field in batch order form',
+    defaultMessage: 'Email',
+  },
+  labelPhone: {
+    id: 'batchOrder.label.phone',
+    description: 'Label displayed for the phone field in batch order form',
+    defaultMessage: 'Phone',
+  },
+  labelMethod: {
+    id: 'batchOrder.label.method',
+    description: 'Label displayed for the payment method field in batch order form',
+    defaultMessage: 'Method',
+  },
+  labelEntity: {
+    id: 'batchOrder.label.entity',
+    description: 'Label displayed for the entity field in batch order form',
+    defaultMessage: 'Entity',
+  },
+  labelAmount: {
+    id: 'batchOrder.label.amount',
+    description: 'Label displayed for the amount field in batch order form',
+    defaultMessage: 'Amount',
+  },
+  labelCompany: {
+    id: 'batchOrder.label.company',
+    description: 'Label displayed for the company field in batch order form',
+    defaultMessage: 'Company',
+  },
+  labelSiret: {
+    id: 'batchOrder.label.siret',
+    description: 'Label displayed for the SIRET field in batch order form',
+    defaultMessage: 'SIRET',
+  },
+  labelVAT: {
+    id: 'batchOrder.label.vat',
+    description: 'Label displayed for the VAT field in batch order form',
+    defaultMessage: 'VAT',
+  },
+  labelAddress: {
+    id: 'batchOrder.label.address',
+    description: 'Label displayed for the address field in batch order form',
+    defaultMessage: 'Address',
+  },
+  labelPostcode: {
+    id: 'batchOrder.label.postcode',
+    description: 'Label displayed for the postcode field in batch order form',
+    defaultMessage: 'Postcode',
+  },
+  labelCity: {
+    id: 'batchOrder.label.city',
+    description: 'Label displayed for the city field in batch order form',
+    defaultMessage: 'City',
+  },
+  labelCountry: {
+    id: 'batchOrder.label.country',
+    description: 'Label displayed for the country field in batch order form',
+    defaultMessage: 'Country',
+  },
+  labelBilling: {
+    id: 'batchOrder.label.billing',
+    description: 'Label displayed for the billing field in batch order form',
+    defaultMessage: 'Billing',
+  },
+  [BatchOrderState.DRAFT]: {
+    id: 'batchOrder.status.draft',
+    description: 'Status label for a draft batch order',
+    defaultMessage: 'Draft',
+  },
+  [BatchOrderState.ASSIGNED]: {
+    id: 'batchOrder.status.assigned',
+    description: 'Status label for an assigned batch order',
+    defaultMessage: 'Assigned',
+  },
+  [BatchOrderState.QUOTED]: {
+    id: 'batchOrder.status.quoted',
+    description: 'Status label for a quoted batch order',
+    defaultMessage: 'Quoted',
+  },
+  [BatchOrderState.TO_SIGN]: {
+    id: 'batchOrder.status.to_sign',
+    description: 'Status label for a batch order awaiting signature',
+    defaultMessage: 'To sign',
+  },
+  [BatchOrderState.SIGNING]: {
+    id: 'batchOrder.status.signing',
+    description: 'Status label for a batch order in signing process',
+    defaultMessage: 'Signing',
+  },
+  [BatchOrderState.PENDING]: {
+    id: 'batchOrder.status.pending',
+    description: 'Status label for a pending batch order',
+    defaultMessage: 'Pending',
+  },
   [BatchOrderState.FAILED_PAYMENT]: {
     id: 'batchOrder.status.failed_payment',
+    description: 'Status label for a batch order with failed payment',
     defaultMessage: 'Failed payment',
   },
-  [BatchOrderState.CANCELED]: { id: 'batchOrder.status.canceled', defaultMessage: 'Canceled' },
-  [BatchOrderState.COMPLETED]: { id: 'batchOrder.status.completed', defaultMessage: 'Completed' },
-  [PaymentMethod.BANK_TRANSFER]: { id: 'batchOrder.payment.bank', defaultMessage: 'Bank transfer' },
-  [PaymentMethod.CARD_PAYMENT]: { id: 'batchOrder.payment.card', defaultMessage: 'Card payment' },
+  [BatchOrderState.CANCELED]: {
+    id: 'batchOrder.status.canceled',
+    description: 'Status label for a canceled batch order',
+    defaultMessage: 'Canceled',
+  },
+  [BatchOrderState.COMPLETED]: {
+    id: 'batchOrder.status.completed',
+    description: 'Status label for a completed batch order',
+    defaultMessage: 'Completed',
+  },
+  [PaymentMethod.BANK_TRANSFER]: {
+    id: 'batchOrder.payment.bank',
+    description: 'Label for bank transfer payment method',
+    defaultMessage: 'Bank transfer',
+  },
+  [PaymentMethod.CARD_PAYMENT]: {
+    id: 'batchOrder.payment.card',
+    description: 'Label for card payment method',
+    defaultMessage: 'Card payment',
+  },
   [PaymentMethod.PURCHASE_ORDER]: {
     id: 'batchOrder.payment.order',
+    description: 'Label for purchase order payment method',
     defaultMessage: 'Purchase order',
   },
 });
