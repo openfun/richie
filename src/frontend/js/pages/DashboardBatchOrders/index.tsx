@@ -6,6 +6,7 @@ import { DashboardItemBatchOrder } from 'widgets/Dashboard/components/DashboardI
 import Banner, { BannerType } from 'components/Banner';
 import { usePagination, Pagination } from 'components/Pagination';
 import { useEffect } from 'react';
+import { BatchOrderState } from 'types/Joanie';
 
 const messages = defineMessages({
   loading: {
@@ -63,15 +64,17 @@ export const DashboardBatchOrders = () => {
               'dashboard__list--loading': states?.isPending,
             })}
           >
-            {items?.map((batchOrder) => (
-              <div
-                key={batchOrder.id}
-                className="dashboard__courses__list__item"
-                data-testid="order-enrollment-list-item"
-              >
-                <DashboardItemBatchOrder batchOrder={batchOrder} />
-              </div>
-            ))}
+            {items
+              ?.filter((batchOrder) => batchOrder.state !== BatchOrderState.CANCELED)
+              .map((batchOrder) => (
+                <div
+                  key={batchOrder.id}
+                  className="dashboard__courses__list__item"
+                  data-testid="order-enrollment-list-item"
+                >
+                  <DashboardItemBatchOrder batchOrder={batchOrder} />
+                </div>
+              ))}
           </div>
           <Pagination {...pagination} />
         </>
