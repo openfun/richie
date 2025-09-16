@@ -1042,7 +1042,13 @@ def create_site():
 
 
 @override_settings(RICHIE_KEEP_SEARCH_UPDATED=False)
-def create_dev_data(log=lambda x: None):
+def create_dev_data(
+    log=lambda x: None,
+    create_certificate=False,
+    create_certificate_discount=False,
+    create_credential=False,
+    create_credential_discount=False,
+):
     """
     Create a simple site tree structure for developpers to work in realistic environment.
 
@@ -1087,17 +1093,27 @@ def create_dev_data(log=lambda x: None):
     # Create courses under the `Course` page with categories and organizations
     # relations
 
-    product_options = [
-        "Certificate product",
-        "Certificate product with discount",
-        "Credential product",
-        "Credential product with discount",
-    ]
-    products = select_multiple(product_options)
+    if (
+        not create_credential
+        and not create_certificate
+        and not create_certificate_discount
+        and not create_credential_discount
+    ):
+        product_options = [
+            "Certificate product",
+            "Certificate product with discount",
+            "Credential product",
+            "Credential product with discount",
+        ]
+        products = select_multiple(product_options)
+        create_certificate = "Certificate product" in products
+        create_certificate_discount = "Certificate product with discount" in products
+        create_credential = "Credential product" in products
+        create_credential_discount = "Credential product with discount" in products
 
     log(f"Creating {NB_OBJECTS['courses']} courses...")
     courses = []
-    if "Certificate product" in products:
+    if create_certificate:
         course = create_courses(
             icons,
             languages,
@@ -1115,7 +1131,7 @@ def create_dev_data(log=lambda x: None):
         )
         courses.append(course)
 
-    if "Certificate product with discount" in products:
+    if create_certificate_discount:
         course = create_courses(
             icons,
             languages,
@@ -1135,7 +1151,7 @@ def create_dev_data(log=lambda x: None):
         )
         courses.append(course)
 
-    if "Credential product" in products:
+    if create_credential:
         course = create_courses(
             icons,
             languages,
@@ -1153,7 +1169,7 @@ def create_dev_data(log=lambda x: None):
         )
         courses.append(course)
 
-    if "Credential product with discount" in products:
+    if create_credential_discount:
         course = create_courses(
             icons,
             languages,
@@ -1216,6 +1232,31 @@ class Command(BaseCommand):
             help="Force command execution despite DEBUG is set to False",
         )
 
+        parser.add_argument(
+            "--certificate",
+            action="store_true",
+            default=False,
+            help="Create a certificate product.",
+        )
+        parser.add_argument(
+            "--certificate-discount",
+            action="store_true",
+            default=False,
+            help="Create a certificate product with a discount.",
+        )
+        parser.add_argument(
+            "--credential",
+            action="store_true",
+            default=False,
+            help="Create a credential product.",
+        )
+        parser.add_argument(
+            "--credential-discount",
+            action="store_true",
+            default=False,
+            help="Create a credential product with a discount.",
+        )
+
     def handle(self, *args, **options):
         def log(message):
             """Log message"""
@@ -1229,6 +1270,12 @@ class Command(BaseCommand):
                 )
             )
 
-        create_dev_data(log=log)
+        create_dev_data(
+            log=log,
+            create_certificate=options.get("certificate"),
+            create_certificate_discount=options.get("certificate_discount"),
+            create_credential=options.get("credential"),
+            create_credential_discount=options.get("credential_discount"),
+        )
 
         logger.info("done")

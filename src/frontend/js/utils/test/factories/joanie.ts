@@ -37,6 +37,7 @@ import {
   ProductType,
   TargetCourse,
   UserLight,
+  PaymentPlan,
 } from 'types/Joanie';
 import { Payment, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
@@ -360,6 +361,15 @@ export const PaymentInstallmentFactory = factory((): PaymentInstallment => {
   };
 });
 
+export const PaymentPlanFactory = factory((): PaymentPlan => {
+  return {
+    payment_schedule: PaymentInstallmentFactory().many(2),
+    price: faker.number.int({ min: 1, max: 1000, multipleOf: 10 }),
+    discount: undefined,
+    discounted_price: undefined,
+  };
+});
+
 export const OrderEnrollmentFactory = factory((): OrderEnrollment => {
   return {
     id: faker.string.uuid(),
@@ -492,5 +502,6 @@ export const SaleTunnelContextFactory = factory(
     unregisterSubmitCallback: noop,
     runSubmitCallbacks: () => new Promise((resolve) => resolve()),
     nextStep: noop,
+    setVoucherCode: noop,
   }),
 );

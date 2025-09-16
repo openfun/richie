@@ -19,8 +19,8 @@ import {
   CredentialOrderFactory,
   CreditCardFactory,
   PaymentFactory,
-  PaymentInstallmentFactory,
   ProductFactory,
+  PaymentPlanFactory,
 } from 'utils/test/factories/joanie';
 import { CourseRun, NOT_CANCELED_ORDER_STATES, OrderState } from 'types/Joanie';
 import { Priority } from 'types';
@@ -70,7 +70,9 @@ describe('SaleTunnel', () => {
     new Intl.NumberFormat('en', {
       currency,
       style: 'currency',
-    }).format(price);
+    })
+      .format(price)
+      .replace(/(\u202F|\u00a0)/g, ' ');
 
   beforeEach(() => {
     richieUser = UserFactory().one();
@@ -104,15 +106,15 @@ describe('SaleTunnel', () => {
       product,
       is_withdrawable: false,
     }).one();
-    const paymentSchedule = PaymentInstallmentFactory().many(2);
+    const paymentPlan = PaymentPlanFactory().one();
 
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
       offering,
     );
     fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-schedule/`,
-      paymentSchedule,
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+      paymentPlan,
     );
     fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
     const orderQueryParameters = {
@@ -135,7 +137,7 @@ describe('SaleTunnel', () => {
     screen.getByText(
       // the price formatter generates non-breaking spaces and getByText doesn't seem to handle that well, replace it
       // with a regular space. We replace NNBSP (\u202F) and NBSP (\u00a0) with a regular space
-      priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+      priceFormatter(product.price_currency, product.price),
     );
     expect(screen.queryByText('Purchased')).not.toBeInTheDocument();
 
@@ -250,14 +252,12 @@ describe('SaleTunnel', () => {
      * Make sure the payment schedule is displayed.
      */
     screen.getByRole('heading', { name: 'Payment schedule' });
-    paymentSchedule.forEach((installment, index) => {
+    paymentPlan.payment_schedule.forEach((installment, index) => {
       const row = screen.getByTestId(installment.id);
       const cells = getAllByRole(row, 'cell');
       expect(cells).toHaveLength(4);
       expect(cells[0]).toHaveTextContent((index + 1).toString());
-      expect(cells[1]).toHaveTextContent(
-        priceFormatter(installment.currency, installment.amount).replace(/(\u202F|\u00a0)/g, ' '),
-      );
+      expect(cells[1]).toHaveTextContent(priceFormatter(installment.currency, installment.amount));
       expect(cells[2]).toHaveTextContent(
         `Withdrawn on ${dateFormatter.format(new Date(installment.due_date))}`,
       );
@@ -266,8 +266,30 @@ describe('SaleTunnel', () => {
 
     const $totalAmount = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmount).toHaveTextContent(
+      'Total' + priceFormatter(product.price_currency, paymentPlan.price),
+    );
+
+    /**
+     * Submit voucher and check price
+     */
+    const paymentPlanVoucher = PaymentPlanFactory({
+      discounted_price: 70,
+      discount: '-30%',
+    }).one();
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT30`,
+      paymentPlanVoucher,
+      { overwriteRoutes: true },
+    );
+    await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT30');
+    await user.click(screen.getByRole('button', { name: 'Validate' }));
+    screen.getByRole('heading', { name: 'Payment schedule' });
+    await screen.findByTestId('sale-tunnel__total__amount');
+    const $totalAmountVoucher = screen.getByTestId('sale-tunnel__total__amount');
+    expect($totalAmountVoucher).toHaveTextContent(
       'Total' +
-        priceFormatter(product.price_currency, product.price).replace(/(\u202F|\u00a0)/g, ' '),
+        priceFormatter(product.price_currency, paymentPlanVoucher.price!) +
+        priceFormatter(product.price_currency, paymentPlanVoucher.discounted_price!),
     );
 
     /**
