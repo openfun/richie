@@ -18,7 +18,7 @@ const messages = defineMessages({
   walkthroughToSignAndSavePayment: {
     id: 'components.SaleTunnel.SubscriptionButton.walkthroughToSignAndSavePayment',
     defaultMessage:
-      'To enroll in the training, you will first be invited to sign the training agreement and then to define a payment method.',
+      'To enroll in the training, you will first be invited to sign the training agreement and then to define a payment method if required.',
     description:
       'Message explaining the subscription process with a training agreement to sign and a payment method to set.',
   },

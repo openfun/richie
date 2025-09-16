@@ -98,6 +98,11 @@ export const SaleTunnelInformation = () => {
   const discountedPrice = query.data?.discounted_price ?? props.paymentPlan?.discounted_price;
   const discount = query.data?.discount ?? props.paymentPlan?.discount;
 
+  const showPaymentSchedule =
+    product.type === ProductType.CREDENTIAL &&
+    schedule &&
+    (discountedPrice != null ? discountedPrice > 0 : price != null && price > 0);
+
   useEffect(() => {
     if (query.error && voucherCode) {
       setVoucherCode('');
@@ -121,9 +126,7 @@ export const SaleTunnelInformation = () => {
         </div>
       </div>
       <div>
-        {product.type === ProductType.CREDENTIAL && schedule && (
-          <PaymentScheduleBlock schedule={schedule} />
-        )}
+        {showPaymentSchedule && <PaymentScheduleBlock schedule={schedule} />}
         <Voucher
           discount={discount}
           voucherError={voucherError}
@@ -159,7 +162,7 @@ const Email = () => {
 
 const Total = ({ price, discountedPrice }: { price?: number; discountedPrice?: number }) => {
   const { product } = useSaleTunnelContext();
-  const totalPrice = price ?? product.price;
+  const totalPrice = price || product.price;
   return (
     <div className="sale-tunnel__total">
       <div className="sale-tunnel__total__amount mt-t" data-testid="sale-tunnel__total__amount">
@@ -168,7 +171,7 @@ const Total = ({ price, discountedPrice }: { price?: number; discountedPrice?: n
         </div>
 
         <div className="block-title">
-          {discountedPrice ? (
+          {discountedPrice !== undefined ? (
             <>
               <span className="price--striked">
                 <FormattedNumber
