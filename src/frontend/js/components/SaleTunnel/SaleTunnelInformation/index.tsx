@@ -28,14 +28,19 @@ const messages = defineMessages({
   },
 });
 
+export enum FormType {
+  GROUP = 'group',
+  SINGULAR = 'singular',
+}
+
 export const SaleTunnelInformation = () => {
   const { setBatchOrder } = useSaleTunnelContext();
   const intl = useIntl();
   const options = [
-    { label: intl.formatMessage(messages.purchaseTypeOptionSingle), value: 'b2c' },
-    { label: intl.formatMessage(messages.purchaseTypeOptionGroup), value: 'b2b' },
+    { label: intl.formatMessage(messages.purchaseTypeOptionSingle), value: FormType.SINGULAR },
+    { label: intl.formatMessage(messages.purchaseTypeOptionGroup), value: FormType.GROUP },
   ];
-  const [purchaseType, setPurchaseType] = useState('b2c');
+  const [purchaseType, setPurchaseType] = useState(FormType.SINGULAR);
 
   return (
     <div className="sale-tunnel__main__column sale-tunnel__information">
@@ -50,13 +55,14 @@ export const SaleTunnelInformation = () => {
           value={purchaseType}
           clearable={false}
           onChange={(e) => {
-            setPurchaseType(e.target.value as string);
+            setPurchaseType(e.target.value as FormType);
             setBatchOrder(undefined);
           }}
         />
       </div>
-      {purchaseType === 'b2c' && <SaleTunnelInformationSingular />}
-      {purchaseType === 'b2b' && <SaleTunnelInformationGroup />}
+      to
+      {purchaseType === FormType.SINGULAR && <SaleTunnelInformationSingular />}
+      {purchaseType === FormType.GROUP && <SaleTunnelInformationGroup />}
     </div>
   );
 };
