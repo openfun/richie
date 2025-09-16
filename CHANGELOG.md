@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add group buy form in sale tunnel information
+- Add batch order item in dashboard for global and detailled view
+
 ## [3.2.0] - 2025-08-26
 
 ### Added
