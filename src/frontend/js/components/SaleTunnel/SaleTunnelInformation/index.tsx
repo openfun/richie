@@ -60,7 +60,6 @@ export const SaleTunnelInformation = () => {
           }}
         />
       </div>
-      to
       {purchaseType === FormType.SINGULAR && <SaleTunnelInformationSingular />}
       {purchaseType === FormType.GROUP && <SaleTunnelInformationGroup />}
     </div>

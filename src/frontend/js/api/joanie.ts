@@ -163,7 +163,7 @@ export const getRoutes = () => {
     offerings: {
       get: `${baseUrl}/offerings/:id/`,
       organizations: {
-        get: `${baseUrl}/offerings/:id/get-organizations`,
+        get: `${baseUrl}/offerings/:id/get-organizations/`,
       },
     },
     contractDefinitions: {
