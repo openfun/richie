@@ -59,4 +59,24 @@ describe('<DashboardBatchOrders />', () => {
     expect(screen.getByText('Batch Order 2')).toBeInTheDocument();
     expect(screen.queryByText('Batch Order 3')).not.toBeInTheDocument();
   });
+
+  it('renders an error banner when there is an error', async () => {
+    const errorMessage = 'API Error';
+
+    (useBatchOrders as jest.Mock).mockReturnValue({
+      items: [],
+      meta: { pagination: { count: 0 } },
+      states: { isPending: false, error: errorMessage },
+    });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <DashboardBatchOrders />
+        </IntlProvider>
+      </QueryClientProvider>,
+    );
+
+    expect(await screen.findByText(errorMessage)).toBeInTheDocument();
+  });
 });
