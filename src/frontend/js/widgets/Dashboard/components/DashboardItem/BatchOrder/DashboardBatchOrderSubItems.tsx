@@ -1,6 +1,5 @@
-// DashboardBatchOrderSubItems.tsx
-import { PaymentMethod } from 'components/PaymentInterfaces/types';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { PaymentMethod } from 'components/PaymentInterfaces/types';
 import { BatchOrderRead } from 'types/Joanie';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';

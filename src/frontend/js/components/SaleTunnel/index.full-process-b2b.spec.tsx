@@ -15,7 +15,6 @@ import {
   PaymentInstallmentFactory,
   ProductFactory,
   OfferingBatchOrderFactory,
-  BatchOrderFactory,
   BatchOrderReadFactory,
 } from 'utils/test/factories/joanie';
 import { CourseRun, NOT_CANCELED_ORDER_STATES } from 'types/Joanie';
@@ -25,7 +24,6 @@ import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
 import { User } from 'types/User';
 import { OpenEdxApiProfile } from 'types/openEdx';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { useLocation } from 'react-router';
 
 jest.mock('utils/context', () => ({
   __esModule: true,

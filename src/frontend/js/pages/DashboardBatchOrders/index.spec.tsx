@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { BatchOrderReadFactory } from 'utils/test/factories/joanie';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { expectSpinner, expectNoSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError, expectBannerInfo, expectNoBannerInfo } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
@@ -84,7 +83,7 @@ describe('<DashboardBatchOrders/>', () => {
     expect(items).toHaveLength(3);
   });
 
-  it.only('renders pagination and loads next page', async () => {
+  it('renders pagination and loads next page', async () => {
     const total = perPage + 3;
     const batchOrders = BatchOrderReadFactory().many(total);
 
@@ -110,7 +109,7 @@ describe('<DashboardBatchOrders/>', () => {
     let items = screen.getAllByTestId('batch-order-enrollment-list-item');
     expect(items).toHaveLength(perPage);
 
-    const nextPageLink = screen.getByRole('link', { name: 'Next page 2' });
+    const nextPageLink = screen.getByRole('link', { name: 'Last page 2' });
     await userEvent.click(nextPageLink);
 
     await waitFor(() => {
@@ -120,7 +119,6 @@ describe('<DashboardBatchOrders/>', () => {
   });
 
   it('shows an error', async () => {
-    jest.spyOn(console, 'error').mockImplementation(noop);
     const deferred = new Deferred();
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/batch-orders/?page=1&page_size=${perPage}`,
@@ -137,6 +135,6 @@ describe('<DashboardBatchOrders/>', () => {
     });
 
     await expectNoSpinner('Loading orders and enrollments...');
-    await expectBannerError('An error occurred while fetching batch orders. Please retry later.');
+    await expectBannerError('An error occurred while fetching resources. Please retry later.');
   });
 });

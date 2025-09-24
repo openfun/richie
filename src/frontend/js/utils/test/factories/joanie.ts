@@ -341,10 +341,10 @@ export const OfferingFactory = factory((): Offering => {
 
 export const OfferingBatchOrderFactory = factory((): OfferingBatchOrder => {
   return {
-      product_id: faker.string.uuid(),
-      product_title: faker.string.alpha(10),
-      course: CourseListItemFactory().one(),
-  }
+    product_id: faker.string.uuid(),
+    product_title: faker.string.alpha(10),
+    course: CourseListItemFactory().one(),
+  };
 });
 
 export const CourseListItemFactory = factory((): CourseListItem => {
@@ -395,7 +395,7 @@ export const OrderLiteFactory = factory((): OrderLite => {
 
 export const BatchOrderFactory = factory((): BatchOrder => {
   return {
-    id: faker.string.uuid(), 
+    id: faker.string.uuid(),
     offering_id: faker.string.uuid(),
     company_name: faker.company.name(),
     identification_number: faker.string.alphanumeric(14),
@@ -442,10 +442,7 @@ export const BatchOrderReadFactory = factory((): BatchOrderRead => {
       PaymentMethod.BANK_TRANSFER,
       PaymentMethod.PURCHASE_ORDER,
     ]),
-    state: faker.helpers.arrayElement([
-      BatchOrderState.PENDING,
-      BatchOrderState.COMPLETED,
-    ]),
+    state: faker.helpers.arrayElement([BatchOrderState.PENDING, BatchOrderState.COMPLETED]),
     administrative_lastname: faker.person.lastName(),
     administrative_firstname: faker.person.firstName(),
     administrative_profession: faker.person.jobTitle(),
@@ -456,7 +453,6 @@ export const BatchOrderReadFactory = factory((): BatchOrderRead => {
     offering: OfferingBatchOrderFactory().one(),
   };
 });
-
 
 export const NestedCertificateOrderFactory = factory((): NestedCertificateOrder => {
   return {
