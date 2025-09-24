@@ -341,8 +341,10 @@ export const OfferingFactory = factory((): Offering => {
 
 export const OfferingBatchOrderFactory = factory((): OfferingBatchOrder => {
   return {
-    product_id: faker.string.uuid(),
-    product_title: faker.string.alpha(10),
+    product: {
+      id: faker.string.uuid(),
+      title: faker.string.alphanumeric(5),
+    },
     course: CourseListItemFactory().one(),
   };
 });

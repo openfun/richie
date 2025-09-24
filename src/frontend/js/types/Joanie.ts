@@ -463,8 +463,10 @@ export interface Billing {
 }
 
 export interface OfferingBatchOrder {
-  product_id: string;
-  product_title: string;
+  product: {
+    id: string;
+    title: string;
+  };
   course: CourseListItem;
 }
 
@@ -495,6 +497,11 @@ export interface BatchOrder {
   administrative_profession: string;
   administrative_email: string;
   administrative_telephone: string;
+  signatory_lastname: string;
+  signatory_firstname: string;
+  signatory_profession: string;
+  signatory_email: string;
+  signatory_telephone: string;
   billing?: Billing;
   nb_seats: number;
   payment_method: PaymentMethod;
@@ -525,6 +532,11 @@ export interface BatchOrderRead {
   administrative_profession: string;
   administrative_email: string;
   administrative_telephone: string;
+  signatory_lastname: string;
+  signatory_firstname: string;
+  signatory_profession: string;
+  signatory_email: string;
+  signatory_telephone: string;
   billing?: Billing;
   funding_entity?: string;
   funding_amount?: number;

@@ -52,6 +52,11 @@ const messages = defineMessages({
     description: 'Step label for administrative follow-up in the batch order form',
     defaultMessage: 'Follow-up',
   },
+  stepSignatory: {
+    id: 'components.SaleTunnel.BatchOrderForm.stepSignatory',
+    description: 'Step label for signatory person in the batch order form',
+    defaultMessage: 'Signatory',
+  },
   stepParticipants: {
     id: 'components.SaleTunnel.BatchOrderForm.stepParticipants',
     description: 'Step label for participants information in the batch order form',
@@ -94,6 +99,11 @@ const validationSchema = Yup.object().shape({
   administrative_profession: Yup.string().required(),
   administrative_email: Yup.string().email().required(),
   administrative_telephone: Yup.string().required(),
+  signatory_lastname: Yup.string().required(),
+  signatory_firstname: Yup.string().required(),
+  signatory_profession: Yup.string().required(),
+  signatory_email: Yup.string().required(),
+  signatory_telephone: Yup.string().required(),
   billing: Yup.object().optional().shape({
     company_name: Yup.string().optional(),
     identification_number: Yup.string().optional(),
@@ -127,6 +137,11 @@ const BatchOrderForm = () => {
     administrative_profession: '',
     administrative_email: '',
     administrative_telephone: '',
+    signatory_lastname: '',
+    signatory_firstname: '',
+    signatory_profession: '',
+    signatory_email: '',
+    signatory_telephone: '',
     nb_seats: 0,
     payment_method: PaymentMethod.PURCHASE_ORDER,
     funding_amount: 0,
@@ -136,6 +151,7 @@ const BatchOrderForm = () => {
   const steps = [
     intl.formatMessage(messages.stepCompany),
     intl.formatMessage(messages.stepAdmin),
+    intl.formatMessage(messages.stepSignatory),
     intl.formatMessage(messages.stepParticipants),
     intl.formatMessage(messages.stepFinancing),
   ];

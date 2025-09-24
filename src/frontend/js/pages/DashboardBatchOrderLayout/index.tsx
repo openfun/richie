@@ -29,7 +29,7 @@ export const DashboardBatchOrderLayout = () => {
   return (
     <DashboardLayout
       className="dashboard-order-layout"
-      sidebar={<LearnerDashboardSidebar menuLinks={links} title="toto" />}
+      sidebar={<LearnerDashboardSidebar menuLinks={links} />}
     >
       <DashboardBatchOrderLayoutContent batchOrder={batchOrder} />
     </DashboardLayout>

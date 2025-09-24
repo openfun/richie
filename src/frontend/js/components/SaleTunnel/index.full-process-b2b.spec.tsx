@@ -82,8 +82,7 @@ describe('SaleTunnel', () => {
     const offering = OfferingFactory({ course, product, is_withdrawable: false }).one();
     const paymentSchedule = PaymentInstallmentFactory().many(2);
     const offeringOrganization = OfferingBatchOrderFactory({
-      product_id: product.id,
-      product_title: product.title,
+      product: { id: product.id, title: product.title },
     }).one();
 
     fetchMock.get(

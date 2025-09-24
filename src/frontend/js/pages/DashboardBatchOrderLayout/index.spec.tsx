@@ -1,16 +1,13 @@
 import { findByRole, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import queryString from 'query-string';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { CredentialOrder, NOT_CANCELED_ORDER_STATES } from 'types/Joanie';
-import { CredentialOrderFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
-import { mockCourseProductWithOrder } from 'utils/test/mockCourseProductWithOrder';
+import { BatchOrderReadFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { expectUrlMatchLocationDisplayed } from 'utils/test/expectUrlMatchLocationDisplayed';
-
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
+import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -20,58 +17,31 @@ jest.mock('utils/context', () => ({
   }).one(),
 }));
 
-describe('<DashboardOrderLayout />', () => {
-  const WrapperWithDashboard = (route: string) => {
-    const client = createTestQueryClient({ user: true });
-    return (
-      <BaseJoanieAppWrapper queryOptions={{ client }}>
-        <DashboardTest initialRoute={route} />
-      </BaseJoanieAppWrapper>
-    );
-  };
+jest.mock('settings', () => ({
+  __esModule: true,
+  ...jest.requireActual('settings'),
+  PER_PAGE: { useBatchOrders: 10 },
+}));
 
-  beforeEach(() => {
-    fetchMock.get('https://joanie.endpoint/api/v1.0/addresses/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/credit-cards/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/orders/', []);
-    fetchMock.get('https://joanie.endpoint/api/v1.0/enrollments/', []);
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-    jest.clearAllMocks();
-    fetchMock.restore();
-  });
+describe('<DashboardBatchOrderLayout />', () => {
+  setupJoanieSession();
 
   it('renders sidebar', async () => {
-    const order: CredentialOrder = CredentialOrderFactory({
-      target_courses: [TargetCourseFactory().one()],
-      target_enrollments: [],
-    }).one();
+    const batchOrders = BatchOrderReadFactory().many(3);
 
-    const { product } = mockCourseProductWithOrder(order);
-    fetchMock.get(
-      'https://joanie.endpoint/api/v1.0/orders/',
-      { results: [order], next: null, previous: null, count: null },
-      { overwriteRoutes: true },
-    );
-    const orderQueryParameters = {
-      course_code: order.course.code,
-      product_id: order.product_id,
-      state: NOT_CANCELED_ORDER_STATES,
-    };
-    const queryParams = queryString.stringify(orderQueryParameters);
-    const url = `https://joanie.endpoint/api/v1.0/orders/?${queryParams}`;
-    fetchMock.get(url, [order]);
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/batch-orders/?page=1&page_size=10`, {
+      results: batchOrders,
+      count: batchOrders.length,
+      next: null,
+      previous: null,
+    });
 
-    render(WrapperWithDashboard(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)));
-
-    await waitFor(() =>
-      expectUrlMatchLocationDisplayed(LearnerDashboardPaths.ORDER.replace(':orderId', order.id)),
-    );
+    render(<DashboardTest initialRoute={LearnerDashboardPaths.BATCH_ORDERS} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
 
     const sidebar = screen.getByTestId('dashboard__sidebar');
-    await findByRole(sidebar, 'heading', { name: product.title });
+    await findByRole(sidebar, 'heading');
 
     screen.getByRole('link', {
       name: 'General information',

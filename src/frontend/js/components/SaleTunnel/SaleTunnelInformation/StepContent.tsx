@@ -40,6 +40,12 @@ const messages = defineMessages({
       'Title of the section with details about the person responsible for admin follow-up',
     defaultMessage: 'Responsible for the administrative follow-up',
   },
+  stepSignatoryTitle: {
+    id: 'components.SaleTunnel.BatchOrderForm.stepSignatoryTitle',
+    description:
+      'Title of the section with details about the person responsible for signing the quote',
+    defaultMessage: 'Authorized signatory',
+  },
   stepBillingTitle: {
     id: 'components.SaleTunnel.BatchOrderForm.stepBillingTitle',
     description: 'Title of the section with billing details',
@@ -370,7 +376,63 @@ export const StepContent = ({
           }
         />
       </div>
-      <div className="step seats" hidden={activeStep !== 2}>
+      <div className="step signatory" hidden={activeStep !== 2}>
+        <FormattedMessage {...messages.stepSignatoryTitle} />
+        <Input
+          className="field"
+          {...register('signatory_lastname')}
+          label={intl.formatMessage(messages.lastName)}
+          required
+          state={formState.errors.signatory_lastname?.message ? 'error' : 'default'}
+          text={
+            getLocalizedCunninghamErrorProp(intl, formState.errors.signatory_lastname?.message).text
+          }
+        />
+        <Input
+          className="field"
+          {...register('signatory_firstname')}
+          label={intl.formatMessage(messages.firstName)}
+          required
+          state={formState.errors.signatory_firstname?.message ? 'error' : 'default'}
+          text={
+            getLocalizedCunninghamErrorProp(intl, formState.errors.signatory_firstname?.message)
+              .text
+          }
+        />
+        <Input
+          className="field"
+          {...register('signatory_profession')}
+          label={intl.formatMessage(messages.role)}
+          required
+          state={formState.errors.signatory_profession?.message ? 'error' : 'default'}
+          text={
+            getLocalizedCunninghamErrorProp(intl, formState.errors.signatory_profession?.message)
+              .text
+          }
+        />
+        <Input
+          className="field"
+          {...register('signatory_email')}
+          label={intl.formatMessage(messages.email)}
+          required
+          state={formState.errors.signatory_email?.message ? 'error' : 'default'}
+          text={
+            getLocalizedCunninghamErrorProp(intl, formState.errors.signatory_email?.message).text
+          }
+        />
+        <Input
+          className="field"
+          {...register('signatory_telephone')}
+          label={intl.formatMessage(messages.phone)}
+          required
+          state={formState.errors.signatory_telephone?.message ? 'error' : 'default'}
+          text={
+            getLocalizedCunninghamErrorProp(intl, formState.errors.signatory_telephone?.message)
+              .text
+          }
+        />
+      </div>
+      <div className="step seats" hidden={activeStep !== 3}>
         <FormattedMessage {...messages.stepParticipantsTitle} />
         <Input
           className="field"
@@ -382,7 +444,7 @@ export const StepContent = ({
           text={getLocalizedCunninghamErrorProp(intl, formState.errors.nb_seats?.message).text}
         />
       </div>
-      <div className="step financing" hidden={activeStep !== 3}>
+      <div className="step financing" hidden={activeStep !== 4}>
         <FormattedMessage {...messages.stepFinancingTitle} />
         <RadioGroup fullWidth={true} className="payment-block">
           <Radio

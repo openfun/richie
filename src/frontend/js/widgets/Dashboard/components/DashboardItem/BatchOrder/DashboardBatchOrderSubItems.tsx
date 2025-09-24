@@ -5,6 +5,31 @@ import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/Das
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 
 const messages = defineMessages({
+  stepCompany: {
+    id: 'batchOrder.title.company',
+    description: 'Step label for company information in the batch order form',
+    defaultMessage: 'Organization',
+  },
+  stepAdmin: {
+    id: 'batchOrder.title.admin',
+    description: 'Step label for administrative follow-up in the batch order form',
+    defaultMessage: 'Follow-up',
+  },
+  stepParticipants: {
+    id: 'batchOrder.title.partipants',
+    description: 'Step label for participants information in the batch order form',
+    defaultMessage: 'Participants',
+  },
+  stepFinancing: {
+    id: 'batchOrder.title.financing',
+    description: 'Step label for financing/payment in the batch order form',
+    defaultMessage: 'Financing',
+  },
+  stepSignatory: {
+    id: 'batchOrder.title.signatory',
+    description: 'section with details about the person responsible for signing the quote',
+    defaultMessage: 'Signatory',
+  },
   seats: {
     id: 'batchOrder.seats',
     description: 'Text displayed for seats value in batch order',
@@ -122,7 +147,7 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
   const items = [
     <DashboardSubItem
       key="company"
-      title={intl.formatMessage(messages.labelCompany)}
+      title={intl.formatMessage(messages.stepCompany)}
       footer={
         <div className="content">
           <DashboardItemField
@@ -158,7 +183,7 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
     />,
     <DashboardSubItem
       key="admin"
-      title={intl.formatMessage(messages.labelName)}
+      title={intl.formatMessage(messages.stepAdmin)}
       footer={
         <div className="content">
           <DashboardItemField
@@ -181,8 +206,32 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
       }
     />,
     <DashboardSubItem
+      key="signatory"
+      title={intl.formatMessage(messages.stepSignatory)}
+      footer={
+        <div className="content">
+          <DashboardItemField
+            label={<FormattedMessage {...messages.labelName} />}
+            value={`${batchOrder.signatory_firstname} ${batchOrder.signatory_lastname}`}
+          />
+          <DashboardItemField
+            label={<FormattedMessage {...messages.labelProfession} />}
+            value={batchOrder.signatory_profession}
+          />
+          <DashboardItemField
+            label={<FormattedMessage {...messages.labelEmail} />}
+            value={batchOrder.signatory_email}
+          />
+          <DashboardItemField
+            label={<FormattedMessage {...messages.labelPhone} />}
+            value={batchOrder.signatory_telephone}
+          />
+        </div>
+      }
+    />,
+    <DashboardSubItem
       key="participants"
-      title={intl.formatMessage(messages.seats)}
+      title={intl.formatMessage(messages.stepParticipants)}
       footer={
         <div className="content">
           <DashboardItemField
@@ -194,7 +243,7 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
     />,
     <DashboardSubItem
       key="financing"
-      title={intl.formatMessage(messages.labelEntity)}
+      title={intl.formatMessage(messages.stepFinancing)}
       footer={
         <div className="content">
           <DashboardItemField

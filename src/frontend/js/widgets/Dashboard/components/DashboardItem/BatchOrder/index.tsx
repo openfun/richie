@@ -90,7 +90,7 @@ export const DashboardItemBatchOrder = ({
     <div className="dashboard-item-order">
       <DashboardItem
         data-testid={`dashboard-item-batch-order-${batchOrder.id}`}
-        title={batchOrder.offering?.product_title}
+        title={batchOrder.offering?.product.title}
         code={`Ref. ${batchOrder.id}`}
         imageUrl={batchOrder.offering?.course.cover?.src}
         footer={
