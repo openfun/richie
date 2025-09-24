@@ -10,7 +10,7 @@ import { BatchOrderState } from 'types/Joanie';
 
 const messages = defineMessages({
   loading: {
-    defaultMessage: 'Loading orders and enrollments...',
+    defaultMessage: 'Loading batch orders...',
     description: 'Message displayed while loading orders and enrollments',
     id: 'components.DashboardBatchOrders.loading',
   },
@@ -40,7 +40,7 @@ export const DashboardBatchOrders = () => {
     return <Banner message={states.error} type={BannerType.ERROR} />;
   }
 
-  if (items?.length && states?.isPending) {
+  if (items?.length === 0 && states?.isPending) {
     return (
       <Spinner aria-labelledby="loading-courses-data">
         <span id="loading-courses-data">
@@ -70,7 +70,7 @@ export const DashboardBatchOrders = () => {
                 <div
                   key={batchOrder.id}
                   className="dashboard__courses__list__item"
-                  data-testid="order-enrollment-list-item"
+                  data-testid="batch-order-enrollment-list-item"
                 >
                   <DashboardItemBatchOrder batchOrder={batchOrder} />
                 </div>
