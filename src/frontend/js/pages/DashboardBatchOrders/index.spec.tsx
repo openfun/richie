@@ -7,7 +7,6 @@ import { BatchOrderReadFactory } from 'utils/test/factories/joanie';
 import { expectSpinner, expectNoSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError, expectBannerInfo, expectNoBannerInfo } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
-import { noop } from 'utils';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';

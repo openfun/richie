@@ -1,10 +1,8 @@
-import { findByRole, render, screen, waitFor } from '@testing-library/react';
+import { findByRole, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { BatchOrderReadFactory } from 'utils/test/factories/joanie';
-import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
-import { expectUrlMatchLocationDisplayed } from 'utils/test/expectUrlMatchLocationDisplayed';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
