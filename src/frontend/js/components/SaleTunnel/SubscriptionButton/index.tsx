@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { Alert, Button, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
+import { validationSchema } from 'components/SaleTunnel/SaleTunnelInformation/SaleTunnelInformationGroup';
 import { useOrders } from 'hooks/useOrders';
+import { useBatchOrder } from 'hooks/useBatchOrder';
 import { OrderCreationPayload } from 'types/Joanie';
 import { useMatchMediaLg } from 'hooks/useMatchMedia';
 import { SubscriptionErrorMessageId } from 'components/PaymentInterfaces/types';
@@ -60,6 +62,11 @@ const messages = defineMessages({
     description: 'Label for screen reader when an order creation is in progress.',
     id: 'components.SubscriptionButton.orderCreationInProgress',
   },
+  batchOrderFormInvalid: {
+    id: 'components.SubscriptionButton.batchOrderFormInvalid',
+    defaultMessage: 'Some required fields are missing in the form.',
+    description: 'Some required fields are missing in the form.',
+  },
 });
 
 enum ComponentStates {
@@ -82,6 +89,10 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     order,
     creditCard,
     billingAddress,
+    batchOrder,
+    setBatchOrder,
+    batchOrderFormMethods,
+    validateBatchOrder,
     hasWaivedWithdrawalRight,
     product,
     nextStep,
@@ -90,8 +101,10 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     voucherCode,
   } = useSaleTunnelContext();
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
+  const { methods: batchOrderMethods } = useBatchOrder();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
   const [error, setError] = useState<SubscriptionErrorMessageId | string>();
+  const [isBatchOrderValid, setIsBatchOrderValid] = useState(false);
   const isMobile = useMatchMediaLg();
 
   const handleError = (
@@ -142,6 +155,34 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     });
   };
 
+  const createBatchOrder = async () => {
+    setState(ComponentStates.LOADING);
+    try {
+      await runSubmitCallbacks();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
+      setState(ComponentStates.IDLE);
+      return;
+    }
+    if (!batchOrder) return;
+    const isFormValid = await batchOrderFormMethods?.trigger();
+    if (!isFormValid) {
+      handleError(SubscriptionErrorMessageId.ERROR_BATCH_ORDER_FORM_INVALID);
+      return;
+    }
+    batchOrderMethods.create(batchOrder, {
+      onError: async () => {
+        handleError();
+      },
+      onSuccess: async (createdBatchOrder: any) => {
+        if (createdBatchOrder.id) {
+          setBatchOrder(createdBatchOrder);
+          validateBatchOrder();
+        }
+      },
+    });
+  };
+
   const walkthroughMessages = useMemo(() => {
     if (product.contract_definition && product.price > 0) {
       return messages.walkthroughToSignAndSavePayment;
@@ -165,6 +206,12 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     }
   }, [state]);
 
+  useEffect(() => {
+    if (batchOrder) {
+      validationSchema.isValid(batchOrder).then((isValid) => setIsBatchOrderValid(isValid));
+    }
+  }, [batchOrder]);
+
   return (
     <>
       <div style={{ maxWidth: '680px' }} className="mb-s" data-testid="walkthrough-banner">
@@ -178,9 +225,9 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
         )}
       </div>
       <Button
-        onClick={createOrder}
+        onClick={batchOrder ? createBatchOrder : createOrder}
         fullWidth={isMobile}
-        disabled={state === ComponentStates.LOADING}
+        disabled={state === ComponentStates.LOADING || (batchOrder && !isBatchOrderValid)}
         {...(state === ComponentStates.ERROR && {
           'aria-describedby': 'sale-tunnel-payment-error',
         })}

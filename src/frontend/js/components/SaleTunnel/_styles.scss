@@ -130,6 +130,68 @@
       font-size: var(--c--theme--font--sizes--l);
     }
   }
+
+  .stepper {
+    flex-wrap: wrap;
+    gap: 0.2rem;
+  }
+
+  .navigationButton {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .step-content {
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 1rem 0;
+      gap: 0.5rem;
+      .billing {
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+      }
+      .field {
+        width: 90%;
+      }
+      .city-fields {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 0.25rem;
+        width: 90%;
+      }
+      .payment-block {
+        & > div {
+          margin: 1rem 0;
+          flex-direction: row;
+        }
+      }
+      .organism-block {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        margin-bottom: 1rem;
+        .opco-order {
+          display: flex;
+          flex-direction: row;
+          gap: 0.25rem;
+          & > div {
+            width: 100%;
+          }
+        }
+      }
+      .recommandation {
+        width: 100%;
+      }
+    }
+  }
 }
 
 .description {

@@ -16,6 +16,8 @@ export enum LearnerDashboardPaths {
   PREFERENCES_ADDRESS_EDITION = `${PREFERENCES}/addresses/:addressId`,
   PREFERENCES_ADDRESS_CREATION = `${PREFERENCES}/addresses/create`,
   PREFERENCES_CREDIT_CARD_EDITION = `${PREFERENCES}/credit-cards/:creditCardId`,
+  BATCH_ORDER = `/batch-orders/:batchOrderId`,
+  BATCH_ORDERS = `/batch-orders`,
 }
 
 export const LEARNER_DASHBOARD_ROUTE_LABELS = defineMessages<LearnerDashboardPaths>({
@@ -78,5 +80,15 @@ export const LEARNER_DASHBOARD_ROUTE_LABELS = defineMessages<LearnerDashboardPat
     id: 'components.Dashboard.DashboardRoutes.preferences.creditCards.label',
     description: 'Label of the credit cards edition view.',
     defaultMessage: 'Edit credit card "{creditCardTitle}"',
+  },
+  [LearnerDashboardPaths.BATCH_ORDER]: {
+    id: 'components.Dashboard.DashboardRoutes.batchOrder.label',
+    description: 'Label of the order view used in navigation components.',
+    defaultMessage: '{batchOrderTitle}',
+  },
+  [LearnerDashboardPaths.BATCH_ORDERS]: {
+    id: 'components.Dashboard.DashboardRoutes.batchOrders.label',
+    description: 'Label of the order view used in navigation components.',
+    defaultMessage: 'My batch orders',
   },
 });

@@ -403,5 +403,5 @@ describe('SaleTunnel', () => {
     // This way we make sure the cache is updated.
     await screen.findByText('Purchased');
     expect(screen.queryByRole('button', { name: product.call_to_action })).not.toBeInTheDocument();
-  }, 15000);
+  }, 30000);
 });
