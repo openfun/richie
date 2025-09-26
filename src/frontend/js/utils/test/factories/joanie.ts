@@ -38,8 +38,12 @@ import {
   TargetCourse,
   UserLight,
   PaymentPlan,
+  OfferingBatchOrder,
+  BatchOrderRead,
+  BatchOrder,
+  BatchOrderState,
 } from 'types/Joanie';
-import { Payment, PaymentProviders } from 'components/PaymentInterfaces/types';
+import { Payment, PaymentMethod, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { JoanieUserApiAbilityActions, JoanieUserProfile } from 'types/User';
@@ -336,6 +340,16 @@ export const OfferingFactory = factory((): Offering => {
   };
 });
 
+export const OfferingBatchOrderFactory = factory((): OfferingBatchOrder => {
+  return {
+    product: {
+      id: faker.string.uuid(),
+      title: faker.string.alphanumeric(5),
+    },
+    course: CourseListItemFactory().one(),
+  };
+});
+
 export const CourseListItemFactory = factory((): CourseListItem => {
   return {
     id: faker.string.uuid(),
@@ -388,6 +402,77 @@ export const OrderLiteFactory = factory((): OrderLite => {
     total: faker.number.int(),
     product_id: faker.string.uuid(),
     state: OrderState.COMPLETED,
+  };
+});
+
+export const BatchOrderFactory = factory((): BatchOrder => {
+  return {
+    id: faker.string.uuid(),
+    offering_id: faker.string.uuid(),
+    company_name: faker.company.name(),
+    identification_number: faker.string.alphanumeric(14),
+    vat_registration: faker.string.alphanumeric(11),
+    address: faker.location.streetAddress(),
+    postcode: faker.location.zipCode(),
+    city: faker.location.city(),
+    country: faker.location.countryCode(),
+    administrative_lastname: faker.person.lastName(),
+    administrative_firstname: faker.person.firstName(),
+    administrative_profession: faker.person.jobTitle(),
+    administrative_email: faker.internet.email(),
+    administrative_telephone: faker.phone.number(),
+    signatory_lastname: faker.person.lastName(),
+    signatory_firstname: faker.person.firstName(),
+    signatory_profession: faker.person.jobTitle(),
+    signatory_email: faker.internet.email(),
+    signatory_telephone: faker.phone.number(),
+    nb_seats: faker.number.int({ min: 1, max: 200 }),
+    payment_method: faker.helpers.arrayElement([
+      PaymentMethod.CARD_PAYMENT,
+      PaymentMethod.BANK_TRANSFER,
+      PaymentMethod.PURCHASE_ORDER,
+    ]),
+    funding_entity: faker.company.name(),
+    funding_amount: faker.number.int({ min: 100, max: 10000 }),
+    organization_id: faker.string.uuid(),
+  };
+});
+
+export const BatchOrderReadFactory = factory((): BatchOrderRead => {
+  return {
+    id: faker.string.uuid(),
+    owner: faker.internet.email(),
+    total: faker.number.int({ min: 100, max: 5000 }),
+    organization: OrganizationFactory().one(),
+    main_invoice_reference: faker.string.alphanumeric(10),
+    contract_id: faker.string.alphanumeric(12),
+    company_name: faker.company.name(),
+    identification_number: faker.string.alphanumeric(14),
+    vat_registration: faker.string.alphanumeric(11),
+    address: faker.location.streetAddress(),
+    postcode: faker.location.zipCode(),
+    city: faker.location.city(),
+    country: faker.location.countryCode(),
+    nb_seats: faker.number.int({ min: 1, max: 200 }),
+    payment_method: faker.helpers.arrayElement([
+      PaymentMethod.CARD_PAYMENT,
+      PaymentMethod.BANK_TRANSFER,
+      PaymentMethod.PURCHASE_ORDER,
+    ]),
+    state: faker.helpers.arrayElement([BatchOrderState.PENDING, BatchOrderState.COMPLETED]),
+    administrative_lastname: faker.person.lastName(),
+    administrative_firstname: faker.person.firstName(),
+    administrative_profession: faker.person.jobTitle(),
+    administrative_email: faker.internet.email(),
+    administrative_telephone: faker.phone.number(),
+    signatory_lastname: faker.person.lastName(),
+    signatory_firstname: faker.person.firstName(),
+    signatory_profession: faker.person.jobTitle(),
+    signatory_email: faker.internet.email(),
+    signatory_telephone: faker.phone.number(),
+    funding_entity: faker.company.name(),
+    funding_amount: faker.number.int({ min: 100, max: 10000 }),
+    offering: OfferingBatchOrderFactory().one(),
   };
 });
 
