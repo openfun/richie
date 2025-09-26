@@ -33,7 +33,7 @@ const messages = defineMessages({
 
 export const SaleTunnelSuccess = ({ closeModal }: { closeModal: () => void }) => {
   const intl = useIntl();
-  const { order, product } = useSaleTunnelContext();
+  const { order, product, batchOrder } = useSaleTunnelContext();
 
   return (
     <section className="sale-tunnel-step" data-testid="generic-sale-tunnel-success-step">
@@ -48,22 +48,36 @@ export const SaleTunnelSuccess = ({ closeModal }: { closeModal: () => void }) =>
         <br />
         <FormattedMessage {...messages.successDetailMessage} />
       </p>
-      <footer className="sale-tunnel-step__footer">
-        {product.type === ProductType.CREDENTIAL ? (
+      {order && (
+        <footer className="sale-tunnel-step__footer">
+          {product.type === ProductType.CREDENTIAL ? (
+            <Button
+              href={
+                getDashboardBasename(intl.locale) +
+                generatePath(LearnerDashboardPaths.ORDER, { orderId: order!.id })
+              }
+            >
+              <FormattedMessage {...messages.cta} />
+            </Button>
+          ) : (
+            <Button onClick={closeModal}>
+              <FormattedMessage {...messages.cta} />
+            </Button>
+          )}
+        </footer>
+      )}
+      {batchOrder?.id && (
+        <footer className="sale-tunnel-step__footer">
           <Button
             href={
               getDashboardBasename(intl.locale) +
-              generatePath(LearnerDashboardPaths.ORDER, { orderId: order!.id })
+              generatePath(LearnerDashboardPaths.BATCH_ORDER, { batchOrderId: batchOrder.id })
             }
           >
             <FormattedMessage {...messages.cta} />
           </Button>
-        ) : (
-          <Button onClick={closeModal}>
-            <FormattedMessage {...messages.cta} />
-          </Button>
-        )}
-      </footer>
+        </footer>
+      )}
     </section>
   );
 };
