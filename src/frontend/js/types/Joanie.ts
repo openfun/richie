@@ -3,7 +3,7 @@ import type { Nullable } from 'types/utils';
 import { Resource, ResourcesQuery } from 'hooks/useResources';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 import { Course as RichieCourse } from 'types/Course';
-import { Payment } from 'components/PaymentInterfaces/types';
+import { Payment, PaymentMethod } from 'components/PaymentInterfaces/types';
 import { JoanieUserProfile } from './User';
 
 // - Generic
@@ -449,6 +449,100 @@ export interface Address {
   title: string;
 }
 
+// BatchOrder
+
+export interface Billing {
+  company_name?: string;
+  identification_number?: string;
+  contact_name?: string;
+  contact_email?: string;
+  address?: string;
+  postcode?: string;
+  city?: string;
+  country?: string;
+}
+
+export interface OfferingBatchOrder {
+  product: {
+    id: string;
+    title: string;
+  };
+  course: CourseListItem;
+}
+
+export enum BatchOrderState {
+  DRAFT = 'draft',
+  ASSIGNED = 'assigned',
+  QUOTED = 'quoted',
+  TO_SIGN = 'to_sign',
+  SIGNING = 'signing',
+  PENDING = 'pending',
+  FAILED_PAYMENT = 'failed_payment',
+  CANCELED = 'canceled',
+  COMPLETED = 'completed',
+}
+
+export interface BatchOrder {
+  id?: string;
+  offering_id: string;
+  company_name: string;
+  identification_number: string;
+  vat_registration?: string;
+  address: string;
+  postcode: string;
+  city: string;
+  country: string;
+  administrative_lastname: string;
+  administrative_firstname: string;
+  administrative_profession: string;
+  administrative_email: string;
+  administrative_telephone: string;
+  signatory_lastname: string;
+  signatory_firstname: string;
+  signatory_profession: string;
+  signatory_email: string;
+  signatory_telephone: string;
+  billing?: Billing;
+  nb_seats: number;
+  payment_method: PaymentMethod;
+  funding_entity?: string;
+  funding_amount?: number;
+  organization_id?: string;
+}
+
+export interface BatchOrderRead {
+  id: string;
+  owner: string;
+  total: number;
+  organization: Organization;
+  main_invoice_reference?: string;
+  contract_id?: string;
+  company_name: string;
+  identification_number: string;
+  vat_registration?: string;
+  address: string;
+  postcode: string;
+  city: string;
+  country: string;
+  nb_seats: number;
+  payment_method: PaymentMethod;
+  state: BatchOrderState;
+  administrative_lastname: string;
+  administrative_firstname: string;
+  administrative_profession: string;
+  administrative_email: string;
+  administrative_telephone: string;
+  signatory_lastname: string;
+  signatory_firstname: string;
+  signatory_profession: string;
+  signatory_email: string;
+  signatory_telephone: string;
+  billing?: Billing;
+  funding_entity?: string;
+  funding_amount?: number;
+  offering: OfferingBatchOrder;
+}
+
 // Wishlist
 export interface CourseWish extends Resource {
   status: boolean;
@@ -563,6 +657,9 @@ export interface OfferingQueryFilters extends PaginatedResourceQuery {
   product_type?: ProductType;
   query?: string;
 }
+export interface BatchOrderQueryFilters extends PaginatedResourceQuery {
+  id?: BatchOrderRead['id'];
+}
 
 export enum ContractState {
   UNSIGNED = 'unsigned',
@@ -637,6 +734,14 @@ interface APIUser {
       payload?: OrderSubmitInstallmentPayment,
     ): Promise<Payment>;
     set_payment_method(payload: OrderSetPaymentMethodPayload): Promise<void>;
+  };
+  batchOrders: {
+    create(payload: BatchOrder): Promise<BatchOrderRead>;
+    get<Filters extends PaginatedResourceQuery = PaginatedResourceQuery>(
+      filters?: Filters,
+    ): Filters extends { id: string }
+      ? Promise<Nullable<BatchOrderRead>>
+      : Promise<PaginatedResponse<BatchOrderRead>>;
   };
   certificates: {
     download(id: string): Promise<File>;
@@ -731,6 +836,11 @@ export interface API {
     ): Filters extends { id: string }
       ? Promise<Nullable<Offering>>
       : Promise<PaginatedResponse<OfferingLight>>;
+    organizations: {
+      get<Filters extends ResourcesQuery = ResourcesQuery>(
+        filters?: Filters,
+      ): Filters extends { id: string } ? Promise<Nullable<Organization>> : Promise<Organization[]>;
+    };
   };
   contractDefinitions: {
     previewTemplate(id: string): Promise<File>;

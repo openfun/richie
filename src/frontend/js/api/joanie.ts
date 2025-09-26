@@ -101,6 +101,10 @@ export const getRoutes = () => {
         submit_installment_payment: `${baseUrl}/orders/:id/submit-installment-payment/`,
         set_payment_method: `${baseUrl}/orders/:id/payment-method/`,
       },
+      batchOrders: {
+        get: `${baseUrl}/batch-orders/:id/`,
+        create: `${baseUrl}/batch-orders/`,
+      },
       certificates: {
         download: `${baseUrl}/certificates/:id/download/`,
         get: `${baseUrl}/certificates/:id/`,
@@ -157,6 +161,9 @@ export const getRoutes = () => {
     },
     offerings: {
       get: `${baseUrl}/offerings/:id/`,
+      organizations: {
+        get: `${baseUrl}/offerings/:id/get-organizations/`,
+      },
     },
     contractDefinitions: {
       previewTemplate: `${baseUrl}/contract_definitions/:id/preview_template/`,
@@ -302,6 +309,16 @@ const API = (): Joanie.API => {
             method: 'POST',
             body: JSON.stringify(payload),
           }).then(checkStatus),
+      },
+      batchOrders: {
+        create: async (payload) =>
+          fetchWithJWT(ROUTES.user.batchOrders.create, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+          }).then(checkStatus),
+        get: async (filters?: Joanie.BatchOrderQueryFilters) => {
+          return fetchWithJWT(buildApiUrl(ROUTES.user.batchOrders.get, filters)).then(checkStatus);
+        },
       },
       enrollments: {
         create: async (payload) =>
@@ -476,6 +493,13 @@ const API = (): Joanie.API => {
             ? buildApiUrl(ROUTES.organizations.offerings.get, filters)
             : buildApiUrl(ROUTES.offerings.get, filters),
         ).then(checkStatus);
+      },
+      organizations: {
+        get: async (filters) => {
+          return fetchWithJWT(buildApiUrl(ROUTES.offerings.organizations.get, filters), {
+            method: 'GET',
+          }).then(checkStatus);
+        },
       },
     },
     contractDefinitions: {
