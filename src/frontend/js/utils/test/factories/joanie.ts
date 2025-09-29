@@ -443,6 +443,7 @@ export const BatchOrderReadFactory = factory((): BatchOrderRead => {
     id: faker.string.uuid(),
     owner: faker.internet.email(),
     total: faker.number.int({ min: 100, max: 5000 }),
+    currency: faker.finance.currencyCode(),
     organization: OrganizationFactory().one(),
     main_invoice_reference: faker.string.alphanumeric(10),
     contract_id: faker.string.alphanumeric(12),

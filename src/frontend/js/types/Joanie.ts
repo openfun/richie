@@ -514,6 +514,7 @@ export interface BatchOrderRead {
   id: string;
   owner: string;
   total: number;
+  currency: string;
   organization: Organization;
   main_invoice_reference?: string;
   contract_id?: string;

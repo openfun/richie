@@ -1,0 +1,14 @@
+.dashboard-order-loader__banners {
+  .banner {
+    margin-top: 0;
+
+    a {
+      color: white;
+      text-decoration: underline;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+}
