@@ -62,12 +62,45 @@
       @include media-breakpoint-down(sm) {
         margin-bottom: 0.5rem;
       }
+
+      &__badge {
+        padding: 0.25rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      &__details {
+        display: flex;
+        flex-direction: column;
+        font-size: 1rem;
+        &__title {
+          font-weight: bold;
+          margin-top: 0.5rem;
+        }
+      }
+    }
+
+    &__information {
+      display: flex;
+      flex-direction: row;
+      gap: 0.25rem;
+      margin: 0 0.5rem;
+      text-align: center;
+      align-items: center;
+      align-content: center;
+      justify-content: center;
     }
   }
 
   &__button {
     justify-content: center;
     min-width: rem-calc(140px);
+  }
+
+  &__label {
+    font-weight: bold;
+    margin-right: 0.25rem;
   }
 }
 
@@ -121,6 +154,13 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+    }
+  }
+
+  &__footer {
+    .content {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
     }
   }
 }
