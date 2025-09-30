@@ -31,7 +31,7 @@ OPTIONS:
 
 function check_changes() {
     to="${CIRCLE_SHA1:-HEAD}"
-    git whatchanged --name-only --pretty="" origin/main.."${to}" | grep "${1}" &> /dev/null
+    git log --name-only --pretty="" origin/main.."${to}" | grep "${1}" &> /dev/null
 }
 
 # Utility function that updates circle configuration site-factory file according to
