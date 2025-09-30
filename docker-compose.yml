@@ -91,7 +91,7 @@ services:
     working_dir: /app
 
   redis-sentinel:
-    image: docker.io/bitnami/redis-sentinel:6.0-debian-10
+    image: docker.io/fundocker/redis-sentinel:6.2.9-debian-11-r0
     depends_on:
       - redis-primary
       - redis-replica1
@@ -105,7 +105,7 @@ services:
       retries: 300
 
   redis-primary:
-    image: docker.io/bitnami/redis:6.0-debian-10
+    image: docker.io/fundocker/redis:6.2.9-debian-11-r0
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_REPLICATION_MODE=master
@@ -116,7 +116,7 @@ services:
       retries: 300
 
   redis-replica1:
-    image: docker.io/bitnami/redis:6.0-debian-10
+    image: docker.io/fundocker/redis:6.2.9-debian-11-r0
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_REPLICATION_MODE=slave
@@ -130,7 +130,7 @@ services:
       retries: 300
 
   redis-replica2:
-    image: docker.io/bitnami/redis:6.0-debian-10
+    image: docker.io/fundocker/redis:6.2.9-debian-11-r0
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_REPLICATION_MODE=slave
