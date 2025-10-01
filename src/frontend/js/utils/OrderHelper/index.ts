@@ -104,4 +104,14 @@ export class OrderHelper {
     if (!order) return true;
     return PURCHASABLE_ORDER_STATES.includes(order.state);
   }
+
+  static isFreeWithVoucher(order?: Order) {
+    if (!order) return false;
+    return order.total === 0;
+  }
+
+  static isFreeFromBatchOrder(order?: Order) {
+    if (!order) return false;
+    return order.from_batch_order === true;
+  }
 }

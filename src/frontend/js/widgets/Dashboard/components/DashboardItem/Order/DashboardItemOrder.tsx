@@ -78,6 +78,7 @@ export const DashboardItemOrder = ({
   const isProductPurchasable = ProductHelper.isPurchasable(offering?.product);
   const isNotResumable = !isActive && !isProductPurchasable;
   const canEnroll = OrderHelper.allowEnrollment(order);
+  const isFreeFromBatchOrder = OrderHelper.isFreeFromBatchOrder(order);
 
   if (!product) return null;
 
@@ -111,7 +112,7 @@ export const DashboardItemOrder = ({
                   </>
                 )}
               </div>
-              {!isNotResumable && showDetailsButton && (
+              {!isNotResumable && showDetailsButton && !isFreeFromBatchOrder && (
                 <RouterButton
                   size="small"
                   className="dashboard-item__button"
@@ -199,7 +200,9 @@ export const DashboardItemOrder = ({
           {showCertificate && !!product?.certificate_definition && (
             <CertificateItem order={order} product={product} />
           )}
-          {writable && <OrganizationBlock order={order} product={product} />}
+          {writable && !isFreeFromBatchOrder && (
+            <OrganizationBlock order={order} product={product} />
+          )}
         </>
       )}
     </div>

@@ -343,6 +343,7 @@ export interface Order {
   organization: Organization;
   payment_schedule?: PaymentSchedule;
   credit_card_id?: CreditCard['id'];
+  from_batch_order?: boolean;
 }
 
 export interface CredentialOrder extends Order {
