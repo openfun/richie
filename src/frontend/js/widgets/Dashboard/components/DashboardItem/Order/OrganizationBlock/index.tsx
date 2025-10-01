@@ -2,6 +2,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
 import { CredentialOrder, Product } from 'types/Joanie';
 import { AddressView } from 'components/Address';
+import { OrderHelper } from 'utils/OrderHelper';
 import ContractItem from '../ContractItem';
 import Installment from '../Installment';
 
@@ -64,6 +65,8 @@ const OrganizationBlock = ({ order, product }: Props) => {
     return null;
   }
 
+  const hidePaymentBlock =
+    OrderHelper.isFreeWithVoucher(order) || OrderHelper.isFreeFromBatchOrder(order);
   const showContactsBlock =
     organization.contact_email || organization.contact_phone || organization.dpo_email;
 
@@ -141,7 +144,7 @@ const OrganizationBlock = ({ order, product }: Props) => {
             </div>
           </div>
         )}
-        <Installment order={order} />
+        {!hidePaymentBlock && <Installment order={order} />}
       </div>
     </div>
   );
