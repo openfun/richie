@@ -214,7 +214,7 @@ dev-data: ## create dev data if app container is running
 		exit 1;\
 	fi
 	@$(MANAGE) flush --no-input
-	@$(COMPOSE_EXEC_APP) python sandbox/manage.py create_dev_data
+	@$(COMPOSE_EXEC_APP) python sandbox/manage.py create_dev_data ${ARGS}
 	@${MAKE} search-index
 	@${MAKE} superuser
 .PHONY: dev-data
