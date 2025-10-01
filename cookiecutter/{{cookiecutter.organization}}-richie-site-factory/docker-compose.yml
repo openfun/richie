@@ -28,6 +28,7 @@ services:
       - DJANGO_CONFIGURATION=Development
       - RICHIE_ES_INDICES_PREFIX=richie_${RICHIE_SITE:?}
     env_file:
+      - ".env"
       - "env.d/development"
       - "env.d/${ACTIVATED_DB:-postgresql}"
     networks:
@@ -59,6 +60,7 @@ services:
       - DJANGO_CONFIGURATION=ContinuousIntegration
       - RICHIE_ES_INDICES_PREFIX=richie_${RICHIE_SITE:?}
     env_file:
+      - ".env"
       - "env.d/development"
       - "env.d/${ACTIVATED_DB:-postgresql}"
     networks:
