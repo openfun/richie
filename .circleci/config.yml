@@ -598,6 +598,7 @@ jobs:
       # Restore built python packages
       - attach_workspace:
           at: ~/fun
+      - *install-libcairo2-dev
       - run:
           name: List built packages
           command: ls dist/*
