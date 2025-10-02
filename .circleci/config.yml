@@ -752,6 +752,7 @@ jobs:
       - run:
           name: Create env files
           command: |
+            cp fun-richie-site-factory/.env.dist fun-richie-site-factory/.env
             cp fun-richie-site-factory/env.d/aws.dist fun-richie-site-factory/env.d/aws
             cp fun-richie-site-factory/env.d/development.dist fun-richie-site-factory/env.d/development
       - run:
