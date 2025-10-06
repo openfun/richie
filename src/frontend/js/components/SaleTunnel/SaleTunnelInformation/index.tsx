@@ -10,6 +10,7 @@ import useOpenEdxProfile from 'hooks/useOpenEdxProfile';
 import WithdrawRightCheckbox from 'components/SaleTunnel/WithdrawRightCheckbox';
 import { PaymentSchedule, ProductType } from 'types/Joanie';
 import { usePaymentPlan } from 'hooks/usePaymentPlan';
+import { HttpError } from 'utils/errors/HttpError';
 
 const messages = defineMessages({
   title: {
@@ -73,10 +74,15 @@ const messages = defineMessages({
     description: 'Delete text for the voucher',
     defaultMessage: 'Delete this voucher',
   },
-  voucherError: {
-    id: 'components.SaleTunnel.Information.voucher.error',
+  voucherErrorInvalid: {
+    id: 'components.SaleTunnel.Information.voucher.errorInvalid',
     description: 'Error when voucher is invalid',
     defaultMessage: 'The submitted voucher code is not valid.',
+  },
+  voucherErrorTooManyRequests: {
+    id: 'components.SaleTunnel.Information.voucher.errorTooManyRequests',
+    description: 'Error when user has tried too many vouchers',
+    defaultMessage: 'Too many attempts. Please try again later.',
   },
   discount: {
     id: 'components.SaleTunnel.Information.voucher.discount',
@@ -87,7 +93,7 @@ const messages = defineMessages({
 
 export const SaleTunnelInformation = () => {
   const { props, product, voucherCode, setVoucherCode } = useSaleTunnelContext();
-  const [voucherError, setVoucherError] = useState(false);
+  const [voucherError, setVoucherError] = useState<HttpError | null>(null);
   const query = usePaymentPlan({
     course_code: props.course?.code ?? props.enrollment!.course_run.course.code,
     product_id: props.product.id,
@@ -106,7 +112,7 @@ export const SaleTunnelInformation = () => {
   useEffect(() => {
     if (query.error && voucherCode) {
       setVoucherCode('');
-      setVoucherError(true);
+      setVoucherError(query.error);
     }
   }, [query.error, voucherCode, setVoucherCode]);
 
@@ -205,15 +211,15 @@ const Voucher = ({
   setVoucherError,
 }: {
   discount?: string;
-  voucherError: boolean;
-  setVoucherError: (value: boolean) => void;
+  voucherError: HttpError | null;
+  setVoucherError: (value: HttpError | null) => void;
 }) => {
   const intl = useIntl();
   const { voucherCode, setVoucherCode } = useSaleTunnelContext();
   const [voucher, setVoucher] = useState('');
   const handleVoucher = (e: ChangeEvent<HTMLInputElement>) => setVoucher(e.target.value);
   const submitVoucher = () => {
-    setVoucherError(false);
+    setVoucherError(null);
     setVoucherCode(voucher);
     setVoucher('');
   };
@@ -261,7 +267,11 @@ const Voucher = ({
       )}
       {voucherError && (
         <Alert type={VariantType.ERROR} className="mt-s">
-          <FormattedMessage {...messages.voucherError} />
+          {voucherError.code === 429 ? (
+            <FormattedMessage {...messages.voucherErrorTooManyRequests} />
+          ) : (
+            <FormattedMessage {...messages.voucherErrorInvalid} />
+          )}
         </Alert>
       )}
     </div>

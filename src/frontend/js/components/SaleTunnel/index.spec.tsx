@@ -690,9 +690,13 @@ describe.each([
     });
   });
 
-  it('should show an error when submit an invalid voucher', async () => {
+  it('should show appropriate error messages for invalid vouchers', async () => {
     const user = userEvent.setup({ delay: null });
     const paymentPlan = PaymentPlanFactory().one();
+    const paymentPlanVoucher = PaymentPlanFactory({
+      discounted_price: 70,
+      discount: '-30%',
+    }).one();
     const product = ProductFactory().one();
     fetchMock
       .get(
@@ -711,6 +715,19 @@ describe.each([
             detail: 'No Voucher matches the given query.',
           },
         },
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT29`,
+        {
+          status: 429,
+          body: {
+            detail: 'Too many attempts. Please try again later.',
+          },
+        },
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT10`,
+        paymentPlanVoucher,
       );
     render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
@@ -719,5 +736,13 @@ describe.each([
     await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT30');
     await user.click(screen.getByRole('button', { name: 'Validate' }));
     expect(await screen.findByText('The submitted voucher code is not valid.')).toBeInTheDocument();
+    await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT29');
+    await user.click(screen.getByRole('button', { name: 'Validate' }));
+    expect(
+      await screen.findByText('Too many attempts. Please try again later.'),
+    ).toBeInTheDocument();
+    await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT10');
+    await user.click(screen.getByRole('button', { name: 'Validate' }));
+    expect(await screen.findByText('Discount applied')).toBeInTheDocument();
   });
 });

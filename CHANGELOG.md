@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Handle null offering rules on CourseProduct item
 
+### Added
+
+- Add custom error message display for voucher code in sale tunnel
+
 ## [3.2.0] - 2025-08-26
 
 ### Added
