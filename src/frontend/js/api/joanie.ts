@@ -104,6 +104,9 @@ export const getRoutes = () => {
       batchOrders: {
         get: `${baseUrl}/batch-orders/:id/`,
         create: `${baseUrl}/batch-orders/`,
+        submit_for_payment: {
+          create: `${baseUrl}/batch-orders/:id/submit-for-payment/`,
+        },
       },
       certificates: {
         download: `${baseUrl}/certificates/:id/download/`,
@@ -139,6 +142,22 @@ export const getRoutes = () => {
       contracts: {
         get: `${baseUrl}/organizations/:organization_id/contracts/:id/`,
         getSignatureLinks: `${baseUrl}/organizations/:organization_id/contracts-signature-link/`,
+      },
+      quotes: {
+        get: `${baseUrl}/organizations/:organization_id/quotes/:id/`,
+        update: `${baseUrl}/organizations/:organization_id/confirm-quote/`,
+        purchase_order: {
+          update: `${baseUrl}/organizations/:organization_id/confirm-purchase-order/`,
+        },
+        bank_transfer: {
+          create: `${baseUrl}/organizations/:organization_id/confirm-bank-transfer/`,
+        },
+        submit_for_signature: {
+          create: `${baseUrl}/organizations/:organization_id/submit-for-signature-batch-order/`,
+        },
+        download_quote: {
+          get: `${baseUrl}/organizations/:organization_id/download-quote/`,
+        },
       },
     },
     courses: {
@@ -319,6 +338,16 @@ const API = (): Joanie.API => {
         get: async (filters?: Joanie.BatchOrderQueryFilters) => {
           return fetchWithJWT(buildApiUrl(ROUTES.user.batchOrders.get, filters)).then(checkStatus);
         },
+        submit_for_payment: {
+          create: async (filters) => {
+            return fetchWithJWT(
+              buildApiUrl(ROUTES.user.batchOrders.submit_for_payment.create, filters),
+              {
+                method: 'POST',
+              },
+            ).then(checkStatus);
+          },
+        },
       },
       enrollments: {
         create: async (payload) =>
@@ -423,6 +452,87 @@ const API = (): Joanie.API => {
           ).then(checkStatus);
         },
       },
+      quotes: {
+        get: async (filters?: Joanie.OrganizationQuoteQueryFilters) => {
+          return fetchWithJWT(buildApiUrl(ROUTES.organizations.quotes.get, filters), {
+            method: 'GET',
+          }).then(checkStatus);
+        },
+        update: async (filters: { organization_id: string; payload: any }) => {
+          if (filters.organization_id && filters.payload) {
+            return fetchWithJWT(
+              ROUTES.organizations.quotes.update.replace(
+                ':organization_id',
+                filters.organization_id,
+              ),
+              {
+                method: 'PATCH',
+                body: JSON.stringify(filters.payload),
+              },
+            ).then(checkStatus);
+          }
+        },
+        purchase_order: {
+          update: async (filters: { organization_id: string; payload: any }) => {
+            if (filters.organization_id && filters.payload) {
+              return fetchWithJWT(
+                ROUTES.organizations.quotes.purchase_order.update.replace(
+                  ':organization_id',
+                  filters.organization_id,
+                ),
+                {
+                  method: 'PATCH',
+                  body: JSON.stringify(filters.payload),
+                },
+              ).then(checkStatus);
+            }
+          },
+        },
+        bank_transfer: {
+          create: async (filters: { organization_id: string; payload: any }) => {
+            if (filters.organization_id && filters.payload) {
+              return fetchWithJWT(
+                ROUTES.organizations.quotes.bank_transfer.create.replace(
+                  ':organization_id',
+                  filters.organization_id,
+                ),
+                {
+                  method: 'POST',
+                  body: JSON.stringify(filters.payload),
+                },
+              ).then(checkStatus);
+            }
+          },
+        },
+        submit_for_signature: {
+          create: async (filters: { organization_id: string; payload: any }) => {
+            if (filters.organization_id && filters.payload) {
+              return fetchWithJWT(
+                ROUTES.organizations.quotes.submit_for_signature.create.replace(
+                  ':organization_id',
+                  filters.organization_id,
+                ),
+                {
+                  method: 'POST',
+                  body: JSON.stringify(filters.payload),
+                },
+              ).then(checkStatus);
+            }
+          },
+        },
+        download_quote: {
+          get: async (filters?: Joanie.OrganizationQuoteQueryFilters) => {
+            return fetchWithJWT(
+              buildApiUrl(ROUTES.organizations.quotes.download_quote.get, filters),
+              {
+                method: 'GET',
+              },
+            )
+              .then(checkStatus)
+              .then(getFileFromResponse);
+          },
+        },
+      },
     },
     courses: {
       get: (filters?: Joanie.CourseQueryFilters) => {
@@ -495,10 +605,10 @@ const API = (): Joanie.API => {
         ).then(checkStatus);
       },
       organizations: {
-        get: async (filters) => {
-          return fetchWithJWT(buildApiUrl(ROUTES.offerings.organizations.get, filters), {
-            method: 'GET',
-          }).then(checkStatus);
+        get: (filters?: Joanie.OrganizationQuoteQueryFilters) => {
+          return fetchWithJWT(buildApiUrl(ROUTES.offerings.organizations.get, filters)).then(
+            checkStatus,
+          );
         },
       },
     },

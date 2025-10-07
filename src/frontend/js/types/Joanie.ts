@@ -545,6 +545,47 @@ export interface BatchOrderRead {
   offering: OfferingBatchOrder;
 }
 
+export interface Relation {
+  id: string;
+  product: {
+    title: string;
+    id: string;
+  };
+  course: {
+    title: string;
+    id: string;
+  };
+}
+
+export interface BatchOrderQuote {
+  id: string;
+  owner_name: string;
+  organization_id: string;
+  state: BatchOrderState;
+  company_name: string;
+  relation: Relation;
+  payment_method: PaymentMethod;
+  contract_submitted: boolean;
+  nb_seats: number;
+}
+
+export interface Definition {
+  id: string;
+  title: string;
+  description: string;
+  name: string;
+  body: string;
+  language: string;
+}
+
+export interface OrganizationQuote {
+  id: string;
+  organization_signed_on: string;
+  has_purchase_order: boolean;
+  batch_order: BatchOrderQuote;
+  total: number;
+}
+
 // Wishlist
 export interface CourseWish extends Resource {
   status: boolean;
@@ -662,6 +703,13 @@ export interface OfferingQueryFilters extends PaginatedResourceQuery {
 export interface BatchOrderQueryFilters extends PaginatedResourceQuery {
   id?: BatchOrderRead['id'];
 }
+export interface OrganizationQuoteQueryFilters extends PaginatedResourceQuery {
+  organization_id?: Organization['id'];
+  batch_order_id?: BatchOrder['id'];
+  quote_id?: OrganizationQuote['id'];
+  id?: OrganizationQuote['id'];
+  payload?: any;
+}
 
 export enum ContractState {
   UNSIGNED = 'unsigned',
@@ -744,6 +792,9 @@ interface APIUser {
     ): Filters extends { id: string }
       ? Promise<Nullable<BatchOrderRead>>
       : Promise<PaginatedResponse<BatchOrderRead>>;
+    submit_for_payment: {
+      create(filters: ResourcesQuery): Promise<any>;
+    };
   };
   certificates: {
     download(id: string): Promise<File>;
@@ -825,6 +876,26 @@ export interface API {
       getSignatureLinks(
         filters?: OrganizationContractSignatureLinksFilters,
       ): Promise<OrganizationContractInvitationLinkResponse>;
+    };
+    quotes: {
+      get(
+        filters?: OrganizationQuoteQueryFilters,
+      ): OrganizationQuoteQueryFilters extends { id: string }
+        ? Promise<Nullable<OrganizationQuote>>
+        : Promise<PaginatedResponse<OrganizationQuote>>;
+      update(filters: OrganizationQuoteQueryFilters): Promise<any>;
+      purchase_order: {
+        update(filters: OrganizationQuoteQueryFilters): Promise<any>;
+      };
+      bank_transfer: {
+        create(filters: OrganizationQuoteQueryFilters): Promise<any>;
+      };
+      submit_for_signature: {
+        create(filters: OrganizationQuoteQueryFilters): Promise<any>;
+      };
+      download_quote: {
+        get(filters: OrganizationQuoteQueryFilters): Promise<any>;
+      };
     };
   };
   courseRuns: {

@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
-import { useResource, useResources, UseResourcesProps } from 'hooks/useResources';
+import { ResourcesQuery, useResource, useResources, UseResourcesProps } from 'hooks/useResources';
 import { API, BatchOrderQueryFilters, BatchOrderRead } from 'types/Joanie';
 
 const messages = defineMessages({
@@ -21,3 +21,16 @@ const props: UseResourcesProps<BatchOrderRead, BatchOrderQueryFilters, API['user
 
 export const useBatchOrders = useResources<BatchOrderRead, BatchOrderQueryFilters>(props);
 export const useBatchOrder = useResource<BatchOrderRead, BatchOrderQueryFilters>(props);
+
+export const useBatchOrdersActions = () => {
+  const { user } = useJoanieApi();
+  const api = user.batchOrders;
+
+  const submitForPayment = async (filters: ResourcesQuery) => {
+    return api.submit_for_payment.create(filters);
+  };
+
+  return {
+    submitForPayment,
+  };
+};
