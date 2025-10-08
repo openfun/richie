@@ -18,7 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add custom error message display for voucher code in sale tunnel
 - Handle batch orders creation via Sale Tunnel
-- Display batch orders in dashboard (global and detaill screens)
+- Display batch orders in dashboard (global and detail screens)
 
 ## [3.2.0] - 2025-08-26
 

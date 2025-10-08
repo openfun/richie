@@ -1,5 +1,4 @@
 import { FormattedMessage, defineMessages } from 'react-intl';
-
 import { TeacherDashboardCourseSidebar } from 'widgets/Dashboard/components/TeacherDashboardCourseSidebar';
 import { DashboardLayout } from 'widgets/Dashboard/components/DashboardLayout';
 import TeacherDashboardContracts from '../TeacherDashboardContracts';

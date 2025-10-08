@@ -1,0 +1,525 @@
+import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
+import { Button, Input, Modal, ModalSize } from '@openfun/cunningham-react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+import Banner, { BannerType } from 'components/Banner';
+import { useOrganizationsQuotes } from 'hooks/useOrganizationQuotes';
+import { TeacherDashboardContractsParams } from 'pages/TeacherDashboardContractsLayout/hooks/useTeacherContractFilters';
+import { BatchOrderState, OrganizationQuote } from 'types/Joanie';
+import { PaymentMethod } from 'components/PaymentInterfaces/types';
+import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
+import { Pagination, usePagination } from 'components/Pagination';
+import Badge from 'components/Badge';
+import { Icon, IconTypeEnum } from 'components/Icon';
+import { browserDownloadFromBlob } from 'utils/download';
+
+const messages = defineMessages({
+  columnTitle: {
+    defaultMessage: 'Title',
+    id: 'components.OrganizationQuotesTable.columnTitle',
+    description: 'Title column in the quotes table',
+  },
+  columnCompany: {
+    defaultMessage: 'Company',
+    id: 'components.OrganizationQuotesTable.columnCompany',
+    description: 'Company column in the quotes table',
+  },
+  columnOwner: {
+    defaultMessage: 'Owner',
+    id: 'components.OrganizationQuotesTable.columnOwner',
+    description: 'Owner column in the quotes table',
+  },
+  columnState: {
+    defaultMessage: 'State',
+    id: 'components.OrganizationQuotesTable.columnState',
+    description: 'State column in the quotes table',
+  },
+  columnSignedOn: {
+    defaultMessage: 'Signed on',
+    id: 'components.OrganizationQuotesTable.columnSignedOn',
+    description: 'Signed on date column in the quotes table',
+  },
+  columnPayment: {
+    defaultMessage: 'Payment method',
+    id: 'components.OrganizationQuotesTable.payment',
+    description: 'Payment method column in the quotes table',
+  },
+  columnActions: {
+    defaultMessage: 'Actions',
+    id: 'components.OrganizationQuotesTable.columnActions',
+    description: 'Actions column in the quotes table',
+  },
+  confirmQuote: {
+    defaultMessage: 'Confirm quote',
+    id: 'components.OrganizationQuotesTable.confirmQuote',
+    description: 'Label for the action to confirm a quote',
+  },
+  confirmPurchaseOrder: {
+    defaultMessage: 'Confirm receipt of purchase order',
+    id: 'components.OrganizationQuotesTable.confirmPurchaseOrder',
+    description: 'Label for confirming receipt of a purchase order',
+  },
+  confirmBank: {
+    defaultMessage: 'Confirm bank transfer',
+    id: 'components.OrganizationQuotesTable.confirmBank',
+    description: 'Label for confirming a bank transfer',
+  },
+  sendForSignature: {
+    defaultMessage: 'Send quote for signature',
+    id: 'components.OrganizationQuotesTable.sendForSignature',
+    description: 'Action label to send a quote for signature',
+  },
+  waitingSignature: {
+    defaultMessage: 'Waiting signature',
+    id: 'components.OrganizationQuotesTable.waitingSignature',
+    description: 'Label for a quote waiting for signature',
+  },
+  waitingPayment: {
+    defaultMessage: 'Waiting payment',
+    id: 'components.OrganizationQuotesTable.waitingPayment',
+    description: 'Label for a quote waiting for payment',
+  },
+  payAmount: {
+    defaultMessage: 'Waiting for payment',
+    id: 'components.OrganizationQuotesTable.payAmount',
+    description: 'Label indicating the amount is pending payment',
+  },
+  downloadQuote: {
+    defaultMessage: 'Download quote',
+    id: 'components.OrganizationQuotesTable.downloadQuote',
+    description: 'Action label to download the quote',
+  },
+  modalTitle: {
+    defaultMessage: 'Confirm quote',
+    id: 'components.OrganizationQuotesTable.modalTitle',
+    description: 'Title of the confirm quote modal',
+  },
+  modalAmountLabel: {
+    defaultMessage: 'Total amount',
+    id: 'components.OrganizationQuotesTable.modalAmountLabel',
+    description: 'Label for the total amount in the modal',
+  },
+  modalCancel: {
+    defaultMessage: 'Cancel',
+    id: 'components.OrganizationQuotesTable.modalCancel',
+    description: 'Cancel button text in modal',
+  },
+  noQuotes: {
+    defaultMessage: 'No quotes found for this organization.',
+    id: 'components.OrganizationQuotesTable.noQuotes',
+    description: 'Message displayed when no quotes exist for the organization',
+  },
+  paymentCard: {
+    defaultMessage: 'Credit card',
+    id: 'components.OrganizationQuotesTable.paymentCard',
+    description: 'Payment method: credit card',
+  },
+  paymentPurchaseOrder: {
+    defaultMessage: 'Purchase order',
+    id: 'components.OrganizationQuotesTable.paymentPurchaseOrder',
+    description: 'Payment method: purchase order',
+  },
+  paymentBankTransfer: {
+    defaultMessage: 'Bank transfer',
+    id: 'components.OrganizationQuotesTable.paymentBankTransfer',
+    description: 'Payment method: bank transfer',
+  },
+  [BatchOrderState.QUOTED]: {
+    id: 'components.OrganizationQuotesTable.state.quoted',
+    defaultMessage: 'Quoted',
+    description: 'Batch order state: quoted',
+  },
+  [BatchOrderState.TO_SIGN]: {
+    id: 'components.OrganizationQuotesTable.state.toSign',
+    defaultMessage: 'To sign',
+    description: 'Batch order state: to be signed',
+  },
+  [BatchOrderState.SIGNING]: {
+    id: 'components.OrganizationQuotesTable.state.signing',
+    defaultMessage: 'Signing',
+    description: 'Batch order state: currently being signed',
+  },
+  [BatchOrderState.COMPLETED]: {
+    id: 'components.OrganizationQuotesTable.state.completed',
+    defaultMessage: 'Completed',
+    description: 'Batch order state: completed',
+  },
+  [BatchOrderState.DRAFT]: {
+    id: 'components.OrganizationQuotesTable.state.draft.',
+    defaultMessage: 'Draft',
+    description: 'Batch order state: draft',
+  },
+  [BatchOrderState.ASSIGNED]: {
+    id: 'components.OrganizationQuotesTable.state.assigned.',
+    defaultMessage: 'Assigned',
+    description: 'Batch order state: assigned',
+  },
+  [BatchOrderState.PENDING]: {
+    id: 'components.OrganizationQuotesTable.state.pending.',
+    defaultMessage: 'Pending',
+    description: 'Batch order state: pending',
+  },
+  [BatchOrderState.FAILED_PAYMENT]: {
+    id: 'components.OrganizationQuotesTable.state.failedPayment.',
+    defaultMessage: 'Failed payment',
+    description: 'Batch order state: failed payment',
+  },
+  [BatchOrderState.CANCELED]: {
+    id: 'components.OrganizationQuotesTable.state.canceled',
+    defaultMessage: 'Canceled',
+    description: 'Batch order state: canceled',
+  },
+  [PaymentMethod.CARD_PAYMENT]: {
+    id: 'components.OrganizationQuotesTable.payment.card',
+    defaultMessage: 'Card payment',
+    description: 'Payment method: card payment',
+  },
+  [PaymentMethod.PURCHASE_ORDER]: {
+    id: 'components.OrganizationQuotesTable.payment.purchaseOrder',
+    defaultMessage: 'Purchase order',
+    description: 'Payment method: purchase order',
+  },
+  [PaymentMethod.BANK_TRANSFER]: {
+    id: 'components.OrganizationQuotesTable.payment.bankTransfer',
+    defaultMessage: 'Bank transfer',
+    description: 'Payment method: bank transfer',
+  },
+  seats: {
+    id: 'batchOrder.seats',
+    description: 'Text displayed for seats value in batch order',
+    defaultMessage: 'Seats',
+  },
+});
+
+const TeacherDashboardOrganizationQuotes = () => {
+  const intl = useIntl();
+  const { organizationId: routeOrganizationId } = useParams<TeacherDashboardContractsParams>();
+  const pagination = usePagination({ itemsPerPage: 10 });
+
+  const {
+    quotes,
+    confirmQuote,
+    confirmPurchaseOrder,
+    confirmBankTransfer,
+    submitForSignature,
+    downloadQuote,
+  } = useOrganizationsQuotes();
+
+  const {
+    items: quotesList,
+    states: { error },
+    meta,
+
+    methods: { invalidate },
+  } = quotes({
+    organization_id: routeOrganizationId,
+    page: pagination.currentPage,
+    page_size: pagination.itemsPerPage,
+  });
+
+  const [selectedQuote, setSelectedQuote] = useState<OrganizationQuote | null>(null);
+  const [amount, setAmount] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (meta?.pagination?.count) {
+      pagination.setItemsCount(meta.pagination.count);
+    }
+  }, [meta?.pagination?.count]);
+
+  if (error) return <Banner message={error} type={BannerType.ERROR} rounded />;
+
+  const handleOpenConfirm = (id: string) => {
+    const quote = quotesList.find((q) => q.id === id);
+    if (!quote) return;
+    setSelectedQuote(quote);
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setAmount('');
+    setSelectedQuote(null);
+  };
+
+  const handleConfirmQuote = async () => {
+    if (!selectedQuote) return;
+    await confirmQuote({
+      organization_id: routeOrganizationId,
+      payload: { total: amount, quote_id: selectedQuote.id },
+    });
+    handleCancel();
+    await invalidate();
+  };
+
+  const handleConfirmPurchaseOrder = async (id: string) => {
+    await confirmPurchaseOrder({
+      organization_id: routeOrganizationId,
+      payload: { quote_id: id },
+    });
+    await invalidate();
+  };
+
+  const handleConfirmBankTransfer = async (id: string) => {
+    await confirmBankTransfer({
+      organization_id: routeOrganizationId,
+      payload: { batch_order_id: id },
+    });
+    await invalidate();
+  };
+
+  const handleSubmitForSignature = async (id: string) => {
+    await submitForSignature({
+      organization_id: routeOrganizationId,
+      payload: { batch_order_id: id },
+    });
+    await invalidate();
+  };
+
+  const handleDownloadQuote = async (id: string) => {
+    await browserDownloadFromBlob(
+      () =>
+        downloadQuote({
+          organization_id: routeOrganizationId,
+          quote_id: id,
+        }),
+      true,
+    );
+    await invalidate();
+  };
+
+  const renderActionButton = (quote: OrganizationQuote) => {
+    const batchOrder = quote.batch_order;
+    const state = batchOrder?.state;
+    const paymentMethod = batchOrder?.payment_method;
+
+    if (!batchOrder || !state || !paymentMethod) return null;
+
+    if (state === BatchOrderState.COMPLETED) {
+      return (
+        <Button
+          size="small"
+          onClick={() => handleDownloadQuote(quote.id)}
+          icon={<span className="material-icons">download</span>}
+        >
+          {intl.formatMessage(messages.downloadQuote)}
+        </Button>
+      );
+    }
+
+    switch (paymentMethod) {
+      case PaymentMethod.CARD_PAYMENT:
+        switch (state) {
+          case BatchOrderState.QUOTED:
+            return (
+              <Button
+                size="small"
+                onClick={() => handleOpenConfirm(quote.id)}
+                icon={<span className="material-icons">check_circle</span>}
+              >
+                {intl.formatMessage(messages.confirmQuote)}
+              </Button>
+            );
+          case BatchOrderState.TO_SIGN:
+            return (
+              <Button
+                size="small"
+                disabled={batchOrder.contract_submitted}
+                onClick={() =>
+                  !batchOrder.contract_submitted && handleSubmitForSignature(quote.batch_order.id)
+                }
+                icon={<span className="material-icons">send</span>}
+              >
+                {batchOrder.contract_submitted
+                  ? intl.formatMessage(messages.waitingSignature)
+                  : intl.formatMessage(messages.sendForSignature)}
+              </Button>
+            );
+          case BatchOrderState.SIGNING:
+            return (
+              <Button
+                size="small"
+                disabled
+                icon={<span className="material-icons">hourglass_empty</span>}
+              >
+                {intl.formatMessage(messages.waitingPayment)}
+              </Button>
+            );
+          case BatchOrderState.PROCESS_PAYMENT:
+            return (
+              <Button size="small" disabled icon={<span className="material-icons">sync</span>}>
+                {intl.formatMessage(messages.processingPayment)}
+              </Button>
+            );
+        }
+        break;
+      case PaymentMethod.PURCHASE_ORDER:
+        switch (state) {
+          case BatchOrderState.QUOTED:
+            return quote.organization_signed_on ? (
+              <>
+                <Button
+                  size="small"
+                  className="ml-2"
+                  onClick={() => handleConfirmPurchaseOrder(quote.id)}
+                  icon={<span className="material-icons">description</span>}
+                >
+                  {intl.formatMessage(messages.confirmPurchaseOrder)}
+                </Button>
+                <br />
+              </>
+            ) : (
+              <Button
+                size="small"
+                onClick={() => handleOpenConfirm(quote.id)}
+                icon={<span className="material-icons">check_circle</span>}
+              >
+                {intl.formatMessage(messages.confirmQuote)}
+              </Button>
+            );
+          case BatchOrderState.TO_SIGN:
+            return (
+              <Button
+                size="small"
+                disabled={batchOrder.contract_submitted}
+                onClick={() =>
+                  !batchOrder.contract_submitted && handleSubmitForSignature(quote.batch_order.id)
+                }
+                icon={<span className="material-icons">send</span>}
+              >
+                {batchOrder.contract_submitted
+                  ? intl.formatMessage(messages.waitingSignature)
+                  : intl.formatMessage(messages.sendForSignature)}
+              </Button>
+            );
+        }
+        break;
+      case PaymentMethod.BANK_TRANSFER:
+        switch (state) {
+          case BatchOrderState.QUOTED:
+            return (
+              <Button
+                size="small"
+                onClick={() => handleOpenConfirm(quote.id)}
+                icon={<span className="material-icons">check_circle</span>}
+              >
+                {intl.formatMessage(messages.confirmQuote)}
+              </Button>
+            );
+          case BatchOrderState.TO_SIGN:
+            return (
+              <Button
+                size="small"
+                disabled={batchOrder.contract_submitted}
+                onClick={() =>
+                  !batchOrder.contract_submitted && handleSubmitForSignature(quote.batch_order.id)
+                }
+                icon={<span className="material-icons">send</span>}
+              >
+                {batchOrder.contract_submitted
+                  ? intl.formatMessage(messages.waitingSignature)
+                  : intl.formatMessage(messages.sendForSignature)}
+              </Button>
+            );
+          case BatchOrderState.SIGNING:
+            return (
+              <Button
+                size="small"
+                onClick={() => handleConfirmBankTransfer(quote.batch_order.id)}
+                icon={<span className="material-icons">account_balance</span>}
+              >
+                {intl.formatMessage(messages.confirmBank)}
+              </Button>
+            );
+        }
+        break;
+    }
+
+    return null;
+  };
+
+  return (
+    <div className="dashboard__quotes">
+      {quotesList.map((quote) => (
+        <DashboardCard
+          key={quote.id}
+          header={
+            <div className="dashboard__quote__header">
+              <div className="dashboard__quote__header__main">
+                <span>{quote.batch_order.relation.product.title}</span>
+                {quote.batch_order.state && (
+                  <Badge color="primary">
+                    <FormattedMessage {...messages[quote.batch_order.state]} />
+                  </Badge>
+                )}
+              </div>
+              <div className="dashboard__quote__header__reference">Ref. {quote.id}</div>
+            </div>
+          }
+          footer={renderActionButton(quote)}
+        >
+          <div className="dashboard__quote__informations">
+            {quote.batch_order.owner_name && (
+              <div className="dashboard__quote__information">
+                <Icon name={IconTypeEnum.LOGIN} size="small" />
+                <span>{quote.batch_order.owner_name}</span>
+              </div>
+            )}
+            {quote.batch_order.company_name && (
+              <div className="dashboard__quote__information">
+                <Icon name={IconTypeEnum.ORG} size="small" />
+                <span>{quote.batch_order.company_name}</span>
+              </div>
+            )}
+            {quote.batch_order.nb_seats && (
+              <div className="dashboard__quote__information">
+                <Icon name={IconTypeEnum.GROUPS} size="small" />
+                <div>
+                  <span>
+                    {quote.batch_order.nb_seats}
+                    {intl.formatMessage(messages.seats)}
+                  </span>
+                </div>
+              </div>
+            )}
+            {quote.total && (
+              <div className="dashboard__quote__information">
+                <Icon name={IconTypeEnum.MONEY} size="small" />
+                <FormattedNumber value={quote.total} currency="EUR" style="currency" />
+              </div>
+            )}
+            {quote.batch_order.payment_method && (
+              <div className="dashboard__quote__information">
+                <Icon name={IconTypeEnum.OFFER_SUBSCRIPTION} size="small" />
+                <FormattedMessage {...messages[quote.batch_order.payment_method]} />
+              </div>
+            )}
+          </div>
+        </DashboardCard>
+      ))}
+      <Pagination {...pagination} />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCancel}
+        title={intl.formatMessage(messages.modalTitle)}
+        size={ModalSize.MEDIUM}
+        actions={
+          <Button size="small" onClick={handleConfirmQuote}>
+            {intl.formatMessage(messages.confirmQuote)}
+          </Button>
+        }
+      >
+        <div className="dashboard__quote__modal">
+          <Input
+            type="number"
+            label={intl.formatMessage(messages.modalAmountLabel)}
+            onChange={(e) => setAmount(e.target.value)}
+            value={amount}
+          />
+        </div>
+      </Modal>
+    </div>
+  );
+};
+
+export default TeacherDashboardOrganizationQuotes;

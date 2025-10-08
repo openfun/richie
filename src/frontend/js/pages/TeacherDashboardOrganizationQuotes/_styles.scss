@@ -1,0 +1,40 @@
+.dashboard__quotes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dashboard__quote__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: start;
+  &__main {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    gap: 0.5rem;
+  }
+  &__reference {
+    font-size: 60%;
+    font-weight: $font-weight-normal;
+  }
+}
+
+.dashboard__quote__informations {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dashboard__quote__information {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.dashboard__quote__modal {
+  display: flex;
+  justify-content: center;
+}
