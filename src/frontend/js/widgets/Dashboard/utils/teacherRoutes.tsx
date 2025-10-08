@@ -13,6 +13,7 @@ import {
   TEACHER_DASHBOARD_ROUTE_LABELS,
   TeacherDashboardPaths,
 } from 'widgets/Dashboard/utils/teacherDashboardPaths';
+import { TeacherDashboardOrganizationQuotesLayout } from 'pages/TeacherDashboardOrganizationQuotesLayout';
 
 export function getTeacherDashboardRoutes() {
   const routes: RouteObject[] = [
@@ -153,6 +154,13 @@ export function getTeacherDashboardRoutes() {
           handle: {
             crumbLabel:
               TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION_CONTRACTS],
+          },
+        },
+        {
+          path: TeacherDashboardPaths.ORGANIZATION_QUOTES,
+          element: <TeacherDashboardOrganizationQuotesLayout />,
+          handle: {
+            crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION_QUOTES],
           },
         },
       ],
