@@ -14,6 +14,7 @@ import {
   TeacherDashboardPaths,
 } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { TeacherDashboardOrganizationQuotesLayout } from 'pages/TeacherDashboardOrganizationQuotesLayout';
+import { TeacherDashboardOrganizationAgreementsLayout } from 'pages/TeacherDashboardOrganizationAgreementsLayout';
 
 export function getTeacherDashboardRoutes() {
   const routes: RouteObject[] = [
@@ -161,6 +162,14 @@ export function getTeacherDashboardRoutes() {
           element: <TeacherDashboardOrganizationQuotesLayout />,
           handle: {
             crumbLabel: TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION_QUOTES],
+          },
+        },
+        {
+          path: TeacherDashboardPaths.ORGANIZATION_AGREEMENTS,
+          element: <TeacherDashboardOrganizationAgreementsLayout />,
+          handle: {
+            crumbLabel:
+              TEACHER_DASHBOARD_ROUTE_LABELS[TeacherDashboardPaths.ORGANIZATION_AGREEMENTS],
           },
         },
       ],

@@ -54,6 +54,7 @@ export const TeacherDashboardOrganizationSidebar = () => {
     TeacherDashboardPaths.ORGANIZATION_COURSES,
     TeacherDashboardPaths.ORGANIZATION_CONTRACTS,
     TeacherDashboardPaths.ORGANIZATION_QUOTES,
+    TeacherDashboardPaths.ORGANIZATION_AGREEMENTS,
   ].map(getMenuLinkFromPath);
 
   if (fetching) {

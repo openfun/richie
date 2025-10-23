@@ -10,6 +10,7 @@ export enum TeacherDashboardPaths {
   ORGANIZATION_CONTRACTS = `${ORGANIZATION}/contracts`,
   ORGANIZATION_COURSES = `${ORGANIZATION}/courses`,
   ORGANIZATION_QUOTES = `${ORGANIZATION}/quotes`,
+  ORGANIZATION_AGREEMENTS = `${ORGANIZATION}/agreements`,
   ORGANIZATION_PRODUCT = `${ORGANIZATION_COURSES}/:courseId/products/:offeringId`,
   ORGANIZATION_COURSE_CONTRACTS = `${ORGANIZATION_COURSES}/:courseId/contracts`,
   ORGANIZATION_PRODUCT_CONTRACTS = `${ORGANIZATION_COURSES}/:courseId/products/:offeringId/contracts`,
@@ -47,6 +48,11 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.quotes.label',
     description: 'Label of the organization quotes view.',
     defaultMessage: 'Manage my quotes',
+  },
+  [TeacherDashboardPaths.ORGANIZATION_AGREEMENTS]: {
+    id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.agreements.label',
+    description: 'Label of the organization agreements view.',
+    defaultMessage: 'Manage my agreements',
   },
   [TeacherDashboardPaths.ORGANIZATION_CONTRACTS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.contracts.label',
