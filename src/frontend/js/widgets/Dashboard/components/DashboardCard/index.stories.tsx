@@ -1,6 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { Button } from '@openfun/cunningham-react';
-import Input from 'components/Form/Input';
 import { DashboardBox } from '../DashboardBox';
 import { DashboardCard } from './index';
 
@@ -18,7 +17,15 @@ type Story = StoryObj<typeof DashboardCard>;
 export const Default: Story = {
   args: {
     header: 'Billing Addresses',
-    children: <Input name="default" label="Country" />,
+    children: (
+      <div>
+        <div>
+          <div>Home</div>
+          <strong>Pierre Léger</strong>
+          <p>21 rue du pavillon - 78130 Chapter ( France )</p>
+        </div>
+      </div>
+    ),
     footer: <Button color="primary">Update</Button>,
   },
 };
@@ -43,6 +50,22 @@ export const WithBoxes: Story = {
             <p>21 rue du pavillon - 78130 Chapter ( France )</p>
           </div>
         </DashboardBox>
+      </div>
+    ),
+  },
+};
+
+export const NotExpanded: Story = {
+  args: {
+    header: 'Not expanded',
+    defaultExpanded: false,
+    children: (
+      <div>
+        <div>
+          <div>Home</div>
+          <strong>Pierre Léger</strong>
+          <p>21 rue du pavillon - 78130 Chapter ( France )</p>
+        </div>
       </div>
     ),
   },

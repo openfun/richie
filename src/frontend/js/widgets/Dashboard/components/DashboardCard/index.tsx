@@ -9,6 +9,7 @@ interface Props {
   expandable?: boolean;
   fullWidth?: boolean;
   className?: string;
+  defaultExpanded?: boolean;
 }
 
 export const DashboardCard = ({
@@ -18,10 +19,11 @@ export const DashboardCard = ({
   className,
   expandable = true,
   fullWidth = false,
+  defaultExpanded = true,
 }: PropsWithChildren<Props>) => {
-  const [opened, setOpened] = useState(true);
+  const [opened, setOpened] = useState(defaultExpanded);
   const expandableRef = useRef<HTMLDivElement>(null);
-  const [wrapperHeight, setWrapperHeight] = useState('auto');
+  const [wrapperHeight, setWrapperHeight] = useState(defaultExpanded ? 'auto' : '0');
 
   const toggle = () => {
     if (opened) {

@@ -17,4 +17,22 @@ describe('<DashboardCard/>', () => {
     fireEvent.click(screen.getByTestId('dashboard-card__header__toggle'));
     expect(screen.getByTestId('dashboard-card__wrapper').style.height).toBe('0px');
   });
+
+  it('is not expanded', async () => {
+    render(
+      <DashboardCard
+        defaultExpanded={false}
+        header="My header"
+        footer={<Button color="primary">Update</Button>}
+      >
+        Content here
+      </DashboardCard>,
+    );
+
+    expect(screen.getByTestId('dashboard-card__wrapper').style.height).toBe('0px');
+    const card = screen.getByText('My header').closest('.dashboard-card');
+    expect(card).toHaveClass('dashboard-card--closed');
+    fireEvent.click(screen.getByTestId('dashboard-card__header__toggle'));
+    expect(card).toHaveClass('dashboard-card--opened');
+  });
 });
