@@ -478,6 +478,7 @@ export enum BatchOrderState {
   TO_SIGN = 'to_sign',
   SIGNING = 'signing',
   PENDING = 'pending',
+  PROCESS_PAYMENT = 'process_payment',
   FAILED_PAYMENT = 'failed_payment',
   CANCELED = 'canceled',
   COMPLETED = 'completed',

@@ -46,6 +46,11 @@ const messages = defineMessages({
     description: 'Status label for a pending batch order',
     defaultMessage: 'Pending',
   },
+  [BatchOrderState.PROCESS_PAYMENT]: {
+    id: 'batchOrder.status.processPayment',
+    description: 'Status label for a process payment batch order',
+    defaultMessage: 'Process payment',
+  },
   [BatchOrderState.FAILED_PAYMENT]: {
     id: 'batchOrder.status.failed_payment',
     description: 'Status label for a batch order with failed payment',
@@ -92,8 +97,8 @@ export const DashboardItemBatchOrder = ({
 }) => {
   const intl = useIntl();
   const needsPayment =
-    (batchOrder.state === BatchOrderState.SIGNING ||
-      batchOrder.state === BatchOrderState.PENDING) &&
+    (batchOrder.state === BatchOrderState.PENDING ||
+      batchOrder.state === BatchOrderState.PROCESS_PAYMENT) &&
     batchOrder.payment_method === PaymentMethod.CARD_PAYMENT;
 
   return (

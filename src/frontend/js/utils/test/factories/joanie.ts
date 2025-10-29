@@ -42,6 +42,9 @@ import {
   BatchOrderRead,
   BatchOrder,
   BatchOrderState,
+  OrganizationQuote,
+  BatchOrderQuote,
+  Relation,
 } from 'types/Joanie';
 import { Payment, PaymentMethod, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
@@ -167,6 +170,44 @@ export const OrganizationFactory = factory((): Organization => {
     dpo_email: faker.internet.email(),
     contact_phone: faker.phone.number(),
     address: AddressFactory().one(),
+  };
+});
+
+export const RelationFactory = factory((): Relation => {
+  return {
+    id: faker.string.uuid(),
+    product: {
+      id: faker.string.uuid(),
+      title: faker.commerce.productName(),
+    },
+    course: {
+      id: faker.string.uuid(),
+      title: faker.lorem.words({ min: 2, max: 5 }),
+    },
+  };
+});
+
+export const BatchOrderQuoteFactory = factory((): BatchOrderQuote => {
+  return {
+    id: faker.string.uuid(),
+    owner_name: faker.person.fullName(),
+    organization_id: faker.string.uuid(),
+    state: faker.helpers.arrayElement(Object.values(BatchOrderState)),
+    company_name: faker.company.name(),
+    relation: RelationFactory().one(),
+    payment_method: faker.helpers.arrayElement(Object.values(PaymentMethod)),
+    contract_submitted: faker.datatype.boolean(),
+    nb_seats: faker.number.int({ min: 1, max: 100 }),
+  };
+});
+
+export const OrganizationQuoteFactory = factory((): OrganizationQuote => {
+  return {
+    id: faker.string.uuid(),
+    organization_signed_on: faker.date.past().toISOString(),
+    has_purchase_order: faker.datatype.boolean(),
+    batch_order: BatchOrderQuoteFactory().one(),
+    total: faker.number.float({ min: 1000, max: 50000 }),
   };
 });
 
