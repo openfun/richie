@@ -8,6 +8,7 @@ import { Icon, IconTypeEnum } from 'components/Icon';
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { DashboardBatchOrderSubItems } from './DashboardBatchOrderSubItems';
+import { BatchOrderPaymentManager } from './BatchOrderPaymentModal/BatchOrderPaymentManager';
 
 const messages = defineMessages({
   seats: {
@@ -75,6 +76,11 @@ const messages = defineMessages({
     description: 'Label for purchase order payment method',
     defaultMessage: 'Purchase order',
   },
+  paymentNeededButton: {
+    id: 'components.ProductCertificateFooter.paymentNeededButton',
+    description: 'Button label for the payment needed message',
+    defaultMessage: 'Pay {amount}',
+  },
 });
 
 export const DashboardItemBatchOrder = ({
@@ -85,6 +91,11 @@ export const DashboardItemBatchOrder = ({
   showDetails?: boolean;
 }) => {
   const intl = useIntl();
+  const needsPayment =
+    (batchOrder.state === BatchOrderState.SIGNING ||
+      batchOrder.state === BatchOrderState.PENDING) &&
+    batchOrder.payment_method === PaymentMethod.CARD_PAYMENT;
+
   return (
     <div className="dashboard-item-order">
       <DashboardItem
@@ -151,6 +162,7 @@ export const DashboardItemBatchOrder = ({
           </div>
         }
       >
+        {needsPayment && <BatchOrderPaymentManager batchOrder={batchOrder} />}
         {showDetails && <DashboardBatchOrderSubItems batchOrder={batchOrder} />}
       </DashboardItem>
     </div>
