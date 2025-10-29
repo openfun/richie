@@ -12,8 +12,14 @@ import { Pagination, usePagination } from 'components/Pagination';
 import Badge from 'components/Badge';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { browserDownloadFromBlob } from 'utils/download';
+import { Spinner } from 'components/Spinner';
 
 const messages = defineMessages({
+  loading: {
+    defaultMessage: 'Loading organization quotes...',
+    description: 'Message displayed while loading organization quotes',
+    id: 'components.OrganizationQuotesTable.loading',
+  },
   columnTitle: {
     defaultMessage: 'Title',
     id: 'components.OrganizationQuotesTable.columnTitle',
@@ -79,6 +85,11 @@ const messages = defineMessages({
     id: 'components.OrganizationQuotesTable.waitingPayment',
     description: 'Label for a quote waiting for payment',
   },
+  processingPayment: {
+    defaultMessage: 'Processing payment',
+    id: 'components.OrganizationQuotesTable.processingPayment',
+    description: 'Label when Lyra is processing for payment',
+  },
   payAmount: {
     defaultMessage: 'Waiting for payment',
     id: 'components.OrganizationQuotesTable.payAmount',
@@ -138,6 +149,11 @@ const messages = defineMessages({
     id: 'components.OrganizationQuotesTable.state.signing',
     defaultMessage: 'Signing',
     description: 'Batch order state: currently being signed',
+  },
+  [BatchOrderState.PROCESS_PAYMENT]: {
+    id: 'batchOrder.status.processPayment',
+    description: 'Status label for a process payment batch order',
+    defaultMessage: 'Process payment',
   },
   [BatchOrderState.COMPLETED]: {
     id: 'components.OrganizationQuotesTable.state.completed',
@@ -207,9 +223,8 @@ const TeacherDashboardOrganizationQuotes = () => {
 
   const {
     items: quotesList,
-    states: { error },
+    states: { error, isPending },
     meta,
-
     methods: { invalidate },
   } = quotes({
     organization_id: routeOrganizationId,
@@ -228,6 +243,20 @@ const TeacherDashboardOrganizationQuotes = () => {
   }, [meta?.pagination?.count]);
 
   if (error) return <Banner message={error} type={BannerType.ERROR} rounded />;
+
+  if (isPending)
+    return (
+      <Spinner size="large">
+        <span id="loading-contract-data">
+          <FormattedMessage {...messages.loading} />
+        </span>
+      </Spinner>
+    );
+
+  if (!isPending && !error && quotesList.length === 0)
+    return (
+      <Banner type={BannerType.INFO} rounded message={intl.formatMessage(messages.noQuotes)} />
+    );
 
   const handleOpenConfirm = (id: string) => {
     const quote = quotesList.find((q) => q.id === id);
@@ -335,7 +364,7 @@ const TeacherDashboardOrganizationQuotes = () => {
                   : intl.formatMessage(messages.sendForSignature)}
               </Button>
             );
-          case BatchOrderState.SIGNING:
+          case BatchOrderState.PENDING:
             return (
               <Button
                 size="small"
@@ -421,7 +450,7 @@ const TeacherDashboardOrganizationQuotes = () => {
                   : intl.formatMessage(messages.sendForSignature)}
               </Button>
             );
-          case BatchOrderState.SIGNING:
+          case BatchOrderState.PENDING:
             return (
               <Button
                 size="small"
