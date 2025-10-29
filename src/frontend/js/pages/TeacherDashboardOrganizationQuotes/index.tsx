@@ -457,6 +457,7 @@ const TeacherDashboardOrganizationQuotes = () => {
             </div>
           }
           footer={renderActionButton(quote)}
+          defaultExpanded={false}
         >
           <div className="dashboard__quote__informations">
             {quote.batch_order.owner_name && (

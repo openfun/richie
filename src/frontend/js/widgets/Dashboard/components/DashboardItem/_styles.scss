@@ -161,6 +161,9 @@
     .content {
       padding: 0.5rem 1rem;
       font-size: 0.8rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
     }
   }
 }
