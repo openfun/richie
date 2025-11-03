@@ -1391,6 +1391,34 @@
     "description": "Label for the total amount",
     "message": "Total"
   },
+  "components.SaleTunnel.Information.voucher.delete": {
+    "description": "Delete text for the voucher",
+    "message": "Supprimer ce coupon"
+  },
+  "components.SaleTunnel.Information.voucher.discount": {
+    "description": "Discount description",
+    "message": "Réduction appliquée"
+  },
+  "components.SaleTunnel.Information.voucher.errorInvalid": {
+    "description": "Error when voucher is invalid",
+    "message": "Le code promo saisi n’est pas valide."
+  },
+  "components.SaleTunnel.Information.voucher.errorTooManyRequests": {
+    "description": "Error when user has tried too many vouchers",
+    "message": "Trop de tentatives. Veuillez réessayer plus tard."
+  },
+  "components.SaleTunnel.Information.voucher.info": {
+    "description": "Info for the voucher",
+    "message": "Si vous avez un coupon ou code promo, veuillez le saisir dans le champ ci-dessous."
+  },
+  "components.SaleTunnel.Information.voucher.title": {
+    "description": "Title for the voucher",
+    "message": "Coupon / Code promo"
+  },
+  "components.SaleTunnel.Information.voucher.validate": {
+    "description": "Validate text for the voucher",
+    "message": "Valider"
+  },
   "components.SaleTunnel.Sponsors.SaleTunnelSponsors.blockTitle": {
     "description": "Title for the universities section in the sale tunnel",
     "message": "Université"
@@ -1409,7 +1437,7 @@
   },
   "components.SaleTunnel.SubscriptionButton.walkthroughToSignAndSavePayment": {
     "description": "Message explaining the subscription process with a training agreement to sign and a payment method to set.",
-    "message": "Pour vous inscrire, vous serez d'abord invité à signer le contrat de formation, puis à définir un moyen de paiement."
+    "message": "Pour vous inscrire à la formation, vous serez d’abord invité à signer la convention de formation, puis à définir un mode de paiement si nécessaire."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.certificate .waiveCheckboxHelperClause2": {
     "description": "Second clause item for the waiver checkbox.",

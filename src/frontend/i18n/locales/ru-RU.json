@@ -1391,6 +1391,34 @@
     "description": "Label for the total amount",
     "message": "Total"
   },
+  "components.SaleTunnel.Information.voucher.delete": {
+    "description": "Delete text for the voucher",
+    "message": "Delete this voucher"
+  },
+  "components.SaleTunnel.Information.voucher.discount": {
+    "description": "Discount description",
+    "message": "Discount applied"
+  },
+  "components.SaleTunnel.Information.voucher.errorInvalid": {
+    "description": "Error when voucher is invalid",
+    "message": "The submitted voucher code is not valid."
+  },
+  "components.SaleTunnel.Information.voucher.errorTooManyRequests": {
+    "description": "Error when user has tried too many vouchers",
+    "message": "Too many attempts. Please try again later."
+  },
+  "components.SaleTunnel.Information.voucher.info": {
+    "description": "Info for the voucher",
+    "message": "If you have a voucher code, please enter it in the field below."
+  },
+  "components.SaleTunnel.Information.voucher.title": {
+    "description": "Title for the voucher",
+    "message": "Voucher code"
+  },
+  "components.SaleTunnel.Information.voucher.validate": {
+    "description": "Validate text for the voucher",
+    "message": "Validate"
+  },
   "components.SaleTunnel.Sponsors.SaleTunnelSponsors.blockTitle": {
     "description": "Title for the universities section in the sale tunnel",
     "message": "University"
@@ -1409,7 +1437,7 @@
   },
   "components.SaleTunnel.SubscriptionButton.walkthroughToSignAndSavePayment": {
     "description": "Message explaining the subscription process with a training agreement to sign and a payment method to set.",
-    "message": "To enroll in the training, you will first be invited to sign the training agreement and then to define a payment method."
+    "message": "To enroll in the training, you will first be invited to sign the training agreement and then to define a payment method if required."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.certificate .waiveCheckboxHelperClause2": {
     "description": "Second clause item for the waiver checkbox.",
