@@ -1391,6 +1391,34 @@
     "description": "Label for the total amount",
     "message": "Total"
   },
+  "components.SaleTunnel.Information.voucher.delete": {
+    "description": "Delete text for the voucher",
+    "message": "Apagar este voucher"
+  },
+  "components.SaleTunnel.Information.voucher.discount": {
+    "description": "Discount description",
+    "message": "Desconto aplicado"
+  },
+  "components.SaleTunnel.Information.voucher.errorInvalid": {
+    "description": "Error when voucher is invalid",
+    "message": "O código do voucher enviado não é válido."
+  },
+  "components.SaleTunnel.Information.voucher.errorTooManyRequests": {
+    "description": "Error when user has tried too many vouchers",
+    "message": "Tentativas excessivas. Por favor, tente novamente mais tarde."
+  },
+  "components.SaleTunnel.Information.voucher.info": {
+    "description": "Info for the voucher",
+    "message": "Se tiver um código promocional, insira-o no campo abaixo."
+  },
+  "components.SaleTunnel.Information.voucher.title": {
+    "description": "Title for the voucher",
+    "message": "Código promocional"
+  },
+  "components.SaleTunnel.Information.voucher.validate": {
+    "description": "Validate text for the voucher",
+    "message": "Validar"
+  },
   "components.SaleTunnel.Sponsors.SaleTunnelSponsors.blockTitle": {
     "description": "Title for the universities section in the sale tunnel",
     "message": "Universidade"
@@ -1409,7 +1437,7 @@
   },
   "components.SaleTunnel.SubscriptionButton.walkthroughToSignAndSavePayment": {
     "description": "Message explaining the subscription process with a training agreement to sign and a payment method to set.",
-    "message": "Para se inscrever na formação, será primeiro convidado a assinar o acordo de formação e, em seguida, a definir um método de pagamento."
+    "message": "Para se inscrever na formação, primeiro será convidado a assinar o contrato de formação e, em seguida, a definir um método de pagamento, se necessário."
   },
   "components.SaleTunnel.WithdrawRightCheckbox.certificate .waiveCheckboxHelperClause2": {
     "description": "Second clause item for the waiver checkbox.",

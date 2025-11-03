@@ -1,6 +1,6 @@
 {
   "name": "richie-tests-e2e",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "End-to-end tests for the Richie project",
   "repository": "https://github.com/openfun/richie",
   "author": "Open FUN (France Université Numérique)",

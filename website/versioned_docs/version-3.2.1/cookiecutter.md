@@ -25,7 +25,7 @@ If you chose to install Cookiecutter, you can now run it against our
 [template][2] as follows:
 
 ```bash
-cookiecutter gh:openfun/richie --directory cookiecutter  --checkout v3.2.1
+cookiecutter gh:openfun/richie --directory cookiecutter  --checkout v3.2.0
 ```
 
 If you didn't want to install it on your machine, we provide a Docker image
