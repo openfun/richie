@@ -34,6 +34,12 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
         `/contracts/?signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
       { results: [], count: 0, previous: null, next: null },
     );
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/organizations/' +
+        organization.id +
+        `/agreements/?signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
+      { results: [], count: 0, previous: null, next: null },
+    );
 
     render(<TeacherDashboardOrganizationSidebar />, {
       routerOptions: { path: '/:organizationId', initialEntries: [`/${organization.id}`] },
@@ -50,9 +56,11 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
 
     // It should display menu links
     const links = screen.getAllByRole('link');
-    expect(links).toHaveLength(2);
+    expect(links).toHaveLength(4);
     expect(links[0]).toHaveTextContent('Courses');
     expect(links[1]).toHaveTextContent('Contracts');
+    expect(links[2]).toHaveTextContent('Manage my quotes');
+    expect(links[3]).toHaveTextContent('Manage my agreements');
     // No badge should be displayed next to contract link
     expect(links[1].nextSibling).toBeNull();
   });
@@ -75,6 +83,12 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
         previous: null,
         next: null,
       },
+    );
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/organizations/' +
+        organization.id +
+        `/agreements/?signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
+      { results: [], count: 0, previous: null, next: null },
     );
 
     render(<TeacherDashboardOrganizationSidebar />, {
@@ -108,9 +122,13 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
       {
         results: ContractFactory({ abilities: { sign: false } }).many(contractToSignCount),
         count: contractToSignCount,
-        previous: null,
-        next: null,
       },
+    );
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/organizations/' +
+        organization.id +
+        `/agreements/?signature_state=half_signed&page=1&page_size=${PER_PAGE.teacherContractList}`,
+      { results: [], count: 0, previous: null, next: null },
     );
 
     render(<TeacherDashboardOrganizationSidebar />, {

@@ -54,10 +54,12 @@ const useContractArchive = () => {
       create: async (
         organizationId?: Organization['id'],
         offeringId?: Offering['id'],
+        fromBatchOrder?: boolean,
       ): Promise<string> => {
         const response = await api.user.contracts.zip_archive.create({
           organization_id: organizationId,
           offering_id: offeringId,
+          from_batch_order: fromBatchOrder,
         });
 
         return extractArchiveId(response.url);

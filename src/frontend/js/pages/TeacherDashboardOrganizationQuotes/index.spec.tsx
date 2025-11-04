@@ -30,7 +30,6 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
     const quoteList = OrganizationQuoteFactory({}).many(5);
 
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
-
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`, {
       results: quoteList,
       count: 0,
@@ -51,7 +50,7 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
     );
   });
 
-  it('should render a list of quotes for an organization', async () => {
+  it('should render an empty list of quotes for an organization', async () => {
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`, {
       results: [],

@@ -1,11 +1,15 @@
 import { JoanieUserProfile } from 'types/User';
-import { Contract } from 'types/Joanie';
+import { Agreement, Contract } from 'types/Joanie';
 
 export enum JoanieUserProfileActions {
   ACCESS_TEACHER_DASHBOARD = 'access_teacher_dashboard',
 }
 
 export enum ContractActions {
+  SIGN = 'sign',
+}
+
+export enum AgreementActions {
   SIGN = 'sign',
 }
 
@@ -30,7 +34,12 @@ export const isContractEntity = (entity: Entity): entity is Contract => {
   return CONTRACT_KEYS.every((key) => entity.hasOwnProperty(key));
 };
 
+export function isAgreementEntity(entity: any): entity is Agreement {
+  const AGREEMENT_KEYS = ['batch_order', 'abilities', 'id'];
+  return AGREEMENT_KEYS.every((key) => entity.hasOwnProperty(key));
+}
+
 // further entities and entity actions can be added here
 // like Entity = JoanieUserProfileEntity | CourseEntity
-export type Entity = JoanieUserProfile | Contract;
-export type Actions = JoanieUserProfileActions | ContractActions;
+export type Entity = JoanieUserProfile | Contract | Agreement;
+export type Actions = JoanieUserProfileActions | ContractActions | AgreementActions;

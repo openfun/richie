@@ -20,11 +20,13 @@ export enum ContractDownloadStatus {
 interface UseTeacherContractsBulkDownloadProps {
   organizationId?: Organization['id'];
   offeringId?: Offering['id'];
+  fromBatchOrder?: boolean;
 }
 
 const useDownloadContractArchive = ({
   organizationId,
   offeringId,
+  fromBatchOrder,
 }: UseTeacherContractsBulkDownloadProps) => {
   const localstorageArchiveFilters = {
     organizationId,
@@ -116,7 +118,7 @@ const useDownloadContractArchive = ({
   const createContractArchive = async () => {
     let newContractArchiveId;
     if (contractArchiveId === null) {
-      newContractArchiveId = await createArchive(organizationId, offeringId);
+      newContractArchiveId = await createArchive(organizationId, offeringId, fromBatchOrder);
       setContractArchiveId(newContractArchiveId);
       storeContractArchiveId({
         ...localstorageArchiveFilters,

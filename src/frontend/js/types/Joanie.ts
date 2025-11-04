@@ -65,6 +65,13 @@ export interface Contract {
 
 export type ContractLight = Pick<Contract, 'id' | 'organization_signed_on' | 'student_signed_on'>;
 
+export interface Agreement {
+  id: string;
+  batch_order: BatchOrderQuote;
+  abilities?: ContractAbilities;
+  organization_signed_on?: string;
+}
+
 export interface CourseListItem extends Resource {
   id: string;
   title: string;
@@ -728,6 +735,7 @@ export interface OrganizationContractSignatureLinksFilters {
   contracts_ids?: string[];
   organization_id: Organization['id'];
   offering_ids?: Offering['id'][];
+  from_batch_order?: boolean;
 }
 
 export interface ContractInvitationLinkResponse {
@@ -833,9 +841,11 @@ interface APIUser {
       create: ({
         organization_id,
         offering_id,
+        from_batch_order,
       }: {
         organization_id?: Organization['id'];
         offering_id?: Offering['id'];
+        from_batch_order?: boolean;
       }) => Promise<{ url: string }>;
       get: (id: string) => Promise<File>;
     };
@@ -897,6 +907,13 @@ export interface API {
       download_quote: {
         get(filters: OrganizationQuoteQueryFilters): Promise<any>;
       };
+    };
+    agreements: {
+      get(
+        filters?: ContractResourceQuery,
+      ): ContractResourceQuery extends { id: string }
+        ? Promise<Nullable<Agreement>>
+        : Promise<PaginatedResponse<Agreement>>;
     };
   };
   courseRuns: {

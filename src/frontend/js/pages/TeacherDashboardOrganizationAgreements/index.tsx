@@ -3,8 +3,6 @@ import { defineMessages, useIntl } from 'react-intl';
 import { DataGrid, usePagination } from '@openfun/cunningham-react';
 import { useEffect, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router';
-import { ContractHelper, ContractStatePoV } from 'utils/ContractHelper';
-import { useOrganizationContracts } from 'hooks/useContracts';
 import Banner, { BannerType } from 'components/Banner';
 import { PER_PAGE } from 'settings';
 import { ContractResourceQuery } from 'types/Joanie';
@@ -13,8 +11,9 @@ import { useOrganizations } from 'hooks/useOrganizations';
 import useTeacherContractFilters, {
   TeacherDashboardContractsParams,
 } from 'pages/TeacherDashboardContractsLayout/hooks/useTeacherContractFilters';
-import ContractActionsBar from 'pages/TeacherDashboardContractsLayout/components/ContractActionsBar';
 import ContractFiltersBar from 'pages/TeacherDashboardContractsLayout/components/ContractFiltersBar';
+import { useOrganizationAgreements } from 'hooks/useOrganizationAgreements.tsx';
+import AgreementActionsBar from './AgreementActionsBar';
 
 const messages = defineMessages({
   columnProductTitle: {
@@ -54,23 +53,23 @@ const TeacherDashboardOrganizationAgreements = () => {
   const hasMultipleOrganizations = isOrganizationListFetched && organizationList.length > 1;
   const { initialFilters, filters, setFilters } = useTeacherContractFilters();
   const {
-    items: contracts,
+    items: agreements,
     meta,
     states: { fetching, isFetched, error },
-  } = useOrganizationContracts({
+  } = useOrganizationAgreements({
     ...filters,
     page: pagination.page,
     page_size: PER_PAGE.teacherContractList,
   });
 
   const rows = useMemo(() => {
-    return contracts.map((contract) => ({
-      id: contract.id,
-      learnerName: contract.order.owner_name,
-      productTitle: contract.order.product_title,
-      state: ContractHelper.getHumanReadableState(contract, ContractStatePoV.ORGANIZATION, intl),
+    return agreements.map((agreement) => ({
+      id: agreement.id,
+      learnerName: agreement.batch_order.owner_name,
+      productTitle: agreement.batch_order.relation.product.title,
+      state: agreement.batch_order.state,
     }));
-  }, [contracts]);
+  }, [agreements]);
 
   const handleFiltersChange = (newFilters: Partial<ContractResourceQuery>) => {
     // Reset pagination
@@ -91,7 +90,7 @@ const TeacherDashboardOrganizationAgreements = () => {
   return (
     <div className="teacher-contract-page">
       <div className="dashboard__page__actions">
-        <ContractActionsBar
+        <AgreementActionsBar
           organizationId={filters.organization_id!}
           offeringId={filters.offering_id}
         />
