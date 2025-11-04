@@ -45,6 +45,7 @@ import {
   OrganizationQuote,
   BatchOrderQuote,
   Relation,
+  Agreement,
 } from 'types/Joanie';
 import { Payment, PaymentMethod, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
@@ -190,7 +191,7 @@ export const RelationFactory = factory((): Relation => {
 export const BatchOrderQuoteFactory = factory((): BatchOrderQuote => {
   return {
     id: faker.string.uuid(),
-    owner_name: faker.person.fullName(),
+    owner_name: faker.person.firstName(),
     organization_id: faker.string.uuid(),
     state: faker.helpers.arrayElement(Object.values(BatchOrderState)),
     company_name: faker.company.name(),
@@ -207,7 +208,7 @@ export const OrganizationQuoteFactory = factory((): OrganizationQuote => {
     organization_signed_on: faker.date.past().toISOString(),
     has_purchase_order: faker.datatype.boolean(),
     batch_order: BatchOrderQuoteFactory().one(),
-    total: faker.number.float({ min: 1000, max: 50000 }),
+    total: faker.number.float({ min: 1, max: 100 }),
   };
 });
 
@@ -215,6 +216,17 @@ export const OrganizationLightFactory = factory((): OrganizationLight => {
   return {
     code: faker.string.alphanumeric(5),
     title: faker.lorem.words(1),
+  };
+});
+
+export const AgreementFactory = factory((): Agreement => {
+  return {
+    id: faker.string.uuid(),
+    batch_order: BatchOrderQuoteFactory().one(),
+    abilities: {
+      sign: faker.datatype.boolean(),
+    },
+    organization_signed_on: faker.date.past().toISOString(),
   };
 });
 

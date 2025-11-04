@@ -1,5 +1,6 @@
 import { Maybe, Nullable } from 'types/utils';
 import contractAbilities from 'utils/AbilitiesHelper/contractAbilities';
+import agreementAbilities from 'utils/AbilitiesHelper/agreementAbilities';
 import joanieUserProfileAbilities from './joanieUserProfileAbilities';
 import {
   Entity,
@@ -8,6 +9,8 @@ import {
   isJoanieUserProfileEntity,
   isContractEntity,
   ContractActions,
+  isAgreementEntity,
+  AgreementActions,
 } from './types';
 
 // further actions can be added here
@@ -35,6 +38,10 @@ const can = (entities: Maybe<Nullable<Entity | Entity[]>>, action: Actions) => {
 
     if (isContractEntity(entity)) {
       return contractAbilities[action as ContractActions](entity);
+    }
+
+    if (isAgreementEntity(entity)) {
+      return agreementAbilities[action as AgreementActions](entity);
     }
 
     return false;

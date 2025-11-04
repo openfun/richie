@@ -66,6 +66,10 @@ describe('components/TeacherDashboardOrganizationCourseLoader', () => {
       `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?signature_state=half_signed&page=1`,
       [],
     );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/agreements/?signature_state=half_signed&page=1`,
+      [],
+    );
 
     render(<TeacherDashboardOrganizationCourseLoader />, {
       routerOptions: {
@@ -78,6 +82,7 @@ describe('components/TeacherDashboardOrganizationCourseLoader', () => {
     nbApiCalls += 1; // course api call
     nbApiCalls += 1; // offerings api call
     nbApiCalls += 1; // contracts api call
+    nbApiCalls += 1; // agreements api call
     const calledUrls = fetchMock.calls().map((call) => call[0]);
     expect(calledUrls).toHaveLength(nbApiCalls);
     expect(calledUrls).toContain(
@@ -103,6 +108,10 @@ describe('components/TeacherDashboardOrganizationCourseLoader', () => {
     const organization = OrganizationFactory().one();
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/contracts/?signature_state=half_signed&page=1`,
+      [],
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/${organization.id}/agreements/?signature_state=half_signed&page=1`,
       [],
     );
     nbApiCalls += 1;

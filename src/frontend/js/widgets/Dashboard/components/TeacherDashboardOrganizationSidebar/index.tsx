@@ -7,6 +7,7 @@ import { getDashboardRouteLabel } from 'widgets/Dashboard/utils/dashboardRoutes'
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { DashboardAvatar, DashboardAvatarVariantEnum } from '../DashboardAvatar';
 import ContractNavLink from '../DashboardSidebar/components/ContractNavLink';
+import AgreementNavLink from '../DashboardSidebar/components/AgreementNavLink';
 
 const messages = defineMessages({
   subHeader: {
@@ -44,6 +45,12 @@ export const TeacherDashboardOrganizationSidebar = () => {
     if (basePath === TeacherDashboardPaths.ORGANIZATION_CONTRACTS) {
       menuLink.component = (
         <ContractNavLink link={menuLink} organizationId={organizationId} offeringId={offeringId} />
+      );
+    }
+
+    if (basePath === TeacherDashboardPaths.ORGANIZATION_AGREEMENTS) {
+      menuLink.component = (
+        <AgreementNavLink link={menuLink} organizationId={organizationId} offeringId={offeringId} />
       );
     }
 
