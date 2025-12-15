@@ -766,7 +766,7 @@ jobs:
             - run:
                 name: Tweak requirement files to install the branch richie version instead of the released one
                 command: |
-                  sed -i 's@"richie-education":.*@"richie-education": "https://gitpkg.now.sh/openfun/richie/src/frontend?'"${CIRCLE_BRANCH}"'"@' fun-richie-site-factory/sites/${RICHIE_SITE}/src/frontend/package.json
+                  sed -i 's@"richie-education":.*@"richie-education": "https://gitpkg2.now.sh/openfun/richie/src/frontend?'"${CIRCLE_BRANCH}"'"@' fun-richie-site-factory/sites/${RICHIE_SITE}/src/frontend/package.json
                   sed -i 's@richie==.*@git+https://github.com/openfun/richie.git\@'"${CIRCLE_BRANCH}"'#egg=richie@' fun-richie-site-factory/sites/${RICHIE_SITE}/requirements/base.txt
       - run:
           name: Build front
