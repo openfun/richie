@@ -10,7 +10,7 @@ import {
   SaleTunnelContext,
   SaleTunnelContextType,
 } from 'components/SaleTunnel/GenericSaleTunnel';
-import { Address } from 'types/Joanie';
+import { Address, PaymentSchedule } from 'types/Joanie';
 import {
   AddressFactory,
   CredentialOrderFactory,
@@ -50,6 +50,7 @@ describe('AddressSelector', () => {
     const Wrapper = () => {
       const [billingAddress, setBillingAddress] = useState<Address>();
       const [voucherCode, setVoucherCode] = useState<string>();
+      const [schedule, setSchedule] = useState<PaymentSchedule>();
       const context: SaleTunnelContextType = useMemo(
         () => ({
           webAnalyticsEventKey: 'eventKey',
@@ -70,8 +71,9 @@ describe('AddressSelector', () => {
           hasWaivedWithdrawalRight: false,
           setHasWaivedWithdrawalRight: jest.fn(),
           setVoucherCode,
+          setSchedule,
         }),
-        [billingAddress, voucherCode],
+        [billingAddress, voucherCode, schedule],
       );
       contextRef.current = context;
 
