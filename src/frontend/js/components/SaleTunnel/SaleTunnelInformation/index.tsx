@@ -35,7 +35,7 @@ export enum FormType {
 
 export const SaleTunnelInformation = () => {
   const intl = useIntl();
-  const { setBatchOrder } = useSaleTunnelContext();
+  const { setBatchOrder, setSchedule } = useSaleTunnelContext();
   const options = [
     { label: intl.formatMessage(messages.purchaseTypeOptionSingle), value: FormType.SINGULAR },
     { label: intl.formatMessage(messages.purchaseTypeOptionGroup), value: FormType.GROUP },
@@ -57,6 +57,7 @@ export const SaleTunnelInformation = () => {
           onChange={(e) => {
             setPurchaseType(e.target.value as FormType);
             setBatchOrder(undefined);
+            setSchedule(undefined);
           }}
         />
       </div>

@@ -87,7 +87,7 @@ const messages = defineMessages({
 });
 
 export const SaleTunnelInformationSingular = () => {
-  const { props, product, voucherCode, setVoucherCode } = useSaleTunnelContext();
+  const { props, product, voucherCode, setVoucherCode, setSchedule } = useSaleTunnelContext();
   const [voucherError, setVoucherError] = useState<HttpError | null>(null);
   const query = usePaymentPlan({
     course_code: props.course?.code ?? props.enrollment!.course_run.course.code,
@@ -103,6 +103,12 @@ export const SaleTunnelInformationSingular = () => {
     product.type === ProductType.CREDENTIAL &&
     schedule &&
     (discountedPrice != null ? discountedPrice > 0 : price != null && price > 0);
+
+  useEffect(() => {
+    if (schedule) {
+      setSchedule(schedule);
+    }
+  }, [schedule, setSchedule]);
 
   useEffect(() => {
     if (query.error && voucherCode) {
