@@ -222,6 +222,7 @@ describe('SaleTunnel', () => {
     await user.click($subscribebutton);
     await screen.findByTestId('generic-sale-tunnel-success-step');
     screen.getByText('Subscription confirmed!');
+    screen.getByText('Your order has been successfully registered.');
     const $dashboardLink = screen.getByRole('link', { name: 'Close' });
     expect($dashboardLink).toHaveAttribute(
       'href',

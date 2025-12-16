@@ -647,5 +647,6 @@ export const SaleTunnelContextFactory = factory(
     runSubmitCallbacks: () => new Promise((resolve) => resolve()),
     nextStep: noop,
     setVoucherCode: noop,
+    setSchedule: noop,
   }),
 );

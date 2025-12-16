@@ -33,7 +33,7 @@ const messages = defineMessages({
 
 export const SaleTunnelSuccess = ({ closeModal }: { closeModal: () => void }) => {
   const intl = useIntl();
-  const { order, product, batchOrder } = useSaleTunnelContext();
+  const { order, product, batchOrder, schedule } = useSaleTunnelContext();
 
   return (
     <section className="sale-tunnel-step" data-testid="generic-sale-tunnel-success-step">
@@ -46,7 +46,7 @@ export const SaleTunnelSuccess = ({ closeModal }: { closeModal: () => void }) =>
       <p className="sale-tunnel-step__content">
         <FormattedMessage {...messages.successMessage} />
         <br />
-        <FormattedMessage {...messages.successDetailMessage} />
+        {schedule && <FormattedMessage {...messages.successDetailMessage} />}
       </p>
       {order && (
         <footer className="sale-tunnel-step__footer">

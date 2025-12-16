@@ -20,6 +20,7 @@ import {
   OrderState,
   Product,
   BatchOrder,
+  PaymentSchedule,
 } from 'types/Joanie';
 import useProductOrder from 'hooks/useProductOrder';
 import { SaleTunnelSuccess } from 'components/SaleTunnel/SaleTunnelSuccess';
@@ -60,6 +61,8 @@ export interface SaleTunnelContextType {
   nextStep: () => void;
   voucherCode?: string;
   setVoucherCode: (code?: string) => void;
+  schedule?: PaymentSchedule;
+  setSchedule: (schedule?: PaymentSchedule) => void;
 }
 
 export const SaleTunnelContext = createContext<SaleTunnelContextType>({} as any);
@@ -136,6 +139,8 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
     if (batchOrder && step === SaleTunnelStep.IDLE) setStep(SaleTunnelStep.SUCCESS);
   }, [batchOrder]);
 
+  const [schedule, setSchedule] = useState<PaymentSchedule | undefined>(undefined);
+
   const context: SaleTunnelContextType = useMemo(
     () => ({
       webAnalyticsEventKey: props.eventKey,
@@ -172,6 +177,8 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       },
       voucherCode,
       setVoucherCode,
+      schedule,
+      setSchedule,
     }),
     [
       props,
