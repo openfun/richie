@@ -6,7 +6,7 @@ import { TeacherDashboardOrganizationSidebar } from 'widgets/Dashboard/component
 
 const messages = defineMessages({
   pageTitle: {
-    defaultMessage: 'Manage my quotes',
+    defaultMessage: 'Quotes',
     description: 'Use for the page title of the organization quotes',
     id: 'pages.TeacherDashboardOrganizationQuotesLayout.pageTitle',
   },

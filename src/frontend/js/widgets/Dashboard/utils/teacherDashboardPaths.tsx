@@ -47,12 +47,12 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
   [TeacherDashboardPaths.ORGANIZATION_QUOTES]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.quotes.label',
     description: 'Label of the organization quotes view.',
-    defaultMessage: 'Manage my quotes',
+    defaultMessage: 'Quotes',
   },
   [TeacherDashboardPaths.ORGANIZATION_AGREEMENTS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.agreements.label',
     description: 'Label of the organization agreements view.',
-    defaultMessage: 'Manage my agreements',
+    defaultMessage: 'Agreements',
   },
   [TeacherDashboardPaths.ORGANIZATION_CONTRACTS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.contracts.label',
