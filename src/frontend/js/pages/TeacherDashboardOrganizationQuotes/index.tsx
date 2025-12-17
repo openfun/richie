@@ -345,26 +345,28 @@ const TeacherDashboardOrganizationQuotes = () => {
       </div>
     );
 
+    const sendForSignatureButton = (
+      <Button
+        size="small"
+        disabled={batchOrder.contract_submitted}
+        onClick={() =>
+          !batchOrder.contract_submitted && handleSubmitForSignature(quote.batch_order.id)
+        }
+        icon={<span className="material-icons">send</span>}
+      >
+        {batchOrder.contract_submitted
+          ? intl.formatMessage(messages.waitingSignature)
+          : intl.formatMessage(messages.sendForSignature)}
+      </Button>
+    );
+
     switch (paymentMethod) {
       case PaymentMethod.CARD_PAYMENT:
         switch (state) {
           case BatchOrderState.QUOTED:
             return quoteButtons;
           case BatchOrderState.TO_SIGN:
-            return (
-              <Button
-                size="small"
-                disabled={batchOrder.contract_submitted}
-                onClick={() =>
-                  !batchOrder.contract_submitted && handleSubmitForSignature(quote.batch_order.id)
-                }
-                icon={<span className="material-icons">send</span>}
-              >
-                {batchOrder.contract_submitted
-                  ? intl.formatMessage(messages.waitingSignature)
-                  : intl.formatMessage(messages.sendForSignature)}
-              </Button>
-            );
+            return sendForSignatureButton;
           case BatchOrderState.PENDING:
             return (
               <Button
@@ -402,20 +404,7 @@ const TeacherDashboardOrganizationQuotes = () => {
               quoteButtons
             );
           case BatchOrderState.TO_SIGN:
-            return (
-              <Button
-                size="small"
-                disabled={batchOrder.contract_submitted}
-                onClick={() =>
-                  !batchOrder.contract_submitted && handleSubmitForSignature(quote.batch_order.id)
-                }
-                icon={<span className="material-icons">send</span>}
-              >
-                {batchOrder.contract_submitted
-                  ? intl.formatMessage(messages.waitingSignature)
-                  : intl.formatMessage(messages.sendForSignature)}
-              </Button>
-            );
+            return sendForSignatureButton;
         }
         break;
       case PaymentMethod.BANK_TRANSFER:
@@ -423,20 +412,7 @@ const TeacherDashboardOrganizationQuotes = () => {
           case BatchOrderState.QUOTED:
             return quoteButtons;
           case BatchOrderState.TO_SIGN:
-            return (
-              <Button
-                size="small"
-                disabled={batchOrder.contract_submitted}
-                onClick={() =>
-                  !batchOrder.contract_submitted && handleSubmitForSignature(quote.batch_order.id)
-                }
-                icon={<span className="material-icons">send</span>}
-              >
-                {batchOrder.contract_submitted
-                  ? intl.formatMessage(messages.waitingSignature)
-                  : intl.formatMessage(messages.sendForSignature)}
-              </Button>
-            );
+            return sendForSignatureButton;
           case BatchOrderState.PENDING:
             return (
               <Button
