@@ -36,7 +36,11 @@ describe('full process for the organization quotes dashboard', () => {
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
 
     const quoteQuoted = OrganizationQuoteFactory({
-      batch_order: { state: BatchOrderState.QUOTED, payment_method: PaymentMethod.CARD_PAYMENT },
+      batch_order: {
+        state: BatchOrderState.QUOTED,
+        payment_method: PaymentMethod.CARD_PAYMENT,
+        available_actions: { next_action: 'confirm_quote' },
+      },
       organization_signed_on: undefined,
     }).one();
     const quoteSendForSign = OrganizationQuoteFactory({
@@ -45,6 +49,7 @@ describe('full process for the organization quotes dashboard', () => {
         state: BatchOrderState.TO_SIGN,
         payment_method: PaymentMethod.CARD_PAYMENT,
         contract_submitted: false,
+        available_actions: { next_action: 'submit_for_signature' },
       },
     }).one();
     const quoteWaitingForSign = OrganizationQuoteFactory({
@@ -53,6 +58,7 @@ describe('full process for the organization quotes dashboard', () => {
         state: BatchOrderState.TO_SIGN,
         payment_method: PaymentMethod.CARD_PAYMENT,
         contract_submitted: true,
+        available_actions: { next_action: null },
       },
     }).one();
     const quotePending = OrganizationQuoteFactory({
