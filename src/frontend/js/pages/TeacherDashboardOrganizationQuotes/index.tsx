@@ -437,14 +437,14 @@ const TeacherDashboardOrganizationQuotes = () => {
               <div className="dashboard__quote__header__main">
                 <span>{quote.batch_order.relation.product.title}</span>
                 {quote.batch_order.state && (
-                  <Badge color="primary">
+                  <Badge color="secondary">
                     <FormattedMessage {...messages[quote.batch_order.state]} />
                   </Badge>
                 )}
               </div>
+              <div className="dashboard__quote__header__action">{renderActionButton(quote)}</div>
             </div>
           }
-          footer={renderActionButton(quote)}
           defaultExpanded={false}
         >
           <div className="dashboard__quote__informations">
