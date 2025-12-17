@@ -123,6 +123,14 @@ describe('full process for the organization quotes dashboard', () => {
     await user.click(toggle);
     expect(card).toHaveClass('dashboard-card--opened');
 
+    // Download quote
+    const downloadQuoteButton = await screen.findByRole('button', {
+      name: /Download quote/i,
+    });
+    expect(downloadQuoteButton).toBeVisible();
+    await user.click(downloadQuoteButton);
+    expect(browserDownloadFromBlob).toHaveBeenCalledTimes(1);
+
     // First step : confirm quote
     const confirmQuoteButton = await screen.findByRole('button', { name: /confirm quote/i });
     expect(confirmQuoteButton).toBeVisible();
@@ -176,22 +184,5 @@ describe('full process for the organization quotes dashboard', () => {
     });
     expect(processPaymentButton).toBeVisible();
     expect(processPaymentButton).toBeDisabled();
-
-    // Last step : download quote
-    cleanup();
-    render(<TeacherDashboardOrganizationQuotes />, {
-      routerOptions: {
-        path: '/organizations/:organizationId/quotes',
-        initialEntries: ['/organizations/1/quotes'],
-      },
-    });
-    await expectNoSpinner();
-
-    const downloadQuoteButton = await screen.findByRole('button', {
-      name: /Download quote/i,
-    });
-    expect(downloadQuoteButton).toBeVisible();
-    await user.click(downloadQuoteButton);
-    expect(browserDownloadFromBlob).toHaveBeenCalledTimes(1);
   });
 });
