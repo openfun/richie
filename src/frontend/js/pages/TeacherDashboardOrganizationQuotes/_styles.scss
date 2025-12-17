@@ -15,10 +15,6 @@
     justify-content: start;
     gap: 0.5rem;
   }
-  &__reference {
-    font-size: 60%;
-    font-weight: $font-weight-normal;
-  }
 }
 
 .dashboard__quote__informations {
@@ -27,6 +23,7 @@
   gap: 0.5rem;
 }
 
+.dashboard__quote__reference,
 .dashboard__quote__information {
   display: flex;
   flex-direction: row;
