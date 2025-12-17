@@ -565,6 +565,18 @@ export interface Relation {
   };
 }
 
+export type BatchOrderAction =
+  | 'confirm_quote'
+  | 'confirm_purchase_order'
+  | 'confirm_bank_transfer'
+  | 'submit_for_signature';
+
+export type BatchOrderAvailableActions = {
+  [K in BatchOrderAction]: boolean;
+} & {
+  next_action: BatchOrderAction | null;
+};
+
 export interface BatchOrderQuote {
   id: string;
   owner_name: string;
@@ -575,6 +587,7 @@ export interface BatchOrderQuote {
   payment_method: PaymentMethod;
   contract_submitted: boolean;
   nb_seats: number;
+  available_actions: BatchOrderAvailableActions;
 }
 
 export interface Definition {

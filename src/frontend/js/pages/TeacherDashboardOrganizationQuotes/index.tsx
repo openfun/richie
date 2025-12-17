@@ -13,7 +13,6 @@ import Badge from 'components/Badge';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { browserDownloadFromBlob } from 'utils/download';
 import { Spinner } from 'components/Spinner';
-import { buttons } from 'polished';
 
 const messages = defineMessages({
   loading: {
@@ -324,7 +323,7 @@ const TeacherDashboardOrganizationQuotes = () => {
 
     if (!batchOrder || !state || !paymentMethod || state === BatchOrderState.COMPLETED) return null;
 
-    const quoteButtons = (
+    const confirmQuoteButtons = (
       <div>
         <Button
           size="small"
@@ -345,7 +344,28 @@ const TeacherDashboardOrganizationQuotes = () => {
       </div>
     );
 
-    const sendForSignatureButton = (
+    const confirmPurchaseOrderButton = (
+      <Button
+        size="small"
+        className="ml-2"
+        onClick={() => handleConfirmPurchaseOrder(quote.id)}
+        icon={<span className="material-icons">description</span>}
+      >
+        {intl.formatMessage(messages.confirmPurchaseOrder)}
+      </Button>
+    );
+
+    const confirmBankTransferButton = (
+      <Button
+        size="small"
+        onClick={() => handleConfirmBankTransfer(quote.batch_order.id)}
+        icon={<span className="material-icons">account_balance</span>}
+      >
+        {intl.formatMessage(messages.confirmBank)}
+      </Button>
+    );
+
+    const submitForSignatureButton = (
       <Button
         size="small"
         disabled={batchOrder.contract_submitted}
@@ -360,13 +380,20 @@ const TeacherDashboardOrganizationQuotes = () => {
       </Button>
     );
 
+    switch (batchOrder.available_actions?.next_action) {
+      case 'confirm_quote':
+        return confirmQuoteButtons;
+      case 'confirm_purchase_order':
+        return confirmPurchaseOrderButton;
+      case 'confirm_bank_transfer':
+        return confirmBankTransferButton;
+      case 'submit_for_signature':
+        return submitForSignatureButton;
+    }
+
     switch (paymentMethod) {
       case PaymentMethod.CARD_PAYMENT:
         switch (state) {
-          case BatchOrderState.QUOTED:
-            return quoteButtons;
-          case BatchOrderState.TO_SIGN:
-            return sendForSignatureButton;
           case BatchOrderState.PENDING:
             return (
               <Button
@@ -385,46 +412,11 @@ const TeacherDashboardOrganizationQuotes = () => {
             );
         }
         break;
-      case PaymentMethod.PURCHASE_ORDER:
-        switch (state) {
-          case BatchOrderState.QUOTED:
-            return quote.organization_signed_on ? (
-              <>
-                <Button
-                  size="small"
-                  className="ml-2"
-                  onClick={() => handleConfirmPurchaseOrder(quote.id)}
-                  icon={<span className="material-icons">description</span>}
-                >
-                  {intl.formatMessage(messages.confirmPurchaseOrder)}
-                </Button>
-                <br />
-              </>
-            ) : (
-              quoteButtons
-            );
-          case BatchOrderState.TO_SIGN:
-            return sendForSignatureButton;
-        }
-        break;
-      case PaymentMethod.BANK_TRANSFER:
-        switch (state) {
-          case BatchOrderState.QUOTED:
-            return quoteButtons;
-          case BatchOrderState.TO_SIGN:
-            return sendForSignatureButton;
-          case BatchOrderState.PENDING:
-            return (
-              <Button
-                size="small"
-                onClick={() => handleConfirmBankTransfer(quote.batch_order.id)}
-                icon={<span className="material-icons">account_balance</span>}
-              >
-                {intl.formatMessage(messages.confirmBank)}
-              </Button>
-            );
-        }
-        break;
+    }
+
+    switch (state) {
+      case BatchOrderState.TO_SIGN:
+        return submitForSignatureButton;
     }
 
     return null;
