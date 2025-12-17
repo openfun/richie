@@ -27,8 +27,7 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
   });
 
   it('should render a list of quotes for an organization', async () => {
-    const quoteList = OrganizationQuoteFactory({}).many(5);
-
+    const quoteList = OrganizationQuoteFactory().many(1);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`, {
       results: quoteList,
@@ -46,7 +45,15 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
 
     await expectNoSpinner();
     await Promise.all(
-      quoteList.map((quote) => screen.findByText((content) => content.includes(quote.id))),
+      quoteList.map(async (quote) => {
+        expect(
+          await screen.findByText(`Batch order id: ${quote.batch_order.id}`),
+        ).toBeInTheDocument();
+        const seats = quote.batch_order.nb_seats === 1 ? 'seat' : 'seats';
+        expect(
+          await screen.findByText(`${quote.batch_order.nb_seats} ${seats}`),
+        ).toBeInTheDocument();
+      }),
     );
   });
 
@@ -97,19 +104,23 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
 
     await expectNoSpinner();
 
-    expect(screen.getByText((content) => content.includes(quoteList[0].id))).toBeInTheDocument();
     expect(
-      screen.queryByText((content) => content.includes(quoteList[10].id)),
+      screen.getByText((content) => content.includes(quoteList[0].batch_order.id)),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText((content) => content.includes(quoteList[10].batch_order.id)),
     ).not.toBeInTheDocument();
 
     const nextButton = screen.getByRole('link', { name: /page 2/i });
     await user.click(nextButton);
 
     await waitFor(() => {
-      expect(screen.getByText((content) => content.includes(quoteList[10].id))).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => content.includes(quoteList[10].batch_order.id)),
+      ).toBeInTheDocument();
     });
     expect(
-      screen.queryByText((content) => content.includes(quoteList[0].id)),
+      screen.queryByText((content) => content.includes(quoteList[0].batch_order.id)),
     ).not.toBeInTheDocument();
   });
 

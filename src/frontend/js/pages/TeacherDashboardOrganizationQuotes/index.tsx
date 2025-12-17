@@ -200,10 +200,15 @@ const messages = defineMessages({
     defaultMessage: 'Bank transfer',
     description: 'Payment method: bank transfer',
   },
+  batchOrderId: {
+    id: 'components.OrganizationQuotesTable.batchOrderId',
+    defaultMessage: 'Batch order id: {id}',
+    description: 'Label for the batch order reference (id)',
+  },
   seats: {
     id: 'batchOrder.seats',
+    defaultMessage: '{seats} {seats, plural, one {seat} other {seats}}',
     description: 'Text displayed for seats value in batch order',
-    defaultMessage: 'Seats',
   },
 });
 
@@ -437,13 +442,20 @@ const TeacherDashboardOrganizationQuotes = () => {
                   </Badge>
                 )}
               </div>
-              <div className="dashboard__quote__header__reference">Ref. {quote.id}</div>
             </div>
           }
           footer={renderActionButton(quote)}
           defaultExpanded={false}
         >
           <div className="dashboard__quote__informations">
+            <div className="dashboard__quote__reference">
+              <Icon name={IconTypeEnum.BARCODE} size="small" />
+              <span>
+                {intl.formatMessage(messages.batchOrderId, {
+                  id: quote.batch_order.id,
+                })}
+              </span>
+            </div>
             {quote.batch_order.owner_name && (
               <div className="dashboard__quote__information">
                 <Icon name={IconTypeEnum.LOGIN} size="small" />
@@ -461,8 +473,7 @@ const TeacherDashboardOrganizationQuotes = () => {
                 <Icon name={IconTypeEnum.GROUPS} size="small" />
                 <div>
                   <span>
-                    {quote.batch_order.nb_seats}
-                    {intl.formatMessage(messages.seats)}
+                    {intl.formatMessage(messages.seats, { seats: quote.batch_order.nb_seats })}
                   </span>
                 </div>
               </div>
