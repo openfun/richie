@@ -199,6 +199,13 @@ export const BatchOrderQuoteFactory = factory((): BatchOrderQuote => {
     payment_method: faker.helpers.arrayElement(Object.values(PaymentMethod)),
     contract_submitted: faker.datatype.boolean(),
     nb_seats: faker.number.int({ min: 1, max: 100 }),
+    available_actions: {
+      confirm_quote: false,
+      confirm_purchase_order: false,
+      confirm_bank_transfer: false,
+      submit_for_signature: false,
+      next_action: null,
+    },
   };
 });
 
