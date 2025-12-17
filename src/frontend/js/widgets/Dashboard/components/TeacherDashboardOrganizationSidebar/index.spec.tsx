@@ -59,8 +59,8 @@ describe('<TeacherDashboardOrganizationSidebar />', () => {
     expect(links).toHaveLength(4);
     expect(links[0]).toHaveTextContent('Courses');
     expect(links[1]).toHaveTextContent('Contracts');
-    expect(links[2]).toHaveTextContent('Manage my quotes');
-    expect(links[3]).toHaveTextContent('Manage my agreements');
+    expect(links[2]).toHaveTextContent('Quotes');
+    expect(links[3]).toHaveTextContent('Agreements');
     // No badge should be displayed next to contract link
     expect(links[1].nextSibling).toBeNull();
   });

@@ -5,7 +5,7 @@ import { TeacherDashboardOrganizationSidebar } from 'widgets/Dashboard/component
 
 const messages = defineMessages({
   pageTitle: {
-    defaultMessage: 'Manage my agreements',
+    defaultMessage: 'Agreements',
     description: 'Use for the page title of the organization agreements',
     id: 'pages.TeacherDashboardOrganizationAgreementsLayout.pageTitle',
   },
