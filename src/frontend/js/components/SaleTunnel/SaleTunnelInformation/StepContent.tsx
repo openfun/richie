@@ -278,40 +278,54 @@ export const StepContent = ({
           onChange={() => setOtherBillingAddress(!otherBillingAddress)}
           checked={otherBillingAddress}
         />
-        {otherBillingAddress && (
-          <div className="billing">
-            <FormattedMessage {...messages.stepBillingTitle} />
+      </div>
+      {otherBillingAddress && (
+        <div className="step billing" hidden={activeStep !== 0}>
+          <FormattedMessage {...messages.stepBillingTitle} />
+          <Input
+            className="field"
+            {...register('billing.contact_name')}
+            label={intl.formatMessage(messages.contactName)}
+          />
+          <Input
+            className="field"
+            {...register('billing.contact_email')}
+            label={intl.formatMessage(messages.contactEmail)}
+          />
+          <Input
+            className="field"
+            {...register('billing.company_name')}
+            label={intl.formatMessage(messages.companyName)}
+          />
+          <Input
+            className="field"
+            {...register('billing.identification_number')}
+            label={intl.formatMessage(messages.identificationNumber)}
+          />
+          <Input
+            className="field"
+            {...register('billing.address')}
+            label={intl.formatMessage(messages.address)}
+          />
+          <div className="city-fields">
             <Input
-              {...register('billing.company_name')}
-              label={intl.formatMessage(messages.companyName)}
+              className="field"
+              {...register('billing.postcode')}
+              label={intl.formatMessage(messages.postCode)}
             />
             <Input
-              {...register('billing.identification_number')}
-              label={intl.formatMessage(messages.identificationNumber)}
-            />
-            <Input {...register('billing.address')} label={intl.formatMessage(messages.address)} />
-            <div className="city-fields">
-              <Input
-                {...register('billing.postcode')}
-                label={intl.formatMessage(messages.postCode)}
-              />
-              <Input {...register('billing.city')} label={intl.formatMessage(messages.city)} />
-            </div>
-            <CountrySelectField
-              {...register('billing.country')}
-              label={intl.formatMessage(messages.country)}
-            />
-            <Input
-              {...register('billing.contact_name')}
-              label={intl.formatMessage(messages.contactName)}
-            />
-            <Input
-              {...register('billing.contact_email')}
-              label={intl.formatMessage(messages.contactEmail)}
+              className="field"
+              {...register('billing.city')}
+              label={intl.formatMessage(messages.city)}
             />
           </div>
-        )}
-      </div>
+          <CountrySelectField
+            className="field"
+            {...register('billing.country')}
+            label={intl.formatMessage(messages.country)}
+          />
+        </div>
+      )}
       <div className="step admin" hidden={activeStep !== 1}>
         <FormattedMessage {...messages.stepAdminTitle} />
         <Input
