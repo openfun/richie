@@ -441,6 +441,7 @@ export const PaymentPlanFactory = factory((): PaymentPlan => {
     price: faker.number.int({ min: 1, max: 1000, multipleOf: 10 }),
     discount: undefined,
     discounted_price: undefined,
+    from_batch_order: false,
   };
 });
 

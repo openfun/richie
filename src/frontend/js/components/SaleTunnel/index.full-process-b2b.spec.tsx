@@ -16,8 +16,9 @@ import {
   ProductFactory,
   OfferingBatchOrderFactory,
   BatchOrderReadFactory,
+  CredentialOrderFactory,
 } from 'utils/test/factories/joanie';
-import { CourseRun, NOT_CANCELED_ORDER_STATES } from 'types/Joanie';
+import { CourseRun, NOT_CANCELED_ORDER_STATES, OrderState } from 'types/Joanie';
 import { Priority } from 'types';
 import { expectMenuToBeClosed, expectMenuToBeOpen } from 'utils/test/Cunningham';
 import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
@@ -229,4 +230,127 @@ describe('SaleTunnel', () => {
       `/en/dashboard/batch-orders/${batchOrderRead.id}`,
     );
   }, 30000);
+
+  it('tests the entire process of subscribing with a voucher from a batch order', async () => {
+    /**
+     * Initialization.
+     */
+    const course = PacedCourseFactory().one();
+    const product = ProductFactory().one();
+    const offering = OfferingFactory({
+      course,
+      product,
+      is_withdrawable: false,
+    }).one();
+    const paymentPlan = PaymentPlanFactory().one();
+
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
+      offering,
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+      paymentPlan,
+    );
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
+    const orderQueryParameters = {
+      product_id: product.id,
+      course_code: course.code,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+      [],
+    );
+
+    render(<CourseProductItem productId={product.id} course={course} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    // Wait for product information to be fetched
+    await screen.findByRole('heading', { level: 3, name: product.title });
+    // Price is displayed, meaning the product is not bought yet.
+    screen.getByText(
+      // the price formatter generates non-breaking spaces and getByText doesn't seem to handle that well, replace it
+      // with a regular space. We replace NNBSP (\u202F) and NBSP (\u00a0) with a regular space
+      formatPrice(product.price_currency, product.price),
+    );
+    expect(screen.queryByText('Purchased')).not.toBeInTheDocument();
+
+    /**
+     * Purchase.
+     */
+    const user = userEvent.setup();
+    const buyButton = screen.getByRole('button', { name: product.call_to_action });
+
+    // The SaleTunnel should not be displayed.
+    expect(screen.queryByTestId('generic-sale-tunnel-payment-step')).not.toBeInTheDocument();
+
+    await user.click(buyButton);
+
+    // The SaleTunnel should be displayed.
+    screen.getByTestId('generic-sale-tunnel-payment-step');
+
+    /**
+     * Submit voucher and check price
+     */
+    const paymentPlanVoucher = PaymentPlanFactory({
+      discounted_price: 0,
+      discount: '-100%',
+      payment_schedule: undefined,
+      from_batch_order: true,
+    }).one();
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT100`,
+      paymentPlanVoucher,
+      { overwriteRoutes: true },
+    );
+    await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT100');
+    await user.click(screen.getByRole('button', { name: 'Validate' }));
+    expect(screen.queryByRole('heading', { name: 'Payment schedule' })).not.toBeInTheDocument();
+    await screen.findByTestId('sale-tunnel__total__amount');
+    const $totalAmountVoucher = screen.getByTestId('sale-tunnel__total__amount');
+    expect($totalAmountVoucher).toHaveTextContent(
+      'Total' +
+        formatPrice(product.price_currency, paymentPlanVoucher.price!) +
+        formatPrice(product.price_currency, paymentPlanVoucher.discounted_price!),
+    );
+
+    /**
+     * Make sure the checkbox to waive withdrawal right is not displayed
+     */
+    expect(screen.queryByTestId('withdraw-right-checkbox')).not.toBeInTheDocument();
+
+    /**
+     * Subscribe
+     */
+    const order = CredentialOrderFactory({
+      state: OrderState.COMPLETED,
+      payment_schedule: undefined,
+    }).one();
+    fetchMock
+      .post('https://joanie.endpoint/api/v1.0/orders/', order)
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+        [order],
+        { overwriteRoutes: true },
+      );
+
+    const $button = screen.getByRole('button', {
+      name: `Subscribe`,
+    }) as HTMLButtonElement;
+    await user.click($button);
+
+    /**
+     * No withdrawal error should be displayed.
+     */
+    expect(
+      await screen.queryByText('You must waive your withdrawal right.'),
+    ).not.toBeInTheDocument();
+
+    // // Make sure the success step is shown.
+    await screen.findByTestId('generic-sale-tunnel-success-step');
+
+    screen.getByText('Subscription confirmed!');
+  }, 10000);
 });
