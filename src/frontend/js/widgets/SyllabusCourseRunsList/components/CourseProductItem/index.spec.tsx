@@ -175,7 +175,10 @@ describe('CourseProductItem', () => {
         course={PacedCourseFactory({ code: '00000' }).one()}
         productId={product.id}
       />,
-      { queryOptions: { client: createTestQueryClient({ user: null }) } },
+      {
+        intlOptions: { timeZone: 'UTC' },
+        queryOptions: { client: createTestQueryClient({ user: null }) },
+      },
     );
 
     await screen.findByRole('heading', { level: 3, name: product.title });
@@ -238,7 +241,10 @@ describe('CourseProductItem', () => {
         course={PacedCourseFactory({ code: '00000' }).one()}
         productId={product.id}
       />,
-      { queryOptions: { client: createTestQueryClient({ user: null }) } },
+      {
+        intlOptions: { timeZone: 'UTC' },
+        queryOptions: { client: createTestQueryClient({ user: null }) },
+      },
     );
 
     await screen.findByRole('heading', { level: 3, name: product.title });
