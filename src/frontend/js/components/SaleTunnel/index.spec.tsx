@@ -745,4 +745,45 @@ describe.each([
     await user.click(screen.getByRole('button', { name: 'Validate' }));
     expect(await screen.findByText('Discount applied')).toBeInTheDocument();
   });
+
+  it('should hide billing informations for a voucher from a batch order', async () => {
+    const user = userEvent.setup({ delay: null });
+    const paymentPlan = PaymentPlanFactory().one();
+    const paymentPlanVoucher = PaymentPlanFactory({
+      discounted_price: 0.0,
+      discount: '-100%',
+      from_batch_order: true,
+    }).one();
+    const product = ProductFactory().one();
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT100`,
+        paymentPlanVoucher,
+      );
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+    expect(
+      await screen.queryByText('Those information will be used for billing'),
+    ).toBeInTheDocument();
+
+    await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT100');
+    await user.click(screen.getByRole('button', { name: 'Validate' }));
+
+    expect(await screen.findByText('Discount applied')).toBeInTheDocument();
+    await waitFor(async () =>
+      expect(
+        await screen.queryByText('Those information will be used for billing'),
+      ).not.toBeInTheDocument(),
+    );
+    expect(await screen.queryByTestId('withdraw-right-checkbox')).not.toBeInTheDocument();
+  });
 });
