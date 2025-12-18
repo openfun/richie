@@ -655,5 +655,7 @@ export const SaleTunnelContextFactory = factory(
     nextStep: noop,
     setVoucherCode: noop,
     setSchedule: noop,
+    needsPayment: true,
+    setNeedsPayment: noop,
   }),
 );

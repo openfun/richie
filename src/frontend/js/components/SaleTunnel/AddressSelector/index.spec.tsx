@@ -72,6 +72,8 @@ describe('AddressSelector', () => {
           setHasWaivedWithdrawalRight: jest.fn(),
           setVoucherCode,
           setSchedule,
+          needsPayment: false,
+          setNeedsPayment: jest.fn(),
         }),
         [billingAddress, voucherCode, schedule],
       );
