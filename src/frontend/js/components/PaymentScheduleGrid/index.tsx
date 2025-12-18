@@ -59,8 +59,8 @@ export const PaymentScheduleGrid = ({ schedule }: Props) => {
       <DataGrid
         displayHeader={false}
         columns={[
-          { field: 'index', size: 10 },
-          { field: 'amount', size: 90 },
+          { field: 'index', size: 10, enableSorting: false },
+          { field: 'amount', size: 90, enableSorting: false },
           {
             field: 'date',
             renderCell: ({ row }) => (
@@ -68,6 +68,7 @@ export const PaymentScheduleGrid = ({ schedule }: Props) => {
                 <FormattedMessage {...messages.withdrawnAt} values={{ date: row.date }} />
               </span>
             ),
+            enableSorting: false,
           },
           {
             id: 'state',
@@ -79,6 +80,7 @@ export const PaymentScheduleGrid = ({ schedule }: Props) => {
               ) : (
                 ''
               ),
+            enableSorting: false,
           },
         ]}
         rows={schedule.map((installment, index) => ({
