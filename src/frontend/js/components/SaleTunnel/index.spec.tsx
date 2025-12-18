@@ -786,4 +786,67 @@ describe.each([
     );
     expect(await screen.queryByTestId('withdraw-right-checkbox')).not.toBeInTheDocument();
   });
+
+  it('should hide voucher code input when one is already used', async () => {
+    const user = userEvent.setup({ delay: null });
+    const paymentPlan = PaymentPlanFactory().one();
+    const paymentPlanVoucher = PaymentPlanFactory({
+      discounted_price: 70,
+      discount: '-30%',
+    }).one();
+    const product = ProductFactory().one();
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT30`,
+        paymentPlanVoucher,
+      );
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    // Initially, voucher input should be visible
+    expect(screen.getByLabelText('Voucher code')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Validate' })).toBeInTheDocument();
+    expect(
+      screen.getByText('If you have a voucher code, please enter it in the field below.'),
+    ).toBeInTheDocument();
+
+    // Apply a voucher code
+    await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT30');
+    await user.click(screen.getByRole('button', { name: 'Validate' }));
+
+    // Wait for voucher to be applied
+    expect(await screen.findByText('Discount applied')).toBeInTheDocument();
+
+    // Voucher input should be hidden
+    expect(screen.queryByLabelText('Voucher code')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Validate' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('If you have a voucher code, please enter it in the field below.'),
+    ).not.toBeInTheDocument();
+
+    // Voucher tag should be visible with the applied code
+    expect(screen.getByText('DISCOUNT30')).toBeInTheDocument();
+
+    // Remove the voucher
+    await user.click(screen.getByTitle('Delete this voucher'));
+
+    // Voucher input should be visible again
+    expect(screen.getByLabelText('Voucher code')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Validate' })).toBeInTheDocument();
+    expect(
+      screen.getByText('If you have a voucher code, please enter it in the field below.'),
+    ).toBeInTheDocument();
+
+    // Voucher tag should be hidden
+    expect(screen.queryByText('DISCOUNT30')).not.toBeInTheDocument();
+  });
 });
