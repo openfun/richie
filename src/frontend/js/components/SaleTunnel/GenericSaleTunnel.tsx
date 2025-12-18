@@ -63,6 +63,8 @@ export interface SaleTunnelContextType {
   setVoucherCode: (code?: string) => void;
   schedule?: PaymentSchedule;
   setSchedule: (schedule?: PaymentSchedule) => void;
+  needsPayment: boolean;
+  setNeedsPayment: (needsPayment: boolean) => void;
 }
 
 export const SaleTunnelContext = createContext<SaleTunnelContextType>({} as any);
@@ -108,6 +110,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
     new Map(),
   );
   const [voucherCode, setVoucherCode] = useState<string>();
+  const [needsPayment, setNeedsPayment] = useState(true);
 
   const nextStep = useCallback(() => {
     if (order)
@@ -179,6 +182,8 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       setVoucherCode,
       schedule,
       setSchedule,
+      needsPayment,
+      setNeedsPayment,
     }),
     [
       props,
@@ -191,6 +196,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       submitCallbacks,
       hasWaivedWithdrawalRight,
       voucherCode,
+      needsPayment,
     ],
   );
 
