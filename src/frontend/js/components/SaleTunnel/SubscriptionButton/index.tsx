@@ -99,6 +99,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     runSubmitCallbacks,
     props: saleTunnelProps,
     voucherCode,
+    needsPayment,
   } = useSaleTunnelContext();
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
   const { methods: batchOrderMethods } = useBatchOrder();
@@ -125,12 +126,12 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       return;
     }
 
-    if (!billingAddress) {
+    if (!billingAddress && needsPayment) {
       handleError(SubscriptionErrorMessageId.ERROR_ADDRESS);
       return;
     }
 
-    if (!saleTunnelProps.isWithdrawable && !hasWaivedWithdrawalRight) {
+    if (!saleTunnelProps.isWithdrawable && !hasWaivedWithdrawalRight && needsPayment) {
       handleError(SubscriptionErrorMessageId.ERROR_WITHDRAWAL_RIGHT);
       return;
     }
@@ -188,10 +189,10 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       return messages.walkthroughToSignAndSavePayment;
     } else if (product.contract_definition && product.price === 0) {
       return messages.walkthroughToSign;
-    } else if (!product.contract_definition && product.price > 0) {
+    } else if (!product.contract_definition && product.price > 0 && needsPayment) {
       return messages.walkthroughToSavePayment;
     }
-  }, [product, creditCard]);
+  }, [product, creditCard, needsPayment]);
 
   useEffect(() => {
     if (order) nextStep();

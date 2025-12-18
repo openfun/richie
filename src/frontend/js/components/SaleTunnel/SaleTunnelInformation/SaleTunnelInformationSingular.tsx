@@ -87,7 +87,15 @@ const messages = defineMessages({
 });
 
 export const SaleTunnelInformationSingular = () => {
-  const { props, product, voucherCode, setVoucherCode, setSchedule } = useSaleTunnelContext();
+  const {
+    props,
+    product,
+    voucherCode,
+    setVoucherCode,
+    setSchedule,
+    needsPayment,
+    setNeedsPayment,
+  } = useSaleTunnelContext();
   const [voucherError, setVoucherError] = useState<HttpError | null>(null);
   const query = usePaymentPlan({
     course_code: props.course?.code ?? props.enrollment!.course_run.course.code,
@@ -98,6 +106,7 @@ export const SaleTunnelInformationSingular = () => {
   const price = query.data?.price ?? props.paymentPlan?.price;
   const discountedPrice = query.data?.discounted_price ?? props.paymentPlan?.discounted_price;
   const discount = query.data?.discount ?? props.paymentPlan?.discount;
+  const fromBatchOrder = query.data?.from_batch_order ?? props.paymentPlan?.from_batch_order;
 
   const showPaymentSchedule =
     product.type === ProductType.CREDENTIAL &&
@@ -117,21 +126,27 @@ export const SaleTunnelInformationSingular = () => {
     }
   }, [query.error, voucherCode, setVoucherCode]);
 
+  useEffect(() => {
+    setNeedsPayment(!fromBatchOrder);
+  }, [fromBatchOrder, setNeedsPayment]);
+
   return (
     <>
-      <div>
-        <h3 className="block-title mb-t">
-          <FormattedMessage {...messages.title} />
-        </h3>
-        <div className="description mb-s">
-          <FormattedMessage {...messages.description} />
+      {needsPayment && (
+        <div>
+          <h3 className="block-title mb-t">
+            <FormattedMessage {...messages.title} />
+          </h3>
+          <div className="description mb-s">
+            <FormattedMessage {...messages.description} />
+          </div>
+          <OpenEdxFullNameForm />
+          <AddressSelector />
+          <div className="mt-s">
+            <Email />
+          </div>
         </div>
-        <OpenEdxFullNameForm />
-        <AddressSelector />
-        <div className="mt-s">
-          <Email />
-        </div>
-      </div>
+      )}
       <div>
         {showPaymentSchedule && <PaymentScheduleBlock schedule={schedule} />}
         <Voucher
@@ -140,7 +155,7 @@ export const SaleTunnelInformationSingular = () => {
           setVoucherError={setVoucherError}
         />
         <Total price={price} discountedPrice={discountedPrice} />
-        <WithdrawRightCheckbox />
+        {needsPayment && <WithdrawRightCheckbox />}
       </div>
     </>
   );
