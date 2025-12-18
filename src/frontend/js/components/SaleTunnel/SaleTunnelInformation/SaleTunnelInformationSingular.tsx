@@ -132,6 +132,14 @@ export const SaleTunnelInformationSingular = () => {
 
   return (
     <>
+      <div>
+        <Voucher
+          discount={discount}
+          voucherError={voucherError}
+          setVoucherError={setVoucherError}
+        />
+        <Total price={price} discountedPrice={discountedPrice} />
+      </div>
       {needsPayment && (
         <div>
           <h3 className="block-title mb-t">
@@ -149,12 +157,6 @@ export const SaleTunnelInformationSingular = () => {
       )}
       <div>
         {showPaymentSchedule && <PaymentScheduleBlock schedule={schedule} />}
-        <Voucher
-          discount={discount}
-          voucherError={voucherError}
-          setVoucherError={setVoucherError}
-        />
-        <Total price={price} discountedPrice={discountedPrice} />
         {needsPayment && <WithdrawRightCheckbox />}
       </div>
     </>
@@ -246,22 +248,26 @@ const Voucher = ({
         <h4 className="block-title mb-t">
           <FormattedMessage {...messages.voucherTitle} />
         </h4>
-        <span className="mb-t">
-          <FormattedMessage {...messages.voucherInfo} />
-        </span>
+        {!voucherCode && (
+          <span className="mb-t">
+            <FormattedMessage {...messages.voucherInfo} />
+          </span>
+        )}
       </div>
-      <div className="form">
-        <Input
-          className="form-field mt-s"
-          value={voucher}
-          onChange={handleVoucher}
-          label={intl.formatMessage(messages.voucherTitle)}
-          disabled={!!voucherCode}
-        />
-        <Button size="small" color="primary" onClick={submitVoucher} disabled={!!voucherCode}>
-          <FormattedMessage {...messages.voucherValidate} />
-        </Button>
-      </div>
+      {!voucherCode && (
+        <div className="form">
+          <Input
+            className="form-field mt-s"
+            value={voucher}
+            onChange={handleVoucher}
+            label={intl.formatMessage(messages.voucherTitle)}
+            disabled={!!voucherCode}
+          />
+          <Button size="small" color="primary" onClick={submitVoucher} disabled={!!voucherCode}>
+            <FormattedMessage {...messages.voucherValidate} />
+          </Button>
+        </div>
+      )}
       {voucherCode && (
         <div className="voucher-tag">
           <span>{voucherCode}</span>
