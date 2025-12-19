@@ -511,7 +511,7 @@ export interface BatchOrder {
   signatory_profession: string;
   signatory_email: string;
   signatory_telephone: string;
-  billing?: Billing;
+  billing_address?: Billing;
   nb_seats: number;
   payment_method: PaymentMethod;
   funding_entity?: string;
@@ -547,7 +547,7 @@ export interface BatchOrderRead {
   signatory_profession: string;
   signatory_email: string;
   signatory_telephone: string;
-  billing?: Billing;
+  billing_address?: Billing;
   funding_entity?: string;
   funding_amount?: number;
   offering: OfferingBatchOrder;

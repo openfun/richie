@@ -267,7 +267,7 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
     />,
   ];
 
-  if (batchOrder.billing) {
+  if (batchOrder.billing_address) {
     items.push(
       <DashboardSubItem
         key="billing"
@@ -276,35 +276,35 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
           <div className="content">
             <DashboardItemField
               label={<FormattedMessage {...messages.labelCompany} />}
-              value={batchOrder.billing.company_name}
+              value={batchOrder.billing_address.company_name}
             />
             <DashboardItemField
               label={<FormattedMessage {...messages.labelSiret} />}
-              value={batchOrder.billing.identification_number}
+              value={batchOrder.billing_address.identification_number}
             />
             <DashboardItemField
               label={<FormattedMessage {...messages.labelName} />}
-              value={batchOrder.billing.contact_name}
+              value={batchOrder.billing_address.contact_name}
             />
             <DashboardItemField
               label={<FormattedMessage {...messages.labelEmail} />}
-              value={batchOrder.billing.contact_email}
+              value={batchOrder.billing_address.contact_email}
             />
             <DashboardItemField
               label={<FormattedMessage {...messages.labelAddress} />}
-              value={batchOrder.billing.address}
+              value={batchOrder.billing_address.address}
             />
             <DashboardItemField
               label={<FormattedMessage {...messages.labelPostcode} />}
-              value={batchOrder.billing.postcode}
+              value={batchOrder.billing_address.postcode}
             />
             <DashboardItemField
               label={<FormattedMessage {...messages.labelCity} />}
-              value={batchOrder.billing.city}
+              value={batchOrder.billing_address.city}
             />
             <DashboardItemField
               label={<FormattedMessage {...messages.labelCountry} />}
-              value={batchOrder.billing.country}
+              value={batchOrder.billing_address.country}
             />
           </div>
         }

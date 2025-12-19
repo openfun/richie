@@ -284,44 +284,44 @@ export const StepContent = ({
           <FormattedMessage {...messages.stepBillingTitle} />
           <Input
             className="field"
-            {...register('billing.contact_name')}
+            {...register('billing_address.contact_name')}
             label={intl.formatMessage(messages.contactName)}
           />
           <Input
             className="field"
-            {...register('billing.contact_email')}
+            {...register('billing_address.contact_email')}
             label={intl.formatMessage(messages.contactEmail)}
           />
           <Input
             className="field"
-            {...register('billing.company_name')}
+            {...register('billing_address.company_name')}
             label={intl.formatMessage(messages.companyName)}
           />
           <Input
             className="field"
-            {...register('billing.identification_number')}
+            {...register('billing_address.identification_number')}
             label={intl.formatMessage(messages.identificationNumber)}
           />
           <Input
             className="field"
-            {...register('billing.address')}
+            {...register('billing_address.address')}
             label={intl.formatMessage(messages.address)}
           />
           <div className="city-fields">
             <Input
               className="field"
-              {...register('billing.postcode')}
+              {...register('billing_address.postcode')}
               label={intl.formatMessage(messages.postCode)}
             />
             <Input
               className="field"
-              {...register('billing.city')}
+              {...register('billing_address.city')}
               label={intl.formatMessage(messages.city)}
             />
           </div>
           <CountrySelectField
             className="field"
-            {...register('billing.country')}
+            {...register('billing_address.country')}
             label={intl.formatMessage(messages.country)}
           />
         </div>
