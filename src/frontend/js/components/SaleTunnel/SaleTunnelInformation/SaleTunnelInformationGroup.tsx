@@ -105,7 +105,7 @@ export const validationSchema = Yup.object().shape({
   signatory_profession: Yup.string().required(),
   signatory_email: Yup.string().email().required(),
   signatory_telephone: Yup.string().required(),
-  billing: Yup.object().optional().shape({
+  billing_address: Yup.object().optional().shape({
     company_name: Yup.string().optional(),
     identification_number: Yup.string().optional(),
     contact_name: Yup.string().optional(),
