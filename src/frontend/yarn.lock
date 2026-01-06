@@ -3973,10 +3973,10 @@
     lodash "^4.17.21"
     redent "^3.0.0"
 
-"@testing-library/react@16.2.0":
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-16.2.0.tgz#c96126ee01a49cdb47175721911b4a9432afc601"
-  integrity sha512-2cSskAvA1QNtKc8Y9VJQRv0tm3hLVgxRGDB+KYhIaPQJ1I+RHbhIXcM+zClKXzMes/wshsMVzf4B9vS4IZpqDQ==
+"@testing-library/react@16.3.1":
+  version "16.3.1"
+  resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-16.3.1.tgz#60a9f1f6a930399d9e41b506a8bf68dbf4831fe8"
+  integrity sha512-gr4KtAWqIOQoucWYD/f6ki+j5chXfcPc74Col/6poTyqTmn7zRmodWahWRCp8tYd+GMqBonw6hstNzqjbs6gjw==
   dependencies:
     "@babel/runtime" "^7.12.5"
 
@@ -8555,10 +8555,10 @@ locate-path@^7.1.0:
   dependencies:
     p-locate "^6.0.0"
 
-lodash-es@4.17.21:
-  version "4.17.21"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
-  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
+lodash-es@4.17.22:
+  version "4.17.22"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.22.tgz#eb7d123ec2470d69b911abe34f85cb694849b346"
+  integrity sha512-XEawp1t0gxSi9x01glktRZ5HDy0HXqrM0x5pXQM98EaI0NxO6jVM7omDOxsuEo5UIASAnm2bRp1Jt/e0a2XU8Q==
 
 lodash.debounce@^4.0.8:
   version "4.0.8"
@@ -9804,10 +9804,19 @@ qs@^6.12.3:
   dependencies:
     side-channel "^1.0.6"
 
-query-string@*, query-string@9.1.1:
+query-string@*:
   version "9.1.1"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-9.1.1.tgz#dbfebb4196aeb2919915f2b2b81b91b965cf03a0"
   integrity sha512-MWkCOVIcJP9QSKU52Ngow6bsAWAPlPK2MludXvcrS2bGZSl+T1qX9MZvRIkqUIkGLJquMJHWfsT6eRqUpp4aWg==
+  dependencies:
+    decode-uri-component "^0.4.1"
+    filter-obj "^5.1.0"
+    split-on-first "^3.0.0"
+
+query-string@9.3.1:
+  version "9.3.1"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-9.3.1.tgz#d0c93e6c7fb7c17bdf04aa09e382114580ede270"
+  integrity sha512-5fBfMOcDi5SA9qj5jZhWAcTtDfKF5WFdd2uD9nVNlbxVv1baq65aALy6qofpNEGELHvisjjasxQp7BlM9gvMzw==
   dependencies:
     decode-uri-component "^0.4.1"
     filter-obj "^5.1.0"
