@@ -57,12 +57,12 @@
     "@sentry/browser": "9.8.0",
     "@sentry/types": "9.8.0",
     "@storybook/addon-actions": "8.6.8",
-    "@storybook/addon-essentials": "8.6.8",
-    "@storybook/addon-interactions": "8.6.8",
+    "@storybook/addon-essentials": "8.6.14",
+    "@storybook/addon-interactions": "8.6.14",
     "@storybook/addon-links": "8.6.8",
     "@storybook/react": "8.6.8",
     "@storybook/react-webpack5": "8.6.8",
-    "@storybook/test": "8.6.8",
+    "@storybook/test": "8.6.15",
     "@tanstack/query-core": "5.69.0",
     "@tanstack/query-sync-storage-persister": "5.69.0",
     "@tanstack/react-query": "5.69.0",
@@ -160,7 +160,7 @@
     "yarn": "1.22.22"
   },
   "devDependencies": {
-    "@storybook/addon-mdx-gfm": "8.6.8",
+    "@storybook/addon-mdx-gfm": "8.6.14",
     "@storybook/addon-webpack5-compiler-babel": "3.0.5"
   }
 }
