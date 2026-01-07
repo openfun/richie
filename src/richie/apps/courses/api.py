@@ -2,6 +2,8 @@
 API endpoints for the courses app.
 """
 
+import hmac
+
 from django.conf import settings
 from django.core.cache import caches
 from django.db.models import Q
@@ -253,8 +255,9 @@ def sync_course_runs_from_request(request, version):
     if not authorization_header:
         return Response("Missing authentication.", status=403)
 
+    # Use `hmac.compare_digest` to prevent time attacks
     signature_is_valid = any(
-        authorization_header == get_signature(message, secret)
+        hmac.compare_digest(authorization_header, get_signature(message, secret))
         for secret in getattr(settings, "RICHIE_COURSE_RUN_SYNC_SECRETS", [])
     )
 
