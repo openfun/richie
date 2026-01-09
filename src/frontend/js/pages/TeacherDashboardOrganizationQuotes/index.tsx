@@ -71,9 +71,9 @@ const messages = defineMessages({
     description: 'Label for confirming a bank transfer',
   },
   sendForSignature: {
-    defaultMessage: 'Send quote for signature',
+    defaultMessage: 'Send contract for signature',
     id: 'components.OrganizationQuotesTable.sendForSignature',
-    description: 'Action label to send a quote for signature',
+    description: 'Action label to send a contract for signature',
   },
   waitingSignature: {
     defaultMessage: 'Waiting signature',
