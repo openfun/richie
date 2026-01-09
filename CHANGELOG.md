@@ -14,15 +14,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- Remove unnecessary required fields in B2B sale tunnel
+- Remove unncessary required fields in B2B sale tunnel
 - Fix typo in batch order quotes management
-- Add organiaztion ID in batch order payload
-- Handle regex in B2B sale tunnel
-
-### Added
-
-- Disable quote actions for member users 
-- Add custom error message for batch orders when there are no available seats
 
 ## [3.2.1] - 2025-11-03
 

@@ -147,7 +147,7 @@ describe('full process for the organization quotes dashboard', () => {
 
     // Second step : to sign quote
     const sendForSignatureButton = await screen.findByRole('button', {
-      name: /send quote for signature/i,
+      name: /send contract for signature/i,
     });
     expect(sendForSignatureButton).toBeVisible();
     await user.click(sendForSignatureButton);
