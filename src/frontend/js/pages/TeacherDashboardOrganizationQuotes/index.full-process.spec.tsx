@@ -2,7 +2,7 @@ import fetchMock from 'fetch-mock';
 import { cleanup, screen } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { OrganizationQuoteFactory } from 'utils/test/factories/joanie';
+import { OrganizationFactory, OrganizationQuoteFactory } from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
@@ -34,6 +34,17 @@ describe('full process for the organization quotes dashboard', () => {
 
   it('should works with the full process workflow for any payment methods', async () => {
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+
+    const organization = OrganizationFactory({
+      abilities: {
+        can_submit_for_signature_batch_order: true,
+        confirm_bank_transfer: true,
+        confirm_quote: true,
+        download_quote: true,
+        sign_contracts: true,
+      },
+    }).one();
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', organization);
 
     const quoteQuoted = OrganizationQuoteFactory({
       batch_order: {
@@ -129,7 +140,6 @@ describe('full process for the organization quotes dashboard', () => {
     await user.click(toggle);
     expect(card).toHaveClass('dashboard-card--opened');
 
-    // Download quote
     const downloadQuoteButton = await screen.findByRole('button', {
       name: /Download quote/i,
     });

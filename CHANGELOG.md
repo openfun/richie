@@ -11,10 +11,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add keycloak as an authentication backend
+- Disable quote actions for member users 
 
 ### Fixed
 
 - Remove unncessary required fields in B2B sale tunnel
+- Fix typo in batch order quotes management
 - Fix typo in batch order quotes management
 
 ## [3.2.1] - 2025-11-03

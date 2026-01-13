@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import Banner, { BannerType } from 'components/Banner';
 import { useOrganizationsQuotes } from 'hooks/useOrganizationQuotes';
+import { useOrganization } from 'hooks/useOrganizations';
 import { TeacherDashboardContractsParams } from 'pages/TeacherDashboardContractsLayout/hooks/useTeacherContractFilters';
 import { BatchOrderState, OrganizationQuote } from 'types/Joanie';
 import { PaymentMethod } from 'components/PaymentInterfaces/types';
@@ -215,6 +216,13 @@ const messages = defineMessages({
 const TeacherDashboardOrganizationQuotes = () => {
   const intl = useIntl();
   const { organizationId: routeOrganizationId } = useParams<TeacherDashboardContractsParams>();
+  const {
+    item: organization,
+    states: { isPending: isOrganizationPending },
+  } = useOrganization(routeOrganizationId);
+
+  const abilities = organization?.abilities;
+
   const pagination = usePagination({ itemsPerPage: 10 });
 
   const {
@@ -249,7 +257,7 @@ const TeacherDashboardOrganizationQuotes = () => {
 
   if (error) return <Banner message={error} type={BannerType.ERROR} rounded />;
 
-  if (isPending)
+  if (isPending || isOrganizationPending)
     return (
       <Spinner size="large">
         <span id="loading-contract-data">
@@ -336,6 +344,7 @@ const TeacherDashboardOrganizationQuotes = () => {
           className="mr-2"
           onClick={() => handleDownloadQuote(quote.id)}
           icon={<span className="material-icons">download</span>}
+          disabled={!abilities?.download_quote}
         >
           {intl.formatMessage(messages.downloadQuote)}
         </Button>
@@ -343,6 +352,7 @@ const TeacherDashboardOrganizationQuotes = () => {
           size="small"
           onClick={() => handleOpenConfirm(quote.id)}
           icon={<span className="material-icons">check_circle</span>}
+          disabled={!abilities?.confirm_quote}
         >
           {intl.formatMessage(messages.confirmQuote)}
         </Button>
@@ -365,6 +375,7 @@ const TeacherDashboardOrganizationQuotes = () => {
         size="small"
         onClick={() => handleConfirmBankTransfer(quote.batch_order.id)}
         icon={<span className="material-icons">account_balance</span>}
+        disabled={!abilities?.confirm_bank_transfer}
       >
         {intl.formatMessage(messages.confirmBank)}
       </Button>
@@ -373,7 +384,7 @@ const TeacherDashboardOrganizationQuotes = () => {
     const submitForSignatureButton = (
       <Button
         size="small"
-        disabled={batchOrder.contract_submitted}
+        disabled={batchOrder.contract_submitted || !abilities?.can_submit_for_signature_batch_order}
         onClick={() =>
           !batchOrder.contract_submitted && handleSubmitForSignature(quote.batch_order.id)
         }
