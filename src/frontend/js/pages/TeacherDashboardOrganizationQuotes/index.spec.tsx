@@ -2,12 +2,13 @@ import fetchMock from 'fetch-mock';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { OrganizationQuoteFactory } from 'utils/test/factories/joanie';
+import { OrganizationFactory, OrganizationQuoteFactory } from 'utils/test/factories/joanie';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
 import { expectBannerInfo, expectBannerError } from 'utils/test/expectBanner';
 import TeacherDashboardOrganizationQuotes from '.';
+import { BatchOrderState } from 'types/Joanie';
 
 let user: UserEvent;
 
@@ -29,6 +30,9 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
   it('should render a list of quotes for an organization', async () => {
     const quoteList = OrganizationQuoteFactory().many(1);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', []);
+
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`, {
       results: quoteList,
       count: 0,
@@ -59,6 +63,9 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
 
   it('should render an empty list of quotes for an organization', async () => {
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', []);
+
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`, {
       results: [],
       count: 0,
@@ -80,6 +87,8 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
   it('should paginate', async () => {
     const quoteList = OrganizationQuoteFactory().many(30);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', []);
 
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`, {
       results: quoteList.slice(0, 10),
@@ -126,6 +135,9 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
 
   it('should display an error when API fails', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', []);
+
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', []);
+
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10',
       500,
@@ -140,5 +152,50 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
 
     await expectNoSpinner();
     await expectBannerError('An error occurred while fetching resources. Please retry later.');
+  });
+
+  it('should render disabled buttons when the user is not allowed', async () => {
+    const quoteQuoted = OrganizationQuoteFactory({
+      batch_order: {
+        state: BatchOrderState.QUOTED,
+        available_actions: { next_action: 'confirm_quote' },
+      },
+    }).one();
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+
+    const organization = OrganizationFactory({
+      abilities: {
+        can_submit_for_signature_batch_order: false,
+        confirm_bank_transfer: false,
+        confirm_quote: false,
+        download_quote: true,
+        sign_contracts: false,
+      },
+    }).one();
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', organization);
+
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`, {
+      results: [quoteQuoted],
+      count: 1,
+      previous: null,
+      next: null,
+    });
+
+    render(<TeacherDashboardOrganizationQuotes />, {
+      routerOptions: {
+        path: '/organizations/:organizationId/quotes',
+        initialEntries: ['/organizations/1/quotes'],
+      },
+    });
+
+    await expectNoSpinner();
+
+    const downloadQuoteButton = await screen.findByRole('button', { name: /Download quote/i });
+    expect(downloadQuoteButton).toBeVisible();
+    expect(downloadQuoteButton).not.toBeDisabled();
+
+    const confirmQuoteButton = await screen.findByRole('button', { name: /Confirm quote/i });
+    expect(confirmQuoteButton).toBeVisible();
+    expect(confirmQuoteButton).toBeDisabled();
   });
 });
