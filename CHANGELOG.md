@@ -17,7 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Remove unncessary required fields in B2B sale tunnel
 - Fix typo in batch order quotes management
-- Fix typo in batch order quotes management
+- Add organiaztion ID in batch order payload
 
 ## [3.2.1] - 2025-11-03
 
