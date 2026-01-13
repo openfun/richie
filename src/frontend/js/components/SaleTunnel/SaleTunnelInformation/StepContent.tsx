@@ -208,7 +208,7 @@ export const StepContent = ({
   const { items: organizations } = useOfferingOrganizations({ id: offering?.id });
   const orgOptions = organizations.map((organization) => ({
     label: organization.title,
-    value: organization.code,
+    value: organization.id,
   }));
   const [otherBillingAddress, setOtherBillingAddress] = useState(false);
 
