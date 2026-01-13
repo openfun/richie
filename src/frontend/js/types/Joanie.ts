@@ -35,6 +35,18 @@ export interface Organization {
   contact_phone: Nullable<string>;
   dpo_email: Nullable<string>;
   address?: Address;
+  abilities: {
+    can_submit_for_signature_batch_order: boolean;
+    confirm_bank_transfer: boolean;
+    confirm_quote: boolean;
+    delete: boolean;
+    download_quote: boolean;
+    get: boolean;
+    manage_accesses: boolean;
+    patch: boolean;
+    put: boolean;
+    sign_contracts: boolean;
+  };
 }
 
 export interface OrganizationResourceQuery extends ResourcesQuery {

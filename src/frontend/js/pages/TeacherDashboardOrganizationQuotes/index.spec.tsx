@@ -29,6 +29,9 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
   it('should render a list of quotes for an organization', async () => {
     const quoteList = OrganizationQuoteFactory().many(1);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', []);
+
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`, {
       results: quoteList,
       count: 0,
@@ -59,6 +62,9 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
 
   it('should render an empty list of quotes for an organization', async () => {
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', []);
+
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`, {
       results: [],
       count: 0,
@@ -80,6 +86,8 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
   it('should paginate', async () => {
     const quoteList = OrganizationQuoteFactory().many(30);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', []);
 
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`, {
       results: quoteList.slice(0, 10),
@@ -126,6 +134,9 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
 
   it('should display an error when API fails', async () => {
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/', []);
+
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', []);
+
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10',
       500,
