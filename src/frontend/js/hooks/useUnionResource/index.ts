@@ -35,8 +35,12 @@ export interface ResourceUnionPaginationProps {
   perPage?: number;
 }
 
-interface UseUnionResourceProps<DataA, DataB, FiltersA, FiltersB>
-  extends ResourceUnionPaginationProps {
+interface UseUnionResourceProps<
+  DataA,
+  DataB,
+  FiltersA,
+  FiltersB,
+> extends ResourceUnionPaginationProps {
   queryAConfig: QueryConfig<DataA, FiltersA>;
   queryBConfig: QueryConfig<DataB, FiltersB>;
   errorGetMessage?: MessageDescriptor;
