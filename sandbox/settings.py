@@ -319,6 +319,20 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             environ_name="AUTHENTICATION_PROFILE_URLS",
             environ_prefix=None,
         ),
+        "CLIENT_ID": values.Value(
+            "", environ_name="AUTHENTICATION_KEYCLOAK_CLIENT_ID", environ_prefix=None
+        ),
+        "CLIENT_SECRET": values.Value(
+            "",
+            environ_name="AUTHENTICATION_KEYCLOAK_CLIENT_SECRET",
+            environ_prefix=None,
+        ),
+        "REALM": values.Value(
+            "", environ_name="AUTHENTICATION_KEYCLOAK_REALM", environ_prefix=None
+        ),
+        "TOKEN": values.Value(
+            "", environ_name="AUTHENTICATION_KEYCLOAK_TOKEN", environ_prefix=None
+        ),
     }
 
     # Elasticsearch
