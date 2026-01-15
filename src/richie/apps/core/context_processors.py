@@ -3,6 +3,7 @@ Template context processors
 """
 
 import json
+import logging
 from collections import OrderedDict
 from urllib.parse import urlparse
 
@@ -18,6 +19,8 @@ from richie.apps.core.templatetags.joanie import is_joanie_enabled
 from richie.apps.courses.models import Organization
 
 from . import defaults
+
+logger = logging.getLogger(__name__)
 
 
 def site_metas(request: HttpRequest):
@@ -94,6 +97,16 @@ def site_metas(request: HttpRequest):
                 }
             ),
         }
+        if authentication_delegation["BACKEND"] == "keycloak":
+            profile_urls = json.loads(context["AUTHENTICATION"]["profile_urls"])
+            # Override the default account profile url with the one from the keycloak realm
+            account_url = (
+                f"{authentication_delegation['BASE_URL']}"
+                f"/realms/{authentication_delegation['REALM']}/account/"
+            )
+            profile_urls["account"]["action"] = account_url
+            profile_urls.pop("profile", None)
+            context["AUTHENTICATION"]["profile_urls"] = json.dumps(profile_urls)
 
     if getattr(settings, "RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT", None):
         context["RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT"] = (
@@ -204,15 +217,20 @@ class FrontendContextProcessor:
 
     def get_authentication_context(self):
         """Get the authentication context if there is."""
+        context = None
         if authentication_delegation := getattr(
             settings, "RICHIE_AUTHENTICATION_DELEGATION", None
         ):
-            return {
+            context = {
                 "endpoint": authentication_delegation["BASE_URL"],
                 "backend": authentication_delegation["BACKEND"],
             }
+            if authentication_delegation["BACKEND"] == "keycloak":
+                context["client_id"] = authentication_delegation["CLIENT_ID"]
+                context["realm"] = authentication_delegation["REALM"]
+                context["token"] = authentication_delegation["TOKEN"]
 
-        return None
+        return context
 
     def get_joanie_context(self):
         """Get the joanie context if it is enabled."""

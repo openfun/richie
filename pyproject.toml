@@ -49,6 +49,7 @@ dependencies = [
     "exrex<1",
     "importlib-metadata<9",
     "oauthlib>=3.2.2,<4",
+    "python-keycloak<8",
     "requests>=2.32.3,<3",
 ]
 

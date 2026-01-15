@@ -3,7 +3,7 @@ Tests for error views
 """
 
 from django.contrib.auth.models import AnonymousUser
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.test.client import RequestFactory
 
 from cms.api import create_page
@@ -11,6 +11,12 @@ from cms.api import create_page
 from richie.apps.core.views import error
 
 
+@override_settings(
+    RICHIE_AUTHENTICATION_DELEGATION={
+        "BASE_URL": "https://richie.education:9999",
+        "BACKEND": "dummy",
+    }
+)
 class ErrorViewHandlersTestCase(TestCase):
     """Test suite for the error view handlers"""
 
