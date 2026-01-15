@@ -118,6 +118,7 @@
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
     "js-cookie": "3.0.5",
+    "keycloak-js": "26.2.2",
     "lodash-es": "4.17.21",
     "mdn-polyfills": "5.20.0",
     "msw": "2.7.3",

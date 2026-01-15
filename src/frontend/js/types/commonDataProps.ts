@@ -14,6 +14,17 @@ export interface LMSBackend {
 export interface AuthenticationBackend {
   backend: string;
   endpoint: string;
+  client_id?: string;
+  realm?: string;
+  token?: string;
+  auth_url?: string;
+  registration_url?: string;
+  user_info_url?: string;
+  logout_url?: string;
+  user?: {
+    username: string;
+    email: string;
+  };
 }
 
 enum FEATURES {

@@ -60,6 +60,7 @@ export enum APIBackend {
   DUMMY = 'dummy',
   FONZIE = 'fonzie',
   JOANIE = 'joanie',
+  KEYCLOAK = 'keycloak',
   OPENEDX_DOGWOOD = 'openedx-dogwood',
   OPENEDX_HAWTHORN = 'openedx-hawthorn',
 }

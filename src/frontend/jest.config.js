@@ -15,7 +15,17 @@ module.exports = {
   },
   resolver: '<rootDir>/jest/resolver.js',
   transformIgnorePatterns: [
-    'node_modules/(?!(react-intl|lodash-es|@hookform/resolvers|query-string|decode-uri-component|split-on-first|filter-obj|@openfun/cunningham-react)/)',
+    'node_modules/(?!(' +
+      'react-intl' +
+      '|lodash-es' +
+      '|@hookform/resolvers' +
+      '|query-string' +
+      '|decode-uri-component' +
+      '|split-on-first' +
+      '|filter-obj' +
+      '|@openfun/cunningham-react' +
+      '|keycloak-js' +
+      ')/)',
   ],
   globals: {
     RICHIE_VERSION: 'test',
