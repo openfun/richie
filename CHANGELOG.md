@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add keycloak as an authentication backend
+
 ## [3.2.1] - 2025-11-03
 
 ### Fixed
