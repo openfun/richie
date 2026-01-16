@@ -208,7 +208,7 @@ export const StepContent = ({
   const { items: organizations } = useOfferingOrganizations({ id: offering?.id });
   const orgOptions = organizations.map((organization) => ({
     label: organization.title,
-    value: organization.code,
+    value: organization.id,
   }));
   const [otherBillingAddress, setOtherBillingAddress] = useState(false);
 
@@ -497,21 +497,11 @@ export const StepContent = ({
           <Input
             {...register('funding_entity')}
             label={intl.formatMessage(messages.fundingEntityName)}
-            required
-            state={formState.errors.funding_entity?.message ? 'error' : 'default'}
-            text={
-              getLocalizedCunninghamErrorProp(intl, formState.errors.funding_entity?.message).text
-            }
           />
           <Input
             {...register('funding_amount')}
             type="number"
             label={intl.formatMessage(messages.fundingEntityAmount)}
-            required
-            state={formState.errors.funding_amount?.message ? 'error' : 'default'}
-            text={
-              getLocalizedCunninghamErrorProp(intl, formState.errors.funding_amount?.message).text
-            }
           />
         </div>
         <FormattedMessage {...messages.recommandation} />

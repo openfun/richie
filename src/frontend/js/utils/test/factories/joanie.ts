@@ -171,6 +171,18 @@ export const OrganizationFactory = factory((): Organization => {
     dpo_email: faker.internet.email(),
     contact_phone: faker.phone.number(),
     address: AddressFactory().one(),
+    abilities: {
+      can_submit_for_signature_batch_order: faker.datatype.boolean(),
+      confirm_bank_transfer: faker.datatype.boolean(),
+      confirm_quote: faker.datatype.boolean(),
+      delete: faker.datatype.boolean(),
+      download_quote: faker.datatype.boolean(),
+      get: faker.datatype.boolean(),
+      manage_accesses: faker.datatype.boolean(),
+      patch: faker.datatype.boolean(),
+      put: faker.datatype.boolean(),
+      sign_contracts: faker.datatype.boolean(),
+    },
   };
 });
 
