@@ -1,4 +1,4 @@
-import { getByText, screen } from '@testing-library/react';
+import { getByText, queryByText, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import userEvent from '@testing-library/user-event';
 import {
@@ -17,6 +17,7 @@ import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import context from 'utils/context';
 import { DashboardTest } from './components/DashboardTest';
 
 jest.mock('utils/context', () => ({
@@ -209,5 +210,24 @@ describe('<Dashboard />', () => {
 
     expectUrlMatchLocationDisplayed('/dummy/route');
     expect(screen.getByRole('heading', { name: /Page not found/ }));
+  });
+
+  it('should not show preferences link when using keycloak backend', async () => {
+    // Temporarily change the authentication backend to keycloak
+    const originalBackend = context.authentication.backend;
+    context.authentication.backend = 'keycloak';
+
+    render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
+    await expectNoSpinner('Loading orders and enrollments...');
+
+    const sidebar = screen.getByTestId('dashboard__sidebar');
+
+    // Verify that "My preferences" link is NOT present in the sidebar
+    expect(queryByText(sidebar, 'My preferences')).toBeNull();
+
+    // Restore original backend
+    context.authentication.backend = originalBackend;
   });
 });
