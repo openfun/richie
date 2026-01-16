@@ -42,7 +42,8 @@ describe('Keycloak API', () => {
     client_id: 'richie-client',
     realm: 'richie-realm',
     auth_url: 'https://keycloak.test/auth/realms/richie-realm/protocol/openid-connect/auth',
-    registration_url: 'https://keycloak.test/auth/realms/richie-realm/protocol/openid-connect/registrations',
+    registration_url:
+      'https://keycloak.test/auth/realms/richie-realm/protocol/openid-connect/registrations',
   };
 
   let keycloakApi: ReturnType<typeof API>;

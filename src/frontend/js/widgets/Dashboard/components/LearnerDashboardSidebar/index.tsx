@@ -7,6 +7,8 @@ import {
   DashboardSidebarProps,
 } from 'widgets/Dashboard/components/DashboardSidebar';
 import { useSession } from 'contexts/SessionContext';
+import { APIBackend } from 'types/api';
+import context from 'utils/context';
 import { UserHelper } from 'utils/UserHelper';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
@@ -30,15 +32,18 @@ export const LearnerDashboardSidebar = (props: Partial<DashboardSidebarProps>) =
 
   const getRouteLabel = getDashboardRouteLabel(intl);
 
+  const dashboardPaths = [
+    LearnerDashboardPaths.COURSES,
+    LearnerDashboardPaths.CERTIFICATES,
+    LearnerDashboardPaths.CONTRACTS,
+    LearnerDashboardPaths.BATCH_ORDERS,
+  ];
+  if (context?.authentication.backend !== APIBackend.KEYCLOAK) {
+    dashboardPaths.push(LearnerDashboardPaths.PREFERENCES);
+  }
   const links = useMemo(
     () =>
-      [
-        LearnerDashboardPaths.COURSES,
-        LearnerDashboardPaths.CERTIFICATES,
-        LearnerDashboardPaths.CONTRACTS,
-        LearnerDashboardPaths.PREFERENCES,
-        LearnerDashboardPaths.BATCH_ORDERS,
-      ].map((path) => ({
+      dashboardPaths.map((path) => ({
         to: generatePath(path),
         label: getRouteLabel(path),
         activePaths:
