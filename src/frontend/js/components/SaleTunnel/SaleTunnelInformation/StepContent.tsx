@@ -275,7 +275,19 @@ export const StepContent = ({
         />
         <Checkbox
           label={intl.formatMessage(messages.checkBilling)}
-          onChange={() => setOtherBillingAddress(!otherBillingAddress)}
+          onChange={() => {
+            setOtherBillingAddress(!otherBillingAddress);
+            form.resetField('billing_address');
+            form.resetField('billing_address.contact_name');
+            form.resetField('billing_address.contact_email');
+            form.resetField('billing_address.company_name');
+            form.resetField('billing_address.identification_number');
+            form.resetField('billing_address.address');
+            form.resetField('billing_address.postcode');
+            form.resetField('billing_address.city');
+            form.resetField('billing_address.country');
+            form.clearErrors();
+          }}
           checked={otherBillingAddress}
         />
       </div>
@@ -291,6 +303,13 @@ export const StepContent = ({
             className="field"
             {...register('billing_address.contact_email')}
             label={intl.formatMessage(messages.contactEmail)}
+            state={formState.errors.billing_address?.contact_email?.message ? 'error' : 'default'}
+            text={
+              getLocalizedCunninghamErrorProp(
+                intl,
+                formState.errors.billing_address?.contact_email?.message,
+              ).text
+            }
           />
           <Input
             className="field"

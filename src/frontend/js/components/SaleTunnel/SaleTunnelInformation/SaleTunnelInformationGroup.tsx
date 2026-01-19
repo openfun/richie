@@ -86,6 +86,8 @@ export const SaleTunnelInformationGroup = () => {
   );
 };
 
+const EMAIL_REGEX = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/;
+
 export const validationSchema = Yup.object().shape({
   offering_id: Yup.string().required(),
   company_name: Yup.string().required(),
@@ -98,23 +100,25 @@ export const validationSchema = Yup.object().shape({
   administrative_lastname: Yup.string().required(),
   administrative_firstname: Yup.string().required(),
   administrative_profession: Yup.string().required(),
-  administrative_email: Yup.string().email().required(),
+  administrative_email: Yup.string().matches(EMAIL_REGEX).required(),
   administrative_telephone: Yup.string().required(),
   signatory_lastname: Yup.string().required(),
   signatory_firstname: Yup.string().required(),
   signatory_profession: Yup.string().required(),
-  signatory_email: Yup.string().email().required(),
+  signatory_email: Yup.string().matches(EMAIL_REGEX).required(),
   signatory_telephone: Yup.string().required(),
-  billing_address: Yup.object().optional().shape({
-    company_name: Yup.string().optional(),
-    identification_number: Yup.string().optional(),
-    contact_name: Yup.string().optional(),
-    contact_email: Yup.string().email().optional(),
-    address: Yup.string().optional(),
-    postcode: Yup.string().optional(),
-    city: Yup.string().optional(),
-    country: Yup.string().optional(),
-  }),
+  billing_address: Yup.object()
+    .optional()
+    .shape({
+      company_name: Yup.string().optional(),
+      identification_number: Yup.string().optional(),
+      contact_name: Yup.string().optional(),
+      contact_email: Yup.string().matches(EMAIL_REGEX).optional(),
+      address: Yup.string().optional(),
+      postcode: Yup.string().optional(),
+      city: Yup.string().optional(),
+      country: Yup.string().optional(),
+    }),
   nb_seats: Yup.number().required().min(1),
   payment_method: Yup.mixed<PaymentMethod>().oneOf(Object.values(PaymentMethod)).required(),
   funding_entity: Yup.string().optional(),
@@ -198,9 +202,29 @@ const BatchOrderForm = () => {
   }, [values, batchOrder, setBatchOrder]);
 
   useEffect(() => {
-    const requiredRules = requiredFieldsByStep[activeStep];
-    const isStepValid = requiredRules.every((field) => !!batchOrder?.[field]);
-    setIsCurrentStepValid(isStepValid);
+    const validateStep = async () => {
+      if (activeStep === 0 && batchOrder?.billing_address?.contact_email) {
+        const isEmailValid = EMAIL_REGEX.test(batchOrder.billing_address.contact_email);
+        if (!isEmailValid) {
+          setIsCurrentStepValid(false);
+          return;
+        }
+      }
+      const fieldsToValidate = requiredFieldsByStep[activeStep];
+      const validationPromises = fieldsToValidate.map(async (field) => {
+        try {
+          const fieldSchema = Yup.reach(validationSchema, field) as Yup.Schema;
+          await fieldSchema.validate(batchOrder?.[field]);
+          return true;
+        } catch {
+          return false;
+        }
+      });
+      const results = await Promise.all(validationPromises);
+      const isStepValid = results.every((isValid) => isValid);
+      setIsCurrentStepValid(isStepValid);
+    };
+    validateStep();
   }, [activeStep, batchOrder]);
 
   return (
