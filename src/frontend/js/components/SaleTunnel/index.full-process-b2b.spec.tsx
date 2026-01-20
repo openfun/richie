@@ -353,4 +353,158 @@ describe('SaleTunnel', () => {
 
     screen.getByText('Subscription confirmed!');
   }, 10000);
+
+  it('should display the appropriate error message when there are not enough seats available', async () => {
+    const course = PacedCourseFactory().one();
+    const product = ProductFactory().one();
+    const offering = OfferingFactory({ course, product, is_withdrawable: false }).one();
+    const paymentPlan = PaymentPlanFactory().one();
+    const offeringOrganization = OfferingBatchOrderFactory({
+      product: { id: product.id, title: product.title },
+    }).one();
+
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
+      offering,
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+      paymentPlan,
+    );
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify({
+        product_id: product.id,
+        course_code: course.code,
+        state: NOT_CANCELED_ORDER_STATES,
+      })}`,
+      [],
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/offerings/${offering.id}/get-organizations/`,
+      offeringOrganization,
+    );
+
+    render(<CourseProductItem productId={product.id} course={course} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    // Verify product info
+    await screen.findByRole('heading', { level: 3, name: product.title });
+    await screen.findByText(formatPrice(product.price_currency, product.price));
+    expect(screen.queryByText('Purchased')).not.toBeInTheDocument();
+
+    const user = userEvent.setup();
+    const buyButton = screen.getByRole('button', { name: product.call_to_action });
+
+    expect(screen.queryByTestId('generic-sale-tunnel-payment-step')).not.toBeInTheDocument();
+    await user.click(buyButton);
+    await screen.findByTestId('generic-sale-tunnel-payment-step');
+
+    // Verify learning path
+    await screen.findByText('Your learning path');
+    const targetCourses = await screen.findAllByTestId('product-target-course');
+    expect(targetCourses).toHaveLength(product.target_courses.length);
+    targetCourses.forEach((targetCourse, index) => {
+      const courseItem = product.target_courses[index];
+      const courseDetail = within(targetCourse).getByTestId(
+        `target-course-detail-${courseItem.code}`,
+      );
+      const summary = courseDetail.querySelector('summary')!;
+      expect(summary).toHaveTextContent(courseItem.title);
+
+      const courseRuns = targetCourse.querySelectorAll(
+        '.product-detail-row__course-run-dates__item',
+      );
+      const openedCourseRuns = courseItem.course_runs.filter(
+        (cr: CourseRun) => cr.state.priority <= Priority.FUTURE_NOT_YET_OPEN,
+      );
+      expect(courseRuns).toHaveLength(openedCourseRuns.length);
+    });
+
+    // Select group buy form
+    await screen.findByText('Purchase type');
+    const formTypeSelect = screen.getByRole('combobox', { name: 'Purchase type' });
+    const menu: HTMLDivElement = screen.getByRole('listbox', { name: 'Purchase type' });
+    expectMenuToBeClosed(menu);
+    await user.click(formTypeSelect);
+    expectMenuToBeOpen(menu);
+    await user.click(screen.getByText('Group purchase (B2B)'));
+
+    // Company step
+    const $companyName = await screen.findByRole('textbox', { name: 'Company name' });
+    const $idNumber = screen.getByRole('textbox', { name: /Identification number/ });
+    const $address = screen.getByRole('textbox', { name: 'Address' });
+    const $postCode = screen.getByRole('textbox', { name: 'Post code' });
+    const $city = screen.getByRole('textbox', { name: 'City' });
+    const $country = screen.getByRole('combobox', { name: 'Country' });
+
+    await user.type($companyName, 'GIP-FUN');
+    await user.type($idNumber, '789 242 229 01694');
+    await user.type($address, '61 Bis Rue de la Glaciere');
+    await user.type($postCode, '75013');
+    await user.type($city, 'Paris');
+
+    const countryMenu: HTMLDivElement = screen.getByRole('listbox', { name: 'Country' });
+    await user.click($country);
+    expectMenuToBeOpen(countryMenu);
+    await user.click(screen.getByText('France'));
+
+    expect($companyName).toHaveValue('GIP-FUN');
+    const visibleValue = $country.querySelector('.c__select__inner__value span');
+    expect(visibleValue!.textContent).toBe('France');
+
+    // Follow-up step
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    const $lastName = await screen.findByRole('textbox', { name: 'Last name' });
+    const $firstName = screen.getByRole('textbox', { name: 'First name' });
+    const $role = screen.getByRole('textbox', { name: 'Role' });
+    const $email = screen.getByRole('textbox', { name: 'Email' });
+    const $phone = screen.getByRole('textbox', { name: 'Phone' });
+
+    await user.type($lastName, 'Doe');
+    await user.type($firstName, 'John');
+    await user.type($role, 'HR');
+    await user.type($email, 'john.doe@fun-mooc.com');
+    await user.type($phone, '+338203920103');
+
+    expect($lastName).toHaveValue('Doe');
+    expect($email).toHaveValue('john.doe@fun-mooc.com');
+
+    // Signatory step
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    const $signatoryLastName = await screen.findByRole('textbox', { name: 'Last name' });
+    const $signatoryFirstName = screen.getByRole('textbox', { name: 'First name' });
+    const $signatoryRole = screen.getByRole('textbox', { name: 'Role' });
+    const $signatoryEmail = screen.getByRole('textbox', { name: 'Email' });
+    const $signatoryPhone = screen.getByRole('textbox', { name: 'Phone' });
+
+    await user.type($signatoryLastName, 'Doe');
+    await user.type($signatoryFirstName, 'John');
+    await user.type($signatoryRole, 'CEO');
+    await user.type($signatoryEmail, 'john.doe@fun-mooc.com');
+    await user.type($signatoryPhone, '+338203920103');
+
+    // Participants step
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    const $nbParticipants = await screen.findByLabelText('How many participants ?');
+    await user.type($nbParticipants, '13');
+    expect($nbParticipants).toHaveValue(13);
+
+    fetchMock.post('https://joanie.endpoint/api/v1.0/batch-orders/', {
+      status: 422,
+      body: {
+        __all__: ['Maximum number of orders reached for product Credential Product'],
+      },
+    });
+
+    const $subscribeButton = screen.getByRole('button', {
+      name: `Subscribe`,
+    }) as HTMLButtonElement;
+    await user.click($subscribeButton);
+
+    await screen.findByText(
+      'Unable to create the order: the maximum number of available seats for this offering has been reached. Please contact support for more information.',
+    );
+  }, 30000);
 });

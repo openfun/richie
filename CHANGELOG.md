@@ -11,7 +11,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add keycloak as an authentication backend
-- Disable quote actions for member users 
+- Disable quote actions for member users
+- Add custom error message for batch orders when there are no available seats
 
 ### Fixed
 

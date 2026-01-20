@@ -7,8 +7,8 @@ import { expectNoSpinner } from 'utils/test/expectSpinner';
 import { setupJoanieSession } from 'utils/test/wrappers/JoanieAppWrapper';
 import { render } from 'utils/test/render';
 import { expectBannerInfo, expectBannerError } from 'utils/test/expectBanner';
-import TeacherDashboardOrganizationQuotes from '.';
 import { BatchOrderState } from 'types/Joanie';
+import TeacherDashboardOrganizationQuotes from '.';
 
 let user: UserEvent;
 
