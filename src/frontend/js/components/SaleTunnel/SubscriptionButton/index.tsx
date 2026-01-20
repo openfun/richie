@@ -67,6 +67,13 @@ const messages = defineMessages({
     defaultMessage: 'Some required fields are missing in the form.',
     description: 'Some required fields are missing in the form.',
   },
+  errorBatchOrderMaxOrders: {
+    id: 'components.SubscriptionButton.errorBatchOrderMaxOrders',
+    defaultMessage:
+      'Unable to create the order: the maximum number of available seats for this offering has been reached. Please contact support for more information.',
+    description:
+      'Error message shown when batch order creation fails because maximum number of orders is reached by an active offering rule.',
+  },
 });
 
 enum ComponentStates {
@@ -172,7 +179,11 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       return;
     }
     batchOrderMethods.create(batchOrder, {
-      onError: async () => {
+      onError: async (createBatchOrderError: HttpError) => {
+        if (createBatchOrderError.code === 422) {
+          handleError(SubscriptionErrorMessageId.ERROR_BATCH_ORDER_MAX_ORDERS);
+          return;
+        }
         handleError();
       },
       onSuccess: async (createdBatchOrder: any) => {
