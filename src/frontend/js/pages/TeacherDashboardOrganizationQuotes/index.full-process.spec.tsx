@@ -201,4 +201,133 @@ describe('full process for the organization quotes dashboard', () => {
     expect(processPaymentButton).toBeVisible();
     expect(processPaymentButton).toBeDisabled();
   });
+
+  it('should work with purchase order payment method workflow', async () => {
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
+    const organization = OrganizationFactory({
+      abilities: {
+        can_submit_for_signature_batch_order: true,
+        confirm_bank_transfer: true,
+        confirm_quote: true,
+        download_quote: true,
+        sign_contracts: true,
+      },
+    }).one();
+    fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', organization);
+
+    const quoteQuoted = OrganizationQuoteFactory({
+      batch_order: {
+        state: BatchOrderState.QUOTED,
+        payment_method: PaymentMethod.PURCHASE_ORDER,
+        available_actions: { next_action: 'confirm_quote' },
+      },
+      organization_signed_on: undefined,
+    }).one();
+
+    const quotePurchaseOrder = OrganizationQuoteFactory({
+      id: quoteQuoted.id,
+      batch_order: {
+        state: BatchOrderState.QUOTED,
+        payment_method: PaymentMethod.PURCHASE_ORDER,
+        available_actions: { next_action: 'confirm_purchase_order' },
+      },
+    }).one();
+
+    const quoteSendForSign = OrganizationQuoteFactory({
+      id: quoteQuoted.id,
+      batch_order: {
+        state: BatchOrderState.TO_SIGN,
+        payment_method: PaymentMethod.PURCHASE_ORDER,
+        contract_submitted: false,
+        available_actions: { next_action: 'submit_for_signature' },
+      },
+    }).one();
+
+    const quoteCompleted = OrganizationQuoteFactory({
+      id: quoteQuoted.id,
+      batch_order: {
+        state: BatchOrderState.COMPLETED,
+        payment_method: PaymentMethod.PURCHASE_ORDER,
+      },
+    }).one();
+
+    const quotesResponses = [
+      { results: [quoteQuoted], count: 1, previous: null, next: null },
+      { results: [quotePurchaseOrder], count: 1, previous: null, next: null },
+      { results: [quoteSendForSign], count: 1, previous: null, next: null },
+      { results: [quoteCompleted], count: 1, previous: null, next: null },
+    ];
+
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/organizations/1/quotes/?page=1&page_size=10`,
+      () => quotesResponses.shift(),
+    );
+
+    fetchMock.patch(`https://joanie.endpoint/api/v1.0/organizations/1/confirm-quote/`, 200);
+    fetchMock.patch(
+      `https://joanie.endpoint/api/v1.0/organizations/1/confirm-purchase-order/`,
+      200,
+    );
+    fetchMock.post(
+      `https://joanie.endpoint/api/v1.0/organizations/1/submit-for-signature-batch-order/`,
+      200,
+    );
+
+    render(<TeacherDashboardOrganizationQuotes />, {
+      routerOptions: {
+        path: '/organizations/:organizationId/quotes',
+        initialEntries: ['/organizations/1/quotes'],
+      },
+    });
+
+    await expectNoSpinner();
+
+    // First step: confirm quote
+    const confirmQuoteButton = await screen.findByRole('button', { name: /confirm quote/i });
+    expect(confirmQuoteButton).toBeVisible();
+    await user.click(confirmQuoteButton);
+    await screen.findByText(/total amount/i);
+    await user.type(screen.getByLabelText(/total amount/i), '1000');
+    await user.click(screen.getByRole('button', { name: /confirm quote/i }));
+
+    // Second step: confirm purchase order with reference via modal
+    const confirmPurchaseOrderButton = await screen.findByRole('button', {
+      name: /confirm receipt of purchase order/i,
+    });
+    expect(confirmPurchaseOrderButton).toBeVisible();
+    await user.click(confirmPurchaseOrderButton);
+
+    // Modal should open with purchase order reference input
+    const modalTitle = await screen.findByText(/confirm purchase order/i);
+    expect(modalTitle).toBeInTheDocument();
+
+    const referenceInput = screen.getByLabelText(/purchase order reference/i);
+    expect(referenceInput).toBeInTheDocument();
+
+    // Type reference and confirm
+    await user.type(referenceInput, 'this-is-a-reference');
+    await user.click(screen.getByRole('button', { name: /confirm receipt of purchase order/i }));
+
+    // Third step: send for signature
+    const sendForSignatureButton = await screen.findByRole('button', {
+      name: /send contract for signature/i,
+    });
+    expect(sendForSignatureButton).toBeVisible();
+    await user.click(sendForSignatureButton);
+
+    // Verify completed state
+    cleanup();
+    render(<TeacherDashboardOrganizationQuotes />, {
+      routerOptions: {
+        path: '/organizations/:organizationId/quotes',
+        initialEntries: ['/organizations/1/quotes'],
+      },
+    });
+    await expectNoSpinner();
+
+    // No action button should be visible for completed quote
+    expect(
+      screen.queryByRole('button', { name: /confirm receipt of purchase order/i }),
+    ).not.toBeInTheDocument();
+  });
 });

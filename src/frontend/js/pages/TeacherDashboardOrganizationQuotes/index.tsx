@@ -66,6 +66,16 @@ const messages = defineMessages({
     id: 'components.OrganizationQuotesTable.confirmPurchaseOrder',
     description: 'Label for confirming receipt of a purchase order',
   },
+  purchaseOrderModalTitle: {
+    defaultMessage: 'Confirm purchase order',
+    id: 'components.OrganizationQuotesTable.purchaseOrderModalTitle',
+    description: 'Title of the confirm purchase order modal',
+  },
+  purchaseOrderReferenceLabel: {
+    defaultMessage: 'Purchase order reference',
+    id: 'components.OrganizationQuotesTable.purchaseOrderReferenceLabel',
+    description: 'Label for the purchase order reference input',
+  },
   confirmBank: {
     defaultMessage: 'Confirm bank transfer',
     id: 'components.OrganizationQuotesTable.confirmBank',
@@ -249,6 +259,11 @@ const TeacherDashboardOrganizationQuotes = () => {
   const [amount, setAmount] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [selectedPurchaseOrderQuote, setSelectedPurchaseOrderQuote] =
+    useState<OrganizationQuote | null>(null);
+  const [purchaseOrderReference, setPurchaseOrderReference] = useState('');
+  const [isPurchaseOrderModalOpen, setIsPurchaseOrderModalOpen] = useState(false);
+
   useEffect(() => {
     if (meta?.pagination?.count) {
       pagination.setItemsCount(meta.pagination.count);
@@ -294,11 +309,27 @@ const TeacherDashboardOrganizationQuotes = () => {
     await invalidate();
   };
 
-  const handleConfirmPurchaseOrder = async (id: string) => {
+  const handleOpenPurchaseOrderModal = (quote: OrganizationQuote) => {
+    setSelectedPurchaseOrderQuote(quote);
+    setIsPurchaseOrderModalOpen(true);
+  };
+
+  const handleCancelPurchaseOrder = () => {
+    setIsPurchaseOrderModalOpen(false);
+    setPurchaseOrderReference('');
+    setSelectedPurchaseOrderQuote(null);
+  };
+
+  const handleConfirmPurchaseOrder = async () => {
+    if (!selectedPurchaseOrderQuote) return;
     await confirmPurchaseOrder({
       organization_id: routeOrganizationId,
-      payload: { quote_id: id },
+      payload: {
+        quote_id: selectedPurchaseOrderQuote.id,
+        purchase_order_reference: purchaseOrderReference,
+      },
     });
+    handleCancelPurchaseOrder();
     await invalidate();
   };
 
@@ -363,7 +394,7 @@ const TeacherDashboardOrganizationQuotes = () => {
       <Button
         size="small"
         className="ml-2"
-        onClick={() => handleConfirmPurchaseOrder(quote.id)}
+        onClick={() => handleOpenPurchaseOrderModal(quote)}
         icon={<span className="material-icons">description</span>}
       >
         {intl.formatMessage(messages.confirmPurchaseOrder)}
@@ -522,6 +553,26 @@ const TeacherDashboardOrganizationQuotes = () => {
             label={intl.formatMessage(messages.modalAmountLabel)}
             onChange={(e) => setAmount(e.target.value)}
             value={amount}
+          />
+        </div>
+      </Modal>
+      <Modal
+        isOpen={isPurchaseOrderModalOpen}
+        onClose={handleCancelPurchaseOrder}
+        title={intl.formatMessage(messages.purchaseOrderModalTitle)}
+        size={ModalSize.MEDIUM}
+        actions={
+          <Button size="small" onClick={handleConfirmPurchaseOrder}>
+            {intl.formatMessage(messages.confirmPurchaseOrder)}
+          </Button>
+        }
+      >
+        <div className="dashboard__quote__modal">
+          <Input
+            type="text"
+            label={intl.formatMessage(messages.purchaseOrderReferenceLabel)}
+            onChange={(e) => setPurchaseOrderReference(e.target.value)}
+            value={purchaseOrderReference}
           />
         </div>
       </Modal>
