@@ -5,6 +5,7 @@ const mockKeycloakInit = jest.fn().mockResolvedValue(true);
 const mockKeycloakLogout = jest.fn().mockResolvedValue(undefined);
 const mockKeycloakLogin = jest.fn().mockResolvedValue(undefined);
 const mockKeycloakLoadUserProfile = jest.fn();
+const mockIdToken = 'mock-id-token-12345';
 
 jest.mock('keycloak-js', () => {
   return jest.fn().mockImplementation(() => ({
@@ -12,6 +13,7 @@ jest.mock('keycloak-js', () => {
     logout: mockKeycloakLogout,
     login: mockKeycloakLogin,
     loadUserProfile: mockKeycloakLoadUserProfile,
+    idToken: 'mock-id-token-12345',
   }));
 });
 
@@ -50,6 +52,7 @@ describe('Keycloak API', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    sessionStorage.clear();
     keycloakApi = API(authConfig);
   });
 
@@ -71,7 +74,9 @@ describe('Keycloak API', () => {
       expect(response).toEqual({
         username: 'John Doe',
         email: 'johndoe@example.com',
+        access_token: mockIdToken,
       });
+      expect(sessionStorage.getItem('RICHIE_USER_TOKEN')).toEqual(mockIdToken);
     });
   });
 
