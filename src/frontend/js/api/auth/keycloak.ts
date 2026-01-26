@@ -3,6 +3,7 @@ import { AuthenticationBackend } from 'types/commonDataProps';
 import { APIAuthentication } from 'types/api';
 import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
+import { RICHIE_USER_TOKEN } from 'settings';
 
 const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
   const keycloak = new Keycloak({
@@ -22,13 +23,16 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
 
   return {
     user: {
+      accessToken: () => sessionStorage.getItem(RICHIE_USER_TOKEN),
       me: async () => {
         return keycloak
           .loadUserProfile()
           .then((userProfile) => {
+            sessionStorage.setItem(RICHIE_USER_TOKEN, keycloak.idToken!);
             return {
               username: `${userProfile.firstName} ${userProfile.lastName}`,
               email: userProfile.email,
+              access_token: keycloak.idToken,
             };
           })
           .catch((error) => {
@@ -46,6 +50,7 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
       },
 
       logout: async () => {
+        sessionStorage.removeItem(RICHIE_USER_TOKEN);
         await keycloak.logout({ redirectUri: getRedirectUri() });
       },
     },
