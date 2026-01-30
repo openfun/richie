@@ -21,7 +21,7 @@ const messages = defineMessages({
   description: {
     id: 'components.SaleTunnel.Information.description',
     description: 'Description of the information section',
-    defaultMessage: 'Those information will be used for billing',
+    defaultMessage: 'This information will be used for billing',
   },
   paymentSchedule: {
     id: 'components.SaleTunnel.Information.paymentSchedule',

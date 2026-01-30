@@ -772,7 +772,7 @@ describe.each([
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
     expect(
-      await screen.queryByText('Those information will be used for billing'),
+      await screen.queryByText('This information will be used for billing'),
     ).toBeInTheDocument();
 
     await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT100');
@@ -781,7 +781,7 @@ describe.each([
     expect(await screen.findByText('Discount applied')).toBeInTheDocument();
     await waitFor(async () =>
       expect(
-        await screen.queryByText('Those information will be used for billing'),
+        await screen.queryByText('This information will be used for billing'),
       ).not.toBeInTheDocument(),
     );
     expect(await screen.queryByTestId('withdraw-right-checkbox')).not.toBeInTheDocument();

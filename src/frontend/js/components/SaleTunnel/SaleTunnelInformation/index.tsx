@@ -19,12 +19,12 @@ const messages = defineMessages({
   purchaseTypeOptionSingle: {
     id: 'components.SaleTunnel.Information.purchaseTypeOptionSingle',
     description: 'Label for B2C option',
-    defaultMessage: 'Single purchase (B2C)',
+    defaultMessage: 'I am purchasing as an individual',
   },
   purchaseTypeOptionGroup: {
     id: 'components.SaleTunnel.Information.purchaseTypeOptionGroup',
     description: 'Label for B2C option',
-    defaultMessage: 'Group purchase (B2B)',
+    defaultMessage: 'I am purchasing on behalf of an organization',
   },
 });
 

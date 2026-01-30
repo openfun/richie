@@ -21,7 +21,7 @@ const messages = defineMessages({
   description: {
     id: 'components.SaleTunnel.Information.description',
     description: 'Helper text explaining that the information will be used for billing',
-    defaultMessage: 'Those information will be used for billing',
+    defaultMessage: 'This information will be used for billing',
   },
   purchaseTypeTitle: {
     id: 'components.SaleTunnel.Information.purchaseTypeTitle',
@@ -36,12 +36,12 @@ const messages = defineMessages({
   purchaseTypeOptionSingle: {
     id: 'components.SaleTunnel.Information.purchaseTypeOptionSingle',
     description: 'Option label for selecting a single purchase (B2C)',
-    defaultMessage: 'Single purchase (B2C)',
+    defaultMessage: 'I am purchasing as an individual',
   },
   purchaseTypeOptionGroup: {
     id: 'components.SaleTunnel.Information.purchaseTypeOptionGroup',
     description: 'Option label for selecting a group purchase (B2B)',
-    defaultMessage: 'Group purchase (B2B)',
+    defaultMessage: 'I am purchasing on behalf of an organization',
   },
   stepCompany: {
     id: 'components.SaleTunnel.BatchOrderForm.stepCompany',

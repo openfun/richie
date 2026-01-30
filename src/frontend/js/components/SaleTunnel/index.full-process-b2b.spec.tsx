@@ -152,13 +152,13 @@ describe('SaleTunnel', () => {
     expectMenuToBeClosed(menu);
     await user.click(formTypeSelect);
     expectMenuToBeOpen(menu);
-    await user.click(screen.getByText('Group purchase (B2B)'));
+    await user.click(screen.getByText('I am purchasing on behalf of an organization'));
 
     // Company step
     const $companyName = await screen.findByRole('textbox', { name: 'Company name' });
-    const $idNumber = screen.getByRole('textbox', { name: /Identification number/ });
+    const $idNumber = screen.getByRole('textbox', { name: /Registration number/ });
     const $address = screen.getByRole('textbox', { name: 'Address' });
-    const $postCode = screen.getByRole('textbox', { name: 'Post code' });
+    const $postCode = screen.getByRole('textbox', { name: 'Postal code' });
     const $city = screen.getByRole('textbox', { name: 'City' });
     const $country = screen.getByRole('combobox', { name: 'Country' });
 
@@ -183,7 +183,7 @@ describe('SaleTunnel', () => {
     const $firstName = screen.getByRole('textbox', { name: 'First name' });
     const $role = screen.getByRole('textbox', { name: 'Role' });
     const $email = screen.getByRole('textbox', { name: 'Email' });
-    const $phone = screen.getByRole('textbox', { name: 'Phone' });
+    const $phone = screen.getByRole('textbox', { name: 'Phone number' });
 
     await user.type($lastName, 'Doe');
     await user.type($firstName, 'John');
@@ -200,7 +200,7 @@ describe('SaleTunnel', () => {
     const $signatoryFirstName = screen.getByRole('textbox', { name: 'First name' });
     const $signatoryRole = screen.getByRole('textbox', { name: 'Role' });
     const $signatoryEmail = screen.getByRole('textbox', { name: 'Email' });
-    const $signatoryPhone = screen.getByRole('textbox', { name: 'Phone' });
+    const $signatoryPhone = screen.getByRole('textbox', { name: 'Phone number' });
 
     await user.type($signatoryLastName, 'Doe');
     await user.type($signatoryFirstName, 'John');
@@ -210,7 +210,7 @@ describe('SaleTunnel', () => {
 
     // Participants step
     await user.click(screen.getByRole('button', { name: 'Next' }));
-    const $nbParticipants = await screen.findByLabelText('How many participants ?');
+    const $nbParticipants = await screen.findByLabelText('Number of participants to register');
     await user.type($nbParticipants, '13');
     expect($nbParticipants).toHaveValue(13);
 
@@ -429,13 +429,13 @@ describe('SaleTunnel', () => {
     expectMenuToBeClosed(menu);
     await user.click(formTypeSelect);
     expectMenuToBeOpen(menu);
-    await user.click(screen.getByText('Group purchase (B2B)'));
+    await user.click(screen.getByText('I am purchasing on behalf of an organization'));
 
     // Company step
     const $companyName = await screen.findByRole('textbox', { name: 'Company name' });
-    const $idNumber = screen.getByRole('textbox', { name: /Identification number/ });
+    const $idNumber = screen.getByRole('textbox', { name: /Registration number/ });
     const $address = screen.getByRole('textbox', { name: 'Address' });
-    const $postCode = screen.getByRole('textbox', { name: 'Post code' });
+    const $postCode = screen.getByRole('textbox', { name: 'Postal code' });
     const $city = screen.getByRole('textbox', { name: 'City' });
     const $country = screen.getByRole('combobox', { name: 'Country' });
 
@@ -460,7 +460,7 @@ describe('SaleTunnel', () => {
     const $firstName = screen.getByRole('textbox', { name: 'First name' });
     const $role = screen.getByRole('textbox', { name: 'Role' });
     const $email = screen.getByRole('textbox', { name: 'Email' });
-    const $phone = screen.getByRole('textbox', { name: 'Phone' });
+    const $phone = screen.getByRole('textbox', { name: 'Phone number' });
 
     await user.type($lastName, 'Doe');
     await user.type($firstName, 'John');
@@ -477,7 +477,7 @@ describe('SaleTunnel', () => {
     const $signatoryFirstName = screen.getByRole('textbox', { name: 'First name' });
     const $signatoryRole = screen.getByRole('textbox', { name: 'Role' });
     const $signatoryEmail = screen.getByRole('textbox', { name: 'Email' });
-    const $signatoryPhone = screen.getByRole('textbox', { name: 'Phone' });
+    const $signatoryPhone = screen.getByRole('textbox', { name: 'Phone number' });
 
     await user.type($signatoryLastName, 'Doe');
     await user.type($signatoryFirstName, 'John');
@@ -487,7 +487,7 @@ describe('SaleTunnel', () => {
 
     // Participants step
     await user.click(screen.getByRole('button', { name: 'Next' }));
-    const $nbParticipants = await screen.findByLabelText('How many participants ?');
+    const $nbParticipants = await screen.findByLabelText('Number of participants to register');
     await user.type($nbParticipants, '13');
     expect($nbParticipants).toHaveValue(13);
 

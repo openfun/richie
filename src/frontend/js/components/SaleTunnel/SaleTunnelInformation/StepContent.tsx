@@ -38,7 +38,7 @@ const messages = defineMessages({
     id: 'components.SaleTunnel.BatchOrderForm.stepAdminTitle',
     description:
       'Title of the section with details about the person responsible for admin follow-up',
-    defaultMessage: 'Responsible for the administrative follow-up',
+    defaultMessage: 'Administrative contact',
   },
   stepSignatoryTitle: {
     id: 'components.SaleTunnel.BatchOrderForm.stepSignatoryTitle',
@@ -49,17 +49,17 @@ const messages = defineMessages({
   stepBillingTitle: {
     id: 'components.SaleTunnel.BatchOrderForm.stepBillingTitle',
     description: 'Title of the section with billing details',
-    defaultMessage: 'Billing informations',
+    defaultMessage: 'Billing details',
   },
   stepParticipantsTitle: {
     id: 'components.SaleTunnel.BatchOrderForm.stepParticipantsTitle',
     description: 'Title of the section to enter the number of registrations/participants',
-    defaultMessage: 'How many registrations ?',
+    defaultMessage: 'Number of registrations',
   },
   stepFinancingTitle: {
     id: 'components.SaleTunnel.BatchOrderForm.stepFinancingTitle',
     description: 'Title of the section to select the payment plan of the course',
-    defaultMessage: 'Payment plan of the course',
+    defaultMessage: 'Ordering method',
   },
   companyName: {
     id: 'batchOrder.companyName',
@@ -70,7 +70,7 @@ const messages = defineMessages({
     id: 'batchOrder.identificationNumber',
     description:
       'Label for the field asking the company identification number (eg. SIRET in France)',
-    defaultMessage: 'Identification number (SIRET for french company)',
+    defaultMessage: 'Registration number (SIRET for French companies)',
   },
   vatNumber: {
     id: 'batchOrder.vatNumber',
@@ -85,7 +85,7 @@ const messages = defineMessages({
   postCode: {
     id: 'batchOrder.postCode',
     description: 'Label for the field asking the postal code',
-    defaultMessage: 'Post code',
+    defaultMessage: 'Postal code',
   },
   city: {
     id: 'batchOrder.city',
@@ -120,42 +120,42 @@ const messages = defineMessages({
   phone: {
     id: 'batchOrder.phone',
     description: 'Label for the field asking the phone number of the contact person',
-    defaultMessage: 'Phone',
+    defaultMessage: 'Phone number',
   },
   checkBilling: {
     id: 'components.SaleTunnel.BatchOrderForm.checkBilling',
     description: 'Checkbox label to indicate using alternative billing information',
-    defaultMessage: 'Use other informations for billing',
+    defaultMessage: 'Use different billing information',
   },
   contactName: {
     id: 'batchOrder.contactName',
     description: 'Label for the field asking the billing contact name',
-    defaultMessage: 'Name of the contact',
+    defaultMessage: 'Contact name',
   },
   contactEmail: {
     id: 'batchOrder.contactEmail',
     description: 'Label for the field asking the billing contact email',
-    defaultMessage: 'Email of the contact',
+    defaultMessage: 'Contact email',
   },
   nbSeats: {
     id: 'batchOrder.nbSeats',
     description: 'Label for the field asking the number of participants/seats',
-    defaultMessage: 'How many participants ?',
+    defaultMessage: 'Number of participants to register',
   },
   cardPayment: {
     id: 'batchOrder.cardPayment',
     description: 'Option label for selecting credit card payment',
-    defaultMessage: 'Payment by credit card',
+    defaultMessage: 'Credit card',
   },
   bankTransfer: {
     id: 'batchOrder.bankTransfer',
     description: 'Option label for selecting bank transfer payment',
-    defaultMessage: 'Payment by bank transfer',
+    defaultMessage: 'Bank transfer',
   },
   purchaseOrder: {
     id: 'batchOrder.purchaseOrder',
     description: 'Option label for selecting payment via purchase order',
-    defaultMessage: 'Payment with purchase order',
+    defaultMessage: 'Purchase order',
   },
   withoutOrderForm: {
     id: 'batchOrder.withoutOrderForm',
@@ -191,7 +191,7 @@ const messages = defineMessages({
   participatingOrganisations: {
     id: 'batchOrder.participatingOrganisations',
     description: 'Label for the field listing other participating organisations',
-    defaultMessage: 'Participating organisations',
+    defaultMessage: 'Participating organizations',
   },
 });
 
