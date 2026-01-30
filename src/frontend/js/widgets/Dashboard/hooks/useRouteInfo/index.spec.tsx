@@ -35,6 +35,7 @@ describe('useRouteInfo', () => {
     await waitFor(() =>
       expect(result!.current).toEqual({
         id: '0',
+        loaderData: { posts: [] },
         pathname: '/posts',
         params: {},
         data: { posts: [] },

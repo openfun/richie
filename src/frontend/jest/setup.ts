@@ -19,7 +19,7 @@ if (!globalThis.TextEncoder || !globalThis.TextDecoder) {
  * A little trick to prevent so package to be reset when using `jest.resetModules()`.
  * https://github.com/facebook/jest/issues/8987#issuecomment-584898030
  */
-const RESET_MODULE_EXCEPTIONS = ['react', 'react-intl'];
+const RESET_MODULE_EXCEPTIONS: string[] = [];
 
 const mockActualRegistry: Record<PropertyKey, any> = {};
 

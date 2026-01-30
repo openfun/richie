@@ -1,6 +1,5 @@
 import { defineMessages, useIntl } from 'react-intl';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MutateOptions } from '@tanstack/query-core';
+import { MutateOptions, useMutation, useQueryClient } from '@tanstack/react-query';
 import { API, CreditCard } from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
@@ -87,7 +86,7 @@ const useCreditCardResources =
     const deleteMutateAsync = async (creditCard: CreditCard, options?: MutateOptions) => {
       return custom.methods.delete(creditCard.id, {
         ...options,
-        onError: (error: HttpError, variables, context) => {
+        onError: (error: HttpError, variables, context, mutationContext) => {
           if (error.code === HttpStatusCode.CONFLICT) {
             custom.methods.setError(
               intl.formatMessage(messages.errorCannotDelete, {
@@ -97,7 +96,7 @@ const useCreditCardResources =
           } else {
             custom.methods.setError(intl.formatMessage(messages.errorDelete));
           }
-          options?.onError?.(error, variables, context);
+          options?.onError?.(error, variables, context, mutationContext);
         },
       });
     };
