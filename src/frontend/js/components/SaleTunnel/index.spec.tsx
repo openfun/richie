@@ -36,6 +36,8 @@ import { OpenEdxApiProfileFactory } from 'utils/test/factories/openEdx';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { StringHelper } from 'utils/StringHelper';
 import { DEFAULT_DATE_FORMAT } from 'hooks/useDateFormat';
+import { AuthenticationApi } from 'api/authentication';
+import { APIAuthentication } from 'types/api';
 import { Deferred } from 'utils/test/deferred';
 
 jest.mock('utils/context', () => ({
@@ -848,5 +850,121 @@ describe.each([
 
     // Voucher tag should be hidden
     expect(screen.queryByText('DISCOUNT30')).not.toBeInTheDocument();
+  });
+});
+
+describe('SaleTunnel with Keycloak backend', () => {
+  const mockAccountUpdateUrl = 'https://keycloak.test/auth/realms/richie-realm/account';
+  const course = PacedCourseFactory().one();
+  let richieUser: User;
+  let originalBackend: string;
+  let originalAccount: APIAuthentication['account'];
+
+  const Wrapper = (props: Omit<SaleTunnelProps, 'isOpen' | 'onClose'>) => {
+    const [open, setOpen] = useState(true);
+    return <SaleTunnel {...props} course={course} isOpen={open} onClose={() => setOpen(false)} />;
+  };
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+    jest.clearAllTimers();
+    jest.resetAllMocks();
+
+    fetchMock.restore();
+    sessionStorage.clear();
+
+    richieUser = UserFactory({
+      username: 'John Doe',
+      email: 'johndoe@example.com',
+    }).one();
+
+    // Mock OpenEdx profile endpoints that may still be triggered by the fonzie-based
+    // AuthenticationApi (resolved at module load). These should not be called by
+    // the keycloak code paths we are testing.
+    fetchMock.get(`begin:https://auth.test/api/user/v1/accounts/`, {});
+    fetchMock.get(`begin:https://auth.test/api/user/v1/preferences/`, {});
+
+    // Temporarily switch context to keycloak backend
+    const context = require('utils/context').default;
+    originalBackend = context.authentication.backend;
+    context.authentication.backend = 'keycloak';
+
+    // Add keycloak account methods to AuthenticationApi
+    originalAccount = AuthenticationApi!.account;
+    AuthenticationApi!.account = {
+      get: () => ({
+        username: 'johndoe',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'johndoe@example.com',
+      }),
+      updateUrl: () => mockAccountUpdateUrl,
+    };
+  });
+
+  // Must be called after beforeEach so fetchMock.restore() doesn't clear joanie mocks
+  setupJoanieSession();
+
+  afterEach(() => {
+    // Restore original backend and account
+    const context = require('utils/context').default;
+    context.authentication.backend = originalBackend;
+    AuthenticationApi!.account = originalAccount;
+
+    act(() => {
+      jest.runOnlyPendingTimers();
+    });
+    jest.useRealTimers();
+    cleanup();
+  });
+
+  it('should render keycloak account name, email, and update link instead of OpenEdx profile', async () => {
+    const product = CredentialProductFactory().one();
+    const paymentPlan = PaymentPlanFactory().one();
+
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify({
+          course_code: course.code,
+          product_id: product.id,
+          state: NOT_CANCELED_ORDER_STATES,
+        })}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
+      );
+
+    render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    // Should display the "Account name" heading
+    await screen.findByRole('heading', { level: 4, name: 'Account name' });
+
+    // Should display the username from the session
+    screen.getByText(richieUser.username);
+
+    // Should display the username info
+    screen.getByText('This name will be used in legal documents.');
+
+    // Should display the email from the session
+    screen.getByText(richieUser.email!);
+
+    // Should display the email info
+    screen.getByText('This email will be used to send you confirmation mails.');
+
+    // Should display the keycloak account update link (only the link part)
+    const updateLink = screen.getByRole('link', {
+      name: 'please update your account',
+    });
+    expect(updateLink).toHaveAttribute('href', mockAccountUpdateUrl);
+
+    // Should NOT render the OpenEdx full name form
+    expect(screen.queryByLabelText('First name and last name')).not.toBeInTheDocument();
+
+    // No OpenEdx profile API calls should have been made
+    expect(fetchMock.calls().filter(([url]) => url.includes('/api/user/v1/'))).toHaveLength(0);
   });
 });
