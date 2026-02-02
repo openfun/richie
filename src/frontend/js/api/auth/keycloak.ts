@@ -1,6 +1,7 @@
 import Keycloak from 'keycloak-js';
 import { AuthenticationBackend } from 'types/commonDataProps';
 import { APIAuthentication } from 'types/api';
+import { KeycloakApiProfile } from 'types/keycloak';
 import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
 import { RICHIE_USER_TOKEN } from 'settings';
@@ -52,6 +53,18 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
       logout: async () => {
         sessionStorage.removeItem(RICHIE_USER_TOKEN);
         await keycloak.logout({ redirectUri: getRedirectUri() });
+      },
+
+      account: {
+        get: (): KeycloakApiProfile => {
+          return {
+            username: keycloak.idTokenParsed?.preferred_username,
+            firstName: keycloak.idTokenParsed?.firstName,
+            lastName: keycloak.idTokenParsed?.lastName,
+            email: keycloak.idTokenParsed?.email,
+          };
+        },
+        updateUrl: () => keycloak.createAccountUrl(),
       },
     },
   };

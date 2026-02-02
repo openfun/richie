@@ -2,6 +2,7 @@ import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { UnknownEnrollment } from 'types';
 import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
+import { KeycloakApiProfile } from './keycloak';
 import { OpenEdxApiProfile } from './openEdx';
 
 export interface APIListRequestParams {
@@ -16,17 +17,25 @@ export interface APIResponseListMeta {
   offset: number;
   total_count: number;
 }
+
+export interface OpenEdxAccountApi {
+  get: (username: string) => Promise<OpenEdxApiProfile>;
+  update: (username: string, values: OpenEdxFullNameFormValues) => Promise<OpenEdxApiProfile>;
+}
+
+export interface KeycloakAccountApi {
+  get: () => KeycloakApiProfile;
+  updateUrl: () => string;
+}
+
 export interface APIAuthentication {
   login: () => void;
   logout: () => Promise<void>;
   me: () => Promise<Nullable<User>>;
   register: () => void;
-  // routes below are only defined for fonzie auth backend
+  // routes below are only defined for fonzie and keycloak auth backends
   accessToken?: () => Nullable<string>;
-  account?: {
-    get: (username: string) => Promise<OpenEdxApiProfile>;
-    update: (username: string, values: OpenEdxFullNameFormValues) => Promise<OpenEdxApiProfile>;
-  };
+  account?: OpenEdxAccountApi | KeycloakAccountApi;
 }
 
 export interface APIEnrollment {

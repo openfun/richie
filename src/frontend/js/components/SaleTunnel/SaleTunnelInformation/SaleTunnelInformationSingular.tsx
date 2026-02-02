@@ -11,6 +11,9 @@ import WithdrawRightCheckbox from 'components/SaleTunnel/WithdrawRightCheckbox';
 import { PaymentSchedule, ProductType } from 'types/Joanie';
 import { usePaymentPlan } from 'hooks/usePaymentPlan';
 import { HttpError } from 'utils/errors/HttpError';
+import { APIBackend, KeycloakAccountApi } from 'types/api';
+import context from 'utils/context';
+import { AuthenticationApi } from 'api/authentication';
 
 const messages = defineMessages({
   title: {
@@ -48,6 +51,31 @@ const messages = defineMessages({
     description: 'Info for the email',
     defaultMessage:
       'This email will be used to send you confirmation mails, it is the one you created your account with.',
+  },
+  keycloakUsernameLabel: {
+    id: 'components.SaleTunnel.Information.keycloak.account.label',
+    description: 'Label for the name',
+    defaultMessage: 'Account name',
+  },
+  keycloakUsernameInfo: {
+    id: 'components.SaleTunnel.Information.keycloak.account.info',
+    description: 'Info for the name',
+    defaultMessage: 'This name will be used in legal documents.',
+  },
+  keycloakEmailInfo: {
+    id: 'components.SaleTunnel.Information.keycloak.email.info',
+    description: 'Info for the email',
+    defaultMessage: 'This email will be used to send you confirmation mails.',
+  },
+  keycloakAccountLinkInfo: {
+    id: 'components.SaleTunnel.Information.keycloak.updateLinkInfo',
+    description: 'Text before the keycloak account update link',
+    defaultMessage: 'If any of the information above is incorrect,',
+  },
+  keycloakAccountLinkLabel: {
+    id: 'components.SaleTunnel.Information.keycloak.updateLinkLabel',
+    description: 'Label of the keycloak link to update account',
+    defaultMessage: 'please update your account',
   },
   voucherTitle: {
     id: 'components.SaleTunnel.Information.voucher.title',
@@ -130,6 +158,8 @@ export const SaleTunnelInformationSingular = () => {
     setNeedsPayment(!fromBatchOrder);
   }, [fromBatchOrder, setNeedsPayment]);
 
+  const isKeycloakBackend = context?.authentication.backend === APIBackend.KEYCLOAK;
+
   return (
     <>
       <div>
@@ -148,16 +178,67 @@ export const SaleTunnelInformationSingular = () => {
           <div className="description mb-s">
             <FormattedMessage {...messages.description} />
           </div>
-          <OpenEdxFullNameForm />
           <AddressSelector />
-          <div className="mt-s">
-            <Email />
-          </div>
+          {isKeycloakBackend ? (
+            <KeycloakAccountEdit />
+          ) : (
+            <>
+              <OpenEdxFullNameForm />
+              <div className="mt-s">
+                <Email />
+              </div>
+            </>
+          )}
         </div>
       )}
       <div>
         {showPaymentSchedule && <PaymentScheduleBlock schedule={schedule} />}
         {needsPayment && <WithdrawRightCheckbox />}
+      </div>
+    </>
+  );
+};
+
+const KeycloakAccountEdit = () => {
+  const accountApi = AuthenticationApi!.account as KeycloakAccountApi;
+  const { user } = useSession();
+
+  return (
+    <>
+      <div className="mt-s">
+        <div className="sale-tunnel__username">
+          <div className="sale-tunnel__username__top">
+            <h4>
+              <FormattedMessage {...messages.keycloakUsernameLabel} />
+            </h4>
+            <div className="fw-bold">{user?.username}</div>
+          </div>
+          <div className="sale-tunnel__username__description">
+            <FormattedMessage {...messages.keycloakUsernameInfo} />
+          </div>
+        </div>
+      </div>
+      <div className="mt-s">
+        <div className="sale-tunnel__email">
+          <div className="sale-tunnel__email__top">
+            <h4>
+              <FormattedMessage {...messages.emailLabel} />
+            </h4>
+            <div className="fw-bold">{user?.email}</div>
+          </div>
+          <div className="sale-tunnel__email__description">
+            <FormattedMessage {...messages.keycloakEmailInfo} />
+          </div>
+        </div>
+      </div>
+      <div className="mt-s">
+        <div className="sale-tunnel__account-link">
+          <FormattedMessage {...messages.keycloakAccountLinkInfo} />{' '}
+          <a href={accountApi.updateUrl()}>
+            <FormattedMessage {...messages.keycloakAccountLinkLabel} />
+          </a>
+          .
+        </div>
       </div>
     </>
   );
