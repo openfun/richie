@@ -67,6 +67,7 @@
     }
   }
 
+  &__username,
   &__email {
     &__top {
       display: flex;
@@ -80,6 +81,13 @@
 
     h4 {
       font-size: 0.75rem;
+    }
+  }
+
+  &__account-link {
+    a {
+      color: r-theme-val(sale-tunnel, account-link-color);
+      text-decoration: underline;
     }
   }
   .price--striked {

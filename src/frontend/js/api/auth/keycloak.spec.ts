@@ -1,11 +1,21 @@
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
+import { KeycloakAccountApi } from 'types/api';
 import API from './keycloak';
 
 const mockKeycloakInit = jest.fn().mockResolvedValue(true);
 const mockKeycloakLogout = jest.fn().mockResolvedValue(undefined);
 const mockKeycloakLogin = jest.fn().mockResolvedValue(undefined);
 const mockKeycloakLoadUserProfile = jest.fn();
+const mockKeycloakCreateAccountUrl = jest
+  .fn()
+  .mockReturnValue('https://keycloak.test/auth/realms/richie-realm/account');
 const mockIdToken = 'mock-id-token-12345';
+const mockIdTokenParsed = {
+  preferred_username: 'johndoe',
+  firstName: 'John',
+  lastName: 'Doe',
+  email: 'johndoe@example.com',
+};
 
 jest.mock('keycloak-js', () => {
   return jest.fn().mockImplementation(() => ({
@@ -13,7 +23,9 @@ jest.mock('keycloak-js', () => {
     logout: mockKeycloakLogout,
     login: mockKeycloakLogin,
     loadUserProfile: mockKeycloakLoadUserProfile,
+    createAccountUrl: mockKeycloakCreateAccountUrl,
     idToken: 'mock-id-token-12345',
+    idTokenParsed: mockIdTokenParsed,
   }));
 });
 
@@ -108,6 +120,24 @@ describe('Keycloak API', () => {
       expect(mockKeycloakLogout).toHaveBeenCalledWith({
         redirectUri: 'https://richie.test/courses/test-course/',
       });
+    });
+  });
+
+  describe('user.account', () => {
+    it('returns profile data from idTokenParsed via account.get()', () => {
+      const profile = (keycloakApi.user.account as KeycloakAccountApi).get();
+      expect(profile).toEqual({
+        username: 'johndoe',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'johndoe@example.com',
+      });
+    });
+
+    it('returns the account management URL via account.updateUrl()', () => {
+      const url = (keycloakApi.user.account as any).updateUrl();
+      expect(url).toBe('https://keycloak.test/auth/realms/richie-realm/account');
+      expect(mockKeycloakCreateAccountUrl).toHaveBeenCalled();
     });
   });
 
