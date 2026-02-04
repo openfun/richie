@@ -2,6 +2,7 @@ import { screen, within } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import userEvent from '@testing-library/user-event';
+import { PaymentMethod } from 'components/PaymentInterfaces/types';
 import {
   RichieContextFactory as mockRichieContextFactory,
   PacedCourseFactory,
@@ -17,6 +18,7 @@ import {
   OfferingBatchOrderFactory,
   BatchOrderReadFactory,
   CredentialOrderFactory,
+  OrganizationFactory,
 } from 'utils/test/factories/joanie';
 import { CourseRun, NOT_CANCELED_ORDER_STATES, OrderState } from 'types/Joanie';
 import { Priority } from 'types';
@@ -82,9 +84,7 @@ describe('SaleTunnel', () => {
     const product = ProductFactory().one();
     const offering = OfferingFactory({ course, product, is_withdrawable: false }).one();
     const paymentPlan = PaymentPlanFactory().one();
-    const offeringOrganization = OfferingBatchOrderFactory({
-      product: { id: product.id, title: product.title },
-    }).one();
+    const organizations = OrganizationFactory().many(3);
 
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
@@ -105,7 +105,7 @@ describe('SaleTunnel', () => {
     );
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/offerings/${offering.id}/get-organizations/`,
-      offeringOrganization,
+      organizations,
     );
 
     render(<CourseProductItem productId={product.id} course={course} />, {
@@ -214,6 +214,33 @@ describe('SaleTunnel', () => {
     await user.type($nbParticipants, '13');
     expect($nbParticipants).toHaveValue(13);
 
+    // Financing step
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+
+    const $purchaseOrderRadio = await screen.findByLabelText('Purchase order');
+    await user.click($purchaseOrderRadio);
+
+    const $fundingEntity = screen.getByLabelText('Entity name');
+    await user.type($fundingEntity, 'OPCO');
+    expect($fundingEntity).toHaveValue('OPCO');
+
+    const $fundingAmount = screen.getByLabelText('Amount covered');
+    await user.type($fundingAmount, '5000');
+    expect($fundingAmount).toHaveValue(5000);
+
+    const organizationComboboxes = screen.getAllByRole('combobox', {
+      name: 'Participating organizations',
+    });
+
+    const $organizationSelect = organizationComboboxes[organizationComboboxes.length - 1];
+    await user.click($organizationSelect);
+    const organizationMenu: HTMLDivElement = screen.getByRole('listbox', {
+      name: 'Participating organizations',
+    });
+    expectMenuToBeOpen(organizationMenu);
+    const firstOrg = organizations[0];
+    await user.click(screen.getByRole('option', { name: firstOrg.title }));
+
     // Submit the batch order
     const batchOrderRead = BatchOrderReadFactory().one();
     fetchMock.post('https://joanie.endpoint/api/v1.0/batch-orders/', batchOrderRead);
@@ -229,6 +256,39 @@ describe('SaleTunnel', () => {
       'href',
       `/en/dashboard/batch-orders/${batchOrderRead.id}`,
     );
+
+    // Verify the batch order payload contains all required and optional fields
+    const batchOrderCalls = fetchMock.calls('https://joanie.endpoint/api/v1.0/batch-orders/');
+    expect(batchOrderCalls).toHaveLength(1);
+    const batchOrderCall = batchOrderCalls[0];
+    const batchOrderRequest = batchOrderCall[1];
+    const batchOrderPayload = JSON.parse(batchOrderRequest?.body as string);
+
+    // Verify all payload fields
+    expect(batchOrderPayload).toEqual({
+      offering_id: offering.id,
+      company_name: 'GIP-FUN',
+      identification_number: '789 242 229 01694',
+      address: '61 Bis Rue de la Glaciere',
+      postcode: '75013',
+      city: 'Paris',
+      country: 'FR',
+      administrative_lastname: 'Doe',
+      administrative_firstname: 'John',
+      administrative_profession: 'HR',
+      administrative_email: 'john.doe@fun-mooc.com',
+      administrative_telephone: '+338203920103',
+      signatory_lastname: 'Doe',
+      signatory_firstname: 'John',
+      signatory_profession: 'CEO',
+      signatory_email: 'john.doe@fun-mooc.com',
+      signatory_telephone: '+338203920103',
+      nb_seats: '13',
+      payment_method: PaymentMethod.PURCHASE_ORDER,
+      funding_entity: 'OPCO',
+      funding_amount: '5000',
+      organization_id: firstOrg.id,
+    });
   }, 30000);
 
   it('tests the entire process of subscribing with a voucher from a batch order', async () => {
