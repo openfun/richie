@@ -211,6 +211,7 @@ export const StepContent = ({
     value: organization.id,
   }));
   const [otherBillingAddress, setOtherBillingAddress] = useState(false);
+  const organizationId = form.watch('organization_id');
 
   return (
     <div className="step-content">
@@ -525,11 +526,14 @@ export const StepContent = ({
         </div>
         <FormattedMessage {...messages.recommandation} />
         <Select
-          {...register('organization_id')}
           label={intl.formatMessage(messages.participatingOrganisations)}
           clearable
           options={orgOptions}
           className="recommandation"
+          value={organizationId ?? ''}
+          onChange={(e) => {
+            form.setValue('organization_id', e.target.value as string);
+          }}
         />
       </div>
     </div>
