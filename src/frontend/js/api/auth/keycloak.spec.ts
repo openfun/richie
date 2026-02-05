@@ -6,6 +6,7 @@ const mockKeycloakInit = jest.fn().mockResolvedValue(true);
 const mockKeycloakLogout = jest.fn().mockResolvedValue(undefined);
 const mockKeycloakLogin = jest.fn().mockResolvedValue(undefined);
 const mockKeycloakLoadUserProfile = jest.fn();
+const mockKeycloakUpdateToken = jest.fn().mockResolvedValue(true);
 const mockKeycloakCreateAccountUrl = jest
   .fn()
   .mockReturnValue('https://keycloak.test/auth/realms/richie-realm/account');
@@ -23,6 +24,7 @@ jest.mock('keycloak-js', () => {
     logout: mockKeycloakLogout,
     login: mockKeycloakLogin,
     loadUserProfile: mockKeycloakLoadUserProfile,
+    updateToken: mockKeycloakUpdateToken,
     createAccountUrl: mockKeycloakCreateAccountUrl,
     idToken: 'mock-id-token-12345',
     idTokenParsed: mockIdTokenParsed,
@@ -69,13 +71,22 @@ describe('Keycloak API', () => {
   });
 
   describe('user.me', () => {
+    it('returns null when updateToken fails', async () => {
+      mockKeycloakUpdateToken.mockRejectedValueOnce(new Error('Token refresh failed'));
+      const response = await keycloakApi.user.me();
+      expect(response).toBeNull();
+      expect(mockKeycloakLoadUserProfile).not.toHaveBeenCalled();
+    });
+
     it('returns null when loadUserProfile fails', async () => {
+      mockKeycloakUpdateToken.mockResolvedValueOnce(true);
       mockKeycloakLoadUserProfile.mockRejectedValueOnce(new Error('Not authenticated'));
       const response = await keycloakApi.user.me();
       expect(response).toBeNull();
     });
 
     it('returns user when loadUserProfile succeeds', async () => {
+      mockKeycloakUpdateToken.mockResolvedValueOnce(true);
       mockKeycloakLoadUserProfile.mockResolvedValueOnce({
         firstName: 'John',
         lastName: 'Doe',
@@ -83,6 +94,7 @@ describe('Keycloak API', () => {
       });
 
       const response = await keycloakApi.user.me();
+      expect(mockKeycloakUpdateToken).toHaveBeenCalledWith(30);
       expect(response).toEqual({
         username: 'John Doe',
         email: 'johndoe@example.com',
@@ -153,8 +165,9 @@ describe('Keycloak API', () => {
 
       expect(mockKeycloakInit).toHaveBeenCalledWith({
         checkLoginIframe: false,
-        flow: 'implicit',
-        token: undefined,
+        flow: 'standard',
+        onLoad: 'check-sso',
+        pkceMethod: 'S256',
       });
     });
   });
