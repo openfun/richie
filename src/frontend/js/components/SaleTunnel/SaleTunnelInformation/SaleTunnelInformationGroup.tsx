@@ -169,7 +169,7 @@ const BatchOrderForm = () => {
     signatory_email: '',
     signatory_telephone: '',
     nb_seats: 0,
-    payment_method: PaymentMethod.PURCHASE_ORDER,
+    payment_method: undefined as any,
     funding_amount: 0,
   };
 
