@@ -230,7 +230,6 @@ class FrontendContextProcessor:
             if authentication_delegation["BACKEND"] == "keycloak":
                 context["client_id"] = authentication_delegation["CLIENT_ID"]
                 context["realm"] = authentication_delegation["REALM"]
-                context["token"] = authentication_delegation["TOKEN"]
 
         return context
 
