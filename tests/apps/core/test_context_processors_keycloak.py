@@ -29,7 +29,6 @@ class ContextProcessorKeycloakTestCase(TestCase):
             "BACKEND": "keycloak",
             "CLIENT_ID": "richie-client",
             "REALM": "richie-realm",
-            "TOKEN": "test-token",
             "PROFILE_URLS": {
                 "account": {
                     "label": "Account",
@@ -67,7 +66,6 @@ class ContextProcessorKeycloakTestCase(TestCase):
             "BACKEND": "keycloak",
             "CLIENT_ID": "richie-client",
             "REALM": "richie-realm",
-            "TOKEN": "test-token",
         }
     )
     def test_get_authentication_context_keycloak_basic(self):
@@ -83,7 +81,6 @@ class ContextProcessorKeycloakTestCase(TestCase):
                 "backend": "keycloak",
                 "client_id": "richie-client",
                 "realm": "richie-realm",
-                "token": "test-token",
             },
             context,
         )
