@@ -14,8 +14,9 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
   });
   keycloak.init({
     checkLoginIframe: false,
-    flow: 'implicit',
-    token: APIConf.token!,
+    flow: 'standard',
+    onLoad: 'check-sso',
+    pkceMethod: 'S256',
   });
 
   const getRedirectUri = () => {
@@ -26,6 +27,13 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
     user: {
       accessToken: () => sessionStorage.getItem(RICHIE_USER_TOKEN),
       me: async () => {
+        try {
+          await keycloak.updateToken(30);
+        } catch (error) {
+          handle(error);
+          return null;
+        }
+
         return keycloak
           .loadUserProfile()
           .then((userProfile) => {
