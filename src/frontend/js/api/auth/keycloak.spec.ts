@@ -26,7 +26,7 @@ jest.mock('keycloak-js', () => {
     loadUserProfile: mockKeycloakLoadUserProfile,
     updateToken: mockKeycloakUpdateToken,
     createAccountUrl: mockKeycloakCreateAccountUrl,
-    idToken: 'mock-id-token-12345',
+    idToken: mockIdToken,
     idTokenParsed: mockIdTokenParsed,
   }));
 });
@@ -68,6 +68,19 @@ describe('Keycloak API', () => {
     jest.clearAllMocks();
     sessionStorage.clear();
     keycloakApi = API(authConfig);
+  });
+
+  describe('user.accessToken', () => {
+    it('returns null when no token is stored', () => {
+      const token = keycloakApi.user.accessToken!();
+      expect(token).toBeNull();
+    });
+
+    it('returns the token from sessionStorage', () => {
+      sessionStorage.setItem('RICHIE_USER_TOKEN', mockIdToken);
+      const token = keycloakApi.user.accessToken!();
+      expect(token).toEqual(mockIdToken);
+    });
   });
 
   describe('user.me', () => {

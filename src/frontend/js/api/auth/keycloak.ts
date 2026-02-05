@@ -19,6 +19,18 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
     pkceMethod: 'S256',
   });
 
+  keycloak.onTokenExpired = () => {
+    keycloak.updateToken(30).catch(() => {
+      sessionStorage.removeItem(RICHIE_USER_TOKEN);
+    });
+  };
+
+  keycloak.onAuthRefreshSuccess = () => {
+    if (keycloak.idToken) {
+      sessionStorage.setItem(RICHIE_USER_TOKEN, keycloak.idToken);
+    }
+  };
+
   const getRedirectUri = () => {
     return `${location.origin}${location.pathname}`;
   };
