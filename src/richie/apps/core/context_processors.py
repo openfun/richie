@@ -5,7 +5,7 @@ Template context processors
 import json
 import logging
 from collections import OrderedDict
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -103,6 +103,8 @@ def site_metas(request: HttpRequest):
             account_url = (
                 f"{authentication_delegation['BASE_URL']}"
                 f"/realms/{authentication_delegation['REALM']}/account/"
+                f"?referrer={authentication_delegation['CLIENT_ID']}"
+                f"&referrer_uri={quote(request.build_absolute_uri(), safe='')}"
             )
             profile_urls["account"]["action"] = account_url
             profile_urls.pop("profile", None)
