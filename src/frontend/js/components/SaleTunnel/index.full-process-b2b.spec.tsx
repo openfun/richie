@@ -551,6 +551,12 @@ describe('SaleTunnel', () => {
     await user.type($nbParticipants, '13');
     expect($nbParticipants).toHaveValue(13);
 
+    // Financing step
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+
+    const $purchaseOrderRadio = await screen.findByLabelText('Purchase order');
+    await user.click($purchaseOrderRadio);
+
     fetchMock.post('https://joanie.endpoint/api/v1.0/batch-orders/', {
       status: 422,
       body: {

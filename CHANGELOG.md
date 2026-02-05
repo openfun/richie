@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add custom error message for batch orders when there are no available seats
 - Add purchase order reference modal for quote process in dashboard organization
 - Update english texts for batch orders
+- Uncheck payment method in sale tunnel during the batch order creation
 
 ### Fixed
 
