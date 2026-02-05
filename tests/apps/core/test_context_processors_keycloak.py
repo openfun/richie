@@ -55,7 +55,8 @@ class ContextProcessorKeycloakTestCase(TestCase):
         # Account URL should be overridden with Keycloak realm account URL
         self.assertEqual(
             profile_urls["account"]["action"],
-            "https://keycloak.test/auth/realms/richie-realm/account/",
+            "https://keycloak.test/auth/realms/richie-realm/account/"
+            "?referrer=richie-client&referrer_uri=http%3A%2F%2Ftestserver%2F",
         )
         # Profile URL should be removed
         self.assertNotIn("profile", profile_urls)
