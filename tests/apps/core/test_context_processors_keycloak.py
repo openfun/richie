@@ -29,7 +29,6 @@ class ContextProcessorKeycloakTestCase(TestCase):
             "BACKEND": "keycloak",
             "CLIENT_ID": "richie-client",
             "REALM": "richie-realm",
-            "TOKEN": "test-token",
             "PROFILE_URLS": {
                 "account": {
                     "label": "Account",
@@ -55,7 +54,8 @@ class ContextProcessorKeycloakTestCase(TestCase):
         # Account URL should be overridden with Keycloak realm account URL
         self.assertEqual(
             profile_urls["account"]["action"],
-            "https://keycloak.test/auth/realms/richie-realm/account/",
+            "https://keycloak.test/auth/realms/richie-realm/account/"
+            "?referrer=richie-client&referrer_uri=http%3A%2F%2Ftestserver%2F",
         )
         # Profile URL should be removed
         self.assertNotIn("profile", profile_urls)
@@ -66,7 +66,6 @@ class ContextProcessorKeycloakTestCase(TestCase):
             "BACKEND": "keycloak",
             "CLIENT_ID": "richie-client",
             "REALM": "richie-realm",
-            "TOKEN": "test-token",
         }
     )
     def test_get_authentication_context_keycloak_basic(self):
@@ -82,7 +81,6 @@ class ContextProcessorKeycloakTestCase(TestCase):
                 "backend": "keycloak",
                 "client_id": "richie-client",
                 "realm": "richie-realm",
-                "token": "test-token",
             },
             context,
         )

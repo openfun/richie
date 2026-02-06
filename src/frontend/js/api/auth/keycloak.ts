@@ -1,8 +1,10 @@
 import Keycloak from 'keycloak-js';
 import { AuthenticationBackend } from 'types/commonDataProps';
 import { APIAuthentication } from 'types/api';
+import { KeycloakApiProfile } from 'types/keycloak';
 import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
+import { RICHIE_USER_TOKEN } from 'settings';
 
 const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
   const keycloak = new Keycloak({
@@ -12,9 +14,22 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
   });
   keycloak.init({
     checkLoginIframe: false,
-    flow: 'implicit',
-    token: APIConf.token!,
+    flow: 'standard',
+    onLoad: 'check-sso',
+    pkceMethod: 'S256',
   });
+
+  keycloak.onTokenExpired = () => {
+    keycloak.updateToken(30).catch(() => {
+      sessionStorage.removeItem(RICHIE_USER_TOKEN);
+    });
+  };
+
+  keycloak.onAuthRefreshSuccess = () => {
+    if (keycloak.idToken) {
+      sessionStorage.setItem(RICHIE_USER_TOKEN, keycloak.idToken);
+    }
+  };
 
   const getRedirectUri = () => {
     return `${location.origin}${location.pathname}`;
@@ -22,13 +37,23 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
 
   return {
     user: {
+      accessToken: () => sessionStorage.getItem(RICHIE_USER_TOKEN),
       me: async () => {
+        try {
+          await keycloak.updateToken(30);
+        } catch (error) {
+          handle(error);
+          return null;
+        }
+
         return keycloak
           .loadUserProfile()
           .then((userProfile) => {
+            sessionStorage.setItem(RICHIE_USER_TOKEN, keycloak.idToken!);
             return {
               username: `${userProfile.firstName} ${userProfile.lastName}`,
               email: userProfile.email,
+              access_token: keycloak.idToken,
             };
           })
           .catch((error) => {
@@ -46,7 +71,20 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
       },
 
       logout: async () => {
+        sessionStorage.removeItem(RICHIE_USER_TOKEN);
         await keycloak.logout({ redirectUri: getRedirectUri() });
+      },
+
+      account: {
+        get: (): KeycloakApiProfile => {
+          return {
+            username: keycloak.idTokenParsed?.preferred_username,
+            firstName: keycloak.idTokenParsed?.firstName,
+            lastName: keycloak.idTokenParsed?.lastName,
+            email: keycloak.idTokenParsed?.email,
+          };
+        },
+        updateUrl: () => keycloak.createAccountUrl(),
       },
     },
   };

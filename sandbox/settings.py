@@ -330,9 +330,6 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "REALM": values.Value(
             "", environ_name="AUTHENTICATION_KEYCLOAK_REALM", environ_prefix=None
         ),
-        "TOKEN": values.Value(
-            "", environ_name="AUTHENTICATION_KEYCLOAK_TOKEN", environ_prefix=None
-        ),
     }
 
     # Elasticsearch

@@ -7,6 +7,7 @@ import { useSessionMutation } from 'utils/react-query/useSessionMutation';
 import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
 import { HttpError } from 'utils/errors/HttpError';
 import { TSessionQueryKey } from 'utils/react-query/useSessionKey';
+import { OpenEdxAccountApi } from 'types/api';
 import { OpenEdxProfile, parseOpenEdxApiProfile } from './utils';
 
 const messages = defineMessages({
@@ -61,7 +62,8 @@ const useOpenEdxProfile = (
 
   const queryFn: () => Promise<OpenEdxProfile> = useCallback(async () => {
     try {
-      const openEdxApiProfile = await AuthenticationApi!.account!.get(username);
+      const account = AuthenticationApi!.account as OpenEdxAccountApi;
+      const openEdxApiProfile = await account.get(username);
       return parseOpenEdxApiProfile(intl, openEdxApiProfile);
     } catch {
       setError(intl.formatMessage(messages.errorGet));
@@ -79,7 +81,7 @@ const useOpenEdxProfile = (
   const writeHandlers = {
     update: mutation({
       mutationFn: (data: OpenEdxFullNameFormValues) =>
-        AuthenticationApi!.account!.update(username, data),
+        (AuthenticationApi!.account as OpenEdxAccountApi).update(username, data),
       onSuccess,
       onError: () => setError(intl.formatMessage(messages.errorUpdate)),
     }),
