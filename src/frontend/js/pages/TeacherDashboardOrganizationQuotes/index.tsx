@@ -172,22 +172,22 @@ const messages = defineMessages({
     description: 'Batch order state: completed',
   },
   [BatchOrderState.DRAFT]: {
-    id: 'components.OrganizationQuotesTable.state.draft.',
+    id: 'components.OrganizationQuotesTable.state.draft',
     defaultMessage: 'Draft',
     description: 'Batch order state: draft',
   },
   [BatchOrderState.ASSIGNED]: {
-    id: 'components.OrganizationQuotesTable.state.assigned.',
+    id: 'components.OrganizationQuotesTable.state.assigned',
     defaultMessage: 'Assigned',
     description: 'Batch order state: assigned',
   },
   [BatchOrderState.PENDING]: {
-    id: 'components.OrganizationQuotesTable.state.pending.',
+    id: 'components.OrganizationQuotesTable.state.pending',
     defaultMessage: 'Pending',
     description: 'Batch order state: pending',
   },
   [BatchOrderState.FAILED_PAYMENT]: {
-    id: 'components.OrganizationQuotesTable.state.failedPayment.',
+    id: 'components.OrganizationQuotesTable.state.failedPayment',
     defaultMessage: 'Failed payment',
     description: 'Batch order state: failed payment',
   },
@@ -216,10 +216,10 @@ const messages = defineMessages({
     defaultMessage: 'Batch order id: {id}',
     description: 'Label for the batch order reference (id)',
   },
-  seats: {
-    id: 'batchOrder.seats',
+  seatsCount: {
+    id: 'batchOrder.seatsCount',
     defaultMessage: '{seats} {seats, plural, one {seat} other {seats}}',
-    description: 'Text displayed for seats value in batch order',
+    description: 'Text displayed for seats count with pluralization in batch order',
   },
 });
 
@@ -515,7 +515,7 @@ const TeacherDashboardOrganizationQuotes = () => {
                 <Icon name={IconTypeEnum.GROUPS} size="small" />
                 <div>
                   <span>
-                    {intl.formatMessage(messages.seats, { seats: quote.batch_order.nb_seats })}
+                    {intl.formatMessage(messages.seatsCount, { seats: quote.batch_order.nb_seats })}
                   </span>
                 </div>
               </div>
