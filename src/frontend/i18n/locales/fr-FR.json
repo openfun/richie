@@ -23,6 +23,246 @@
     "description": "Text to indicate the total number of results for a research",
     "message": "{nbResults} {nbResults, plural, one {résultat} other {résultats}} correspondant à votre recherche"
   },
+  "batchOrder.address": {
+    "description": "Label for the field asking the company address",
+    "message": "Adresse"
+  },
+  "batchOrder.bankTransfer": {
+    "description": "Option label for selecting bank transfer payment",
+    "message": "Virement bancaire"
+  },
+  "batchOrder.cardPayment": {
+    "description": "Option label for selecting credit card payment",
+    "message": "Carte bancaire"
+  },
+  "batchOrder.city": {
+    "description": "Label for the field asking the city",
+    "message": "Ville"
+  },
+  "batchOrder.companyName": {
+    "description": "Label for the field asking the name of the company",
+    "message": "Raison sociale"
+  },
+  "batchOrder.contactEmail": {
+    "description": "Label for the field asking the billing contact email",
+    "message": "Courriel du contact"
+  },
+  "batchOrder.contactName": {
+    "description": "Label for the field asking the billing contact name",
+    "message": "Nom du contact"
+  },
+  "batchOrder.country": {
+    "description": "Label for the field asking the country",
+    "message": "Pays"
+  },
+  "batchOrder.email": {
+    "description": "Label for the field asking the email address of the contact person",
+    "message": "Courriel"
+  },
+  "batchOrder.firstName": {
+    "description": "Label for the field asking the first name of the contact person",
+    "message": "Prénom"
+  },
+  "batchOrder.fundingEntity": {
+    "description": "Label for the field asking the type of funding entity",
+    "message": "Organisme financeur"
+  },
+  "batchOrder.fundingEntityAmount": {
+    "description": "Label for the field asking the amount covered by the funding entity",
+    "message": "Montant pris en charge"
+  },
+  "batchOrder.fundingEntityName": {
+    "description": "Label for the field asking the name of the funding entity",
+    "message": "Nom de l’organisme"
+  },
+  "batchOrder.identificationNumber": {
+    "description": "Label for the field asking the company identification number (eg. SIRET in France)",
+    "message": "Numéro d’identification (SIRET pour les entreprises françaises)"
+  },
+  "batchOrder.label.address": {
+    "description": "Label displayed for the address field in batch order form",
+    "message": "Adresse"
+  },
+  "batchOrder.label.amount": {
+    "description": "Label displayed for the amount field in batch order form",
+    "message": "Montant"
+  },
+  "batchOrder.label.billing": {
+    "description": "Label displayed for the billing field in batch order form",
+    "message": "Facturation"
+  },
+  "batchOrder.label.city": {
+    "description": "Label displayed for the city field in batch order form",
+    "message": "Ville"
+  },
+  "batchOrder.label.company": {
+    "description": "Label displayed for the company field in batch order form",
+    "message": "Raison sociale"
+  },
+  "batchOrder.label.country": {
+    "description": "Label displayed for the country field in batch order form",
+    "message": "Pays"
+  },
+  "batchOrder.label.email": {
+    "description": "Label displayed for the email field in batch order form",
+    "message": "Courriel"
+  },
+  "batchOrder.label.entity": {
+    "description": "Label displayed for the entity field in batch order form",
+    "message": "Organisme"
+  },
+  "batchOrder.label.method": {
+    "description": "Label displayed for the payment method field in batch order form",
+    "message": "Modalité"
+  },
+  "batchOrder.label.name": {
+    "description": "Label displayed for the name field in batch order form",
+    "message": "Nom"
+  },
+  "batchOrder.label.phone": {
+    "description": "Label displayed for the phone field in batch order form",
+    "message": "Téléphone"
+  },
+  "batchOrder.label.postcode": {
+    "description": "Label displayed for the postcode field in batch order form",
+    "message": "Code postal"
+  },
+  "batchOrder.label.profession": {
+    "description": "Label displayed for the profession field in batch order form",
+    "message": "Fonction"
+  },
+  "batchOrder.label.siret": {
+    "description": "Label displayed for the SIRET field in batch order form",
+    "message": "SIRET"
+  },
+  "batchOrder.label.vat": {
+    "description": "Label displayed for the VAT field in batch order form",
+    "message": "TVA"
+  },
+  "batchOrder.lastName": {
+    "description": "Label for the field asking the last name of the contact person",
+    "message": "Nom"
+  },
+  "batchOrder.nbSeats": {
+    "description": "Label for the field asking the number of participants/seats",
+    "message": "Nombre de participants à inscrire"
+  },
+  "batchOrder.opc": {
+    "description": "Label for the field asking the OPCO (French training funding organisation)",
+    "message": "OPCO"
+  },
+  "batchOrder.participatingOrganisations": {
+    "description": "Label for the field listing other participating organisations",
+    "message": "Établissements participants"
+  },
+  "batchOrder.payment.bank": {
+    "description": "Label for bank transfer payment method",
+    "message": "Virement bancaire"
+  },
+  "batchOrder.payment.card": {
+    "description": "Label for card payment method",
+    "message": "Carte bancaire"
+  },
+  "batchOrder.payment.order": {
+    "description": "Label for purchase order payment method",
+    "message": "Bon de commande"
+  },
+  "batchOrder.payment.sectionTitle": {
+    "description": "Title for the payment section in dashboard",
+    "message": "Paiement requis"
+  },
+  "batchOrder.phone": {
+    "description": "Label for the field asking the phone number of the contact person",
+    "message": "Numéro de téléphone"
+  },
+  "batchOrder.postCode": {
+    "description": "Label for the field asking the postal code",
+    "message": "Code postal"
+  },
+  "batchOrder.purchaseOrder": {
+    "description": "Option label for selecting payment via purchase order",
+    "message": "Bon de commande"
+  },
+  "batchOrder.recommandation": {
+    "description": "Label for the field asking how the user heard about or was recommended the course",
+    "message": "Cette formation m’a été recommandée par"
+  },
+  "batchOrder.role": {
+    "description": "Label for the field asking the role/position of the contact person",
+    "message": "Fonction"
+  },
+  "batchOrder.seats": {
+    "description": "Text displayed for seats value in batch order",
+    "message": "Places"
+  },
+  "batchOrder.status.assigned": {
+    "description": "Status label for an assigned batch order",
+    "message": "Assignée"
+  },
+  "batchOrder.status.canceled": {
+    "description": "Status label for a canceled batch order",
+    "message": "Annulée"
+  },
+  "batchOrder.status.completed": {
+    "description": "Status label for a completed batch order",
+    "message": "Complétée"
+  },
+  "batchOrder.status.draft": {
+    "description": "Status label for a draft batch order",
+    "message": "Brouillon"
+  },
+  "batchOrder.status.failed_payment": {
+    "description": "Status label for a batch order with failed payment",
+    "message": "Paiement échoué"
+  },
+  "batchOrder.status.pending": {
+    "description": "Status label for a pending batch order",
+    "message": "En attente"
+  },
+  "batchOrder.status.processPayment": {
+    "description": "Status label for a process payment batch order",
+    "message": "Paiement en cours"
+  },
+  "batchOrder.status.quoted": {
+    "description": "Status label for a quoted batch order",
+    "message": "Devis"
+  },
+  "batchOrder.status.signing": {
+    "description": "Status label for a batch order in signing process",
+    "message": "En cours de signature"
+  },
+  "batchOrder.status.to_sign": {
+    "description": "Status label for a batch order awaiting signature",
+    "message": "À signer"
+  },
+  "batchOrder.title.admin": {
+    "description": "Step label for administrative follow-up in the batch order form",
+    "message": "Suivi"
+  },
+  "batchOrder.title.company": {
+    "description": "Step label for company information in the batch order form",
+    "message": "Organisation"
+  },
+  "batchOrder.title.financing": {
+    "description": "Step label for financing/payment in the batch order form",
+    "message": "Financement"
+  },
+  "batchOrder.title.partipants": {
+    "description": "Step label for participants information in the batch order form",
+    "message": "Participants"
+  },
+  "batchOrder.title.signatory": {
+    "description": "section with details about the person responsible for signing the quote",
+    "message": "Signataire"
+  },
+  "batchOrder.vatNumber": {
+    "description": "Label for the field asking the company VAT number",
+    "message": "Numéro de TVA"
+  },
+  "batchOrder.withoutOrderForm": {
+    "description": "Option label for selecting payment without order form",
+    "message": "Sans formulaire de commande"
+  },
   "components.AddressesManagement.actionPromotion": {
     "description": "Action name for address promotion.",
     "message": "promotion"
@@ -355,6 +595,14 @@
     "description": "Help text below the \"Unenroll now\" CTA when an enrollment attempt has already failed.",
     "message": "Se désinscrire de ce cours"
   },
+  "components.Dashboard.DashboardRoutes.batchOrder.label": {
+    "description": "Label of the order view used in navigation components.",
+    "message": "{batchOrderTitle}"
+  },
+  "components.Dashboard.DashboardRoutes.batchOrders.label": {
+    "description": "Label of the order view used in navigation components.",
+    "message": "Mes commandes groupées"
+  },
   "components.Dashboard.DashboardRoutes.certificates.enrollment.label": {
     "description": "Label of the enrollment certificates view used in navigation components.",
     "message": "Mes attestations de réussite"
@@ -450,6 +698,14 @@
   "components.DashboardAddressesManagement.header": {
     "description": "Title of the dashboard addresses management block",
     "message": "Adresses de facturation"
+  },
+  "components.DashboardBatchOrders.emptyList": {
+    "description": "Empty placeholder of the dashboard's list of orders and enrollments",
+    "message": "Aucune commande groupée pour le moment."
+  },
+  "components.DashboardBatchOrders.loading": {
+    "description": "Message displayed while loading orders and enrollments",
+    "message": "Chargement des commandes groupées..."
   },
   "components.DashboardBreadcrumbs.back": {
     "description": "The dashboard's breadcrumb back button's label",
@@ -734,6 +990,42 @@
   "components.DashboardItem.more_label": {
     "description": "Accessible label for the more button on the dashboard item",
     "message": "Voir les autres options"
+  },
+  "components.DashboardItemBatchOrder.BatchOrderPaymentModal.abortError": {
+    "description": "Error message displayed when the payment process is aborted by the user or system.",
+    "message": "Votre paiement a été interrompu pendant le processus. Veuillez réessayer."
+  },
+  "components.DashboardItemBatchOrder.BatchOrderPaymentModal.description": {
+    "description": "Informational message displayed when the user needs to complete the batch order payment.",
+    "message": "Vous avez opté pour le paiement par carte de crédit. Finalisez votre commande groupée pour terminer votre achat."
+  },
+  "components.DashboardItemBatchOrder.BatchOrderPaymentModal.errorAbortingPolling": {
+    "description": "Message displayed when the payment succeeded but the order validation polling timed out.",
+    "message": "Votre paiement a bien été effectué, mais la validation de la commande prend plus de temps que prévu. Vous pouvez fermer cette fenêtre et consulter votre commande ultérieurement."
+  },
+  "components.DashboardItemBatchOrder.BatchOrderPaymentModal.paymentError": {
+    "description": "Error message displayed when the payment fails.",
+    "message": "Une erreur est survenue lors du processus de paiement."
+  },
+  "components.DashboardItemBatchOrder.BatchOrderPaymentModal.paymentInProgress": {
+    "description": "Label displayed when the payment process is currently ongoing.",
+    "message": "Paiement en cours"
+  },
+  "components.DashboardItemBatchOrder.BatchOrderPaymentModal.submit": {
+    "description": "Label of the button used to start the batch order payment.",
+    "message": "Payer {amount}"
+  },
+  "components.DashboardItemBatchOrder.BatchOrderPaymentModal.successDescription": {
+    "description": "Description displayed in the success modal after a successful payment.",
+    "message": "Votre paiement a été traité avec succès."
+  },
+  "components.DashboardItemBatchOrder.BatchOrderPaymentModal.successTitle": {
+    "description": "Title of the modal displayed when the payment completes successfully.",
+    "message": "Paiement accepté"
+  },
+  "components.DashboardItemBatchOrder.BatchOrderPaymentModal.title": {
+    "description": "Title of the modal prompting the user to complete a batch order payment.",
+    "message": "Paiement de la commande groupée"
   },
   "components.DashboardItemCourseEnrollingRun.cannotEnroll": {
     "description": "Message displayed as disabled button title when the order state does not allow enrollment.",
@@ -1191,6 +1483,162 @@
     "description": "Label of the submit button on openEdx full name form",
     "message": "Sauvegarder"
   },
+  "components.OrganizationQuotesTable.batchOrderId": {
+    "description": "Label for the batch order reference (id)",
+    "message": "Référence de commande : {id}"
+  },
+  "components.OrganizationQuotesTable.columnActions": {
+    "description": "Actions column in the quotes table",
+    "message": "Actions"
+  },
+  "components.OrganizationQuotesTable.columnCompany": {
+    "description": "Company column in the quotes table",
+    "message": "Raison sociale"
+  },
+  "components.OrganizationQuotesTable.columnOwner": {
+    "description": "Owner column in the quotes table",
+    "message": "Propriétaire"
+  },
+  "components.OrganizationQuotesTable.columnSignedOn": {
+    "description": "Signed on date column in the quotes table",
+    "message": "Signée le"
+  },
+  "components.OrganizationQuotesTable.columnState": {
+    "description": "State column in the quotes table",
+    "message": "État"
+  },
+  "components.OrganizationQuotesTable.columnTitle": {
+    "description": "Title column in the quotes table",
+    "message": "Titre"
+  },
+  "components.OrganizationQuotesTable.confirmBank": {
+    "description": "Label for confirming a bank transfer",
+    "message": "Confirmer le virement bancaire"
+  },
+  "components.OrganizationQuotesTable.confirmPurchaseOrder": {
+    "description": "Label for confirming receipt of a purchase order",
+    "message": "Confirmer la réception du bon de commande"
+  },
+  "components.OrganizationQuotesTable.confirmQuote": {
+    "description": "Label for the action to confirm a quote",
+    "message": "Confirmer le devis"
+  },
+  "components.OrganizationQuotesTable.downloadQuote": {
+    "description": "Action label to download the quote",
+    "message": "Télécharger le devis"
+  },
+  "components.OrganizationQuotesTable.loading": {
+    "description": "Message displayed while loading organization quotes",
+    "message": "Chargement des devis..."
+  },
+  "components.OrganizationQuotesTable.modalAmountLabel": {
+    "description": "Label for the total amount in the modal",
+    "message": "Montant total"
+  },
+  "components.OrganizationQuotesTable.modalCancel": {
+    "description": "Cancel button text in modal",
+    "message": "Annuler"
+  },
+  "components.OrganizationQuotesTable.modalTitle": {
+    "description": "Title of the confirm quote modal",
+    "message": "Confirmer le devis"
+  },
+  "components.OrganizationQuotesTable.noQuotes": {
+    "description": "Message displayed when no quotes exist for the organization",
+    "message": "Aucun devis trouvé pour l’établissement."
+  },
+  "components.OrganizationQuotesTable.payAmount": {
+    "description": "Label indicating the amount is pending payment",
+    "message": "En attente de paiement"
+  },
+  "components.OrganizationQuotesTable.payment": {
+    "description": "Payment method column in the quotes table",
+    "message": "Modalité de paiement"
+  },
+  "components.OrganizationQuotesTable.payment.bankTransfer": {
+    "description": "Payment method: bank transfer",
+    "message": "Virement bancaire"
+  },
+  "components.OrganizationQuotesTable.payment.card": {
+    "description": "Payment method: card payment",
+    "message": "Carte bancaire"
+  },
+  "components.OrganizationQuotesTable.payment.purchaseOrder": {
+    "description": "Payment method: purchase order",
+    "message": "Bon de commande"
+  },
+  "components.OrganizationQuotesTable.paymentBankTransfer": {
+    "description": "Payment method: bank transfer",
+    "message": "Virement bancaire"
+  },
+  "components.OrganizationQuotesTable.paymentCard": {
+    "description": "Payment method: credit card",
+    "message": "Carte bancaire"
+  },
+  "components.OrganizationQuotesTable.paymentPurchaseOrder": {
+    "description": "Payment method: purchase order",
+    "message": "Bon de commande"
+  },
+  "components.OrganizationQuotesTable.processingPayment": {
+    "description": "Label when Lyra is processing for payment",
+    "message": "Paiement en cours"
+  },
+  "components.OrganizationQuotesTable.purchaseOrderModalTitle": {
+    "description": "Title of the confirm purchase order modal",
+    "message": "Confirmer la réception du bon de commande"
+  },
+  "components.OrganizationQuotesTable.purchaseOrderReferenceLabel": {
+    "description": "Label for the purchase order reference input",
+    "message": "Référence du bon de commande"
+  },
+  "components.OrganizationQuotesTable.sendForSignature": {
+    "description": "Action label to send a contract for signature",
+    "message": "Envoyer la convention pour signature"
+  },
+  "components.OrganizationQuotesTable.state.assigned.": {
+    "description": "Batch order state: assigned",
+    "message": "Assignée"
+  },
+  "components.OrganizationQuotesTable.state.canceled": {
+    "description": "Batch order state: canceled",
+    "message": "Annulée"
+  },
+  "components.OrganizationQuotesTable.state.completed": {
+    "description": "Batch order state: completed",
+    "message": "Complétée"
+  },
+  "components.OrganizationQuotesTable.state.draft.": {
+    "description": "Batch order state: draft",
+    "message": "Brouillon"
+  },
+  "components.OrganizationQuotesTable.state.failedPayment.": {
+    "description": "Batch order state: failed payment",
+    "message": "Paiement échoué"
+  },
+  "components.OrganizationQuotesTable.state.pending.": {
+    "description": "Batch order state: pending",
+    "message": "En attente"
+  },
+  "components.OrganizationQuotesTable.state.quoted": {
+    "description": "Batch order state: quoted",
+    "message": "Devis"
+  },
+  "components.OrganizationQuotesTable.state.signing": {
+    "description": "Batch order state: currently being signed",
+    "message": "En cours de signature"
+  },
+  "components.OrganizationQuotesTable.state.toSign": {
+    "description": "Batch order state: to be signed",
+    "message": "À signer"
+  },
+  "components.OrganizationQuotesTable.waitingPayment": {
+    "description": "Label for a quote waiting for payment",
+    "message": "En attente de paiement"
+  },
+  "components.OrganizationQuotesTable.waitingSignature": {
+    "description": "Label for a quote waiting for signature",
+    "message": "En attente de signature"
+  },
   "components.PaginateCourseSearch.currentlyReadingLastPageN": {
     "description": "Accessibility helper in pagination, shown next to the current page number when it is the last page.",
     "message": "Actuellement sur la dernière page: {page}"
@@ -1259,6 +1707,10 @@
     "description": "Label displayed to explain when the installment will be withdrawn.",
     "message": "Prélevée le {date}"
   },
+  "components.ProductCertificateFooter.batchOrderPayment": {
+    "description": "Label before the payment button",
+    "message": "Nous attendons votre paiement pour finaliser la commande groupée."
+  },
   "components.ProductCertificateFooter.buyProductCertificateLabel": {
     "description": "Label on the enrollment row that propose to buy a product of type certificate",
     "message": "Un examen qui délivre un certificat peut être acheté pour ce cours."
@@ -1282,6 +1734,10 @@
   "components.ProductCertificateFooter.paymentNeededButton": {
     "description": "Button label for the payment needed message",
     "message": "Payer {amount}"
+  },
+  "components.ProductCertificateFooter.paymentProcessing": {
+    "description": "Button label for the payment is processing message",
+    "message": "Traitement du paiement..."
   },
   "components.ProductCertificateFooter.pendingProductCertificateLabel": {
     "description": "Label on the enrollment when a product of type certificate have been bought",
@@ -1318,6 +1774,54 @@
   "components.SaleTunnel.AddressSelector.label": {
     "description": "Address field label.",
     "message": "Adresse de facturation"
+  },
+  "components.SaleTunnel.BatchOrderForm.checkBilling": {
+    "description": "Checkbox label to indicate using alternative billing information",
+    "message": "Utiliser des informations de facturation différentes"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepAdmin": {
+    "description": "Step label for administrative follow-up in the batch order form",
+    "message": "Suivi"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepAdminTitle": {
+    "description": "Title of the section with details about the person responsible for admin follow-up",
+    "message": "Responsable du suivi administratif"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepBillingTitle": {
+    "description": "Title of the section with billing details",
+    "message": "Informations de facturation"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepCompany": {
+    "description": "Step label for company information in the batch order form",
+    "message": "Organisation"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepCompanyTitle": {
+    "description": "Title of the section with company/organization details",
+    "message": "Informations sur votre entreprise / organisation"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepFinancing": {
+    "description": "Step label for financing/payment in the batch order form",
+    "message": "Financement"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepFinancingTitle": {
+    "description": "Title of the section to select the payment plan of the course",
+    "message": "Mode de commande"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepParticipants": {
+    "description": "Step label for participants information in the batch order form",
+    "message": "Participants"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepParticipantsTitle": {
+    "description": "Title of the section to enter the number of registrations/participants",
+    "message": "Nombre d’inscriptions"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepSignatory": {
+    "description": "Step label for signatory person in the batch order form",
+    "message": "Signataire"
+  },
+  "components.SaleTunnel.BatchOrderForm.stepSignatoryTitle": {
+    "description": "Title of the section with details about the person responsible for signing the quote",
+    "message": "Signataire autorisé"
   },
   "components.SaleTunnel.Certificate.ProductPath.title": {
     "description": "Title of certificate product path section",
@@ -1371,13 +1875,25 @@
     "description": "Label for the email",
     "message": "Courriel du compte"
   },
-  "components.SaleTunnel.Information.fullNameLabel": {
-    "description": "Label for the full name input",
-    "message": "Nom complet"
-  },
   "components.SaleTunnel.Information.paymentSchedule": {
     "description": "Title for the payment schedule section",
     "message": "Échéancier"
+  },
+  "components.SaleTunnel.Information.purchaseTypeOptionGroup": {
+    "description": "Label for B2C option",
+    "message": "Je représente un organisme"
+  },
+  "components.SaleTunnel.Information.purchaseTypeOptionSingle": {
+    "description": "Label for B2C option",
+    "message": "Je suis un particulier"
+  },
+  "components.SaleTunnel.Information.purchaseTypeSelect": {
+    "description": "Label for purchase type select",
+    "message": "Type d'achat"
+  },
+  "components.SaleTunnel.Information.purchaseTypeTitle": {
+    "description": "Title for purchase type",
+    "message": "Sélectionner le type d’achat"
   },
   "components.SaleTunnel.Information.title": {
     "description": "Title for the information section",
@@ -1639,9 +2155,17 @@
     "description": "Sub title of the dashboard sidebar",
     "message": "Vous êtes sur votre tableau de bord"
   },
+  "components.SubscriptionButton.batchOrderFormInvalid": {
+    "description": "Some required fields are missing in the form.",
+    "message": "Certains champs obligatoires sont manquants dans le formulaire."
+  },
   "components.SubscriptionButton.errorAddress": {
     "description": "Error message shown when the user didn't select a billing address.",
     "message": "Vous devez spécifier une adresse de facturation."
+  },
+  "components.SubscriptionButton.errorBatchOrderMaxOrders": {
+    "description": "Error message shown when batch order creation fails because maximum number of orders is reached by an active offering rule.",
+    "message": "Impossible de créer la commande : le nombre de places disponibles pour cette offre a été atteint. Contactez le support pour plus d'informations."
   },
   "components.SubscriptionButton.errorDefault": {
     "description": "Error message shown when order creation request failed.",
@@ -1851,6 +2375,10 @@
     "description": "Label of the course general information view.",
     "message": "Informations générales"
   },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.agreements.label": {
+    "description": "Label of the organization agreements view.",
+    "message": "Conventions"
+  },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.contracts.label": {
     "description": "Label of the organization contracts view.",
     "message": "Contrats de formation"
@@ -1882,6 +2410,10 @@
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.label": {
     "description": "Label of the organization view.",
     "message": "{organizationTitle}"
+  },
+  "components.TeacherDashboard.TeacherDashboardRoutes.organization.quotes.label": {
+    "description": "Label of the organization quotes view.",
+    "message": "Devis"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.label": {
     "description": "Label of the teacher courses liste view.",
@@ -2071,6 +2603,10 @@
     "description": "Error shown if a user tries to remove a main address",
     "message": "Vous ne pouvez pas supprimer l'adresse principale."
   },
+  "hooks.useBatchOrders.errorCreate": {
+    "description": "Error message shown when batch order creation fails.",
+    "message": "Une erreur s'est produite lors de la création de la commande."
+  },
   "hooks.useCertificates.errorGet": {
     "description": "Error message shown to the user when certificates fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération des certificats. Veuillez réessayer plus tard."
@@ -2187,6 +2723,14 @@
     "description": "Error message shown to the user when it isn't logged.",
     "message": "Vous n'êtes pas connecté."
   },
+  "hooks.useOfferingOrganizations.errorNotFound": {
+    "description": "Error message shown to the user when no organizations matches.",
+    "message": "Impossible de trouver l'établissement"
+  },
+  "hooks.useOfferingOrganizations.errorSelect": {
+    "description": "Error message shown to the user when organizations fetch request fails.",
+    "message": "Une erreur s'est produite lors de la récupération des établissements. Veuillez réessayer plus tard."
+  },
   "hooks.useOfferings.errorGet": {
     "description": "Error message shown to the user when offering fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération des formations. Veuillez réessayer plus tard."
@@ -2230,6 +2774,10 @@
   "hooks.useOrganizations.errorSelect": {
     "description": "Error message shown to the user when organizations fetch request fails.",
     "message": "Une erreur s'est produite lors de la récupération des établissements. Veuillez réessayer plus tard."
+  },
+  "hooks.useOrganizationsQuotes.errorGet": {
+    "description": "Error message shown when batch order fetch fails.",
+    "message": "Une erreur s'est produite lors de la récupération de la commande."
   },
   "hooks.useResources.errorCreate": {
     "description": "Error message shown to the user when resource creation request fails.",
@@ -2383,6 +2931,14 @@
     "description": "Text to indicate the total number of learner on a training",
     "message": "{nbLearners} {nbLearners, plural, one {apprenant inscrit} other {apprenants inscrits}} à cette formation"
   },
+  "pages.TeacherDashboardOrganizationAgreementsLayout.pageTitle": {
+    "description": "Use for the page title of the organization agreements",
+    "message": "Conventions"
+  },
+  "pages.TeacherDashboardOrganizationAgreementsLayout.signAllPendingAgreements": {
+    "description": "Button to sign all pending agreements",
+    "message": "Signer toutes les conventions en attente ({ count })"
+  },
   "pages.TeacherDashboardOrganizationContractsLayout.columnLearnerName": {
     "description": "Label for learnerName column",
     "message": "Apprenant"
@@ -2402,6 +2958,10 @@
   "pages.TeacherDashboardOrganizationContractsLayout.signAllPendingContracts": {
     "description": "Button to sign all pending contracts",
     "message": "Signer tous les contrats de formation en attente ({ count })"
+  },
+  "pages.TeacherDashboardOrganizationQuotesLayout.pageTitle": {
+    "description": "Use for the page title of the organization quotes",
+    "message": "Devis"
   },
   "utils.ContractHelper.learnerHalfSigned": {
     "description": "Label for unsigned contract status in learner point of view",
