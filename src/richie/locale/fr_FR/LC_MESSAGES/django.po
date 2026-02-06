@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-11 13:02+0000\n"
-"PO-Revision-Date: 2025-11-03 10:28\n"
+"PO-Revision-Date: 2026-02-06 09:05\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -1560,7 +1560,7 @@ msgstr "Quels sont les équipements nécessaires pour suivre ce cours ?"
 #: apps/courses/templates/courses/cms/course_detail.html:323
 msgctxt "course_detail__title"
 msgid "Assessment and certification"
-msgstr "Evaluation et Certification"
+msgstr "Évaluation et Certification"
 
 #: apps/courses/templates/courses/cms/course_detail.html:327
 msgid "How is progress evaluated and/or certified?"
