@@ -195,6 +195,10 @@
     "description": "Text displayed for seats value in batch order",
     "message": "Seats"
   },
+  "batchOrder.seatsCount": {
+    "description": "Text displayed for seats count with pluralization in batch order",
+    "message": "{seats} {seats, plural, one {seat} other {seats}}"
+  },
   "batchOrder.status.assigned": {
     "description": "Status label for an assigned batch order",
     "message": "Assigned"
@@ -1595,7 +1599,7 @@
     "description": "Action label to send a contract for signature",
     "message": "Send contract for signature"
   },
-  "components.OrganizationQuotesTable.state.assigned.": {
+  "components.OrganizationQuotesTable.state.assigned": {
     "description": "Batch order state: assigned",
     "message": "Assigned"
   },
@@ -1607,15 +1611,15 @@
     "description": "Batch order state: completed",
     "message": "Completed"
   },
-  "components.OrganizationQuotesTable.state.draft.": {
+  "components.OrganizationQuotesTable.state.draft": {
     "description": "Batch order state: draft",
     "message": "Draft"
   },
-  "components.OrganizationQuotesTable.state.failedPayment.": {
+  "components.OrganizationQuotesTable.state.failedPayment": {
     "description": "Batch order state: failed payment",
     "message": "Failed payment"
   },
-  "components.OrganizationQuotesTable.state.pending.": {
+  "components.OrganizationQuotesTable.state.pending": {
     "description": "Batch order state: pending",
     "message": "Pending"
   },
