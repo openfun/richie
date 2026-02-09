@@ -195,6 +195,10 @@
     "description": "Text displayed for seats value in batch order",
     "message": "Places"
   },
+  "batchOrder.seatsCount": {
+    "description": "Text displayed for seats count with pluralization in batch order",
+    "message": "{seats} {seats, plural, one {place} other {places}}"
+  },
   "batchOrder.status.assigned": {
     "description": "Status label for an assigned batch order",
     "message": "Assignée"
@@ -241,7 +245,7 @@
   },
   "batchOrder.title.company": {
     "description": "Step label for company information in the batch order form",
-    "message": "Organisation"
+    "message": "Organisme"
   },
   "batchOrder.title.financing": {
     "description": "Step label for financing/payment in the batch order form",
@@ -1595,7 +1599,7 @@
     "description": "Action label to send a contract for signature",
     "message": "Envoyer la convention pour signature"
   },
-  "components.OrganizationQuotesTable.state.assigned.": {
+  "components.OrganizationQuotesTable.state.assigned": {
     "description": "Batch order state: assigned",
     "message": "Assignée"
   },
@@ -1607,15 +1611,15 @@
     "description": "Batch order state: completed",
     "message": "Complétée"
   },
-  "components.OrganizationQuotesTable.state.draft.": {
+  "components.OrganizationQuotesTable.state.draft": {
     "description": "Batch order state: draft",
     "message": "Brouillon"
   },
-  "components.OrganizationQuotesTable.state.failedPayment.": {
+  "components.OrganizationQuotesTable.state.failedPayment": {
     "description": "Batch order state: failed payment",
     "message": "Paiement échoué"
   },
-  "components.OrganizationQuotesTable.state.pending.": {
+  "components.OrganizationQuotesTable.state.pending": {
     "description": "Batch order state: pending",
     "message": "En attente"
   },
@@ -1793,7 +1797,7 @@
   },
   "components.SaleTunnel.BatchOrderForm.stepCompany": {
     "description": "Step label for company information in the batch order form",
-    "message": "Organisation"
+    "message": "Organisme"
   },
   "components.SaleTunnel.BatchOrderForm.stepCompanyTitle": {
     "description": "Title of the section with company/organization details",
