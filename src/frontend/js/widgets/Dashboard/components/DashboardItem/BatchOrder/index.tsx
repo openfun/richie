@@ -14,7 +14,12 @@ const messages = defineMessages({
   seats: {
     id: 'batchOrder.seats',
     description: 'Text displayed for seats value in batch order',
-    defaultMessage: 'Seats',
+    defaultMessage: '{nb_seats} seats',
+  },
+  seatsCount: {
+    id: 'batchOrder.seatsCount',
+    description: 'Text displayed for seats count in batch order (owned / total)',
+    defaultMessage: '{seats_owned}/{nb_seats} seats',
   },
   [BatchOrderState.DRAFT]: {
     id: 'batchOrder.status.draft',
@@ -136,8 +141,16 @@ export const DashboardItemBatchOrder = ({
               {batchOrder.nb_seats && (
                 <div className="dashboard-item__block__information">
                   <Icon name={IconTypeEnum.GROUPS} size="small" />
-                  <span>{batchOrder.nb_seats}</span>
-                  <span>{intl.formatMessage(messages.seats)}</span>
+                  <span>
+                    {batchOrder.seats_owned
+                      ? intl.formatMessage(messages.seatsCount, {
+                          seats_owned: batchOrder.seats_owned,
+                          nb_seats: batchOrder.nb_seats,
+                        })
+                      : intl.formatMessage(messages.seats, {
+                          nb_seats: batchOrder.nb_seats,
+                        })}
+                  </span>
                 </div>
               )}
               {batchOrder.payment_method && (
