@@ -86,6 +86,11 @@ const messages = defineMessages({
     description: 'Button label for the payment needed message',
     defaultMessage: 'Pay {amount}',
   },
+  enrolledStudents: {
+    id: 'batchOrder.enrolledStudents',
+    description: 'Text displayed for enrolled students count',
+    defaultMessage: 'enrolled students',
+  },
 });
 
 export const DashboardItemBatchOrder = ({
@@ -131,6 +136,11 @@ export const DashboardItemBatchOrder = ({
                   <FormattedMessage {...messages[batchOrder.payment_method]} />
                 </div>
               )}
+              {/* Mockup: Hardcoded enrollment data */}
+              <div className="dashboard-item__block__information">
+                <Icon name={IconTypeEnum.SCHOOL} size="small" />
+                <span>9/12 {intl.formatMessage(messages.enrolledStudents)}</span>
+              </div>
               {showDetails && (
                 <div className="dashboard-item__block__information">
                   <Icon name={IconTypeEnum.OFFER_SUBSCRIPTION} size="small" />

@@ -3,6 +3,7 @@ import { PaymentMethod } from 'components/PaymentInterfaces/types';
 import { BatchOrderRead } from 'types/Joanie';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
+import { EnrollmentManagementSubItem } from './BatchOrderEnrollmentManagement';
 
 const messages = defineMessages({
   stepCompany: {
@@ -311,6 +312,9 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
       />,
     );
   }
+
+  // Add enrollment management section (mockup)
+  items.push(<EnrollmentManagementSubItem key="enrollment-management" />);
 
   return <DashboardSubItemsList subItems={items} />;
 };

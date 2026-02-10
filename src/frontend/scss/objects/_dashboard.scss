@@ -101,3 +101,96 @@
     padding: 1rem;
   }
 }
+
+// Enrollment Management Mockup Styles
+.enrollment-progress {
+  display: flex;
+  align-items: center;
+  gap: rem-calc(8px);
+  margin-bottom: rem-calc(8px);
+
+  &__bar {
+    flex: 1;
+    height: rem-calc(8px);
+    background-color: var(--c--theme--colors--greyscale-300);
+    border-radius: rem-calc(4px);
+    overflow: hidden;
+
+    &__fill {
+      height: 100%;
+      background-color: var(--c--theme--colors--primary-600);
+      transition: width 0.3s ease;
+      animation: progress-grow 2s ease-out forwards;
+
+      @keyframes progress-grow {
+        from {
+          width: 0;
+        }
+      }
+    }
+  }
+}
+
+.enrollment-nested-section {
+  display: flex;
+  flex-direction: column;
+  gap: rem-calc(8px);
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: rem-calc(8px);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: inherit;
+    font-size: inherit;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__content {
+    padding-left: rem-calc(24px);
+    display: flex;
+    flex-direction: column;
+    gap: rem-calc(4px);
+    font-size: rem-calc(13px);
+  }
+}
+
+.enrollment-pagination {
+  display: flex;
+  gap: rem-calc(8px);
+  margin-top: rem-calc(8px);
+  align-items: center;
+  justify-content: center;
+
+  &__info {
+    font-size: rem-calc(12px);
+    color: var(--c-theme-secondary-700);
+  }
+
+  &__button {
+    padding: rem-calc(4px) rem-calc(12px);
+    background-color: var(--c-theme-primary-500);
+    color: white;
+    border: none;
+    border-radius: rem-calc(4px);
+    cursor: pointer;
+    font-size: rem-calc(12px);
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: var(--c-theme-primary-600);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
