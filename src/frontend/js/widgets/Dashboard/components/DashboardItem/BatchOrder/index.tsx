@@ -86,6 +86,21 @@ const messages = defineMessages({
     description: 'Button label for the payment needed message',
     defaultMessage: 'Pay {amount}',
   },
+  reference: {
+    id: 'batchOrder.reference',
+    description: 'Reference label displayed with the batch order ID',
+    defaultMessage: 'Ref. {id}',
+  },
+  viewAll: {
+    id: 'batchOrder.viewAll',
+    description: 'Button label to navigate to the list of all batch orders',
+    defaultMessage: 'View all batch orders',
+  },
+  viewOne: {
+    id: 'batchOrder.viewOne',
+    description: 'Button label to navigate to a single batch order details',
+    defaultMessage: 'View details',
+  },
 });
 
 export const DashboardItemBatchOrder = ({
@@ -106,7 +121,7 @@ export const DashboardItemBatchOrder = ({
       <DashboardItem
         data-testid={`dashboard-item-batch-order-${batchOrder.id}`}
         title={batchOrder.offering?.product.title}
-        code={`Ref. ${batchOrder.id}`}
+        code={intl.formatMessage(messages.reference, { id: batchOrder.id })}
         imageUrl={batchOrder.offering?.course.cover?.src}
         footer={
           <div className="dashboard-item-order__footer">
@@ -158,11 +173,7 @@ export const DashboardItemBatchOrder = ({
               }
               data-testid="dashboard-item-batch-order__button"
             >
-              {intl.formatMessage(
-                showDetails
-                  ? { id: 'batchOrder.viewAll', defaultMessage: 'View all batch orders' }
-                  : { id: 'batchOrder.viewOne', defaultMessage: 'View details' },
-              )}
+              {intl.formatMessage(showDetails ? messages.viewAll : messages.viewOne)}
             </RouterButton>
           </div>
         }
