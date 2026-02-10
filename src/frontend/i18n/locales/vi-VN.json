@@ -187,6 +187,10 @@
     "description": "Label for the field asking how the user heard about or was recommended the course",
     "message": "This course was recommended to me by"
   },
+  "batchOrder.reference": {
+    "description": "Reference label displayed with the batch order ID",
+    "message": "Ref. {id}"
+  },
   "batchOrder.role": {
     "description": "Label for the field asking the role/position of the contact person",
     "message": "Role"
@@ -262,6 +266,14 @@
   "batchOrder.vatNumber": {
     "description": "Label for the field asking the company VAT number",
     "message": "VAT number"
+  },
+  "batchOrder.viewAll": {
+    "description": "Button label to navigate to the list of all batch orders",
+    "message": "View all batch orders"
+  },
+  "batchOrder.viewOne": {
+    "description": "Button label to navigate to a single batch order details",
+    "message": "View details"
   },
   "batchOrder.withoutOrderForm": {
     "description": "Option label for selecting payment without order form",
@@ -1782,6 +1794,14 @@
   "components.SaleTunnel.BatchOrderForm.checkBilling": {
     "description": "Checkbox label to indicate using alternative billing information",
     "message": "Use different billing information"
+  },
+  "components.SaleTunnel.BatchOrderForm.nextButton": {
+    "description": "Label for the button to proceed to the next step in the batch order form",
+    "message": "Next"
+  },
+  "components.SaleTunnel.BatchOrderForm.previousButton": {
+    "description": "Label for the button to go back to the previous step in the batch order form",
+    "message": "Previous"
   },
   "components.SaleTunnel.BatchOrderForm.stepAdmin": {
     "description": "Step label for administrative follow-up in the batch order form",
