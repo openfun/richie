@@ -119,7 +119,7 @@ async function render() {
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
         <IntlProvider locale={locale} messages={translatedMessages} defaultLocale="en-US">
-          <Root richieReactSpots={richieReactSpots} />
+          <Root richieReactSpots={richieReactSpots} locale={locale} />
         </IntlProvider>
       </QueryClientProvider>,
     );

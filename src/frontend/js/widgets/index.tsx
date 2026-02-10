@@ -56,9 +56,10 @@ function isComponentName(
 
 interface RootProps {
   richieReactSpots: Element[];
+  locale?: string;
 }
 
-export const Root = ({ richieReactSpots }: RootProps) => {
+export const Root = ({ richieReactSpots, locale = 'en-US' }: RootProps) => {
   const portals = richieReactSpots.map((element: Element) => {
     // Generate a component name. It should be a key of the componentLibrary object / ComponentLibrary interface
     const componentName = startCase(
@@ -104,7 +105,7 @@ export const Root = ({ richieReactSpots }: RootProps) => {
   });
 
   return (
-    <CunninghamProvider>
+    <CunninghamProvider currentLocale={locale}>
       <SessionProvider>
         <HistoryProvider>
           <Suspense fallback={<Spinner />}>{portals}</Suspense>
