@@ -101,3 +101,97 @@
     padding: 1rem;
   }
 }
+
+.enrollment-progress {
+  display: flex;
+  align-items: center;
+  gap: rem-calc(8px);
+  margin-bottom: rem-calc(8px);
+
+  &__bar {
+    flex: 1;
+    height: rem-calc(8px);
+    background-color: var(--c--theme--colors--greyscale-300);
+    border-radius: rem-calc(4px);
+    overflow: hidden;
+
+    &__fill {
+      height: 100%;
+      background-color: var(--c--theme--colors--primary-600);
+      transition: width 0.3s ease;
+      animation: progress-grow 2s ease-out forwards;
+
+      @keyframes progress-grow {
+        from {
+          width: 0;
+        }
+      }
+    }
+  }
+}
+
+.enrollment-nested-section {
+  display: flex;
+  flex-direction: column;
+  gap: rem-calc(8px);
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    gap: rem-calc(8px);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: inherit;
+    font-size: inherit;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &__content {
+    padding-left: rem-calc(24px);
+    display: flex;
+    flex-direction: column;
+    gap: rem-calc(4px);
+    font-size: rem-calc(13px);
+
+    .enrollment-list {
+      list-style: disc inside;
+      padding-left: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: rem-calc(4px);
+      }
+    }
+
+    .enrollment-load-more {
+      margin-top: rem-calc(4px);
+      width: fit-content;
+    }
+  }
+}
+
+.enrollment-pagination-wrapper {
+  margin-top: rem-calc(8px);
+
+  .pagination {
+    margin: 0;
+    padding: 0;
+    justify-content: flex-start;
+
+    &__list {
+      margin: 0;
+      padding: 0;
+      gap: rem-calc(4px);
+    }
+
+    &__item {
+      transform: scale(0.9);
+      transform-origin: center;
+    }
+  }
+}
