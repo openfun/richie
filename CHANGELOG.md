@@ -23,6 +23,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix typo in batch order quotes management
 - Add organiaztion ID in batch order payload
 - Handle regex email and number input in B2B sale tunnel
+- Add locale context for components
 
 ## [3.2.1] - 2025-11-03
 
