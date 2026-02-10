@@ -29,7 +29,7 @@
   },
   "batchOrder.bankTransfer": {
     "description": "Option label for selecting bank transfer payment",
-    "message": "Virement bancaire"
+    "message": "Virement bancaire direct"
   },
   "batchOrder.cardPayment": {
     "description": "Option label for selecting credit card payment",
@@ -157,7 +157,7 @@
   },
   "batchOrder.payment.bank": {
     "description": "Label for bank transfer payment method",
-    "message": "Virement bancaire"
+    "message": "Virement bancaire direct"
   },
   "batchOrder.payment.card": {
     "description": "Label for card payment method",
@@ -186,6 +186,10 @@
   "batchOrder.recommandation": {
     "description": "Label for the field asking how the user heard about or was recommended the course",
     "message": "Cette formation m’a été recommandée par"
+  },
+  "batchOrder.reference": {
+    "description": "Reference label displayed with the batch order ID",
+    "message": "Réf. {id}"
   },
   "batchOrder.role": {
     "description": "Label for the field asking the role/position of the contact person",
@@ -262,6 +266,14 @@
   "batchOrder.vatNumber": {
     "description": "Label for the field asking the company VAT number",
     "message": "Numéro de TVA"
+  },
+  "batchOrder.viewAll": {
+    "description": "Button label to navigate to the list of all batch orders",
+    "message": "Mes commandes groupées"
+  },
+  "batchOrder.viewOne": {
+    "description": "Button label to navigate to a single batch order details",
+    "message": "Voir le détail"
   },
   "batchOrder.withoutOrderForm": {
     "description": "Option label for selecting payment without order form",
@@ -1561,7 +1573,7 @@
   },
   "components.OrganizationQuotesTable.payment.bankTransfer": {
     "description": "Payment method: bank transfer",
-    "message": "Virement bancaire"
+    "message": "Virement bancaire direct"
   },
   "components.OrganizationQuotesTable.payment.card": {
     "description": "Payment method: card payment",
@@ -1573,7 +1585,7 @@
   },
   "components.OrganizationQuotesTable.paymentBankTransfer": {
     "description": "Payment method: bank transfer",
-    "message": "Virement bancaire"
+    "message": "Virement bancaire direct"
   },
   "components.OrganizationQuotesTable.paymentCard": {
     "description": "Payment method: credit card",
@@ -1783,6 +1795,14 @@
     "description": "Checkbox label to indicate using alternative billing information",
     "message": "Utiliser des informations de facturation différentes"
   },
+  "components.SaleTunnel.BatchOrderForm.nextButton": {
+    "description": "Label for the button to proceed to the next step in the batch order form",
+    "message": "Suivant"
+  },
+  "components.SaleTunnel.BatchOrderForm.previousButton": {
+    "description": "Label for the button to go back to the previous step in the batch order form",
+    "message": "Précédent"
+  },
   "components.SaleTunnel.BatchOrderForm.stepAdmin": {
     "description": "Step label for administrative follow-up in the batch order form",
     "message": "Suivi"
@@ -1809,7 +1829,7 @@
   },
   "components.SaleTunnel.BatchOrderForm.stepFinancingTitle": {
     "description": "Title of the section to select the payment plan of the course",
-    "message": "Mode de commande"
+    "message": "Mode de paiement"
   },
   "components.SaleTunnel.BatchOrderForm.stepParticipants": {
     "description": "Step label for participants information in the batch order form",
