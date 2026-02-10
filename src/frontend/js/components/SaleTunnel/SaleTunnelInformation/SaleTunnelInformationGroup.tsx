@@ -68,6 +68,16 @@ const messages = defineMessages({
     description: 'Step label for financing/payment in the batch order form',
     defaultMessage: 'Financing',
   },
+  previousButton: {
+    id: 'components.SaleTunnel.BatchOrderForm.previousButton',
+    description: 'Label for the button to go back to the previous step in the batch order form',
+    defaultMessage: 'Previous',
+  },
+  nextButton: {
+    id: 'components.SaleTunnel.BatchOrderForm.nextButton',
+    description: 'Label for the button to proceed to the next step in the batch order form',
+    defaultMessage: 'Next',
+  },
 });
 
 export const SaleTunnelInformationGroup = () => {
@@ -258,7 +268,7 @@ const BatchOrderForm = () => {
           hidden={activeStep === 0}
           color="secondary"
         >
-          Previous
+          <FormattedMessage {...messages.previousButton} />
         </Button>
         <Button
           onClick={() => {
@@ -269,7 +279,7 @@ const BatchOrderForm = () => {
           disabled={!isCurrentStepValid}
           hidden={activeStep === steps.length - 1}
         >
-          Next
+          <FormattedMessage {...messages.nextButton} />
         </Button>
       </div>
     </FormProvider>
