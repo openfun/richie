@@ -46,6 +46,7 @@ import {
   BatchOrderQuote,
   Relation,
   Agreement,
+  BatchOrderSeat,
 } from 'types/Joanie';
 import { Payment, PaymentMethod, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
@@ -547,6 +548,8 @@ export const BatchOrderReadFactory = factory((): BatchOrderRead => {
     funding_entity: faker.company.name(),
     funding_amount: faker.number.int({ min: 100, max: 10000 }),
     offering: OfferingBatchOrderFactory().one(),
+    seats_owned: faker.number.int({ min: 1, max: 200 }),
+    seats_to_own: faker.number.int({ min: 1, max: 200 }),
   };
 });
 
@@ -672,3 +675,11 @@ export const SaleTunnelContextFactory = factory(
     setNeedsPayment: noop,
   }),
 );
+
+export const BatchOrderSeatFactory = factory((): BatchOrderSeat => {
+  return {
+    id: faker.string.uuid(),
+    owner_name: faker.person.fullName(),
+    voucher: faker.string.alphanumeric(10),
+  };
+});
