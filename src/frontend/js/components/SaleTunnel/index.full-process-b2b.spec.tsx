@@ -573,4 +573,187 @@ describe('SaleTunnel', () => {
       'Unable to create the order: the maximum number of available seats for this offering has been reached. Please contact support for more information.',
     );
   }, 30000);
+
+  it('tests optional fields can be filled and cleared without breaking validation', async () => {
+    const course = PacedCourseFactory().one();
+    const product = ProductFactory().one();
+    const offering = OfferingFactory({ course, product, is_withdrawable: false }).one();
+    const paymentPlan = PaymentPlanFactory().one();
+    const organizations = OrganizationFactory().many(3);
+
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
+      offering,
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+      paymentPlan,
+    );
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify({
+        product_id: product.id,
+        course_code: course.code,
+        state: NOT_CANCELED_ORDER_STATES,
+      })}`,
+      [],
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/offerings/${offering.id}/get-organizations/`,
+      organizations,
+    );
+
+    render(<CourseProductItem productId={product.id} course={course} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    await screen.findByRole('heading', { level: 3, name: product.title });
+    const user = userEvent.setup();
+    const buyButton = screen.getByRole('button', { name: product.call_to_action });
+    await user.click(buyButton);
+    await screen.findByTestId('generic-sale-tunnel-payment-step');
+
+    // Select group buy form
+    const formTypeSelect = screen.getByRole('combobox', { name: 'Purchase type' });
+    await user.click(formTypeSelect);
+    await user.click(screen.getByText('I am purchasing on behalf of an organization'));
+
+    // Company step
+    const $companyName = await screen.findByRole('textbox', { name: 'Company name' });
+    const $idNumber = screen.getByRole('textbox', { name: /Registration number/ });
+    const $address = screen.getByRole('textbox', { name: 'Address' });
+    const $postCode = screen.getByRole('textbox', { name: 'Postal code' });
+    const $city = screen.getByRole('textbox', { name: 'City' });
+    const $country = screen.getByRole('combobox', { name: 'Country' });
+
+    await user.type($companyName, 'Test Company');
+    await user.type($idNumber, '123456789');
+    await user.type($address, '123 Test Street');
+    await user.type($postCode, '12345');
+    await user.type($city, 'Test City');
+    await user.click($country);
+    await user.click(screen.getByText('France'));
+
+    // Fill and clear billing address optional fields
+    const $billingCheckbox = screen.getByLabelText('Use different billing information');
+    await user.click($billingCheckbox);
+
+    const $billingContactName = await screen.findByRole('textbox', {
+      name: 'Contact name',
+    });
+    const $billingContactEmail = screen.getByRole('textbox', { name: 'Contact email' });
+    const billingCompanyInputs = screen.getAllByRole('textbox', { name: 'Company name' });
+    const $billingCompanyName = billingCompanyInputs[billingCompanyInputs.length - 1];
+    const billingIdInputs = screen.getAllByRole('textbox', { name: /Registration number/ });
+    const $billingIdNumber = billingIdInputs[billingIdInputs.length - 1];
+    const billingAddressInputs = screen.getAllByRole('textbox', { name: 'Address' });
+    const $billingAddress = billingAddressInputs[billingAddressInputs.length - 1];
+    const billingPostCodeInputs = screen.getAllByRole('textbox', { name: 'Postal code' });
+    const $billingPostCode = billingPostCodeInputs[billingPostCodeInputs.length - 1];
+    const billingCityInputs = screen.getAllByRole('textbox', { name: 'City' });
+    const $billingCity = billingCityInputs[billingCityInputs.length - 1];
+    const billingCountrySelects = screen.getAllByRole('combobox', { name: 'Country' });
+    const $billingCountry = billingCountrySelects[billingCountrySelects.length - 1];
+
+    await user.type($billingContactName, 'Billing Contact');
+    await user.type($billingContactEmail, 'billing@test.com');
+    await user.type($billingCompanyName, 'Billing Company');
+    await user.type($billingIdNumber, '987654321');
+    await user.type($billingAddress, '456 Billing Street');
+    await user.type($billingPostCode, '54321');
+    await user.type($billingCity, 'Billing City');
+    await user.click($billingCountry);
+    await user.click(screen.getAllByText('France')[1]);
+
+    await user.clear($billingContactName);
+    await user.clear($billingContactEmail);
+    await user.clear($billingCompanyName);
+    await user.clear($billingIdNumber);
+    await user.clear($billingAddress);
+    await user.clear($billingPostCode);
+    await user.clear($billingCity);
+
+    await user.click($billingCheckbox);
+
+    // Follow-up step
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    const $lastName = await screen.findByRole('textbox', { name: 'Last name' });
+    const $firstName = screen.getByRole('textbox', { name: 'First name' });
+    const $role = screen.getByRole('textbox', { name: 'Role' });
+    const $email = screen.getByRole('textbox', { name: 'Email' });
+    const $phone = screen.getByRole('textbox', { name: 'Phone number' });
+
+    await user.type($lastName, 'Doe');
+    await user.type($firstName, 'Jane');
+    await user.type($role, 'Manager');
+    await user.type($email, 'jane.doe@test.com');
+    await user.type($phone, '+33123456789');
+
+    // Signatory step
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    const $signatoryLastName = await screen.findByRole('textbox', { name: 'Last name' });
+    const $signatoryFirstName = screen.getByRole('textbox', { name: 'First name' });
+    const $signatoryRole = screen.getByRole('textbox', { name: 'Role' });
+    const $signatoryEmail = screen.getByRole('textbox', { name: 'Email' });
+    const $signatoryPhone = screen.getByRole('textbox', { name: 'Phone number' });
+
+    await user.type($signatoryLastName, 'Smith');
+    await user.type($signatoryFirstName, 'John');
+    await user.type($signatoryRole, 'Director');
+    await user.type($signatoryEmail, 'john.smith@test.com');
+    await user.type($signatoryPhone, '+33987654321');
+
+    // Participants step
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    const $nbParticipants = await screen.findByLabelText('Number of participants to register');
+    await user.type($nbParticipants, '10');
+
+    // Financing step - fill and clear optional fields
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    const $purchaseOrderRadio = await screen.findByLabelText('Purchase order');
+    await user.click($purchaseOrderRadio);
+
+    const $fundingEntity = screen.getByLabelText('Entity name');
+    await user.type($fundingEntity, 'Test OPCO');
+    expect($fundingEntity).toHaveValue('Test OPCO');
+
+    const $fundingAmount = screen.getByLabelText('Amount covered');
+    await user.type($fundingAmount, '1000');
+    expect($fundingAmount).toHaveValue(1000);
+
+    await user.clear($fundingAmount);
+    expect($fundingAmount).toHaveValue(null);
+
+    await user.clear($fundingEntity);
+    expect($fundingEntity).toHaveValue('');
+
+    // Submit the batch order
+    const batchOrderRead = BatchOrderReadFactory().one();
+    fetchMock.post('https://joanie.endpoint/api/v1.0/batch-orders/', batchOrderRead);
+    const $subscribeButton = screen.getByRole('button', {
+      name: 'Subscribe',
+    }) as HTMLButtonElement;
+
+    expect($subscribeButton).not.toBeDisabled();
+    await user.click($subscribeButton);
+    await screen.findByTestId('generic-sale-tunnel-success-step');
+
+    // Verify the batch order payload does NOT contain the cleared optional fields
+    const batchOrderCalls = fetchMock.calls('https://joanie.endpoint/api/v1.0/batch-orders/');
+    expect(batchOrderCalls).toHaveLength(1);
+    const batchOrderPayload = JSON.parse(batchOrderCalls[0][1]?.body as string);
+
+    expect(batchOrderPayload.billing_address).toBeUndefined();
+    expect(batchOrderPayload.funding_entity).toBeUndefined();
+    expect(batchOrderPayload.funding_amount).toBeUndefined();
+    expect(batchOrderPayload.organization_id).toBeUndefined();
+
+    expect(batchOrderPayload).toMatchObject({
+      offering_id: offering.id,
+      company_name: 'Test Company',
+      identification_number: '123456789',
+      payment_method: PaymentMethod.PURCHASE_ORDER,
+      nb_seats: '10',
+    });
+  }, 30000);
 });

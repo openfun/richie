@@ -132,7 +132,9 @@ export const validationSchema = Yup.object().shape({
   nb_seats: Yup.number().required().min(1),
   payment_method: Yup.mixed<PaymentMethod>().oneOf(Object.values(PaymentMethod)).required(),
   funding_entity: Yup.string().optional(),
-  funding_amount: Yup.number().optional(),
+  funding_amount: Yup.number()
+    .transform((value, originalValue) => (originalValue === '' ? undefined : value))
+    .optional(),
   organization_id: Yup.string().optional(),
 });
 
