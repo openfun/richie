@@ -4,6 +4,7 @@ import { Select } from '@openfun/cunningham-react';
 import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { SaleTunnelInformationSingular } from 'components/SaleTunnel/SaleTunnelInformation/SaleTunnelInformationSingular';
 import { SaleTunnelInformationGroup } from 'components/SaleTunnel/SaleTunnelInformation/SaleTunnelInformationGroup';
+import { ProductType } from 'types/Joanie';
 
 const messages = defineMessages({
   purchaseTypeTitle: {
@@ -35,7 +36,8 @@ export enum FormType {
 
 export const SaleTunnelInformation = () => {
   const intl = useIntl();
-  const { setBatchOrder, setSchedule } = useSaleTunnelContext();
+  const { setBatchOrder, setSchedule, product } = useSaleTunnelContext();
+  const productType = product.type;
   const options = [
     { label: intl.formatMessage(messages.purchaseTypeOptionSingle), value: FormType.SINGULAR },
     { label: intl.formatMessage(messages.purchaseTypeOptionGroup), value: FormType.GROUP },
@@ -44,25 +46,29 @@ export const SaleTunnelInformation = () => {
 
   return (
     <div className="sale-tunnel__main__column sale-tunnel__information">
-      <div>
-        <h3 className="block-title mb-t">
-          <FormattedMessage {...messages.purchaseTypeTitle} />
-        </h3>
-        <Select
-          label={intl.formatMessage(messages.purchaseTypeSelect)}
-          options={options}
-          fullWidth
-          value={purchaseType}
-          clearable={false}
-          onChange={(e) => {
-            setPurchaseType(e.target.value as FormType);
-            setBatchOrder(undefined);
-            setSchedule(undefined);
-          }}
-        />
-      </div>
-      {purchaseType === FormType.SINGULAR && <SaleTunnelInformationSingular />}
-      {purchaseType === FormType.GROUP && <SaleTunnelInformationGroup />}
+      {productType === ProductType.CERTIFICATE ? (
+        <SaleTunnelInformationSingular />
+      ) : (
+        <div>
+          <h3 className="block-title mb-t">
+            <FormattedMessage {...messages.purchaseTypeTitle} />
+          </h3>
+          <Select
+            label={intl.formatMessage(messages.purchaseTypeSelect)}
+            options={options}
+            fullWidth
+            value={purchaseType}
+            clearable={false}
+            onChange={(e) => {
+              setPurchaseType(e.target.value as FormType);
+              setBatchOrder(undefined);
+              setSchedule(undefined);
+            }}
+          />
+          {purchaseType === FormType.SINGULAR && <SaleTunnelInformationSingular />}
+          {purchaseType === FormType.GROUP && <SaleTunnelInformationGroup />}
+        </div>
+      )}
     </div>
   );
 };

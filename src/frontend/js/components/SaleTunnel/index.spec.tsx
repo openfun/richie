@@ -319,6 +319,49 @@ describe.each([
     });
   });
 
+  it('should verify the purchase type selector visibility based on product type', async () => {
+    const product = ProductFactory().one();
+    const paymentPlan = PaymentPlanFactory().one();
+    const user = userEvent.setup({ delay: null });
+
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
+      )
+      .get('https://joanie.endpoint/api/v1.0/offerings/get-organizations/', []);
+
+    render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    await screen.findByText(
+      formatPrice(paymentPlan.price, product.price_currency).replace(/(\u202F|\u00a0)/g, ' '),
+    );
+
+    if (productType === ProductType.CERTIFICATE) {
+      expect(screen.queryByRole('combobox', { name: 'Purchase type' })).not.toBeInTheDocument();
+      expect(screen.getByText('This information will be used for billing')).toBeInTheDocument();
+    } else {
+      const purchaseType = screen.getByRole('combobox', { name: 'Purchase type' });
+      expect(purchaseType).toBeInTheDocument();
+
+      expect(screen.getByText('This information will be used for billing')).toBeInTheDocument();
+      expect(screen.queryByRole('textbox', { name: 'Company name' })).not.toBeInTheDocument();
+
+      await user.click(purchaseType);
+      await user.click(
+        screen.getByRole('option', { name: 'I am purchasing on behalf of an organization' }),
+      );
+
+      expect(screen.getByRole('textbox', { name: 'Company name' })).toBeInTheDocument();
+    }
+  });
+
   it('should start at the save payment method step if order is in state to_save_payment_method', async () => {
     const product = ProductFactory().one();
     const billingAddress = AddressFactory({
