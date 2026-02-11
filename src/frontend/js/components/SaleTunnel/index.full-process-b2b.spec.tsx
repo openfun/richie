@@ -46,6 +46,44 @@ jest.mock('utils/indirection/window', () => ({
 
 jest.mock('../PaymentInterfaces');
 
+/**
+ * Setup common mocks for B2B batch order tests
+ */
+const setupBatchOrderMocks = (params: {
+  course: any;
+  product: any;
+  offering: any;
+  paymentPlan: any;
+  organizations?: any[] | any;
+}) => {
+  const { course, product, offering, paymentPlan, organizations } = params;
+
+  fetchMock.get(
+    `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
+    offering,
+  );
+  fetchMock.get(
+    `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+    paymentPlan,
+  );
+  fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
+  fetchMock.get(
+    `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify({
+      product_id: product.id,
+      course_code: course.code,
+      state: NOT_CANCELED_ORDER_STATES,
+    })}`,
+    [],
+  );
+
+  if (organizations) {
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/offerings/${offering.id}/get-organizations/`,
+      organizations,
+    );
+  }
+};
+
 describe('SaleTunnel', () => {
   let richieUser: User;
   let openApiEdxProfile: OpenEdxApiProfile;
@@ -86,27 +124,7 @@ describe('SaleTunnel', () => {
     const paymentPlan = PaymentPlanFactory().one();
     const organizations = OrganizationFactory().many(3);
 
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
-      offering,
-    );
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
-      paymentPlan,
-    );
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify({
-        product_id: product.id,
-        course_code: course.code,
-        state: NOT_CANCELED_ORDER_STATES,
-      })}`,
-      [],
-    );
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/offerings/${offering.id}/get-organizations/`,
-      organizations,
-    );
+    setupBatchOrderMocks({ course, product, offering, paymentPlan, organizations });
 
     render(<CourseProductItem productId={product.id} course={course} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
@@ -304,24 +322,13 @@ describe('SaleTunnel', () => {
     }).one();
     const paymentPlan = PaymentPlanFactory().one();
 
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
-      offering,
-    );
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
-      paymentPlan,
-    );
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
+    setupBatchOrderMocks({ course, product, offering, paymentPlan });
+
     const orderQueryParameters = {
       product_id: product.id,
       course_code: course.code,
       state: NOT_CANCELED_ORDER_STATES,
     };
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
-      [],
-    );
 
     render(<CourseProductItem productId={product.id} course={course} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
@@ -423,27 +430,13 @@ describe('SaleTunnel', () => {
       product: { id: product.id, title: product.title },
     }).one();
 
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
+    setupBatchOrderMocks({
+      course,
+      product,
       offering,
-    );
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
       paymentPlan,
-    );
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify({
-        product_id: product.id,
-        course_code: course.code,
-        state: NOT_CANCELED_ORDER_STATES,
-      })}`,
-      [],
-    );
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/offerings/${offering.id}/get-organizations/`,
-      offeringOrganization,
-    );
+      organizations: offeringOrganization,
+    });
 
     render(<CourseProductItem productId={product.id} course={course} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
@@ -581,27 +574,7 @@ describe('SaleTunnel', () => {
     const paymentPlan = PaymentPlanFactory().one();
     const organizations = OrganizationFactory().many(3);
 
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/`,
-      offering,
-    );
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
-      paymentPlan,
-    );
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify({
-        product_id: product.id,
-        course_code: course.code,
-        state: NOT_CANCELED_ORDER_STATES,
-      })}`,
-      [],
-    );
-    fetchMock.get(
-      `https://joanie.endpoint/api/v1.0/offerings/${offering.id}/get-organizations/`,
-      organizations,
-    );
+    setupBatchOrderMocks({ course, product, offering, paymentPlan, organizations });
 
     render(<CourseProductItem productId={product.id} course={course} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
