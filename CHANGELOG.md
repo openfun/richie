@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add purchase order reference modal for quote process in dashboard organization
 - Update english texts for batch orders
 - Uncheck payment method in sale tunnel during the batch order creation
+- Hide B2B sale tunnel for certificate products
 
 ### Fixed
 
