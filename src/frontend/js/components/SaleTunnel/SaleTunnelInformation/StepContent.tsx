@@ -216,7 +216,9 @@ export const StepContent = ({
   return (
     <div className="step-content">
       <div className="step organization" hidden={activeStep !== 0}>
-        <FormattedMessage {...messages.stepCompanyTitle} />
+        <h4 className="title">
+          <FormattedMessage {...messages.stepCompanyTitle} />
+        </h4>
         <Input
           className="field"
           label={intl.formatMessage(messages.companyName)}
@@ -294,7 +296,9 @@ export const StepContent = ({
       </div>
       {otherBillingAddress && (
         <div className="step billing" hidden={activeStep !== 0}>
-          <FormattedMessage {...messages.stepBillingTitle} />
+          <h4 className="title">
+            <FormattedMessage {...messages.stepBillingTitle} />
+          </h4>
           <Input
             className="field"
             {...register('billing_address.contact_name')}
@@ -347,7 +351,9 @@ export const StepContent = ({
         </div>
       )}
       <div className="step admin" hidden={activeStep !== 1}>
-        <FormattedMessage {...messages.stepAdminTitle} />
+        <h4 className="title">
+          <FormattedMessage {...messages.stepAdminTitle} />
+        </h4>
         <Input
           className="field"
           {...register('administrative_lastname')}
@@ -411,7 +417,9 @@ export const StepContent = ({
         />
       </div>
       <div className="step signatory" hidden={activeStep !== 2}>
-        <FormattedMessage {...messages.stepSignatoryTitle} />
+        <h4 className="title">
+          <FormattedMessage {...messages.stepSignatoryTitle} />
+        </h4>
         <Input
           className="field"
           {...register('signatory_lastname')}
@@ -467,7 +475,9 @@ export const StepContent = ({
         />
       </div>
       <div className="step seats" hidden={activeStep !== 3}>
-        <FormattedMessage {...messages.stepParticipantsTitle} />
+        <h4 className="title">
+          <FormattedMessage {...messages.stepParticipantsTitle} />
+        </h4>
         <Input
           className="field"
           type="number"
@@ -479,7 +489,9 @@ export const StepContent = ({
         />
       </div>
       <div className="step financing" hidden={activeStep !== 4}>
-        <FormattedMessage {...messages.stepFinancingTitle} />
+        <h4 className="title">
+          <FormattedMessage {...messages.stepFinancingTitle} />
+        </h4>
         <RadioGroup fullWidth={true} className="payment-block">
           <Radio
             {...register('payment_method')}
@@ -512,7 +524,10 @@ export const StepContent = ({
             }
           />
         </RadioGroup>
-        <FormattedMessage {...messages.fundingEntity} />
+
+        <h4 className="title">
+          <FormattedMessage {...messages.fundingEntity} />
+        </h4>
         <div className="organism-block">
           <Input
             {...register('funding_entity')}
@@ -524,7 +539,10 @@ export const StepContent = ({
             label={intl.formatMessage(messages.fundingEntityAmount)}
           />
         </div>
-        <FormattedMessage {...messages.recommandation} />
+
+        <h4 className="title">
+          <FormattedMessage {...messages.recommandation} />
+        </h4>
         <Select
           label={intl.formatMessage(messages.participatingOrganisations)}
           clearable
