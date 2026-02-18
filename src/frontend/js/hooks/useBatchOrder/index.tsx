@@ -1,7 +1,13 @@
 import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { ResourcesQuery, useResource, useResources, UseResourcesProps } from 'hooks/useResources';
-import { API, BatchOrderQueryFilters, BatchOrderRead } from 'types/Joanie';
+import {
+  API,
+  BatchOrderQueryFilters,
+  BatchOrderRead,
+  BatchOrderSeat,
+  BatchOrderSeatsQueryFilters,
+} from 'types/Joanie';
 
 const messages = defineMessages({
   errorCreate: {
@@ -34,3 +40,17 @@ export const useBatchOrdersActions = () => {
     submitForPayment,
   };
 };
+
+const seatsProps: UseResourcesProps<
+  BatchOrderSeat,
+  BatchOrderSeatsQueryFilters,
+  API['user']['batchOrders']['seats']
+> = {
+  queryKey: ['batchOrders', 'seats'],
+  apiInterface: () => useJoanieApi().user.batchOrders.seats,
+  session: true,
+};
+
+export const useBatchOrderSeats = useResources<BatchOrderSeat, BatchOrderSeatsQueryFilters>(
+  seatsProps,
+);

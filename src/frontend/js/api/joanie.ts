@@ -107,6 +107,9 @@ export const getRoutes = () => {
         submit_for_payment: {
           create: `${baseUrl}/batch-orders/:id/submit-for-payment/`,
         },
+        seats: {
+          get: `${baseUrl}/batch-orders/:batch_order_id/seats/`,
+        },
       },
       certificates: {
         download: `${baseUrl}/certificates/:id/download/`,
@@ -349,6 +352,13 @@ const API = (): Joanie.API => {
                 method: 'POST',
               },
             ).then(checkStatus);
+          },
+        },
+        seats: {
+          get: async (filters?: Joanie.BatchOrderSeatsQueryFilters) => {
+            return fetchWithJWT(buildApiUrl(ROUTES.user.batchOrders.seats.get, filters)).then(
+              checkStatus,
+            );
           },
         },
       },

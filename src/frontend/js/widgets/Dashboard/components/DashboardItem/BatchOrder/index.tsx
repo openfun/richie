@@ -14,7 +14,12 @@ const messages = defineMessages({
   seats: {
     id: 'batchOrder.seats',
     description: 'Text displayed for seats value in batch order',
-    defaultMessage: 'Seats',
+    defaultMessage: '{nb_seats} seats',
+  },
+  seatsCount: {
+    id: 'batchOrder.seatsCount',
+    description: 'Text displayed for seats count in batch order (owned / total)',
+    defaultMessage: '{seats_owned}/{nb_seats} seats',
   },
   [BatchOrderState.DRAFT]: {
     id: 'batchOrder.status.draft',
@@ -101,6 +106,11 @@ const messages = defineMessages({
     description: 'Button label to navigate to a single batch order details',
     defaultMessage: 'View details',
   },
+  enrolledStudents: {
+    id: 'batchOrder.enrolledStudents',
+    description: 'Text displayed for enrolled students count',
+    defaultMessage: 'enrolled students',
+  },
 });
 
 export const DashboardItemBatchOrder = ({
@@ -133,13 +143,19 @@ export const DashboardItemBatchOrder = ({
                   </div>
                 </Badge>
               )}
-              {batchOrder.nb_seats && (
-                <div className="dashboard-item__block__information">
-                  <Icon name={IconTypeEnum.GROUPS} size="small" />
-                  <span>{batchOrder.nb_seats}</span>
-                  <span>{intl.formatMessage(messages.seats)}</span>
-                </div>
-              )}
+              <div className="dashboard-item__block__information">
+                <Icon name={IconTypeEnum.GROUPS} size="small" />
+                <span>
+                  {batchOrder.seats_owned
+                    ? intl.formatMessage(messages.seatsCount, {
+                        seats_owned: batchOrder.seats_owned || 0,
+                        nb_seats: batchOrder.nb_seats,
+                      })
+                    : intl.formatMessage(messages.seats, {
+                        nb_seats: batchOrder.nb_seats,
+                      })}
+                </span>
+              </div>
               {batchOrder.payment_method && (
                 <div className="dashboard-item__block__information">
                   <Icon name={IconTypeEnum.MONEY} size="small" />
