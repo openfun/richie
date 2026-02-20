@@ -112,6 +112,16 @@ const messages = defineMessages({
     description: 'Discount description',
     defaultMessage: 'Discount applied',
   },
+  noPaymentSchedule: {
+    id: 'components.SaleTunnel.Information.noPaymentSchedule',
+    description: 'Message displayed representing the payment schedule when the order is free.',
+    defaultMessage: 'No payment required. This order is fully covered.',
+  },
+  noBillingInformation: {
+    id: 'components.SaleTunnel.Information.noBillingInformation',
+    description: 'Message displayed when the order is part of a batch order',
+    defaultMessage: 'No billing information required. This order is covered by your organization.',
+  },
 });
 
 export const SaleTunnelInformationSingular = () => {
@@ -162,14 +172,6 @@ export const SaleTunnelInformationSingular = () => {
 
   return (
     <>
-      <div>
-        <Voucher
-          discount={discount}
-          voucherError={voucherError}
-          setVoucherError={setVoucherError}
-        />
-        <Total price={price} discountedPrice={discountedPrice} />
-      </div>
       {needsPayment && (
         <div>
           <h3 className="block-title mb-t">
@@ -178,7 +180,6 @@ export const SaleTunnelInformationSingular = () => {
           <div className="description mb-s">
             <FormattedMessage {...messages.description} />
           </div>
-          <AddressSelector />
           {isKeycloakBackend ? (
             <KeycloakAccountEdit />
           ) : (
@@ -189,10 +190,38 @@ export const SaleTunnelInformationSingular = () => {
               </div>
             </>
           )}
+          <AddressSelector />
+        </div>
+      )}
+      {!needsPayment && (
+        <div>
+          <h3 className="block-title">
+            <FormattedMessage {...messages.title} />
+          </h3>
+          <Alert type={VariantType.NEUTRAL}>
+            <FormattedMessage {...messages.noBillingInformation} />
+          </Alert>
         </div>
       )}
       <div>
-        {showPaymentSchedule && <PaymentScheduleBlock schedule={schedule} />}
+        {showPaymentSchedule ? (
+          <PaymentScheduleBlock schedule={schedule!} />
+        ) : (
+          <div>
+            <h4 className="block-title">
+              <FormattedMessage {...messages.paymentSchedule} />
+            </h4>
+            <Alert type={VariantType.NEUTRAL}>
+              <FormattedMessage {...messages.noPaymentSchedule} />
+            </Alert>
+          </div>
+        )}
+        <Voucher
+          discount={discount}
+          voucherError={voucherError}
+          setVoucherError={setVoucherError}
+        />
+        <Total price={price} discountedPrice={discountedPrice} />
         {needsPayment && <WithdrawRightCheckbox />}
       </div>
     </>

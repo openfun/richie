@@ -374,7 +374,8 @@ describe('SaleTunnel', () => {
     );
     await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT100');
     await user.click(screen.getByRole('button', { name: 'Validate' }));
-    expect(screen.queryByRole('heading', { name: 'Payment schedule' })).not.toBeInTheDocument();
+    await screen.findByRole('heading', { level: 4, name: 'Payment schedule' });
+    screen.getByText('No payment required. This order is fully covered.');
     await screen.findByTestId('sale-tunnel__total__amount');
     const $totalAmountVoucher = screen.getByTestId('sale-tunnel__total__amount');
     expect($totalAmountVoucher).toHaveTextContent(

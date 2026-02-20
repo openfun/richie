@@ -134,7 +134,10 @@ const OpenEdxFullNameForm = () => {
   return (
     <FormProvider {...form}>
       <Form name="openedx-fullname-form" noValidate>
-        <Alert type={formState.errors.name?.message ? VariantType.ERROR : VariantType.WARNING}>
+        <Alert
+          className="mt-s"
+          type={formState.errors.name?.message ? VariantType.ERROR : VariantType.WARNING}
+        >
           <FormattedMessage {...messages.fullNameInputDescription} />
         </Alert>
         <Input

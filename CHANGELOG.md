@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Update english texts for batch orders
 - Uncheck payment method in sale tunnel during the batch order creation
 - Hide B2B sale tunnel for certificate products
+- Improve UI in sale tunnel
 
 ### Fixed
 
