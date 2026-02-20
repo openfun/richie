@@ -44,11 +44,11 @@ export const SaleTunnelInformation = () => {
   ];
   const [purchaseType, setPurchaseType] = useState(FormType.SINGULAR);
 
+  const isCertificate = productType === ProductType.CERTIFICATE;
+
   return (
     <div className="sale-tunnel__main__column sale-tunnel__information">
-      {productType === ProductType.CERTIFICATE ? (
-        <SaleTunnelInformationSingular />
-      ) : (
+      {!isCertificate && (
         <div>
           <h3 className="block-title mb-t">
             <FormattedMessage {...messages.purchaseTypeTitle} />
@@ -65,10 +65,10 @@ export const SaleTunnelInformation = () => {
               setSchedule(undefined);
             }}
           />
-          {purchaseType === FormType.SINGULAR && <SaleTunnelInformationSingular />}
-          {purchaseType === FormType.GROUP && <SaleTunnelInformationGroup />}
         </div>
       )}
+      {purchaseType === FormType.SINGULAR && <SaleTunnelInformationSingular />}
+      {purchaseType === FormType.GROUP && !isCertificate && <SaleTunnelInformationGroup />}
     </div>
   );
 };
