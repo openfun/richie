@@ -1899,6 +1899,34 @@
     "description": "Label for the email",
     "message": "Correio eletrónico da conta"
   },
+  "components.SaleTunnel.Information.keycloak.account.info": {
+    "description": "Info for the name",
+    "message": "This name will be used in legal documents."
+  },
+  "components.SaleTunnel.Information.keycloak.account.label": {
+    "description": "Label for the name",
+    "message": "Account name"
+  },
+  "components.SaleTunnel.Information.keycloak.email.info": {
+    "description": "Info for the email",
+    "message": "This email will be used to send you confirmation mails."
+  },
+  "components.SaleTunnel.Information.keycloak.updateLinkInfo": {
+    "description": "Text before the keycloak account update link",
+    "message": "If any of the information above is incorrect,"
+  },
+  "components.SaleTunnel.Information.keycloak.updateLinkLabel": {
+    "description": "Label of the keycloak link to update account",
+    "message": "please update your account"
+  },
+  "components.SaleTunnel.Information.noBillingInformation": {
+    "description": "Message displayed when the order is part of a batch order",
+    "message": "No billing information required. This order is covered by your organization."
+  },
+  "components.SaleTunnel.Information.noPaymentSchedule": {
+    "description": "Message displayed representing the payment schedule when the order is free.",
+    "message": "No payment required. This order is fully covered."
+  },
   "components.SaleTunnel.Information.paymentSchedule": {
     "description": "Title for the payment schedule section",
     "message": "Calendário de pagamento"
