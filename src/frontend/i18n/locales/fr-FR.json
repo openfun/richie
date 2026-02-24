@@ -1821,7 +1821,7 @@
   },
   "components.SaleTunnel.BatchOrderForm.stepCompanyTitle": {
     "description": "Title of the section with company/organization details",
-    "message": "Informations sur votre entreprise / organisation"
+    "message": "Informations sur votre entreprise / organisme"
   },
   "components.SaleTunnel.BatchOrderForm.stepFinancing": {
     "description": "Step label for financing/payment in the batch order form",
@@ -1898,6 +1898,34 @@
   "components.SaleTunnel.Information.email.label": {
     "description": "Label for the email",
     "message": "Courriel du compte"
+  },
+  "components.SaleTunnel.Information.keycloak.account.info": {
+    "description": "Info for the name",
+    "message": "Ce nom sera utilisé dans les documents légaux."
+  },
+  "components.SaleTunnel.Information.keycloak.account.label": {
+    "description": "Label for the name",
+    "message": "Nom du compte"
+  },
+  "components.SaleTunnel.Information.keycloak.email.info": {
+    "description": "Info for the email",
+    "message": "Ce courriel sera utilisé pour vous envoyer des messages de confirmation."
+  },
+  "components.SaleTunnel.Information.keycloak.updateLinkInfo": {
+    "description": "Text before the keycloak account update link",
+    "message": "Si l'une des informations ci-dessus est incorrecte,"
+  },
+  "components.SaleTunnel.Information.keycloak.updateLinkLabel": {
+    "description": "Label of the keycloak link to update account",
+    "message": "veuillez mettre à jour votre compte"
+  },
+  "components.SaleTunnel.Information.noBillingInformation": {
+    "description": "Message displayed when the order is part of a batch order",
+    "message": "Aucune information de facturation requise. Cette commande est prise en charge par votre organisme."
+  },
+  "components.SaleTunnel.Information.noPaymentSchedule": {
+    "description": "Message displayed representing the payment schedule when the order is free.",
+    "message": "Aucun paiement requis. Cette commande est entièrement prise en charge."
   },
   "components.SaleTunnel.Information.paymentSchedule": {
     "description": "Title for the payment schedule section",
@@ -2065,7 +2093,7 @@
   },
   "components.SaleTunnelSuccess.successDetailMessage": {
     "description": "Text to explain when the user will be able to start its training.",
-    "message": "Vous pourrez débuter votre formation dès que la première échéance aura été prélevée."
+    "message": "Vous pourrez débuter votre formation dès le règlement de la première échéance, ou dès l’ouverture de l’accès si aucun paiement n’est requis."
   },
   "components.SaleTunnelSuccess.successMessage": {
     "description": "Message to confirm that order has been created",
