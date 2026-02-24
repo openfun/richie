@@ -18,7 +18,7 @@
 FROM python:3.11-bookworm AS base
 
 # ---- Front-end builder image ----
-FROM node:20.11 AS front-builder
+FROM node:20.19 AS front-builder
 
 # Copy frontend app sources
 COPY ./src/frontend /builder/src/frontend
