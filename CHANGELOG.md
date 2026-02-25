@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.3.0] - 2026-02-25
+
 ### Added
 
 - Add keycloak as an authentication backend
@@ -2391,8 +2393,9 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v3.2.1...master
-[3.2.0]: https://github.com/openfun/richie/compare/v3.2.0...v3.2.1
+[unreleased]: https://github.com/openfun/richie/compare/v3.3.0...master
+[3.3.0]: https://github.com/openfun/richie/compare/v3.2.1...v3.3.0
+[3.2.1]: https://github.com/openfun/richie/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/openfun/richie/compare/v3.1.2...v3.2.0
 [3.1.2]: https://github.com/openfun/richie/compare/v3.1.1...v3.1.2
 [3.1.1]: https://github.com/openfun/richie/compare/v3.1.0...v3.1.1
