@@ -34,12 +34,17 @@ const messages = defineMessages({
   selfPaceRunPeriod: {
     id: 'components.SyllabusCourseRunCompacted.selfPaceCoursePeriod',
     description: 'Course date of an opened and self paced course run block',
-    defaultMessage: 'Available until {endDate}',
+    defaultMessage: 'Until {endDate, select, undefined {} other {{endDate}}}',
   },
   selfPaceNoEndDate: {
     id: 'components.SyllabusCourseRunCompacted.selfPaceNoEndDate',
     description: 'Self paced course run block with no end date',
     defaultMessage: 'Available',
+  },
+  enrollment: {
+    id: 'components.SyllabusCourseRun.enrollment',
+    description: 'Title of the enrollment dates section of an opened course run block',
+    defaultMessage: 'Enrollment',
   },
   coursePrice: {
     id: 'components.SyllabusCourseRunCompacted.coursePrice',
@@ -105,6 +110,7 @@ const OpenedSelfPacedCourseRun = ({
   let enrollmentDiscountedPrice = '';
   let certificatePrice = '';
   let certificateDiscountedPrice = '';
+  const enrollmentEnd = courseRun.enrollment_end ? formatDate(courseRun.enrollment_end) : '...';
 
   if (courseRun.offer) {
     const offer = courseRun.offer.toUpperCase().replaceAll(' ', '_');
@@ -157,23 +163,34 @@ const OpenedSelfPacedCourseRun = ({
     <>
       {courseRun.title && <h3>{StringHelper.capitalizeFirst(courseRun.title)}</h3>}
       <dl>
-        {!showLanguages && (
-          <dt>
-            <FormattedMessage {...messages.course} />
-          </dt>
+        {hasEndDate ? (
+          <>
+            <dt>
+              <FormattedMessage {...messages.enrollment} />
+            </dt>
+            <dd>
+              <FormattedMessage
+                {...messages.selfPaceRunPeriod}
+                values={{
+                  endDate: enrollmentEnd,
+                }}
+              />
+            </dd>
+            <dt>
+              <FormattedMessage {...messages.course} />
+            </dt>
+            <dd>
+              <FormattedMessage
+                {...messages.selfPaceRunPeriod}
+                values={{
+                  endDate: end,
+                }}
+              />
+            </dd>
+          </>
+        ) : (
+          <FormattedMessage {...messages.selfPaceNoEndDate} />
         )}
-        <dd>
-          {hasEndDate ? (
-            <FormattedMessage
-              {...messages.selfPaceRunPeriod}
-              values={{
-                endDate: end,
-              }}
-            />
-          ) : (
-            <FormattedMessage {...messages.selfPaceNoEndDate} />
-          )}
-        </dd>
         {!showLanguages && (
           <>
             <dt>
