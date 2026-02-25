@@ -46,3 +46,24 @@ release.
 Before asking for a new language, make sure it does not already exist. If your language already
 exists in another variant (e.g. Brazilian portuguese vs Portugal portuguese), you may consider
 contributing on the existing language if your resources to contribute are limited.
+
+### Troubleshooting
+
+When you need to fetch and download the translations from Crowdin by executing the command:
+`make i18n-download-and-compile`, but you encounter this error :
+
+```bash
+openfun/richie$ make i18n-download-and-compile
+✔️  Fetching project info
+✔️  Building ZIP archive with the latest translations
+✔️  Building translation (100%)
+✔️  Downloading translations
+✔️  Extracting archive
+⚠️  Couldn't find any file to download
+⚠️  Downloaded translations don't match the current project configuration. The translations for
+the following sources will be omitted (use --verbose to get the list of the omitted translations):
+        - frontend.json (9)
+        - backend.pot (8)
+```
+
+Run `make i18n-generate` first, then rerun `make i18n-download-and-compile`
