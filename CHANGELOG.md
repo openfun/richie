@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Hide payment plan block for certificates
+
 ## [3.3.0] - 2026-02-25
 
 ### Added
