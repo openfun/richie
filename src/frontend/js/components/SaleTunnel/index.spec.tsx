@@ -484,8 +484,12 @@ describe.each([
         });
       });
     } else {
-      await screen.findByRole('heading', { level: 4, name: 'Payment schedule' });
-      screen.getByText('No payment required. This order is fully covered.');
+      expect(
+        screen.queryByRole('heading', { level: 4, name: 'Payment schedule' }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('No payment required. This order is fully covered.'),
+      ).not.toBeInTheDocument();
       expect(screen.queryByRole('table')).toBeNull();
     }
 
@@ -624,8 +628,12 @@ describe.each([
         });
       });
     } else {
-      await screen.findByRole('heading', { level: 4, name: 'Payment schedule' });
-      screen.getByText('No payment required. This order is fully covered.');
+      expect(
+        screen.queryByRole('heading', { level: 4, name: 'Payment schedule' }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('No payment required. This order is fully covered.'),
+      ).not.toBeInTheDocument();
       expect(screen.queryByRole('table')).toBeNull();
     }
 
@@ -838,10 +846,12 @@ describe.each([
         'No billing information required. This order is covered by your organization.',
       ),
     ).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 4, name: 'Payment schedule' })).toBeInTheDocument();
     expect(
-      screen.getByText('No payment required. This order is fully covered.'),
-    ).toBeInTheDocument();
+      screen.queryByRole('heading', { level: 4, name: 'Payment schedule' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('No payment required. This order is fully covered.'),
+    ).not.toBeInTheDocument();
   });
 
   it('should hide voucher code input when one is already used', async () => {

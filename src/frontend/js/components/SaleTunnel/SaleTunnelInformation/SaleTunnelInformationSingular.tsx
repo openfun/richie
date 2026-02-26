@@ -146,9 +146,8 @@ export const SaleTunnelInformationSingular = () => {
   const discount = query.data?.discount ?? props.paymentPlan?.discount;
   const fromBatchOrder = query.data?.from_batch_order ?? props.paymentPlan?.from_batch_order;
 
-  const showPaymentSchedule =
+  const isCredentialWithPrice =
     product.type === ProductType.CREDENTIAL &&
-    schedule &&
     (discountedPrice != null ? discountedPrice > 0 : price != null && price > 0);
 
   useEffect(() => {
@@ -204,18 +203,19 @@ export const SaleTunnelInformationSingular = () => {
         </div>
       )}
       <div>
-        {showPaymentSchedule ? (
-          <PaymentScheduleBlock schedule={schedule!} />
-        ) : (
-          <div>
-            <h4 className="block-title">
-              <FormattedMessage {...messages.paymentSchedule} />
-            </h4>
-            <Alert type={VariantType.NEUTRAL}>
-              <FormattedMessage {...messages.noPaymentSchedule} />
-            </Alert>
-          </div>
-        )}
+        {isCredentialWithPrice &&
+          (schedule ? (
+            <PaymentScheduleBlock schedule={schedule!} />
+          ) : (
+            <div>
+              <h4 className="block-title">
+                <FormattedMessage {...messages.paymentSchedule} />
+              </h4>
+              <Alert type={VariantType.NEUTRAL}>
+                <FormattedMessage {...messages.noPaymentSchedule} />
+              </Alert>
+            </div>
+          ))}
         <Voucher
           discount={discount}
           voucherError={voucherError}
