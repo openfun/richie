@@ -17,6 +17,10 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(' +
       'react-intl' +
+      '|@formatjs' +
+      '|intl-messageformat' +
+      '|@tanstack' +
+      '|uuid' +
       '|lodash-es' +
       '|@hookform/resolvers' +
       '|query-string' +
