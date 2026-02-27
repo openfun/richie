@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { RichieContextFactory, CourseLightFactory } from 'utils/test/factories/richie';
 import { CourseGlimpseList, getCourseGlimpseListProps } from '.';
 

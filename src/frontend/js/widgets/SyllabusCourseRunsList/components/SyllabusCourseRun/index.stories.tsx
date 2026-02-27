@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { CourseRunFactory, PacedCourseFactory } from 'utils/test/factories/richie';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { CourseCertificateOffer, CourseOffer } from '../../../../types/Course';

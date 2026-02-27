@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { IntlProvider } from 'react-intl';
 import { Slide } from './types';
 import Slider from '.';

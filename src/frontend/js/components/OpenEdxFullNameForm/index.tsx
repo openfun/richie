@@ -78,7 +78,7 @@ const OpenEdxFullNameForm = () => {
     defaultValues,
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema) as any,
   });
 
   const { getValues, register, handleSubmit, reset, formState } = form;

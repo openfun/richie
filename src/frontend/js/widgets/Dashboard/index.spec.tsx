@@ -82,7 +82,7 @@ describe('<Dashboard />', () => {
 
     await expectNoSpinner('Loading orders and enrollments...');
 
-    expect(location.replace).not.toBeCalled();
+    expect(location.replace).not.toHaveBeenCalled();
     expectUrlMatchLocationDisplayed(LearnerDashboardPaths.COURSES);
   });
 

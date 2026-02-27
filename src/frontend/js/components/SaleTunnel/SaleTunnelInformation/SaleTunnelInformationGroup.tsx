@@ -197,7 +197,7 @@ const BatchOrderForm = () => {
   const form = useForm<BatchOrder>({
     defaultValues: batchOrder || defaultValues,
     mode: 'onBlur',
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema) as any,
   });
   const { watch } = form;
   const values = watch();

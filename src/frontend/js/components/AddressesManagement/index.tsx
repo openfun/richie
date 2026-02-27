@@ -1,4 +1,4 @@
-import { Children, useEffect, useState, RefAttributes } from 'react';
+import { Children, useEffect, useState, Ref } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Button } from '@openfun/cunningham-react';
 import AddressForm, { type AddressFormValues } from 'components/AddressesManagement/AddressForm';
@@ -105,9 +105,10 @@ export const messages = defineMessages({
   },
 });
 
-interface AddressesManagementProps extends RefAttributes<HTMLDivElement> {
+interface AddressesManagementProps {
   handleClose: () => void;
   selectAddress: (address: Joanie.Address) => void;
+  ref?: Ref<HTMLDivElement>;
 }
 
 const AddressesManagement = ({ handleClose, selectAddress, ref }: AddressesManagementProps) => {

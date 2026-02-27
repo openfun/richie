@@ -157,10 +157,21 @@ const useDownloadContractArchive = ({
   // this effect will trigger the download
   // if it have been previously requested by the user
   useEffect(() => {
-    if (isDownloadRequest && isContractArchiveExists) {
-      downloadContractArchive();
+    if (isDownloadRequest && isContractArchiveExists && contractArchiveId !== null) {
+      (async () => {
+        await getArchive(contractArchiveId);
+        setIsDownloadRequest(false);
+        setContractArchiveId(null);
+        unstoreContractArchiveId(localstorageArchiveFilters);
+      })();
     }
-  }, [isDownloadRequest, isContractArchiveExists]);
+  }, [
+    isDownloadRequest,
+    isContractArchiveExists,
+    contractArchiveId,
+    localstorageArchiveFilters,
+    getArchive,
+  ]);
 
   return {
     status: contractDownloadStatus,

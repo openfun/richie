@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 import { useCallback, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { MutateOptions } from '@tanstack/query-core/src/types';
+import { MutateOptions } from '@tanstack/query-core';
 import { AddParameters, Maybe } from 'types/utils';
 import { HttpError } from 'utils/errors/HttpError';
 import { useSessionQuery } from 'utils/react-query/useSessionQuery';

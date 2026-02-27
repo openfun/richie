@@ -17,7 +17,7 @@
       "esnext.intl"
     ],
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "paths": {
       "intl-pluralrules": ["types/libs/intl-pluralrules"],
       "keycloak-js": ["../node_modules/keycloak-js/lib/keycloak"]

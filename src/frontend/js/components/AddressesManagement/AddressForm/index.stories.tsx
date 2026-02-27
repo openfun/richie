@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { AddressFactory } from 'utils/test/factories/joanie';
 import AddressForm from '.';

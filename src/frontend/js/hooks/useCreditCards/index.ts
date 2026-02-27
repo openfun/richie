@@ -1,6 +1,5 @@
 import { defineMessages, useIntl } from 'react-intl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MutateOptions } from '@tanstack/query-core';
 import { API, CreditCard } from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
@@ -84,7 +83,10 @@ const useCreditCardResources =
      * If the error is a 409, it means the credit card is used to pay at least one order
      * and the user should be informed about that.
      */
-    const deleteMutateAsync = async (creditCard: CreditCard, options?: MutateOptions) => {
+    const deleteMutateAsync = async (
+      creditCard: CreditCard,
+      options?: Parameters<typeof custom.methods.delete>[1],
+    ) => {
       return custom.methods.delete(creditCard.id, {
         ...options,
         onError: (error: HttpError, variables, context) => {
@@ -97,7 +99,7 @@ const useCreditCardResources =
           } else {
             custom.methods.setError(intl.formatMessage(messages.errorDelete));
           }
-          options?.onError?.(error, variables, context);
+          options?.onError?.(error, variables, context, undefined as any);
         },
       });
     };

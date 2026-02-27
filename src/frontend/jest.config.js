@@ -17,6 +17,10 @@ module.exports = {
   transformIgnorePatterns: [
     'node_modules/(?!(' +
       'react-intl' +
+      '|@formatjs' +
+      '|intl-messageformat' +
+      '|@tanstack' +
+      '|uuid' +
       '|lodash-es' +
       '|@hookform/resolvers' +
       '|query-string' +
@@ -25,6 +29,7 @@ module.exports = {
       '|filter-obj' +
       '|@openfun/cunningham-react' +
       '|keycloak-js' +
+      '|@faker-js/faker' +
       ')/)',
   ],
   globals: {

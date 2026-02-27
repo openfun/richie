@@ -39,7 +39,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
     defaultValues: address || defaultValues,
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema) as any,
   });
   const { register, handleSubmit, reset, formState } = form;
 

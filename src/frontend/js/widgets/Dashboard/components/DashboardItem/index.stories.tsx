@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { DashboardItem, DEMO_IMAGE_URL } from './index';
 
 export default {
