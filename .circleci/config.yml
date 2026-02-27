@@ -748,7 +748,7 @@ jobs:
           name: Enter the newly created project and add a new site "ci"
           command: |
             cd fun-richie-site-factory
-            cookiecutter template -o sites/ --no-input site=${RICHIE_SITE} domain=${RICHIE_SITE}.test
+            cookiecutter template -o sites/ --no-input site=${RICHIE_SITE} domain=${RICHIE_SITE}.test second_lang_code=fr second_lang_name=French
       - run:
           name: Create env files
           command: |
