@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { PropsWithChildren, useState, useRef, CSSProperties } from 'react';
 import { HttpStatusCode } from 'utils/errors/HttpError';
 import { Icon, IconTypeEnum } from './index';
@@ -69,6 +69,7 @@ const IconContainer = ({ name, enumKey }: IconContainerProps) => {
   };
 
   const clipboardCopy = () => {
+    // eslint-disable-next-line compat/compat
     navigator.clipboard.writeText(`${ENUM_NAME}.${enumKey}`);
     setShowTooltip(true);
     if (timeoutRef.current) clearTimeout(timeoutRef.current);

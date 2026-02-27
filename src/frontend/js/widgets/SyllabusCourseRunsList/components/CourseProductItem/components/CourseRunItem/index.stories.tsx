@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { CredentialOrderFactory, TargetCourseFactory } from 'utils/test/factories/joanie';
 import { StorybookHelper } from 'utils/StorybookHelper';
