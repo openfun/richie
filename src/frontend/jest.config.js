@@ -25,6 +25,7 @@ module.exports = {
       '|filter-obj' +
       '|@openfun/cunningham-react' +
       '|keycloak-js' +
+      '|@faker-js/faker' +
       ')/)',
   ],
   globals: {

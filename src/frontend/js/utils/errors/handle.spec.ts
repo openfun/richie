@@ -19,12 +19,12 @@ jest.mock('@sentry/browser', () => ({
 
 describe('handle', () => {
   it('should initialize sentry', () => {
-    expect(Sentry.init).toBeCalledTimes(1);
-    expect(Sentry.setTag).toBeCalledTimes(1);
+    expect(Sentry.init).toHaveBeenCalledTimes(1);
+    expect(Sentry.setTag).toHaveBeenCalledTimes(1);
   });
 
   it('should report error to sentry', () => {
     handle(new Error('An error for test'));
-    expect(Sentry.captureException).toBeCalledTimes(1);
+    expect(Sentry.captureException).toHaveBeenCalledTimes(1);
   });
 });

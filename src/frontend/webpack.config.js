@@ -60,6 +60,14 @@ module.exports = (env) => {
       extensions: ['.ts', '.tsx', '.js', '.json'],
       plugins: [new TsconfigPathsPlugin({})],
       modules: ['node_modules', ...richieDependentModuleResolutions],
+      alias: {
+        // @formatjs/intl-relativetimeformat v11+ uses package.json#exports which doesn't
+        // expose `./locale-data` as a resolvable path prefix for webpack5 dynamic imports.
+        '@formatjs/intl-relativetimeformat/locale-data': path.resolve(
+          __dirname,
+          'node_modules/@formatjs/intl-relativetimeformat/locale-data',
+        ),
+      },
     },
 
     module: {

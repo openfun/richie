@@ -1,5 +1,4 @@
 import { defineMessages, useIntl } from 'react-intl';
-import { MutateOptions } from '@tanstack/react-query';
 import { useAddresses } from 'hooks/useAddresses';
 import * as Joanie from 'types/Joanie';
 import { confirm } from 'utils/indirection/window';
@@ -58,7 +57,10 @@ export function useAddressesManagement() {
    * @param {Joanie.Address} address
    * @param {AddressesMutateOptions} options
    */
-  const remove = (address: Joanie.Address, options?: MutateOptions) => {
+  const remove = (
+    address: Joanie.Address,
+    options?: Parameters<typeof addresses.methods.delete>[1],
+  ) => {
     if (address.is_main) {
       addresses.methods.setError(intl.formatMessage(messages.errorCannotRemoveMain));
       return;

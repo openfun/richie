@@ -24,7 +24,7 @@ export function useSessionMutation<TData = unknown, TVariables = void, TContext 
     }
 
     if (options?.onError) {
-      return options.onError(error, variables, context);
+      return options.onError(error, variables, context, undefined as any);
     }
   };
 
