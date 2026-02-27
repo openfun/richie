@@ -248,7 +248,7 @@ describe('ProductHelper', () => {
     it('should throw an error when the product is a certificate and the enrollment is undefined', () => {
       const product = CertificateProductFactory().one();
 
-      expect(() => ProductHelper.hasOpenedTargetCourse(product, undefined)).toThrowError(
+      expect(() => ProductHelper.hasOpenedTargetCourse(product, undefined)).toThrow(
         'Unable to check if the certificate product relies on an opened course run without enrollment.',
       );
     });

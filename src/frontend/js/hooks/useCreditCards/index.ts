@@ -84,10 +84,13 @@ const useCreditCardResources =
      * If the error is a 409, it means the credit card is used to pay at least one order
      * and the user should be informed about that.
      */
-    const deleteMutateAsync = async (creditCard: CreditCard, options?: MutateOptions) => {
+    const deleteMutateAsync = async (
+      creditCard: CreditCard,
+      options?: Parameters<typeof custom.methods.delete>[1],
+    ) => {
       return custom.methods.delete(creditCard.id, {
         ...options,
-        onError: (error: HttpError, variables, context) => {
+        onError: (error: HttpError, variables, context, mutationContext) => {
           if (error.code === HttpStatusCode.CONFLICT) {
             custom.methods.setError(
               intl.formatMessage(messages.errorCannotDelete, {
@@ -97,7 +100,7 @@ const useCreditCardResources =
           } else {
             custom.methods.setError(intl.formatMessage(messages.errorDelete));
           }
-          options?.onError?.(error, variables, context);
+          options?.onError?.(error, variables, context, mutationContext);
         },
       });
     };
