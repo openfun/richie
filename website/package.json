@@ -23,13 +23,13 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
-    "@docusaurus/core": "3.7.0",
-    "@docusaurus/plugin-content-pages": "3.7.0",
-    "@docusaurus/preset-classic": "3.7.0",
+    "@docusaurus/core": "3.9.2",
+    "@docusaurus/plugin-content-pages": "3.9.2",
+    "@docusaurus/preset-classic": "3.9.2",
     "clsx": "2.1.1",
-    "prettier": "3.5.3",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "prettier": "3.8.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "react-markdown": "10.1.0"
   },
   "volta": {
