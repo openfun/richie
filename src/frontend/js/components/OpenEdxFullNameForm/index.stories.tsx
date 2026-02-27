@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import OpenEdxFullNameForm from '.';
 

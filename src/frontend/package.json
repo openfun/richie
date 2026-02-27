@@ -33,9 +33,9 @@
   },
   "homepage": "https://github.com/openfun/richie#readme",
   "browserslist": [
-    "last 2 versions",
-    ">1%",
-    "not dead"
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
   ],
   "dependencies": {
     "@babel/core": "7.29.0",

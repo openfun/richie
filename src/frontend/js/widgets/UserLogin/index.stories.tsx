@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { StorybookHelper } from 'utils/StorybookHelper';
 import { RichieContextFactory } from 'utils/test/factories/richie';
 import UserLogin from '.';

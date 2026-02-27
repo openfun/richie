@@ -1,41 +1,43 @@
 #! /usr/bin/env node
 const path = require('path');
 const fs = require('fs');
-const yargs = require('yargs');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
 const { glob } = require('glob');
 const { merge } = require('cljs-merge');
 
 /**
  * compile-translations
- * 
+ *
  * formatjs/cli compile and compile-folder methods do not allow merge.
  * So we need your own compile method.
- * 
+ *
  * Without specify option, this script compile all translations files includes
  * in i18n/locales into js/translations
- * 
+ *
  * You can provide a search pattern to include other translation sources. If several files have the
  * same name, they will be merged.
- * 
+ *
  * Usage: ./compile-translations.js [search_patterns] [--ignore] [--outDir <path_to_output_files]
- * 
- * 
+ *
+ *
  * ARGUMENTS:
  *  search_pattern      list of patterns to search additional translation files (support only json)
  *  --ignore            a pattern to ignore a path where search files (e.g ./node_modules)
  *  --outDir            output directory
- * 
+ *
  */
 
+const { argv } = yargs(hideBin(process.argv));
 
 // Transparently includes Richie default translation files to lighten command
 const LOCALES_PATTERN = path.resolve(__dirname, `./locales/*.json`);
 // Output directory
-const OUT_DIR = yargs.argv.outDir || path.resolve(__dirname, `../js/translations`);
+const OUT_DIR = argv.outDir || path.resolve(__dirname, `../js/translations`);
 
 
 (async () => {
-  const { ignore, _: patterns } = yargs.argv
+  const { ignore, _: patterns } = argv
   const filesPattern = [
     LOCALES_PATTERN,
     ...patterns.map((filepath) => path.resolve(process.cwd(), filepath))

@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { UserFactory } from 'utils/test/factories/richie';
 import { OrganizationFactory } from 'utils/test/factories/joanie';
 import { DashboardAvatar, DashboardAvatarVariantEnum } from '.';

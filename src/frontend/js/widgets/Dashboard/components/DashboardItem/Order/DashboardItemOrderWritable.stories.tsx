@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { CredentialOrder, OrderState, Product, TargetCourse } from 'types/Joanie';
 import { QueryStateFactory } from 'utils/test/factories/reactQuery';
 import {

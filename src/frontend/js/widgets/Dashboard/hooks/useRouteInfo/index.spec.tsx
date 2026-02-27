@@ -1,4 +1,4 @@
-import { PropsWithChildren, useMemo } from 'react';
+import { PropsWithChildren } from 'react';
 import { renderHook, waitFor } from '@testing-library/react';
 import { RouterWrapper } from 'utils/test/wrappers/RouterWrapper';
 import useRouteInfo from '.';

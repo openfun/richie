@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { CreditCardFactory } from 'utils/test/factories/joanie';
 import { CreditCard, CreditCardBrand } from 'types/Joanie';
 import { CreditCardBrandLogo } from './CreditCardBrandLogo';

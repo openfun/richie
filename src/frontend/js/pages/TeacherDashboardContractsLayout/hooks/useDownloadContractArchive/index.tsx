@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useRef } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useContractArchive from 'hooks/useContractArchive';
 import { Offering, Organization } from 'types/Joanie';
 import useCheckContractArchiveExists from '../useCheckContractArchiveExists';
@@ -158,7 +158,7 @@ const useDownloadContractArchive = ({
   // if it have been previously requested by the user
   useEffect(() => {
     if (isDownloadRequest && isContractArchiveExists && contractArchiveId !== null) {
-      void (async () => {
+      (async () => {
         await getArchive(contractArchiveId);
         setIsDownloadRequest(false);
         setContractArchiveId(null);
