@@ -116,9 +116,9 @@ describe.each([
     });
 
     await waitFor(() => {
-      expect(result.current.isPolling).toBe(false);
+      expect(result.current.isContractArchiveExists).toBe(true);
     });
-    expect(result.current.isContractArchiveExists).toBe(true);
+    expect(result.current.isPolling).toBe(false);
   });
 
   it('should do nothing when enable is false', () => {
@@ -160,8 +160,8 @@ describe.each([
     mockCheckArchive.mockResolvedValue(true);
     await waitFor(() => {
       expect(mockCheckArchive).toHaveBeenCalledTimes(2);
+      expect(result.current.isContractArchiveExists).toBe(true);
+      expect(result.current.isPolling).toBe(false);
     });
-    expect(result.current.isPolling).toBe(false);
-    expect(result.current.isContractArchiveExists).toBe(true);
   });
 });
