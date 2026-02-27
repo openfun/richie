@@ -1,6 +1,5 @@
 import { defineMessages, useIntl } from 'react-intl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MutateOptions } from '@tanstack/query-core';
 import { API, CreditCard } from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';

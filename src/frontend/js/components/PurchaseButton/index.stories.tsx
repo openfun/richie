@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { ProductFactory } from 'utils/test/factories/joanie';
 import PurchaseButton from '.';
 
