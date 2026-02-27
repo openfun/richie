@@ -24,7 +24,7 @@ export function useSessionMutation<TData = unknown, TVariables = void, TContext 
     context: TContext | undefined,
     mutationContext: MutationFunctionContext,
   ) => {
-    if (error.code === HttpStatusCode.UNAUTHORIZED) {
+    if (error && error.code === HttpStatusCode.UNAUTHORIZED) {
       await queryClient.invalidateQueries({ queryKey: ['user'], exact: true });
     }
 

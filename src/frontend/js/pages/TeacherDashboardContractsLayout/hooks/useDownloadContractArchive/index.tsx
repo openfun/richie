@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import useContractArchive from 'hooks/useContractArchive';
 import { Offering, Organization } from 'types/Joanie';
 import useCheckContractArchiveExists from '../useCheckContractArchiveExists';
@@ -157,10 +157,21 @@ const useDownloadContractArchive = ({
   // this effect will trigger the download
   // if it have been previously requested by the user
   useEffect(() => {
-    if (isDownloadRequest && isContractArchiveExists) {
-      downloadContractArchive();
+    if (isDownloadRequest && isContractArchiveExists && contractArchiveId !== null) {
+      void (async () => {
+        await getArchive(contractArchiveId);
+        setIsDownloadRequest(false);
+        setContractArchiveId(null);
+        unstoreContractArchiveId(localstorageArchiveFilters);
+      })();
     }
-  }, [isDownloadRequest, isContractArchiveExists]);
+  }, [
+    isDownloadRequest,
+    isContractArchiveExists,
+    contractArchiveId,
+    localstorageArchiveFilters,
+    getArchive,
+  ]);
 
   return {
     status: contractDownloadStatus,

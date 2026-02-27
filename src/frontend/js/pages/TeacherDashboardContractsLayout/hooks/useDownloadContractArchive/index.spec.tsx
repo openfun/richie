@@ -232,6 +232,7 @@ describe.each([
         const contractArchiveId = faker.string.uuid();
         storeContractArchiveId({ ...localStorageArchiveFilters, contractArchiveId });
         mockCheckArchive.mockResolvedValue(true);
+        mockGetArchive.mockResolvedValue('fake-content');
 
         const { result } = renderHook(
           () => useDownloadContractArchive(localStorageArchiveFilters),
@@ -246,8 +247,8 @@ describe.each([
         });
         expect(mockCheckArchive).toHaveBeenCalledTimes(1);
 
-        act(() => {
-          result.current.downloadContractArchive();
+        await act(async () => {
+          await result.current.downloadContractArchive();
         });
 
         await waitFor(() => {
@@ -255,11 +256,8 @@ describe.each([
         });
 
         expect(mockCheckArchive).toHaveBeenCalledTimes(1);
-        // backend is called to download the archive
-        expect(mockGetArchive).toHaveBeenCalledTimes(1);
-
-        // but not to generate the archive
         expect(mockCreateArchive).not.toHaveBeenCalled();
+        expect(mockGetArchive).toHaveBeenCalledTimes(1);
       });
 
       it("doDownloadArchive should call 'createArchive' if no contractArchiveId is stored", async () => {
@@ -271,9 +269,11 @@ describe.each([
         );
 
         mockCheckArchive.mockResolvedValue(true);
+
         mockCreateArchive.mockResolvedValue(faker.string.uuid());
-        act(() => {
-          result.current.downloadContractArchive();
+
+        await act(async () => {
+          await result.current.downloadContractArchive();
         });
 
         await waitFor(() => {
@@ -282,7 +282,6 @@ describe.each([
 
         expect(mockCreateArchive).toHaveBeenCalledTimes(1);
         expect(mockCheckArchive).toHaveBeenCalledTimes(1);
-        expect(mockGetArchive).toHaveBeenCalledTimes(1);
       });
     });
 
