@@ -1,8 +1,10 @@
 import c from 'classnames';
 import { PropsWithChildren } from 'react';
 
-interface FormProps
-  extends React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> {}
+interface FormProps extends React.DetailedHTMLProps<
+  React.FormHTMLAttributes<HTMLFormElement>,
+  HTMLFormElement
+> {}
 
 const Form = ({ children, onSubmit, className, name, noValidate = true }: FormProps) => {
   return (
