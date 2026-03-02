@@ -63,6 +63,7 @@ module.exports = {
           midnightblue: '#141b2c',
           mantis: '#76ce68',
           'mantis-darken': '#006908',
+          'warning-500': '#937303',
         },
       },
       components: {

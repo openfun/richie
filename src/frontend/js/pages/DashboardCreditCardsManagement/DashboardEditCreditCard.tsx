@@ -159,12 +159,13 @@ export const DashboardEditCreditCard = ({ creditCard, onSettled = noop }: Props)
       header={<FormattedMessage {...messages.header} />}
       footer={
         <>
-          <Button color="secondary" onClick={handleSubmit(onSubmit)}>
+          <Button color="brand" variant="secondary" onClick={handleSubmit(onSubmit)}>
             <FormattedMessage {...messages.submit} />
           </Button>
           {!creditCard.is_main && (
             <Button
-              color="secondary"
+              color="brand"
+              variant="secondary"
               onClick={() =>
                 safeDelete(creditCard, {
                   onSuccess: () => {

@@ -38,7 +38,7 @@ export const DashboardCreateAddress = ({ onSettled }: { onSettled?: Function }) 
     <DashboardCard
       header={<FormattedMessage {...messages.header} />}
       footer={
-        <Button color="primary" onClick={handleSubmit(onSubmit)}>
+        <Button color="brand" variant="primary" onClick={handleSubmit(onSubmit)}>
           <FormattedMessage {...messages.submit} />
         </Button>
       }

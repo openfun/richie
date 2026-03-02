@@ -52,7 +52,7 @@ export const CreateAddressFormModal = (props: AddressFormModalProps) => {
       size={ModalSize.MEDIUM}
       title={intl.formatMessage(messages.title)}
       actions={
-        <Button color="primary" size="small" onClick={handleSubmit(onSubmit)}>
+        <Button color="brand" variant="primary" size="small" onClick={handleSubmit(onSubmit)}>
           <FormattedMessage {...messages.submit} />
         </Button>
       }

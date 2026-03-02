@@ -192,7 +192,8 @@ const AddressesManagement = ({ handleClose, selectAddress, ref }: AddressesManag
     <div className="AddressesManagement" ref={ref}>
       <Button
         className="AddressesManagement__closeButton"
-        color="tertiary"
+        color="brand"
+        variant="tertiary"
         size="small"
         onClick={handleClose}
       >

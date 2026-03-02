@@ -68,15 +68,15 @@ export const DashboardCreditCardBox = ({ creditCard, promote, edit, remove }: Pr
         <>
           <div className="dashboard-credit-card__buttons">
             {!creditCard.is_main && (
-              <Button color="primary" onClick={() => promote(creditCard)}>
+              <Button color="brand" variant="primary" onClick={() => promote(creditCard)}>
                 <FormattedMessage {...messages.setMain} />
               </Button>
             )}
-            <Button color="primary" onClick={() => edit(creditCard)}>
+            <Button color="brand" variant="primary" onClick={() => edit(creditCard)}>
               <FormattedMessage {...messages.edit} />
             </Button>
           </div>
-          <Button color="primary" onClick={() => remove(creditCard)}>
+          <Button color="brand" variant="primary" onClick={() => remove(creditCard)}>
             <FormattedMessage {...messages.delete} />
           </Button>
         </>

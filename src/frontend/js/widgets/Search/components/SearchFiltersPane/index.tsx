@@ -76,7 +76,8 @@ export const SearchFiltersPane = ({
         <FormattedMessage {...messages.filter} />
       </h2>
       <Button
-        color="secondary"
+        color="brand"
+        variant="secondary"
         size="small"
         className={c({
           'search-filters-pane__clear--hidden': !activeFilterCount,

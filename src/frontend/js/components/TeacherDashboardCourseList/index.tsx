@@ -91,7 +91,8 @@ const TeacherDashboardCourseList = ({
           onClick={() => loadMore()}
           disabled={isLoadingMore}
           ref={loadMoreButtonRef}
-          color="tertiary"
+          color="brand"
+          variant="tertiary"
         >
           <FormattedMessage {...messages.loadMore} />
         </Button>
