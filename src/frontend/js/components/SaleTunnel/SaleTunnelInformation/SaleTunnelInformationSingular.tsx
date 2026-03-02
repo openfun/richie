@@ -443,7 +443,13 @@ const Voucher = ({
             label={intl.formatMessage(messages.voucherTitle)}
             disabled={!!voucherCode}
           />
-          <Button size="small" color="primary" onClick={submitVoucher} disabled={!!voucherCode}>
+          <Button
+            size="small"
+            color="brand"
+            variant="primary"
+            onClick={submitVoucher}
+            disabled={!!voucherCode}
+          >
             <FormattedMessage {...messages.voucherValidate} />
           </Button>
         </div>
@@ -500,7 +506,7 @@ const CpfPayment = ({ deepLink }: { deepLink: string }) => {
         <FormattedMessage {...messages.cpfDescription} />
       </p>
       <Button
-        color="primary"
+        color="brand"
         fullWidth={true}
         href={deepLink}
         target="_blank"

@@ -39,7 +39,13 @@ const DownloadContractButton = ({ contract, className }: DownloadContractButtonP
   };
 
   return (
-    <Button size="small" className={className} color="secondary" onClick={downloadContract}>
+    <Button
+      size="small"
+      className={className}
+      color="brand"
+      variant="secondary"
+      onClick={downloadContract}
+    >
       <FormattedMessage {...messages.contractDownloadActionLabel} />
     </Button>
   );

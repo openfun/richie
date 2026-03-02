@@ -36,6 +36,6 @@ const useMatchMedia = (query: string): boolean => {
 };
 
 export const useMatchMediaLg = () =>
-  useMatchMedia(`(max-width: ${tokens.themes.default.theme.breakpoints.lg})`);
+  useMatchMedia(`(max-width: ${tokens.themes.default.globals.breakpoints.lg})`);
 
 export default useMatchMedia;

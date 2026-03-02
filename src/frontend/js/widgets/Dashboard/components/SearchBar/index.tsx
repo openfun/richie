@@ -59,7 +59,8 @@ const SearchBar = ({ onSubmit }: SearchBarProps) => {
               className="dashboard-search-bar__input"
               type="button"
               size="small"
-              color="tertiary"
+              color="brand"
+              variant="tertiary"
               icon={<span className="material-icons">close</span>}
               onClick={clear}
               aria-label={intl.formatMessage(messages.clearSearchButtonLabel)}

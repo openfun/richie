@@ -50,7 +50,8 @@ const BulkDownloadAgreementButton = ({
     return (
       <Button
         disabled={true}
-        color="tertiary"
+        color="brand"
+        variant="tertiary"
         size="small"
         icon={<div className="spinner spinner--small" />}
       >
@@ -63,7 +64,8 @@ const BulkDownloadAgreementButton = ({
     <Button
       onClick={downloadContractArchive}
       disabled={status === ContractDownloadStatus.INITIALIZING}
-      color={status === ContractDownloadStatus.READY ? 'primary' : 'tertiary'}
+      color="brand"
+      variant={status === ContractDownloadStatus.READY ? 'primary' : 'tertiary'}
       size="small"
       icon={<span className="material-icons">download</span>}
     >

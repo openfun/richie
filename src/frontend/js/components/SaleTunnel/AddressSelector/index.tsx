@@ -75,7 +75,8 @@ export const AddressSelector = () => {
         <Button
           size="small"
           icon={<span className="material-icons">edit</span>}
-          color="tertiary"
+          color="brand"
+          variant="tertiary"
           onClick={editFormModal.open}
           fullWidth={isMobile}
         >
@@ -85,7 +86,8 @@ export const AddressSelector = () => {
         <Button
           size="small"
           icon={<span className="material-icons">add</span>}
-          color="primary"
+          color="brand"
+          variant="primary"
           onClick={createFormModal.open}
           fullWidth={isMobile}
         >

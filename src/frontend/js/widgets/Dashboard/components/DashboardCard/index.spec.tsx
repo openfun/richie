@@ -5,7 +5,14 @@ import { DashboardCard } from '.';
 describe('<DashboardCard/>', () => {
   it('opens and closes', async () => {
     render(
-      <DashboardCard header="My header" footer={<Button color="primary">Update</Button>}>
+      <DashboardCard
+        header="My header"
+        footer={
+          <Button color="brand" variant="primary">
+            Update
+          </Button>
+        }
+      >
         Content here
       </DashboardCard>,
     );
@@ -23,7 +30,11 @@ describe('<DashboardCard/>', () => {
       <DashboardCard
         defaultExpanded={false}
         header="My header"
-        footer={<Button color="primary">Update</Button>}
+        footer={
+          <Button color="brand" variant="primary">
+            Update
+          </Button>
+        }
       >
         Content here
       </DashboardCard>,

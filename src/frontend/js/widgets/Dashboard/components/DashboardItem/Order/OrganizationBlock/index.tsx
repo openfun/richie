@@ -100,7 +100,8 @@ const OrganizationBlock = ({ order, product }: Props) => {
                   <FormattedMessage {...messages.organizationMailContactLabel} />
                   <Button
                     size="small"
-                    color="tertiary"
+                    color="brand"
+                    variant="tertiary"
                     href={'mailto:' + (organization.contact_email ?? '')}
                   >
                     {organization.contact_email}
@@ -112,7 +113,8 @@ const OrganizationBlock = ({ order, product }: Props) => {
                   <FormattedMessage {...messages.organizationPhoneContactLabel} />
                   <Button
                     size="small"
-                    color="tertiary"
+                    color="brand"
+                    variant="tertiary"
                     href={'tel:' + (organization.contact_phone ?? '')}
                   >
                     {organization.contact_phone}
@@ -124,7 +126,8 @@ const OrganizationBlock = ({ order, product }: Props) => {
                   <FormattedMessage {...messages.organizationDpoContactLabel} />
                   <Button
                     size="small"
-                    color="tertiary"
+                    color="brand"
+                    variant="tertiary"
                     href={'mailto:' + (organization.dpo_email ?? '')}
                   >
                     {organization.dpo_email}

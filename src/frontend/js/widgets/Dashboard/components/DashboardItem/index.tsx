@@ -92,7 +92,8 @@ const DashboardItemMore = ({ more }: { more: ReactNode }) => {
     <div className="selector dashboard-item__block__head__more">
       <Button
         icon={<Icon name={IconTypeEnum.MORE} />}
-        color="tertiary"
+        color="brand"
+        variant="tertiary"
         size="small"
         aria-label={intl.formatMessage(messages.moreLabel)}
         {...getToggleButtonProps()}
