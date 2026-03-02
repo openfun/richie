@@ -54,12 +54,13 @@ export const DashboardEditAddress = ({ address, onSettled = noop }: DashboardEdi
       header={<FormattedMessage {...messages.header} values={{ title: address.title }} />}
       footer={
         <>
-          <Button color="secondary" onClick={handleSubmit(onSubmit)}>
+          <Button color="brand" variant="secondary" onClick={handleSubmit(onSubmit)}>
             <FormattedMessage {...messages.submit} />
           </Button>
           {!address.is_main && (
             <Button
-              color="secondary"
+              color="brand"
+              variant="secondary"
               onClick={() => {
                 remove(address, {
                   onSuccess: () => onSettled(),

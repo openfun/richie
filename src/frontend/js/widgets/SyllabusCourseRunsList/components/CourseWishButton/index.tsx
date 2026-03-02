@@ -69,7 +69,8 @@ const CourseWishButton = ({ course }: Props) => {
   return user ? (
     <>
       <Button
-        color="primary"
+        color="brand"
+        variant="primary"
         onClick={isWished ? removeFromWishlist : addToWishlist}
         fullWidth
         disabled={componentState === ComponentStates.LOADING}
@@ -87,7 +88,8 @@ const CourseWishButton = ({ course }: Props) => {
     </>
   ) : (
     <Button
-      color="primary"
+      color="brand"
+      variant="primary"
       onClick={login}
       fullWidth
       disabled={componentState === ComponentStates.LOADING}

@@ -140,7 +140,8 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
           {address ? (
             <Fragment>
               <Button
-                color="tertiary"
+                color="brand"
+                variant="tertiary"
                 onClick={handleCancel}
                 title={intl.formatMessage(messages.cancelTitleButton)}
               >

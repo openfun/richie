@@ -162,7 +162,7 @@ const InstallmentManager = ({ order }: Props) => {
         <FormattedMessage {...messages.paymentLabel} />
       </div>
       <div className="dashboard-splitted-card__item__actions">
-        <Button size="small" color="secondary" onClick={modal.open}>
+        <Button size="small" color="brand" variant="secondary" onClick={modal.open}>
           <FormattedMessage {...messages.paymentButton} />
         </Button>
       </div>

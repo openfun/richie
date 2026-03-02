@@ -86,7 +86,7 @@ export const DashboardAddressesManagement = ({
                 ))}
               </DashboardBox.List>
             )}
-            <Button color="secondary" fullWidth onClick={() => onClickCreate?.()}>
+            <Button color="brand" variant="secondary" fullWidth onClick={() => onClickCreate?.()}>
               <Icon name={IconTypeEnum.PLUS} className="button__icon" />
               <FormattedMessage {...messages.add} />
             </Button>

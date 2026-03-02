@@ -268,7 +268,8 @@ const BatchOrderForm = () => {
             }
           }}
           hidden={activeStep === 0}
-          color="tertiary"
+          color="brand"
+          variant="tertiary"
         >
           <FormattedMessage {...messages.previousButton} />
         </Button>

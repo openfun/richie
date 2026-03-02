@@ -88,7 +88,8 @@ export const DashboardCourses = () => {
               onClick={() => next()}
               disabled={isLoadingMore}
               ref={loadMoreButtonRef}
-              color="tertiary"
+              color="brand"
+              variant="tertiary"
             >
               <FormattedMessage {...messages.loadMore} />
             </Button>

@@ -373,7 +373,13 @@ const Voucher = ({
             label={intl.formatMessage(messages.voucherTitle)}
             disabled={!!voucherCode}
           />
-          <Button size="small" color="primary" onClick={submitVoucher} disabled={!!voucherCode}>
+          <Button
+            size="small"
+            color="brand"
+            variant="primary"
+            onClick={submitVoucher}
+            disabled={!!voucherCode}
+          >
             <FormattedMessage {...messages.voucherValidate} />
           </Button>
         </div>

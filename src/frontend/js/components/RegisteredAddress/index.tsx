@@ -91,7 +91,8 @@ const RegisteredAddress = ({ promote, select, edit, remove, address }: Props) =>
         </Button>
         <Button
           aria-label={intl.formatMessage(messages.editButtonLabel, { title: address.title })}
-          color="secondary"
+          color="brand"
+          variant="secondary"
           size="small"
           onClick={() => edit(address)}
         >
@@ -101,7 +102,8 @@ const RegisteredAddress = ({ promote, select, edit, remove, address }: Props) =>
           aria-label={intl.formatMessage(messages.deleteButtonLabel, {
             title: address.title,
           })}
-          color="secondary"
+          color="brand"
+          variant="secondary"
           size="small"
           disabled={address.is_main}
           onClick={() => remove(address)}
