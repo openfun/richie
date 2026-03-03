@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Hide payment plan block for certificates
 
+### Added
+
+- Handle CPF payment for specific credential products
+
 ## [3.3.0] - 2026-02-25
 
 ### Added
