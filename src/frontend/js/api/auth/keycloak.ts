@@ -12,7 +12,7 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
     realm: APIConf.realm!,
     clientId: APIConf.client_id!,
   });
-  keycloak.init({
+  const initPromise = keycloak.init({
     checkLoginIframe: false,
     flow: 'standard',
     onLoad: 'check-sso',
@@ -39,6 +39,15 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
     user: {
       accessToken: () => sessionStorage.getItem(RICHIE_USER_TOKEN),
       me: async () => {
+        let isAuthenticated: boolean;
+        try {
+          isAuthenticated = await initPromise;
+        } catch (error) {
+          handle(error);
+          return null;
+        }
+        if (!isAuthenticated) return null;
+
         try {
           await keycloak.updateToken(30);
         } catch (error) {
