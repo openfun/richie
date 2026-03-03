@@ -173,6 +173,9 @@ export const getRoutes = () => {
         paymentPlan: {
           get: `${baseUrl}/courses/:course_id/products/:id/payment-plan/`,
         },
+        deepLink: {
+          get: `${baseUrl}/courses/:course_id/products/:id/deep-link/`,
+        },
       },
       orders: {
         get: `${baseUrl}/courses/:course_id/orders/:id/`,
@@ -581,6 +584,23 @@ const API = (): Joanie.API => {
             }
 
             return fetchWithJWT(buildApiUrl(ROUTES.courses.products.paymentPlan.get, filters)).then(
+              checkStatus,
+            );
+          },
+        },
+        deepLink: {
+          get: async (
+            filters?: Joanie.CourseProductQueryFilters,
+          ): Promise<Joanie.OfferingDeepLink> => {
+            if (!filters) {
+              throw new Error('A course code and a product id are required to fetch a deep link');
+            } else if (!filters.course_id) {
+              throw new Error('A course code is required to fetch a deep link');
+            } else if (!filters.id) {
+              throw new Error('A product id is required to fetch a deep link');
+            }
+
+            return fetchWithJWT(buildApiUrl(ROUTES.courses.products.deepLink.get, filters)).then(
               checkStatus,
             );
           },

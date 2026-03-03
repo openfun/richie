@@ -65,6 +65,8 @@ export interface SaleTunnelContextType {
   setSchedule: (schedule?: PaymentSchedule) => void;
   needsPayment: boolean;
   setNeedsPayment: (needsPayment: boolean) => void;
+  paymentMode: PaymentMode;
+  setPaymentMode: (mode: PaymentMode) => void;
 }
 
 export const SaleTunnelContext = createContext<SaleTunnelContextType>({} as any);
@@ -84,6 +86,11 @@ export enum SaleTunnelStep {
   SIGN,
   SAVE_PAYMENT,
   SUCCESS,
+}
+
+export enum PaymentMode {
+  CLASSIC = 'classic',
+  CPF = 'cpf',
 }
 
 interface GenericSaleTunnelProps extends SaleTunnelProps {
@@ -111,6 +118,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
   );
   const [voucherCode, setVoucherCode] = useState<string>();
   const [needsPayment, setNeedsPayment] = useState(true);
+  const [paymentMode, setPaymentMode] = useState<PaymentMode>(PaymentMode.CLASSIC);
 
   const nextStep = useCallback(() => {
     if (order)
@@ -184,6 +192,8 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       setSchedule,
       needsPayment,
       setNeedsPayment,
+      paymentMode,
+      setPaymentMode,
     }),
     [
       props,
@@ -197,6 +207,7 @@ export const GenericSaleTunnel = (props: GenericSaleTunnelProps) => {
       hasWaivedWithdrawalRight,
       voucherCode,
       needsPayment,
+      paymentMode,
     ],
   );
 

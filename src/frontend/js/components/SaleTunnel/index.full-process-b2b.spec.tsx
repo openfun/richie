@@ -66,6 +66,10 @@ const setupBatchOrderMocks = (params: {
     `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
     paymentPlan,
   );
+  fetchMock.get(
+    `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+    {},
+  );
   fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
   fetchMock.get(
     `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify({

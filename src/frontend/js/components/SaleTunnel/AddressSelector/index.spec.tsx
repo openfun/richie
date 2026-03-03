@@ -9,6 +9,7 @@ import {
   SaleTunnelStep,
   SaleTunnelContext,
   SaleTunnelContextType,
+  PaymentMode,
 } from 'components/SaleTunnel/GenericSaleTunnel';
 import { Address, PaymentSchedule } from 'types/Joanie';
 import {
@@ -74,6 +75,8 @@ describe('AddressSelector', () => {
           setSchedule,
           needsPayment: false,
           setNeedsPayment: jest.fn(),
+          paymentMode: PaymentMode.CLASSIC,
+          setPaymentMode: jest.fn(),
         }),
         [billingAddress, voucherCode, schedule],
       );
