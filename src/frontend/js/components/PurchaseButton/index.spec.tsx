@@ -115,6 +115,10 @@ describe('PurchaseButton', () => {
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-plan/`,
         [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/deep-link/`,
+        {},
       );
 
     render(
@@ -159,6 +163,10 @@ describe('PurchaseButton', () => {
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-plan/`,
         [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/deep-link/`,
+        {},
       );
     render(
       <Wrapper client={createTestQueryClient({ user })}>
@@ -201,6 +209,10 @@ describe('PurchaseButton', () => {
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/payment-plan/`,
         [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${courseCode}/products/${product.id}/deep-link/`,
+        {},
       );
     delete product.remaining_order_count;
 
