@@ -84,6 +84,22 @@ describe('Keycloak API', () => {
   });
 
   describe('user.me', () => {
+    it('returns null when init returns false (not authenticated)', async () => {
+      mockKeycloakInit.mockResolvedValueOnce(false);
+      const api = API(authConfig);
+      const response = await api.user.me();
+      expect(response).toBeNull();
+      expect(mockKeycloakUpdateToken).not.toHaveBeenCalled();
+    });
+
+    it('returns null when init rejects', async () => {
+      mockKeycloakInit.mockRejectedValueOnce(new Error('Init failed'));
+      const api = API(authConfig);
+      const response = await api.user.me();
+      expect(response).toBeNull();
+      expect(mockKeycloakUpdateToken).not.toHaveBeenCalled();
+    });
+
     it('returns null when updateToken fails', async () => {
       mockKeycloakUpdateToken.mockRejectedValueOnce(new Error('Token refresh failed'));
       const response = await keycloakApi.user.me();
