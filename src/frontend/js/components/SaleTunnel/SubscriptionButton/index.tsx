@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, Button, VariantType } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
+import { PaymentMode, useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import { validationSchema } from 'components/SaleTunnel/SaleTunnelInformation/SaleTunnelInformationGroup';
 import { useOrders } from 'hooks/useOrders';
 import { useBatchOrder } from 'hooks/useBatchOrder';
@@ -107,7 +107,12 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     props: saleTunnelProps,
     voucherCode,
     needsPayment,
+    paymentMode,
   } = useSaleTunnelContext();
+
+  if (paymentMode === PaymentMode.CPF) {
+    return null;
+  }
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
   const { methods: batchOrderMethods } = useBatchOrder();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);

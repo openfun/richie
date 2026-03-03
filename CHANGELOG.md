@@ -13,6 +13,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix Keycloak race condition causing users to appear unauthenticated
 - Hide payment plan block for certificates
 
+### Added
+
+- Handle CPF payment for specific credential products
+
 ## [3.3.0] - 2026-02-25
 
 ### Added

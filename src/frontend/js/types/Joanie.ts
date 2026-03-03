@@ -221,6 +221,10 @@ export interface Offering extends OfferingLight {
   is_withdrawable: boolean;
   rules?: OfferingRule;
 }
+
+export interface OfferingDeepLink {
+  deep_link: Nullable<string>;
+}
 export function isOffering(
   entity: CourseListItem | OfferingLight | RichieCourse,
 ): entity is OfferingLight {
@@ -890,6 +894,9 @@ export interface API {
       get(filters?: CourseProductQueryFilters): Promise<Nullable<Offering>>;
       paymentPlan: {
         get(filters?: CourseProductQueryFilters): Promise<Nullable<PaymentPlan>>;
+      };
+      deepLink: {
+        get(filters?: CourseProductQueryFilters): Promise<OfferingDeepLink>;
       };
     };
     orders: {

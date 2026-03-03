@@ -116,6 +116,10 @@ describe('SaleTunnel', () => {
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
       paymentPlan,
     );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+      {},
+    );
     fetchMock.get(`https://joanie.endpoint/api/v1.0/enrollments/`, []);
     const orderQueryParameters = {
       product_id: product.id,
@@ -279,6 +283,11 @@ describe('SaleTunnel', () => {
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT30`,
       paymentPlanVoucher,
+      { overwriteRoutes: true },
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+      {},
       { overwriteRoutes: true },
     );
     await user.type(screen.getByLabelText('Voucher code'), 'DISCOUNT30');

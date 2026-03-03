@@ -1,15 +1,16 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
-import { Alert, Button, Input, VariantType } from '@openfun/cunningham-react';
+import { Alert, Button, Input, Radio, RadioGroup, VariantType } from '@openfun/cunningham-react';
 import { AddressSelector } from 'components/SaleTunnel/AddressSelector';
 import { PaymentScheduleGrid } from 'components/PaymentScheduleGrid';
-import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
+import { PaymentMode, useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
 import OpenEdxFullNameForm from 'components/OpenEdxFullNameForm';
 import { useSession } from 'contexts/SessionContext';
 import useOpenEdxProfile from 'hooks/useOpenEdxProfile';
 import WithdrawRightCheckbox from 'components/SaleTunnel/WithdrawRightCheckbox';
 import { PaymentSchedule, ProductType } from 'types/Joanie';
 import { usePaymentPlan } from 'hooks/usePaymentPlan';
+import { useDeepLink } from 'hooks/useDeepLink';
 import { HttpError } from 'utils/errors/HttpError';
 import { APIBackend, KeycloakAccountApi } from 'types/api';
 import context from 'utils/context';
@@ -122,6 +123,32 @@ const messages = defineMessages({
     description: 'Message displayed when the order is part of a batch order',
     defaultMessage: 'No billing information required. This order is covered by your organization.',
   },
+  paymentModeTitle: {
+    id: 'components.SaleTunnel.Information.paymentMode.title',
+    description: 'Title for the payment mode selection section',
+    defaultMessage: 'Payment method',
+  },
+  paymentModeClassic: {
+    id: 'components.SaleTunnel.Information.paymentMode.classic',
+    description: 'Label for the classic card payment option',
+    defaultMessage: 'Credit card payment',
+  },
+  paymentModeCpf: {
+    id: 'components.SaleTunnel.Information.paymentMode.cpf',
+    description: 'Label for the CPF (Mon Compte Formation) payment option',
+    defaultMessage: 'My Training Account (CPF)',
+  },
+  cpfDescription: {
+    id: 'components.SaleTunnel.Information.cpf.description',
+    description: 'Explanatory text for the CPF payment option',
+    defaultMessage:
+      'Pay for your training using your personal training account (CPF) on Mon Compte Formation.',
+  },
+  cpfButtonLabel: {
+    id: 'components.SaleTunnel.Information.cpf.buttonLabel',
+    description: 'Label for the button redirecting to Mon Compte Formation',
+    defaultMessage: 'Go to Mon Compte Formation',
+  },
 });
 
 export const SaleTunnelInformationSingular = () => {
@@ -133,6 +160,8 @@ export const SaleTunnelInformationSingular = () => {
     setSchedule,
     needsPayment,
     setNeedsPayment,
+    paymentMode,
+    setPaymentMode,
   } = useSaleTunnelContext();
   const [voucherError, setVoucherError] = useState<HttpError | null>(null);
   const query = usePaymentPlan({
@@ -140,11 +169,16 @@ export const SaleTunnelInformationSingular = () => {
     product_id: props.product.id,
     ...(voucherCode ? { voucher_code: voucherCode } : {}),
   });
+  const deepLinkQuery = useDeepLink({
+    course_code: props.course?.code ?? props.enrollment!.course_run.course.code,
+    product_id: props.product.id,
+  });
   const schedule = query.data?.payment_schedule ?? props.paymentPlan?.payment_schedule;
   const price = query.data?.price ?? props.paymentPlan?.price;
   const discountedPrice = query.data?.discounted_price ?? props.paymentPlan?.discounted_price;
   const discount = query.data?.discount ?? props.paymentPlan?.discount;
   const fromBatchOrder = query.data?.from_batch_order ?? props.paymentPlan?.from_batch_order;
+  const deepLink = deepLinkQuery.data?.deep_link;
 
   const isCredentialWithPrice =
     product.type === ProductType.CREDENTIAL &&
@@ -167,63 +201,91 @@ export const SaleTunnelInformationSingular = () => {
     setNeedsPayment(!fromBatchOrder);
   }, [fromBatchOrder, setNeedsPayment]);
 
+  const intl = useIntl();
   const isKeycloakBackend = context?.authentication.backend === APIBackend.KEYCLOAK;
 
   return (
     <>
-      {needsPayment && (
-        <div>
+      {deepLink && (
+        <div className="mb-s">
           <h3 className="block-title mb-t">
-            <FormattedMessage {...messages.title} />
+            <FormattedMessage {...messages.paymentModeTitle} />
           </h3>
-          <div className="description mb-s">
-            <FormattedMessage {...messages.description} />
-          </div>
-          {isKeycloakBackend ? (
-            <KeycloakAccountEdit />
-          ) : (
-            <>
-              <OpenEdxFullNameForm />
-              <div className="mt-s">
-                <Email />
-              </div>
-            </>
-          )}
-          <AddressSelector />
+          <RadioGroup>
+            <Radio
+              label={intl.formatMessage(messages.paymentModeClassic)}
+              value={PaymentMode.CLASSIC}
+              checked={paymentMode === PaymentMode.CLASSIC}
+              onChange={() => setPaymentMode(PaymentMode.CLASSIC)}
+            />
+            <Radio
+              label={intl.formatMessage(messages.paymentModeCpf)}
+              value={PaymentMode.CPF}
+              checked={paymentMode === PaymentMode.CPF}
+              onChange={() => setPaymentMode(PaymentMode.CPF)}
+            />
+          </RadioGroup>
         </div>
       )}
-      {!needsPayment && (
-        <div>
-          <h3 className="block-title">
-            <FormattedMessage {...messages.title} />
-          </h3>
-          <Alert type={VariantType.NEUTRAL}>
-            <FormattedMessage {...messages.noBillingInformation} />
-          </Alert>
-        </div>
-      )}
-      <div>
-        {isCredentialWithPrice &&
-          (schedule ? (
-            <PaymentScheduleBlock schedule={schedule!} />
-          ) : (
+      {paymentMode === PaymentMode.CPF ? (
+        <CpfPayment deepLink={deepLink!} />
+      ) : (
+        <>
+          {needsPayment && (
             <div>
-              <h4 className="block-title">
-                <FormattedMessage {...messages.paymentSchedule} />
-              </h4>
+              <h3 className="block-title mb-t">
+                <FormattedMessage {...messages.title} />
+              </h3>
+              <div className="description mb-s">
+                <FormattedMessage {...messages.description} />
+              </div>
+              {isKeycloakBackend ? (
+                <KeycloakAccountEdit />
+              ) : (
+                <>
+                  <OpenEdxFullNameForm />
+                  <div className="mt-s">
+                    <Email />
+                  </div>
+                </>
+              )}
+              <AddressSelector />
+            </div>
+          )}
+          {!needsPayment && (
+            <div>
+              <h3 className="block-title">
+                <FormattedMessage {...messages.title} />
+              </h3>
               <Alert type={VariantType.NEUTRAL}>
-                <FormattedMessage {...messages.noPaymentSchedule} />
+                <FormattedMessage {...messages.noBillingInformation} />
               </Alert>
             </div>
-          ))}
-        <Voucher
-          discount={discount}
-          voucherError={voucherError}
-          setVoucherError={setVoucherError}
-        />
-        <Total price={price} discountedPrice={discountedPrice} />
-        {needsPayment && <WithdrawRightCheckbox />}
-      </div>
+          )}
+          <div>
+            {isCredentialWithPrice &&
+              (schedule ? (
+                <PaymentScheduleBlock schedule={schedule!} />
+              ) : (
+                <div>
+                  <h4 className="block-title">
+                    <FormattedMessage {...messages.paymentSchedule} />
+                  </h4>
+                  <Alert type={VariantType.NEUTRAL}>
+                    <FormattedMessage {...messages.noPaymentSchedule} />
+                  </Alert>
+                </div>
+              ))}
+            <Voucher
+              discount={discount}
+              voucherError={voucherError}
+              setVoucherError={setVoucherError}
+            />
+            <Total price={price} discountedPrice={discountedPrice} />
+            {needsPayment && <WithdrawRightCheckbox />}
+          </div>
+        </>
+      )}
     </>
   );
 };
@@ -419,6 +481,25 @@ const PaymentScheduleBlock = ({ schedule }: { schedule: PaymentSchedule }) => {
       <div className="mt-t">
         <PaymentScheduleGrid schedule={schedule} />
       </div>
+    </div>
+  );
+};
+
+const CpfPayment = ({ deepLink }: { deepLink: string }) => {
+  return (
+    <div className="sale-tunnel__cpf">
+      <p className="description mb-s">
+        <FormattedMessage {...messages.cpfDescription} />
+      </p>
+      <Button
+        color="primary"
+        fullWidth={true}
+        href={deepLink}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <FormattedMessage {...messages.cpfButtonLabel} />
+      </Button>
     </div>
   );
 };
