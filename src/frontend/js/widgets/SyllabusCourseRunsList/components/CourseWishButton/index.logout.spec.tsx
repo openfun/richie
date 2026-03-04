@@ -19,7 +19,7 @@ import CourseWishButton from '.';
 
 jest.mock('utils/indirection/window', () => ({
   location: {
-    pathname: '/tests/CourseAddToWishlist/',
+    href: 'https://example.com/tests/CourseAddToWishlist/',
     assign: jest.fn(() => true),
   },
 }));
@@ -61,7 +61,7 @@ describe('CourseWishButton', () => {
     await userEvent.click($logMeButton);
 
     expect(location.assign).toHaveBeenCalledWith(
-      `https://authentication.test/login?next=richie/tests/CourseAddToWishlist/`,
+      `https://authentication.test/keycloak-login?next=https%3A%2F%2Fexample.com%2Ftests%2FCourseAddToWishlist%2F`,
     );
   });
 });

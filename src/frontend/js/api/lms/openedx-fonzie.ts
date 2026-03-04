@@ -7,6 +7,7 @@ import { handle } from 'utils/errors/handle';
 import { OpenEdxApiProfile } from 'types/openEdx';
 import { checkStatus } from 'api/utils';
 import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
+import { location } from 'utils/indirection/window';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 /**
@@ -29,6 +30,7 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
   const APIOptions = {
     routes: {
       user: {
+        login: `${APIConf.endpoint}/keycloak-login`,
         me: `${APIConf.endpoint}/api/v1.0/user/me`,
         account: `${APIConf.endpoint}/api/user/v1/accounts/:username`,
         preferences: `${APIConf.endpoint}/api/user/v1/preferences/:username`,
@@ -41,6 +43,10 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
     ...ApiInterface,
     user: {
       ...ApiInterface.user,
+      login: () => {
+        const next = encodeURIComponent(location.href);
+        location.assign(`${APIOptions.routes.user.login}?next=${next}`);
+      },
       accessToken: () => {
         return sessionStorage.getItem(RICHIE_USER_TOKEN);
       },
