@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { PropsWithChildren } from 'react/ts5.0';
+import { PropsWithChildren } from 'react';
 
 type BadgeProps = PropsWithChildren<{
   color?: 'primary' | 'secondary' | 'tertiary';

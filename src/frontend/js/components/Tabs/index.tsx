@@ -45,7 +45,8 @@ const Tab = ({
   return (
     <div className="tabs__tab">
       <Button
-        color="tertiary-text"
+        color="brand"
+        variant="tertiary"
         onClick={handleOnClick}
         className={classNames('c__button--tab', {
           'c__button--active': isActive,

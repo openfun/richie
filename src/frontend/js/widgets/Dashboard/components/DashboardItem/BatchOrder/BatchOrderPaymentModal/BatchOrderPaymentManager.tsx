@@ -56,7 +56,8 @@ export const BatchOrderPaymentManager = ({ batchOrder }: BatchPaymentManagerProp
               <FormattedMessage {...messages.batchOrderPayment} />
               <Button
                 size="small"
-                color="primary"
+                color="brand"
+                variant="primary"
                 onClick={retryModal.open}
                 disabled={processingPayment}
               >

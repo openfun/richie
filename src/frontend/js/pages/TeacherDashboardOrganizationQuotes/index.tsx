@@ -371,7 +371,8 @@ const TeacherDashboardOrganizationQuotes = () => {
       <div>
         <Button
           size="small"
-          color="secondary"
+          color="brand"
+          variant="secondary"
           className="mr-2"
           onClick={() => handleDownloadQuote(quote.id)}
           icon={<span className="material-icons">download</span>}

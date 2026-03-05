@@ -172,7 +172,8 @@ export const BatchOrderPaymentModal = ({ batchOrder, ...props }: Props) => {
         hideCloseButton={state === ComponentStates.LOADING}
         actions={
           <Button
-            color="primary"
+            color="brand"
+            variant="primary"
             size="small"
             fullWidth={true}
             onClick={pay}

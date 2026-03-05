@@ -243,7 +243,8 @@ export const DashboardItemCourseEnrollingRun = ({
         SHOW_ACCESS_COURSE_PRIORITIES.includes(courseRun.state.priority) && (
           <div>
             <Button
-              color="secondary"
+              color="brand"
+              variant="secondary"
               size="small"
               href={courseRun.resource_link}
               data-testid="dashboard-item-enrollment__button"
@@ -257,7 +258,8 @@ export const DashboardItemCourseEnrollingRun = ({
         <div>
           <Button
             disabled={!isOpenedForEnrollment || !canEnroll}
-            color="tertiary"
+            color="brand"
+            variant="tertiary"
             size="small"
             onClick={enroll}
             title={!canEnroll ? intl.formatMessage(messages.cannotEnroll) : ''}
@@ -287,7 +289,8 @@ const NotEnrolled = ({
       </div>
       {!hideEnrollButtons && (
         <RouterButton
-          color="secondary"
+          color="brand"
+          variant="secondary"
           size="small"
           href={notEnrolledUrl}
           data-testid="dashboard-item-enrollment__button"
@@ -327,7 +330,8 @@ export const Enrolled = ({
       </div>
       {SHOW_ACCESS_COURSE_PRIORITIES.includes(enrollment.course_run.state.priority) && (
         <Button
-          color="secondary"
+          color="brand"
+          variant="secondary"
           size="small"
           href={enrollment.course_run.resource_link}
           data-testid="dashboard-item-enrollment__button"

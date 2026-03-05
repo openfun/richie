@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { UserFactory } from 'utils/test/factories/richie';
 import { StorybookHelper } from 'utils/StorybookHelper';

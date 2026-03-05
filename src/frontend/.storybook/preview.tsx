@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import { CunninghamProvider } from '@openfun/cunningham-react';
-import { Preview } from '@storybook/react';
+import { Preview } from '@storybook/react-webpack5';
 import { useAsyncEffect } from 'hooks/useAsyncEffect';
 import './__mocks__/utils/context';
 

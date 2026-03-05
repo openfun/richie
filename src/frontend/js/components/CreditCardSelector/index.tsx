@@ -111,7 +111,8 @@ export const CreditCardSelector = ({
             {allowEdit && creditCards?.length > 0 && (
               <Button
                 icon={<span className="material-icons">edit</span>}
-                color="tertiary-text"
+                color="brand"
+                variant="tertiary"
                 size="medium"
                 onClick={modal.open}
                 aria-label={intl.formatMessage(messages.editCreditCardAriaLabel)}
@@ -122,7 +123,8 @@ export const CreditCardSelector = ({
             <Button
               onClick={() => setCreditCard(undefined)}
               size="small"
-              color="secondary"
+              color="brand"
+              variant="secondary"
               className="mt-t"
               fullWidth={isMobile}
             >
@@ -217,7 +219,13 @@ const CreditCardSelectorModal = ({
       size={ModalSize.MEDIUM}
       title={intl.formatMessage(messages.modalTitle)}
       actions={
-        <Button color="primary" size="small" fullWidth={true} onClick={() => onChange(selected)}>
+        <Button
+          color="brand"
+          variant="primary"
+          size="small"
+          fullWidth={true}
+          onClick={() => onChange(selected)}
+        >
           <FormattedMessage {...messages.modalTitle} />
         </Button>
       }

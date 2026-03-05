@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Fragment, useEffect } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, Resolver, useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Button, Checkbox } from '@openfun/cunningham-react';
 import { getLocalizedCunninghamErrorProp } from 'components/Form/utils';
@@ -39,7 +39,7 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
     defaultValues: address || defaultValues,
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema) as Resolver<AddressFormValues>,
   });
   const { register, handleSubmit, reset, formState } = form;
 
@@ -140,7 +140,8 @@ const AddressForm = ({ handleReset, onSubmit, address }: Props) => {
           {address ? (
             <Fragment>
               <Button
-                color="tertiary"
+                color="brand"
+                variant="tertiary"
                 onClick={handleCancel}
                 title={intl.formatMessage(messages.cancelTitleButton)}
               >

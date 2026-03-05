@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { Button } from '@openfun/cunningham-react';
 import { DashboardBox } from '../DashboardBox';
 import { DashboardCard } from './index';
@@ -26,7 +26,11 @@ export const Default: Story = {
         </div>
       </div>
     ),
-    footer: <Button color="primary">Update</Button>,
+    footer: (
+      <Button color="brand" variant="primary">
+        Update
+      </Button>
+    ),
   },
 };
 
@@ -39,8 +43,12 @@ export const WithBoxes: Story = {
           header={<>Address used by default</>}
           footer={
             <>
-              <Button color="primary">Remove</Button>
-              <Button color="primary">Edit</Button>
+              <Button color="brand" variant="primary">
+                Remove
+              </Button>
+              <Button color="brand" variant="primary">
+                Edit
+              </Button>
             </>
           }
         >

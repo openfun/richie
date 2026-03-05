@@ -47,16 +47,16 @@ export const DashboardAddressBox = ({
         <>
           <div className="dashboard-address-box__buttons">
             {!address.is_main && (
-              <Button color="primary" onClick={() => promote(address)}>
+              <Button color="brand" variant="primary" onClick={() => promote(address)}>
                 <FormattedMessage {...messages.setMain} />
               </Button>
             )}
-            <Button color="primary" onClick={() => edit(address)}>
+            <Button color="brand" variant="primary" onClick={() => edit(address)}>
               <FormattedMessage {...messages.edit} />
             </Button>
           </div>
           {!address.is_main && (
-            <Button color="primary" onClick={() => remove(address)}>
+            <Button color="brand" variant="primary" onClick={() => remove(address)}>
               <FormattedMessage {...messages.delete} />
             </Button>
           )}
