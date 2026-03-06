@@ -15,6 +15,7 @@ import KeycloakApiInterface from './auth/keycloak';
 import OpenEdxDogwoodApiInterface from './lms/openedx-dogwood';
 import OpenEdxHawthornApiInterface from './lms/openedx-hawthorn';
 import OpenEdxFonzieApiInterface from './lms/openedx-fonzie';
+import OpenEdxFonzieKeycloakApiInterface from './lms/openedx-fonzie-keycloak';
 
 const AuthenticationAPIHandler = (): Nullable<APIAuthentication> => {
   const AUTHENTICATION: AuthenticationBackend = context?.authentication;
@@ -31,6 +32,8 @@ const AuthenticationAPIHandler = (): Nullable<APIAuthentication> => {
       return OpenEdxHawthornApiInterface(AUTHENTICATION).user;
     case APIBackend.FONZIE:
       return OpenEdxFonzieApiInterface(AUTHENTICATION).user;
+    case APIBackend.FONZIE_KEYCLOAK:
+      return OpenEdxFonzieKeycloakApiInterface(AUTHENTICATION).user;
     default:
       handle(new Error(`No Authentication Backend found for ${AUTHENTICATION.backend}.`));
       return null;

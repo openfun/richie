@@ -68,6 +68,7 @@ export interface APIOptions {
 export enum APIBackend {
   DUMMY = 'dummy',
   FONZIE = 'fonzie',
+  FONZIE_KEYCLOAK = 'fonzie-keycloak',
   JOANIE = 'joanie',
   KEYCLOAK = 'keycloak',
   OPENEDX_DOGWOOD = 'openedx-dogwood',

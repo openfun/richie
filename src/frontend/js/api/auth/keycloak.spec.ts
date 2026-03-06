@@ -44,8 +44,8 @@ jest.mock('utils/context', () => ({
     authentication: {
       backend: 'keycloak',
       endpoint: 'https://keycloak.test/auth',
-      client_id: 'richie-client',
-      realm: 'richie-realm',
+      keycloak_client_id: 'richie-client',
+      keycloak_realm: 'richie-realm',
       auth_url: 'https://keycloak.test/auth/realms/richie-realm/protocol/openid-connect/auth',
     },
   }).one(),
@@ -55,8 +55,9 @@ describe('Keycloak API', () => {
   const authConfig = {
     backend: 'keycloak',
     endpoint: 'https://keycloak.test/auth',
-    client_id: 'richie-client',
-    realm: 'richie-realm',
+    keycloak_endpoint: 'https://keycloak.test/auth',
+    keycloak_client_id: 'richie-client',
+    keycloak_realm: 'richie-realm',
     auth_url: 'https://keycloak.test/auth/realms/richie-realm/protocol/openid-connect/auth',
     registration_url:
       'https://keycloak.test/auth/realms/richie-realm/protocol/openid-connect/registrations',
