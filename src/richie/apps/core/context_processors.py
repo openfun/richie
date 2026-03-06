@@ -101,9 +101,9 @@ def site_metas(request: HttpRequest):
             profile_urls = json.loads(context["AUTHENTICATION"]["profile_urls"])
             # Override the default account profile url with the one from the keycloak realm
             account_url = (
-                f"{authentication_delegation['BASE_URL']}"
-                f"/realms/{authentication_delegation['REALM']}/account/"
-                f"?referrer={authentication_delegation['CLIENT_ID']}"
+                f"{authentication_delegation['KEYCLOAK_BASE_URL']}"
+                f"/realms/{authentication_delegation['KEYCLOAK_REALM']}/account/"
+                f"?referrer={authentication_delegation['KEYCLOAK_CLIENT_ID']}"
                 f"&referrer_uri={quote(request.build_absolute_uri(), safe='')}"
             )
             profile_urls["account"]["action"] = account_url
@@ -227,9 +227,14 @@ class FrontendContextProcessor:
                 "endpoint": authentication_delegation["BASE_URL"],
                 "backend": authentication_delegation["BACKEND"],
             }
-            if authentication_delegation["BACKEND"] == "keycloak":
-                context["client_id"] = authentication_delegation["CLIENT_ID"]
-                context["realm"] = authentication_delegation["REALM"]
+            if authentication_delegation["BACKEND"] in ["keycloak", "fonzie-keycloak"]:
+                context["keycloak_endpoint"] = authentication_delegation[
+                    "KEYCLOAK_BASE_URL"
+                ]
+                context["keycloak_client_id"] = authentication_delegation[
+                    "KEYCLOAK_CLIENT_ID"
+                ]
+                context["keycloak_realm"] = authentication_delegation["KEYCLOAK_REALM"]
 
         return context
 

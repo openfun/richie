@@ -319,15 +319,18 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             environ_name="AUTHENTICATION_PROFILE_URLS",
             environ_prefix=None,
         ),
-        "CLIENT_ID": values.Value(
+        "KEYCLOAK_CLIENT_ID": values.Value(
             "", environ_name="AUTHENTICATION_KEYCLOAK_CLIENT_ID", environ_prefix=None
         ),
-        "CLIENT_SECRET": values.Value(
+        "KEYCLOAK_CLIENT_SECRET": values.Value(
             "",
             environ_name="AUTHENTICATION_KEYCLOAK_CLIENT_SECRET",
             environ_prefix=None,
         ),
-        "REALM": values.Value(
+        "KEYCLOAK_BASE_URL": values.Value(
+            "", environ_name="AUTHENTICATION_KEYCLOAK_BASE_URL", environ_prefix=None
+        ),
+        "KEYCLOAK_REALM": values.Value(
             "", environ_name="AUTHENTICATION_KEYCLOAK_REALM", environ_prefix=None
         ),
     }

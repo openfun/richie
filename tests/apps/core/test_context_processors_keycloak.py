@@ -25,10 +25,11 @@ class ContextProcessorKeycloakTestCase(TestCase):
 
     @override_settings(
         RICHIE_AUTHENTICATION_DELEGATION={
-            "BASE_URL": "https://keycloak.test/auth",
+            "BASE_URL": "whatever",
+            "KEYCLOAK_BASE_URL": "https://keycloak.test/auth",
             "BACKEND": "keycloak",
-            "CLIENT_ID": "richie-client",
-            "REALM": "richie-realm",
+            "KEYCLOAK_CLIENT_ID": "richie-client",
+            "KEYCLOAK_REALM": "richie-realm",
             "PROFILE_URLS": {
                 "account": {
                     "label": "Account",
@@ -62,10 +63,11 @@ class ContextProcessorKeycloakTestCase(TestCase):
 
     @override_settings(
         RICHIE_AUTHENTICATION_DELEGATION={
-            "BASE_URL": "https://keycloak.test/auth",
+            "BASE_URL": "whatever",
+            "KEYCLOAK_BASE_URL": "https://keycloak.test/auth",
             "BACKEND": "keycloak",
-            "CLIENT_ID": "richie-client",
-            "REALM": "richie-realm",
+            "KEYCLOAK_CLIENT_ID": "richie-client",
+            "KEYCLOAK_REALM": "richie-realm",
         }
     )
     def test_get_authentication_context_keycloak_basic(self):
@@ -77,10 +79,38 @@ class ContextProcessorKeycloakTestCase(TestCase):
 
         self.assertEqual(
             {
-                "endpoint": "https://keycloak.test/auth",
                 "backend": "keycloak",
-                "client_id": "richie-client",
-                "realm": "richie-realm",
+                "endpoint": "whatever",
+                "keycloak_endpoint": "https://keycloak.test/auth",
+                "keycloak_client_id": "richie-client",
+                "keycloak_realm": "richie-realm",
+            },
+            context,
+        )
+
+    @override_settings(
+        RICHIE_AUTHENTICATION_DELEGATION={
+            "BASE_URL": "whatever",
+            "KEYCLOAK_BASE_URL": "https://keycloak.test/auth",
+            "BACKEND": "fonzie-keycloak",
+            "KEYCLOAK_CLIENT_ID": "richie-client",
+            "KEYCLOAK_REALM": "richie-realm",
+        }
+    )
+    def test_get_authentication_context_fonzie_keycloak_backend(self):
+        """
+        When using fonzie-keycloak backend, get_authentication_context should return
+        the same keycloak_* variables as the keycloak backend.
+        """
+        context = self.processor.get_authentication_context()
+
+        self.assertEqual(
+            {
+                "backend": "fonzie-keycloak",
+                "endpoint": "whatever",
+                "keycloak_endpoint": "https://keycloak.test/auth",
+                "keycloak_client_id": "richie-client",
+                "keycloak_realm": "richie-realm",
             },
             context,
         )
