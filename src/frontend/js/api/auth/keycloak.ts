@@ -9,8 +9,8 @@ import { RICHIE_USER_TOKEN } from 'settings';
 const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
   const keycloak = new Keycloak({
     url: APIConf.endpoint,
-    realm: APIConf.realm!,
-    clientId: APIConf.client_id!,
+    realm: APIConf.keycloak_realm!,
+    clientId: APIConf.keycloak_client_id!,
   });
   const initPromise = keycloak.init({
     checkLoginIframe: false,

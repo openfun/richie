@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
+import { AuthenticationBackend } from 'types/commonDataProps';
 import { APILms } from 'types/api';
 import { RICHIE_USER_TOKEN, EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
 import { isHttpError } from 'utils/errors/HttpError';
@@ -7,6 +7,7 @@ import { handle } from 'utils/errors/handle';
 import { OpenEdxApiProfile } from 'types/openEdx';
 import { checkStatus } from 'api/utils';
 import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
+import { location } from 'utils/indirection/window';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 /**
@@ -25,12 +26,13 @@ import OpenEdxHawthornApiInterface from './openedx-hawthorn';
  *
  */
 
-const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
+const API = (APIConf: AuthenticationBackend): APILms => {
   const APIOptions = {
     routes: {
       user: {
+        login: `${APIConf.endpoint}/keycloak-login`,
         me: `${APIConf.endpoint}/api/v1.0/user/me`,
-        account: `${APIConf.endpoint}/api/user/v1/accounts/:username`,
+        account: `${APIConf.keycloak_endpoint}/realms/${APIConf.keycloak_realm}/account/`,
         preferences: `${APIConf.endpoint}/api/user/v1/preferences/:username`,
       },
     },
@@ -41,6 +43,10 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): APILms => {
     ...ApiInterface,
     user: {
       ...ApiInterface.user,
+      login: () => {
+        const next = encodeURIComponent(location.href);
+        location.assign(`${APIOptions.routes.user.login}?next=${next}`);
+      },
       accessToken: () => {
         return sessionStorage.getItem(RICHIE_USER_TOKEN);
       },

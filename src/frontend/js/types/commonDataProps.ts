@@ -14,8 +14,9 @@ export interface LMSBackend {
 export interface AuthenticationBackend {
   backend: string;
   endpoint: string;
-  client_id?: string;
-  realm?: string;
+  keycloak_client_id?: string;
+  keycloak_endpoint?: string;
+  keycloak_realm?: string;
   token?: string;
   auth_url?: string;
   registration_url?: string;
