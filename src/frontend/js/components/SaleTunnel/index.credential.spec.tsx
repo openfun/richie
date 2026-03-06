@@ -1,5 +1,6 @@
 import fetchMock from 'fetch-mock';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import queryString from 'query-string';
 import {
   RichieContextFactory as mockRichieContextFactory,
@@ -99,7 +100,11 @@ describe('SaleTunnel / Credential', () => {
       .post('https://joanie.endpoint/api/v1.0/orders/', order)
       .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
         overwriteRoutes: true,
-      });
+      })
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
+      );
 
     render(<Wrapper product={product} course={course} />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
@@ -114,5 +119,108 @@ describe('SaleTunnel / Credential', () => {
 
     // - Payment button should not be disabled.
     expect($button.disabled).toBe(false);
+  });
+
+  it('should display CPF payment option and redirect to deepLink when deepLink is available', async () => {
+    const course = PacedCourseFactory().one();
+    const product = CredentialProductFactory().one();
+    const billingAddress: Joanie.Address = AddressFactory({ is_main: true }).one();
+    const deepLink = 'https://placeholder.com/course/1';
+    const orderQueryParameters = {
+      course_code: course.code,
+      product_id: product.id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        { deep_link: deepLink },
+      )
+      .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
+        overwriteRoutes: true,
+      });
+
+    window.open = jest.fn();
+    const user = userEvent.setup({ delay: null });
+
+    render(<Wrapper product={product} course={course} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    await screen.findByRole('heading', { level: 3, name: /payment method/i });
+
+    // - By default, credit card payment should be selected.
+    expect(screen.getByRole('radio', { name: /credit card payment/i })).toBeChecked();
+    expect(screen.getByRole('radio', { name: /my training account \(cpf\)/i })).not.toBeChecked();
+
+    await user.click(screen.getByRole('radio', { name: /my training account \(cpf\)/i }));
+
+    // - CPF description and redirect button should be visible.
+    expect(
+      screen.getByText(/pay for your training using your personal training account/i),
+    ).toBeInTheDocument();
+    const cpfButton = screen.getByRole('button', { name: /go to mon compte formation/i });
+
+    await user.click(cpfButton);
+    expect(window.open).toHaveBeenCalledWith(deepLink, '_blank', 'noopener,noreferrer');
+  });
+
+  it('should not display CPF payment option when deepLink is null', async () => {
+    const course = PacedCourseFactory().one();
+    const product = CredentialProductFactory().one();
+    const billingAddress: Joanie.Address = AddressFactory({ is_main: true }).one();
+    const orderQueryParameters = {
+      course_code: course.code,
+      product_id: product.id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        { deep_link: null },
+      )
+      .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
+        overwriteRoutes: true,
+      });
+
+    render(<Wrapper product={product} course={course} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    // - wait for address to be loaded.
+    await screen.findByText(getAddressLabel(billingAddress));
+
+    // - Payment method section and CPF option should not be rendered.
+    expect(
+      screen.queryByRole('heading', { level: 3, name: /payment method/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('radio', { name: /my training account \(cpf\)/i }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('radio', { name: /credit card payment/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /go to mon compte formation/i }),
+    ).not.toBeInTheDocument();
+
+    // - Classic billing information section should be displayed.
+    expect(screen.getByText(/this information will be used for billing/i)).toBeInTheDocument();
   });
 });

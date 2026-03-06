@@ -175,6 +175,10 @@ describe.each([
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
       )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
+      )
       .post('https://joanie.endpoint/api/v1.0/orders/', order)
       .get(`https://joanie.endpoint/api/v1.0/orders/${order.id}/`, order)
       .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
@@ -188,6 +192,7 @@ describe.each([
     nbApiCalls += 1; // get user account call.
     nbApiCalls += 1; // get user preferences call.
     nbApiCalls += 1; // product payment-schedule call
+    nbApiCalls += 1; // product deep-link call
     await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
     const user = userEvent.setup({ delay: null });
@@ -263,6 +268,10 @@ describe.each([
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
       )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
+      )
       .post('https://joanie.endpoint/api/v1.0/orders/', deferred.promise)
       .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
         overwriteRoutes: true,
@@ -275,6 +284,7 @@ describe.each([
     nbApiCalls += 1; // get user account call.
     nbApiCalls += 1; // get user preferences call.
     nbApiCalls += 1; // get paymentPlan call.
+    nbApiCalls += 1; // get deep-link call.
     await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
     const user = userEvent.setup({ delay: null });
@@ -333,6 +343,10 @@ describe.each([
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
       )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
+      )
       .get('https://joanie.endpoint/api/v1.0/offerings/get-organizations/', []);
 
     render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
@@ -379,6 +393,10 @@ describe.each([
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
       )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
+      )
       .get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard], {
         overwriteRoutes: true,
       })
@@ -390,7 +408,7 @@ describe.each([
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
 
-    nbApiCalls += 3;
+    nbApiCalls += 4;
     await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
     await screen.findByTestId('sale-tunnel-save-payment-method-step');
@@ -415,6 +433,10 @@ describe.each([
           `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
           paymentPlan,
         )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+          {},
+        )
         .get('https://joanie.endpoint/api/v1.0/credit-cards/', [creditCard], {
           overwriteRoutes: true,
         })
@@ -426,7 +448,7 @@ describe.each([
         queryOptions: { client: createTestQueryClient({ user: richieUser }) },
       });
 
-      nbApiCalls += 3;
+      nbApiCalls += 4;
       await waitFor(() => expect(fetchMock.calls()).toHaveLength(nbApiCalls));
 
       await screen.findByTestId('sale-tunnel-sign-step');
@@ -446,6 +468,10 @@ describe.each([
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
       );
 
     render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
@@ -537,6 +563,10 @@ describe.each([
         .get(
           `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
           paymentPlan,
+        )
+        .get(
+          `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+          {},
         );
       render(
         <Wrapper
@@ -585,6 +615,10 @@ describe.each([
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
       );
 
     render(
@@ -659,6 +693,10 @@ describe.each([
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
       );
 
     render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
@@ -679,6 +717,10 @@ describe.each([
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
       );
 
     render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={false} />, {
@@ -699,6 +741,10 @@ describe.each([
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
       );
 
     render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={true} />, {
@@ -719,6 +765,10 @@ describe.each([
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
       );
 
     render(<Wrapper paymentPlan={paymentPlan} product={product} isWithdrawable={false} />, {
@@ -761,6 +811,10 @@ describe.each([
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT30`,
@@ -820,6 +874,10 @@ describe.each([
         paymentPlan,
       )
       .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
+      )
+      .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT100`,
         paymentPlanVoucher,
       );
@@ -870,6 +928,10 @@ describe.each([
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
       )
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT30`,
@@ -999,6 +1061,10 @@ describe('SaleTunnel with Keycloak backend', () => {
       .get(
         `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
         paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
       );
 
     render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {

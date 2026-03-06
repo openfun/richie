@@ -51,7 +51,11 @@ import { Payment, PaymentMethod, PaymentProviders } from 'components/PaymentInte
 import { CourseStateFactory } from 'utils/test/factories/richie';
 import { FactoryHelper } from 'utils/test/factories/helper';
 import { JoanieUserApiAbilityActions, JoanieUserProfile } from 'types/User';
-import { SaleTunnelContextType, SaleTunnelStep } from 'components/SaleTunnel/GenericSaleTunnel';
+import {
+  SaleTunnelContextType,
+  SaleTunnelStep,
+  PaymentMode,
+} from 'components/SaleTunnel/GenericSaleTunnel';
 import { SaleTunnelProps } from 'components/SaleTunnel';
 import { noop } from 'utils/index';
 import { factory } from './factories';
@@ -670,5 +674,7 @@ export const SaleTunnelContextFactory = factory(
     setSchedule: noop,
     needsPayment: true,
     setNeedsPayment: noop,
+    paymentMode: PaymentMode.CLASSIC,
+    setPaymentMode: noop,
   }),
 );
