@@ -95,6 +95,44 @@ class ContextProcessorKeycloakTestCase(TestCase):
             "BACKEND": "fonzie-keycloak",
             "KEYCLOAK_CLIENT_ID": "richie-client",
             "KEYCLOAK_REALM": "richie-realm",
+            "PROFILE_URLS": {
+                "account": {
+                    "label": "Account",
+                    "href": "{base_url}/account",
+                },
+                "profile": {
+                    "label": "Profile",
+                    "href": "{base_url}/profile",
+                },
+            },
+        }
+    )
+    def test_site_metas_fonzie_keycloak_overrides_account_url_keeps_profile(self):
+        """
+        When using fonzie-keycloak backend, site_metas should override the account URL
+        with the Keycloak realm account URL but keep the profile URL (unlike keycloak).
+        """
+        request = self.factory.get("/")
+        context = site_metas(request)
+
+        profile_urls = json.loads(context["AUTHENTICATION"]["profile_urls"])
+
+        # Account URL should be overridden with Keycloak realm account URL
+        self.assertEqual(
+            profile_urls["account"]["action"],
+            "https://keycloak.test/auth/realms/richie-realm/account/"
+            "?referrer=richie-client&referrer_uri=http%3A%2F%2Ftestserver%2F",
+        )
+        # Profile URL should be kept (unlike keycloak backend)
+        self.assertIn("profile", profile_urls)
+
+    @override_settings(
+        RICHIE_AUTHENTICATION_DELEGATION={
+            "BASE_URL": "whatever",
+            "KEYCLOAK_BASE_URL": "https://keycloak.test/auth",
+            "BACKEND": "fonzie-keycloak",
+            "KEYCLOAK_CLIENT_ID": "richie-client",
+            "KEYCLOAK_REALM": "richie-realm",
         }
     )
     def test_get_authentication_context_fonzie_keycloak_backend(self):

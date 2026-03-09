@@ -97,7 +97,7 @@ def site_metas(request: HttpRequest):
                 }
             ),
         }
-        if authentication_delegation["BACKEND"] == "keycloak":
+        if authentication_delegation["BACKEND"] in ["keycloak", "fonzie-keycloak"]:
             profile_urls = json.loads(context["AUTHENTICATION"]["profile_urls"])
             # Override the default account profile url with the one from the keycloak realm
             account_url = (
@@ -107,7 +107,8 @@ def site_metas(request: HttpRequest):
                 f"&referrer_uri={quote(request.build_absolute_uri(), safe='')}"
             )
             profile_urls["account"]["action"] = account_url
-            profile_urls.pop("profile", None)
+            if authentication_delegation["BACKEND"] == "keycloak":
+                profile_urls.pop("profile", None)
             context["AUTHENTICATION"]["profile_urls"] = json.dumps(profile_urls)
 
     if getattr(settings, "RICHIE_MINIMUM_COURSE_RUNS_ENROLLMENT_COUNT", None):
