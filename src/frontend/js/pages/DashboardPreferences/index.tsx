@@ -2,6 +2,7 @@ import { DashboardCreditCardsManagement } from 'pages/DashboardCreditCardsManage
 import { DashboardAddressesManagement } from 'pages/DashboardAddressesManagement';
 import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter';
 import DashboardOpenEdxProfile from 'pages/DashboardOpenEdxProfile';
+import DashboardKeycloakProfile from 'pages/DashboardKeycloakProfile';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { APIBackend } from 'types/api';
@@ -17,7 +18,7 @@ export const DashboardPreferences = () => {
   );
   return (
     <div className="dashboard-preferences">
-      {!isKeycloakBackend && <DashboardOpenEdxProfile />}
+      {isKeycloakBackend ? <DashboardKeycloakProfile /> : <DashboardOpenEdxProfile />}
       <DashboardAddressesManagement
         onClickCreate={() => navigate(LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION)}
         onClickEdit={(address) =>

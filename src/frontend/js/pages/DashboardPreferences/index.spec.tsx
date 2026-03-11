@@ -11,6 +11,7 @@ import { User } from 'types/User';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import context from 'utils/context';
+import { AuthenticationApi } from 'api/authentication';
 
 jest.mock('utils/context', () => ({
   __esModule: true,
@@ -26,6 +27,7 @@ jest.mock('utils/indirection/window', () => ({
 
 describe('<DashboardPreferences />', () => {
   let richieUser: User;
+  const mockAccountUpdateUrl = 'https://keycloak.test/auth/realms/richie/account';
 
   beforeEach(() => {
     richieUser = UserFactory().one();
@@ -69,9 +71,19 @@ describe('<DashboardPreferences />', () => {
     await screen.findByText('Profile');
   });
 
-  it('should not render the OpenEdx profile section when using keycloak backend', async () => {
+  it('should render the keycloak profile section when using keycloak backend', async () => {
     const originalBackend = context.authentication.backend;
     context.authentication.backend = 'keycloak';
+    const originalAccount = AuthenticationApi!.account;
+    AuthenticationApi!.account = {
+      get: () => ({
+        username: richieUser.username,
+        email: richieUser.email,
+        firstName: null,
+        lastName: null,
+      }),
+      updateUrl: () => mockAccountUpdateUrl,
+    };
 
     const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
@@ -82,15 +94,30 @@ describe('<DashboardPreferences />', () => {
       );
     });
 
-    // The OpenEdx profile section should NOT be visible
-    expect(screen.queryByText('Profile')).not.toBeInTheDocument();
+    // The keycloak profile section should be visible
+    await screen.findByText('Account name');
+    await screen.findByText('Account email');
+    await screen.findByText('Edit your profile');
+    // The OpenEdx-specific section should NOT be visible
+    expect(screen.queryByText('Basic account information')).not.toBeInTheDocument();
 
     context.authentication.backend = originalBackend;
+    AuthenticationApi!.account = originalAccount;
   });
 
-  it('should not render the OpenEdx profile section when using fonzie-keycloak backend', async () => {
+  it('should render the keycloak profile section when using fonzie-keycloak backend', async () => {
     const originalBackend = context.authentication.backend;
     context.authentication.backend = 'fonzie-keycloak';
+    const originalAccount = AuthenticationApi!.account;
+    AuthenticationApi!.account = {
+      get: () => ({
+        username: richieUser.username,
+        email: richieUser.email,
+        firstName: null,
+        lastName: null,
+      }),
+      updateUrl: () => mockAccountUpdateUrl,
+    };
 
     const client = createTestQueryClient({ user: richieUser });
     await act(async () => {
@@ -101,9 +128,14 @@ describe('<DashboardPreferences />', () => {
       );
     });
 
-    // The OpenEdx profile section should NOT be visible
-    expect(screen.queryByText('Profile')).not.toBeInTheDocument();
+    // The keycloak profile section should be visible
+    await screen.findByText('Account name');
+    await screen.findByText('Account email');
+    await screen.findByText('Edit your profile');
+    // The OpenEdx-specific section should NOT be visible
+    expect(screen.queryByText('Basic account information')).not.toBeInTheDocument();
 
     context.authentication.backend = originalBackend;
+    AuthenticationApi!.account = originalAccount;
   });
 });
