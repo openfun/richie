@@ -1032,4 +1032,52 @@ describe('SaleTunnel with Keycloak backend', () => {
     // No OpenEdx profile API calls should have been made
     expect(fetchMock.calls().filter(([url]) => url.includes('/api/user/v1/'))).toHaveLength(0);
   });
+
+  it('should render keycloak account info when using fonzie-keycloak backend', async () => {
+    // Switch to fonzie-keycloak backend
+    const ctx = require('utils/context').default;
+    ctx.authentication.backend = 'fonzie-keycloak';
+
+    const product = CredentialProductFactory().one();
+    const paymentPlan = PaymentPlanFactory().one();
+
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify({
+          course_code: course.code,
+          product_id: product.id,
+          state: NOT_CANCELED_ORDER_STATES,
+        })}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
+      );
+
+    render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    // Should display the "Account name" heading (keycloak flow)
+    await screen.findByRole('heading', { level: 4, name: 'Account name' });
+
+    // Should display the username from the session
+    screen.getByText(richieUser.username);
+
+    // Should display the email from the session
+    screen.getByText(richieUser.email!);
+
+    // Should display the keycloak account update link
+    const updateLink = screen.getByRole('link', {
+      name: 'please update your account',
+    });
+    expect(updateLink).toHaveAttribute('href', mockAccountUpdateUrl);
+
+    // Should NOT render the OpenEdx full name form
+    expect(screen.queryByLabelText('First name and last name')).not.toBeInTheDocument();
+
+    // No OpenEdx profile API calls should have been made
+    expect(fetchMock.calls().filter(([url]) => url.includes('/api/user/v1/'))).toHaveLength(0);
+  });
 });
