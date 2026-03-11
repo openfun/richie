@@ -167,7 +167,9 @@ export const SaleTunnelInformationSingular = () => {
     setNeedsPayment(!fromBatchOrder);
   }, [fromBatchOrder, setNeedsPayment]);
 
-  const isKeycloakBackend = context?.authentication.backend === APIBackend.KEYCLOAK;
+  const isKeycloakBackend = [APIBackend.KEYCLOAK, APIBackend.FONZIE_KEYCLOAK].includes(
+    context?.authentication.backend as APIBackend,
+  );
 
   return (
     <>

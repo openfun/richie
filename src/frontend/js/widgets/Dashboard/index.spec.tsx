@@ -212,7 +212,8 @@ describe('<Dashboard />', () => {
     expect(screen.getByRole('heading', { name: /Page not found/ }));
   });
 
-  it('should not show preferences link when using keycloak backend', async () => {
+  it('should show preferences link when using keycloak backend', async () => {
+    // The guard moved from the sidebar to DashboardPreferences itself.
     // Temporarily change the authentication backend to keycloak
     const originalBackend = context.authentication.backend;
     context.authentication.backend = 'keycloak';
@@ -224,8 +225,8 @@ describe('<Dashboard />', () => {
 
     const sidebar = screen.getByTestId('dashboard__sidebar');
 
-    // Verify that "My preferences" link is NOT present in the sidebar
-    expect(queryByText(sidebar, 'My preferences')).toBeNull();
+    // "My preferences" link is always present in the sidebar regardless of backend
+    expect(queryByText(sidebar, 'My preferences')).not.toBeNull();
 
     // Restore original backend
     context.authentication.backend = originalBackend;

@@ -4,15 +4,20 @@ import { useDashboardNavigate } from 'widgets/Dashboard/hooks/useDashboardRouter
 import DashboardOpenEdxProfile from 'pages/DashboardOpenEdxProfile';
 
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
+import { APIBackend } from 'types/api';
+import context from 'utils/context';
 
 /**
  * This component relies on react-router.
  */
 export const DashboardPreferences = () => {
   const navigate = useDashboardNavigate();
+  const isKeycloakBackend = [APIBackend.KEYCLOAK, APIBackend.FONZIE_KEYCLOAK].includes(
+    context?.authentication.backend as APIBackend,
+  );
   return (
     <div className="dashboard-preferences">
-      <DashboardOpenEdxProfile />
+      {!isKeycloakBackend && <DashboardOpenEdxProfile />}
       <DashboardAddressesManagement
         onClickCreate={() => navigate(LearnerDashboardPaths.PREFERENCES_ADDRESS_CREATION)}
         onClickEdit={(address) =>
