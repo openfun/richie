@@ -234,4 +234,107 @@ describe('<DashboardBatchOrders/>', () => {
 
     await screen.findByText('Completed');
   });
+
+  it('allows retrying payment after aborting the payment tunnel', async () => {
+    const batchOrder = BatchOrderReadFactory({
+      payment_method: PaymentMethod.CARD_PAYMENT,
+      state: BatchOrderState.PENDING,
+      total: 200,
+      currency: 'EUR',
+    }).one();
+
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/batch-orders/?page=1&page_size=${perPage}`, {
+      results: [batchOrder],
+      count: 1,
+      next: null,
+      previous: null,
+    });
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/batch-orders/`, [batchOrder]);
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/batch-orders/${batchOrder.id}/`, batchOrder);
+
+    render(<DashboardTest initialRoute={LearnerDashboardPaths.BATCH_ORDERS} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
+
+    await expectNoSpinner('Loading batch orders...');
+    await screen.findByText('Payment required');
+
+    // Open modal and start payment
+    await userEvent.click(await screen.findByRole('button', { name: 'Pay €200.00' }));
+
+    fetchMock.post(
+      `https://joanie.endpoint/api/v1.0/batch-orders/${batchOrder.id}/submit-for-payment/`,
+      { payment_id: 'payment_id', provider: 'payment_provider', url: 'payment_url' },
+    );
+
+    const firstModal = await screen.findByRole('dialog');
+    await userEvent.click(within(firstModal).getByRole('button', { name: 'Pay €200.00' }));
+
+    // Close payment modal
+    await screen.findByTestId('payment-abort');
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/batch-orders/?page=1&page_size=${perPage}`,
+      {
+        results: [{ ...batchOrder, state: BatchOrderState.PROCESS_PAYMENT }],
+        count: 1,
+        next: null,
+        previous: null,
+      },
+      { overwriteRoutes: true },
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/batch-orders/${batchOrder.id}/`,
+      { ...batchOrder, state: BatchOrderState.PROCESS_PAYMENT },
+      { overwriteRoutes: true },
+    );
+    await userEvent.click(screen.getByTestId('payment-abort'));
+
+    const modalAfterAbort = await screen.findByRole('dialog');
+    await userEvent.click(within(modalAfterAbort).getByRole('button', { name: 'close' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+    await screen.findByText('Payment required');
+    await screen.findByRole('button', { name: 'Pay €200.00' });
+
+    // Retry payment successfully
+    await userEvent.click(await screen.findByRole('button', { name: 'Pay €200.00' }));
+
+    fetchMock.post(
+      `https://joanie.endpoint/api/v1.0/batch-orders/${batchOrder.id}/submit-for-payment/`,
+      { payment_id: 'payment_id', provider: 'payment_provider', url: 'payment_url' },
+      { overwriteRoutes: true },
+    );
+
+    const retryModal = await screen.findByRole('dialog');
+    await userEvent.click(within(retryModal).getByRole('button', { name: 'Pay €200.00' }));
+
+    await screen.findByTestId('payment-success');
+
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/batch-orders/?page=1&page_size=${perPage}`,
+      {
+        results: [{ ...batchOrder, state: BatchOrderState.COMPLETED }],
+        count: 1,
+        next: null,
+        previous: null,
+      },
+      { overwriteRoutes: true },
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/batch-orders/${batchOrder.id}/`,
+      { ...batchOrder, state: BatchOrderState.COMPLETED },
+      { overwriteRoutes: true },
+    );
+
+    await userEvent.click(screen.getByTestId('payment-success'));
+
+    await waitFor(() => {
+      expect(mockMessageModal).toHaveBeenCalledWith(
+        expect.objectContaining({ title: 'Payment successful' }),
+      );
+    });
+
+    expect(screen.queryByRole('button', { name: /Pay/ })).not.toBeInTheDocument();
+    await screen.findByText('Completed');
+  });
 });

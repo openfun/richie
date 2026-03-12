@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix Keycloak race condition causing users to appear unauthenticated
 - Hide payment plan block for certificates
+- Allow user to retry batch order payment when closing the modal once
 
 ### Changed
 
