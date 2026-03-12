@@ -69,7 +69,8 @@ export const buildCourseRunData = (intl: IntlShape, courseRuns: CourseRun[]) => 
       <CourseRunListCell variant={CourseRunListCell.ALIGN_RIGHT}>
         <Button
           href={courseRun.resource_link}
-          color="secondary"
+          color="brand"
+          variant="secondary"
           size="small"
           icon={<Icon name={IconTypeEnum.LOGOUT_SQUARE} size="small" />}
         >

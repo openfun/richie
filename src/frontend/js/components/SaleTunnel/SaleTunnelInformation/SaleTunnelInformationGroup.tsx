@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, Resolver, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Step, StepLabel, Stepper } from '@mui/material';
@@ -197,7 +197,7 @@ const BatchOrderForm = () => {
   const form = useForm<BatchOrder>({
     defaultValues: batchOrder || defaultValues,
     mode: 'onBlur',
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema) as Resolver<BatchOrder>,
   });
   const { watch } = form;
   const values = watch();
@@ -268,7 +268,8 @@ const BatchOrderForm = () => {
             }
           }}
           hidden={activeStep === 0}
-          color="tertiary"
+          color="brand"
+          variant="tertiary"
         >
           <FormattedMessage {...messages.previousButton} />
         </Button>

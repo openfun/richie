@@ -32,7 +32,8 @@ const SignOrganizationAgreementButton = ({
       {hasAgreementToSign && (
         <Button
           size="small"
-          color="primary"
+          color="brand"
+          variant="primary"
           onClick={() => setAgreementFrameOpened(true)}
           disabled={agreementFrameOpened}
           icon={

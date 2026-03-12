@@ -1,4 +1,4 @@
-import { StoryObj, Meta } from '@storybook/react';
+import { StoryObj, Meta } from '@storybook/react-webpack5';
 import { BaseJoanieAppWrapper } from 'utils/test/wrappers/BaseJoanieAppWrapper';
 import {
   CertificateProductFactory,

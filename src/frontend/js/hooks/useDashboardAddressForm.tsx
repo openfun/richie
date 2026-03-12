@@ -1,5 +1,5 @@
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
-import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { FormProvider, Resolver, useForm } from 'react-hook-form';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as Yup from 'yup';
 import countries from 'i18n-iso-countries';
@@ -60,7 +60,7 @@ export const useDashboardAddressForm = (address?: Address) => {
     defaultValues: address || defaultValues,
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema) as Resolver<AddressFormValues>,
   });
   const { register, handleSubmit, formState } = form;
 

@@ -60,6 +60,12 @@ module.exports = (env) => {
       extensions: ['.ts', '.tsx', '.js', '.json'],
       plugins: [new TsconfigPathsPlugin({})],
       modules: ['node_modules', ...richieDependentModuleResolutions],
+      alias: {
+        '@formatjs/intl-relativetimeformat/locale-data': path.resolve(
+          __dirname,
+          'node_modules/@formatjs/intl-relativetimeformat/locale-data',
+        ),
+      },
     },
 
     module: {

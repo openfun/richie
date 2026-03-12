@@ -1,6 +1,6 @@
 import { ButtonElement, Input, Alert, VariantType } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, Resolver, useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useMemo, useRef } from 'react';
@@ -78,7 +78,7 @@ const OpenEdxFullNameForm = () => {
     defaultValues,
     mode: 'onBlur',
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema) as Resolver<OpenEdxFullNameFormValues>,
   });
 
   const { getValues, register, handleSubmit, reset, formState } = form;

@@ -210,7 +210,7 @@ const FailedInstallmentManager = ({ order, updateOrder }: FailedInstallmentManag
   return (
     <>
       <div className="dashboard-splitted-card__item__actions">
-        <Button size="small" color="primary" onClick={installmentRetryModal.open}>
+        <Button size="small" color="brand" variant="primary" onClick={installmentRetryModal.open}>
           <FormattedMessage
             {...messages.paymentNeededButton}
             values={{

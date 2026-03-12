@@ -38,7 +38,8 @@ const DownloadCertificateButton = ({
     <Button
       className={className}
       size="small"
-      color="secondary"
+      color="brand"
+      variant="secondary"
       disabled={loading}
       onClick={onDownloadClick}
     >

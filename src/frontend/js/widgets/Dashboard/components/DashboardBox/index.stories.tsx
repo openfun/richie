@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { Button } from '@openfun/cunningham-react';
 import { DashboardBox } from './index';
 
@@ -25,8 +25,12 @@ export const Default: Story = {
     ),
     footer: (
       <>
-        <Button color="primary">Delete</Button>
-        <Button color="primary">Update</Button>
+        <Button color="brand" variant="primary">
+          Delete
+        </Button>
+        <Button color="brand" variant="primary">
+          Update
+        </Button>
       </>
     ),
   },
@@ -43,8 +47,12 @@ export const NoHeader: Story = {
     ),
     footer: (
       <>
-        <Button color="primary">Delete</Button>
-        <Button color="primary">Update</Button>
+        <Button color="brand" variant="primary">
+          Delete
+        </Button>
+        <Button color="brand" variant="primary">
+          Update
+        </Button>
       </>
     ),
   },

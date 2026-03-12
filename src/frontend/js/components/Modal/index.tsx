@@ -78,7 +78,8 @@ export const Modal = ({
             className="modal__closeButton"
             onClick={(e) => props.onRequestClose?.(e)}
             title={intl.formatMessage(messages.closeDialog)}
-            color="tertiary"
+            color="brand"
+            variant="tertiary"
             size="small"
           >
             <Icon name={IconTypeEnum.ROUND_CLOSE} />

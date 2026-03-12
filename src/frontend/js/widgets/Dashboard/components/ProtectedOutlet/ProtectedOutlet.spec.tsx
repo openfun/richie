@@ -39,7 +39,7 @@ describe('<ProtectedOutlet />', () => {
     screen.getByTestId('route-restricted');
 
     // location.replace should not have been called
-    expect(location.replace).not.toBeCalled();
+    expect(location.replace).not.toHaveBeenCalled();
   });
 
   it('should redirect to provided path if isAllowed is false', () => {

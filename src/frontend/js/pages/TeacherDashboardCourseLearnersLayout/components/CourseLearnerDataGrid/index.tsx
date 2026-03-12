@@ -82,7 +82,12 @@ const CourseLearnerDataGrid = ({
       headerName: intl.formatMessage(messages.columnActions),
       renderCell: (params: { row: Row }) => {
         return (
-          <Button href={`mailto:${params.row.owner__email}`} size="small" color="secondary">
+          <Button
+            href={`mailto:${params.row.owner__email}`}
+            size="small"
+            color="brand"
+            variant="secondary"
+          >
             <FormattedMessage {...messages.contactButton} />
           </Button>
         );
