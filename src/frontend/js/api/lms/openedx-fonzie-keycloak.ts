@@ -51,6 +51,7 @@ const API = (APIConf: AuthenticationBackend): APILms => {
         return sessionStorage.getItem(RICHIE_USER_TOKEN);
       },
       account: {
+        updateUrl: () => APIOptions.routes.user.account,
         get: async (username: string) => {
           const options: RequestInit = {
             credentials: 'include',

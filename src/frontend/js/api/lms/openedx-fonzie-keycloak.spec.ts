@@ -66,6 +66,15 @@ describe('Fonzie Keycloak API', () => {
     expect(fetchMock.calls()).toHaveLength(2);
   });
 
+  it('provides an updateUrl pointing to the keycloak account page', () => {
+    const api = FonzieKeycloakAPIInterface(configuration);
+    const { account } = api.user;
+    expect(typeof (account as any).updateUrl).toBe('function');
+    expect((account as any).updateUrl()).toBe(
+      'https://keycloak.test/auth/realms/richie-realm/account/',
+    );
+  });
+
   it('is able to retrieve access token within the session storage', () => {
     const accessToken = faker.string.uuid();
     sessionStorage.setItem(RICHIE_USER_TOKEN, accessToken);
