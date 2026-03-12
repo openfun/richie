@@ -1,0 +1,80 @@
+{
+  "components": {
+    "alert": {
+      "close_aria_label": "Supprimer l'alerte",
+      "expand_aria_label": "Ouvrir l'alerte",
+      "shrink_aria_label": "Fermer l'alerte"
+    },
+    "pagination": {
+      "goto_label": "Aller à",
+      "goto_label_aria": "Aller à la page",
+      "next_aria": "Aller à la page suivante",
+      "previous_aria": "Aller à la page précédente",
+      "goto_page_aria": "Aller à la page {page}",
+      "current_page_aria": "Vous êtes actuellement sur la page {page}"
+    },
+    "datagrid": {
+      "empty": "Ce tableau est vide",
+      "empty_alt": "Illustration d'un tableau vide",
+      "loader_aria": "Chargement des données",
+      "rows_selection_aria": "Toutes les lignes sélectionnées",
+      "row_selection_aria": "Ligne sélectionnée"
+    },
+    "provider": {
+      "test": "Ceci est un test : {name}"
+    },
+    "forms": {
+      "input": {
+        "password": {
+          "show_password": "Afficher le mot de passe",
+          "hide_password": "Masquer le mot de passe"
+        }
+      },
+      "select": {
+        "toggle_button_aria_label": "Ouvrir le menu",
+        "clear_button_aria_label": "Effacer la sélection",
+        "clear_all_button_aria_label": "Effacer toutes les sélections",
+        "menu_empty_placeholder": "Aucun choix disponible"
+      },
+      "file_uploader": {
+        "delete_file_name": "Supprimer le fichier {name}",
+        "delete_file": "Supprimer le fichier",
+        "uploading": "Upload en cours ...",
+        "caption": "Glisser-déposer ou ",
+        "browse_files": "Parcourir"
+      },
+      "date_picker": {
+        "toggle_button_aria_label_open": "Ouvrir le calendrier",
+        "toggle_button_aria_label_close": "Fermer le calendrier",
+        "clear_button_aria_label": "Effacer la date",
+        "next_month_button_aria_label": "Mois suivant",
+        "next_year_button_aria_label": "Année suivante",
+        "previous_month_button_aria_label": "Mois précédent",
+        "previous_year_button_aria_label": "Année précédente",
+        "year_select_button_aria_label": "Sélectionner une année",
+        "month_select_button_aria_label": "Sélectionner un mois"
+      }
+    },
+    "modals": {
+      "helpers": {
+        "delete_confirmation": {
+          "title": "Êtes-vous sûr ?",
+          "children": "Êtes-vous sûr de vouloir supprimer cet élément ?",
+          "cancel": "Annuler",
+          "delete": "Supprimer"
+        },
+        "confirmation": {
+          "title": "Êtes-vous sûr ?",
+          "children": "Êtes-vous sûr de vouloir faire cela ?",
+          "cancel": "Annuler",
+          "yes": "Oui"
+        },
+        "disclaimer": {
+          "title": "Avertissement",
+          "children": "Ceci est un avertissement",
+          "ok": "Ok"
+        }
+      }
+    }
+  }
+}
