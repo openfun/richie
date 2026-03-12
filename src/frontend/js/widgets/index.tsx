@@ -4,6 +4,7 @@ import startCase from 'lodash-es/startCase';
 import { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { CunninghamProvider } from '@openfun/cunningham-react';
+import cunninghamFrFRLocale from 'widgets/cunningham-fr-FR-locale.json';
 import { HistoryProvider } from 'hooks/useHistory';
 import { SessionProvider } from 'contexts/SessionContext';
 import { Spinner } from 'components/Spinner';
@@ -105,7 +106,11 @@ export const Root = ({ richieReactSpots, locale = 'en-US' }: RootProps) => {
   });
 
   return (
-    <CunninghamProvider currentLocale={locale}>
+    <CunninghamProvider
+      currentLocale={locale}
+      // TODO: remove customLocales and the cunningham-fr-FR-locale.json file once Cunningham is upgraded to v4+
+      customLocales={{ 'fr-FR': cunninghamFrFRLocale }}
+    >
       <SessionProvider>
         <HistoryProvider>
           <Suspense fallback={<Spinner />}>{portals}</Suspense>
