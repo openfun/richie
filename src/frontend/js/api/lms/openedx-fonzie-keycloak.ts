@@ -49,7 +49,10 @@ const API = (APIConf: AuthenticationBackend): APILms => {
         try {
           const keycloakAccount = await fetch(APIOptions.routes.user.account, {
             credentials: 'include',
-            headers: { Accept: 'application/json' },
+            headers: {
+              Accept: 'application/json',
+              Authorization: `Bearer ${user.access_token}`,
+            },
           }).then((res) => {
             if (!res.ok) throw new Error(`Keycloak account fetch failed: ${res.status}`);
             return res.json();
