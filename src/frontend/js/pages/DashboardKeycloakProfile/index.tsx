@@ -6,6 +6,7 @@ import { DashboardCard } from 'widgets/Dashboard/components/DashboardCard';
 import Form from 'components/Form';
 import { AuthenticationApi } from 'api/authentication';
 import { KeycloakAccountApi } from 'types/api';
+import { UserHelper } from 'utils/UserHelper';
 
 const messages = defineMessages({
   sectionHeader: {
@@ -63,7 +64,7 @@ const DashboardKeycloakProfile = () => {
               name="username"
               label={intl.formatMessage(messages.usernameInputLabel)}
               disabled={true}
-              value={user?.username || DEFAULT_DISPLAYED_FORM_VALUE}
+              value={user ? UserHelper.getName(user) : DEFAULT_DISPLAYED_FORM_VALUE}
               text={intl.formatMessage(messages.usernameInputDescription)}
             />
           </Form.Row>

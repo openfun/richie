@@ -14,6 +14,7 @@ import { HttpError } from 'utils/errors/HttpError';
 import { APIBackend, KeycloakAccountApi } from 'types/api';
 import context from 'utils/context';
 import { AuthenticationApi } from 'api/authentication';
+import { UserHelper } from 'utils/UserHelper';
 
 const messages = defineMessages({
   title: {
@@ -242,7 +243,7 @@ const KeycloakAccountEdit = () => {
             <h4>
               <FormattedMessage {...messages.keycloakUsernameLabel} />
             </h4>
-            <div className="fw-bold">{user?.username}</div>
+            <div className="fw-bold">{user ? UserHelper.getName(user) : ''}</div>
           </div>
           <div className="sale-tunnel__username__description">
             <FormattedMessage {...messages.keycloakUsernameInfo} />

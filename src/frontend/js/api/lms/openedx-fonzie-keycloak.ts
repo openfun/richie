@@ -43,6 +43,28 @@ const API = (APIConf: AuthenticationBackend): APILms => {
     ...ApiInterface,
     user: {
       ...ApiInterface.user,
+      me: async () => {
+        const user = await ApiInterface.user.me();
+        if (!user) return null;
+        try {
+          const keycloakAccount = await fetch(APIOptions.routes.user.account, {
+            credentials: 'include',
+            headers: { Accept: 'application/json' },
+          }).then((res) => {
+            if (!res.ok) throw new Error(`Keycloak account fetch failed: ${res.status}`);
+            return res.json();
+          });
+          return {
+            ...user,
+            full_name:
+              [keycloakAccount.firstName, keycloakAccount.lastName].filter(Boolean).join(' ') ||
+              user.full_name,
+            email: keycloakAccount.email || user.email,
+          };
+        } catch {
+          return user;
+        }
+      },
       login: () => {
         const next = encodeURIComponent(location.href);
         location.assign(`${APIOptions.routes.user.login}?next=${next}`);

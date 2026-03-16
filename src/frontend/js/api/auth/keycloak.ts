@@ -59,8 +59,12 @@ const API = (APIConf: AuthenticationBackend): { user: APIAuthentication } => {
           .loadUserProfile()
           .then((userProfile) => {
             sessionStorage.setItem(RICHIE_USER_TOKEN, keycloak.idToken!);
+            const fullName = [userProfile.firstName, userProfile.lastName]
+              .filter(Boolean)
+              .join(' ');
             return {
-              username: `${userProfile.firstName} ${userProfile.lastName}`,
+              username: fullName,
+              full_name: fullName,
               email: userProfile.email,
               access_token: keycloak.idToken,
             };
