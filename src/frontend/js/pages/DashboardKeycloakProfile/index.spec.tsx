@@ -48,7 +48,7 @@ describe('pages.DashboardKeycloakProfile', () => {
     AuthenticationApi!.account = originalAccount;
   });
 
-  it('should render profile information', async () => {
+  it('should render profile information with full_name', async () => {
     render(<DashboardKeycloakProfile />, {
       queryOptions: { client: createTestQueryClient({ user: richieUser }) },
     });
@@ -56,7 +56,7 @@ describe('pages.DashboardKeycloakProfile', () => {
     expect(screen.getByText('Profile')).toBeInTheDocument();
     expect(screen.getByText('Account information')).toBeInTheDocument();
 
-    expect(await screen.findByDisplayValue(richieUser.username)).toBeInTheDocument();
+    expect(await screen.findByDisplayValue(richieUser.full_name!)).toBeInTheDocument();
     expect(screen.getByDisplayValue(richieUser.email!)).toBeInTheDocument();
 
     const editLink = screen.getByRole('link', { name: 'Edit your profile' });
@@ -64,14 +64,14 @@ describe('pages.DashboardKeycloakProfile', () => {
     expect(editLink).toHaveAttribute('href', mockAccountUpdateUrl);
   });
 
-  it('should render default values when user fields are empty', async () => {
-    const userWithoutEmail = UserFactory({ email: undefined }).one();
+  it('should fallback to username when full_name is empty', async () => {
+    const userWithoutFullName = UserFactory({ full_name: undefined, email: undefined }).one();
 
     render(<DashboardKeycloakProfile />, {
-      queryOptions: { client: createTestQueryClient({ user: userWithoutEmail }) },
+      queryOptions: { client: createTestQueryClient({ user: userWithoutFullName }) },
     });
 
-    expect(await screen.findByDisplayValue(userWithoutEmail.username)).toBeInTheDocument();
+    expect(await screen.findByDisplayValue(userWithoutFullName.username)).toBeInTheDocument();
     expect(screen.getByLabelText('Account email')).toHaveValue(DEFAULT_DISPLAYED_FORM_VALUE);
   });
 });

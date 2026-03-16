@@ -31,12 +31,36 @@ describe('Fonzie Keycloak API', () => {
     jest.clearAllMocks();
   });
 
-  it('uses its own route to get user information', async () => {
+  it('uses its own route to get user information and enriches with keycloak account', async () => {
     const user = {
-      username: faker.internet.username(),
+      username: 'test-richie-ncl',
+      full_name: 'n c',
+    };
+    const keycloakAccount = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
     };
 
     fetchMock.get('https://demo.endpoint.api/api/v1.0/user/me', user);
+    fetchMock.get('https://keycloak.test/auth/realms/richie-realm/account/', keycloakAccount);
+
+    const api = FonzieKeycloakAPIInterface(configuration);
+    await expect(api.user.me()).resolves.toEqual({
+      ...user,
+      full_name: 'John Doe',
+      email: 'john.doe@example.com',
+    });
+  });
+
+  it('falls back to fonzie data when keycloak account call fails', async () => {
+    const user = {
+      username: 'test-richie-ncl',
+      full_name: 'n c',
+    };
+
+    fetchMock.get('https://demo.endpoint.api/api/v1.0/user/me', user);
+    fetchMock.get('https://keycloak.test/auth/realms/richie-realm/account/', 500);
 
     const api = FonzieKeycloakAPIInterface(configuration);
     await expect(api.user.me()).resolves.toEqual(user);

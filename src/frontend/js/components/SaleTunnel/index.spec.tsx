@@ -940,6 +940,7 @@ describe('SaleTunnel with Keycloak backend', () => {
 
     richieUser = UserFactory({
       username: 'John Doe',
+      full_name: 'John Doe',
       email: 'johndoe@example.com',
     }).one();
 

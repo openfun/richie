@@ -127,6 +127,7 @@ describe('Keycloak API', () => {
       expect(mockKeycloakUpdateToken).toHaveBeenCalledWith(30);
       expect(response).toEqual({
         username: 'John Doe',
+        full_name: 'John Doe',
         email: 'johndoe@example.com',
         access_token: mockIdToken,
       });
