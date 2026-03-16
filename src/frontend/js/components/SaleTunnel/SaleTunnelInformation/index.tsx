@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Select } from '@openfun/cunningham-react';
-import { useSaleTunnelContext } from 'components/SaleTunnel/GenericSaleTunnel';
+import { useSaleTunnelContext, PaymentMode } from 'components/SaleTunnel/GenericSaleTunnel';
 import { SaleTunnelInformationSingular } from 'components/SaleTunnel/SaleTunnelInformation/SaleTunnelInformationSingular';
 import { SaleTunnelInformationGroup } from 'components/SaleTunnel/SaleTunnelInformation/SaleTunnelInformationGroup';
 import { ProductType } from 'types/Joanie';
@@ -36,7 +36,7 @@ export enum FormType {
 
 export const SaleTunnelInformation = () => {
   const intl = useIntl();
-  const { setBatchOrder, setSchedule, product } = useSaleTunnelContext();
+  const { setBatchOrder, setSchedule, setPaymentMode, product } = useSaleTunnelContext();
   const productType = product.type;
   const options = [
     { label: intl.formatMessage(messages.purchaseTypeOptionSingle), value: FormType.SINGULAR },
@@ -63,6 +63,7 @@ export const SaleTunnelInformation = () => {
               setPurchaseType(e.target.value as FormType);
               setBatchOrder(undefined);
               setSchedule(undefined);
+              setPaymentMode(PaymentMode.CLASSIC);
             }}
           />
         </div>
