@@ -178,7 +178,8 @@ export const SaleTunnelInformationSingular = () => {
   const price = query.data?.price ?? props.paymentPlan?.price;
   const discountedPrice = query.data?.discounted_price ?? props.paymentPlan?.discounted_price;
   const discount = query.data?.discount ?? props.paymentPlan?.discount;
-  const fromBatchOrder = query.data?.from_batch_order ?? props.paymentPlan?.from_batch_order;
+  const skipContractInputs =
+    query.data?.skip_contract_inputs ?? props.paymentPlan?.skip_contract_inputs;
   const deepLink = deepLinkQuery.data?.deep_link;
 
   const isCredentialWithPrice =
@@ -199,8 +200,8 @@ export const SaleTunnelInformationSingular = () => {
   }, [query.error, voucherCode, setVoucherCode]);
 
   useEffect(() => {
-    setNeedsPayment(!fromBatchOrder);
-  }, [fromBatchOrder, setNeedsPayment]);
+    setNeedsPayment(!skipContractInputs);
+  }, [skipContractInputs, setNeedsPayment]);
 
   const intl = useIntl();
   const isKeycloakBackend = [APIBackend.KEYCLOAK, APIBackend.FONZIE_KEYCLOAK].includes(

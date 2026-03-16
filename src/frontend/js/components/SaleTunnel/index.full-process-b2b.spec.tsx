@@ -369,7 +369,7 @@ describe('SaleTunnel', () => {
       discounted_price: 0,
       discount: '-100%',
       payment_schedule: undefined,
-      from_batch_order: true,
+      skip_contract_inputs: true,
     }).one();
     fetchMock.get(
       `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/?voucher_code=DISCOUNT100`,
