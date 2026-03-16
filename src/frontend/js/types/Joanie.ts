@@ -661,7 +661,7 @@ export interface PaymentPlan {
   discount?: string;
   discounted_price?: number;
   payment_schedule: PaymentSchedule;
-  from_batch_order: boolean;
+  skip_contract_inputs: boolean;
 }
 
 // - API
