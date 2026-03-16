@@ -861,7 +861,7 @@ describe.each([
     const paymentPlanVoucher = PaymentPlanFactory({
       discounted_price: 0.0,
       discount: '-100%',
-      from_batch_order: true,
+      skip_contract_inputs: true,
     }).one();
     const product = ProductFactory().one();
     fetchMock
