@@ -1247,6 +1247,34 @@
     "description": "Syllabus link label on order details",
     "message": "Accéder au syllabus"
   },
+  "components.DashboardKeycloakProfile.accountInformationHeader": {
+    "description": "Title of the keycloak profile form \"account information\" block",
+    "message": "Informations du compte"
+  },
+  "components.DashboardKeycloakProfile.editButtonLabel": {
+    "description": "Label of the edit button link of the keycloak profile",
+    "message": "Modifiez votre profil"
+  },
+  "components.DashboardKeycloakProfile.emailInputDescription": {
+    "description": "Description of the keycloak profile \"email\" input",
+    "message": "Ce courriel sera utilisé pour vous envoyer des messages de confirmation."
+  },
+  "components.DashboardKeycloakProfile.emailInputLabel": {
+    "description": "Label of the keycloak profile \"email\" input",
+    "message": "Courriel du compte"
+  },
+  "components.DashboardKeycloakProfile.header": {
+    "description": "Title of the dashboard keycloak profile block",
+    "message": "Profil"
+  },
+  "components.DashboardKeycloakProfile.usernameInputDescription": {
+    "description": "Description of the keycloak profile \"username\" input",
+    "message": "Ce nom sera utilisé dans les documents légaux."
+  },
+  "components.DashboardKeycloakProfile.usernameInputLabel": {
+    "description": "Label of the keycloak profile \"username\" input",
+    "message": "Nom du compte"
+  },
   "components.DashboardOpenEdxProfile.EditButtonLabel": {
     "description": "Label of the edit button link of the open edx profile form",
     "message": "Modifiez votre profil"
@@ -1751,10 +1779,6 @@
     "description": "Button label for the payment needed message",
     "message": "Payer {amount}"
   },
-  "components.ProductCertificateFooter.paymentProcessing": {
-    "description": "Button label for the payment is processing message",
-    "message": "Traitement du paiement..."
-  },
   "components.ProductCertificateFooter.pendingProductCertificateLabel": {
     "description": "Label on the enrollment when a product of type certificate have been bought",
     "message": "Terminez ce cours pour obtenir votre certificat."
@@ -2243,14 +2267,6 @@
     "description": "Message displayed on the top of course runs list on syllabus when there is 0 or multiple course runs opened",
     "message": "Session de cours"
   },
-  "components.SyllabusAsideList.noCourseRuns": {
-    "description": "Message displayed on syllabus when there are no course runs to show",
-    "message": "Aucune session"
-  },
-  "components.SyllabusAsideList.noOtherCourseRuns": {
-    "description": "Message displayed on syllabus when there are no other course runs to show than the only one opened",
-    "message": "Aucune autre session"
-  },
   "components.SyllabusAsideList.ongoing": {
     "description": "Message displayed on syllabus when there are ongoing course runs",
     "message": "En cours"
@@ -2381,7 +2397,7 @@
   },
   "components.SyllabusCourseRunCompacted.selfPaceCoursePeriod": {
     "description": "Course date of an opened and self paced course run block",
-    "message": "Disponible jusqu'au {endDate}"
+    "message": "Du {endDate, select, undefined {} other {au {endDate}}}"
   },
   "components.SyllabusCourseRunCompacted.selfPaceNoEndDate": {
     "description": "Self paced course run block with no end date",
