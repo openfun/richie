@@ -161,6 +161,7 @@ export const SaleTunnelInformationSingular = () => {
     setSchedule,
     needsPayment,
     setNeedsPayment,
+    setHasWaivedWithdrawalRight,
     paymentMode,
     setPaymentMode,
   } = useSaleTunnelContext();
@@ -201,7 +202,10 @@ export const SaleTunnelInformationSingular = () => {
 
   useEffect(() => {
     setNeedsPayment(!skipContractInputs);
-  }, [skipContractInputs, setNeedsPayment]);
+    if (skipContractInputs) {
+      setHasWaivedWithdrawalRight(false);
+    }
+  }, [skipContractInputs, setNeedsPayment, setHasWaivedWithdrawalRight]);
 
   const intl = useIntl();
   const isKeycloakBackend = [APIBackend.KEYCLOAK, APIBackend.FONZIE_KEYCLOAK].includes(
