@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix enhance error handling for enrollment failures in OpenEdX API to be
+  compatible with Open edX Ulmo release
+
 ## [3.3.1] - 2026-03-17
 
 ### Fixed
