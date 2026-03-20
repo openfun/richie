@@ -141,21 +141,22 @@ install-front-production: .env ## install front-end dependencies (production mod
 	@$(YARN) install --frozen-lockfile
 .PHONY: install-front-production
 
-lint-front-prettier: .env ## run prettier linter over ts(x) & scss files
-	@$(YARN) prettier
-.PHONY: lint-front-prettier
-
-lint-front-prettier-write: .env ## run prettier over ts(x) & scss files -- beware! overwrites files
-	@$(YARN) prettier-write
-.PHONY: lint-front-prettier-write
-
 lint-front-eslint: .env ## run eslint over ts files
 	@$(YARN) lint
 .PHONY: lint-front-eslint
 
+lint-front-prettier: .env ## run prettier linter over ts(x) & scss files
+	@$(YARN) prettier-check
+.PHONY: lint-front-prettier
+
+lint-front-fix: .env ## fix lint ts(x) & scss files -- beware! overwrites files
+	@$(YARN) lint --fix
+	@$(YARN) prettier-write
+.PHONY: lint-front-fix
+
 lint-front: ## run all linters frontend on sources
 lint-front: \
-	lint-front-prettier-write \
+	lint-front-prettier \
 	lint-front-eslint
 .PHONY: lint-front
 
