@@ -11,7 +11,7 @@
     "compile-translations": "node_modules/richie-education/i18n/compile-translations.js ./i18n/overrides/*.json ./i18n/locales/*.json",
     "extract-translations": "formatjs extract './**/*.ts*' --ignore ./node_modules --ignore './**/*.d.ts' --out-file './i18n/frontend.json' --id-interpolation-pattern '[sha512:contenthash:base64:6]' --format crowdin",
     "lint": "eslint -c node_modules/richie-education/.eslintrc.json 'js/**/*.ts?(x)' --rule 'import/no-extraneous-dependencies: [error, {packageDir: ['.', './node_modules/richie-education']}]' --no-error-on-unmatched-pattern",
-    "prettier": "prettier '**/*.+(css|scss)'",
+    "prettier-check": "prettier --check '**/*.+(css|scss)'",
     "prettier-write": "prettier --write '**/*.+(css|scss)'",
     "watch-sass": "nodemon -e scss -x 'yarn build-sass'",
     "watch-ts": "yarn build-ts --watch"
