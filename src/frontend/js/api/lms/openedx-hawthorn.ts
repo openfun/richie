@@ -115,7 +115,10 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
         })
           .then(async (response) => {
             if (response.ok) return response.json();
-            if (response.status === HttpStatusCode.BAD_REQUEST) {
+            if (
+              response.status === HttpStatusCode.BAD_REQUEST ||
+              response.status === HttpStatusCode.FORBIDDEN
+            ) {
               if (response.headers.get('Content-Type') === 'application/json') {
                 const { localizedMessage } = await response.json();
                 throw new HttpError(response.status, response.statusText, localizedMessage);

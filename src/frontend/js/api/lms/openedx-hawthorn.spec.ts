@@ -170,7 +170,7 @@ describe('OpenEdX Hawthorn API', () => {
         );
       });
 
-      it('throws HttpError.localizedMessage on enrollment failure', async () => {
+      it('throws HttpError.localizedMessage on enrollment failure for bad requests', async () => {
         fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, {
           status: HttpStatusCode.BAD_REQUEST,
           body: { localizedMessage: 'You are not authorized to enroll in this course' },
@@ -189,7 +189,7 @@ describe('OpenEdX Hawthorn API', () => {
         );
       });
 
-      it('throws HttpError on enrollment failure when localizedMessage property is not present in the payload', async () => {
+      it('throws HttpError on enrollment failure when localizedMessage property is not present in the payload for bad requests', async () => {
         fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, {
           status: HttpStatusCode.BAD_REQUEST,
           body: { message: 'Bad Request' },
@@ -200,6 +200,38 @@ describe('OpenEdX Hawthorn API', () => {
             username,
           }),
         ).rejects.toThrow(new HttpError(HttpStatusCode.BAD_REQUEST, 'Bad Request'));
+      });
+
+      it('throws HttpError.localizedMessage on enrollment failure for forbidden requests', async () => {
+        fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, {
+          status: HttpStatusCode.FORBIDDEN,
+          body: { localizedMessage: 'You are not authorized to enroll in this course' },
+        });
+
+        await expect(
+          HawthornApi.enrollment.set(`https://demo.endpoint/courses?course_id=${courseId}`, {
+            username,
+          }),
+        ).rejects.toThrow(
+          new HttpError(
+            HttpStatusCode.FORBIDDEN,
+            'Forbidden',
+            'You are not authorized to enroll in this course',
+          ),
+        );
+      });
+
+      it('throws HttpError on enrollment failure when localizedMessage property is not present in the payload for forbidden requests', async () => {
+        fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, {
+          status: HttpStatusCode.FORBIDDEN,
+          body: { message: 'Forbidden' },
+        });
+
+        await expect(
+          HawthornApi.enrollment.set(`https://demo.endpoint/courses?course_id=${courseId}`, {
+            username,
+          }),
+        ).rejects.toThrow(new HttpError(HttpStatusCode.FORBIDDEN, 'Forbidden'));
       });
 
       it('throws HttpError when response has no json payload', async () => {
