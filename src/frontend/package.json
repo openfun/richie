@@ -9,6 +9,7 @@
     "extract-translations": "formatjs extract './**/*.ts*' --ignore ./node_modules --ignore './**/*.d.ts' --out-file './i18n/frontend.json' --id-interpolation-pattern '[sha512:contenthash:base64:6]' --format crowdin",
     "compile-translations": "./i18n/compile-translations.js",
     "lint": "eslint . 'js/**/*.ts?(x)'",
+    "prettier-check": "prettier --check 'js/**/*.+(ts|tsx|json|js|jsx)' '*.+(ts|tsx|json|js|jsx)' '**/*.+(css|scss)'",
     "prettier-write": "prettier --write 'js/**/*.+(ts|tsx|json|js|jsx)' '*.+(ts|tsx|json|js|jsx)' '**/*.+(css|scss)'",
     "build-sass": "sass scss/_main.scss ../richie/static/richie/css/main.css --load-path=node_modules",
     "build-sass-production": "sass scss/_main.scss ../richie/static/richie/css/main.css --style=compressed --load-path=node_modules",

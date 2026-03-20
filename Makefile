@@ -161,13 +161,18 @@ lint-front: \
   lint-front-prettier
 .PHONY: lint-front
 
-lint-front-prettier: ## run prettier over js/jsx/json/ts/tsx files -- beware! overwrites files
-	@$(YARN) prettier-write
-.PHONY: lint-front-prettier
-
 lint-front-eslint: ## lint TypeScript sources
 	@$(YARN) lint
 .PHONY: lint-front-eslint
+
+lint-front-prettier: ## run prettier over js/jsx/json/ts/tsx files
+	@$(YARN) prettier-check
+.PHONY: lint-front-prettier
+
+lint-front-fix: ## fix lint js/jsx/json/ts/tsx files -- beware! overwrites files
+	@$(YARN) lint --fix
+	@$(YARN) prettier-write
+.PHONY: lint-front-fix
 
 run-storybook: ## Run front-end's storybook
 	@$(COMPOSE) up -d storybook
