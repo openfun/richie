@@ -573,8 +573,8 @@ export interface BatchOrderRead {
 
 export interface BatchOrderSeat {
   id: string;
-  owner_name?: string;
-  voucher: string;
+  owner_name: string | null;
+  voucher: string | null;
 }
 
 export interface Relation {
@@ -751,7 +751,7 @@ export interface BatchOrderQueryFilters extends PaginatedResourceQuery {
 }
 export interface BatchOrderSeatsQueryFilters extends PaginatedResourceQuery {
   batch_order_id?: string;
-  owner_name?: string;
+  query?: string;
 }
 export interface OrganizationQuoteQueryFilters extends PaginatedResourceQuery {
   organization_id?: Organization['id'];

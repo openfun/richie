@@ -685,7 +685,7 @@ export const SaleTunnelContextFactory = factory(
 export const BatchOrderSeatFactory = factory((): BatchOrderSeat => {
   return {
     id: faker.string.uuid(),
-    owner_name: faker.person.fullName(),
+    owner_name: null,
     voucher: faker.string.alphanumeric(10),
   };
 });

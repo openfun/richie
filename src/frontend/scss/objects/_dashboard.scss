@@ -158,6 +158,11 @@
     gap: rem-calc(4px);
     font-size: rem-calc(13px);
 
+    .enrollment-search {
+      width: 50%;
+      margin-bottom: 0.5rem;
+    }
+
     .enrollment-list {
       list-style: disc inside;
       padding-left: 0;
