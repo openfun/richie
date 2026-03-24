@@ -164,6 +164,10 @@ test-back: .env ## run back-end tests
 	bin/pytest
 .PHONY: test-back
 
+test-front: ## run front-end tests
+       @$(YARN) test --runInBand
+.PHONY: test-front
+
 watch-sass: .env ## watch changes in Sass files
 	@$(YARN) watch-sass
 .PHONY: watch-sass
@@ -280,7 +284,7 @@ ci-check: .env ## run django check management command on productin image
 .PHONY: ci-check
 
 ci-migrate: .env ## run django migrate command on production image
-	@$(COMPOSE) up -d ${ACTIVATED_DB}
+	@$(COMPOSE) up -d ${ACTIVATED_DB} --wait --wait-timeout 60
 	$(COMPOSE_RUN) app python manage.py migrate
 .PHONY: ci-migrate
 
