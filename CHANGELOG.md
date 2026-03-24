@@ -15,6 +15,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Improve frontend linting workflow by clearly separating checking from
   fixing.
 
+### Changed
+
+- Change organization courses ordering to display newest courses first
+
 ## [3.3.1] - 2026-03-17
 
 ### Fixed
