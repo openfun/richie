@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   compatible with Open edX Ulmo release
 - Improve frontend linting workflow by clearly separating checking from
   fixing.
+- Fix MySQL configuration and add test-front target in cookiecutter template
 
 ### Changed
 
