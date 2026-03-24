@@ -313,11 +313,11 @@ class OrganizationCMSTestCase(CMSTestCase):
         # Make sure we do have 3 courses on the organization
         self.assertEqual(organization.get_courses().count(), 3)
 
-        # Only the first two are rendered in the template
+        # Only the last two are rendered in the template
         response = self.client.get(organization.extended_object.get_absolute_url())
-        self.assertContains(response, courses[0].extended_object.get_title())
+        self.assertNotContains(response, courses[0].extended_object.get_title())
         self.assertContains(response, courses[1].extended_object.get_title())
-        self.assertNotContains(response, courses[2].extended_object.get_title())
+        self.assertContains(response, courses[2].extended_object.get_title())
 
         # There is a link to view more related courses directly in the Search view
         self.assertContains(

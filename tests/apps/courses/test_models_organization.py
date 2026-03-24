@@ -297,6 +297,37 @@ class OrganizationModelsTestCase(TestCase):
         with self.assertNumQueries(1):
             self.assertEqual(list(retrieved_courses), [])
 
+    def test_models_organization_get_courses_ordering(self):
+        """
+        Courses should be returned in reverse chronological order (newest first).
+        """
+        organization = OrganizationFactory(should_publish=True)
+
+        # Create courses one by one to ensure different PKs
+        course1 = CourseFactory(
+            page_title="Old course",
+            fill_organizations=[organization],
+            should_publish=True,
+        )
+        course2 = CourseFactory(
+            page_title="Middle course",
+            fill_organizations=[organization],
+            should_publish=True,
+        )
+        course3 = CourseFactory(
+            page_title="New course",
+            fill_organizations=[organization],
+            should_publish=True,
+        )
+
+        retrieved_courses = list(organization.get_courses())
+
+        # Courses should be ordered by descending PK (newest first)
+        self.assertEqual(len(retrieved_courses), 3)
+        self.assertEqual(retrieved_courses[0], course3)  # Newest
+        self.assertEqual(retrieved_courses[1], course2)  # Middle
+        self.assertEqual(retrieved_courses[2], course1)  # Oldest
+
     def test_models_organization_get_courses_language_fallback_draft(self):
         """
         Validate that the reverse courses lookup works as expected with language fallback

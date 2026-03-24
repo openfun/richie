@@ -145,11 +145,13 @@ class Organization(EsIdMixin, BasePageExtension):
         Return a query to get the courses related to this organization ie for which a plugin for
         this organization is linked to the course page via any placeholder.
         """
-        return self.get_reverse_related_page_extensions(
-            "course", language=language
-        ).filter(
-            extended_object__node__parent__cms_pages__course__isnull=True,
-            is_listed=True,
+        return (
+            self.get_reverse_related_page_extensions("course", language=language)
+            .filter(
+                extended_object__node__parent__cms_pages__course__isnull=True,
+                is_listed=True,
+            )
+            .order_by("-pk")
         )
 
     def get_persons(self, language=None):
