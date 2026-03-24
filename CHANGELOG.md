@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Handle French and English language in Storybook
+
 ### Fixed
 
 - Fix enhance error handling for enrollment failures in OpenEdX API to be
