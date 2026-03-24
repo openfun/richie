@@ -21,7 +21,7 @@ hub:
         version: 19.03.13
     - run:
         name: Build docker images
-        command: make env.d/aws && make build
+        command: make env.d/aws && make env.d/development && make build
     - run:
         name: Check built image availability
         command: |

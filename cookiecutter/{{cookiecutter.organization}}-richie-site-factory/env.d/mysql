@@ -1,12 +1,14 @@
 # Mysql db container configuration
-MYSQL_ROOT_PASSWORD=
+MYSQL_ROOT_PASSWORD=pass
 MYSQL_ALLOW_EMPTY_PASSWORD=yes
 MYSQL_DATABASE=richie_${RICHIE_SITE}
+MYSQL_USER=richie_${RICHIE_SITE}
+MYSQL_PASSWORD=pass
 
 # App database configuration
 DB_ENGINE=django.db.backends.mysql
 DB_HOST=mysql
 DB_NAME=richie_${RICHIE_SITE}
 DB_USER=root
-DB_PASSWORD=
+DB_PASSWORD=pass
 DB_PORT=3306
