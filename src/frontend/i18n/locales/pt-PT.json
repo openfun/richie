@@ -25,47 +25,47 @@
   },
   "batchOrder.address": {
     "description": "Label for the field asking the company address",
-    "message": "Address"
+    "message": "Endereço"
   },
   "batchOrder.bankTransfer": {
     "description": "Option label for selecting bank transfer payment",
-    "message": "Bank transfer"
+    "message": "Transferência bancária"
   },
   "batchOrder.cardPayment": {
     "description": "Option label for selecting credit card payment",
-    "message": "Credit card"
+    "message": "Cartão de crédito"
   },
   "batchOrder.city": {
     "description": "Label for the field asking the city",
-    "message": "City"
+    "message": "Cidade"
   },
   "batchOrder.companyName": {
     "description": "Label for the field asking the name of the company",
-    "message": "Company name"
+    "message": "Nome da empresa"
   },
   "batchOrder.contactEmail": {
     "description": "Label for the field asking the billing contact email",
-    "message": "Contact email"
+    "message": "E-mail de contacto"
   },
   "batchOrder.contactName": {
     "description": "Label for the field asking the billing contact name",
-    "message": "Contact name"
+    "message": "Nome do contacto"
   },
   "batchOrder.country": {
     "description": "Label for the field asking the country",
-    "message": "Country"
+    "message": "País"
   },
   "batchOrder.email": {
     "description": "Label for the field asking the email address of the contact person",
-    "message": "Email"
+    "message": "E-mail"
   },
   "batchOrder.firstName": {
     "description": "Label for the field asking the first name of the contact person",
-    "message": "First name"
+    "message": "Nome próprio"
   },
   "batchOrder.fundingEntity": {
     "description": "Label for the field asking the type of funding entity",
-    "message": "Funding entity"
+    "message": "Entidade financiadora"
   },
   "batchOrder.fundingEntityAmount": {
     "description": "Label for the field asking the amount covered by the funding entity",
@@ -1911,6 +1911,14 @@
     "description": "Validate button for the credit card modal",
     "message": "Validar"
   },
+  "components.SaleTunnel.Information.cpf.buttonLabel": {
+    "description": "Label for the button redirecting to Mon Compte Formation",
+    "message": "Go to Mon Compte Formation"
+  },
+  "components.SaleTunnel.Information.cpf.description": {
+    "description": "Explanatory text for the CPF payment option",
+    "message": "Pay for your training using your personal training account (CPF) on Mon Compte Formation."
+  },
   "components.SaleTunnel.Information.description": {
     "description": "Description of the information section",
     "message": "This information will be used for billing"
@@ -1950,6 +1958,18 @@
   "components.SaleTunnel.Information.noPaymentSchedule": {
     "description": "Message displayed representing the payment schedule when the order is free.",
     "message": "No payment required. This order is fully covered."
+  },
+  "components.SaleTunnel.Information.paymentMode.classic": {
+    "description": "Label for the classic card payment option",
+    "message": "Credit card payment"
+  },
+  "components.SaleTunnel.Information.paymentMode.cpf": {
+    "description": "Label for the CPF (Mon Compte Formation) payment option",
+    "message": "My Training Account (CPF)"
+  },
+  "components.SaleTunnel.Information.paymentMode.title": {
+    "description": "Title for the payment mode selection section",
+    "message": "Payment method"
   },
   "components.SaleTunnel.Information.paymentSchedule": {
     "description": "Title for the payment schedule section",
@@ -2241,7 +2261,7 @@
   },
   "components.SubscriptionButton.errorBatchOrderMaxOrders": {
     "description": "Error message shown when batch order creation fails because maximum number of orders is reached by an active offering rule.",
-    "message": "Unable to create the order: the maximum number of available seats for this offering has been reached. Please contact support for more information."
+    "message": "Não foi possível criar a encomenda: foi atingido o número máximo de lugares disponíveis para esta oferta. Contacte o apoio ao cliente para obter mais informações."
   },
   "components.SubscriptionButton.errorDefault": {
     "description": "Error message shown when order creation request failed.",
@@ -2397,7 +2417,7 @@
   },
   "components.SyllabusCourseRunCompacted.selfPaceCoursePeriod": {
     "description": "Course date of an opened and self paced course run block",
-    "message": "Until {endDate, select, undefined {} other {{endDate}}}"
+    "message": "Até {endDate, select, undefined {} other {{endDate}}}"
   },
   "components.SyllabusCourseRunCompacted.selfPaceNoEndDate": {
     "description": "Self paced course run block with no end date",
@@ -2445,7 +2465,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.agreements.label": {
     "description": "Label of the organization agreements view.",
-    "message": "Agreements"
+    "message": "Acordos"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.contracts.label": {
     "description": "Label of the organization contracts view.",
@@ -2481,7 +2501,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.quotes.label": {
     "description": "Label of the organization quotes view.",
-    "message": "Quotes"
+    "message": "Cotações"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.profile.courses.label": {
     "description": "Label of the teacher courses liste view.",
@@ -2673,7 +2693,7 @@
   },
   "hooks.useBatchOrders.errorCreate": {
     "description": "Error message shown when batch order creation fails.",
-    "message": "An error occurred while creating the batch order."
+    "message": "Ocorreu um erro ao criar a encomenda em lote."
   },
   "hooks.useCertificates.errorGet": {
     "description": "Error message shown to the user when certificates fetch request fails.",
@@ -2793,11 +2813,11 @@
   },
   "hooks.useOfferingOrganizations.errorNotFound": {
     "description": "Error message shown to the user when no organizations matches.",
-    "message": "Cannot find the organization"
+    "message": "Não é possível encontrar a organização"
   },
   "hooks.useOfferingOrganizations.errorSelect": {
     "description": "Error message shown to the user when organizations fetch request fails.",
-    "message": "An error occurred while fetching organizations. Please retry later."
+    "message": "Ocorreu um erro ao carregar as organizações. Por favor, tente novamente mais tarde."
   },
   "hooks.useOfferings.errorGet": {
     "description": "Error message shown to the user when offering fetch request fails.",
@@ -2845,7 +2865,7 @@
   },
   "hooks.useOrganizationsQuotes.errorGet": {
     "description": "Error message shown when batch order fetch fails.",
-    "message": "An error occurred while fetching the batch order."
+    "message": "Ocorreu um erro ao recuperar a encomenda em lote."
   },
   "hooks.useResources.errorCreate": {
     "description": "Error message shown to the user when resource creation request fails.",
@@ -3001,11 +3021,11 @@
   },
   "pages.TeacherDashboardOrganizationAgreementsLayout.pageTitle": {
     "description": "Use for the page title of the organization agreements",
-    "message": "Agreements"
+    "message": "Acordos"
   },
   "pages.TeacherDashboardOrganizationAgreementsLayout.signAllPendingAgreements": {
     "description": "Button to sign all pending agreements",
-    "message": "Sign all pending agreements ({ count })"
+    "message": "Assinar todos os acordos pendentes ({ count })"
   },
   "pages.TeacherDashboardOrganizationContractsLayout.columnLearnerName": {
     "description": "Label for learnerName column",
@@ -3029,7 +3049,7 @@
   },
   "pages.TeacherDashboardOrganizationQuotesLayout.pageTitle": {
     "description": "Use for the page title of the organization quotes",
-    "message": "Quotes"
+    "message": "Cotações"
   },
   "utils.ContractHelper.learnerHalfSigned": {
     "description": "Label for unsigned contract status in learner point of view",
