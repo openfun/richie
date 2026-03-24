@@ -3,10 +3,8 @@ services:
     image: mysql:8.0
     ports:
       - "3306:3306"
-    environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_DATABASE=richie_${RICHIE_SITE:?}
+    env_file:
+      - env.d/mysql
     command: --default-authentication-plugin=caching_sha2_password
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
