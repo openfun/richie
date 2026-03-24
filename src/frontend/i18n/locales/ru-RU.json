@@ -1911,6 +1911,14 @@
     "description": "Validate button for the credit card modal",
     "message": "Validate"
   },
+  "components.SaleTunnel.Information.cpf.buttonLabel": {
+    "description": "Label for the button redirecting to Mon Compte Formation",
+    "message": "Go to Mon Compte Formation"
+  },
+  "components.SaleTunnel.Information.cpf.description": {
+    "description": "Explanatory text for the CPF payment option",
+    "message": "Pay for your training using your personal training account (CPF) on Mon Compte Formation."
+  },
   "components.SaleTunnel.Information.description": {
     "description": "Description of the information section",
     "message": "This information will be used for billing"
@@ -1950,6 +1958,18 @@
   "components.SaleTunnel.Information.noPaymentSchedule": {
     "description": "Message displayed representing the payment schedule when the order is free.",
     "message": "No payment required. This order is fully covered."
+  },
+  "components.SaleTunnel.Information.paymentMode.classic": {
+    "description": "Label for the classic card payment option",
+    "message": "Credit card payment"
+  },
+  "components.SaleTunnel.Information.paymentMode.cpf": {
+    "description": "Label for the CPF (Mon Compte Formation) payment option",
+    "message": "My Training Account (CPF)"
+  },
+  "components.SaleTunnel.Information.paymentMode.title": {
+    "description": "Title for the payment mode selection section",
+    "message": "Payment method"
   },
   "components.SaleTunnel.Information.paymentSchedule": {
     "description": "Title for the payment schedule section",

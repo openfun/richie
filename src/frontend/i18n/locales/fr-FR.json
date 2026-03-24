@@ -1911,6 +1911,14 @@
     "description": "Validate button for the credit card modal",
     "message": "Valider"
   },
+  "components.SaleTunnel.Information.cpf.buttonLabel": {
+    "description": "Label for the button redirecting to Mon Compte Formation",
+    "message": "Aller sur Mon Compte Formation"
+  },
+  "components.SaleTunnel.Information.cpf.description": {
+    "description": "Explanatory text for the CPF payment option",
+    "message": "Payez pour votre formation en utilisant votre compte personnel de formation (CPF) sur Mon Compte Formation."
+  },
   "components.SaleTunnel.Information.description": {
     "description": "Description of the information section",
     "message": "Ces informations seront utilisées pour la facturation"
@@ -1950,6 +1958,18 @@
   "components.SaleTunnel.Information.noPaymentSchedule": {
     "description": "Message displayed representing the payment schedule when the order is free.",
     "message": "Aucun paiement requis. Cette commande est entièrement prise en charge."
+  },
+  "components.SaleTunnel.Information.paymentMode.classic": {
+    "description": "Label for the classic card payment option",
+    "message": "Paiement par carte bancaire"
+  },
+  "components.SaleTunnel.Information.paymentMode.cpf": {
+    "description": "Label for the CPF (Mon Compte Formation) payment option",
+    "message": "Mon Compte Formation (CPF)"
+  },
+  "components.SaleTunnel.Information.paymentMode.title": {
+    "description": "Title for the payment mode selection section",
+    "message": "Méthode de paiement"
   },
   "components.SaleTunnel.Information.paymentSchedule": {
     "description": "Title for the payment schedule section",
@@ -2397,7 +2417,7 @@
   },
   "components.SyllabusCourseRunCompacted.selfPaceCoursePeriod": {
     "description": "Course date of an opened and self paced course run block",
-    "message": "Du {endDate, select, undefined {} other {au {endDate}}}"
+    "message": "Jusqu'au {endDate, select, undefined {} other {{endDate}}}"
   },
   "components.SyllabusCourseRunCompacted.selfPaceNoEndDate": {
     "description": "Self paced course run block with no end date",
