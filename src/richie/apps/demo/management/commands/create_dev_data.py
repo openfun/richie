@@ -6,11 +6,13 @@
 import logging
 import random
 from collections import defaultdict
+from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand, CommandError
 from django.test.utils import override_settings
+from django.utils import timezone as django_timezone
 
 import factory
 from beaupy import select_multiple
@@ -688,6 +690,160 @@ def create_blog_posts(languages, levels, pages_created, persons, tags):
     return blogposts
 
 
+def create_courses_with_run_states(
+    languages,
+    levels,
+    licences,
+    lms_endpoint,
+    organizations,
+    pages_created,
+    persons_for_organization,
+    subjects,
+    icons,
+    log=lambda x: None,
+):
+    """
+    Create courses with explicit names and course run states to allow
+    visual testing of the ordering by state on category/organization pages.
+    """
+    now = django_timezone.now()
+
+    day_before_yesterday = (now - timedelta(days=2)).strftime("%Y-%m-%d")
+    yesterday = (now - timedelta(days=1)).strftime("%Y-%m-%d")
+    today = now.strftime("%Y-%m-%d")
+    creation_days = [day_before_yesterday, yesterday, today]
+
+    # (state label, description, code prefix, run_dates or None)
+    state_specs = [
+        (
+            "ONGOING_OPEN",
+            "En cours, inscriptions ouvertes",
+            "STATE0",
+            {
+                "start": now - timedelta(days=30),
+                "end": now + timedelta(days=60),
+                "enrollment_start": now - timedelta(days=60),
+                "enrollment_end": now + timedelta(days=30),
+            },
+        ),
+        (
+            "FUTURE_OPEN",
+            "À venir, inscriptions ouvertes",
+            "STATE1",
+            {
+                "start": now + timedelta(days=30),
+                "end": now + timedelta(days=120),
+                "enrollment_start": now - timedelta(days=10),
+                "enrollment_end": now + timedelta(days=20),
+            },
+        ),
+        (
+            "ARCHIVED_OPEN",
+            "Terminé, inscriptions ouvertes",
+            "STATE2",
+            {
+                "start": now - timedelta(days=120),
+                "end": now - timedelta(days=30),
+                "enrollment_start": now - timedelta(days=150),
+                "enrollment_end": now + timedelta(days=30),
+            },
+        ),
+        (
+            "FUTURE_NOT_YET_OPEN",
+            "À venir, inscriptions pas ouvertes",
+            "STATE3",
+            {
+                "start": now + timedelta(days=60),
+                "end": now + timedelta(days=150),
+                "enrollment_start": now + timedelta(days=30),
+                "enrollment_end": now + timedelta(days=55),
+            },
+        ),
+        (
+            "FUTURE_CLOSED",
+            "À venir, inscriptions fermées",
+            "STATE4",
+            {
+                "start": now + timedelta(days=30),
+                "end": now + timedelta(days=120),
+                "enrollment_start": now - timedelta(days=60),
+                "enrollment_end": now - timedelta(days=10),
+            },
+        ),
+        (
+            "ONGOING_CLOSED",
+            "En cours, inscriptions fermées",
+            "STATE5",
+            {
+                "start": now - timedelta(days=30),
+                "end": now + timedelta(days=60),
+                "enrollment_start": now - timedelta(days=60),
+                "enrollment_end": now - timedelta(days=10),
+            },
+        ),
+        (
+            "ARCHIVED_CLOSED",
+            "Archivé",
+            "STATE6",
+            {
+                "start": now - timedelta(days=120),
+                "end": now - timedelta(days=30),
+                "enrollment_start": now - timedelta(days=150),
+                "enrollment_end": now - timedelta(days=40),
+            },
+        ),
+        (
+            "TO_BE_SCHEDULED",
+            "Pas encore planifié",
+            "STATE7",
+            None,
+        ),
+    ]
+
+    # For each state, create 3 courses with simulated creation dates.
+    # Courses are created in chronological order (oldest first) so that
+    # the newest gets the highest pk and appears first with -pk ordering.
+    course_specs = []
+    for label, description, code_prefix, run_dates in state_specs:
+        for i, day in enumerate(creation_days):
+            course_specs.append(
+                (
+                    f"[{label} - créé {day}] {description}",
+                    f"{code_prefix}_{i}",
+                    run_dates,
+                )
+            )
+    random.shuffle(course_specs)
+
+    created_courses = []
+    for title, code, run_dates in course_specs:
+        log(f"  Creating course {title}...")
+        course = create_courses(
+            icons,
+            languages,
+            levels,
+            licences,
+            lms_endpoint,
+            organizations,
+            pages_created,
+            persons_for_organization,
+            subjects,
+            code=code,
+            title=title,
+        )
+        if run_dates:
+            factories.CourseRunFactory(
+                direct_course=course,
+                **run_dates,
+            )
+            # Re-publish so the course run is copied to the public version
+            for language in course.extended_object.get_languages():
+                course.extended_object.publish(language)
+        created_courses.append(course)
+
+    return created_courses
+
+
 def create_courses(
     icons,
     languages,
@@ -1188,6 +1344,22 @@ def create_dev_data(
             discounted_price=80,
         )
         courses.append(course)
+
+    # Create courses with explicit course run states to test ordering
+    log("Creating courses with varied course run states...")
+    state_courses = create_courses_with_run_states(
+        languages,
+        levels,
+        licences,
+        lms_endpoint,
+        organizations,
+        pages_created,
+        persons_for_organization,
+        subjects,
+        icons,
+        log=log,
+    )
+    courses.extend(state_courses)
 
     # Create blog posts under the `News` page
     log(f"Creating {NB_OBJECTS['blogposts']} blog posts...")
