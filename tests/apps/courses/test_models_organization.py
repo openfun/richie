@@ -3,12 +3,13 @@ Unit tests for the Organization model
 """
 
 import random
+from datetime import timedelta
 from unittest import mock
 
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils import translation
+from django.utils import timezone, translation
 
 from cms.api import add_plugin, create_page
 from cms.models import PagePermission
@@ -20,6 +21,7 @@ from richie.apps.courses import defaults
 from richie.apps.courses.cms_plugins import OrganizationPlugin
 from richie.apps.courses.factories import (
     CourseFactory,
+    CourseRunFactory,
     OrganizationFactory,
     PersonFactory,
 )
@@ -299,34 +301,47 @@ class OrganizationModelsTestCase(TestCase):
 
     def test_models_organization_get_courses_ordering(self):
         """
-        Courses should be returned in reverse chronological order (newest first).
+        Courses should be ordered by their best course run state priority,
+        then by reverse pk (newest first) within the same priority.
         """
+        now = timezone.now()
         organization = OrganizationFactory(should_publish=True)
 
-        # Create courses one by one to ensure different PKs
-        course1 = CourseFactory(
-            page_title="Old course",
-            fill_organizations=[organization],
-            should_publish=True,
-        )
-        course2 = CourseFactory(
-            page_title="Middle course",
-            fill_organizations=[organization],
-            should_publish=True,
-        )
-        course3 = CourseFactory(
-            page_title="New course",
-            fill_organizations=[organization],
-            should_publish=True,
+        # course1: archived
+        course1 = CourseFactory(fill_organizations=[organization], should_publish=True)
+        CourseRunFactory(
+            direct_course=course1,
+            start=now - timedelta(hours=2),
+            end=now - timedelta(hours=1),
+            enrollment_end=now - timedelta(hours=1),
         )
 
-        retrieved_courses = list(organization.get_courses())
+        # course2: future, open for enrollment
+        course2 = CourseFactory(fill_organizations=[organization], should_publish=True)
+        CourseRunFactory(
+            direct_course=course2,
+            start=now + timedelta(hours=1),
+            enrollment_start=now - timedelta(hours=1),
+            enrollment_end=now + timedelta(hours=1),
+        )
 
-        # Courses should be ordered by descending PK (newest first)
-        self.assertEqual(len(retrieved_courses), 3)
-        self.assertEqual(retrieved_courses[0], course3)  # Newest
-        self.assertEqual(retrieved_courses[1], course2)  # Middle
-        self.assertEqual(retrieved_courses[2], course1)  # Oldest
+        # course3: ongoing, open for enrollment (best state)
+        course3 = CourseFactory(fill_organizations=[organization], should_publish=True)
+        CourseRunFactory(
+            direct_course=course3,
+            start=now - timedelta(hours=1),
+            end=now + timedelta(hours=2),
+            enrollment_end=now + timedelta(hours=1),
+        )
+
+        # course4: no course run (to be scheduled)
+        course4 = CourseFactory(fill_organizations=[organization], should_publish=True)
+
+        # Expected: ongoing_open (3), future_open (2), archived (1), to_be_scheduled (4)
+        self.assertEqual(
+            list(organization.get_courses()),
+            [course3, course2, course1, course4],
+        )
 
     def test_models_organization_get_courses_language_fallback_draft(self):
         """
