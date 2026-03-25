@@ -8,8 +8,9 @@ from django.test import TestCase
 from django.utils import timezone
 
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
-from richie.apps.courses.models import CourseState
+from richie.apps.courses.models import Course, CourseState
 from richie.apps.courses.models.course import CourseRunCatalogVisibility
+from richie.apps.courses.models.querysets import order_courses_by_state
 
 
 class CourseRunModelsTestCase(TestCase):
@@ -233,3 +234,148 @@ class CourseRunModelsTestCase(TestCase):
         future_open_course_run.refresh_from_db()
 
         self.assertEqual(course.state["priority"], 7)
+
+
+class OrderCoursesByStateTestCase(TestCase):
+    """
+    Unit test suite to validate that order_courses_by_state() produces
+    the same priority as the Python-computed Course.state["priority"].
+    """
+
+    def setUp(self):
+        super().setUp()
+        self.now = timezone.now()
+
+    def _get_sql_priority(self, course):
+        """Annotate the course with order_courses_by_state and return the priority."""
+        return (
+            order_courses_by_state(Course.objects.filter(pk=course.pk))
+            .values_list("best_state_priority", flat=True)
+            .first()
+        )
+
+    def test_best_state_subquery_ongoing_open(self):
+        """SQL subquery should return ONGOING_OPEN for a course with an ongoing open run."""
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_end=self.now + timedelta(hours=1),
+        )
+        self.assertEqual(self._get_sql_priority(course), CourseState.ONGOING_OPEN)
+
+    def test_best_state_subquery_future_open(self):
+        """SQL subquery should return FUTURE_OPEN for a course with a future open run."""
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now + timedelta(hours=1),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=1),
+        )
+        self.assertEqual(self._get_sql_priority(course), CourseState.FUTURE_OPEN)
+
+    def test_best_state_subquery_archived_open(self):
+        """SQL subquery should return ARCHIVED_OPEN for a course with an archived open run."""
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=self.now,
+            enrollment_end=self.now + timedelta(hours=1),
+        )
+        self.assertEqual(self._get_sql_priority(course), CourseState.ARCHIVED_OPEN)
+
+    def test_best_state_subquery_future_not_yet_open(self):
+        """SQL subquery should return FUTURE_NOT_YET_OPEN."""
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now + timedelta(hours=2),
+            enrollment_start=self.now + timedelta(hours=1),
+        )
+        self.assertEqual(
+            self._get_sql_priority(course), CourseState.FUTURE_NOT_YET_OPEN
+        )
+
+    def test_best_state_subquery_future_closed(self):
+        """SQL subquery should return FUTURE_CLOSED."""
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now + timedelta(hours=1),
+            enrollment_start=self.now - timedelta(hours=2),
+            enrollment_end=self.now - timedelta(hours=1),
+        )
+        self.assertEqual(self._get_sql_priority(course), CourseState.FUTURE_CLOSED)
+
+    def test_best_state_subquery_ongoing_closed(self):
+        """SQL subquery should return ONGOING_CLOSED."""
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=1),
+            enrollment_end=self.now,
+        )
+        self.assertEqual(self._get_sql_priority(course), CourseState.ONGOING_CLOSED)
+
+    def test_best_state_subquery_archived_closed(self):
+        """SQL subquery should return ARCHIVED_CLOSED."""
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=self.now,
+            enrollment_end=self.now - timedelta(hours=1),
+        )
+        self.assertEqual(self._get_sql_priority(course), CourseState.ARCHIVED_CLOSED)
+
+    def test_best_state_subquery_to_be_scheduled(self):
+        """SQL subquery should return TO_BE_SCHEDULED when there are no runs."""
+        course = CourseFactory()
+        self.assertEqual(self._get_sql_priority(course), CourseState.TO_BE_SCHEDULED)
+
+    def test_best_state_subquery_null_dates(self):
+        """Null end/enrollment_end should be treated as infinite (forever open)."""
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=None,
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=None,
+        )
+        self.assertEqual(self._get_sql_priority(course), CourseState.ONGOING_OPEN)
+
+    def test_best_state_subquery_picks_best_run(self):
+        """When a course has multiple runs, the subquery should return the best priority."""
+        course = CourseFactory()
+        # Archived run
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=2),
+            end=self.now - timedelta(hours=1),
+            enrollment_end=self.now - timedelta(hours=1),
+        )
+        # Ongoing open run (best)
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_end=self.now + timedelta(hours=1),
+        )
+        self.assertEqual(self._get_sql_priority(course), CourseState.ONGOING_OPEN)
+
+    def test_best_state_subquery_excludes_hidden(self):
+        """Hidden course runs should be excluded from the subquery."""
+        course = CourseFactory()
+        CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_end=self.now + timedelta(hours=1),
+            catalog_visibility=CourseRunCatalogVisibility.HIDDEN,
+        )
+        self.assertEqual(self._get_sql_priority(course), CourseState.TO_BE_SCHEDULED)

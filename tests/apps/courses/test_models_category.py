@@ -196,9 +196,7 @@ class CategoryModelsTestCase(TestCase):
         category = CategoryFactory(should_publish=True)
 
         # course1: archived (oldest, worst state)
-        course1 = CourseFactory(
-            fill_categories=[category], should_publish=True
-        )
+        course1 = CourseFactory(fill_categories=[category], should_publish=True)
         CourseRunFactory(
             direct_course=course1,
             start=now - timedelta(hours=2),
@@ -207,9 +205,7 @@ class CategoryModelsTestCase(TestCase):
         )
 
         # course2: future, open for enrollment
-        course2 = CourseFactory(
-            fill_categories=[category], should_publish=True
-        )
+        course2 = CourseFactory(fill_categories=[category], should_publish=True)
         CourseRunFactory(
             direct_course=course2,
             start=now + timedelta(hours=1),
@@ -218,9 +214,7 @@ class CategoryModelsTestCase(TestCase):
         )
 
         # course3: ongoing, open for enrollment (best state)
-        course3 = CourseFactory(
-            fill_categories=[category], should_publish=True
-        )
+        course3 = CourseFactory(fill_categories=[category], should_publish=True)
         CourseRunFactory(
             direct_course=course3,
             start=now - timedelta(hours=1),
@@ -229,9 +223,7 @@ class CategoryModelsTestCase(TestCase):
         )
 
         # course4: no course run (to be scheduled)
-        course4 = CourseFactory(
-            fill_categories=[category], should_publish=True
-        )
+        course4 = CourseFactory(fill_categories=[category], should_publish=True)
 
         # Expected order: ongoing_open (3), future_open (2), archived (1), to_be_scheduled (4)
         self.assertEqual(
@@ -248,9 +240,7 @@ class CategoryModelsTestCase(TestCase):
         category = CategoryFactory(should_publish=True)
 
         # course1: ongoing, open (explicit dates)
-        course1 = CourseFactory(
-            fill_categories=[category], should_publish=True
-        )
+        course1 = CourseFactory(fill_categories=[category], should_publish=True)
         CourseRunFactory(
             direct_course=course1,
             start=now - timedelta(hours=1),
@@ -259,9 +249,7 @@ class CategoryModelsTestCase(TestCase):
         )
 
         # course2: ongoing with null end and null enrollment_end (= forever open)
-        course2 = CourseFactory(
-            fill_categories=[category], should_publish=True
-        )
+        course2 = CourseFactory(fill_categories=[category], should_publish=True)
         CourseRunFactory(
             direct_course=course2,
             start=now - timedelta(hours=1),
@@ -271,9 +259,7 @@ class CategoryModelsTestCase(TestCase):
         )
 
         # course3: archived
-        course3 = CourseFactory(
-            fill_categories=[category], should_publish=True
-        )
+        course3 = CourseFactory(fill_categories=[category], should_publish=True)
         CourseRunFactory(
             direct_course=course3,
             start=now - timedelta(hours=2),
