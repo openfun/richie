@@ -159,7 +159,7 @@ class CategoryModelsTestCase(TestCase):
         retrieved_courses = category.get_courses()
 
         with self.assertNumQueries(2):
-            self.assertEqual(list(retrieved_courses), courses)
+            self.assertEqual(list(retrieved_courses), courses[::-1])
 
         with self.assertNumQueries(0):
             for course in retrieved_courses:
@@ -185,19 +185,16 @@ class CategoryModelsTestCase(TestCase):
             self.assertEqual(list(retrieved_courses), [])
 
     def test_models_category_get_courses_ordering(self):
-        """The related courses should be sorted by their position in the pages tree."""
+        """Courses should be returned in reverse chronological order (newest first)."""
         category = CategoryFactory(should_publish=True)
         course1, course2, course3 = CourseFactory.create_batch(
             3, fill_categories=[category], should_publish=True
         )
-        self.assertEqual(list(category.get_courses()), [course1, course2, course3])
+        self.assertEqual(list(category.get_courses()), [course3, course2, course1])
 
-        # Move pages in the tree and check that they are returned in the new order
+        # Moving pages in the tree should not change the ordering
         course3.extended_object.move_page(course1.extended_object.node, position="left")
-        self.assertEqual(list(category.get_courses()), [course3, course1, course2])
-
-        course1.extended_object.move_page(course3.extended_object.node, position="left")
-        self.assertEqual(list(category.get_courses()), [course1, course3, course2])
+        self.assertEqual(list(category.get_courses()), [course3, course2, course1])
 
     def test_models_category_get_courses_descendants(self):
         """
@@ -242,23 +239,29 @@ class CategoryModelsTestCase(TestCase):
 
         # Check that each category gets courses from its descendants
         # ...unless we pass an argument to deactivate it
+        # Courses are ordered by -pk (newest first)
+        all_courses = courses_grand_child[::-1] + courses_child[::-1] + courses[::-1]
+        self.assertEqual(list(category.get_courses()), all_courses)
         self.assertEqual(
-            list(category.get_courses()), courses + courses_child + courses_grand_child
+            list(category.get_courses(include_descendants=False)), courses[::-1]
         )
-        self.assertEqual(list(category.get_courses(include_descendants=False)), courses)
 
         self.assertEqual(
-            list(child_category.get_courses()), courses_child + courses_grand_child
+            list(child_category.get_courses()),
+            courses_grand_child[::-1] + courses_child[::-1],
         )
         self.assertEqual(
-            list(child_category.get_courses(include_descendants=False)), courses_child
+            list(child_category.get_courses(include_descendants=False)),
+            courses_child[::-1],
         )
 
         self.assertEqual(
             list(grand_child_category.get_courses(include_descendants=False)),
-            courses_grand_child,
+            courses_grand_child[::-1],
         )
-        self.assertEqual(list(grand_child_category.get_courses()), courses_grand_child)
+        self.assertEqual(
+            list(grand_child_category.get_courses()), courses_grand_child[::-1]
+        )
 
     def test_models_category_get_courses_language_fallback_draft(self):
         """

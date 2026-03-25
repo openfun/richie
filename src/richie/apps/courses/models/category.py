@@ -74,7 +74,7 @@ class Category(EsIdMixin, BasePageExtension):
         ).filter(
             extended_object__node__parent__cms_pages__course__isnull=True,
             is_listed=True,
-        )
+        ).order_by("-pk")
 
     def get_blogposts(self, language=None, include_descendants=True):
         """
