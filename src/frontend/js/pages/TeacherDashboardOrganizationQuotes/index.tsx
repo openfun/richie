@@ -415,7 +415,7 @@ const TeacherDashboardOrganizationQuotes = () => {
     const submitForSignatureButton = (
       <Button
         size="small"
-        disabled={batchOrder.contract_submitted || !abilities?.can_submit_for_signature_batch_order}
+        disabled={batchOrder.contract_submitted || !abilities?.can_manage_batch_order_agreement}
         onClick={() =>
           !batchOrder.contract_submitted && handleSubmitForSignature(quote.batch_order.id)
         }

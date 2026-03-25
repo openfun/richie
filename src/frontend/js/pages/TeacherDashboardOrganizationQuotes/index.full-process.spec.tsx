@@ -37,7 +37,7 @@ describe('full process for the organization quotes dashboard', () => {
 
     const organization = OrganizationFactory({
       abilities: {
-        can_submit_for_signature_batch_order: true,
+        can_manage_batch_order_agreement: true,
         confirm_bank_transfer: true,
         confirm_quote: true,
         download_quote: true,
@@ -206,7 +206,7 @@ describe('full process for the organization quotes dashboard', () => {
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
     const organization = OrganizationFactory({
       abilities: {
-        can_submit_for_signature_batch_order: true,
+        can_manage_batch_order_agreement: true,
         confirm_bank_transfer: true,
         confirm_quote: true,
         download_quote: true,
