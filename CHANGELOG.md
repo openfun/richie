@@ -21,6 +21,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Change organization courses ordering to display newest courses first
 
+### Changed
+
+- Change category courses ordering to display newest courses first
+
 ## [3.3.1] - 2026-03-17
 
 ### Fixed
