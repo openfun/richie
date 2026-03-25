@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Improve frontend linting workflow by clearly separating checking from
   fixing.
 - Fix MySQL configuration and add test-front target in cookiecutter template
+- Rename organization ability attribute since API changes
 
 ### Changed
 

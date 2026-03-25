@@ -36,7 +36,7 @@ export interface Organization {
   dpo_email: Nullable<string>;
   address?: Address;
   abilities: {
-    can_submit_for_signature_batch_order: boolean;
+    can_manage_batch_order_agreement: boolean;
     confirm_bank_transfer: boolean;
     confirm_quote: boolean;
     delete: boolean;

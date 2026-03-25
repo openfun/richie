@@ -176,7 +176,7 @@ export const OrganizationFactory = factory((): Organization => {
     contact_phone: faker.phone.number(),
     address: AddressFactory().one(),
     abilities: {
-      can_submit_for_signature_batch_order: faker.datatype.boolean(),
+      can_manage_batch_order_agreement: faker.datatype.boolean(),
       confirm_bank_transfer: faker.datatype.boolean(),
       confirm_quote: faker.datatype.boolean(),
       delete: faker.datatype.boolean(),

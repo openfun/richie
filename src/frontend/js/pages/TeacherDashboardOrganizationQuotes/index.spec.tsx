@@ -165,7 +165,7 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
 
     const organization = OrganizationFactory({
       abilities: {
-        can_submit_for_signature_batch_order: false,
+        can_manage_batch_order_agreement: false,
         confirm_bank_transfer: false,
         confirm_quote: false,
         download_quote: true,
