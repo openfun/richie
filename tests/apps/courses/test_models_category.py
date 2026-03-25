@@ -3,9 +3,11 @@ Unit tests for the Category model
 """
 
 # pylint: disable=too-many-lines
+from datetime import timedelta
+
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils import translation
+from django.utils import timezone, translation
 
 from cms.api import add_plugin, create_page
 
@@ -15,6 +17,7 @@ from richie.apps.courses.factories import (
     BlogPostFactory,
     CategoryFactory,
     CourseFactory,
+    CourseRunFactory,
     OrganizationFactory,
     PersonFactory,
 )
@@ -185,16 +188,106 @@ class CategoryModelsTestCase(TestCase):
             self.assertEqual(list(retrieved_courses), [])
 
     def test_models_category_get_courses_ordering(self):
-        """Courses should be returned in reverse chronological order (newest first)."""
+        """
+        Courses should be ordered by their best course run state priority,
+        then by reverse pk (newest first) within the same priority.
+        """
+        now = timezone.now()
         category = CategoryFactory(should_publish=True)
-        course1, course2, course3 = CourseFactory.create_batch(
-            3, fill_categories=[category], should_publish=True
-        )
-        self.assertEqual(list(category.get_courses()), [course3, course2, course1])
 
-        # Moving pages in the tree should not change the ordering
-        course3.extended_object.move_page(course1.extended_object.node, position="left")
-        self.assertEqual(list(category.get_courses()), [course3, course2, course1])
+        # course1: archived (oldest, worst state)
+        course1 = CourseFactory(
+            fill_categories=[category], should_publish=True
+        )
+        CourseRunFactory(
+            direct_course=course1,
+            start=now - timedelta(hours=2),
+            end=now - timedelta(hours=1),
+            enrollment_end=now - timedelta(hours=1),
+        )
+
+        # course2: future, open for enrollment
+        course2 = CourseFactory(
+            fill_categories=[category], should_publish=True
+        )
+        CourseRunFactory(
+            direct_course=course2,
+            start=now + timedelta(hours=1),
+            enrollment_start=now - timedelta(hours=1),
+            enrollment_end=now + timedelta(hours=1),
+        )
+
+        # course3: ongoing, open for enrollment (best state)
+        course3 = CourseFactory(
+            fill_categories=[category], should_publish=True
+        )
+        CourseRunFactory(
+            direct_course=course3,
+            start=now - timedelta(hours=1),
+            end=now + timedelta(hours=2),
+            enrollment_end=now + timedelta(hours=1),
+        )
+
+        # course4: no course run (to be scheduled)
+        course4 = CourseFactory(
+            fill_categories=[category], should_publish=True
+        )
+
+        # Expected order: ongoing_open (3), future_open (2), archived (1), to_be_scheduled (4)
+        self.assertEqual(
+            list(category.get_courses()),
+            [course3, course2, course1, course4],
+        )
+
+    def test_models_category_get_courses_ordering_null_dates(self):
+        """
+        Course runs with null end/enrollment_end should be treated as ongoing
+        (never ending), matching the Python behavior where null defaults to MAX_DATE.
+        """
+        now = timezone.now()
+        category = CategoryFactory(should_publish=True)
+
+        # course1: ongoing, open (explicit dates)
+        course1 = CourseFactory(
+            fill_categories=[category], should_publish=True
+        )
+        CourseRunFactory(
+            direct_course=course1,
+            start=now - timedelta(hours=1),
+            end=now + timedelta(hours=2),
+            enrollment_end=now + timedelta(hours=1),
+        )
+
+        # course2: ongoing with null end and null enrollment_end (= forever open)
+        course2 = CourseFactory(
+            fill_categories=[category], should_publish=True
+        )
+        CourseRunFactory(
+            direct_course=course2,
+            start=now - timedelta(hours=1),
+            end=None,
+            enrollment_start=now - timedelta(hours=1),
+            enrollment_end=None,
+        )
+
+        # course3: archived
+        course3 = CourseFactory(
+            fill_categories=[category], should_publish=True
+        )
+        CourseRunFactory(
+            direct_course=course3,
+            start=now - timedelta(hours=2),
+            end=now - timedelta(hours=1),
+            enrollment_end=now - timedelta(hours=1),
+        )
+
+        # Both course1 and course2 are ONGOING_OPEN (priority 0),
+        # course3 is ARCHIVED_CLOSED (priority 6).
+        # Within same priority, newest first (-pk).
+        self.assertEqual(
+            list(category.get_courses()),
+            [course2, course1, course3],
+        )
 
     def test_models_category_get_courses_descendants(self):
         """

@@ -4,6 +4,11 @@ Declare and configure the models for the courses application
 
 from django.conf import settings
 from django.db import models
+from datetime import datetime, timezone as tz
+
+from django.db.models import Case, DateTimeField, IntegerField, OuterRef, Subquery, Value, When
+from django.db.models.functions import Coalesce
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from cms.api import Page
@@ -68,13 +73,82 @@ class Category(EsIdMixin, BasePageExtension):
         """
         Return a query to get the courses related to this category ie for which a plugin for
         this category is linked to the course page via any placeholder.
+        Courses are ordered by their best course run state priority (most
+        interesting first), then by newest first within the same priority.
         """
-        return self.get_reverse_related_page_extensions(
-            "course", language=language, include_descendants=include_descendants
-        ).filter(
-            extended_object__node__parent__cms_pages__course__isnull=True,
-            is_listed=True,
-        ).order_by("-pk")
+        from .course import CourseRun, CourseRunCatalogVisibility, CourseState
+
+        now = timezone.now()
+        max_date = Value(
+            datetime.max.replace(tzinfo=tz.utc),
+            output_field=DateTimeField(),
+        )
+        end = Coalesce("end", max_date)
+        enrollment_end = Coalesce("enrollment_end", max_date)
+
+        best_state = Subquery(
+            CourseRun.objects.filter(
+                direct_course=OuterRef("pk"),
+            )
+            .exclude(catalog_visibility=CourseRunCatalogVisibility.HIDDEN)
+            .annotate(
+                _end=end,
+                _enrollment_end=enrollment_end,
+                priority=Case(
+                    When(start__isnull=True, then=Value(CourseState.TO_BE_SCHEDULED)),
+                    When(
+                        enrollment_start__isnull=True,
+                        then=Value(CourseState.TO_BE_SCHEDULED),
+                    ),
+                    When(
+                        start__lt=now,
+                        _end__gt=now,
+                        _enrollment_end__gt=now,
+                        then=Value(CourseState.ONGOING_OPEN),
+                    ),
+                    When(
+                        start__lt=now,
+                        _end__gt=now,
+                        then=Value(CourseState.ONGOING_CLOSED),
+                    ),
+                    When(
+                        start__lt=now,
+                        enrollment_start__lt=now,
+                        _enrollment_end__gt=now,
+                        then=Value(CourseState.ARCHIVED_OPEN),
+                    ),
+                    When(start__lt=now, then=Value(CourseState.ARCHIVED_CLOSED)),
+                    When(
+                        enrollment_start__gt=now,
+                        then=Value(CourseState.FUTURE_NOT_YET_OPEN),
+                    ),
+                    When(
+                        _enrollment_end__gt=now,
+                        then=Value(CourseState.FUTURE_OPEN),
+                    ),
+                    default=Value(CourseState.FUTURE_CLOSED),
+                    output_field=IntegerField(),
+                ),
+            )
+            .order_by("priority")
+            .values("priority")[:1]
+        )
+
+        return (
+            self.get_reverse_related_page_extensions(
+                "course", language=language, include_descendants=include_descendants
+            )
+            .filter(
+                extended_object__node__parent__cms_pages__course__isnull=True,
+                is_listed=True,
+            )
+            .annotate(
+                best_state_priority=Coalesce(
+                    best_state, Value(CourseState.TO_BE_SCHEDULED)
+                ),
+            )
+            .order_by("best_state_priority", "-pk")
+        )
 
     def get_blogposts(self, language=None, include_descendants=True):
         """
