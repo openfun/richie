@@ -19,11 +19,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Change organization courses ordering to display newest courses first
-
-### Changed
-
-- Change category courses ordering to display newest courses first
+- Order courses on category and organization pages by course run state
+  priority, then by newest first
 
 ## [3.3.1] - 2026-03-17
 
