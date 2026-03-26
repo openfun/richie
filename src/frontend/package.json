@@ -120,7 +120,7 @@
     "jest-environment-jsdom": "30.2.0",
     "js-cookie": "3.0.5",
     "keycloak-js": "26.2.3",
-    "lodash-es": "4.17.21",
+    "lodash-es": "4.17.23",
     "mdn-polyfills": "5.20.0",
     "msw": "2.12.10",
     "node-fetch": ">2.6.6 <3",
