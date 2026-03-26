@@ -136,7 +136,7 @@
     "react-router": "7.4.0",
     "sass": "1.97.3",
     "source-map-loader": "5.0.0",
-    "storybook": "8.6.8",
+    "storybook": "8.6.17",
     "tsconfig-paths-webpack-plugin": "4.2.0",
     "typescript": "5.9.3",
     "uuid": "13.0.0",
