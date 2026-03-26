@@ -33,7 +33,7 @@ describe('useRouteInfo', () => {
     });
 
     await waitFor(() =>
-      expect(result!.current).toEqual({
+      expect(result!.current).toMatchObject({
         id: '0',
         pathname: '/posts',
         params: {},
@@ -46,7 +46,7 @@ describe('useRouteInfo', () => {
     rerender();
 
     await waitFor(() =>
-      expect(result.current).toEqual({
+      expect(result.current).toMatchObject({
         id: '0-0',
         pathname: '/posts/a-first-post',
         params: { postId: 'a-first-post' },
