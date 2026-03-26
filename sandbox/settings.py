@@ -32,7 +32,7 @@ def get_release():
     try:
         with open(os.path.join(BASE_DIR, "version.json"), encoding="utf8") as version:
             return json.load(version)["version"]
-    except FileNotFoundError:
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
         return "NA"  # Default: not available
 
 
