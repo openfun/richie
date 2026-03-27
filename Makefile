@@ -98,6 +98,10 @@ bootstrap: \
   superuser
 .PHONY: bootstrap
 
+cookiecutter-bootstrap: ## test the cookiecutter template end-to-end
+	@bin/cookiecutter-bootstrap
+.PHONY: cookiecutter-bootstrap
+
 # -- Docker/compose
 build: ## build the app container
 	@$(COMPOSE) build app
