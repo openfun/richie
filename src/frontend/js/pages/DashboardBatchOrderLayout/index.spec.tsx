@@ -2,7 +2,7 @@ import { findByRole, render, screen, waitFor } from '@testing-library/react';
 import { generatePath } from 'react-router';
 import fetchMock from 'fetch-mock';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
-import { BatchOrderReadFactory } from 'utils/test/factories/joanie';
+import { BatchOrderReadFactory, BatchOrderSeatFactory } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import { DashboardTest } from 'widgets/Dashboard/components/DashboardTest';
 import { expectUrlMatchLocationDisplayed } from 'utils/test/expectUrlMatchLocationDisplayed';
@@ -49,8 +49,9 @@ describe('<DashboardBatchOrderLayout />', () => {
 
   it('renders sidebar', async () => {
     const batchOrder = BatchOrderReadFactory().one();
-
+    const seats = BatchOrderSeatFactory().many(2);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/batch-orders/${batchOrder.id}/`, batchOrder);
+    fetchMock.get(`https://joanie.endpoint/api/v1.0/batch-orders/${batchOrder.id}/seats/`, seats);
 
     render(
       WrapperWithDashboard(
