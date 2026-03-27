@@ -89,7 +89,7 @@
     "babel-jest": "30.2.0",
     "babel-loader": "10.0.0",
     "babel-plugin-react-intl": "8.2.25",
-    "bootstrap": ">=4.6.0 <5",
+    "bootstrap": ">=4.6.0 <6",
     "classnames": "2.5.1",
     "cljs-merge": "1.1.1",
     "core-js": "3.48.0",
