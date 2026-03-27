@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+#
+# Reproduce the cookiecutter-bootstrap CircleCI job locally.
+# See .circleci/config.yml (job: cookiecutter-bootstrap) for the reference.
+#
+# Environment variables:
+#   BRANCH      - git branch for richie deps (default: "master")
+#   KEEP_OUTPUT - set to 1 to preserve temp output dir (default: 0)
+
+set -eo pipefail
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+BRANCH="${BRANCH:-master}"
+KEEP_OUTPUT="${KEEP_OUTPUT:-0}"
+RICHIE_SITE=ci
+
+OUTPUT_DIR="$(mktemp -d)"
+cleanup() {
+    if [ "$KEEP_OUTPUT" -eq 0 ]; then
+        echo "==> Cleaning up ${OUTPUT_DIR}..."
+        rm -rf "$OUTPUT_DIR"
+    else
+        echo "==> Output preserved at: ${OUTPUT_DIR}"
+    fi
+}
+trap cleanup EXIT
+
+FACTORY_DIR="${OUTPUT_DIR}/fun-richie-site-factory"
+
+echo "==> Create a project from richie cookiecutter template"
+pipx run cookiecutter "${REPO_DIR}/cookiecutter" \
+    --output-dir "$OUTPUT_DIR" \
+    --no-input organization=fun
+
+echo "==> Enter the newly created project and add a new site \"ci\""
+cd "$FACTORY_DIR"
+pipx run cookiecutter template -o sites/ --no-input \
+    site=${RICHIE_SITE} domain=${RICHIE_SITE}.test \
+    second_lang_code=fr second_lang_name=French
+
+echo "==> Create env files"
+cp "${FACTORY_DIR}/.env.dist" "${FACTORY_DIR}/.env"
+cp "${FACTORY_DIR}/env.d/aws.dist" "${FACTORY_DIR}/env.d/aws"
+cp "${FACTORY_DIR}/env.d/development.dist" "${FACTORY_DIR}/env.d/development"
+
+echo "==> Create media and db volumes for \"ci\" site"
+mkdir -p "${FACTORY_DIR}/data/media/${RICHIE_SITE}"
+mkdir -p "${FACTORY_DIR}/data/db/${RICHIE_SITE}"
+
+echo "==> Tweak requirement files to install the branch richie version instead of the released one"
+sed -i 's@"richie-education":.*@"richie-education": "https://gitpkg2.now.sh/openfun/richie/src/frontend?'"${BRANCH}"'"@' \
+    "${FACTORY_DIR}/sites/${RICHIE_SITE}/src/frontend/package.json"
+sed -i 's@richie==.*@git+https://github.com/openfun/richie.git\@'"${BRANCH}"'#egg=richie@' \
+    "${FACTORY_DIR}/sites/${RICHIE_SITE}/requirements/base.txt"
+
+echo "==> Build front"
+cd "${FACTORY_DIR}/sites/${RICHIE_SITE}/src/frontend"
+yarn install
+yarn build-sass-production
+yarn build-ts-production
+
+echo "==> Build app container"
+cd "$FACTORY_DIR"
+docker compose build app
+
+echo "==> cookiecutter-bootstrap completed successfully!"
