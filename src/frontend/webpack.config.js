@@ -61,8 +61,10 @@ module.exports = (env) => {
       plugins: [new TsconfigPathsPlugin({})],
       modules: ['node_modules', ...richieDependentModuleResolutions],
       alias: {
+        // process.cwd() is used instead of __dirname because hoisting may place the package at
+        // the consuming project's root node_modules rather than richie's own node_modules.
         '@formatjs/intl-relativetimeformat/locale-data': path.resolve(
-          __dirname,
+          process.cwd(),
           'node_modules/@formatjs/intl-relativetimeformat/locale-data',
         ),
       },
