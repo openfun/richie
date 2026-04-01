@@ -16,11 +16,12 @@ export async function getFileFromResponse(response: Response): Promise<File> {
 }
 
 export function getResponseBody(response: Response) {
-  if (response.headers.get('Content-Type') === 'application/json') {
+  const contentType = (response.headers.get('Content-Type') || '').split(';')[0].trim();
+  if (contentType === 'application/json') {
     return response.json();
   }
-  const fileType = ['application/pdf', 'application/zip'];
-  if (fileType.includes(response.headers.get('Content-Type') || '')) {
+  const fileType = ['application/pdf', 'application/zip', 'text/csv'];
+  if (fileType.includes(contentType)) {
     return new Promise((resolve) => resolve(response));
   }
   return response.text();
