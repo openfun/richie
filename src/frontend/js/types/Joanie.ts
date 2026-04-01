@@ -966,6 +966,7 @@ export interface API {
       ): ContractResourceQuery extends { id: string }
         ? Promise<Nullable<Agreement>>
         : Promise<PaginatedResponse<Agreement>>;
+      download(filters: { organization_id: string; id: string }): Promise<File>;
     };
   };
   courseRuns: {
