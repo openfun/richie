@@ -165,6 +165,7 @@ export const getRoutes = () => {
       },
       agreements: {
         get: `${baseUrl}/organizations/:organization_id/agreements/:id/`,
+        download: `${baseUrl}/organizations/:organization_id/agreements/:id/download/`,
       },
     },
     courses: {
@@ -560,6 +561,10 @@ const API = (): Joanie.API => {
             method: 'GET',
           }).then(checkStatus);
         },
+        download: async (filters: { organization_id: string; id: string }): Promise<File> =>
+          fetchWithJWT(buildApiUrl(ROUTES.organizations.agreements.download, filters))
+            .then(checkStatus)
+            .then(getFileFromResponse),
       },
     },
     courses: {
