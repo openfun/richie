@@ -5,11 +5,13 @@ import { handle } from './errors/handle';
  *
  * @param downloadFunction, an api promise that return a File
  * @param newWindow, does it open in a new window or not
+ * @param filename, optional filename override; if provided, takes precedence over file.name
  * @returns boolean, true for success
  */
 export const browserDownloadFromBlob = async (
   downloadFunction: () => Promise<File>,
   newWindow: boolean = false,
+  filename?: string,
 ) => {
   try {
     const file = await downloadFunction();
@@ -24,7 +26,7 @@ export const browserDownloadFromBlob = async (
 
     const $link = document.createElement('a');
     $link.href = url;
-    $link.download = file.name;
+    $link.download = filename || file.name;
 
     const revokeObject = () => {
       // eslint-disable-next-line compat/compat
