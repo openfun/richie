@@ -5,6 +5,7 @@ import { Icon, IconTypeEnum } from 'components/Icon';
 import Banner, { BannerType } from 'components/Banner';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
 import { useBatchOrderSeats } from 'hooks/useBatchOrder';
+import DownloadBatchOrderSeatsButton from 'components/DownloadBatchOrderSeatsButton';
 import { BatchOrderRead, BatchOrderSeat } from 'types/Joanie';
 import { batchOrderSeatInfoMessages } from './batchOrderSeatInfoMessages';
 
@@ -121,6 +122,10 @@ export const BatchOrderSeatInfo = ({ batchOrder }: BatchOrderSeatInfoProps) => {
               </>
             )}
           </div>
+          <DownloadBatchOrderSeatsButton
+            batchOrderId={batchOrder.id}
+            productTitle={batchOrder.offering?.product.title ?? ''}
+          />
         </div>
       }
     />
