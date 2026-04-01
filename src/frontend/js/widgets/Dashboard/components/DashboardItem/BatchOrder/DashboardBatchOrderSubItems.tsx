@@ -2,6 +2,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { PaymentMethod } from 'components/PaymentInterfaces/types';
 import { BatchOrderRead, BatchOrderState } from 'types/Joanie';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
+import DownloadAgreementButton from 'components/DownloadAgreementButton';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { BatchOrderSeatInfo } from './BatchOrderSeatInfo';
 
@@ -125,6 +126,11 @@ const messages = defineMessages({
     id: 'batchOrder.payment.order',
     description: 'Label for purchase order payment method',
     defaultMessage: 'Purchase order',
+  },
+  stepAgreement: {
+    id: 'batchOrder.title.agreement',
+    description: 'Step label for the agreement/convention document in the batch order form',
+    defaultMessage: 'Agreement',
   },
 });
 
@@ -312,6 +318,23 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
             <DashboardItemField
               label={<FormattedMessage {...messages.labelCountry} />}
               value={batchOrder.billing_address.country}
+            />
+          </div>
+        }
+      />,
+    );
+  }
+
+  if (batchOrder.contract_id) {
+    items.push(
+      <DashboardSubItem
+        key="agreement"
+        title={intl.formatMessage(messages.stepAgreement)}
+        footer={
+          <div className="content">
+            <DownloadAgreementButton
+              organizationId={batchOrder.organization.id}
+              agreementId={batchOrder.contract_id}
             />
           </div>
         }
