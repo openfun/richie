@@ -168,6 +168,10 @@
   }
 }
 
+.dashboard-item__action-button {
+  align-self: flex-end;
+}
+
 .dashboard-item__course-enrolling {
   &__infos {
     align-items: center;

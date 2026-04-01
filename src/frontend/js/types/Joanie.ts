@@ -851,6 +851,7 @@ interface APIUser {
     seats: {
       get(filters?: BatchOrderSeatsQueryFilters): Promise<PaginatedResponse<BatchOrderSeat>>;
     };
+    seats_export(id: string): Promise<File>;
   };
   certificates: {
     download(id: string): Promise<File>;
