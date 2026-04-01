@@ -19,7 +19,7 @@ export function getResponseBody(response: Response) {
   if (response.headers.get('Content-Type') === 'application/json') {
     return response.json();
   }
-  const fileType = ['application/pdf', 'application/zip'];
+  const fileType = ['application/pdf', 'application/zip', 'text/csv'];
   if (fileType.includes(response.headers.get('Content-Type') || '')) {
     return new Promise((resolve) => resolve(response));
   }
