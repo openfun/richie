@@ -4,6 +4,7 @@ import { BatchOrderRead, BatchOrderState } from 'types/Joanie';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
 import { BatchOrderSeatInfo } from './BatchOrderSeatInfo';
+import { BatchOrderAgreementInfo } from './BatchOrderAgreementInfo';
 
 const messages = defineMessages({
   stepCompany: {
@@ -317,6 +318,10 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
         }
       />,
     );
+  }
+
+  if (batchOrder.contract_id) {
+    items.push(<BatchOrderAgreementInfo key="agreement" batchOrder={batchOrder} />);
   }
 
   if (displaySeatsInfo) {
