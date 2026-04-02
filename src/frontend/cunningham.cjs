@@ -78,6 +78,18 @@ module.exports = {
           lightness: 55,
         },
       },
+      contextuals: {
+        background: {
+          semantic: {
+            brand: { primary: '#f72c30', 'primary-hover': '#d60f29' },
+          },
+        },
+        content: {
+          semantic: {
+            brand: { 'on-brand': '#FFFFFF', tertiary: '#555F6B' },
+          },
+        },
+      },
     },
   },
 };

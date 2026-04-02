@@ -408,8 +408,8 @@ export const tokens = {
           surface: { primary: '#FFFFFF', secondary: '#FFFFFF', tertiary: '#F7F8F8' },
           semantic: {
             brand: {
-              primary: '#1167D4',
-              'primary-hover': '#1A509F',
+              primary: '#f72c30',
+              'primary-hover': '#d60f29',
               secondary: '#D5E4F7',
               'secondary-hover': '#C0D6F4',
               tertiary: '#EAF1FB',
@@ -480,8 +480,8 @@ export const tokens = {
             brand: {
               primary: '#20467F',
               secondary: '#0659C5',
-              tertiary: '#2976D8',
-              'on-brand': '#EAF1FB',
+              tertiary: '#555F6B',
+              'on-brand': '#FFFFFF',
             },
             neutral: {
               primary: '#252627',

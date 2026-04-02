@@ -18,8 +18,8 @@
   height: 24px;
   padding: 0 12px;
   border-radius: 24px;
-  font-family: var(--c--theme--font--families--accent);
-  font-weight: var(--c--theme--font--weight--semibold);
+  font-family: var(--c--globals--font--families--accent);
+  font-weight: var(--c--globals--font--weights--medium);
   font-size: rem-calc(12px);
 
   &--canceled,

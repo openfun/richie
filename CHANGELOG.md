@@ -21,6 +21,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   fixing.
 - Fix MySQL configuration and add test-front target in cookiecutter template
 - Rename organization ability attribute since API changes
+- Update cunningham theme since we updated to 4.0.0
 
 ### Changed
 

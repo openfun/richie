@@ -15,8 +15,8 @@
         text-align: left;
         font-size: rem-calc(12px);
         color: r-theme-val(credit-card-selector, title-color);
-        font-weight: var(--c--theme--font--weights--bold);
-        font-family: var(--c--theme--font--families--accent);
+        font-weight: var(--c--globals--font--weights--bold);
+        font-family: var(--c--globals--font--families--accent);
       }
 
       &__meta {

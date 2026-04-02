@@ -24,7 +24,7 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
   &__title {
     @include make-container();
     @include make-container-max-widths();
-    @include sv-flex(1, 0, 100%);
+    @include sv-flex(1, 0, 100%, $max: false);
     padding-left: 0;
     padding-right: 0;
 
