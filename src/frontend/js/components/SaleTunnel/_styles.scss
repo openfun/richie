@@ -32,6 +32,11 @@
     &__right {
       flex: 1;
       overflow: hidden;
+      // Establish the nearest positioned ancestor so Cunningham's Select
+      // dropdown (rendered outside .c__select via React Fragment)
+      // stays aligned with this content as the modal's internal scroller
+      // moves, instead of positioning relative to the fixed modal.
+      position: relative;
     }
 
     &__column {
