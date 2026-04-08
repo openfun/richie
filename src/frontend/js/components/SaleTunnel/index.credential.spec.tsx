@@ -222,4 +222,51 @@ describe('SaleTunnel / Credential', () => {
     // - Classic billing information section should be displayed.
     expect(screen.getByText(/this information will be used for billing/i)).toBeInTheDocument();
   });
+
+  it('should display voucher input and subscribe button in CPF mode', async () => {
+    const course = PacedCourseFactory().one();
+    const product = CredentialProductFactory().one();
+    const billingAddress: Joanie.Address = AddressFactory({ is_main: true }).one();
+    const deepLink = 'https://placeholder.com/course/1';
+    const orderQueryParameters = {
+      course_code: course.code,
+      product_id: product.id,
+      state: NOT_CANCELED_ORDER_STATES,
+    };
+
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(orderQueryParameters)}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        { deep_link: deepLink },
+      )
+      .get('https://joanie.endpoint/api/v1.0/addresses/', [billingAddress], {
+        overwriteRoutes: true,
+      });
+
+    const user = userEvent.setup({ delay: null });
+
+    render(<Wrapper product={product} course={course} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    await screen.findByRole('heading', { level: 3, name: /payment method/i });
+
+    // Switch to CPF mode
+    await user.click(screen.getByRole('radio', { name: /my training account \(cpf\)/i }));
+
+    // - Voucher input should be visible in CPF mode.
+    expect(screen.getByLabelText('Voucher code')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Validate' })).toBeInTheDocument();
+
+    // - Subscribe button should be visible in CPF mode.
+    expect(screen.getByRole('button', { name: 'Subscribe' })).toBeInTheDocument();
+  });
 });
