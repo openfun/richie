@@ -1917,7 +1917,7 @@
   },
   "components.SaleTunnel.Information.cpf.description": {
     "description": "Explanatory text for the CPF payment option",
-    "message": "Payez pour votre formation en utilisant votre compte personnel de formation (CPF) sur Mon Compte Formation."
+    "message": "Achetez votre cours de formation en utilisant votre Compte Personnel de Formation (CPF) sur Mon Compte Formation."
   },
   "components.SaleTunnel.Information.description": {
     "description": "Description of the information section",
