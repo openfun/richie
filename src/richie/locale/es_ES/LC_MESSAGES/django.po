@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-11 13:02+0000\n"
-"PO-Revision-Date: 2025-08-26 15:57\n"
+"POT-Creation-Date: 2026-03-26 06:19+0000\n"
+"PO-Revision-Date: 2026-04-08 13:00\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -574,15 +574,15 @@ msgstr "entrada de blog"
 msgid "blog posts"
 msgstr "entradas de blog"
 
-#: apps/courses/models/blog.py:92 apps/courses/models/category.py:167
-#: apps/courses/models/course.py:1199 apps/courses/models/organization.py:203
-#: apps/courses/models/organization.py:237
+#: apps/courses/models/blog.py:92 apps/courses/models/category.py:175
+#: apps/courses/models/course.py:1199 apps/courses/models/organization.py:211
+#: apps/courses/models/organization.py:245
 msgid "variant"
 msgstr "variante"
 
-#: apps/courses/models/blog.py:95 apps/courses/models/category.py:170
-#: apps/courses/models/course.py:1202 apps/courses/models/organization.py:206
-#: apps/courses/models/organization.py:240
+#: apps/courses/models/blog.py:95 apps/courses/models/category.py:178
+#: apps/courses/models/course.py:1202 apps/courses/models/organization.py:214
+#: apps/courses/models/organization.py:248
 msgid "Optional glimpse variant for a custom look."
 msgstr "Variante vista previa optional para un aspecto personalizado."
 
@@ -602,11 +602,11 @@ msgstr "categoría"
 msgid "categories"
 msgstr "categorías"
 
-#: apps/courses/models/category.py:177
+#: apps/courses/models/category.py:185
 msgid "category plugin"
 msgstr "plugin de categoría"
 
-#: apps/courses/models/category.py:178
+#: apps/courses/models/category.py:186
 msgid "category plugins"
 msgstr "plugins de categoría"
 
@@ -964,19 +964,19 @@ msgstr "organización"
 msgid "organizations"
 msgstr "organizaciones"
 
-#: apps/courses/models/organization.py:213
+#: apps/courses/models/organization.py:221
 msgid "organization plugin"
 msgstr "plugin de la organización"
 
-#: apps/courses/models/organization.py:214
+#: apps/courses/models/organization.py:222
 msgid "organization plugins"
 msgstr "plugins de organización"
 
-#: apps/courses/models/organization.py:247
+#: apps/courses/models/organization.py:255
 msgid "organizations by category plugin"
 msgstr "organizaciones por plugin de categoría"
 
-#: apps/courses/models/organization.py:248
+#: apps/courses/models/organization.py:256
 msgid "organizations by category plugins"
 msgstr "organizaciones por plugins de categoría"
 
