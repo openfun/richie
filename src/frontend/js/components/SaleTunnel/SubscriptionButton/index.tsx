@@ -110,9 +110,6 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     paymentMode,
   } = useSaleTunnelContext();
 
-  if (paymentMode === PaymentMode.CPF) {
-    return null;
-  }
   const { methods: orderMethods } = useOrders(undefined, { enabled: false });
   const { methods: batchOrderMethods } = useBatchOrder();
   const [state, setState] = useState<ComponentStates>(ComponentStates.IDLE);
@@ -138,12 +135,17 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
       return;
     }
 
-    if (!billingAddress && needsPayment) {
+    if (!billingAddress && needsPayment && paymentMode !== PaymentMode.CPF) {
       handleError(SubscriptionErrorMessageId.ERROR_ADDRESS);
       return;
     }
 
-    if (!saleTunnelProps.isWithdrawable && !hasWaivedWithdrawalRight && needsPayment) {
+    if (
+      !saleTunnelProps.isWithdrawable &&
+      !hasWaivedWithdrawalRight &&
+      needsPayment &&
+      paymentMode !== PaymentMode.CPF
+    ) {
       handleError(SubscriptionErrorMessageId.ERROR_WITHDRAWAL_RIGHT);
       return;
     }

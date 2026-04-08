@@ -236,7 +236,12 @@ export const SaleTunnelInformationSingular = () => {
         </div>
       )}
       {paymentMode === PaymentMode.CPF ? (
-        <CpfPayment deepLink={deepLink!} />
+        <CpfPayment
+          deepLink={deepLink!}
+          discount={discount}
+          voucherError={voucherError}
+          setVoucherError={setVoucherError}
+        />
       ) : (
         <>
           {needsPayment && (
@@ -499,7 +504,17 @@ const PaymentScheduleBlock = ({ schedule }: { schedule: PaymentSchedule }) => {
   );
 };
 
-const CpfPayment = ({ deepLink }: { deepLink: string }) => {
+const CpfPayment = ({
+  deepLink,
+  discount,
+  voucherError,
+  setVoucherError,
+}: {
+  deepLink: string;
+  discount?: string;
+  voucherError: HttpError | null;
+  setVoucherError: (value: HttpError | null) => void;
+}) => {
   return (
     <div className="sale-tunnel__cpf">
       <p className="description mb-s">
@@ -514,6 +529,7 @@ const CpfPayment = ({ deepLink }: { deepLink: string }) => {
       >
         <FormattedMessage {...messages.cpfButtonLabel} />
       </Button>
+      <Voucher discount={discount} voucherError={voucherError} setVoucherError={setVoucherError} />
     </div>
   );
 };
