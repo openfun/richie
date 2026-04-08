@@ -18,7 +18,7 @@
     "watch-ts": "yarn build-ts --watch",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "build-theme": "cunningham -g scss -o scss/vendors && cunningham -g css -o scss/vendors/css && cunningham -g ts -o js/utils/"
+    "build-theme": "cunningham -g scss -o scss/vendors && cunningham -g css -o scss/vendors/css && cunningham -g ts -o js/utils/ && prettier --write scss/vendors/cunningham-tokens.scss scss/vendors/css/cunningham-tokens.css js/utils/cunningham-tokens.ts"
   },
   "repository": {
     "type": "git",
