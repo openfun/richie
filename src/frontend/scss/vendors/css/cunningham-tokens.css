@@ -3,25 +3,25 @@
   --c--globals--colors--logo-2: #377fdb;
   --c--globals--colors--logo-1-dark: #95abff;
   --c--globals--colors--logo-2-dark: #95abff;
-  --c--globals--colors--brand-050: #eaf1fb;
-  --c--globals--colors--brand-100: #d5e4f7;
-  --c--globals--colors--brand-150: #c0d6f4;
-  --c--globals--colors--brand-200: #abc9f0;
-  --c--globals--colors--brand-250: #96bcec;
-  --c--globals--colors--brand-300: #80aee8;
-  --c--globals--colors--brand-350: #6ca0e4;
-  --c--globals--colors--brand-400: #5693e0;
-  --c--globals--colors--brand-450: #4085dc;
-  --c--globals--colors--brand-500: #2976d8;
-  --c--globals--colors--brand-550: #1167d4;
-  --c--globals--colors--brand-600: #0659c5;
-  --c--globals--colors--brand-650: #1a509f;
-  --c--globals--colors--brand-700: #20467f;
-  --c--globals--colors--brand-750: #203c63;
-  --c--globals--colors--brand-800: #1d314c;
-  --c--globals--colors--brand-850: #1a2638;
-  --c--globals--colors--brand-900: #141c28;
-  --c--globals--colors--brand-950: #0c1117;
+  --c--globals--colors--brand-050: #fff0f1;
+  --c--globals--colors--brand-100: #ffcad1;
+  --c--globals--colors--brand-150: #f8b0b4;
+  --c--globals--colors--brand-200: #f19597;
+  --c--globals--colors--brand-250: #ed8083;
+  --c--globals--colors--brand-300: #e86a6f;
+  --c--globals--colors--brand-350: #ed575d;
+  --c--globals--colors--brand-400: #f2444b;
+  --c--globals--colors--brand-450: #f5383e;
+  --c--globals--colors--brand-500: #f63237;
+  --c--globals--colors--brand-550: #f72c30;
+  --c--globals--colors--brand-600: #e81f2f;
+  --c--globals--colors--brand-650: #d60f29;
+  --c--globals--colors--brand-700: #c90022;
+  --c--globals--colors--brand-750: #c2001b;
+  --c--globals--colors--brand-800: #bb0014;
+  --c--globals--colors--brand-850: #a30010;
+  --c--globals--colors--brand-900: #8c000d;
+  --c--globals--colors--brand-950: #6b0009;
   --c--globals--colors--gray-000: #ffffff;
   --c--globals--colors--gray-025: #f7f8f8;
   --c--globals--colors--gray-050: #f0f1f2;
@@ -393,8 +393,10 @@
   --c--contextuals--background--surface--primary: var(--c--globals--colors--gray-000);
   --c--contextuals--background--surface--secondary: var(--c--globals--colors--gray-000);
   --c--contextuals--background--surface--tertiary: var(--c--globals--colors--gray-025);
-  --c--contextuals--background--semantic--brand--primary: #f72c30;
-  --c--contextuals--background--semantic--brand--primary-hover: #d60f29;
+  --c--contextuals--background--semantic--brand--primary: var(--c--globals--colors--brand-550);
+  --c--contextuals--background--semantic--brand--primary-hover: var(
+    --c--globals--colors--brand-650
+  );
   --c--contextuals--background--semantic--brand--secondary: var(--c--globals--colors--brand-100);
   --c--contextuals--background--semantic--brand--secondary-hover: var(
     --c--globals--colors--brand-150
@@ -507,8 +509,8 @@
   --c--contextuals--content--logo2: var(--c--globals--colors--logo-2);
   --c--contextuals--content--semantic--brand--primary: var(--c--globals--colors--brand-700);
   --c--contextuals--content--semantic--brand--secondary: var(--c--globals--colors--brand-600);
-  --c--contextuals--content--semantic--brand--tertiary: #555f6b;
-  --c--contextuals--content--semantic--brand--on-brand: #ffffff;
+  --c--contextuals--content--semantic--brand--tertiary: var(--c--globals--colors--gray-600);
+  --c--contextuals--content--semantic--brand--on-brand: var(--c--globals--colors--gray-000);
   --c--contextuals--content--semantic--neutral--primary: var(--c--globals--colors--gray-850);
   --c--contextuals--content--semantic--neutral--secondary: var(--c--globals--colors--gray-600);
   --c--contextuals--content--semantic--neutral--tertiary: var(--c--globals--colors--gray-500);

@@ -79,15 +79,33 @@ module.exports = {
         },
       },
       contextuals: {
-        background: {
-          semantic: {
-            brand: { primary: '#f72c30', 'primary-hover': '#d60f29' },
-          },
-        },
         content: {
           semantic: {
-            brand: { 'on-brand': '#FFFFFF', tertiary: '#555F6B' },
+             brand: { 'on-brand': 'ref(globals.colors.gray-000)', tertiary: 'ref(globals.colors.gray-600)' },
           },
+        },
+      },
+      globals: {
+        colors: {
+          'brand-050': '#fff0f1',
+          'brand-100': '#ffcad1',
+          'brand-150': '#f8b0b4',
+          'brand-200': '#f19597',
+          'brand-250': '#ed8083',
+          'brand-300': '#e86a6f',
+          'brand-350': '#ed575d',
+          'brand-400': '#f2444b',
+          'brand-450': '#f5383e',
+          'brand-500': '#f63237',
+          'brand-550': '#f72c30',
+          'brand-600': '#e81f2f',
+          'brand-650': '#d60f29',
+          'brand-700': '#c90022',
+          'brand-750': '#c2001b',
+          'brand-800': '#bb0014',
+          'brand-850': '#a30010',
+          'brand-900': '#8c000d',
+          'brand-950': '#6b0009',
         },
       },
     },

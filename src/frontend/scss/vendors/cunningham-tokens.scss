@@ -6,25 +6,25 @@ $themes: (
         'logo-2': #377fdb,
         'logo-1-dark': #95abff,
         'logo-2-dark': #95abff,
-        'brand-050': #eaf1fb,
-        'brand-100': #d5e4f7,
-        'brand-150': #c0d6f4,
-        'brand-200': #abc9f0,
-        'brand-250': #96bcec,
-        'brand-300': #80aee8,
-        'brand-350': #6ca0e4,
-        'brand-400': #5693e0,
-        'brand-450': #4085dc,
-        'brand-500': #2976d8,
-        'brand-550': #1167d4,
-        'brand-600': #0659c5,
-        'brand-650': #1a509f,
-        'brand-700': #20467f,
-        'brand-750': #203c63,
-        'brand-800': #1d314c,
-        'brand-850': #1a2638,
-        'brand-900': #141c28,
-        'brand-950': #0c1117,
+        'brand-050': #fff0f1,
+        'brand-100': #ffcad1,
+        'brand-150': #f8b0b4,
+        'brand-200': #f19597,
+        'brand-250': #ed8083,
+        'brand-300': #e86a6f,
+        'brand-350': #ed575d,
+        'brand-400': #f2444b,
+        'brand-450': #f5383e,
+        'brand-500': #f63237,
+        'brand-550': #f72c30,
+        'brand-600': #e81f2f,
+        'brand-650': #d60f29,
+        'brand-700': #c90022,
+        'brand-750': #c2001b,
+        'brand-800': #bb0014,
+        'brand-850': #a30010,
+        'brand-900': #8c000d,
+        'brand-950': #6b0009,
         'gray-000': #ffffff,
         'gray-025': #f7f8f8,
         'gray-050': #f0f1f2,
@@ -373,9 +373,9 @@ $themes: (
           'black': 800,
         ),
         'families': (
-          'base': #{\RobotoFlex Variable\,
+          'base': #{\RobotoFlexVariable\,
           sans-serif},
-          'accent': #{\RobotoFlex Variable\,
+          'accent': #{\RobotoFlexVariable\,
           sans-serif},
         ),
       ),
@@ -422,10 +422,10 @@ $themes: (
           'brand': (
             'primary': #f72c30,
             'primary-hover': #d60f29,
-            'secondary': #d5e4f7,
-            'secondary-hover': #c0d6f4,
-            'tertiary': #eaf1fb,
-            'tertiary-hover': #d5e4f7,
+            'secondary': #ffcad1,
+            'secondary-hover': #f8b0b4,
+            'tertiary': #fff0f1,
+            'tertiary-hover': #ffcad1,
           ),
           'neutral': (
             'primary': #686b6f,
@@ -478,9 +478,9 @@ $themes: (
         ),
         'palette': (
           'brand': (
-            'primary': #2976d8,
-            'secondary': #6ca0e4,
-            'tertiary': #c0d6f4,
+            'primary': #f63237,
+            'secondary': #ed575d,
+            'tertiary': #f8b0b4,
           ),
           'red': (
             'primary': #d83f3d,
@@ -542,9 +542,9 @@ $themes: (
         'logo2': #377fdb,
         'semantic': (
           'brand': (
-            'primary': #20467f,
-            'secondary': #0659c5,
-            'tertiary': #555f6b,
+            'primary': #c90022,
+            'secondary': #e81f2f,
+            'tertiary': #5c5f63,
             'on-brand': #ffffff,
           ),
           'neutral': (
@@ -587,9 +587,9 @@ $themes: (
         ),
         'palette': (
           'brand': (
-            'primary': #2976d8,
-            'secondary': #6ca0e4,
-            'tertiary': #c0d6f4,
+            'primary': #f63237,
+            'secondary': #ed575d,
+            'tertiary': #f8b0b4,
           ),
           'red': (
             'primary': #d83f3d,
@@ -649,9 +649,9 @@ $themes: (
         ),
         'semantic': (
           'brand': (
-            'primary': #1167d4,
-            'secondary': #80aee8,
-            'tertiary': #c0d6f4,
+            'primary': #f72c30,
+            'secondary': #e86a6f,
+            'tertiary': #f8b0b4,
           ),
           'contextual': (
             'primary': #ffffff33,
@@ -687,9 +687,9 @@ $themes: (
         ),
         'palette': (
           'brand': (
-            'primary': #2976d8,
-            'secondary': #6ca0e4,
-            'tertiary': #c0d6f4,
+            'primary': #f63237,
+            'secondary': #ed575d,
+            'tertiary': #f8b0b4,
           ),
           'red': (
             'primary': #d83f3d,
@@ -1178,9 +1178,9 @@ $themes: (
           'black': 800,
         ),
         'families': (
-          'base': #{\RobotoFlex Variable\,
+          'base': #{\RobotoFlexVariable\,
           sans-serif},
-          'accent': #{\RobotoFlex Variable\,
+          'accent': #{\RobotoFlexVariable\,
           sans-serif},
         ),
       ),
@@ -1225,12 +1225,12 @@ $themes: (
         ),
         'semantic': (
           'brand': (
-            'primary': #1167d4,
-            'primary-hover': #1a509f,
-            'secondary': #20467f,
-            'secondary-hover': #203c63,
-            'tertiary': #203c63,
-            'tertiary-hover': #1d314c,
+            'primary': #f72c30,
+            'primary-hover': #d60f29,
+            'secondary': #c90022,
+            'secondary-hover': #c2001b,
+            'tertiary': #c2001b,
+            'tertiary-hover': #bb0014,
           ),
           'neutral': (
             'primary': #686b6f,
@@ -1283,9 +1283,9 @@ $themes: (
         ),
         'palette': (
           'brand': (
-            'primary': #6ca0e4,
-            'secondary': #4085dc,
-            'tertiary': #1167d4,
+            'primary': #ed575d,
+            'secondary': #f5383e,
+            'tertiary': #f72c30,
           ),
           'red': (
             'primary': #ee7c7b,
@@ -1344,10 +1344,10 @@ $themes: (
         'logo2': #95abff,
         'semantic': (
           'brand': (
-            'primary': #eaf1fb,
-            'secondary': #d5e4f7,
-            'tertiary': #96bcec,
-            'on-brand': #eaf1fb,
+            'primary': #fff0f1,
+            'secondary': #ffcad1,
+            'tertiary': #ed8083,
+            'on-brand': #fff0f1,
           ),
           'neutral': (
             'primary': #f0f1f2,
@@ -1389,9 +1389,9 @@ $themes: (
         ),
         'palette': (
           'brand': (
-            'primary': #6ca0e4,
-            'secondary': #4085dc,
-            'tertiary': #1167d4,
+            'primary': #ed575d,
+            'secondary': #f5383e,
+            'tertiary': #f72c30,
           ),
           'red': (
             'primary': #ee7c7b,
@@ -1451,9 +1451,9 @@ $themes: (
         ),
         'semantic': (
           'brand': (
-            'primary': #4085dc,
-            'secondary': #0659c5,
-            'tertiary': #20467f,
+            'primary': #f5383e,
+            'secondary': #e81f2f,
+            'tertiary': #c90022,
           ),
           'contextual': (
             'primary': #00000033,
@@ -1489,9 +1489,9 @@ $themes: (
         ),
         'palette': (
           'brand': (
-            'primary': #6ca0e4,
-            'secondary': #4085dc,
-            'tertiary': #1167d4,
+            'primary': #ed575d,
+            'secondary': #f5383e,
+            'tertiary': #f72c30,
           ),
           'red': (
             'primary': #ee7c7b,
