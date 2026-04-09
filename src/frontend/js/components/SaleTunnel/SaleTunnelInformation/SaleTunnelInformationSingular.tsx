@@ -143,7 +143,7 @@ const messages = defineMessages({
     id: 'components.SaleTunnel.Information.cpf.description',
     description: 'Explanatory text for the CPF payment option',
     defaultMessage:
-      'Pay for your training using your personal training account (CPF) on Mon Compte Formation.',
+      'Purchase your training course by using your Personal Training Account (CPF) on Mon Compte Formation.',
   },
   cpfButtonLabel: {
     id: 'components.SaleTunnel.Information.cpf.buttonLabel',

@@ -166,7 +166,9 @@ describe('SaleTunnel / Credential', () => {
 
     // - CPF description and redirect button should be visible.
     expect(
-      screen.getByText(/pay for your training using your personal training account/i),
+      screen.getByText(
+        /purchase your training course by using your Personal Training Account \(CPF\) on Mon Compte Formation/i,
+      ),
     ).toBeInTheDocument();
     const cpfButton = screen.getByRole('link', { name: /go to mon compte formation/i });
 
