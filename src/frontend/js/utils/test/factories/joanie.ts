@@ -46,6 +46,7 @@ import {
   BatchOrderQuote,
   Relation,
   Agreement,
+  BatchOrderSeat,
 } from 'types/Joanie';
 import { Payment, PaymentMethod, PaymentProviders } from 'components/PaymentInterfaces/types';
 import { CourseStateFactory } from 'utils/test/factories/richie';
@@ -214,7 +215,9 @@ export const BatchOrderQuoteFactory = factory((): BatchOrderQuote => {
     relation: RelationFactory().one(),
     payment_method: faker.helpers.arrayElement(Object.values(PaymentMethod)),
     contract_submitted: faker.datatype.boolean(),
-    nb_seats: faker.number.int({ min: 1, max: 100 }),
+    nb_seats: faker.number.int({ min: 10, max: 100 }),
+    seats_owned: faker.number.int({ min: 0, max: 10 }),
+    seats_to_own: faker.number.int({ min: 90, max: 100 }),
     available_actions: {
       confirm_quote: false,
       confirm_purchase_order: false,
@@ -551,6 +554,8 @@ export const BatchOrderReadFactory = factory((): BatchOrderRead => {
     funding_entity: faker.company.name(),
     funding_amount: faker.number.int({ min: 100, max: 10000 }),
     offering: OfferingBatchOrderFactory().one(),
+    seats_owned: faker.number.int({ min: 1, max: 200 }),
+    seats_to_own: faker.number.int({ min: 1, max: 200 }),
   };
 });
 
@@ -678,3 +683,11 @@ export const SaleTunnelContextFactory = factory(
     setPaymentMode: noop,
   }),
 );
+
+export const BatchOrderSeatFactory = factory((): BatchOrderSeat => {
+  return {
+    id: faker.string.uuid(),
+    owner_name: null,
+    voucher: faker.string.alphanumeric(10),
+  };
+});

@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Handle French and English language in Storybook
 - Upgraded js dependencies, fixed tests and linting errors
+- Display batch order enrollment status in dashboard
 
 ### Fixed
 

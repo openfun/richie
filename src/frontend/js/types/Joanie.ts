@@ -567,6 +567,14 @@ export interface BatchOrderRead {
   funding_entity?: string;
   funding_amount?: number;
   offering: OfferingBatchOrder;
+  seats_to_own?: number;
+  seats_owned?: number;
+}
+
+export interface BatchOrderSeat {
+  id: string;
+  owner_name: string | null;
+  voucher: string | null;
 }
 
 export interface Relation {
@@ -603,6 +611,8 @@ export interface BatchOrderQuote {
   payment_method: PaymentMethod;
   contract_submitted: boolean;
   nb_seats: number;
+  seats_to_own?: number;
+  seats_owned?: number;
   available_actions: BatchOrderAvailableActions;
 }
 
@@ -741,6 +751,10 @@ export interface OfferingQueryFilters extends PaginatedResourceQuery {
 export interface BatchOrderQueryFilters extends PaginatedResourceQuery {
   id?: BatchOrderRead['id'];
 }
+export interface BatchOrderSeatsQueryFilters extends PaginatedResourceQuery {
+  batch_order_id?: string;
+  query?: string;
+}
 export interface OrganizationQuoteQueryFilters extends PaginatedResourceQuery {
   organization_id?: Organization['id'];
   batch_order_id?: BatchOrder['id'];
@@ -833,6 +847,9 @@ interface APIUser {
       : Promise<PaginatedResponse<BatchOrderRead>>;
     submit_for_payment: {
       create(filters: ResourcesQuery): Promise<any>;
+    };
+    seats: {
+      get(filters?: BatchOrderSeatsQueryFilters): Promise<PaginatedResponse<BatchOrderSeat>>;
     };
   };
   certificates: {
