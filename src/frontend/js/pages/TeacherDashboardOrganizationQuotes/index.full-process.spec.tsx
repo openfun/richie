@@ -214,7 +214,6 @@ describe('full process for the organization quotes dashboard', () => {
       },
     }).one();
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', organization);
-
     const quoteQuoted = OrganizationQuoteFactory({
       batch_order: {
         state: BatchOrderState.QUOTED,
@@ -271,6 +270,10 @@ describe('full process for the organization quotes dashboard', () => {
     fetchMock.post(
       `https://joanie.endpoint/api/v1.0/organizations/1/submit-for-signature-batch-order/`,
       200,
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/batch-orders/${quoteCompleted.batch_order.id}/seats/?page=1&page_size=10`,
+      { results: [], count: 0, previous: null, next: null },
     );
 
     render(<TeacherDashboardOrganizationQuotes />, {
