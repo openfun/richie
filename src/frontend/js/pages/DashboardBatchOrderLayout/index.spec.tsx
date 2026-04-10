@@ -51,7 +51,15 @@ describe('<DashboardBatchOrderLayout />', () => {
     const batchOrder = BatchOrderReadFactory().one();
     const seats = BatchOrderSeatFactory().many(2);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/batch-orders/${batchOrder.id}/`, batchOrder);
-    fetchMock.get(`https://joanie.endpoint/api/v1.0/batch-orders/${batchOrder.id}/seats/`, seats);
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/batch-orders/${batchOrder.id}/seats/?page=1&page_size=10`,
+      {
+        results: seats,
+        count: seats.length,
+        previous: null,
+        next: null,
+      },
+    );
 
     render(
       WrapperWithDashboard(

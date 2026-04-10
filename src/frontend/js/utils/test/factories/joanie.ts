@@ -215,7 +215,9 @@ export const BatchOrderQuoteFactory = factory((): BatchOrderQuote => {
     relation: RelationFactory().one(),
     payment_method: faker.helpers.arrayElement(Object.values(PaymentMethod)),
     contract_submitted: faker.datatype.boolean(),
-    nb_seats: faker.number.int({ min: 1, max: 100 }),
+    nb_seats: faker.number.int({ min: 10, max: 100 }),
+    seats_owned: faker.number.int({ min: 0, max: 10 }),
+    seats_to_own: faker.number.int({ min: 90, max: 100 }),
     available_actions: {
       confirm_quote: false,
       confirm_purchase_order: false,
