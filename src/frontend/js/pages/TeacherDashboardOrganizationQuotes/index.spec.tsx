@@ -28,7 +28,9 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
   });
 
   it('should render a list of quotes for an organization', async () => {
-    const quoteList = OrganizationQuoteFactory().many(1);
+    const quoteList = OrganizationQuoteFactory({
+      batch_order: { state: BatchOrderState.QUOTED },
+    }).many(1);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', []);
@@ -85,7 +87,9 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
   });
 
   it('should paginate', async () => {
-    const quoteList = OrganizationQuoteFactory().many(30);
+    const quoteList = OrganizationQuoteFactory({
+      batch_order: { state: BatchOrderState.QUOTED },
+    }).many(30);
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);
 
     fetchMock.get('https://joanie.endpoint/api/v1.0/organizations/1/', []);

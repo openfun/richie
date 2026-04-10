@@ -611,6 +611,8 @@ export interface BatchOrderQuote {
   payment_method: PaymentMethod;
   contract_submitted: boolean;
   nb_seats: number;
+  seats_to_own?: number;
+  seats_owned?: number;
   available_actions: BatchOrderAvailableActions;
 }
 

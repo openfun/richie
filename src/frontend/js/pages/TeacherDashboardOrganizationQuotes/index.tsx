@@ -14,6 +14,7 @@ import Badge from 'components/Badge';
 import { Icon, IconTypeEnum } from 'components/Icon';
 import { browserDownloadFromBlob } from 'utils/download';
 import { Spinner } from 'components/Spinner';
+import { BatchOrderSeatInfoQuote } from './BatchOrderSeatInfoQuote';
 
 const messages = defineMessages({
   loading: {
@@ -534,6 +535,9 @@ const TeacherDashboardOrganizationQuotes = () => {
               </div>
             )}
           </div>
+          {quote.batch_order.state === BatchOrderState.COMPLETED && (
+            <BatchOrderSeatInfoQuote batchOrder={quote.batch_order} />
+          )}
         </DashboardCard>
       ))}
       <Pagination {...pagination} />

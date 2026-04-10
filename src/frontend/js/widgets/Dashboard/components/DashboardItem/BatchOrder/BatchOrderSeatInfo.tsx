@@ -6,32 +6,13 @@ import Banner, { BannerType } from 'components/Banner';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
 import { useBatchOrderSeats } from 'hooks/useBatchOrder';
 import { BatchOrderRead, BatchOrderSeat } from 'types/Joanie';
+import { batchOrderSeatInfoMessages } from './batchOrderSeatInfoMessages';
 
 const messages = defineMessages({
   enrollmentManagement: {
     id: 'batchOrder.enrollmentManagement.title',
     description: 'Title for enrollment management section',
     defaultMessage: 'Enrollment',
-  },
-  enrolledParticipants: {
-    id: 'batchOrder.enrollmentManagement.enrolledParticipants',
-    description: 'Progress label showing enrolled participants out of total seats',
-    defaultMessage: '{seats_owned}/{nb_seats} enrolled participants',
-  },
-  searchPlaceholder: {
-    id: 'batchOrder.enrollmentManagement.searchPlaceholder',
-    description: 'Placeholder for the seat search input (student name or voucher)',
-    defaultMessage: 'Student name',
-  },
-  noResults: {
-    id: 'batchOrder.enrollmentManagement.noResults',
-    description: 'Message shown when the student search returns no results',
-    defaultMessage: 'No student matches your search.',
-  },
-  loadMore: {
-    id: 'batchOrder.enrollmentManagement.loadMore',
-    description: 'Button to load more seats',
-    defaultMessage: 'Load {count} more',
   },
 });
 
@@ -93,7 +74,7 @@ export const BatchOrderSeatInfo = ({ batchOrder }: BatchOrderSeatInfoProps) => {
         <div className="content">
           <div className="enrollment-progress">
             <span className="dashboard-item__label">
-              {intl.formatMessage(messages.enrolledParticipants, {
+              {intl.formatMessage(batchOrderSeatInfoMessages.enrolledParticipants, {
                 seats_owned: seatsOwnedCount,
                 nb_seats: batchOrder.nb_seats,
               })}
@@ -109,13 +90,13 @@ export const BatchOrderSeatInfo = ({ batchOrder }: BatchOrderSeatInfoProps) => {
           <div className="enrollment-nested-section__content">
             <Input
               className="enrollment-search"
-              label={intl.formatMessage(messages.searchPlaceholder)}
+              label={intl.formatMessage(batchOrderSeatInfoMessages.searchPlaceholder)}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               rightIcon={<Icon name={IconTypeEnum.MAGNIFYING_GLASS} size="small" />}
             />
             {allSeats.length === 0 && query ? (
-              <FormattedMessage {...messages.noResults} />
+              <FormattedMessage {...batchOrderSeatInfoMessages.noResults} />
             ) : (
               <>
                 <ul className="enrollment-list">
@@ -132,7 +113,9 @@ export const BatchOrderSeatInfo = ({ batchOrder }: BatchOrderSeatInfoProps) => {
                     onClick={() => setPage((p) => p + 1)}
                     disabled={states.fetching}
                   >
-                    {intl.formatMessage(messages.loadMore, { count: remainingCount })}
+                    {intl.formatMessage(batchOrderSeatInfoMessages.loadMore, {
+                      count: remainingCount,
+                    })}
                   </Button>
                 )}
               </>
