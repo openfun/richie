@@ -1204,6 +1204,7 @@ def create_dev_data(
     create_certificate_discount=False,
     create_credential=False,
     create_credential_discount=False,
+    create_run_state_courses=False,
 ):
     """
     Create a simple site tree structure for developpers to work in realistic environment.
@@ -1345,21 +1346,21 @@ def create_dev_data(
         )
         courses.append(course)
 
-    # Create courses with explicit course run states to test ordering
-    log("Creating courses with varied course run states...")
-    state_courses = create_courses_with_run_states(
-        languages,
-        levels,
-        licences,
-        lms_endpoint,
-        organizations,
-        pages_created,
-        persons_for_organization,
-        subjects,
-        icons,
-        log=log,
-    )
-    courses.extend(state_courses)
+    if create_run_state_courses:
+        log("Creating courses with varied course run states...")
+        state_courses = create_courses_with_run_states(
+            languages,
+            levels,
+            licences,
+            lms_endpoint,
+            organizations,
+            pages_created,
+            persons_for_organization,
+            subjects,
+            icons,
+            log=log,
+        )
+        courses.extend(state_courses)
 
     # Create blog posts under the `News` page
     log(f"Creating {NB_OBJECTS['blogposts']} blog posts...")
@@ -1428,6 +1429,12 @@ class Command(BaseCommand):
             default=False,
             help="Create a credential product with a discount.",
         )
+        parser.add_argument(
+            "--run-state-courses",
+            action="store_true",
+            default=False,
+            help="Create courses with explicit run states to test ordering.",
+        )
 
     def handle(self, *args, **options):
         def log(message):
@@ -1448,6 +1455,7 @@ class Command(BaseCommand):
             create_certificate_discount=options.get("certificate_discount"),
             create_credential=options.get("credential"),
             create_credential_discount=options.get("credential_discount"),
+            create_run_state_courses=options.get("run_state_courses"),
         )
 
         logger.info("done")
