@@ -216,6 +216,11 @@ demo-site: ## create a demo site if app container is running
 	@${MAKE} superuser
 .PHONY: demo-site
 
+ifeq (dev-data,$(firstword $(MAKECMDGOALS)))
+  DEV_DATA_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  $(eval $(DEV_DATA_ARGS):;@:)
+endif
+
 dev-data: ## create dev data if app container is running
 	@echo "Check app container is running..."
 	@if [ $(shell docker container inspect -f '{{.State.Running}}' "$(shell $(COMPOSE) ps -q app)") = "false" ] ; then\
@@ -223,7 +228,7 @@ dev-data: ## create dev data if app container is running
 		exit 1;\
 	fi
 	@$(MANAGE) flush --no-input
-	@$(COMPOSE_EXEC_APP) python sandbox/manage.py create_dev_data ${ARGS}
+	@$(COMPOSE_EXEC_APP) python sandbox/manage.py create_dev_data $(DEV_DATA_ARGS)
 	@${MAKE} search-index
 	@${MAKE} superuser
 .PHONY: dev-data
