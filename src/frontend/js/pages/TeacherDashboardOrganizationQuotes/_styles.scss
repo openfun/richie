@@ -38,3 +38,20 @@
   display: flex;
   justify-content: center;
 }
+
+.dashboard__quote__enrollment {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid r-theme-val(dashboard-card, base-color);
+
+  &__title {
+    margin: 0 0 0.5rem;
+  }
+
+  .content {
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
