@@ -851,6 +851,7 @@ interface APIUser {
     seats: {
       get(filters?: BatchOrderSeatsQueryFilters): Promise<PaginatedResponse<BatchOrderSeat>>;
     };
+    seats_export(id: string): Promise<File>;
   };
   certificates: {
     download(id: string): Promise<File>;
@@ -964,6 +965,7 @@ export interface API {
       ): ContractResourceQuery extends { id: string }
         ? Promise<Nullable<Agreement>>
         : Promise<PaginatedResponse<Agreement>>;
+      download(filters: { organization_id: string; id: string }): Promise<File>;
     };
   };
   courseRuns: {

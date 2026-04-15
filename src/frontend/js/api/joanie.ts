@@ -110,6 +110,7 @@ export const getRoutes = () => {
         seats: {
           get: `${baseUrl}/batch-orders/:batch_order_id/seats/`,
         },
+        seats_export: `${baseUrl}/batch-orders/:id/seats-export/`,
       },
       certificates: {
         download: `${baseUrl}/certificates/:id/download/`,
@@ -164,6 +165,7 @@ export const getRoutes = () => {
       },
       agreements: {
         get: `${baseUrl}/organizations/:organization_id/agreements/:id/`,
+        download: `${baseUrl}/organizations/:organization_id/agreements/:id/download/`,
       },
     },
     courses: {
@@ -364,6 +366,10 @@ const API = (): Joanie.API => {
             );
           },
         },
+        seats_export: async (id: string): Promise<File> =>
+          fetchWithJWT(ROUTES.user.batchOrders.seats_export.replace(':id', id))
+            .then(checkStatus)
+            .then(getFileFromResponse),
       },
       enrollments: {
         create: async (payload) =>
@@ -555,6 +561,10 @@ const API = (): Joanie.API => {
             method: 'GET',
           }).then(checkStatus);
         },
+        download: async (filters: { organization_id: string; id: string }): Promise<File> =>
+          fetchWithJWT(buildApiUrl(ROUTES.organizations.agreements.download, filters))
+            .then(checkStatus)
+            .then(getFileFromResponse),
       },
     },
     courses: {
