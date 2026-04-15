@@ -320,6 +320,11 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_name="EDX_JS_COURSE_REGEX",
                 environ_prefix=None,
             ),
+            "JS_NEXT_URL": values.Value(
+                "richie",
+                environ_name="EDX_JS_NEXT_URL",
+                environ_prefix=None,
+            ),
             "BASE_URL": values.Value(environ_name="EDX_BASE_URL", environ_prefix=None),
         }
     ]

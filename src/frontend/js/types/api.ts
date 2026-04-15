@@ -63,6 +63,7 @@ export interface APIRoute {
 
 export interface APIOptions {
   routes: APIRoute;
+  nextURL?: string;
 }
 
 export enum APIBackend {

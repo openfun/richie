@@ -3,10 +3,17 @@ import { faker } from '@faker-js/faker';
 import { RichieContextFactory as mockRichieContextFactory } from 'utils/test/factories/richie';
 import { handle } from 'utils/errors/handle';
 import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
+import { location } from 'utils/indirection/window';
 import context from 'utils/context';
 import API from './openedx-hawthorn';
 
 jest.mock('utils/errors/handle');
+jest.mock('utils/indirection/window', () => ({
+  location: {
+    pathname: '/courses/a-test-course/',
+    assign: jest.fn(),
+  },
+}));
 jest.mock('utils/context', () => ({
   __esModule: true,
   default: mockRichieContextFactory({
@@ -42,6 +49,48 @@ describe('OpenEdX Hawthorn API', () => {
       fetchMock.get(`${EDX_ENDPOINT}/my-custom-api/user/v2.0/whoami`, HttpStatusCode.UNAUTHORIZED);
 
       await expect(CustomApi.user.me()).resolves.toBe(null);
+    });
+  });
+
+  describe('user', () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    describe('login', () => {
+      it('redirects to login with default "richie" next prefix when nextURL is not set', () => {
+        const api = API(LMSConf);
+        api.user.login();
+        expect(location.assign).toHaveBeenCalledWith(
+          `${EDX_ENDPOINT}/login?next=richie${location.pathname}`,
+        );
+      });
+
+      it('redirects to login with custom next prefix when nextURL option is provided', () => {
+        const api = API(LMSConf, { routes: {}, nextURL: 'richie-nau' });
+        api.user.login();
+        expect(location.assign).toHaveBeenCalledWith(
+          `${EDX_ENDPOINT}/login?next=richie-nau${location.pathname}`,
+        );
+      });
+    });
+
+    describe('register', () => {
+      it('redirects to register with default "richie" next prefix when nextURL is not set', () => {
+        const api = API(LMSConf);
+        api.user.register();
+        expect(location.assign).toHaveBeenCalledWith(
+          `${EDX_ENDPOINT}/register?next=richie${location.pathname}`,
+        );
+      });
+
+      it('redirects to register with custom next prefix when nextURL option is provided', () => {
+        const api = API(LMSConf, { routes: {}, nextURL: 'richie-ap' });
+        api.user.register();
+        expect(location.assign).toHaveBeenCalledWith(
+          `${EDX_ENDPOINT}/register?next=richie-ap${location.pathname}`,
+        );
+      });
     });
   });
 
