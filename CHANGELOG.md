@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add next_url configuration for OpenEdX Hawthorn login/register redirects
+
 ## [3.4.0] - 2026-03-17
 
 ### Added
