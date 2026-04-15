@@ -9,6 +9,7 @@ export interface LMSBackend {
   backend: string;
   course_regexp: RegExp | string;
   endpoint: string;
+  next_url?: string;
 }
 
 export interface AuthenticationBackend {
@@ -26,6 +27,7 @@ export interface AuthenticationBackend {
     username: string;
     email: string;
   };
+  next_url?: string;
 }
 
 enum FEATURES {

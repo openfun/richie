@@ -251,14 +251,17 @@ class FrontendContextProcessor:
     def get_lms_context(self):
         """Get lms backends context if there are."""
         if getattr(settings, "RICHIE_LMS_BACKENDS", None):
-            return [
-                {
+            result = []
+            for lms in getattr(settings, "RICHIE_LMS_BACKENDS", []):
+                entry = {
                     "endpoint": lms["BASE_URL"],
                     "backend": lms["JS_BACKEND"],
                     "course_regexp": lms["JS_COURSE_REGEX"],
                 }
-                for lms in getattr(settings, "RICHIE_LMS_BACKENDS", [])
-            ]
+                if "JS_NEXT_URL" in lms:
+                    entry["next_url"] = lms["JS_NEXT_URL"]
+                result.append(entry)
+            return result
 
         return None
 
