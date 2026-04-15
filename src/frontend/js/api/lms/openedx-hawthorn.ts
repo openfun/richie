@@ -20,6 +20,8 @@ import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
  */
 
 const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions): APILms => {
+  const nextURL = options?.nextURL ?? 'richie';
+
   const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> => {
     const matches = url.match((APIConf as LMSBackend).course_regexp);
     return matches && matches[1] ? matches[1] : null;
@@ -61,8 +63,9 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions):
         / ! \ Prefix next param with richie.
         In this way, OpenEdX Nginx conf knows that we want to go back to richie app after login/redirect
       */
-      login: () => location.assign(`${ROUTES.user.login}?next=richie${location.pathname}`),
-      register: () => location.assign(`${ROUTES.user.register}?next=richie${location.pathname}`),
+      login: () => location.assign(`${ROUTES.user.login}?next=${nextURL}${location.pathname}`),
+      register: () =>
+        location.assign(`${ROUTES.user.register}?next=${nextURL}${location.pathname}`),
       logout: async () => {
         await fetch(ROUTES.user.logout, {
           mode: 'no-cors',

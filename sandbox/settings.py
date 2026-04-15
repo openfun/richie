@@ -263,6 +263,11 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_name="EDX_JS_COURSE_REGEX",
                 environ_prefix=None,
             ),
+            "JS_NEXT_URL": values.Value(
+                "richie",
+                environ_name="EDX_JS_NEXT_URL",
+                environ_prefix=None,
+            ),
             # Course runs synchronization
             "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": [],
             "DEFAULT_COURSE_RUN_SYNC_MODE": "sync_to_public",
