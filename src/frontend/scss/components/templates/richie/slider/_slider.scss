@@ -101,7 +101,7 @@ $r-slider-content-line-clamp: 4 !default;
 .slider__panel {
   @include make-container();
   @include make-container-max-widths();
-
+  cursor: default;
   display: flex;
   flex-direction: column-reverse;
 }
