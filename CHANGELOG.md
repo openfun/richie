@@ -8,6 +8,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix storybook configuration
+- Fix course glimpse filters overlap on mobile/tablet
+- Fix slider drag and drop issues
+
 ## [3.4.0] - 2026-03-17
 
 ### Added

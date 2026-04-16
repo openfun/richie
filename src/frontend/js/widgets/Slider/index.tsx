@@ -101,18 +101,19 @@ const Slider = ({ slides, title }: SliderProps) => {
   return (
     <div
       className="slider"
-      ref={emblaRef}
       aria-roledescription="carousel"
       aria-label={title}
       role="button"
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
-      <Slideshow
-        slides={slides}
-        onNextSlide={() => emblaApi?.scrollNext()}
-        onPreviousSlide={() => emblaApi?.scrollPrev()}
-      />
+      <div ref={emblaRef}>
+        <Slideshow
+          slides={slides}
+          onNextSlide={() => emblaApi?.scrollNext()}
+          onPreviousSlide={() => emblaApi?.scrollPrev()}
+        />
+      </div>
       <SlidePanel
         slides={slides}
         activeSlideIndex={activeSlideIndex}
