@@ -1,12 +1,17 @@
 import { dirname, join } from "path";
+import { createRequire } from "module";
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
-module.exports = {
-  stories: ['../stories/**/*.mdx', '../stories/**/*.stories.@(js|jsx|ts|tsx)', '../js/**/*.stories.@(js|jsx|ts|tsx)'],
+const require = createRequire(import.meta.url);
+
+function getAbsolutePath(value) {
+  return dirname(require.resolve(join(value, "package.json")));
+}
+
+export default {
+  stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)', '../js/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
     getAbsolutePath('@storybook/addon-links'),
-    getAbsolutePath('@storybook/addon-essentials'),
-    getAbsolutePath('@storybook/addon-interactions'),
     getAbsolutePath('@storybook/addon-webpack5-compiler-babel'),
   ],
   framework: {
@@ -23,9 +28,7 @@ module.exports = {
     from: '../../richie/apps/core/static',
     to: '/static',
   }, '../../richie/apps/core/templates/richie'],
-  webpackFinal: async (config, {
-    configType,
-  }) => {
+  webpackFinal: async (config, { configType }) => {
     config.resolve.plugins = [new TsconfigPathsPlugin()];
     return config;
   },
@@ -33,7 +36,3 @@ module.exports = {
     autodocs: false,
   },
 };
-
-function getAbsolutePath(value) {
-  return dirname(require.resolve(join(value, "package.json")));
-}

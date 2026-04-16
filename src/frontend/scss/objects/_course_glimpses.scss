@@ -56,6 +56,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
   @include sv-flex(1, 0, calc(100% - #{$r-course-glimpse-gutter * 2}));
 
   position: relative;
+  isolation: isolate;
   margin: $r-course-glimpse-gutter;
 
   min-width: 16rem;
