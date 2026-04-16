@@ -57,13 +57,9 @@
     "@openfun/cunningham-tokens": "3.0.0",
     "@sentry/browser": "10.40.0",
     "@sentry/types": "10.40.0",
-    "@storybook/addon-actions": "9.0.8",
-    "@storybook/addon-essentials": "8.6.17",
-    "@storybook/addon-interactions": "8.6.17",
     "@storybook/addon-links": "10.2.13",
     "@storybook/react": "10.2.13",
     "@storybook/react-webpack5": "10.2.13",
-    "@storybook/test": "8.6.17",
     "@tanstack/query-core": "5.90.20",
     "@tanstack/query-sync-storage-persister": "5.90.23",
     "@tanstack/react-query": "5.90.21",
@@ -136,7 +132,7 @@
     "react-router": "7.12.0",
     "sass": "1.97.3",
     "source-map-loader": "5.0.0",
-    "storybook": "8.6.17",
+    "storybook": "10.2.13",
     "tsconfig-paths-webpack-plugin": "4.2.0",
     "typescript": "5.9.3",
     "uuid": "13.0.0",
@@ -162,7 +158,6 @@
     "yarn": "1.22.22"
   },
   "devDependencies": {
-    "@storybook/addon-mdx-gfm": "8.6.17",
     "@storybook/addon-webpack5-compiler-babel": "4.0.0"
   }
 }
