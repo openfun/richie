@@ -158,7 +158,7 @@ describe('pages/TeacherDashboardOrganizationQuotes', () => {
     const quoteQuoted = OrganizationQuoteFactory({
       batch_order: {
         state: BatchOrderState.QUOTED,
-        available_actions: { next_action: 'confirm_quote' },
+        available_actions: { next_action: 'confirm_quote', download_quote: true },
       },
     }).one();
     fetchMock.get(`https://joanie.endpoint/api/v1.0/organizations/`, []);

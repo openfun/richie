@@ -220,6 +220,7 @@ export const BatchOrderQuoteFactory = factory((): BatchOrderQuote => {
       confirm_purchase_order: false,
       confirm_bank_transfer: false,
       submit_for_signature: false,
+      download_quote: false,
       next_action: null,
     },
   };

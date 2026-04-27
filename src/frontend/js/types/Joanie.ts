@@ -585,7 +585,8 @@ export type BatchOrderAction =
   | 'confirm_quote'
   | 'confirm_purchase_order'
   | 'confirm_bank_transfer'
-  | 'submit_for_signature';
+  | 'submit_for_signature'
+  | 'download_quote';
 
 export type BatchOrderAvailableActions = {
   [K in BatchOrderAction]: boolean;
