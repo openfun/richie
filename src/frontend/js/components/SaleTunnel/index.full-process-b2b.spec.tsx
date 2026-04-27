@@ -210,11 +210,11 @@ describe('SaleTunnel', () => {
     await user.type($lastName, 'Doe');
     await user.type($firstName, 'John');
     await user.type($role, 'HR');
-    await user.type($email, 'john.doe@fun-mooc.com');
+    await user.type($email, 'john.doe+admin@fun-mooc.com');
     await user.type($phone, '+338203920103');
 
     expect($lastName).toHaveValue('Doe');
-    expect($email).toHaveValue('john.doe@fun-mooc.com');
+    expect($email).toHaveValue('john.doe+admin@fun-mooc.com');
 
     // Signatory step
     await user.click(screen.getByRole('button', { name: 'Next' }));
@@ -227,7 +227,7 @@ describe('SaleTunnel', () => {
     await user.type($signatoryLastName, 'Doe');
     await user.type($signatoryFirstName, 'John');
     await user.type($signatoryRole, 'CEO');
-    await user.type($signatoryEmail, 'john.doe@fun-mooc.com');
+    await user.type($signatoryEmail, 'john.doe+ceo@fun-mooc.com');
     await user.type($signatoryPhone, '+338203920103');
 
     // Participants step
@@ -298,12 +298,12 @@ describe('SaleTunnel', () => {
       administrative_lastname: 'Doe',
       administrative_firstname: 'John',
       administrative_profession: 'HR',
-      administrative_email: 'john.doe@fun-mooc.com',
+      administrative_email: 'john.doe+admin@fun-mooc.com',
       administrative_telephone: '+338203920103',
       signatory_lastname: 'Doe',
       signatory_firstname: 'John',
       signatory_profession: 'CEO',
-      signatory_email: 'john.doe@fun-mooc.com',
+      signatory_email: 'john.doe+ceo@fun-mooc.com',
       signatory_telephone: '+338203920103',
       nb_seats: '13',
       payment_method: PaymentMethod.PURCHASE_ORDER,

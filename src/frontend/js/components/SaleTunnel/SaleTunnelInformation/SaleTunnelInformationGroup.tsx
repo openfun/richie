@@ -96,7 +96,7 @@ export const SaleTunnelInformationGroup = () => {
   );
 };
 
-const EMAIL_REGEX = /^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/;
+const EMAIL_REGEX = /^[\w.+\-]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 export const validationSchema = Yup.object().shape({
   offering_id: Yup.string().required(),
