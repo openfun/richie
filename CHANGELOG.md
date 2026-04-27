@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Changes the render of download quote button
 - Fix storybook configuration
 - Fix course glimpse filters overlap on mobile/tablet
 - Fix slider drag and drop issues

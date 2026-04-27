@@ -50,7 +50,7 @@ describe('full process for the organization quotes dashboard', () => {
       batch_order: {
         state: BatchOrderState.QUOTED,
         payment_method: PaymentMethod.CARD_PAYMENT,
-        available_actions: { next_action: 'confirm_quote' },
+        available_actions: { next_action: 'confirm_quote', download_quote: true },
       },
       organization_signed_on: undefined,
     }).one();

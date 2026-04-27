@@ -360,35 +360,40 @@ const TeacherDashboardOrganizationQuotes = () => {
     );
   };
 
+  const renderDownloadButton = (quote: OrganizationQuote) => {
+    const batchOrder = quote.batch_order;
+
+    return (
+      <Button
+        size="small"
+        color="brand"
+        variant="secondary"
+        className="mr-2"
+        onClick={() => handleDownloadQuote(quote.id)}
+        icon={<span className="material-icons">download</span>}
+        disabled={!abilities?.download_quote || !batchOrder.available_actions.download_quote}
+      >
+        {intl.formatMessage(messages.downloadQuote)}
+      </Button>
+    );
+  };
+
   const renderActionButton = (quote: OrganizationQuote) => {
     const batchOrder = quote.batch_order;
     const state = batchOrder?.state;
     const paymentMethod = batchOrder?.payment_method;
 
-    if (!batchOrder || !state || !paymentMethod || state === BatchOrderState.COMPLETED) return null;
+    if (!batchOrder || !state || !paymentMethod) return null;
 
-    const confirmQuoteButtons = (
-      <div>
-        <Button
-          size="small"
-          color="brand"
-          variant="secondary"
-          className="mr-2"
-          onClick={() => handleDownloadQuote(quote.id)}
-          icon={<span className="material-icons">download</span>}
-          disabled={!abilities?.download_quote}
-        >
-          {intl.formatMessage(messages.downloadQuote)}
-        </Button>
-        <Button
-          size="small"
-          onClick={() => handleOpenConfirm(quote.id)}
-          icon={<span className="material-icons">check_circle</span>}
-          disabled={!abilities?.confirm_quote}
-        >
-          {intl.formatMessage(messages.confirmQuote)}
-        </Button>
-      </div>
+    const confirmQuoteButton = (
+      <Button
+        size="small"
+        onClick={() => handleOpenConfirm(quote.id)}
+        icon={<span className="material-icons">check_circle</span>}
+        disabled={!abilities?.confirm_quote}
+      >
+        {intl.formatMessage(messages.confirmQuote)}
+      </Button>
     );
 
     const confirmPurchaseOrderButton = (
@@ -430,7 +435,7 @@ const TeacherDashboardOrganizationQuotes = () => {
 
     switch (batchOrder.available_actions?.next_action) {
       case 'confirm_quote':
-        return confirmQuoteButtons;
+        return confirmQuoteButton;
       case 'confirm_purchase_order':
         return confirmPurchaseOrderButton;
       case 'confirm_bank_transfer':
@@ -485,7 +490,10 @@ const TeacherDashboardOrganizationQuotes = () => {
                   </Badge>
                 )}
               </div>
-              <div className="dashboard__quote__header__action">{renderActionButton(quote)}</div>
+              <div className="dashboard__quote__header__action">
+                {renderDownloadButton(quote)}
+                {renderActionButton(quote)}
+              </div>
             </div>
           }
           defaultExpanded={false}
