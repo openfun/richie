@@ -15,7 +15,7 @@ const LmsAPIHandler = (url: string): APILms => {
     case APIBackend.OPENEDX_DOGWOOD:
       return OpenEdxDogwoodApiInterface(api);
     case APIBackend.OPENEDX_HAWTHORN:
-      return OpenEdxHawthornApiInterface(api);
+      return OpenEdxHawthornApiInterface(api, { routes: {}, nextURL: api.next_url });
   }
 
   const error = new Error(`No LMS Backend found for ${url}.`);
