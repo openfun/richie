@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Handle aliases in mail regex for b2b sale tunnel
+
 ## [3.4.0] - 2026-03-17
 
 ### Added
