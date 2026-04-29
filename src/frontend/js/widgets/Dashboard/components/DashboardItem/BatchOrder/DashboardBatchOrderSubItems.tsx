@@ -1,8 +1,10 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { PaymentMethod } from 'components/PaymentInterfaces/types';
-import { BatchOrderRead } from 'types/Joanie';
+import { BatchOrderRead, BatchOrderState } from 'types/Joanie';
 import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/DashboardSubItem';
 import { DashboardSubItemsList } from '../DashboardSubItemsList';
+import { BatchOrderSeatInfo } from './BatchOrderSeatInfo';
+import { BatchOrderAgreementInfo } from './BatchOrderAgreementInfo';
 
 const messages = defineMessages({
   stepCompany: {
@@ -143,6 +145,12 @@ const DashboardItemField = ({
 
 export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchOrderRead }) => {
   const intl = useIntl();
+
+  const displaySeatsInfo =
+    batchOrder.state === BatchOrderState.COMPLETED &&
+    !!batchOrder.nb_seats &&
+    batchOrder.seats_owned !== undefined &&
+    batchOrder.seats_to_own !== undefined;
 
   const items = [
     <DashboardSubItem
@@ -310,6 +318,14 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
         }
       />,
     );
+  }
+
+  if (batchOrder.contract_id) {
+    items.push(<BatchOrderAgreementInfo key="agreement" batchOrder={batchOrder} />);
+  }
+
+  if (displaySeatsInfo) {
+    items.push(<BatchOrderSeatInfo key="enrollment-management" batchOrder={batchOrder} />);
   }
 
   return <DashboardSubItemsList subItems={items} />;

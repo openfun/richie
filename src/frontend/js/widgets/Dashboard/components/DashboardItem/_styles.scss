@@ -162,10 +162,14 @@
       padding: 0.5rem 1rem;
       font-size: 0.8rem;
       display: flex;
-      gap: 1rem;
-      align-items: center;
+      flex-direction: column;
+      gap: 0.5rem;
     }
   }
+}
+
+.dashboard-item__action-button {
+  align-self: flex-end;
 }
 
 .dashboard-item__course-enrolling {
