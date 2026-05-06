@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Handle aliases in mail regex for b2b sale tunnel
 
+### Changed
+
+- Hide walkthrough message in sale tunnel for B2B process
+
 ### Fixed
 
 - Changes the render of download quote button
