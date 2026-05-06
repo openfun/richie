@@ -203,6 +203,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
   };
 
   const walkthroughMessages = useMemo(() => {
+    if (batchOrder) return;
     if (product.contract_definition && product.price > 0) {
       return messages.walkthroughToSignAndSavePayment;
     } else if (product.contract_definition && product.price === 0) {
@@ -210,7 +211,7 @@ const SubscriptionButton = ({ buildOrderPayload }: Props) => {
     } else if (!product.contract_definition && product.price > 0 && needsPayment) {
       return messages.walkthroughToSavePayment;
     }
-  }, [product, creditCard, needsPayment]);
+  }, [product, creditCard, needsPayment, batchOrder]);
 
   useEffect(() => {
     if (order) nextStep();
