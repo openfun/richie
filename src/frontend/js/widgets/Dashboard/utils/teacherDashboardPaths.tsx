@@ -82,7 +82,7 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
   [TeacherDashboardPaths.ORGANIZATION_COURSE_PRODUCT_LEARNER_LIST]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.learnerList.label',
     description: "Label to display the organization product's learner list view.",
-    defaultMessage: 'Learners',
+    defaultMessage: 'Buyers',
   },
   [TeacherDashboardPaths.COURSE]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.label',
@@ -102,7 +102,7 @@ export const TEACHER_DASHBOARD_ROUTE_LABELS = defineMessages<TeacherDashboardPat
   [TeacherDashboardPaths.COURSE_PRODUCT_LEARNER_LIST]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.learnerList.label',
     description: "Label to display the product's learner list view.",
-    defaultMessage: 'Learners',
+    defaultMessage: 'Buyers',
   },
   [TeacherDashboardPaths.COURSE_PRODUCT_CONTRACTS]: {
     id: 'components.TeacherDashboard.TeacherDashboardRoutes.course.product.contracts.label',

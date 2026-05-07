@@ -20,7 +20,7 @@ const messages = defineMessages({
   },
   successDetailMessage: {
     defaultMessage:
-      'You will be able to start your training once the first installment will be paid.',
+      'You’ll be able to start your training once the first installment has been paid, or once access opens if no payment is required.',
     description: 'Text to explain when the user will be able to start its training.',
     id: 'components.SaleTunnelSuccess.successDetailMessage',
   },

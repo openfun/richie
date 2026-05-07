@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Hide walkthrough message in sale tunnel for B2B process
+- Rename some sentences for B2B process
 
 ### Fixed
 

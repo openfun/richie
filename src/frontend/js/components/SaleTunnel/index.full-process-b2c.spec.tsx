@@ -404,7 +404,7 @@ describe('SaleTunnel', () => {
     await screen.findByTestId('generic-sale-tunnel-success-step');
     screen.getByText('Subscription confirmed!');
     screen.getByText(
-      /your order has been successfully registered\.you will be able to start your training once the first installment will be paid\./i,
+      /you’ll be able to start your training once the first installment has been paid, or once access opens if no payment is required\./i,
     );
     screen.getByRole('link', { name: 'Close' });
 
