@@ -25,6 +25,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix course glimpse filters overlap on mobile/tablet
 - Fix slider drag and drop issues
 
+### Added
+
+- Updgraded js dependencies
+
 ## [3.4.0] - 2026-03-17
 
 ### Added
