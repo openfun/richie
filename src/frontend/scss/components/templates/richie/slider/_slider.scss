@@ -201,6 +201,16 @@ $r-slider-content-line-clamp: 4 !default;
   font-weight: $r-slider-title-fontweight;
   font-family: $r-slider-title-fontfamily;
 
+  a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      opacity: 0.8;
+    }
+  }
+
   & > span {
     display: inline-block;
     transform: translateY(0%);
