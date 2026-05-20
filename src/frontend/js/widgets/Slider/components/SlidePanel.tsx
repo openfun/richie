@@ -53,7 +53,19 @@ const SlidePanel = ({
         })}
       >
         <strong className="slide__title">
-          <span>{slides[activeSlideIndex].title}</span>
+          <span>
+            {slides[activeSlideIndex].link_url ? (
+              <a
+                href={slides[activeSlideIndex].link_url}
+                target={slides[activeSlideIndex].link_open_blank ? '_blank' : '_self'}
+                rel="noopener noreferrer"
+              >
+                {slides[activeSlideIndex].title}
+              </a>
+            ) : (
+              slides[activeSlideIndex].title
+            )}
+          </span>
         </strong>
         {hasSlideContent && (
           <div

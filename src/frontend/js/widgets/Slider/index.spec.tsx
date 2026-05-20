@@ -71,13 +71,11 @@ describe('<Slider />', () => {
     // Check if all slides are rendered
     mockSlides.forEach((slide) => {
       expect(screen.getByRole('img', { name: slide.title })).toBeInTheDocument();
-      // Check if the link is rendered
-      const link = screen.queryByRole('link', { name: slide.title });
       if (slide.link_url) {
-        expect(link).toHaveAttribute('href', slide.link_url);
-        expect(link).toBeInTheDocument();
+        const links = screen.getAllByRole('link', { name: slide.title });
+        links.forEach((link) => expect(link).toHaveAttribute('href', slide.link_url));
       } else {
-        expect(link).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: slide.title })).not.toBeInTheDocument();
       }
     });
 
