@@ -31,8 +31,11 @@
     &__left,
     &__right {
       flex: 1;
-      overflow: hidden;
       position: relative;
+    }
+
+    &__left {
+      overflow: hidden;
     }
 
     &__column {
