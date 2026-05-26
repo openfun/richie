@@ -24,6 +24,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix storybook configuration
 - Fix course glimpse filters overlap on mobile/tablet
 - Fix slider drag and drop issues
+- Handle 422 error for seats API
 
 ## [3.4.0] - 2026-03-17
 

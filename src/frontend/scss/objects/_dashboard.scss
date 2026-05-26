@@ -152,9 +152,16 @@
   }
 }
 
+.enrollment-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: rem-calc(8px);
+  margin-top: rem-calc(8px);
+}
+
 .enrollment-load-more {
   width: fit-content;
-  margin-top: rem-calc(8px);
   padding: rem-calc(4px) rem-calc(12px);
 }
 

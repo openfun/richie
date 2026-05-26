@@ -38,6 +38,7 @@ export enum IconTypeEnum {
   COURSES = 'icon-courses',
   CREDIT_CARD = 'icon-creditCard',
   CROSS = 'icon-cross',
+  DOWNLOAD = 'icon-download',
   DURATION = 'icon-duration',
   ENVELOPE = 'icon-envelope',
   FACEBOOK = 'icon-facebook',

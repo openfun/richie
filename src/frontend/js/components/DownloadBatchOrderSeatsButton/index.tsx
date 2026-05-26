@@ -1,7 +1,9 @@
 import { useId } from 'react';
-import { Button } from '@openfun/cunningham-react';
+import { Alert, Button, VariantType } from '@openfun/cunningham-react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { Spinner } from 'components/Spinner';
+import { Icon, IconTypeEnum } from 'components/Icon';
+import { HttpStatusCode } from 'utils/errors/HttpError';
 import { useDownloadBatchOrderSeats } from 'hooks/useDownloadBatchOrderSeats';
 
 const messages = defineMessages({
@@ -19,6 +21,12 @@ const messages = defineMessages({
     defaultMessage: 'Seats',
     description: 'Text displayed for seats value in batch order',
     id: 'batchOrder.seats',
+  },
+  noSeatsOwned: {
+    defaultMessage:
+      'No participants have claimed their seat yet. The export will be available once at least one participant has enrolled.',
+    description: 'Error message displayed when trying to export seats but no seats are owned yet.',
+    id: 'components.DownloadBatchOrderSeatsButton.noSeatsOwned',
   },
 });
 
@@ -46,7 +54,7 @@ const DownloadBatchOrderSeatsButton = ({
   batchOrderId,
   productTitle,
 }: DownloadBatchOrderSeatsButtonProps) => {
-  const { download, loading } = useDownloadBatchOrderSeats();
+  const { download, loading, error } = useDownloadBatchOrderSeats();
   const labelId = useId();
   const intl = useIntl();
 
@@ -56,24 +64,33 @@ const DownloadBatchOrderSeatsButton = ({
   };
 
   return (
-    <Button
-      size="small"
-      color="brand"
-      variant="primary"
-      className="dashboard-item__action-button"
-      disabled={loading}
-      onClick={handleClick}
-    >
-      {loading ? (
-        <Spinner theme="primary" aria-labelledby={labelId}>
-          <span id={labelId}>
-            <FormattedMessage {...messages.generating} />
-          </span>
-        </Spinner>
-      ) : (
-        <FormattedMessage {...messages.download} />
+    <>
+      <Button
+        size="small"
+        color="brand"
+        variant="primary"
+        className="dashboard-item__action-button"
+        icon={<Icon name={IconTypeEnum.DOWNLOAD} size="small" />}
+        iconPosition="left"
+        disabled={loading}
+        onClick={handleClick}
+      >
+        {loading ? (
+          <Spinner theme="primary" aria-labelledby={labelId}>
+            <span id={labelId}>
+              <FormattedMessage {...messages.generating} />
+            </span>
+          </Spinner>
+        ) : (
+          <FormattedMessage {...messages.download} />
+        )}
+      </Button>
+      {error?.code === HttpStatusCode.UNPROCESSABLE_ENTITY && (
+        <Alert type={VariantType.ERROR} className="mt-s">
+          <FormattedMessage {...messages.noSeatsOwned} />
+        </Alert>
       )}
-    </Button>
+    </>
   );
 };
 

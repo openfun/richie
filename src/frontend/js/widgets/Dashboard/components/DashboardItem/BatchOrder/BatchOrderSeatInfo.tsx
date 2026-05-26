@@ -105,27 +105,31 @@ export const BatchOrderSeatInfo = ({ batchOrder }: BatchOrderSeatInfoProps) => {
                     <li key={seat.id}>{seat.owner_name ?? seat.voucher}</li>
                   ))}
                 </ul>
-                {remainingCount > 0 && (
-                  <Button
-                    className="enrollment-load-more"
-                    color="brand"
-                    variant="secondary"
-                    size="small"
-                    onClick={() => setPage((p) => p + 1)}
-                    disabled={states.fetching}
-                  >
-                    {intl.formatMessage(batchOrderSeatInfoMessages.loadMore, {
-                      count: remainingCount,
-                    })}
-                  </Button>
-                )}
+                <div className="enrollment-actions">
+                  {remainingCount > 0 && (
+                    <Button
+                      className="enrollment-load-more"
+                      color="brand"
+                      variant="secondary"
+                      size="small"
+                      onClick={() => setPage((p) => p + 1)}
+                      disabled={states.fetching}
+                    >
+                      {intl.formatMessage(batchOrderSeatInfoMessages.loadMore, {
+                        count: remainingCount,
+                      })}
+                    </Button>
+                  )}
+                  <div>
+                    <DownloadBatchOrderSeatsButton
+                      batchOrderId={batchOrder.id}
+                      productTitle={batchOrder.offering?.product.title ?? ''}
+                    />
+                  </div>
+                </div>
               </>
             )}
           </div>
-          <DownloadBatchOrderSeatsButton
-            batchOrderId={batchOrder.id}
-            productTitle={batchOrder.offering?.product.title ?? ''}
-          />
         </div>
       }
     />
