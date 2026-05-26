@@ -16,6 +16,7 @@ import { JOANIE_API_VERSION } from 'settings';
 import { ResourcesQuery } from 'hooks/useResources';
 import { ObjectHelper } from 'utils/ObjectHelper';
 import { Maybe, Nullable } from 'types/utils';
+import { HttpError, HttpStatusCode } from 'utils/errors/HttpError';
 import { checkStatus, getFileFromResponse } from './utils';
 
 /*
@@ -366,10 +367,15 @@ const API = (): Joanie.API => {
             );
           },
         },
-        seats_export: async (id: string): Promise<File> =>
-          fetchWithJWT(ROUTES.user.batchOrders.seats_export.replace(':id', id))
-            .then(checkStatus)
-            .then(getFileFromResponse),
+        seats_export: async (id: string): Promise<File> => {
+          const response = await fetchWithJWT(
+            ROUTES.user.batchOrders.seats_export.replace(':id', id),
+          );
+          if (response.status === HttpStatusCode.UNPROCESSABLE_ENTITY) {
+            throw new HttpError(response.status, response.statusText);
+          }
+          return checkStatus(response).then(getFileFromResponse);
+        },
       },
       enrollments: {
         create: async (payload) =>

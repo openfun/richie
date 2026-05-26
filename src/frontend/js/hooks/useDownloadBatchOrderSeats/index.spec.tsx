@@ -129,4 +129,32 @@ describe('useDownloadBatchOrderSeats', () => {
       expect(result.current.loading).toBe(false);
     });
   });
+
+  it('exposes a 422 HttpError when seats export fails because no seats are owned', async () => {
+    const batchOrder = BatchOrderReadFactory().one();
+    const DOWNLOAD_URL = `https://joanie.test/api/v1.0/batch-orders/${batchOrder.id}/seats-export/`;
+    fetchMock.get(DOWNLOAD_URL, {
+      status: HttpStatusCode.UNPROCESSABLE_ENTITY,
+      body: { detail: 'Batch order has no seats owned, cannot export seats.' },
+    });
+
+    const { result } = renderHook(() => useDownloadBatchOrderSeats(), {
+      wrapper: Wrapper,
+    });
+    await waitFor(() => expect(result.current).not.toBeNull());
+
+    expect(result.current.error).toBeUndefined();
+
+    act(() => {
+      result.current.download(batchOrder.id);
+    });
+
+    await waitFor(() => {
+      expect(fetchMock.called(DOWNLOAD_URL)).toBe(true);
+      expect(result.current.error?.code).toBe(HttpStatusCode.UNPROCESSABLE_ENTITY);
+      // eslint-disable-next-line compat/compat
+      expect(URL.createObjectURL).toHaveBeenCalledTimes(0);
+      expect(result.current.loading).toBe(false);
+    });
+  });
 });
