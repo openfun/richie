@@ -27,6 +27,18 @@
     "description": "Label for the field asking the company address",
     "message": "Adresse"
   },
+  "batchOrder.agreement.organizationSignedOn": {
+    "description": "Label displayed once the organization has counter-signed the agreement",
+    "message": "Signée par l’établissement le {date}."
+  },
+  "batchOrder.agreement.title": {
+    "description": "Step label for the agreement document in the batch order detail",
+    "message": "Convention"
+  },
+  "batchOrder.agreement.waitingOrganization": {
+    "description": "Label displayed when the agreement is waiting for the organization counter-signature",
+    "message": "En attente de contre-signature par l’établissement."
+  },
   "batchOrder.bankTransfer": {
     "description": "Option label for selecting bank transfer payment",
     "message": "Virement bancaire direct"
@@ -58,6 +70,26 @@
   "batchOrder.email": {
     "description": "Label for the field asking the email address of the contact person",
     "message": "Courriel"
+  },
+  "batchOrder.enrollmentManagement.enrolledParticipants": {
+    "description": "Progress label showing enrolled participants out of total seats",
+    "message": "{seats_owned}/{nb_seats} participants inscrits"
+  },
+  "batchOrder.enrollmentManagement.loadMore": {
+    "description": "Button to load more seats",
+    "message": "Charger {count} de plus"
+  },
+  "batchOrder.enrollmentManagement.noResults": {
+    "description": "Message shown when the student search returns no results",
+    "message": "Aucun participant ne correspond à votre recherche."
+  },
+  "batchOrder.enrollmentManagement.searchPlaceholder": {
+    "description": "Placeholder for the seat search input (student name or voucher)",
+    "message": "Nom de participant"
+  },
+  "batchOrder.enrollmentManagement.title": {
+    "description": "Title for enrollment management section",
+    "message": "Inscription"
   },
   "batchOrder.firstName": {
     "description": "Label for the field asking the first name of the contact person",
@@ -197,11 +229,11 @@
   },
   "batchOrder.seats": {
     "description": "Text displayed for seats value in batch order",
-    "message": "Places"
+    "message": "{nb_seats} places"
   },
   "batchOrder.seatsCount": {
-    "description": "Text displayed for seats count with pluralization in batch order",
-    "message": "{seats} {seats, plural, one {place} other {places}}"
+    "description": "Text displayed for seats count in batch order (owned / total)",
+    "message": "{seats_owned}/{nb_seats} places"
   },
   "batchOrder.status.assigned": {
     "description": "Status label for an assigned batch order",
@@ -1370,6 +1402,26 @@
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
     "message": "Accéder aux préférences de votre profil"
+  },
+  "components.DownloadAgreementButton.download": {
+    "description": "Label for the button to download a signed agreement PDF",
+    "message": "Télécharger la convention"
+  },
+  "components.DownloadAgreementButton.generating": {
+    "description": "Accessible label displayed while agreement PDF is being downloaded.",
+    "message": "Téléchargement en cours..."
+  },
+  "components.DownloadBatchOrderSeatsButton.download": {
+    "description": "Label for the button to export batch order seats as CSV",
+    "message": "Exporter au format CSV"
+  },
+  "components.DownloadBatchOrderSeatsButton.generating": {
+    "description": "Accessible label displayed while CSV export is being generated.",
+    "message": "Génération de l'export..."
+  },
+  "components.DownloadBatchOrderSeatsButton.noSeatsOwned": {
+    "description": "Error message displayed when trying to export seats but no seats are owned yet.",
+    "message": "Aucun participant n’a encore pris sa place. L’export sera disponible dès qu’au moins un participant sera inscrit."
   },
   "components.DownloadCertificateButton.download": {
     "description": "Label for the download button of a certificate",

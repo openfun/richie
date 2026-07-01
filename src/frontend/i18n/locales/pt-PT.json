@@ -27,6 +27,18 @@
     "description": "Label for the field asking the company address",
     "message": "Endereço"
   },
+  "batchOrder.agreement.organizationSignedOn": {
+    "description": "Label displayed once the organization has counter-signed the agreement",
+    "message": "Signed by the organization on {date}."
+  },
+  "batchOrder.agreement.title": {
+    "description": "Step label for the agreement document in the batch order detail",
+    "message": "Agreement"
+  },
+  "batchOrder.agreement.waitingOrganization": {
+    "description": "Label displayed when the agreement is waiting for the organization counter-signature",
+    "message": "Waiting for the organization to counter-sign the agreement."
+  },
   "batchOrder.bankTransfer": {
     "description": "Option label for selecting bank transfer payment",
     "message": "Transferência bancária"
@@ -58,6 +70,26 @@
   "batchOrder.email": {
     "description": "Label for the field asking the email address of the contact person",
     "message": "E-mail"
+  },
+  "batchOrder.enrollmentManagement.enrolledParticipants": {
+    "description": "Progress label showing enrolled participants out of total seats",
+    "message": "{seats_owned}/{nb_seats} enrolled participants"
+  },
+  "batchOrder.enrollmentManagement.loadMore": {
+    "description": "Button to load more seats",
+    "message": "Load {count} more"
+  },
+  "batchOrder.enrollmentManagement.noResults": {
+    "description": "Message shown when the student search returns no results",
+    "message": "No student matches your search."
+  },
+  "batchOrder.enrollmentManagement.searchPlaceholder": {
+    "description": "Placeholder for the seat search input (student name or voucher)",
+    "message": "Student name"
+  },
+  "batchOrder.enrollmentManagement.title": {
+    "description": "Title for enrollment management section",
+    "message": "Enrollment"
   },
   "batchOrder.firstName": {
     "description": "Label for the field asking the first name of the contact person",
@@ -197,11 +229,11 @@
   },
   "batchOrder.seats": {
     "description": "Text displayed for seats value in batch order",
-    "message": "Seats"
+    "message": "{nb_seats} seats"
   },
   "batchOrder.seatsCount": {
-    "description": "Text displayed for seats count with pluralization in batch order",
-    "message": "{seats} {seats, plural, one {seat} other {seats}}"
+    "description": "Text displayed for seats count in batch order (owned / total)",
+    "message": "{seats_owned}/{nb_seats} seats"
   },
   "batchOrder.status.assigned": {
     "description": "Status label for an assigned batch order",
@@ -1371,6 +1403,26 @@
     "description": "Accessible label for user menu button",
     "message": "Acesso às suas configurações de perfil"
   },
+  "components.DownloadAgreementButton.download": {
+    "description": "Label for the button to download a signed agreement PDF",
+    "message": "Download agreement"
+  },
+  "components.DownloadAgreementButton.generating": {
+    "description": "Accessible label displayed while agreement PDF is being downloaded.",
+    "message": "Downloading..."
+  },
+  "components.DownloadBatchOrderSeatsButton.download": {
+    "description": "Label for the button to export batch order seats as CSV",
+    "message": "Export CSV"
+  },
+  "components.DownloadBatchOrderSeatsButton.generating": {
+    "description": "Accessible label displayed while CSV export is being generated.",
+    "message": "Generating export..."
+  },
+  "components.DownloadBatchOrderSeatsButton.noSeatsOwned": {
+    "description": "Error message displayed when trying to export seats but no seats are owned yet.",
+    "message": "No participants have claimed their seat yet. The export will be available once at least one participant has enrolled."
+  },
   "components.DownloadCertificateButton.download": {
     "description": "Label for the download button of a certificate",
     "message": "Descarregar"
@@ -2137,7 +2189,7 @@
   },
   "components.SaleTunnelSuccess.successDetailMessage": {
     "description": "Text to explain when the user will be able to start its training.",
-    "message": "Poderá iniciar a sua formação após o pagamento da primeira prestação."
+    "message": "You’ll be able to start your training once the first installment has been paid, or once access opens if no payment is required."
   },
   "components.SaleTunnelSuccess.successMessage": {
     "description": "Message to confirm that order has been created",
@@ -2457,7 +2509,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.course.product.learnerList.label": {
     "description": "Label to display the product's learner list view.",
-    "message": "Alunos"
+    "message": "Buyers"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.generalInformation.label": {
     "description": "Label of the course general information view.",
@@ -2489,7 +2541,7 @@
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.course.product.learnerList.label": {
     "description": "Label to display the organization product's learner list view.",
-    "message": "Alunos"
+    "message": "Buyers"
   },
   "components.TeacherDashboard.TeacherDashboardRoutes.organization.courses.label": {
     "description": "Label of the organization courses view.",
