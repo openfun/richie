@@ -649,6 +649,7 @@ jobs:
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
+    resource_class: large
     working_directory: ~/fun/src/frontend
     steps:
       - *checkout_fun
