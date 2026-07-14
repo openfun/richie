@@ -135,7 +135,7 @@
     "storybook": "10.2.13",
     "tsconfig-paths-webpack-plugin": "4.2.0",
     "typescript": "5.9.3",
-    "uuid": "13.0.0",
+    "uuid": "14.0.0",
     "webpack": "5.104.1",
     "webpack-cli": "6.0.1",
     "whatwg-fetch": "3.6.20",
