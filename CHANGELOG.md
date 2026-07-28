@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add Trivy CVE scan job in CI (report only, non-blocking)
 - Handle aliases in mail regex for b2b sale tunnel
 - Add next_url configuration for OpenEdX Hawthorn login/register redirects
 

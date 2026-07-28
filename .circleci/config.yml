@@ -156,6 +156,39 @@ jobs:
           name: Check built image availability
           command: docker images "richie:${CIRCLE_SHA1}*"
 
+  # ---- Security jobs ----
+  # CVEs (report only, never fails)
+  scan-cve:
+    docker:
+      - image: cimg/base:current
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: default
+      - run:
+          name: Build production image
+          command: docker build -t richie:${CIRCLE_SHA1} --target production .
+      - run:
+          name: Install trivy
+          command: curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
+      - run:
+          name: Scan runtime environment (OS packages) for known CVEs
+          command: |
+            mkdir -p reports/trivy
+            trivy image --vuln-type os --exit-code 0 --format template --template "@.circleci/templates/trivy-cve-report.tpl" -o reports/trivy/env-report.html richie:${CIRCLE_SHA1}
+      - run:
+          name: Scan back-end application dependencies for known CVEs
+          command: trivy image --vuln-type library --exit-code 0 --format template --template "@.circleci/templates/trivy-cve-report.tpl" -o reports/trivy/back-report.html richie:${CIRCLE_SHA1}
+      - run:
+          name: Scan front-end application dependencies for known CVEs
+          command: trivy fs --vuln-type library --exit-code 0 --format template --template "@.circleci/templates/trivy-cve-report.tpl" -o reports/trivy/front-report.html src/frontend
+      - store_artifacts:
+          path: reports/trivy
+
   # ---- Backend jobs ----
   # Build backend development environment
   build-back:
@@ -994,6 +1027,15 @@ workflows:
       #
       # Build images
       - build-docker:
+          filters:
+            tags:
+              only: /.*/
+
+      # Security jobs
+      #
+      # Scan the production docker image for known CVEs (report only, never
+      # blocks the pipeline)
+      - scan-cve:
           filters:
             tags:
               only: /.*/
