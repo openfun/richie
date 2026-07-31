@@ -43,6 +43,38 @@
     "import/extensions": "off",
     "import/no-cycle": ["off"],
     "import/no-dynamic-require": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "test/**",
+          "tests/**",
+          "spec/**",
+          "**/__tests__/**",
+          "**/__mocks__/**",
+          "test.{js,jsx,ts,tsx}",
+          "test-*.{js,jsx,ts,tsx}",
+          "**/*{.,_}{test,spec}.{js,jsx,ts,tsx}",
+          "**/jest.config.{js,ts}",
+          "**/jest.setup.{js,ts}",
+          "**/vue.config.{js,ts}",
+          "**/webpack.config.{js,ts}",
+          "**/webpack.config.*.{js,ts}",
+          "**/rollup.config.{js,ts}",
+          "**/rollup.config.*.{js,ts}",
+          "**/gulpfile.{js,ts}",
+          "**/gulpfile.*.{js,ts}",
+          "**/Gruntfile{,.js,.ts}",
+          "**/protractor.conf.{js,ts}",
+          "**/protractor.conf.*.{js,ts}",
+          "**/karma.conf.{js,ts}",
+          "**/.eslintrc.{js,ts}",
+          "**/*.stories.{js,jsx,ts,tsx}",
+          ".storybook/**"
+        ],
+        "optionalDependencies": false
+      }
+    ],
     "import/order": [
       "error",
       {
