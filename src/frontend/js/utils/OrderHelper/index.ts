@@ -48,6 +48,7 @@ export class OrderHelper {
       [OrderState.NO_PAYMENT]: OrderStatus.NO_PAYMENT,
       [OrderState.PENDING]: OrderStatus.PENDING,
       [OrderState.PENDING_PAYMENT]: OrderStatus.PENDING_PAYMENT,
+      [OrderState.PENDING_WITHDRAW]: OrderStatus.PENDING,
       [OrderState.SIGNING]: OrderStatus.WAITING_SIGNATURE,
       [OrderState.TO_SAVE_PAYMENT_METHOD]: OrderStatus.WAITING_PAYMENT_METHOD,
       [OrderState.TO_SIGN]: OrderStatus.WAITING_SIGNATURE,

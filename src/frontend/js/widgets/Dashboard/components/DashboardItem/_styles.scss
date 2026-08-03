@@ -176,6 +176,7 @@
   &__infos {
     align-items: center;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding: 0.5rem 1rem;
     min-height: 3.75rem;
@@ -200,6 +201,14 @@
 
     p {
       margin: 0;
+    }
+
+    &__withdrawal {
+      align-items: center;
+      display: flex;
+      flex-basis: 100%;
+      justify-content: space-between;
+      padding-top: 0.5rem;
     }
   }
 

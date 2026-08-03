@@ -312,6 +312,7 @@ export enum OrderState {
   NO_PAYMENT = 'no_payment',
   PENDING = 'pending',
   PENDING_PAYMENT = 'pending_payment',
+  PENDING_WITHDRAW = 'pending_withdraw',
   SIGNING = 'signing',
   TO_SAVE_PAYMENT_METHOD = 'to_save_payment_method',
   TO_SIGN = 'to_sign',
@@ -331,6 +332,7 @@ export const ACTIVE_ORDER_STATES = [
   OrderState.NO_PAYMENT,
   OrderState.FAILED_PAYMENT,
   OrderState.COMPLETED,
+  OrderState.PENDING_WITHDRAW,
 ];
 
 export const NOT_CANCELED_ORDER_STATES = [...ACTIVE_ORDER_STATES, ...PURCHASABLE_ORDER_STATES];
@@ -367,6 +369,9 @@ export interface Order {
   payment_schedule?: PaymentSchedule;
   credit_card_id?: CreditCard['id'];
   from_batch_order?: boolean;
+  has_waived_withdrawal_right: boolean;
+  eligible_to_withdraw: boolean;
+  withdrawal_date_limit: Nullable<string>;
 }
 
 export interface CredentialOrder extends Order {
@@ -418,7 +423,14 @@ export interface NestedCredentialOrder extends AbstractNestedOrder {
 
 export type OrderEnrollment = Pick<
   Order,
-  'id' | 'state' | 'product_id' | 'certificate_id' | 'payment_schedule'
+  | 'id'
+  | 'state'
+  | 'product_id'
+  | 'certificate_id'
+  | 'payment_schedule'
+  | 'has_waived_withdrawal_right'
+  | 'eligible_to_withdraw'
+  | 'withdrawal_date_limit'
 >;
 
 export interface NestedCourseOrder {
@@ -838,6 +850,7 @@ interface APIUser {
       payload?: OrderSubmitInstallmentPayment,
     ): Promise<Payment>;
     set_payment_method(payload: OrderSetPaymentMethodPayload): Promise<void>;
+    withdraw(id: Order['id']): Promise<CredentialOrder | CertificateOrder>;
   };
   batchOrders: {
     create(payload: BatchOrder): Promise<BatchOrderRead>;

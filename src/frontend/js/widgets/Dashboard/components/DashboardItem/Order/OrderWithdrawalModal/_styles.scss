@@ -1,0 +1,39 @@
+.order-withdrawal-modal {
+  &__intro,
+  &__description,
+  &__update-account {
+    font-size: var(--c--globals--font--sizes--md);
+  }
+
+  &__update-account__link,
+  &__update-account__link:hover {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  &__product {
+    font-size: var(--c--globals--font--sizes--md);
+    font-weight: var(--c--globals--font--weights--bold);
+  }
+
+  &__section-title {
+    font-size: var(--c--globals--font--sizes--lg);
+    font-weight: var(--c--globals--font--weights--bold);
+  }
+
+  &__details {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 1rem;
+    row-gap: 0.25rem;
+    font-size: var(--c--globals--font--sizes--md);
+
+    dt {
+      font-weight: var(--c--globals--font--weights--bold);
+    }
+
+    dd {
+      margin: 0;
+    }
+  }
+}

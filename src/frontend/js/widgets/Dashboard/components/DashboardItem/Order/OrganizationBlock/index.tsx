@@ -1,10 +1,12 @@
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@openfun/cunningham-react';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { Button, useModal } from '@openfun/cunningham-react';
 import { CredentialOrder, Product } from 'types/Joanie';
 import { AddressView } from 'components/Address';
 import { OrderHelper } from 'utils/OrderHelper';
+import useDateFormat, { DATETIME_FORMAT } from 'hooks/useDateFormat';
 import ContractItem from '../ContractItem';
 import Installment from '../Installment';
+import { OrderWithdrawalModal } from '../OrderWithdrawalModal';
 
 const messages = defineMessages({
   contactDescription: {
@@ -51,6 +53,21 @@ const messages = defineMessages({
     id: 'components.DashboardItemOrder.OrganizationBlock.organizationSubtitleContacts',
     description: 'Subtitle for the organization contacts section',
     defaultMessage: 'Contacts',
+  },
+  withdrawalTitle: {
+    id: 'components.DashboardItemOrder.OrganizationBlock.withdrawalTitle',
+    description: 'Title of the withdrawal block',
+    defaultMessage: 'Withdrawal',
+  },
+  withdrawalDescription: {
+    id: 'components.DashboardItemOrder.OrganizationBlock.withdrawalDescription',
+    description: 'Description of the withdrawal block',
+    defaultMessage: 'You can withdraw from your contract until {date}.',
+  },
+  withdrawalButton: {
+    id: 'components.DashboardItemOrder.OrganizationBlock.withdrawalButton',
+    description: 'Button label of the withdrawal block',
+    defaultMessage: 'Withdraw',
   },
 });
 
@@ -148,7 +165,43 @@ const OrganizationBlock = ({ order, product }: Props) => {
           </div>
         )}
         {!hidePaymentBlock && <Installment order={order} />}
+        {!order.has_waived_withdrawal_right && order.eligible_to_withdraw && (
+          <Withdrawal order={order} product={product} />
+        )}
       </div>
+    </div>
+  );
+};
+
+const Withdrawal = ({ order, product }: Props) => {
+  const intl = useIntl();
+  const formatDate = useDateFormat(DATETIME_FORMAT);
+  const modal = useModal();
+
+  return (
+    <div data-testid="dashboard-item-withdrawal" className="dashboard-splitted-card__item">
+      <div className="dashboard-splitted-card__item__title">
+        <span>
+          <FormattedMessage {...messages.withdrawalTitle} />
+        </span>
+      </div>
+      <p className="dashboard-splitted-card__item__description">
+        <FormattedMessage
+          {...messages.withdrawalDescription}
+          values={{ date: formatDate(order.withdrawal_date_limit) }}
+        />
+      </p>
+      <div className="dashboard-splitted-card__item__actions">
+        <Button size="small" color="brand" variant="secondary" onClick={modal.open}>
+          {intl.formatMessage(messages.withdrawalButton)}
+        </Button>
+      </div>
+      <OrderWithdrawalModal
+        {...modal}
+        order={order}
+        productTitle={product.title}
+        reference={order.course.code}
+      />
     </div>
   );
 };

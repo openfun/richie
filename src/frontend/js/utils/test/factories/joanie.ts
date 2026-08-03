@@ -471,6 +471,9 @@ export const OrderEnrollmentFactory = factory((): OrderEnrollment => {
     product_id: faker.string.uuid(),
     state: OrderState.COMPLETED,
     payment_schedule: PaymentInstallmentFactory().many(1),
+    has_waived_withdrawal_right: false,
+    eligible_to_withdraw: true,
+    withdrawal_date_limit: faker.date.future().toISOString(),
   };
 });
 
@@ -600,6 +603,9 @@ const AbstractOrderFactory = factory((): Order => {
     course: null,
     organization_id: faker.string.uuid(),
     organization: OrganizationFactory().one(),
+    has_waived_withdrawal_right: false,
+    eligible_to_withdraw: true,
+    withdrawal_date_limit: faker.date.future().toISOString(),
   };
 });
 

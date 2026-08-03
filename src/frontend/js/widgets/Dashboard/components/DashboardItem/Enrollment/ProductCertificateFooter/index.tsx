@@ -16,9 +16,10 @@ import { useCertificate } from 'hooks/useCertificates';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
 import { OrderHelper } from 'utils/OrderHelper';
 import { OrderPaymentRetryModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderPaymentRetryModal';
+import { OrderWithdrawalModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderWithdrawalModal';
 import PaymentScheduleHelper from 'utils/PaymentScheduleHelper';
 import { useOrder } from 'hooks/useOrders';
-import useDateFormat from 'hooks/useDateFormat';
+import useDateFormat, { DATETIME_FORMAT } from 'hooks/useDateFormat';
 import CertificateStatus from '../../CertificateStatus';
 
 const messages = defineMessages({
@@ -57,6 +58,22 @@ const messages = defineMessages({
     id: 'components.ProductCertificateFooter.paymentNeededButton',
     description: 'Button label for the payment needed message',
     defaultMessage: 'Pay {amount}',
+  },
+  withdrawalDescription: {
+    id: 'components.ProductCertificateFooter.withdrawalDescription',
+    description: 'Message displayed to offer the withdrawal of the certificate order',
+    defaultMessage:
+      "If you haven't accessed the exam yet, you can exercise your right of withdrawal until {date}.",
+  },
+  withdrawalButton: {
+    id: 'components.ProductCertificateFooter.withdrawalButton',
+    description: 'Button label to open the withdrawal request modal',
+    defaultMessage: 'I wish to withdraw',
+  },
+  pendingWithdrawalMessage: {
+    id: 'components.ProductCertificateFooter.pendingWithdrawalMessage',
+    description: 'Message displayed when a withdrawal request is being processed',
+    defaultMessage: 'Your withdrawal request has been recorded and is being processed.',
   },
 });
 
@@ -104,6 +121,9 @@ const ProductCertificateFooter = ({
           certificateId={order!.certificate_id!}
         />
       )}
+      {isOrderActive && !order!.has_waived_withdrawal_right && order!.eligible_to_withdraw && (
+        <WithdrawalManager order={order!} product={product} enrollment={enrollment} />
+      )}
       <PurchaseButton
         className="dashboard-item__button"
         product={product}
@@ -143,15 +163,30 @@ const OrderCertificateStatus = ({ order, product, hasError }: OrderCertificateSt
   const formatDate = useDateFormat();
   const nextInstallment = PaymentScheduleHelper.getPendingInstallment(order?.payment_schedule);
   const canAccessToExam = ![OrderState.PENDING, OrderState.NO_PAYMENT].includes(order.state);
+  const isPendingWithdrawal = order.state === OrderState.PENDING_WITHDRAW;
+  let statusIcon = IconTypeEnum.CERTIFICATE;
+  if (hasError) {
+    statusIcon = IconTypeEnum.WARNING;
+  } else if (isPendingWithdrawal) {
+    statusIcon = IconTypeEnum.CLOCK;
+  }
 
   return (
     <div className="dashboard-item__block__status">
-      <Icon name={hasError ? IconTypeEnum.WARNING : IconTypeEnum.CERTIFICATE} />
+      <Icon name={statusIcon} />
       <p>
         {hasError && (
           <>
             <strong>
               <FormattedMessage {...messages.failedInstallmentMessage} />
+            </strong>
+            <br />
+          </>
+        )}
+        {isPendingWithdrawal && (
+          <>
+            <strong>
+              <FormattedMessage {...messages.pendingWithdrawalMessage} />
             </strong>
             <br />
           </>
@@ -229,6 +264,44 @@ const FailedInstallmentManager = ({ order, updateOrder }: FailedInstallmentManag
         onClose={orderQuery.methods.invalidate}
       />
     </>
+  );
+};
+
+type WithdrawalManagerProps = {
+  order: OrderEnrollment;
+  product: CertificateProduct;
+  enrollment: Enrollment;
+};
+const WithdrawalManager = ({ order, product, enrollment }: WithdrawalManagerProps) => {
+  const intl = useIntl();
+  const formatDate = useDateFormat(DATETIME_FORMAT);
+  const modal = useModal();
+
+  return (
+    <div className="dashboard-item__course-enrolling__infos__withdrawal">
+      <div className="dashboard-item__block__status">
+        <Icon name={IconTypeEnum.MONEY} />
+        <FormattedMessage
+          {...messages.withdrawalDescription}
+          values={{ date: formatDate(order.withdrawal_date_limit) }}
+        />
+      </div>
+      <Button
+        className="dashboard-item__button"
+        size="small"
+        color="brand"
+        variant="secondary"
+        onClick={modal.open}
+      >
+        {intl.formatMessage(messages.withdrawalButton)}
+      </Button>
+      <OrderWithdrawalModal
+        {...modal}
+        order={order}
+        productTitle={product.title}
+        reference={enrollment.course_run.course.code}
+      />
+    </div>
   );
 };
 
