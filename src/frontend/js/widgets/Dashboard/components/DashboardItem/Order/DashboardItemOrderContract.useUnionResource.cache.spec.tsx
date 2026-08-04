@@ -88,7 +88,6 @@ describe('<DashboardItemOrder/> Contract', () => {
       fetchMock.get(
         'https://joanie.endpoint/api/v1.0/orders/' +
           '?product_type=credential' +
-          '&state_exclude=canceled' +
           '&state_exclude=refunding' +
           '&state_exclude=refunded' +
           '&page=1' +
@@ -267,7 +266,6 @@ describe('<DashboardItemOrder/> Contract', () => {
       fetchMock.get(
         'https://joanie.endpoint/api/v1.0/orders/' +
           '?product_type=credential' +
-          '&state_exclude=canceled' +
           '&state_exclude=refunding' +
           '&state_exclude=refunded' +
           '&page=1' +

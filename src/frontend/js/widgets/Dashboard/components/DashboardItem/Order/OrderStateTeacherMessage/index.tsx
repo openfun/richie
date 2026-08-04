@@ -51,6 +51,17 @@ export const messages = defineMessages<MessageKeys>({
     description: 'Status shown on the dashboard order item when order is canceled',
     defaultMessage: 'Canceled',
   },
+  statusWithdrawn: {
+    id: 'components.DashboardItem.Order.OrderStateTeacherMessage.statusWithdrawn',
+    description: 'Status shown on the dashboard order item when order has been withdrawn',
+    defaultMessage: 'Withdrawn',
+  },
+  statusPendingWithdrawal: {
+    id: 'components.DashboardItem.Order.OrderStateTeacherMessage.statusPendingWithdrawal',
+    description:
+      'Status shown on the dashboard order item when a withdrawal request is being processed',
+    defaultMessage: 'Withdrawal in progress',
+  },
   statusNoPayment: {
     id: 'components.DashboardItem.Order.OrderStateTeacherMessage.statusNoPayment',
     description: 'Status shown on the dashboard order item when order is in no payment state',

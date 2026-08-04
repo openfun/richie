@@ -105,7 +105,6 @@ describe('<DashboardCourses/>', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
-        '&state_exclude=canceled' +
         '&state_exclude=refunding' +
         '&state_exclude=refunded' +
         '&page=1' +
@@ -153,7 +152,6 @@ describe('<DashboardCourses/>', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
-        '&state_exclude=canceled' +
         '&state_exclude=refunding' +
         '&state_exclude=refunded' +
         '&page=1' +
@@ -163,7 +161,6 @@ describe('<DashboardCourses/>', () => {
         next:
           'https://joanie.endpoint/api/v1.0/orders/' +
           '?product_type=credential' +
-          '&state_exclude=canceled' +
           '&state_exclude=refunding' +
           '&state_exclude=refunded' +
           '&page=2' +
@@ -175,7 +172,6 @@ describe('<DashboardCourses/>', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
-        '&state_exclude=canceled' +
         '&state_exclude=refunding' +
         '&state_exclude=refunded' +
         '&page=2' +
@@ -185,7 +181,6 @@ describe('<DashboardCourses/>', () => {
         next:
           'https://joanie.endpoint/api/v1.0/orders/' +
           '?product_type=credential' +
-          '&state_exclude=canceled' +
           '&state_exclude=refunding' +
           '&state_exclude=refunded' +
           '&page=3' +
@@ -197,7 +192,6 @@ describe('<DashboardCourses/>', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
-        '&state_exclude=canceled' +
         '&state_exclude=refunding' +
         '&state_exclude=refunded' +
         '&page=3' +
@@ -277,7 +271,6 @@ describe('<DashboardCourses/>', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
-        '&state_exclude=canceled' +
         '&state_exclude=refunding' +
         '&state_exclude=refunded' +
         '&page=1' +

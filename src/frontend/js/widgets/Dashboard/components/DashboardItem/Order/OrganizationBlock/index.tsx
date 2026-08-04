@@ -1,6 +1,6 @@
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Button, useModal } from '@openfun/cunningham-react';
-import { CredentialOrder, Product } from 'types/Joanie';
+import { CredentialOrder, OrderState, Product } from 'types/Joanie';
 import { AddressView } from 'components/Address';
 import { OrderHelper } from 'utils/OrderHelper';
 import useDateFormat, { DATETIME_FORMAT } from 'hooks/useDateFormat';
@@ -68,6 +68,26 @@ const messages = defineMessages({
     id: 'components.DashboardItemOrder.OrganizationBlock.withdrawalButton',
     description: 'Button label of the withdrawal block',
     defaultMessage: 'Withdraw',
+  },
+  pendingWithdrawalTitle: {
+    id: 'components.DashboardItemOrder.OrganizationBlock.pendingWithdrawalTitle',
+    description: 'Title of the withdrawal block while the request is being processed',
+    defaultMessage: 'Withdrawal in progress',
+  },
+  pendingWithdrawalDescription: {
+    id: 'components.DashboardItemOrder.OrganizationBlock.pendingWithdrawalDescription',
+    description: 'Description shown while a withdrawal request is being processed',
+    defaultMessage: 'Your withdrawal request has been recorded on {date} and is being processed.',
+  },
+  withdrawnTitle: {
+    id: 'components.DashboardItemOrder.OrganizationBlock.withdrawnTitle',
+    description: 'Title of the withdrawal block once the withdrawal is confirmed',
+    defaultMessage: 'Withdrawn',
+  },
+  withdrawnDescription: {
+    id: 'components.DashboardItemOrder.OrganizationBlock.withdrawnDescription',
+    description: 'Description shown once the withdrawal is confirmed',
+    defaultMessage: 'You withdrew from this order on {date}.',
   },
 });
 
@@ -168,6 +188,8 @@ const OrganizationBlock = ({ order, product }: Props) => {
         {!order.has_waived_withdrawal_right && order.eligible_to_withdraw && (
           <Withdrawal order={order} product={product} />
         )}
+        {order.state === OrderState.PENDING_WITHDRAW && <PendingWithdrawalStatus order={order} />}
+        {OrderHelper.isWithdrawn(order) && <WithdrawnStatus order={order} />}
       </div>
     </div>
   );
@@ -192,7 +214,13 @@ const Withdrawal = ({ order, product }: Props) => {
         />
       </p>
       <div className="dashboard-splitted-card__item__actions">
-        <Button size="small" color="brand" variant="secondary" onClick={modal.open}>
+        <Button
+          size="small"
+          color="brand"
+          variant="tertiary"
+          className="dashboard-item-order__withdrawal-button"
+          onClick={modal.open}
+        >
           {intl.formatMessage(messages.withdrawalButton)}
         </Button>
       </div>
@@ -202,6 +230,46 @@ const Withdrawal = ({ order, product }: Props) => {
         productTitle={product.title}
         reference={order.course.code}
       />
+    </div>
+  );
+};
+
+const PendingWithdrawalStatus = ({ order }: { order: CredentialOrder }) => {
+  const formatDate = useDateFormat(DATETIME_FORMAT);
+
+  return (
+    <div data-testid="dashboard-item-pending-withdrawal" className="dashboard-splitted-card__item">
+      <div className="dashboard-splitted-card__item__title">
+        <span>
+          <FormattedMessage {...messages.pendingWithdrawalTitle} />
+        </span>
+      </div>
+      <p className="dashboard-splitted-card__item__description">
+        <FormattedMessage
+          {...messages.pendingWithdrawalDescription}
+          values={{ date: formatDate(order.withdrawn_requested_at) }}
+        />
+      </p>
+    </div>
+  );
+};
+
+const WithdrawnStatus = ({ order }: { order: CredentialOrder }) => {
+  const formatDate = useDateFormat(DATETIME_FORMAT);
+
+  return (
+    <div data-testid="dashboard-item-withdrawn" className="dashboard-splitted-card__item">
+      <div className="dashboard-splitted-card__item__title">
+        <span>
+          <FormattedMessage {...messages.withdrawnTitle} />
+        </span>
+      </div>
+      <p className="dashboard-splitted-card__item__description">
+        <FormattedMessage
+          {...messages.withdrawnDescription}
+          values={{ date: formatDate(order.withdrawn_confirmation_at) }}
+        />
+      </p>
     </div>
   );
 };

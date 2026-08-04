@@ -474,6 +474,8 @@ export const OrderEnrollmentFactory = factory((): OrderEnrollment => {
     has_waived_withdrawal_right: false,
     eligible_to_withdraw: true,
     withdrawal_date_limit: faker.date.future().toISOString(),
+    withdrawn_requested_at: null,
+    withdrawn_confirmation_at: null,
   };
 });
 
@@ -606,6 +608,8 @@ const AbstractOrderFactory = factory((): Order => {
     has_waived_withdrawal_right: false,
     eligible_to_withdraw: true,
     withdrawal_date_limit: faker.date.future().toISOString(),
+    withdrawn_requested_at: null,
+    withdrawn_confirmation_at: null,
   };
 });
 

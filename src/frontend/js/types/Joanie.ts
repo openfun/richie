@@ -372,6 +372,8 @@ export interface Order {
   has_waived_withdrawal_right: boolean;
   eligible_to_withdraw: boolean;
   withdrawal_date_limit: Nullable<string>;
+  withdrawn_requested_at: Nullable<string>;
+  withdrawn_confirmation_at: Nullable<string>;
 }
 
 export interface CredentialOrder extends Order {
@@ -431,6 +433,8 @@ export type OrderEnrollment = Pick<
   | 'has_waived_withdrawal_right'
   | 'eligible_to_withdraw'
   | 'withdrawal_date_limit'
+  | 'withdrawn_requested_at'
+  | 'withdrawn_confirmation_at'
 >;
 
 export interface NestedCourseOrder {

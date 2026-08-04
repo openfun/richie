@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { Enrollment, CredentialOrder, ProductType, CANCELED_ORDER_STATES } from 'types/Joanie';
+import { Enrollment, CredentialOrder, ProductType, OrderState } from 'types/Joanie';
 import { Maybe, Nullable } from 'types/utils';
-import { useOrdersEnrollments } from 'pages/DashboardCourses/useOrdersEnrollments';
+import { OrderHelper } from 'utils/OrderHelper';
+import { isOrder, useOrdersEnrollments } from 'pages/DashboardCourses/useOrdersEnrollments';
+
+/**
+ * Orders canceled following the buyer's withdrawal must stay visible in the dashboard
+ * (the learner needs to keep a trace of that legal action), unlike other cancellation
+ * causes. The API can't filter on that distinction yet, so we only exclude REFUNDING/
+ * REFUNDED server-side and drop the remaining non-withdrawn CANCELED orders here.
+ */
+const isHiddenCanceledOrder = (item: CredentialOrder | Enrollment) =>
+  isOrder(item) && OrderHelper.isCanceled(item) && !OrderHelper.isWithdrawn(item);
 
 const useLearnerCoursesSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,7 +33,7 @@ const useLearnerCoursesSearch = () => {
     query,
     orderFilters: {
       product_type: [ProductType.CREDENTIAL],
-      state_exclude: CANCELED_ORDER_STATES,
+      state_exclude: [OrderState.REFUNDING, OrderState.REFUNDED],
     },
   });
 
@@ -41,7 +51,10 @@ const useLearnerCoursesSearch = () => {
     }
 
     if (isNewSearchLoading || data.length > orderAndEnrollmentList?.length) {
-      setOrderAndEnrollmentList(data as (CredentialOrder | Enrollment)[]);
+      const visibleData = (data as (CredentialOrder | Enrollment)[]).filter(
+        (item) => !isHiddenCanceledOrder(item),
+      );
+      setOrderAndEnrollmentList(visibleData);
       setCount(currentCount);
     }
   }, [data.length, isLoading, isNewSearchLoading, query]);

@@ -7,6 +7,7 @@ import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/Das
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { OrderHelper } from 'utils/OrderHelper';
+import useDateFormat from 'hooks/useDateFormat';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import OrganizationBlock from 'widgets/Dashboard/components/DashboardItem/Order/OrganizationBlock';
 import CertificateItem from 'widgets/Dashboard/components/DashboardItem/Order/CertificateItem';
@@ -50,6 +51,16 @@ const messages = defineMessages({
     defaultMessage:
       'The subscription process cannot be resumed. The related training is no more purchasable.',
   },
+  withdrawalRequestedOn: {
+    id: 'components.DashboardItemOrder.withdrawalRequestedOn',
+    description: 'Date at which the withdrawal request was submitted',
+    defaultMessage: 'Requested on {date}.',
+  },
+  withdrawnOn: {
+    id: 'components.DashboardItemOrder.withdrawnOn',
+    description: 'Date at which the withdrawal was confirmed',
+    defaultMessage: 'On {date}.',
+  },
 });
 
 interface DashboardItemOrderProps {
@@ -67,6 +78,7 @@ export const DashboardItemOrder = ({
 }: DashboardItemOrderProps) => {
   const { course } = order;
   const intl = useIntl();
+  const formatDate = useDateFormat();
   const { item: offering } = useCourseProduct({
     product_id: order.product_id,
     course_id: course.code,
@@ -75,6 +87,14 @@ export const DashboardItemOrder = ({
   const needsSignature = OrderHelper.orderNeedsSignature(order);
   const needsPaymentMethod = order.state === OrderState.TO_SAVE_PAYMENT_METHOD;
   const isActive = OrderHelper.isActive(order);
+  const isWithdrawn = OrderHelper.isWithdrawn(order);
+  const isPendingWithdrawal = order.state === OrderState.PENDING_WITHDRAW;
+  let statusIcon = IconTypeEnum.SCHOOL;
+  if (isPendingWithdrawal) {
+    statusIcon = IconTypeEnum.CLOCK;
+  } else if (isWithdrawn) {
+    statusIcon = IconTypeEnum.ROUND_CLOSE;
+  }
   const isProductPurchasable = ProductHelper.isPurchasable(offering?.product);
   const isNotResumable = !isActive && !isProductPurchasable;
   const canEnroll = OrderHelper.allowEnrollment(order);
@@ -107,8 +127,28 @@ export const DashboardItemOrder = ({
                   </>
                 ) : (
                   <>
-                    <Icon name={IconTypeEnum.SCHOOL} />
-                    <OrderStateLearnerMessage order={order} />
+                    <Icon name={statusIcon} />
+                    <span>
+                      <OrderStateLearnerMessage order={order} />
+                      {isPendingWithdrawal && order.withdrawn_requested_at && (
+                        <>
+                          {' '}
+                          <FormattedMessage
+                            {...messages.withdrawalRequestedOn}
+                            values={{ date: formatDate(order.withdrawn_requested_at) }}
+                          />
+                        </>
+                      )}
+                      {isWithdrawn && order.withdrawn_confirmation_at && (
+                        <>
+                          {' '}
+                          <FormattedMessage
+                            {...messages.withdrawnOn}
+                            values={{ date: formatDate(order.withdrawn_confirmation_at) }}
+                          />
+                        </>
+                      )}
+                    </span>
                   </>
                 )}
               </div>
@@ -170,7 +210,7 @@ export const DashboardItemOrder = ({
           </>
         }
       >
-        {!isNotResumable && (
+        {!isNotResumable && !isWithdrawn && !isPendingWithdrawal && (
           <DashboardSubItemsList
             subItems={order.target_courses?.map((targetCourse) => (
               <DashboardSubItem
