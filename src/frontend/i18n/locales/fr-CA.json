@@ -163,6 +163,10 @@
     "description": "Label displayed for the profession field in batch order form",
     "message": "Profession"
   },
+  "batchOrder.label.seats": {
+    "description": "Label displayed for the seats count field in the batch order participants sub-item",
+    "message": "Seats"
+  },
   "batchOrder.label.siret": {
     "description": "Label displayed for the SIRET field in batch order form",
     "message": "SIRET"
@@ -1414,6 +1418,10 @@
   "components.DownloadBatchOrderSeatsButton.download": {
     "description": "Label for the button to export batch order seats as CSV",
     "message": "Export CSV"
+  },
+  "components.DownloadBatchOrderSeatsButton.filenamePrefix": {
+    "description": "Prefix used to build the filename of the exported batch order seats CSV",
+    "message": "Seats"
   },
   "components.DownloadBatchOrderSeatsButton.generating": {
     "description": "Accessible label displayed while CSV export is being generated.",
