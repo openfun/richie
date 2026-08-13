@@ -17,10 +17,10 @@ const messages = defineMessages({
     description: 'Accessible label displayed while CSV export is being generated.',
     id: 'components.DownloadBatchOrderSeatsButton.generating',
   },
-  seats: {
+  filenamePrefix: {
     defaultMessage: 'Seats',
-    description: 'Text displayed for seats value in batch order',
-    id: 'batchOrder.seats',
+    description: 'Prefix used to build the filename of the exported batch order seats CSV',
+    id: 'components.DownloadBatchOrderSeatsButton.filenamePrefix',
   },
   noSeatsOwned: {
     defaultMessage:
@@ -59,7 +59,7 @@ const DownloadBatchOrderSeatsButton = ({
   const intl = useIntl();
 
   const handleClick = () => {
-    const prefix = intl.formatMessage(messages.seats);
+    const prefix = intl.formatMessage(messages.filenamePrefix);
     download(batchOrderId, buildFilename(prefix, productTitle));
   };
 
