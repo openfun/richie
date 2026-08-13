@@ -32,9 +32,10 @@ const messages = defineMessages({
     description: 'section with details about the person responsible for signing the quote',
     defaultMessage: 'Signatory',
   },
-  seats: {
-    id: 'batchOrder.seats',
-    description: 'Text displayed for seats value in batch order',
+  labelSeats: {
+    id: 'batchOrder.label.seats',
+    description:
+      'Label displayed for the seats count field in the batch order participants sub-item',
     defaultMessage: 'Seats',
   },
   labelName: {
@@ -243,7 +244,7 @@ export const DashboardBatchOrderSubItems = ({ batchOrder }: { batchOrder: BatchO
       footer={
         <div className="content">
           <DashboardItemField
-            label={<FormattedMessage {...messages.seats} />}
+            label={<FormattedMessage {...messages.labelSeats} />}
             value={batchOrder.nb_seats}
           />
         </div>
