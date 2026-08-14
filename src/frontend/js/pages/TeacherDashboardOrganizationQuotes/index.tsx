@@ -218,7 +218,7 @@ const messages = defineMessages({
     description: 'Label for the batch order reference (id)',
   },
   seatsCount: {
-    id: 'batchOrder.seatsCount',
+    id: 'components.OrganizationQuotesTable.batchOrder.seatsCount',
     defaultMessage: '{seats} {seats, plural, one {seat} other {seats}}',
     description: 'Text displayed for seats count with pluralization in batch order',
   },
