@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix crowdin duplication id for organization quotes seats count
+
 ## [3.5.0] - 2026-08-13
 
 ### Added
