@@ -7,6 +7,7 @@ import { DashboardSubItem } from 'widgets/Dashboard/components/DashboardItem/Das
 import { RouterButton } from 'widgets/Dashboard/components/RouterButton';
 import { useCourseProduct } from 'hooks/useCourseProducts';
 import { OrderHelper } from 'utils/OrderHelper';
+import useDateFormat from 'hooks/useDateFormat';
 import { LearnerDashboardPaths } from 'widgets/Dashboard/utils/learnerRoutesPaths';
 import OrganizationBlock from 'widgets/Dashboard/components/DashboardItem/Order/OrganizationBlock';
 import CertificateItem from 'widgets/Dashboard/components/DashboardItem/Order/CertificateItem';
@@ -50,6 +51,11 @@ const messages = defineMessages({
     defaultMessage:
       'The subscription process cannot be resumed. The related training is no more purchasable.',
   },
+  withdrawnOn: {
+    id: 'components.DashboardItemOrder.withdrawnOn',
+    description: 'Date at which the withdrawal was confirmed',
+    defaultMessage: 'On {date}.',
+  },
 });
 
 interface DashboardItemOrderProps {
@@ -67,6 +73,7 @@ export const DashboardItemOrder = ({
 }: DashboardItemOrderProps) => {
   const { course } = order;
   const intl = useIntl();
+  const formatDate = useDateFormat();
   const { item: offering } = useCourseProduct({
     product_id: order.product_id,
     course_id: course.code,
@@ -75,8 +82,10 @@ export const DashboardItemOrder = ({
   const needsSignature = OrderHelper.orderNeedsSignature(order);
   const needsPaymentMethod = order.state === OrderState.TO_SAVE_PAYMENT_METHOD;
   const isActive = OrderHelper.isActive(order);
+  const isWithdrawn = OrderHelper.isWithdrawn(order);
   const isProductPurchasable = ProductHelper.isPurchasable(offering?.product);
   const isNotResumable = !isActive && !isProductPurchasable;
+  const hideResumableContent = isNotResumable || isWithdrawn;
   const canEnroll = OrderHelper.allowEnrollment(order);
   const isFreeFromBatchOrder = OrderHelper.isFreeFromBatchOrder(order);
 
@@ -107,12 +116,23 @@ export const DashboardItemOrder = ({
                   </>
                 ) : (
                   <>
-                    <Icon name={IconTypeEnum.SCHOOL} />
-                    <OrderStateLearnerMessage order={order} />
+                    <Icon name={isWithdrawn ? IconTypeEnum.ROUND_CLOSE : IconTypeEnum.SCHOOL} />
+                    <span>
+                      <OrderStateLearnerMessage order={order} />
+                      {isWithdrawn && order.withdrawn_confirmation_at && (
+                        <>
+                          {' '}
+                          <FormattedMessage
+                            {...messages.withdrawnOn}
+                            values={{ date: formatDate(order.withdrawn_confirmation_at) }}
+                          />
+                        </>
+                      )}
+                    </span>
                   </>
                 )}
               </div>
-              {!isNotResumable && showDetailsButton && !isFreeFromBatchOrder && (
+              {!hideResumableContent && showDetailsButton && !isFreeFromBatchOrder && (
                 <RouterButton
                   size="small"
                   className="dashboard-item__button"
@@ -170,7 +190,7 @@ export const DashboardItemOrder = ({
           </>
         }
       >
-        {!isNotResumable && (
+        {!hideResumableContent && (
           <DashboardSubItemsList
             subItems={order.target_courses?.map((targetCourse) => (
               <DashboardSubItem
@@ -195,15 +215,11 @@ export const DashboardItemOrder = ({
           />
         )}
       </DashboardItem>
-      {!isNotResumable && (
-        <>
-          {showCertificate && !!product?.certificate_definition && (
-            <CertificateItem order={order} product={product} />
-          )}
-          {writable && !isFreeFromBatchOrder && (
-            <OrganizationBlock order={order} product={product} />
-          )}
-        </>
+      {!hideResumableContent && showCertificate && !!product?.certificate_definition && (
+        <CertificateItem order={order} product={product} />
+      )}
+      {!isNotResumable && writable && !isFreeFromBatchOrder && (
+        <OrganizationBlock order={order} product={product} />
       )}
     </div>
   );

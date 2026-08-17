@@ -10,7 +10,7 @@ import {
   CredentialOrderFactory,
 } from 'utils/test/factories/joanie';
 import { createTestQueryClient } from 'utils/test/createTestQueryClient';
-import { CourseLight, Offering, Enrollment, CredentialOrder } from 'types/Joanie';
+import { CourseLight, Offering, Enrollment, CredentialOrder, OrderState } from 'types/Joanie';
 import { expectNoSpinner, expectSpinner } from 'utils/test/expectSpinner';
 import { expectBannerError, expectBannerInfo, expectNoBannerInfo } from 'utils/test/expectBanner';
 import { Deferred } from 'utils/test/deferred';
@@ -105,7 +105,6 @@ describe('<DashboardCourses/>', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
-        '&state_exclude=canceled' +
         '&state_exclude=refunding' +
         '&state_exclude=refunded' +
         '&page=1' +
@@ -153,7 +152,6 @@ describe('<DashboardCourses/>', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
-        '&state_exclude=canceled' +
         '&state_exclude=refunding' +
         '&state_exclude=refunded' +
         '&page=1' +
@@ -163,7 +161,6 @@ describe('<DashboardCourses/>', () => {
         next:
           'https://joanie.endpoint/api/v1.0/orders/' +
           '?product_type=credential' +
-          '&state_exclude=canceled' +
           '&state_exclude=refunding' +
           '&state_exclude=refunded' +
           '&page=2' +
@@ -175,7 +172,6 @@ describe('<DashboardCourses/>', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
-        '&state_exclude=canceled' +
         '&state_exclude=refunding' +
         '&state_exclude=refunded' +
         '&page=2' +
@@ -185,7 +181,6 @@ describe('<DashboardCourses/>', () => {
         next:
           'https://joanie.endpoint/api/v1.0/orders/' +
           '?product_type=credential' +
-          '&state_exclude=canceled' +
           '&state_exclude=refunding' +
           '&state_exclude=refunded' +
           '&page=3' +
@@ -197,7 +192,6 @@ describe('<DashboardCourses/>', () => {
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
-        '&state_exclude=canceled' +
         '&state_exclude=refunding' +
         '&state_exclude=refunded' +
         '&page=3' +
@@ -271,13 +265,51 @@ describe('<DashboardCourses/>', () => {
     expect(loadMoreButton).toBeEnabled();
   }, 15000);
 
+  it('keeps a withdrawn order visible while filtering out other canceled orders', async () => {
+    const activeOrder = CredentialOrderFactory({
+      state: OrderState.COMPLETED,
+      created_on: '2026-01-03T00:00:00.000Z',
+    }).one();
+    const withdrawnOrder = CredentialOrderFactory({
+      state: OrderState.CANCELED,
+      created_on: '2026-01-02T00:00:00.000Z',
+      withdrawn_confirmation_at: '2026-01-02T00:00:00.000Z',
+    }).one();
+    const canceledOrder = CredentialOrderFactory({
+      state: OrderState.CANCELED,
+      created_on: '2026-01-01T00:00:00.000Z',
+      withdrawn_confirmation_at: null,
+    }).one();
+    const { orders, offerings } = mockOrders([activeOrder, withdrawnOrder, canceledOrder]);
+
+    fetchMock.get(
+      'https://joanie.endpoint/api/v1.0/orders/' +
+        '?product_type=credential' +
+        '&state_exclude=refunding' +
+        '&state_exclude=refunded' +
+        '&page=1' +
+        `&page_size=${perPage}`,
+      { results: orders, next: null, previous: null, count: orders.length },
+    );
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/enrollments/?was_created_by_order=false&is_active=true&page=1&page_size=${perPage}`,
+      { results: [], next: null, previous: null, count: 0 },
+    );
+
+    render(<DashboardTest initialRoute={LearnerDashboardPaths.COURSES} />, {
+      wrapper: BaseJoanieAppWrapper,
+    });
+
+    await expectNoSpinner('Loading orders and enrollments...');
+    await waitFor(() => expectList([activeOrder, withdrawnOrder], offerings));
+  });
+
   it('shows an error', async () => {
     jest.spyOn(console, 'error').mockImplementation(noop);
     const ordersDeferred = new Deferred();
     fetchMock.get(
       'https://joanie.endpoint/api/v1.0/orders/' +
         '?product_type=credential' +
-        '&state_exclude=canceled' +
         '&state_exclude=refunding' +
         '&state_exclude=refunded' +
         '&page=1' +
