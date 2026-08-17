@@ -84,6 +84,7 @@ describe('useProductOrder', () => {
       `&state=${OrderState.NO_PAYMENT}` +
       `&state=${OrderState.FAILED_PAYMENT}` +
       `&state=${OrderState.COMPLETED}` +
+      `&state=${OrderState.PENDING_WITHDRAW}` +
       `&state=${OrderState.DRAFT}` +
       `&state=${OrderState.ASSIGNED}` +
       `&state=${OrderState.TO_SIGN}` +

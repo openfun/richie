@@ -71,6 +71,17 @@ export const messages = defineMessages<MessageKeys>({
     description: 'Status shown on the dashboard order item when order is refunded',
     defaultMessage: 'Refunded',
   },
+  statusPendingWithdrawal: {
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusPendingWithdrawal',
+    description:
+      'Status shown on the dashboard order item when a withdrawal request is being processed',
+    defaultMessage: 'Withdrawal in progress',
+  },
+  statusWithdrawn: {
+    id: 'components.DashboardItem.Order.OrderStateLearnerMessage.statusWithdrawn',
+    description: 'Status shown on the dashboard order item when order has been withdrawn',
+    defaultMessage: 'Withdrawn',
+  },
 });
 
 const OrderStateLearnerMessage = (props: OrderStateMessageBaseProps) => {

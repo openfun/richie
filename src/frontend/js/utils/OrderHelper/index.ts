@@ -20,9 +20,11 @@ export enum OrderStatus {
   PASSED = 'passed',
   PENDING = 'pending',
   PENDING_PAYMENT = 'pending_payment',
+  PENDING_WITHDRAWAL = 'pending_withdrawal',
   WAITING_COUNTER_SIGNATURE = 'waiting_counter_signature',
   WAITING_PAYMENT_METHOD = 'waiting_payment_method',
   WAITING_SIGNATURE = 'waiting_signature',
+  WITHDRAWN = 'withdrawn',
 }
 
 /**
@@ -36,6 +38,9 @@ export class OrderHelper {
     if (order.state === OrderState.COMPLETED && order.certificate_id) {
       return OrderStatus.PASSED;
     }
+    if (OrderHelper.isWithdrawn(order)) {
+      return OrderStatus.WITHDRAWN;
+    }
 
     const orderStatusMap = {
       [OrderState.ASSIGNED]: OrderStatus.ASSIGNED,
@@ -48,6 +53,7 @@ export class OrderHelper {
       [OrderState.NO_PAYMENT]: OrderStatus.NO_PAYMENT,
       [OrderState.PENDING]: OrderStatus.PENDING,
       [OrderState.PENDING_PAYMENT]: OrderStatus.PENDING_PAYMENT,
+      [OrderState.PENDING_WITHDRAW]: OrderStatus.PENDING_WITHDRAWAL,
       [OrderState.SIGNING]: OrderStatus.WAITING_SIGNATURE,
       [OrderState.TO_SAVE_PAYMENT_METHOD]: OrderStatus.WAITING_PAYMENT_METHOD,
       [OrderState.TO_SIGN]: OrderStatus.WAITING_SIGNATURE,
@@ -65,7 +71,8 @@ export class OrderHelper {
    */
   static getActiveEnrollmentOrder(orders: OrderEnrollment[], productId: string) {
     const filter = (order: OrderEnrollment) =>
-      ACTIVE_ORDER_STATES.includes(order.state) && order.product_id === productId;
+      (ACTIVE_ORDER_STATES.includes(order.state) || OrderHelper.isWithdrawn(order)) &&
+      order.product_id === productId;
     return orders.find(filter);
   }
 
@@ -100,8 +107,13 @@ export class OrderHelper {
     return CANCELED_ORDER_STATES.includes(order.state);
   }
 
+  static isWithdrawn(order?: Order | NestedCourseOrder | OrderEnrollment) {
+    if (!order) return false;
+    return Boolean('withdrawn_confirmation_at' in order && order.withdrawn_confirmation_at);
+  }
+
   static isPurchasable(order?: Order | NestedCourseOrder | OrderEnrollment) {
-    if (!order) return true;
+    if (!order || OrderHelper.isWithdrawn(order)) return true;
     return PURCHASABLE_ORDER_STATES.includes(order.state);
   }
 
