@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Withdrawing feature for certificate and credential orders
+
 ## [3.5.1] - 2026-08-18
 
 ### Fixed

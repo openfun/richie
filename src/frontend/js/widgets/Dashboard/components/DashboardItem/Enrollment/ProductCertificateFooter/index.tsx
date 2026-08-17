@@ -16,9 +16,10 @@ import { useCertificate } from 'hooks/useCertificates';
 import { isOpenedCourseRunCertificate } from 'utils/CourseRuns';
 import { OrderHelper } from 'utils/OrderHelper';
 import { OrderPaymentRetryModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderPaymentRetryModal';
+import { OrderWithdrawalModal } from 'widgets/Dashboard/components/DashboardItem/Order/OrderWithdrawalModal';
 import PaymentScheduleHelper from 'utils/PaymentScheduleHelper';
 import { useOrder } from 'hooks/useOrders';
-import useDateFormat from 'hooks/useDateFormat';
+import useDateFormat, { DATETIME_FORMAT } from 'hooks/useDateFormat';
 import CertificateStatus from '../../CertificateStatus';
 
 const messages = defineMessages({
@@ -58,6 +59,27 @@ const messages = defineMessages({
     description: 'Button label for the payment needed message',
     defaultMessage: 'Pay {amount}',
   },
+  withdrawalDescription: {
+    id: 'components.ProductCertificateFooter.withdrawalDescription',
+    description: 'Message displayed to offer the withdrawal of the certificate order',
+    defaultMessage:
+      "If you haven't accessed the exam yet, you can exercise your right of withdrawal until {date}.",
+  },
+  withdrawalButton: {
+    id: 'components.ProductCertificateFooter.withdrawalButton',
+    description: 'Button label to open the withdrawal request modal',
+    defaultMessage: 'I wish to withdraw',
+  },
+  pendingWithdrawalMessage: {
+    id: 'components.ProductCertificateFooter.pendingWithdrawalMessage',
+    description: 'Message displayed when a withdrawal request is being processed',
+    defaultMessage: 'Your withdrawal request has been recorded on {date} and is being processed.',
+  },
+  withdrawnMessage: {
+    id: 'components.ProductCertificateFooter.withdrawnMessage',
+    description: 'Message displayed once a withdrawal request has been confirmed',
+    defaultMessage: 'You withdrew from this order on {date}.',
+  },
 });
 
 export interface ProductCertificateFooterProps {
@@ -75,6 +97,8 @@ const ProductCertificateFooter = ({
     OrderHelper.getActiveEnrollmentOrder(enrollment.orders || [], product.id),
   );
   const isOrderActive = OrderHelper.isActive(order);
+  const isOrderWithdrawn = OrderHelper.isWithdrawn(order);
+  const isOrderVisible = isOrderActive || isOrderWithdrawn;
   const isPurchasable =
     OrderHelper.isPurchasable(order) && isOpenedCourseRunCertificate(enrollment.course_run.state);
   const isCertificateIssued = isOrderActive && Boolean(order!.certificate_id);
@@ -92,36 +116,46 @@ const ProductCertificateFooter = ({
   }
 
   return (
-    <div className="dashboard-item__course-enrolling__infos">
-      {!isOrderActive ? (
-        <ProductCertificateStatus />
-      ) : (
-        <OrderCertificateStatus order={order!} product={product} hasError={hasError} />
-      )}
-      {isCertificateIssued && (
-        <DownloadCertificateButton
+    <>
+      <div className="dashboard-item__course-enrolling__infos">
+        {!isOrderVisible ? (
+          <ProductCertificateStatus />
+        ) : (
+          <OrderCertificateStatus order={order!} product={product} hasError={hasError} />
+        )}
+        {isCertificateIssued && (
+          <DownloadCertificateButton
+            className="dashboard-item__button"
+            certificateId={order!.certificate_id!}
+          />
+        )}
+        <PurchaseButton
           className="dashboard-item__button"
-          certificateId={order!.certificate_id!}
+          product={product}
+          enrollment={enrollment}
+          isWithdrawable={isWithdrawable}
+          buttonProps={{ size: 'small' }}
+          disabled={!isPurchasable}
+          onFinish={(o) => {
+            /**
+             * As we do not refetch enrollments in DashboardCourses after SaleTunnel cache invalidation (to avoid
+             * scroll reset - and SaleTunnel modal unmounting too early caused by list reset) we need to manually
+             * update the active order in the enrollment in order to hide the buy button and display the download button.
+             */
+            setOrder(o);
+          }}
+        />
+        {hasError && <FailedInstallmentManager order={order!} updateOrder={setOrder} />}
+      </div>
+      {isOrderActive && order!.eligible_to_withdraw && (
+        <WithdrawalManager
+          order={order!}
+          product={product}
+          enrollment={enrollment}
+          updateOrder={setOrder}
         />
       )}
-      <PurchaseButton
-        className="dashboard-item__button"
-        product={product}
-        enrollment={enrollment}
-        isWithdrawable={isWithdrawable}
-        buttonProps={{ size: 'small' }}
-        disabled={!isPurchasable}
-        onFinish={(o) => {
-          /**
-           * As we do not refetch enrollments in DashboardCourses after SaleTunnel cache invalidation (to avoid
-           * scroll reset - and SaleTunnel modal unmounting too early caused by list reset) we need to manually
-           * update the active order in the enrollment in order to hide the buy button and display the download button.
-           */
-          setOrder(o);
-        }}
-      />
-      {hasError && <FailedInstallmentManager order={order!} updateOrder={setOrder} />}
-    </div>
+    </>
   );
 };
 
@@ -143,10 +177,20 @@ const OrderCertificateStatus = ({ order, product, hasError }: OrderCertificateSt
   const formatDate = useDateFormat();
   const nextInstallment = PaymentScheduleHelper.getPendingInstallment(order?.payment_schedule);
   const canAccessToExam = ![OrderState.PENDING, OrderState.NO_PAYMENT].includes(order.state);
+  const isPendingWithdrawal = order.state === OrderState.PENDING_WITHDRAW;
+  const isWithdrawn = OrderHelper.isWithdrawn(order);
+  let statusIcon = IconTypeEnum.CERTIFICATE;
+  if (hasError) {
+    statusIcon = IconTypeEnum.WARNING;
+  } else if (isPendingWithdrawal) {
+    statusIcon = IconTypeEnum.CLOCK;
+  } else if (isWithdrawn) {
+    statusIcon = IconTypeEnum.ROUND_CLOSE;
+  }
 
   return (
     <div className="dashboard-item__block__status">
-      <Icon name={hasError ? IconTypeEnum.WARNING : IconTypeEnum.CERTIFICATE} />
+      <Icon name={statusIcon} />
       <p>
         {hasError && (
           <>
@@ -156,12 +200,30 @@ const OrderCertificateStatus = ({ order, product, hasError }: OrderCertificateSt
             <br />
           </>
         )}
-        {canAccessToExam ? (
+        {isPendingWithdrawal && (
+          <>
+            <strong>
+              <FormattedMessage
+                {...messages.pendingWithdrawalMessage}
+                values={{ date: formatDate(order.withdrawn_requested_at) }}
+              />
+            </strong>
+            <br />
+          </>
+        )}
+        {isWithdrawn && (
+          <FormattedMessage
+            {...messages.withdrawnMessage}
+            values={{ date: formatDate(order.withdrawn_confirmation_at) }}
+          />
+        )}
+        {!isWithdrawn && !isPendingWithdrawal && canAccessToExam && (
           <>
             {product.certificate_definition.title + '. '}
             <CertificateStatus certificate={certificate} productType={product.type} />
           </>
-        ) : (
+        )}
+        {!isWithdrawn && !isPendingWithdrawal && !canAccessToExam && (
           <FormattedMessage {...messages.examAccessBlocked} />
         )}
         {!hasError && nextInstallment && (
@@ -229,6 +291,46 @@ const FailedInstallmentManager = ({ order, updateOrder }: FailedInstallmentManag
         onClose={orderQuery.methods.invalidate}
       />
     </>
+  );
+};
+
+type WithdrawalManagerProps = {
+  order: OrderEnrollment;
+  product: CertificateProduct;
+  enrollment: Enrollment;
+  updateOrder: (order: Order) => void;
+};
+const WithdrawalManager = ({ order, product, enrollment, updateOrder }: WithdrawalManagerProps) => {
+  const intl = useIntl();
+  const formatDate = useDateFormat(DATETIME_FORMAT);
+  const modal = useModal();
+
+  return (
+    <div className="dashboard-item__course-enrolling__infos">
+      <div className="dashboard-item__block__status">
+        <Icon name={IconTypeEnum.MONEY} />
+        <FormattedMessage
+          {...messages.withdrawalDescription}
+          values={{ date: formatDate(order.withdrawal_date_limit) }}
+        />
+      </div>
+      <Button
+        className="dashboard-item__course-enrolling__infos__withdrawal__button"
+        size="small"
+        color="brand"
+        variant="tertiary"
+        onClick={modal.open}
+      >
+        {intl.formatMessage(messages.withdrawalButton)}
+      </Button>
+      <OrderWithdrawalModal
+        {...modal}
+        order={order}
+        productTitle={product.title}
+        reference={enrollment.course_run.course.code}
+        onSuccess={updateOrder}
+      />
+    </div>
   );
 };
 
