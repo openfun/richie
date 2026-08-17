@@ -19,10 +19,12 @@ export type MessageKeys =
   | 'statusPassed'
   | 'statusPending'
   | 'statusPendingPayment'
+  | 'statusPendingWithdrawal'
   | 'statusRefunded'
   | 'statusWaitingCounterSignature'
   | 'statusWaitingPaymentMethod'
-  | 'statusWaitingSignature';
+  | 'statusWaitingSignature'
+  | 'statusWithdrawn';
 
 interface OrderStateMessageProps extends OrderStateMessageBaseProps {
   messages: Record<MessageKeys, MessageDescriptor>;
@@ -45,10 +47,12 @@ const OrderStateMessage = ({ order, messages }: OrderStateMessageProps) => {
     [OrderStatus.PASSED]: messages.statusPassed,
     [OrderStatus.PENDING]: messages.statusPending,
     [OrderStatus.PENDING_PAYMENT]: messages.statusPendingPayment,
+    [OrderStatus.PENDING_WITHDRAWAL]: messages.statusPendingWithdrawal,
     [OrderStatus.REFUNDED]: messages.statusRefunded,
     [OrderStatus.WAITING_COUNTER_SIGNATURE]: messages.statusWaitingCounterSignature,
     [OrderStatus.WAITING_PAYMENT_METHOD]: messages.statusWaitingPaymentMethod,
     [OrderStatus.WAITING_SIGNATURE]: messages.statusWaitingSignature,
+    [OrderStatus.WITHDRAWN]: messages.statusWithdrawn,
   };
   const status = OrderHelper.getState(order);
 

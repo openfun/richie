@@ -552,7 +552,7 @@ describe.each([
       enrollmentDiscounted.offerings[0].product = product;
       fetchMock
         .get(
-          `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollmentDiscounted.id}&product_id=${product.id}&state=pending&state=pending_payment&state=no_payment&state=failed_payment&state=completed&state=draft&state=assigned&state=to_sign&state=signing&state=to_save_payment_method`,
+          `https://joanie.endpoint/api/v1.0/orders/?enrollment_id=${enrollmentDiscounted.id}&product_id=${product.id}&state=pending&state=pending_payment&state=no_payment&state=failed_payment&state=completed&state=pending_withdraw&state=draft&state=assigned&state=to_sign&state=signing&state=to_save_payment_method`,
           {
             results: [],
             next: null,

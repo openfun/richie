@@ -19,6 +19,7 @@ describe('<OrderStateLearnerMessage/>', () => {
     [OrderState.NO_PAYMENT, 'First direct debit has failed'],
     [OrderState.PENDING, 'Pending for the first direct debit'],
     [OrderState.PENDING_PAYMENT, 'On going'],
+    [OrderState.PENDING_WITHDRAW, 'Withdrawal in progress'],
     [OrderState.SIGNING, 'Signature required'],
     [OrderState.TO_SAVE_PAYMENT_METHOD, 'Payment method is missing'],
     [OrderState.TO_SIGN, 'Signature required'],
@@ -28,6 +29,17 @@ describe('<OrderStateLearnerMessage/>', () => {
       wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
     });
     expect(screen.getByText(expectedMessage)).toBeInTheDocument();
+  });
+
+  it('should display message for a withdrawn order', () => {
+    const order = CredentialOrderFactory({
+      state: OrderState.CANCELED,
+      withdrawn_confirmation_at: new Date().toISOString(),
+    }).one();
+    render(<OrderStateLearnerMessage order={order} />, {
+      wrapper: ({ children }: PropsWithChildren) => <IntlWrapper>{children}</IntlWrapper>,
+    });
+    expect(screen.getByText('Withdrawn')).toBeInTheDocument();
   });
 
   it('should display message for completed order that have a generated certificate', () => {
