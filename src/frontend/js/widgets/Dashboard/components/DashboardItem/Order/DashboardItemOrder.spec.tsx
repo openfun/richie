@@ -195,6 +195,28 @@ describe('<DashboardItemOrder/>', () => {
     });
   });
 
+  it('renders a withdrawn order without its active-course content', async () => {
+    const order: CredentialOrder = CredentialOrderFactory({
+      state: OrderState.CANCELED,
+      withdrawn_confirmation_at: '2026-01-15T10:00:00.000Z',
+    }).one();
+    const { product } = mockCourseProductWithOrder(order);
+
+    render(<DashboardItemOrder order={order} />);
+
+    await screen.findByRole('heading', { level: 5, name: product.title });
+    const withdrawnOnDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
+      new Date(order.withdrawn_confirmation_at!),
+    );
+    await screen.findByText(`Withdrawn On ${withdrawnOnDate}.`, { exact: false });
+    expect(screen.queryByRole('link', { name: 'View details' })).not.toBeInTheDocument();
+    order.target_courses.forEach((course) => {
+      expect(
+        screen.queryByRole('heading', { level: 6, name: course.title }),
+      ).not.toBeInTheDocument();
+    });
+  });
+
   it('renders a non-writable order with enrolled target course ', async () => {
     const order: CredentialOrder = CredentialOrderFactory({
       target_courses: TargetCourseFactory().many(1),
