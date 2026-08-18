@@ -1,7 +1,7 @@
 {
   "16uca+": {
     "description": "",
-    "message": "Sub \"{value}\""
+    "message": "Sous \"{value}\""
   },
   "9vqPaF": {
     "description": "",
@@ -1586,6 +1586,10 @@
   "components.OpenEdxFullNameForm.submitButtonLabel": {
     "description": "Label of the submit button on openEdx full name form",
     "message": "Sauvegarder"
+  },
+  "components.OrganizationQuotesTable.batchOrder.seatsCount": {
+    "description": "Text displayed for seats count with pluralization in batch order",
+    "message": "{seats} {seats, plural, one {place} other {places}}"
   },
   "components.OrganizationQuotesTable.batchOrderId": {
     "description": "Label for the batch order reference (id)",

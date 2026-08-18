@@ -1587,6 +1587,10 @@
     "description": "Label of the submit button on openEdx full name form",
     "message": "Submit"
   },
+  "components.OrganizationQuotesTable.batchOrder.seatsCount": {
+    "description": "Text displayed for seats count with pluralization in batch order",
+    "message": "{seats} {seats, plural, one {seat} other {seats}}"
+  },
   "components.OrganizationQuotesTable.batchOrderId": {
     "description": "Label for the batch order reference (id)",
     "message": "Batch order id: {id}"
