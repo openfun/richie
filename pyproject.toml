@@ -40,6 +40,7 @@ dependencies = [
     "djangorestframework<4",
     "django-autocomplete-light<4",
     "django-cms>=3.11.0,<4.0.0",
+    "django-formtools>=2.1,<2.6",
     "django-parler>=2.3,<3",
     "django-redis>=4.11.0,<6",
     "django-treebeard<5",
