@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix crowdin duplication id for organization quotes seats count
+- Pin django-form-tools python lib to avoid regression
 
 ## [3.5.0] - 2026-08-13
 
