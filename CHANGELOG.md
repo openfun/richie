@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.5.1] - 2026-08-18
+
 ### Fixed
 
 - Fix crowdin duplication id for organization quotes seats count
@@ -2459,7 +2461,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v3.5.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v3.5.1...master
+[3.5.1]: https://github.com/openfun/richie/compare/v3.5.0...v3.5.1
 [3.5.0]: https://github.com/openfun/richie/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/openfun/richie/compare/v3.4.0...v3.3.1
 [3.3.1]: https://github.com/openfun/richie/compare/v3.3.0...v3.3.1
