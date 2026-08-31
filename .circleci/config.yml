@@ -687,7 +687,8 @@ jobs:
           command: |
             yarn init -y
             cp ~/fun/src/frontend/yarn.lock .
-            yarn add webpack webpack-cli babel-loader source-map-loader file-loader ~/fun/src/frontend
+            # webpack is pinned to match src/frontend/package.json
+            yarn add webpack@5.109.2 webpack-cli babel-loader source-map-loader file-loader ~/fun/src/frontend
             echo '{"extends": "./node_modules/richie-education/tsconfig.json", "include": ["./**/*"]}' > tsconfig.json
       - run:
           name: Create an overridden React component
