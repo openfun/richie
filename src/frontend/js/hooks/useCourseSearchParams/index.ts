@@ -38,10 +38,7 @@ interface QueryAction {
 }
 
 type CourseSearchParamsReducerAction =
-  | FilterResetAction
-  | FilterSingleAction
-  | PageChangeAction
-  | QueryAction;
+  FilterResetAction | FilterSingleAction | PageChangeAction | QueryAction;
 
 type CourseSearchParamsState = {
   courseSearchParams: APIListRequestParams;
