@@ -132,7 +132,7 @@
     "typescript": "5.9.3",
     "uuid": "13.0.0",
     "webpack": "5.109.2",
-    "webpack-cli": "6.0.1",
+    "webpack-cli": "7.2.2",
     "whatwg-fetch": "3.6.20",
     "xhr-mock": "2.5.1",
     "yargs": "18.1.0",
