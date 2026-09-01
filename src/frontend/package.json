@@ -154,10 +154,10 @@
   },
   "devDependencies": {
     "@storybook/addon-webpack5-compiler-swc": "4.0.3",
-    "@storybook/addon-links": "10.2.13",
-    "@storybook/react": "10.2.13",
-    "@storybook/react-webpack5": "10.2.13",
-    "eslint-plugin-storybook": "10.2.13",
-    "storybook": "10.2.13"
+    "@storybook/addon-links": "10.5.10",
+    "@storybook/react": "10.5.10",
+    "@storybook/react-webpack5": "10.5.10",
+    "eslint-plugin-storybook": "10.5.10",
+    "storybook": "10.5.10"
   }
 }
