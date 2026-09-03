@@ -32,7 +32,10 @@ jest.mock('@openfun/cunningham-react', () => ({
 describe('<OrderWithdrawalModal/>', () => {
   setupJoanieSession();
   const user = UserFactory().one();
-  const renderModal = (props: Partial<React.ComponentProps<typeof OrderWithdrawalModal>>) =>
+  const renderModal = (
+    props: Partial<React.ComponentProps<typeof OrderWithdrawalModal>>,
+    sessionUser = user,
+  ) =>
     render(
       <OrderWithdrawalModal
         isOpen
@@ -42,7 +45,7 @@ describe('<OrderWithdrawalModal/>', () => {
         reference="COURSE-CODE"
         {...props}
       />,
-      { queryOptions: { client: createTestQueryClient({ user }) } },
+      { queryOptions: { client: createTestQueryClient({ user: sessionUser }) } },
     );
 
   it('should display order and user information, without the account update link for a non-keycloak backend', () => {
@@ -53,8 +56,11 @@ describe('<OrderWithdrawalModal/>', () => {
     expect(
       screen.getByText('You wish to cancel your subscription to', { exact: false }),
     ).toBeInTheDocument();
+    expect(screen.getByText('Account name')).toBeInTheDocument();
     expect(screen.getByText(user.full_name!)).toBeInTheDocument();
+    expect(screen.getByText('Account email')).toBeInTheDocument();
     expect(screen.getByText(user.email!)).toBeInTheDocument();
+    expect(screen.getByText('Order reference')).toBeInTheDocument();
     expect(screen.getByText(order.id)).toBeInTheDocument();
     expect(
       screen.queryByRole('link', { name: 'please update your account' }),
