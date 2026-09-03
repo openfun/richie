@@ -8,7 +8,24 @@ import { OpenEdxApiProfile } from 'types/openEdx';
 import { checkStatus } from 'api/utils';
 import { OpenEdxFullNameFormValues } from 'components/OpenEdxFullNameForm';
 import { location } from 'utils/indirection/window';
+import { base64Decode } from 'utils/base64Parser';
+import { Maybe } from 'types/utils';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
+
+/**
+ * Extract claims from the JWT issued by Fonzie. The `user/me` route does not expose
+ * the email nor an up to date full name, but the token it returns always carries them.
+ */
+const getTokenClaims = (token: Maybe<string>): Maybe<{ email?: string; full_name?: string }> => {
+  if (!token) return undefined;
+
+  try {
+    const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(base64Decode(payload));
+  } catch {
+    return undefined;
+  }
+};
 
 /**
  *
@@ -46,27 +63,13 @@ const API = (APIConf: AuthenticationBackend): APILms => {
       me: async () => {
         const user = await ApiInterface.user.me();
         if (!user) return null;
-        try {
-          const keycloakAccount = await fetch(APIOptions.routes.user.account, {
-            credentials: 'include',
-            headers: {
-              Accept: 'application/json',
-              Authorization: `Bearer ${user.access_token}`,
-            },
-          }).then((res) => {
-            if (!res.ok) throw new Error(`Keycloak account fetch failed: ${res.status}`);
-            return res.json();
-          });
-          return {
-            ...user,
-            full_name:
-              [keycloakAccount.firstName, keycloakAccount.lastName].filter(Boolean).join(' ') ||
-              user.full_name,
-            email: keycloakAccount.email || user.email,
-          };
-        } catch {
-          return user;
-        }
+
+        const claims = getTokenClaims(user.access_token);
+        return {
+          ...user,
+          full_name: user.full_name || claims?.full_name,
+          email: user.email ?? claims?.email,
+        };
       },
       login: () => {
         const next = encodeURIComponent(location.href);
