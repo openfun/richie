@@ -706,6 +706,36 @@ describe.each([
     screen.getByTestId('walkthrough-banner');
   });
 
+  it('should render the account name and email from the OpenEdx profile', async () => {
+    const product = ProductFactory().one();
+    const paymentPlan = PaymentPlanFactory().one();
+    fetchMock
+      .get(
+        `https://joanie.endpoint/api/v1.0/orders/?${queryString.stringify(getFetchOrderQueryParams(product))}`,
+        [],
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/payment-plan/`,
+        paymentPlan,
+      )
+      .get(
+        `https://joanie.endpoint/api/v1.0/courses/${course.code}/products/${product.id}/deep-link/`,
+        {},
+      );
+
+    render(<Wrapper product={product} isWithdrawable={true} paymentPlan={paymentPlan} />, {
+      queryOptions: { client: createTestQueryClient({ user: richieUser }) },
+    });
+
+    screen.getByRole('heading', { level: 4, name: 'Account email' });
+
+    await screen.findByText(openApiEdxProfile.email);
+
+    screen.getByText(
+      'This email will be used to send you confirmation mails, it is the one you created your account with.',
+    );
+  });
+
   it('should show a checkbox to waive withdrawal right if the product is not withdrawable', async () => {
     const product = ProductFactory().one();
     const paymentPlan = PaymentPlanFactory().one();
