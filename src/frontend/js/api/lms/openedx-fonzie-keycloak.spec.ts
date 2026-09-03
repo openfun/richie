@@ -31,19 +31,16 @@ describe('Fonzie Keycloak API', () => {
     jest.clearAllMocks();
   });
 
-  it('uses its own route to get user information and enriches with keycloak account', async () => {
+  it('reads the email and full name from the access token claims', async () => {
+    // JWT payload: { email: 'john.doe@example.com', full_name: 'John Doe' }
+    const accessToken =
+      'header.eyJlbWFpbCI6ImpvaG4uZG9lQGV4YW1wbGUuY29tIiwiZnVsbF9uYW1lIjoiSm9obiBEb2UifQ.signature';
     const user = {
       username: 'test-richie-ncl',
-      full_name: 'n c',
-    };
-    const keycloakAccount = {
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@example.com',
+      access_token: accessToken,
     };
 
     fetchMock.get('https://demo.endpoint.api/api/v1.0/user/me', user);
-    fetchMock.get('https://keycloak.test/auth/realms/richie-realm/account/', keycloakAccount);
 
     const api = FonzieKeycloakAPIInterface(configuration);
     await expect(api.user.me()).resolves.toEqual({
@@ -53,14 +50,14 @@ describe('Fonzie Keycloak API', () => {
     });
   });
 
-  it('falls back to fonzie data when keycloak account call fails', async () => {
+  it('does not fail when the access token has no usable claims', async () => {
     const user = {
       username: 'test-richie-ncl',
       full_name: 'n c',
+      access_token: 'not-a-jwt',
     };
 
     fetchMock.get('https://demo.endpoint.api/api/v1.0/user/me', user);
-    fetchMock.get('https://keycloak.test/auth/realms/richie-realm/account/', 500);
 
     const api = FonzieKeycloakAPIInterface(configuration);
     await expect(api.user.me()).resolves.toEqual(user);

@@ -65,6 +65,7 @@ function getUserInfo(username: DevDemoUser): User {
     access_token: accessToken,
     username: JWTPayload.username,
     full_name: JWTPayload.full_name,
+    email: JWTPayload.email,
   };
 }
 

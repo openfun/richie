@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Pin webpack version in dependent front build
+- Handle user data form the authentication method (especially for mail)
 
 ## [3.5.1] - 2026-08-18
 
