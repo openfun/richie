@@ -47,7 +47,7 @@
     "@babel/preset-typescript": "7.28.5",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@faker-js/faker": "10.3.0",
+    "@faker-js/faker": "10.5.0",
     "@formatjs/cli": "6.13.0",
     "@formatjs/intl-relativetimeformat": "12.2.2",
     "@hookform/resolvers": "5.2.2",
