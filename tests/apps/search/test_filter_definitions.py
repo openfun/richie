@@ -2,11 +2,19 @@
 Tests for environment ElasticSearch support
 """
 
+from unittest import mock
+
 from django.core.cache import caches
 from django.test import TestCase
 
+import arrow
+
 from richie.apps.courses.factories import CategoryFactory
 from richie.apps.search.filter_definitions import FILTERS, IndexableFilterDefinition
+from richie.apps.search.filter_definitions.courses import (
+    AvailabilityFilterDefinition,
+    StaticChoicesFilterDefinition,
+)
 
 
 class FilterDefintionsTestCase(TestCase):
@@ -97,3 +105,135 @@ class FilterDefintionsTestCase(TestCase):
         """
         indexable_filter_definition = IndexableFilterDefinition("name")
         self.assertEqual(indexable_filter_definition.aggs_include, ".*")
+
+    def test_filter_definitions_choices_query_fragment_single_value(self):
+        """
+        With a single value selected, a choices filter should return that value's fragment
+        as is.
+        """
+        filter_definition = StaticChoicesFilterDefinition(
+            name="pace",
+            human_name="Weekly pace",
+            values={"lt-1h": "Less than one hour", "gt-2h": "More than two hours"},
+            fragment_map={
+                "lt-1h": [{"range": {"pace": {"lt": 60}}}],
+                "gt-2h": [{"range": {"pace": {"gt": 120}}}],
+            },
+        )
+        self.assertEqual(
+            filter_definition.get_query_fragment({"pace": ["gt-2h"]}),
+            [{"key": "pace", "fragment": [{"range": {"pace": {"gt": 120}}}]}],
+        )
+        self.assertEqual(filter_definition.get_query_fragment({"pace": []}), [])
+        self.assertEqual(filter_definition.get_query_fragment({}), [])
+
+    def test_filter_definitions_choices_query_fragment_several_values(self):
+        """
+        With several values selected, a choices filter should combine the fragments of the
+        selected values with a "should" clause (OR) instead of letting them be ANDed with
+        the other filters' fragments.
+        """
+        filter_definition = StaticChoicesFilterDefinition(
+            name="pace",
+            human_name="Weekly pace",
+            values={"1h-2h": "One to two hours", "gt-2h": "More than two hours"},
+            fragment_map={
+                "1h-2h": [{"range": {"pace": {"gte": 60, "lte": 120}}}],
+                "gt-2h": [{"range": {"pace": {"gt": 120}}}],
+            },
+        )
+        self.assertEqual(
+            filter_definition.get_query_fragment({"pace": ["1h-2h", "gt-2h"]}),
+            [
+                {
+                    "key": "pace",
+                    "fragment": [
+                        {
+                            "bool": {
+                                "should": [
+                                    {
+                                        "bool": {
+                                            "must": [
+                                                {
+                                                    "range": {
+                                                        "pace": {"gte": 60, "lte": 120}
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "bool": {
+                                            "must": [{"range": {"pace": {"gt": 120}}}]
+                                        }
+                                    },
+                                ],
+                                "minimum_should_match": 1,
+                            }
+                        }
+                    ],
+                }
+            ],
+        )
+
+    @mock.patch.object(arrow, "utcnow", return_value=arrow.get(2020, 2, 9))
+    def test_filter_definitions_availability_query_fragment_several_values(self, _):
+        """
+        With several availabilities selected, the availability filter should combine the
+        fragments with a "should" clause. Each availability's fragment can be made of several
+        range clauses (e.g. "open" checks both enrollment dates), all of which must match.
+        """
+        now = arrow.utcnow().datetime
+        filter_definition = AvailabilityFilterDefinition(
+            name="availability", human_name="Availability"
+        )
+        self.assertEqual(
+            filter_definition.get_query_fragment(
+                {"availability": ["open", "archived"]}
+            ),
+            [
+                {
+                    "key": "availability",
+                    "fragment": [
+                        {
+                            "bool": {
+                                "should": [
+                                    {
+                                        "bool": {
+                                            "must": [
+                                                {
+                                                    "range": {
+                                                        "course_runs.enrollment_start": {
+                                                            "lte": now
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "range": {
+                                                        "course_runs.enrollment_end": {
+                                                            "gte": now
+                                                        }
+                                                    }
+                                                },
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "bool": {
+                                            "must": [
+                                                {
+                                                    "range": {
+                                                        "course_runs.end": {"lte": now}
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                ],
+                                "minimum_should_match": 1,
+                            }
+                        }
+                    ],
+                }
+            ],
+        )

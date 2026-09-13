@@ -8,6 +8,7 @@ from django.http.request import QueryDict
 from django.test import TestCase
 
 from richie.apps.core.defaults import ALL_LANGUAGES_DICT
+from richie.apps.courses.models import CourseState
 from richie.apps.search.forms import CourseSearchForm
 
 
@@ -246,6 +247,49 @@ class CourseSearchFormTestCase(TestCase):
                 "subjects_aggs": ["89"],
                 "subjects_children_aggs": "",
             },
+        )
+
+    def test_forms_courses_availability_states_no_value(self, *_):
+        """
+        Without an availability filter, all the course run states should be considered.
+        """
+        form = CourseSearchForm(data=QueryDict())
+        self.assertTrue(form.is_valid())
+        self.assertIsNone(form.states)
+
+    def test_forms_courses_availability_states_single_value(self, *_):
+        """
+        With a single availability selected, only the course run states relevant to this
+        availability should be considered.
+        """
+        form = CourseSearchForm(data=QueryDict(query_string="availability=archived"))
+        self.assertTrue(form.is_valid())
+        self.assertEqual(
+            form.states, [CourseState.ARCHIVED_OPEN, CourseState.ARCHIVED_CLOSED]
+        )
+
+    def test_forms_courses_availability_states_several_values(self, *_):
+        """
+        With several availabilities selected, the course run states relevant to each of them
+        should be considered, without duplicates, so the courses matching any of the selected
+        availabilities are sorted according to their best matching course run.
+        """
+        form = CourseSearchForm(
+            data=QueryDict(
+                query_string="availability=coming_soon&availability=archived&availability=open"
+            )
+        )
+        self.assertTrue(form.is_valid())
+        self.assertEqual(
+            form.states,
+            [
+                CourseState.FUTURE_OPEN,
+                CourseState.FUTURE_NOT_YET_OPEN,
+                CourseState.FUTURE_CLOSED,
+                CourseState.ARCHIVED_OPEN,
+                CourseState.ARCHIVED_CLOSED,
+                CourseState.ONGOING_OPEN,
+            ],
         )
 
     def test_forms_courses_build_es_query_search_by_match_text(self, *_):

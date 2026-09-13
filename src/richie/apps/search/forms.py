@@ -103,29 +103,43 @@ class CourseSearchForm(SearchForm):
         self.fields.update({k: v[0] for k, v in FILTER_FIELDS.items()})
         self.states = None
 
+    STATES_BY_AVAILABILITY = {
+        AvailabilityFilterDefinition.OPEN: [
+            CourseState.ONGOING_OPEN,
+            CourseState.FUTURE_OPEN,
+            CourseState.ARCHIVED_OPEN,
+        ],
+        AvailabilityFilterDefinition.ONGOING: [
+            CourseState.ONGOING_OPEN,
+            CourseState.ONGOING_CLOSED,
+        ],
+        AvailabilityFilterDefinition.COMING_SOON: [
+            CourseState.FUTURE_OPEN,
+            CourseState.FUTURE_NOT_YET_OPEN,
+            CourseState.FUTURE_CLOSED,
+        ],
+        AvailabilityFilterDefinition.ARCHIVED: [
+            CourseState.ARCHIVED_OPEN,
+            CourseState.ARCHIVED_CLOSED,
+        ],
+    }
+
     def clean_availability(self):
         """
         Calculate and set the list of states relevant with the current availability filter.
         e.g. if we filter on OPEN courses, only the course runs in state 0 (ongoing open) or
         1 (future open) should be considered for sorting and computation of the course's state.
+
+        When several availabilities are selected, the search returns the union of the matching
+        courses, so the states relevant to each selected availability are all considered.
         """
         availabilities = self.cleaned_data.get("availability", [])
-        if AvailabilityFilterDefinition.OPEN in availabilities:
-            self.states = [
-                CourseState.ONGOING_OPEN,
-                CourseState.FUTURE_OPEN,
-                CourseState.ARCHIVED_OPEN,
-            ]
-        elif AvailabilityFilterDefinition.ONGOING in availabilities:
-            self.states = [CourseState.ONGOING_OPEN, CourseState.ONGOING_CLOSED]
-        elif AvailabilityFilterDefinition.COMING_SOON in availabilities:
-            self.states = [
-                CourseState.FUTURE_OPEN,
-                CourseState.FUTURE_NOT_YET_OPEN,
-                CourseState.FUTURE_CLOSED,
-            ]
-        elif AvailabilityFilterDefinition.ARCHIVED in availabilities:
-            self.states = [CourseState.ARCHIVED_OPEN, CourseState.ARCHIVED_CLOSED]
+        states = []
+        for availability in availabilities:
+            for state in self.STATES_BY_AVAILABILITY[availability]:
+                if state not in states:
+                    states.append(state)
+        self.states = states or None
 
         return availabilities
 
