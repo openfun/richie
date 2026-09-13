@@ -1715,6 +1715,22 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             self.get_expected_courses(courses_definition, list(data["course_runs"])),
         )
 
+    def test_query_courses_filter_pace_several_values(self, *_):
+        """
+        Selecting several paces should return the union of the courses matching each pace,
+        not the intersection (which is always empty as a course has a single pace).
+        """
+        data = self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?pace=1h-2h&pace=gt-2h")
+        self.assertEqual(response.status_code, 200)
+        courses_definition = filter(
+            lambda c: c[0] in [1, 2], data["courses_definition"]
+        )
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
+        )
+
     def test_query_courses_filter_pace_self_paced(self, *_):
         """
         Make sure courses can be filtered to only self-paced.

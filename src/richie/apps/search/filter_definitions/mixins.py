@@ -20,11 +20,41 @@ class ChoicesQueryMixin:
     """A mixin for filter definitions that need to apply predefined queries."""
 
     def get_query_fragment(self, data):
-        """Pick the hardcoded query fragment for each selected value."""
+        """
+        Pick the hardcoded query fragment for each selected value.
+
+        The fragments of all the filters are combined with a "must" clause (AND), which is what
+        we want between two different filters. Between several values of the same filter,
+        though, the user expects a union (OR): selecting the "1h-2h" and "gt-2h" paces should
+        return the courses matching either of them, not none because no course matches both.
+
+        So when more than one value is selected, the fragments of all the selected values are
+        wrapped in a single "should" clause. Each value's fragment is itself a list of clauses
+        that must all match, hence the inner "must".
+        """
         fragment_map = self.get_fragment_map()
+        values = data.get(self.name, [])
+
+        if len(values) <= 1:
+            return [
+                {"key": self.name, "fragment": fragment_map[value]} for value in values
+            ]
+
         return [
-            {"key": self.name, "fragment": fragment_map[value]}
-            for value in data.get(self.name, [])
+            {
+                "key": self.name,
+                "fragment": [
+                    {
+                        "bool": {
+                            "should": [
+                                {"bool": {"must": fragment_map[value]}}
+                                for value in values
+                            ],
+                            "minimum_should_match": 1,
+                        }
+                    }
+                ],
+            }
         ]
 
 
