@@ -30,6 +30,30 @@ export interface AuthenticationBackend {
   next_url?: string;
 }
 
+/**
+ * A rule making the enrollment call to action aware of the course run context.
+ * Configured on the backend with the `RICHIE_ENROLLMENT_AWARENESS_RULES` setting.
+ */
+export type EnrollmentAwarenessMessageVariant = 'info' | 'warning';
+
+export interface EnrollmentAwarenessRule {
+  id: string;
+  when: {
+    offer?: string[];
+    certificate_offer?: string[];
+    languages?: string[];
+    is_external?: boolean;
+  };
+  cta?: {
+    enroll?: string;
+    login?: string;
+  };
+  message?: {
+    variant: EnrollmentAwarenessMessageVariant;
+    text: string;
+  };
+}
+
 enum FEATURES {
   REACT_DASHBOARD = 'REACT_DASHBOARD',
   WISHLIST = 'WISHLIST',
@@ -41,6 +65,7 @@ export interface RichieContext {
   features: Partial<Record<FEATURES, boolean>>;
   joanie_backend?: JoanieBackend;
   lms_backends?: LMSBackend[];
+  enrollment_awareness_rules?: EnrollmentAwarenessRule[];
   release: string;
   sentry_dsn: Nullable<string>;
   web_analytics_providers?: Nullable<string[]>;

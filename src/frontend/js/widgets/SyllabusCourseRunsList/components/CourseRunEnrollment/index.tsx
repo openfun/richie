@@ -13,6 +13,9 @@ import useCourseEnrollment from 'widgets/SyllabusCourseRunsList/hooks/useCourseE
 import { CourseRunUnenrollButton } from 'widgets/SyllabusCourseRunsList/components/CourseRunEnrollment/CourseRunUnenrollmentButton';
 import useDateRelative from 'hooks/useDateRelative';
 import { isEnrollment as isJoanieEnrollment } from 'types/Joanie';
+import richieContext from 'utils/context';
+import { getEnrollmentAwareness } from 'utils/enrollmentAwareness';
+import EnrollmentAwarenessMessages from 'components/EnrollmentAwarenessMessages';
 
 const messages = defineMessages({
   enroll: {
@@ -187,6 +190,13 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
   const startDate = new Date(props.courseRun.start);
   const isStarted = new Date() > startDate;
   const relativeStartDate = useDateRelative(startDate);
+  const awareness = useMemo(
+    () =>
+      getEnrollmentAwareness(richieContext.enrollment_awareness_rules, props.courseRun, {
+        isExternal: false,
+      }),
+    [props.courseRun],
+  );
 
   const [
     {
@@ -254,9 +264,12 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
       );
     case step === Step.ANONYMOUS:
       return (
-        <Button onClick={login} fullWidth>
-          <FormattedMessage {...messages.loginToEnroll} />
-        </Button>
+        <React.Fragment>
+          <Button onClick={login} fullWidth>
+            {awareness.loginLabel ?? <FormattedMessage {...messages.loginToEnroll} />}
+          </Button>
+          <EnrollmentAwarenessMessages messages={awareness.messages} />
+        </React.Fragment>
       );
     case step === Step.LOADING:
       return (
@@ -281,7 +294,7 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
             fullWidth
             aria-busy={step === Step.ENROLLING}
           >
-            <FormattedMessage {...messages.enroll} />
+            {awareness.enrollLabel ?? <FormattedMessage {...messages.enroll} />}
             {step === Step.ENROLLING ? (
               <span aria-hidden="true">
                 {/* No children with loading text as the spinner is aria-hidden (handled by aria-busy) */}
@@ -289,6 +302,7 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps> = (props) => {
               </span>
             ) : null}
           </Button>
+          <EnrollmentAwarenessMessages messages={awareness.messages} />
           {step === Step.ENROLLMENT_FAILED ? (
             <div className="course-run-enrollment__errortext">
               {error?.localizedMessage ? (
