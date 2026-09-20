@@ -8,6 +8,7 @@
       "frontend-overrides",
       "internationalization",
       "lms-connection",
+      "enrollment-awareness-rules",
       "web-analytics"
     ],
     "Contributing": [

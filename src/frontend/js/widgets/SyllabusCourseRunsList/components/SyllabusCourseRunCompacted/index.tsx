@@ -1,4 +1,3 @@
-import { Button } from '@openfun/cunningham-react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { CourseRun, CourseRunDisplayMode, PacedCourse } from 'types';
 import useDateFormat from 'hooks/useDateFormat';
@@ -8,19 +7,10 @@ import { StringHelper } from 'utils/StringHelper';
 import { IntlHelper } from 'utils/IntlHelper';
 import { DjangoCMSPluginCourseRun, DjangoCMSTemplate } from 'components/DjangoCMSTemplate';
 import CourseRunEnrollment from '../CourseRunEnrollment';
+import ExternalCourseRunEnrollment from '../ExternalCourseRunEnrollment';
 import CourseProductItem from '../CourseProductItem';
 
 const messages = defineMessages({
-  enrollNow: {
-    id: 'components.SyllabusCourseRunCompacted.enrollNow',
-    description: 'CTA for users to enroll on ongoing of future open course.',
-    defaultMessage: 'Enroll now',
-  },
-  studyNow: {
-    id: 'components.SyllabusCourseRunCompacted.studyNow',
-    description: 'CTA for users to enroll on archived course.',
-    defaultMessage: 'Study now',
-  },
   course: {
     id: 'components.SyllabusCourseRunCompacted.course',
     description: 'Title of the course dates section of an opened course run block',
@@ -252,14 +242,7 @@ const OpenedSelfPacedCourseRun = ({
       {findLmsBackend(courseRun.resource_link) ? (
         <CourseRunEnrollment courseRun={courseRun} />
       ) : (
-        <Button className="course-run-enrollment__cta" href={courseRun.resource_link} fullWidth>
-          {courseRun.state.call_to_action === 'enroll now' ? (
-            <FormattedMessage {...messages.enrollNow} />
-          ) : null}
-          {courseRun.state.call_to_action === 'study now' ? (
-            <FormattedMessage {...messages.studyNow} />
-          ) : null}
-        </Button>
+        <ExternalCourseRunEnrollment courseRun={courseRun} />
       )}
     </>
   );

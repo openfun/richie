@@ -9,6 +9,7 @@ from urllib.parse import quote, urlparse
 
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import get_storage_class
 from django.http.request import HttpRequest
 from django.utils.translation import get_language_from_request
@@ -265,6 +266,130 @@ class FrontendContextProcessor:
 
         return None
 
+    ENROLLMENT_AWARENESS_CONDITIONS = {
+        "offer": list,
+        "certificate_offer": list,
+        "languages": list,
+        "is_external": bool,
+    }
+    ENROLLMENT_AWARENESS_MESSAGE_VARIANTS = ("info", "warning")
+
+    def get_enrollment_awareness_rules(self):
+        """
+        Get the enrollment awareness rules context if there are.
+
+        Rules are configured with the `RICHIE_ENROLLMENT_AWARENESS_RULES` setting. Each rule is
+        a dictionary with:
+        - "id": a unique string identifying the rule,
+        - "when": a dictionary of conditions on the course run, using the vocabulary defined in
+          `ENROLLMENT_AWARENESS_CONDITIONS`. All conditions of a rule must match,
+        - "cta" (optional): a dictionary with the "enroll" and/or "login" labels replacing the
+          default labels of the enrollment call to action,
+        - "message" (optional): a dictionary with a "variant" ("info" or "warning") and a
+          "text" displayed next to the call to action.
+
+        Labels and texts can be lazy translation strings: they are rendered in the language of
+        the current request when serialized to the frontend context.
+
+        Raises ImproperlyConfigured if the setting is malformed, so that a broken configuration
+        is noticed as soon as a page is rendered.
+        """
+        rules = getattr(settings, "RICHIE_ENROLLMENT_AWARENESS_RULES", None)
+        if not rules:
+            return None
+
+        result = []
+        seen_ids = set()
+        for index, rule in enumerate(rules):
+            entry = self._serialize_enrollment_awareness_rule(index, rule)
+            if entry["id"] in seen_ids:
+                raise ImproperlyConfigured(
+                    f"RICHIE_ENROLLMENT_AWARENESS_RULES[{index:d}] has a duplicate "
+                    f'"id": {entry["id"]:s}.'
+                )
+            seen_ids.add(entry["id"])
+            result.append(entry)
+
+        return result
+
+    def _serialize_enrollment_awareness_rule(self, index, rule):
+        """Validate one enrollment awareness rule and serialize it for the frontend."""
+        prefix = f"RICHIE_ENROLLMENT_AWARENESS_RULES[{index:d}]"
+        if not isinstance(rule, dict):
+            raise ImproperlyConfigured(f"{prefix} must be a dictionary.")
+
+        rule_id = rule.get("id")
+        if not isinstance(rule_id, str) or not rule_id:
+            raise ImproperlyConfigured(f'{prefix} must have a non-empty string "id".')
+
+        entry = {
+            "id": rule_id,
+            "when": self._validate_enrollment_awareness_conditions(
+                prefix, rule.get("when")
+            ),
+        }
+
+        cta = rule.get("cta")
+        message = rule.get("message")
+        if cta is None and message is None:
+            raise ImproperlyConfigured(
+                f'{prefix} must define at least a "cta" or a "message".'
+            )
+
+        if cta is not None:
+            if not isinstance(cta, dict) or not cta:
+                raise ImproperlyConfigured(
+                    f'{prefix} "cta" must be a non-empty dictionary.'
+                )
+            if set(cta) - {"enroll", "login"}:
+                raise ImproperlyConfigured(
+                    f'{prefix} "cta" only accepts the "enroll" and "login" keys.'
+                )
+            entry["cta"] = {key: str(value) for key, value in cta.items()}
+
+        if message is not None:
+            if (
+                not isinstance(message, dict)
+                or message.get("variant")
+                not in self.ENROLLMENT_AWARENESS_MESSAGE_VARIANTS
+                or not message.get("text")
+            ):
+                raise ImproperlyConfigured(
+                    f'{prefix} "message" must be a dictionary with a "variant" '
+                    f"({' or '.join(self.ENROLLMENT_AWARENESS_MESSAGE_VARIANTS):s}) "
+                    'and a non-empty "text".'
+                )
+            entry["message"] = {
+                "variant": message["variant"],
+                "text": str(message["text"]),
+            }
+
+        return entry
+
+    def _validate_enrollment_awareness_conditions(self, prefix, when):
+        """Validate the "when" conditions of an enrollment awareness rule."""
+        if not isinstance(when, dict) or not when:
+            raise ImproperlyConfigured(
+                f'{prefix} must have a non-empty "when" dictionary.'
+            )
+
+        for condition, value in when.items():
+            expected_type = self.ENROLLMENT_AWARENESS_CONDITIONS.get(condition)
+            if expected_type is None:
+                raise ImproperlyConfigured(
+                    f'{prefix} has an unknown condition "{condition:s}". Known conditions '
+                    f"are: {', '.join(self.ENROLLMENT_AWARENESS_CONDITIONS):s}."
+                )
+            if not isinstance(value, expected_type) or (
+                expected_type is list and not value
+            ):
+                raise ImproperlyConfigured(
+                    f'{prefix} condition "{condition:s}" must be a non-empty '
+                    f"{expected_type.__name__:s}."
+                )
+
+        return when
+
     def get_site_urls(self, request: HttpRequest):
         """Get the site urls context that must be passed down to react application."""
 
@@ -297,5 +422,8 @@ class FrontendContextProcessor:
 
         if lms_context := self.get_lms_context():
             context["lms_backends"] = lms_context
+
+        if enrollment_awareness_rules := self.get_enrollment_awareness_rules():
+            context["enrollment_awareness_rules"] = enrollment_awareness_rules
 
         return {"context": context}

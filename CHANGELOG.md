@@ -10,6 +10,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Enrollment awareness rules: configure labels and messages of the
+  enrollment CTA according to the course run offer, certificate offer,
+  languages or external hosting with the
+  `RICHIE_ENROLLMENT_AWARENESS_RULES` setting
 - Withdrawing feature for certificate and credential orders
 
 ### Fixed
