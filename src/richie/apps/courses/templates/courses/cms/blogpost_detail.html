@@ -33,8 +33,33 @@
 
         <div class="blogpost-detail__row">
             {% block title %}
-                <h1 class="blogpost-detail__title">{% render_model current_page "title" %}</h1>
+                <h1 class="blogpost-detail__title" property="headline">{% render_model current_page "title" %}</h1>
             {% endblock title %}
+
+            {% block rdfa %}
+                <meta property="datePublished" content="{{ current_page.publication_date|date:'c' }}" />
+                <meta property="dateModified" content="{{ current_page.changed_date|date:'c' }}" />
+                <meta property="inLanguage" content="{{ LANGUAGE_CODE }}" />
+                {% get_placeholder_plugins "cover" as cover_plugins %}
+                {% if cover_plugins.0 %}
+                    {% thumbnail cover_plugins.0.picture 845x500 replace_alpha='#FFFFFF' crop upscale subject_location=cover_plugins.0.picture.subject_location as thumb %}
+                    <meta property="image" content="{{ MEDIA_URL_PREFIX }}{{ thumb.url }}" />
+                {% endif %}
+                {% if not current_page|is_empty_placeholder:"excerpt" %}
+                    <meta property="description" content="{% filter slice:":200" %}{% show_placeholder 'excerpt' current_page %}{% endfilter %}" />
+                {% endif %}
+                {% get_placeholder_plugins "author" as author_plugins %}
+                {% for plugin in author_plugins %}
+                    {% with person_page=plugin.page.get_public_object %}
+                        {% if person_page %}
+                            <span property="author" typeof="Person">
+                                <meta property="name" content="{{ person_page.get_title }}" />
+                                <meta property="url" content="{{ SITE.web_url }}{{ person_page.get_absolute_url }}" />
+                            </span>
+                        {% endif %}
+                    {% endwith %}
+                {% endfor %}
+            {% endblock rdfa %}
 
             {% block subhead %}
                 <div class="blogpost-detail__subhead">
