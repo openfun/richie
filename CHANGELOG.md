@@ -14,6 +14,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Add the `Offer` RDFa (category, price, currency) of the best course run
+  to the course detail page, and complete the `Article` and `Person` RDFa
+  of the blog post and person detail pages
 - Pin webpack version in dependent front build
 - Handle user data form the authentication method (especially for mail)
 
