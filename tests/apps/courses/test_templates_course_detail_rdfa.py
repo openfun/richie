@@ -5,6 +5,7 @@ End-to-end tests for the course detail view
 import io
 import re
 from datetime import datetime
+from decimal import Decimal
 from unittest import mock
 
 from django.template.defaultfilters import striptags
@@ -25,7 +26,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     PersonFactory,
 )
-from richie.apps.courses.models import CourseRunCatalogVisibility
+from richie.apps.courses.models import CourseRunCatalogVisibility, CourseRunOffer
 from richie.plugins.nesteditem.defaults import ACCORDION
 
 # pylint: disable=too-many-lines,too-many-locals,too-many-statements
@@ -203,6 +204,9 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             enrollment_end=datetime(2030, 6, 16, tzinfo=timezone.utc),
             languages=["en", "fr"],
             enrollment_count=5000,
+            offer=CourseRunOffer.PAID,
+            price=Decimal("49.90"),
+            price_currency="EUR",
         )
         CourseRunFactory(
             title="Run 1",
@@ -213,6 +217,9 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             enrollment_end=datetime(2030, 6, 20, tzinfo=timezone.utc),
             languages=["de"],
             enrollment_count=3000,
+            offer=CourseRunOffer.PAID,
+            price=Decimal("49.90"),
+            price_currency="EUR",
         )
         CourseRunFactory(
             title="A hidden course run",
@@ -254,7 +261,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         # Retrieve the course top node (body)
         (subject,) = graph.subjects(RDF.type, SDO.Course, unique=True)
 
-        self.assertEqual(len(list(graph.triples((subject, None, None)))), 41)
+        self.assertEqual(len(list(graph.triples((subject, None, None)))), 42)
 
         # Opengraph
         self.assertTrue(
@@ -594,6 +601,13 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             (course_run_subject,) = graph.subjects(SDO.endDate, Literal(end_date))
             self.assertTrue(course_run_subject in course_run_subjects)
 
+        # - Offer
+        (offer_subject,) = graph.objects(subject, SDO.offers)
+        self.assertTrue((offer_subject, RDF.type, SDO.Offer) in graph)
+        self.assertTrue((offer_subject, SDO.category, Literal("Paid")) in graph)
+        self.assertTrue((offer_subject, SDO.price, Literal("49.90")) in graph)
+        self.assertTrue((offer_subject, SDO.priceCurrency, Literal("EUR")) in graph)
+
         # Categories (keywords)
         category_subjects = list(graph.objects(subject, SDO.keywords))
         self.assertEqual(len(category_subjects), 2)
@@ -610,3 +624,29 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
 
             (category_subject,) = graph.subjects(SDO.url, Literal(page_url))
             self.assertTrue(category_subject in category_subjects)
+
+    def test_templates_course_detail_rdfa_offer_free(self):
+        """A free course exposes a Free offer without price."""
+        course = CourseFactory(should_publish=True)
+        CourseRunFactory(
+            direct_course=course,
+            offer=CourseRunOffer.FREE,
+            price=None,
+            price_currency="EUR",
+        )
+        course.extended_object.publish("en")
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        processor = pyRdfa()
+        content = str(response.content.decode("utf-8"))
+        parser = html5lib.HTMLParser(tree=html5lib.treebuilders.getTreeBuilder("dom"))
+        dom = parser.parse(io.StringIO(content))
+        graph = processor.graph_from_DOM(dom)
+
+        (subject,) = graph.subjects(RDF.type, SDO.Course, unique=True)
+        (offer_subject,) = graph.objects(subject, SDO.offers)
+        self.assertTrue((offer_subject, SDO.category, Literal("Free")) in graph)
+        self.assertEqual(list(graph.objects(offer_subject, SDO.price)), [])
+        self.assertEqual(list(graph.objects(offer_subject, SDO.priceCurrency)), [])

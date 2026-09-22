@@ -36,7 +36,8 @@
             <div class="subheader__container">
                 <div class="subheader__intro">
                     <div class="subheader__main">
-                        <h1 class="subheader__title">{% render_model current_page "title" %}</h1>
+                        <h1 class="subheader__title" property="name">{% render_model current_page "title" %}</h1>
+                        <meta property="url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}" />
 
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
                         <div class="category-badge-list category-badge-list--tertiary">
@@ -110,11 +111,13 @@
             <div class="person-detail__row">
                 <section class="organization-glimpse-list">
                     <h2 class="person-detail__title">{% trans "Organizations" %}</h2>
+                    {% with organization_property="affiliation" %}
                     {% placeholder "organizations" or %}
                         <p class="organization-glimpse-list__empty">
                             {% trans "No associated organizations" %}
                         </p>
                     {% endplaceholder %}
+                    {% endwith %}
                 </section>
             </div>
         </div>
