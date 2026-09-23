@@ -8,4 +8,9 @@
   @if $body-padding-fix {
     @include content-padding-fix($gutter: 2rem);
   }
+
+  &__maincontent {
+    width: 100%;
+    padding: 0 $grid-gutter-width 1rem;
+  }
 }

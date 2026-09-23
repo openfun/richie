@@ -7,6 +7,7 @@ from unittest import mock
 
 from django.utils import timezone
 
+from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import PageFactory, UserFactory
@@ -58,3 +59,29 @@ class ListCategoryCMSTestCase(CMSTestCase):
 
         for title in ["First", "Second", "Third"]:
             self.assertContains(response, title)
+
+    def test_templates_category_list_maincontent(self):
+        """The main content placeholder is rendered only when it has content."""
+        page = PageFactory(
+            template="courses/cms/category_list.html",
+            title__language="en",
+            should_publish=True,
+        )
+
+        response = self.client.get(page.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "category-list__maincontent")
+
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CKEditorPlugin",
+            body="<p>Explore our categories</p>",
+        )
+        page.publish("en")
+
+        response = self.client.get(page.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "category-list__maincontent")
+        self.assertContains(response, "Explore our categories")
