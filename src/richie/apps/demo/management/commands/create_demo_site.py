@@ -442,6 +442,21 @@ def create_demo_site():
         )
         programs.append(program)
 
+    # Create some content on the categories list page
+    placeholder = pages_created["categories"].placeholders.get(slot="maincontent")
+
+    for language in pages_created["categories"].get_languages():
+        create_text_plugin(
+            pages_created["categories"],
+            placeholder,
+            nb_paragraphs=random.randint(3, 4),  # nosec
+            languages=[language],
+            plugin_type="TextPlugin",
+        )
+
+        # Once content has been added we must publish again the page
+        pages_created["categories"].publish(language)
+
     # Create some content on the programs list page
     placeholder = pages_created["programs"].placeholders.get(slot="maincontent")
 

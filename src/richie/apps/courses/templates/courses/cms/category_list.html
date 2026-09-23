@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags i18n pagination_tags %}
+{% load cms_tags extra_tags i18n pagination_tags %}
 
 {% block subheader_content %}
 <div class="subheader__container">
@@ -10,6 +10,11 @@
 
 {% block content %}
 <div class="category-list">
+  {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"maincontent" %}
+    <div class="category-list__maincontent">
+      {% placeholder "maincontent" %}
+    </div>
+  {% endif %}
   <div class="category-glimpse-list">
     {% if current_page.publisher_is_draft %}
       {% autopaginate current_page.get_child_pages 100 as object_list %}
