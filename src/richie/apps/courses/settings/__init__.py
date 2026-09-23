@@ -433,6 +433,26 @@ CMS_PLACEHOLDER_CONF = {
             "SectionPlugin": ["CKEditorPlugin", "SimplePicturePlugin", "GlimpsePlugin"]
         },
     },
+    "courses/cms/category_list.html maincontent": {
+        "name": _("Main content"),
+        "plugins": ["SectionPlugin"],
+        "child_classes": {
+            "SectionPlugin": [
+                "BlogPostPlugin",
+                "CategoryPlugin",
+                "CoursePlugin",
+                "GlimpsePlugin",
+                "LinkPlugin",
+                "OrganizationPlugin",
+                "OrganizationsByCategoryPlugin",
+                "PersonPlugin",
+                "CKEditorPlugin",
+                "SectionPlugin",
+                "NestedItemPlugin",
+            ],
+            "NestedItemPlugin": ["CategoryPlugin"],
+        },
+    },
     "courses/cms/program_list.html maincontent": {
         "name": _("Main content"),
         "plugins": ["SectionPlugin"],

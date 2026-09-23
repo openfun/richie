@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add main content placeholder to categories list view
 - Withdrawing feature for certificate and credential orders
 
 ### Fixed
