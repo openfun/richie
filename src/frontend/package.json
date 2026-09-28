@@ -52,7 +52,7 @@
     "@formatjs/intl-relativetimeformat": "12.3.13",
     "@hookform/resolvers": "5.9.1",
     "@lyracom/embedded-form-glue": "1.4.4",
-    "@mui/material": "^7.3.2",
+    "@mui/material": "^9.0.0",
     "@openfun/cunningham-react": "4.0.0",
     "@openfun/cunningham-tokens": "3.0.0",
     "@sentry/browser": "10.71.0",
