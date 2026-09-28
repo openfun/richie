@@ -612,7 +612,7 @@ jobs:
   # ---- Front-end jobs ----
   build-front:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -645,7 +645,7 @@ jobs:
 
   build-front-production:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -675,7 +675,7 @@ jobs:
 
   build-dependent-front:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -787,7 +787,7 @@ jobs:
 
   lint-front:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -804,7 +804,7 @@ jobs:
 
   test-front:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -828,7 +828,7 @@ jobs:
 
   test-front-package:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -894,7 +894,7 @@ jobs:
   # Run relevant linters (eg. prettier for now) on the documentation website
   lint-website:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -911,7 +911,7 @@ jobs:
   # Deploy the docs website to GitHub pages.
   deploy-website:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS

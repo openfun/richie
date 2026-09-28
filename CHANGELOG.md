@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Withdrawing feature for certificate and credential orders
+- Upgrade to node 24.21.0
 
 ### Fixed
 
