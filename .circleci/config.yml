@@ -838,6 +838,13 @@ jobs:
       - run:
           name: Check SCSS library
           command: |
+            # Reuse richie-education's lockfile so dependencies resolve to
+            # versions already known to work, instead of resolving the whole
+            # tree fresh against npm at build time (fragile: a transitive
+            # react-aria/cunningham dependency can start requesting a version
+            # that doesn't exist on the registry, breaking the build with no
+            # code change on our side).
+            cp ~/fun/src/frontend/yarn.lock .
             # Install the sass library/compiler
             yarn add sass
             # Install the package locally
