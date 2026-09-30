@@ -39,12 +39,11 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@babel/core": "7.29.0",
-    "@babel/plugin-syntax-dynamic-import": "7.8.3",
-    "@babel/plugin-transform-modules-commonjs": "7.28.6",
-    "@babel/preset-env": "7.29.0",
-    "@babel/preset-react": "7.28.5",
-    "@babel/preset-typescript": "7.28.5",
+    "@babel/core": "8.0.6",
+    "@babel/plugin-transform-modules-commonjs": "8.0.1",
+    "@babel/preset-env": "8.0.2",
+    "@babel/preset-react": "8.0.1",
+    "@babel/preset-typescript": "8.0.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@faker-js/faker": "10.4.0",
@@ -81,7 +80,8 @@
     "@typescript-eslint/parser": "8.68.0",
     "babel-jest": "30.4.1",
     "babel-loader": "10.1.1",
-    "babel-plugin-react-intl": "8.2.25",
+    "babel-plugin-formatjs": "13.0.6",
+    "babel-plugin-polyfill-corejs3": "1.0.0",
     "bootstrap": ">=4.6.0 <5",
     "classnames": "2.5.1",
     "cljs-merge": "1.1.1",
@@ -153,7 +153,7 @@
     "yarn": "1.22.22"
   },
   "devDependencies": {
-    "@storybook/addon-webpack5-compiler-babel": "4.0.1",
+    "@storybook/addon-webpack5-compiler-swc": "4.0.3",
     "@storybook/addon-links": "10.5.10",
     "@storybook/react": "10.5.10",
     "@storybook/react-webpack5": "10.5.10",
