@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/browser';
-import { CaptureContext } from '@sentry/types';
+import { CaptureContext } from '@sentry/browser';
 import context from 'utils/context';
 
 if (context?.sentry_dsn) {
