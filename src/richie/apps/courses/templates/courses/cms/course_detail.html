@@ -386,6 +386,23 @@
                             {% endfor %}
                         {% endwith %}
                     {% endwith %}
+                    <span rel="offers" typeof="Offer">
+                        {% if course.offer == "paid" %}
+                            <meta property="category" content="Paid" />
+                        {% elif course.offer == "subscription" %}
+                            <meta property="category" content="Subscription" />
+                        {% elif course.offer == "partially_free" %}
+                            <meta property="category" content="Partially Free" />
+                        {% else %}
+                            <meta property="category" content="Free" />
+                        {% endif %}
+                        {% if course.price is not None %}
+                            <meta property="price" content="{{ course.price }}" />
+                            {% if course.price_currency %}
+                                <meta property="priceCurrency" content="{{ course.price_currency }}" />
+                            {% endif %}
+                        {% endif %}
+                    </span>
                 </div>
             {% endblock runs %}
         </div>

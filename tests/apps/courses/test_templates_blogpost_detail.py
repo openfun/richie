@@ -127,7 +127,9 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
             response, "<title>Preums - example.com</title>", html=True, status_code=200
         )
         self.assertContains(
-            response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True
+            response,
+            '<h1 class="blogpost-detail__title" property="headline">Preums</h1>',
+            html=True,
         )
         self.assertContains(response, "Comte de Saint-Germain", html=True)
 
@@ -167,7 +169,9 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
             response, "<title>Preums - example.com</title>", html=True, status_code=200
         )
         self.assertContains(
-            response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True
+            response,
+            '<h1 class="blogpost-detail__title" property="headline">Preums</h1>',
+            html=True,
         )
         self.assertContains(response, "Comte de Saint-Germain", html=True)
         self.assertContains(
