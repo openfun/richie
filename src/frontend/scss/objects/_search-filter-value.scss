@@ -34,7 +34,7 @@
 
     &__count {
       @extend .badge;
-      @extend .badge-pill;
+      @extend .rounded-pill;
 
       display: inline; // So &nbsp; can prevent linebreaks between the name and the count badge
       color: r-theme-val(search-filters-value, count-color);
