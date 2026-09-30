@@ -5,6 +5,7 @@ import { PersistedClient } from '@tanstack/react-query-persist-client';
 export const QueryStateFactory = (key: QueryKey, state: Partial<QueryState>) => ({
   queryKey: key,
   queryHash: Array.isArray(key) ? JSON.stringify(key) : `[${JSON.stringify(key)}]`,
+  dehydratedAt: Date.now(),
   state: {
     data: undefined,
     dataUpdateCount: 1,
