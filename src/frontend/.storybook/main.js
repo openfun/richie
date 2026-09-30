@@ -12,7 +12,7 @@ export default {
   stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)', '../js/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
     getAbsolutePath('@storybook/addon-links'),
-    getAbsolutePath('@storybook/addon-webpack5-compiler-babel'),
+    getAbsolutePath('@storybook/addon-webpack5-compiler-swc'),
   ],
   framework: {
     name: getAbsolutePath('@storybook/react-webpack5'),
