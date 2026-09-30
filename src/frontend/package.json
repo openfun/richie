@@ -82,7 +82,7 @@
     "babel-loader": "10.1.1",
     "babel-plugin-formatjs": "13.0.6",
     "babel-plugin-polyfill-corejs3": "1.0.0",
-    "bootstrap": ">=4.6.0 <5",
+    "bootstrap": "5.3.8",
     "classnames": "2.5.1",
     "cljs-merge": "1.1.1",
     "core-js": "3.50.0",
