@@ -130,7 +130,7 @@
     "source-map-loader": "5.0.0",
     "tsconfig-paths-webpack-plugin": "4.2.0",
     "typescript": "5.9.3",
-    "uuid": "13.0.0",
+    "uuid": "14.0.2",
     "webpack": "5.111.1",
     "webpack-cli": "7.2.3",
     "whatwg-fetch": "3.6.20",
