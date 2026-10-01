@@ -1399,6 +1399,24 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             self.get_expected_courses(data["courses_definition"], ["D", "H", "I"]),
         )
 
+    def test_query_courses_course_runs_filter_availability_several_values(self, *_):
+        """
+        Selecting several availabilities should return the union of the courses matching
+        each availability, not the intersection. Coming soon and archived course runs
+        never overlap, so an AND between them would return nothing.
+        """
+        data = self.prepare_indices()
+        response = self.client.get(
+            "/api/v1.0/courses/?availability=coming_soon&availability=archived"
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(
+                data["courses_definition"], ["C", "D", "E", "H", "I"]
+            ),
+        )
+
     def test_query_courses_course_runs_filter_language(self, *_):
         """
         Battle test filtering and sorting courses in one language.
@@ -1710,6 +1728,22 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         response = self.client.get("/api/v1.0/courses/?pace=1h-2h")
         self.assertEqual(response.status_code, 200)
         courses_definition = filter(lambda c: c[0] == 1, data["courses_definition"])
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(courses_definition, list(data["course_runs"])),
+        )
+
+    def test_query_courses_filter_pace_several_values(self, *_):
+        """
+        Selecting several paces should return the union of the courses matching each pace,
+        not the intersection (which is always empty as a course has a single pace).
+        """
+        data = self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?pace=1h-2h&pace=gt-2h")
+        self.assertEqual(response.status_code, 200)
+        courses_definition = filter(
+            lambda c: c[0] in [1, 2], data["courses_definition"]
+        )
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
             self.get_expected_courses(courses_definition, list(data["course_runs"])),

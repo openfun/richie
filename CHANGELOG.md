@@ -17,6 +17,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Pin webpack version in dependent front build
 - Handle user data form the authentication method (especially for mail)
+- Combine the values selected on a choices search filter (e.g. weekly pace)
+  with OR instead of AND, so selecting several values returns results, and
+  sort courses on the states of all the selected availabilities
 
 ## [3.5.1] - 2026-08-18
 
