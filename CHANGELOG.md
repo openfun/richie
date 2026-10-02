@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Show the selected organization on teacher dashboard course glimpses
 - Pin webpack version in dependent front build
 - Handle user data form the authentication method (especially for mail)
 
