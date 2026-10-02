@@ -7,6 +7,7 @@ import {
   queryByText,
   render,
   screen,
+  waitFor,
 } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import {
@@ -143,7 +144,7 @@ describe('<DashboardAddressesManagement/>', () => {
     expect(fetchMock.called(deleteUrl)).toBe(true);
 
     // The address does not appear anymore in the list.
-    expect(screen.queryByText(address.title)).toBeNull();
+    await waitFor(() => expect(screen.queryByText(address.title)).toBeNull());
 
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();

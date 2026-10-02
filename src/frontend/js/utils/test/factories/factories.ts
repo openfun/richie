@@ -40,7 +40,7 @@ const setUndefinedValues = (obj: any) => {
 };
 
 type Factory<TData> = (override?: Subset<TData>) => FactoryInterface<TData>;
-export const factory = <TData>(builder: FactoryBuilder<TData>): Factory<TData> => {
+export const factory = <TData extends unknown>(builder: FactoryBuilder<TData>): Factory<TData> => {
   const mergeData = (data: TData, override: Subset<TData>): TData => {
     const customizer = (_objValue: any, srcValue: any) => {
       if (Array.isArray(srcValue)) {

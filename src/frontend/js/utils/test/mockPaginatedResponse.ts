@@ -1,6 +1,6 @@
 import { PaginatedResponse } from 'types/Joanie';
 
-export const mockPaginatedResponse: <Data>(
+export const mockPaginatedResponse: <Data extends unknown>(
   results?: Data[],
   totalCount?: number,
   haveNextPage?: boolean,

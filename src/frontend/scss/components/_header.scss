@@ -393,13 +393,8 @@
       align-items: center;
 
       a {
-        @include button-size(
-          $btn-padding-y,
-          $btn-padding-x,
-          $btn-font-size,
-          $btn-line-height,
-          2rem
-        );
+        @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, 2rem);
+        line-height: $btn-line-height;
         @include font-size($font-size-base);
         justify-content: center;
         color: r-theme-val(topbar, item-cta-color);
