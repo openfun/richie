@@ -11,9 +11,20 @@ import {
   OfferingLight,
   isOffering,
   ProductType,
+  Organization,
 } from 'types/Joanie';
 import { TeacherDashboardPaths } from 'widgets/Dashboard/utils/teacherDashboardPaths';
 import { CourseGlimpseCourse } from '.';
+
+// A course can be managed by several organizations. In an organization's dashboard,
+// show that organization rather than whichever one comes first.
+const getGlimpseOrganization = (organizations: Organization[], organizationId?: string) => {
+  const organization = organizations.find(({ id }) => id === organizationId) ?? organizations[0];
+  return {
+    title: organization.title,
+    image: organization.logo || null,
+  };
+};
 
 const getCourseGlimpsePropsFromOffering = (
   offering: OfferingLight,
@@ -39,10 +50,7 @@ const getCourseGlimpsePropsFromOffering = (
           src: offering.course.cover.src,
         }
       : null,
-    organization: {
-      title: offering.organizations[0].title,
-      image: offering.organizations[0].logo || null,
-    },
+    organization: getGlimpseOrganization(offering.organizations, organizationId),
     product_id: offering.product.id,
     course_route: courseRoute,
     state: offering.product.state,
@@ -111,10 +119,7 @@ const getCourseGlimpsePropsFromJoanieCourse = (
         }
       : null,
     title: course.title,
-    organization: {
-      title: course.organizations[0].title,
-      image: course.organizations[0].logo || null,
-    },
+    organization: getGlimpseOrganization(course.organizations, organizationId),
     state: course.state,
     nb_course_runs: course.course_run_ids.length,
     price: null,
