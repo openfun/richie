@@ -54,7 +54,7 @@
     "@mui/material": "^9.0.0",
     "@openfun/cunningham-react": "4.0.0",
     "@openfun/cunningham-tokens": "3.0.0",
-    "@sentry/browser": "11.1.0",
+    "@sentry/browser": "11.2.0",
     "@tanstack/query-core": "5.104.0",
     "@tanstack/query-sync-storage-persister": "5.104.0",
     "@tanstack/react-query": "5.104.0",
