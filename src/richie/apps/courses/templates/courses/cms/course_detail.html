@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags i18n extra_tags pagination_tags static thumbnail humanize joanie feature_flags %}
+{% load cms_tags i18n l10n extra_tags pagination_tags static thumbnail humanize joanie feature_flags %}
 
 {% block head_title %}
     {% page_attribute "page_title" as course_title %}
@@ -386,6 +386,25 @@
                             {% endfor %}
                         {% endwith %}
                     {% endwith %}
+                    {% block offer_rdfa %}
+                        <span rel="offers" typeof="Offer">
+                            {% if course.offer == "paid" %}
+                                <meta property="category" content="Paid" />
+                            {% elif course.offer == "subscription" %}
+                                <meta property="category" content="Subscription" />
+                            {% elif course.offer == "partially_free" %}
+                                <meta property="category" content="Partially Free" />
+                            {% else %}
+                                <meta property="category" content="Free" />
+                            {% endif %}
+                            {% if course.price is not None %}
+                                <meta property="price" content="{{ course.price|unlocalize }}" />
+                                {% if course.price_currency %}
+                                    <meta property="priceCurrency" content="{{ course.price_currency }}" />
+                                {% endif %}
+                            {% endif %}
+                        </span>
+                    {% endblock offer_rdfa %}
                 </div>
             {% endblock runs %}
         </div>
