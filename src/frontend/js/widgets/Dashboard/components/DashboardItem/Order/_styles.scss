@@ -157,6 +157,11 @@
   }
 }
 
+.order-withdrawal-modal__account-link {
+  color: inherit;
+  text-decoration: underline;
+}
+
 .order-organization {
   &__caption {
     order: 3;

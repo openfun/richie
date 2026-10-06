@@ -18,7 +18,7 @@ import { AuthenticationApi } from 'api/authentication';
 import { APIBackend, KeycloakAccountApi } from 'types/api';
 import context from 'utils/context';
 import { Spinner } from 'components/Spinner';
-import { HttpStatusCode, isHttpError } from 'utils/errors/HttpError';
+import { isHttpError } from 'utils/errors/HttpError';
 
 const boldChunk = (chunks: ReactNode) => <strong>{chunks}</strong>;
 
@@ -78,6 +78,11 @@ const messages = defineMessages({
     id: 'components.DashboardItemOrder.OrderWithdrawalModal.accountLinkLabel',
     defaultMessage: 'please update your account',
     description: 'Label of the account update link in the withdrawal request modal',
+  },
+  accountLinkRefresh: {
+    id: 'components.DashboardItemOrder.OrderWithdrawalModal.accountLinkRefresh',
+    defaultMessage: ' and log out. The changes will be visible the next time you log in.',
+    description: 'Label of the account refresh information',
   },
   submit: {
     id: 'components.DashboardItemOrder.OrderWithdrawalModal.submit',
@@ -251,10 +256,15 @@ export const OrderWithdrawalModal = ({
       {isKeycloakBackend && (
         <p className="mb-b">
           <FormattedMessage {...messages.accountLinkInfo} />{' '}
-          <a href={(AuthenticationApi!.account as KeycloakAccountApi).updateUrl()}>
+          <a
+            className="order-withdrawal-modal__account-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            href={(AuthenticationApi!.account as KeycloakAccountApi).updateUrl()}
+          >
             <FormattedMessage {...messages.accountLinkLabel} />
           </a>
-          .
+          <FormattedMessage {...messages.accountLinkRefresh} />
         </p>
       )}
     </Modal>
