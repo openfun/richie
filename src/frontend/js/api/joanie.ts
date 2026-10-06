@@ -341,10 +341,20 @@ const API = (): Joanie.API => {
             method: 'POST',
             body: JSON.stringify(payload),
           }).then(checkStatus),
-        withdraw: async (id) =>
-          fetchWithJWT(ROUTES.user.orders.withdraw.replace(':id', id), {
+        withdraw: async (id) => {
+          const response = await fetchWithJWT(ROUTES.user.orders.withdraw.replace(':id', id), {
             method: 'POST',
-          }).then(checkStatus),
+          });
+          if (response.status === HttpStatusCode.UNPROCESSABLE_ENTITY) {
+            throw new HttpError(
+              response.status,
+              response.statusText,
+              undefined,
+              response.json().catch(() => undefined),
+            );
+          }
+          return checkStatus(response);
+        },
       },
       batchOrders: {
         create: async (payload) =>

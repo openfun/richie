@@ -109,10 +109,10 @@ describe('<OrderWithdrawalModal/>', () => {
 
   it('should display a specific error message when the withdrawal delay has expired', async () => {
     const order = CredentialOrderFactory().one();
-    fetchMock.post(
-      `https://joanie.endpoint/api/v1.0/orders/${order.id}/withdraw/`,
-      HttpStatusCode.UNPROCESSABLE_ENTITY,
-    );
+    fetchMock.post(`https://joanie.endpoint/api/v1.0/orders/${order.id}/withdraw/`, {
+      status: HttpStatusCode.UNPROCESSABLE_ENTITY,
+      body: { detail: 'Cannot withdraw order because the date has been reached' },
+    });
     const onClose = jest.fn();
 
     renderModal({ order, onClose });
@@ -121,6 +121,28 @@ describe('<OrderWithdrawalModal/>', () => {
     await userEvent.click(submitButton);
 
     await screen.findByText('The withdrawal period for this order has expired.');
+    expect(onClose).not.toHaveBeenCalled();
+    expect(mockMessageModal).not.toHaveBeenCalled();
+  });
+
+  it('should display a generic error message when the http status is unprocessable entity', async () => {
+    const order = CredentialOrderFactory().one();
+    fetchMock.post(`https://joanie.endpoint/api/v1.0/orders/${order.id}/withdraw/`, {
+      status: HttpStatusCode.UNPROCESSABLE_ENTITY,
+      body: { detail: 'No payment schedule found for this order' },
+    });
+    const onClose = jest.fn();
+
+    renderModal({ order, onClose });
+
+    const submitButton = screen.getByTestId('order-withdrawal-modal-submit-button');
+    await userEvent.click(submitButton);
+
+    await screen.findByText('An error occurred, please contact our support team.');
+
+    expect(
+      screen.queryByText('The withdrawal period for this order has expired.'),
+    ).not.toBeInTheDocument();
     expect(onClose).not.toHaveBeenCalled();
     expect(mockMessageModal).not.toHaveBeenCalled();
   });

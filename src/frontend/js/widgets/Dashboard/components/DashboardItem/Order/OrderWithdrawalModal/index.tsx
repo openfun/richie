@@ -140,6 +140,8 @@ enum ComponentStates {
   ERROR = 'error',
 }
 
+const WITHDRAWAL_PERIOD_EXPIRED_DETAIL = 'Cannot withdraw order because the date has been reached';
+
 export const OrderWithdrawalModal = ({
   order,
   productTitle,
@@ -181,9 +183,10 @@ export const OrderWithdrawalModal = ({
       });
     } catch (submitError) {
       setState(ComponentStates.ERROR);
+      const body = isHttpError(submitError) ? await submitError.responseBody : undefined;
       setError(
         intl.formatMessage(
-          isHttpError(submitError) && submitError.code === HttpStatusCode.UNPROCESSABLE_ENTITY
+          body?.detail === WITHDRAWAL_PERIOD_EXPIRED_DETAIL
             ? messages.errorDelayExpired
             : messages.errorDefault,
         ),
