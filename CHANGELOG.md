@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Pin webpack version in dependent front build
 - Handle user data form the authentication method (especially for mail)
 - Handle response detail for withdrawal request in specific usecases
+- Clarify account update link in withdrawal modal
 
 ## [3.5.1] - 2026-08-18
 
