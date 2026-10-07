@@ -128,7 +128,7 @@
     "sass": "1.105.1",
     "source-map-loader": "5.0.0",
     "tsconfig-paths-webpack-plugin": "4.2.0",
-    "typescript": "5.9.3",
+    "typescript": "6.0.3",
     "uuid": "14.0.2",
     "webpack": "5.111.1",
     "webpack-cli": "7.2.3",
