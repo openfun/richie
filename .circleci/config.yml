@@ -612,7 +612,7 @@ jobs:
   # ---- Front-end jobs ----
   build-front:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -645,10 +645,11 @@ jobs:
 
   build-front-production:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
+    resource_class: large
     working_directory: ~/fun/src/frontend
     steps:
       - *checkout_fun
@@ -674,7 +675,7 @@ jobs:
 
   build-dependent-front:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -786,7 +787,7 @@ jobs:
 
   lint-front:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -803,7 +804,7 @@ jobs:
 
   test-front:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -827,7 +828,7 @@ jobs:
 
   test-front-package:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -837,6 +838,13 @@ jobs:
       - run:
           name: Check SCSS library
           command: |
+            # Reuse richie-education's lockfile so dependencies resolve to
+            # versions already known to work, instead of resolving the whole
+            # tree fresh against npm at build time (fragile: a transitive
+            # react-aria/cunningham dependency can start requesting a version
+            # that doesn't exist on the registry, breaking the build with no
+            # code change on our side).
+            cp ~/fun/src/frontend/yarn.lock .
             # Install the sass library/compiler
             yarn add sass
             # Install the package locally
@@ -886,7 +894,7 @@ jobs:
   # Run relevant linters (eg. prettier for now) on the documentation website
   lint-website:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -903,7 +911,7 @@ jobs:
   # Deploy the docs website to GitHub pages.
   deploy-website:
     docker:
-      - image: cimg/node:20.19
+      - image: cimg/node:24.21
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -978,7 +986,7 @@ workflows:
             branches:
               ignore: master
             tags:
-              only: /(?!^v).*/
+              ignore: /^v.*/
       - lint-changelog:
           filters:
             branches:
