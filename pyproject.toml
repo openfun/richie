@@ -49,7 +49,7 @@ dependencies = [
     "elasticsearch>=6.0.0,<7.0.0",
     "exrex<1",
     "importlib-metadata<9",
-    "oauthlib>=3.2.2,<4",
+    "oauthlib>=4.0.0,<5",
     "python-keycloak<8",
     "requests>=2.32.3,<3",
 ]
