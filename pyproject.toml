@@ -83,7 +83,7 @@ dev = [
     "ipdb==0.13.13",
     "ipython==9.0.2",
     "isort==6.0.1",
-    "lxml==5.3.1",
+    "lxml==6.1.0",
     "msgpack==1.1.0",
     "mysqlclient==2.2.7",
     "pylint==3.3.6",
