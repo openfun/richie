@@ -15,6 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Collapse the whitespace leaked by template indentation into the `<title>`
+  tag so page titles no longer contain big gaps between words
 - Pin webpack version in dependent front build
 - Handle user data form the authentication method (especially for mail)
 - Handle response detail for withdrawal request in specific usecases
