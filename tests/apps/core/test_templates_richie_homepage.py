@@ -50,3 +50,16 @@ class TemplatesRichieHomepageTestCase(CMSTestCase):
             html_meta_og_image,
         )
         self.assertIn("richie/images/logo.png", html_meta_og_image)
+
+    def test_templates_richie_homepage_title_whitespace(self):
+        """
+        The <title> tag should not leak template indentation and should be rendered
+        on a single line with normalized spaces.
+        """
+        homepage = create_i18n_page("my title", is_homepage=True)
+        homepage.publish("en")
+        url = homepage.get_absolute_url(language="en")
+        response = self.client.get(url)
+        response_content = response.content.decode("UTF-8")
+
+        self.assertIn("<title>my title - example.com</title>", response_content)

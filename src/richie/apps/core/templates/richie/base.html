@@ -1,13 +1,13 @@
-{% load i18n cms_tags menu_tags rfc_5646_locale static sekizai_tags full_static_tags %}
+{% load i18n cms_tags menu_tags normalize_whitespace rfc_5646_locale static sekizai_tags full_static_tags %}
 <!doctype html>
 <html lang="{{ LANGUAGE_CODE|rfc_5646_locale }}">
     <head>
         {% spaceless %}
-        <title>
+        <title>{% filter normalize_whitespace %}
             {% block head_title %}{% endblock head_title %}
             {% block site_title_separator %} - {% endblock site_title_separator %}
             {% block site_title %}{{ SITE.name }}{% endblock site_title %}
-        </title>
+        {% endfilter %}</title>
         <meta name="viewport" content="width=device-width,initial-scale=1">
         {% block meta %}
             {% block meta_index_rules %}
