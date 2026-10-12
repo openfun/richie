@@ -613,23 +613,19 @@ const AbstractOrderFactory = factory((): Order => {
   };
 });
 
-export const CredentialOrderFactory = factory(
-  (): CredentialOrder => ({
-    ...AbstractOrderFactory().one(),
-    course: CourseLightFactory().one(),
-    enrollment: null,
-    payment_schedule: PaymentInstallmentFactory().many(3),
-  }),
-);
+export const CredentialOrderFactory = factory((): CredentialOrder => ({
+  ...AbstractOrderFactory().one(),
+  course: CourseLightFactory().one(),
+  enrollment: null,
+  payment_schedule: PaymentInstallmentFactory().many(3),
+}));
 
-export const CertificateOrderFactory = factory(
-  (): CertificateOrder => ({
-    ...AbstractOrderFactory().one(),
-    course: null,
-    target_courses: [],
-    enrollment: EnrollmentLightFactory().one(),
-  }),
-);
+export const CertificateOrderFactory = factory((): CertificateOrder => ({
+  ...AbstractOrderFactory().one(),
+  course: null,
+  target_courses: [],
+  enrollment: EnrollmentLightFactory().one(),
+}));
 
 export const AddressFactory = factory((): Address => {
   return {
@@ -665,35 +661,33 @@ export const PaymentFactory = factory((): Payment => {
   };
 });
 
-export const SaleTunnelContextFactory = factory(
-  (): SaleTunnelContextType => ({
-    webAnalyticsEventKey: 'eventKey',
-    order: CredentialOrderFactory().one(),
-    product: ProductFactory().one(),
-    props: {} as SaleTunnelProps,
-    billingAddress: undefined,
-    setBillingAddress: noop,
-    batchOrder: undefined,
-    setBatchOrder: noop,
-    batchOrderFormMethods: undefined,
-    setBatchOrderFormMethods: noop,
-    validateBatchOrder: noop,
-    setCreditCard: noop,
-    setHasWaivedWithdrawalRight: noop,
-    hasWaivedWithdrawalRight: false,
-    step: SaleTunnelStep.IDLE,
-    registerSubmitCallback: noop,
-    unregisterSubmitCallback: noop,
-    runSubmitCallbacks: () => new Promise((resolve) => resolve()),
-    nextStep: noop,
-    setVoucherCode: noop,
-    setSchedule: noop,
-    needsPayment: true,
-    setNeedsPayment: noop,
-    paymentMode: PaymentMode.CLASSIC,
-    setPaymentMode: noop,
-  }),
-);
+export const SaleTunnelContextFactory = factory((): SaleTunnelContextType => ({
+  webAnalyticsEventKey: 'eventKey',
+  order: CredentialOrderFactory().one(),
+  product: ProductFactory().one(),
+  props: {} as SaleTunnelProps,
+  billingAddress: undefined,
+  setBillingAddress: noop,
+  batchOrder: undefined,
+  setBatchOrder: noop,
+  batchOrderFormMethods: undefined,
+  setBatchOrderFormMethods: noop,
+  validateBatchOrder: noop,
+  setCreditCard: noop,
+  setHasWaivedWithdrawalRight: noop,
+  hasWaivedWithdrawalRight: false,
+  step: SaleTunnelStep.IDLE,
+  registerSubmitCallback: noop,
+  unregisterSubmitCallback: noop,
+  runSubmitCallbacks: () => new Promise((resolve) => resolve()),
+  nextStep: noop,
+  setVoucherCode: noop,
+  setSchedule: noop,
+  needsPayment: true,
+  setNeedsPayment: noop,
+  paymentMode: PaymentMode.CLASSIC,
+  setPaymentMode: noop,
+}));
 
 export const BatchOrderSeatFactory = factory((): BatchOrderSeat => {
   return {

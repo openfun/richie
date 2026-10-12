@@ -10,13 +10,11 @@ interface CourseRunListProps {
 
 const CourseRunList = ({ courseRuns }: CourseRunListProps) => {
   const intl = useIntl();
-  const columns = ['title', 'period', 'status', 'action'].map(
-    (field: string): Column => ({
-      id: field,
-      headerName: field,
-      renderCell: (params) => params.row[field],
-    }),
-  );
+  const columns = ['title', 'period', 'status', 'action'].map((field: string): Column => ({
+    id: field,
+    headerName: field,
+    renderCell: (params) => params.row[field],
+  }));
 
   return (
     <div className="teacher-dashboard-course-run-list">

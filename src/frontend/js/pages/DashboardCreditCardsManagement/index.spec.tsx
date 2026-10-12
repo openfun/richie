@@ -1,12 +1,14 @@
 import fetchMock from 'fetch-mock';
 import {
   act,
+  findByText,
   fireEvent,
   getByRole,
   getByText,
   queryByRole,
   queryByText,
   screen,
+  waitFor,
 } from '@testing-library/react';
 import { faker } from '@faker-js/faker';
 import {
@@ -229,7 +231,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
 
     // The address does not appear anymore in the list.
-    expect(screen.queryByText(creditCard.title!)).toBeNull();
+    await waitFor(() => expect(screen.queryByText(creditCard.title!)).toBeNull());
   });
 
   it('deletes a main credit card', async () => {
@@ -269,7 +271,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();
 
     // The address does not appear anymore in the list.
-    expect(screen.queryByText(creditCard.title!)).toBeNull();
+    await waitFor(() => expect(screen.queryByText(creditCard.title!)).toBeNull());
   });
 
   it('promotes a credit card', async () => {
@@ -310,7 +312,7 @@ describe('<DashboardCreditCardsManagement/>', () => {
 
     // Assert that "Default credit card" is displayed on the credit card's box.
     creditCardContainer = screen.getByTestId('dashboard-credit-card__' + creditCard.id);
-    getByText(creditCardContainer, 'Default credit card');
+    await findByText(creditCardContainer, 'Default credit card');
 
     // No error is shown.
     expect(screen.queryByText('An error occurred', { exact: false })).toBeNull();

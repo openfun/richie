@@ -3,6 +3,7 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./js",
     "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
     "jsx": "preserve",
     "lib": [
       "dom",

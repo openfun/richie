@@ -113,13 +113,8 @@
 
   &__cta {
     @include sv-flex(0, 0, auto);
-    @include button-size(
-      $btn-padding-y,
-      $btn-padding-x,
-      $btn-font-size,
-      $btn-line-height,
-      $btn-border-radius
-    );
+    @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-border-radius);
+    line-height: $btn-line-height;
     @include button-variant(
       r-theme-val(compacted-banner, cta-variant-from),
       r-theme-val(compacted-banner, cta-variant-to)

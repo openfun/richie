@@ -1,23 +1,33 @@
 module.exports = {
   plugins: [
     [
-      'react-intl',
+      'polyfill-corejs3',
       {
-        ast: true,
-        extractFromFormatMessageCall: true,
-        idInterpolationPattern: '[sha512:contenthash:base64:6]',
+        method: 'usage-global',
+        version: require('core-js/package.json').version,
       },
     ],
-    ['@babel/plugin-syntax-dynamic-import'],
+  ],
+  overrides: [
+    {
+      exclude: /node_modules/,
+      plugins: [
+        [
+          'formatjs',
+          {
+            ast: true,
+            idInterpolationPattern: '[sha512:contenthash:base64:6]',
+          },
+        ],
+      ],
+    },
   ],
   presets: [
     [
       '@babel/preset-env',
       {
-        corejs: 3,
         forceAllTransforms: true,
         targets: 'last 1 version, >0.2%, IE 11',
-        useBuiltIns: 'usage',
       },
     ],
     [
@@ -26,6 +36,11 @@ module.exports = {
         runtime: 'automatic',
       },
     ],
-    '@babel/preset-typescript',
+    [
+      '@babel/preset-typescript',
+      {
+        onlyRemoveTypeImports: false,
+      },
+    ],
   ],
 };

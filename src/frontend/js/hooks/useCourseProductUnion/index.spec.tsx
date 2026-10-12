@@ -73,7 +73,7 @@ describe('useCourseProductUnion', () => {
     );
     const { result } = renderUseCourseProductUnion();
     await waitFor(() => expect(result.current.isLoading).toBe(false));
-    expect(result.current.data.length).toBe(PER_PAGE);
+    await waitFor(() => expect(result.current.data.length).toBe(PER_PAGE));
     nbApiCalls += 1; // courses page 1
     nbApiCalls += 1; // offerings page 1
     const calledUrls = fetchMock.calls().map((call) => call[0]);
@@ -103,7 +103,7 @@ describe('useCourseProductUnion', () => {
     );
     const { result } = renderUseCourseProductUnion({ organizationId: 'DUMMY_ORGANIZATION_ID' });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
-    expect(result.current.data.length).toBe(PER_PAGE);
+    await waitFor(() => expect(result.current.data.length).toBe(PER_PAGE));
     nbApiCalls += 1; // courses page 1
     nbApiCalls += 1; // offerings page 1
     const calledUrls = fetchMock.calls().map((call) => call[0]);
