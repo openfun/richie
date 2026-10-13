@@ -72,7 +72,8 @@
         {% render_block "css" %}
 
         {% block css_links %}
-        <link rel="stylesheet" type="text/css" href="{% static 'richie/css/main.css' %}">
+        <link rel="stylesheet" media="screen" type="text/css" href="{% static 'richie/css/main.css' %}">
+        <link rel="stylesheet" media="print" type="text/css" href="{% static 'richie/css/print.css' %}">
         {% endblock css_links %}
     </head>
     <body{% block body_rdfa %}{% endblock body_rdfa %}>
