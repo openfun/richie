@@ -81,7 +81,7 @@ const messages = defineMessages({
   },
   accountLinkRefresh: {
     id: 'components.DashboardItemOrder.OrderWithdrawalModal.accountLinkRefresh',
-    defaultMessage: ' and log out. The changes will be visible the next time you log in.',
+    defaultMessage: 'and log out. The changes will be visible the next time you log in.',
     description: 'Label of the account refresh information',
   },
   submit: {
@@ -263,7 +263,7 @@ export const OrderWithdrawalModal = ({
             href={(AuthenticationApi!.account as KeycloakAccountApi).updateUrl()}
           >
             <FormattedMessage {...messages.accountLinkLabel} />
-          </a>
+          </a>{' '}
           <FormattedMessage {...messages.accountLinkRefresh} />
         </p>
       )}
