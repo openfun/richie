@@ -208,7 +208,9 @@ describe('<DashboardItemOrder/>', () => {
     const withdrawnOnDate = new Intl.DateTimeFormat('en', DEFAULT_DATE_FORMAT).format(
       new Date(order.withdrawn_confirmation_at!),
     );
-    await screen.findByText(`Withdrawn On ${withdrawnOnDate}.`, { exact: false });
+    await screen.findByText(`You withdrew from this order on ${withdrawnOnDate}.`, {
+      exact: false,
+    });
     expect(screen.queryByRole('link', { name: 'View details' })).not.toBeInTheDocument();
     order.target_courses.forEach((course) => {
       expect(

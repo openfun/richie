@@ -53,8 +53,8 @@ const messages = defineMessages({
   },
   withdrawnOn: {
     id: 'components.DashboardItemOrder.withdrawnOn',
-    description: 'Date at which the withdrawal was confirmed',
-    defaultMessage: 'On {date}.',
+    description: 'Message displayed once a withdrawal request has been confirmed',
+    defaultMessage: 'You withdrew from this order on {date}.',
   },
 });
 
@@ -118,15 +118,13 @@ export const DashboardItemOrder = ({
                   <>
                     <Icon name={isWithdrawn ? IconTypeEnum.ROUND_CLOSE : IconTypeEnum.SCHOOL} />
                     <span>
-                      <OrderStateLearnerMessage order={order} />
-                      {isWithdrawn && order.withdrawn_confirmation_at && (
-                        <>
-                          {' '}
-                          <FormattedMessage
-                            {...messages.withdrawnOn}
-                            values={{ date: formatDate(order.withdrawn_confirmation_at) }}
-                          />
-                        </>
+                      {isWithdrawn && order.withdrawn_confirmation_at ? (
+                        <FormattedMessage
+                          {...messages.withdrawnOn}
+                          values={{ date: formatDate(order.withdrawn_confirmation_at) }}
+                        />
+                      ) : (
+                        <OrderStateLearnerMessage order={order} />
                       )}
                     </span>
                   </>
