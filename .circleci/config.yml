@@ -28,7 +28,6 @@ aliases:
       name: Restore node_modules cache
       keys:
         - v8-front-dependencies-{{ checksum "~/fun/src/frontend/yarn.lock" }}
-        - v8-front-dependencies-
 
   - &install-libcairo2-dev
     run:
