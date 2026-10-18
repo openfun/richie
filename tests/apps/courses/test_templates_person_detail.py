@@ -187,9 +187,10 @@ class PersonCMSTestCase(CMSTestCase):
             html=True,
             status_code=200,
         )
+        title = person.extended_object.get_title()
         self.assertContains(
             response,
-            f'<h1 class="subheader__title">{person.extended_object.get_title():s}</h1>',
+            f'<h1 class="subheader__title" property="name">{title:s}</h1>',
             html=True,
         )
         # The published category should be on the page in its published version
@@ -301,7 +302,7 @@ class PersonCMSTestCase(CMSTestCase):
         title = person.extended_object.get_title()
         self.assertContains(
             response,
-            f'<h1 class="subheader__title">{title:s}</h1>',
+            f'<h1 class="subheader__title" property="name">{title:s}</h1>',
             html=True,
         )
 
@@ -342,7 +343,7 @@ class PersonCMSTestCase(CMSTestCase):
             # pylint: disable=consider-using-f-string
             '<div class="organization-glimpse">'
             '<a href="{:s}" title="Link to the organization page of {:s}" '
-            'property="author" typeof="CollegeOrUniversity">'.format(
+            'property="affiliation" typeof="CollegeOrUniversity">'.format(
                 published_organization.extended_object.get_absolute_url(),
                 published_organization.extended_object.get_title(),
             ),
@@ -360,7 +361,7 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertIn(
             # pylint: disable=consider-using-f-string
             '<a href="{:s}" title="Link to the organization page of {:s}" '
-            'property="author" typeof="CollegeOrUniversity">'.format(
+            'property="affiliation" typeof="CollegeOrUniversity">'.format(
                 not_published_organization.extended_object.get_absolute_url(),
                 not_published_organization.extended_object.get_title(),
             ),
