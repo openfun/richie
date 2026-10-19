@@ -236,7 +236,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
         facet_counts = [
             (key.split("@")[1], facet["doc_count"])
             for key, facet in facets.items()
-            if f"{self.name:s}@" in key  # 6 times faster than startswith
+            if key.startswith(f"{self.name:s}@")
         ]
 
         # Detect the applicable facet counts limit depending on the request

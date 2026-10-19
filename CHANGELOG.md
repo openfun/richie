@@ -10,11 +10,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add `offer` and `certificate_offer` search filters on course runs
 - Add main content placeholder to categories list view
 - Withdrawing feature for certificate and credential orders
 
 ### Fixed
 
+- Match facet keys on the filter name prefix so a filter does not collect the
+  facet counts of another filter whose name ends with its own name
 - Pin webpack version in dependent front build
 - Handle user data form the authentication method (especially for mail)
 - Handle response detail for withdrawal request in specific usecases

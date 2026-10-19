@@ -311,7 +311,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             {
                 key.split("@")[1]: facet["doc_count"]
                 for key, facet in facets.items()
-                if f"{self.name:s}@" in key  # 6 times faster than startswith
+                if key.startswith(f"{self.name:s}@")
             }
         )
 
@@ -472,6 +472,56 @@ class AvailabilityFilterDefinition(
                 {"range": {"course_runs.end": {"gte": now}}},
             ],
             self.ARCHIVED: [{"range": {"course_runs.end": {"lte": now}}}],
+        }
+
+
+class OfferFilterDefinition(
+    NestedChoicesAggsMixin, TermsQueryMixin, BaseChoicesFilterDefinition
+):
+    """
+    Filter definition to allow filtering by the offer of course runs ie whether the course
+    can be followed for free, partially for free, with a subscription or by paying for it.
+
+    Hardcoded choices match the `offer` field of the course run model and are applied on the
+    `course_runs` nested field. Selected values are combined in a single terms query so that
+    choosing several offers matches course runs having any of them.
+    """
+
+    FREE, PARTIALLY_FREE, SUBSCRIPTION, PAID = (
+        "free",
+        "partially_free",
+        "subscription",
+        "paid",
+    )
+
+    def get_values(self):
+        """Return the hardcoded values with internationalized human names."""
+        return {
+            self.FREE: _("Free"),
+            self.PARTIALLY_FREE: _("Partially free"),
+            self.SUBSCRIPTION: _("Subscription"),
+            self.PAID: _("Paid"),
+        }
+
+    def get_fragment_map(self):
+        """Return a terms query on the nested field for each of the possible values."""
+        return {value: [{"terms": {self.term: [value]}}] for value in self.get_values()}
+
+
+class CertificateOfferFilterDefinition(OfferFilterDefinition):
+    """
+    Filter definition to allow filtering by the certificate offer of course runs ie whether
+    the certificate can be obtained for free, with a subscription or by paying for it.
+
+    Hardcoded choices match the `certificate_offer` field of the course run model.
+    """
+
+    def get_values(self):
+        """Return the hardcoded values with internationalized human names."""
+        return {
+            self.FREE: _("Free"),
+            self.SUBSCRIPTION: _("Subscription"),
+            self.PAID: _("Paid"),
         }
 
 
