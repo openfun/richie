@@ -69,6 +69,25 @@ DEFAULT_FILTERS_CONFIGURATION = {
                         "sorting": "conf",
                     },
                 },
+                "offer": {
+                    "class": "richie.apps.search.filter_definitions.OfferFilterDefinition",
+                    "params": {
+                        "human_name": _("Offer"),
+                        "min_doc_count": 0,
+                        "sorting": "conf",
+                    },
+                },
+                "certificate_offer": {
+                    "class": (
+                        "richie.apps.search.filter_definitions."
+                        "CertificateOfferFilterDefinition"
+                    ),
+                    "params": {
+                        "human_name": _("Certificate offer"),
+                        "min_doc_count": 0,
+                        "sorting": "conf",
+                    },
+                },
                 "languages": {
                     "class": "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
                     "params": {
@@ -172,5 +191,7 @@ FILTERS_PRESENTATION = getattr(
         "persons",
         "licences",
         "pace",
+        "offer",
+        "certificate_offer",
     ],
 )

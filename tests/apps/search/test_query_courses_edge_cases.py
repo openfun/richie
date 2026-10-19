@@ -157,6 +157,8 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 "Personnes",
                 "Licences",
                 "Rythme hebdomadaire",
+                "Offer",
+                "Certificate offer",
             ],
         )
 

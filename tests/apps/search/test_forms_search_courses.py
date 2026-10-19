@@ -31,6 +31,7 @@ class CourseSearchFormTestCase(TestCase):
             form.cleaned_data,
             {
                 "availability": [],
+                "certificate_offer": [],
                 "facet_sorting": "",
                 "languages": [],
                 "levels": [],
@@ -41,6 +42,7 @@ class CourseSearchFormTestCase(TestCase):
                 "licences_children_aggs": "",
                 "limit": None,
                 "new": [],
+                "offer": [],
                 "offset": None,
                 "organizations": [],
                 "organizations_aggs": [],
@@ -154,6 +156,7 @@ class CourseSearchFormTestCase(TestCase):
             form.cleaned_data,
             {
                 "availability": ["coming_soon"],
+                "certificate_offer": [],
                 "facet_sorting": "count",
                 "languages": ["fr"],
                 "levels": ["1"],
@@ -164,6 +167,7 @@ class CourseSearchFormTestCase(TestCase):
                 "licences_children_aggs": "",
                 "limit": 9,
                 "new": ["new"],
+                "offer": [],
                 "offset": 3,
                 "organizations": ["10"],
                 "organizations_aggs": [],
@@ -222,6 +226,7 @@ class CourseSearchFormTestCase(TestCase):
             form.cleaned_data,
             {
                 "availability": ["coming_soon", "ongoing"],
+                "certificate_offer": [],
                 "facet_sorting": "name",
                 "languages": ["fr", "en"],
                 "levels": ["1", "2"],
@@ -232,6 +237,7 @@ class CourseSearchFormTestCase(TestCase):
                 "licences_children_aggs": "",
                 "limit": 9,
                 "new": ["new"],
+                "offer": [],
                 "offset": 3,
                 "organizations": ["10", "11"],
                 "organizations_aggs": ["43", "44"],
