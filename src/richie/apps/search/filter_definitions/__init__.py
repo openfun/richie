@@ -7,9 +7,11 @@ from ..defaults import FILTERS_CONFIGURATION
 from .base import BaseFilterDefinition, NestingWrapper  # noqa
 from .courses import (  # noqa
     AvailabilityFilterDefinition,
+    CertificateOfferFilterDefinition,
     IndexableFilterDefinition,
     IndexableHierarchicalFilterDefinition,
     LanguagesFilterDefinition,
+    OfferFilterDefinition,
     StaticChoicesFilterDefinition,
 )
 
