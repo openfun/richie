@@ -13,6 +13,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add main content placeholder to categories list view
 - Withdrawing feature for certificate and credential orders
 - Upgrade to node 24.21.0
+- Add mirror repo to gitlab
 
 ### Fixed
 
