@@ -16,6 +16,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Refetch learner dashboard courses after enroll/unenroll instead of serving
+  a 20-minute sessionStorage cache
+- Refresh learner dashboard courses on tab focus and across tabs after
+  enrollment changes
 - Pin webpack version in dependent front build
 - Handle user data form the authentication method (especially for mail)
 - Handle response detail for withdrawal request in specific usecases

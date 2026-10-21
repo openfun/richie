@@ -12,6 +12,11 @@ export interface QueryConfig<Data, Filters> {
   queryKey: string[];
   fn: FetchDataFunction<Data, Filters>;
   filters: Filters;
+  /**
+   * How long cached pages are reused instead of calling the API.
+   * Defaults to sessionItems (20 min). Use 0 to always refetch (e.g. learner dashboard).
+   */
+  staleTime?: number;
 }
 
 export interface FetchEntityBaseArgs {
@@ -50,11 +55,12 @@ export const fetchEntity = async <
   const QUERY_KEY = [...queryKey, JSON.stringify(filters)];
   const state = queryClient.getQueryState<PaginatedResponse<Data>>(QUERY_KEY);
   let data: Maybe<PaginatedResponse<Data>>;
+  const staleTime = queryConfig.staleTime ?? REACT_QUERY_SETTINGS.staleTimes.sessionItems;
   // Here we need to mimic the behavior of staleTime, which does not seems to be implemented when using `getQueryData`.
   if (
     state &&
     state.status === 'success' &&
-    state.dataUpdatedAt >= new Date().getTime() - REACT_QUERY_SETTINGS.staleTimes.sessionItems &&
+    state.dataUpdatedAt >= new Date().getTime() - staleTime &&
     !state.isInvalidated
   ) {
     data = state.data;

@@ -496,4 +496,97 @@ describe('useUnionResource', () => {
     expect(calledUrls).toContain('http://data.a/?page=3');
     expect(calledUrls).toContain('http://data.b/?page=1');
   });
+
+  it('should reuse a fresh query cache by default', async () => {
+    const queryClient = createTestQueryClient({ user: true });
+    const cachedA = mockPaginatedResponse([dataAList[0]], 1, false);
+    const cachedB = mockPaginatedResponse([], 0, false);
+    const pageFilters = JSON.stringify({ page: 1, page_size: perPage });
+    queryClient.setQueryData(['resourceA', pageFilters], cachedA);
+    queryClient.setQueryData(['resourceB', pageFilters], cachedB);
+
+    fetchMock.get('http://data.a/?page=1', mockPaginatedResponse([dataAList[1]], 1, false));
+    fetchMock.get('http://data.b/?page=1', mockPaginatedResponse([dataBList[0]], 1, false));
+
+    const { result } = renderHook(
+      () =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig,
+          queryBConfig,
+        }),
+      {
+        wrapper: ({ children }) => (
+          <AppWrapper queryOptions={{ client: queryClient }}>{children}</AppWrapper>
+        ),
+      },
+    );
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(fetchMock.calls()).toHaveLength(0);
+    expect(result.current.data).toEqual([dataAList[0]]);
+  });
+
+  it('should refetch despite a fresh query cache when staleTime is 0', async () => {
+    const queryClient = createTestQueryClient({ user: true });
+    const cachedA = mockPaginatedResponse([dataAList[0]], 1, false);
+    const cachedB = mockPaginatedResponse([], 0, false);
+    const pageFilters = JSON.stringify({ page: 1, page_size: perPage });
+    queryClient.setQueryData(['resourceA', pageFilters], cachedA);
+    queryClient.setQueryData(['resourceB', pageFilters], cachedB);
+
+    fetchMock.get('http://data.a/?page=1', mockPaginatedResponse([dataAList[1]], 1, false));
+    fetchMock.get('http://data.b/?page=1', mockPaginatedResponse([dataBList[0]], 1, false));
+
+    const { result } = renderHook(
+      () =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig: { ...queryAConfig, staleTime: 0 },
+          queryBConfig: { ...queryBConfig, staleTime: 0 },
+        }),
+      {
+        wrapper: ({ children }) => (
+          <AppWrapper queryOptions={{ client: queryClient }}>{children}</AppWrapper>
+        ),
+      },
+    );
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(fetchMock.calls()).toHaveLength(2);
+    expect(result.current.data).toEqual([dataBList[0], dataAList[1]]);
+  });
+
+  it('should refetch when the window is focused if refetchOnWindowFocus is true', async () => {
+    fetchMock.get('http://data.a/?page=1', mockPaginatedResponse([dataAList[0]], 1, false));
+    fetchMock.get('http://data.b/?page=1', mockPaginatedResponse([], 0, false));
+
+    const { result } = renderHook(
+      () =>
+        useUnionResource<TestDataA, TestDataB, TestDataAFilters, PaginatedResourceQuery>({
+          queryAConfig: { ...queryAConfig, staleTime: 0 },
+          queryBConfig: { ...queryBConfig, staleTime: 0 },
+          refetchOnWindowFocus: true,
+        }),
+      { wrapper: AppWrapper },
+    );
+
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+    expect(fetchMock.calls()).toHaveLength(2);
+
+    await act(async () => {
+      Object.defineProperty(document, 'visibilityState', {
+        configurable: true,
+        get: () => 'visible',
+      });
+      window.dispatchEvent(new Event('focus'));
+    });
+
+    await waitFor(() => {
+      expect(
+        fetchMock
+          .calls()
+          .map((call) => call[0])
+          .filter((url) => url === 'http://data.a/?page=1'),
+      ).toHaveLength(2);
+    });
+  });
 });
