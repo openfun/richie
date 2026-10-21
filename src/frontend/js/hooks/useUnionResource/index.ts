@@ -5,6 +5,7 @@ import { PaginatedResourceQuery, PaginatedResponse } from 'types/Joanie';
 import { PER_PAGE } from 'settings';
 import { useQueryKeyInvalidateListener } from 'hooks/useQueryKeyInvalidateListener';
 import { Maybe } from 'types/utils';
+import { LEARNER_DASHBOARD_SYNC_CHANNEL } from 'utils/learnerDashboardSync';
 import { syncIntegrityCount } from './utils/syncIntegrityCount';
 import { FetchEntityData } from './utils/fetchEntities';
 import { QueryConfig } from './utils/fetchEntity';
@@ -45,6 +46,8 @@ interface UseUnionResourceProps<
   queryBConfig: QueryConfig<DataB, FiltersB>;
   errorGetMessage?: MessageDescriptor;
   refetchOnInvalidation?: boolean;
+  refetchOnWindowFocus?: boolean;
+  syncAcrossTabs?: boolean;
 }
 
 /**
@@ -65,6 +68,8 @@ const useUnionResource = <
   perPage = PER_PAGE.useUnionResources,
   errorGetMessage = messages.errorGet,
   refetchOnInvalidation = true,
+  refetchOnWindowFocus = false,
+  syncAcrossTabs = false,
 }: UseUnionResourceProps<DataA, DataB, FiltersA, FiltersB>): UseUnionResourceReturns<
   DataA,
   DataB
@@ -108,6 +113,45 @@ const useUnionResource = <
     setIntegrityCount(0);
     setForceUpdate(Date.now());
   };
+  const resetRef = useRef(reset);
+  resetRef.current = reset;
+
+  useEffect(() => {
+    if (!refetchOnWindowFocus) {
+      return undefined;
+    }
+    let lastResetAt = 0;
+    const onVisible = () => {
+      if (typeof document !== 'undefined' && document.visibilityState !== 'visible') {
+        return;
+      }
+      const now = Date.now();
+      if (now - lastResetAt < 500) {
+        return;
+      }
+      lastResetAt = now;
+      resetRef.current();
+    };
+    window.addEventListener('focus', onVisible);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      window.removeEventListener('focus', onVisible);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
+  }, [refetchOnWindowFocus]);
+
+  useEffect(() => {
+    if (!syncAcrossTabs || typeof BroadcastChannel === 'undefined') {
+      return undefined;
+    }
+    const channel = new BroadcastChannel(LEARNER_DASHBOARD_SYNC_CHANNEL);
+    channel.onmessage = () => {
+      resetRef.current();
+    };
+    return () => {
+      channel.close();
+    };
+  }, [syncAcrossTabs]);
 
   // we manualy observe key invalidation to trigger new search
   // by generating a new update key

@@ -94,6 +94,15 @@ describe('<DashboardItemOrder/> Contract', () => {
           '&page_size=50',
         { results: [order], next: null, previous: null, count: 1 },
       );
+      fetchMock.get(
+        'https://joanie.endpoint/api/v1.0/orders/' +
+          '?product_type=credential' +
+          '&state_exclude=refunding' +
+          '&state_exclude=refunded' +
+          '&page=2' +
+          '&page_size=50',
+        { results: [], next: null, previous: null, count: 1 },
+      );
 
       const submitDeferred = new Deferred();
       fetchMock.post(
@@ -271,6 +280,16 @@ describe('<DashboardItemOrder/> Contract', () => {
           '&page=1' +
           '&page_size=50',
         { results: [signedOrder], next: null, previous: null, count: 1 },
+        { overwriteRoutes: true },
+      );
+      fetchMock.get(
+        'https://joanie.endpoint/api/v1.0/orders/' +
+          '?product_type=credential' +
+          '&state_exclude=refunding' +
+          '&state_exclude=refunded' +
+          '&page=2' +
+          '&page_size=50',
+        { results: [], next: null, previous: null, count: 1 },
         { overwriteRoutes: true },
       );
 
