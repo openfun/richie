@@ -157,6 +157,42 @@ FILTERS_CONFIGURATION = {
 }
 ```
 
+Richie ships with two other nested filters on course runs, based on the `offer` and
+`certificate_offer` fields of course runs: `OfferFilterDefinition` lets users filter courses
+that can be followed for free, partially for free, with a subscription or by paying, and
+`CertificateOfferFilterDefinition` does the same for the certificate. They only need a
+`human_name` to be configured:
+
+```
+FILTERS_CONFIGURATION = {
+    ...
+    "course_runs": {
+        "class": "richie.apps.search.filter_definitions.NestingWrapper",
+        "params": {
+            "filters": {
+                "offer": {
+                    "class": "richie.apps.search.filter_definitions.OfferFilterDefinition",
+                    "params": {
+                        "human_name": _("Offer"),
+                        "min_doc_count": 0,
+                        "sorting": "conf",
+                    },
+                },
+                "certificate_offer": {
+                    "class": "richie.apps.search.filter_definitions.CertificateOfferFilterDefinition",
+                    "params": {
+                        "human_name": _("Certificate offer"),
+                        "min_doc_count": 0,
+                        "sorting": "conf",
+                    },
+                },
+            }
+        },
+    },
+    ...
+}
+```
+
 ## Filters presentation
 
 Which filters are displayed in the left side bar of the search page and in which order is defined

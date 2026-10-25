@@ -1112,6 +1112,49 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             },
                         ],
                     },
+                    "offer": {
+                        "base_path": None,
+                        "has_more_values": False,
+                        "human_name": "Offer",
+                        "is_autocompletable": False,
+                        "is_drilldown": False,
+                        "is_searchable": False,
+                        "name": "offer",
+                        "position": 9,
+                        "values": [
+                            {"count": 0, "human_name": "Free", "key": "free"},
+                            {
+                                "count": 0,
+                                "human_name": "Partially free",
+                                "key": "partially_free",
+                            },
+                            {
+                                "count": 0,
+                                "human_name": "Subscription",
+                                "key": "subscription",
+                            },
+                            {"count": 1, "human_name": "Paid", "key": "paid"},
+                        ],
+                    },
+                    "certificate_offer": {
+                        "base_path": None,
+                        "has_more_values": False,
+                        "human_name": "Certificate offer",
+                        "is_autocompletable": False,
+                        "is_drilldown": False,
+                        "is_searchable": False,
+                        "name": "certificate_offer",
+                        "position": 10,
+                        "values": [
+                            {"count": 1, "human_name": "Free", "key": "free"},
+                            {
+                                "count": 0,
+                                "human_name": "Subscription",
+                                "key": "subscription",
+                            },
+                            {"count": 1, "human_name": "Paid", "key": "paid"},
+                        ],
+                    },
                     "subjects": {
                         "base_path": "0001",
                         "has_more_values": False,
@@ -1241,7 +1284,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.prepare_indices()
         response = self.client.get("/api/v1.0/courses/?scope=filters")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()["filters"]), 9)
+        self.assertEqual(len(response.json()["filters"]), 11)
         self.assertFalse("objects" in response.json())
 
     def test_query_courses_course_runs_filter_availability_facets(self, *_):
@@ -1397,6 +1440,132 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             list((int(c["id"]) for c in response.json()["objects"])),
             self.get_expected_courses(data["courses_definition"], ["D", "H", "I"]),
+        )
+
+    def test_query_courses_course_runs_filter_offer_paid(self, *_):
+        """
+        Battle test filtering and sorting courses with a paid course run.
+        """
+        data = self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?offer=paid")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(data["courses_definition"], ["A"]),
+        )
+
+    def test_query_courses_course_runs_filter_offer_partially_free(self, *_):
+        """
+        Battle test filtering and sorting courses with a partially free course run.
+        """
+        data = self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?offer=partially_free")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(data["courses_definition"], ["D"]),
+        )
+
+    def test_query_courses_course_runs_filter_offer_no_match(self, *_):
+        """
+        Filtering on an offer that no course run has should return no course.
+        """
+        self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?offer=subscription")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["objects"], [])
+
+    def test_query_courses_course_runs_filter_offer_invalid(self, *_):
+        """
+        Filtering on an offer that is not a valid choice should be rejected.
+        """
+        self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?offer=gift")
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("offer", response.json()["errors"])
+
+    def test_query_courses_course_runs_filter_multiple_offers(self, *_):
+        """
+        Battle test filtering and sorting courses on several offers at once.
+        """
+        data = self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?offer=paid&offer=partially_free")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(data["courses_definition"], ["A", "D"]),
+        )
+
+    def test_query_courses_course_runs_filter_certificate_offer_paid(self, *_):
+        """
+        Battle test filtering and sorting courses with a paid certificate.
+        """
+        data = self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?certificate_offer=paid")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(data["courses_definition"], ["C", "D"]),
+        )
+
+    def test_query_courses_course_runs_filter_certificate_offer_free(self, *_):
+        """
+        Battle test filtering and sorting courses with a free certificate.
+        """
+        data = self.prepare_indices()
+        response = self.client.get("/api/v1.0/courses/?certificate_offer=free")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(data["courses_definition"], ["A"]),
+        )
+
+    def test_query_courses_course_runs_filter_offer_facets(self, *_):
+        """
+        Check that facet counts of the other nested filters are affected when we filter on
+        offer, but not the facet counts of the offer filter itself.
+        We fix the course runs suite because facet counts may vary if course runs with the
+        same offer get grouped under the same course.
+        """
+        data = self.prepare_indices(
+            suite=[["A", "B"], ["H", "C"], ["E", "I"], ["G", "D"]]
+        )
+        response = self.client.get("/api/v1.0/courses/?offer=paid")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            list((int(c["id"]) for c in response.json()["objects"])),
+            self.get_expected_courses(data["courses_definition"], ["A"]),
+        )
+        self.assertEqual(
+            response.json()["filters"]["offer"]["values"],
+            [
+                {"count": 0, "human_name": "Free", "key": "free"},
+                {"count": 1, "human_name": "Partially free", "key": "partially_free"},
+                {"count": 0, "human_name": "Subscription", "key": "subscription"},
+                {"count": 1, "human_name": "Paid", "key": "paid"},
+            ],
+        )
+        # Only the course run that is paid is taken into account for the other nested facets
+        self.assertEqual(
+            response.json()["filters"]["certificate_offer"]["values"],
+            [
+                {"count": 1, "human_name": "Free", "key": "free"},
+                {"count": 0, "human_name": "Subscription", "key": "subscription"},
+                {"count": 0, "human_name": "Paid", "key": "paid"},
+            ],
+        )
+        self.assertEqual(
+            response.json()["filters"]["availability"]["values"],
+            [
+                {"count": 1, "human_name": "Open for enrollment", "key": "open"},
+                {"count": 0, "human_name": "Coming soon", "key": "coming_soon"},
+                {"count": 1, "human_name": "On-going", "key": "ongoing"},
+                {"count": 0, "human_name": "Archived", "key": "archived"},
+            ],
+        )
+        self.assertEqual(
+            response.json()["filters"]["languages"]["values"],
+            [{"count": 1, "human_name": "#fr", "key": "fr"}],
         )
 
     def test_query_courses_course_runs_filter_language(self, *_):

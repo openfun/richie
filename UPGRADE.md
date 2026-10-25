@@ -16,6 +16,11 @@ $ make migrate
 
 ## Unreleased
 
+- Two new search filters, `offer` and `certificate_offer`, are added to the default
+  `RICHIE_FILTERS_CONFIGURATION` (nested under `course_runs`) and appended to the default
+  `RICHIE_FILTERS_PRESENTATION`. If you override either setting, add them to your own
+  configuration to display them, or leave them out to keep your search page unchanged.
+
 ## 2.34.0 to v3.0.0-beta.0
 
 - We upgrade our frontend to React 19, you have to update your dependencies

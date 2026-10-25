@@ -142,6 +142,24 @@ class FilterDefinitionsViewTestCase(CMSTestCase):
                     "name": "pace",
                     "position": 8,
                 },
+                "offer": {
+                    "base_path": None,
+                    "human_name": "Offer",
+                    "is_autocompletable": False,
+                    "is_drilldown": False,
+                    "is_searchable": False,
+                    "name": "offer",
+                    "position": 9,
+                },
+                "certificate_offer": {
+                    "base_path": None,
+                    "human_name": "Certificate offer",
+                    "is_autocompletable": False,
+                    "is_drilldown": False,
+                    "is_searchable": False,
+                    "name": "certificate_offer",
+                    "position": 10,
+                },
             },
         )
 
