@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-26 06:19+0000\n"
-"PO-Revision-Date: 2026-04-08 13:00\n"
+"POT-Creation-Date: 2026-10-09 08:53+0000\n"
+"PO-Revision-Date: 2026-10-28 10:28\n"
 "Last-Translator: \n"
 "Language-Team: Arabic, Saudi Arabia\n"
 "Language: ar_SA\n"
@@ -1167,7 +1167,7 @@ msgstr ""
 #: apps/courses/settings/__init__.py:116 apps/courses/settings/__init__.py:137
 #: apps/courses/settings/__init__.py:140 apps/courses/settings/__init__.py:150
 #: apps/courses/settings/__init__.py:157 apps/courses/settings/__init__.py:164
-#: apps/courses/settings/__init__.py:437
+#: apps/courses/settings/__init__.py:437 apps/courses/settings/__init__.py:457
 msgid "Main content"
 msgstr ""
 
@@ -1332,11 +1332,11 @@ msgstr "الدورات"
 msgid "Instructors"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:559
+#: apps/courses/settings/__init__.py:579
 msgid "Button caesura"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:561
+#: apps/courses/settings/__init__.py:581
 msgid "Full width"
 msgstr "العرض الكامل"
 
@@ -1440,7 +1440,7 @@ msgstr "الأشخاص ذوو الصلة"
 msgid "Related persons pagination"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/category_list.html:26
+#: apps/courses/templates/courses/cms/category_list.html:31
 msgid "No categories"
 msgstr "لا توجد فئات حتى الآن"
 
