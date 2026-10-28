@@ -971,6 +971,10 @@
     "description": "Status shown on the dashboard order item when order is pending for payment",
     "message": "A decorrer"
   },
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusPendingWithdrawal": {
+    "description": "Status shown on the dashboard order item when a withdrawal request is being processed",
+    "message": "Withdrawal in progress"
+  },
   "components.DashboardItem.Order.OrderStateLearnerMessage.statusRefunded": {
     "description": "Status shown on the dashboard order item when order is refunded",
     "message": "Reembolsado"
@@ -986,6 +990,10 @@
   "components.DashboardItem.Order.OrderStateLearnerMessage.statusWaitingSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
     "message": "Assinatura obrigatória"
+  },
+  "components.DashboardItem.Order.OrderStateLearnerMessage.statusWithdrawn": {
+    "description": "Status shown on the dashboard order item when order has been withdrawn",
+    "message": "Withdrawn"
   },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusAssigned": {
     "description": "Status shown on the dashboard order item when order is assigned.",
@@ -1023,6 +1031,10 @@
     "description": "Status shown on the dashboard order item when order is validated with no certificate",
     "message": "A decorrer"
   },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusPendingWithdrawal": {
+    "description": "Status shown on the dashboard order item when a withdrawal request is being processed",
+    "message": "Withdrawal in progress"
+  },
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusRefunded": {
     "description": "Status shown on the dashboard order item when order is refunded",
     "message": "Reembolsado"
@@ -1038,6 +1050,10 @@
   "components.DashboardItem.Order.OrderStateTeacherMessage.statusWaitingSignature": {
     "description": "Status shown on the dashboard order item when order is validated with contract's learner signature missing.",
     "message": "Pendente para assinatura do formando"
+  },
+  "components.DashboardItem.Order.OrderStateTeacherMessage.statusWithdrawn": {
+    "description": "Status shown on the dashboard order item when order has been withdrawn",
+    "message": "Withdrawn"
   },
   "components.DashboardItem.more_label": {
     "description": "Accessible label for the more button on the dashboard item",
@@ -1203,6 +1219,78 @@
     "description": "Title of the payment retry modal",
     "message": "Repetir o pagamento"
   },
+  "components.DashboardItemOrder.OrderWithdrawalModal.accountEmailLabel": {
+    "description": "Label for the account email in the withdrawal request modal",
+    "message": "Account email"
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.accountLinkInfo": {
+    "description": "Text before the account update link in the withdrawal request modal",
+    "message": "If any of the information above is incorrect,"
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.accountLinkLabel": {
+    "description": "Label of the account update link in the withdrawal request modal",
+    "message": "please update your account"
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.accountLinkRefresh": {
+    "description": "Label of the account refresh information",
+    "message": "and log out. The changes will be visible the next time you log in."
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.accountNameLabel": {
+    "description": "Label for the account name in the withdrawal request modal",
+    "message": "Account name"
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.description": {
+    "description": "Message displayed in the withdrawal request modal",
+    "message": "You wish to cancel your subscription to <bold>{productTitle} - Ref. {reference}</bold>."
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.errorDefault": {
+    "description": "Generic error message when the withdrawal request failed",
+    "message": "An error occurred, please contact our support team."
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.errorDelayExpired": {
+    "description": "Error message when the withdrawal delay has expired",
+    "message": "The withdrawal period for this order has expired."
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.informationDescription": {
+    "description": "Description of the information recap section in the withdrawal request modal",
+    "message": "This information will be included in the acknowledgement of receipt for your request."
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.informationTitle": {
+    "description": "Title of the information recap section in the withdrawal request modal",
+    "message": "Information"
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.orderReferenceLabel": {
+    "description": "Label for the order reference in the withdrawal request modal",
+    "message": "Order reference"
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.submit": {
+    "description": "Submit button label of the withdrawal request modal",
+    "message": "I confirm my withdrawal request"
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.submitInProgress": {
+    "description": "Label for screen reader when a withdrawal request is in progress.",
+    "message": "Withdrawal request in progress"
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.successConfirmedDescription": {
+    "description": "Description of the success modal when the withdrawal is confirmed immediately",
+    "message": "Your order has been canceled following your withdrawal request."
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.successConfirmedTitle": {
+    "description": "Title of the success modal when the withdrawal is confirmed immediately",
+    "message": "Withdrawal confirmed"
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.successPendingDescription": {
+    "description": "Description of the success modal when the withdrawal request needs manual review",
+    "message": "Your withdrawal request has been recorded and is being processed."
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.successPendingTitle": {
+    "description": "Title of the success modal when the withdrawal request needs manual review",
+    "message": "Withdrawal request recorded"
+  },
+  "components.DashboardItemOrder.OrderWithdrawalModal.title": {
+    "description": "Title of the withdrawal request modal",
+    "message": "Withdrawal request"
+  },
   "components.DashboardItemOrder.OrganizationBlock.contactButton": {
     "description": "Button to contact the organization",
     "message": "Contato"
@@ -1238,6 +1326,26 @@
   "components.DashboardItemOrder.OrganizationBlock.organizationSubtitleContacts": {
     "description": "Subtitle for the organization contacts section",
     "message": "Contactos"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.withdrawalButton": {
+    "description": "Button label of the withdrawal block",
+    "message": "Withdraw"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.withdrawalDescription": {
+    "description": "Description of the withdrawal block",
+    "message": "You can withdraw from your contract until {date}."
+  },
+  "components.DashboardItemOrder.OrganizationBlock.withdrawalTitle": {
+    "description": "Title of the withdrawal block",
+    "message": "Withdrawal"
+  },
+  "components.DashboardItemOrder.OrganizationBlock.withdrawnDescription": {
+    "description": "Description shown once the withdrawal is confirmed",
+    "message": "You withdrew from this order on {date}."
+  },
+  "components.DashboardItemOrder.OrganizationBlock.withdrawnTitle": {
+    "description": "Title of the withdrawal block once the withdrawal is confirmed",
+    "message": "Withdrawn"
   },
   "components.DashboardItemOrder.PaymentModal.paymentMethodTitle": {
     "description": "Title of the payment method section",
@@ -1282,6 +1390,10 @@
   "components.DashboardItemOrder.syllabusLinkLabel": {
     "description": "Syllabus link label on order details",
     "message": "Ir para o programa de estudos"
+  },
+  "components.DashboardItemOrder.withdrawnOn": {
+    "description": "Message displayed once a withdrawal request has been confirmed",
+    "message": "You withdrew from this order on {date}."
   },
   "components.DashboardKeycloakProfile.accountInformationHeader": {
     "description": "Title of the keycloak profile form \"account information\" block",
@@ -1846,6 +1958,22 @@
   "components.ProductCertificateFooter.pendingProductCertificateLabel": {
     "description": "Label on the enrollment when a product of type certificate have been bought",
     "message": "Termine este curso para obter o seu certificado."
+  },
+  "components.ProductCertificateFooter.pendingWithdrawalMessage": {
+    "description": "Message displayed when a withdrawal request is being processed",
+    "message": "Your withdrawal request has been recorded on {date} and is being processed."
+  },
+  "components.ProductCertificateFooter.withdrawalButton": {
+    "description": "Button label to open the withdrawal request modal",
+    "message": "I wish to withdraw"
+  },
+  "components.ProductCertificateFooter.withdrawalDescription": {
+    "description": "Message displayed to offer the withdrawal of the certificate order",
+    "message": "If you haven't accessed the exam yet, you can exercise your right of withdrawal until {date}."
+  },
+  "components.ProductCertificateFooter.withdrawnMessage": {
+    "description": "Message displayed once a withdrawal request has been confirmed",
+    "message": "You withdrew from this order on {date}."
   },
   "components.RootSearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
