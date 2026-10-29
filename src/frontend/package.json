@@ -5,7 +5,7 @@
   "main": "sandbox/manage.py",
   "scripts": {
     "build-ts": "tsc --noEmit && webpack",
-    "build-ts-production": "tsc --noEmit && webpack --mode=production",
+    "build-ts-production": "tsc --noEmit && NODE_ENV=production webpack --mode=production",
     "extract-translations": "formatjs extract './**/*.ts*' --ignore ./node_modules --ignore './**/*.d.ts' --out-file './i18n/frontend.json' --id-interpolation-pattern '[sha512:contenthash:base64:6]' --format crowdin",
     "compile-translations": "./i18n/compile-translations.js",
     "lint": "eslint . 'js/**/*.ts?(x)'",
