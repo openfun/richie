@@ -10,7 +10,8 @@ module.exports = {
   ],
   overrides: [
     {
-      exclude: /node_modules/,
+      // Keep compiling richie-education's own messages even when it's used as a dependency (its code then lives under node_modules).
+      exclude: /node_modules(?!\/richie-education)/,
       plugins: [
         [
           'formatjs',
