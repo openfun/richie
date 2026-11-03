@@ -16,6 +16,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Refetch learner dashboard courses after enroll/unenroll instead of serving
+  a 20-minute sessionStorage cache
+- Refresh learner dashboard courses on tab focus and across tabs after
+  enrollment changes
 - Collapse the whitespace leaked by template indentation into the `<title>`
   tag so page titles no longer contain big gaps between words
 - Pin webpack version in dependent front build
