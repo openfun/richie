@@ -1854,3 +1854,35 @@ class CourseModelsTestCase(TestCase):
         self.assertEqual(course.certificate_offer, run1.certificate_offer)
         self.assertEqual(course.certificate_price, run1.certificate_price)
         self.assertEqual(course.certificate_price, run1.certificate_price)
+
+    def test_models_course_get_offer_course_only_run_leaks_into_cms_offer(self):
+        """
+        An open "course only" run (e.g. a positioning test) must not win the
+        best course run computation: it is excluded from the catalog search index
+        and must be excluded from the CMS offer the same way, otherwise a course's
+        glimpse color can diverge between the search catalogue and CMS pages.
+        """
+        course = factories.CourseFactory()
+        # The actual paid product run, open for enrollment.
+        paid_run = factories.CourseRunFactory(
+            direct_course=course,
+            offer="paid",
+            price=100.00,
+            enrollment_start=timezone.now() - timedelta(days=5),
+            enrollment_end=timezone.now() + timedelta(days=30),
+            start=timezone.now() - timedelta(days=5),
+            end=timezone.now() + timedelta(days=60),
+        )
+        # A free "course only" positioning test, also open for enrollment.
+        factories.CourseRunFactory(
+            direct_course=course,
+            catalog_visibility=CourseRunCatalogVisibility.COURSE_ONLY,
+            offer="free",
+            enrollment_start=timezone.now() - timedelta(days=5),
+            enrollment_end=timezone.now() + timedelta(days=30),
+            start=timezone.now() - timedelta(days=5),
+            end=timezone.now() + timedelta(days=60),
+        )
+
+        self.assertEqual(course.best_course_run, paid_run)
+        self.assertEqual(course.offer, "paid")
