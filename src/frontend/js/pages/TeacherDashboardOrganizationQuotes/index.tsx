@@ -369,7 +369,7 @@ const TeacherDashboardOrganizationQuotes = () => {
         size="small"
         color="brand"
         variant="secondary"
-        className="mr-2"
+        className="me-2"
         onClick={() => handleDownloadQuote(quote.id)}
         icon={<span className="material-icons">download</span>}
         disabled={!abilities?.download_quote || !batchOrder.available_actions.download_quote}
@@ -400,7 +400,7 @@ const TeacherDashboardOrganizationQuotes = () => {
     const confirmPurchaseOrderButton = (
       <Button
         size="small"
-        className="ml-2"
+        className="ms-2"
         onClick={() => handleOpenPurchaseOrderModal(quote)}
         icon={<span className="material-icons">description</span>}
       >
