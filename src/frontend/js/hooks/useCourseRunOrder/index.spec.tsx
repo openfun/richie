@@ -1,9 +1,12 @@
-import { renderHook, waitFor } from '@testing-library/react';
+import { PropsWithChildren } from 'react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import {
   RichieContextFactory as mockRichieContextFactory,
   CourseRunFactory,
+  UserFactory,
 } from 'utils/test/factories/richie';
+import { createTestQueryClient } from 'utils/test/createTestQueryClient';
 import {
   CourseLightFactory,
   CredentialOrderFactory,
@@ -51,5 +54,34 @@ describe('useCourseRunOrder', () => {
     });
 
     expect(result.current.item).toStrictEqual(order);
+  });
+
+  it('should not break when the user logs in after the first render', async () => {
+    const product = ProductFactory().one();
+    const joanieCourse = CourseLightFactory().one();
+    const richieCourseRun = CourseRunFactory({
+      resource_link: `https://joanie.endpoint/api/v1.0/courses/${joanieCourse.code}/products/${product.id}`,
+    }).one();
+    const order = CredentialOrderFactory().one();
+    fetchMock.get(
+      `https://joanie.endpoint/api/v1.0/orders/?course_code=${joanieCourse.code}&product_id=${product.id}`,
+      [order],
+    );
+    const client = createTestQueryClient({ user: null });
+    const Wrapper = ({ children }: PropsWithChildren) => (
+      <BaseJoanieAppWrapper queryOptions={{ client }}>{children}</BaseJoanieAppWrapper>
+    );
+    const { result } = renderHook(() => useCourseRunOrder(richieCourseRun), { wrapper: Wrapper });
+
+    expect(result.current.item).toBeUndefined();
+
+    // The session resolves after the first render (e.g. `/user/me` answers later)
+    act(() => {
+      client.setQueryData(['user'], UserFactory().one());
+    });
+
+    await waitFor(() => {
+      expect(result.current.item).toStrictEqual(order);
+    });
   });
 });
