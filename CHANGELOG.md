@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [3.6.0] - 2026-11-25
+
 ### Added
 
 - Add main content placeholder to categories list view
@@ -2477,7 +2479,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v3.5.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v3.6.0...master
+[3.6.0]: https://github.com/openfun/richie/compare/v3.5.1...v3.6.0
 [3.5.1]: https://github.com/openfun/richie/compare/v3.5.0...v3.5.1
 [3.5.0]: https://github.com/openfun/richie/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/openfun/richie/compare/v3.4.0...v3.3.1
