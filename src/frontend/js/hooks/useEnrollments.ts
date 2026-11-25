@@ -2,6 +2,7 @@ import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useResources, UseResourcesProps } from 'hooks/useResources';
 import { API, Enrollment, EnrollmentsQuery } from 'types/Joanie';
+import { notifyLearnerDashboardChanged } from 'utils/learnerDashboardSync';
 
 const messages = defineMessages({
   errorUpdate: {
@@ -40,6 +41,7 @@ const props: UseResourcesProps<Enrollment, EnrollmentsQuery, API['user']['enroll
     // When enrollment creation/update succeeded, we have to invalidate orders queries
     // to refetch fresh data containing updated enrollments.
     await queryClient.invalidateQueries({ queryKey: ['user', 'orders'] });
+    notifyLearnerDashboardChanged();
   },
 };
 /**

@@ -1,5 +1,5 @@
 import { PaginatedResourceQuery } from 'types/Joanie';
-import { FetchEntityBaseArgs, fetchEntity, FetchDataFunction } from './fetchEntity';
+import { FetchEntityBaseArgs, fetchEntity, QueryConfig } from './fetchEntity';
 
 export interface FetchEntityData {
   id: string;
@@ -52,11 +52,6 @@ export const fetchEntities = async <
   return { stack: newStack, totalCount };
 };
 
-interface QueryConfig<Data, Filters> {
-  queryKey: string[];
-  fn: FetchDataFunction<Data, Filters>;
-  filters: Filters;
-}
 interface FetchEntitiesOfPageArgs<DataA, DataB, FiltersA, FiltersB> extends FetchEntityBaseArgs {
   queryAConfig: QueryConfig<DataA, FiltersA>;
   queryBConfig: QueryConfig<DataB, FiltersB>;

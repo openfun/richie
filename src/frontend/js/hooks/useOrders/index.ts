@@ -13,6 +13,7 @@ import {
 } from 'types/Joanie';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { useSessionMutation } from 'utils/react-query/useSessionMutation';
+import { notifyLearnerDashboardChanged } from 'utils/learnerDashboardSync';
 import { QueryOptions, useResource, useResourcesCustom, UseResourcesProps } from '../useResources';
 
 export type OrderResourcesQuery = PaginatedResourceQuery & {
@@ -92,6 +93,7 @@ const useOrdersBase =
       custom.methods.setError(undefined);
       await custom.methods.invalidate();
       props.onMutationSuccess?.(queryClient);
+      notifyLearnerDashboardChanged();
     };
     const cancelHandler = useSessionMutation({
       mutationFn: api.cancel,

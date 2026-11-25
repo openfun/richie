@@ -2,7 +2,7 @@ import { defineMessages } from 'react-intl';
 import { useJoanieApi } from 'contexts/JoanieApiContext';
 import { Enrollment, CredentialOrder, CertificateOrder, EnrollmentsQuery } from 'types/Joanie';
 import useUnionResource, { ResourceUnionPaginationProps } from 'hooks/useUnionResource';
-import { PER_PAGE } from 'settings';
+import { PER_PAGE, REACT_QUERY_SETTINGS } from 'settings';
 import { OrderResourcesQuery } from 'hooks/useOrders';
 
 export const isOrder = (
@@ -55,6 +55,8 @@ export const useOrdersEnrollments = ({
       queryKey: ['user', 'orders'],
       fn: api.user.orders.get,
       filters: { ...orderFilters, query },
+      // Do not reuse the 20 min sessionStorage cache: enrollments change from other pages/tabs.
+      staleTime: REACT_QUERY_SETTINGS.staleTimes.default,
     },
     queryBConfig: {
       queryKey: ['user', 'enrollments'],
@@ -64,9 +66,11 @@ export const useOrdersEnrollments = ({
         is_active: true,
         query,
       },
+      staleTime: REACT_QUERY_SETTINGS.staleTimes.default,
     },
     perPage,
     errorGetMessage: messages.errorGet,
-    refetchOnInvalidation: false,
+    refetchOnWindowFocus: true,
+    syncAcrossTabs: true,
   });
 };
