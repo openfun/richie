@@ -633,7 +633,7 @@
   },
   "components.CourseRunList.dataCourseRunLink": {
     "description": "Message displayed in course run datagrid for course run link",
-    "message": "Accéder à l'espace cours"
+    "message": "Accéder au cours"
   },
   "components.CourseRunList.dataCourseRunPeriod": {
     "description": "Message displayed in course run datagrid for course run period",
