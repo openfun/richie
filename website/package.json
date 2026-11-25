@@ -1,6 +1,6 @@
 {
   "name": "richie-education-docs",
-  "version": "3.3.1",
+  "version": "3.6.0",
   "description": "Documentation website for the Richie project",
   "scripts": {
     "build": "docusaurus build",
@@ -21,7 +21,6 @@
     "email": "fun.dev@fun-mooc.fr"
   },
   "license": "MIT",
-  "devDependencies": {},
   "dependencies": {
     "@docusaurus/core": "3.9.2",
     "@docusaurus/plugin-content-pages": "3.9.2",
